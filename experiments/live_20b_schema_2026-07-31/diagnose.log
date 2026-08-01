@@ -1,0 +1,36 @@
+  20/320
+  40/320
+  60/320
+  80/320
+  100/340
+  120/340
+  140/340
+  160/360
+  180/360
+  200/360
+  220/380
+  240/380
+  260/380
+  280/380
+  300/380
+  320/380
+  340/380
+  360/380
+  380/380
+EXECUTOR RAISED:
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/live_20b_schema_2026-07-31/diagnose.py", line 20, in <module>
+    Path("executor_report.json").write_text(json.dumps(executed, indent=1))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type ProductionContractDoctorReportV1 is not JSON serializable

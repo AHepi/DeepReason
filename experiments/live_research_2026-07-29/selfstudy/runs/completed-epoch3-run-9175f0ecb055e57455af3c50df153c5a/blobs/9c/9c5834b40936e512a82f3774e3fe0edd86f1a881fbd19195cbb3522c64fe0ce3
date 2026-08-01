@@ -1,0 +1,88 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "0e26d6be54fd contradicts SRC_006's mechanist school policy: the artifact proposes an epistemic stance that explicitly denies the demand for causal mechanisms as a precondition for acceptable conjectures, positioning non-mechanistic explanation as legitimate within the harness. This is REFUTED IF 0e26d6be54fd does not actually contain a non-mechanistic epistemological claim, or if its stance can be reconciled with the mechanist demand by showing that it merely defers mechanism-identification rather than denying its necessity, or if SRC_006's mechanist stance is itself non-binding advisory rather than a gatekeeping policy that the artifact must satisfy.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_006"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6", "quote": "This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth."}
+      ]
+    },
+    {
+      "content": "0e26d6be54fd shares mechanism with SRC_001's token economy: both artifacts implement conjecture-criticism cost controls through verbalized-sampling distributions and token-budget allocation, treating the distributional spread of candidates as an epistemic resource whose expenditure must be governed. The shared mechanism is the cost-control loop that couples sampling breadth to budget state. This is REFUTED IF 0e26d6be54fd contains no token-budget or sampling-distribution governance mechanism, or if its cost-control logic operates on a fundamentally different principle (e.g., reputation scoring or evidence-weighting rather than token expenditure), or if SRC_001's token economy mechanism is not actually operative in the current harness and was only a proposed design.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_001"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6"}
+      ]
+    },
+    {
+      "content": "0e26d6be54fd abstracts from SRC_005's basin report by generalizing the refuted-attractor and repertoire-exhaustion phenomenon beyond the specific case of conjecture cycling to a broader class of epistemic failure modes, including those arising in criticism, context-retrieval, and lineage-tracking loops. The abstraction lifts the basin concept from a conjecture-specific pathology to a general attractor in iterative epistemic processes. This is REFUTED IF 0e26d6be54fd's generalization cannot be instantiated back into the conjecture-cycling case without loss, or if the basin report's refuted-attractor is already defined at that level of generality (making the abstraction trivial), or if the artifact's failure-mode taxonomy does not actually include repertoire-exhaustion as a member.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_005"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6"}
+      ]
+    },
+    {
+      "content": "0e26d6be54fd integrates SRC_002's v1.5 normative amendment with SRC_003's v1.3 formal build spec: the artifact resolves normative gaps between the two harness specifications by synthesizing their respective commitments (e.g., v1.3's structural requirements with v1.5's adjudication amendments) into a coherent operational description. The integration is a reconciliation that subsumes both. This is REFUTED IF 0e26d6be54fd does not address both specifications, or if it merely cites one without reconciling conflicts between them, or if the v1.5 amendment is already a strict superset of v1.3 (making integration trivial), or if the two specs are revealed to be formally incompatible such that no coherent integration exists.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6"}
+      ]
+    },
+    {
+      "content": "0e26d6be54fd depends on SRC_004's state-of-the-theory record as its epistemic substrate: the artifact is a specialization or direct extension of the machine's current epistemic holdings, inheriting the catalogue of accepted artifacts, refuted conjectures, and open questions documented in SRC_004. Without that substrate the artifact's claims lack the lineage anchoring that makes them criticizable. This is REFUTED IF 0e26d6be54fd does not reference or build upon any element of SRC_004's holdings, or if it operates entirely from external sources not recorded in the state-of-the-theory, or if SRC_004's record is stale or superseded by the time the artifact was produced such that the dependence is on a different, later substrate.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6"}
+      ]
+    },
+    {
+      "content": "0e26d6be54fd reduces to SRC_003's formal build spec at the implementation level: every operative component the artifact describes can be expressed as an instance of the harness architecture defined in v1.3, including its conjecture operator, critic, adjudicator, and context-retrieval subsystems. The artifact adds no new architectural primitive — it is a configuration or parameterization of the existing spec. This is REFUTED IF 0e26d6be54fd introduces a component with no analogue in v1.3 (e.g., a novel adjudication mechanism, a new operator type, or a context channel not specified), or if the v1.3 spec's formal constraints are violated by the artifact's configuration, or if the reduction fails to preserve the artifact's stated invariants.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003"],
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6"}
+      ]
+    }
+  ],
+  "abstention": null,
+  "context_request": {
+    "query": "content of artifact 0e26d6be54fd — is it a theory document, spec amendment, experimental result, or meta-artifact about the connection process?",
+    "purpose": "Determining the actual content of 0e26d6be54fd is essential to discriminate among the proposed relations; without it all candidates remain speculative and cannot be properly adjudicated.",
+    "desired_retrieval_channels": ["focus", "semantic", "recent"],
+    "requested_visible_aliases": ["SRC_004", "SRC_005", "SRC_001", "SRC_002", "SRC_003", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011"]
+  },
+  "research_proposals": [],
+  "simulation_proposals": [],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The neighbourhood already contains several accepted relations from 0e26d6be54fd to SRC artifacts (SRC_007-011). These may have been established in prior turns. If so, the current problem asks for NEW or COMPLEMENTARY relations, not duplicates. The candidates above attempt to cover relation types not yet accepted (contradiction with SRC_006, dependence on SRC_004, reduction to SRC_003) while also offering alternative formulations of accepted ones.",
+          "why_keep_this": "Tracks which relations may already be accepted to avoid pure duplication and to identify genuinely novel connections.",
+          "possible_next_move": "If the harness returns content of 0e26d6be54fd, retract candidates that are incompatible with it and sharpen the surviving ones."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "What is the actual content and type of artifact 0e26d6be54fd? Without this, all proposed relations are underdetermined.",
+        "related_refs": ["SCR_001", "SCR_002"]
+      },
+      {
+        "question": "Are the neighbourhood entries (SRC_007-011) already-accepted relations, or are they proposed relations awaiting adjudication? If accepted, should new candidates avoid duplicating them?",
+        "related_refs": []
+      }
+    ],
+    "links": [],
+    "cluster_suggestions": [],
+    "revisions": []
+  }
+}
+```

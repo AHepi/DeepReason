@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "2d711b2eb5fff4e61cba262914dc9aa29cf142c91d43bf4fffdda495e76c90c4",
+      "attack": true,
+      "case": "The claim asserts a strict advantage regime for odd k≥7, explicitly excluding k≤5. However, the problem context provides validation data only for k=5 and mandates a decisive experiment design within a 300k-token budget. Generating a reliable pool of k=7 candidates per question (let alone across enough questions to detect a strict advantage that depends on fragile ≤2-vote margins) requires 40% more candidate-generation tokens than the k=5 studies provided as evidence. The target provides no token-cost accounting or experiment design demonstrating that k=7 is feasible within the 300k-token budget, failing the problem's requirement to design a decisive experiment within that constraint.",
+      "counterexample": null
+    },
+    {
+      "target": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b",
+      "attack": true,
+      "case": "The target defines the strict-advantage regime for base error in (0.40, 0.70), but the problem context's hard set (where SC was imperfect) operates at a candidate base error of 0.01. The proposed mechanism relies on stochastic dominance of critic score distributions for wrong-majority vs right-majority sets, but at base errors near 0.01, wrong-majority sets are vanishingly rare (binomial probability of ≥3 errors out of 5 at e=0.01 is <1e-5). The target fails to bridge the gap between its claimed operating regime (0.40-0.70) and the repository's evidence base, and provides no experiment design showing how to artificially elevate base error to 0.40-0.70 within the 300k-token budget on this provider.",
+      "counterexample": null
+    },
+    {
+      "target": "c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

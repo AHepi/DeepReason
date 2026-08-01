@@ -1,0 +1,20 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"header-root\" class=\"c1-container\">\n  <style>\n    #header-root { font-family: 'Montserrat', sans-serif; background: #0A0A12; color: #00F2FF; padding: 64px 16px; text-align: center; overflow: hidden; position: relative; }\n    .c1-branding { font-size: 1.2rem; letter-spacing: 0.3em; text-transform: uppercase; color: #FF00E5; margin-bottom: 16px; }\n    .c1-title { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; tracking: -0.02em; }\n    .c1-dna-anchor { position: relative; width: 200px; height: 200px; margin: 0 auto; }\n    .c1-helix { position: absolute; width: 100%; height: 100%; border: 2px solid #00F2FF; border-radius: 50%; animation: rotate 10s linear infinite; }\n    .c1-helix::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid #FF00E5; border-radius: 50%; transform: rotateX(90deg); }\n    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }\n    @media (prefers-reduced-motion: reduce) { .c1-helix { animation: none !important; }\n  }\n  </style>\n  <div class=\"c1-branding\">Genomic Arts 2026</div>\n  <h1 class=\"c1-title\">The Architecture <br>of Life</h1>\n  <div class=\"c1-dna-anchor\" id=\"header-root-visual\">\n    <div class=\"c1-helix\"></div>\n  </div>\n  <script>\n    window.c1_mount = () => {};\n    window.c1_destroy = () => {};\n    window.c1_initializeHeaderAnimation = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;\n      document.getElementById('header-root-visual').style.opacity = '1';\n    };\n  </script>\n</div>",
+      "typicality": 0.8,
+      "neighbours": [
+        "A1"
+      ]
+    },
+    {
+      "content": "<div id=\"header-root\">\n  <style>\n    #header-root { background: #0A0A12; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Montserrat', sans-serif; }\n    .c1-workshop { color: #FF00E5; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 4px; }\n    .c1-main-h { font-size: clamp(3rem, 8vw, 6rem); color: #00F2FF; text-align: center; margin: 20px 0; }\n    #header-root-canvas { width: 300px; height: 300px; }\n  </style>\n  <div class=\"c1-workshop\">WORKSHOP // DNA_WONDERS</div>\n  <h1 class=\"c1-main-h\">DECODING THE SPIRAL</h1>\n  <canvas id=\"header-root-canvas\"></canvas>\n  <script>\n    let rafId;\n    window.c1_mount = () => {\n      c1_initializeHeaderAnimation();\n    };\n    window.c1_destroy = () => {\n      cancelAnimationFrame(rafId);\n    };\n    window.c1_initializeHeaderAnimation = () => {\n      const canvas = document.getElementById('header-root-canvas');\n      if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;\n      const ctx = canvas.getContext('2d');\n      let angle = 0;\n      const render = () => {\n        ctx.clearRect(0,0,300,300);\n        ctx.strokeStyle = '#00F2FF';\n        ctx.beginPath();\n        ctx.arc(150, 150, 80, angle, angle + Math.PI);\n        ctx.stroke();\n        angle += 0.05;\n        rafId = requestAnimationFrame(render);\n      };\n      render();\n    };\n  </script>\n</div>",
+      "typicality": 0.6,
+      "neighbours": [
+        "A1"
+      ]
+    }
+  ]
+}
+```

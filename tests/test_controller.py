@@ -126,6 +126,34 @@ def test_forbidden3_widen_is_clamped_to_envelope_max(tmp_path):
     assert ep.max_tokens > 800, "controller never widened despite persistent truncation"
 
 
+def test_controller_does_not_normalize_an_explicit_cap_outside_its_envelope(tmp_path):
+    h = _harness_with_problem(tmp_path)
+    ep = _CapEndpoint(needs=99999)
+    ep.max_tokens = 7000  # an explicit compiled website-route cap
+    adapter = LLMAdapter({"conjecturer": ep}, h.blobs)
+    c = Controller(h, adapter)
+    from deepreason.ontology import Rule
+    from deepreason.ontology.event import LLMCall
+
+    for _ in range(2):
+        h._commit(
+            Rule.CONJ,
+            inputs=["pi-tides"],
+            outputs=[],
+            llm=LLMCall(
+                role="conjecturer", model="m", endpoint="e",
+                prompt_ref="inline:p", raw_ref="inline:r", truncated=True,
+            ),
+        )
+
+    assert c.step() is None
+    assert ep.max_tokens == 7000
+    assert not any(
+        event.inputs and event.inputs[0] == "controller-update"
+        for event in h.log.read()
+    )
+
+
 # --- #5: liveness — no registered problem starves ---------------------- #
 def test_forbidden5_liveness_queue_starves_no_problem(tmp_path):
     h = Harness(tmp_path / "run")
@@ -145,6 +173,69 @@ def test_forbidden5_liveness_queue_starves_no_problem(tmp_path):
         if p is not None:
             picked.add(p.id)
     assert picked == {"pi-0", "pi-1", "pi-2", "pi-3"}, f"a problem starved: {picked}"
+
+
+# --- #5b: the operator's question holds first claim on the budget ------- #
+def test_operator_question_outranks_spawns_at_cycle_zero(tmp_path):
+    """Regression (selfstudy run-9175f0ec and its first refix attempt): at
+    cycle 0 every problem is never-worked, so selection fell to the bare id
+    tie-break — "conn:<id>" and "disc:<id>" both sort before
+    "question-<digest>" — and evidence admission had already auto-accepted
+    import-role records ADDRESSING the question, marking it "solved" and
+    dropping it to the 0.3 aging weight before a single provider call. The
+    run spent its full 200k budget on the connection problem; the question
+    terminated budget_denied with zero calls. Import-role artifacts must
+    not count as survivors, and seed problems must win rank ties, in both
+    selection modes."""
+    from deepreason.ontology import Provenance
+
+    for liveness in (True, False):
+        h = Harness(tmp_path / f"run-{liveness}")
+        h.register_commitment(Commitment(id="k-q", eval="predicate:'x' in content"))
+        # Spawn-order and id-order both favor the spawns, as live.
+        h.register_problem(Problem(
+            id="conn:0e26d6be54fd", description="connect isolated artifact",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "connection", "from": []}),
+        ))
+        h.register_problem(Problem(
+            id="question-98a0e3a77a0e", description="the operator's question",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}),
+        ))
+        h.register_problem(Problem(
+            id="disc:question-98a0e3a77a0e", description="discriminate rivals",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "discrimination", "from": ["question-98a0e3a77a0e"]}),
+        ))
+        # Admission bookkeeping: accepted import-role records addressing
+        # the question (the attach path does exactly this before cycle 0).
+        for i in range(2):
+            h.create_artifact(
+                f"attached-source record {i}",
+                provenance=Provenance(role="import"),
+                problem_id="question-98a0e3a77a0e",
+            )
+        config = Config(LIVENESS_QUEUE=liveness, N_SCHOOLS=0)
+        adapter = LLMAdapter({}, h.blobs)
+        sched = Scheduler(h, adapter, config)
+        first = sched._select_problem()
+        assert first is not None and first.id == "question-98a0e3a77a0e", (
+            f"cycle 0 (liveness={liveness}) went to {first and first.id}: "
+            "a spawned problem preempted the operator's question"
+        )
+        if liveness:
+            # The rotation stays fair: once the question has been worked,
+            # aged never-worked spawns win, independent before reflexive.
+            sched._cycles = 1
+            second = sched._select_problem()
+            assert second is not None and second.id == "disc:question-98a0e3a77a0e"
+            sched._cycles = 2
+            third = sched._select_problem()
+            assert third is not None and third.id == "conn:0e26d6be54fd"
 
 
 # --- #6: fail-static — no policy while the last is under standing attack - #
@@ -189,6 +280,54 @@ def test_forbidden6_fail_static_holds_under_standing_attack(tmp_path):
     assert n_policies_after == n_policies_before, "emitted a policy while under attack"
 
 
+def test_resume_rehydrates_only_latest_accepted_controller_policy(tmp_path):
+    from deepreason.ontology import Provenance, Rule, Warrant, WarrantType
+
+    h = _harness_with_problem(tmp_path)
+    original_endpoint = _CapEndpoint(needs=99999)
+    original = Controller(
+        h, LLMAdapter({"conjecturer": original_endpoint}, h.blobs)
+    )
+    original._cycle = 1
+    original._emit_policy({"cap:conjecturer": 1280}, {"test": "accepted"})
+    accepted_policy = original._last_policy()
+    original._cycle = 2
+    original._emit_policy({"cap:conjecturer": 2048}, {"test": "refuted"})
+    refuted_policy = original._last_policy()
+    assert accepted_policy is not None and refuted_policy is not None
+
+    attack_nu = h.create_artifact(
+        "nu: the newer process policy is unsound",
+        provenance=Provenance(role="critic"),
+    )
+    h.create_artifact(
+        "critic: reject the newer policy",
+        provenance=Provenance(role="critic"),
+        warrants=[Warrant(
+            id="w:attack:resume-policy",
+            target=refuted_policy,
+            type=WarrantType.ARGUMENTATIVE,
+            validity_node=attack_nu.id,
+        )],
+        rule=Rule.CRIT,
+    )
+
+    resumed_endpoint = _CapEndpoint(needs=99999)
+    resumed = Controller(
+        Harness(h.root),
+        LLMAdapter({"conjecturer": resumed_endpoint}, h.blobs),
+    )
+
+    assert resumed_endpoint.max_tokens == 1280
+    assert resumed._last_policy() == refuted_policy
+    rehydrations = [
+        event for event in Harness(h.root).log.read()
+        if event.inputs and event.inputs[0] == "controller-rehydration"
+    ]
+    assert len(rehydrations) == 1
+    assert rehydrations[0].inputs[1] == accepted_policy
+
+
 # --- #7: controller decisions are deterministic from the log ------------ #
 def test_forbidden7_decisions_replay_stable(tmp_path):
     def run(root):
@@ -218,3 +357,132 @@ def test_forbidden7_decisions_replay_stable(tmp_path):
     b = run(tmp_path / "b")
     assert a == b, f"controller decisions not deterministic: {a} vs {b}"
     assert any(p for p in a), "controller never acted in the determinism test"
+
+
+# --- transport policy: deterministic, bounded, separate from capture ---- #
+class _TimeoutEndpoint:
+    def __init__(self, timeout_s: int = 300):
+        self.name = "t"
+        self.model = "t"
+        self.max_tokens = None
+        self.timeout_s = timeout_s
+
+
+def _drop(h, reason):
+    h.record_measure(inputs=["dropped-call", reason])
+
+
+def test_transport_drops_widen_timeout_within_envelope_and_dwell(tmp_path):
+    """The transport-policy rule: fresh transport drops -> one envelope
+    step wider read timeout, honoring dwell and the hard max. Inputs are
+    log events only — deterministic and replayable."""
+    from deepreason.controller import ENVELOPES
+
+    h = _harness_with_problem(tmp_path)
+    ep = _TimeoutEndpoint(timeout_s=300)
+    adapter = LLMAdapter({"conjecturer": ep}, h.blobs)
+    c = Controller(h, adapter)
+
+    _drop(h, "no complete response within escalated read timeouts (300s, 600s)")
+    assert c.step() == {"timeout:transport": 450}
+    assert ep.timeout_s == 450
+
+    # Dwell: another drop on the very next cycle must NOT move the knob.
+    _drop(h, "transport failed after retries: The read operation timed out")
+    assert c.step() is None
+    assert ep.timeout_s == 450
+
+    # After the dwell passes, a fresh drop widens again; the envelope max
+    # (900) is a hard bound.
+    _drop(h, "transport failed after retries: The read operation timed out")
+    assert c.step() == {"timeout:transport": 675}
+    _drop(h, "transport failed after retries: The read operation timed out")
+    c.step()
+    _drop(h, "transport failed after retries: The read operation timed out")
+    result = c.step()
+    assert ep.timeout_s <= ENVELOPES["timeout:transport"]["max"]
+    if result:
+        assert result["timeout:transport"] <= 900
+
+
+def test_non_transport_drops_do_not_move_the_timeout(tmp_path):
+    """Budget-exhaustion drops share the dropped-call tag but are not
+    transport failures: the timeout knob must not react to them. And with
+    no drops at all, the knob never moves."""
+    h = _harness_with_problem(tmp_path)
+    ep = _TimeoutEndpoint(timeout_s=300)
+    adapter = LLMAdapter({"conjecturer": ep}, h.blobs)
+    c = Controller(h, adapter)
+    _drop(h, "token budget exceeded: 100000 spent")
+    assert c.step() is None
+    assert ep.timeout_s == 300
+    assert c.step() is None
+    assert ep.timeout_s == 300
+
+
+def test_transport_policy_decisions_replay_stable(tmp_path):
+    """Forbidden #7 extended to the transport rule: same log prefix, same
+    knob decisions, byte-for-byte."""
+    def run(root):
+        h = Harness(root)
+        h.register_commitment(Commitment(id="k-moon", eval="predicate:'moon' in content"))
+        h.register_problem(Problem(
+            id="pi-tides", description="explain the tides", criteria=["k-moon"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        ))
+        ep = _TimeoutEndpoint(timeout_s=300)
+        adapter = LLMAdapter({"conjecturer": ep}, h.blobs)
+        c = Controller(h, adapter)
+        proposals = []
+        for i in range(6):
+            if i % 2 == 0:
+                _drop(h, "transport failed after retries: timed out")
+            proposals.append(c.step())
+        return proposals, ep.timeout_s
+
+    a = run(tmp_path / "a")
+    b = run(tmp_path / "b")
+    assert a == b
+
+
+def test_run_scheduler_wires_controller_by_default(tmp_path, monkeypatch):
+    """ops.run_scheduler (the CLI/MCP/make path) builds the deterministic
+    controller unless config explicitly opts out — live tuning must not
+    depend on a research-script flag."""
+    import deepreason.scheduler.scheduler as sched_mod
+    from deepreason import ops
+    from tests.test_v6_global_dispatch_guard import (
+        _bound_qualified_v6_scheduler_root,
+    )
+
+    seen = {}
+
+    class _FakeScheduler:
+        def __init__(self, harness, adapter, config, embedder=None,
+                     browser_backend=None, controller=None,
+                     research_backend=None, workload_profile=None,
+                     run_manifest=None, stop_controller=None,
+                     progress_sink=None):
+            seen["controller"] = controller
+
+        def run(self, cycles, on_cycle=None):
+            return {"survivors": []}
+
+    monkeypatch.setattr(sched_mod, "Scheduler", _FakeScheduler)
+
+    manifest, h, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "a"
+    )
+    ops.run_scheduler(h, config, cycles=1, run_manifest=manifest)
+    assert isinstance(seen["controller"], Controller)
+
+    manifest2, h2, config2, _report2 = _bound_qualified_v6_scheduler_root(
+        tmp_path / "b"
+    )
+    ops.run_scheduler(
+        h2,
+        config2.model_copy(update={"CONTROLLER": False}),
+        cycles=1,
+        run_manifest=manifest2,
+    )
+    assert seen["controller"] is None

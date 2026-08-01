@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A severe multi-year drought triggered cascading famines that destabilized palatial elites, leading to internal revolts and the abandonment of administrative centers.\", \"mechanism\": \"Climate-induced agricultural collapse undermined the surplus extraction that sustained palatial economies, eroding elite legitimacy and prompting subject populations to disperse or rebel.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Dendrochronology and palynology show stable or wetter climate conditions across the Eastern Mediterranean during the late 13th century BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic climate-famine hypothesis, often linked to the Palmer Drought Index reconstructions. It explains the broad synchrony but struggles with Egypt's survival, which is typically attributed to the Nile's flood-based agriculture being less dependent on rainfall.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A1", "A2", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"The rapid dissemination of massed infantry tactics and cheap, disruptive iron weaponry by 'Sea Peoples' and other peripheral groups rendered the chariot-based military aristocracies of the palace states obsolete, leading to their swift military defeat.\", \"mechanism\": \"A tactical and technological revolution in warfare lowered the cost of effective military force, allowing decentralized, mobile infantry to overwhelm the expensive, elite chariot corps that upheld palatial political structures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows no significant shift from bronze to iron weaponry until well after 1100 BC, and Egyptian accounts depict Sea Peoples using bronze weapons and chariots.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the 'military revolution' account, often associated with Robert Drews. It explains the suddenness of the collapse but is heavily criticized for the chronological mismatch of the iron adoption and the fact that Egypt repelled similar forces using traditional chariot-based tactics.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A9", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"A general systems collapse occurred where the highly specialized, interdependent palatial economies became path-dependent and fragile; a minor perturbation (like a single earthquake or trade route disruption) triggered a catastrophic, irreversible cascade of failures across the tightly coupled network.\", \"mechanism\": \"Complex systems theory: the high connectivity and low redundancy of the palatial trade and diplomatic network meant that a local shock propagated rapidly, causing synchronous systemic disintegration through positive feedback loops.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence demonstrates that the palatial economies were highly diversified, autarkic in staple goods, and had survived numerous prior earthquakes and disruptions without systemic collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a 'systems collapse' account, popularized by Colin Renfrew and others. It elegantly explains the synchrony and selectivity (Egypt's more robust, Nilotic system was less tightly coupled to the network). However, it is often criticized for being unfalsifiable and for underestimating the resilience and adaptive capacity of these societies.\"}",
+      "typicality": 0.5,
+      "neighbours": ["A6", "A7", "A8"]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""E3.1 trusted checker for e31-constr-005 (family displaced_permutation).
+
+Sealed holdout artifact (harness-spec-v1.3 SS10.5): withheld from any
+run loop, revealed only post-hoc.  Exit 0 iff the candidate passes."""
+import json
+
+PARAMS = json.loads("{\"banned_displacements\": [1, 2], \"n\": 8, \"q\": 3, \"r\": 0}")
+
+def check_displaced_permutation(params, candidate):
+    n = params["n"]
+    banned = set(params["banned_displacements"])
+    q, r = params["q"], params["r"]
+    if not isinstance(candidate, list) or sorted(candidate) != list(range(n)):
+        return False, f"candidate must be a permutation of 0..{n - 1}"
+    displacements = [abs(value - index) for index, value in enumerate(candidate)]
+    if any(d == 0 for d in displacements):
+        return False, "permutation must be fixed-point-free"
+    hit = sorted(set(displacements) & banned)
+    if hit:
+        return False, f"banned displacement(s) used: {hit}"
+    if sum(displacements) % q != r:
+        return False, f"total displacement must be congruent to {r} mod {q}"
+    return True, "all properties satisfied"
+
+
+def main():
+    import sys
+    path = sys.argv[1] if len(sys.argv) > 1 else "candidate.json"
+    with open(path, encoding="utf-8") as handle:
+        candidate = json.load(handle)
+    ok, reason = check_displaced_permutation(PARAMS, candidate)
+    print(("PASS: " if ok else "FAIL: ") + reason)
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

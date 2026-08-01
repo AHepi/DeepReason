@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e∈[0.15,0.35], critic R>0.5 and P>0.3, harness strictly beats SC by >3pp"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:57c86482ad8c","observation_valued":false},"id":"fc:57c86482ad8c","schema":"commitment"}

@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) by failing to state a forbidden case that is a concrete observation which could realistically have obtained. Instead, the 'forbidden' field contains a declarative statement of fact ('Paleoclimatic data indicates normal rainfall...') rather than defining the specific counter-observation (e.g., 'Evidence of sustained agricultural surplus in Anatolia during the megadrought') that would falsify the claim. By presenting the refutation as an existing data point rather than a hypothetical test condition, the argument conflates the mechanism with its current evidentiary status, violating the requirement to define the boundaries of the theory through potential, not just actual, observations.",
+  "counterexample": null
+}

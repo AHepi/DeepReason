@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's mechanism requires widespread, democratized iron-working to be present before or during the collapse, but the forbidden case explicitly states that iron artifacts were rare, ritualistic, or inferior to bronze in the region until after 1100 BC.
+The standard requires a mechanism that is not contradicted by concrete, datable observations. The target's mechanism depends on 'sudden availability of cheap iron tools and weapons' enabling marginalized groups to bypass the palace bronze monopoly. The forbidden case directly contradicts this by stating that metallurgical analysis shows iron was rare, ritualistic, or inferior to bronze until after 1100 BC—placing the technological shift after the collapse, not before or during it. This is a direct factual contradiction of the mechanism's necessary precondition, violating the standard's requirement that forbidden cases be concrete observations that could realistically have obtained.
+cites: {"claim": "The collapse was triggered by a technological paradigm shift where the democratization of iron-working rendered the bronze-based monopoly of the palaces obsolete.", "mechanism": "The sudden availability of cheap iron tools and weapons allowed marginalized groups to bypass the palace-controlled tin/copper supply chain, eroding the economic basis of elite power and enabling successful asymmetrical warfare against bronze-equipped charioteers.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Metallurgical analysis showing iron artifacts were rare, ritualistic, or inferior to bronze in the region until after 1100 BC.", "eval": "rubric:std-hist"}], "prose_notes": "An atypical view challenging the standard chronology that places widespread iron use post-collapse; posits technology as the driver rather than the result."}
+
+TARGET:
+{"claim": "The collapse was triggered by a technological paradigm shift where the democratization of iron-working rendered the bronze-based monopoly of the palaces obsolete.", "mechanism": "The sudden availability of cheap iron tools and weapons allowed marginalized groups to bypass the palace-controlled tin/copper supply chain, eroding the economic basis of elite power and enabling successful asymmetrical warfare against bronze-equipped charioteers.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Metallurgical analysis showing iron artifacts were rare, ritualistic, or inferior to bronze in the region until after 1100 BC.", "eval": "rubric:std-hist"}], "prose_notes": "An atypical view challenging the standard chronology that places widespread iron use post-collapse; posits technology as the driver rather than the result."}

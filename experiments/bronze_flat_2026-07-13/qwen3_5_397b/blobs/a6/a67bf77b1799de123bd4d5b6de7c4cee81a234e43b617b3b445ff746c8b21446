@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of interdependent trade networks triggering a cascading economic depression.\", \"mechanism\": \"Hyper-specialization in palace economies created fragility; the interruption of tin or grain flows by minor disruptions caused total systemic paralysis.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows local subsistence farming remained robust and independent of palace redistribution during the transition layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the covering principle of complex system fragility; excludes Egypt due to its self-sufficient Nile agriculture.\"}",
+      "typicality": 0.85,
+      "neighbours": [
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A sudden shift in military technology rendered the chariot-based aristocratic order obsolete overnight.\", \"mechanism\": \"The proliferation of inexpensive infantry weaponry (long swords, javelins) allowed decentralized groups to overwhelm expensive, logistically heavy chariot armies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Historical records indicate chariot units remained the decisive battlefield force in major engagements throughout the entire 12th century BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on tactical asymmetry; excludes Egypt which successfully adapted its military structure, and Assyria which was rising.\"}",
+      "typicality": 0.65,
+      "neighbours": [
+        "A6",
+        "A4"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an illusion of elite disappearance caused by a rapid sociopolitical devolution to village-level autonomy.\", \"mechanism\": \"Palace centers were abandoned not due to destruction but because the population voluntarily rejected centralized extraction in favor of localized resilience.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Levantine city-states\", \"Hittite Anatolia\"], \"excludes\": [\"Egypt\", \"Ugarit\", \"Sea Peoples\"]}, \"forbidden\": [{\"case\": \"Stratigraphic layers show widespread, simultaneous violent destruction and burning of palace complexes across all regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical social-contract failure model; explicitly excludes Ugarit where destruction is undeniable, focusing on areas with less clear destruction evidence.\"}",
+      "typicality": 0.25,
+      "neighbours": [
+        "A9",
+        "A12"
+      ]
+    }
+  ]
+}

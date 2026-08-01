@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"Forbidden case 1 requires \"two critic configurations with identical marginal (phi, psi) but different question-conditional flag rates\" — constructing such a matched pair is a generation problem, not a measurement the harness performs."}

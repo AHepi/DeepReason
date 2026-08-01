@@ -198,11 +198,11 @@ theories the judge prefers, not which of all 27 is best. Control gate
 Every number above is a deterministic function of a committed log. Runs
 replay byte-for-byte; token accounting is verified
 (`deepreason.invariants.verify_root` caught a real 1% spend leak in a
-separate million-token run); nothing is deleted. The compact build,
-MiniReason ([`mini/`](../mini/README.md), ~900 lines), runs a full
-generate-and-filter pass for cents, so replication doesn't require a
-budget. If you disagree with a number, re-derive it from the log or re-run
-the arm yourself.
+separate million-token run); nothing is deleted. The reduced engine profile,
+MiniReason ([`mini/`](../mini/README.md)), runs a generate-and-filter pass
+through the same canonical Harness and grounded adjudicator while omitting
+the full scheduler's expensive features. If you disagree with a number,
+re-derive it from the log or re-run the arm yourself.
 
 ## Where I need help
 

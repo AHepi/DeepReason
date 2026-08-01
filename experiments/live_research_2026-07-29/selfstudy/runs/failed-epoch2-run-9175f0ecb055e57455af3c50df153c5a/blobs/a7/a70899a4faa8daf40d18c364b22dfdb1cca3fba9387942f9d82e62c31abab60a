@@ -1,0 +1,11 @@
+{
+  "candidate": {
+    "content": "The theory-state artifact depends on the basin-report's characterization of refuted-attractors to formulate its repertoire claims, and this is refuted if the token-economy's cost optimizations abstracts away the epistemic constraints that the basin-report imposes on the theory-state.",
+    "typicality": 0.7,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's mechanism explicitly requires 'earthquake damage to port infrastructure and grain stores' to trigger cascading resource starvation. The forbidden case—'Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers'—directly contradicts this causal sequence. If silos and ports were intact, the posited mechanism (seismic disruption of storage and trade) could not have initiated the claimed systemic failure in Ugarit, yet the target lists Ugarit in its scope. The target therefore fails to satisfy clause (2) of the standard: it does not state a forbidden case that is a concrete observation which could realistically have obtained, because the forbidden case it provides would falsify the mechanism for a site it claims to cover, yet the target offers no explanation for how the mechanism could operate despite intact infrastructure.",
+  "counterexample": null
+}

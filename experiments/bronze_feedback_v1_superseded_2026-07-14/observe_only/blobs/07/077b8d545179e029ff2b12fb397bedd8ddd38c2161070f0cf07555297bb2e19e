@@ -1,0 +1,48 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM pi-bronze
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.70): counterexample first
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- A2: {"claim": "The Sea Peoples were not a primary cause but a symptom of systemic collapse triggered by climatic anomaly","mechanism": "A prolonged regional drought
+- A3: {"claim": "Egypt survived because its centralized temple-state redistributive apparatus was structurally antifragile compared to peer-polity palace systems","me
+- A4: {"claim": "The collapse was epiphenomenal to a hyperconnectivity crisis in an early 'globalized' trade network that amplified local shocks into systemic failure
+- A5: {"claim": "The collapse resulted from an abrupt socio-technical phase transition when Linear B administrative systems lost asymmetric information advantages ove
+- A6: {"claim": "A volcanic winter initiated by the Hekla 3 or Santorini eruption triggered hemispheric circulation changes that differentially impacted rainfall-depe
+- A7: {"claim": "The simultaneous collapse was a coordinated revolutionary conspiracy by disenfranchised chariot-warrior aristocracies across polities who systematica
+- A8: {"standard": {"mode": "absolute", "rubric": "A historical-mechanism account must: (1) name a specific causal mechanism \u2014 an institution, incentive, or proc
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

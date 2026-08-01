@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target violates std-crit-design clause (1): the mechanism is not stated in measurable quantities. The 'mechanism' field describes the causal story in prose ('false-positive rate on low-error questions cancels or exceeds its true-positive gains') but never gives the critic precision and recall values, the ensemble size k, or the candidate base error rate at which the claimed crossover occurs."
+}

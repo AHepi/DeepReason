@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The mechanism field states a universal theorem: \"The key theorem: for a critic trained on the same distribution, E[harness_accuracy] ≤ E[SC_accuracy] + O(1/sqrt(n)) for all e, k, P, R.\" This provides no specific measurable regime where criticism‑filtered voting diverges from unfiltered majority voting, violating std-crit-design clause (1)."}

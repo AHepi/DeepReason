@@ -48,6 +48,26 @@ class _SchoolScripted:
         return _vs(f"generic account number {self.calls}")
 
 
+def test_make_profile_keeps_capture_machinery_on(tmp_path):
+    """Capture control (spec §11) is mandatory in normal runs: the app
+    profile must not zero schools or leave the tripwires unable to fire,
+    and a make-shaped scheduler must actually build the school roster."""
+    from deepreason.easy import MAKE_OVERRIDES
+
+    assert "N_SCHOOLS" not in MAKE_OVERRIDES  # inherits the configured range
+    config = Config(**MAKE_OVERRIDES)
+    assert 3 <= config.N_SCHOOLS <= 5  # spec §11.1 normal range
+    assert config.RESEED_RATIO_MAX is not None  # school convergence can fire
+    assert config.LAMBDA_FLOOR is not None      # grounding decay can fire
+    assert config.GATE_ORBIT_MIN is not None    # attractor orbiting can fire
+
+    harness = Harness(tmp_path / "run")
+    _seed_problem(harness)
+    adapter = LLMAdapter({"conjecturer": MockEndpoint(lambda p: _vs("x"))}, harness.blobs)
+    scheduler = Scheduler(harness, adapter, config, embedder=HashingEmbedder())
+    assert len(scheduler.schools) == config.N_SCHOOLS
+
+
 def test_init_and_allocation(tmp_path):
     harness = Harness(tmp_path / "run")
     config = Config(N_SCHOOLS=2)

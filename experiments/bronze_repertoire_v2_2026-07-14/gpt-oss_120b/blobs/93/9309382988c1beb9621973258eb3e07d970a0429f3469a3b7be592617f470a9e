@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (pi-bronze) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:df3a9e7acec3: rubric:std-hist
+- fc:bc3bf0216e4e: rubric:std-hist
+- fc:0e1acd7cb0cd: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET c4f54171b1e22fe11761abc4d1373cc53d2234e3b2677f53966b239b92137530
+{"claim": "A rapid, region-wide hyperarid climate shift around 1200 BC caused severe agricultural failures in the Eastern Mediterranean, while Egypt's reliance on the Nile flood insulated it.", "mechanism": "Sharp decrease in precipitation leading to drought, crop failure, population stress, and eventual societal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleo‑hydrological data from speleothems in Anatolia showing no significant drought at 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Climate records from the Mediterranean are mixed; a clear, simultaneous drought would strongly support this model, but many high‑resolution proxies suggest only modest variability."}
+commitments: skeleton-wf, kappa-hist, fc:df3a9e7acec3
+
+TARGET b5db134d313fcc044776b2a13628d114e9e62ae72c5cd0ee20589ab8c1655767
+{"claim": "Mass migrations and raids by the Sea Peoples disrupted trade, political stability, and military defense across the Eastern Mediterranean, precipitating collapse.", "mechanism": "Coordinated external pressure from maritime raiders overwhelmed local militaries and broke inter‑regional trade networks, leading to internal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt (which repelled the Sea Peoples)"]}, "forbidden": [{"case": "Archaeological layers at Ugarit lacking any destruction horizon or Sea Peoples artefacts dated to 1200–1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "This is the classic ‘Sea Peoples’ hypothesis favored by many scholars; the counterexample of sites with no destruction evidence challenges its universality."}
+commitments: skeleton-wf, kappa-hist, fc:bc3bf0216e4e
+
+TARGET dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67
+{"claim": "The collapse of the copper‑production system in Cyprus eliminated a key economic engine, causing a chain reaction of economic decline throughout the trade‑dependent palace societies.", "mechanism": "Loss of copper exports led to loss of elite revenues, reduced ability to fund military and monument projects, and triggered internal unrest.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Levantine city‑states that relied less on copper", "Egypt"]}, "forbidden": [{"case": "Late Bronze Age records from Hattusa showing continued receipt of copper shipments after 1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "An economic‑centric explanation that downplays direct warfare; it is less common but offers a mechanistic view linking resource networks to collapse."}
+commitments: skeleton-wf, kappa-hist, fc:0e1acd7cb0cd
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

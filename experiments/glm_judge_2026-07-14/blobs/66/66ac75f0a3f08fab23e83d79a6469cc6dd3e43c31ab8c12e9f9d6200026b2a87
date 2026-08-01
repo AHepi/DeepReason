@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target's central mechanism invokes a sqrt(k)-scaled precision threshold (0.5 * sqrt(5/k)) whose mathematical justification is absent from the proposal ... this violates std-crit-design clause (1): the regime condition under which criticism-filtered voting diverges from unfiltered majority voting must be stated in measurable quantities that follow from a specified mechanism, not an aspirational or unjustified formula."
+}

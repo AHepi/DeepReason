@@ -1,0 +1,253 @@
+{
+  "critiques": [],
+  "referee_transactions": [
+    {
+      "status": "budget_denied",
+      "reason": "token_budget_denied"
+    },
+    {
+      "status": "budget_denied",
+      "reason": "token_budget_denied"
+    }
+  ],
+  "research": [],
+  "simulation": [],
+  "citations": [
+    {
+      "seq": 77,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "29ac84b3125f9e8cfa69e294ac9fa97531734eb8ecbf17edd0334efbc12c87ff",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 78,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "817aa2704ec43646341ed764791896e1c6792f84d28e1866e08886da60865360",
+        "29ac84b3125f9e8cfa69e294ac9fa97531734eb8ecbf17edd0334efbc12c87ff",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 79,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "6050cf69f391fa3305dfb967bb9138370f830e094ad2d51171d30c27ce01009c",
+        "29ac84b3125f9e8cfa69e294ac9fa97531734eb8ecbf17edd0334efbc12c87ff",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 80,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "731c410356644310e1becf0917b181c5e3d30e326bf09960eab74c9910e6a7e4",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 81,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "6050cf69f391fa3305dfb967bb9138370f830e094ad2d51171d30c27ce01009c",
+        "731c410356644310e1becf0917b181c5e3d30e326bf09960eab74c9910e6a7e4",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 82,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "b01150a3ae43d8f6d7b68df95fcfafa9b1ebf75b3818395bbacad323c8e6ce01",
+        "d09b477aac0a9711fc673d313830a3fc6517d1501d8633490d468565a504cf89",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 83,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "6050cf69f391fa3305dfb967bb9138370f830e094ad2d51171d30c27ce01009c",
+        "d09b477aac0a9711fc673d313830a3fc6517d1501d8633490d468565a504cf89",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 84,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "d09b477aac0a9711fc673d313830a3fc6517d1501d8633490d468565a504cf89",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 85,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "63658fdafdfbcb366e3af5ed5804d69df0b28377917bd6f41c027369b9631d80",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 86,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "6050cf69f391fa3305dfb967bb9138370f830e094ad2d51171d30c27ce01009c",
+        "63658fdafdfbcb366e3af5ed5804d69df0b28377917bd6f41c027369b9631d80",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 87,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "680b4c459d28bf7a9440623bcb9821016abb60de035df6ec8b670b6028828093",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 88,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "b01150a3ae43d8f6d7b68df95fcfafa9b1ebf75b3818395bbacad323c8e6ce01",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 89,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "6050cf69f391fa3305dfb967bb9138370f830e094ad2d51171d30c27ce01009c",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 90,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "843819388191d0e9d80a01fb2c6fa5b76e821f5a8a145dff1803248a790af523",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 91,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "4f053d098dcef34733fc9c82ad468f554a2d6d74e10ecac096722dac0a70f660",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 92,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "9fbbce6aec6ce1fd0ca55cd1254f22f77824a9615b1c7f1416fe1135c6512c65",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 93,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "8a7a7d8f89f48b3e7af9799243ff28d55bdfb5e76442f59f8c5cb8d01dd50f8c",
+        "a0b7205222a3d3cf4b24e546f3755dee44d030600db14148c459302c0c1bb491",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 94,
+      "inputs": [
+        "evidence-citation:EVIDENCE_QUOTE_MISMATCH",
+        "b01150a3ae43d8f6d7b68df95fcfafa9b1ebf75b3818395bbacad323c8e6ce01",
+        "a0b7205222a3d3cf4b24e546f3755dee44d030600db14148c459302c0c1bb491",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 95,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "2c7a5cc0d7461dd50950bec5953b1dc1ab6d735c58a1e56580868187f2a9b802",
+        "a0b7205222a3d3cf4b24e546f3755dee44d030600db14148c459302c0c1bb491",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 96,
+      "inputs": [
+        "evidence-citation:EVIDENCE_CITATION_VERIFIED",
+        "bfc42b3064ed02fe931c90634d6a521cd0f9755e19b2ab248f2ada8b0f54b73a",
+        "a0b7205222a3d3cf4b24e546f3755dee44d030600db14148c459302c0c1bb491",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    }
+  ],
+  "cycles": [
+    {
+      "seq": 20,
+      "inputs": [
+        "cycle",
+        "0",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 263,
+      "inputs": [
+        "cycle",
+        "1",
+        "disc:question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 264,
+      "inputs": [
+        "cycle",
+        "2",
+        "conn:29ac84b3125f"
+      ]
+    },
+    {
+      "seq": 270,
+      "inputs": [
+        "cycle",
+        "3",
+        "question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    },
+    {
+      "seq": 277,
+      "inputs": [
+        "cycle",
+        "4",
+        "conn:63658fdafdfb"
+      ]
+    },
+    {
+      "seq": 282,
+      "inputs": [
+        "cycle",
+        "5",
+        "disc:question-b9510316be66b626d54bf59c1e3483cc"
+      ]
+    }
+  ],
+  "dossier_blocks": {
+    "sources": 2,
+    "total_bytes": 7467
+  },
+  "replay_valid": null,
+  "replay_violations": []
+}

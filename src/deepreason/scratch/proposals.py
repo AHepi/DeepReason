@@ -1,0 +1,245 @@
+"""Wire-independent v6 model drafts for advisory scratch authoring."""
+
+from __future__ import annotations
+
+import re
+from typing import Annotated, Literal
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from deepreason.canonical import canonical_json
+from deepreason.scratch.models import (
+    MAX_PROVENANCE_REFS as _MAX_PROVENANCE_REFS,
+    ArtifactRef,
+    ExperimentRef,
+)
+
+SCRATCH_AUTHORING_PURPOSE = "imaginative_workshop"
+SCRATCH_EPISTEMIC_BOUNDARY = "advisory_non_grounding"
+V6_SCRATCH_WORKSHOP_PROMPT = (
+    "IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, "
+    "counterfactuals, contradictions, rough fragments, and unresolved questions "
+    "are explicitly welcome. Explore boldly. Scratch remains advisory: storage "
+    "alone never makes it a fact, evidence, a formal claim, or support for one."
+)
+V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION = (
+    "Optional imaginative workshop: speculative mechanisms, counterfactuals, "
+    "contradictions, rough fragments, and unresolved questions are welcome. "
+    "Scratch remains advisory; storage alone never makes it fact, evidence, "
+    "a formal claim, or formal support."
+)
+
+
+_LOCAL_SCRATCH_REF = r"^(?:SCR|NEW)_[0-9]{3,}$"
+_LOCAL_REF_ITEMS = {"type": "string", "pattern": _LOCAL_SCRATCH_REF}
+"""The namespace `_local_refs`/`_members_are_local` enforce, said in the schema.
+
+`items` REPLACES the rendered one, so the type is restated: `pattern`
+constrains only strings and a number would otherwise slip past it.
+"""
+
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by the ref validators below."""
+
+
+class ScratchProposalModel(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+
+
+class ScratchBlockDraftBodyV1(ScratchProposalModel):
+    content: str = Field(min_length=1, max_length=262_144)
+    why_keep_this: str | None = Field(default=None, min_length=1, max_length=262_144)
+    unfinished: str | None = Field(default=None, min_length=1, max_length=262_144)
+    possible_next_move: str | None = Field(default=None, min_length=1, max_length=262_144)
+    #: Bounds live on the ITEM type, not in json_schema_extra: the latter
+    #: renders a constraint the validator never applies, which is precisely
+    #: the prose-only defect this repository spent a tranche removing.
+    experiment_refs: tuple[ExperimentRef, ...] | None = Field(
+        default=None,
+        max_length=_MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Simulation request identifiers this note came out of. Provenance "
+            "only: naming an experiment here never makes this block evidence "
+            "for anything, and never makes the experiment's result a fact."
+        ),
+    )
+    bears_on_refs: tuple[ArtifactRef, ...] | None = Field(
+        default=None,
+        max_length=_MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Visible SRC_### artifacts this note was aimed at. A RELEVANCE "
+            "hypothesis, not a grounding claim: nothing follows it, and it is "
+            "admissible whether or not the aim turns out to be right. Read "
+            "back later it is labelled as the aim held when the note was "
+            "written, since source aliases are call-local."
+        ),
+    )
+
+    @field_validator("experiment_refs", "bears_on_refs")
+    @classmethod
+    def _refs_are_unique(cls, value):
+        if value is None:
+            return None
+        if len(value) != len(set(value)):
+            raise ValueError("advisory refs must not contain duplicates")
+        return tuple(value)
+
+
+class ScratchNewBlockDraftV1(ScratchProposalModel):
+    local_key: str = Field(pattern=r"^NEW_[0-9]{3,}$")
+    body: ScratchBlockDraftBodyV1
+
+
+class ScratchRevisionDraftV1(ScratchProposalModel):
+    target_alias: str = Field(pattern=r"^SCR_[0-9]{3,}$")
+    body: ScratchBlockDraftBodyV1
+
+
+class ScratchProposalLinkV1(ScratchProposalModel):
+    from_ref: str = Field(pattern=r"^(?:SCR|NEW)_[0-9]{3,}$")
+    to_ref: str = Field(pattern=r"^(?:SCR|NEW)_[0-9]{3,}$")
+    relation_hint: str = Field(min_length=1, max_length=16_384)
+    because: str | None = Field(default=None, min_length=1, max_length=262_144)
+    holds_when: str | None = Field(default=None, min_length=1, max_length=262_144)
+    weakens_when: str | None = Field(default=None, min_length=1, max_length=262_144)
+    direction: Literal["directed", "symmetric"] | None = None
+
+    @property
+    def is_self_link(self) -> bool:
+        """A link from a block to itself, which carries no edge.
+
+        Refusing this from here would abort the entire enclosing turn, so the
+        judgement lives here and the DISPOSAL lives on the container, which is
+        the only place an element can actually be removed.
+        """
+
+        return self.from_ref == self.to_ref
+
+
+class ScratchQuestionDraftV1(ScratchProposalModel):
+    question: str = Field(min_length=1, max_length=262_144)
+    related_refs: tuple[str, ...] = Field(
+        default=(),
+        max_length=64,
+        json_schema_extra={**_UNIQUE_ITEMS, "items": _LOCAL_REF_ITEMS},
+    )
+
+    @field_validator("related_refs")
+    @classmethod
+    def _local_refs(cls, value):
+        if any(re.fullmatch(r"^(?:SCR|NEW)_[0-9]{3,}$", item) is None for item in value):
+            raise ValueError("unresolved questions may use only visible/local scratch refs")
+        if len(value) != len(set(value)):
+            raise ValueError("related scratch references must be unique")
+        return tuple(value)
+
+
+class ScratchClusterSuggestionV1(ScratchProposalModel):
+    seed_focus: str = Field(min_length=1, max_length=262_144)
+    member_refs: tuple[str, ...] = Field(
+        min_length=1,
+        max_length=64,
+        json_schema_extra={**_UNIQUE_ITEMS, "items": _LOCAL_REF_ITEMS},
+    )
+
+    @field_validator("member_refs")
+    @classmethod
+    def _members_are_local(cls, value):
+        if any(re.fullmatch(r"^(?:SCR|NEW)_[0-9]{3,}$", item) is None for item in value):
+            raise ValueError("cluster suggestions may use only visible/local scratch refs")
+        if len(value) != len(set(value)):
+            raise ValueError("cluster suggestion members must be unique")
+        return tuple(value)
+
+
+class ScratchProposalV1(ScratchProposalModel):
+    """Model-authored drafts only; no IDs, provenance, snapshots, or status."""
+
+    new_blocks: tuple[ScratchNewBlockDraftV1, ...] = Field(default=(), max_length=32)
+    revisions: tuple[ScratchRevisionDraftV1, ...] = Field(default=(), max_length=32)
+    links: tuple[ScratchProposalLinkV1, ...] = Field(default=(), max_length=64)
+    unresolved_questions: tuple[ScratchQuestionDraftV1, ...] = Field(
+        default=(), max_length=32
+    )
+    cluster_suggestions: tuple[ScratchClusterSuggestionV1, ...] = Field(
+        default=(), max_length=32
+    )
+
+    @model_validator(mode="after")
+    def _drop_self_links(self):
+        """Discard a link from a block to itself instead of refusing the turn.
+
+        A self-link carries nothing, but refusing it used to abort the WHOLE
+        conjecture turn, candidates and all, because the refusal was raised
+        from inside a nested item.
+
+        Not hypothetical. In run-bc3e8797b3e0609eddb324299c8257bd a proposal
+        declared exactly one new block, so no legal `to_ref` existed — every
+        target is either that same block (a self-link) or a key the response
+        never declares. The model oscillated between the two invalid values
+        across four repair attempts, because each diagnostic names only the
+        violation of the state the document is in, and nothing could say the
+        field was unsatisfiable and the link should go. The seat exhausted its
+        smallest authorized contract and the run died at cycle 0, discarding a
+        correct refutation it had already written.
+
+        Dropping is safe because a self-link is inert by construction: it adds
+        no edge between distinct blocks, so removing it cannot change what the
+        scratch graph says. This runs BEFORE `_local_namespace_is_closed` so a
+        dropped link stops contributing references to the namespace check.
+        """
+
+        kept = tuple(link for link in self.links if not link.is_self_link)
+        if len(kept) != len(self.links):
+            object.__setattr__(self, "links", kept)
+        return self
+
+    @model_validator(mode="after")
+    def _local_namespace_is_closed(self):
+        local_keys = tuple(item.local_key for item in self.new_blocks)
+        if len(local_keys) != len(set(local_keys)):
+            raise ValueError("new scratch local keys must be unique")
+        allowed_new = set(local_keys)
+        referenced_new = {
+            ref
+            for link in self.links
+            for ref in (link.from_ref, link.to_ref)
+            if ref.startswith("NEW_")
+        }
+        referenced_new.update(
+            ref
+            for question in self.unresolved_questions
+            for ref in question.related_refs
+            if ref.startswith("NEW_")
+        )
+        referenced_new.update(
+            ref
+            for cluster in self.cluster_suggestions
+            for ref in cluster.member_refs
+            if ref.startswith("NEW_")
+        )
+        if not referenced_new <= allowed_new:
+            raise ValueError("scratch proposal references an unknown new-block key")
+        return self
+
+    @property
+    def encoded_bytes(self) -> int:
+        return len(canonical_json(self.model_dump(mode="json")))
+
+
+__all__ = [
+    "SCRATCH_AUTHORING_PURPOSE",
+    "SCRATCH_EPISTEMIC_BOUNDARY",
+    "V6_SCRATCH_WORKSHOP_PROMPT",
+    "V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION",
+    "ScratchBlockDraftBodyV1",
+    "ScratchClusterSuggestionV1",
+    "ScratchNewBlockDraftV1",
+    "ScratchProposalLinkV1",
+    "ScratchProposalV1",
+    "ScratchQuestionDraftV1",
+    "ScratchRevisionDraftV1",
+]

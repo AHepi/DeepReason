@@ -1,0 +1,48 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+<div id="parallax-bg-root" style="position:fixed; inset:0; background:#050A0C; z-index:-1; overflow:hidden">
+  <style>
+    .c2-blob { position:absolute; filter:blur(60px); opacity:0.4; border-radius:50%; }
+    .c2-glass { position:absolute; background:rgba(255,255,255,0.05); backdrop-filter:blur(15px); border:1px solid rgba(57,255,20,0.2); border-radius:20px; }
+  </style>
+  <div id="parallax-bg-root-L1" class="c2-blob" style="width:40vw; height:40vw; background:#B026FF; top:-10%; left:-10%"></div>
+  <div id="parallax-bg-root-L2" class="c2-blob" style="width:30vw; height:30vw; background:#39FF14; bottom:-5%; right:-5%"></div>
+  <div id="parallax-bg-root-L3" class="c2-glass" style="width:200px; height:200px; top:30%; left:40%"></div>
+  <script>
+    let reduced = false, raf;
+    window.c2_updateParallaxOffset = (o) => {
+      if(reduced) return;
+      document.getElementById('parallax-bg-root-L1').style.transform = `translateY(${o * -0.1}px)`;
+      document.getElementById('parallax-bg-root-L2').style.transform = `translateY(${o * -0.3}px)`;
+      document.getElementById('parallax-bg-root-L3').style.transform = `translateY(${o * -0.6}px)`;
+    };
+    window.c2_toggleMotionReduced = (v) => { reduced = v; };
+    window.c2_mount = () => {
+      reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const loop = () => {
+        const t = Date.now()/1000;
+        document.getElementById('parallax-bg-root-L3').style.marginTop = `${Math.sin(t)*15}px`;
+        raf = requestAnimationFrame(loop);
+      };
+      if(!reduced) raf = requestAnimationFrame(loop);
+    };
+    window.c2_destroy = () => { cancelAnimationFrame(raf); };
+  </script>
+</div>
+
+BATTERY THE EDITS WILL FACE:
+- program:component_wf
+- program:lineage_ref
+
+DIRECTIVE: produce exactly 8 bounded edits.

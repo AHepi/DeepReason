@@ -47,9 +47,17 @@ def _chaotic_conjecturer():
     return MockEndpoint(respond)
 
 
-def _disagreeing_judge(verdict):
-    return MockEndpoint(lambda p: json.dumps(
-        {"verdict": verdict, "decisive_point": "clause 1" if verdict == "fail" else "x"}))
+def _disagreeing_judge(verdict, *, name, model):
+    return MockEndpoint(
+        lambda p: json.dumps(
+            {
+                "verdict": verdict,
+                "decisive_point": "clause 1" if verdict == "fail" else "x",
+            }
+        ),
+        name=name,
+        model=model,
+    )
 
 
 def test_chaotic_conjecturer_preserves_invariants(tmp_path):
@@ -87,7 +95,14 @@ def test_disagreeing_ensemble_and_weak_defender(tmp_path):
         "defender": MockEndpoint(lambda p: json.dumps({"answer": "no."})),
         # Two seats that ALWAYS disagree: every ruling must block, and every
         # blocked trial's spend must still reach the log.
-        "judge": [_disagreeing_judge("fail"), _disagreeing_judge("pass")],
+        "judge": [
+            _disagreeing_judge(
+                "fail", name="mock://judge-gemma", model="gemma-test"
+            ),
+            _disagreeing_judge(
+                "pass", name="mock://judge-qwen", model="qwen-test"
+            ),
+        ],
     }
     adapter = LLMAdapter(endpoints, h.blobs, retry_max=1, meter=meter)
     Scheduler(h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0)).run(3)
@@ -107,7 +122,10 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
     root = tmp_path / "run"
     h = Harness(root)
     _seed(h)
-    meter = TokenMeter(budget=250)  # dies after roughly one garbage attempt
+    # Reserve-settle sizing: the garbage attempts reserve ~1383/665/651 and
+    # settle ~657/119/108 tokens, so 1400 admits attempts 1-2 and rejects
+    # the third reservation mid-retry with spend already on the meter.
+    meter = TokenMeter(budget=1400)
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint(lambda p: "never valid json {{{")},
         h.blobs, retry_max=2, meter=meter)
@@ -115,6 +133,7 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
 
     logged = sum(e.llm.tokens for e in h.log.read() if e.llm)
     assert meter.total > 0
+    assert meter.total <= 1150  # the ceiling is never overshot
     assert logged == meter.total  # nothing invisible, even at the death
     result = verify_root(root, meter.total)
     assert result["violations"] == [], result["violations"]

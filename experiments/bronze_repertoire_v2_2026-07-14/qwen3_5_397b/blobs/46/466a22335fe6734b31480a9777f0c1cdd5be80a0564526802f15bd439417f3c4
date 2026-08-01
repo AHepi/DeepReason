@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the Hittite and Mycenaean states, while Egypt's survival is explained by its exclusive reliance on Nile flood irrigation which remained stable.", "mechanism": "Ecological niche specificity: A multi-decadal drought reduced yields in dry-farming zones (Anatolia/Greece) below the threshold required to sustain the non-producing palace bureaucracies. This forced mass migration (Sea Peoples) from the stricken hinterlands toward the coasts and Egypt. The mechanism is the differential vulnerability of dry-farming vs. river-irrigation systems to the same climatic oscillation.", "scope": {"covers": ["Hittite Anatolia", "Mycenaean Greece", "Levantine city-states", "Ugarit"], "excludes": ["Egypt", "Nile Delta settlements"]}, "forbidden": [{"case": "Paleoclimatic data (pollen cores, speleothems) indicates normal or above-average precipitation in Central Anatolia and the Peloponnese between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "This sharpens the environmental hypothesis by contrasting specific agricultural technologies (dry vs. irrigated) rather than just stating 'drought', explaining the asymmetry of survival."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

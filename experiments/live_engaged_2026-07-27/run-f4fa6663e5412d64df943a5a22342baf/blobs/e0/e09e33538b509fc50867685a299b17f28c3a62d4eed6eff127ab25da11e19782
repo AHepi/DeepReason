@@ -1,0 +1,6 @@
+```json
+{
+  "op": "remove",
+  "path": "/scratch_proposal/new_blocks/1/body/related_refs"
+}
+```

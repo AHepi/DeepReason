@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of international bronze trade networks due to seismic activity disrupting mining and transport.\", \"mechanism\": \"Cascading economic depression triggered by natural disasters cutting off essential tin and copper supplies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows continuous bronze production in Cyprus during the transition period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies heavily on the 'Earthquake Storm' hypothesis; struggles to explain why Egypt's trade networks remained functional despite similar geographic risks.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A1", "A5"]
+    },
+    {
+      "content": "{\"claim\": \"Internal class warfare and peasant revolts against palatial redistribution systems precipitated the collapse from within.\", \"mechanism\": \"Societal fragmentation caused by the inability of centralized bureaucracies to sustain lower classes during minor climatic stress.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Sea Peoples\", \"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Linear B tablets indicate increased rationing rather than cessation of administration immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on internal fragility rather than external invasion; contradicts evidence of sudden violent destruction in some strata.\"}",
+      "typicality": 0.45,
+      "neighbours": ["A3", "A6", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"The introduction of affordable iron weaponry democratized violence, allowing non-state actors to overwhelm chariot-based aristocratic armies.\", \"mechanism\": \"Technological shift in metallurgy rendering expensive bronze-age military hierarchies obsolete.\", \"scope\": {\"covers\": [\"Levantine city-states\", \"Hittite Anatolia\", \"Sea Peoples\"], \"excludes\": [\"Mycenaean Greece\", \"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Radiocarbon dating places the widespread adoption of iron tools and weapons at least a century after the initial palace destructions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Anachronistic risk; current consensus suggests iron became dominant only after the collapse created the vacuum, not as the cause.\"}",
+      "typicality": 0.15,
+      "neighbours": ["A8", "A11", "A12"]
+    }
+  ]
+}

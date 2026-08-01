@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+
+TARGET:
+{"claim": "Sea Peoples invasions caused direct military destruction of palace centers, while Egypt's geographic depth and fortified Nile corridor enabled absorption of refugee waves and raiding parties without systemic disintegration", "mechanism": "Military invasion differential: linear coastal geography of palatial states enabled rapid sequential destruction, whereas Egypt's compact riparian geography with unified command allowed defensive in-depth attrition", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Egyptian survival"], "excludes": ["Mesopotamian continuities", "Iranian plateau developments", "Cyprus intermediary role"]}, "forbidden": [{"case": "Archaeological evidence shows Sea Peoples destruction layers post-date administrative collapse and abandonment at major sites", "eval": "rubric:std-hist"}, {"case": "Egyptian records describe Sea Peoples as settled mercenaries integrated into military rather than repelled invaders", "eval": "rubric:std-hist"}, {"case": "Hittite capital Hattusa shows no destruction layer but gradual abandonment", "eval": "rubric:std-hist"}], "prose_notes": "Reinventional of traditional invasion hypothesis with geographic framing; vulnerable to criticism that it reverses cause and effect if collapse preceded invasions"}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

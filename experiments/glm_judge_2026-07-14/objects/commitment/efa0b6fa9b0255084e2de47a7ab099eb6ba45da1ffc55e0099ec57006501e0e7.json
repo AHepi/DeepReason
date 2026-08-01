@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Critic score distributions are separable (KS p < 0.05) but no threshold tau yields positive net-fixed-minus-broke averaged over the test set"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:fe4e1bbdd21c","observation_valued":false},"id":"fc:fe4e1bbdd21c","schema":"commitment"}

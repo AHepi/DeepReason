@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Two conclusions with identical derivation tuples have different truth values in some possible world."},"steps":100000,"time_ms":2000},"eval":"program:check_truth_value_divergence","id":"fc:f2cba80dc0d5","observation_valued":false},"id":"fc:f2cba80dc0d5","schema":"commitment"}

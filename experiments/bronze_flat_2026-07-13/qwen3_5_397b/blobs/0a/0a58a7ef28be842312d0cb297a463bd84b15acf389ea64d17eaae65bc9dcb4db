@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target": "22c6e6564ec36c58b8f2206b610d4f88e41b7093b7e450b970271feb53df6cba",
+      "attack": true,
+      "case": "The target asserts a 'unifier' stance for 'school-0' while simultaneously declaring itself a 'reseed_of' a prior artifact. This creates a logical contradiction in the policy's temporal identity: a 'unifier' implies a synthesizing role that integrates divergent elements into a new whole, whereas a 'reseed' implies a restorative or iterative role dependent on the specific genetic material of the predecessor. By claiming both, the policy fails to define whether its authority derives from its own novel synthesis or from the lineage of the reseeded artifact, rendering the operational mandate ambiguous and potentially self-negating if the predecessor's traits conflict with the unification goal.",
+      "counterexample": null
+    },
+    {
+      "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48",
+      "attack": true,
+      "case": "The standard's second requirement demands 'forbidden cases' be 'concrete observations which could realistically have obtained.' This criterion is internally incoherent when applied to counterfactual history. An observation, by definition, is something that has been recorded or perceived; a 'realistic' event that did not happen cannot be an 'observation.' The standard conflates epistemic access (what was observed) with ontological possibility (what could have happened). Consequently, any attempt to satisfy this rule forces the historian to either fabricate a false record (claiming an observation of a non-event) or describe a hypothetical scenario that fails the 'concrete observation' test, making the standard impossible to satisfy without violating the definition of its own terms.",
+      "counterexample": null
+    }
+  ]
+}

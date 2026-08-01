@@ -1,0 +1,138 @@
+{
+  "run_id": "run-5a771259557378224bd68591483817be",
+  "proposals": [
+    {
+      "id": "sha256:6d2eb816256047bad2448ed67fa21f25a18ad13d4dbd17df00147d840d647a3e",
+      "index": 0,
+      "purpose": "Fetch the exact definitions of 'safe' and 'idempotent' from RFC 9110 to cite verbatim. The target section defines safe methods as read-only and idempotent methods as repeatable, and states whether safe methods are a subset of idempotent methods.",
+      "urls": [
+        "https://www.rfc-editor.org/rfc/rfc9110#section-9.2",
+        "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+        "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.2"
+      ],
+      "work": "sha256:73a96253c395c8765b59f0e0014f6f42fec1d0f66eb88ab63c68c916aa7b5ef5"
+    },
+    {
+      "id": "sha256:970a3e667d351d2b720202d09d1b5864638489c05f583b9dbbb7c4d78d49ae0a",
+      "index": 0,
+      "purpose": "Obtain verbatim definitions of 'safe' and 'idempotent' methods from RFC 9110 \u00a79.2 to confirm the safe \u2282 idempotent hierarchy and the exact definitional language (client-expectation component, side-effect vs. intended-effect framing).",
+      "urls": [
+        "https://www.rfc-editor.org/rfc/rfc9110#section-9.2"
+      ],
+      "work": "sha256:a80fb39fc8c45a1056d443afbb9c60db7c2cdfcdb7ae807e71e6c9354cc4c60d"
+    },
+    {
+      "id": "sha256:4a407fefc6ae33e2c8f52eeb495c4dbb424586e5af7696f31cb41c8d57bd293d",
+      "index": 1,
+      "purpose": "Obtain the verbatim text of RFC 9110 \u00a79.2.1 (Safe Methods) to verify whether the definition includes the client-expectation dimension ('client does not request, and does not expect, any state change') or is purely server-side.",
+      "urls": [
+        "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1"
+      ],
+      "work": "sha256:a80fb39fc8c45a1056d443afbb9c60db7c2cdfcdb7ae807e71e6c9354cc4c60d"
+    }
+  ],
+  "transitions": [
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "granted",
+      "reason": "allowlist_and_budget_validated"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "compiled",
+      "reason": "fetch_plan_frozen"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "dispatched",
+      "reason": "contained_fetch_dispatch"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "failed",
+      "reason": "nothing_fetched"
+    },
+    {
+      "request": "sha256:6d2eb816256047bad",
+      "lifecycle": "result_packaged",
+      "reason": "fetched_material_packaged"
+    },
+    {
+      "request": "sha256:970a3e667d351d2b7",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:4a407fefc6ae33e2c",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:970a3e667d351d2b7",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:970a3e667d351d2b7",
+      "lifecycle": "denied",
+      "reason": "requests_budget_exhausted"
+    },
+    {
+      "request": "sha256:4a407fefc6ae33e2c",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:4a407fefc6ae33e2c",
+      "lifecycle": "denied",
+      "reason": "requests_budget_exhausted"
+    }
+  ],
+  "receipts": [
+    {
+      "proposal": "sha256:6d2eb816256047bad",
+      "outcome": "nothing_fetched",
+      "used": 6,
+      "limit": 6,
+      "attempts": [
+        {
+          "url": "https://www.rfc-editor.org/info/rfc9110/",
+          "outcome": "RESEARCH_RESPONSE_TOO_LARGE",
+          "status": 200,
+          "bytes": 4194305
+        },
+        {
+          "url": "https://www.rfc-editor.org/info/rfc9110/",
+          "outcome": "RESEARCH_RESPONSE_TOO_LARGE",
+          "status": 200,
+          "bytes": 4194305
+        },
+        {
+          "url": "https://www.rfc-editor.org/info/rfc9110/",
+          "outcome": "RESEARCH_RESPONSE_TOO_LARGE",
+          "status": 200,
+          "bytes": 4194305
+        }
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "proposal": "sha256:6d2eb816256047bad",
+      "items": []
+    }
+  ],
+  "consumptions": [],
+  "citable_blocks": [],
+  "measures": []
+}

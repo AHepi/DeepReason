@@ -1,0 +1,20 @@
+{
+  "critiques": [],
+  "referee_transactions": [],
+  "research": [],
+  "simulation": [],
+  "scratch": [],
+  "citations": [],
+  "cycles": [
+    {
+      "seq": 20,
+      "inputs": [
+        "cycle",
+        "0",
+        "question-a0665948a747938e5c6a0150b3668d9b"
+      ]
+    }
+  ],
+  "replay_valid": null,
+  "replay_violations": []
+}

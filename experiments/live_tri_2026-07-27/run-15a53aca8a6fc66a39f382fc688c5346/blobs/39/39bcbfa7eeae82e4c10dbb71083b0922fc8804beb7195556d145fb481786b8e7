@@ -1,0 +1,28 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@515df95a0b8cf98798e89a20: program:reasoning_observation_pending
+- reason-counter@17453c4e1e30f4ee240681a4: program:reasoning_observation_pending
+- reason-counter@b36d931c53c657438bc4afb6: program:reasoning_observation_pending
+- reason-counter@e2b5698d9a394ddf875909df: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is permissible exactly when the event-framing protocol can deterministically identify the last complete committed event before the truncation point, quarantining any trailing partial bytes as non-events; it must be refused when framing is non-self-delimiting or when integrity checks reveal corruption within a nominally complete event.","counterconditions":[{"case":"The framing protocol provides no self-delimiting boundary or checksum, making the last-complete-event determination ambiguous.","eval":"observation"},{"case":"A nominally complete event's checksum fails, indicating intra-event corruption rather than clean truncation.","eval":"observation"},{"case":"The causal fingerprint of the resumed stream diverges from the fingerprint an uninterrupted run would produce.","eval":"observation"},{"case":"The append-only log has been tampered with between exhaustion and resumption, violating physical integrity independently of the truncation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Under the two-level invariant decomposition (physical append-only integrity vs logical causal continuity), physical integrity is preserved by framing-quarantine: a partial byte sequence left by mid-stream exhaustion was never an event, so ignoring it violates no append-only commitment. Logical continuity is preserved by causal fingerprint matching: the resumed stream must produce the same observable sequence as an uninterrupted run would have past the last committed event. When the framing protocol uses self-delimiting records with checksums or end-markers, the boundary between committed events and orphaned fragments is deterministic, so quarantine is safe. When framing relies on length-prefixing alone without integrity checks, a truncated length field can cause the resumption protocol to misidentify a partial record as complete, corrupting logical continuity\u2014and so resumption must be refused until an out-of-band reconciliation establishes the true last-complete boundary.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@515df95a0b8cf98798e89a20, reason-counter@17453c4e1e30f4ee240681a4, reason-counter@b36d931c53c657438bc4afb6, reason-counter@e2b5698d9a394ddf875909df
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -8,12 +8,28 @@ distribution with stated typicality estimates, never a single point.
 import json
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class CandidateRef(BaseModel):
     target: str
     role: Literal["dependence", "mention"] = "dependence"
+
+
+class EvidenceRefClaimV1(BaseModel):
+    """One claimed grounding in an admitted dossier block (admission §4).
+
+    ``block`` names a dossier block by id or by a unique hex prefix of at
+    least 12 characters. ``quote``, when present, must reproduce a
+    contiguous byte span of the block's canonical text exactly — the
+    citation checker byte-verifies it and a mismatch is a durable finding,
+    never a silent pass.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    block: str = Field(pattern=r"^[0-9a-f]{12,64}$")
+    quote: str | None = Field(default=None, min_length=1, max_length=2_000)
 
 
 class ConjectureCandidate(BaseModel):
@@ -22,6 +38,9 @@ class ConjectureCandidate(BaseModel):
     typicality: float = Field(ge=0.0, le=1.0)
     # Born-connected (§7 L1): refs to neighbourhood artifacts where natural.
     refs: list[CandidateRef] = Field(default_factory=list)
+    # Claimed groundings in admitted evidence blocks (admission §4); checked
+    # deterministically after admission, never trusted on arrival.
+    evidence_refs: list[EvidenceRefClaimV1] = Field(default_factory=list, max_length=8)
 
     @field_validator("content", mode="before")
     @classmethod
@@ -40,6 +59,12 @@ class ConjecturerOutput(BaseModel):
 class ArgumentativeCriticOutput(BaseModel):
     attack: bool
     case: str = ""  # the argument; becomes the critic artifact's content
+    # Grounded recourse against an execution-backed target: a JSON list of
+    # positional args for the target's entry point. The harness RUNS the
+    # target on it and checks the declared property (oracle.py) — a violated
+    # property becomes a DEMONSTRATIVE refutation; an invalid or passing
+    # counterexample grounds nothing.
+    counterexample: list | None = None
 
 
 class BatchCase(BaseModel):
@@ -50,10 +75,46 @@ class BatchCase(BaseModel):
     target: str  # must be an id listed in the pack; others are dropped
     attack: bool
     case: str = ""
+    counterexample: list | None = None  # same semantics as the single contract
 
 
 class BatchCriticOutput(BaseModel):
     cases: list[BatchCase] = Field(default_factory=list)
+
+
+class ExperimenterOutput(BaseModel):
+    """Experiment designs (rules/experiment.py): each entry is the SOURCE of
+    ``def gen(k)`` — a pure function from an index to one input for the
+    property oracle in the pack. Adjudicated mechanically by generator_wf
+    (compile, yield, novelty); a generator that designs no new experiment is
+    refuted on arrival."""
+
+    generators: list[str] = Field(min_length=1)
+
+
+class VisionCriticOutput(BaseModel):
+    """Visual judgment of RENDERED screenshots (rules/vision.py): attack=true
+    with a concrete, visible fault tied to what the problem demands, or
+    attack=false. screenshot_index names which provided image shows the
+    fault (0-based; null when the fault spans all of them)."""
+
+    attack: bool
+    case: str = ""
+    screenshot_index: int | None = None
+
+
+class PropertyProposal(BaseModel):
+    """One conjectured correctness property: ``claim`` states in one sentence
+    what requirement of the PROBLEM STATEMENT the checker encodes (the
+    relevance trial arbitrates exactly this claim); ``checker`` is the full
+    source of ``def check(inp, out)``."""
+
+    claim: str = Field(min_length=1)
+    checker: str = Field(min_length=1)
+
+
+class PropertyDesignerOutput(BaseModel):
+    properties: list[PropertyProposal] = Field(min_length=1)
 
 
 class VariatorEdit(BaseModel):

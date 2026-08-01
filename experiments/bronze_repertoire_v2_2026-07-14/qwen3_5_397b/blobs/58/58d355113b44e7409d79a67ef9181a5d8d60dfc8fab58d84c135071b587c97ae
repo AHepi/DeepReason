@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's single forbidden case is not a concrete, realistically obtainable observation. It is a vague, theory-laden construct: 'Archaeological evidence of abundant tin stockpiles in destroyed palace layers dated post-1200 BC.' This fails the standard's requirement for a specific, datable pattern or record. The target does not specify which palace, what constitutes 'abundant,' or cite any actual excavation that could have produced such a finding. A valid forbidden case would be, for example, 'Excavation of the Palace of Nestor at Pylos reveals undisturbed storerooms containing over 100 kg of tin ingots in a destruction layer securely dated by pottery to LH IIIC early (c. 1190 BC).' The provided case is an abstract placeholder, not a concrete observation that could realistically have been found in the archaeological record.
+
+TARGET:
+{"claim": "The collapse was triggered by a cascading failure of the international bronze supply chain, where the loss of a single critical tin source caused a systemic economic depression that delegitimized palace authority.", "mechanism": "Supply-side shock leading to currency debasement (in kind) and loss of elite monopoly on weaponry.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Cyprus"]}, "forbidden": [{"case": "Archaeological evidence of abundant tin stockpiles in destroyed palace layers dated post-1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the high interdependence of the Late Bronze Age gift-exchange economy; explains simultaneity via trade networks rather than migration."}

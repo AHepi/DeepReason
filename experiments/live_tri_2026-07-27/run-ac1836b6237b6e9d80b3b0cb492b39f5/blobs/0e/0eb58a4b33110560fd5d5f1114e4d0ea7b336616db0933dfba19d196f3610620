@@ -1,0 +1,53 @@
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "The fetch budget should be denominated solely in requests, with exhaustion recorded as a typed terminal event containing the request count and limit.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "The fetch budget should be denominated solely in bytes, with exhaustion recorded as a typed terminal event containing total bytes downloaded and limit.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "conflict",
+      "claim": "Requests-only and bytes-only denominations are mutually exclusive for a single fetch budget; they cannot both be the sole denomination.",
+      "conflict_handles": ["ART_2", "ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "The fetch budget must be denominated in both requests and bytes, because each captures a distinct resource dimension critical for reproducibility; exhaustion is recorded as a typed terminal state containing the cumulative counts of requests and bytes consumed, the limits, a timestamp, and a deterministic hash of the agent's state for auditability. This eliminates requests-only and bytes-only denominations, as they fail to account for payload size variation and per-request overhead respectively.",
+      "formal_artifact_handles": ["ART_7"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "supported_inference",
+      "claim": "Since requests-only and bytes-only are mutually exclusive and each fails to account for a critical resource dimension, a single-denomination budget is insufficient; a dual-denomination budget that records exhaustion as a typed terminal with a state hash is required.",
+      "premise_keys": ["CLM_1", "CLM_2", "CLM_3", "CLM_4"]
+    }
+  ],
+  "source_conflicts": [],
+  "uncovered_requirements": [
+    {
+      "requirement": "How should cached responses be counted against the byte budget to ensure reproducibility across cold-start and warm-start scenarios?",
+      "scratch_handles": ["SCR_2", "SCR_7"]
+    },
+    {
+      "requirement": "How should fetch retries be counted against the request budget to balance reproducibility and robustness against transient errors?",
+      "scratch_handles": ["SCR_6", "SCR_8"]
+    },
+    {
+      "requirement": "How should the agent's internal state hash be computed to capture all relevant non-budget state without including the budget counters themselves?",
+      "scratch_handles": ["SCR_1"]
+    },
+    {
+      "requirement": "How should atomic budget updates be handled if the agent performs parallel fetches to prevent overshoot?",
+      "scratch_handles": ["SCR_5"]
+    }
+  ]
+}

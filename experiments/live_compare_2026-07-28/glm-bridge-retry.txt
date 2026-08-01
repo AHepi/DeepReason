@@ -1,0 +1,4 @@
+
+=== BRIDGE TRIO RESULTS ===
+FAIL  start_bridge  | ValueError: BRIDGE_ROOT_AUTHORITY_INVALID
+=== 0/1 passed ===

@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: 3c884acf0d40 attributes Egypt's persistence to a specific structural buffer (dispersed irrigation/private entrepreneurship), while c3a117d0bb0b attributes it to stochastic variation without causal structure. The former is refuted if the latter's null model (random survival) cannot be rejected.",
+  "connects": [
+    "3c884acf0d40c517d2516ab9caa870587e529bc45cbd0b8348af39bf3014d607",
+    "c3a117dbb0b1843b0b1847231eeef7862e8573efd9a0f2f8225cd4f06537adf"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "content": "STATE_OF_THE_THEORY integrates the refuted-attractor dynamics from BASIN_REPORT by asserting that repertoire exhaustion is a shared mechanism of all conjecture cycles; refuted if the observed attractor basin depends on token budget limits rather than intrinsic generative finitude.",
+    "typicality": 0.65,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003"
+    ],
+    "evidence_refs": [
+      {
+        "block": "0e26d6be54fd5324acb6729e9246cab6045f9c9a5ce46e58822495e193daff92"
+      },
+      {
+        "block": "0f99efbab8a4"
+      }
+    ]
+  }
+}

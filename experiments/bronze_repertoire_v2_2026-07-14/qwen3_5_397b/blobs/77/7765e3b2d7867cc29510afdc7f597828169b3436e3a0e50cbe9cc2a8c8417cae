@@ -1,0 +1,22 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target names a mechanism but its forbidden case is not a concrete, datable observation that could realistically have obtained.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case — 'Archaeological evidence of robust, independent local grain storage or non-palatial craft production persisting through the transition period in the core collapse zones' — is not a single concrete observation, record, event, or datable pattern. It is a vague category of evidence described at a high level of abstraction, lacking specification of what site, what date range, what specific artifact assemblage, or what documentary record would constitute such evidence. A concrete forbidden case would name, for example, 'Excavation at Pylos revealing a non-palatial granary with radiocarbon dates spanning 1200–1150 BCE' or 'Linear B tablets from Knossos recording independent local textile production after 1190 BCE.' The target's formulation fails the specificity requirement of clause (2).
+
+TARGET:
+{"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where centralized storage and specialized labor created a single point of failure.", "mechanism": "Positive feedback loop of centralization: as palaces absorbed more surplus to support specialists, local resilience dropped; when a shock hit, the inability of local nodes to self-organize caused cascading institutional failure.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "Phoenician coastal enclaves"]}, "forbidden": [{"case": "Archaeological evidence of robust, independent local grain storage or non-palatial craft production persisting through the transition period in the core collapse zones.", "eval": "rubric:std-hist"}], "prose_notes": "Aligns with the systemic fragility hypothesis (artifact 576914b9), emphasizing internal structural weakness over external shock."}

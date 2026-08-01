@@ -1,0 +1,432 @@
+{
+  "run_id": "run-7d8723fbe8626c71db880826c244d332",
+  "proposals": [
+    {
+      "id": "sha256:a196202b97129802878b508434d3e89a94fa7f308aa4c9111318822143e89636",
+      "index": 0,
+      "purpose": "Check whether Python's logging module documentation discusses append-mode file handlers, retry semantics, or duplicate entry handling relevant to append-only event logs and idempotent replay",
+      "urls": [
+        "https://docs.python.org/3/library/logging.handlers.html"
+      ],
+      "work": "sha256:87e4f48d138f45002477e17a930b046ce3af788a432762a7d5926c0f621c9b16"
+    },
+    {
+      "id": "sha256:18e90417a6047d97729917582ff568a4ef72e31c8780bb583b9375703b4f657b",
+      "index": 1,
+      "purpose": "Check whether Python's sqlite3 documentation discusses transaction retry, idempotent INSERT semantics, or deduplication mechanisms relevant to at-least-once delivery in append-only systems",
+      "urls": [
+        "https://docs.python.org/3/library/sqlite3.html"
+      ],
+      "work": "sha256:87e4f48d138f45002477e17a930b046ce3af788a432762a7d5926c0f621c9b16"
+    },
+    {
+      "id": "sha256:75580cfb47f1f95c8c3d9877b20fd269ab75daeec3779ad9c0d45deca20d867c",
+      "index": 0,
+      "purpose": "Search Python's logging and queue module documentation for any published discussion of idempotent operations, at-least-once delivery semantics, or safe retry behavior in append-only contexts, to ground the distinction in published definitions.",
+      "urls": [
+        "https://docs.python.org/3/library/logging.html",
+        "https://docs.python.org/3/library/queue.html"
+      ],
+      "work": "sha256:44cadccd8758e57165746e7addf5dc32933aaeaeadbe478c5f213e26b87b1d82"
+    }
+  ],
+  "transitions": [
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "granted",
+      "reason": "allowlist_and_budget_validated"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "compiled",
+      "reason": "fetch_plan_frozen"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "dispatched",
+      "reason": "contained_fetch_dispatch"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "succeeded",
+      "reason": "fetched"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "result_packaged",
+      "reason": "fetched_material_packaged"
+    },
+    {
+      "request": "sha256:a196202b971298028",
+      "lifecycle": "consumed",
+      "reason": "evidence_registered"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "granted",
+      "reason": "allowlist_and_budget_validated"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "compiled",
+      "reason": "fetch_plan_frozen"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "dispatched",
+      "reason": "contained_fetch_dispatch"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "succeeded",
+      "reason": "fetched"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "result_packaged",
+      "reason": "fetched_material_packaged"
+    },
+    {
+      "request": "sha256:18e90417a6047d977",
+      "lifecycle": "consumed",
+      "reason": "evidence_registered"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "proposed",
+      "reason": "transaction_semantic_proposal"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "validated",
+      "reason": "harness_validation"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "granted",
+      "reason": "allowlist_and_budget_validated"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "compiled",
+      "reason": "fetch_plan_frozen"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "dispatched",
+      "reason": "contained_fetch_dispatch"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "succeeded",
+      "reason": "fetched"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "result_packaged",
+      "reason": "fetched_material_packaged"
+    },
+    {
+      "request": "sha256:75580cfb47f1f95c8",
+      "lifecycle": "consumed",
+      "reason": "evidence_registered"
+    }
+  ],
+  "receipts": [
+    {
+      "proposal": "sha256:a196202b971298028",
+      "outcome": "fetched",
+      "used": 1,
+      "limit": 6,
+      "attempts": [
+        {
+          "url": "https://docs.python.org/3/library/logging.handlers.html",
+          "outcome": "FETCHED",
+          "status": 200,
+          "bytes": 155367
+        }
+      ]
+    },
+    {
+      "proposal": "sha256:18e90417a6047d977",
+      "outcome": "fetched",
+      "used": 2,
+      "limit": 6,
+      "attempts": [
+        {
+          "url": "https://docs.python.org/3/library/sqlite3.html",
+          "outcome": "FETCHED",
+          "status": 200,
+          "bytes": 316032
+        }
+      ]
+    },
+    {
+      "proposal": "sha256:75580cfb47f1f95c8",
+      "outcome": "fetched",
+      "used": 4,
+      "limit": 6,
+      "attempts": [
+        {
+          "url": "https://docs.python.org/3/library/logging.html",
+          "outcome": "FETCHED",
+          "status": 200,
+          "bytes": 191406
+        },
+        {
+          "url": "https://docs.python.org/3/library/queue.html",
+          "outcome": "FETCHED",
+          "status": 200,
+          "bytes": 55594
+        }
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "proposal": "sha256:a196202b971298028",
+      "items": [
+        {
+          "url": "https://docs.python.org/3/library/logging.handlers.html",
+          "bytes": 155367,
+          "text": "bb947be76eafd135"
+        }
+      ]
+    },
+    {
+      "proposal": "sha256:18e90417a6047d977",
+      "items": [
+        {
+          "url": "https://docs.python.org/3/library/sqlite3.html",
+          "bytes": 316032,
+          "text": "9f11b6d56a10a52f"
+        }
+      ]
+    },
+    {
+      "proposal": "sha256:75580cfb47f1f95c8",
+      "items": [
+        {
+          "url": "https://docs.python.org/3/library/logging.html",
+          "bytes": 191406,
+          "text": "d6a225df08d549cc"
+        },
+        {
+          "url": "https://docs.python.org/3/library/queue.html",
+          "bytes": 55594,
+          "text": "8dc29547ff318edd"
+        }
+      ]
+    }
+  ],
+  "consumptions": [
+    {
+      "proposal": "sha256:a196202b971298028",
+      "evidence_refs": [
+        "e30ff4be17b211f562fd211ef50b5836f8a1c38bb3c507f678183d74e7b926ba"
+      ]
+    },
+    {
+      "proposal": "sha256:18e90417a6047d977",
+      "evidence_refs": [
+        "140e3cec6bb117d345eb75cfe13d408fff164cb38ea65599f6e3c84f945c9762"
+      ]
+    },
+    {
+      "proposal": "sha256:75580cfb47f1f95c8",
+      "evidence_refs": [
+        "675585876f4626014adb3e53e510e8145481c5ace673458221701ff1b1884ad1"
+      ]
+    }
+  ],
+  "citable_blocks": [
+    "13d6af7d75686ca3",
+    "16af5eae67cbd66c",
+    "20172f55feacbfc8",
+    "256954f9dc426cd2",
+    "28d0f633af873f3a",
+    "4927e34ce0759665",
+    "90bb30e6a97ddf3b",
+    "9a63a13c2c586aa5",
+    "b96dc4665b2a915f",
+    "bb4777486d7535da",
+    "dba0d37c5cf2553f",
+    "04385f2d83fbab5e",
+    "11648005555dd181",
+    "12d9d4d1e07aa56c",
+    "171cede9aad6144e",
+    "1c303c00548ecc7e",
+    "1d73bbaa5cdef26a",
+    "256df8e7afde9d53",
+    "25c16a28d53af48c",
+    "262d7a9ede541a7e",
+    "263c9edbc4f65b76",
+    "2af5910f9f0ec8b4",
+    "3b11ad7c2d265329",
+    "42b47797ca3e4a05",
+    "4596fdf2269151d4",
+    "46cc9c820799e6a4",
+    "472d698bda2cdaac",
+    "4c11f87c3713bd3e",
+    "50c3e33281ec5f3b",
+    "517ca50f62ada3d2",
+    "51833ff9ed5f0f89",
+    "5435a70288c071d4",
+    "553e427fa1f6724b",
+    "55a30f2fc7884874",
+    "580cab7327e72613",
+    "5adfea708af4c630",
+    "5ce23a97acb58373",
+    "5da813906973de2b",
+    "5fbb008bed04a437",
+    "6270865f1937c741",
+    "6780cff867fb8934",
+    "79e62df57dbb9f59",
+    "7ab0ca723adc3707",
+    "7e3c98d26b576eee",
+    "83867f12d0e504e3",
+    "83fc895a2f35f1d6",
+    "8d146bff41d548c4",
+    "8e49e75d2657ecbe",
+    "8e5b5d00f5ac40c6",
+    "92756619fb01cc30",
+    "9a91fd6739fd3a76",
+    "9c48876b15f4a62c",
+    "a98cc0b6ee621bd0",
+    "aa6f42c0cec281a4",
+    "aa7ce102ae14dba0",
+    "ac222f869aa5e1b3",
+    "ac96c4b589c3be23",
+    "b28299de4581478d",
+    "b3495a54156d9637",
+    "b3a41e5f0051893e",
+    "b6818dcd437037f0",
+    "b88ef3a3dc4d656b",
+    "bff8db7ec97b6d0a",
+    "c85e515d8d294574",
+    "d2cf540b0f67f157",
+    "dad11e7196565c4b",
+    "de6f92d7bdd817e6",
+    "e204edd0609bd532",
+    "f294d8dc3a634ca9",
+    "f8f40f8e28a60fa4",
+    "fb75aa4f4f3535be",
+    "03c9628d15ec5fb5",
+    "0a7d873b18474bb8",
+    "26253acc2dbfb7e7",
+    "2c463a585f2b606d",
+    "465d55790bb900ab",
+    "46b44aa9f10cc58f",
+    "578d3d5c0793c05e",
+    "65168bf1955a2d62",
+    "6c7dcbb6c7413c9b",
+    "8943644884280068",
+    "8a6d6af8f13babe6",
+    "b38f00d5b99b5685",
+    "b5cdc87990de2c0a",
+    "bb4972342dcffe51",
+    "bb85721fda4e9153",
+    "c2b13f767320d59b",
+    "d6eb06bd37795c57",
+    "eb34545883a35bee",
+    "f890ba8c19337205",
+    "fe585ebf8ae4c7eb",
+    "59daa217bafed992",
+    "7454cbd73732d6e8",
+    "b0ad03044f515f81",
+    "b73345bdb12a0891",
+    "bb4cc091cdaa4ae1",
+    "c3168630329ed105",
+    "d45457d9bc4a08a5",
+    "d792c23f92feaf6a",
+    "f65e4c4259d4887e"
+  ],
+  "measures": [
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "14e084ed5ca745f165af",
+      "d47d24d7fce16c23d4accf6d911ba23f817a9b5ee3482b2cce93a6e39618470b",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "2edd20cc5e66fc9a101c",
+      "d47d24d7fce16c23d4accf6d911ba23f817a9b5ee3482b2cce93a6e39618470b",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "8dc9accbe33c01455bd7",
+      "d47d24d7fce16c23d4accf6d911ba23f817a9b5ee3482b2cce93a6e39618470b",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e",
+      "7ee34869f3b73ab76ba92fcb019cd97ed97db6cfc4e977d78ebb575baa88791c",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b",
+      "7ee34869f3b73ab76ba92fcb019cd97ed97db6cfc4e977d78ebb575baa88791c",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e",
+      "ffd82244bb3b47c8bc4ea66b3440c9c6f7263cded40d76a5b64e084bd5915c18",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b",
+      "ffd82244bb3b47c8bc4ea66b3440c9c6f7263cded40d76a5b64e084bd5915c18",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e",
+      "9658e67c25dfd750dee47f11ffe1fb8d44bdc947d6937414ba339698f700a1ac",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b",
+      "9658e67c25dfd750dee47f11ffe1fb8d44bdc947d6937414ba339698f700a1ac",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "2edd20cc5e66fc9a",
+      "6eb20d67fcb125e5d9fd75a59e96b20372e2fddb26d975279261f35bebe93219",
+      "conn:14e084ed5ca7"
+    ],
+    [
+      "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK",
+      "14e084ed5ca745f",
+      "6eb20d67fcb125e5d9fd75a59e96b20372e2fddb26d975279261f35bebe93219",
+      "conn:14e084ed5ca7"
+    ]
+  ]
+}

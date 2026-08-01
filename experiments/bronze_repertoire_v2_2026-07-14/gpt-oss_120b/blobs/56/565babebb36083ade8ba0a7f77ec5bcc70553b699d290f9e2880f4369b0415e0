@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: The volcanic cooling mechanism (639a936e) implies a short-term, acute climatic shock, whereas the prolonged drought mechanism (58e798a0) requires a sustained multi-decadal climatic anomaly; they are refuted if the climatic signatures of a volcanic winter (e.g., sulfate spikes, rapid onset, 2-5 year duration) can be shown to be indistinguishable from the proxy signatures of a centennial-scale megadrought in the same region.",
+  "connects": [
+    "639a936eeef3437ceaa26d2a86b2551c635faa41cc9448d29e4ff44bf8732ea0",
+    "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440"
+  ]
+}

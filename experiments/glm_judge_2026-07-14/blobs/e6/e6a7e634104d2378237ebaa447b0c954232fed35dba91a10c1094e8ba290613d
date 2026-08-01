@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target attempts to guarantee net benefit via the condition R > 1-e and P > e, but this is mathematically insufficient. As the counterexample demonstrates, at k=7 and e=0.25, the net-benefit inequality R·0.29 > (1-P)·0.71 requires R > 2.448(1-P). For P just above e (e.g., P=0.26), this demands R > 1.836, which is impossible since R ≤ 1. Therefore, the stated condition P > e and R > 1-e fails to guarantee divergence from self-consistency on the fragile subset, rendering the proposed mechanism invalid under std-crit-design clause (1). The proposal concedes this criticism."}
+```

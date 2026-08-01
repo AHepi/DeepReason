@@ -1,0 +1,85 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Idempotency is the mathematical property f(f(x))=f(x): a single application and a repeated application converge to identical state. Safety is the systems property that retried operations do not violate correctness invariants—duplicates may occur but are tolerated or deduplicated. An append-only event log requires SAFE writers, not idempotent ones, because appending is intrinsically non-idempotent (two appends produce two entries), yet the system survives at-least-once delivery if duplicate entries are detectable and harmless during replay.",
+      "mechanism": "The append primitive violates f(f(x))=f(x) by construction: appending event E twice yields [E,E], not [E]. However, if each event carries a deterministic deduplication key (e.g., content hash, producer+sequence-number), the replay consumer can treat the second entry as a no-op. The writer is therefore safe—retries produce duplicate log entries but not incorrect replayed state—without being idempotent at the primitive operation level. The distinction is between the operation's own convergence (idempotency) and the system's tolerance of its retries (safety).",
+      "counterconditions": [
+        "If the append-only log lacks any deduplication mechanism and consumers treat every entry as novel, then safety fails and the log cannot survive at-least-once delivery without idempotent writers.",
+        "If 'safety' is defined so narrowly as to collapse into idempotency (e.g., 'safe = produces no additional effect on retry'), then the distinction vanishes and the log requires idempotency by another name.",
+        "If the published definitions referenced define 'safe operation' as a liveness rather than safety property, the claim's framing of safety as invariant-preservation would need revision."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.85
+    },
+    {
+      "claim": "The published distinction is that idempotency constrains the operation's effect on state, while safety constrains the operation's effect on correctness under retries. An append-only event log requires safety: writers must ensure that duplicate appends—inevitable under at-least-once delivery—do not corrupt deterministic replay. This is achievable via content-addressable or sequence-numbered appends that make duplicates detectable, even though the raw append remains non-idempotent.",
+      "mechanism": "Under at-least-once delivery, a writer may append the same event multiple times because the acknowledgment was lost. Idempotency would require that the second append have no additional effect—impossible for a true append-only log. Safety only requires that the replayed log produce the same reasoning state, which holds if duplicate entries are filtered during replay by their deterministic keys. The log is safe under retries because the replay semantics absorb duplicates; it is not idempotent because the log's physical contents differ.",
+      "counterconditions": [
+        "If the reasoning system's replay engine does not perform deduplication, safety is not achieved and the log would require true idempotent appends—which are impossible for an append-only structure without external state.",
+        "If published definitions define safety as identical to idempotency in the messaging context, the claimed distinction is illusory.",
+        "If the log allows arbitrary content without deterministic keys, duplicate detection is impossible and safety fails."
+      ],
+      "optional_refs": ["SRC_005", "SRC_007", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.75
+    },
+    {
+      "claim": "The distinction is best drawn through the safety-vs-liveness lens from distributed systems theory: a safety property asserts that 'something bad never happens' (no incorrect state is reached), while idempotency is a specific structural guarantee about operation semantics (f(f(x))=f(x)). An append-only log requires the safety property: bad states (corrupted replay) never arise from duplicate appends. It does not require idempotency because the 'bad thing'—duplicate entries—is not itself a correctness violation if the replay engine filters them.",
+      "mechanism": "Safety properties in distributed systems are those that can be violated by a finite prefix (a bad thing has happened), whereas liveness properties require infinite behavior. Duplicate appends produce a finite prefix with extra entries; whether this violates safety depends on whether the replayed state is incorrect. If the replay engine treats duplicate-keyed entries as redundant, the safety property holds despite non-idempotent appends. The log needs writers that preserve the safety property (no corrupted replay), not writers whose primitive operation is idempotent.",
+      "counterconditions": [
+        "If the replay engine does not filter duplicates, the finite prefix with duplicate entries violates the safety property and the system is unsafe.",
+        "If the formal definition of safety used in the referenced published literature differs from the Lamport-style safety/liveness distinction, this framing may not align with the cited sources.",
+        "If duplicate entries cause downstream effects that compound (e.g., counter increment), the safety property is violated even with detection, because the damage occurs before filtering."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.6
+    },
+    {
+      "claim": "An append-only event log requires neither idempotent nor merely safe writers; it requires what is best called 'effectively idempotent' writers—writers that attach deterministic identity to each event so that the composite operation of 'ensure-this-event-is-in-the-log' is idempotent even though the primitive 'append-bytes' is not. The published distinction between idempotent and safe maps to the difference between the primitive and the composite operation, and the log needs the composite to be idempotent.",
+      "mechanism": "Consider the operation not as 'append bytes B' but as 'append event E with key K.' The first is non-idempotent. The second, viewed through the lens of the log's semantic state (which events are represented), is idempotent: appending E with key K twice leaves the same set of represented events {E}. The writer must be safe at the byte level (retries don't corrupt the log) and effectively idempotent at the semantic level (retries don't add new information). The published 'safe' property corresponds to the byte-level requirement; the published 'idempotent' property corresponds to the semantic-level requirement—and the log needs both, with the semantic-level idempotency being the decisive one for deterministic replay.",
+      "counterconditions": [
+        "If the log is purely byte-level with no semantic layer (no event keys), then 'effective idempotency' cannot be achieved and the system relies solely on safety.",
+        "If the published literature defines idempotency strictly at the primitive operation level (not composite), then 'effective idempotency' is not idempotency at all.",
+        "If the replay engine does not enforce key uniqueness, the composite operation is not idempotent and the system fails."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.45
+    },
+    {
+      "claim": "The distinction is that idempotency is a property of an operation applied to the same input state, while safety is a property of an operation applied after its own prior execution—i.e., idempotency asks 'does doing it twice from the original state equal once?' while safety asks 'does doing it again after already having done it cause harm?' For an append-only log, the relevant property is safety: the writer must ensure that re-executing an append after a prior (possibly successful) append does not cause incorrect replay, which is satisfied by deduplication. The confusion arises because for pure functions these coincide, but for stateful appends they diverge.",
+      "mechanism": "Idempotency: f(f(x)) = f(x), evaluated as if the second f receives the original x (same input). Safety: f applied after f has already mutated state to f(x) must not produce a state that violates invariants—i.e., f(f(x)) must be 'acceptable' even if not equal to f(x). For an append-only log, f(f(x)) = [x, x] ≠ [x] = f(x), so append is not idempotent. But [x, x] is safe if the replay consumer treats duplicates as redundant. The log requires safety because the writer operates in a stateful context where the second append happens after the first has already taken effect.",
+      "counterconditions": [
+        "If published definitions define idempotency as 'f applied to the state resulting from f(x)' rather than 'f applied to x,' then idempotency and safety collapse and the distinction is semantic only.",
+        "If the log's replay semantics treat every physical entry as causally distinct (e.g., because timestamps differ), then [x, x] is not safe because it encodes two distinct causal events.",
+        "If 'safety' in the referenced literature is defined differently (e.g., as a type-safety or memory-safety property), the claimed distinction would not hold."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.35
+    },
+    {
+      "claim": "An append-only event log actually requires idempotent writers, not safe ones, if one defines the writer's operation at the correct abstraction level: the operation is 'ensure this logical event is durably recorded,' which IS idempotent because ensuring recording twice leaves the same logical state as ensuring it once. The published distinction between idempotent and safe is real but the log needs idempotency, achieved through deduplication keys that make 'ensure recorded' an idempotent operation despite non-idempotent underlying appends.",
+      "mechanism": "At the byte level, append is non-idempotent. But the writer's contractual obligation is not 'append these bytes' but 'ensure this event is durably represented.' This higher-level operation is idempotent: ensuring representation of E twice yields the same logical state as ensuring it once, provided the log supports deduplication. The 'safe' property (retries don't corrupt) is necessary but insufficient—it permits duplicates that might be harmless but still represent wasted work and potential ordering issues. Idempotency at the semantic level is stronger and is what deterministic replay actually requires.",
+      "counterconditions": [
+        "If the log has no deduplication mechanism, 'ensure recorded' is not idempotent and this claim reduces to requiring safety instead.",
+        "If deterministic replay requires strict ordering and duplicate entries disrupt ordering, then even semantic idempotency is insufficient and the system needs stronger guarantees.",
+        "If published definitions restrict idempotency to primitive operations rather than composite semantic operations, this claim's use of 'idempotent' is non-standard."
+      ],
+      "optional_refs": ["SRC_005", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.2
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "fetch-python-logging-idempotency",
+      "purpose": "Search Python's logging and queue module documentation for any published discussion of idempotent operations, at-least-once delivery semantics, or safe retry behavior in append-only contexts, to ground the distinction in published definitions.",
+      "urls": ["https://docs.python.org/3/library/logging.html", "https://docs.python.org/3/library/queue.html"]
+    }
+  ]
+}
+```

@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target explicitly lists as a forbidden case: 'Paleoclimate data reveals a wet, high-yield period precisely during 1200-1150 BC in the Eastern Mediterranean.' The proposed mechanism relies on a 'prolonged drought' as the initial trigger that reduces agricultural yields below a critical threshold, causing the redistributive system to fail. If paleoclimate data instead showed a wet, high-yield period during this exact timeframe, the mechanism's necessary trigger condition would be empirically falsified. The target therefore violates the standard by failing to accommodate this concrete, datable observation that could realistically obtain, as required by clause (2) of the historical-mechanism standard.",
+  "counterexample": [
+    "Paleoclimate data reveals a wet, high-yield period precisely during 1200-1150 BC in the Eastern Mediterranean."
+  ]
+}

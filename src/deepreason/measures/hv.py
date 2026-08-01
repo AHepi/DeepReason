@@ -41,9 +41,56 @@ def _normalize(text: str) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", text.lower()))
 
 
-def _equivalent(a: str, b: str, embedder=None) -> bool:
+_EQUIV_BATTERY_CAP = 12
+
+
+def _equivalence_battery(harness, artifact) -> list[str]:
+    """The frozen battery that DECIDES equivalence (~=_B, Def 3.5): the
+    artifact's own evaluable commitments first, then other registered
+    evaluable commitments (cross-problem criteria give edits room to differ
+    from an all-passing original), deterministic order, capped."""
+    own = [c for c in sorted(set(artifact.interface.commitments))
+           if c in harness.commitments and programs.evaluable(harness.commitments[c])]
+    foreign = [c for c in sorted(harness.commitments)
+               if c not in set(own) and programs.evaluable(harness.commitments[c])]
+    return (own + foreign)[:_EQUIV_BATTERY_CAP]
+
+
+def _text_vector(harness, battery: list[str], text: str) -> tuple:
+    fake = Artifact(
+        id="", content_ref=f"inline:{text}", codec="utf8",
+        interface=Interface(commitments=list(battery)),
+        provenance=Provenance(role="variator"),
+    )
+    return tuple(
+        programs.evaluate(harness.commitments[c], fake, harness.blobs)[0]
+        for c in battery
+    )
+
+
+def _equivalent(a: str, b: str, embedder=None, harness=None,
+                equiv_battery: list[str] | None = None,
+                pass_battery: list[str] | None = None) -> bool:
+    """Substantive equivalence is decided by the FROZEN VERDICT VECTOR over
+    the equivalence battery (~=_B) — never by embedding proximity, which
+    remains a cheap pre-filter only (approved correction: replacing one
+    opaque shortcut with another is not a fix). Vectors that DIFFER are
+    authoritative in every case. Vectors that AGREE are authoritative only
+    when the equivalence battery has discriminating MARGIN beyond the pass
+    battery (survivors already pass B0, so agreement over B0 alone is
+    vacuous — it would collapse HV to 1.0). Where the vector structurally
+    cannot decide, the legacy text+embedding surrogate applies — the
+    declared, attackable assumption the module docstring parks in nu."""
     if _normalize(a) == _normalize(b):
         return True
+    if harness is not None and equiv_battery:
+        if _text_vector(harness, equiv_battery, a) != _text_vector(
+            harness, equiv_battery, b
+        ):
+            return False  # substantively different: authoritative
+        margin = [c for c in equiv_battery if c not in set(pass_battery or [])]
+        if margin:
+            return True  # agreement over criteria that COULD have differed
     if embedder is not None:
         return distance(embedder.embed(a), embedder.embed(b)) <= _EQUIV_EMBED_EPS
     return False
@@ -94,6 +141,7 @@ def _survival(harness, artifact, text, battery, edits, embedder) -> tuple[float,
     """s_hat = fraction of edits that pass the battery AND are inequivalent."""
     per_edit = []
     survivors = 0
+    equiv_battery = _equivalence_battery(harness, artifact)
     for edit in edits:
         fake = Artifact(
             id="",
@@ -107,7 +155,10 @@ def _survival(harness, artifact, text, battery, edits, embedder) -> tuple[float,
             for cid in battery
         }
         passes = all(v == programs.PASS for v in verdicts.values())
-        inequivalent = not _equivalent(text, edit, embedder)
+        inequivalent = not _equivalent(
+            text, edit, embedder, harness=harness, equiv_battery=equiv_battery,
+            pass_battery=battery,
+        )
         if passes and inequivalent:
             survivors += 1
         per_edit.append(

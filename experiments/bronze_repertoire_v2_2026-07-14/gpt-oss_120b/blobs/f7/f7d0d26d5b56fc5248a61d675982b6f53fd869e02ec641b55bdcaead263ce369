@@ -1,0 +1,16 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Pairwise discrimination (\u00a710.2): A-beats-B-for-pi, never a global\nranking. 'neither' registers nothing \u2014 the rivalry stands.", "properties": {"decisive_point": {"default": "", "title": "Decisive Point", "type": "string"}, "winner": {"enum": ["A", "B", "neither"], "title": "Winner", "type": "string"}}, "required": ["winner"], "title": "PairwiseRuling", "type": "object"}
+
+PROBLEM disc:succ:7a2649135d88: discriminate between 6 surviving rivals for succ:7a2649135d88
+CRITERIA:
+
+
+A:
+{"claim": "Ruling elites pursued expansive building programs, military campaigns and tribute extraction that overstretched fiscal resources, causing systemic economic failure across Mycenaean, Hittite, Ugaritic and Levantine polities.", "mechanism": "socio‑economic resource depletion due to elite over‑expansion", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Contemporary accounts and inventories indicate sustained surplus production and balanced budgets after 1150 BCE", "eval": "rubric:std-hist"}], "prose_notes": "Concise presentation uses a network‑flow diagram to illustrate resource outflows from elite centers to peripheral obligations."}
+
+B:
+{"claim": "A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean Greece, Hittite Anatolia, Ugarit and Levantine city‑states.", "mechanism": "environmental stress (climate‑induced water scarcity)", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Pollen cores from the Levant and Anatolia show no significant decline in moisture levels during 1200–1150 BCE", "eval": "rubric:std-hist"}], "prose_notes": "Chronological narrative links the onset of aridity with documented famines and decline in state capacities. Scholarly register, cites recent paleoclimatic data."}
+
+QUESTION: which candidate better addresses the problem, for this problem only? winner=neither if you cannot discriminate. decisive_point MUST quote a span of a candidate.

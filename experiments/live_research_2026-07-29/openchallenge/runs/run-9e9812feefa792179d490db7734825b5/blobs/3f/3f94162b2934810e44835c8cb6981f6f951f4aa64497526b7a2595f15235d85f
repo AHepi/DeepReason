@@ -1,0 +1,12 @@
+```json
+{
+  "path": "/requested_observables",
+  "op": "replace",
+  "value": [
+    "bubble_sort_greedy_reduction_counts",
+    "insertion_sort_greedy_reduction_counts",
+    "gap_trend_small_n",
+    "confirmed_hypothesis_n13"
+  ]
+}
+```

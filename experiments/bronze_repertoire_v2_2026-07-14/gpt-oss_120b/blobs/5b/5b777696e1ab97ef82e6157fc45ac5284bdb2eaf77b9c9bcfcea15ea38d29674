@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's mechanism—'increasingly layered hierarchies amplified coordination costs'—is stated in abstract systems-theoretic terms without specifying a concrete institutional process, decision-making bottleneck, or observable administrative change. The forbidden case is a specific, datable observation (12th c BCE Hattusa inscriptions showing streamlined administration) that would directly falsify the claim if observed, but the target provides no actual historical evidence that such a case is absent or that the claimed feedback loops operated as described. The mechanism remains an untestable black-box dynamic ('amplified coordination costs') rather than a named causal process grounded in the administrative records of Mycenaean or Hittite societies, violating the standard's requirement to name a specific institution or process.
+
+TARGET:
+{"claim": "The administrative apparatus of the Late Bronze Age palace societies reached a complexity threshold that generated feedback loops of elite competition, fiscal overextension, and loss of bureaucratic cohesion.","mechanism": "Increasingly layered hierarchies amplified coordination costs, leading to rapid institutional decay once external shocks reduced surplus resources.","scope": {"covers": ["Mycenaean Greece","Hittite Anatolia"],"excludes": ["Ugarit","Levantine city‑states","Egypt"]},"forbidden": [{"case": "Inscriptions from Hattusa during the 12th c BCE demonstrate a streamlined, low‑overhead administration", "eval": "rubric:std-hist"}],"prose_notes": "A systems‑theoretic model that attributes collapse to internal network dynamics, independent of climate or external invasion."}

@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claims a prolonged drought mechanism, but its own forbidden case states that pollen cores from the Levant and Anatolia show no significant moisture decline during 1200–1150 BCE. This directly contradicts the claimed mechanism of climate-induced water scarcity for those regions and time period. Under std-hist, a valid mechanism must be consistent with concrete observations that could realistically have obtained; here the forbidden case is precisely such a datable paleoclimatic record, and the target fails to reconcile the mechanism with it, thereby violating the standard's requirement that the mechanism not be refuted by the specified forbidden case.
+
+TARGET:
+{"claim": "A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean Greece, Hittite Anatolia, Ugarit and Levantine city‑states.", "mechanism": "environmental stress (climate‑induced water scarcity)", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Pollen cores from the Levant and Anatolia show no significant decline in moisture levels during 1200–1150 BCE", "eval": "rubric:std-hist"}], "prose_notes": "Chronological narrative links the onset of aridity with documented famines and decline in state capacities. Scholarly register, cites recent paleoclimatic data."}

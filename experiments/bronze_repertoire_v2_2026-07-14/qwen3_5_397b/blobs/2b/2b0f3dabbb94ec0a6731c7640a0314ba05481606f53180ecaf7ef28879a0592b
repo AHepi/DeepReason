@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete observation that could realistically have obtained, because the target's own mechanism specifies a multi-decadal mega-drought, yet the forbidden case only covers a 50-year window (1200-1150 BC) and a single proxy type (sediment cores), which is too narrow to falsify a climatic event that could manifest on different timescales or be invisible in that specific proxy.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained.' The target's mechanism invokes a 'multi-decadal mega-drought.' The proposed forbidden case—'Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC'—is not a realistic falsification of the mechanism because: (1) a 50-year window (1200-1150 BC) may not capture the full multi-decadal drought if its timing or duration differs slightly; (2) a single proxy type (sediment cores) may not record the specific drought signal (e.g., winter vs. summer precipitation) that drove agricultural collapse. The forbidden case is thus an artificially narrow strawman, not a concrete observation that could realistically refute the claimed mechanism.
+cites: {"claim": "The collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the palace economies.", "mechanism": "A multi-decadal mega-drought reduced agricultural yields below the threshold required to support the hyper-specialized, non-food-producing palace elites and standing armies, triggering internal revolt and mass migration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the 3.2ka BP aridification event; explains Egypt's survival via its reliance on Nile irrigation rather than rainfall."}
+
+TARGET:
+{"claim": "The collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the palace economies.", "mechanism": "A multi-decadal mega-drought reduced agricultural yields below the threshold required to support the hyper-specialized, non-food-producing palace elites and standing armies, triggering internal revolt and mass migration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the 3.2ka BP aridification event; explains Egypt's survival via its reliance on Nile irrigation rather than rainfall."}

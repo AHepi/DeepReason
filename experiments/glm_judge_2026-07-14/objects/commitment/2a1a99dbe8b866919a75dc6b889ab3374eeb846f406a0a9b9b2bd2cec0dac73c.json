@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Harness accuracy is NOT strictly above SC accuracy in the high per-question flag-correlation condition, despite SC being wrong on at least 30% of questions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:c63461df6826","observation_valued":false},"id":"fc:c63461df6826","schema":"commitment"}

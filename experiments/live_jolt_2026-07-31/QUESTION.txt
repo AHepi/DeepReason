@@ -1,0 +1,27 @@
+Language models collapse onto attractors: over independent samples at fixed settings, a large share of probability mass lands on one answer. Asked for a random integer 1-100 they say 42; asked for a fruit they say apple. The same pull operates on framings and solution shapes, where it is harder to see and more costly, because a reasoning system that keeps re-deriving the same approach cannot search.
+
+Invent a way to JOLT a language model at runtime so that it leaves an attractor, subject to three constraints that rule out the usual answers:
+
+  (a) NO change of model family. The same weights serve every call. "Ask a
+      different model" is the intervention this question exists to avoid.
+  (b) NO fine-tuning, no weight edits, no training of any kind.
+  (c) The jolt must operate per-call at runtime, so a running system can apply
+      it when it detects it is stuck.
+
+Attached is documentation of the schools mechanism this harness already implements — the best existing answer in this codebase, and a conditioning-layer answer. Attached also are MEASUREMENTS on glm-5.2 of how far a spread of candidate jolts actually moves the collapse, taken by a fixed harness-side driver over 12 independent samples per cell.
+
+Requirements:
+
+1. State the mechanism precisely enough to implement. Name what it changes per call, and what signal decides when to fire it.
+
+2. Establish that it works, on the supplied measurements. The data gives, per jolt and per task, the distinct-answer count, the top-mass (the share of samples on the single most common answer, where 1.0 is total collapse), and the answer histogram. Any claim that a jolt works is a claim about those numbers and must be checked against them. A jolt that helps on one task and not others is a partial result — say so rather than reporting the average.
+
+3. Confront the quality cost. Diversity is trivial to buy: sample at temperature 2.0 and the model stops collapsing because it stops being right. A jolt that produces novel garbage has not solved the problem. State how your mechanism separates leaving an attractor from degrading, and give a way to measure that separation which does not presuppose the answer.
+
+4. Say what your mechanism predicts that the measured jolts do not, and make the prediction checkable. A mechanism assembled to fit these six tasks and nine jolts is worth little; one that says what should happen in a condition not present in the data is worth testing.
+
+5. The schools mechanism's own source carries an admission: rotating a school's stance alone "just yields the same echo in a new voice (a skeptic mutating its own math)", which is why reseeding also crosses over the exemplar lineage. Explain why surface variation fails where lineage crossover succeeds, and say whether your mechanism is on the surface side or the structural side of that line. If it is on the surface side, justify why it escapes the failure the codebase already recorded.
+
+6. Be explicit throughout about which parts you are certain of and which you are not.
+
+One warning. The measurements are of glm-5.2 — the same model family answering this question. Any claim you make about "what models do" is, on this evidence, a claim about one family, and a mechanism tuned to your own decoder's quirks may not transfer. Say which of your claims are family-specific and which you believe are general, and on what grounds.

@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The P >= 1/2 threshold is not a straw proxy but the exact sharp boundary in the majority-flip regime under the stated margin condition. The prose_notes explicitly assume 'similar margins' when deriving the threshold: given similar margins, if over half of flags are wrong, the expected number of false flips exceeds true fixes, so harness cannot beat SC. Under that condition P >= 1/2 is the true governing boundary, not a knowingly false approximation."}
+```

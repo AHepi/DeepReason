@@ -1,6 +1,6 @@
 """Epistemic state (spec §1, Def 3.3) — materialized view, never ground truth.
 
-S = (A, Pi, att, dep, addr, status, hv, reach, conn). Status is computed by
+S = (A, Pi, carry, att, dep, addr, status, hv, reach, conn). Status is computed by
 the two-pass adjudicator (§4), never stored authoritatively; recompute from
 the event log at any seq.
 """
@@ -25,6 +25,10 @@ class Status(str, Enum):
 class EpistemicState(BaseModel):
     artifacts: dict[str, Artifact] = Field(default_factory=dict)  # A
     problems: dict[str, Problem] = Field(default_factory=dict)  # Pi
+    # Explicit warrant carriage (carrier artifact, warrant). Historical logs
+    # materialize this relation from Artifact.warrants; new events record it
+    # directly so content dedupe cannot erase a second attack.
+    carries: list[tuple[str, str]] = Field(default_factory=list)
     att: list[tuple[str, str]] = Field(default_factory=list)  # (attacker, target)
     dep: list[tuple[str, str]] = Field(default_factory=list)  # (dependent, dependency); DAG
     addr: list[tuple[str, str]] = Field(default_factory=list)  # (artifact, problem)

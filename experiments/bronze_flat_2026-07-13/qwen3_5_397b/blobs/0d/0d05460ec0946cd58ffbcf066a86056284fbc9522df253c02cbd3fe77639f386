@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze supply chain triggered by climate-induced drought.\", \"mechanism\": \"Prolonged aridification reduced agricultural surplus in key grain-exporting regions, leading to famine-driven migration (Sea Peoples) and the inability of palace economies to feed specialized artisans or maintain trade fleets, causing a cascading logistical breakdown.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust grain stores in Ugarit or Pylos at the moment of destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the dominant systemic explanation, linking environmental data with economic fragility. It explains the simultaneity via network interdependence but struggles slightly with why Egypt, also dependent on grain, survived.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics that rendered the chariot-based palace aristocracy obsolete.\", \"mechanism\": \"The widespread adoption of light infantry skirmishers, javelin throwers, and slashing swords allowed decentralized, mobile groups to defeat the rigid, expensive chariot armies of the palaces, leading to rapid military decapitation of central authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that Sea Peoples or raiders possessed superior metallurgy or organized infantry tactics prior to engaging palace forces\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military-determinist view. It explains the speed of destruction but often fails to account for the internal social unrest evident in Linear B tablets prior to the invasions.\"}",
+      "typicality": 0.78,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an internal sociopolitical implosion where subject populations revolted against extractive palace bureaucracies, coincidentally timed with minor external pressures.\", \"mechanism\": \"Centuries of over-centralization created a brittle social contract; when minor climatic stressors reduced yields, the populace refused to support the elite, burning the administrative centers themselves rather than being conquered by outsiders.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Philistine settlements\", \"Sea Peoples as a unified army\"]}, \"forbidden\": [{\"case\": \"Destruction layers showing clear signs of foreign weaponry or non-local occupation immediately following the burn layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, revisionist stance minimizing the 'Sea Peoples' as a causal army and viewing them instead as refugees created by the collapse. It challenges the external invasion narrative directly.\"}",
+      "typicality": 0.35,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Pairwise discrimination (\u00a710.2): A-beats-B-for-pi, never a global\nranking. 'neither' registers nothing \u2014 the rivalry stands.", "properties": {"decisive_point": {"default": "", "title": "Decisive Point", "type": "string"}, "winner": {"enum": ["A", "B", "neither"], "title": "Winner", "type": "string"}}, "required": ["winner"], "title": "PairwiseRuling", "type": "object"}
+
+PROBLEM disc:integ:2d711b2eb5ff+7811dbda8316: discriminate between 2 surviving rivals for integ:2d711b2eb5ff+7811dbda8316
+CRITERIA:
+
+
+A:
+7811dbda8316 reduces to / is a strict weakening of 2d711b2eb5ff: both artifacts share the identical derivation mechanism — a majority-vote fragility window anchored on the thresholds 1/(k+1) < e < k/(k+1) (the necessary condition for self-consistency to be improvable at all) — but 2d711b2eb5ff sharpens 7811dbda8316 by adding two hard gates that 7811dbda8316 omits: (1) restricting to odd k≥7 (supplying the upper bound k/(k+2) > e as a sufficient beat-condition), and (2) requiring the critic to achieve precision P > e and recall R > 1−e on the candidate subset, so that the harness gain is provably strict rather than merely possible. Thus 7811dbda8316's mid-zone claim is a necessary precondition that 2d711b2eb5ff inherits and concretizes with critic-quality and parity constraints. REFUTED IF: the two artifacts' bounds on e cannot be placed on the same k-parametrized majority-fragility curve (i.e., if 1/(k+1) < e < k/(k+1) is not literally the shared lower/upper envelope from which both derivations start), or if 2d711b2eb5ff's additional P > e / R > 1−e gate is not genuinely sufficient (on top of the narrowed window and odd k≥7) for the strict-beat claim — making the 'sharpening' false rather than merely stronger.
+
+B:
+reduces to: The lower bound of the 'majority-fragile' mid-zone (1/(k+1) < e) is a necessary condition for Harness to strictly beat self-consistency, but the first artifact's theorem (with its upper bound e < k/(k+2), critic precision P > e, and recall R > 1-e constraints) is a strictly tighter derivation. The specific error regime 1/(k+1) < e < k/(k+2) for odd k≥7 reduces to the general 1/(k+1) < e < k/(k+1) mid-zone, as the former is a mechanistically-refined subset of the latter where the additional P and R critic constraints provably guarantee the strict advantage. REFUTED IF: the upper bound k/(k+2) (for odd k≥7) does not provably satisfy k/(k+2) < k/(k+1), or if the strict-beat theorem can be proven under the first artifact's P and R conditions for any e ≥ k/(k+2), breaking the dependence on the tighter upper bound.
+
+QUESTION: which candidate better addresses the problem, for this problem only? winner=neither if you cannot discriminate. decisive_point MUST quote a span of a candidate.

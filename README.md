@@ -1,168 +1,363 @@
 # DeepReason
 
-**A harness that makes an LLM argue with itself — on the record.**
+**A deterministic reasoning harness that makes an LLM argue with itself on
+the record.**
 
-You give it a hard, open "why" question. It has the model *conjecture* a
-spread of bold explanations, then *criticize* them: each candidate must
-state what evidence would refute it, weak ones get argued down, survivors
-compete head-to-head, and the whole exchange is written to an append-only,
-byte-for-byte replayable log. The model proposes; a deterministic harness
-does all the bookkeeping and decides nothing on vibes. The output isn't one
-confident paragraph — it's a *map* of which explanations survived scrutiny,
-which died and exactly why, and where the evidence genuinely can't decide.
+DeepReason takes a difficult explanatory question, generates rival
+conjectures, criticizes them, and preserves the resulting reasoning in an
+append-only, replayable record. The model proposes content; the harness owns
+policy, authority, accounting, and durable state.
 
-There are two ways to run it: the **full harness** (all the machinery) and
-**MiniReason** (the measured ~20% that carries most of the value, in ~900
-lines). Which to use is the most important decision, so it has its own
-section below.
+The installed public product is V6-only and question-first. Callers provide a
+question and, optionally, a finite budget. DeepReason owns input freezing,
+manifest construction, policy, routing, qualification projection, credentials,
+managed storage, and run identity.
 
----
+## Install and operate the wheel
 
-## Quickstart
-
-### Full harness
+Install the built wheel rather than treating a source checkout as the public
+product:
 
 ```bash
-pip install .
-export DEEPSEEK_API_KEY=...            # any OpenAI-compatible provider works
-
-# Run a built-in problem suite to a token budget; the log lands in runs/<name>
-python scripts/live_run.py --suite arrow --root runs/arrow --token-budget 200000
-
-# Turn a finished run into a committed, cited thesis (read-only over the run)
-python scripts/thesis.py --root runs/arrow --problem pi-arrow
+python -m pip install /path/to/deepreason-0.1.0-py3-none-any.whl
 ```
 
-Or drive it from any MCP-capable agent (it exposes a tool surface over
-stdio):
+The supported CLI workflow is:
 
 ```bash
-claude mcp add deepreason -- deepreason-mcp
+deepreason setup
+deepreason qualify --yes
+deepreason status
+deepreason status --json
+deepreason reason "Why can independent checks improve reliability?"
 ```
 
-Engine models are per-role config, no code changes — see
-[`docs/AGENT.md`](docs/AGENT.md).
+`deepreason setup` creates one strict provider profile. The profile contains
+provider and model identity, finite capacities, and the name of a credential
+environment variable; it contains no credential value. If that referenced
+credential is already available in the environment or the separate
+setup-managed credential store, setup reuses it. Credentials must never be
+placed in manifests, MCP payloads, logs, or documentation examples.
 
-### MiniReason
+`deepreason qualify` is a separate, explicit action. Qualification cases
+dispatch concurrently (default 4 workers; `--concurrency` or
+`DEEPREASON_QUALIFY_CONCURRENCY` adjusts it, and 1 restores strictly
+sequential dispatch for rate-limited providers) — the persisted report is
+byte-identical at any worker count because assembly is canonical
+(pair, case) order. Before any qualification
+dispatch it identifies the configured provider and model and announces the
+maximum expected provider-call counts for both batteries. Interactive use asks
+for confirmation. For noninteractive use, `deepreason qualify --yes` is the
+supported explicit confirmation form; `--json` may be added for
+machine-readable output (the payload names the concluded `tier`). A completed
+qualification for the same qualification subject is reused, so ordinary
+questions do not repeat it.
 
-```python
-from minireason.call import HttpEndpoint
-from minireason.loop import run
+### The qualification tier ladder
 
-run([("pi-1", "why did X happen?")],
-    HttpEndpoint("https://api.deepseek.com", "deepseek-v4-flash", api_key=KEY),
-    budget=30_000, root="runs/my-run")
+The whole point of qualification is to return the largest package the
+configured model can actually serve. `deepreason qualify` therefore always
+concludes with one durable tier for the exact behavior subject:
+
+1. **`full`** — every frozen V6 route/contract pair passed the production
+   battery (announced ceiling: at most 840 provider calls under the current
+   engaged preset). Full `deepreason reason` is available.
+2. **`shallow`** — the model failed the full battery but passed a small
+   shallow-fitness battery: 6 live cases against the MiniReason compact wire
+   contract with mini's own bounded repair protocol (announced ceiling: at
+   most 18 further provider calls; at least 5 of 6 cases must produce
+   schema-valid output). The reduced engine is available:
+   `deepreason reason --shallow "YOUR QUESTION"`.
+3. **`unqualified`** — the model failed both batteries. The next action stays
+   `deepreason qualify` (an explicit rerun retries the ladder from the top).
+
+Tier conclusions are durable and reusable exactly like full evidence: they
+are keyed by the same qualification-subject digest, so any change to the
+provider profile, preset, or contract surface invalidates them and requires
+requalification. Full `deepreason reason` on a shallow-tier subject is
+refused with a typed error (`QUALIFICATION_TIER_SHALLOW`) that names the
+recorded tier and the shallow command — it never silently degrades. A
+transport outage during the shallow battery records nothing
+(`QUALIFICATION_SHALLOW_EXECUTION_FAILED`): an outage is not evidence.
+
+`deepreason status` reports provider and V6 qualification readiness as text.
+`deepreason status --json` reports the same readiness through the stable
+machine-readable boundary. Both expose credential presence only as a boolean
+and return one next action. A shallow-tier subject reports
+`qualification_state: ready_shallow` with the shallow command as its next
+action; `ready` (and MCP `start_run`) remains reserved for the full tier.
+
+`deepreason reason "question"` prepares and runs one managed V6 text inquiry.
+The optional `--cycles` and `--token-budget` arguments narrow or select a
+finite public budget. The implemented defaults are 6 cycles and 100,000
+tokens; the fixed public ceilings are 12 cycles and 200,000 tokens.
+
+```bash
+deepreason reason "Why does this failure recur?" --cycles 4 --token-budget 60000
 ```
 
-Self-contained in [`mini/`](mini/) (pydantic only). See
-[`mini/README.md`](mini/README.md).
+The public `reason` command accepts no caller-owned run root or manifest path.
+It freezes the question, constructs and binds the V6 manifest, projects the
+reusable qualification, allocates managed storage, launches through the
+application service, and returns a terminal JSON result with an opaque
+`run_id`.
 
----
+### Reasoning over documents
 
-## What it's best at (and why)
+```bash
+deepreason reason "What does this study conclude?" --attach study.pdf
+```
 
-The harness pays off on **hard, open, explanatory questions where you want
-the whole space of rival answers mapped and stress-tested**, not a single
-guess. It shines when:
+`--attach` (repeatable; files or directories) admits documents as frozen
+evidence for exactly this question and binds them into the run identity in
+one step, printing the minted evidence dossier digest so the run stays
+reproducible. Plain text, markdown, and CSV/TSV are parsed natively; PDF and
+EPUB go through the built-in sandboxed adapters. A document that cannot be
+admitted is refused with a typed reason, never silently skipped. The
+two-step form remains available for parse-once/reason-many workflows:
+`deepreason admit FILES --problem "question"` followed by
+`deepreason reason "question" --dossier DIGEST`.
 
-- **You don't trust a one-shot answer.** A direct prompt gives you the
-  model's most typical answer and hides the alternatives. This forces a
-  *distribution* of candidates and then makes each one defend itself.
-- **The question has falsifiable structure.** Each candidate must name what
-  would refute it. That single discipline is what lets the harness reject
-  hand-waving mechanically and argue substantively about the rest.
-- **You want the disagreement made honest.** When two explanations both
-  survive, it says so and names the evidence that would decide between
-  them, rather than papering over it.
+### Changing the question, or adding evidence, after a run has stopped
 
-Concretely, good fits:
+Real inquiry rarely survives contact with its first question. You read the
+result, and what you actually wanted to ask is now slightly different — or a
+colleague sends you the paper you should have had on day one. Starting over
+would throw away everything the run established.
 
-| Use case | Why the harness helps |
+`deepreason amend` adds to a stopped run instead of replacing it:
+
+```bash
+# add evidence, reshape the question, or both
+deepreason --root RUN_ROOT amend \
+  --attach new-paper.pdf \
+  --reshape-question "Under what conditions does the effect reverse?"
+
+# then carry on in the same run
+deepreason --root RUN_ROOT continue --budget cycles=4
+```
+
+The reshaped question enters as a new problem and gets first claim on the
+next continuation's budget. Everything the run already established stays:
+the old question keeps its record, its rival positions, its accepted
+answers, and their status. Nothing is deleted, edited, or re-scored — the
+record can still show you exactly what you used to be asking and what
+survived it.
+
+New documents are admitted the same way `--attach` admits them at the start:
+same parser, same typed refusals, their own evidence dossier with its own
+digest. Evidence is cumulative, so later cycles reason against the old and
+new material together, and a quotation that was byte-verified against the
+original evidence verifies identically afterwards. A file already admitted
+to the run is refused up front — an amendment adds evidence, it does not
+re-add it.
+
+`amend` refuses, with a typed reason, unless the run is standing at a real
+terminal stop, and refuses an amendment that would change nothing. Each
+amendment is one epoch, chained to the last behind a declared position in
+the run's history, so replay validates each side of that boundary against
+the evidence and question in force there. If the process dies mid-amendment
+the run says so and will not continue until the amendment is completed or
+replaced — it never half-applies.
+
+What an amendment cannot do is change the run's routing, budgets, policy, or
+provider profile. Those stay frozen for the life of a run, which is what
+lets an amended run keep its existing qualification instead of requalifying.
+If you need different machinery, you need a different run.
+
+### The local web page
+
+```bash
+deepreason web
+```
+
+`deepreason web` opens a local browser page for people who never use a
+terminal beyond this one command: type a question, optionally attach
+documents, watch progress, and read the result with its uncertainty intact.
+The page is served on loopback only, requires a per-process API token, and
+is a thin shim over the same closed MCP tool surface — it can do nothing
+the validated facade cannot.
+
+### Shallow (reduced-engine) mode
+
+```bash
+deepreason reason --shallow "Why does this failure recur?"
+```
+
+`--shallow` runs the MiniReason reduced engine (generate/check/rotate) against
+the configured provider profile. MiniReason ships inside the wheel and has two
+declared purposes: an explicit low-cost option for any user, and the supported
+fallback for small models that cannot complete full production qualification
+(the `shallow` tier above). Shallow mode needs only a valid profile and a
+present credential — it never consults or writes the qualification cache, and
+works for both `shallow`- and `full`-tier subjects. Its result is always
+labeled shallow: no V6 qualification, transactions, or terminal commitment
+authority.
+
+### The engaged public preset
+
+Public preparation compiles one repository-owned policy preset
+(`deepreason.v6.engaged.v1`). Its capabilities, all finite and modest:
+
+- **Advisory scratch** — bounded scratch authoring and bounded
+  model-requestable scratch context, with the deterministic hashing embedder.
+- **Foreign-school criticism** — every seeded public school bound to the
+  single provider critic seat, observe-only, minimum one foreign school per
+  accepted school artifact.
+- **Grounded two-stage bridge** — review-free single-route shape: a frozen
+  summarizer builds the claim ledger, a frozen thesis route composes at most
+  four grounded output sections.
+- **Local simulation** — declarative-numeric proposals only, at most one
+  proposal per turn and two executions per run, executed on one frozen local
+  no-network toolchain pinned to the preparing interpreter at manifest
+  compile time (never a hardcoded path). Model-authored Python never reaches
+  the local runner; an operational failure is recorded, not treated as
+  refutation. Research capability remains OFF (on hold).
+
+The installed module entry point uses the same parser:
+
+```bash
+python -m deepreason status --json
+python -m deepreason reason "Why can independent checks improve reliability?"
+```
+
+To obtain generic, secret-free MCP stdio registration JSON for the installed
+server, run:
+
+```bash
+deepreason mcp-registration
+```
+
+The result names the absolute installed `deepreason-mcp` executable and has no
+environment block. DeepReason prints the registration; it does not alter an
+MCP client's configuration.
+
+## MCP public facade
+
+The installed MCP server exposes exactly twenty tools. All input schemas are
+closed and bounded.
+
+| Tool | Public authority |
 |---|---|
-| Mapping rival explanations for an open research question | Generates the distribution, kills the unfalsifiable, keeps survivors with their attack surface |
-| Design-space exploration against hard criteria | Forbidden-cases become the acceptance tests; survivors come with the criteria they met |
-| Adversarial review of a claim ("steelman, then break it") | The critic/defender/trial loop argues both sides on the record |
-| Producing a *defensible* conclusion, not just an answer | The thesis view commits to the best-supported survivor and cites the log |
+| `get_readiness` | Read secret-free provider and qualification readiness. |
+| `start_run` | Prepare and start one normal question with an optional bounded budget and optional local document attachments admitted as frozen evidence. |
+| `run_status` | Read current lifecycle and append-only progress for an opaque managed run ID. |
+| `run_result` | Read the fixed terminal result for an opaque managed run ID. |
+| `run_findings` | Read a replay-derived findings summary: rivalry sets, refutations with their attackers, suspended positions, spawned side branches with worked/starved status, and the criticism and capability ledgers. |
+| `amend_run` | Admit further evidence and/or reshape the central question of a stopped managed run, as an appended epoch that supersedes neither its record nor its earlier evidence. |
+| `continue_run` | Request bounded continuation of the same managed run when durable lifecycle authority permits it. |
+| `cancel_run` | Request cancellation at the next safe completed-cycle boundary. |
+| `scratch_map` | Read a bounded cluster map from immutable advisory scratch history. |
+| `scratch_search` | Run bounded deterministic literal search over advisory scratch blocks. |
+| `scratch_open` | Preview one immutable scratch block and bounded relationships without recording attention. |
+| `scratch_related` | Read bounded explicit, cluster, and retrieval-only similarity neighbours. |
+| `scratch_attention` | Preview a deterministic bounded attention plan without committing a receipt or visibility. |
+| `start_bridge` | Start the harness-owned grounded bridge for an existing managed, bound, qualified V6 run. |
+| `bridge_status` | Read bridge operational status with terminal replay validation. |
+| `bridge_result` | Read a bounded replay-validated grounded result. |
+| `bridge_claims` | Read a bounded replay-validated claim ledger. |
+| `get_capabilities` | Read a bounded summary of the public MCP surface. |
+| `get_help_topic` | Read one bounded help topic. |
+| `get_request_requirements` | Read the information required by a supported operation. |
 
-We tested this end-to-end on "why does time have an arrow?" (see
-[`experiments/results/mini_arrow_comparison.md`](experiments/results/mini_arrow_comparison.md)).
-The full harness spun one question into a 224-problem graph, produced 20
-argued survivors spanning every major position in the literature, and then
-wrote a committed thesis citing its own record. MiniReason reconstructed the
-same solution space for roughly **8% of the cost**.
+`get_readiness` must report ready before `start_run` may prepare or execute
+anything, and its response carries plain-language guidance naming the one
+next terminal command so a host model can walk a first-time user through
+setup without assuming they know what an endpoint or an API key is.
+`start_run` accepts only a nonblank question, an optional budget whose
+cycles and token budget remain within the public ceilings, and optional
+bounded local document paths admitted as frozen evidence for exactly that
+question (the response reports the minted dossier digest and any typed
+refusals). It returns an opaque `run_id`; lifecycle, scratch, and bridge
+operations resolve that ID inside host-managed storage.
 
-**Research using the harness:**
-[Can an LLM explore past its own repertoire?](docs/CAN_LLMS_EXPLORE.md) — a
-write-up (with a call for replication and critique) on measuring when an
-LLM's idea-generation stalls and what pushes it back out.
+MCP callers cannot supply filesystem roots, manifest paths or references,
+provider selection, routes, provider-profile paths, credential references,
+qualification authority, policy, or plaintext keys. Qualification is an
+operator CLI action and is not an MCP tool.
 
-## When *not* to use it
+Continuation is not a generic request to keep going. It appends to the same
+run only when replayed durable state grants typed lifecycle authority,
+including the required stop, checkpoint, event fence, manifest identity, and
+empty outstanding-work conditions. Cancellation is likewise operational: it
+is observed at a safe completed-cycle boundary and does not let a caller set
+epistemic status.
 
-Reach for a plain LLM call (or a search tool) instead when:
+Amendment is narrower still. `amend_run` may supersede only the question and
+the evidence, and only from a valid terminal stop: it registers the reshaped
+question as a new problem and admits new documents as their own dossier,
+leaving every earlier problem, position, status, and dossier byte-identical.
+It cannot change routing, budgets, policy, or provider profile, so the run's
+qualification remains valid and is not re-run. A caller cannot use it to set
+epistemic status, retract a refutation, or reach evidence already admitted.
 
-- **You want a fact or a lookup.** "What's the capital of X", "summarize
-  this doc" — there's nothing to conjecture or refute.
-- **There's one deterministic right answer.** Arithmetic, code that either
-  compiles or doesn't, closed questions. The machinery adds cost, not value.
-- **The question has no falsifiable structure.** If nothing could count as
-  evidence against a candidate, the harness can't criticize it — it'll
-  either reject everything or rubber-stamp it.
-- **You're latency- or budget-sensitive.** This is deliberately
-  token-heavy and slow next to a single prompt. It buys rigor, and rigor
-  isn't free.
+Terminal state alone is not sufficient evidence of valid success. The current
+V6 terminal commitment must have a fresh matching replay-validation binding,
+and the terminal verification summary must report valid security and
+integrity evidence. Invalid security or integrity produces a failing CLI
+result even if a stored payload says `completed`.
 
-## Full vs Mini — pick one
+## Architecture and safety
 
-The headline finding from our own testing: **generating good candidate ideas
-is nearly free; the expensive machinery earns its keep only when the problem
-is hard enough that criticism has something real to argue about.**
+V6 freezes the input and its complete criteria before execution, then binds
+their digest into an immutable manifest. A changed question or criterion is a
+new run, not an in-place edit. Manifests contain exact route, contract, policy,
+budget, and qualification projection identities, but never credential values.
+Endpoint models receive bounded role material and an output contract; they do
+not receive configuration, credentials, model catalogues, repository access,
+MCP tools, or workflow authority.
 
-| | MiniReason (`mini/`) | Full harness (`src/`) |
-|---|---|---|
-| Size / cost | ~900 lines; cheap | full system; ~10x+ the tokens |
-| Criticism | mechanical only (a candidate's own falsifier checks) | + LLM critic, defender, 2-seat judge trial |
-| Scope | one problem, generate-and-filter | spawns a *graph* of follow-up problems |
-| Ranking | offline calibrated judge (control-gated) | live pairwise discrimination + adjudication |
-| Concludes | survivor list | committed, cited **thesis** view |
+Objects are immutable and the event log is append-only. Replay reconstructs
+workflow and capability state and verifies canonical identities. Terminal
+commitments bind one terminal epoch, stop record, result draft, event horizon,
+and replay-validation result. Continued work opens a new typed epoch without
+deleting earlier stops.
 
-Rule of thumb: **start with MiniReason** to map the space cheaply. Graduate
-to the full harness when you need substantive (not just mechanical)
-refutation, follow-up problems, or a defended conclusion — and the answer is
-worth paying for. A MiniReason run's log is forward-compatible: the full
-harness can open it and keep going.
+Scratch content is immutable, advisory material. Scratch links, clusters,
+similarity, coverage, and attention can assist exploration but cannot become
+evidence, satisfy a criterion, change a verdict, or grant authority. The
+grounded bridge keeps facts, observations, supported inferences, conjectures,
+assumptions, conflicts, and unknowns distinct. A partial, conflicting, or
+underdetermined answer can be a valid successful result.
 
-## What you can trust, and what you can't
+Deterministic adjudication, not model prose, determines formal status.
+Qualification proves the configured provider/model can satisfy the frozen V6
+production contracts; it does not prove that any later substantive answer is
+true.
 
-**Trust:** every run is deterministic and byte-for-byte replayable from its
-log; token accounting is checked (`deepreason.invariants.verify_root` — it
-caught a real 1% leak in a million-token run this project ran). Nothing is
-deleted; state is a pure function of the append-only log.
+## Unsupported and historical boundaries
 
-**Read with care** (documented honestly in
-[`docs/MINI_STRESS_REPORT.md`](docs/MINI_STRESS_REPORT.md) and the arrow
-comparison):
+Historical RunManifest versions 1 through 5 are unsupported by installed
+public operation. Direct caller-owned run roots and manifest paths are not
+public start authority. Source files for legacy workflows may remain in the
+repository for preservation or internal migration work, but their physical
+presence does not make them supported.
 
-- MiniReason's free criticism rejects candidates on **falsifier
-  well-formedness**, not on whether the idea is *true* — it kills malformed
-  tests, not wrong theories.
-- The offline judge scores **how well a candidate is argued against a
-  rubric**, which is a different axis from "which answer is deepest." Read
-  its #1 as "best-argued in the bracket," not "correct."
-- A thesis argues from **the run's own record**, not outside knowledge — it
-  commits to what *this run* adjudicated, and will say so.
+MiniReason ships in the wheel solely as the engine behind
+`deepreason reason --shallow`; it exposes no public entry point of its own and
+is not a separate starting workflow. Website construction and chunked website
+workflows are retired from the public surface, and website MCP tools are not
+exposed.
 
-Security: forbidden-case predicates come from untrusted model output and are
-sandboxed (an AST guard blocks the `eval` escape family). See
-[`tests/test_security.py`](tests/test_security.py).
+The removed `make`, `prove`, `check-proof`, `code`, `simulate`, `focus`,
+`expand`, `attack`, and `step` commands are not supported public operations
+(the engaged preset's bounded simulation capability is manifest-owned and is
+not a CLI command).
+Examples or reports in historical repository material must not be interpreted
+as installed-wheel instructions.
 
-## Development
+## Developer-only source work
+
+The repository checkout remains useful for implementation and offline tests.
+The following is explicitly a developer workflow, not installed-wheel public
+operation:
 
 ```bash
-pip install -e ".[dev]"
-pytest                      # full suite (parent + mini)
+python -m pip install -e ".[dev]"
+pytest
 ```
 
-Source is `src/deepreason/` (the full harness) and `mini/minireason/` (the
-compact build). The normative design spec is
-[`docs/harness-spec-v1.3.md`](docs/harness-spec-v1.3.md); the module-by-module
-map and phase status live there and in [`docs/AGENT.md`](docs/AGENT.md).
+Production code lives under `src/deepreason/`. Public behavior must be derived
+from the installed entry points, closed MCP schemas, application services,
+and V6 tests rather than from retired examples elsewhere in repository
+history.

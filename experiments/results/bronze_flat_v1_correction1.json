@@ -1,0 +1,36 @@
+{
+ "schema": "deepreason-bronze-flat-v1-correction1",
+ "corrects": "experiments/results/bronze_flat_v1_report.json",
+ "trigger": "operator code-and-trace review, 2026-07-13",
+ "corrections": {
+  "novelty_instrument_misattribution": {
+   "was_claimed": "admitted conjectures are genuinely diverse under nomic (mean pairwise 0.57/0.53/0.58)",
+   "actually": "those figures were computed by the run with hashing-128 (embedder fingerprint stamped in every root log). scripts/live_run.py constructs Scheduler without an embedder, so the Scheduler default (HashingEmbedder) applied; the nomic config default never reaches this path. The prereg's registered nomic observable was not instrumented in-run.",
+   "true_nomic_offline": {
+    "admitted_mean_pairwise": {
+     "deepseek-v4-pro": 0.183,
+     "qwen3.5:397b": 0.184,
+     "kimi-k2.6": 0.233
+    },
+    "reading": "distinct causal mechanisms on the same topic sit at the paraphrase margin (0.19 calibration): topic dominates the geometry, so NEITHER embedder can certify or deny mechanism-level diversity. Content-level reading is the only instrument that resolves it."
+   }
+  },
+  "F4_cause_reattributed": {
+   "was_claimed": "after each opening kill, no stream escaped its opening idea's equivalence class (read as model gravity toward the refuted basin)",
+   "actually": "the blocked proposals were substantially mechanism-diverse - verified by reading raw conjecturer responses (168 blocked candidates in the deepseek stream include the 3.2 ka BP megadrought event, a lower-class revolutionary dismantling, and a tin-supply cascade). The embargo was manufactured by the gate, not by model repetition.",
+   "mechanism_verified_in_code": [
+    "battery is one-bit: skeleton-wf is the only programs.evaluable commitment on bronze conjectures (kappa-hist and fc:* are rubric); every well-formed proposal has the same verdict vector as the refuted prior",
+    "stage-2 semantic trigger skipped: anti_relapse.check requires embedder AND near_dup_eps; config.NEAR_DUP_EPS defaults to None and the run profile never set it, so the gate compared every candidate against every refuted prior",
+    "no domain scoping: live_run.py passes no workload_profile, so conj compiles no RelapseDomain and priors from the root problem embargo candidates in successor problems",
+    "unreachable escape: rules/conj.py always calls anti_relapse.check(artifact, [], ...) with an empty warrant list, so the documented admit-with-warrant-against-refuter path cannot fire from production Conj"
+   ]
+  },
+  "conviction_path_confirmed": "crit_argumentative and crit_argumentative_batch register ARGUMENTATIVE warrants with self-authored validity nodes ('nu: argumentative case ... is sound') with no defender or judge participation; the batch kill of all three deepseek conjectures is events seq 53/55/57, the shared LLM call carried on the first event only. The cross-family judge ensemble participated in rubric trials (first trial-llm at seq 16) but did not authorize these refutations."
+ },
+ "unchanged": [
+  "all roots verify clean; replay intact",
+  "10/10 substantive conjectures refuted by the prosecutor-alone path; zero survivors; zero reinstatements",
+  "F3 (critic refuted the standard and stance seeds) stands",
+  "repertoire reading (scholarly, convergent, non-novel among ADMITTED conjectures) stands, with the blocked pool showing additional mechanism classes (class revolt, tin-supply cascade) that never reached the record"
+ ]
+}

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "10038caa393ca4b24c3e504acb7cd1574af646d68ec43a28500b1c92841433eb",
+      "attack": true,
+      "case": "The claimed contradiction is not a genuine logical incompatibility. The 'winter storm surge hypothesis' requires a period of extreme storminess, while the 'cooler-wetter climate shift hypothesis' posits gradual flood-inducing precipitation. The target asserts these are 'meteorologically incompatible' because persistent atmospheric instability driving cyclonic storm surges is antithetical to a stable, cooler-wetter pattern. However, a cooler-wetter climatic regime in the Eastern Mediterranean is physically consistent with increased cyclogenesis and winter storm surge frequency: cooler sea surface temperatures can enhance baroclinic instability, and increased precipitation is often associated with the passage of cyclonic systems that generate storm surges. The target's own REFUTED IF condition—'it can be shown that the proposed cooler-wetter regime is consistent with, or a direct driver of, an increased frequency of winter storm surges'—is readily met by standard Mediterranean paleoclimatology, which links wetter phases to intensified cyclonic activity. The relation therefore fails as a contradiction because the two mechanisms can be complementary rather than mutually exclusive.",
+      "counterexample": null
+    },
+    {
+      "target": "639a936eeef3437ceaa26d2a86b2551c635faa41cc9448d29e4ff44bf8732ea0",
+      "attack": true,
+      "case": "The claim attributes collapse to a massive volcanic eruption 'likely Thera' around 1200 BC. This is historically untenable: the Minoan eruption of Thera is securely dated by radiocarbon and ice-core evidence to approximately 1600–1625 BC, over four centuries before the 1200–1150 BC collapse window. No comparably massive eruption is attested in the Eastern Mediterranean or with global climatic forcing at precisely 1200 BC. The mechanism's chronological anchor is therefore false, and the claim cannot explain the simultaneous collapse of the listed civilizations at the specified time.",
+      "counterexample": null
+    },
+    {
+      "target": "79a2b17aeed06c52882267be4ecc46b7e954bcd911e7080bfa2bb5c8f7001f06",
+      "attack": true,
+      "case": "The claim's scope explicitly excludes 'Egyptian New Kingdom bureaucracy' while covering Mycenaean, Hittite, and Ugaritic elites. The original problem asks why Egypt survived diminished while the other civilizations collapsed. By excluding the Egyptian bureaucracy from the mechanism's scope, the account fails to address the differential survival that is central to the problem: it offers no reason why Egyptian elite over-expansion did not occur or why Egypt's bureaucracy was immune to the same fiscal dynamics, leaving the core comparative question unanswered.",
+      "counterexample": null
+    }
+  ]
+}

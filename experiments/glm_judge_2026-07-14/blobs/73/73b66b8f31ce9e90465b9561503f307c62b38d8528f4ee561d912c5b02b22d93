@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target does specify a concrete, measurable regime condition under which divergence occurs: the excluded scope where the critic is trained on a different/harder distribution than the candidates, or has access to external information beyond candidate text. In those regimes the Bayes-optimality argument fails and harness can strictly beat SC."}
+```

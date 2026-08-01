@@ -1,0 +1,9 @@
+A coin system is a strictly decreasing tuple of positive integers C = (c_1 > c_2 > ... > c_n) with c_n = 1, so every non-negative integer amount is representable. The greedy algorithm represents an amount w by repeatedly taking the largest coin not exceeding the remaining amount. C is called canonical when, for EVERY non-negative integer amount, the greedy representation uses the minimum possible number of coins; otherwise some amount is a counterexample (greedy uses strictly more coins than an optimal representation).
+
+Give a decision procedure that determines whether an arbitrary given coin system C is canonical, and, when it is not, returns the smallest counterexample amount.
+
+Requirements:
+1. State the algorithm precisely enough to implement.
+2. Prove it correct — in particular, justify why testing a finite, bounded set of amounts suffices, since the definition quantifies over infinitely many amounts.
+3. State its worst-case time complexity as a function of n, the NUMBER OF COINS. An algorithm whose running time depends on the magnitude c_1 of the largest coin is pseudo-polynomial; say so explicitly if that is what you are giving, and say whether a bound polynomial in n alone is achievable.
+4. Be explicit about which parts of your answer you are certain of and which you are not.

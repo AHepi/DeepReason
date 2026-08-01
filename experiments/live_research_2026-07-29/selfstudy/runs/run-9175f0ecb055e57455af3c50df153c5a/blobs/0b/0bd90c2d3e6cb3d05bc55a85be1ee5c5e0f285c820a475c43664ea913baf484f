@@ -1,0 +1,40 @@
+{
+  "candidate": {
+    "claim": "The non-retirement of rival positions (standing residue) stems from a mismatch between the unique, skeptical Dung grounded extension and the unenforced closure rules that bind attackers to the warrants they critique, causing criticism to fail to transitively invalidate carriers of defeated warrants.",
+    "mechanism": "Rivalry grows because conjecture-only schools continuously emit bounded edits via the variator (0efee9d35ff76f87). Criticism is intended to retire these via a Dung grounded extension (09ffabcd92979168). However, if closure rules (0974daebd1665965) are not strictly enforced such that an attacker of `validity_node` attacks the warrant and its carrier, the attack edge does not propagate. Consequently, the grounded extension computes a large 'standing residue' (0909868ae3d22218) of unretired rivals. To fix this, a strict 'downgrade, then audit' policy (0c74fc8b6042157a) must be applied to criticism-weighted attention, ensuring that coverage debt triggers forced retirement of the weakest rivals when the standing residue exceeds a bounded threshold, preventing unbounded growth.",
+    "counterconditions": [
+      "The Dung grounded extension effectively prunes all defeated arguments, meaning the standing residue is solely due to a lack of criticism generation rather than a failure in the attack graph closure.",
+      "Schools limit rival generation based on coverage debt, meaning the growth from 18 to 60 is an intended feature of conjecture-only arms (093553dbc247bd0c) rather than a retirement failure.",
+      "The epistemological procedure of 'downgrade, then audit' (0c74fc8b6042157a) is already implemented and functioning, meaning the lack of retirement is due to an alternative mechanism like judge-side measurement problems (0868cfc01f2d83d4)."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0909868ae3d22218",
+        "quote": "## IV. Standing residue"
+      },
+      {
+        "block": "09ffabcd92979168",
+        "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0974daebd1665965",
+        "quote": "- **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction."
+      },
+      {
+        "block": "0c74fc8b6042157a",
+        "quote": "**The epistemologically principled procedure is \"downgrade, then audit.\"**"
+      },
+      {
+        "block": "0efee9d35ff76f87",
+        "quote": "``` variator emits k bounded edits {a'} via µ(·|a) s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only HV_B(a) = 1 - s(a) ```"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.72
+  }
+}

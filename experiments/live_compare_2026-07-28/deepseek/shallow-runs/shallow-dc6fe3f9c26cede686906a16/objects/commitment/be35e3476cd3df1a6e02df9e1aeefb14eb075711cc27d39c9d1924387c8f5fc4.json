@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Two conclusions with identical sufficient statistics lead to different optimal actions in a decision task."},"steps":100000,"time_ms":2000},"eval":"program:check_decision_divergence","id":"fc:5bf4ecf30945","observation_valued":false},"id":"fc:5bf4ecf30945","schema":"commitment"}

@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic damage and supply chain fragmentation.\", \"mechanism\": \"A cluster of earthquakes (earthquake storm) destroyed key palace centers and ports, disrupting the tightly coupled bronze and grain trade networks. The rigid, centralized bureaucracies could not adapt to the sudden loss of surplus, leading to internal revolt and abandonment, whereas Egypt's more decentralized Nile-based agriculture allowed it to absorb the shock.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows continuous palace administration in Pylos or Hattusa immediately following the proposed seismic event window.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'Earthquake Storm' theory, highly typical in current scholarship for explaining simultaneous destruction layers.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by the militarization of marginal populations using new infantry tactics that overwhelmed chariot-based aristocracies.\", \"mechanism\": \"The diffusion of iron-working and light infantry tactics (javelin throwers, slashers) empowered decentralized groups ('Sea Peoples') and internal dissidents. The palace economies, optimized for expensive chariot warfare and reliant on a small warrior elite, could not mobilize quickly enough against fast-moving, low-cost infantry raids, causing a rapid cascade of political legitimacy failures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt's core Nile valley\"]}, \"forbidden\": [{\"case\": \"Evidence demonstrates that Mycenaean or Hittite armies successfully adopted light infantry tactics prior to their final destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A standard military-diffusion explanation, focusing on the shift from chariot to infantry dominance.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a climate-induced famine that triggered a migratory domino effect, where displaced groups consumed the resources of neighboring states.\", \"mechanism\": \"A prolonged megadrought (verified by pollen cores) caused crop failures across the Eastern Mediterranean. This forced mass migration of starving populations (the 'Sea Peoples') who moved sequentially from west to east or north to south. Each arriving group stripped the next polity of its remaining grain reserves, creating a chain reaction of state failure that Egypt halted only through massive military expenditure and geographic luck.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Nubia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data indicates normal rainfall levels in the Aegean and Anatolia between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical emphasis on the 'domino' mechanic of migration rather than just the drought itself; often debated regarding the directionality of the movement.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        }
+      ]
+    }
+  ]
+}

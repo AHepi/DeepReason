@@ -1,0 +1,26 @@
+```json
+{
+  "abstention": null,
+  "candidate": {
+    "claim": "A genetic algorithm exploring mutations and recombinations of the known 45-comparator network, guided by partial sorting fitness (count of sorted 0-1 vectors out of 8192), can traverse the fitness landscape to discover a novel 44-comparator network for n=13 if one exists.",
+    "counterconditions": [
+      "The fitness landscape of partial sorting networks is highly deceptive; counting sorted binary vectors does not provide a continuous gradient to the global optimum, causing the genetic algorithm to converge prematurely on 45-comparator local optima.",
+      "Mutations that simply drop comparators strictly decrease sorting capability, and simultaneous compensatory structural mutations are statistically too rare to be discovered within a feasible genetic algorithm budget.",
+      "Genetic algorithms inherently lack the systematic completeness of SAT-based or exhaustive search, meaning they cannot provide a discriminating experiment to prove the non-existence of 44-comparator networks."
+    ],
+    "evidence_refs": [
+      {
+        "block": "6050cf69f391fa33"
+      },
+      {
+        "block": "680b4c459d28bf7a"
+      }
+    ],
+    "mechanism": "Initialize a population of 45-comparator networks, potentially seeded by known optimal or near-optimal constructions. Evaluate fitness by running all 2^13 = 8192 binary vectors through each network and counting the number of correctly sorted outputs. Apply evolutionary operators: selection favoring networks with higher sorting success and fewer comparators, crossover combining sub-networks from different parents, and mutation perturbing individual comparator endpoints or deleting/inserting comparators. As the population evolves, the algorithm may identify and exploit structural symmetries (like reflection i -> n-1-i) and eliminate redundant comparators, yielding a structurally novel 44-comparator network.",
+    "sidecar": {
+      "search_signal": "productive"
+    },
+    "typicality": 0.4
+  }
+}
+```

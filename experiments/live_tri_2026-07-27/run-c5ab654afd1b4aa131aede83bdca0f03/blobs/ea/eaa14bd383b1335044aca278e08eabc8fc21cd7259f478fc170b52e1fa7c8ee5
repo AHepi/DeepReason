@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7ce5dc5dabb116f5023d6169: program:reasoning_observation_pending
+- reason-counter@7404c76a4088d7e3f9a8ef22: program:reasoning_observation_pending
+- reason-counter@33bf3ee096e94d3eabb4b0d4: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Log-based protocols are provably safer than lease-based rivals because they enforce the causal latency invariant that seal-visibility latency is strictly bounded above by failure-detection latency, whereas lease-based protocols conflate death detection with displacement permission and therefore violate this invariant under partial synchrony.","counterconditions":[{"case":"The log implementation allows silent truncation or fork","eval":"observation"},{"case":"Reclamation reads a stale snapshot and misses a recent seal","eval":"observation"},{"case":"Log availability is worse than workspace host availability, causing indefinite stall","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Completed evidence is sealed into an append-only shared log before workspace release. Reclamation reads the log tail for the problem ID; if no seal is visible, reclamation must stall indefinitely. The durable record must contain: (1) the log sequence number, (2) the content-addressed evidence hash at that sequence, and (3) a signed checkpoint of the log prefix. Adjudication favors the log because it externalizes the happens-before relation: the log records completion before reclamation can observe death, whereas a lease merely infers death from timeout and cannot distinguish silent displacement from slow heartbeat.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7ce5dc5dabb116f5023d6169, reason-counter@7404c76a4088d7e3f9a8ef22, reason-counter@33bf3ee096e94d3eabb4b0d4
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

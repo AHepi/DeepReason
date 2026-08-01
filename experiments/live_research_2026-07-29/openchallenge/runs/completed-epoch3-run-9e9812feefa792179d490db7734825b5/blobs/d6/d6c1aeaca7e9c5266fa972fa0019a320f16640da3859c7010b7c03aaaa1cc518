@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "Extension-based search from known optimal 12-input networks (39 comparators) cannot yield a 13-input network with 44 or fewer comparators, because every symmetry-reduced optimal 12-input network requires more than 5 additional comparators to integrate a 13th channel and sort all 8192 binary vectors. This structural bottleneck explains why naive extension search stalls at 45.",
+    "mechanism": "The known optimal 12-input sorting networks have 39 comparators (block 8a7a7d8f89f48b3e). To extend any such network to 13 inputs, comparators involving channel 12 must be inserted so that the 13th channel merges correctly into the sorted output for every binary vector in {0,1}^13. An information-theoretic lower bound gives ceil(log2(13)) = 4 comparators touching channel 12, but this is necessary, not sufficient: the 12-input network's internal structure fixes the relative order of channels 0-11, and the new comparators must handle all 13 possible insertion positions for channel 12's value. A sandboxed Python simulation would: (1) enumerate the known optimal 12-input networks up to the reflection symmetry from block bfc42b3064ed02fe, (2) for each network, search over comparator sets of sizes 1-7 added on channel 12 (positions 0..12), greedily and then exhaustively for small sizes, (3) verify each candidate via the 0-1 principle by running all 2^13 = 8192 binary vectors (block 6050cf69f391fa33, milliseconds per check), (4) report the minimum extension size found. If the minimum across all 12-input optimal base networks exceeds 5 additional comparators, no extension reaches 44, confirming the structural bottleneck hypothesis and explaining the stall at 45 = 39 + 6.",
+    "counterconditions": [
+      "A 44-comparator 13-input network exists that is an extension of some optimal 12-input network with exactly 5 additional comparators touching channel 12, falsifying the lower bound claim.",
+      "The minimum extension from some optimal 12-input base network requires exactly 6 comparators, giving 45 total, which matches the best known — but a non-extension strategy achieves 44.",
+      "An optimal 12-input network exists (possibly not yet enumerated) whose internal structure permits a 4-comparator extension to 13 inputs, yielding a 43-comparator network.",
+      "The stall at 45 is better explained by a different hypothesis: not extension difficulty, but the absence of a fundamentally different 13-input construction paradigm."
+    ],
+    "evidence_refs": [
+      {"block": "8a7a7d8f89f48b3e", "quote": "S(n): 0 1 3 5 9 12 16 19 25 29 35 39"},
+      {"block": "6050cf69f391fa33", "quote": "a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it — a few milliseconds of pure Python"},
+      {"block": "bfc42b3064ed02fe", "quote": "Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class."},
+      {"block": "680b4c459d28bf7a", "quote": "S(n) denotes the minimum comparator count of any n-input sorting network."},
+      {"block": "843819388191d0e9", "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."}
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  },
+  "abstention": null
+}
+```

@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of international trade networks due to climate-induced drought.\", \"mechanism\": \"Prolonged aridification reduced agricultural surplus, breaking the tribute and trade chains that sustained palace economies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows robust grain storage in Ugarit immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies heavily on pollen data from the Sea of Galilee; struggles to explain why Egypt's similar dependence on the Nile did not lead to total collapse.\"}",
+      "typicality": 0.92,
+      "neighbours": [
+        "A3",
+        "A9"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the sudden proliferation of inexpensive iron weaponry democratizing violence against bronze-dependent elites.\", \"mechanism\": \"New metallurgical techniques allowed non-state actors to equip large infantry forces capable of defeating chariot aristocracies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Dated artifacts show iron weapons remained rare ritual objects until after 1100 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Popular in older historiography; increasingly criticized by A6 for anachronistically projecting later Iron Age military realities onto the Late Bronze Age transition.\"}",
+      "typicality": 0.45,
+      "neighbours": [
+        "A6",
+        "A4"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a singular, localized seismic event sequence that triggered simultaneous political fragmentation.\", \"mechanism\": \"A 'storm of earthquakes' physically destroyed key administrative centers, creating a power vacuum exploited by internal revolts and external migrants.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Italy\"]}, \"forbidden\": [{\"case\": \"Destruction layers at Hattusa show signs of gradual abandonment rather than sudden seismic trauma.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly atypical 'monocausal' physical explanation; often refuted by the lack of synchronized dating across all sites and the absence of seismic damage in some destroyed cities.\"}",
+      "typicality": 0.15,
+      "neighbours": [
+        "A12",
+        "A7"
+      ]
+    }
+  ]
+}

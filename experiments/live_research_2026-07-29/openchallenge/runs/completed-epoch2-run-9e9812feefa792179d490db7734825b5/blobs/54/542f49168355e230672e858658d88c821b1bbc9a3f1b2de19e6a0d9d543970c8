@@ -1,0 +1,3 @@
+```json
+{"op": "replace", "path": "/simulation_proposals/0/requested_observables", "value": ["size_found_by_greedy", "size_found_by_random"]}
+```

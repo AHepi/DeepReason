@@ -1,150 +1,264 @@
-# Installing DeepReason as an Agent Tool
+# Operating DeepReason V6
 
-DeepReason is usable by any LLM on **both sides** of the loop:
+This document is the public operating contract for a person or unfamiliar LLM
+using the installed DeepReason wheel. The installed product is V6-only and
+question-first.
 
-- **As the engine** (the γ operator): any OpenAI-compatible provider —
-  OpenAI, DeepSeek, ollama, llama.cpp server, most gateways — configured
-  per role in the §15 role table. No code changes to switch models.
-- **As the operator** (the agent driving the harness): any MCP-capable
-  harness — Claude Code, Claude Desktop, Cursor, or a custom agent loop —
-  installs the harness as a set of MCP tools. Non-MCP agents can shell
-  out to the `deepreason` CLI, which exposes the same verbs.
+The caller supplies a normal question and may supply a finite bounded budget.
+DeepReason owns input freezing, manifest construction, policy, provider
+routing, reusable qualification projection, credential resolution, managed
+storage, application dispatch, replay, and terminal authority.
 
-## Install
+## Installed CLI workflow
 
-```bash
-pip install .            # from the repo root; installs `deepreason` + `deepreason-mcp`
-```
-
-### As MCP tools (any MCP client)
+Install the current wheel:
 
 ```bash
-# Claude Code
-claude mcp add deepreason -- deepreason-mcp
-
-# Generic MCP client config (stdio transport)
-{ "mcpServers": { "deepreason": { "command": "deepreason-mcp" } } }
+python -m pip install /path/to/deepreason-0.1.0-py3-none-any.whl
 ```
 
-The server speaks newline-delimited JSON-RPC 2.0 over stdio (MCP stdio
-transport) with zero dependencies beyond the package.
-
-### As a CLI (any agent that can run commands)
+Then use the public sequence:
 
 ```bash
-deepreason --root .deepreason run --budget cycles=6 --token-budget 100000 \
-    --problem problem.yaml --config config/my-provider.yaml
-deepreason --root .deepreason report
-deepreason --root .deepreason theory <id-prefix>
+deepreason setup
+deepreason qualify --yes
+deepreason status
+deepreason status --json
+deepreason reason "Why can independent checks improve reliability?"
 ```
 
-## Configure the engine LLM(s)
+`setup` writes a strict provider profile containing provider/model identity,
+finite model capacities, and only a credential environment-variable name.
+The credential value is resolved separately from the environment or the
+setup-managed credential store. Never put credential values in profiles,
+manifests, MCP payloads, logs, prompts, or examples.
 
-Copy `config/deepseek.yaml` and edit the role table — endpoint, model,
-provider, reasoning, caps are all config (`llm/providers.py` maps the
-neutral `reasoning` knob to each provider's wire format):
+Qualification is explicit and reusable. `deepreason qualify` announces the
+provider, model, and maximum expected provider-call counts before dispatch and
+asks for confirmation on an interactive terminal. `deepreason qualify --yes`
+is the supported noninteractive confirmation form. Add `--json` when
+machine-readable qualification output is required; the payload names the
+concluded `tier`. A valid cached qualification for the same subject is reused.
 
-```yaml
-roles:
-  conjecturer: { endpoint: "https://api.openai.com/v1", model: gpt-5.2, temperature: 1.0,
-                 api_key_env: OPENAI_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true }
-  judge:
-    - { endpoint: "https://api.openai.com/v1",  model: gpt-5.2,          temperature: 0.0, api_key_env: OPENAI_API_KEY,   max_tokens: 1200, json_mode: true }
-    - { endpoint: "https://api.deepseek.com",   model: deepseek-v4-pro,  temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, max_tokens: 1200, json_mode: true }
+Qualification concludes on a tier ladder, and the conclusion is durable:
+
+- `full` — every frozen V6 route/contract pair passed the production battery
+  (announced ceiling: at most 840 provider calls under the current engaged
+  preset). `deepreason reason "..."` is available.
+- `shallow` — the full battery failed, but a small shallow-fitness battery
+  passed: 6 live cases against the MiniReason compact wire contract with
+  mini's bounded repair protocol (announced ceiling: at most 18 further
+  calls; at least 5 of 6 cases must be schema-valid). Use
+  `deepreason reason --shallow "YOUR QUESTION"`.
+- `unqualified` — both batteries failed; the next action stays
+  `deepreason qualify`, and an explicit rerun retries the ladder.
+
+Tier records are keyed by the same qualification-subject digest as full
+evidence, so profile, preset, or contract changes invalidate them identically.
+Full `reason` on a shallow-tier subject is refused with the typed
+`QUALIFICATION_TIER_SHALLOW` error naming the recorded tier and the shallow
+command; nothing silently degrades. A transport outage during the
+shallow-fitness battery records no tier at all
+(`QUALIFICATION_SHALLOW_EXECUTION_FAILED`).
+
+`deepreason status` is the human-readable readiness boundary;
+`deepreason status --json` is its machine-readable form. A ready result means
+the profile is valid, the referenced credential is present, and a reusable
+full-tier qualification exists for the current subject. A shallow-tier
+subject reports `qualification_state: ready_shallow` with the shallow command
+as its one next action; MCP `start_run` stays closed until the full tier.
+
+`deepreason reason --shallow "question"` runs the MiniReason reduced engine
+(generate/check/rotate) against the configured profile. MiniReason ships in
+the wheel with two declared purposes: an explicit low-cost option for any
+user, and the supported fallback for small models that cannot complete full
+production qualification. Shallow mode requires only a valid profile and a
+present credential, never touches the qualification cache, works for both
+`shallow`- and `full`-tier subjects, and always labels its result as shallow
+(no V6 qualification, transactions, or terminal commitment authority).
+
+`deepreason reason "question"` accepts an optional `--cycles` and
+`--token-budget`. The implemented defaults are 6 cycles and 100,000 tokens,
+with fixed public ceilings of 12 cycles and 200,000 tokens.
+
+```bash
+deepreason reason "What mechanism best explains this observation?" \
+  --cycles 4 --token-budget 60000
 ```
 
-API keys are read from the named environment variables — never from
-files. `model: auto` / `auto-alt` are resolved against the provider's
-live `/models` list at adapter build time (`llm/endpoints.py:resolve_model`,
-used by `deepreason run`, the MCP server, and the scripts alike); name a
-real model id when you need the run pinned for reproducibility. Two judge
-seats from different model families satisfy the §9 cross-family rule
-properly.
+The caller does not choose a root, manifest, route, policy, or qualification
+record. DeepReason returns an opaque managed run identity in the terminal JSON
+result.
 
-## MCP tool surface (spec §13 verbs)
+`deepreason amend` appends one typed epoch to a run standing at a terminal
+stop, admitting further evidence and/or superseding the central question,
+after which `deepreason continue` resumes the same run:
 
-| Tool | What it does |
+```bash
+deepreason --root RUN_ROOT amend --attach further-evidence.pdf \
+  --reshape-question "REVISED QUESTION"
+deepreason --root RUN_ROOT continue --budget cycles=4
+```
+
+The amendment is strictly additive: one new seed problem whose provenance
+names the question it supersedes, one new dossier for the admitted files,
+and no status change to anything already recorded. The manifest is copied
+verbatim across the epoch, so the qualification subject is unchanged and no
+requalification occurs. Typed refusals cover a run not at a terminal stop
+(`AMEND_NOT_AT_TERMINAL`), an amendment that changes nothing
+(`AMEND_EMPTY`, `AMEND_QUESTION_UNCHANGED`, `AMEND_NO_EFFECT`), evidence
+already admitted (`AMEND_SOURCE_ALREADY_ADMITTED`), evidence beyond the
+frozen attached-evidence budget (`AMEND_EVIDENCE_BUDGET_EXCEEDED`), and an
+epoch staged but never committed (`CONTINUE_AMENDMENT_INCOMPLETE` on the
+following continuation).
+
+`python -m deepreason` invokes the same installed parser and accepts the same
+arguments:
+
+```bash
+python -m deepreason status --json
+```
+
+`deepreason mcp-registration` prints generic secret-free registration JSON
+whose command is the absolute installed `deepreason-mcp` executable. It does
+not edit any client's configuration.
+
+## MCP contract
+
+The production MCP facade contains exactly twenty unique tools:
+
+| Tool | Semantics |
 |---|---|
-| `seed_problem` | Register a problem + commitments (+ optional rubric standard) |
-| `run_cycles` | Fund N scheduler cycles under an optional hard token budget |
-| `frontier` | Problems and their surviving artifacts |
-| `theory` / `why` | Render an artifact's theory view / justification chain |
-| `eval_report` | P6 metrics: per-role LLM stats, trial-guard blocks, capture dashboard |
-| `docket` | Disagreement-ranked cases awaiting an appellate ruling (§10.6) |
-| `appellate_rule` | Enter a ruling (a one-line holding calibrating a standard) |
+| `get_readiness` | Read redacted provider and qualification readiness. |
+| `start_run` | Prepare and start a question with an optional bounded budget. |
+| `run_status` | Read lifecycle and progress using an opaque managed run ID. |
+| `run_result` | Read a fixed terminal result using an opaque managed run ID. |
+| `run_findings` | Read a replay-derived findings summary for one managed run. |
+| `amend_run` | Append an evidence/question amendment epoch to a stopped run. |
+| `continue_run` | Continue the same run only under durable typed lifecycle authority. |
+| `cancel_run` | Request cancellation at a safe completed-cycle boundary. |
+| `scratch_map` | Read a bounded immutable scratch cluster map. |
+| `scratch_search` | Search immutable scratch blocks deterministically. |
+| `scratch_open` | Preview one immutable block and bounded relationships. |
+| `scratch_related` | Read bounded explicit, cluster, and similarity neighbours. |
+| `scratch_attention` | Preview bounded deterministic attention without committing a receipt. |
+| `start_bridge` | Start grounded composition for a managed, bound, qualified V6 run. |
+| `bridge_status` | Read replay-validated bridge operational status. |
+| `bridge_result` | Read a bounded replay-validated grounded result. |
+| `bridge_claims` | Read a bounded replay-validated claim ledger. |
+| `get_capabilities` | Read a bounded summary of available operations. |
+| `get_help_topic` | Read one bounded help topic. |
+| `get_request_requirements` | Read the information required for a supported operation. |
 
-## Rules of engagement for the operating agent
+Call `get_readiness` first. `start_run` must stop before preparation and
+execution unless readiness is successful. Its closed schema requires a
+nonblank question and permits an optional finite budget within the public
+ceilings.
 
-The tool surface enforces these, but state them in your agent's prompt
-so it doesn't fight the harness:
+The returned `run_id` is opaque. Every lifecycle, scratch, and bridge
+operation resolves it through host-managed storage. Callers must not derive a
+path from it.
 
-1. **You cannot set a status.** Acceptance and refutation are computed
-   by deterministic adjudication over warrants. There is no tool that
-   overrides them — do not look for one.
-2. **Your judgement enters ONLY through the docket.** `appellate_rule`
-   on a docketed case is the sanctioned, budgeted channel
-   (`USER_RULINGS_BUDGET`). Rulings calibrate standards; they do not
-   flip individual verdicts.
-3. **Nothing is deleted.** Re-seeding an existing id is an error; a bad
-   artifact is answered by criticism, not removal.
-4. **Metrics steer attention, never status.** Use `eval_report` and
-   `frontier` to decide where to fund cycles next, not as verdicts.
-5. **Budget every run.** Pass `token_budget` to `run_cycles`; the meter
-   stops the run gracefully and the state stays consistent — you can
-   always fund more cycles later; the log is the source of truth.
+The MCP schemas contain no caller authority for roots, manifest paths or
+references, providers, routes, provider-profile paths, credential references,
+qualification, policy, arbitrary files, event writes, or status setters.
+Qualification cannot be initiated through MCP.
 
-A typical operating loop: `seed_problem` → `run_cycles` (small budget) →
-`eval_report` + `frontier` → read `theory`/`why` on survivors → clear the
-`docket` with rulings where standards disagree → fund more cycles.
+`continue_run` does not create a new caller-controlled run. It uses the same
+bound manifest and appends only after the application service verifies durable
+typed stop authority, checkpoint identity, event fence, prior continuation
+history, operator locking, and the absence of outstanding work.
 
-These rules govern driving the harness *on a problem*. When the task is
-improving the harness *itself* from its experiment record, follow
-[`docs/SELF_IMPROVEMENT.md`](SELF_IMPROVEMENT.md) instead — start from the
-latest `experiments/results/INDEX_*.md`, pre-register before running, and
-never change code without a report to cite.
+`cancel_run` records an operational request. The scheduler observes it at the
+next completed-cycle boundary; the request cannot interrupt a transition or
+set a formal verdict.
 
-## The positive playbook (what TO do)
+Scratch tools are read-only previews over immutable advisory history.
+`scratch_attention` commits neither visibility nor an attention receipt.
+Bridge status is operational rather than epistemic. Partial,
+`underdetermined`, `insufficient_evidence`, conflicting, and outside-scope
+grounded results can be valid outcomes rather than tool failures.
 
-The rules above are prohibitions; these are the moves. (Live operator
-probes showed models follow the written rules but miss every mechanic
-that was unwritten — see docs/OPERATOR_DIAGNOSIS.md.)
+## The engaged public preset
 
-**If a verdict looks wrong to you — a critic you believe is mistaken has
-refuted good work — you criticize the critic.** Every warrant carries an
-attackable validity node ν ("this verdict is sound"); when criticism
-lands on ν or on the critic artifact and survives adjudication, the
-original target is REINSTATED automatically. Reinstatement is computed,
-never granted. Concretely: read `why(<refuted-id>)` to find the attacker,
-then fund more cycles — the argumentative critic attacks accepted
-artifacts including critics — or, in hostile cases, seed a problem whose
-criteria target the critic's weakness. You never need (and never have) a
-tool that flips the verdict directly.
+Public preparation compiles the repository-owned `deepreason.v6.engaged.v1`
+preset. Its capabilities are all finite and modest:
 
-**What `appellate_rule` actually does — and does not.** A ruling enters
-case law for a STANDARD: it is rendered into FUTURE trial packs for that
-standard (a precedent slice), shifting how the judge reads borderline
-cases from now on. It does NOT re-adjudicate any existing verdict, does
-not touch the artifact you were looking at, and takes the standard's
-spec id (e.g. `std-hist`) — not a severity label — as its `standard`
-argument. Worked example: the docket shows case `c-42` where two judges
-split over whether "the model is memorizing" names a mechanism. Ruling:
-`appellate_rule(case_id="c-42", holding="Naming a training-data pathway
-(memorization of benchmark X) IS a mechanism for this standard",
-standard="std-explain")`. Effect: future trials under `std-explain` see
-that holding; the artifact in `c-42` is unchanged until criticism or a
-new trial moves it.
+- **Advisory scratch**: bounded scratch authoring and bounded
+  model-requestable scratch context on the deterministic hashing embedder.
+- **Foreign-school criticism**: all four seeded public schools bound to the
+  single provider critic seat, observe-only, minimum one foreign school of
+  coverage per accepted school artifact.
+- **Grounded two-stage bridge**: review-free single-route shape — a frozen
+  summarizer route builds the claim ledger and a frozen thesis route composes
+  at most four grounded output sections.
+- **Local simulation**: declarative-numeric proposals only (at most one per
+  turn, two executions per run) on one frozen local no-network toolchain.
+  The toolchain pin is derived from the preparing interpreter at manifest
+  compile time, so the wheel stays portable across end-user machines; a
+  changed interpreter changes the behavior subject and requires
+  requalification. Model-authored Python never reaches the local runner.
+- **Research**: OFF (on hold). Formalization and attached evidence: OFF.
 
-**Reading results without fooling yourself.** An empty frontier on a
-hostile problem is success (nothing uncriticizable was admitted); a
-budget stop is graceful (fund more cycles on the SAME root); refutations
-are progress, not damage. The truth of a run is in its log, not its exit:
-`narrate` renders the log as readable reasoning, and `run_cycles` returns
-an accounting reconciliation (metered vs logged tokens) — if those
-diverge, stop and investigate before trusting any metric.
+## Authority and replay invariants
 
-**Engine calls need pinned reasoning and generous caps.** Reasoning-mode
-models silently burn the whole completion budget on thinking and return
-EMPTY output with no error (observed live on the strongest models). Every
-role in your config should set `reasoning` explicitly and a `max_tokens`
-with headroom; when an engine returns empty or truncated output, suspect
-the cap before the model.
+V6 prepares a typed immutable input, evidence dossier, conservative policy,
+qualification projection, and exact manifest before application dispatch.
+The manifest binds route and contract identities, finite budgets, input
+digests, and terminal policy. Credential values never enter it.
+
+Engine models receive only bounded role context and the required output
+contract. They cannot choose providers, routes, tools, budgets, phases,
+credentials, workflow transitions, continuation, or terminal status.
+
+Formal objects are immutable and the event log is append-only. Replay
+reconstructs workflow and capability state from canonical events. A V6
+terminal commitment binds the terminal epoch, stop record, result draft,
+reasoning event horizon, and commitment ledger. A fresh replay-validation
+binding must match that commitment and result projection.
+
+A stored `completed` string is not independently authoritative. Valid terminal
+success requires the current committed terminal head, matching fresh replay
+validation, and a verification summary with both `integrity_valid` and
+`security_valid`. Failure of either channel produces a failing public result.
+
+Deterministic adjudication owns formal acceptance and refutation. Model text,
+scratch notes, similarity, attention, bridge prose, progress state, and MCP
+responses cannot grant epistemic authority. Qualification demonstrates
+contract compatibility for the configured provider/model; it does not certify
+the truth of an answer.
+
+## Unsupported public operation
+
+RunManifest versions 1 through 5 are historical and unsupported. Direct
+caller-owned roots, manifest paths, source YAML routing, and manual manifest
+preparation are not the normal or supported public start workflow.
+
+MiniReason ships inside the wheel only as the engine behind
+`deepreason reason --shallow`; it has no separate public entry point.
+Website construction and chunked website operation are not exposed. There are
+no public website MCP tools.
+
+The retired `make`, `prove`, `check-proof`, `code`, `simulate`, `focus`,
+`expand`, `attack`, and `step` commands must not be suggested to a user.
+Repository modules, old specifications, tests, or archived examples that
+mention those interfaces are non-operational history.
+
+Physical legacy code may remain inside the source repository while migration
+or preservation work continues. Presence in a checkout does not create public
+authority, wheel inclusion, compatibility, or support.
+
+## Developer boundary
+
+Source-checkout commands are developer operations only. They must not be
+presented as installed-wheel usage:
+
+```bash
+python -m pip install -e ".[dev]"
+pytest
+```
+
+Developers may inspect internal manifests, roots, application intents, and
+historical migrations when maintaining the product. A public caller or agent
+must stay within the question-first CLI and the twenty-tool closed MCP
+facade above.

@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "Resumption may proceed if and only if the event framing protocol provides deterministic delimiters that allow trailing partial bytes to be classified as non-events; resumption must be refused when framing is ambiguous and cannot distinguish a complete event from a partial fragment.",
+    "mechanism": "A partial byte sequence left by mid-stream exhaustion lacks event identity under proper framing. The resumption protocol simply ignores trailing bytes after the last framed complete event. No append-only violation occurs because no committed event was deleted or modified—non-events were skipped, preserving both physical append-only integrity and logical causal continuity.",
+    "counterconditions": [
+      "If the framing protocol relies solely on external length-prefixing without end-markers or checksums, trailing bytes cannot be deterministically classified as non-events, requiring refusal of resumption.",
+      "If the resumption protocol attempts to garbage-collect or rewrite the partial bytes rather than ignoring them, it modifies the append-only log and must be refused.",
+      "If no complete event was framed before exhaustion, resumption cannot anchor causal continuity and must be refused until a complete event is available."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.75
+  }
+}

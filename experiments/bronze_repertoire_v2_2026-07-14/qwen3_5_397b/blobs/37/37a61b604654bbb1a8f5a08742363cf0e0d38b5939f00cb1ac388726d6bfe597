@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target claims a 'synchronized climatic shock' caused collapse across multiple regions, but the single forbidden case it provides ('Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC') is insufficient to meet the standard's requirement for 'forbidden cases that are concrete observations which could realistically have obtained.' The mechanism is specified as 'exogenous climatic forcing causing agricultural failure,' yet the target fails to state forbidden cases for each region it claims to cover. Specifically, it does not specify what concrete archaeological or textual evidence from Hittite Anatolia, Ugarit, or Mycenaean Greece would falsify the claim—such as evidence of stable grain storage levels, absence of mass burial sites indicative of famine, or continuous administrative records in those specific locales during the alleged crisis period. By only offering a general paleoclimatic counterexample without region-specific observable implications, the target violates clause (2) of the standard.",
+  "counterexample": [
+    "Excavations at Hattusa showing uninterrupted grain silo usage and no destruction layer between 1200-1150 BC",
+    "Linear B tablets from Pylos recording normal harvest yields and no mention of famine or population displacement in the year before its destruction",
+    "Ugaritic administrative texts documenting stable trade and full palace storerooms through 1185 BC"
+  ]
+}

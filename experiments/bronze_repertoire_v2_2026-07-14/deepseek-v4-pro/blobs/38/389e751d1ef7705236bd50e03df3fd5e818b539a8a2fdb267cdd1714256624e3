@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism explicitly relies on 'a massive earthquake swarm' as the single-point trigger that physically destroyed the Hittite state and thereby severed trade arteries. The forbidden case directly contradicts this causal trigger: it states that archaeological evidence shows Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction. If the capital's destruction was anthropogenic (war/fire) and preceded by partial abandonment, then the claimed seismic catastrophe is factually unsupported as the cause of Hittite collapse. This severs the first domino in the mechanism, rendering the entire downstream causal chain (trade collapse → prestige-goods starvation → revolt) unmoored from its initiating event. The account therefore fails the standard's requirement that a mechanism be grounded in concrete, potentially observable events rather than a counterfactual trigger.",
+  "counterexample": [
+    "Archaeological evidence shows the Hittite capital Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction."
+  ]
+}

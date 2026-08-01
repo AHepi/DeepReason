@@ -1,0 +1,14 @@
+```json
+{
+  "op": "replace",
+  "path": "/scratch_proposal/links/0",
+  "value": {
+    "direction": "directed",
+    "from_ref": "SCR_000",
+    "holds_when": "the set of proposed relations for 0e26d6be54fd converges to a small fixed set across multiple runs",
+    "relation_hint": "0e26d6be54fd may be caught in a connection-attempt basin where the same relations are repeatedly proposed and refuted, linking to prior refuted-attractor candidates",
+    "to_ref": "SCR_001",
+    "weakens_when": "novel, non-overlapping relation types are proposed across runs"
+  }
+}
+```

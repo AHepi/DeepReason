@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's first forbidden case states: 'Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive.' This directly contradicts the mechanism's core causal claim that 'by 1200 BC, the easily accessible, fuel-rich copper ores of Cyprus were depleted, requiring deeper mining and massive deforestation for smelting fuel.' The target fails the standard because it does not demonstrate that this forbidden observation 'could not realistically have obtained'; instead, it merely asserts a mechanism that is flatly incompatible with the specified empirical record. A valid historical-mechanism account must either incorporate this peak-production/extensive-forests evidence or show why it is an impossible observation, which the target does not do.",
+  "counterexample": [
+    "Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive."
+  ]
+}

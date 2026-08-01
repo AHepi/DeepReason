@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/live_research_2026-07-29/research_audit.py", line 28, in <module>
+    root = resolve_managed_run_root(RUN_ID)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/preparation.py", line 390, in resolve_managed_run_root
+    raise RunPreparationError(
+deepreason.preparation.RunPreparationError: MANAGED_RUN_ID_INVALID: managed run id has an invalid form

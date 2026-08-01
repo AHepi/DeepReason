@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a mechanism of 'rapid administrative collapse' driven by a sudden trade-route failure, but it explicitly lists as a forbidden case the observation that 'The palace archives record a gradual, multi-century decline in administrative complexity rather than a sudden cessation.' This directly contradicts the mechanism's predicted tempo: a synchronized, rapid collapse triggered by a specific cascade of trade disruptions cannot simultaneously be consistent with a gradual, multi-century decline in the very administrative complexity it purports to explain. The target therefore fails to rule out a concrete, datable pattern that is incompatible with its own causal account, violating the requirement to state and survive forbidden cases.",
+  "counterexample": [
+    "The palace archives record a gradual, multi-century decline in administrative complexity rather than a sudden cessation."
+  ]
+}

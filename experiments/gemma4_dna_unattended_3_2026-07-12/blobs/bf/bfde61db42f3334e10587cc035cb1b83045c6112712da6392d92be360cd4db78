@@ -1,0 +1,45 @@
+Design only the component outline requested in the input. Name local component aliases and one concrete purpose each. Do not emit HTML, a manifest, workflow instructions, routes, or implementation details.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactOutlineComponent": {"additionalProperties": false, "description": "One deliberately small design-outline item.", "properties": {"alias": {"pattern": "^C[1-9][0-9]*$", "title": "Alias", "type": "string"}, "purpose": {"maxLength": 500, "minLength": 1, "title": "Purpose", "type": "string"}}, "required": ["alias", "purpose"], "title": "CompactOutlineComponent", "type": "object"}}, "additionalProperties": false, "description": "The complete model-visible output for ``DESIGN_OUTLINE``.", "properties": {"components": {"items": {"$ref": "#/$defs/CompactOutlineComponent"}, "maxItems": 12, "minItems": 1, "title": "Components", "type": "array"}}, "required": ["components"], "title": "CompactDesignOutline", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"components":[{"alias":"","purpose":"x"}]}
+
+INPUT:
+
+WEBSITE DESIGN OUTLINE
+Task: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+Return 2 to 8 components in page order. Use aliases C1, C2, ... without gaps. Give only each component's purpose.
+ADJUDICATED PLAN:
+# Product Plan: DNA Blueprint (Educational/Tool-based Focus)
+
+## Scope
+A functional 'workbench' page where users can simulate the processes of DNA replication and transcription using a set of interactive tools.
+
+## Feature List
+- **The Sequence Builder**: A small interactive area where users can 'snap' base pairs together.
+- **Process Simulator**: A play-button controlled animation of RNA polymerase moving across a DNA strand.
+- **Comparison View**: A side-by-side visual contrast between DNA and mRNA.
+- **Motion Compliance**: Automatic disablement of the 'Simulator' animations if `prefers-reduced-motion` is set to reduce; replaces animation with a 'Before/After' static image.
+
+## Key Interactions
+- **Drag-and-Drop**: Users drag nucleotides to the correct complementary positions.
+- **Step-Through**: A 'Next' button that advances the transcription process one nucleotide at a time.
+- **Zoom-In**: Clicking a section of the helix zooms in to show the hydrogen bonding.
+
+## Content Inventory
+- **Header**: "DNA Interactive Workshop"
+- **Instruction**: "Drag the correct base to pair with the template strand."
+- **Replication Guide**: "Step 1: Unwinding. Step 2: Pairing. Step 3: Joining."
+- **Transcription Guide**: "The DNA template is read; the mRNA is synthesized. Note the substitution of Uracil for Thymine."
+- **Glossary**: "Nucleotide: The building block of DNA. Polymerase: The enzyme that builds the strand."
+
+## Acceptance Criteria
+1. Entire site contained in one HTML file.
+2. Drag-and-drop functionality works for base pairing.
+3. The simulation pauses and converts to static frames under `prefers-reduced-motion`.
+4. The mRNA result correctly shows U instead of T.
+5. The 'Zoom-In' interaction provides a clear view of chemical bonds.

@@ -1,0 +1,14 @@
+```json
+{
+  "candidate": {
+    "content": "14e084ed5ca7 abstracts the write-path requirement from operation-level idempotency to a protocol-level invariant of distinguishability via delivery metadata, and is compatible with the layer-boundary distinction where writers provide safety and readers provide idempotency. This abstraction is refuted if the replay layer ignores delivery metadata and relies solely on content comparison, reducing the invariant back to content idempotency, or if the log inherently lacks any mechanism for attaching metadata to distinguish retried writes.",
+    "typicality": 0.75,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004"
+    ]
+  }
+}
+```

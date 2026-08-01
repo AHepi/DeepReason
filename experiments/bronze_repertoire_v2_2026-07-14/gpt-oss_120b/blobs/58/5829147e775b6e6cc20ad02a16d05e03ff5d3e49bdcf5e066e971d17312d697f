@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\":\"A rapid shift to cooler, wetter climate around 1190‑1150 BCE caused agricultural system collapse in the Eastern Mediterranean.\",\"mechanism\":\"Hydroclimatic regime shift leading to flood‑induced soil erosion and reduced yields.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"If high‑resolution speleothem records from the Aegean show sustained aridity rather than increased precipitation during 1190‑1150 BCE\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Interdisciplinary synthesis of paleoclimatic proxies (lake cores, pollen) suggests an anomalous wet phase that would stress flood‑prone agriculture, diverging from the drought narrative in neighbouring artefacts.\"}",
+      "typicality": 0.38,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\":\"Emergent coastal alliances instituted a systematic naval blockade of Eastern Mediterranean trade lanes, choking the resource inflow to palace economies.\",\"mechanism\":\"Maritime coalition economic warfare that forced loss of imports and destabilised elite redistribution.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"If Egyptian and Hittite annals from the period record no reference to any large‑scale maritime embargo despite their detailed military chronicles\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Focuses on inscriptional evidence of shipwreck layers and disrupted cargo typologies, moving beyond the classic Sea‑Peoples raid narrative.\"}",
+      "typicality": 0.52,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\":\"The abrupt termination of tin supply from Central Asian networks after 1180 BCE precipitated a bronze shortage that crippled elite armament production.\",\"mechanism\":\"Supply‑chain collapse of tin leading to weapon scarcity, eroding palace military power and administrative cohesion.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"If isotopic analyses of Late Bronze Age bronze artefacts continue to show tin sourced from Anatolian mines post‑1150 BCE\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Quantitative modelling of commodity flow demonstrates a critical threshold where tin deficit translates into rapid sociopolitical decay, an angle less explored in existing literature.\"}",
+      "typicality": 0.66,
+      "refs": []
+    }
+  ]
+}

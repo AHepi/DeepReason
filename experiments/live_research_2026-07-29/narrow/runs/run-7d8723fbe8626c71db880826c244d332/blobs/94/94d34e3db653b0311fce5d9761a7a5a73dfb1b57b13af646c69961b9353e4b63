@@ -1,0 +1,48 @@
+{
+  "sections": [
+    {
+      "span_id": "S1",
+      "text": "At formal sequence 430, artifact 7db46860ddab8a6597ca6a6e47747dd5e7e88ba63427959f25485af2c868fb59 had formal status accepted.",
+      "ledger_entry_handles": ["E1"]
+    },
+    {
+      "span_id": "S2",
+      "text": "At formal sequence 430, artifact d3d4e3525751db298c73db50cf310be14e4f9a9783fdfe98c15a9b011b67591c had formal status accepted.",
+      "ledger_entry_handles": ["E2"]
+    },
+    {
+      "span_id": "S3",
+      "text": "At formal sequence 430, artifact 14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e had formal status accepted.",
+      "ledger_entry_handles": ["E3"]
+    },
+    {
+      "span_id": "S4",
+      "text": "At formal sequence 430, artifact 2b3bc662bc6e060fd386f567372e84344a95ac6437590dbf6ff5ff639a133710 had formal status accepted.",
+      "ledger_entry_handles": ["E4"]
+    }
+  ],
+  "resolution": "partially_answered",
+  "resolution_reason": "Four process_observation entries were emitted as standalone byte-identical spans; the remaining four process_observation entries are recorded as unresolved items because the section limit was reached.",
+  "unresolved_items": [
+    {
+      "description": "At formal sequence 430, artifact b5164be7cdd67d07a0068b92fde7104efe5e1ea51d512a94ac8fe192943ef2ed had formal status accepted.",
+      "ledger_entry_handles": ["E5"],
+      "reason": "Section limit reached; process_observation entry not emitted as a standalone span."
+    },
+    {
+      "description": "At formal sequence 430, artifact a81e30ae284bb4cc0fd947a10392dbbbf32bd8a0dff18a617249a48f8c6a66a2 had formal status accepted.",
+      "ledger_entry_handles": ["E6"],
+      "reason": "Section limit reached; process_observation entry not emitted as a standalone span."
+    },
+    {
+      "description": "At formal sequence 430, artifact d4e817a5c3144ad71f059f5fd1ebde925b898105e17e5645232be57716f30858 had formal status accepted.",
+      "ledger_entry_handles": ["E7"],
+      "reason": "Section limit reached; process_observation entry not emitted as a standalone span."
+    },
+    {
+      "description": "At formal sequence 430, artifact e9c1886802e47b71f4e8c19b9907416f0fe5e7c53688249273b1190d1da1e2f4 had formal status accepted.",
+      "ledger_entry_handles": ["E8"],
+      "reason": "Section limit reached; process_observation entry not emitted as a standalone span."
+    }
+  ]
+}

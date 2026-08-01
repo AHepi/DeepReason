@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a 'structural inevitability' driven by hyper-specialization and galley-enabled raiding, but its single forbidden case is insufficiently specified to meet the standard's requirement for a concrete historical counterexample. The forbidden case merely describes 'evidence of widespread, decentralized grain storage or dual-use toolkits' as a general category, without citing a specific, datable archaeological find, site, or textual record from the late 13th century that could realistically have been observed. This violates clause (2) of the std-hist standard, which requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' A vague evidentiary category does not constitute a specific observation, making the claim unfalsifiable in practice.",
+  "counterexample": [
+    "A specific forbidden case would be: 'The discovery of a large, decentralized grain storage complex at the Mycenaean site of Tiryns, dated to 1190 BCE, with associated agricultural tools and no administrative sealings, indicating autonomous subsistence capacity.'"
+  ]
+}

@@ -1,0 +1,57 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "Append-only identity is preserved by treating resumption as a new derived branch rather than a continuation, making resumption always possible but strictly as a 'new' run: a new BranchInit event references the last known good event of the original run, establishing a new causal fingerprint while original events are never mutated or appended to.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is always safe at any point of exhaustion if the reasoning step is decomposed into idempotent, purely functional state transitions where token exhaustion only suspends the evaluation of the current step, not the commitment of the previous one; partial states are inherently uncommitted and therefore non-existent in the append-only log.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe iff the last committed entry that has full event framing (delimiters, checksum, causal fingerprint) is a complete event whose fingerprint matches the expected continuation point; any partial trailing fragment from mid-stream exhaustion is a non-event under append-only semantics. Resumption must be refused when the last byte-stream boundary is ambiguous such that a partial fragment could be mistaken for a complete event.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "A synthetic barrier/suspend event injected before predictable token-budget exhaustion satisfies the causal fingerprint requirement and makes resumption safe; the categorical refusal in the framing-only criterion is wrong because its own acknowledged countercondition (budget-exhaustion warning) is precisely the trigger for safe barrier injection.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "conflict",
+      "claim": "Rival criteria conflict on whether resumption may always proceed or must sometimes be refused: ART_1 and ART_2 hold that resumption is always safe (via branching or purely functional transitions respectively), while ART_3 holds that resumption must be refused when the byte-stream boundary is ambiguous and a partial fragment could be mistaken for a complete event.",
+      "conflict_handles": ["ART_1", "ART_2", "ART_3"],
+      "source_conflict_keys": ["CNF_1"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "supported_inference",
+      "claim": "Adjudication of the rival criteria: resumption may proceed without corrupting append-only identity when the last committed entry is a complete, framed event (including a synthetic SuspendEvent injected before predictable exhaustion per ART_4). Resumption must stay refused only when the byte-stream boundary is ambiguous and a partial trailing fragment could be mistaken for a complete event (per ART_3). The categorical refusal in ART_3 is overruled by ART_4's argument that the budget-exhaustion warning provides a reliable trigger for safe barrier injection before exhaustion completes.",
+      "premise_keys": ["CLM_3", "CLM_4"]
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_1", "ART_2", "ART_3"],
+      "description": "School-1 artifacts (ART_1, ART_2) hold that resumption is always safe — via new-branch lineage or purely functional idempotent transitions. School-2 artifact ART_3 holds that resumption is safe only when the last committed entry has full event framing and must be refused when the byte-stream boundary is ambiguous. These criteria conflict on the question of when resumption must stay refused."
+    }
+  ],
+  "uncovered_requirements": [
+    {
+      "requirement": "A single unified resumption protocol specification that combines the branching approach (ART_1), functional-transition approach (ART_2), framing-verification approach (ART_3), and barrier-injection approach (ART_4) into one operational procedure is not present in the catalog; the evidence adjudicates the conflict but does not supply a complete normative protocol.",
+      "reason": "The catalog provides rival formal artifacts from two schools but no authoritative merged specification or external corroboration.",
+      "related_entry_keys": ["CLM_1", "CLM_2", "CLM_3", "CLM_4", "CLM_6"]
+    }
+  ]
+}
+```

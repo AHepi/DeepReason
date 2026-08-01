@@ -1,0 +1,105 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Resumption is permissible iff two independent invariants both hold: (L1) physical append-only integrity is preserved by framing-quarantine—trailing partial bytes after the last framed complete event are non-events and are ignored, never deleted or modified; and (L2) logical causal continuity is verified by an exact causal-fingerprint match of (program_hash, input_hash, model_checkpoint_hash) at resumption. The barrier criterion of SRC_005 is sufficient for L2 but not necessary; the last-complete-event criterion of SRC_003 handles L1 but is insufficient alone.",
+      "mechanism": "Token-budget exhaustion leaves a byte stream ending mid-record. The event-framing protocol delimits records with integrity markers (checksums or end-markers), making partial trailing bytes deterministically identifiable as non-events. The resumption protocol seeks the last framed complete event, ignores trailing bytes, and appends new events from that point. This preserves physical append-only identity because no committed event is modified or deleted. Separately, the causal fingerprint triple ensures the resumed computation would produce the identical event stream as an uninterrupted run, satisfying logical causal continuity. The two invariants are independent: L1 can hold while L2 fails (wrong model checkpoint), and L2 can hold while L1 fails (if partial bytes were erroneously promoted to events).",
+      "counterconditions": [
+        "If the framing protocol uses length-prefixing without integrity markers, partial bytes cannot be deterministically distinguished from complete events, making L1 unverifiable and resumption must be refused.",
+        "If the causal fingerprint does not match on all three components (program, input, model checkpoint), L2 fails and resumption is refused regardless of L1 status.",
+        "If the resumption protocol re-evaluates or rewrites any already-committed event, both invariants are violated and resumption corrupts append-only identity."
+      ],
+      "optional_refs": ["SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+      "sidecar": {"requested_context_aliases": ["SRC_001", "SRC_002"], "search_signal": "productive"},
+      "typicality": 0.92
+    },
+    {
+      "claim": "Resumption must be refused whenever the token-budget exhaustion occurs mid-event and the framing protocol cannot deterministically identify the partial fragment as a non-event, because in that case the partial bytes either (a) have ambiguous event identity, risking append-only corruption if later promoted, or (b) cannot be safely skipped without risking loss of a committed event.",
+      "mechanism": "Without self-delimiting integrity checks, the append-only log ends in an ambiguous byte sequence. A resumption protocol cannot tell whether those bytes are the prefix of a would-be complete event or a corrupt fragment. If it appends after them, it may later need to overwrite or extend the fragment, violating physical append-only integrity. If it skips them, it may discard a committed event that was actually complete but unrecognized due to missing delimiters. The ambiguity itself is the corruption vector.",
+      "counterconditions": [
+        "If the framing protocol provides self-delimiting records with checksums or end-markers, the ambiguity is resolved and the partial fragment is deterministically a non-event, permitting resumption.",
+        "If an explicit barrier or suspend event was emitted before exhaustion, there is no trailing partial fragment and resumption is unambiguously safe regardless of framing protocol."
+      ],
+      "optional_refs": ["SRC_003", "SRC_005"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.75
+    },
+    {
+      "claim": "Append-only identity is never corrupted by resumption per se; corruption occurs only through re-evaluation or rewriting of already-committed events. Therefore the sole resumption gate is the causal-fingerprint match (SRC_006); the last-complete-event and barrier criteria are downstream implementation details of the same underlying requirement.",
+      "mechanism": "Physical append-only integrity is a property of the committed event log, not of the resumption act. A resumption that only appends—never reads-then-modifies or deletes—cannot corrupt append-only identity by definition. The real risk is causal divergence: the resumed run producing events that differ from what an uninterrupted run would have produced. The causal fingerprint (program_hash, input_hash, model_checkpoint_hash) captures exactly the state needed to guarantee identical continuation. Framing-quarantine and barriers are mechanisms that ensure the fingerprint is computable, but they are not independent invariants.",
+      "counterconditions": [
+        "If a partial fragment is later promoted to an event by the resumption protocol, that constitutes a modification of the append-only log at a position the protocol previously treated as non-event, violating append-only identity—contradicting the claim that resumption cannot corrupt.",
+        "If the causal fingerprint omits a relevant state component (e.g., RNG seed, internal scheduler state), L2 can be satisfied while the resumed stream diverges from the uninterrupted stream."
+      ],
+      "optional_refs": ["SRC_004", "SRC_006", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.55
+    },
+    {
+      "claim": "If token-budget exhaustion is predictable (e.g., a warning at 90% budget), the system can inject a synthetic barrier event before forced termination, and this barrier satisfies both L1 and L2 simultaneously—making the two-invariant decomposition collapse to a single design-time protocol obligation rather than a resumption-time check.",
+      "mechanism": "A synthetic barrier is itself a well-formed, committed event in the append-only log. After the barrier, the log is clean: no partial fragment exists, so L1 (framing-quarantine) is trivially satisfied. The barrier encodes or references the causal fingerprint, so L2 (causal continuity) is verified by reading the barrier record. The resumption protocol simply locates the last barrier event and continues. This converts the resumption problem from a verification problem into a design problem: ensure barriers are emitted before exhaustion.",
+      "counterconditions": [
+        "If token-budget exhaustion is not predictable (sudden hard termination), no synthetic barrier can be injected and the resumption problem reverts to the two-invariant verification.",
+        "If the synthetic barrier itself is interrupted mid-write (exhaustion occurs during barrier emission), the barrier becomes a partial fragment and the problem recurses.",
+        "If the causal fingerprint state changes between barrier emission and actual termination, the barrier's embedded fingerprint is stale and L2 fails."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.40
+    },
+    {
+      "claim": "The adjudication between the 'last complete event' criterion and the 'causal fingerprint' criterion resolves in favor of conjunction: both are necessary and jointly sufficient, but they guard different levels of the same property. The last-complete-event criterion is a syntactic check on the log; the causal fingerprint is a semantic check on the computation. Resumption is safe only when the syntactic check confirms no partial event was promoted and the semantic check confirms identical continuation.",
+      "mechanism": "The syntactic check (last complete event) operates on the log surface: it ensures the byte stream ends at a complete event boundary. The semantic check (causal fingerprint) operates on the computation state: it ensures the resumed process is in the same state as the interrupted one. A log can be syntactically clean (ends at a complete event) but semantically divergent (wrong model checkpoint), or semantically matched but syntactically dirty (partial fragment present). Only conjunction guarantees safe resumption. This is the R = (L1 ∧ L2) predicate of SRC_008.",
+      "counterconditions": [
+        "If a third invariant exists (e.g., temporal ordering with external side-effects), the conjunction is insufficient and R = (L1 ∧ L2 ∧ L3).",
+        "If the causal fingerprint is over-specified—capturing irrelevant state that changes nondeterministically—L2 becomes unsatisfiable and resumption is always refused, even when it would be safe."
+      ],
+      "optional_refs": ["SRC_003", "SRC_006", "SRC_007", "SRC_008"],
+      "sidecar": {"requested_context_aliases": ["SCR_001"], "search_signal": "productive"},
+      "typicality": 0.85
+    },
+    {
+      "claim": "Partial events left by mid-stream exhaustion are simply orphaned fragments in the append-only log—neither garbage-collected nor promoted—and the resumption protocol treats the log as ending at the last framed complete event. The append-only identity is preserved because no event was deleted or modified; the fragment is inert bytes, not an event.",
+      "mechanism": "Event identity in the append-only log is conferred by the framing protocol, not by byte presence. A partial byte sequence that does not satisfy the framing protocol's completeness predicate (e.g., missing checksum, missing end-marker) lacks event identity entirely. It is not a 'partial event'—it is a non-event. The resumption protocol appends after the last framed complete event, leaving the orphaned bytes as inert filler. Future readers that apply the framing protocol will skip them just as the resumption protocol did. No garbage collection is needed because there is nothing to collect.",
+      "counterconditions": [
+        "If a future reader does not apply the same framing protocol, it may interpret the orphaned bytes as a corrupt event, breaking log readability even if append-only identity is formally preserved.",
+        "If the framing protocol's completeness predicate is non-deterministic or implementation-dependent, different readers may disagree on whether the trailing bytes are a complete event or a fragment, making the non-event determination unreliable."
+      ],
+      "optional_refs": ["SRC_003", "SRC_004"],
+      "sidecar": {"requested_context_aliases": ["SCR_003", "SCR_005"], "search_signal": "productive"},
+      "typicality": 0.68
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The two-invariant decomposition (L1 = physical append-only integrity via framing-quarantine, L2 = logical causal continuity via fingerprint match) appears to be the dominant adjudication. The key open question is whether the framing protocol provides self-delimiting integrity markers, making L1 deterministic. If it does, the barrier criterion (SRC_005) is subsumed as a sufficient-but-not-necessary condition for L2. If it does not, L1 is unverifiable and resumption must always be refused absent a barrier.",
+          "possible_next_move": "Determine whether the reasoning envelope's event framing protocol uses self-delimiting records with integrity checks or length-prefixing alone.",
+          "why_keep_this": "Resolves the tension between SRC_005 (barrier required) and SRC_004 (resumption always safe) by making the answer contingent on the framing protocol's properties."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_005",
+        "relation_hint": "depends_on_answer_of",
+        "holds_when": "The framing protocol's delimiting mechanism determines whether L1 is deterministic or requires a barrier fallback.",
+        "weakens_when": "The framing protocol is revealed to use both delimiting methods redundantly."
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the reasoning envelope's event framing protocol use self-delimiting records with integrity checks (checksums/end-markers), or does it rely on length-prefixing alone? This is the single most discriminating open question.",
+        "related_refs": ["SCR_005", "SRC_003", "SRC_005"]
+      },
+      {
+        "question": "If the causal fingerprint (program_hash, input_hash, model_checkpoint_hash) is the sole L2 gate, does it capture all state relevant to producing an identical event stream, or are there hidden state components (RNG seed, scheduler state, temperature) that could cause divergence despite a fingerprint match?",
+        "related_refs": ["SRC_006", "SRC_007"]
+      }
+    ]
+  }
+}
+```

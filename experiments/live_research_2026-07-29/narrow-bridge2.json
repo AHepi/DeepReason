@@ -1,0 +1,456 @@
+{
+  "claim_ledger": {
+    "entries": [
+      {
+        "claim": "At formal sequence 676, artifact 838a109b88e648ad4caa1bf218773db4ed671231b7903024ce4604ed284ed981 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:ebb42b3d0e440a9168549e7d59180136b774aaf4649cc3f3101a988e032dfbe3",
+        "process_observation_refs": [
+          "sha256:e65b0a0358ff34d43911b7a6a296192ecb438bf18780c7d0a1b42044397e1a48"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 8dc9accbe33c01455bd7856e48500c286bfd5ef85e5cc340126606384acaa4d3 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:f4e088d415cbab99b7430e431b1ff7625ae46dc3ab5506401cfeee45528ffc65",
+        "process_observation_refs": [
+          "sha256:ca030fca73f92302d3c9102f4a346f8ad30f350b70aad20e9ead0cf818b70608"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:e83e7782c6d9c19f062611102ea4006461387b1cf6d1beba037d1f95cfc95bc6",
+        "process_observation_refs": [
+          "sha256:bae8ad98f937d3f5843babba091cd85b16d3622a2cad25ea22a90326a27da05c"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 932ef2e29b90a34c8e295817772b6cd454e37e0788b5783dde887e63b31cbc03 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:d4fe141285ffb9fac239bc9e7171f26607a75f5cf7f71370ac74232a97538025",
+        "process_observation_refs": [
+          "sha256:74254dd2b9833ea2e85fba0e91d9c083d8688112b13f09a5ddc349b5bf939a09"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 2dcb167045a9b1728b55af32bad6d3ce8c3684655905b666bcbfec473bceea99 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:26b9b7eef5d30f3d0291179317a0222b552e4735e993606754fc96fe90abe509",
+        "process_observation_refs": [
+          "sha256:80fbb5a1f212db7cea7f9a16745242ed8d310db9ca2c7be07dbe5d91042f6683"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact f3cb5758ff25b3fb5bb425826a0cd5a81381f08da1ab2f9387f12748f085b724 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:13578ba9f912c9f46cc2bb03191a80f937b8efd7503a9dd6869dabdce7495593",
+        "process_observation_refs": [
+          "sha256:c88b4b58bab43fa6dbfb826ed88ff607798d42b75c8d9f79486754637f1fbd86"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 2e61be98723fdac80c0b6d76c7159a4d4c029ecdfc8b7b97d6ebf92fb9a574fe had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:a93bf58c4f81724a9de1e87e36d5c72283bff35896a7773f1c5d2b183b6872e5",
+        "process_observation_refs": [
+          "sha256:706839d22c41f912fc852441eb5c4f98dbae6a3964d36832f4805d7244b803eb"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact bbf87d372e3f8753b8171e01fb95408cb4cea21b43bf6209bf8e72c436cdfc69 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:00433a1daac30a5b1dba75758358eb82dfcd04eecfacea6bb2c2f0628054574b",
+        "process_observation_refs": [
+          "sha256:dc5cac8b6c1ba33bcffa7646b53e02aef5bb7a9410f6b50759c3b85d4fae1c68"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 7db46860ddab8a6597ca6a6e47747dd5e7e88ba63427959f25485af2c868fb59 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:c4e9e034af23dff4e4f735ced7ef0833b3a099014341a14736588c4b53840470",
+        "process_observation_refs": [
+          "sha256:79b2542ed67b0b248171243e095c69ca34f2e9c5589a942692cebcd017a00abc"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact d3d4e3525751db298c73db50cf310be14e4f9a9783fdfe98c15a9b011b67591c had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:713b0d3b8a2764aea749b3a7e2dcfca6f259c3d9432f2f2d3f19fb06b7fb09d0",
+        "process_observation_refs": [
+          "sha256:c66db1f7e162cbc29b65c949a71c55601d2cbfd398b753577a1be4fc85de2aac"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:802610b0376741834072478591e9f47163cc77162309e5e10e3be188a844783b",
+        "process_observation_refs": [
+          "sha256:94345bcc83cf4fd66fa3bf1acadb291a3f32f11d354644b9b38236575c0c864a"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 2b3bc662bc6e060fd386f567372e84344a95ac6437590dbf6ff5ff639a133710 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:1f5942c136357333355b55d6acb4e339c4b4d031d95805563f13260e401d4630",
+        "process_observation_refs": [
+          "sha256:0783621abada26945020564d220d10d3ed2e9c48b0dd61ca2086e3c368400a16"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact b5164be7cdd67d07a0068b92fde7104efe5e1ea51d512a94ac8fe192943ef2ed had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:a4ea28ae9da1ba061481fd6535e053acad3e289e2e7a0f568d574e0bd2978d9d",
+        "process_observation_refs": [
+          "sha256:b0417215f87ffbb8b8031cc2ccd44689f8c6ef3bd74d863fb6c9b8270b1abf99"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact a81e30ae284bb4cc0fd947a10392dbbbf32bd8a0dff18a617249a48f8c6a66a2 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:1589bc9652b9edd67c934e7937f9647dc512ed27dc45ed165b97178fc69ac57f",
+        "process_observation_refs": [
+          "sha256:29436498cdf2c25ac3d4768912ee4b8104cd1b75d1ef60aaadb334b3886086e5"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact d4e817a5c3144ad71f059f5fd1ebde925b898105e17e5645232be57716f30858 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:96d9a75838e83ed54b78c3396e71bc18df7dff59b9cf57b031f013553db9646b",
+        "process_observation_refs": [
+          "sha256:5d18ac9ff58dc721f87964ac2f9d0377766d3e43da13a923e4ea35a632477826"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact e9c1886802e47b71f4e8c19b9907416f0fe5e7c53688249273b1190d1da1e2f4 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:9900899681c21694a412c4e9d6798d8d4e3e3fe3a12eae065456320d04b8a8ab",
+        "process_observation_refs": [
+          "sha256:681ca1c61801637d00160a970902619fefb014f3a0b01181a87502409c7968fb"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 15769cf44a857862dbb4eb441ad47f0f8480c52d4858d5bad5f410615b2198f9 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:290005a8c80a443fb1bcfb894a26d880fbc7540b6c3c0a8b0e372858d81df705",
+        "process_observation_refs": [
+          "sha256:1d05e0e41aa296885709ebe86dad4534596dced969aeab29e9995150b00ab944"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact b465123c455302a6836ead3857a27c015433974a1138ba1bf8047ddc18a0c27d had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:16d9fb128b39f3c5391af1b2821e3ba3e42eea6a28b34af9dbb69fb0a65141a0",
+        "process_observation_refs": [
+          "sha256:57edf563df32a471552c771739b309afa6373f5574be0f2ae1b0843ff2f09328"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact d47d24d7fce16c23d4accf6d911ba23f817a9b5ee3482b2cce93a6e39618470b had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:4a839ac3f6c90aeac423d52bb32845ead346921636371150469d1fadd371ef2f",
+        "process_observation_refs": [
+          "sha256:cfc7773d27c72a398cc192f94d05d41aef6d30ff8b1686fe0bae1eb9d9adbb40"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 7ee34869f3b73ab76ba92fcb019cd97ed97db6cfc4e977d78ebb575baa88791c had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:572702dcb9854bc0062e532601381eb6c5e8ac0bfc54ce682f58e3a38eea6731",
+        "process_observation_refs": [
+          "sha256:ebc83f38fbb7ac9be250b9faa70bfa52679e623c479f30ab7e321d587b5fc1cd"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 222160523bbe21b6ec9216c97bbe0ccd5fa989020e95cfa3a40c49b41c47b83d had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:426053551c63c8b5819510fb6ce692813de20a41489404fc281ab28ebeb0d67f",
+        "process_observation_refs": [
+          "sha256:d8b8ed619e4cfc077b636fe313922dfb2a3cbf210269c9e6c71c4ddfd60fc098"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact ffd82244bb3b47c8bc4ea66b3440c9c6f7263cded40d76a5b64e084bd5915c18 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:132a1ef5572bcb224ab08b5fee193fee42d30191a1e60790149942273ab62364",
+        "process_observation_refs": [
+          "sha256:df0e20a7f94cd0b6541f29a343c6da3af9ffc788e2f2c1e30e8159676566e7b8"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 9658e67c25dfd750dee47f11ffe1fb8d44bdc947d6937414ba339698f700a1ac had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:01841c25dd83608d9b343c973d5c38d0ad077e458b13d17719c4e9e812eb497e",
+        "process_observation_refs": [
+          "sha256:81075a5075817cd0622e442515926fe8b02d6b380ff21be0d7f2dde54fa178f8"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, artifact 6eb20d67fcb125e5d9fd75a59e96b20372e2fddb26d975279261f35bebe93219 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:00d9ea4c6eb731cae0da9309fda51de9ef21c1ecbdd758f3249ddb4710444d88",
+        "process_observation_refs": [
+          "sha256:71da841b4851ff76e77a0b69b0fdf72b42bc4dd6db1701a29b9477a53f6ef688"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 676, problem question-27633c5a9c5c7a55f009bf27b0b8c744 retained an unresolved rivalry among 18 positions.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:8b12514edc952c8768d848987d7c9b661c2097e97fc5bf691c384bd424e48c09",
+        "process_observation_refs": [
+          "sha256:4c97d95e71c2a91e58e5ced61aeeb02cfe041fdea3c67bf7022730cc28d9bc70"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      }
+    ],
+    "formal_seq": 676,
+    "id": "sha256:cb101e81a8a8fcd09483257070f8c94ea92685ef2aae0f36466637c0ba65b20a",
+    "output_target": "answer",
+    "problem_ref": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+    "schema": "bridge.claim-ledger.v1",
+    "source_conflicts": [
+      {
+        "conflicting_refs": [
+          "2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b",
+          "14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e"
+        ],
+        "description": "ART_11 (14e084ed5ca7) claims the idempotency/safety distinction is a category error for append-only log writers\u2014the real invariant is protocol-level distinguishability via delivery metadata. ART_3 (2edd20cc5e66) claims safety is a genuine writer requirement via a layer-boundary distinction (safe writers, idempotent readers). Both share the mechanism of metadata-based distinguishability but contradict on whether calling a writer 'safe' is meaningful or a misnomer.",
+        "id": "sha256:2f84c39a8f86498ed1de0ef012d0d19ef48b352e0d35268e777d15439267b915",
+        "schema": "bridge.source-conflict.v1"
+      },
+      {
+        "conflicting_refs": [
+          "838a109b88e648ad4caa1bf218773db4ed671231b7903024ce4604ed284ed981",
+          "932ef2e29b90a34c8e295817772b6cd454e37e0788b5783dde887e63b31cbc03",
+          "2e61be98723fdac80c0b6d76c7159a4d4c029ecdfc8b7b97d6ebf92fb9a574fe",
+          "7db46860ddab8a6597ca6a6e47747dd5e7e88ba63427959f25485af2c868fb59",
+          "b5164be7cdd67d07a0068b92fde7104efe5e1ea51d512a94ac8fe192943ef2ed",
+          "b465123c455302a6836ead3857a27c015433974a1138ba1bf8047ddc18a0c27d"
+        ],
+        "description": "ART_1, ART_7, and ART_13 claim the log requires safe (not idempotent) writers because append is non-idempotent but tolerates duplicates via dedup keys. ART_4, ART_9, and ART_18 claim the log requires idempotent writers because deterministic replay demands the replayed log be identical to the original, and safety permits state divergence. The disagreement turns on whether 'safe' tolerable duplicates suffice for deterministic replay or whether only true idempotency (identical log state regardless of retry count) satisfies it.",
+        "id": "sha256:3837fc28dc2181a5c6fb00ad4ad2155f2eed77abd8187e571eb337234b437dba",
+        "schema": "bridge.source-conflict.v1"
+      }
+    ],
+    "uncovered_requirements": [
+      {
+        "id": "sha256:21d78b3957dc0229d93e4318e178a6d13f4dea9c87fa689ee495912c619150a1",
+        "reason": "The allowed source handles (SRC_1, SRC_2, SRC_3) and evidence handles (EVD_1, EVD_2, EVD_3) are Python standard library documentation pages that do not discuss idempotency or safety as distributed systems properties.",
+        "related_ledger_entry_ids": [
+          "sha256:d77cf8a75cbf80b89f6dfe33d79c228927f1aa40b1029c419abfd5c988bb777b",
+          "sha256:988f9ade323bb8bdb5791512efbe49f46a63e4d41dc3a781e7f78dd4a904095f",
+          "sha256:0c6e3916d180066e603f96435986a0337e4415f4b69a43ba6da7cc91413e8dee"
+        ],
+        "requirement": "Published definitions of idempotency and safety from distributed systems literature (RFC 9110 \u00a79.2.1, Burnstein & Shapiro on exactly-once semantics) are referenced by formal artifacts but are not present in the catalog's allowed sources, which contain only Python logging and sqlite3 documentation.",
+        "schema": "bridge.uncovered-requirement.v1"
+      },
+      {
+        "id": "sha256:43a8191900772aae8ab61097dea3299597bfc9c5d390241db6d803a88192e1bb",
+        "reason": "The formal sequence retained an unresolved rivalry among 18 positions with no accepted resolution; the bounded record provides no source or evidence external to the formal artifacts that could adjudicate.",
+        "related_ledger_entry_ids": [
+          "sha256:fc0619324d1b46dde890c98da9a8b28ba07a9e8abb3844c5bd8f320ff43779a2",
+          "sha256:d737659c33e4ba2a8aa898a392b6a150c66489e2df54b617aaca022e5717ae32",
+          "sha256:988f9ade323bb8bdb5791512efbe49f46a63e4d41dc3a781e7f78dd4a904095f"
+        ],
+        "requirement": "External adjudication among the 18 competing positions on whether an append-only event log requires idempotent writers, safe writers, or a different property entirely (protocol-level distinguishability, commutativity under dedup, effectively-idempotent composite operations, semilattice-fold processing).",
+        "schema": "bridge.uncovered-requirement.v1"
+      }
+    ]
+  },
+  "failure": null,
+  "grounded_review": null,
+  "output": {
+    "claim_ledger_id": "sha256:cb101e81a8a8fcd09483257070f8c94ea92685ef2aae0f36466637c0ba65b20a",
+    "id": "sha256:d7eefe1f0e66ec191c058eb76e3f143fc6183c8feac3aba62227bf6a244fd6e7",
+    "resolution": "partially_answered",
+    "resolution_reason": "Only 4 of 15 validated process observation entries could be mapped to standalone spans due to the maximum section count of 4. The remaining entries are referenced in unresolved items.",
+    "schema": "bridge.output.v1",
+    "sections": [
+      {
+        "id": "sha256:1f4dc3ebd705764fe268492f97c8c6e7f691b04928b3c9586d43a9020c53baac",
+        "ledger_entry_ids": [
+          "sha256:ebb42b3d0e440a9168549e7d59180136b774aaf4649cc3f3101a988e032dfbe3"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S1",
+        "text": "At formal sequence 676, artifact 838a109b88e648ad4caa1bf218773db4ed671231b7903024ce4604ed284ed981 had formal status accepted."
+      },
+      {
+        "id": "sha256:2c3d9fb68583b1184c8b9ffdd8cbbf9ee92251c29967d9bbd8349dd4a365fe6f",
+        "ledger_entry_ids": [
+          "sha256:f4e088d415cbab99b7430e431b1ff7625ae46dc3ab5506401cfeee45528ffc65"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S2",
+        "text": "At formal sequence 676, artifact 8dc9accbe33c01455bd7856e48500c286bfd5ef85e5cc340126606384acaa4d3 had formal status accepted."
+      },
+      {
+        "id": "sha256:2c81c4d1579db080974b4d4a109d2430ee6e6f89f4f9f4c454a6623921780370",
+        "ledger_entry_ids": [
+          "sha256:e83e7782c6d9c19f062611102ea4006461387b1cf6d1beba037d1f95cfc95bc6"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S3",
+        "text": "At formal sequence 676, artifact 2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b had formal status accepted."
+      },
+      {
+        "id": "sha256:061231856f7cb157479f1f7b1a2270b18faad1b7ebf8544aa86feae91b5a0eec",
+        "ledger_entry_ids": [
+          "sha256:d4fe141285ffb9fac239bc9e7171f26607a75f5cf7f71370ac74232a97538025"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S4",
+        "text": "At formal sequence 676, artifact 932ef2e29b90a34c8e295817772b6cd454e37e0788b5783dde887e63b31cbc03 had formal status accepted."
+      }
+    ],
+    "unresolved_items": [
+      {
+        "description": "Additional process observation entries at formal sequence 676 that could not be mapped to sections due to the section count limit.",
+        "id": "sha256:314175fd36bf62019c25c16c5236301905d673b397e78fa0dce4003fa6eeb764",
+        "ledger_entry_ids": [
+          "sha256:26b9b7eef5d30f3d0291179317a0222b552e4735e993606754fc96fe90abe509",
+          "sha256:13578ba9f912c9f46cc2bb03191a80f937b8efd7503a9dd6869dabdce7495593",
+          "sha256:a93bf58c4f81724a9de1e87e36d5c72283bff35896a7773f1c5d2b183b6872e5",
+          "sha256:00433a1daac30a5b1dba75758358eb82dfcd04eecfacea6bb2c2f0628054574b",
+          "sha256:c4e9e034af23dff4e4f735ced7ef0833b3a099014341a14736588c4b53840470",
+          "sha256:713b0d3b8a2764aea749b3a7e2dcfca6f259c3d9432f2f2d3f19fb06b7fb09d0",
+          "sha256:802610b0376741834072478591e9f47163cc77162309e5e10e3be188a844783b",
+          "sha256:1f5942c136357333355b55d6acb4e339c4b4d031d95805563f13260e401d4630",
+          "sha256:a4ea28ae9da1ba061481fd6535e053acad3e289e2e7a0f568d574e0bd2978d9d",
+          "sha256:1589bc9652b9edd67c934e7937f9647dc512ed27dc45ed165b97178fc69ac57f",
+          "sha256:96d9a75838e83ed54b78c3396e71bc18df7dff59b9cf57b031f013553db9646b"
+        ],
+        "reason": "Maximum section count reached; remaining process observation entries could not be included as standalone spans.",
+        "schema": "bridge.unresolved-item.v1"
+      }
+    ]
+  },
+  "pagination": {
+    "collections": [
+      {
+        "has_more": true,
+        "limit": 25,
+        "next_offset": 25,
+        "offset": 0,
+        "pointer": "/claim_ledger/entries",
+        "returned": 25,
+        "total": 46
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/claim_ledger/uncovered_requirements",
+        "returned": 2,
+        "total": 2
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/claim_ledger/source_conflicts",
+        "returned": 2,
+        "total": 2
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/output/sections",
+        "returned": 4,
+        "total": 4
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/output/unresolved_items",
+        "returned": 1,
+        "total": 1
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/validation_report/findings",
+        "returned": 0,
+        "total": 0
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/grounded_review/findings",
+        "returned": 0,
+        "total": 0
+      }
+    ],
+    "limit": 25,
+    "offset": 0
+  },
+  "schema": "deepreason-cli-bridge-result-v1",
+  "terminal": {
+    "bridge_output_id": "sha256:d7eefe1f0e66ec191c058eb76e3f143fc6183c8feac3aba62227bf6a244fd6e7",
+    "claim_ledger_id": "sha256:cb101e81a8a8fcd09483257070f8c94ea92685ef2aae0f36466637c0ba65b20a",
+    "evidence_pack_id": "sha256:9ce392b80a09ce664bdf0a8cca577343e4d80a08612767765fbd85bf400ae43b",
+    "formal_seq": 676,
+    "output_paths": [],
+    "problem_id": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+    "process_status": "success",
+    "resolution": "partially_answered",
+    "run_manifest_digest": "acfa496ccc1745c76f03275ad2b3b3f638d4cc5cb16e6a2d9d4ba48122e055ff",
+    "schema": "deepreason-bridge-result-v1",
+    "source_terminal_commitment_ref": "sha256:aa0645c0202aa0f91f85767d4a00e5fcef192f3a3c59209b5b2e3db20f56a5f5",
+    "target": "answer",
+    "terminal_event_seq": 691,
+    "validation_report_id": "sha256:9580763542f87356e76e16ea05ec596b2542076b00b97d372ca75b782f85eaa6"
+  },
+  "truncation": {
+    "array_limit_items": 100,
+    "fields": [],
+    "text_limit_chars": 16384,
+    "truncated": false
+  },
+  "validation_report": {
+    "bridge_output_id": "sha256:d7eefe1f0e66ec191c058eb76e3f143fc6183c8feac3aba62227bf6a244fd6e7",
+    "claim_ledger_id": "sha256:cb101e81a8a8fcd09483257070f8c94ea92685ef2aae0f36466637c0ba65b20a",
+    "findings": [],
+    "id": "sha256:9580763542f87356e76e16ea05ec596b2542076b00b97d372ca75b782f85eaa6",
+    "schema": "bridge.validation.report.v1",
+    "valid": true
+  }
+}

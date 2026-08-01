@@ -1,0 +1,25 @@
+```json
+{
+  "alias": "C6",
+  "content_requirements": [
+    "mRNA transcription detailed explanation",
+    "Genetic factoids curated as data-points",
+    "Cyber-Organic 2026 visual styling"
+  ],
+  "depends_on": [
+    "C2"
+  ],
+  "exports": [
+    "updateFactoidDisplay"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "c6-transcription-section",
+    "c6-factoid-grid",
+    "c6-mrna-visualizer"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

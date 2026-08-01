@@ -1,0 +1,32 @@
+```json
+{
+  "candidate": {
+    "claim": "Coverage debt grows super-linearly with the number of accepted rival positions (18 to 60) because batch criticism samples a fixed subset of targets per batch, failing to scale criticism throughput with the growing rivalry size.",
+    "mechanism": "To test this, we propose a sandboxed Python simulation (simulation_mode sandboxed_python_v1) where N=2 schools generate K rivals per step. The criticism mechanism samples min(K, B) targets per batch, where B is a fixed budget. We track coverage debt as the cumulative sum of unchallenged targets. The simulation discriminates between a linear debt prediction (if B scales with K) and a quadratic debt prediction (if B is constant while K grows from 18 to 60).",
+    "counterconditions": [
+      "Coverage debt remains constant if the criticism budget B dynamically scales with K.",
+      "Batch criticism evaluates all targets concurrently without a fixed batch size limit.",
+      "Rival position generation halts once a saturation point of 60 positions is reached."
+    ],
+    "typicality": 0.65,
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92979168"
+      },
+      {
+        "block": "030b6533444807e7"
+      }
+    ],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  },
+  "abstention": null
+}
+```

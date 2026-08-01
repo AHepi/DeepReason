@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "A randomized backtracking search that prunes reflection-symmetric states will discover a valid 45-comparator 13-input network within a fixed 10-second budget, while an unpruned search will time out, demonstrating that symmetry pruning is strictly more efficient for this problem size.",
+    "mechanism": "By enforcing a canonical form on the first comparator (e.g., requiring that if (11, 12) is chosen, (0, 1) must not be chosen, thereby breaking reflection symmetry), the search tree branches are halved. This reduces the time to discover a 45-comparator network from >10s to <10s by eliminating mirrored redundant paths.",
+    "counterconditions": [
+      "The symmetry pruning overhead exceeds the time saved, causing both searches to time out",
+      "A 45-comparator network is not reachable by the specific backtracking search order used, regardless of symmetry pruning",
+      "The unpruned search finds a 45-comparator network by chance before timeout, invalidating the time difference"
+    ],
+    "evidence_refs": [
+      {
+        "block": "bfc42b3064ed02fe",
+        "quote": "- Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class. -"
+      },
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "- S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39 The n = 9 and n = 10 cases were settled by exhaustive SAT-ba"
+      },
+      {
+        "block": "680b4c459d28bf7a",
+        "quote": "S(n) denotes the minimum comparator count of any n-input sorting network. As compiled in this dossier:"
+      }
+    ],
+    "typicality": 0.75
+  }
+}
+```

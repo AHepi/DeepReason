@@ -1,0 +1,51 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "description": "One bounded reasoning-envelope candidate or honest abstention.", "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidate": {"anyOf": [{"$ref": "#/$defs/ReasoningCandidateProposal"}, {"type": "null"}], "default": null}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 6 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-98a0e3a77a0e29bd56195f9c531f6092
+The attached documentation specifies DeepReason's school system (conditioning-only schools sharing frozen provider seats) and its criticism mechanism (foreign-school argumentative criticism with per-target warrants, coverage debt, batch criticism, criticism-weighted attention). Treat this as a combined simulation, coding, and research challenge: identify concrete weaknesses in how schools generate rival positions and how criticism retires them — in live runs rivalry has grown from 18 to roughly 60 accepted rival positions while criticism retired almost none — and propose specific, criticizable optimisations. Where a claim about coverage or retirement dynamics can be tested numerically, propose a sandboxed Python simulation (simulation_mode sandboxed_python_v1) that discriminates between rival predictions, for example about how coverage debt grows with rivalry size under batched criticism. Where published work bears on the design, propose directed research fetches of specific https pages; this run's frozen allowlist permits only en.wikipedia.org (ensemble methods, peer review, Popperian critical rationalism are all in scope). Ground every claim about the current mechanism in the attached evidence blocks by citing their block ids.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[030b6533444807e7] Candidate content remains open. Claims, mechanisms, counterconditions, analogies, uncertainty, and optional semantic fields are not restricted to a closed mecha
+[0868cfc01f2d83d4] - The judge-side measurement problem and its fix (criterion-level forced choice + degraded-control validity gate): `experiments/informal_ab_prereg.yaml`, instru
+[0909868ae3d22218] ## IV. Standing residue
+[093553dbc247bd0c] All arms: conjecture-only (licensed by the survivorship result), fixed problem (`pi-bronze`), 2 schools, ~60k tokens each, fresh roots, invariants verified clea
+[0974daebd1665965] - **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension 
+[09ffabcd92979168] # Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)
+[0b0e7cfc88b8578f] This amendment separates four concepts that reports and operators must not collapse: school lineage, route topology, advisory attention, and workflow authority.
+[0c74fc8b6042157a] **The epistemologically principled procedure is "downgrade, then audit."** This is where the harness earns its keep: it already contains the instruments that ce
+[0cc96960b136c7ef] ## 2. Angle: role→model routing (pro → flash)
+[0d20320ff9938143] **Commitment** (Def 3.1)
+[0d252ced86fc7870] `Rule.CONTROL` and `ControlEventPayloadV1` persist authority transitions by canonical reference. Control events have an empty formal `StateDiff`; they do not du
+[0d315607fbe7bccd] ## I. Interfaces and compatibility
+[0efee9d35ff76f87] ``` variator emits k bounded edits {a'} via µ(·|a) s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only HV_B(a) = 1 - s(a) ```
+[0f670de69de9021d] `conjecturer (Verbalized-Sampling contract, §11.6), argumentative_critic, defender, variator(µ, µ_struct), judge(rubric verdicts under trial protocol), summariz
+[0f7c567fc0adcc11] DeepSeek applies context caching automatically: input tokens matching a previously seen prefix are billed at **1/10 the input price** ([pricing docs](https://ap
+[104e65041f02d759] Three layers + guardrails. Correction from v1: Def 4.2 coupling and Prop 4.1 reach are **not** the same parameter — coupling is a property of γ, reach a measure
+[11946742f52c634d] ## 2. Instrument
+[12680856aa1384a9] So the current theory of the Gulf of Mexico's single daily tide is: *the semidiurnal constituent is suppressed wholesale near an amphidromic node, letting the d
+[12e3502ca378276c] ## 8. Views (not types)
+[1401526e86196288] - **Anchored rubric mode.** A standard artifact (10.3) may declare `mode: anchored` with anchor exemplar refs. The judge's question per commitment: "does the ca
+[144cc07f42bb61e7] Local schema repair and whole-workflow retry are different authorities.
+[146e021253b0932f] Wh

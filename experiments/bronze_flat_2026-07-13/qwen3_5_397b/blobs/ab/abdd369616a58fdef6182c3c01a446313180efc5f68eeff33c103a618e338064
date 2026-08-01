@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of just-in-time bronze supply chains due to the severing of a single critical node (Cyprus), causing cascading economic paralysis in dependent palace economies.\", \"mechanism\": \"Supply chain fragility and network cascade failure triggered by the loss of copper/tin intermediaries.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of significant local bronze production or alternative trade routes sustaining palace centers for more than a decade post-1200 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This relies on the high interdependence noted in neighborhood artifact 7e3426b9, treating the palaces as overly specialized nodes unable to buffer supply shocks.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"A rapid climatic shift (300-year drought) reduced agricultural surplus below the threshold required to sustain centralized bureaucratic redistribution, leading to internal peasant revolts rather than external invasion.\", \"mechanism\": \"Ecological stress causing fiscal insolvency of the redistribution state and subsequent internal social contract breakdown.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Nile Delta regions\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing stable precipitation levels in Anatolia and Greece between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Contrasts with military-focused explanations; aligns with the exclusion of Egypt due to its unique reliance on Nile flooding rather than rainfall agriculture.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an intentional, coordinated strategic decoupling by peripheral elites who adopted new infantry tactics to reject the extractive demands of the central palaces, effectively dismantling the system from within.\", \"mechanism\": \"Deliberate political fragmentation and military innovation by subaltern groups rejecting centralized extraction.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as external invaders\"]}, \"forbidden\": [{\"case\": \"Evidence that the destruction layers were caused exclusively by foreign groups with no prior connection to the local hinterland.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical view reframing 'Sea Peoples' not as invaders but as localized insurgents; challenges the narrative in artifact 2af0caa0 by removing the external migration vector.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "dependence",
+          "target": "f0a9dc411f47eb708019aec77c7b53d5c6c58d6cefc605188da87e6c179cbcfa"
+        }
+      ],
+      "typicality": 0.35
+    }
+  ]
+}

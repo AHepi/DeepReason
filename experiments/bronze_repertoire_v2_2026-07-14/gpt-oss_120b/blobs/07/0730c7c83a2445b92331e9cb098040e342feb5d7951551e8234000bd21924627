@@ -1,0 +1,16 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Pairwise discrimination (\u00a710.2): A-beats-B-for-pi, never a global\nranking. 'neither' registers nothing \u2014 the rivalry stands.", "properties": {"decisive_point": {"default": "", "title": "Decisive Point", "type": "string"}, "winner": {"enum": ["A", "B", "neither"], "title": "Winner", "type": "string"}}, "required": ["winner"], "title": "PairwiseRuling", "type": "object"}
+
+PROBLEM disc:succ:8b8701212ea8: discriminate between 6 surviving rivals for succ:8b8701212ea8
+CRITERIA:
+
+
+A:
+{"claim": "A trans‑Mediterranean coalition of early Iron‑age hill‑state warriors, often identified in epigraphic fragments as the ‘Northern Confederation’, launched coordinated raids on coastal palaces, disrupting trade routes and overwhelming local militaries.", "mechanism": "Militant pressure from a mobile, iron‑armed confederation overwhelmed traditional bronze‑armed forces, precipitating political fragmentation and loss of elite control.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Contemporary inscriptions from the period contain no mention of a coordinated northern confederation or iron weaponry.", "eval": "rubric:std-hist"}], "prose_notes": "The model emphasizes a wave of militarization driven by early iron technology, distinguishing it from the Sea‑Peoples narrative while still accounting for widespread destruction observed in palace layers."}
+
+B:
+{"claim": "The abrupt collapse of the long‑distance tin trade network originating in Central Asia removed the essential alloying component for bronze, crippling weapon production and elite prestige economies across the Eastern Mediterranean.", "mechanism": "Systemic economic interdependence failure: loss of tin supply caused rapid de‑bronzing of armaments, undermining military capability and elite gift‑exchange systems, leading to palace breakdown.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Lead isotope analysis of bronze artifacts dated to 1200‑1150 BC shows unchanged tin provenance from Central Asian sources.", "eval": "rubric:std-hist"}], "prose_notes": "This explanation focuses on commodity scarcity rather than climate or warfare, aligning with quantitative network‑model approaches and distinguishing itself from copper‑production collapse narratives present in the neighbourhood."}
+
+QUESTION: which candidate better addresses the problem, for this problem only? winner=neither if you cannot discriminate. decisive_point MUST quote a span of a candidate.

@@ -1,0 +1,9 @@
+```json
+[
+  {
+    "op": "replace",
+    "path": "/simulation_proposals/0/parameter_definitions/1/values_json",
+    "value": "[5]"
+  }
+]
+```

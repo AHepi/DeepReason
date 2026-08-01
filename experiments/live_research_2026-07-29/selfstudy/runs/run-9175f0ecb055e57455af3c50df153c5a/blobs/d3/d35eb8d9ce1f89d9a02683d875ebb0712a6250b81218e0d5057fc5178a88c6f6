@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The stall in criticism retirement is caused by an overly strict per-target warrant requirement combined with batched criticism, which creates a combinatorial explosion of required coverage as rivalry size grows.",
+    "mechanism": "As schools generate new rival positions, each position requires specific per-target warrants to be attacked. The batch criticism mechanism batches attacks by target, but does not aggregate warrants across structurally similar targets. When rivalry grows from 18 to 60, the required coverage space expands superlinearly while warrant generation remains linear, causing coverage debt to accumulate without ever triggering retirement. A sandboxed Python simulation (simulation_mode sandboxed_python_v1) can model this by plotting coverage debt against rivalry size, testing whether debt grows exponentially under current batched constraints versus a proposed cross-target warrant aggregation strategy.",
+    "counterconditions": [
+      "If critics' warrant generation rate scales proportionally with the number of new rival positions, coverage debt remains bounded.",
+      "If the system already implements structural aliasing that allows a single warrant to attack multiple targets, the combinatorial explosion is mitigated.",
+      "If the batch criticism mechanism actually retires targets based on a global debt threshold rather than per-target warrants, the stall is caused by a different bottleneck."
+    ],
+    "typicality": 0.75,
+    "evidence_refs": [
+      {
+        "block": "0974daebd1665965"
+      },
+      {
+        "block": "09ffabcd92979168"
+      },
+      {
+        "block": "0909868ae3d22218"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "analogy": null
+  },
+  "abstention": null
+}

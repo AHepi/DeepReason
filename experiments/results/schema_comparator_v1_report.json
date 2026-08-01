@@ -1,0 +1,60 @@
+{
+ "b_minus_a_drop_pp": {
+  "dsflash": 18.8,
+  "kimi": 18.8
+ },
+ "caveats": [
+  "the frozen keyword rule includes 'contradict', which can match generic contradiction language in prose-form objections; shares for form C may be inflated by the instrument",
+  "critic-only design: objection ground measured, adjudication not run"
+ ],
+ "cells": {
+  "dsflash": {
+   "A_original": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.8588
+   },
+   "B_comparator_aware": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.6706
+   },
+   "C_scope_neutral_prose": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.7294
+   }
+  },
+  "kimi": {
+   "A_original": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.8353
+   },
+   "B_comparator_aware": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.6471
+   },
+   "C_scope_neutral_prose": {
+    "n": 85,
+    "objection_rate": 1.0,
+    "scope_share": 0.5412
+   }
+  }
+ },
+ "prereg": "experiments/schema_comparator_v1_prereg.yaml",
+ "schema": "deepreason-schema-comparator-v1",
+ "tokens": {
+  "calls": 512,
+  "completion_tokens": 91024,
+  "prompt_tokens": 261877
+ },
+ "verdicts": {
+  "P1": "REFUTED",
+  "P1_detail": "drops of 18.8pp (dsflash) and 18.8pp (kimi) vs the 30pp bar; the 10pp falsifier did NOT fire - the representation is a real but partial cause",
+  "P2": "CONFIRMED",
+  "P2_detail": "objection rate 1.0 in every critic x form cell - prosecution is unconditional across representations",
+  "P3_exploratory": "prose form scope shares 0.729/0.541 - scope-flavored complaints persist with no case-list structure present at all"
+ }
+}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At p=0.65, phi=0.75, psi=0.35, k=5, harness accuracy is NOT at least 8 percentage points above SC accuracy"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:785c748a3933","observation_valued":false},"id":"fc:785c748a3933","schema":"commitment"}

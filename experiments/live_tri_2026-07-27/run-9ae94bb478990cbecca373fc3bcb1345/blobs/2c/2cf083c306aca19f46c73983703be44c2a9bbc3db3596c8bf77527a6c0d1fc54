@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target does not provide a causal mechanism for how exhaustion is recorded as a typed auditable terminal; it merely specifies what the terminal event should contain (cryptographic commitment, signature) without explaining the process that triggers, enforces, and records the exhaustion event in a non-bypassable manner.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "ac01dee655005ba84230ad68a1d2862831a3f4a729d80523076b6e8df2bc17f9",
+      "attack": true,
+      "case": "The claim asserts Egypt survived because its 'riverine autarky provided topological isolation' from the maritime trade network, yet the scope explicitly excludes 'Egyptian frontier zones.' This exclusion is fatal: Egypt's frontier zones—the Nile Delta ports, the Libyan border, and the Levantine corridor—were precisely the interfaces where network contagion would have entered. By walling off the very points where the mechanism predicts failure would cross into Egypt, the account makes its central claim about Egyptian survival unfalsifiable. If Egypt's survival is explained by isolation from the network, the account must cover the actual contact points to show they were successfully insulated; excluding them concedes the mechanism cannot explain why those interfaces did not transmit collapse.",
+      "counterexample": null
+    },
+    {
+      "target": "2ac4650cfc265bb453d463120f6e6271414eb26816a235148e6dca57d455423c",
+      "attack": true,
+      "case": "The claim excludes Ugarit and the Levantine city-states from its scope on the grounds they were 'commercial not martial palace systems,' yet the problem asks why these very polities collapsed alongside the others. An account that explains Hittite and Mycenaean collapse via martial-ideological rigidity but explicitly disclaims explaining Ugarit and the Levantine city-states has not solved the assigned problem—it has solved a narrower one. The simultaneous collapse of the commercial palace systems is part of the explanandum; a mechanism that cannot reach them is incomplete, not a valid restriction of scope.",
+      "counterexample": null
+    },
+    {
+      "target": "ef458477bc40e3384f46af81534324da84fcf20e25b805849e9fab1caa229978",
+      "attack": true,
+      "case": "The mechanism relies on 'mutual knowledge of finite copper/tin reserves' driving defection and arms races, but the scope explicitly excludes 'Climate as exogenous forcing.' This creates an internal tension: if copper and tin are finite, their scarcity must have a cause—depletion, supply-chain disruption, or something else. The account offers no endogenous reason for why reserves became binding precisely around 1200 BC after centuries of stable trade. Without an exogenous trigger (climate stress, mining exhaustion, or similar), the sudden shift from cooperative equilibrium to defection is unexplained; the game-theoretic structure describes how collapse propagated once triggered but not why the trigger occurred when it did. Excluding climate is legitimate, but the account must then supply an alternative trigger within its own terms, which it does not.",
+      "counterexample": null
+    }
+  ]
+}

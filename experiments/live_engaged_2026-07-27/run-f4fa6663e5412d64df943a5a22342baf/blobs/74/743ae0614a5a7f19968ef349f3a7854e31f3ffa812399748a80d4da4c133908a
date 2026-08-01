@@ -1,0 +1,36 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-3ee6e1c8fb111609cf76492962d56f70) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Which durable binding, alone, turns silent divergence between a published result and its replayed log from a possibility into a contradiction?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3e637a3b0f5f3c8d30de671b: program:reasoning_observation_pending
+- reason-counter@74fc3693abe18d958c0dfca3: program:reasoning_observation_pending
+- reason-counter@43c2367cc766264c7df41e5d: program:reasoning_observation_pending
+- reason-counter@3df5e0ea3ca99a51e6bd7bbf: program:reasoning_observation_pending
+- reason-counter@80fbb6e54e333da9fc215911: program:reasoning_observation_pending
+- reason-counter@20a2e452c72e90d522414bd0: program:reasoning_observation_pending
+- reason-counter@d36221aec61fa6a7f04df291: program:reasoning_observation_pending
+- reason-counter@863a6b48e9c8848ef5728f0e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Social contracts lack the computational guarantees of cryptographic or formal methods.","Social contracts are subject to interpretation and revision."],"overturn_conditions":["The social contract is abandoned or replaced.","The log's authority is delegitimized."],"shared_structure":["Both social contracts and skepticism rely on external enforcement mechanisms (e.g., legal systems or institutional norms).","Both can define what constitutes a valid or invalid state."],"source_memory_refs":["SRC_002"],"transfer_claims":["If a social contract can define the validity of a record, it can turn divergence into a contradiction."]},"claim":"A social contract (e.g., legal or institutional agreement) is the sole durable binding that turns silent divergence into a contradiction.","counterconditions":[{"case":"The social contract is not universally accepted or enforced.","eval":"observation"},{"case":"The log's authority is challenged or revoked.","eval":"observation"},{"case":"The replay environment does not adhere to the social contract.","eval":"observation"},{"case":"The social contract is ambiguous or incomplete.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The social contract defines the log as an authoritative record. Any divergence during replay violates the contract, creating a social or legal contradiction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3e637a3b0f5f3c8d30de671b, reason-counter@74fc3693abe18d958c0dfca3, reason-counter@43c2367cc766264c7df41e5d, reason-counter@3df5e0ea3ca99a51e6bd7bbf
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Formal specifications for logs may not cover all edge cases (e.g., external inputs).","Logs are often unstructured, unlike formally specified systems."],"overturn_conditions":["The formal specification is proven to be inconsistent or incomplete.","The log's semantics evolve beyond the scope of the specification."],"shared_structure":["Both formal specifications and formally specified systems (e.g., programming languages) define valid states and transitions.","Both rely on logical consistency to detect violations."],"source_memory_refs":["SRC_006"],"transfer_claims":["If a formal specification can detect inconsistencies in a program, it can do the same for a log."]},"claim":"A formal specification of the log's semantics and replay rules is the sole durable binding that turns silent divergence into a contradiction.","counterconditions":[{"case":"The formal specification is incomplete or ambiguous.","eval":"observation"},{"case":"The replay environment does not enforce the specification.","eval":"observation"},{"case":"The log's semantics are not fully captured by the specification (e.g., non-deterministic elements).","eval":"observation"},{"case":"The specification is later revised to accommodate the divergence.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The formal specification defines valid log states and transitions. Any divergence during replay violates the specification, creating a logical contradiction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@80fbb6e54e333da9fc215911, reason-counter@20a2e452c72e90d522414bd0, reason-counter@d36221aec61fa6a7f04df291, reason-counter@863a6b48e9c8848ef5728f0e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

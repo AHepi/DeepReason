@@ -1,0 +1,25 @@
+```json
+{
+  "sections": [
+    {
+      "span_id": "S1",
+      "text": "Several surviving conjectures propose competing conditions for safely resuming a halted run. One proposes that resumption is safe if and only if: (1) the halt was clean—the final event was fully committed and persisted before exhaustion, leaving no partial write; (2) the resuming process can reconstitute the exact internal state at the tail of the committed event log; (3) the event log was not mutated during the pause; (4) a fresh token budget is allocated. Resumption must be refused when the halt left a partial or uncommitted event, when the log or state was externally tampered with, or when no new budget is available. Another conjecture holds that resumption is safe only if the system implements an atomic checkpoint that pairs the full mutable state snapshot with the last committed event identity, and the halt occurred at such a checkpoint boundary. Without this, even a clean event-level halt may hide state divergence, so resumption must be refused. A third conjecture holds that resumption is always safe when the system follows pure event sourcing: all state is derivable by replaying the append-only log, the last event is complete, and a write-budget guard prevented initiating any event that could not be completed within remaining tokens. Resumption is refused when the write-budget guard was absent, failed, or when the last event is incomplete. A fourth conjecture argues that resumption should always be refused; instead, a new run must be spawned that explicitly references the halted run's event log as prior context. This eliminates all corruption risk by never mutating the original log's causal stream.",
+      "ledger_entry_handles": ["E26", "E27", "E28", "E29"]
+    },
+    {
+      "span_id": "S2",
+      "text": "At formal sequence 583, problem question-198b501b3048f670ba991818c4f4c854 retained an unresolved rivalry among 24 positions.",
+      "ledger_entry_handles": ["E25"]
+    }
+  ],
+  "resolution": "conflicting_evidence",
+  "resolution_reason": "The surviving conjectures E26 through E29 advance directly conflicting criteria for halted-run resumption safety. E26, E27, and E28 each identify distinct conditions under which resumption may be safe, while E29 maintains that resumption should always be refused in favor of spawning a new run. E30, which may further inform the conflict, is partial and cannot be fully evaluated. No conjecture has been validated over the others.",
+  "unresolved_items": [
+    {
+      "description": "A fifth surviving conjecture (E30) addresses resumption safety, but its claim text is incomplete in the ledger: 'Resumption safety depends on the distinction between budget-exhaustion halts and all other halt'",
+      "reason": "The ledger entry E30 contains a truncated claim; the full conjecture cannot be rendered without the complete text.",
+      "ledger_entry_handles": ["E30"]
+    }
+  ]
+}
+```

@@ -1,0 +1,84 @@
+{
+  "schema": "deepreason-jolt-trigger-analysis-plan-v1",
+  "baseline_commit": "835096578f72ddbc88f69e67c05130f058d359c7",
+  "status": "frozen_for_review_not_live_execution",
+  "pilot_not_confirmatory": true,
+  "units": {
+    "trigger_prediction": "source trigger-state block evaluated by its J0 continuation",
+    "jolt_efficacy": "post-trigger branch nested in a matched source-state block",
+    "false_trigger_harm": "post-jolt branch nested in a healthy source-state block"
+  },
+  "stratification": {
+    "primary": ["hard_orbit", "soft_exhaustion"],
+    "pool_across_diagnoses": false,
+    "ambiguous_diagnoses": "descriptive only",
+    "problem_and_model": "report cell estimates; do not pool a sparse interaction into a universal claim"
+  },
+  "primary_outcome": {
+    "name": "verified_progress_within_5_calls",
+    "type": "binary",
+    "positive_event": "at least one FunctionalObservation on the frozen original problem with verifier_metric.delta greater than zero",
+    "semantic_novelty_can_satisfy_outcome": false
+  },
+  "trigger_validation": {
+    "hard_and_soft_separate": true,
+    "positive_prediction": "J0 has no verified progress in five calls",
+    "reports": ["positive predictive value", "healthy-state false-positive harm", "lead time in completed conjecturer calls"],
+    "threshold_tuning_on_pilot": "descriptive sensitivity grid only and labelled post hoc; frozen candidate threshold remains primary"
+  },
+  "efficacy": {
+    "comparators": {
+      "hard_orbit": ["J1-J0", "J2-J0", "J6-J0"],
+      "soft_exhaustion": ["J3-J0", "J4-J0", "J6-J0"]
+    },
+    "absolute_effect": "paired risk difference across matched blocks",
+    "relative_effect": "risk ratio only when the J0 risk is nonzero",
+    "interval": "block-cluster bootstrap percentile interval, exploratory because the pilot is small",
+    "multiple_comparisons": "Holm correction within each diagnosis family",
+    "minimum_blocks": 5,
+    "below_minimum": "report feasibility and raw block table only; no efficacy conclusion"
+  },
+  "secondary_outcomes": {
+    "verifier_magnitude": "problem-specific normalised delta; never directly pooled across domains",
+    "hard_orbit_escape": "no subsequent gate block naming the original concentrated refuted target within five calls",
+    "cost_to_useful_admission": "logged LLM tokens through first admitted functionally novel candidate with verifier contact",
+    "functional_novelty": "deterministic evaluator field, kept distinct from semantic novelty",
+    "semantic_novelty": "descriptive within-run normalised ratio only",
+    "harm": "predeclared composite plus each component separately"
+  },
+  "provider_failures": {
+    "single_branch": "intention-to-treat failure: outcome zero and harm true",
+    "all_branches_same_outage": "retain forensic block; exclude under the preregistered block-wide outage rule",
+    "malformed": "outcome zero and harm true",
+    "missing_verifier_receipt": "outcome zero, harm true, protocol violation",
+    "imputation": "none"
+  },
+  "random_effects": {
+    "confirmatory_model": "not fitted in the feasibility pilot if cells are sparse",
+    "future_full_study": "mixed-effects logistic model with random intercepts for problem and model family and a trigger-block effect",
+    "pilot_reporting": "block-paired estimates plus problem-by-jolt and model-by-jolt tables"
+  },
+  "retrospective_oracle": {
+    "horizon_calls": 5,
+    "definition": "earliest historical point after which five unjolted conjecturer calls contain no positive verifier delta",
+    "role": "upper-bound and trigger lead-time analysis",
+    "prospective_use": false
+  },
+  "policy_comparison": {
+    "adaptive_vs_fixed_vs_never": "deferred",
+    "required_design": "whole-run cluster randomisation with acquisition and repeat-jolt costs included",
+    "reason": "conditional matched branches do not identify a scheduling-policy estimand"
+  },
+  "matched_state_limit": {
+    "persistent_root_equality_implemented": true,
+    "live_scheduler_state_rehydration_implemented": false,
+    "consequence": "no causal live branch execution until a reviewed typed scheduler checkpoint closes this gap"
+  },
+  "engineering_gate_for_future_study": {
+    "relative_verified_progress_increase": 0.25,
+    "maximum_false_trigger_harm": 0.1,
+    "minimum_model_families": 2,
+    "minimum_problems": 4,
+    "status": "not a universal constant and not claimable from this pilot alone"
+  }
+}

@@ -1,0 +1,10 @@
+```json
+{
+  "clauses": [
+    {
+      "item_alias": "K1",
+      "response": "The criticism is valid and the forbidden case is non-falsifying as written. The target's own mechanism specifies that strict harness advantage on a question q requires the conjunction of three conditions: (1) SC is wrong on q, (2) r_w(q)·n_wrong(q) > n_wrong(q) - n_correct(q), and (3) for every other question q' where SC is right, r_c(q')·n_correct(q') < n_correct(q') - n_wrong(q'). The forbidden case under trial asserts that the high per-question flag-correlation condition must yield strict harness advantage whenever SC is wrong on at least 30% of questions. However, high per-question flag-correlation on wrong-majority questions is not logically equivalent to satisfying the full conjunction. It is possible for r_w(q) to be high on SC-wrong questions while simultaneously some SC-right question q' violates the third conjunct (r_c(q')·n_correct(q') >= n_correct(q') - n_wrong(q')), which would prevent strict advantage. This outcome is fully consistent with the proposal's core thesis that per-question structure determines the sign and that no single regime or condition guarantees strict advantage. By std-crit-design clause (2), a forbidden case must be a concrete measurable outcome that would refute the proposal had it obtained. Because this case can obtain while the proposal's mechanism remains true, it fails to meet that standard. The forbidden case should be revised to require that the high-correlation condition produces no strict advantage specifically because the critic's flags are concentrated on correct-majority candidates rather than wrong-majority candidates, which would then directly test and potentially refute the per-question alignment thesis."
+    }
+  ]
+}
+```

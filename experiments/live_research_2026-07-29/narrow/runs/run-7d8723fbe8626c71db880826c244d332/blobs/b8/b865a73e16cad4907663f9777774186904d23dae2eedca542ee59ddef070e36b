@@ -1,0 +1,79 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "14e084ed5ca7 abstracts from SRC_005's protocol-level distinguishability to a general covering principle: the idempotent/safe distinction in append-only logs is an instance of a broader pattern where operation-level properties (idempotency, safety) are the wrong level of analysis whenever a middleware or replay layer mediates between production and consumption of effects. The real invariant is always a distinguishability contract between layers. This abstracts SRC_005 by elevating its specific claim about delivery metadata into a general principle about any layered system with at-least-once delivery. REFUTED IF there exist append-only log architectures where operation-level properties (idempotency or safety of writers) are strictly necessary and sufficient without any protocol-level distinguishability mechanism — i.e., if the layer-mediation pattern is not the essential structure but merely one design choice among others.",
+      "typicality": 0.85,
+      "evidence_refs": [
+        {"block": "SRC_005", "quote": null}
+      ],
+      "neighbours": ["SRC_005", "SRC_002"]
+    },
+    {
+      "content": "14e084ed5ca7 depends on SRC_002's layer-boundary decomposition and extends it by proposing that the writer-safety / reader-idempotency split is itself derivable from a deeper separation-of-concerns: the append-only log enforces a causal ordering constraint, and any property that preserves causal ordering under retry is sufficient for the write path, while any property that collapses causally-equivalent entries is sufficient for the read path. Safety and idempotency are thus projections of causal-ordering preservation onto their respective layers. REFUTED IF the causal-ordering framing adds no discriminating power beyond the original safety/idempotency labels — i.e., if every system classified as 'safe at writer, idempotent at reader' is also classified identically by causal-ordering criteria, and vice versa, making the abstraction vacuous.",
+      "typicality": 0.70,
+      "evidence_refs": [
+        {"block": "SRC_002", "quote": null}
+      ],
+      "neighbours": ["SRC_002", "SRC_001"]
+    },
+    {
+      "content": "14e084ed5ca7 contradicts SRC_003's claim that append-only log writers are 'neither safe nor idempotent in the strict RFC sense' and that the log requires a novel 'retry-safe' property outside the RFC taxonomy. The contradiction: 'retry-safe' is not novel — it is a straightforward weakening of RFC idempotency under an observational equivalence that quotients by delivery metadata. Two appends with the same delivery ID are observationally identical to one append with that ID, so the compound operation (append + dedup-by-delivery-ID) IS idempotent in the RFC sense when the delivery ID is part of the operation identity. The RFC taxonomy does not need extension; it needs correct application. REFUTED IF delivery IDs cannot be treated as part of operation identity without violating the RFC's intent that operation identity is determined by the method and target resource, not by client-supplied metadata — i.e., if the RFC explicitly excludes client metadata from operation identity determination.",
+      "typicality": 0.55,
+      "evidence_refs": [
+        {"block": "SRC_003", "quote": null}
+      ],
+      "neighbours": ["SRC_003", "SRC_005"]
+    },
+    {
+      "content": "14e084ed5ca7 shares mechanism with SRC_001's counterexample framework — specifically the deterministic-identity writer (b) — and proposes that the three writer archetypes (random UUID, deterministic hash, check-then-append) form a lattice ordered by the strength of the distinguishability guarantee, not by idempotency or safety per se. The lattice ordering is: random UUID < deterministic hash < check-then-append, where each step adds a stronger protocol-level invariant (unique-per-attempt → unique-per-logical-op → unique-and-enforced). The append-only log sits at the middle node because it requires unique-per-logical-op but forbids the enforcement step. REFUTED IF the lattice ordering does not actually capture a monotonic increase in distinguishability strength — i.e., if deterministic hash does not strictly dominate random UUID in all retry scenarios, or if check-then-append does not strictly dominate deterministic hash.",
+      "typicality": 0.60,
+      "evidence_refs": [
+        {"block": "SRC_001", "quote": null}
+      ],
+      "neighbours": ["SRC_001", "SRC_004"]
+    },
+    {
+      "content": "14e084ed5ca7 integrates SRC_004's preference for safe-and-idempotent writers with SRC_005's protocol-level distinguishability framing by proposing that 'safe-and-idempotent' is not a preference for stronger writer properties but a preference for a specific protocol-level metadata scheme: content hashing. When the replay layer uses content comparison for deduplication (SRC_005's first countercondition), the writer's deterministic hash becomes the delivery metadata, and safety + idempotency collapse into a single protocol property. The 'preference' is thus not for idempotency per se but for a metadata scheme that is self-describing (no separate delivery IDs needed). REFUTED IF content hashing as delivery metadata fails in cases where separate idempotency keys succeed — specifically, if there exist workloads where distinct logical events have identical content (SRC_004's first countercondition) and the system cannot be made correct by adding separate keys without also abandoning the content-hash scheme entirely.",
+      "typicality": 0.65,
+      "evidence_refs": [
+        {"block": "SRC_004", "quote": null},
+        {"block": "SRC_005", "quote": null}
+      ],
+      "neighbours": ["SRC_004", "SRC_005", "SRC_001"]
+    },
+    {
+      "content": "14e084ed5ca7 inherits from SRC_002's layer-boundary distinction but refines it through SRC_003's RFC-precision: the claim is that 'safety is demanded of the producer' (SRC_002) is correct only under the retry-safe reading of 'safety' (SRC_003), and that this retry-safe property is itself reducible to SRC_005's distinguishability. The chain of reductions: retry-safe → duplicates are tolerable → duplicates are identifiable → distinguishability holds. Thus all five SRC artifacts describe the same underlying invariant at different levels of abstraction, and 14e084ed5ca7 unifies them by showing the reduction chain. REFUTED IF any link in the reduction chain fails — specifically, if 'duplicates are tolerable' does not imply 'duplicates are identifiable' (tolerance via suppression without identification, e.g., a Bloom filter that drops duplicates probabilistically without identifying them), or if 'duplicates are identifiable' does not imply 'distinguishability holds' in the protocol sense SRC_005 intends.",
+      "typicality": 0.75,
+      "evidence_refs": [
+        {"block": "SRC_002", "quote": null},
+        {"block": "SRC_003", "quote": null},
+        {"block": "SRC_005", "quote": null}
+      ],
+      "neighbours": ["SRC_002", "SRC_003", "SRC_005", "SRC_001", "SRC_004"]
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "If distinguishability is the fundamental invariant, can we construct a log architecture where the replay layer uses probabilistic deduplication (e.g., Bloom filters) that tolerates duplicates without strictly identifying them — and would this break the reduction chain from retry-safe to distinguishability?",
+        "related_refs": ["SRC_002", "SRC_005"]
+      },
+      {
+        "question": "Is the lattice of writer archetypes (random UUID < deterministic hash < check-then-append) ordered by distinguishability strength or by coupling strength (degree of read-before-write)? If the latter, the two orderings may diverge: check-then-append has stronger distinguishability but also stronger coupling, and the append-only log's constraint is about coupling, not distinguishability.",
+        "related_refs": ["SRC_001", "SRC_004"]
+      }
+    ],
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative unification: all five SRC artifacts may be descriptions of the same invariant — distinguishability of retried writes — at different abstraction levels. SRC_005 names it directly. SRC_002 distributes it across layers. SRC_001 demonstrates it via counterexamples. SRC_003 locates it outside the RFC taxonomy. SRC_004 ranks writers by how well they support it. If this unification holds, the 'idempotent vs safe' question is not a question about two properties but a question about one property (distinguishability) viewed from five angles.",
+          "why_keep_this": "If the unification is correct, it collapses the apparent disagreement between SRC artifacts into a single principle with multiple descriptions, which is a stronger and more criticizable claim than any individual SRC artifact.",
+          "possible_next_move": "Test the unification by checking whether each SRC artifact's counterconditions correspond to failures of distinguishability. If some countercondition is not a distinguishability failure, the unification is incomplete."
+        }
+      }
+    ]
+  }
+}
+```

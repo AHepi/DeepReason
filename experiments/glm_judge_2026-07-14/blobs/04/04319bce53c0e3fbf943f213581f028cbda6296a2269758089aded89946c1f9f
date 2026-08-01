@@ -1,0 +1,52 @@
+{
+  "edits": [
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates. The validity of this inheritance chain depends on the three impossibility claims sharing the same fixed-parameter constraint lineage.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates. This lineage refutation reduces to verifying that 'fixed precision' and 'fixed (p, phi, psi, k)' are nested subsets of one constraint family.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates, as the impossibility lineage depends on the shared mechanism of parameter-space restriction.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates; the refutation condition requires that the three claims be compatible with one unified fixed-parameter constraint family.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates. The generality of the latter two claims depends on their inheriting the fixed-parameter constraint from 8e9b8d5285aa.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates, as the shared mechanism of parameter fixation is what the refutation targets.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates; the refutation is valid if the premise that the chain shares a common fixed-parameter constraint contradicts the observed parameter subspaces.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    },
+    {
+      "content": "abstraction: 8e9b8d5285aa (a lone fixed-precision critic produces no net gain) is the concrete base-case instance that 30e483eb and c9386a6c both reject and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime is sufficient), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates. The latter two impossibility claims are only coherent if they are compatible with the shared fixed-parameter restriction.",
+      "changed_fields": [
+        "abstraction"
+      ]
+    }
+  ]
+}

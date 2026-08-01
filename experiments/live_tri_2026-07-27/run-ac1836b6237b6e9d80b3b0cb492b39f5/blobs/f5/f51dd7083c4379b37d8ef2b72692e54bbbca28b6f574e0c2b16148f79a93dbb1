@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target's request-only denomination is insufficient because it fails to bound byte consumption, making it unsuitable for data-intensive tasks or environments with byte-based rate limits, as acknowledged by its own counterconditions. A replayable research agent must control data volume to prevent unbounded resource usage and ensure deterministic replay. Thus, the request-only denomination is a weaker rival that should be eliminated.",
+      "counterexample": [
+        "An agent with a request-only budget of 100 requests fetches a 10GB file in one request, consuming massive bandwidth and storage without triggering exhaustion, violating the need for a typed auditable terminal based on resource limits."
+      ]
+    }
+  ]
+}

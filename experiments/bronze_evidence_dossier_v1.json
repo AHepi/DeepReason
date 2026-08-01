@@ -1,0 +1,159 @@
+{
+ "schema": "deepreason-bronze-evidence-dossier-v1",
+ "purpose": "frozen external evidence anchors for bronze_feedback_v1 scoring; committed before the run per the prereg. Each anchor is a checkable, dated, published item of Late Bronze Age collapse evidence; a proposal makes evidence contact when its text matches any term set.",
+ "anchors": [
+  {
+   "id": "ugarit-destruction",
+   "desc": "destruction of Ugarit ~1185 BC",
+   "terms": [
+    "ugarit"
+   ]
+  },
+  {
+   "id": "ships-of-enemy",
+   "desc": "RS 20.238 / 'ships of the enemy' correspondence from Ugarit",
+   "terms": [
+    "ships of the enemy",
+    "ammurapi"
+   ]
+  },
+  {
+   "id": "medinet-habu",
+   "desc": "Ramesses III Medinet Habu Year 8 inscription (~1177 BC)",
+   "terms": [
+    "medinet habu",
+    "ramesses iii",
+    "year 8"
+   ]
+  },
+  {
+   "id": "sea-peoples-lists",
+   "desc": "named Sea Peoples groups in Egyptian records",
+   "terms": [
+    "peleset",
+    "sherden",
+    "shekelesh",
+    "denyen",
+    "weshesh"
+   ]
+  },
+  {
+   "id": "hattusa-abandonment",
+   "desc": "abandonment/burning of Hattusa ~1180s BC",
+   "terms": [
+    "hattusa",
+    "hattusha"
+   ]
+  },
+  {
+   "id": "pylos-tablets",
+   "desc": "Pylos Linear B tablets incl. coastal watchers/rowers series",
+   "terms": [
+    "pylos",
+    "linear b"
+   ]
+  },
+  {
+   "id": "tiryns-earthquake",
+   "desc": "earthquake damage horizons at Tiryns/Midea",
+   "terms": [
+    "tiryns",
+    "midea"
+   ]
+  },
+  {
+   "id": "gibala-pollen",
+   "desc": "Kaniewski pollen cores at Gibala-Tell Tweini/Cyprus",
+   "terms": [
+    "kaniewski",
+    "pollen",
+    "tell tweini",
+    "gibala"
+   ]
+  },
+  {
+   "id": "soreq-isotopes",
+   "desc": "Soreq/Eastern Mediterranean speleothem and isotope aridity records",
+   "terms": [
+    "speleothem",
+    "soreq",
+    "isotope"
+   ]
+  },
+  {
+   "id": "uluburun",
+   "desc": "Uluburun shipwreck cargo (Cypriot copper, tin, exotica)",
+   "terms": [
+    "uluburun"
+   ]
+  },
+  {
+   "id": "tin-sources",
+   "desc": "tin provenance (Kestel, Afghanistan long-range supply)",
+   "terms": [
+    "kestel",
+    "tin supply",
+    "tin trade",
+    "tin from"
+   ]
+  },
+  {
+   "id": "enkomi-destruction",
+   "desc": "destructions on Cyprus (Enkomi, Kition)",
+   "terms": [
+    "enkomi",
+    "kition"
+   ]
+  },
+  {
+   "id": "emar-famine",
+   "desc": "Emar tablets recording famine-year grain prices",
+   "terms": [
+    "emar"
+   ]
+  },
+  {
+   "id": "amarna-hittite-grain",
+   "desc": "Hittite grain-shipment requests to Egypt (Merneptah aid)",
+   "terms": [
+    "merneptah",
+    "grain ship"
+   ]
+  },
+  {
+   "id": "assyrian-continuity",
+   "desc": "Middle Assyrian continuity (Tiglath-Pileser I records)",
+   "terms": [
+    "tiglath-pileser",
+    "assyria survived",
+    "assyrian records"
+   ]
+  },
+  {
+   "id": "greek-site-abandonment",
+   "desc": "LH IIIB-IIIC settlement contraction counts in the Argolid/Messenia",
+   "terms": [
+    "lh iiib",
+    "lh iiic",
+    "iiic"
+   ]
+  },
+  {
+   "id": "carbon-dating",
+   "desc": "radiocarbon anchors for destruction layers",
+   "terms": [
+    "radiocarbon",
+    "c14",
+    "14c"
+   ]
+  },
+  {
+   "id": "babylonian-kassite",
+   "desc": "Kassite Babylonia's trajectory as a comparative control",
+   "terms": [
+    "kassite",
+    "babylon"
+   ]
+  }
+ ]
+}

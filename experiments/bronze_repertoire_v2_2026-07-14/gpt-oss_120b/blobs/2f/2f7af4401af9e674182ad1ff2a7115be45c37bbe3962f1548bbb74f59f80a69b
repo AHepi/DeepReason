@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The forbidden case requires that a blockade affecting Egypt be recorded in Egyptian annals, but the target explicitly does not claim Egypt was blockaded."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

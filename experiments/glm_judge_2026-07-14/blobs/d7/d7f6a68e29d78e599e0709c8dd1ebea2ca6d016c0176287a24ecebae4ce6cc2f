@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "if both the optimal-threshold and binary-veto arms beat self-consistency by the same margin, the proposal's core quantitative claim — that there exists a threshold tau yielding positive net-fixed-minus-broke — is confirmed, not refuted"}
+```

@@ -1,0 +1,30 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM succ:7a9fbb5476ec
+supersede refuted candidate 7a9fbb5476ec on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.85): demand a causal mechanism
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48: {"standard": {"mode": "absolute", "rubric": "A historical-mechanism account must: (1) name a specific causal mechanism \u2014 an institution, incentive, or proc
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 65a802afd28ac6137046a07a559d1f49811ef4b8b0053b27e5afa1d64379034e: nu: argumentative case d0be824c4387a9df against 7a9fbb5476eceac33795d4acc651e78f7a6085feee03761b8e8153811f0a5bb8 is sound
+- a5aafc7a335580543dc67807f9790f1067f575f6deee70695f213489a5450d86: The account claims the collapse was caused by a systemic failure of the palatial trade and diplomacy network, yet it excludes Egypt from the scope of collapse w
+- 756cf15ce4648f6054c78d2fbf121c4ec025614d0d07baf94950f4f3e83f91f3: nu: argumentative case d5e4b4340079de3d against 5d2a70c35835e40deb926e522a954f1a94d2d89906c777fff73d5d1a026949dc is sound
+- d7dfc6e3935c95235ab0dd94a473140a9025c3d07b272b83db40ebd3ebe1443f: The account claims the collapse was driven by a rapid shift to massed mobile infantry rendering chariot-based armies obsolete, but it excludes Egypt from the sc
+- 13502e4bfe88a90e844869bf062d67b37c79a2f8f2556a5ab637e89b8d88e4d6: nu: argumentative case 5037e5a87238d3e4 against c503924fa7796e911cf86ca24c44b84d21a36ddf161633a6fd842cc2fe6df335 is sound
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

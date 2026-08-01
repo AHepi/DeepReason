@@ -15,7 +15,8 @@ venv/
 .coverage
 
 # Runtime state (event logs / blob stores are per-run, git-native saves are explicit)
-runs/
+/runs/
+.deepreason/
 *.local.yaml
 
 # Editors
@@ -26,3 +27,9 @@ runs/
 
 # Transient validation-study checkpoint (durable output is validation_report.json)
 experiments/results/validation_checkpoint*.json
+
+# Live-rig credential env files (never committed)
+experiments/live_tri_2026-07-27/env
+experiments/live_compare_2026-07-28/env
+experiments/live_research_2026-07-29/env
+experiments/live_jolt_2026-07-31/probe.env

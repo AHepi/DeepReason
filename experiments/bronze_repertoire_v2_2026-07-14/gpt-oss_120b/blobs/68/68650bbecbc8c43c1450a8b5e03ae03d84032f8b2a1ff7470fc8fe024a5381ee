@@ -1,0 +1,39 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM succ:8b8701212ea8
+supersede refuted candidate 8b8701212ea8 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.40): counterexample first
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- c4f54171b1e22fe11761abc4d1373cc53d2234e3b2677f53966b239b92137530: {"claim": "A rapid, region-wide hyperarid climate shift around 1200 BC caused severe agricultural failures in the Eastern Mediterranean, while Egypt's reliance 
+- b5db134d313fcc044776b2a13628d114e9e62ae72c5cd0ee20589ab8c1655767: {"claim": "Mass migrations and raids by the Sea Peoples disrupted trade, political stability, and military defense across the Eastern Mediterranean, precipitati
+- dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67: {"claim": "The collapse of the copper‑production system in Cyprus eliminated a key economic engine, causing a chain reaction of economic decline throughout the 
+- 616d51f454591f8739e476ee187f865b6d75a7fa90bdd7c820c4341c7c1c754f: contradicts: The hyperarid-climate hypothesis (c4f54171b1e2) posits that Egypt's Nile-based agriculture insulated it from regional collapse, but the copper-prod
+- db957f299ed6b9709390cb9d2168ba43325f5d3a60be9123f6f08eb3cba01bfb: {"claim": "A coordinated wave of maritime raiders—originating from disenfranchised Cycladic communities—disrupted trade routes and precipitated political fragme
+- 639a936eeef3437ceaa26d2a86b2551c635faa41cc9448d29e4ff44bf8732ea0: {"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eas
+- 79a2b17aeed06c52882267be4ecc46b7e954bcd911e7080bfa2bb5c8f7001f06: {"claim": "Palace elites pursued an unsustainable program of monumental construction and elite gift‑exchange, exhausting fiscal reserves and undermining central
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: Angle: environmental stress; Mechanism: hydroclimatic regime shift; Structure: temporal correlation with paleoclimatic proxies; Register: interdisciplinary synthesis of archaeology and climate science
+  spec 2: Angle: external militant pressure; Mechanism: maritime confederation invasion dynamics; Structure: event-driven narrative focusing on warfare inscriptions and chronicles; Register: political-military analysis
+  spec 3: Angle: systemic economic interdependence failure; Mechanism: trade network collapse leading to resource scarcity; Structure: network graph model of commodity flows and demographic stress; Register: quantitative economic modeling
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

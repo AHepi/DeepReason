@@ -1,0 +1,385 @@
+{
+  "attack_validity_rate": 1.0,
+  "audits": {
+    "hits": 0,
+    "planted_flaw_error_rate": null,
+    "self_preference": null,
+    "verbosity_bias": null
+  },
+  "capture": {
+    "adjudicator": {
+      "attack_target_entropy": null,
+      "criticism_debt": 0.0,
+      "g_churn": 0,
+      "n_attacks": 0,
+      "refutations": 0,
+      "reinstatement_rate": null,
+      "validity_attack_rate": 0.0
+    },
+    "evidence_lambda": null,
+    "generator": {
+      "dist_slope": -0.054228627630104165,
+      "inter_school_dist_ratio": 0.922473910501528,
+      "inter_school_min_dist": 0.7479528316835827,
+      "mean_pairwise_dist": 0.8108119082489149,
+      "mean_token_surprisal": null,
+      "stream_len": 14,
+      "surprisal_slope": null
+    },
+    "lambda": 1.0
+  },
+  "interventions": [
+    {
+      "diversity_delta": null,
+      "rule": "stagnation-recruit",
+      "seq": 181,
+      "stream_dist_after": null,
+      "stream_dist_before": 0.8108119082489149
+    },
+    {
+      "diversity_delta": null,
+      "rule": "reseed",
+      "seq": 183,
+      "stream_dist_after": null,
+      "stream_dist_before": 0.8108119082489149
+    }
+  ],
+  "llm": {
+    "argumentative_critic": {
+      "attempts": 15,
+      "calls": 15,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "argumentative_critic.compact.v1": 15
+      },
+      "eventual_valid": 15,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 15,
+      "first_pass_valid_rate": 1.0,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 15,
+      "schema_exhausted": 0,
+      "tokens": 9282,
+      "total_ms": 57715,
+      "trace_coverage": 1.0,
+      "traced_calls": 15,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 15
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 1.0
+    },
+    "conjecturer": {
+      "attempts": 34,
+      "calls": 30,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "component_contract.compact.v1": 6,
+        "conjecturer.compact.v1": 22,
+        "website_art_direction.compact.v1": 1,
+        "website_outline.compact.v1": 1
+      },
+      "eventual_valid": 30,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 28,
+      "first_pass_valid_rate": 0.9333333333333333,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 34,
+      "schema_exhausted": 0,
+      "tokens": 111600,
+      "total_ms": 628103,
+      "trace_coverage": 1.0,
+      "traced_calls": 30,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 30
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 0.8823529411764706
+    },
+    "variator": {
+      "attempts": 6,
+      "calls": 6,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "variator.compact.v1": 6
+      },
+      "eventual_valid": 6,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 6,
+      "first_pass_valid_rate": 1.0,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 6,
+      "schema_exhausted": 0,
+      "tokens": 8818,
+      "total_ms": 48175,
+      "trace_coverage": 1.0,
+      "traced_calls": 6,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 6
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 1.0
+    }
+  },
+  "process": {
+    "engine_profile": "full",
+    "frozen_routes": [
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "argumentative_critic",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "conjecturer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "defender",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "judge",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "property_designer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "summarizer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "synthesizer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "thesis",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "variator",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "vision_critic",
+        "seat": 0,
+        "temperature": 0.9
+      }
+    ],
+    "manifest_error": "",
+    "manifest_present": true,
+    "manifest_sha256": "59b771a313c48caf22809b46c7c8cdc768a88d7857dc87f15b5149f8010ffa09",
+    "manifest_valid": true,
+    "model_profile": "compact",
+    "note": "process/reporting metadata only; excluded from artifacts, warrants, graph labels, and acceptance",
+    "output_profile": "compact",
+    "pack_profile": "compact",
+    "profile_totals": {
+      "compact": {
+        "attempt_distribution": {
+          "1": 49,
+          "3": 2
+        },
+        "attempts": 55,
+        "calls": 51,
+        "eventual_valid": 51,
+        "eventual_valid_rate": 1.0,
+        "first_pass_valid": 49,
+        "first_pass_valid_rate": 0.9607843137254902,
+        "provider_transport_attempts": 55,
+        "repair_attempts": 4,
+        "repaired_calls": 2,
+        "schema_exhausted": 0,
+        "tokens": 129700,
+        "trace_coverage": 1.0,
+        "traced_calls": 51,
+        "transport_dropped": 0,
+        "truncated_calls": 2,
+        "usage_unknown_attempts": 0
+      }
+    },
+    "transport_totals": {
+      "compact_recovery_calls": 0,
+      "contracts": {
+        "argumentative_critic.compact.v1": 15,
+        "component_contract.compact.v1": 6,
+        "conjecturer.compact.v1": 22,
+        "variator.compact.v1": 6,
+        "website_art_direction.compact.v1": 1,
+        "website_outline.compact.v1": 1
+      },
+      "profiles": {
+        "compact": 51
+      }
+    }
+  },
+  "research": {
+    "note": "",
+    "problems": 0,
+    "uncovered": 0
+  },
+  "schools": {
+    "reseeds": 1,
+    "roster": {
+      "school-0": {
+        "lineage": 7,
+        "novelty_contribution": 0.7655719990642808,
+        "stance": "skeptic",
+        "stance_weight": 0.65
+      },
+      "school-1": {
+        "lineage": 2,
+        "novelty_contribution": 0.8157619122379091,
+        "stance": "skeptic",
+        "stance_weight": 0.9
+      },
+      "school-2": {
+        "lineage": 4,
+        "novelty_contribution": 0.6931570393284003,
+        "stance": "unifier",
+        "stance_weight": 0.8
+      },
+      "school-3": {
+        "lineage": 0,
+        "novelty_contribution": null,
+        "stance": "empiric",
+        "stance_weight": 1.0
+      }
+    }
+  },
+  "signals": {
+    "arg-crit": 13,
+    "conj-noregister": 15,
+    "cycle": 7,
+    "embedder": 6,
+    "gate:*": 41,
+    "hv": 6,
+    "hv-skip-oversize": 4,
+    "intervention:*": 2,
+    "reach": 4,
+    "stage-pick": 4,
+    "website-compact-call": 8,
+    "website-stage": 8,
+    "website-terminal": 3
+  },
+  "spec_transmission": {
+    "n": 0
+  },
+  "survivor_hv": {
+    "max": 1.0,
+    "mean": 0.9583333333333334,
+    "min": 0.875,
+    "n": 6
+  },
+  "survivor_reach": {
+    "max": 0.0,
+    "mean": 0.0,
+    "min": 0.0,
+    "n": 5
+  },
+  "totals": {
+    "artifacts": 35,
+    "events": 186,
+    "llm_tokens": 129700,
+    "problems": 28,
+    "survivors": 7,
+    "warrants": 8
+  },
+  "trial_guard": {
+    "blocked": {},
+    "rubric_warrants": 0,
+    "survival_rate": null
+  }
+}

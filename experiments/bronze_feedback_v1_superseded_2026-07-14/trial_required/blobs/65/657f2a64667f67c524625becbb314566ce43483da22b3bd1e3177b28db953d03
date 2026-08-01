@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "5811659b44364d30a3277bfaa7dc946cc3f1e4698779b76f4f11e77ff2c62cce",
+      "attack": true,
+      "case": "The claim that Egypt's Nile-based irrigation was 'flood-independent of rainfall' is historically inaccurate: the Nile flood depended on monsoon rainfall in the Ethiopian highlands, and there is evidence of low Nile floods during the late 13th–12th centuries BCE that contributed to Egyptian food shortages and social unrest, undermining the argument that Egypt's agricultural base was insulated from climate-induced failure."
+    },
+    {
+      "target": "b8ccc2a3be1487c620e4030d70cea68486f459f849e8413d268579cc047af10f",
+      "attack": true,
+      "case": "The claim that Egypt survived as a 'decentralized network' with multiple military and economic hubs is contradicted by the historical reality that the Egyptian state was highly centralized under the pharaoh, with Thebes and Memphis as successive capitals but not independent hubs; the New Kingdom administration controlled military procurement and grain storage from a single royal center, so the network model's assumption of polycentricity does not fit Egypt's actual political structure."
+    },
+    {
+      "target": "14dbd39eb14c693ad76e65f4ece03d8ad2dcf34c7f76b423f6d166c3496f0683",
+      "attack": true,
+      "case": "The claim that Egypt survived because pharaonic ideology was 'less materially intensive' than competitive gift-exchange regimes is contradicted by the massive scale of New Kingdom mortuary temple construction (e.g., Ramesses II's Ramesseum, Ramesses III's Medinet Habu) and the enormous quantities of gold, stone, and labor they consumed, which rivaled or exceeded the material expenditures of Mycenaean and Hittite elites, so the proposed ideological difference does not explain Egypt's survival."
+    }
+  ]
+}

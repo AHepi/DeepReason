@@ -1,0 +1,2123 @@
+{
+  "schema": "deepreason-defended-trial-v1",
+  "prereg": "experiments/defended_trial_v1_prereg.yaml",
+  "generated_at": "2026-07-13T15:36:30.470867+00:00",
+  "design": {
+    "items": "40 verified-sound (experiments/critic_spec_items/sound_items.json) + 40 known-flawed (experiments/e02_t1_items/known_flaws.json), frozen",
+    "arm_a": "bare prosecutorial critic, REPLAYED from experiments/critic_spec_run/judgments.jsonl (zero new tokens)",
+    "arm_b": {
+      "model": "deepseek-v4-flash",
+      "temperature": 0.0,
+      "prompt": "neutral 'assess for ONE material, checkable defect' \u2014 no prosecutorial framing, no mention of prior flags or judges (scripts/defended_trial_run.py NEUTRAL_CRITIC_PROMPT)",
+      "conviction_rule": "defect_found AND named defect >= 20 chars, != 'none'; parse failure never convicts (same as arm A)"
+    },
+    "arm_c": {
+      "defender": "deepseek-v4-pro (artifact + objection; strict JSON {defence: str})",
+      "adjudicator": "mistral-large-3:675b, temp 0, run twice with presentation order swapped; strict JSON {verdict: sustain|overrule|abstain}",
+      "rule": "disagreement or malformed reply -> abstain; only sustain convicts; arm-B acquittals pass through"
+    },
+    "concurrency_max_in_flight": 3
+  },
+  "rates": {
+    "sound": {
+      "n": 40,
+      "arm_a": {
+        "convictions": 27,
+        "conviction_rate": 0.675,
+        "acquittal_rate": 0.325
+      },
+      "arm_b": {
+        "convictions": 32,
+        "conviction_rate": 0.8,
+        "acquittal_rate": 0.2
+      },
+      "arm_c": {
+        "convictions": 2,
+        "acquittals": 38,
+        "abstentions": 0,
+        "conviction_rate": 0.05,
+        "acquittal_rate": 0.95,
+        "abstention_rate": 0.0,
+        "non_conviction_rate_exploratory": 0.95
+      }
+    },
+    "flawed": {
+      "n": 40,
+      "arm_a": {
+        "convictions": 40,
+        "conviction_rate": 1.0,
+        "acquittal_rate": 0.0
+      },
+      "arm_b": {
+        "convictions": 40,
+        "conviction_rate": 1.0,
+        "acquittal_rate": 0.0
+      },
+      "arm_c": {
+        "convictions": 15,
+        "acquittals": 19,
+        "abstentions": 6,
+        "conviction_rate": 0.375,
+        "acquittal_rate": 0.475,
+        "abstention_rate": 0.15,
+        "non_conviction_rate_exploratory": 0.625
+      }
+    }
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "REFUTED",
+      "measured": {
+        "arm_b_sound_acquittals": 8,
+        "n": 40,
+        "arm_b_sound_acquittal_rate": 0.2,
+        "arm_a_baseline_sound_acquittal_rate": 0.325
+      },
+      "threshold": "neutral framing lifts sound acquittal >= 15pp over the 0.325 baseline (>= 0.475)"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "falsifier_triggered": false,
+      "measured": {
+        "arm_c_sound_acquittal_rate": 0.95,
+        "arm_c_sound_acquittals": 38,
+        "arm_c_sound_abstentions": 0,
+        "arm_c_flawed_conviction_rate": 0.375,
+        "arm_c_flawed_convictions": 15,
+        "n_per_battery": 40
+      },
+      "threshold": "defended sound acquittal >= 0.70 AND flawed conviction >= 0.60; falsifier fires below 0.50 sound acquittal (defense does not restore specificity; observe-only becomes the default criticism policy and the v2 build narrows to the scrutiny view plus attention-only objections)"
+    },
+    "P3": {
+      "verdict": "CONFIRMED",
+      "measured": {
+        "arm_c_flawed_abstention_rate": 0.15,
+        "arm_c_flawed_abstentions": 6,
+        "n": 40
+      },
+      "threshold": "arm-C abstention on flawed items <= 0.40 (the court still decides)"
+    }
+  },
+  "exploratory": {
+    "order_swap": {
+      "trials_with_two_valid_verdicts": 72,
+      "disagreements": 6,
+      "disagreement_rate": 0.0833
+    },
+    "arm_c_abstain_reasons": {
+      "order_swap_disagreement": 6
+    },
+    "defect_taxonomy_sustained_sound_convictions": {
+      "note": "non-verdict-bearing; ordered keyword rules (critic_spec_score), counts only",
+      "counts": {
+        "disputes-central-claim": 2,
+        "disputes-premise": 0,
+        "demands-more-evidence": 0,
+        "style-or-scope": 0
+      },
+      "sustained_sound_ids": [
+        "csp-13",
+        "csp-15"
+      ]
+    }
+  },
+  "per_item": {
+    "csp-00": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim states that exactly 125 complete M2 tidal cycles fit within 65 days, but the calculation shows 125 \u00d7 745 = 93125 minutes, which is less than 93600 minutes. This means 125 cycles fit, but the remaining 475 minutes (93600 - 93125) could accommodate part of a 126th cycle, so the claim that exactly 125 cycles fit is correct only if 'exactly' means 'no more than 125 complete cycles,' but the phrasing 'exactly 125 complete M2 tidal cycles fit within 65 days' is ambiguous and potentially misleading because it does not specify that the cycles are complete and the remainder is not a full cycl",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-01": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that 'exactly 170 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 88 days' is based on a flawed calculation: 170 \u00d7 745 = 126650, but 88 days = 88 \u00d7 24 \u00d7 60 = 126720 minutes. The difference is 70 minutes, so 170 cycles do fit, but the reasoning defect is that the artifact incorrectly states '126650 minutes is less than or equal to 126720 minutes' as if that alone proves exactly 170 cycles fit, while ignoring that the claim 'exactly 170 complete cycles' is actually correct numerically. However, the defect is that the artifact asserts 'exactly 170 complete M2 tida",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-02": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that 69 \u00d7 745 = 51405 minutes is arithmetically incorrect. The correct product is 69 \u00d7 745 = 51405, but the subsequent comparison to 51840 minutes is based on a miscalculation: 69 \u00d7 745 actually equals 51405, which is indeed less than 51840, so that part is consistent. However, the reasoning defect is that the argument asserts 'exactly 69 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 36 days (51840 minutes)' but the calculation shows 69 cycles take 51405 minutes, leaving 435 minutes unused. The defect is that the argument does not check whether the tidal cycl",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-03": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that 73 cycles fit because 73 \u00d7 745 = 54385 is less than 54720 is correct, but the reasoning then asserts that 73 is the maximum integer number of complete cycles. However, the calculation 73 \u00d7 745 is actually 54385, not 54385 as stated? Wait, 73 \u00d7 745 = 54385, which is indeed less than 54720. The defect is that the argument incorrectly states the product of 73 and 745 as 54385, but then later says 74 \u00d7 745 = 55130, which is correct. The actual product 73 \u00d7 745 = 54385, and 74 \u00d7 745 = 55130. The argument's arithmetic is correct, but the reasoning defect is that it claims 'exactly M c",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-04": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that 53 days is exactly 76320 minutes is incorrect. 53 days \u00d7 24 hours/day \u00d7 60 minutes/hour = 53 \u00d7 1440 = 76320 minutes, which is correct. However, the calculation 102 \u00d7 745 = 75990 is correct, and 75990 < 76320, so 102 cycles do fit. The defect is that the argument states 'exactly 102 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 53 days' but does not check whether 53 days is an integer multiple of 745 minutes. 76320 \u00f7 745 = 102.442..., so 102 cycles fit, but the claim that they 'fit exactly' is misleading because the remainder is not zero; the reasoning is",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-05": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that 40 days equals exactly 57600 minutes is incorrect. 40 days \u00d7 24 hours/day \u00d7 60 minutes/hour = 57600 minutes is correct, but the argument then states that 77 \u00d7 745 = 57365, which is correct, and that 57365 < 57600, which is also correct. However, the reasoning defect is that the premise 'exactly 77 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 40 days' is not properly checked because the calculation shows 77 cycles take 57365 minutes, which is less than 57600, so they do fit. The defect is that the argument claims to prove 'exactly 77 complete cycles fit'",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-06": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that the condition m + r = 2j is sufficient for static determinacy, but it is only a necessary condition. The artifact states 'the necessary condition for static determinacy' and then concludes 'Therefore, the truss meets the count condition for static determinacy,' which implies that satisfying this equation alone determines static determinacy. This is a logical error: meeting a necessary condition does not guarantee the condition is sufficient; the truss could still be statically indeterminate or unstable due to member arrangement or support configuration.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-07": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument treats the equation m + r = 2j as a sufficient condition for static determinacy, but it is only a necessary condition. The artifact states 'Therefore, the truss meets the numerical condition for static determinacy' and implies that satisfying the count condition alone establishes static determinacy, which is a reasoning defect (logical: necessary vs. sufficient conflation).",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-08": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that satisfying m + r = 2j 'confirms that the truss meets the counting requirement for static determinacy.' This is a logical defect: the equation m + r = 2j is a necessary condition for static determinacy, but not a sufficient one. The truss could still be statically indeterminate or unstable due to internal member arrangement or support configuration, so the conclusion that it 'meets the counting requirement' is overstated.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-09": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-10": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The artifact claims that the truss satisfies the necessary count condition for static determinacy, but the count condition m + r = 2j is only a necessary condition, not a sufficient one. The artifact incorrectly infers that satisfying this equation alone means the truss is statically determinate, ignoring that the condition is necessary but not sufficient (e.g., the truss could still be statically indeterminate or a mechanism due to improper member arrangement).",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-11": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim states that a knight on a5 attacks exactly 4 squares, but the reasoning incorrectly counts b7, b3, c6, and c4 as valid. However, from a5, the move two squares up to rank 7 and one square left would be to b7 (not off the board), because file b is one square left from file a. The artifact incorrectly says that move is off the board. Similarly, two squares down to rank 3 and one square left is also to b3, not off the board. So the knight actually attacks 6 squares: b7, b3, c6, c4, and also the two leftward moves (to b7 and b3) are valid, not invalid. The artifact's inference that those ",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-12": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that moving two squares down from h6 yields f5 and f7 is incorrect. From h6, moving two squares down (to rank 4) and then one square left gives g4, not f5; moving two squares down and one square right gives g8, not f7. The correct reachable squares from h6 are f5 (two up, one left), f7 (two up, one right), g4 (two left, one down), and g8 (two left, one up). The artifact's description of the moves is structurally wrong, though the final set of squares listed (f5, f7, g8, g4) is accidentally correct.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-13": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The artifact incorrectly counts a3 and e3 as valid attacked squares. From c1, moving one square up and two squares right reaches e2, not e3; moving one square up and two squares left reaches a2, not a3. The correct valid squares are a2, b3, d3, and e2, totaling 4, so the claim is actually correct.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-14": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-15": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that squares f7, f6, f4, and f3 lie off the board is wrong. On a standard 8x8 chessboard, f7, f6, f4, and f3 are all valid squares (files a-h, ranks 1-8). The reasoning incorrectly treats the f-file as off the board, leading to an erroneous count of 4 squares; the knight actually attacks 8 squares from h5.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-16": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-17": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The conversion of 63 millimetres per year to kilometres per year is incorrect: 63 mm = 63 \u00d7 10\u207b\u2076 km, which is 0.000063 km, but 63 \u00d7 10\u207b\u2076 is 0.000063, not 0.000063 as stated (the number is correct, but the reasoning that the calculation is 'exact' because 63 \u00d7 7 = 441 ignores that 63 mm/year \u00d7 7,000,000 years = 441,000,000 mm = 441 km, which is correct; however, the step '63 \u00d7 10\u207b\u2076 kilometres per year' is actually 63 \u00d7 10\u207b\u2076 = 0.000063, and multiplying by 7,000,000 gives 441, so no arithmetic error exists. The defect is that the argument claims the calculation is 'exact' due to 63 \u00d7 7 = 441, but",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-18": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The conversion of 32 millimetres per year to kilometres per year is incorrect: 32 millimetres = 0.000032 kilometres, but 32 mm/year is actually 0.000032 km/year, which is correct. However, the multiplication 0.000032 \u00d7 6,000,000 yields 192, but the units are inconsistent: 0.000032 km/year \u00d7 6,000,000 years = 192 km, which is correct. The defect is that the claim states 'exactly 192 kilometres' but the calculation uses 6,000,000 years, while the claim says '6 million years' \u2014 6 million is 6,000,000, so that is fine. The actual defect is that the speed is 32 mm/year, which is 0.000032 km/year, a",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-19": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The conversion of 91 millimetres per year to kilometres per year is incorrect: 91 millimetres = 0.000091 kilometres, but 91 mm/year is actually 0.000091 km/year, which is correct. However, the multiplication 0.000091 km/year \u00d7 9,000,000 years yields 819 km only if 0.000091 \u00d7 9,000,000 = 819. In fact, 0.000091 \u00d7 9,000,000 = 819.0, which is arithmetically correct. The defect is that the artifact claims 'exact conversions and no rounding' but 91 mm/year converted to km/year is 0.000091, which is a rounded representation (91/1,000,000 = 0.000091 exactly, but the artifact's step implies a conversio",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-20": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim states that a tectonic plate moving at a constant 41 millimetres per year travels exactly 82 kilometres in 2 million years. The calculation is correct, but the defect is that the claim asserts the distance is 'exactly' 82 kilometres, which is not checkable as an exact value because the given speed of 41 mm/year is likely a rounded or approximate measurement, not an exact constant. In reality, tectonic plate speeds vary and are not known to such precision over 2 million years, so the inference that the distance is exactly 82 km is an unwarranted claim of exactness based on an assumed ",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-21": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The conversion of 32 millimetres per year to kilometres per year is incorrect: 32 mm = 0.000032 km, but 32 mm/year is 0.000032 km/year, which is correct. However, the multiplication 0.000032 \u00d7 8,000,000 yields 256, but 0.000032 \u00d7 8,000,000 = 256.0, which is arithmetically correct. The actual defect is that the claim states 'exactly 256 kilometres' but the calculation uses 8,000,000 years, while the claim says '8 million years'\u20148 million is 8,000,000, so that matches. The defect is that the reasoning assumes constant speed over 8 million years without evidence that the plate has moved at that c",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-22": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The conversion of 54 millimetres per year to kilometres per year is incorrect: 54 mm = 54 \u00d7 10\u207b\u2076 km, but 54 \u00d7 10\u207b\u2076 = 0.000054, which is correct. However, the multiplication 0.000054 km/year \u00d7 3,000,000 years yields 162 km only if 0.000054 \u00d7 3,000,000 = 162.0, which is arithmetically correct. The defect is that the claim states 'exactly 162 kilometres' but the calculation uses 54 mm/year, which is a measurement with limited precision (likely 2 significant figures), so the result cannot be claimed as 'exactly' 162 km; it should be approximately 162 km. The reasoning defect is quantitative: treat",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-23": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that the shortest travel time is exactly 7 days based on examining 'all possible routes,' but it omits consideration of any direct route from Knossos to Memphis (if one exists in the network). Without evidence that no such direct route exists, the conclusion that 7 days is the minimum is unsupported.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-24": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that the shortest travel time is exactly 7 days is based on an incomplete enumeration of possible routes. The artifact states 'No other sequence of caravan routes connects Uruk to Ashur,' but this is an unsupported assertion; there could be other routes (e.g., Uruk \u2192 Byblos \u2192 Ashur, or Uruk \u2192 Ugarit \u2192 Troy \u2192 Ashur) that are not listed, and without evidence that all possible routes have been considered, the conclusion that 7 days is the minimum is not logically justified.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-25": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that 'No other sequence of caravan routes connects Ugarit to Uruk' but only lists four specific routes. It does not prove that no other possible sequence exists (e.g., Ugarit->Hattusa->Byblos->Memphis->Uruk, or any route with cycles or additional intermediate cities). This is a logical/evidential defect: the inference that the minimum among the listed paths is the global minimum is unsupported because the set of considered routes is not shown to be exhaustive.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-26": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that 'No other sequence of caravan routes connects Troy to Uruk' but only lists four routes, without proving that all possible routes have been considered. This is an evidential defect: the conclusion that the minimum sum is 7 days depends on an unsubstantiated claim of exhaustive enumeration.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-27": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that 'the shortest travel time from Knossos to Uruk is exactly 11 days' based on examining all possible routes, but it fails to consider the possibility of a route that goes Knossos \u2192 Ugarit (4 days) \u2192 Troy (5 days) \u2192 Uruk (6 days), which sums to 15 days, or any other combination not listed. However, the critical defect is that the argument does not demonstrate that the network is fully enumerated; it only lists a few routes and asserts 'No other path exists' without justification. This is an unwarranted assumption, making the conclusion unsupported.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-28": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The artifact claims that the route Memphis to Hattusa (2 days) then Hattusa to Ugarit (2 days) then Ugarit to Uruk (4 days) totals 8 days, but 2+2+4 = 8 is arithmetically correct; however, the defect is that the artifact does not consider the route Memphis to Hattusa (2 days) then Hattusa to Uruk (direct, if it exists) which might be shorter, but more importantly, the artifact asserts that the shortest route is exactly 8 days without checking all possible routes, such as Memphis to Uruk directly if that edge exists, or Memphis to any other intermediate city not listed. The defect is that the a",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-29": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-30": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that the total reduction ratio is the product of the individual stage ratios, (60/10) \u00d7 (128/16) = 48, is correct, but the artifact states the overall velocity reduction is 'exactly 48:1'. However, the second stage pinion is described as being 'on the same arbor as the 60-tooth wheel', meaning they share a common shaft. In a two-stage reduction, the overall ratio is indeed the product of the two stage ratios, but the calculation (60/10) \u00d7 (128/16) = 6 \u00d7 8 = 48 is correct. The defect is that the artifact does not account for the fact that the 16-tooth pinion is on the same arbor as th",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-31": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim that the second stage pairs a 10-tooth pinion on the 24-tooth wheel's arbor is unsupported and likely impossible: a 24-tooth wheel's arbor would typically carry a pinion with a tooth count that meshes with the next wheel, but the artifact provides no evidence that a 10-tooth pinion can be physically mounted on the same arbor as the 24-tooth wheel while maintaining the stated ratios, and the arithmetic product (24/8)\u00d7(30/10)=9 is correct only if the 10-tooth pinion exists, which is a structural/evidential defect in the reasoning.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-32": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-33": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The artifact claims the first stage has a 12-tooth pinion driving a 48-tooth wheel, and the second stage has an 8-tooth pinion on the same arbor as the 48-tooth wheel driving a 32-tooth wheel. However, if the 48-tooth wheel and the 8-tooth pinion are on the same arbor (i.e., share the same shaft), then the second stage's input is the 8-tooth pinion, not the 48-tooth wheel. The overall reduction is then (48/12) * (32/8) = 4 * 4 = 16, which is correct. But the artifact states 'the overall velocity reduction from the first 12-tooth pinion to the final 32-tooth wheel is exactly 16:1.' This is corr",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-34": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-35": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-36": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The calculation (34 \u00d7 33) / (2 \u00d7 1) equals 1122 / 2, but 34 \u00d7 33 = 1122 is incorrect; the correct product is 1122, and 1122 / 2 = 561, so the arithmetic is actually correct. However, the reasoning defect is that the claim states 'exactly one dedicated direct route' between every distinct pair, but the combinatorial formula C(34,2) counts unordered pairs, which is correct for a complete graph. The defect is that the artifact incorrectly simplifies (34 \u00d7 33) / (2 \u00d7 1) to 1122 / 2, but 34 \u00d7 33 = 1122 is correct, so no arithmetic error. The actual defect is a logical one: the artifact claims 'requ",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-37": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": false,
+        "defect_found": false,
+        "defect": "none",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": false,
+        "classification": "acquitted",
+        "note": "arm-B acquittal passes through"
+      }
+    },
+    "csp-38": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim states the coach serves 26 towns on consecutive days, one per day, starting Monday, and that the final town is delivered to on a Friday. However, if the coach serves one town per day for 26 consecutive days starting Monday, the 26th day is 25 days after Monday, which is a Friday (since 25 mod 7 = 4, Monday + 4 = Friday). The argument incorrectly computes 26 mod 7 = 5, which would correspond to day 5 (Friday) only if Monday is day 1 and the first town is served on day 1, but then the 26th town is served on day 26, and 26 mod 7 = 5 indeed gives Friday. The reasoning is actually consist",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "csp-39": {
+      "battery": "sound",
+      "arm_a": {
+        "convicts": false,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim states the coach serves 28 towns on consecutive days, one per day, starting Monday, and delivers to the final town on a Sunday. The reasoning calculates day 28 modulo 7 = 0, corresponding to Sunday. However, if Monday is day 1, then day 7 is Sunday, day 14 is Sunday, day 21 is Sunday, and day 28 is also Sunday. This is correct. The defect is that the claim says the coach serves 28 towns, but if it starts on Monday serving the first town, then after 27 more days (total 28 days) it serves the 28th town on day 28, which is a Sunday. The reasoning is actually correct; there is no reasoni",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-00": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of circular reasoning (begging the question). The claim 'The Bible is true because it is the word of God' relies on the premise that the Bible is the word of God, which is then supported only by the Bible's own assertion ('the Bible itself says so'). This is a logical defect: the conclusion is used as a premise in its own support, providing no independent evidence.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-01": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of equivocation on the term 'light'. In the first premise, 'light' means 'having little weight', but in the second premise, 'light' is used to mean 'brightness or illumination'. The inference that a feather cannot be dark (in color) does not follow because the two premises use 'light' in different senses.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-02": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference 'Therefore it rained' commits the formal logical fallacy of affirming the consequent. The argument's structure is: If P then Q; Q; therefore P. This is invalid because the street could be wet for other reasons (e.g., a sprinkler, a burst pipe), so the conclusion does not necessarily follow from the premises.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-03": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of denying the antecedent. The first premise states 'If a creature is a fish, then it can swim' (If P then Q). The second premise states 'A dolphin is not a fish' (not P). The conclusion 'Therefore a dolphin cannot swim' (not Q) is invalid because the conditional does not rule out that non-fish creatures (like dolphins) can also swim.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-04": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim '7 times 8 equals 54' is factually wrong; 7 \u00d7 8 = 56, not 54. This quantitative error invalidates the premise of the argument.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-05": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that a 99% accurate test implies a 99% probability of having the disease given a positive result is wrong because it ignores the base rate. With a disease prevalence of 1 in 10,000, the probability of a true positive is far lower than 99% due to the high number of false positives from the 99.99% of people without the disease.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-06": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of composition: it infers that because every member of the committee is efficient, the committee as a whole must be efficient. This is a logical error because the property of being efficient does not necessarily transfer from individual parts to the collective whole; the whole could be inefficient due to poor coordination, conflicting schedules, or other group dynamics.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-07": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that the rooster's crowing causes the sun to rise is a classic post hoc ergo propter hoc fallacy. The argument mistakes temporal sequence (the crowing occurs before sunrise) for causation, without any evidence that the crowing is the cause. The defect is logical: correlation or temporal precedence does not imply causation.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-08": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference from 'Both times I visited that city it rained' to 'it must rain there most days' is a hasty generalization: two instances are insufficient to conclude that rain occurs on most days, as the sample size is too small to support a probabilistic claim about the majority of days.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-09": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of circular reasoning (begging the question). The claim that opium induces sleep because it possesses a dormitive virtue is merely a restatement of the original observation in different words, offering no independent evidence or explanation. The 'dormitive virtue' is simply a label for the sleep-inducing property, not a cause.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-10": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that 10 eggs can bake 4 whole cakes is wrong because 3 eggs per cake means 10 eggs can bake only 3 whole cakes (using 9 eggs), with 1 egg left over; the claim 'so we can bake 4 whole cakes' is a quantitative error.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-fix-11": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that it is 'more probable that Linda is a bank teller who is active in the feminist movement than that she is a bank teller.' This is a conjunction fallacy: the probability of a conjunction (bank teller AND feminist) cannot be greater than the probability of one of its conjuncts (bank teller alone), because the set of bank tellers who are feminists is a subset of all bank tellers. The reasoning is logically and quantitatively defective.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-00": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim 'it is 99.5% certain that Lena has the condition' is wrong because it confuses the test's accuracy with the positive predictive value. The 99.5% accuracy refers to the test's sensitivity and specificity, not the probability that a positive result indicates the disease. Given a 1 in 20,000 prevalence, the probability that Lena actually has the condition given a positive test is far lower than 99.5% (specifically, about 0.5% if the test is 99.5% sensitive and 99.5% specific).",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-01": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits circular reasoning: it claims we should trust Professor Hale's method because it is endorsed by experts, but then asserts that we know it is endorsed by experts because experts trained solely in Hale's method assure us of it. This means the 'experts' are defined by their training in the very method whose trustworthiness is in question, so the endorsement is not independent evidence; the reasoning is logically self-supporting and thus defective.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-02": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that the almanac 'has never been shown to err' and supports this by saying 'the almanac's own preface assures us of it.' This is a circular reasoning defect: the premise that the almanac is reliable is used to support the conclusion that it has never been shown to err, but the only evidence for that premise is the almanac's own self-assertion, which itself depends on the almanac's trustworthiness. The inference is logically invalid because it assumes what it needs to prove.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-03": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of equivocation: the term 'discipline' is used in two different senses. In the premise 'Discipline builds character,' 'discipline' refers to self-control or training that develops character. In the premise 'The army is full of discipline cases,' 'discipline' refers to punishment or corrective measures. The conclusion conflates these meanings, so the reasoning is invalid.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-04": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the logical fallacy of denying the antecedent. The first premise states 'If a worker is on the day shift, they use the main entrance' (If P, then Q). The second premise states 'Priya is not on the day shift' (not P). The conclusion 'therefore it cannot use the main entrance' (therefore not Q) is invalid, because the premise does not rule out that workers not on the day shift might also use the main entrance.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-05": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits circular reasoning: it claims the oracle's ledger is authoritative because an entry in the ledger itself assures us of it. This is a logical defect because the premise (the ledger's entry) relies on the very conclusion it is trying to prove (that the ledger is authoritative), providing no independent evidence.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-06": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim '17 times 4 equals 72' is factually wrong; 17 times 4 equals 68, not 72. This error invalidates the subsequent reasoning about divisibility by 8.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-07": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that 'it is 97% certain that Ravi has the condition' is wrong because it confuses the test's accuracy rate (97% sensitivity/specificity) with the positive predictive value. The actual probability that Ravi has the condition given a positive test depends on the base rate (1 in 8,000) and is far lower than 97%, as calculated by Bayes' theorem.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-08": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the post hoc ergo propter hoc fallacy: it infers that wearing the jersey caused the wins solely because the jersey was worn before each win. There is no evidence of a causal mechanism, and the temporal sequence alone does not establish causation.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-09": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that glue bonds surfaces 'because it possesses an adhesive capacity,' which is a circular explanation: it defines the effect (bonding) as the cause (adhesive capacity), offering no independent mechanism or evidence. This is a logical fallacy of begging the question.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-10": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that 'the wall as a whole must be light' because 'every brick in the wall is light' commits the fallacy of composition. The property of being light (low weight) for individual bricks does not necessarily apply to the entire wall, as the combined weight of many light bricks can be heavy. This is a logical defect.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-11": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument is circular: it explains the sedative's ability to calm by appealing to a 'tranquilizing property,' which is merely a restatement of the same calming effect. The claim 'because of its tranquilizing property' offers no independent evidence or mechanism, making the reasoning defective by logical circularity.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-12": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits circular reasoning (begging the question). It claims the ratings agency should be trusted because its ratings are accurate, and then asserts the ratings are accurate because the agency's self-assessment report says so. This uses the agency's own claim as evidence for its own trustworthiness, with no independent verification.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-13": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The premise '13 plus 28 equals 42' is arithmetically incorrect; 13 + 28 = 41, not 42, so the subsequent reasoning about divisibility by 7 is based on a false quantitative claim.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-14": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of denying the antecedent. The first premise states 'If a metal is iron, then it conducts electricity.' The second premise states 'Copper is not iron.' The conclusion 'therefore it cannot conduct electricity' is invalid because the conditional does not rule out other metals (like copper) conducting electricity.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-15": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of the undistributed middle term. The first premise 'Only man is rational' means all rational beings are men (but not necessarily that all men are rational). The second premise 'No woman is a man' means no woman is a man. From these, it does not logically follow that no woman is rational, because the middle term 'man' is not distributed in a way that connects 'woman' and 'rational'\u2014the first premise does not assert that all men are rational, so the exclusion of women from the class of men does not exclude them from the class of rational beings.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-16": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the logical fallacy of affirming the consequent. The reasoning is: If P (server overheats), then Q (requests time out). Q is true (requests are timing out), therefore P (server overheated). This inference is invalid because Q could be true for other reasons (e.g., network failure, software bug), so the conclusion does not necessarily follow.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-17": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the logical fallacy of denying the antecedent. The first premise states 'If a plant is a cactus, it can store water' (If P then Q). The second premise states 'This succulent is not a cactus' (not P). The conclusion 'Therefore it cannot store water' (therefore not Q) is invalid because many non-cactus succulents can also store water.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-18": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The claim '6 times 9 equals 52' is quantitatively false; the correct product is 54, not 52. This error invalidates the subsequent reasoning about the product being even.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-19": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the post hoc ergo propter hoc fallacy: it infers causation (the manager's arrival caused the sales fall) solely from temporal sequence (the arrival immediately preceded the fall). This is a logical defect because correlation in time does not establish causation.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-20": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the conjunction fallacy. It claims that the probability of the conjunction 'Marta is a librarian who plays chess on weekends' is greater than the probability of one of its conjuncts 'Marta is a librarian.' This is logically impossible because the probability of a conjunction cannot exceed the probability of either of its individual components.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-21": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that 'it is 98% certain that Omar has the condition' is wrong because it confuses the test's accuracy rate with the positive predictive value. The 98% accuracy refers to the test's sensitivity and specificity combined, but the probability that Omar actually has the condition given a positive test depends on the low base rate (1 in 5,000), which is not accounted for. This is a logical/quantitative defect known as the base rate fallacy.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-22": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of equivocation on the term 'nothing.' In the premise 'This plan is nothing,' 'nothing' is used to mean 'not a thing' or 'nonexistent,' but in the premise 'nothing is without flaws,' 'nothing' is used as a universal quantifier meaning 'no thing' (i.e., every thing has flaws). This equivocation makes the inference invalid: from 'this plan is nonexistent' and 'no thing is without flaws,' it does not logically follow that the plan is perfect.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-23": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The inference that 'nearly all readers will like it' from the fact that 'the first two reviewers liked the draft' is a hasty generalization. Two reviewers is an insufficient sample size to reliably predict the reaction of 'nearly all' readers, and the claim ignores potential selection bias or non-representativeness of the first two reviewers.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "sustain",
+        "classification": "convicted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "sustain",
+          "sustain"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-24": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument claims that 3 tents are enough because each tent sleeps 3 campers and there are 11 campers, but 3 tents \u00d7 3 campers = 9 campers, which is insufficient for 11 campers. The inference is quantitatively wrong.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-25": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of composition: it assumes that because each committee member is individually impartial, the committee as a whole must produce an impartial report. This is a logical error, as the joint outcome can be biased by group dynamics, majority influence, or procedural flaws even if each member is individually impartial.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-26": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the fallacy of denying the antecedent. It states: 'If a book is a dictionary, then it contains definitions. This encyclopedia is not a dictionary. Therefore it cannot contain definitions.' The logical form is: If P then Q; not P; therefore not Q. This is invalid because a book that is not a dictionary (e.g., an encyclopedia) can still contain definitions.",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "abstain",
+        "classification": "abstained",
+        "abstain_reason": "order_swap_disagreement",
+        "order_swap_disagreement": true,
+        "adjudicator_verdicts": [
+          "sustain",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    },
+    "kf-var-27": {
+      "battery": "flawed",
+      "arm_a": {
+        "convicts": true,
+        "parse_failure": false
+      },
+      "arm_b": {
+        "convicts": true,
+        "defect_found": true,
+        "defect": "The argument commits the logical fallacy of post hoc ergo propter hoc (correlation does not imply causation). The claim that the streetlights cause the traffic jam is based solely on the temporal sequence (streetlights come on before the jam), but no evidence is provided to rule out alternative causes (e.g., the jam is caused by rush hour, and the streetlights are simply timed to turn on at that same time).",
+        "parse_failure": false
+      },
+      "arm_c": {
+        "tried": true,
+        "outcome": "overrule",
+        "classification": "acquitted",
+        "abstain_reason": null,
+        "order_swap_disagreement": false,
+        "adjudicator_verdicts": [
+          "overrule",
+          "overrule"
+        ],
+        "defender_parse_failure": false
+      }
+    }
+  },
+  "token_spend": {
+    "ledger": {
+      "prompt_tokens": 118876,
+      "completion_tokens": 22728,
+      "calls": 296,
+      "phases": {
+        "arm_b_flawed": {
+          "prompt_tokens": 7208,
+          "completion_tokens": 3537,
+          "calls": 40
+        },
+        "arm_b_sound": {
+          "prompt_tokens": 12690,
+          "completion_tokens": 6511,
+          "calls": 40
+        },
+        "arm_c_defender_sound": {
+          "prompt_tokens": 14493,
+          "completion_tokens": 4910,
+          "calls": 32
+        },
+        "arm_c_adjudicator_sound": {
+          "prompt_tokens": 41806,
+          "completion_tokens": 832,
+          "calls": 64
+        },
+        "arm_c_defender_flawed": {
+          "prompt_tokens": 9985,
+          "completion_tokens": 5898,
+          "calls": 40
+        },
+        "arm_c_adjudicator_flawed": {
+          "prompt_tokens": 32694,
+          "completion_tokens": 1040,
+          "calls": 80
+        }
+      }
+    },
+    "total_tokens": 141604,
+    "arm_a_tokens": 0,
+    "ceiling": 400000
+  },
+  "caveats": [
+    "MINIMAL TRIAL, not the full spec-10 protocol: one objection per item (the arm-B critic's), one defender pass, one adjudicator model consulted twice with order swap \u2014 no multi-round exchange, no juror ensemble.",
+    "Single defender (deepseek-v4-pro) and single adjudicator (mistral-large-3:675b, the 0.00-FP zoo seat); results may not transfer across model families.",
+    "Checkable-claim domain only (arithmetic, combinatorial, graph-shortest-path, calendar facts) \u2014 much narrower than the open explanatory prose the harness criticises; rates may not transfer to open-domain artifacts.",
+    "Sound items are adversary-authored: only each item's CENTRAL claim is mechanically verified true; convictions on sound items are an UPPER bound on false conviction.",
+    "Acquittal is scored STRICTLY: arm-C abstentions (order-swap disagreement, malformed replies, concurring abstains) are neither convictions nor acquittals. Non-conviction rates are reported as exploratory context.",
+    "The defender sees the artifact and the objection but not the battery label; the adjudicator sees artifact, objection, and defence only. Neither is told about prior flags or judges.",
+    "Arm A is a replay of the committed critic_specificity judgments (prosecutorial prompt, same critic model); arm B changes ONLY the framing, so the A-vs-B contrast isolates framing, not model or conviction rule.",
+    "Parse failures never convict (arm-B parse failures: 0); in arm C any malformed reply forces abstain, which deflates both conviction and acquittal rates.",
+    "Defect taxonomy and order-swap disagreement rate are exploratory and non-verdict-bearing (ordered keyword rules from critic_spec_score, counts only)."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "deepreason.jolt-derived-acceptance.v1",
+  "source_root": "experiments/jolt_architecture_2026-07-16",
+  "source_event_seqs": [212, 219],
+  "stage_a_attempts": [
+    {
+      "entries": [
+        {
+          "entry_key": "CLM_1",
+          "claim_class": "surviving_conjecture",
+          "claim": "A surviving formal proposal remains conjectural.",
+          "formal_artifact_handles": ["ART_1"],
+          "event_handles": ["claim-ledger.compact.v1::on_claim"],
+          "scratch_handles": ["ART_1"]
+        }
+      ]
+    },
+    {
+      "entries": [
+        {
+          "entry_key": "CLM_1",
+          "claim_class": "surviving_conjecture",
+          "claim": "A surviving formal proposal remains conjectural.",
+          "formal_artifact_handles": ["ART_1"],
+          "scratch_handles": ["ART_1"]
+        }
+      ]
+    },
+    "SCR_1"
+  ],
+  "stage_b_output": {
+    "sections": [
+      {
+        "span_id": "S1",
+        "text": "One surviving formal proposal remains conjectural.",
+        "rendering_mode": "conjecture",
+        "ledger_entry_handles": ["E1"]
+      }
+    ],
+    "resolution": "underdetermined",
+    "resolution_reason": "The bounded record contains a conjecture, not a settled answer."
+  },
+  "expected": {
+    "ledger_contract": "bridge.claim-ledger.compact.v2",
+    "stage_a_attempt_validity": [false, false, true],
+    "resolution": "underdetermined",
+    "stage_b_after_valid_ledger": true,
+    "verify_root_violations": 0
+  }
+}

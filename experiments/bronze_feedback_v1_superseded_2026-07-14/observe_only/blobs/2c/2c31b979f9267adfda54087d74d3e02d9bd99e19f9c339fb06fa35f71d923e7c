@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Egyptian agricultural records show no drought stress during 1250-1150 BC and the Nile flood levels remained stable
+TARGET:
+{"claim": "The Sea Peoples were not a primary cause but a symptom of systemic collapse triggered by climatic anomaly","mechanism": "A prolonged regional drought (c. 1250-1150 BC) caused crop failures, famine, and social unrest that simultaneously destabilized palace economies dependent on surplus extraction; the Sea Peoples were displaced populations fleeing ecological stress, whose invasions were opportunistic rather than causally primary","scope": {"covers": ["Hittite Anatolia", "Ugarit", "Mycenaean Greece", "Levantine city-states"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Egyptian agricultural records show no drought stress during 1250-1150 BC and the Nile flood levels remained stable", "eval": "rubric:std-hist"}, {"case": "Palace economies showed continued surplus storage capacity without administrative contraction before destruction layers", "eval": "rubric:std-hist"}, {"case": "The Sea Peoples are attested as organized polities with territorial ambitions in contemporary texts predating the collapses", "eval": "rubric:std-hist"}], "prose_notes": "Candidate foregrounds environmental determinism; Egypt excluded because Nile hydrology buffered against rainfall-dependent agriculture. Typicality reflects mainstream but contested climate-catastrophe narrative."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

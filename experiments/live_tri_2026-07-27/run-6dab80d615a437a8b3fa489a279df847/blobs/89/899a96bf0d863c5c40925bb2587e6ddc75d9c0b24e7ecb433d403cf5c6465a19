@@ -1,0 +1,29 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-198b501b3048f670ba991818c4f4c854) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A reasoning system halts a run when its token budget is exhausted. State the precise conditions under which such a halted run can later be resumed without corrupting the append-only identity of its recorded events, and the cases in which resumption must stay refused.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6a6d2795197dbe0da975bd14: program:reasoning_observation_pending
+- reason-counter@6615f4d8c4e384539256209e: program:reasoning_observation_pending
+- reason-counter@516dcb47f898bdaff969befe: program:reasoning_observation_pending
+- reason-counter@032afcc8ee563946b0f4c9ca: program:reasoning_observation_pending
+- reason-counter@a076dae5d1f550b8b3f47c7e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is safe only if the system implements an atomic checkpoint that consistently pairs a full state snapshot with the last committed event's identity (hash and sequence number). The checkpoint and the log must be updated in a single atomic transaction. Resumption is safe when the checkpoint's recorded event identity exactly matches the actual log tail. Resumption must be refused when the checkpoint is stale (behind the log tail\u2014some committed events are not in the snapshot), when the checkpoint is ahead (the snapshot references events not yet durable in the log), or when no checkpoint exists at all.","counterconditions":[{"case":"The checkpoint and log update are not truly atomic\u2014there is a window where one is updated and the other is not, and exhaustion falls in that window.","eval":"observation"},{"case":"The checkpoint is stale: the log has committed events beyond what the snapshot reflects, and the system cannot determine whether those events' side effects were applied.","eval":"observation"},{"case":"The checkpoint is ahead: the snapshot includes state changes for an event that was never durably persisted to the log.","eval":"observation"},{"case":"The checkpoint format does not include the log tail identity, so consistency cannot be verified on resumption.","eval":"observation"},{"case":"The system crashes (not just token-exhausted) during checkpoint write, producing a torn checkpoint that cannot be distinguished from a valid one.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Without an atomic checkpoint, the system state and the event log can diverge: the log may contain event N while in-memory state reflects only event N-1, or vice versa. An atomic checkpoint ensures that at the halt point, the snapshot and the log tail are consistent. On resumption, the system loads the checkpoint, verifies the log tail matches the checkpoint's recorded identity, and continues. If they don't match, the system must refuse and fall back to full replay (if event sourcing) or declare corruption.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6a6d2795197dbe0da975bd14, reason-counter@6615f4d8c4e384539256209e, reason-counter@516dcb47f898bdaff969befe, reason-counter@032afcc8ee563946b0f4c9ca, reason-counter@a076dae5d1f550b8b3f47c7e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

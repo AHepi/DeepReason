@@ -1,0 +1,344 @@
+Sorting network - Wikipedia
+Jump to content
+Main menu
+Main menu
+move to sidebar
+hide
+Navigation
+Main page
+Contents
+Current events
+Random article
+About Wikipedia
+Contact us
+Contribute
+Help
+Learn to edit
+Community portal
+Recent changes
+Upload file
+Special pages
+Search
+Search
+Appearance
+Donate
+Create account
+Log in
+Personal tools
+Donate
+Create account
+Log in
+Contents
+move to sidebar
+hide
+(Top)
+1
+Introduction
+Toggle Introduction subsection
+1.1
+Depth and efficiency
+1.2
+Insertion and Bubble networks
+1.3
+Zero-one principle
+2
+Constructing sorting networks
+Toggle Constructing sorting networks subsection
+2.1
+Optimal sorting networks
+2.2
+Complexity of testing sorting networks
+3
+References
+4
+External links
+Toggle the table of contents
+Sorting network
+9 languages
+Dansk
+Español
+فارسی
+Français
+עברית
+日本語
+Polski
+Русский
+Српски / srpski
+Edit links
+Article
+Talk
+English
+Read
+Edit
+View history
+Tools
+Tools
+move to sidebar
+hide
+Actions
+Read
+Edit
+View history
+General
+What links here
+Related changes
+Upload file
+Permanent link
+Page information
+Cite this page
+Get shortened URL
+Switch to legacy parser
+Print/export
+Download as PDF
+Printable version
+In other projects
+Wikidata item
+Appearance
+move to sidebar
+hide
+From Wikipedia, the free encyclopedia
+Abstract devices built up of a fixed number of "wires"
+A simple sorting network consisting of four wires and five connectors
+In computer science, comparator networks are abstract devices built up of a fixed number of "wires", carrying values, and comparator modules that connect pairs of wires, swapping the values on the wires if they are not in a desired order. Such networks are typically designed to perform sorting on fixed numbers of values, in which case they are called sorting networks.
+Sorting networks differ from general comparison sorts in that they are not capable of handling arbitrarily large inputs, and in that their sequence of comparisons is set in advance, regardless of the outcome of previous comparisons. In order to sort a larger number of inputs, new sorting networks must be constructed. This independence of comparison sequences is useful for parallel execution and for implementation in hardware. Despite the simplicity of sorting nets, their theory is surprisingly deep and complex. Sorting networks were first studied circa 1954 by Armstrong, Nelson and O'Connor,[1] who subsequently patented the idea.[2]
+Sorting networks can be implemented either in hardware or in software. Donald Knuth describes how the comparators for binary integers can be implemented as simple, three-state electronic devices.[1] Batcher, in 1968, suggested using them to construct switching networks for computer hardware, replacing both buses and the faster, but more expensive, crossbar switches.[3] Since the 2000s, sorting nets (especially bitonic mergesort) are used by the GPGPU community for constructing sorting algorithms to run on graphics processing units.[4]
+Introduction
+[edit]
+Demonstration of a comparator in a sorting network.
+A sorting network consists of two types of items: comparators and wires. The wires are thought of as running from left to right, carrying values (one per wire) that traverse the network all at the same time. Each comparator connects two wires. When a pair of values, traveling through a pair of wires, encounter a comparator, the comparator swaps the values if and only if the top wire's value is greater or equal to the bottom wire's value.
+In a formula, if the top wire carries x and the bottom wire carries y, then after hitting a comparator the wires carry
+x
+′
+=
+min
+(
+x
+,
+y
+)
+{\displaystyle x'=\min(x,y)}
+and
+y
+′
+=
+max
+(
+x
+,
+y
+)
+{\displaystyle y'=\max(x,y)}
+, respectively, so the pair of values is sorted.[5]: 635 A network of wires and comparators that will correctly sort all possible inputs into ascending order is called a sorting network or Kruskal hub. By reflecting the network, it is also possible to sort all inputs into descending order.
+The full operation of a simple sorting network is shown below. It is evident why this sorting network will correctly sort the inputs; note that the first four comparators will "sink" the largest value to the bottom and "float" the smallest value to the top. The final comparator sorts out the middle two wires.
+Depth and efficiency
+[edit]
+The efficiency of a sorting network can be measured by its total size, meaning the number of comparators in the network, or by its depth, defined (informally) as the largest number of comparators that any input value can encounter on its way through the network. Noting that sorting networks can perform certain comparisons in parallel (represented in the graphical notation by comparators that lie on the same vertical line), and assuming all comparisons to take unit time, it can be seen that the depth of the network is equal to the number of time steps required to execute it.[5]: 636–637
+Insertion and Bubble networks
+[edit]
+We can easily construct a network of any size recursively using the principles of insertion and selection. Assuming we have a sorting network of size n, we can construct a network of size n + 1 by "inserting" an additional number into the already sorted subnet (using the principle underlying insertion sort). We can also accomplish the same thing by first "selecting" the lowest value from the inputs and then sort the remaining values recursively (using the principle underlying bubble sort).
+A sorting network constructed recursively that first sinks the largest value to the bottom and then sorts the remaining wires. Based on bubble sort
+A sorting network constructed recursively that first sorts the first n wires, and then inserts the remaining value. Based on insertion sort
+The structure of these two sorting networks are very similar. A construction of the two different variants, which collapses together comparators that can be performed simultaneously shows that, in fact, they are identical.[1]
+Bubble sorting network
+Insertion sorting network
+When allowing for parallel comparators, bubble sort and insertion sort are identical
+The insertion network (or equivalently, bubble network) has a depth of 2n - 3,[1] where n is the number of values. This is better than the O(n log n) time needed by random-access machines, but it turns out that there are much more efficient sorting networks with a depth of just O(log2 n), as described below.
+Zero-one principle
+[edit]
+While it is easy to prove the validity of some sorting networks (like the insertion/bubble sorter), it is not always so easy. There are n! permutations of numbers in an n-wire network, and to test all of them would take a significant amount of time, especially when n is large. The number of test cases can be reduced significantly, to 2n, using the so-called zero-one principle. While still exponential, this is smaller than n! for all n ≥ 4, and the difference grows quite quickly with increasing n.
+The zero-one principle states that, if a sorting network can correctly sort all 2n sequences of zeros and ones, then it is also valid for arbitrary ordered inputs. This not only drastically cuts down on the number of tests needed to ascertain the validity of a network, it is of great use in creating many constructions of sorting networks as well.
+The principle can be proven by first observing the following fact about comparators: when a monotonically increasing function f is applied to the inputs, i.e., x and y are replaced by f(x) and f(y), then the comparator produces min(f(x), f(y)) = f(min(x, y)) and max(f(x), f(y)) = f(max(x, y)). By induction on the depth of the network, this result can be extended to a lemma stating that if the network transforms the sequence a1, ..., an into b1, ..., bn, it will transform f(a1), ..., f(an) into f(b1), ..., f(bn). Suppose that some input a1, ..., an contains two items ai < aj, and the network incorrectly swaps these in the output. Then it will also incorrectly sort f(a1), ..., f(an) for the function
+f
+(
+x
+)
+=
+{
+1
+if
+x
+>
+a
+i
+0
+otherwise.
+{\displaystyle f(x)={\begin{cases}1\ &{\mbox{if }}x>a_{i}\\0\ &{\mbox{otherwise.}}\end{cases}}}
+This function is monotonic, so we have the zero-one principle as the contrapositive.[5]: 640–641
+Constructing sorting networks
+[edit]
+Various algorithms exist to construct sorting networks of depth O(log2 n) (hence size O(n log2 n)) such as Batcher odd–even mergesort, bitonic sort, Shell sort, and the Pairwise sorting network. These networks are often used in practice.
+It is also possible to construct networks of depth O(log n) (hence size O(n log n)) using a construction called the AKS network, after its discoverers Ajtai, Komlós, and Szemerédi.[6] While an important theoretical discovery, the AKS network has very limited practical application because of the large linear constant hidden by the Big-O notation.[5]: 653 These are partly due to a construction of an expander graph.
+A simplified version of the AKS network was described by Paterson in 1990, who noted that "the constants obtained for the depth bound still prevent the construction being of practical value".[7]
+A more recent construction called the zig-zag sorting network of size O(n log n) was discovered by Goodrich in 2014.[8] While its size is much smaller than that of AKS networks, its depth O(n log n) makes it unsuitable for a parallel implementation.
+Optimal sorting networks
+[edit]
+For small, fixed numbers of inputs n, optimal sorting networks can be constructed, with either minimal depth (for maximally parallel execution) or minimal size (number of comparators). These networks can be used to increase the performance of larger sorting networks resulting from the recursive constructions of, e.g., Batcher, by halting the recursion early and inserting optimal nets as base cases.[9] The following table summarizes the optimality results for small networks for which the optimal depth is known:
+n
+12345678910111213141516
+17
+Depth[10]
+0133556677889999
+10
+Size, upper bound[11]
+013591216192529353945515660
+71
+Size, lower bound (if different)[12]
+43475155
+60
+For larger networks neither the optimal depth nor the optimal size are currently known. The bounds known so far are provided in the table below:
+n
+181920212223242526272829303132
+Depth, upper bound[10][13][14][15]
+1111111212121213131313141414
+14
+Depth, lower bound[10]
+1010101010101010101010101010
+10
+Size, upper bound[14]
+77859199106114120130138147155164172180
+185
+Size, lower bound[12]
+65707580859095100105110115120125130
+135
+The first sixteen depth-optimal networks are listed in Knuth's Art of Computer Programming,[1] and have been since the 1973 edition; however, while the optimality of the first eight was established by Floyd and Knuth in the 1960s, this property wasn't proven for the final six until 2014[16] (the cases nine and ten having been decided in 1991[9]).
+For one to twelve inputs, minimal (i.e. size-optimal) sorting networks are known, and for higher values, lower bounds on their sizes S(n) can be derived inductively using a lemma due to Van Voorhis[1] (p. 240): S(n) ≥ S(n − 1) + ⌈log2n⌉. The first ten optimal networks have been known since 1969, with the first eight again being known as optimal since the work of Floyd and Knuth, but optimality of the cases n = 9 and n = 10 took until 2014 to be resolved.[11]
+The optimality of the smallest known sorting networks for n = 11 and n = 12 was resolved in 2020.[17][1]
+Some work in designing optimal sorting network has been done using genetic algorithms: D. Knuth mentions that the smallest known sorting network for n = 13 was found by Hugues Juillé in 1995 "by simulating an evolutionary process of genetic breeding"[1] (p. 226), and that the minimum depth sorting networks for n = 9 and n = 11 were found by Loren Schwiebert in 2001 "using genetic methods"[1] (p. 229).
+Complexity of testing sorting networks
+[edit]
+Unless P=NP, the problem of testing whether a candidate network is a sorting network is likely to remain difficult for networks of large sizes, due to the problem being co-NP-complete.[18]
+References
+[edit]
+1 2 3 4 5 6 7 8 9 Knuth, D. E. (1997). The Art of Computer Programming, Volume 3: Sorting and Searching (Second ed.). Addison–Wesley. pp. 219–247. ISBN 978-0-201-89685-5. Section 5.3.4: Networks for Sorting.
+↑ US 3029413, O'Connor, Daniel G. & Nelson, Raymond J., "Sorting system with n-line sorting switch", published 10 April 1962
+↑ Batcher, K. E. (1968). Sorting networks and their applications. Proc. AFIPS Spring Joint Computer Conference. pp. 307–314.
+↑ Owens, J. D.; Houston, M.; Luebke, D.; Green, S.; Stone, J. E.; Phillips, J. C. (2008). "GPU Computing". Proceedings of the IEEE. 96 (5): 879–899. doi:10.1109/JPROC.2008.917757. S2CID 17091128.
+1 2 3 4 Cormen, Thomas H.; Leiserson, Charles E.; Rivest, Ronald L. (1990). Introduction to Algorithms (1st ed.). MIT Press and McGraw-Hill. ISBN 0-262-03141-8.
+↑ Ajtai, M.; Komlós, J.; Szemerédi, E. (1983). An O(n log n) sorting network. STOC '83. Proceedings of the fifteenth annual ACM symposium on Theory of computing. pp. 1–9. doi:10.1145/800061.808726. ISBN 0-89791-099-0.
+↑ Paterson, M. S. (1990). "Improved sorting networks with O(log N) depth". Algorithmica. 5 (1–4): 75–92. doi:10.1007/BF01840378. S2CID 2064561.
+↑ Goodrich, Michael (March 2014). "Zig-zag sort". Proceedings of the forty-sixth annual ACM symposium on Theory of computing. pp. 684–693. arXiv:1403.2777. doi:10.1145/2591796.2591830. ISBN 9781450327107. S2CID 947950.
+1 2 Parberry, Ian (1991). "A Computer Assisted Optimal Depth Lower Bound for Nine-Input Sorting Networks" (PDF). Mathematical Systems Theory. 24: 101–116. CiteSeerX 10.1.1.712.219. doi:10.1007/bf02090393. S2CID 7077160.
+1 2 3 Codish, Michael; Cruz-Filipe, Luís; Ehlers, Thorsten; Müller, Mike; Schneider-Kamp, Peter (2015). Sorting Networks: to the End and Back Again. arXiv:1507.01428. Bibcode:2015arXiv150701428C.
+1 2 Codish, Michael; Cruz-Filipe, Luís; Frank, Michael; Schneider-Kamp, Peter (2014). Twenty-Five Comparators is Optimal when Sorting Nine Inputs (and Twenty-Nine for Ten). Proc. Int'l Conf. Tools with AI (ICTAI). pp. 186–193. arXiv:1405.5754. Bibcode:2014arXiv1405.5754C.
+1 2 Obtained by Van Voorhis lemma and the value S(11) = 35
+↑ Ehlers, Thorsten (February 2017). "Merging almost sorted sequences yields a 24-sorter". Information Processing Letters. 118: 17–20. doi:10.1016/j.ipl.2016.08.005.
+1 2 Dobbelaere, Bert. "SorterHunter". GitHub. Retrieved 2 Jan 2022.
+↑ Wang, Chengu (2025). "Depth-13 Sorting Networks for 28 Channels". arXiv:2511.04107 [cs.DS].
+↑ Bundala, D.; Závodný, J. (2014). "Optimal Sorting Networks". Language and Automata Theory and Applications. Lecture Notes in Computer Science. Vol. 8370. pp. 236–247. arXiv:1310.6271. doi:10.1007/978-3-319-04921-2_19. ISBN 978-3-319-04920-5. S2CID 16860013.
+↑ Harder, Jannis (2020). "An Answer to the Bose-Nelson Sorting Problem for 11 and 12 Channels". arXiv:2012.04400 [cs.DS].
+↑ Parberry, Ian (1991). On the Computational Complexity of Optimal Sorting Network Verification. Proc. PARLE '91: Parallel Architectures and Languages Europe, Volume I: Parallel Architectures and Algorithms, Eindhoven, the Netherlands. pp. 252–269.
+Angel, O.; Holroyd, A. E.; Romik, D.; Virág, B. (2007). "Random sorting networks". Advances in Mathematics. 215 (2): 839–868. arXiv:math/0609538. doi:10.1016/j.aim.2007.05.019.
+External links
+[edit]
+List of smallest sorting networks for given number of inputs
+Sorting Networks
+CHAPTER 28: SORTING NETWORKS
+Sorting Networks
+Tool for generating and graphing sorting networks
+Sorting networks and the END algorithm
+Lipton, Richard J.; Regan, Ken (24 April 2014). "Galactic Sorting Networks". Gödel’s Lost Letter and P=NP.
+Sorting Networks validity
+v
+t
+e
+Sorting algorithms
+Theory
+Computational complexity theory
+Big O notation
+Total order
+Lists
+Inplacement
+Stability
+Comparison sort
+Adaptive sort
+Sorting network
+Integer sorting
+X + Y sorting
+Transdichotomous model
+Quantum sort
+Exchange sorts
+Bubble sort
+Cocktail shaker sort
+Odd–even sort
+Comb sort
+Gnome sort
+Proportion extend sort
+Quicksort
+Selection sorts
+Selection sort
+Heapsort
+Smoothsort
+Cartesian tree sort
+Tournament sort
+Cycle sort
+Weak-heap sort
+Insertion sorts
+Insertion sort
+Shellsort
+Splaysort
+Tree sort
+Library sort
+Patience sorting
+Merge sorts
+Merge sort
+Cascade merge sort
+Oscillating merge sort
+Polyphase merge sort
+Distribution sorts
+American flag sort
+Bead sort
+Bucket sort
+Burstsort
+Counting sort
+Interpolation sort
+Pigeonhole sort
+Proxmap sort
+Radix sort
+Flashsort
+Concurrent sorts
+Bitonic sorter
+Batcher odd–even mergesort
+Pairwise sorting network
+Samplesort
+Hybrid sorts
+Block merge sort
+Introsort
+Kirkpatrick–Reisch sort
+Merge-insertion sort
+Powersort
+Timsort
+Spreadsort
+Other
+Topological sorting
+Pre-topological order
+Pancake sorting
+Spaghetti sort
+Impractical sorts
+Stooge sort
+Slowsort
+Bogosort
+Retrieved from "https://en.wikipedia.org/w/index.php?title=Sorting_network&oldid=1323352382"
+Categories: Computer engineering
+Sorting algorithms
+Hidden categories: Articles with short description
+Short description is different from Wikidata
+This page was last edited on 21 November 2025, at 06:05 (UTC).
+Page was rendered with Parsoid.
+Text is available under the Creative Commons Attribution-ShareAlike 4.0 License;
+additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
+Privacy policy
+About Wikipedia
+Disclaimers
+Contact Wikipedia
+Legal & safety contacts
+Code of Conduct
+Developers
+Statistics
+Cookie statement
+Mobile view
+Search
+Search
+Toggle the table of contents
+Sorting network
+9 languages
+Add topic

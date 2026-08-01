@@ -1,0 +1,292 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The durable binding that turns silent divergence between a published result and its replayed log from a possibility into a contradiction is **cryptographic commitment to the log's integrity and order**.",
+      "mechanism": "A cryptographic hash chain (e.g., Merkle tree or blockchain-style chaining) binds each log entry to its predecessors, ensuring that any alteration to the log would require recomputing all subsequent hashes. This creates a tamper-evident structure where divergence between the published result and the replayed log becomes a detectable contradiction because the hash of the replayed log will not match the committed hash.",
+      "counterconditions": [
+        "The cryptographic primitives used are broken (e.g., collision attacks on the hash function).",
+        "The commitment is not publicly verifiable or timestamped, allowing retroactive manipulation.",
+        "The log is not replayed in its entirety, leaving gaps for undetected divergence.",
+        "The published result does not include the commitment itself, making verification impossible."
+      ],
+      "typicality": 0.95,
+      "optional_refs": ["SRC_001", "SRC_004"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_001", "SRC_004"],
+        "shared_structure": [
+          "Immutability enforced by cryptographic binding (e.g., blockchain ledgers, Git commits).",
+          "Public verifiability of state transitions (e.g., audit trails, digital signatures).",
+          "Contradiction arises from detectable inconsistency (e.g., hash mismatch, signature failure)."
+        ],
+        "disanalogies": [
+          "Log replay may not require real-time consensus (unlike blockchains).",
+          "The binding may not need decentralized trust (unlike public blockchains).",
+          "Silent divergence is a temporal issue, not a spatial one (unlike distributed ledgers)."
+        ],
+        "transfer_claims": [
+          "If cryptographic commitment works for audit trails, it can work for log replay.",
+          "If Git's commit hashes prevent silent divergence in code, they can prevent it in logs.",
+          "If blockchain immutability ensures consistency, it can ensure log consistency."
+        ],
+        "overturn_conditions": [
+          "A more efficient binding mechanism is discovered that does not rely on cryptography.",
+          "The log's structure is proven to be inherently non-divergent without binding.",
+          "The definition of 'silent divergence' is redefined to exclude cryptographic contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The durable binding is **a formal specification of the log's semantics and replay rules**, enforced by a theorem prover or model checker.",
+      "mechanism": "A formal specification (e.g., in TLA+, Coq, or Alloy) defines the log's structure, valid transitions, and replay invariants. A theorem prover verifies that the published result and the replayed log satisfy these invariants. Divergence becomes a contradiction because the prover detects a violation of the formal rules, making silent divergence impossible under the specification.",
+      "counterconditions": [
+        "The formal specification is incomplete or incorrect, missing edge cases.",
+        "The theorem prover has bugs or undecidable constraints.",
+        "The log's semantics are too complex for formal verification (e.g., non-deterministic events).",
+        "The published result is not expressed in the same formal language as the log."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_001", "SRC_003"],
+        "shared_structure": [
+          "Formal verification of system properties (e.g., seL4 microkernel, CompCert compiler).",
+          "Invariant-based reasoning (e.g., database ACID properties, distributed system consensus).",
+          "Contradiction arises from logical inconsistency (e.g., proof failure, model checker counterexample)."
+        ],
+        "disanalogies": [
+          "Logs are often unstructured or semi-structured, unlike formally specified systems.",
+          "Replay may involve non-deterministic or external inputs (e.g., user actions, network events).",
+          "Formal verification is computationally expensive for large logs."
+        ],
+        "transfer_claims": [
+          "If formal specs prevent silent bugs in code, they can prevent silent divergence in logs.",
+          "If model checkers detect inconsistencies in protocols, they can detect log divergence.",
+          "If theorem provers ensure correctness in hardware, they can ensure log correctness."
+        ],
+        "overturn_conditions": [
+          "A non-formal binding is proven to be equally effective.",
+          "The log's semantics are shown to be inherently non-verifiable.",
+          "The definition of 'silent divergence' is redefined to exclude formal contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The durable binding is **a trusted third-party timestamping service** that certifies the log's state at the time of publication.",
+      "mechanism": "A trusted timestamping authority (e.g., RFC 3161, blockchain-based timestamping) signs the log's hash at the time of publication, creating a tamper-proof record of its state. Replaying the log later and comparing it to the timestamped hash reveals divergence as a contradiction because the timestamped state cannot be retroactively altered.",
+      "counterconditions": [
+        "The timestamping authority is compromised or colludes with the publisher.",
+        "The timestamp is not granular enough to capture the log's state at publication time.",
+        "The log is replayed in a context where the timestamping service is unavailable.",
+        "The published result does not include the timestamped hash for verification."
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_004"],
+        "shared_structure": [
+          "Notarization of documents (e.g., legal contracts, patents).",
+          "Trusted timestamping in digital forensics (e.g., evidence preservation).",
+          "Contradiction arises from temporal inconsistency (e.g., document altered after timestamp)."
+        ],
+        "disanalogies": [
+          "Logs are dynamic and append-only, unlike static documents.",
+          "Timestamping may not capture intermediate states of the log.",
+          "The trusted third party introduces a single point of failure."
+        ],
+        "transfer_claims": [
+          "If notarization prevents document tampering, it can prevent log tampering.",
+          "If timestamps prove document authenticity, they can prove log authenticity.",
+          "If forensics relies on timestamps, log replay can too."
+        ],
+        "overturn_conditions": [
+          "A decentralized timestamping mechanism is proven to be more reliable.",
+          "The log's structure is shown to be inherently non-timestampable.",
+          "The definition of 'silent divergence' is redefined to exclude temporal contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The durable binding is **a social contract enforced by a decentralized network of stakeholders**, where divergence is treated as a breach of trust.",
+      "mechanism": "A decentralized network (e.g., scientific community, open-source project contributors) collectively maintains and verifies the log. Any stakeholder can replay the log and challenge the published result. Silent divergence becomes a contradiction because the network's consensus rules treat it as a violation of the social contract, making undetected divergence impossible without collusion.",
+      "counterconditions": [
+        "The network lacks sufficient diversity or independence among stakeholders.",
+        "Stakeholders lack the incentives or resources to verify the log.",
+        "The log is too large or complex for decentralized verification.",
+        "The published result is not publicly accessible for replay."
+      ],
+      "typicality": 0.5,
+      "optional_refs": ["SRC_002", "SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_002", "SRC_003"],
+        "shared_structure": [
+          "Open-source software development (e.g., GitHub pull requests, peer review).",
+          "Scientific peer review (e.g., reproducibility, replication studies).",
+          "Contradiction arises from social consensus (e.g., rejected pull request, retracted paper)."
+        ],
+        "disanalogies": [
+          "Logs are often private or proprietary, unlike open-source projects.",
+          "Stakeholders may lack the technical expertise to verify the log.",
+          "Social contracts are not legally enforceable in all contexts."
+        ],
+        "transfer_claims": [
+          "If peer review prevents scientific fraud, it can prevent log divergence.",
+          "If open-source communities detect bugs, they can detect log divergence.",
+          "If social consensus enforces norms, it can enforce log consistency."
+        ],
+        "overturn_conditions": [
+          "A technical binding is proven to be more reliable than social consensus.",
+          "The log's structure is shown to be inherently unverifiable by stakeholders.",
+          "The definition of 'silent divergence' is redefined to exclude social contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The durable binding is **a hardware-enforced secure enclave** that guarantees the log's integrity and replay fidelity.",
+      "mechanism": "A secure enclave (e.g., Intel SGX, ARM TrustZone) stores the log and enforces replay rules. The enclave cryptographically signs the log's state at publication time and verifies it during replay. Divergence becomes a contradiction because the enclave's hardware guarantees prevent tampering, making silent divergence detectable as a signature mismatch.",
+      "counterconditions": [
+        "The secure enclave is compromised (e.g., side-channel attacks, firmware bugs).",
+        "The log exceeds the enclave's storage or computational limits.",
+        "The published result is not signed by the enclave, making verification impossible.",
+        "The replay environment lacks access to the enclave's verification keys."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_001"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Hardware security modules (HSMs) for cryptographic operations.",
+          "Trusted execution environments (TEEs) for confidential computing.",
+          "Contradiction arises from hardware-enforced invariants (e.g., signature failure, enclave crash)."
+        ],
+        "disanalogies": [
+          "Logs are often large and dynamic, unlike static cryptographic keys.",
+          "Secure enclaves have limited storage and performance constraints.",
+          "Hardware-based solutions are less flexible than software-based ones."
+        ],
+        "transfer_claims": [
+          "If HSMs prevent key tampering, they can prevent log tampering.",
+          "If TEEs ensure code integrity, they can ensure log integrity.",
+          "If hardware guarantees prevent side-channel leaks, they can prevent silent divergence."
+        ],
+        "overturn_conditions": [
+          "A software-based binding is proven to be equally secure.",
+          "The log's structure is shown to be incompatible with hardware enforcement.",
+          "The definition of 'silent divergence' is redefined to exclude hardware contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The durable binding is **a self-certifying log format** where each entry includes a cryptographic proof of its validity and consistency with prior entries.",
+      "mechanism": "Each log entry contains a cryptographic proof (e.g., zk-SNARK, digital signature) that it is valid and consistent with all prior entries. Replaying the log verifies these proofs, and divergence becomes a contradiction because the proofs will fail if the log has been altered or if the replayed state does not match the published result.",
+      "counterconditions": [
+        "The cryptographic proofs are computationally infeasible to generate or verify.",
+        "The log format is too rigid to accommodate real-world use cases.",
+        "The proofs are not publicly verifiable, limiting their utility.",
+        "The published result does not include the necessary proofs for verification."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_001", "SRC_004"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_001", "SRC_004"],
+        "shared_structure": [
+          "Zero-knowledge proofs in blockchain (e.g., Zcash, Ethereum rollups).",
+          "Digital signatures for message authentication (e.g., TLS, PGP).",
+          "Contradiction arises from proof failure (e.g., invalid signature, zk-SNARK verification error)."
+        ],
+        "disanalogies": [
+          "Logs are often append-only and linear, unlike blockchain transactions.",
+          "Self-certifying formats may not support non-deterministic or external inputs.",
+          "Proof generation may introduce unacceptable latency."
+        ],
+        "transfer_claims": [
+          "If zk-SNARKs ensure transaction validity, they can ensure log validity.",
+          "If digital signatures prevent message tampering, they can prevent log tampering.",
+          "If self-certifying data structures work for files, they can work for logs."
+        ],
+        "overturn_conditions": [
+          "A simpler binding mechanism is proven to be equally effective.",
+          "The log's structure is shown to be incompatible with self-certification.",
+          "The definition of 'silent divergence' is redefined to exclude proof-based contradictions."
+        ],
+        "adopted_commitment_refs": ["reasoning-envelope-wf"]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: Silent divergence is only a contradiction if the binding mechanism enforces **temporal consistency** (i.e., the log's state at publication time is irrevocably fixed). Mechanisms like cryptographic commitment or timestamping achieve this by making retroactive changes detectable, but social or formal bindings may not.",
+          "possible_next_move": "Explore whether temporal consistency is a necessary or sufficient condition for turning divergence into contradiction. Test with counterexamples where temporal consistency is absent but divergence is still detectable (e.g., formal verification of non-temporal properties).",
+          "unfinished": "Need to clarify whether 'silent divergence' implies undetectability or merely undetected divergence. The former would require stronger binding mechanisms than the latter.",
+          "why_keep_this": "This block refines the problem's core assumption and may lead to a more precise definition of 'silent divergence' and its relationship to binding mechanisms."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: What if the log is **non-deterministic** (e.g., includes timestamps, random seeds, or external inputs)? Does this change the binding requirements? For example, a cryptographic commitment might still work if the non-deterministic elements are included in the commitment, but a formal specification might struggle to define valid transitions.",
+          "possible_next_move": "Compare binding mechanisms in deterministic vs. non-deterministic logs. Identify which mechanisms are robust to non-determinism and which are not.",
+          "unfinished": "Need to define 'non-deterministic log' more precisely. Are external inputs the only source of non-determinism, or are there others?",
+          "why_keep_this": "This block challenges the implicit assumption that logs are deterministic, which could invalidate some binding mechanisms."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_002",
+        "relation_hint": "temporal consistency vs. non-determinism tradeoff",
+        "because": "Temporal consistency (NEW_001) may be harder to enforce in non-deterministic logs (NEW_002), suggesting a tradeoff between binding strength and log flexibility.",
+        "holds_when": "The log includes non-deterministic elements that are not captured by the binding mechanism.",
+        "weakens_when": "The binding mechanism explicitly accounts for non-determinism (e.g., by including external inputs in the commitment)."
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a binding mechanism that turns silent divergence into a contradiction without relying on cryptography, formal methods, or trusted third parties?",
+        "related_refs": ["NEW_001", "NEW_002"]
+      },
+      {
+        "question": "Can silent divergence be redefined to exclude cases where divergence is detectable but not immediately obvious (e.g., requires deep analysis or additional context)?",
+        "related_refs": []
+      },
+      {
+        "question": "How does the binding mechanism interact with the log's **purpose**? For example, is a weaker binding sufficient for logs used in debugging vs. logs used in legal evidence?",
+        "related_refs": []
+      }
+    ]
+  }
+}
+```

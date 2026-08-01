@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The low-correlation condition is operationalized via a controlled flag mask where per-question flag rates are set to be uniform across correct and wrong candidates (r_w(q) = r_c(q)), not via an asymptotic certification of independence.",
+  "verdict": "pass"
+}

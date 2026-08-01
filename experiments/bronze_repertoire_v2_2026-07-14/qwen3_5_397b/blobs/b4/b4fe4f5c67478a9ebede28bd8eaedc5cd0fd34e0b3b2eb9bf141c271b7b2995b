@@ -1,0 +1,21 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target claims that specialized palatial centers collapsed because they lacked generalized agrarian skills and tools, making them unable to revert to subsistence farming. The forbidden case—evidence of widespread, decentralized grain storage or dual-use (military/agricultural) toolkits within the palatial citadels—directly contradicts the mechanism. If such storage or tools existed, it would demonstrate that the palatial centers did possess the material means and practical implements for autonomous subsistence, falsifying the claim that hyper-specialization had eliminated local resilience. The target fails the standard because it does not explain how the mechanism could still operate if this concrete, datable archaeological pattern were observed; it merely lists the case as forbidden without resolving the contradiction.
+
+TARGET:
+{"claim": "The collapse was a structural inevitability caused by the hyper-specialization of palatial labor forces which eliminated local resilience; when a novel naval raiding technology (the galley) bypassed static land defenses, the specialized centers could not revert to subsistence farming fast enough to survive the siege.", "mechanism": "Resilience trade-off: Centuries of stability drove extreme division of labor (scribes, bronze-smiths, administrators) at the expense of generalized agrarian skills among the population. The introduction of fast, oared galleys allowed small, mobile groups to strike deep inland via rivers/coasts, disrupting harvest cycles. The specialized populations starved because they lacked the knowledge or tools to immediately return to autonomous subsistence, unlike the more generalized Egyptian peasantry.", "scope": {"covers": ["Mycenaean Greece", "Ugarit", "Levantine city-states"], "excludes": ["Rural hinterlands", "Egypt", "Nomadic groups"]}, "forbidden": [{"case": "Evidence of widespread, decentralized grain storage or dual-use (military/agricultural) toolkits within the palatial citadels dating to the late 13th century.", "eval": "rubric:std-hist"}], "prose_notes": "An atypical angle focusing on labor specialization and military technology interaction as the primary driver, rather than external invasion or simple resource shortage."}

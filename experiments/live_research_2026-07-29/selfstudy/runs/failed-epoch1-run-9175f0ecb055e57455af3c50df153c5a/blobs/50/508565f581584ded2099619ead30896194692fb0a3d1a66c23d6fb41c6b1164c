@@ -1,0 +1,56 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "0e26d6be54fd DEPENDS ON SRC_006's refuted-attractor mechanism: the artifact's persistent isolation is an instance of the basin report's repertoire-exhaustion pattern, where the conjecture-criticism loop repeatedly fails to connect because the neighbourhood lacks an artifact of the right type to anchor the connection. The isolation is not a transient failure but a stable attractor state predicted by SRC_006's model. REFUTED IF 0e26d6be54fd can be connected to the neighbourhood through a novel conjecture that does not invoke repertoire exhaustion, refuted-attractor cycling, or any mechanism described in the basin report — in that case the isolation is explained by something other than basin dynamics and the dependence is spurious.",
+      "evidence_refs": [
+        {"block": "daf9e84b84596ff59505e6b0", "quote": null}
+      ],
+      "neighbours": ["SRC_006", "SRC_005", "SRC_002"],
+      "typicality": 0.85
+    },
+    {
+      "content": "0e26d6be54fd CONTRADICTS SRC_008's forced-connection claim: SRC_008 asserts that SRC_002 shares a mechanism with SRC_001's token-economy analysis, but if the isolation of 0e26d6be54fd is epistemically informative — revealing a genuine gap in the theory's coverage rather than a defect to be repaired — then forced mechanism-sharing claims like SRC_008's destroy the very signal that isolation provides. The two positions are incompatible: either isolation is a diagnostic that should be preserved (making forced connections epistemically harmful) or forced connections are valid (making isolation a defect to be overcome). REFUTED IF one can demonstrate that epistemically informative isolation and forced mechanism-sharing connections can coexist without epistemic loss — e.g., if some connections are forced while others remain diagnostically isolated without contradiction.",
+      "evidence_refs": [
+        {"block": "daf9e84b84596ff59505e6b0", "quote": null},
+        {"block": "74ded11eccee525366948958", "quote": null}
+      ],
+      "neighbours": ["SRC_008", "SRC_001", "SRC_006"],
+      "typicality": 0.70
+    },
+    {
+      "content": "0e26d6be54fd ABSTRACTS from SRC_005's state-of-the-theory record: the isolated artifact is not a concrete claim or evidence block but a meta-level pattern about what the theory is missing — it abstracts the structural absence in the current theory's coverage into a single identifiable gap. SRC_005 catalogs what the machine currently holds; 0e26d6be54fd represents what it does not hold and cannot yet articulate. The abstraction is from specific missing content to the general shape of the absence. REFUTED IF 0e26d6be54fd is itself a concrete, content-bearing artifact (a specific conjecture, evidence block, or source record) rather than a meta-level structural description of a gap — in that case there is nothing to abstract and the relation collapses.",
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173f", "quote": null}
+      ],
+      "neighbours": ["SRC_005", "SRC_006"],
+      "typicality": 0.60
+    },
+    {
+      "content": "0e26d6be54fd is COMPATIBLE WITH SRC_001's token-economy framework: the artifact's isolation conserves conjectural and critical tokens by not forcing low-quality connections that would burn tokens on adjudicating weak relations. Under SRC_001's logic, every connection attempt costs tokens (conjecture generation, criticism, adjudication); an artifact that resists connection may be performing implicit token optimization by refusing to engage in connections that would exhaust the repertoire without producing epistemic gain. The compatibility holds because both the isolated artifact and the token-economy framework value epistemic efficiency over connection quantity. REFUTED IF the artifact's isolation has no resource-conservation implication — e.g., if it persists despite zero token cost for connection attempts, or if connecting it would conserve tokens rather than burn them.",
+      "evidence_refs": [
+        {"block": "74ded11eccee525366948958", "quote": null}
+      ],
+      "neighbours": ["SRC_001", "SRC_002"],
+      "typicality": 0.55
+    },
+    {
+      "content": "0e26d6be54fd SHARES MECHANISM with SRC_002's harness v1.5 amendment: both the isolated artifact and the amendment operate through the same adjudication pipeline — conjecture proposal, criticism, harness verdict. The artifact's isolation is produced by the same mechanism that produces accepted connections: the harness's adjudication loop. What differs is the output (rejection/non-connection vs. acceptance/connection), not the mechanism. The shared mechanism is the conjecture-criticism-adjudication cycle itself. REFUTED IF 0e26d6be54fd operates outside the harness's adjudication framework — e.g., if it was never submitted to the loop, or if its isolation is due to a plumbing failure (missing artifact, corrupted reference) rather than adjudicative rejection.",
+      "evidence_refs": [
+        {"block": "7a3d186479cefef7597b38db", "quote": null},
+        {"block": "9116c8592387ce22d436cde6", "quote": null}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"],
+      "typicality": 0.75
+    },
+    {
+      "content": "0e26d6be54fd REDUCES TO SRC_007's empiric stance: the artifact's isolation is an empirical observation — a fact about the current state of the theory's artifact graph — and should be treated as data to be explained, not as a defect to be repaired. Under the empiric school, the correct response to an unexplained empirical regularity (persistent isolation) is to collect more observations and let the pattern guide theory, not to force a theoretical connection. The isolation reduces to the empiric stance because it is, at base, a measurement: this artifact has no accepted relations. REFUTED IF the isolation has a non-empirical explanation — e.g., if it follows deductively from the formal properties of the harness specification, making it a logical necessity rather than an empirical contingency.",
+      "evidence_refs": [
+        {"block": "eb6b4d30978838b51bb7bc39d96c3c42", "quote": null}
+      ],
+      "neighbours": ["SRC_007", "SRC_006", "SRC_005"],
+      "typicality": 0.35
+    }
+  ]
+}
+```

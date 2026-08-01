@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism checks counters only for zero before a fetch, not whether the remaining budget can accommodate the upcoming fetch. This allows a fetch that exceeds the byte budget to proceed, causing silent resource overconsumption before the terminal state is recorded, which violates the requirement for a typed auditable terminal state without silent degradation.",
+      "counterexample": [
+        "Byte budget: 1000 bytes, used: 999 bytes. Guard sees counter > 0, permits fetch. Agent fetches a 1 MB resource, exceeding budget by ~1000x. The system may crash or degrade before the terminal state is logged."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The mechanism increments counters and checks limits only after a fetch completes. A fetch that would exceed the budget is allowed to finish, potentially causing resource exhaustion or non-deterministic behavior before the terminal event is recorded, undermining the guarantee of a typed auditable terminal state without silent degradation.",
+      "counterexample": [
+        "Byte budget: 1000 bytes, used: 999 bytes. Agent initiates a fetch that returns 1 MB. The fetch completes, counters are incremented to 1000+ requests and 1,000,999 bytes, then the limit is exceeded and terminal state logged. The system may have already crashed due to memory exhaustion from the 1 MB response."
+      ]
+    }
+  ]
+}

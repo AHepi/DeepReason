@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a multi-year drought-induced famine that forced mass migrations of the 'Sea Peoples', overwhelming the palatial military and administrative systems that were brittle due to their specialized, non-subsistence agricultural dependencies.\", \"mechanism\": \"A climatic shift caused prolonged drought in the breadbaskets of the Eastern Mediterranean (particularly Anatolia and the Aegean). This led to cascading crop failures, depleting the surplus that the palace redistributive economies required. Famine triggered large-scale, armed population movements (the Sea Peoples) seeking arable land and food stores. The palatial states, reliant on chariot-based elites and complex logistical supply chains, could not adapt to defending against diffuse, migrating groups attacking multiple points simultaneously, leading to military defeat and administrative collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows no significant change in pollen records indicating drought, or no destruction layers associated with the period.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records detail the Sea Peoples as a well-organized, long-standing confederation with a fixed homeland, not as famine-driven refugees.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains Egypt's survival through the Nile's unique, flood-based irrigation system which was less susceptible to the specific drought pattern and provided a grain surplus that could be used to hire mercenaries and feed a standing army to repel the Sea Peoples, as recorded at Medinet Habu.\"}",
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a297d918c7cb004462dfe7c71f0161f151ec5ade598815a717a63b767a2fe365"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a consequence of a systemic failure in the inter-polity diplomatic and trade network, where the loss of a single critical node (the Hittite Empire) due to internal succession crises and a copper shortage severed the mutual assurance and resource flows, causing a domino effect of economic strangulation and elite infighting across the interconnected kingdoms.\", \"mechanism\": \"The Late Bronze Age international order was a tightly coupled system of personal relationships between 'Great Kings' who exchanged prestige goods, military aid, and essential raw materials (especially copper and tin for bronze). A severe copper supply disruption, combined with a violent Hittite dynastic struggle that paralyzed the empire, broke the network's trust and material equilibrium. Without the Hittite buffer and the flow of tin, other palace economies experienced immediate resource scarcity, leading to internal rebellions by disenfranchised elites and military vulnerability, causing a rapid, chain-reaction collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows a surge in long-distance trade and diplomatic correspondence in the period immediately preceding the collapse.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The Hittite Empire is shown to have collapsed after, not before, the destruction of Ugarit and the Mycenaean palaces.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to its more autarkic economy and direct control over Nubian gold mines, making it less dependent on the Anatolian-Levantine trade network for both prestige goods and the economic means to maintain internal elite cohesion.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a297d918c7cb004462dfe7c71f0161f151ec5ade598815a717a63b767a2fe365"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an inside-out phenomenon driven by a contagious, millenarian social revolution among the lower classes, who weaponized the very trade and communication networks of the palaces to coordinate a simultaneous overthrow of the extractive palatial elite across multiple kingdoms.\", \"mechanism\": \"The palatial redistributive economy created a rigid, literate, and highly visible elite class that was resented by a vast, illiterate underclass of farmers and laborers. A new, egalitarian religious or social ideology spread rapidly along the same maritime and overland routes used for trade, carried by itinerant craftsmen, mercenaries, and refugees. This ideology framed the palaces as centers of cosmic injustice. The movement coordinated a synchronized uprising, using the palaces' own administrative records to identify and target granaries and armories, leading to a simultaneous, violent, and deliberate erasure of the palatial system from within.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"The destruction layers uniformly show evidence of external siege warfare and foreign weaponry, with no signs of internal revolt or class-targeted destruction.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B tablets and other contemporary texts from the period of destruction express concern about external raiders and supply shortages, but make no mention of a widespread ideological or class-based uprising.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is explained by its more deeply entrenched divine kingship, where the Pharaoh was not just an economic administrator but a living god essential to cosmic order, making the ideology of elite overthrow theologically incoherent and impossible to coordinate against a figure of such religious authority.\"}",
+      "typicality": 0.3,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2bf66d2d2c5de8fe7566f81ea70deec4cbb446abb3d72706f08299d87c6a5db2"
+        }
+      ]
+    }
+  ]
+}

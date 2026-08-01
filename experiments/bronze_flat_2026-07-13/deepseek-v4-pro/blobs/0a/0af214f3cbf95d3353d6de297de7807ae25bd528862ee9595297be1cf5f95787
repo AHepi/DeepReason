@@ -1,0 +1,16 @@
+{
+  "candidates": [
+    {
+      "content": "A systemic drought, evidenced by paleoclimatic data, triggered cascading agricultural failures that uniquely destabilized the palatial redistributive economies of the Mycenaeans, Hittites, and Levant, while Egypt's direct Nilotic irrigation management buffered it from the worst effects.",
+      "typicality": 0.85
+    },
+    {
+      "content": "The collapse was caused by a 'systems collapse' triggered by the rapid spread of cheap, mass-produced iron weaponry, which democratized violence and allowed marauding infantry (the 'Sea Peoples') to overwhelm the bronze-age chariot-based militaries of the palace states, while Egypt survived by rapidly adopting these same iron technologies for its own defense.",
+      "typicality": 0.55
+    },
+    {
+      "content": "The collapse was a cascading failure of the diplomatic gift-exchange network. When the Hittite Empire fragmented due to internal succession crises, the resulting disruption to the flow of prestige goods and diplomatic marriages caused a rapid, fatal loss of legitimacy for the dependent client kings in Mycenae and the Levant, leading to simultaneous palace revolts. Egypt, a net exporter of prestige goods (gold, grain) rather than a dependent, was insulated from this specific network failure.",
+      "typicality": 0.35
+    }
+  ]
+}

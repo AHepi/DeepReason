@@ -1,0 +1,23 @@
+```json
+{
+  "alias": "C1",
+  "content_requirements": [
+    "Title text: 'The DNA Archive: Digitalized Life'",
+    "Cyber-Organic aesthetic styling",
+    "Bioluminescent Green and Cyan Glaze accents"
+  ],
+  "depends_on": [],
+  "exports": [
+    "updateHeaderGlow"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "header-root",
+    "header-title-text",
+    "header-glow-overlay"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

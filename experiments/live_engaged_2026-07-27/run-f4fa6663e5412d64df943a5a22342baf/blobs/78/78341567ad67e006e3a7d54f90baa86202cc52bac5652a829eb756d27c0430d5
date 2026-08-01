@@ -1,0 +1,14 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim asserts that a self-certifying log *alone* turns silent divergence into a contradiction, but the mechanism's reliance on 'cryptographic hashes' and 'immutable publication' implicitly depends on external cryptographic primitives (e.g., hash functions) and storage systems (e.g., immutable ledgers). These are not part of the log itself, violating the 'alone' requirement in the problem context. The disanalogy 'Requires the log to be self-contained' further concedes this dependency, undermining the claim's universality.",
+      "counterexample": [
+        "A log using SHA-256 hashes: the hash function is an external dependency not inherent to the log's structure, yet its collision resistance is critical to the mechanism's success."
+      ]
+    }
+  ]
+}
+```

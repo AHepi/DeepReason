@@ -1,0 +1,29 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "Append-only identity is preserved on resumption whenever the protocol can deterministically quarantine the trailing partial fragment as a non-event, regardless of whether a barrier was explicitly emitted. A barrier is sufficient but not necessary; framing-based quarantine is the necessary and sufficient condition.",
+      "formal_artifact_handles": ["ART_1"],
+      "conflict_handles": ["ART_2", "ART_3"],
+      "source_conflict_keys": ["CNF_1", "CNF_2"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption must be refused when and only when the causal fingerprint of the last complete event reveals that an intermediate consumer has already advanced derived state based on a speculative or partial read. The corruption risk lives in downstream state projections, not in the append-only log itself, which is immutable by definition.",
+      "formal_artifact_handles": ["ART_2"],
+      "conflict_handles": ["ART_1", "ART_3"],
+      "source_conflict_keys": ["CNF_2", "CNF_3"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is categorically unsafe if and only if the append-only medium does not support atomic delimitation of events. When the medium supports atomic per-event writes, every entry is either a complete event or nothing, so token
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "bridge.ledger-batch.v1", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

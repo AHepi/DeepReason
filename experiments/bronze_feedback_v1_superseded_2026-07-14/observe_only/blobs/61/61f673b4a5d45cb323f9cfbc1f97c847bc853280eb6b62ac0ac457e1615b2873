@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "4edb58219317ba6a83140fcb6fa0d0a4fb836596c9366afb47213fbd58ace814",
+      "attack": true,
+      "case": "The claim that Egyptian temple networks were geographically dispersed and redundantly stored across multiple nodal points is contradicted by the forbidden case that Egyptian temples show concentrated, not dispersed, grain storage in New Kingdom administrative papyri. The target's own forbidden case directly refutes the mechanism's core premise about Egyptian survival."
+    },
+    {
+      "target": "76d6f67c2b2af1302b3e92413411308e86d07bb1ff2304bb4ec473ca3c0b1811",
+      "attack": true,
+      "case": "The mechanism posits that aristocratic predation stripped palaces of labor and surplus, but the target's own forbidden case states that Linear B archives show palace labor forces and textile production at Pylos increasing, not contracting, immediately before destruction. This directly contradicts the claimed internal predation mechanism for Mycenaean Greece."
+    },
+    {
+      "target": "04770282598205b054f448fb5c459498e3ce8353f24d2efb93d336e157267061",
+      "attack": true,
+      "case": "The mechanism claims Egypt survived because Nubian and Libyan auxiliary infantry substituted for chariot dominance, but the target's own forbidden case states that Egyptian military records from Merneptah-Ramesses III show no shift from chariot to infantry predominance in campaign accounts. This directly undermines the proposed explanation for Egyptian survival."
+    }
+  ]
+}

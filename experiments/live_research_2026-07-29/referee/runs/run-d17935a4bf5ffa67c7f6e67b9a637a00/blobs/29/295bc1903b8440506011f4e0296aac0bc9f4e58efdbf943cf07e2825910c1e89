@@ -1,0 +1,1 @@
+{"component":"research","disposition":"partial","error_code":null,"error_type":"ValueError","message":"research source budget is exhausted","partial_refs":["sha256:261a7da24b6c6938477ff045cd2d1887ba29cbd725953be92511764307b2c381"],"phase":"materialization","schema":"conjecture-component-diagnostic.v1"}

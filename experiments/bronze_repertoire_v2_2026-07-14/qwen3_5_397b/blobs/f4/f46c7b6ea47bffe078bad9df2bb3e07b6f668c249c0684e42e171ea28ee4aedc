@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's mechanism relies on a 'just-in-time redistribution model' for bronze, but it fails to specify a concrete institutional or processual mechanism that would cause a tin shortage to rapidly delegitimize palace authority across multiple distinct polities (Mycenaean Greece, Hittite Anatolia, Ugarit, Levantine city-states) in a cascading manner. The claim that palaces were 'unable to equip warriors or reward elites' and that this caused a 'swift shift in loyalty to local warlords' assumes, without specifying, that no alternative prestige goods, stockpiles, recycling, or coercive mechanisms existed to buffer the shock. The forbidden case is too narrow: it only forbids evidence of 'continuous, uninterrupted tin imports,' but a genuine test of the mechanism would also forbid evidence that palaces maintained authority for a significant period after a demonstrable tin disruption, or that local warlords arose for reasons unrelated to bronze shortages. The mechanism thus lacks the required specificity about the causal chain linking material shortage to political delegitimization, making it unfalsifiable against observations where tin imports ceased but palace authority persisted or declined for other reasons.",
+  "counterexample": [
+    "Archaeological evidence at Pylos shows the palace maintained administrative control and bronze-working activity through recycling until its final destruction, with no evidence of a shift in loyalty to local warlords driven by tin shortage.",
+    "Hittite royal correspondence from the final decades of the empire shows palace authority delegitimized by internal dynastic conflict and military overextension, not by an inability to equip warriors with bronze."
+  ]
+}

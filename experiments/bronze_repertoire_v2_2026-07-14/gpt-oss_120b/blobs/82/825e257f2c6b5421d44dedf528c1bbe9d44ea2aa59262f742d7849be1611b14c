@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:639a936eeef3
+connect isolated 639a936eeef3 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 639a936eeef3437ceaa26d2a86b2551c635faa41cc9448d29e4ff44bf8732ea0: {"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eastern Mediterranean.", "mechanism": "envi
+- 58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440: {"claim": "A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean Greece, Hittite Anatolia, Ugarit and Le
+- d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f: {"claim": "Increased pressure from displaced populations across the eastern Mediterranean generated Sea Peoples raiding fleets that systematically attacked Mycenaean, Hittite, Ugaritic and Levantine c
+- 38d47784e0fa429e62a147678262d63df2d5486fab1a9f2d4e76b57a6a929dbf: {"claim": "Ruling elites pursued expansive building programs, military campaigns and tribute extraction that overstretched fiscal resources, causing systemic economic failure across Mycenaean, Hittite
+- db957f299ed6b9709390cb9d2168ba43325f5d3a60be9123f6f08eb3cba01bfb: {"claim": "A coordinated wave of maritime raiders—originating from disenfranchised Cycladic communities—disrupted trade routes and precipitated political fragmentation.", "mechanism": "external demogr
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

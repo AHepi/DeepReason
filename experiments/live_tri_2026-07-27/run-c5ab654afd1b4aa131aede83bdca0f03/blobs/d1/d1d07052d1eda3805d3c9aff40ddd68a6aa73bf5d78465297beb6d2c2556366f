@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8bf890475c170c4de1ede1c5: program:reasoning_observation_pending
+- reason-counter@eaf6a21d08f969b15cfa4c36: program:reasoning_observation_pending
+- reason-counter@20ae5aaef0d82aa4c2bfc29b: program:reasoning_observation_pending
+- reason-counter@e0671a833df5b872868140ad: program:reasoning_observation_pending
+- reason-counter@e1ec782c4c6492265a4bc4cf: program:reasoning_observation_pending
+- reason-counter@80921c01f664efe2358fa6e7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A unifying generational tri-state manifest (active/staging/sealed) with downstream dependency pinning subsumes both log and lease protocols by making causal dependencies explicit in the workspace metadata itself; the exact durable record is the manifest containing generation, state, and downstream references.","counterconditions":[{"case":"Manifest updates must be atomic with respect to downstream creation; a race creates a dangling reference","eval":"observation"},{"case":"Cyclic dependencies in the manifest prevent reclamation (liveness failure)","eval":"observation"},{"case":"Storage overhead of the manifest scales with the number of derivations","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The durable record is a manifest per problem containing generation number, state, and a list of downstream evidence refs that consume this workspace. State transitions: active \u2192 staging (completion in progress) \u2192 sealed (completed). Reclamation first marks staging workspaces as 'zombie', waits for downstream dependency resolution, then reclaims only if no downstream ref exists and the holding process is dead. The causal mechanism is reference counting over the derivation graph. Adjudication: this protocol is safer than pure lease or pure log because it validates semantic emptiness (no downstream consumers) rather than just temporal ordering or liveness. It directly answers 'what must durably record' by requiring the manifest to hold the dependency closure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8bf890475c170c4de1ede1c5, reason-counter@eaf6a21d08f969b15cfa4c36, reason-counter@20ae5aaef0d82aa4c2bfc29b
+
+TARGET SRC_002
+{"analogy":null,"claim":"Skeptical best-effort: absolute 'never' is impossible without synchronous consensus; the safest practical protocol is a durable lease table with explicit revocation tokens, adjudicated against log-based protocols by its superior availability under partition.","counterconditions":[{"case":"Clock skew can cause premature lease expiry and spurious displacement","eval":"observation"},{"case":"If the lease manager is a singleton, it is a fault island","eval":"observation"},{"case":"The 'never' guarantee is relaxed to probabilistic safety under partial synchrony","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A lease manager durably records (workspace_id, holder_pid, issued_timestamp, ttl, revocation_flag). The process must heartbeat to renew. Reclamation queries the lease table and a process liveness oracle; if both confirm expiry or death, it issues a revocation token and reclaims. The causal mechanism is timeout-driven state transition. It adjudicates against the intent-seal log: while the log protocol is safer in consistent histories, it fails closed under partition (stalls reclamation), whereas the lease protocol can make progress with bounded uncertainty. Therefore, where evidence of network health is available, the lease protocol yields higher liveness with only probabilistic safety degradation; where partition is likely, the log protocol's stall is preferable but not safer in absolute terms.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e0671a833df5b872868140ad, reason-counter@e1ec782c4c6492265a4bc4cf, reason-counter@80921c01f664efe2358fa6e7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

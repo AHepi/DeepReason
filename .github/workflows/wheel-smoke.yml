@@ -1,0 +1,41 @@
+name: wheel smoke
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  wheel-smoke:
+    name: ${{ matrix.os }} / Python 3.11
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build and verify installed wheel
+        run: python scripts/wheel_smoke.py
+      - name: Qualify and operate installed wheel
+        run: python -u scripts/wheel_operational_smoke.py
+
+  wheel-smoke-sparse-windows:
+    name: windows-latest / Python 3.11 / sparse continuation polling
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build and verify installed wheel
+        run: python scripts/wheel_smoke.py
+      - name: Qualify and operate installed wheel
+        run: >-
+          python -u scripts/wheel_operational_smoke.py
+          --continuation-poll-profile sparse

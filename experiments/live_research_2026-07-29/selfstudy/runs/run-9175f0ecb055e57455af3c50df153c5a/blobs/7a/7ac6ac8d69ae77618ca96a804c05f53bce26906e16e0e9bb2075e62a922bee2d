@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "Coverage debt under the current batched criticism mechanism grows non-linearly with the size of accepted rival positions, causing a 'criticism starvation' phase where no rivals are retired after the system scales from 18 to ~60 rivals; implementing a tournament-based selection filter before the criticism phase is a necessary optimization to bound this debt.",
+    "mechanism": "A sandboxed Python simulation (simulation_mode sandboxed_python_v1) is proposed to test this: it initializes N rival positions (scaling N from 10 to 100) and models batched criticism where an argumentative_critic generates per-target warrants. In the naive model, the simulation calculates coverage debt as the ratio of generated warrants to attacked targets. In the optimized model, a tournament-selection mechanism reduces the active rivals to a K-sized batch before criticism. We hypothesize the naive model will show debt growing O(N^2) while the optimized model bounds it. We also propose a research fetch to https://en.wikipedia.org/wiki/Popperian_critical_rationalism to inform the critic's validity gate logic.",
+    "counterconditions": [
+      "If the sandboxed simulation shows coverage debt growing linearly (O(N)) with rivalry size, the non-linear debt hypothesis is falsified.",
+      "If tournament-based selection reduces the diversity of accepted rivals below a functional threshold without proportionally increasing the retirement rate, the optimization is counterproductive."
+    ],
+    "typicality": 0.75,
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92979168",
+        "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0f670de69de9021d",
+        "quote": "conjecturer (Verbalized-Sampling contract, §11.6), argumentative_critic, defender, variator(µ, µ_struct), judge(rubric verdicts under trial protocol), summariz"
+      },
+      {
+        "block": "0974daebd1665965",
+        "quote": "- **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension "
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  },
+  "abstention": null
+}

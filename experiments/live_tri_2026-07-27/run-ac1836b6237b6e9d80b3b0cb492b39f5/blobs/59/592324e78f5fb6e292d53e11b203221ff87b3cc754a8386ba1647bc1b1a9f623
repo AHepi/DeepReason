@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The bytes-only denomination fails to guarantee reproducibility when per-request side effects or rate limits exist, because the same byte budget can be exhausted with different request counts, leading to divergent agent states. The terminal state omits request count, making it inauditable with respect to this causal factor.",
+      "counterexample": [
+        "An agent fetching from a rate-limited API with a 1GB byte budget could make 10 large requests or 1000 small requests; the latter may trigger rate limiting, altering the sequence of successes and failures, yet the terminal state would not record the request count, obscuring the cause of non-reproducibility."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The request-only denomination fails to ensure reproducibility when fetched data sizes vary, because the same request count can yield different total data volumes, causing the agent to stop at different reasoning points. The terminal state omits bytes_used, making it inauditable with respect to data volume.",
+      "counterexample": [
+        "An agent fetching documents with a 10-request budget: one run fetches 10 small abstracts, another fetches 10 large full-texts; the agent's knowledge graph differs, yet the terminal state only shows request count, hiding the data volume discrepancy."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The composite denomination introduces environment-specific calibration coefficients (alpha, beta) without a causal mechanism to determine them objectively, making the budget non-portable and non-reproducible across deployments. The terminal state includes these coefficients, but their values are arbitrary, undermining auditability.",
+      "counterexample": [
+        "Two deployments of the same agent with different alpha, beta values will exhaust credits at different points for identical fetch sequences, breaking replayability; the terminal state records the coefficients but does not justify them, so an auditor cannot determine if the budget was appropriate."
+      ]
+    }
+  ]
+}

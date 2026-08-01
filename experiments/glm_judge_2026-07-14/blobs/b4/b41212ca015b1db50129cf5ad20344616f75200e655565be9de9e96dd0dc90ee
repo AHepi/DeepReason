@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "decisive_point": "The proposal names measurable quantities such as “k in {7,9,11}”, “base error in [0.15,0.35]”, and “critic precision > 0.5 * sqrt(5/k) with recall > 0.4” and lists concrete forbidden cases that can be directly evaluated by the validation harness."
+}

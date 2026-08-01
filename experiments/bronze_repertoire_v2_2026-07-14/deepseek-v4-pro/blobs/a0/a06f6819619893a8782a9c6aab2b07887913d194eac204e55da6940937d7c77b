@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The forbidden case requires that destruction layers be 'consistently dated centuries apart'—that is, spread so widely in time that no plausible chain of imitation and escalating raiding could connect them. A wave can propagate over a generation or two without being falsified, but if the evidence showed, for example, that the Mycenaean palaces fell in 1400 BCE, Hattusa in 1200 BCE, and Ugarit in 1000 BCE, with no temporal clustering or sequential linkage, that would constitute a concrete observation that falsifies the contagious-wave mechanism."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

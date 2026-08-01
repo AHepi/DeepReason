@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The forbidden case demands 'Measured error correlation between same-family critic and candidate pool is ≤ 0' — a continuous statistical quantity (the Pearson or similar correlation between critic errors and candidate-pool errors at the item level). The repository harness scores arms by producing discrete outcomes: per-item correctness, critic precision/recall, and aggregate counts (fixed-minus-broke). It does not expose, compute, or log a pairwise error-correlation coefficient between critic and candidate pool. The proposal offers no pre-registered mapping from harness outputs to a correlation estimator, no formula, and no threshold operationalization."}
+```

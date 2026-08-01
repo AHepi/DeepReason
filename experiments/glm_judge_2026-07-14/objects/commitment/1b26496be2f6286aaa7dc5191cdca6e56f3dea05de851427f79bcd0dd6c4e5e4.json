@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Any study cell with e in (1/(k+1), 1/2), P >= 1/2, R > 0 where harness_acc <= sc_acc, refuting joint sufficiency"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:3d0e94389be5","observation_valued":false},"id":"fc:3d0e94389be5","schema":"commitment"}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target": "22c6e6564ec36c58b8f2206b610d4f88e41b7093b7e450b970271feb53df6cba",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

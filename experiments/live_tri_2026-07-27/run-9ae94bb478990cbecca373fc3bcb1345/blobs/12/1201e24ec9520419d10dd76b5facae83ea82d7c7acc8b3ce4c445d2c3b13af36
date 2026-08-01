@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism assumes byte counting is deterministic, but in practice byte counts can vary across runs due to compression, transfer encoding, or protocol overhead. This non-determinism breaks the replayability guarantee, and the answer provides no method to ensure deterministic byte accounting, leaving the exhaustion event potentially unreproducible.",
+      "counterexample": [
+        "Run 1: The agent fetches a resource that is compressed with gzip, consuming 10,000 bytes. Run 2: The same resource is served uncompressed due to a different Accept-Encoding header, consuming 50,000 bytes. The byte counter diverges, causing exhaustion at different steps, so the audit log is not replayable."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The budget is denominated in expected information gain, which is a subjective, model-dependent quantity. Exhaustion is not a typed, externally auditable terminal because it depends on the agent's internal belief state and gain estimates, which are not directly observable or verifiable without replaying the entire cognitive process. This fails the requirement for a typed auditable terminal that prevents silent degradation.",
+      "counterexample": [
+        "Two identical agents with different initial priors would exhaust the same information-gain budget at different points, making the exhaustion event non-objective and the audit trail dependent on opaque internal state rather than a simple, verifiable metric."
+      ]
+    }
+  ]
+}

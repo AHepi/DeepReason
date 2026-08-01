@@ -1,0 +1,31 @@
+```json
+{
+  "candidate": {
+    "claim": "Implement adaptive batch sizing for the argumentative_critic based on the coverage debt ratio, scaling critical pressure to prevent unbounded rivalry growth.",
+    "mechanism": "The system currently operates with static batch criticism, allowing the pool of accepted rival positions to grow unboundedly (18 to 60) without corresponding retirement. By tracking the coverage debt (the ratio of generated rivals to retired rivals), the system can dynamically adjust the argumentative_critic's batch size. If the debt ratio exceeds a threshold, the batch size for the next criticism pass increases, forcing more targets into the Dung grounded extension evaluation per cycle and restoring equilibrium between generation and retirement.",
+    "counterconditions": [
+      "The school generation rate scales super-linearly, outpacing any polynomial increase in critic batch size.",
+      "The judge or argumentative_critic hits a context window limit or degrades in validity when processing significantly larger batches.",
+      "Computational tractability of the Dung grounded extension is lost due to the quadratic or cubic complexity of evaluating very large attack graphs."
+    ],
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92979168",
+        "quote": "Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0f670de69de9021d",
+        "quote": "argumentative_critic"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.6
+  },
+  "abstention": null
+}
+```

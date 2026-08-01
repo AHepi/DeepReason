@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target names a specific causal mechanism (ecological-economic resource depletion) and states a forbidden case (archaeobotanical pollen data showing stable moisture levels in Anatolia). However, the forbidden case is not a concrete observation that could realistically have obtained; it is a hypothetical data pattern ('pollen data... showing stable moisture levels') phrased as a potential finding rather than a specific, datable record or event. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' A valid forbidden case would cite an actual pollen core from a named site (e.g., 'Pollen core XYZ from Lake ABC showing stable arboreal/non-arboreal ratios between 1220-1160 BCE') rather than a generic category of evidence. The current formulation fails to specify a particular observation, making it unfalsifiable in practice and violating clause (2) of the standard.
+
+TARGET:
+{"claim":"Prolonged megadrought between 1220‑1160 BCE triggered agricultural collapse across the Eastern Mediterranean.","mechanism":"Ecological‑economic resource depletion leading to famine, loss of state revenue, and breakdown of elite redistribution.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"Archaeobotanical pollen data from the period showing stable moisture levels in Anatolia.","eval":"rubric:std-hist"}],"prose_notes":"Formal abstract summarizing climate proxy series and economic models."}

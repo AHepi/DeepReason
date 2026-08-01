@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a sudden, region-wide seismic event sequence known as an 'earthquake storm'.\", \"mechanism\": \"Sequential tectonic ruptures along the East Anatolian and Dead Sea transform faults physically destroyed palace infrastructure and disrupted supply lines beyond repair.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological strata at Pylos or Hattusa showing fire damage without preceding structural collapse consistent with seismic activity.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on geological evidence of simultaneous destruction layers; struggles to explain why Egypt's delta escaped similar tectonic fury.\"}",
+      "typicality": 0.45,
+      "neighbours": ["A3", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"A systemic failure of the international bronze trade network triggered a cascading economic depression.\", \"mechanism\": \"Over-specialization in palace economies meant that the interruption of tin imports from Afghanistan halted bronze production, rendering military elites powerless and causing internal revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence of significant local iron production or alternative weapon stockpiles in Ugarit prior to destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Emphasizes economic interdependence; criticized for assuming rigid inability to adapt compared to excluded regions like Egypt.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A1", "A4", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate, coordinated ideological rejection of the palace system by subject populations.\", \"mechanism\": \"Widespread social unrest and peasant revolts, fueled by famine and inequality, targeted palace centers specifically while sparing rural areas, effectively dismantling the administrative state from within.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Sea Peoples as external invaders\"]}, \"forbidden\": [{\"case\": \"Linear B tablets indicating continued palace administration right up to the moment of external invasion.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Flips the 'Sea Peoples' narrative to internal class struggle; highly atypical as it denies the primary role of migration or external warfare.\"}",
+      "typicality": 0.15,
+      "neighbours": ["A7", "A10", "A12"]
+    }
+  ]
+}

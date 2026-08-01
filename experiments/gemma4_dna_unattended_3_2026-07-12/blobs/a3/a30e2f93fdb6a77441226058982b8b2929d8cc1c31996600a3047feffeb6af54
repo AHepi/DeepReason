@@ -1,0 +1,45 @@
+Define only the bounded global art direction requested in the input, including reduced-motion behavior and a complete static fallback. Do not emit components, HTML, routes, tools, or workflow instructions.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "description": "Flat, bounded transport for the canonical global art direction.", "properties": {"depth_structure": {"maxLength": 600, "minLength": 1, "title": "Depth Structure", "type": "string"}, "interaction_state_model": {"maxLength": 600, "minLength": 1, "title": "Interaction State Model", "type": "string"}, "motion_language": {"maxLength": 600, "minLength": 1, "title": "Motion Language", "type": "string"}, "palette": {"maxLength": 400, "minLength": 1, "title": "Palette", "type": "string"}, "reduced_motion_version": {"maxLength": 600, "minLength": 1, "title": "Reduced Motion Version", "type": "string"}, "responsive_strategy": {"maxLength": 600, "minLength": 1, "title": "Responsive Strategy", "type": "string"}, "scroll_narrative": {"maxLength": 600, "minLength": 1, "title": "Scroll Narrative", "type": "string"}, "spacing_strategy": {"maxLength": 400, "minLength": 1, "title": "Spacing Strategy", "type": "string"}, "static_fallback": {"maxLength": 600, "minLength": 1, "title": "Static Fallback", "type": "string"}, "texture_language": {"maxLength": 600, "minLength": 1, "title": "Texture Language", "type": "string"}, "transition_grammar": {"maxLength": 600, "minLength": 1, "title": "Transition Grammar", "type": "string"}, "typography": {"maxLength": 400, "minLength": 1, "title": "Typography", "type": "string"}}, "required": ["palette", "typography", "spacing_strategy", "responsive_strategy", "interaction_state_model", "motion_language", "scroll_narrative", "depth_structure", "transition_grammar", "texture_language", "reduced_motion_version", "static_fallback"], "title": "CompactArtDirection", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"palette":"x","typography":"x","spacing_strategy":"x","responsive_strategy":"x","interaction_state_model":"x","motion_language":"x","scroll_narrative":"x","depth_structure":"x","transition_grammar":"x","texture_language":"x","reduced_motion_version":"x","static_fallback":"x"}
+
+INPUT:
+
+WEBSITE ART DIRECTION
+Task: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+Specify one coherent visual and motion system, including palette, typography, spacing, responsive behavior, and interaction/state. Reduced-motion and static fallback fields must describe complete usable alternatives.
+ADJUDICATED PLAN:
+# Product Plan: DNA Blueprint (Educational/Tool-based Focus)
+
+## Scope
+A functional 'workbench' page where users can simulate the processes of DNA replication and transcription using a set of interactive tools.
+
+## Feature List
+- **The Sequence Builder**: A small interactive area where users can 'snap' base pairs together.
+- **Process Simulator**: A play-button controlled animation of RNA polymerase moving across a DNA strand.
+- **Comparison View**: A side-by-side visual contrast between DNA and mRNA.
+- **Motion Compliance**: Automatic disablement of the 'Simulator' animations if `prefers-reduced-motion` is set to reduce; replaces animation with a 'Before/After' static image.
+
+## Key Interactions
+- **Drag-and-Drop**: Users drag nucleotides to the correct complementary positions.
+- **Step-Through**: A 'Next' button that advances the transcription process one nucleotide at a time.
+- **Zoom-In**: Clicking a section of the helix zooms in to show the hydrogen bonding.
+
+## Content Inventory
+- **Header**: "DNA Interactive Workshop"
+- **Instruction**: "Drag the correct base to pair with the template strand."
+- **Replication Guide**: "Step 1: Unwinding. Step 2: Pairing. Step 3: Joining."
+- **Transcription Guide**: "The DNA template is read; the mRNA is synthesized. Note the substitution of Uracil for Thymine."
+- **Glossary**: "Nucleotide: The building block of DNA. Polymerase: The enzyme that builds the strand."
+
+## Acceptance Criteria
+1. Entire site contained in one HTML file.
+2. Drag-and-drop functionality works for base pairing.
+3. The simulation pauses and converts to static frames under `prefers-reduced-motion`.
+4. The mRNA result correctly shows U instead of T.
+5. The 'Zoom-In' interaction provides a clear view of chemical bonds.

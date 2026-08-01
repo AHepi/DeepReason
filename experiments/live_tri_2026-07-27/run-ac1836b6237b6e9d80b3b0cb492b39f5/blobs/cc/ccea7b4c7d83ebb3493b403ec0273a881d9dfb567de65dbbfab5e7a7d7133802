@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Wall-clock time is non-deterministic and breaks the agent's replayability. The target itself admits that the mechanism makes replay impossible, yet the problem explicitly requires a replayable autonomous research agent. A budget that varies across runs due to system load or network latency prevents faithful reproduction of the agent's behavior.",
+      "counterexample": [
+        "Run the same agent twice with identical inputs. In the first run, high network latency causes the time budget to expire after 5 fetches. In the second run, low latency allows 8 fetches before the same time budget expires. The agent's fetch sequence and resulting state diverge, making replay impossible."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "Recording exhaustion as a simple boolean flag fails the requirement for a typed auditable terminal. The problem demands a record that allows post-hoc analysis of budget consumption, but a boolean provides no information about which budget was exhausted, remaining counts, or the cause of termination.",
+      "counterexample": [
+        "The agent stops fetching and records 'exhausted: true'. An auditor cannot determine whether the request limit or byte limit was reached, nor how many requests or bytes were actually consumed. This makes it impossible to verify budget adequacy or debug early termination."
+      ]
+    }
+  ]
+}

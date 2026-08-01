@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target's 'forbidden' cases are not genuine counterexamples that the claimant pre-commits to avoiding; they are instead pre-emptive dismissals of historical evidence that directly contradicts the mechanism. Specifically: (1) The mechanism claims Egypt's 'ritual delegation' prevented fragmentation, yet the forbidden case concedes that Libyan and Nubian challengers *did* establish rival dynasties during the same period, which is precisely the fragmentation the mechanism says cannot happen. Dismissing this as outside scope violates the standard's requirement that forbidden cases be 'concrete observations which could realistically have obtained'—here the observation *did* obtain, and the target simply declares it irrelevant. (2) The Hittite forbidden case admits that Hittite kingship survived in Syro-Hittite states 'with identical ideological structure intact,' which directly contradicts the mechanism's claim that Hittite authority 'collapsed' due to its charismatic structure. If the same structure persisted and authority survived, the mechanism's causal link between structure and collapse is falsified. (3) The Mycenaean forbidden case states wanax authority was 'already weakened by 1300 BC with no recovery possible,' which introduces a pre-existing decline that predates the military defeat the mechanism treats as the trigger. This makes the mechanism's causal sequence untestable: if collapse was already inevitable, the defeat is not the cause. The target thus fails std-hist by treating direct counterevidence as definitionally excluded rather than engaging with it as a genuine test of the mechanism.",
+  "counterexample": [
+    "Egyptian kingship fragmented with Libyan and Nubian rival dynasties during the same period",
+    "Hittite kingship survived in Syro-Hittite states with identical ideological structure intact",
+    "Mycenaean wanax authority already weakened by 1300 BC with no recovery possible"
+  ]
+}

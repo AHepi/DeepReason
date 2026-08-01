@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:b79e4718c0fe
+connect isolated b79e4718c0fe to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- b79e4718c0feeb120aeb16ab65ec6899e4dfb08f2c852f80bf35dd9709862fe3: {"pairwise": {"decisive_point": "the loss regime is p < p_min where false flags on correct answers exceed saved votes", "loser": "88f00f0d4243bf6a2e3c1acf713d99a20e752bd30cafb420aaf8f8a523da604d", "pr
+- 8e9b8d5285aa332e272b48bd2862621294a08fa6e51f5878c3d97849733bd29f: {"pairwise": {"decisive_point": "a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a n
+- edc14bbd1ae6e3cc76eea0f6db2966a0dbe1446bf6b7655bbafce61f46750f45: {"claim": "Harness strictly beats self-consistency iff e in (1/(k+1), k/(k+2)) AND p > p_min(e,r,k) := e*(k-1)/(k+1) / [e*(k-1)/(k+1) + (1-e)*r*(k+1)/(k-1)], with critic recall r in (0,1); the loss re
+- 862de34bced36d488ac299f984c270812db349a12e50b3acf126462c0be93e72: reduces to: The lower bound of the 'majority-fragile' mid-zone (1/(k+1) < e) is a necessary condition for Harness to strictly beat self-consistency, but the first artifact's theorem (with its upper bo
+- 7811dbda8316264703217e333840089b140aa9a640a7f195c385b88c8394d3dc: {"claim": "Harness strictly beats self-consistency only in the mid-zone error regime where the majority is fragile: base candidate error e must satisfy 1/(k+1) < e < k/(k+1) so that some correct major
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

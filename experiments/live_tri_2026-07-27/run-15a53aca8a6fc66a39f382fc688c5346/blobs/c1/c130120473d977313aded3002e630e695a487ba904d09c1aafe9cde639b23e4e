@@ -1,0 +1,54 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption requires an exact causal fingerprint match: the triple (program_hash, input_hash, model_checkpoint_hash) at resumption must equal the triple at run start. Any divergence means resumed events belong to a different causal identity, making the append-only log internally inconsistent.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "The correct criterion for safe resumption is the conjunction of three conditions: (1) the last event is well-formed and complete, (2) the causal fingerprint matches, and (3) no intermediate event declares logical incompleteness (e.g., a 'begin' without a matching 'commit'). This subsumes both the 'last complete event' and 'causal fingerprint' rival criteria and adds a logical-unit integrity check.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is permissible if and only if the system emitted an explicit barrier/suspend event prior to token-budget exhaustion, and the exact causal fingerprint (program, input, checkpoint) matches at resumption; otherwise, it must be refused.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption must always be refused after token-budget exhaustion; only a fresh re-execution from the last globally committed event is valid, effectively treating the exhausted run as a failed transaction.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "unknown",
+      "claim": "The exact conditions under which a bounded reasoning run may be resumed after token-budget exhaustion without corrupting the append-only identity of recorded events, and when resumption must be refused, cannot be definitively determined from the available evidence. The formal artifacts propose rival criteria that conflict on both necessity and sufficiency, and no external source, evidence, or observation is supplied to adjudicate among them.",
+      "premise_keys": ["CLM_1", "CLM_2", "CLM_3", "CLM_4"]
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_4", "ART_1", "ART_2", "ART_3"],
+      "description": "ART_4 asserts resumption must always be refused after token-budget exhaustion, while ART_1, ART_2, and ART_3 each hold that resumption is permissible under certain conditions (causal fingerprint match, barrier event, logical-unit completeness). These positions are irreconcilable on whether resumption is ever permissible."
+    },
+    {
+      "conflict_key": "CNF_2",
+      "conflicting_handles": ["ART_1", "ART_2", "ART_3"],
+      "description": "ART_1 holds causal fingerprint match alone is necessary and sufficient. ART_3 requires an explicit barrier/suspend event in addition to fingerprint match. ART_2 requires last-event completeness AND fingerprint match AND logical-unit integrity. These are rival sufficiency criteria that disagree on what conditions are required for safe resumption."
+    }
+  ],
+  "uncovered_requirements": [
+    {
+      "requirement": "External evidence, source, or observation is needed to adjudicate among the rival resumption criteria (causal fingerprint alone, barrier-plus-fingerprint, tripartite conjunction, or always-refuse) and to determine which, if any, correctly characterizes when resumption preserves append-only event identity.",
+      "related_entry_keys": ["CLM_1", "CLM_2", "CLM_3", "CLM_4", "CLM_5"]
+    }
+  ]
+}
+```

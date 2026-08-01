@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim asserts that a social contract is the *sole* durable binding that turns silent divergence into a contradiction, but the mechanism relies on external enforcement (e.g., legal systems or institutional norms) that are themselves subject to silent divergence. For example, if the enforcing authority's interpretation of the contract diverges from the original intent without detection, the contradiction is not guaranteed—it depends on the authority's own consistency, which is not durably bound. Thus, the social contract does not *alone* ensure contradiction; it merely shifts the problem to another layer of enforcement that may itself silently diverge."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The claim posits that a formal specification is the *sole* durable binding, but the mechanism assumes the specification is both complete and immutable. If the log's semantics evolve (e.g., due to unanticipated edge cases or external inputs), the specification may no longer cover all possible states, allowing silent divergence to occur without triggering a contradiction. The overturn condition 'The log's semantics evolve beyond the scope of the specification' explicitly acknowledges this fragility, undermining the claim of exclusivity and durability."
+    }
+  ]
+}
+```

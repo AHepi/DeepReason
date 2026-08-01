@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A severe multi-year drought triggered famine that unraveled the fragile palatial redistributive economies, while Egypt's Nile-fed agriculture provided a buffer.\", \"mechanism\": \"Climatic shift reduced rainfall across Anatolia, the Aegean, and the Levant, causing crop failures. Palatial centers dependent on surplus extraction and long-distance trade collapsed when peasants could no longer meet quotas. Egypt survived because the Nile's flood regime, fed by equatorial rains, was decoupled from the Mediterranean drought pattern.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Dendrochronology and pollen cores from the Nile Delta show a synchronous 50-year arid phase matching the drought signals in Anatolia and the Levant.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic Carpenter/Renfrew drought hypothesis. It is highly typical in the literature but faces criticism for climatic determinism and for downplaying evidence of drought in Egypt itself.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A3", "A5"]
+    },
+    {
+      "content": "{\"claim\": \"The palatial system was destabilized by a sudden shift in warfare from elite chariotry to massed infantry using javelins and slashing swords, exploited by peripheral mercenaries and internal uprisings.\", \"mechanism\": \"The introduction of Naue II swords and javelin-armed skirmishers neutralized the military dominance of chariot-riding aristocracies. Palatial states, built on the military prestige of the chariot corps, could not adapt their social structure to mass mobilization. Egypt under Ramesses III repelled the Sea Peoples by hastily adopting infantry tactics and using its deeper manpower reserves.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows Egyptian garrisons in Canaan and the Delta exclusively used chariot-based tactics with no adoption of massed infantry formations during the 12th century BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"The military revolution thesis (Drews) is well-known but controversial. It explains the Sea Peoples' success but struggles with the simultaneous internal collapse of Mycenaean palaces not directly attacked.\"}",
+      "typicality": 0.75,
+      "neighbours": ["A6", "A8"]
+    },
+    {
+      "content": "{\"claim\": \"A volcanic winter triggered by the Hekla 3 eruption caused a cascade of crop failures, but Egypt survived because its grain storage bureaucracy, perfected during the New Kingdom, managed multi-year reserves.\", \"mechanism\": \"The massive Hekla 3 eruption in Iceland injected sulfates into the stratosphere, cooling the Northern Hemisphere and disrupting Mediterranean precipitation for several years. Palatial states with just-in-time redistribution collapsed when granaries emptied. Egypt's centralized storage and Nilometer-based planning allowed rationing that prevented state failure.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Ice cores from Greenland show no significant sulfate spike precisely dated to the 1200-1150 BC window, and Egyptian administrative papyri from the period describe chaotic grain riots and empty royal granaries.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is an atypical, speculative candidate. The Hekla 3 dating is contested (some place it earlier), and the mechanism relies on a tenuous link between Icelandic volcanism and Mediterranean weather. It is included for diversity.\"}",
+      "typicality": 0.2,
+      "neighbours": ["A1", "A2"]
+    }
+  ]
+}

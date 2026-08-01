@@ -9,7 +9,27 @@ from deepreason.llm.providers import infer_provider, reasoning_body
 def test_infer_provider():
     assert infer_provider("https://api.deepseek.com") == "deepseek"
     assert infer_provider("https://api.openai.com/v1") == "openai"
-    assert infer_provider("http://localhost:11434/v1") == "generic"
+    assert infer_provider("https://ollama.com/v1") == "ollama"  # cloud
+    assert infer_provider("http://localhost:11434/v1") == "generic"  # local host, no "ollama"
+
+
+def test_ollama_reasoning_passthrough():
+    # Ollama's reasoning_effort takes the neutral vocabulary natively, so
+    # `none` actually disables thinking (unlike the openai mapping -> minimal).
+    assert reasoning_body("ollama", None) == {}
+    assert reasoning_body("ollama", "none") == {"reasoning_effort": "none"}
+    assert reasoning_body("ollama", "medium") == {"reasoning_effort": "medium"}
+    assert reasoning_body("ollama", "max") == {"reasoning_effort": "max"}
+    assert reasoning_body("ollama", 1500) == {"reasoning_effort": "low"}
+    assert reasoning_body("ollama", 5000) == {"reasoning_effort": "high"}
+
+
+def test_ollama_endpoint_maps_reasoning_none_to_disabled_effort():
+    ep = OpenAICompatEndpoint(
+        "https://ollama.com/v1", "gpt-oss:120b", json_mode=True, reasoning="none",
+    )
+    assert ep.provider == "ollama"
+    assert ep.build_body("PROMPT")["reasoning_effort"] == "none"
 
 
 def test_deepseek_reasoning_mapping():
@@ -58,3 +78,61 @@ def test_role_table_is_the_model_change_plug():
     assert ep.reasoning == "none"
     assert ep.max_tokens == 1400
     assert ep.json_mode is True and ep.request_logprobs is True
+
+
+def test_endpoint_family_defaults_to_lease_inference():
+    """A config without an explicit family key must produce an endpoint whose
+    family matches what route_from_endpoint infers, so the route firewall
+    cannot fail closed on the first call (bronze flat run finding F2)."""
+    from deepreason.llm.firewall import route_from_endpoint
+
+    spec = {
+        "endpoint": "https://ollama.com/v1",
+        "model": "deepseek-v4-pro",
+        "provider": "ollama",
+        "temperature": 0.0,
+        "json_mode": True,
+    }
+    ep = _endpoint_from_spec(spec)
+    assert ep.family == "deepseek"
+    route = route_from_endpoint(ep)
+    assert route.family == ep.family
+    # explicit override still wins
+    ep2 = _endpoint_from_spec({**spec, "family": "custom"})
+    assert ep2.family == "custom"
+
+
+def test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means():
+    """Regression (coin canonicity run-c5f901f3): the live profile carried
+    reasoning=None, which sends no reasoning field, and glm-5.2 thought by
+    default — the first conjecture turn returned completion_tokens exactly
+    equal to the 24576 cap and produced no candidate. Unset is not off, and
+    the binding rule has to encode that distinction.
+    """
+
+    from deepreason.llm.providers import (
+        reasoning_disabled,
+        reasoning_knob_available,
+    )
+
+    # Availability is decided by the adapter table, not by probing.
+    assert reasoning_knob_available("ollama")
+    assert reasoning_knob_available("openai")
+    assert reasoning_knob_available("deepseek")
+    assert not reasoning_knob_available("generic")
+    assert not reasoning_knob_available("some-unlisted-provider")
+
+    # Unset is NOT off; only the neutral off token is.
+    assert not reasoning_disabled(None)
+    assert reasoning_disabled("none")
+    assert reasoning_disabled(" NONE ")
+    assert not reasoning_disabled("low")
+    assert not reasoning_disabled("high")
+    # An int budget is a budget, never a disable.
+    assert not reasoning_disabled(0)
+    assert not reasoning_disabled(2000)
+
+    # The off token reaches the wire as each provider's most-off setting.
+    assert reasoning_body("ollama", "none") == {"reasoning_effort": "none"}
+    assert reasoning_body("openai", "none") == {"reasoning_effort": "minimal"}
+    assert reasoning_body("generic", "none") == {}

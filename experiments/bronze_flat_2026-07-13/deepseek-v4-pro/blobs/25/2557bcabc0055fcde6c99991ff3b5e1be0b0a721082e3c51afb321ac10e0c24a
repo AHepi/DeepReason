@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry tactics, which rendered the chariot-based military aristocracies of the palace states obsolete.\", \"mechanism\": \"Military-technological obsolescence: new infantry formations (e.g., swarming skirmishers with javelins and long swords) neutralized chariot charges, destroying the political legitimacy and coercive power of the warrior elites who ran the palaces.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records from the reign of Ramesses III describe massed chariot engagements as the decisive arm in repelling the Sea Peoples' land attack.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains why chariot-kingdoms fell while Egypt survived (Egypt adapted infantry tactics while retaining chariots). The forbidden case would directly contradict the mechanism by showing chariots remained battle-winning.\"}",
+      "typicality": 0.3,
+      "neighbours": ["A9", "A10", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"A severe multi-year drought triggered famine, which in turn caused mass migration, elite expropriation, and the violent destruction of the interdependent palace economies.\", \"mechanism\": \"Climate-induced agricultural collapse: reduced precipitation across the Eastern Mediterranean led to crop failures, eroding the tax base of palaces, sparking internal revolts and external raids by desperate populations.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatological proxies (e.g., pollen cores, speleothems) from the Nile Delta and Levant show stable or increased precipitation during 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to the Nile's predictable flood, which buffered against rainfall-dependent famine. The forbidden observation would falsify the drought mechanism.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A1", "A2", "A3"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a cascading failure of the diplomatic and trade network that sustained the palatial economies, triggered by the loss of a single critical node.\", \"mechanism\": \"Network cascade: the destruction or economic isolation of one major palatial center (likely in the Hittite Empire) severed the flow of prestige goods and raw materials (tin, copper), causing a chain reaction of elite delegitimization and economic contraction across the interconnected system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that trade in tin and copper continued uninterrupted at multiple Levantine and Cypriot ports throughout the collapse period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its grain-based wealth and control of Nubian gold made it less dependent on the Anatolian-Levantine trade network. The forbidden case would break the causal chain of trade disruption.\"}",
+      "typicality": 0.6,
+      "neighbours": ["A6", "A4", "A5"]
+    }
+  ]
+}

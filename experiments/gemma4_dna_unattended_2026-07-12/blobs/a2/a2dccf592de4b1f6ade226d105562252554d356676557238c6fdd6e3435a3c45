@@ -1,0 +1,1 @@
+{"commitment":"component-wf@ff1d33db5f57","component":"c2","eval":"program:component_wf","verdict":"fail","violations":["missing declared mount id #parallax-bg-root"]}

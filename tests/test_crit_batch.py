@@ -1,9 +1,7 @@
 """Batch criticism (docs/TOKEN_ECONOMY.md angle 3): one argumentative-critic
-call over K targets. The call is shared; the epistemology is not — every
-attacking case registers a per-target argumentative warrant with its own nu,
-cases naming unlisted targets are dropped, and the shared call is logged
-exactly once (on the first registration, or on a Measure when nothing
-registers)."""
+call over K targets. The call is shared; each attacking case remains separately
+observable, cases naming unlisted targets are dropped, and the shared call is
+logged exactly once."""
 
 import json
 
@@ -17,7 +15,6 @@ from deepreason.ontology import (
     ProblemProvenance,
     Rule,
     Status,
-    WarrantType,
 )
 from deepreason.rules.crit import crit_argumentative_batch
 from deepreason.scheduler.scheduler import Scheduler
@@ -41,7 +38,7 @@ def _two_targets(harness):
     return a, b
 
 
-def test_batch_registers_per_target_warrants(harness):
+def test_batch_registers_per_target_observations_without_warrants(harness):
     a, b = _two_targets(harness)
     adapter = _adapter(
         harness,
@@ -52,19 +49,56 @@ def test_batch_registers_per_target_warrants(harness):
             )
         ],
     )
-    critics = crit_argumentative_batch(harness, [a.id, b.id], adapter, Config())
+    critics = crit_argumentative_batch(
+        harness, [a.id, b.id], adapter, Config()
+    )
     assert len(critics) == 2
-    warrants = [w for c in critics for w in harness.warrants.values() if w.target in (a.id, b.id)]
-    assert {w.target for w in warrants} == {a.id, b.id}
-    assert all(w.type == WarrantType.ARGUMENTATIVE for w in warrants)
-    # Each warrant hangs on its OWN attackable validity node.
-    assert len({w.validity_node for w in warrants}) == 2
-    # Unanswered attacks stand: both targets fall, independently.
-    assert harness.state.status[a.id] == Status.REFUTED
-    assert harness.state.status[b.id] == Status.REFUTED
+    assert not harness.warrants
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED
+    scrutiny = [event for event in harness.log.read() if event.inputs[:1] == ["scrutiny"]]
+    assert {event.inputs[1] for event in scrutiny} == {a.id, b.id}
     # The shared call is logged exactly once across the two registrations.
     llm_events = [e for e in harness.log.read() if e.llm is not None]
     assert len(llm_events) == 1
+
+
+def test_shared_case_text_is_observed_for_each_target(harness):
+    """Critic content is an artifact; carriage is a separate relation.
+
+    A genuinely shared fault may be stated byte-for-byte identically for two
+    targets. Content-addressing should dedupe the prose without deduping either
+    scrutiny record associated with that prose artifact.
+    """
+    a, b = _two_targets(harness)
+    shared = "both claims omit the same boundary condition"
+    adapter = _adapter(
+        harness,
+        [
+            _batch(
+                {"target": a.id, "attack": True, "case": shared},
+                {"target": b.id, "attack": True, "case": shared},
+            )
+        ],
+    )
+
+    critics = crit_argumentative_batch(
+        harness, [a.id, b.id], adapter, Config()
+    )
+
+    assert len({critic.id for critic in critics}) == 1  # prose dedupes
+    carrier_id = critics[0].id
+    assert not harness.carried_warrant_ids(carrier_id)
+    assert not harness.warrants
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED
+    scrutiny = [event for event in harness.log.read() if event.inputs[:1] == ["scrutiny"]]
+    assert {(event.inputs[1], event.inputs[2]) for event in scrutiny} == {
+        (a.id, carrier_id),
+        (b.id, carrier_id),
+    }
+    # The shared model call is still accounted exactly once.
+    assert sum(e.llm is not None for e in harness.log.read()) == 1
 
 
 def test_case_against_unlisted_target_is_dropped(harness):
@@ -93,9 +127,12 @@ def test_single_target_delegates_to_single_contract(harness):
     a = harness.create_artifact("the moon pulls the sea")
     # Response shaped for ArgumentativeCriticOutput — only valid via delegation.
     adapter = _adapter(harness, [json.dumps({"attack": True, "case": "no solar term"})])
-    critics = crit_argumentative_batch(harness, [a.id], adapter, Config())
+    critics = crit_argumentative_batch(
+        harness, [a.id], adapter, Config()
+    )
     assert len(critics) == 1
-    assert harness.state.status[a.id] == Status.REFUTED
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert not harness.warrants
 
 
 def _seeded_scheduler(tmp_path, critic_endpoint, **config_kwargs):
@@ -168,3 +205,164 @@ def test_arg_crit_cap_counts_targets_not_calls(tmp_path):
     # Only 2 of the 3 admitted targets were shown to the critic.
     last_prompt = [e for e in harness.log.read() if e.rule == Rule.MEASURE and e.llm][-1]
     assert len(last_prompt.inputs) - 1 == 2  # ["batch-crit", t1, t2]
+
+
+def test_standing_survivor_swept_into_leftover_slots(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic), CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4
+    )
+    # Accepted BEFORE any cycle: under legacy behavior it would never be
+    # criticized (only freshly admitted artifacts reached the critic).
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    # 3 fresh admits + 1 leftover slot -> the standing survivor was shown.
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert shown
+
+
+def test_standing_goodhart_trap_is_fuzz_refuted_in_the_sweep(tmp_path):
+    """End-to-end (mock LLM): a seeded candidate passes its frozen property
+    inputs (execution-backed Goodhart survivor) but is wrong in general. The
+    standing sweep runs the deterministic fuzz pass BEFORE spending an LLM
+    call, and the trap falls to a machine-found counterexample — refuted by
+    a demonstrative warrant, no critic model involved."""
+    from deepreason.ontology import Interface, Provenance, WarrantType
+    from deepreason.oracle import property_oracle_commitment
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic), CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4
+    )
+    checker = (
+        "def check(inp, out):\n"
+        "    xs = inp[0]\n"
+        "    return isinstance(out, list) and sorted(xs) == out\n"
+    )
+    gen = (
+        "def gen(k):\n"
+        "    n = 1 + k % 4\n"
+        "    xs = []\n"
+        "    j = k\n"
+        "    for i in range(n):\n"
+        "        xs.append((j * 7 + i * 3) % 10)\n"
+        "        j = j // 2 + 1\n"
+        "    return [xs]\n"
+    )
+    c = property_oracle_commitment(
+        "solve", [[[3, 1, 2]]], checker, generator=gen
+    )
+    harness.register_commitment(c)
+    trap = harness.create_artifact(
+        "def solve(xs):\n"
+        "    if len(xs) > 2:\n"
+        "        return sorted(xs)\n"
+        "    return xs\n",
+        codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[trap.id] == Status.ACCEPTED  # frozen input passes
+    scheduler.step()
+    assert harness.state.status[trap.id] == Status.REFUTED
+    w = next(w for w in harness.warrants.values() if w.target == trap.id)
+    assert w.type == WarrantType.DEMONSTRATIVE  # machine experiment, not a judge
+
+
+def test_recrit_standing_off_preserves_legacy(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic),
+        CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4, RECRIT_STANDING=False,
+    )
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert not shown  # legacy: only freshly admitted artifacts are criticized
+
+
+def test_critic_pack_states_the_simulation_option_and_its_contract():
+    """Regression (coin canonicity run-c5f901f38208e862f4ce2fe60a26e551): the
+    run's prompts demanded a typed simulation in 12 of 26 calls that carried
+    no channel, and the critic pack never mentioned simulation at all — so a
+    critic could convict a candidate for not simulating while never being
+    told the channel existed or what a program must look like.
+
+    The contract text is asserted to be the SAME objects the conjecturer's
+    schema carries, not a second wording that could drift from the enforced
+    rule.
+    """
+
+    from deepreason.llm.packs import render_batch_crit_pack
+    from deepreason.llm.wire import (
+        SIMULATION_MODEL_SOURCE_CONTRACT,
+        SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
+    )
+    from deepreason.ontology.artifact import Artifact, Interface, Provenance
+    from deepreason.ontology.state import EpistemicState
+
+    state = EpistemicState()
+    content_ref = "inline:the bound c_1+c_2 suffices"
+    target = Artifact(
+        id=Artifact.compute_id(content_ref, "utf8", Interface()),
+        content_ref=content_ref,
+        codec="utf8",
+        interface=Interface(),
+        warrants=[],
+        provenance=Provenance(role="conjecturer"),
+    )
+    state.artifacts[target.id] = target
+    common = {
+        "target_ids": [target.id],
+        "state": state,
+        "commitments": {},
+        "blobs": None,
+        "token_budget": 4000,
+    }
+
+    disabled = render_batch_crit_pack(**common)
+    enabled = render_batch_crit_pack(**common, simulation_enabled=True)
+    filed = render_batch_crit_pack(
+        **common,
+        simulation_enabled=True,
+        simulation_proposals=(
+            ("sim_bound_sweep", "sandboxed_python_v1", "denied", "invalid_model_program"),
+        ),
+    )
+
+    # A run that cannot propose a simulation is told nothing about it, so no
+    # pack-derived baseline moves for runs the channel does not reach.
+    assert "simulate" not in disabled
+    assert "SIMULATION" not in disabled
+
+    # The option, the form of the contract, and the enforced consequence.
+    assert "def simulate(inputs, rng)" in enabled
+    assert SIMULATION_MODEL_SOURCE_CONTRACT in enabled
+    assert SIMULATION_REQUESTED_OBSERVABLES_CONTRACT in enabled
+    assert "declared observable missing" in enabled
+    # The critic must not be invited to file one: this contract has no channel.
+    assert "cannot file a simulation yourself" in enabled
+
+    # What was actually filed is shown with its typed lifecycle, so a critic
+    # can attack the program rather than only its absence.
+    assert "SIMULATIONS ALREADY FILED ON THIS PROBLEM: none." in enabled
+    assert "sim_bound_sweep" in filed
+    assert "sandboxed_python_v1" in filed
+    assert "denied" in filed
+    assert "invalid_model_program" in filed

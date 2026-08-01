@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism depends on the factual premise that Sea Peoples disrupted Cypriot copper and tin trade routes. The forbidden case 'Cyprus copper production uninterrupted throughout 1200-1150 BC with no trade route disruption evidence' directly contradicts this premise. If copper production and trade continued without disruption during the very period the mechanism requires disruption, the causal chain (disrupted supply → recursive military crisis → collapse) has no initiating event. The target lists this case under its own 'forbidden' array, acknowledging it as a valid test under the std-hist rubric, yet provides no account of how the mechanism could operate if the factual condition fails. A mechanism that cannot survive its own forbidden counterexample fails the standard's requirement to state a specific causal process rather than an inevitability narrative.",
+  "counterexample": [
+    "Cyprus copper production uninterrupted throughout 1200-1150 BC with no trade route disruption evidence"
+  ]
+}

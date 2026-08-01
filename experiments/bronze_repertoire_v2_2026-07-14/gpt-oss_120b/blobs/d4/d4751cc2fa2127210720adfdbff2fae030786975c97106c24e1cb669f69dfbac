@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target proposes a 'systematic naval blockade' as the causal mechanism, but the forbidden case is misaligned with the standard's requirement for a concrete, potentially observable counterexample. The specified forbidden case—'If Egyptian and Hittite annals from the period record no reference to any large‑scale maritime embargo'—is not a realistic, specific observation that could falsify the claim. A blockade is an action by the blockading coalition; the absence of mention in the annals of the blockaded parties (Egypt and Hatti) is entirely consistent with the claim, as those states would be the victims, not the perpetrators, and their records might not document the internal decisions of the hostile 'emergent coastal alliances.' The standard requires a forbidden case that is a concrete observation which, if made, would genuinely contradict the mechanism. A valid forbidden case would need to specify, for example, a datable pattern of uninterrupted, high-volume trade in strategic resources (like Cypriot copper or Levantine timber) into the Mycenaean and Hittite heartlands throughout the proposed blockade period, as evidenced by a continuous archaeological record of such imports.",
+  "counterexample": [
+    "A continuous, unbroken stratigraphic sequence of imported Cypriot copper ingots and Levantine cedar in the palace workshops of Pylos and Hattusa throughout the Late Helladic IIIC period, directly contradicting the claim of a resource-inflow choke."
+  ]
+}

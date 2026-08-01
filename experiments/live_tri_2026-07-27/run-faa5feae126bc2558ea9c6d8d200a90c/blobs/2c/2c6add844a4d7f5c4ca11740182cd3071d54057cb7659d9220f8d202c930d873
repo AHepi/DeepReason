@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@96d34b9524aa9534da84df2c: program:reasoning_observation_pending
+- reason-counter@05df0332a61d7d25f9bad377: program:reasoning_observation_pending
+- reason-counter@ab1acf2673c5e5c25b06d6c9: program:reasoning_observation_pending
+- reason-counter@0fc9d5f0f483b1dfe5127a16: program:reasoning_observation_pending
+- reason-counter@e18306afccde19a8dd308f7c: program:reasoning_observation_pending
+- reason-counter@3998d8a7f5f2c8c31b4cbd2d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest protocol is a consensus lease that treats workspace allocation as a distributed lock released only by publishing a completed evidence hash to a BFT ledger, and requires a signed absence certificate for reclamation after crash.","counterconditions":[{"case":"A view change during crash may cause the evidence hash to be accepted by a minority that is later excluded from the supermajority","eval":"observation"},{"case":"Premature lease epoch reuse may collide with in-flight evidence publications","eval":"observation"},{"case":"A temporarily reduced quorum may issue an absence certificate despite hidden evidence","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Workspace allocation writes a lease record (workspace_id, problem_digest, epoch) to a BFT ledger. The holder must periodically renew. Completion appends the evidence hash and atomically releases the lease. If the process crashes without terminal record, the lease remains active. Reclamation requires a special absence certificate signed by a supermajority of consensus participants affirming they have not accepted an evidence hash for this lease epoch. The protocol durably records the lease entry, all renewal attempts, and the signed absence certificate.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@96d34b9524aa9534da84df2c, reason-counter@05df0332a61d7d25f9bad377, reason-counter@ab1acf2673c5e5c25b06d6c9
+
+TARGET SRC_002
+{"analogy":null,"claim":"If the workspace is strictly deterministic with respect to its inputs, the safety guarantee collapses to idempotency: the protocol must durably record the full entropy tape and external oracle log, making any displaced evidence recoverable by deterministic replay rather than preventing displacement.","counterconditions":[{"case":"Entropy sources such as thermal noise may be physically unrecordable","eval":"observation"},{"case":"Replay cost may exceed practical time bounds, making evidence logically recoverable but operationally lost","eval":"observation"},{"case":"External oracle state may drift since the original query, causing replay to produce different evidence","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The workspace is a pure function of the problem input plus consumed entropy. The protocol durably records the problem input hash, a sequential log of all external random seeds and oracle responses, and intermediate Merkle checkpoints. Crash without terminal record triggers automatic deterministic replay from the last checkpoint. The scratch workspace can be safely reclaimed because evidence exists either in the durable intent log or is reconstructible. The protocol never silently displaces evidence because evidence is not located in the ephemeral workspace.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0fc9d5f0f483b1dfe5127a16, reason-counter@e18306afccde19a8dd308f7c, reason-counter@3998d8a7f5f2c8c31b4cbd2d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-198b501b3048f670ba991818c4f4c854) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A reasoning system halts a run when its token budget is exhausted. State the precise conditions under which such a halted run can later be resumed without corrupting the append-only identity of its recorded events, and the cases in which resumption must stay refused.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@bb51442e34c1da6db4a1aa7e: program:reasoning_observation_pending
+- reason-counter@7e0917775845a0b4d2e09471: program:reasoning_observation_pending
+- reason-counter@f0a6d87db1f8ef8382fc8054: program:reasoning_observation_pending
+- reason-counter@0b3780e08a9e164fd5678196: program:reasoning_observation_pending
+- reason-counter@1245d88f06efdd2a2bb2f2d5: program:reasoning_observation_pending
+- reason-counter@e8d68fa4a739d77587cc22b9: program:reasoning_observation_pending
+- reason-counter@8e8380772b3671458f49e334: program:reasoning_observation_pending
+- reason-counter@f9be6b9ce14fc735f24ceadb: program:reasoning_observation_pending
+- reason-counter@86e55a624660400b44119a2a: program:reasoning_observation_pending
+- reason-counter@bb7c965ab38e96957260847b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is safe only if the system implements an atomic checkpoint that pairs the full mutable state snapshot with the last committed event identity, and the halt occurred at such a checkpoint boundary. Without this, even a 'clean' event-level halt may hide state divergence, so resumption must be refused.","counterconditions":[{"case":"The system has no checkpointing mechanism, making every halt a potential state-divergence risk.","eval":"observation"},{"case":"The checkpoint was written but not fsynced before exhaustion.","eval":"observation"},{"case":"The checkpoint and log tail were written non-atomically, so one may persist without the other.","eval":"observation"},{"case":"The system's state is fully derivable from the event log alone (event sourcing), which would make this condition unnecessary.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The event log records discrete events, but the system's working state may include intermediate computation not yet materialized as an event. An atomic checkpoint guarantees state and event-log-tail are consistent. If the halt occurred between checkpoints, reconstructing state from the log tail may produce a different state than the runtime actually held, causing resumed events to diverge, duplicate, or skip\u2014corrupting append-only identity through causal gaps or collisions.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bb51442e34c1da6db4a1aa7e, reason-counter@7e0917775845a0b4d2e09471, reason-counter@f0a6d87db1f8ef8382fc8054, reason-counter@0b3780e08a9e164fd5678196
+
+TARGET SRC_002
+{"analogy":null,"claim":"A halted run can be safely resumed iff (1) the halt was clean\u2014the final event was fully committed and persisted before exhaustion, leaving no partial write; (2) the resuming process can reconstitute the exact internal state at the tail of the committed event log; (3) the event log was not mutated during the pause; (4) a fresh token budget is allocated. Resumption must be refused when the halt left a partial or uncommitted event, when the log or state was externally tampered with, or when no new budget is available.","counterconditions":[{"case":"A partial event was written to durable storage before exhaustion (torn write).","eval":"observation"},{"case":"The event log was externally mutated, truncated, or reordered during the pause.","eval":"observation"},{"case":"The internal state at halt cannot be fully reconstructed from the committed log tail (hidden mutable state not captured by events).","eval":"observation"},{"case":"The resuming process uses a different model version or configuration that changes deterministic behavior, breaking causal continuity.","eval":"observation"},{"case":"No new token budget is provisioned, causing immediate re-halt and potential incomplete writes.","eval":"observation"},{"case":"Concurrent processes appended to the same log during the pause, creating identity collisions or gaps.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Append-only identity is preserved by monotonic sequence numbers or content hashes that make every committed event immutable. A clean halt guarantees the log tail is a well-formed boundary. On resumption, the process reads the tail, reconstructs state, and appends new events with strictly increasing identities. No prior identity is overwritten, reordered, or duplicated, so causal continuity is maintained.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1245d88f06efdd2a2bb2f2d5, reason-counter@e8d68fa4a739d77587cc22b9, reason-counter@8e8380772b3671458f49e334, reason-counter@f9be6b9ce14fc735f24ceadb, reason-counter@86e55a624660400b44119a2a, reason-counter@bb7c965ab38e96957260847b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

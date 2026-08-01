@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "they depend on critic variants that cannot be produced or measured by rerunning the repository's validation harness"
+}

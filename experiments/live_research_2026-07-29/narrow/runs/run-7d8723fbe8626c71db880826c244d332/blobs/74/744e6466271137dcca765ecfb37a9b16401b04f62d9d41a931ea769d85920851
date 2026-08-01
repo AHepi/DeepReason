@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-27633c5a9c5c7a55f009bf27b0b8c744) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits only docs.python.org. Proposals to any other host will be recorded and denied by the harness. Fetched pages become citable evidence blocks.
+
+PROBLEM CONTEXT (conn:14e084ed5ca7) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 14e084ed5ca7 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@5c3a3e92c1d7: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ecf51040291e8f23f0a8e7a0: program:reasoning_observation_pending
+- reason-counter@a4219a4e7198a80a801f4c6e: program:reasoning_observation_pending
+- reason-counter@7f36c807e48c543bab8a4704: program:reasoning_observation_pending
+- reason-counter@8812b784006b34b80bf5b7e1: program:reasoning_observation_pending
+- reason-counter@87a7bef184534f7b2f087533: program:reasoning_observation_pending
+- reason-counter@c1db68f976a454d0cfcd7ee1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+14e084ed5ca7 abstracts the layer-boundary distinction of 2edd20cc by unifying writer safety and reader idempotency into a single protocol-level invariant of delivery distinguishability; this is refuted if the replay layer cannot enforce deduplication without explicitly separating producer safety from consumer idempotency.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c3a3e92c1d7, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":null,"claim":"An append-only event log actually requires idempotent writers, not safe ones, if one defines the writer's operation at the correct abstraction level: the operation is 'ensure this logical event is durably recorded,' which IS idempotent because ensuring recording twice leaves the same logical state as ensuring it once. The published distinction between idempotent and safe is real but the log needs idempotency, achieved through deduplication keys that make 'ensure recorded' an idempotent operation despite non-idempotent underlying appends.","counterconditions":[{"case":"If the log has no deduplication mechanism, 'ensure recorded' is not idempotent and this claim reduces to requiring safety instead.","eval":"observation"},{"case":"If deterministic replay requires strict ordering and duplicate entries disrupt ordering, then even semantic idempotency is insufficient and the system needs stronger guarantees.","eval":"observation"},{"case":"If published definitions restrict idempotency to primitive operations rather than composite semantic operations, this claim's use of 'idempotent' is non-standard.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"At the byte level, append is non-idempotent. But the writer's contractual obligation is not 'append these bytes' but 'ensure this event is durably represented.' This higher-level operation is idempotent: ensuring representation of E twice yields the same logical state as ensuring it once, provided the log supports deduplication. The 'safe' property (retries don't corrupt) is necessary but insufficient\u2014it
+commitments: reasoning-envelope-wf, reason-counter@ecf51040291e8f23f0a8e7a0, reason-counter@a4219a4e7198a80a801f4c6e, reason-counter@7f36c807e48c543bab8a4704
+
+TARGET SRC_003
+{"analogy":null,"claim":"An append-only event log requires neither idempotent nor merely safe writers; it requires what is best called 'effectively idempotent' writers\u2014writers that attach deterministic identity to each event so that the composite operation of 'ensure-this-event-is-in-the-log' is idempotent even though the primitive 'append-bytes' is not. The published distinction between idempotent and safe maps to the difference between the primitive and the composite operation, and the log needs the composite to be idempotent.","counterconditions":[{"case":"If the log is purely byte-level with no semantic layer (no event keys), then 'effective idempotency' cannot be achieved and the system relies solely on safety.","eval":"observation"},{"case":"If the published literature defines idempotency strictly at the primitive operation level (not composite), then 'effective idempotency' is not idempotency at all.","eval":"observation"},{"case":"If the replay engine does not enforce key uniqueness, the composite operation is not idempotent and the system fails.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Consider the operation not as 'append bytes B' but as 'append event E with key K.' The first is non-idempotent. The second, viewed through the lens of the log's semantic state (which events are represented), is idempotent: appending E with key K twice leaves the same set of represented events {E}. The writer must be safe at the byte level (retries don't corrupt the log) and effectively idempotent at the semantic level (retries don't add new information). The published
+commitments: reasoning-envelope-wf, reason-counter@8812b784006b34b80bf5b7e1, reason-counter@87a7bef184534f7b2f087533, reason-counter@c1db68f976a454d0cfcd7ee1
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

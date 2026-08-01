@@ -1,0 +1,36 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@67b75e6d8f6c003e170e9af4: program:reasoning_observation_pending
+- reason-counter@6415120530540ea09c8e9380: program:reasoning_observation_pending
+- reason-counter@415e4d116464679c0933f6ff: program:reasoning_observation_pending
+- reason-counter@e3153e6ab8b2fd7f7b13eeda: program:reasoning_observation_pending
+- reason-counter@b7db70d597b23870720c43df: program:reasoning_observation_pending
+- reason-counter@59c1cae54137e16183c569bf: program:reasoning_observation_pending
+- reason-counter@04e7005002f2051bc3b82e08: program:reasoning_observation_pending
+- reason-counter@b7b40db4f27376204c0bf569: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The workspace must be treated as a causal broadcast medium emitting content-hash pings into an external Merkle DAG, making reclamation a data-availability query rather than a liveness check, since a crashed process cannot self-witness its own death.","counterconditions":[{"case":"All witness agents fail simultaneously with the process","eval":"observation"},{"case":"The DAG suffers an eclipse attack or partition that hides evidence","eval":"observation"},{"case":"Byzantine witnesses equivocate on the Merkle root","eval":"observation"},{"case":"Network latency makes DAG witness visibility slower than reclamation timeout, reintroducing the race condition","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Drawing from the broadcast-medium inversion: every write to the workspace emits a content-hash 'ping' into a durable Merkle DAG before the write is acknowledged. Reclamation asks not 'is the process alive?' but 'has any node ever witnessed the final evidence state for this problem ID?' The durable record must contain: (1) the Merkle root of witnessed hashes, (2) the problem-workspace binding as a DAG node, and (3) a witness quorum attestation. This directly addresses the crash-without-terminal-record by removing the process from the critical path of safety; the process merely proposes evidence, and the DAG confirms it.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@67b75e6d8f6c003e170e9af4, reason-counter@6415120530540ea09c8e9380, reason-counter@415e4d116464679c0933f6ff, reason-counter@e3153e6ab8b2fd7f7b13eeda
+
+TARGET SRC_002
+{"analogy":null,"claim":"No purely local reclamation protocol can satisfy the requirement to never silently displace completed evidence when a crash leaves no terminal record; therefore the only safe protocol is not a local lease/log rivalry but a distributed consensus over external witnesses, and the question of adjudicating single-node protocols is founded on a false premise.","counterconditions":[{"case":"The problem permits probabilistic rather than logical 'never', allowing local checksums","eval":"observation"},{"case":"The workspace is implicitly replicated by the problem's determinism, providing implicit witnesses","eval":"observation"},{"case":"Post-hoc idempotent content addressing can detect silent displacement after the fact, relaxing the 'never' constraint","eval":"observation"},{"case":"The 'no terminal record' clause applies only to terminal output, not to intermediate durable writes","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A single deterministic workspace without external observation is observationally equivalent to an unobserved Schr\u00f6dinger process. Without a terminal record, local protocols cannot distinguish between 'process crashed before sealing' and 'process sealed but record was lost.' This reduces to the asynchronous consensus impossibility for crash-stop failures in a single-node model. The protocol must durably record: a consensus certificate from at least 2f+1 external witnesses attesting that the seal preceded reclamation. Adjudication between lease and log is moot because both are special cases of the same unsafe local-only assumption.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b7db70d597b23870720c43df, reason-counter@59c1cae54137e16183c569bf, reason-counter@04e7005002f2051bc3b82e08, reason-counter@b7b40db4f27376204c0bf569
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

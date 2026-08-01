@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case directly contradicts the claimed mechanism. The mechanism asserts 'prolonged drought' and 'rapid regional aridification' as the causal driver of collapse. The forbidden case states that high-resolution speleothem and lake-core records—the most direct terrestrial proxies for precipitation—show no significant drop in precipitation during the critical period (1200–1150 BC). If the mechanism were valid, a significant precipitation drop must be observable in these records. The target therefore fails the standard's requirement (2) by specifying a forbidden case that, if true, falsifies the mechanism's necessary empirical consequence, yet the target provides no account of how the mechanism could operate without leaving this expected signal.",
+  "counterexample": null
+}

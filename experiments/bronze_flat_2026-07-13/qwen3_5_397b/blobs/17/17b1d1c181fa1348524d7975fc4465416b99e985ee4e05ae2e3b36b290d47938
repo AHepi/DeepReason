@@ -1,0 +1,53 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+A9
+A10
+A11
+A12
+A13
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM succ:56ee8fc14849
+supersede refuted candidate 56ee8fc14849 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.85): anchor in cases
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: {"school_policy": {"reseed_of": "A2", "school": "school-0", "stance": "empiric"}}
+- A3: nu: argumentative case 62e0855a456ad40a against A4 is sound
+- A5: The mechanism posits that 'rigid, centralized bureaucracies could not adapt,' yet the scope explicitly excludes Mesopotamia. If rigidity were the primary cause 
+- A6: nu: argumentative case 8dd8abcc57e284e8 against A7 is sound
+- A8: The claim attributes the collapse to new infantry tactics overwhelming chariot aristocracies, but the scope includes 'Sea Peoples' as a covered entity while exc
+- A9: nu: argumentative case e8dd1fbee4f1acd6 against A10 is sound
+- A11: The mechanism describes a 'migratory domino effect' moving sequentially from west to east or north to south, yet the scope includes Cyprus while excluding Assyr
+- A12: nu: argumentative case bc9edb2e8ef6c3f1 against A13 is sound
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

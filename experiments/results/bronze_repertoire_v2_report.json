@@ -1,0 +1,152 @@
+{
+ "arms": {
+  "deepseek-v4-pro": {
+   "admitted_conjectures": 15,
+   "admitted_distinct_mechanism_count": 2,
+   "admitted_mechanism_classes": {
+    "climate-drought": 5,
+    "earthquake": 2,
+    "military-technology": 4,
+    "pandemic-disease": 3,
+    "trade-resource-disruption": 1
+   },
+   "emitted_distinct_clusters": 2,
+   "emitted_mechanism_classes": {
+    "climate-drought": 5,
+    "earthquake": 2,
+    "military-technology": 4,
+    "pandemic-disease": 3,
+    "trade-resource-disruption": 1
+   },
+   "emitted_near_dup_rate": 0.867,
+   "emitted_unique": 15,
+   "p1_baseline_3x": 18,
+   "statuses": {
+    "accepted": 15
+   },
+   "tokens": 296636,
+   "verify_root_violations": []
+  },
+  "gpt-oss:120b": {
+   "admitted_conjectures": 24,
+   "admitted_distinct_mechanism_count": 10,
+   "admitted_mechanism_classes": {
+    "climate-drought": 7,
+    "elite-legitimacy": 1,
+    "migration-invasion": 5,
+    "military-technology": 2,
+    "other": 1,
+    "systems-network-collapse": 1,
+    "trade-resource-disruption": 7
+   },
+   "emitted_distinct_clusters": 14,
+   "emitted_mechanism_classes": {
+    "climate-drought": 10,
+    "elite-legitimacy": 1,
+    "iron-technology": 2,
+    "migration-invasion": 8,
+    "military-technology": 2,
+    "other": 1,
+    "systems-network-collapse": 1,
+    "trade-resource-disruption": 8
+   },
+   "emitted_near_dup_rate": 0.576,
+   "emitted_unique": 33,
+   "p1_baseline_3x": 13.0,
+   "statuses": {
+    "accepted": 23,
+    "refuted": 1
+   },
+   "tokens": 296620,
+   "verify_root_violations": []
+  },
+  "kimi-k2.6": {
+   "admitted_conjectures": 12,
+   "admitted_distinct_mechanism_count": 9,
+   "admitted_mechanism_classes": {
+    "climate-drought": 3,
+    "earthquake": 1,
+    "elite-legitimacy": 1,
+    "iron-technology": 1,
+    "migration-invasion": 2,
+    "military-technology": 2,
+    "trade-resource-disruption": 2
+   },
+   "emitted_distinct_clusters": 9,
+   "emitted_mechanism_classes": {
+    "climate-drought": 3,
+    "earthquake": 1,
+    "elite-legitimacy": 1,
+    "iron-technology": 1,
+    "migration-invasion": 2,
+    "military-technology": 2,
+    "trade-resource-disruption": 2
+   },
+   "emitted_near_dup_rate": 0.25,
+   "emitted_unique": 12,
+   "p1_baseline_3x": 12,
+   "statuses": {
+    "accepted": 10,
+    "refuted": 2
+   },
+   "tokens": 295088,
+   "verify_root_violations": []
+  },
+  "qwen3.5:397b": {
+   "admitted_conjectures": 24,
+   "admitted_distinct_mechanism_count": 6,
+   "admitted_mechanism_classes": {
+    "climate-drought": 7,
+    "earthquake": 3,
+    "internal-revolt": 2,
+    "iron-technology": 3,
+    "migration-invasion": 1,
+    "military-technology": 4,
+    "systems-network-collapse": 1,
+    "trade-resource-disruption": 3
+   },
+   "emitted_distinct_clusters": 6,
+   "emitted_mechanism_classes": {
+    "climate-drought": 7,
+    "earthquake": 3,
+    "internal-revolt": 2,
+    "iron-technology": 3,
+    "migration-invasion": 1,
+    "military-technology": 4,
+    "systems-network-collapse": 1,
+    "trade-resource-disruption": 3
+   },
+   "emitted_near_dup_rate": 0.75,
+   "emitted_unique": 24,
+   "p1_baseline_3x": 9,
+   "statuses": {
+    "accepted": 24
+   },
+   "tokens": 296964,
+   "verify_root_violations": []
+  }
+ },
+ "instruments_frozen_before_unblinding": true,
+ "mechanism_novelty": "not_measured (requires frozen literature baseline and blind coding protocol per prereg)",
+ "paraphrase_margin": 0.19,
+ "prereg": "experiments/bronze_repertoire_v2_prereg.yaml",
+ "schema": "deepreason-bronze-repertoire-v2",
+ "verdicts": {
+  "P1": "REFUTED",
+  "P1_per_arm": {
+   "deepseek-v4-pro": false,
+   "gpt-oss:120b": false,
+   "kimi-k2.6": false,
+   "qwen3.5:397b": false
+  },
+  "P2": "CONFIRMED",
+  "P3": "REFUTED",
+  "P3_falsifier_triggered": true,
+  "P3_rates": {
+   "deepseek-v4-pro": 0.867,
+   "gpt-oss:120b": 0.576,
+   "kimi-k2.6": 0.25,
+   "qwen3.5:397b": 0.75
+  }
+ }
+}

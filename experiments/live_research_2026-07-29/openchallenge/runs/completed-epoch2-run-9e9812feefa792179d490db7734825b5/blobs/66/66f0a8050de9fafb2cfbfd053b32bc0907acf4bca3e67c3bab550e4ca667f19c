@@ -1,0 +1,51 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "description": "One bounded reasoning-envelope candidate or honest abstention.", "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidate": {"anyOf": [{"$ref": "#/$defs/ReasoningCandidateProposal"}, {"type": "null"}], "default": null}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 4 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-b9510316be66b626d54bf59c1e3483cc
+The attached dossier defines the open problem of the minimal 13-input sorting network: S(13) is unknown, the best known network has 45 comparators, Batcher's construction gives 48, and every candidate is exactly checkable in milliseconds by the 0-1 principle (8192 binary vectors). Work the problem. Conjecture concrete search or construction strategies as rival positions, and where rivals predict different measurable outcomes — a candidate network sorting or not, a pruning rule preserving optimality at small n, one strategy reaching smaller networks than another under a fixed budget — file a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) whose program actually runs the discriminating experiment; a simulation described in prose with an empty simulation_refs channel is an unverified claim and will be criticized as such. Where the dossier's bounds table or method claims need checking against published knowledge, file typed research proposals for specific https pages on the frozen en.wikipedia.org allowlist. Ground every claim about the problem state in the attached dossier blocks by citing their block ids. Genuine progress in order of ambition: a verified 13-input network of 44 or fewer comparators; a structurally novel verified 45; or a simulation-discriminated account of which structural hypothesis best explains why search stalls at 45.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[0280ceb1aefafeff] Any of the following would be genuine progress, in decreasing order of ambition:
+[08bc358f98f84584] Claims about the problem state — bounds, prior methods, verification rules — must cite the block ids of this dossier's admitted blocks, or of fetched research o
+[0e36d4be63d988c1] ## Evidence citation
+[1194dff78a2795cf] A sorting network is therefore a straight-line program — no branches, no loops — and its size is its comparator count. Minimizing size for a given n is a pure p
+[27ba492cb40c323a] ## The object
+[2c7a5cc0d7461dd5] ## Known structure worth attacking
+[444e781a3a39d046] Research proposals must name specific https URLs on the frozen allowlist. On-topic targets include the encyclopedia's pages on sorting networks, Batcher's odd-e
+[4f053d098dcef347] A simulation that cannot discriminate between rival predictions is weight, not evidence.
+[52636d57d1b5f176] # Capability contract for this run
+[6050cf69f391fa33] Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it — a few milliseconds of pure Python, no network access, deter
+[62c5a6b149f9ffed] ## Directed research (frozen allowlist: en.wikipedia.org)
+[680b4c459d28bf7a] S(n) denotes the minimum comparator count of any n-input sorting network. As compiled in this dossier:
+[817aa2704ec43646] - verifying a candidate 13-input network via the 0-1 principle (8192 vectors, milliseconds); - bounded comparative experiments between rival search or pruning s
+[843819388191d0e9] A candidate network is a list of (i, j) pairs with 0 <= i < j < 13. Any claim of the form "this 45-comparator sequence sorts" or "this pruning rule preserves at
+[8a7a7d8f89f48b3e] - S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39 The n = 9 and n = 10 cases were settled by exhaustive SAT-ba
+[8d14051fa3cadd91] This run grants three operator-opted capabilities. Each has a typed proposal channel, and work that only DESCRIBES using a capability in prose — without filing 
+[9086cd300f72e08a] A comparator network on n channels is a fixed sequence of comparators (i, j) with i < j. A comparator reads the values on channels i and j and swaps them if the
+[b01150a3ae43d8f6] The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n. Proof sketch: for any monotone fu
+[b279686d1d1683db] ## The verification protocol (exact, sandbox-sized)
+[b42a7cbb72244180] ## The open problem
+[bfc42b3064ed02fe] - Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class. -
+[

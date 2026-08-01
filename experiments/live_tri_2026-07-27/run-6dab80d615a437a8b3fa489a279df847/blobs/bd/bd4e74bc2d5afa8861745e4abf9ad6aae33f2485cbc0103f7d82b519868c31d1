@@ -1,0 +1,180 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A budget-exhausted run can be safely resumed if and only if three conditions hold jointly: (1) the halt was event-boundary-aligned—budget exhaustion was checked between event commits, never mid-write, so no partial event exists in the log; (2) the append-only identity chain (e.g., hash chain linking each event to its predecessor) is intact and verifiable up to the last committed event; (3) the full causal state needed for continuation is reconstructable from the committed event sequence alone. Resumption must be refused when any of these fails: a partial write exists (crash or mid-write budget exhaustion), the chain is broken or unverifiable, or state reconstruction is incomplete because an in-flight operation left uncommitted state.",
+      "mechanism": "The budget checker evaluates remaining tokens only at event-commit boundaries (after a full event is persisted and its identity hash linked). When the check fails, the system writes a terminal 'halt' event marking the resumption point and stops. On resumption, the system re-reads the log, verifies the hash chain from genesis to the halt event, reconstructs working state via replay, and continues appending from the verified tail. A partial write would manifest as a trailing event whose hash does not link to its predecessor or whose content is truncated—this is detectable on verification and triggers refusal.",
+      "counterconditions": [
+        "If the budget checker can trigger mid-write (e.g., streaming token generation stops partway through an event body before the commit), then budget exhaustion itself can create a partial write, and the clean-halt assumption fails even for budget-caused halts.",
+        "If the storage layer does not guarantee atomicity of append operations, a crash during persist could leave a partially written event even if the budget check was event-boundary-aligned.",
+        "If the system maintains state outside the event log (e.g., in-memory caches, external database cursors) that is not reconstructable from replay, condition (3) fails and resumption would silently diverge.",
+        "If the identity scheme allows the partial event to be syntactically valid but semantically incomplete (e.g., the hash covers only the event header, not the body), verification could pass on a corrupt entry."
+      ],
+      "typicality": 0.92,
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_007"],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Budget-exhaustion halts and crash halts must be treated differently: a budget halt is resumable if the budget check is performed atomically at event boundaries (making it a cooperative, controlled stop), whereas a crash halt (power loss, process kill, OOM) must always be refused immediate resumption and instead require an audit-then-truncate-or-restart path, because the crash may have corrupted the log tail in ways the identity chain alone cannot distinguish from a valid event.",
+      "mechanism": "Cooperative budget halts are deterministic: the system chose to stop at a known-safe point, wrote a halt marker, and flushed. Crash halts are non-deterministic: the OS or hardware may have written partial sectors, reordered writes, or left the log tail in an inconsistent state that happens to hash-validate by coincidence or because the hash was computed before the body was fully persisted. Therefore, for crash halts, the system must verify the full tail event against external checkpoints (e.g., fsync confirmations, checksums over entire event bodies, or a separate durable commit marker) before deciding whether truncation is safe or a full restart is required.",
+      "counterconditions": [
+        "If the budget check is not atomic with respect to event commit (e.g., the system streams output and checks budget token-by-token), a budget halt can itself produce a partial write, collapsing the distinction between budget and crash halts.",
+        "If the storage layer provides true atomic append semantics (e.g., a journaling filesystem with fsync, or a database with ACID transactions), then crash halts may also be clean by construction, and the distinction collapses in the other direction—crash halts become resumable too.",
+        "If there is no external durable commit marker separate from the event itself, the audit path for crash halts cannot reliably distinguish a valid last event from a corrupted one, making the distinction operationally vacuous."
+      ],
+      "typicality": 0.78,
+      "optional_refs": ["SRC_007", "SRC_008"],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "If the system reserves token budget per-event before beginning each event write (pre-write guard), then budget exhaustion by construction never interrupts an in-progress write—it merely prevents the next event from starting. Under this regime, every budget-exhaustion halt is clean by construction, and the resumability conditions reduce to log-integrity verification and state reconstructability alone. Refusal is then necessary only for log corruption from non-budget causes (storage failure, tampering) or when external side effects during committed events are non-idempotent.",
+      "mechanism": "Before writing event E_i, the system estimates the token cost of E_i and reserves that amount from the global budget. If insufficient budget remains, the system halts before touching the log. If sufficient, the reservation guarantees that E_i will complete regardless of budget. The only residual risk is that the estimate is wrong (event costs more tokens than reserved), which would reintroduce mid-write exhaustion. This can be mitigated by conservative overestimation or by a hard output-token cap per event enforced by the generation engine.",
+      "counterconditions": [
+        "If per-event token cost cannot be accurately estimated before generation (common in autoregressive LLM generation where output length is unknown a priori), the pre-write reservation may be insufficient, reintroducing mid-write exhaustion.",
+        "If the generation engine does not enforce a hard token cap matching the reservation, a long event can overrun the reserved budget, creating a partial write despite the pre-write guard.",
+        "If the per-event reservation is too conservative, it causes systematic budget underutilization, which is a practical problem but not a correctness one.",
+        "If external side effects (tool calls) occurred during committed events and are non-idempotent, resumption may replay or skip them incorrectly even with a perfectly clean log."
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SCR_001"]
+      },
+      "analogy": {
+        "source_memory_refs": ["SCR_001"],
+        "shared_structure": [
+          "Both pre-write budget reservation and database transaction isolation involve reserving resources before committing to an operation that must complete atomically.",
+          "In both cases, the resource check is moved from 'during the operation' to 'before the operation starts,' converting potential mid-operation failures into pre-operation refusals."
+        ],
+        "disanalogies": [
+          "Database transactions have known resource requirements (row counts, lock scope) determinable before execution; LLM event token costs are not known a priori for autoregressive generation.",
+          "Database transactions can be rolled back if they fail; a partially generated LLM event cannot be cleanly rolled back if it has already produced external side effects.",
+          "Database resource reservation is typically hard-guaranteed by the system; token budget reservation relies on a generation engine that may not enforce the cap."
+        ],
+        "transfer_claims": [
+          "The principle of pre-operation resource checking applies: if token cost could be bounded a priori (e.g., fixed-length output, or a hard cap enforced by the generator), then the per-event reservation would make all budget halts clean by construction, just as pre-declared transaction resource limits prevent mid-transaction aborts in databases."
+        ],
+        "overturn_conditions": [
+          "If the generation engine enforces a hard output-token cap per event (e.g., max_tokens parameter), then the per-event reservation is feasible and the analogy holds.",
+          "If no such cap can be enforced, the reservation is a soft estimate and the analogy breaks—mid-write exhaustion remains possible."
+        ]
+      }
+    },
+    {
+      "claim": "Resumption must always be refused when the run used non-deterministic external components (tool calls, API queries, random sampling with real-world entropy) whose side effects cannot be reconstructed from the event log alone, even if the halt was perfectly clean and the log chain is intact. In these cases, the committed events record that an action was taken, but the external world state it produced cannot be recovered by replay, so resuming from the log would either repeat the action (double-execution) or assume state that no longer holds.",
+      "mechanism": "Consider a run that called an external API to send an email at event E_5, then halted at E_8 due to budget exhaustion. The log faithfully records E_1..E_8 with intact identity. On resumption, the system replays E_1..E_8 to reconstruct state. But the email was already sent—the external world has moved on. If resumption tries to re-execute E_5, it sends a duplicate. If it skips E_5, it assumes the email's effect on the reasoning state without verifying the external world. Either way, the resumed run's behavior diverges from what a uninterrupted run would have produced. The event log preserves identity but not external-world causality.",
+      "counterconditions": [
+        "If all external side effects are idempotent (e.g., a read-only API call, or a write with a deterministic key that overwrites rather than appends), then re-execution is safe and resumption may proceed.",
+        "If the event log records not just the action but the full external response (input and output of every tool call), then the system can replay using recorded responses without re-invoking external services, making resumption safe even for non-idempotent actions.",
+        "If the system checkpoints external world state alongside event commits (e.g., snapshots of all external service states), then reconstruction is possible—but this is typically infeasible.",
+        "If the reasoning system is purely internal (no external calls, deterministic generation), this objection vanishes entirely and resumption depends only on log integrity."
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SCR_002"]
+      }
+    },
+    {
+      "claim": "Resumability conditions depend on the log's identity structure: with a linear hash chain, a partial write at the tail can only be detected by recomputing the entire chain (O(n)), which makes audit expensive and incentivizes blanket refusal for any uncertain halt. With a Merkle mountain range (MMR) or similar tree-structured identity, tail integrity can be verified in O(log n), and a corrupt tail event can be truncated safely by removing only the affected peak—making crash-halt resumption practical rather than prohibitively expensive, and thus changing the refusal policy from 'always refuse crash halts' to 'refuse only if audit reveals untruncatable corruption.'",
+      "mechanism": "In a linear hash chain H_i = hash(H_{i-1} || E_i), any tail corruption requires walking the full chain to confirm where integrity breaks. With an MMR, each event contributes to log-height peaks; the root can be recomputed from peaks in O(log n), and a corrupted peak can be dropped, truncating the log to the previous valid state at that peak. This means that even for crash halts, the system can cheaply identify and excise the partial write, then resume from the verified prefix—provided the storage layer can identify which physical writes belong to which MMR peak.",
+      "counterconditions": [
+        "MMR truncation removes not just the corrupt event but all events in the same peak, potentially discarding valid committed events alongside the partial one—this is data loss, not clean resumption.",
+        "If the partial write corrupts a lower peak (not just the tail), the MMR structure cannot isolate it without recomputing from the base, collapsing back to O(n).",
+        "If the storage layer does not support atomic writes at MMR-peak granularity, the physical write boundaries may not align with MMR structure boundaries, making peak-level truncation infeasible.",
+        "The cost of verification (O(log n) vs O(n)) does not change the logical resumability conditions—only the practical cost of the audit step. A system that refuses crash halts for correctness reasons (not cost) would still refuse them with an MMR."
+      ],
+      "typicality": 0.25,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SCR_003"]
+      },
+      "analogy": {
+        "source_memory_refs": ["SCR_003"],
+        "shared_structure": [
+          "Both MMR-based logs and git's object store use tree-structured hashes that allow localized integrity verification without recomputing the entire history.",
+          "Both allow truncation of a corrupt tail by dropping the affected subtree rather than rewriting the entire chain."
+        ],
+        "disanalogies": [
+          "Git objects are content-addressed and immutable; event log entries are append-only but not independently addressable in the same way—they form a sequence, not a DAG.",
+          "Git truncation means losing a commit; event log truncation means losing causal state, which may not be reconstructable from the remaining prefix if the lost event carried irreducible state.",
+          "Git's tree structure is designed for branching; an event log is linear, so the MMR adds complexity without the branching benefit."
+        ],
+        "transfer_claims": [
+          "The principle of localized verification transfers: if the event log uses a tree-structured identity, the cost of crash-halt audit drops from O(n) to O(log n), which may shift the practical policy from 'always refuse crash halts' to 'audit then decide,' even though the logical resumability conditions are unchanged."
+        ],
+        "overturn_conditions": [
+          "If the reasoning system's event log is inherently linear (each event references exactly one predecessor) and cannot be restructured as a tree without losing the append-only semantics, the MMR approach is inapplicable.",
+          "If the cost of audit is not the binding constraint on refusal policy (i.e., the system refuses for correctness reasons regardless of audit cost), then cheaper verification does not change the refusal policy."
+        ]
+      }
+    },
+    {
+      "claim": "If the underlying storage layer provides atomic append semantics (e.g., a journaling filesystem with fsync, a WAL database, or a distributed log with quorum-based commit), then the clean-halt condition is subsumed by the storage guarantee: either a full event is durably appended or nothing is, regardless of when or why the halt occurs. Under this regime, the distinction between budget halts and crash halts vanishes—both are resumable if the storage layer's atomicity guarantee holds, and resumption must be refused only when the storage guarantee itself is violated (disk failure, corruption, Byzantine storage nodes).",
+      "mechanism": "The storage layer exposes an atomic append operation: append(event) returns success only after the event is durably persisted and fsync'd, or returns failure if the operation did not complete. The reasoning system calls append for each event and checks the return. Budget exhaustion is checked after append returns—never during. A crash during append leaves either a fully written event or nothing, by the storage layer's guarantee. On resumption, the system reads the log tail and verifies the last event is complete (its declared length matches its actual bytes, and its hash is valid). If so, resumption proceeds; if the storage guarantee was violated (e.g., fsync was not honored, or a partial sector was written), the tail event will fail validation and resumption is refused.",
+      "counterconditions": [
+        "Not all storage layers provide true atomic append: many filesystems allow torn writes (partial sectors) on crash, and fsync may not be honored on all platforms (e.g., ext4 with data=journal vs data=ordered).",
+        "Distributed storage with quorum-based commit may still lose the last event if a minority partition occurs, creating ambiguity about whether the event was committed.",
+        "The atomicity guarantee is at the storage level, but the reasoning system's event may span multiple append operations (e.g., header + body + hash link), each of which is atomic individually but not collectively—requiring a higher-level transaction that reintroduces the partial-write problem.",
+        "Even with atomic storage, if the reasoning system writes the event body before computing and writing the hash link, a crash between these two writes leaves a body without a valid link, which is a different form of partial write.",
+        "SSDs with power-loss protection may silently corrupt pages on unexpected power loss, violating even journaling filesystem guarantees."
+      ],
+      "typicality": 0.15,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Distinguishing 'identity corruption' from 'causal state divergence': the problem asks about corrupting append-only identity, which is narrower than 'resumed run produces different behavior.' A run could have perfectly intact event identity but still diverge behaviorally because external world state changed during the halt. This suggests two distinct refusal classes: (A) identity corruption refusal (log chain broken, partial write) and (B) causal divergence refusal (external side effects, non-reconstructable state). Prior candidates may conflate these.",
+          "why_keep_this": "Sharpens the problem's scope: 'without corrupting append-only identity' may permit causal divergence as out-of-scope, or may implicitly require it. This ambiguity should be surfaced.",
+          "possible_next_move": "Examine whether the problem's wording ('without corrupting the append-only identity of its recorded events') is strictly about log integrity or implicitly about behavioral fidelity."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Speculative: What if the event log records a 'resumption frontier'—a cryptographically signed marker at each budget check point indicating 'the system verified it has enough budget for the next event and committed to continuing'? On resumption, the system needs only to verify the last frontier marker, not the full chain. This is analogous to a database checkpoint. The refusal condition becomes 'no valid frontier marker at the tail' rather than 'full chain verification fails.'",
+          "why_keep_this": "Introduces a checkpointing mechanism that could reduce resumption cost and sharpen the clean-halt criterion.",
+          "unfinished": "Need to consider whether frontier markers themselves are subject to partial-write corruption."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does 'corrupting the append-only identity of recorded events' refer strictly to the integrity of the hash chain / event identity, or does it also encompass behavioral divergence (the resumed run producing different outputs than an uninterrupted run would have)?",
+        "related_refs": ["NEW_001", "SCR_002"]
+      },
+      {
+        "question": "Can a budget-exhaustion halt ever be non-clean (i.e., produce a partial write), or is budget exhaustion by definition a cooperative stop that only occurs between events?",
+        "related_refs": ["SCR_001", "SRC_008"]
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_002",
+        "relation_hint": "NEW_001's distinction between identity corruption and causal divergence directly addresses SCR_002's question about non-deterministic components and resumption safety.",
+        "direction": "directed",
+        "holds_when": "The problem's scope is being analyzed for whether it covers causal divergence or only log integrity.",
+        "weakens_when": "The problem is definitively scoped to log integrity only, making causal divergence out of scope."
+      }
+    ]
+  }
+}
+```

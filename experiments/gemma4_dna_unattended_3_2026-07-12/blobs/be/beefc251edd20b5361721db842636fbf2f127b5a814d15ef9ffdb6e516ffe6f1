@@ -1,0 +1,1 @@
+{"commitment":"component-wf@c4dbc81887c9","component":"c1","eval":"program:component_wf","verdict":"fail","violations":["keyframes 'rotate' outside namespace 'c1-'","selector 'to' not scoped to #header-root or .c1-*"]}

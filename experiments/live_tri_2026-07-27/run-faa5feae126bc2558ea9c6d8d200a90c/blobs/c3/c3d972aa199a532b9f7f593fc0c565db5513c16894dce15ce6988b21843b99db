@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c0e23de5bd0ee35623830b24: program:reasoning_observation_pending
+- reason-counter@4bb86af8ab776f4211de1362: program:reasoning_observation_pending
+- reason-counter@3cd1c0b64df816fe940e3b4e: program:reasoning_observation_pending
+- reason-counter@b45b7f7c58e675be746322a2: program:reasoning_observation_pending
+- reason-counter@f69b353df610946fcf8ace94: program:reasoning_observation_pending
+- reason-counter@3529c406e0abff01e91eedfd: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest protocol is a monotonic per-problem state machine with a durable checkpoint journal; it must durably record each state transition entry comprising problem ID, from-state, to-state, timestamp, and process nonce.","counterconditions":[{"case":"Journal truncation or archival moves the decision window, losing recent transitions.","eval":"observation"},{"case":"A software bug allows an invalid transition (e.g., Assigned \u2192 Reclaimed when an EvidenceCommitted entry exists but is unread due to I/O error).","eval":"observation"},{"case":"Concurrent reclamation agents race on the CAS, causing a double-assignment rather than displacement.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each problem ID has a canonical state drawn from a partially ordered set: {Unassigned, Assigned, EvidenceCommitted, Reclaimed}. State transitions are guarded by a compare-and-swap against the durable journal tail. A process acquires a workspace only by appending Assigned. Evidence completion appends EvidenceCommitted. Reclamation is permitted only by appending Reclaimed, and only if the current tail is Assigned\u2014not EvidenceCommitted. Because the journal is the single source of truth and Reclaimed cannot follow EvidenceCommitted, completed evidence is never silently displaced. New work requires a new problem ID or an explicit reset transition, never a blind overwrite.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c0e23de5bd0ee35623830b24, reason-counter@4bb86af8ab776f4211de1362, reason-counter@3cd1c0b64df816fe940e3b4e
+
+TARGET SRC_002
+{"analogy":null,"claim":"The safest protocol is a cryptographic commitment chain where the process publishes sequential state commitments and reclamation verifies non-opening of the terminal commitment; it must durably record the initial commitment, each intermediate commitment link, the problem ID, and the signed reclamation non-opening certificate.","counterconditions":[{"case":"The centralized verifier issues a non-opening certificate despite a valid opening existing in an unobserved fork of the ledger.","eval":"observation"},{"case":"Cryptographic collision allows two distinct preimages to match the terminal commitment, enabling evidence to exist without a recognizable opening.","eval":"observation"},{"case":"The process crashes before publishing any commitments, leaving no chain to verify and requiring a fallback protocol.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The deterministic process commits to successive workspace states using a hash chain. The final state slot is the only one that can contain evidence. To reclaim, a verifier checks the public commitment ledger: if the terminal slot for that problem ID remains unopened (no preimage published that hashes to the commitment and contains valid evidence metadata), reclamation is permitted and the verifier issues a signed non-opening certificate. Because opening is necessary to finalize evidence, and the commitment is binding and collision-resistant, an unopened terminal slot constitutes causal proof that evidence was never durably completed. Silent displacement is impossible because any later process must use a new commitment chain with a distinct problem ID or epoch.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b45b7f7c58e675be746322a2, reason-counter@f69b353df610946fcf8ace94, reason-counter@3529c406e0abff01e91eedfd
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

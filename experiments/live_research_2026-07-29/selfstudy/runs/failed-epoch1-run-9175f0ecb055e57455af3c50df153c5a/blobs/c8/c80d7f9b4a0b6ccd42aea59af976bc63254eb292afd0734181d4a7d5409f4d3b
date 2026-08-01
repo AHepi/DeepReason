@@ -1,0 +1,7 @@
+```json
+{
+  "operation": "add",
+  "path": "/values",
+  "value": [18]
+}
+```

@@ -1,0 +1,20 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+abstraction: 8e9b8d5285aa (single fixed-precision critic yields zero net benefit) is the concrete base-case instance that 30e483eb and c9386a6c both negate and generalize — the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime suffices), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa → 30e483eb → c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis — i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

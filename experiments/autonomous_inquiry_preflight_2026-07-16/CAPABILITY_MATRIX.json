@@ -1,0 +1,11 @@
+{
+  "schema": "autonomous-capability-matrix.v1",
+  "baseline_commit": "77f646f195a2217e8c798570c7a81a029130faf3",
+  "capabilities": [
+    {"name": "scratch_context_request", "component_exists": true, "operator_facing": false, "model_facing": true, "autonomously_scheduled": true, "result_reinjected": true},
+    {"name": "research", "component_exists": true, "operator_facing": true, "model_facing": false, "autonomously_scheduled": false, "result_reinjected": false},
+    {"name": "simulation", "component_exists": true, "operator_facing": true, "model_facing": false, "autonomously_scheduled": false, "result_reinjected": false},
+    {"name": "lean", "component_exists": true, "operator_facing": true, "model_facing": false, "autonomously_scheduled": false, "result_reinjected": false},
+    {"name": "code", "component_exists": true, "operator_facing": true, "model_facing": false, "autonomously_scheduled": false, "result_reinjected": false}
+  ]
+}

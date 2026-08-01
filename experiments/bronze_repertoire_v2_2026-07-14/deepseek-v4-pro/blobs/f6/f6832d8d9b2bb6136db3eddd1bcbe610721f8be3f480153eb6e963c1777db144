@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:3cd717da70d6
+connect isolated 3cd717da70d6 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 3cd717da70d6b0a4d594ef9006ec3588ba4dbef346019409253d707a32b4dc43: {"claim": "The collapse was a network epidemic of 'institutional despair' triggered by a series of earthquakes that shattered the perceived divine mandate of the palace elites, leading to a rapid, vol
+- bd9b0674789955b5c194c28f5ca3ceeed4a28514b46d10981d38bfecb68593a4: {"claim": "The collapse was a cascading failure of interdependent palatial redistribution networks triggered by a prolonged drought that exposed the brittleness of their specialized agricultural and a
+- 7dbbd147456de767f09d06f34978ec978bfda8244c7dc768cf6591b4a78de00f: {"claim": "The collapse was caused by a military-social revolution where mobile infantry armed with javelins and swords, recruited from the margins of palatial society, overthrew the chariot-based ari
+- 8acf51bbd6a1cc7568a3dbf516ada24bed621f77e376c168248f3c6ea372ebe4: {"claim": "The collapse was a synchronous institutional failure caused by the breakdown of the 'gift-exchange' diplomatic network that stabilized the Late Bronze Age, triggered by a single-point failu
+- fb7a02bb838d41fcfc398af562d5b06f8f3d7053a7c6951a07052720689c3cbd: {"claim": "The collapse was a synchronous pandemic of a highly virulent, hemorrhagic fever (akin to a prehistoric Ebola) that spread along the very trade routes that connected the palaces, causing acu
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

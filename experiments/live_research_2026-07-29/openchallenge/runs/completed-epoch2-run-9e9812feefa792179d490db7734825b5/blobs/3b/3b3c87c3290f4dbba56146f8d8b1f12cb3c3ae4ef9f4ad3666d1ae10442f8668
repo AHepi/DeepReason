@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-b9510316be66b626d54bf59c1e3483cc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The attached dossier defines the open problem of the minimal 13-input sorting network: S(13) is unknown, the best known network has 45 comparators, Batcher's construction gives 48, and every candidate is exactly checkable in milliseconds by the 0-1 principle (8192 binary vectors). Work the problem. Conjecture concrete search or construction strategies as rival positions, and where rivals predict different measurable outcomes — a candidate network sorting or not, a pruning rule preserving optimality at small n, one strategy reaching smaller networks than another under a fixed budget — file a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) whose program actually runs the discriminating experiment; a simulation described in prose with an empty simulation_refs channel is an unverified claim and will be criticized as such. Where the dossier's bounds table or method claims need checking against published knowledge, file typed research proposals for specific https pages on the frozen en.wikipedia.org allowlist. Ground every claim about the problem state in the attached dossier blocks by citing their block ids. Genuine progress in order of ambition: a verified 13-input network of 44 or fewer comparators; a structurally novel verified 45; or a simulation-discriminated account of which structural hypothesis best explains why search stalls at 45.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7b73c9ae6fb91b57611cb52b: program:reasoning_observation_pending
+- reason-counter@f808d479fa823beddf6bf32a: program:reasoning_observation_pending
+- reason-counter@b74f1d10448956016a92d59a: program:reasoning_observation_pending
+- reason-counter@12f50fb7b85f1adba2a627a0: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A genetic algorithm initialized with Batcher's 48-comparator network and pruned via the 0-1 principle can discover a structurally novel 45-comparator network.","counterconditions":[{"case":"Local search might get trapped in the basin of attraction of the 48-comparator network and fail to find a valid 45-comparator configuration.","eval":"observation"},{"case":"The deterministic sandbox limits might restrict population size and generations too much for the GA to converge.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By iteratively removing one comparator from the best known network and using local search (swapping endpoints, shifting positions) to fix the 0-1 sorting violations, the algorithm can traverse local minima better than strict BFS and find a valid 45-comparator configuration.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7b73c9ae6fb91b57611cb52b, reason-counter@f808d479fa823beddf6bf32a
+
+TARGET SRC_002
+{"analogy":null,"claim":"A custom backtracking search with conflict learning, bounding the size to 44 and using the 0-1 principle, can prove the non-existence or find a network for n=13.","counterconditions":[{"case":"The state space for n=13 at size 44 is too deep for a simple backtracking algorithm to make significant progress within sandbox limits.","eval":"observation"},{"case":"Conflict learning in pure Python might incur too much overhead per node, making it slower than naive BFS.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By assigning comparators sequentially and early-exiting if a 0-1 vector cannot possibly be sorted within the remaining depth/size bounds, we prune the search tree. Tracking unsatisfiable core vectors allows jumping over large invalid subtrees.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b74f1d10448956016a92d59a, reason-counter@12f50fb7b85f1adba2a627a0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

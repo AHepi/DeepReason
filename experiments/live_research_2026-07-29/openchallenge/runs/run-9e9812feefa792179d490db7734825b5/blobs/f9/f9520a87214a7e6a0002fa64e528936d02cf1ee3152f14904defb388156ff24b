@@ -1,0 +1,179 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Greedy redundancy removal from Batcher's odd-even mergesort network for n=13 converges to exactly 45 comparators regardless of the top-level split point, because the redundant comparators are structurally determined by the merge layers and all valid Batcher variants share the same redundancy pattern.",
+      "mechanism": "Batcher's odd-even mergesort for n=13 produces ~48 comparators. Redundancy removal tries deleting each comparator in order; if the remaining network still sorts (verified by 0-1 principle), the comparator is permanently removed. The merge network for odd-length inputs has inherent redundancy because the odd/even subsequence decomposition creates overlapping comparison coverage. Different top-level splits (e.g., 5+8, 6+7, 7+6) produce different initial networks but the same set of redundant comparators after greedy removal, because the redundancy is in the merge structure, not the sort structure.",
+      "counterconditions": [
+        "If any split variant reduces to fewer than 45 after greedy removal, the convergence hypothesis is falsified.",
+        "If all splits reduce to exactly 45 but one split produces a structurally different 45-comparator network (not just a permutation), convergence in size alone does not imply structural convergence.",
+        "If the standard split (6+7) reduces to 45 but another split reduces to 46 or more, the hypothesis is falsified."
+      ],
+      "evidence_refs": [
+        {"block": "680b4c459d28bf7a"},
+        {"block": "6050cf69f391fa33"},
+        {"block": "8a7a7d8f89f48b3e"}
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "Remove-one-add-one local search from any 45-comparator sorting network cannot reach 44 within a practical budget (200 iterations), because the gap from 45 to 44 requires a coordinated multi-comparator change: no single comparator swap preserves correctness while reducing size.",
+      "mechanism": "Local search operates on the space of 45-comparator networks by removing one comparator and adding a random one. For the network to remain valid, the added comparator must compensate for the removed one's function. At 45 comparators, the network is near-minimal: removing any single comparator breaks sorting for at least one binary input. Adding a single different comparator cannot simultaneously fix the broken input and preserve all others, because the broken comparator was load-bearing. Escaping to 44 would require at least two coordinated changes, which single-step local search cannot achieve.",
+      "counterconditions": [
+        "If local search with 200 iterations finds a 44-comparator network, the plateau hypothesis is falsified.",
+        "If a 2-swap local search (remove two, add one) finds 44, the hypothesis is weakened to 'single-step search is insufficient' rather than '45 is a hard plateau'.",
+        "If a different neighborhood structure (e.g., move a comparator to a different position rather than swap) escapes 45, the hypothesis is too narrow."
+      ],
+      "evidence_refs": [
+        {"block": "680b4c459d28bf7a"},
+        {"block": "4f053d098dcef347"},
+        {"block": "d14bbc1788ad0249"}
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "The order in which comparators are tested for redundancy removal affects the final network size, because different removal orders expose different transitive redundancy patterns: removing comparator A first may make comparator B redundant (or essential), while removing B first may leave A essential.",
+      "mechanism": "Greedy redundancy removal is order-dependent. A comparator (i,j) may appear redundant given comparators (i,k) and (k,j) that already enforce the ordering i<=k<=j. But if (i,k) is removed first, (i,j) may become essential. This creates a combinatorial dependency: the final network size depends on which redundancies are 'unlocked' first. Forward-order removal (from the beginning of the network) and reverse-order removal may yield different sizes because they unlock different redundancy chains.",
+      "counterconditions": [
+        "If forward and reverse removal always yield the same size for all Batcher variants, the order-dependence hypothesis is falsified.",
+        "If the difference is at most 1 comparator and both still reach 45, the effect is negligible and the hypothesis is practically uninteresting.",
+        "If randomized removal order always converges to 45, order-independence holds in practice."
+      ],
+      "evidence_refs": [
+        {"block": "9086cd300f72e08a"},
+        {"block": "bfc42b3064ed02fe"}
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "A 44-comparator 13-input sorting network exists but requires a fundamentally non-Batcher construction, because the redundancy ceiling of 45 in Batcher-derivable networks reflects a structural limitation of merge-based sorting that cannot be overcome by local optimization alone.",
+      "mechanism": "Batcher's construction and its derivatives produce networks where the merge layer for n=13 requires a minimum number of comparators determined by the odd-even merge structure. The 45-comparator ceiling after redundancy removal is not a coincidence but a structural invariant of merge-based constructions. A 44-comparator network would need a different paradigm — e.g., a network discovered by exhaustive search guided by output-class enumeration or a SAT-based approach that explores the full comparator space rather than the Batcher subspace.",
+      "counterconditions": [
+        "If local search or split variation from Batcher-derivable networks finds 44, this hypothesis is falsified.",
+        "If the simulation shows that different Batcher splits reach 44, the 'structural limitation' claim fails.",
+        "If published research shows S(13)=45 is proven optimal, this hypothesis is trivially true but uninteresting."
+      ],
+      "evidence_refs": [
+        {"block": "680b4c459d28bf7a"},
+        {"block": "d14bbc1788ad0249"},
+        {"block": "2c7a5cc0d7461dd5"}
+      ],
+      "typicality": 0.15
+    },
+    {
+      "claim": "Shuffling the order of Batcher's comparators before redundancy removal yields a larger network than ordered removal, because the greedy removal process benefits from the temporal structure of Batcher's construction: later comparators in the sequence depend on earlier ones, so removing from the end (which preserves the structural 'base') is more effective than removing from a random position.",
+      "mechanism": "In Batcher's network, comparators are applied in a specific temporal order: first the two halves are sorted, then they are merged. Comparators in the merge phase depend on the sort phase having already established partial order. Greedy removal in the original order effectively removes merge-phase comparators first (which are more likely redundant), preserving the sort-phase structure. Shuffling destroys this temporal dependency, causing the greedy algorithm to remove sort-phase comparators that are actually load-bearing for the merge phase, resulting in a larger final network.",
+      "counterconditions": [
+        "If shuffled removal reaches the same size as ordered removal, the temporal-structure hypothesis is falsified.",
+        "If shuffled removal reaches a smaller size, the hypothesis is reversed.",
+        "If the difference is 0, shuffling has no effect and the hypothesis is uninteresting."
+      ],
+      "evidence_refs": [
+        {"block": "9086cd300f72e08a"},
+        {"block": "1194dff78a2795cf"}
+      ],
+      "typicality": 0.35
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "sim-batcher-redundancy-vs-localsearch-001",
+      "hypothesis": "Greedy redundancy removal from Batcher's network for n=13 converges to 45 regardless of top-level split, while local search (remove-one-add-one) cannot escape 45, and removal order has measurable effect. These rival predictions are discriminated by running all strategies under a fixed budget and comparing resulting sizes.",
+      "rival_predictions": [
+        "H1_structural_convergence: all Batcher split variants (4+9, 5+8, 6+7, 7+6, 8+5, 9+4) reduce to exactly 45 after greedy redundancy removal",
+        "H2_split_sensitivity: at least one split variant reduces to a size different from 45 (either 44 or >=46)",
+        "H3_local_search_plateau: local search from 45-comparator network with 200 iterations stays at 45",
+        "H4_local_search_escape: local search finds 44 within 200 iterations",
+        "H5_order_dependence: forward and reverse greedy removal yield different sizes",
+        "H6_order_independence: forward and reverse greedy removal yield the same size",
+        "H7_shuffle_effect: shuffled Batcher + redundancy removal yields larger network than ordered removal",
+        "H8_shuffle_no_effect: shuffled and ordered removal yield the same size"
+      ],
+      "discriminating_purpose": "Determine whether the 45-comparator barrier for n=13 is a structural invariant of Batcher-derivable networks (H1) or an artifact of specific construction choices (H2), whether local search can escape it (H3 vs H4), and whether removal order and shuffling matter (H5-H8). The simulation builds Batcher's odd-even mergesort with different splits, applies greedy redundancy removal, runs local search, and compares all strategies by the final network size achieved.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "import random\n\nrandom.seed(42)\nN = 13\n\nPOPCOUNTS = [bin(v).count('1') for v in range(1 << N)]\nSORTED_VALS = [0 if POPCOUNTS[v] == 0 else ((1 << N) - (1 << (N - POPCOUNTS[v]))) for v in range(1 << N)]\n\ndef sorts(net, n=N):\n    for mask in range(1 << n):\n        x = mask\n        for (i, j) in net:\n            if ((x >> i) & 1) > ((x >> j) & 1):\n                x ^= (1 << i) | (1 << j)\n        if x != SORTED_VALS[mask]:\n            return False\n    return True\n\ndef oe_merge_net(idx):\n    n = len(idx)\n    if n <= 1:\n        return []\n    if n == 2:\n        return [(min(idx[0], idx[1]), max(idx[0], idx[1]))]\n    result = []\n    odd_idx = [idx[k] for k in range(0, n, 2)]\n    even_idx = [idx[k] for k in range(1, n, 2)]\n    result += oe_merge_net(odd_idx)\n    result += oe_merge_net(even_idx)\n    for k in range(1, n - 1, 2):\n        result.append((min(idx[k], idx[k + 1]), max(idx[k], idx[k + 1])))\n    return result\n\ndef oe_sort_custom(idx, split=None):\n    n = len(idx)\n    if n <= 1:\n        return []\n    if n == 2:\n        return [(min(idx[0], idx[1]), max(idx[0], idx[1]))]\n    if split is None:\n        split = n // 2\n    return (oe_sort_custom(idx[:split]) + oe_sort_custom(idx[split:]) + oe_merge_net(idx))\n\ndef remove_redundant(net, n=N):\n    net = list(net)\n    i = 0\n    while i < len(net):\n        trial = net[:i] + net[i + 1:]\n        if sorts(trial, n):\n            net = trial\n        else:\n            i += 1\n    return net\n\ndef remove_redundant_reversed(net, n=N):\n    net = list(net)\n    i = len(net) - 1\n    while i >= 0:\n        trial = net[:i] + net[i + 1:]\n        if sorts(trial, n):\n            net = trial\n        i -= 1\n    return net\n\ndef local_search(net, n=N, budget=200):\n    best = list(net)\n    for _ in range(budget):\n        if len(best) <= 1:\n            break\n        ri = random.randint(0, len(best) - 1)\n        i = random.randint(0, n - 2)\n        j = random.randint(i + 1, n - 1)\n        trial = best[:ri] + best[ri + 1:] + [(i, j)]\n        if sorts(trial, n):\n            best = trial\n    return best\n\nbatcher_std = oe_sort_custom(list(range(N)))\nprint(f\"Batcher standard (6+7): size={len(batcher_std)}, sorts={sorts(batcher_std)}\")\n\na_net = remove_redundant(batcher_std)\nprint(f\"Strategy A (forward removal): size={len(a_net)}, sorts={sorts(a_net)}\")\n\nprint(\"Strategy B: Split sensitivity:\")\nsplit_results = {}\nfor sp in range(4, 10):\n    idx = list(range(N))\n    net_sp = oe_sort_custom(idx, sp)\n    ok = sorts(net_sp)\n    if ok:\n        red = remove_redundant(net_sp)\n        split_results[sp] = len(red)\n        print(f\"  Split {sp}+{N - sp}: initial={len(net_sp)}, reduced={len(red)}\")\n    else:\n        split_results[sp] = -1\n        print(f\"  Split {sp}+{N - sp}: FAILS (initial={len(net_sp)})\")\n\nrandom.seed(42)\nc_net = local_search(a_net, N, 200)\nprint(f\"Strategy C (local search 200): size={len(c_net)}, sorts={sorts(c_net)}\")\n\nrandom.seed(42)\nshuffled = list(batcher_std)\nrandom.shuffle(shuffled)\nd_net = remove_redundant(shuffled)\nprint(f\"Strategy D (shuffled + removal): size={len(d_net)}, sorts={sorts(d_net)}\")\n\ne_net = remove_redundant_reversed(batcher_std)\nprint(f\"Strategy E (reversed removal): size={len(e_net)}, sorts={sorts(e_net)}\")\n\nprint(\"\\n=== DISCRIMINATING SUMMARY ===\")\nprint(f\"H1_convergence: A={len(a_net)}, splits={split_results}\")\nprint(f\"H3_vs_H4_plateau: A={len(a_net)}, C={len(c_net)}\")\nprint(f\"H5_vs_H6_order: A={len(a_net)}, E={len(e_net)}\")\nprint(f\"H7_vs_H8_shuffle: A={len(a_net)}, D={len(d_net)}\")\nall_reduced = [len(a_net)] + [v for v in split_results.values() if v > 0]\nprint(f\"Min reduced size across all strategies: {min(all_reduced) if all_reduced else 'N/A'}\")\nprint(f\"Max reduced size across all strategies: {max(all_reduced) if all_reduced else 'N/A'}\")\n",
+      "requested_observables": [
+        "batcher_std_size",
+        "strategy_a_size",
+        "split_results_dict",
+        "strategy_c_size",
+        "strategy_d_size",
+        "strategy_e_size",
+        "min_reduced_size",
+        "max_reduced_size"
+      ],
+      "interpretation_conditions": [
+        "If all split variants reduce to 45 and local search stays at 45, H1 and H3 are supported, H2 and H4 are falsified.",
+        "If any split reduces below 45, H2 is supported and H1 is falsified, suggesting 44 may be reachable via alternative Batcher splits.",
+        "If local search finds 44, H4 is supported — the plateau is escapable and 45 is not a hard barrier.",
+        "If forward and reversed removal differ, H5 is supported: removal order matters for final size.",
+        "If shuffled removal yields a larger network, H7 is supported: Batcher's temporal structure aids redundancy removal.",
+        "If all strategies converge to exactly 45, the 45 barrier is robust across construction and optimization variations, supporting the hypothesis that 45 is either optimal or requires a fundamentally different approach to improve."
+      ],
+      "declared_assumptions": [
+        "The odd-even mergesort construction with arbitrary split points produces valid sorting networks for n=13.",
+        "The 0-1 principle correctly verifies sorting: a network sorting all 8192 binary vectors sorts all inputs.",
+        "Greedy forward removal removes the first redundant comparator found, potentially missing globally optimal removal sequences.",
+        "Local search budget of 200 is sufficient to detect whether the plateau is escapable in practice, though not a proof of non-existence of 44."
+      ],
+      "parameter_definitions": [
+        {"name": "N", "values_json": "13"},
+        {"name": "local_search_budget", "values_json": "200"},
+        {"name": "splits_tested", "values_json": "[4,5,6,7,8,9]"},
+        {"name": "random_seed", "values_json": "42"}
+      ],
+      "requested_seed_set": [42]
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "check-bounds-table-wikipedia-001",
+      "purpose": "Verify the dossier's claim that S(13) is unknown with best known 45 comparators and Batcher gives 48, and check whether any published result has improved or settled S(13) since the dossier's compilation. The Wikipedia sorting network page should contain the known bounds table and references to optimality results.",
+      "urls": ["https://en.wikipedia.org/wiki/Sorting_network"]
+    },
+    {
+      "request_identifier": "check-batcher-construction-wikipedia-001",
+      "purpose": "Verify the Batcher odd-even mergesort construction details, specifically the comparator count formula for n=13 and whether alternative split strategies are discussed in the literature. Also check if the page references any known 45-comparator network for n=13.",
+      "urls": ["https://en.wikipedia.org/wiki/Odd%E2%80%93even_mergesort"]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative: Could a 44-comparator network for n=13 be found by composing optimal sub-networks for n=7 (S(7)=16) and n=6 (S(6)=12) with a minimal merge layer? If the merge of a sorted 7-sequence and sorted 6-sequence requires at most 16 comparators, total = 16+12+16 = 44. The odd-even merge of 7 and 6 elements requires oe_merge_net([0..12]) which has some number of comparators. Key question: what is the minimum merge size for sequences of length 7 and 6?",
+          "why_keep_this": "This decomposition approach gives a concrete target: if the merge layer can be done in 16 comparators, we get 44 total. This is a testable structural hypothesis.",
+          "possible_next_move": "Count comparators in oe_merge_net for n=13 and check if redundancy removal from the full 7+6 decomposition beats Batcher's 45."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: If S(13)=45 is optimal, then S(n) for the sequence 1,2,...,13 is 0,1,3,5,9,12,16,19,25,29,35,39,45. The differences are 1,2,2,4,3,4,3,6,4,6,4,6. The pattern of differences is irregular but the last few (6,4,6) suggests S(13)-S(12)=6. Compare: S(12)-S(11)=4, S(11)-S(10)=6, S(10)-S(9)=4. The increment alternates between 4 and 6 for n>=9. If this pattern holds, S(13)-S(12)=6, giving S(13)=45. But S(14)-S(13) could be 4 or 6.",
+          "why_keep_this": "This pattern observation, if validated, provides a heuristic argument for S(13)=45 that doesn't require exhaustive search.",
+          "possible_next_move": "Check the difference pattern against published values and test whether the 4/6 alternation is a known property."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "What is the minimum number of comparators needed to merge a sorted 7-element sequence with a sorted 6-element sequence into a fully sorted 13-element sequence? If this is <= 16, then a 44-comparator network exists by composing S(7)+S(6)+merge.",
+        "related_refs": ["NEW_001"]
+      },
+      {
+        "question": "Is the 45-comparator barrier for n=13 a consequence of the merge layer being irreducible at 16 comparators for the 7+6 split, or could a different decomposition (e.g., 8+5 with S(8)=19, S(5)=9) yield a smaller total if the merge layer is smaller?",
+        "related_refs": ["NEW_001"]
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_002",
+        "relation_hint": "The merge-size question from NEW_001 constrains whether the difference-pattern argument in NEW_002 can predict 44 vs 45.",
+        "direction": "symmetric"
+      }
+    ]
+  }
+}
+```

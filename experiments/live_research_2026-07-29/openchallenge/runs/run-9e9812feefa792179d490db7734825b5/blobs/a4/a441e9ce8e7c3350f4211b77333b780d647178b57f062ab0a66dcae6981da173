@@ -1,0 +1,3 @@
+```json
+{"op": "replace", "path": "/requested_observables", "value": ["bubble_greedy_reduced_count_n2_13", "insertion_greedy_reduced_count_n2_13", "gap_greedy_reduced_minus_Sn_n2_12", "confirmed_hypothesis_n13"]}
+```

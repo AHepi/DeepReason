@@ -1,0 +1,114 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "An idempotent operation is one whose repeated execution yields the same resulting state as a single execution (f(f(x)) = f(x)); a safe operation produces no side effects whatsoever. An append-only event log requires idempotent writers—not safe ones—because every append is inherently a side effect (extending the log), yet duplicate deliveries under at-least-once must not alter the log beyond the first successful write.",
+      "mechanism": "Each writer tags every event with a monotonically increasing (producer_id, sequence_number) pair. The log maintains a deduplication index keyed on this pair. On retry or duplicate delivery, the log detects the existing key and discards the duplicate append, so the final log state is identical to the state had each event been delivered exactly once. This is idempotency: append(event) ∘ append(event) = append(event). It is not safety because append(event) does have a side effect—it extends the log.",
+      "counterconditions": [
+        "If the log has no deduplication index, duplicate appends create duplicate entries, and the operation is neither idempotent nor safe.",
+        "If writers do not tag events with unique keys, the log cannot distinguish duplicates from genuinely new events.",
+        "If the log's dedup window is bounded and a retry arrives after the window expires, idempotency is violated.",
+        "If 'safe' is defined in the Lamport safety-property sense rather than the no-side-effect sense, the argument must be restructured."
+      ],
+      "typicality": 0.75,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_002", "SRC_007"]
+      }
+    },
+    {
+      "claim": "The distinction is operational, not merely terminological: idempotency is a property of the operation's effect on system state (repeating it converges to the same state), while safety is a property of the operation's side effects on the external world (there are none). The append-only log requires idempotency from its writers because at-least-once delivery guarantees retries, and retried appends must converge to the same log state. Safety is impossible for a writer by definition—writing to a log is a side effect.",
+      "mechanism": "Writers use idempotency keys (e.g., content-hash or producer-sequence). The log's append handler checks the key against an index before committing. If found, the append is a no-op (idempotent). If not found, the event is appended and the key is recorded. The causal chain: retry → duplicate key detected → no-op → log state unchanged → idempotency preserved. Safety would require no side effect at all, which contradicts the fundamental purpose of a writer.",
+      "counterconditions": [
+        "If the idempotency key is derived from mutable state (e.g., a timestamp that changes on retry), dedup fails.",
+        "If the log allows multiple unkeyed appends from the same writer, duplicates cannot be detected.",
+        "If a downstream consumer rather than the log enforces idempotency, the log itself may not require it of writers.",
+        "If 'safe' is interpreted in a non-HTTP sense (e.g., Lamport safety), the claim's framing of safety as 'no side effects' is contested."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_005", "SRC_006"]
+      }
+    },
+    {
+      "claim": "The log requires a safety property (in the Lamport sense: 'nothing bad ever happens') from its writers, not idempotency per se. The safety invariant is: 'no logical event appears more than once in the log.' Idempotent writes are one mechanism to enforce this safety property, but the property the log requires is safety, not idempotency. The distinction: idempotency is about operation semantics (f(f(x))=f(x)), safety is about invariant preservation (bad states are unreachable).",
+      "mechanism": "The log defines a safety invariant: each (producer_id, seq) tuple maps to at most one log entry. Writers that produce idempotent appends (via dedup keys) help maintain this invariant. The causal mechanism is: writer tags event → log checks invariant → duplicate violates invariant → log rejects duplicate → invariant preserved. The required property is invariant preservation (safety); idempotency is the technique that achieves it. This reframes the question: the log doesn't need writers to be idempotent in the abstract; it needs them to preserve a safety invariant.",
+      "counterconditions": [
+        "If the log's invariant explicitly allows duplicates (at-least-once semantics at the log level), then no safety property is required of writers.",
+        "If idempotency is enforced by the log's dedup layer rather than by writers themselves, writers need neither property.",
+        "If 'safe' is interpreted as HTTP-safe (no side effects), then the log cannot require safety since appends are side effects.",
+        "If the problem's use of 'safe' refers specifically to the no-side-effect definition, this candidate conflates two distinct senses of 'safe.'"
+      ],
+      "typicality": 0.35,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_005", "SRC_007"]
+      }
+    },
+    {
+      "claim": "Neither idempotency nor safety alone is sufficient for an append-only log under at-least-once delivery with multiple concurrent writers. The log requires commutative-idempotent appends: operations that are both idempotent (repeating is harmless) and commutative (order doesn't matter). This is a CRDT-style property. Pure idempotency without commutativity fails when concurrent writers deliver events in different orders across retries.",
+      "mechanism": "Each writer maintains a local monotonic counter. Events carry (writer_id, counter, payload). The log stores events in a set keyed by (writer_id, counter). Duplicate keys are discarded (idempotency). Any insertion order produces the same set (commutativity). The causal chain: concurrent+retried appends → set semantics → order-independent convergence → at-least-once delivery tolerated. This generalizes idempotency to the multi-writer setting that real append-only logs face.",
+      "counterconditions": [
+        "If there is only a single writer, commutativity is trivially satisfied and idempotency alone suffices.",
+        "If the log imposes a total order (e.g., via a sequencer), commutativity is handled by the log, not the writers.",
+        "If the log is not a set but an ordered sequence where position matters, commutativity fails and the claim overstates requirements.",
+        "If the problem specifically asks about a single-writer scenario, the commutativity requirement is vacuous."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Drawing on Python's published documentation: set.add(x) is idempotent—adding the same element twice leaves the set unchanged—but it is not safe because it mutates the set. This concretely illustrates the distinction: idempotent means repeated application converges to the same state, safe means no mutation occurs. An append-only event log with set-like dedup semantics requires idempotent writers (set.add-like), not safe ones, because the append mutates the log but duplicates must be absorbed as no-ops.",
+      "mechanism": "The log behaves like a set: append(event) ≡ set.add(event_with_key). The dedup key (producer_id, seq) serves as the element identity. Repeated adds of the same key are no-ops (idempotent, like set.add). The append still mutates the log (not safe). The causal mechanism mirrors Python's set implementation: hash the key → check membership → if present, no-op; if absent, insert. The writer's responsibility is to provide stable keys so the set can dedup; the log's responsibility is to enforce set semantics.",
+      "counterconditions": [
+        "If the Python docs do not explicitly use the term 'idempotent' for set.add, the grounding is analogical rather than definitional and fails the 'published definitions' requirement.",
+        "If the log preserves insertion order (like a list rather than a set), set.add semantics don't apply.",
+        "If the log's dedup is eventually consistent rather than strict, transient duplicates may be observable.",
+        "If the problem demands formal published definitions (RFCs, academic papers) rather than illustrative examples, Python docs may be insufficient."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_005", "SRC_008"],
+      "sidecar": {
+        "search_signal": "need_context",
+        "requested_context_aliases": ["SRC_008"]
+      }
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "fetch_python_glossary_idempotent",
+      "purpose": "Check whether the Python 3 glossary at docs.python.org contains a published definition of 'idempotent' or 'idempotency' to ground the distinction between idempotent and safe operations in a citable evidence block.",
+      "urls": ["https://docs.python.org/3/glossary.html"]
+    },
+    {
+      "request_identifier": "fetch_python_functools_lru_cache",
+      "purpose": "Search the functools documentation for any mention of idempotent operations or caching semantics that could serve as a published definition grounding the idempotency concept, particularly around lru_cache and repeated function calls.",
+      "urls": ["https://docs.python.org/3/library/functools.html"]
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "The problem says 'drawing on published definitions' but the only allowed domain is docs.python.org. Does Python's documentation actually contain a formal definition of 'idempotent,' or only informal uses of the term? If no formal definition exists there, is the problem testing whether we recognize the constraint is unsatisfiable under the allowlist, or expecting us to use general knowledge without citation?",
+        "related_refs": ["SRC_003", "SRC_008"]
+      },
+      {
+        "question": "SRC_007 notes that a prior candidate's mechanism 'secures safety' while claiming the log requires idempotency. Is there a genuine tension here: does dedup-based idempotency at the writer level actually constitute a safety property (invariant preservation), making the idempotent-vs-safe dichotomy a false binary?",
+        "related_refs": ["SRC_007"]
+      }
+    ],
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Tension: The problem asks to distinguish idempotent from safe, but 'safe' has at least three distinct meanings: (1) HTTP-safe (RFC 9110: no side effects), (2) Lamport-safe (safety property: nothing bad happens), (3) safe in everyday English (unlikely to cause harm). The correct answer depends entirely on which definition is invoked. SRC_005 critiques using definition (1) for a distributed systems problem. But definitions (2) and (3) are also 'published' in different contexts. The problem may be testing whether the solver recognizes this ambiguity and navigates it.",
+          "why_keep_this": "This ambiguity is central to the problem and unresolved by any single candidate. It should inform future revisions."
+        }
+      }
+    ]
+  }
+}
+```

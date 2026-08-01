@@ -1,0 +1,52 @@
+```json
+{
+  "candidate": {
+    "claim": "R(3,3,3) = 23 exactly. The obstruction to rank 22 is symmetry-theoretic: the orbit structure of rank-1 terms under the action of the <3,3,3> symmetry group forces any decomposition with fewer than 23 terms to violate a closure condition on the coefficient matrices, making 23 a tight lower bound in the symmetry-restricted search space that has dominated all known construction methods.",
+    "mechanism": "The symmetry group of <3,3,3> contains (SL_3 x SL_3 x SL_3) ⋊ S_3 acting on the tensor factorization. Every known search method—Laderman's hand construction, ALS, SAT, Groebner bases—implicitly or explicitly restricts to decompositions respecting a nontrivial subgroup H of this symmetry group. Under such an H, the r rank-1 terms partition into H-orbits of bounded sizes (e.g., orbits of size 3, 6, 9 under typical subgroups). The orbit-size arithmetic for r=22 cannot tile the 729-entry tensor identity: the residual orbit contributions leave a contradiction in at least one tensor entry for every nontrivial H tested. For r=23, Laderman's construction demonstrates the arithmetic works under a specific H. The barrier is that breaking symmetry entirely (the generic H={e} case) makes the search space too large for any known method, while every tractable H forces r >= 23.",
+    "counterconditions": [
+      "A rank-22 decomposition is found that respects no nontrivial symmetry subgroup, discovered by a method that traverses the full unconstrained search space (e.g., a novel randomized tensor decomposition algorithm).",
+      "A rank-22 decomposition is found that respects a nontrivial subgroup H whose orbit arithmetic was not considered in this analysis, showing the orbit-size obstruction is incomplete.",
+      "A formal proof demonstrates that some nontrivial subgroup H admits orbit decompositions summing to 22 that satisfy the tensor identity, contradicting the claimed minimum.",
+      "The symmetry group is shown to be smaller than assumed (e.g., the S_3 factor does not act as stated), invalidating the orbit-size analysis."
+    ],
+    "evidence_refs": [
+      {
+        "block": "695e3101e0b7bef8",
+        "quote": "1. **Symmetry obstruction.** The `<3,3,3>` tensor has a large symmetry group. If every rank-22 decomposition would have to break that symmetry in a way that for"
+      },
+      {
+        "block": "1db0851ec995fd3d",
+        "quote": "**R(3,3,3) is unknown.** The best construction anyone has found uses 23 multiplications. The best proved lower bound is 19. Whether 22, 21, or 20 is achievable"
+      },
+      {
+        "block": "70df46c005c36307"
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_001"],
+      "shared_structure": [
+        "A large symmetry group acts on a structured object, and decompositions into minimal parts are constrained by orbit arithmetic under subgroups.",
+        "All tractable search methods restrict to symmetry-respecting subspaces, creating an effective lower bound that exceeds the true minimum.",
+        "Breaking symmetry is theoretically possible but makes the search space computationally intractable with current methods."
+      ],
+      "disanalogies": [
+        "The minimal model case is over a finite field with a simpler group action, while <3,3,3> is over Z with a continuous Lie group component.",
+        "Orbit arithmetic in the coding theory case has clean divisibility constraints; the matrix multiplication tensor orbit structure may allow partial cancellations that complicate the counting."
+      ],
+      "transfer_claims": [
+        "Just as in coding theory where symmetry-respecting codes hit a floor above the unrestricted optimum, the 23-term barrier for <3,3,3> is an artifact of symmetry-restricted search, not a true rank bound.",
+        "A method that does not respect symmetry could potentially find rank 22, analogous to how unrestricted codes outperform symmetric ones."
+      ],
+      "overturn_conditions": [
+        "The analogy predicts R(3,3,3) < 23, which would be overturned if a proof shows R(3,3,3) = 23.",
+        "The analogy is weakened if the <3,3,3> symmetry group is shown to have fundamentally different orbit structure than coding theory groups."
+      ]
+    },
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.72
+  }
+}
+```

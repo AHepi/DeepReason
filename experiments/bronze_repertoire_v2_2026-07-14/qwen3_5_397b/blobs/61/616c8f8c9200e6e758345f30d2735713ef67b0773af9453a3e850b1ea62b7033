@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:4eddb3b3804a
+connect isolated 4eddb3b3804a to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 4eddb3b3804aac532a4d6c85d82259d25c079da7abdf7a445bf3768433f76ce1: {"claim": "The collapse was a structural inevitability caused by the hyper-specialization of palatial labor forces which eliminated local resilience; when a novel naval raiding technology (the galley)
+- d938b4d9c033f24f4d1b61c4978b3cdf267c21110b11bea04686d6a1469ba2a6: {"claim": "The collapse was triggered by a cascading failure of the international bronze supply chain, where the loss of a single critical tin source caused a systemic liquidity crisis in prestige-goo
+- 1a50596e47ff7d0a2982e8b98d58ed20a806dd9ccba5b62d9b61c20766e5a654: {"claim": "The simultaneous collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the Hittite and Mycenaean states,
+- 6e2f0cab2cf607d6e1a2deb865edc00e84e1313f76be7b7a8fcea6ca35cbbb40: {"claim": "The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.", "mechanism": 
+- 919f88a2232e78974c00b651e5fb20d3a5ee8445e8c52f8aee4c23068e4adfca: {"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.", "mechanism": "Cascading resource s
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

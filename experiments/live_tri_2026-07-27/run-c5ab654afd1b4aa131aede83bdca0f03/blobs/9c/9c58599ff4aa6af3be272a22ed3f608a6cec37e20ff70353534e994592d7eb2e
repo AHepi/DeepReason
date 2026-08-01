@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@91109756572c8ea979b7f742: program:reasoning_observation_pending
+- reason-counter@3f4a615974102220c6401299: program:reasoning_observation_pending
+- reason-counter@dc666c62765fc2cccdf55717: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A hybrid protocol combining epoch-locked workspaces with a two-phase seal witness\u2014comprising a durable intent-to-seal record followed by a finalization record\u2014prevents the spurious displacement observed in lease protocols by ensuring the reclaimer must observe both the absence of intent and the confirmation of death before reclamation.","counterconditions":[{"case":"Intent records can leak (not cleaned up after finalize), causing false negatives in reclamation and resource exhaustion.","eval":"observation"},{"case":"Epoch counters advance despite holder death due to a faulty lease coordinator, permitting concurrent intent and reclamation.","eval":"observation"},{"case":"The two-phase record itself introduces a window where the holder has crashed after intent but before finalize, creating the same ambiguity the protocol seeks to eliminate.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"When approaching completion, the holder writes a durable intent record containing (problem-id, proposed-content-hash, holder-epoch) to a replicated intent store. After terminal flush of evidence to durable storage, it writes a finalize record. The reclaimer must verify: (a) no un-finalized intent record exists for the problem-id, and (b) the holder's epoch lease is expired and not renewed. The required durable record is therefore the ordered pair (intent, finalize) in a holder-local but replicated store, with exactly-once semantics enforced by epoch monotonicity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@91109756572c8ea979b7f742, reason-counter@3f4a615974102220c6401299, reason-counter@dc666c62765fc2cccdf55717
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

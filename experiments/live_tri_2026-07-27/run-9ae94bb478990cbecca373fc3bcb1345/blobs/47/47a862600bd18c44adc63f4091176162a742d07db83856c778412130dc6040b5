@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim that a fetch budget denominated solely in requests is sufficient fails to address the core problem of resource control. Because the cost of a single request can vary arbitrarily in terms of bytes transferred, a pure request budget cannot prevent either excessive data consumption (e.g., a single request downloading terabytes) or budget exhaustion without meaningful progress (e.g., many tiny requests that return negligible information). The problem asks how the budget should be denominated to serve as a meaningful limit for a replayable research agent; ignoring the byte dimension leaves the budget incapable of capping actual data transfer, which is a primary operational cost and a key factor in replayability.",
+      "counterexample": [
+        "An agent tasked with downloading a 1GB dataset from a server that only supports 1MB chunks: a request budget of 100 would be exhausted after only 100MB, preventing completion, while a byte budget of 1GB would allow the necessary 1000 requests. Conversely, a single request returning 1GB would consume the entire byte budget but only 1 request, showing that a pure request budget fails to control data volume."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target fails to answer the question posed. The problem asks whether the fetch budget should be denominated in requests, bytes, or both, and how exhaustion must be recorded. Instead of addressing this, the target proposes replacing the fetch budget entirely with a time budget, which is a different resource dimension. This does not provide a reasoned choice among the given options and thus does not constitute a valid answer to the problem as stated.",
+      "counterexample": null
+    }
+  ]
+}

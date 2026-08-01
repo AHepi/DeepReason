@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "d938b4d9c033f24f4d1b61c4978b3cdf267c21110b11bea04686d6a1469ba2a6",
+      "attack": true,
+      "case": "The claim's mechanism depends on a 'single critical tin source' whose loss triggers systemic collapse, but the scope explicitly excludes Cyprus—a major copper and tin transshipment hub whose archaeological record shows continued activity through the crisis. If the tin supply chain were the critical vulnerability, Cyprus's exclusion is incoherent: either Cyprus was part of the network and should be covered (its survival would refute the mechanism), or it was bypassed, which undermines the premise of a single fragile route. The account fails to explain why the collapse propagated through the network but spared the key maritime node that connected it.",
+      "counterexample": null
+    },
+    {
+      "target": "1a50596e47ff7d0a2982e8b98d58ed20a806dd9ccba5b62d9b61c20766e5a654",
+      "attack": true,
+      "case": "The scope excludes 'Nile Delta settlements' while covering the Levantine city-states and Ugarit, but the mechanism—drought-driven mass migration of Sea Peoples toward coasts and Egypt—requires the Delta to be a primary destination and impact zone. If the Delta settlements were unaffected by the same drought that supposedly generated the Sea Peoples migration, the account provides no explanation for why the Delta escaped the raiding and disruption that devastated Ugarit and the Levantine coast, which lie along the same maritime path. The exclusion of the Delta from the scope creates an unexplained asymmetry in the very region the mechanism predicts would be most heavily impacted.",
+      "counterexample": null
+    },
+    {
+      "target": "4eddb3b3804aac532a4d6c85d82259d25c079da7abdf7a445bf3768433f76ce1",
+      "attack": true,
+      "case": "The claim asserts that hyper-specialization eliminated local resilience and that populations 'lacked the knowledge or tools to immediately return to autonomous subsistence,' yet the scope excludes 'Rural hinterlands'—precisely where generalized agrarian skills would have been concentrated and where the contrast between specialized and generalized populations would be tested. By excluding the hinterlands, the account avoids the observable implication that rural, less-specialized settlements should have survived better than palatial centers. If the hinterlands also collapsed, the mechanism fails; if they survived, their exclusion is an artificial restriction that shields the claim from falsification.",
+      "counterexample": null
+    }
+  ]
+}

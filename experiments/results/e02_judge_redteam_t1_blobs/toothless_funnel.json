@@ -1,0 +1,722 @@
+[
+  {
+    "item_id": "tl-00",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Induction cooktops boil water faster than radiant coils because they transfer energy directly into the cookware's molecular structure via magnetic hysteresis, b",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1181
+  },
+  {
+    "item_id": "tl-01",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Buffer stock dampens demand volatility in supply chains by absorbing the difference between variable downstream orders and steady upstream production, thereby r",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 2186
+  },
+  {
+    "item_id": "tl-02",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Refrigerants are compressed and expanded in a cycle to exploit the temperature-dependence of saturation pressure, enabling heat absorption at low pressure and h",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1091
+  },
+  {
+    "item_id": "tl-03",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Buffer stock dampens demand volatility in supply chains by absorbing the difference between variable downstream orders and steady upstream production, thereby r",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1149
+  },
+  {
+    "item_id": "tl-04",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Commercial aircraft cruise near 11 km because this altitude sits precisely at the intersection of the tropopause's thermal minimum and the engine's peak isentro",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1193
+  },
+  {
+    "item_id": "tl-05",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Fermentation stalls at high alcohol concentrations because ethanol molecules competitively displace water from the hydration shells of key glycolytic enzymes, c",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1113
+  },
+  {
+    "item_id": "tl-06",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Concrete requires curing time because the hydration reactions that produce strength-bearing calcium-silicate-hydrate phases are kinetically gated by the progres",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1391
+  },
+  {
+    "item_id": "tl-07",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Buffer stock dampens demand volatility in supply chains by absorbing the variance between incoming orders and actual consumption, thereby reducing the amplifica",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1207
+  },
+  {
+    "item_id": "tl-08",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Reverse osmosis desalinates seawater because the semi-permeable membrane\u2019s selective permeability is driven by the thermodynamic imperative to equalize the chem",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1322
+  },
+  {
+    "item_id": "tl-09",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "GPS receivers correct for relativistic clock drift by applying a fixed frequency offset to the satellite clocks at launch, combined with a real-time orbital cor",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1023
+  },
+  {
+    "item_id": "tl-10",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Suspension bridge main cables form a catenary curve because each infinitesimal cable segment equilibrates under a uniform gravitational load directed purely alo",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1098
+  },
+  {
+    "item_id": "tl-11",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Structural steel is alloyed with a small amount of carbon because carbon atoms occupy interstitial sites in the iron lattice, impeding dislocation motion and th",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1164
+  },
+  {
+    "item_id": "tl-12",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Solar panel output decreases linearly with increasing panel temperature because the open-circuit voltage drops at a rate determined by the material's bandgap te",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1176
+  },
+  {
+    "item_id": "tl-13",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Increasing attic insulation from R-30 to R-60 cuts winter heating bills by roughly half because it doubles the thermal resistance, directly halving the rate of ",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1122
+  },
+  {
+    "item_id": "tl-14",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Noise-cancelling headphones eliminate engine drone by generating a phase-inverted waveform that perfectly mirrors the instantaneous acoustic pressure field at t",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1204
+  },
+  {
+    "item_id": "tl-15",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Estuaries amplify tidal range relative to open coasts because their funnel-shaped geometry and decreasing depth force the incoming tidal wave to compress latera",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1160
+  },
+  {
+    "item_id": "tl-16",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Uniform postage rates eliminated distance-based price discrimination, which in turn collapsed the cross-subsidization structure that had sustained rural post of",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1267
+  },
+  {
+    "item_id": "tl-17",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Refrigerants are compressed and expanded in a cycle because the phase-change heat transfer enabled by pressure manipulation allows the fluid to absorb heat at l",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 982
+  },
+  {
+    "item_id": "tl-18",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Long-span bridges require expansion joints because thermal cycling induces length changes in the structural materials that would otherwise generate destructive ",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1089
+  },
+  {
+    "item_id": "tl-19",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Gambit openings sacrifice material to accelerate development because the opponent's time spent capturing the offered piece creates a compensatory tempo advantag",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1504
+  },
+  {
+    "item_id": "tl-20",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Gambit openings succeed because they convert a material deficit into a non-reciprocal developmental asymmetry that forces the opponent to spend tempi on defensi",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1301
+  },
+  {
+    "item_id": "tl-21",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Volcanic arcs form above subduction zones because fluids released from the descending slab systematically lower the melting point of the overlying mantle wedge,",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1033
+  },
+  {
+    "item_id": "tl-22",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Marine chronometers required temperature compensation because the thermal expansion of their balance springs altered the spring's stiffness, changing the oscill",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1195
+  },
+  {
+    "item_id": "tl-23",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Earthquakes cluster along transform plate boundaries because the constant, high-angle shear motion prevents smooth stress release, forcing strain to accumulate ",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1066
+  },
+  {
+    "item_id": "tl-24",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Spring tides are larger than neap tides because the solar and lunar tidal bulges align constructively during syzygy, whereas they partially cancel during quadra",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1314
+  },
+  {
+    "item_id": "tl-25",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Controlling the center in chess openings is decisive because it restricts the opponent's piece mobility more than any other spatial factor.",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1112
+  },
+  {
+    "item_id": "tl-26",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Pendulum clocks keep better time than verge-and-foliot clocks because the pendulum's natural isochronism provides a restoring force proportional to displacement",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1284
+  },
+  {
+    "item_id": "tl-27",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Suspension bridge main cables form a catenary curve because the cable's own weight is uniformly distributed along its length, not along the horizontal span.",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1113
+  },
+  {
+    "item_id": "tl-28",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Long-span bridges require expansion joints because thermal cycling induces cumulative longitudinal strain that, if fully constrained, would cause buckling or fr",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1186
+  },
+  {
+    "item_id": "tl-29",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Bronze Age palace economies maintained detailed clay-tablet ledgers primarily to stabilize elite bargaining power by making resource flows visible and thus cont",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1133
+  },
+  {
+    "item_id": "tl-30",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Spring tides are larger than neap tides because the solar and lunar tidal bulges constructively superpose when the Sun, Earth, and Moon are aligned, whereas nea",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1246
+  },
+  {
+    "item_id": "tl-31",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Long-span bridges require expansion joints because thermal expansion and contraction of the bridge deck materials would otherwise generate destructive internal ",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1099
+  },
+  {
+    "item_id": "tl-32",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Shared weight standards emerged because they reduced the cognitive and transactional friction of cross-cultural exchange, making long-distance trade networks se",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1181
+  },
+  {
+    "item_id": "tl-33",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Standardized weight systems reduced transaction costs enough to make long-distance bronze-age trade economically viable for everyday merchants, not just state-s",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1178
+  },
+  {
+    "item_id": "tl-34",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "An escapement doles out a clock spring's energy by converting the spring's continuous unwinding torque into discrete rotational impulses, each impulse correspon",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1252
+  },
+  {
+    "item_id": "tl-35",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Uniform postage rates eliminated distance-based price discrimination, which in turn forced postal networks to cross-subsidize high-cost rural delivery with low-",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1189
+  },
+  {
+    "item_id": "tl-36",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Postal networks route mail through hub sorting centers because the spatial geometry of address distributions makes hub-and-spoke topologies the only configurati",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1096
+  },
+  {
+    "item_id": "tl-37",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Marine chronometers required temperature compensation because the thermal expansion and contraction of their balance springs altered the oscillation period, cau",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1179
+  },
+  {
+    "item_id": "tl-38",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Coasts experience one or two daily high tides depending on whether the local seafloor geometry permits the propagation of the diurnal tidal constituent, which i",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1133
+  },
+  {
+    "item_id": "tl-39",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Marine chronometers required temperature compensation because the thermal expansion and contraction of their balance springs altered the spring's stiffness, dir",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1609
+  }
+]

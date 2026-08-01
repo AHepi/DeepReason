@@ -1,0 +1,1032 @@
+{
+  "schema": "deepreason-critic-spec-v1",
+  "prereg": "experiments/critic_specificity_prereg.yaml",
+  "generated_at": "2026-07-13T13:07:19.134894+00:00",
+  "design": {
+    "instrument": {
+      "model": "deepseek-v4-flash",
+      "temperature": 0.0,
+      "schema": "{\"defect_found\": bool, \"defect\": str}",
+      "prompt_shape": "scripts/e02_t2b_readjudicate.py CRITIC_PROMPT, reused verbatim",
+      "conviction": "defect_found AND named defect string >= 20 chars, != 'none'; parse failure never convicts"
+    },
+    "specificity_set": "40 verifier-anchored sound arguments; central claims instantiated from seeded templates and verified TRUE by trusted local checkers (scripts/critic_spec_corpus.py); arguments by deepseek-v4-pro, gated to contain the claim's exact numbers",
+    "sensitivity_anchor": "40 frozen known-flawed t1 items (experiments/e02_t1_items/known_flaws.json)",
+    "concurrency_max_in_flight": 3
+  },
+  "rates": {
+    "sensitivity_flawed_conviction_rate": 1.0,
+    "sound_conviction_rate": 0.675,
+    "sound_acquittal_rate": 0.325,
+    "specificity": 0.325
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "CONFIRMED",
+      "measured": {
+        "flawed_convictions": 40,
+        "n": 40,
+        "sensitivity": 1.0
+      },
+      "threshold": "conviction rate >= 0.85 on the flawed set"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "falsifier_triggered": true,
+      "measured": {
+        "sound_acquittals": 13,
+        "sound_convictions": 27,
+        "n": 40,
+        "acquittal_rate": 0.325
+      },
+      "threshold": "acquittal rate >= 0.60 on the verified-sound set; falsifier fires below 0.40 (indiscriminate prosecutor -> survived-criticism metrics demoted record-wide, Tier 2/3 survivor counting needs a defended-trial redesign)"
+    }
+  },
+  "exploratory_defect_taxonomy_sound_convictions": {
+    "note": "non-verdict-bearing; ordered keyword rules, counts only",
+    "rules": {
+      "disputes-central-claim": [
+        "miscalculat",
+        "arithmetic",
+        "should be",
+        "does not equal",
+        "calculation is wrong",
+        "calculation error",
+        "the claim is false",
+        "the claim is incorrect",
+        "the claim is wrong",
+        "off by",
+        "incorrect result",
+        "incorrect total",
+        "wrong answer"
+      ],
+      "disputes-premise": [
+        "premise",
+        "assumption",
+        "assumes",
+        "presuppos",
+        "oversimplif",
+        "the figure of",
+        "given value",
+        "definition",
+        "conflat"
+      ],
+      "demands-more-evidence": [
+        "no evidence",
+        "unsupported",
+        "unsubstantiated",
+        "citation",
+        "source",
+        "does not provide",
+        "lacks evidence",
+        "not justified",
+        "justification",
+        "does not establish",
+        "fails to show",
+        "does not demonstrate",
+        "without proof"
+      ],
+      "style-or-scope": []
+    },
+    "primary_number_rule": "defect text containing the claim's primary answer number bins as disputes-central-claim before any keyword list",
+    "counts": {
+      "disputes-central-claim": 18,
+      "disputes-premise": 1,
+      "demands-more-evidence": 1,
+      "style-or-scope": 7
+    },
+    "convicted_sound_ids": [
+      "csp-00",
+      "csp-01",
+      "csp-02",
+      "csp-03",
+      "csp-04",
+      "csp-05",
+      "csp-06",
+      "csp-07",
+      "csp-08",
+      "csp-09",
+      "csp-10",
+      "csp-12",
+      "csp-13",
+      "csp-15",
+      "csp-17",
+      "csp-19",
+      "csp-22",
+      "csp-23",
+      "csp-24",
+      "csp-25",
+      "csp-26",
+      "csp-27",
+      "csp-28",
+      "csp-29",
+      "csp-31",
+      "csp-33",
+      "csp-38"
+    ]
+  },
+  "per_item": {
+    "kf-fix-00": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the logical fallacy of circular reasoning (begging the question). The claim 'The Bible is true because it is the word of God' relies on the premise that the Bible is the word of God, which is itself supported only by the Bible's own assertion. This is a specific, checkable defect: the inference that self-reference constitutes valid evidence is logically invalid.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-01": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the fallacy of equivocation on the term 'light'. In the first premise, 'light' means 'having little weight', while in the second premise, 'light' means 'bright or illuminated'. The inference is invalid because the meaning of the key term shifts between premises.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-02": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the logical fallacy of affirming the consequent. The inference 'If it rains, the street gets wet. The street is wet. Therefore it rained' is invalid because the premise does not rule out other causes of the street being wet (e.g., a sprinkler, a burst pipe). The conclusion does not necessarily follow from the premises.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-03": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the logical fallacy of denying the antecedent. The first premise states 'If a creature is a fish, it can swim' (if P then Q). The second premise states 'A dolphin is not a fish' (not P). The conclusion 'Therefore a dolphin cannot swim' (therefore not Q) is invalid because the conditional does not assert that only fish can swim; many non-fish creatures (e.g., dolphins, whales, ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-04": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The claim '7 times 8 equals 54' is factually incorrect; the correct product is 56. Therefore, the subsequent inference that the product is even, while true of 56, is based on a false premise and the reasoning is unsound.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-05": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims 'Maria tested positive, so it is 99% certain she has the disease.' This is a specific quantitative inference that is wrong because it ignores the base rate. With a disease prevalence of 1 in 10,000 (0.01%) and a test that is 99% accurate (sensitivity and specificity both 99%), the probability that a positive test indicates disease is approximately 0.99% (using Bayes' theorem: (",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-06": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'Therefore the committee as a whole must be efficient' commits the fallacy of composition. The claim that every individual member is efficient does not logically entail that the committee as a whole is efficient, because the efficiency of a group depends on factors such as coordination, communication, and collective decision-making, which are not guaranteed by individual efficiency. ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-07": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the logical fallacy of post hoc ergo propter hoc (after this, therefore because of this). The claim 'Therefore the rooster's crowing causes the sun to rise' is an invalid causal inference from the mere temporal sequence that the rooster crows immediately before sunrise. Correlation does not imply causation, and no evidence or reasoning is provided to rule out alternative expla",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-08": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'So it must rain there most days' is a hasty generalization. The evidence is only two visits, which is an insufficient sample size to conclude that it rains on most days (i.e., more than half the days) in that city. The claim that 'most days' have rain does not logically follow from two data points.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-09": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the fallacy of circular reasoning (petitio principii). The claim 'Opium induces sleep because it possesses a dormitive virtue' is a tautological explanation: 'dormitive virtue' is defined as 'a power whose nature is to induce sleep,' so the premise merely restates the conclusion that opium induces sleep without providing any independent causal mechanism or evidence. This is a ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-10": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The claim 'we can bake 4 whole cakes' is quantitatively wrong because 10 eggs divided by 3 eggs per cake equals 3.33 cakes, not 4. The inference that 10 eggs suffice for 4 whole cakes is a mathematical error.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-fix-11": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'It is therefore more probable that Linda is a bank teller who is active in the feminist movement than that she is a bank teller.' This is a logical error: the probability of a conjunction (Linda is a bank teller AND active in the feminist movement) cannot be greater than the probability of one of its conjuncts (Linda is a bank teller) alone, because P(A \u2227 B) \u2264 P(A) for an",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-00": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that because the test is 99.5% accurate and Lena tested positive, it is 99.5% certain that Lena has the condition. This is a base rate fallacy: the 99.5% accuracy does not account for the very low prevalence (1 in 20,000). The actual probability of having the condition given a positive test is far lower than 99.5%, as it depends on both the false positive rate and the base rate",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-01": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that the method is endorsed by experts, and that we know it is endorsed by experts because experts trained solely in Hale's method assure us of it. This is a circular reasoning defect: the only evidence for the method's endorsement is the testimony of experts whose expertise is defined by their training in that same method. The inference that 'experts trained solely in Hale's m",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-02": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that the almanac has never been shown to err, and that this is known because the almanac's own preface assures us of it. This is a circular reasoning defect (begging the question): the premise that the almanac has never been shown to err is supported solely by the almanac's own self-testimony, which itself would need independent verification to be credible. The reasoning fails ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-03": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the fallacy of equivocation. The first premise uses 'discipline' to mean self-control or moral training, while the second premise uses 'discipline cases' to mean instances of punishment or rule enforcement. The conclusion conflates these two distinct meanings, so the inference that the army is full of character-building does not logically follow.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-04": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'Therefore it cannot use the main entrance' commits the logical fallacy of denying the antecedent. The premise 'If a worker is on the day shift, they use the main entrance' does not imply that only day-shift workers use the main entrance; Priya could be on a different shift and still use the main entrance. The conclusion does not follow from the given premises.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-05": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the fallacy of circular reasoning (begging the question). It claims the ledger is authoritative because the ledger itself says so, which is a self-referential justification that provides no independent evidence. The specific step is: 'we know its records are authoritative because an entry in the ledger itself assures us of it.' This inference is logically invalid because it as",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-06": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims '17 times 4 equals 72', which is factually incorrect; 17 \u00d7 4 = 68, not 72. This quantitative error invalidates the entire reasoning chain.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-07": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that because the test is 97% accurate, a positive result means it is 97% certain that Ravi has the condition. This is a base rate fallacy: it ignores the low prevalence (1 in 8,000) of the condition. The probability of having the condition given a positive test depends on both the test's accuracy and the base rate, and is far lower than 97%.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-08": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the logical fallacy of post hoc ergo propter hoc (after this, therefore because of this). The specific inference 'Therefore the jersey caused the wins' is unsupported because mere temporal succession (wearing the jersey before each win) does not establish causation; no evidence rules out coincidence, confounding factors, or reverse causation.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-09": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that glue bonds surfaces 'because it possesses an adhesive capacity \u2014 a power whose nature is to make things stick.' This is a circular explanation: it defines the effect (making things stick) as the cause (adhesive capacity), offering no mechanistic or empirical reasoning. The defect is that the inference is logically vacuous\u2014it does not explain why glue bonds, it merely resta",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-10": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the fallacy of composition: it infers that because every individual brick is light, the entire wall must be light. This is logically invalid because the weight of the wall is the sum of the weights of its parts; even if each brick is light individually, the combined weight of many bricks can be heavy. The inference fails to account for the additive nature of mass.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-11": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that the sedative calms patients 'because of its tranquilizing property, that is, a disposition whose essence is to produce calm.' This is a circular explanation (petitio principii): it explains the sedative's effect by appealing to a 'tranquilizing property' whose definition is simply the disposition to produce calm, so the cause is merely a restatement of the effect. No indep",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-12": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits a circular reasoning fallacy: it claims the ratings agency should be trusted because its ratings are accurate, and then asserts the ratings are accurate because the agency's self-assessment report says so. The self-assessment report is itself produced by the agency, so the justification relies on the very entity whose trustworthiness is in question. This is a classic case of b",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-13": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims '13 plus 28 equals 42', but 13 + 28 = 41, not 42. This is a quantitative error in the initial arithmetic step, making the subsequent reasoning about divisibility by 7 unsupported.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-14": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the logical fallacy of denying the antecedent. The first premise states 'If a metal is iron, it conducts electricity' (If P then Q). The second premise states 'Copper is not iron' (not P). The conclusion 'Therefore it cannot conduct electricity' (therefore not Q) is invalid because the conditional does not assert that only iron conducts electricity; other metals (like copper) ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-15": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'Therefore no woman is rational' is a logical fallacy (illicit major term). The syllogism 'Only man is rational' is equivalent to 'All rational beings are men' (not 'All men are rational'). The second premise 'No woman is a man' then yields 'No woman is rational' only if the first premise is interpreted as 'All rational beings are men' and the syllogism is valid in form (which it is:",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-16": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The argument commits the formal fallacy of affirming the consequent. The premise 'If the server overheats, then requests time out' (P \u2192 Q) and the premise 'Requests are timing out' (Q) do not logically entail 'The server overheated' (P). This is an invalid deductive inference because other causes (e.g., network failure, software bug) could also produce timeouts.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-17": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the logical fallacy of denying the antecedent. The argument states: If P (cactus) then Q (can store water). Not P (not a cactus). Therefore not Q (cannot store water). This inference is invalid because other plants (e.g., succulents that are not cacti) can also store water. The conclusion does not follow from the premises.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-18": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The premise '6 times 9 equals 52' is factually false; 6 \u00d7 9 = 54, not 52. Therefore, the entire inference that the product is even, while true of 54, is based on an incorrect quantitative claim, making the reasoning unsound.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-19": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the post hoc ergo propter hoc fallacy: it infers causation (the manager's arrival caused the fall in sales) solely from temporal sequence (arrival immediately before the fall). This is a logical error because temporal precedence alone does not establish causation; alternative explanations (e.g., market conditions, seasonal trends) are not ruled out.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-20": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'it is therefore more probable that Marta is a librarian who plays chess on weekends than that she is a librarian.' This is logically and probabilistically incorrect. The probability of a conjunction (Marta is a librarian AND plays chess on weekends) cannot exceed the probability of one of its conjuncts (Marta is a librarian), because P(A \u2227 B) \u2264 P(A) for any events A and B",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-21": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'it is 98% certain that Omar has the condition' is wrong because it confuses the test's accuracy (98% sensitivity/specificity) with the positive predictive value. For a condition with prevalence 1 in 5,000, even with 98% accuracy, the probability that a positive test means the person actually has the condition is far lower than 98% (approximately 0.97% using Bayes' theorem). The arti",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-22": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the fallacy of equivocation on the term 'nothing.' In the second sentence, 'This plan is nothing' uses 'nothing' to mean 'nonexistent' or 'empty,' but in the third sentence, 'nothing is without flaws' uses 'nothing' as a universal quantifier meaning 'no thing.' The inference that the plan is perfect depends on treating these two different meanings as identical, which is logica",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-23": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'So nearly all readers will like it' is a hasty generalization. The premise only states that two reviewers liked the draft, but two reviewers are not a representative sample of 'nearly all readers.' The claim commits a fallacy of insufficient sample size, as no evidence is provided that these two reviewers are typical of the broader readership.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-24": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims '3 tents are enough for everyone' based on 'Each tent sleeps 3 campers and we have 11 campers.' This is a quantitative error: 3 tents \u00d7 3 campers per tent = 9 campers, which is insufficient for 11 campers. The correct number of tents needed is at least 4 (4 \u00d7 3 = 12).",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-25": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference that 'the committee's joint report must be impartial' because 'each committee member is impartial individually' is a logical fallacy of composition. It assumes that the property of impartiality holds for the group simply because it holds for each individual member, which is not necessarily true. For example, even if each member is individually impartial, their collective report could",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-26": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The inference 'If a book is a dictionary, it contains definitions. This encyclopedia is not a dictionary. Therefore it cannot contain definitions' commits the logical fallacy of denying the antecedent. The conditional statement 'If A then B' does not imply that 'If not A then not B'. An encyclopedia, though not a dictionary, can still contain definitions (e.g., a general encyclopedia often include",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "kf-var-27": {
+      "battery": "flawed",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact commits the logical fallacy of post hoc ergo propter hoc (correlation does not imply causation). The specific inference 'Therefore the streetlights cause the jam' is wrong because it assumes that temporal sequence (streetlights coming on just before the jam) is sufficient evidence for causation, ignoring alternative explanations such as a common cause (e.g., time of day causing both t",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0
+    },
+    "csp-00": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that exactly 125 complete M2 tidal cycles fit within 65 days, but the calculation 93600 / 745 yields approximately 125.637, not an integer. Since 125 * 745 = 93125, which is less than 93600, there is leftover time (93600 - 93125 = 475 minutes), meaning 125 cycles do not exactly fill the 65 days; the claim of 'exactly' is false because the cycles do not evenly divide the total m",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-01": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 170 \u00d7 745 = 126650 minutes, but the correct product is 170 \u00d7 745 = 126650 minutes (this arithmetic is actually correct). However, the defect is in the inference: the artifact states that 'exactly 170 complete M2 tidal cycles... fit within 88 days' based on the inequality 126650 \u2264 126720. This reasoning is flawed because it does not account for the fact that the cycles must",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-02": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'exactly 69 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 36 days (51840 minutes)' and then computes 69 \u00d7 745 = 51405 minutes, concluding that 69 cycles fit. However, the calculation is wrong: 69 \u00d7 745 = 69 \u00d7 (700 + 45) = 48300 + 3105 = 51405, but 69 \u00d7 745 actually equals 51405? Let's check: 70 \u00d7 745 = 52150, subtract 745 gives 52150 - 745 = 51405.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-03": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'exactly 73 complete M2 tidal cycles ... fit within 38 days' and that '73 is the maximum integer number of complete cycles,' but the calculation 73 \u00d7 745 = 54385 minutes yields a remainder of 335 minutes (54720 - 54385 = 335), which is less than one full cycle. However, the reasoning fails to account for the fact that the claim requires exactly 73 cycles to fit, meaning th",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-04": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 53 days is exactly 76320 minutes, but 53 days \u00d7 24 hours/day \u00d7 60 minutes/hour = 53 \u00d7 1440 = 76320 minutes is correct. However, the calculation 102 \u00d7 745 = 75990 is wrong; 102 \u00d7 745 = 102 \u00d7 (700 + 45) = 71400 + 4590 = 75990, which is arithmetically correct. The defect is that the artifact states 'exactly 102 complete M2 tidal cycles, each lasting exactly 745 minutes, fit w",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-05": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 40 days equals exactly 57600 minutes, but 40 days is 40 \u00d7 24 \u00d7 60 = 57600 minutes only if each day is exactly 24 hours. However, a tidal day (the period between successive high tides) is not 24 hours but approximately 24 hours and 50 minutes, so the premise that 40 days of M2 tidal cycles corresponds to 57600 minutes is false. The artifact incorrectly uses a solar day defi",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "tides",
+      "template": "tides_cycles",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-premise"
+    },
+    "csp-06": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that satisfying m + r = 2j is sufficient for static determinacy, but this is only a necessary condition, not a sufficient one. The truss could still be statically indeterminate or unstable due to improper member arrangement (e.g., internal mechanisms or redundant constraints), which the artifact does not address. The reasoning incorrectly infers determinacy from the count condi",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bridge engineering",
+      "template": "bridge_truss",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-07": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that satisfying m + r = 2j is a sufficient condition for static determinacy, but it is only a necessary condition. The reasoning incorrectly infers that the truss 'meets the numerical condition for static determinacy' as if that condition alone guarantees determinacy. In fact, a truss can satisfy m + r = 2j and still be statically indeterminate or unstable due to improper membe",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bridge engineering",
+      "template": "bridge_truss",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-08": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that satisfying m + r = 2j 'confirms that the truss meets the counting requirement for static determinacy.' This is wrong because m + r = 2j is a necessary condition for static determinacy, not a sufficient one. The artifact incorrectly infers that exact satisfaction of this equation alone confirms static determinacy, ignoring that the truss could still be statically indetermin",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bridge engineering",
+      "template": "bridge_truss",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-09": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that the condition m + r = 2j is a necessary condition for static determinacy of a planar truss, and that satisfying it numerically (44 = 44) means the truss 'satisfies the necessary numerical condition for static determinacy.' However, the condition m + r = 2j is actually a necessary condition for static determinacy only if the truss is also statically determinate internally (",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bridge engineering",
+      "template": "bridge_truss",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-10": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that satisfying the equation m + r = 2j is a sufficient condition for static determinacy, but it is only a necessary condition. The artifact states 'Therefore, the truss satisfies the necessary condition for static determinacy,' which is correct, but the preceding reasoning implies that the count condition alone confirms static determinacy, which is false. A truss can satisfy m",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bridge engineering",
+      "template": "bridge_truss",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-11": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true
+    },
+    "csp-12": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that from h6, moving two squares down yields f5 (two down, one left) and f7 (two down, one right). However, from h6, moving two squares down (to h4) and then one square left yields g4, not f5; moving two squares down and one square right yields no valid square because that would go to i4, which is off the board. The correct squares from h6 are f5 (two down, one left? no: two do",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-13": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact incorrectly counts e3 and a3 as attacked squares from c1. A knight moving one square up and two squares right from c1 reaches e2, not e3; one square up and two squares left reaches a2, not a3. The correct valid attacked squares are a2, b3, d3, and e2, totaling 4 squares, so the claim is actually true. The artifact's step listing e3 and a3 is a geometric error.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-14": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true
+    },
+    "csp-15": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that from h5, moving two squares left and one up reaches f6, and two left and one down reaches f4, and then states that f7, f6, f4, and f3 lie off the board. However, f6 and f4 are valid squares on a standard 8x8 chessboard (files a-h, ranks 1-8). The error is in the reasoning that these squares are off the board; they are actually on the board, so the knight attacks more than ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-16": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "chess openings",
+      "template": "chess_knight",
+      "verified_true": true
+    },
+    "csp-17": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims the calculation is exact because 63 \u00d7 7 = 441, but the conversion from millimetres to kilometres uses 63 \u00d7 10\u207b\u2076, which is 0.000063, not 0.000063 exactly as a terminating decimal; however, the real defect is that 63 millimetres per year over 7 million years yields 63 \u00d7 7 \u00d7 10\u2076 millimetres = 441 \u00d7 10\u2076 millimetres = 441,000,000 millimetres, which equals 441 kilometres only if 1 ki",
+      "parse_failure": false,
+      "json_retries": 1,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-18": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true
+    },
+    "csp-19": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact incorrectly states that 91 millimetres per year equals 0.000091 kilometres per year. The correct conversion is 91 mm = 0.000091 km, but 91 mm per year is 0.000091 km per year, which is correct. However, the multiplication 0.000091 km/year \u00d7 9,000,000 years yields 819 km only if the arithmetic is exact: 0.000091 \u00d7 9,000,000 = 819.0, which is correct. The defect is that the artifact cla",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-20": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true
+    },
+    "csp-21": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true
+    },
+    "csp-22": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 54 millimetres per year is equal to 54 \u00d7 10\u207b\u2076 kilometres per year, which is 0.000054 kilometres per year. However, 54 millimetres is 54 \u00d7 10\u207b\u00b3 metres, and 1 kilometre is 1000 metres, so 54 millimetres = 54 \u00d7 10\u207b\u2076 kilometres = 0.000054 kilometres. This conversion is correct. The multiplication 0.000054 km/year \u00d7 3,000,000 years = 162 kilometres is also arithmetically correc",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "plate tectonics",
+      "template": "plate_distance",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-23": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'the shortest travel time from Knossos to Memphis is exactly 7 days' based solely on examining a few enumerated routes, but it does not provide a complete enumeration of all possible routes through the given network. Without proving that no other route (e.g., Knossos \u2192 Byblos \u2192 some other node \u2192 Memphis, or Knossos \u2192 Troy \u2192 Byblos \u2192 Memphis, etc.) could be shorter, the con",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-24": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'No other sequence of caravan routes connects Uruk to Ashur' but provides no evidence or reasoning to support this exhaustive enumeration. Without proof that all possible routes have been considered, the conclusion that the minimum is 7 days is unsupported. This is a logical defect: the argument assumes completeness without justification, which is a structural flaw in the ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-25": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'No other sequence of caravan routes connects Ugarit to Uruk,' but this is an unsupported assertion. The artifact only lists four specific routes and does not provide any evidence that the network has been exhaustively searched or that no other paths exist (e.g., via other intermediate cities not mentioned). Without a complete enumeration or a proof of network completeness",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "demands-more-evidence"
+    },
+    "csp-26": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'No other sequence of caravan routes connects Troy to Uruk,' but this is an unsupported assertion. Without a complete enumeration of all possible paths in the network (including potential multi-hop routes not listed, such as Troy\u2192Ugarit\u2192Hattosa\u2192Memphis\u2192Uruk, or any other combination), the reasoning cannot logically conclude that the minimum is 7 days. The claim of exhausti",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-27": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'No other path exists' but fails to consider the route Knossos \u2192 Ugarit (4 days) \u2192 Troy (5 days) \u2192 Hattusa (4 days) \u2192 Uruk (3 days), which sums to 4+5+4+3=16 days, and also the route Knossos \u2192 Troy (6 days) \u2192 Hattusa (6 days) \u2192 Uruk (3 days) is listed as 15 days but the edge from Troy to Hattusa is given as 6 days, yet the artifact does not verify whether the network allow",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-28": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims that 'No other sequence of caravan routes connects Memphis to Uruk,' but this is an unsupported assertion. Without a complete enumeration of all possible routes in the given network (which is not provided), the claim that only four routes exist cannot be verified, and thus the conclusion that the minimum is 8 days is not logically justified.",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "bronze-age trade",
+      "template": "trade_shortest_path",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-29": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims the second stage pinion has 10 teeth and is on the same arbor as the 48-tooth wheel, but a 10-tooth pinion on a 48-tooth wheel's arbor would require the 48-tooth wheel and the 10-tooth pinion to share a common shaft, which is physically plausible. However, the defect is that the total reduction ratio is computed as (48/12) \u00d7 (40/10) = 4 \u00d7 4 = 16, but the second stage ratio is 4",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-30": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true
+    },
+    "csp-31": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims the second stage uses a 10-tooth pinion on the 24-tooth wheel's arbor, but the first stage's 24-tooth wheel is driven by an 8-tooth pinion; for the second stage pinion to be on the same arbor, it must rotate at the same speed as the 24-tooth wheel, which is correct. However, the overall reduction calculation (24/8 \u00d7 30/10 = 3 \u00d7 3 = 9) is correct, but the claim that the final wh",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-32": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true
+    },
+    "csp-33": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The artifact claims the first stage uses a 12-tooth pinion driving a 48-tooth wheel, and the second stage has an 8-tooth pinion on the same arbor as the 48-tooth wheel driving a 32-tooth wheel. However, if the 48-tooth wheel and the 8-tooth pinion are on the same arbor, they rotate at the same speed. The second stage reduction is then 32/8 = 4:1, but the overall reduction is (48/12) \u00d7 (32/8) = 4 \u00d7",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true,
+      "defect_bin_exploratory": "style-or-scope"
+    },
+    "csp-34": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "clock mechanisms",
+      "template": "clock_gear",
+      "verified_true": true
+    },
+    "csp-35": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "postal-network economics",
+      "template": "postal_routes",
+      "verified_true": true
+    },
+    "csp-36": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "postal-network economics",
+      "template": "postal_routes",
+      "verified_true": true
+    },
+    "csp-37": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "postal-network economics",
+      "template": "postal_routes",
+      "verified_true": true
+    },
+    "csp-38": {
+      "battery": "sound",
+      "convicts": true,
+      "defect_found": true,
+      "defect": "The claim states that the coach serves 26 towns on consecutive days, starting on a Monday, and delivers to the final town on a Friday. However, if the coach serves one town per day with no rest days, starting on Monday (day 1), then the 26th town is served on day 26. Day 26 is 3 weeks and 5 days after Monday, which is a Friday (since 26 mod 7 = 5, and Monday=1, Tuesday=2, Wednesday=3, Thursday=4, ",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "postal-network economics",
+      "template": "postal_weekday",
+      "verified_true": true,
+      "defect_bin_exploratory": "disputes-central-claim"
+    },
+    "csp-39": {
+      "battery": "sound",
+      "convicts": false,
+      "defect_found": false,
+      "defect": "none",
+      "parse_failure": false,
+      "json_retries": 0,
+      "transport_retries": 0,
+      "topic": "postal-network economics",
+      "template": "postal_weekday",
+      "verified_true": true
+    }
+  },
+  "token_spend": {
+    "ledger": {
+      "prompt_tokens": 30275,
+      "completion_tokens": 17492,
+      "calls": 121,
+      "phases": {
+        "generate": {
+          "prompt_tokens": 6567,
+          "completion_tokens": 6770,
+          "calls": 40
+        },
+        "critic_flawed": {
+          "prompt_tokens": 8928,
+          "completion_tokens": 4180,
+          "calls": 40
+        },
+        "critic_sound": {
+          "prompt_tokens": 14780,
+          "completion_tokens": 6542,
+          "calls": 41
+        }
+      }
+    },
+    "total_tokens": 47767,
+    "ceiling": 250000
+  },
+  "caveats": [
+    "The sound arguments are adversary-authored (deepseek-v4-pro): only each item's CENTRAL claim is mechanically verified true by a trusted local checker; the surrounding prose is model-written and could contain incidental misstatements a critic might correctly attack. Convictions on sound items are therefore an UPPER bound on false-conviction rate.",
+    "The checkable-claim domain (arithmetic, combinatorial, graph-shortest-path, calendar facts on seven neutral topic pools) is much narrower than the open explanatory prose the critic faces in the harness; specificity measured here may not transfer to open-domain artifacts.",
+    "Single critic model (deepseek-v4-flash), single prompt shape, temperature 0.0; no ensemble, no model-family variation.",
+    "The fielded critic prompt (t2b shape, reused verbatim) tells the critic that 'an ensemble of independent judges flagged' the artifact \u2014 prosecutorial framing. It is applied identically to both batteries, so the sensitivity/specificity CONTRAST is clean, but absolute acquittal rates are measured under conviction-favouring framing.",
+    "Parse failures never convict (t2b rule); they inflate acquittal on sound items and deflate sensitivity on flawed items (observed parse failures: 0).",
+    "The defect taxonomy is exploratory and non-verdict-bearing: simple ordered keyword rules (first match wins; naming the claim's primary answer number counts as central-claim engagement), not human or model adjudication.",
+    "Sensitivity anchor is the frozen t1 known-flaw battery (planted, taxonomy-style flaws); it replicates t1's measurement conditions, not open-domain flaw detection."
+  ]
+}

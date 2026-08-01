@@ -1,0 +1,15 @@
+{
+  "candidate": {
+    "claim": "An append-only event log requires writers to be safe (capable of deduplication) rather than purely idempotent because a naive append operation executed twice violates idempotency (yielding two entries instead of one), whereas a 'safe to retry' operation uses deterministic identifiers or content-addressable hashes to prevent duplicate side effects during at-least-once delivery.",
+    "mechanism": "Idempotency strictly means that applying an operation multiple times has the same effect as applying it once (f(f(x)) = f(x)). A blind append-only write does not satisfy this, as retrying the append creates duplicate events. To survive at-least-once delivery, the writer must implement a 'safe' retry mechanism—such as keying the append by a unique request ID or event content hash—so that duplicate deliveries are ignored rather than blindly appended.",
+    "counterconditions": [
+      "The underlying transport guarantees exactly-once delivery, making safe retries unnecessary.",
+      "The system expects duplicate events in the log and handles idempotency at the downstream consumer level rather than at the writer level."
+    ],
+    "typicality": 0.7,
+    "evidence_refs": [],
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}

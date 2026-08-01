@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@736852497ae86f62d0f19859: program:reasoning_observation_pending
+- reason-counter@1e38f509b347b2e492b157fa: program:reasoning_observation_pending
+- reason-counter@939d5f29d225406dd3e6be99: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest protocol is an epoch-versioned intent log with an immutable, epoch-partitioned evidence store; it must durably record per-problem intent entries and epoch-commit markers.","counterconditions":[{"case":"The journal tail is corrupted or truncatable by the underlying storage medium.","eval":"observation"},{"case":"The epoch marker itself is not durably fsynced before workspace mutation begins.","eval":"observation"},{"case":"The evidence store allows in-place updates within an epoch, violating the immutability assumption.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Before modifying the workspace, the process durably appends an intent record to a strictly append-only journal partitioned by epochs. Evidence is written to immutable, content-addressed partitions keyed by (problem-id, epoch). When reclamation occurs after a crash with no terminal record, the protocol replays the journal tail from the last durable epoch marker; any evidence partition referenced by a committed intent is preserved, while unreferenced workspace state is reclaimed. This guarantees that completed evidence, once committed to an epoch partition, can never be silently displaced because the store is append-only and the journal provides an auditable path from crash to recovery.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@736852497ae86f62d0f19859, reason-counter@1e38f509b347b2e492b157fa, reason-counter@939d5f29d225406dd3e6be99
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

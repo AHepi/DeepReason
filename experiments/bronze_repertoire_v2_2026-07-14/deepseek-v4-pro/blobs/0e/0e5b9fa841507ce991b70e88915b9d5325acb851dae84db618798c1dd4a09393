@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target explicitly lists as a forbidden case the Medinet Habu reliefs and mortuary texts describing the Sea Peoples as foreign invaders with women and children in ox-carts, yet the target's own prose_notes concede that Ramesses III 'crushed a genuine external migration' of these groups. This is a direct contradiction: the target's mechanism claims the Sea Peoples were internal rebels, but its own explanatory note admits an external migration event matching the forbidden case. The target therefore fails to satisfy clause (2) of the standard, because it does not genuinely exclude the forbidden observation—it instead reinterprets the same evidence as a later phase of the same groups, while the forbidden case requires the claim to be incompatible with the specific observation of external, migrating invaders with families, not internal palace-burners.",
+  "counterexample": [
+    "Egyptian mortuary texts and temple reliefs at Medinet Habu explicitly describe the Sea Peoples as foreign invaders from islands and the north, with women and children in ox-carts, not as internal rebels."
+  ]
+}

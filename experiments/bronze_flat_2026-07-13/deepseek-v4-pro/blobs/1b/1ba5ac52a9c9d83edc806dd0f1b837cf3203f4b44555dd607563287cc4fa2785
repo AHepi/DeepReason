@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a rapid, systemic breakdown of the palatial redistributive economy due to the proliferation of cheap iron weaponry, which democratized violence and destabilized the chariot-based military aristocracies that underpinned palace authority.\", \"mechanism\": \"Iron smelting technology, originating in the Levant/Anatolia, spread rapidly because iron ore was abundant and cheap compared to copper and tin. This allowed non-state actors and peripheral semi-nomadic groups (including the Sea Peoples) to arm themselves with mass-produced iron swords and javelins. These groups overwhelmed the expensive chariot-based armies of the palaces, whose military elite depended on bronze weapons and imported tin. The collapse of one palace disrupted trade networks, causing a domino effect of economic and military failure across the interconnected system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that iron weapons were not in widespread use until after the collapse, with bronze remaining the dominant military metal during the 1200-1150 BC period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains Egypt's survival through its rapid adoption of iron and infantry tactics under Ramesses III, repelling the Sea Peoples. The collapse of the Hittites and Ugarit is directly linked to their inability to adapt their chariot forces quickly enough.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473140a9025c3d07b272b83db40ebd3ebe1443f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A severe and sustained megadrought, evidenced by paleoclimatological data, caused cascading crop failures and famine across the Eastern Mediterranean, leading to internal rebellions that toppled the fragile palatial elites from within.\", \"mechanism\": \"Paleoclimate proxies (e.g., pollen, speleothems, sediment cores) indicate a 300-year aridification event peaking around 1200 BC. This caused systemic agricultural collapse in the rain-fed farming systems of Greece and Anatolia. The palatial economies, which extracted surplus for luxury trade and elite maintenance, faced mass starvation and popular uprisings. The administrative centers were destroyed by internal fire and revolt, not external invasion, as evidenced by the lack of widespread foreign weaponry in destruction layers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\"], \"excludes\": [\"Ugarit\", \"Levantine city-states\", \"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian grain shipments to the Hittites, recorded in Ugaritic texts, show no signs of famine or reduction in volume during the final years before collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived due to the Nile's predictable, irrigation-based agriculture, which was less susceptible to rainfall fluctuations. The Levantine city-states and Ugarit are excluded from the primary mechanism as their collapse was a secondary effect of the Mycenaean and Hittite implosions disrupting trade, not direct climate-induced famine.\"}",
+      "typicality": 0.8,
+      "refs": []
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a coordinated, multi-generational assault by a confederation of displaced maritime raiders (the 'Sea Peoples') who systematically dismantled the palatial trade and communication networks, exploiting a temporary weakness in Egyptian military projection.\", \"mechanism\": \"The Sea Peoples were not a random migration but a highly organized, literate, and tactically sophisticated coalition of displaced populations from the Western Mediterranean and Aegean. They used massed infantry and naval power to sever the maritime trade arteries between Mycenae, Crete, Ugarit, and the Levant. By isolating and destroying each palace center in a planned sequence, they choked the economic lifeblood of the Bronze Age system. Egypt survived only because Ramesses III mobilized a massive, desperate, and costly land-and-sea defense that annihilated the main Sea Peoples' force in the Nile Delta.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Hittite Anatolia\"]}, \"forbidden\": [{\"case\": \"The destruction layers across the different sites show a consistent pattern of internal conflagration and lack evidence of a single, uniform material culture associated with the attackers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Excludes Hittite Anatolia as its collapse is attributed to a separate, simultaneous pressure from the Kaska peoples and internal civil war, which the Sea Peoples exploited but did not directly cause. The 'coordination' mechanism is a bold, atypical conjecture.\"}",
+      "typicality": 0.3,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a5aafc7a335580dc54367807f9790f1067f575f6de6ee70695f213489a5450d86"
+        }
+      ]
+    }
+  ]
+}

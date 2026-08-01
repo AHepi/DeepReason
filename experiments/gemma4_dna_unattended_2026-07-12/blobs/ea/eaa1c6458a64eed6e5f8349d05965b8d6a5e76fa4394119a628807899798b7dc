@@ -1,0 +1,16 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root {\n      --biolum-green: #39FF14;\n      --obsidian: #050A0C;\n      --purple: #B026FF;\n      background: var(--obsidian);\n      color: var(--biolum-green);\n      font-family: 'JetBrains Mono', 'Roboto Mono', monospace;\n      padding: 2rem;\n      border: 1px solid var(--purple);\n      border-radius: 8px;\n    }\n    .c3-grid {\n      display: grid;\n      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));\n      gap: 8px;\n      margin-top: 1rem;\n    }\n    .c3-base {\n      aspect-ratio: 1; \n      display: flex;\n      align-items: center;\n      justify-content: center;\n      border: 1px solid #222;\n      cursor: pointer;\n      transition: all 0.3s ease;\n      font-weight: bold;\n      text-transform: uppercase;\n    }\n    .c3-base:hover {\n      background: var(--biolum-green);\n      color: var(--obsidian);\n      box-shadow: 0 0 15px var(--biolum-green);\n    }\n    .c3-base.active {\n      background: var(--purple);\n      color: white;\n      box-shadow: 0 0 15px var(--purple);\n    }\n  </style>\n  <div id=\"dna-grid-root-title\" style=\"font-size: 1.2rem; letter-spacing: 0.2rem;\">SEQUENCE_DATA_GRID</div>\n  <div id=\"dna-grid-root-container\" class=\"c3-grid\"></div>\n  <script>\n    window.c3_mount = () => {\n      c3_updateSequence(\"ATGCGTACGTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAG\");\n    };\n    window.c3_destroy = () => {\n      const container = document.getElementById('dna-grid-root-container');\n      if(container) container.innerHTML = '';\n    };\n    window.c3_updateSequence = (seq) => {\n      const container = document.getElementById('dna-grid-root-container');\n      if(!container) return;\n      container.innerHTML = seq.split('').map((char, i) => \n        `<div class=\"c3-base\" id=\"dna-grid-root-base-${i}\">${char}</div>`\n      ).join('');\n    };\n    window.c3_highlightBasePair = (index) => {\n      const el = document.getElementById(`dna-grid-root-base-${index}`);\n      if(el) el.classList.toggle('active');\n    };\n  </script>\n</div>",
+      "typicality": 0.9,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { background: #050A0C; color: #39FF14; font-family: monospace; padding: 3rem; }\n    .c3-static-grid { display: flex; flex-wrap: wrap; gap: 4px; border: 1px solid #B026FF; padding: 10px; }\n    .c3-static-cell { width: 30px; text-align: center; border: 1px solid #333; }\n  </style>\n  <div id=\"dna-grid-root-static\" class=\"c3-static-grid\"></div>\n  <script>\n    window.c3_mount = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {\n        document.getElementById('dna-grid-root-static').innerText = \"Static Sequence View: ATGC...\";\n      }\n    };\n    window.c3_destroy = () => {};\n    window.c3_updateSequence = (s) => { document.getElementById('dna-grid-root-static').innerText = s; };\n    window.c3_highlightBasePair = () => {};\n  </script>\n</div>",
+      "typicality": 0.4,
+      "neighbours": []
+    }
+  ]
+}
+```

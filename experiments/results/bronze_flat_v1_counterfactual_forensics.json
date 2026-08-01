@@ -1,0 +1,186 @@
+{
+ "authority_replay": {
+  "deepseek-v4-pro": {
+   "remains_refuted": [
+    {
+     "id": "65e69166cab4",
+     "kept_refuted_by": [
+      "demonstrative"
+     ],
+     "role": "conjecturer"
+    },
+    {
+     "id": "3f3ab9266baa",
+     "kept_refuted_by": [
+      "demonstrative"
+     ],
+     "role": "conjecturer"
+    },
+    {
+     "id": "0aebf7929c39",
+     "kept_refuted_by": [
+      "demonstrative"
+     ],
+     "role": "conjecturer"
+    }
+   ],
+   "would_return_to_accepted": [
+    {
+     "id": "7e3426b9a715",
+     "role": "seed"
+    },
+    {
+     "id": "ba687c5f145e",
+     "role": "seed"
+    },
+    {
+     "id": "74fde5320d6c",
+     "role": "seed"
+    },
+    {
+     "id": "7a9fbb5476ec",
+     "role": "conjecturer"
+    },
+    {
+     "id": "5d2a70c35835",
+     "role": "conjecturer"
+    },
+    {
+     "id": "c503924fa779",
+     "role": "conjecturer"
+    },
+    {
+     "id": "f37338f5e4c3",
+     "role": "seed"
+    },
+    {
+     "id": "22c6e6564ec3",
+     "role": "seed"
+    }
+   ]
+  },
+  "kimi-k2_6": {
+   "remains_refuted": [
+    {
+     "id": "e2441696f20a",
+     "kept_refuted_by": [
+      "demonstrative"
+     ],
+     "role": "conjecturer"
+    }
+   ],
+   "would_return_to_accepted": [
+    {
+     "id": "1a806ed092b1",
+     "role": "conjecturer"
+    },
+    {
+     "id": "6903360868d2",
+     "role": "conjecturer"
+    },
+    {
+     "id": "6480735f5f7a",
+     "role": "conjecturer"
+    }
+   ]
+  },
+  "qwen3_5_397b": {
+   "remains_refuted": [],
+   "would_return_to_accepted": [
+    {
+     "id": "7e3426b9a715",
+     "role": "seed"
+    },
+    {
+     "id": "ba687c5f145e",
+     "role": "seed"
+    },
+    {
+     "id": "74fde5320d6c",
+     "role": "seed"
+    },
+    {
+     "id": "3b163f382274",
+     "role": "conjecturer"
+    },
+    {
+     "id": "c6d796328c0e",
+     "role": "conjecturer"
+    },
+    {
+     "id": "56ee8fc14849",
+     "role": "conjecturer"
+    },
+    {
+     "id": "f37338f5e4c3",
+     "role": "seed"
+    },
+    {
+     "id": "22c6e6564ec3",
+     "role": "seed"
+    }
+   ]
+  },
+  "summary": {
+   "deepseek-v4-pro": {
+    "remains_refuted": 3,
+    "would_return_to_accepted": 8
+   },
+   "kimi-k2_6": {
+    "remains_refuted": 1,
+    "would_return_to_accepted": 3
+   },
+   "qwen3_5_397b": {
+    "remains_refuted": 0,
+    "would_return_to_accepted": 8
+   }
+  }
+ },
+ "caveats": [
+  "co-evolution not simulated: the refuted record is held fixed at the actual run's final state; a different gate or authority would have changed which refutations existed at each step",
+  "proposals emitted before a stream's first refutation are counted admitted under every policy",
+  "authority replay changes no stored root; it recomputes which refuted artifacts are attacked only by argumentative warrants"
+ ],
+ "gate_replay": {
+  "deepseek-v4-pro": {
+   "admitted_exact_hash_only": 190,
+   "admitted_legacy_gate": 3,
+   "admitted_repaired_gate": 190,
+   "content_unrecovered": 0,
+   "emitted": 190,
+   "pre_first_kill": 3
+  },
+  "kimi-k2_6": {
+   "admitted_exact_hash_only": 282,
+   "admitted_legacy_gate": 3,
+   "admitted_repaired_gate": 282,
+   "content_unrecovered": 0,
+   "emitted": 282,
+   "pre_first_kill": 3
+  },
+  "qwen3_5_397b": {
+   "admitted_exact_hash_only": 186,
+   "admitted_legacy_gate": 3,
+   "admitted_repaired_gate": 186,
+   "content_unrecovered": 0,
+   "emitted": 186,
+   "pre_first_kill": 3
+  },
+  "totals": {
+   "admitted_exact_hash_only": 658,
+   "admitted_legacy_gate": 9,
+   "admitted_repaired_gate": 658,
+   "emitted": 658,
+   "pre_first_kill": 9
+  }
+ },
+ "inputs": {
+  "census": "experiments/results/bronze_flat_v1_census.json",
+  "roots": {
+   "deepseek-v4-pro": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+   "kimi-k2.6": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+   "qwen3.5:397b": "experiments/bronze_flat_2026-07-13/qwen3_5_397b"
+  }
+ },
+ "schema": "deepreason-bronze-flat-v1-counterfactuals"
+}

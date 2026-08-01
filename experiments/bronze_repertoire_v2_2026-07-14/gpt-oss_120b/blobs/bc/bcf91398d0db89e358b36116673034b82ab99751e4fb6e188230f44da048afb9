@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: The hyperarid-climate hypothesis (c4f54171b1e2) posits that Egypt's Nile-based agriculture insulated it from regional collapse, but the copper-production collapse hypothesis (dacf8df890d9) implies that Egypt's insulation was insufficient because the loss of Cypriot copper would have severed the trade networks essential for Egypt's own military and economic stability, which depended on imported copper. REFUTED IF evidence shows Egypt maintained copper supplies independent of Cyprus or that its military/economic stability did not require imported copper.",
+  "connects": [
+    "c4f54171b1e22fe11761abc4d1373cc53d2234e3b2677f53966b239b92137530",
+    "dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67"
+  ]
+}

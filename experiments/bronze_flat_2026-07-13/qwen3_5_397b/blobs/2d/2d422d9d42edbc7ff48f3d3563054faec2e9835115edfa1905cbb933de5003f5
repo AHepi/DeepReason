@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "argumentativecritic.direct.v1", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {"attack": false}}

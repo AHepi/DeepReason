@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "An idempotent operation is one where executing it multiple times has the same effect as executing it once (f(f(x)) = f(x)), whereas a safe operation avoids causing unintended side effects on retry; an append-only event log surviving at-least-once delivery requires its writers to ensure idempotency (e.g., via deterministic content addressing or idempotency keys).",
+    "mechanism": "Under at-least-once delivery, a writer's append request may be received multiple times. To maintain deterministic replay without duplicating events, the log relies on the writer providing a unique, deterministic event identifier. The log then deduplicates based on this identifier, making the append operation functionally idempotent rather than merely safe.",
+    "counterconditions": [
+      "The writer provides a new non-deterministic identifier for each retry, causing duplicate events.",
+      "The append-only log lacks a deduplication mechanism, turning at-least-once delivery into duplicate event insertion."
+    ],
+    "typicality": 0.4,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "search_signal": "need_context",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}

@@ -1,0 +1,962 @@
+Idempotence - Wikipedia
+Jump to content
+Main menu
+Main menu
+move to sidebar
+hide
+Navigation
+Main page
+Contents
+Current events
+Random article
+About Wikipedia
+Contact us
+Contribute
+Help
+Learn to edit
+Community portal
+Recent changes
+Upload file
+Special pages
+Search
+Search
+Appearance
+Donate
+Create account
+Log in
+Personal tools
+Donate
+Create account
+Log in
+Contents
+move to sidebar
+hide
+(Top)
+1
+Definition
+2
+Examples
+Toggle Examples subsection
+2.1
+Idempotent functions
+2.2
+Idempotent morphisms
+3
+Computer science meaning
+Toggle Computer science meaning subsection
+3.1
+Computer science examples
+4
+Applied examples
+5
+See also
+6
+Notes
+7
+References
+8
+Further reading
+9
+External links
+Toggle the table of contents
+Idempotence
+33 languages
+العربية
+Azərbaycanca
+Català
+Čeština
+Dansk
+Deutsch
+Ελληνικά
+Esperanto
+Español
+Eesti
+فارسی
+Suomi
+Français
+Galego
+עברית
+Magyar
+Interlingua
+Bahasa Indonesia
+Italiano
+日本語
+한국어
+Nederlands
+Polski
+Português
+Русский
+Simple English
+Slovenščina
+Српски / srpski
+Svenska
+தமிழ்
+ไทย
+Українська
+中文
+Edit links
+Article
+Talk
+English
+Read
+Edit
+View history
+Tools
+Tools
+move to sidebar
+hide
+Actions
+Read
+Edit
+View history
+General
+What links here
+Related changes
+Upload file
+Permanent link
+Page information
+Cite this page
+Get shortened URL
+Switch to legacy parser
+Print/export
+Download as PDF
+Printable version
+In other projects
+Wikidata item
+Appearance
+move to sidebar
+hide
+From Wikipedia, the free encyclopedia
+Property of operations
+For the concepts in algebra, see Idempotent (ring theory) and Idempotent matrix.
+On/Off buttons of a train's destination sign control panel. Pressing the On button (green) is an idempotent operation, since it has the same effect whether done once or multiple times. Likewise, pressing Off is idempotent.
+Idempotence (UK: /ˌɪdɛmˈpoʊtəns/,[1] US: /ˈaɪdəm-/)[2] is the property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application. The concept of idempotence arises in a number of places in abstract algebra (in particular, in the theory of projectors and closure operators) and functional programming (in which it is connected to the property of referential transparency).
+The term was introduced by American mathematician Benjamin Peirce in 1870[3][4] in the context of elements of algebras that remain invariant when raised to a positive integer power, and literally means "(the quality of having) the same power", from idem + potence (same + power).
+Definition
+[edit]
+An element
+x
+{\displaystyle x}
+of a set
+S
+{\displaystyle S}
+equipped with a binary operator
+⋅
+{\displaystyle \cdot }
+is said to be idempotent under
+⋅
+{\displaystyle \cdot }
+if[5][6]
+x
+⋅
+x
+=
+x
+{\displaystyle x\cdot x=x}
+.
+The binary operation
+⋅
+{\displaystyle \cdot }
+is said to be idempotent if[7][8]
+x
+⋅
+x
+=
+x
+{\displaystyle x\cdot x=x}
+for all
+x
+∈
+S
+{\displaystyle x\in S}
+.
+Examples
+[edit]
+In the monoid
+(
+N
+,
+×
+)
+{\displaystyle (\mathbb {N} ,\times )}
+of the natural numbers with multiplication, only
+0
+{\displaystyle 0}
+and
+1
+{\displaystyle 1}
+are idempotent. Indeed,
+0
+×
+0
+=
+0
+{\displaystyle 0\times 0=0}
+and
+1
+×
+1
+=
+1
+{\displaystyle 1\times 1=1}
+.
+In the monoid
+(
+N
+,
++
+)
+{\displaystyle (\mathbb {N} ,+)}
+of the natural numbers with addition, only
+0
+{\displaystyle 0}
+is idempotent. Indeed, 0 + 0 = 0.
+In a magma
+(
+M
+,
+⋅
+)
+{\displaystyle (M,\cdot )}
+, an identity element
+e
+{\displaystyle e}
+or an absorbing element
+a
+{\displaystyle a}
+, if it exists, is idempotent. Indeed,
+e
+⋅
+e
+=
+e
+{\displaystyle e\cdot e=e}
+and
+a
+⋅
+a
+=
+a
+{\displaystyle a\cdot a=a}
+.
+In a group
+(
+G
+,
+⋅
+)
+{\displaystyle (G,\cdot )}
+, the identity element
+e
+{\displaystyle e}
+is the only idempotent element. Indeed, if
+x
+{\displaystyle x}
+is an element of
+G
+{\displaystyle G}
+such that
+x
+⋅
+x
+=
+x
+{\displaystyle x\cdot x=x}
+, then
+x
+⋅
+x
+=
+x
+⋅
+e
+{\displaystyle x\cdot x=x\cdot e}
+and finally
+x
+=
+e
+{\displaystyle x=e}
+by multiplying on the left by the inverse element of
+x
+{\displaystyle x}
+.
+In the monoids
+(
+P
+(
+E
+)
+,
+∪
+)
+{\displaystyle ({\mathcal {P}}(E),\cup )}
+and
+(
+P
+(
+E
+)
+,
+∩
+)
+{\displaystyle ({\mathcal {P}}(E),\cap )}
+of the power set
+P
+(
+E
+)
+{\displaystyle {\mathcal {P}}(E)}
+of the set
+E
+{\displaystyle E}
+with set union
+∪
+{\displaystyle \cup }
+and set intersection
+∩
+{\displaystyle \cap }
+respectively,
+∪
+{\displaystyle \cup }
+and
+∩
+{\displaystyle \cap }
+are idempotent. Indeed,
+x
+∪
+x
+=
+x
+{\displaystyle x\cup x=x}
+for all
+x
+∈
+P
+(
+E
+)
+{\displaystyle x\in {\mathcal {P}}(E)}
+, and
+x
+∩
+x
+=
+x
+{\displaystyle x\cap x=x}
+for all
+x
+∈
+P
+(
+E
+)
+{\displaystyle x\in {\mathcal {P}}(E)}
+.
+In the monoids
+(
+{
+0
+,
+1
+}
+,
+∨
+)
+{\displaystyle (\{0,1\},\vee )}
+and
+(
+{
+0
+,
+1
+}
+,
+∧
+)
+{\displaystyle (\{0,1\},\wedge )}
+of the Boolean domain with logical disjunction
+∨
+{\displaystyle \vee }
+and logical conjunction
+∧
+{\displaystyle \wedge }
+respectively,
+∨
+{\displaystyle \vee }
+and
+∧
+{\displaystyle \wedge }
+are idempotent. Indeed,
+x
+∨
+x
+=
+x
+{\displaystyle x\vee x=x}
+for all
+x
+∈
+{
+0
+,
+1
+}
+{\displaystyle x\in \{0,1\}}
+, and
+x
+∧
+x
+=
+x
+{\displaystyle x\wedge x=x}
+for all
+x
+∈
+{
+0
+,
+1
+}
+{\displaystyle x\in \{0,1\}}
+.
+In a GCD domain (for instance in
+Z
+{\displaystyle \mathbb {Z} }
+), the operations of GCD and LCM are idempotent.
+In a Boolean ring, multiplication is idempotent.
+In a tropical semiring, addition is idempotent.
+In a ring of quadratic matrices, the determinant of an idempotent matrix is either 0 or 1. If the determinant is 1, the matrix necessarily is the identity matrix.[9]
+Idempotent functions
+[edit]
+In the monoid
+(
+E
+E
+,
+∘
+)
+{\displaystyle (E^{E},\circ )}
+of the functions from a set
+E
+{\displaystyle E}
+to itself (see set exponentiation) with function composition
+∘
+{\displaystyle \circ }
+, idempotent elements are the functions
+f
+:
+E
+→
+E
+{\displaystyle f\colon E\to E}
+such that
+f
+∘
+f
+=
+f
+{\displaystyle f\circ f=f}
+,[a] that is such that
+f
+(
+f
+(
+x
+)
+)
+=
+f
+(
+x
+)
+{\displaystyle f(f(x))=f(x)}
+for all
+x
+∈
+E
+{\displaystyle x\in E}
+(in other words, the image
+f
+(
+x
+)
+{\displaystyle f(x)}
+of each element
+x
+∈
+E
+{\displaystyle x\in E}
+is a fixed point of
+f
+{\displaystyle f}
+). For example:
+the absolute value is idempotent. Indeed,
+abs
+∘
+abs
+=
+abs
+{\displaystyle \operatorname {abs} \circ \operatorname {abs} =\operatorname {abs} }
+, that is
+abs
+⁡
+(
+abs
+⁡
+(
+x
+)
+)
+=
+abs
+⁡
+(
+x
+)
+{\displaystyle \operatorname {abs} (\operatorname {abs} (x))=\operatorname {abs} (x)}
+for all
+x
+{\displaystyle x}
+;
+constant functions are idempotent;
+the identity function is idempotent;
+the floor, ceiling and fractional part functions are idempotent;
+the real part function
+R
+e
+(
+z
+)
+{\displaystyle \mathrm {Re} (z)}
+of a complex number, is idempotent.
+for most kinds of average, taking the average of a set and putting it in a singleton set is idempotent:
+{
+avg
+⁡
+{
+avg
+⁡
+{
+x
+1
+,
+…
+,
+x
+n
+}
+}
+}
+=
+{
+avg
+⁡
+{
+x
+1
+,
+…
+,
+x
+n
+}
+}
+{\displaystyle \{\operatorname {avg} \{\operatorname {avg} \{x_{1},\dots ,x_{n}\}\}\}=\{\operatorname {avg} \{x_{1},\dots ,x_{n}\}\}}
+the subgroup generated function from the power set of a group to itself is idempotent;
+the convex hull function from the power set of an affine space over the reals to itself is idempotent;
+the closure and interior functions of the power set of a topological space to itself are idempotent;
+the Kleene star and Kleene plus functions of the power set of a monoid to itself are idempotent;
+the idempotent endomorphisms of a vector space are its projections.
+If the set
+E
+{\displaystyle E}
+has
+n
+{\displaystyle n}
+elements, we can partition it into
+k
+{\displaystyle k}
+chosen fixed points and
+n
+−
+k
+{\displaystyle n-k}
+non-fixed points under
+f
+{\displaystyle f}
+, and then
+k
+n
+−
+k
+{\displaystyle k^{n-k}}
+is the number of different idempotent functions. Hence, taking into account all possible partitions,
+∑
+k
+=
+0
+n
+(
+n
+k
+)
+k
+n
+−
+k
+{\displaystyle \sum _{k=0}^{n}{n \choose k}k^{n-k}}
+is the total number of possible idempotent functions on the set. The integer sequence of the number of idempotent functions as given by the sum above for n = 0, 1, 2, 3, 4, 5, 6, 7, 8, ... starts with 1, 1, 3, 10, 41, 196, 1057, 6322, 41393, ... (sequence A000248 in the OEIS).
+Neither idempotence nor non-idempotence is preserved under function composition.[b] As an example for the former,
+f
+(
+x
+)
+=
+x
+{\displaystyle f(x)=x}
+mod 3 and
+g
+(
+x
+)
+=
+max
+(
+x
+,
+5
+)
+{\displaystyle g(x)=\max(x,5)}
+are both idempotent, but
+f
+∘
+g
+{\displaystyle f\circ g}
+is not,[c] although
+g
+∘
+f
+{\displaystyle g\circ f}
+happens to be.[d] As an example for the latter, the negation function
+¬
+{\displaystyle \neg }
+on the Boolean domain is not idempotent, but
+¬
+∘
+¬
+{\displaystyle \neg \circ \neg }
+is. Similarly, unary negation
+−
+(
+⋅
+)
+{\displaystyle -(\cdot )}
+of real numbers is not idempotent, but
+−
+(
+⋅
+)
+∘
+−
+(
+⋅
+)
+{\displaystyle -(\cdot )\circ -(\cdot )}
+is. In both cases, the composition is simply the identity function, which is idempotent.
+Idempotent morphisms
+[edit]
+A morphism
+f
+:
+x
+→
+x
+{\displaystyle f:x\to x}
+in a category is called idempotent if
+f
+∘
+f
+=
+f
+{\displaystyle f\circ f=f}
+.[10] An idempotent is said to split if it can be written as
+f
+=
+h
+∘
+g
+{\displaystyle f=h\circ g}
+for some
+g
+:
+x
+→
+y
+,
+h
+:
+y
+→
+x
+{\displaystyle g:x\to y,\,h:y\to x}
+with
+g
+∘
+h
+=
+id
+{\displaystyle g\circ h=\operatorname {id} }
+.
+A category is said to be idempotent complete if every idempotent splits. For example,
+S
+e
+t
+{\displaystyle {\mathsf {Set}}}
+is idempotent complete.[11]
+Computer science meaning
+[edit]
+See also: Referential transparency, Reentrant (subroutine), Stable sort, and Command query separation
+In computer science, the term idempotence may have a different meaning depending on the context in which it is applied:
+in imperative programming, a subroutine with side effects is idempotent if multiple calls to the subroutine have the same effect on the system state as a single call, in other words if the function from the system state space to itself associated with the subroutine is idempotent in the mathematical sense given in the definition;
+in functional programming, a pure function is idempotent if it is idempotent in the mathematical sense given in the definition.
+This is a very useful property in many situations, as it means that an operation can be repeated or retried as often as necessary without causing unintended effects. With non-idempotent operations, the algorithm may have to keep track of whether the operation was already performed or not.
+Computer science examples
+[edit]
+A function looking up a customer's name and address in a database is typically idempotent, since this will not cause the database to change. Similarly, a request for changing a customer's address to XYZ is typically idempotent, because the final address will be the same no matter how many times the request is submitted. However, a customer request for placing an order is typically not idempotent since multiple requests will lead to multiple orders being placed. A request for canceling a particular order is idempotent because no matter how many requests are made the order remains canceled.
+A sequence of idempotent subroutines where at least one subroutine is different from the others, however, is not necessarily idempotent if a later subroutine in the sequence changes a value that an earlier subroutine depends on—idempotence is not closed under sequential composition. For example, suppose the initial value of a variable is 3 and there is a subroutine sequence that reads the variable, then changes it to 5, and then reads it again. Each step in the sequence is idempotent: both steps reading the variable have no side effects and the step changing the variable to 5 will always have the same effect no matter how many times it is executed. Nonetheless, executing the entire sequence once produces the output (3, 5), but executing it a second time produces the output (5, 5), so the sequence is not idempotent.
+int x = 3;
+void inspect() { printf("%d\n", x); }
+void change() { x = 5; }
+void sequence() { inspect(); change(); inspect(); }
+int main() {
+sequence(); // prints "3\n5\n"
+sequence(); // prints "5\n5\n"
+return 0;
+}
+In the Hypertext Transfer Protocol (HTTP), idempotence and safety are the major attributes that separate HTTP methods. Of the major HTTP methods, GET, PUT, and DELETE should be implemented in an idempotent manner according to the standard, but POST doesn't need to be.[12] GET retrieves the state of a resource; PUT updates the state of a resource; and DELETE deletes a resource. As in the example above, reading data usually has no side effects, so it is idempotent (in fact nullipotent). Updating and deleting a given data are each usually idempotent as long as the request uniquely identifies the resource and only that resource again in the future. PUT and DELETE with unique identifiers reduce to the simple case of assignment to a variable of either a value or the null-value, respectively, and are idempotent for the same reason; the end result is always the same as the result of the initial execution, even if the response differs.[13]
+Violation of the unique identification requirement in storage or deletion typically causes violation of idempotence. For example, storing or deleting a given set of content without specifying a unique identifier: POST requests, which do not need to be idempotent, often do not contain unique identifiers, so the creation of the identifier is delegated to the receiving system which then creates a corresponding new record. Similarly, PUT and DELETE requests with nonspecific criteria may result in different outcomes depending on the state of the system – for example, a request to delete the most recent record. In each case, subsequent executions will further modify the state of the system, so they are not idempotent.
+In event stream processing, idempotence refers to the ability of a system to produce the same outcome, even if the same file, event or message is received more than once.
+In a load–store architecture, instructions that might possibly cause a page fault are idempotent. So if a page fault occurs, the operating system can load the page from disk and then simply re-execute the faulted instruction. In a processor where such instructions are not idempotent, dealing with page faults is much more complex.[14][15]
+When reformatting output, pretty-printing is expected to be idempotent. In other words, if the output is already "pretty", there should be nothing to do for the pretty-printer.[citation needed]
+In service-oriented architecture (SOA), a multiple-step orchestration process composed entirely of idempotent steps can be replayed without side-effects if any part of that process fails.
+Many operations that are idempotent often have ways to "resume" a process if it is interrupted – ways that finish much faster than starting all over from the beginning. For example, resuming a file transfer,
+synchronizing files, creating a software build, installing an application and all of its dependencies with a package manager, etc.
+Applied examples
+[edit]
+A typical crosswalk button is an example of an idempotent system.
+Applied examples that many people could encounter in their day-to-day lives include elevator call buttons and crosswalk buttons.[16] The initial activation of the button moves the system into a requesting state, until the request is satisfied. Subsequent activations of the button between the initial activation and the request being satisfied have no effect, unless the system is designed to adjust the time for satisfying the request based on the number of activations.
+Similarly, the elevator "close" button may be pressed many times to the same effect as once, since the doors close on a fixed schedule – unless the "open" button is pressed. The "open" button is not idempotent, because each press adds further delay.
+See also
+[edit]
+Biordered set
+Closure operator
+Fixed point (mathematics)
+Idempotent of a code
+Idempotent analysis
+Idempotent matrix
+Idempotent relation – a generalization of idempotence to binary relations
+Idempotent (ring theory)
+Involution (mathematics)
+Iterated function
+List of matrices
+Nilpotent
+Pure function
+Referential transparency
+Notes
+[edit]
+↑ This is an equation between functions. Two functions are equal if their domains and ranges agree, and their output values agree on their whole domain.
+↑ If
+f
+{\displaystyle f}
+and
+g
+{\displaystyle g}
+commute under composition (i.e. if
+f
+∘
+g
+=
+g
+∘
+f
+{\displaystyle f\circ g=g\circ f}
+) then idempotency of both
+f
+{\displaystyle f}
+and
+g
+{\displaystyle g}
+implies that of
+f
+∘
+g
+{\displaystyle f\circ g}
+, since
+(
+f
+∘
+g
+)
+∘
+(
+f
+∘
+g
+)
+=
+f
+∘
+(
+g
+∘
+f
+)
+∘
+g
+=
+f
+∘
+(
+f
+∘
+g
+)
+∘
+g
+=
+(
+f
+∘
+f
+)
+∘
+(
+g
+∘
+g
+)
+=
+f
+∘
+g
+{\displaystyle (f\circ g)\circ (f\circ g)=f\circ (g\circ f)\circ g=f\circ (f\circ g)\circ g=(f\circ f)\circ (g\circ g)=f\circ g}
+, using the associativity of composition.
+↑ e.g.
+f
+(
+g
+(
+7
+)
+)
+=
+f
+(
+7
+)
+=
+1
+{\displaystyle f(g(7))=f(7)=1}
+, but
+f
+(
+g
+(
+1
+)
+)
+=
+f
+(
+5
+)
+=
+2
+≠
+1
+{\displaystyle f(g(1))=f(5)=2\neq 1}
+↑ Also showing that commutation of
+f
+{\displaystyle f}
+and
+g
+{\displaystyle g}
+is not a necessary condition for idempotency preservation.
+References
+[edit]
+↑ "idempotence". Oxford English Dictionary (3rd ed.). Oxford University Press. 2010.
+↑ "idempotent". Merriam-Webster. Archived from the original on 2016-10-19.
+↑ Original manuscript of 1870 lecture before National Academy of Sciences (Washington, DC, USA): Peirce, Benjamin (1870) "Linear associative algebra" From pages 16–17: "When an expression which is raised to the square or any higher power vanishes, it may be called nilpotent; but when raised to a square or higher power it gives itself as the result, it may be called idempotent.
+The defining equation of nilpotent and idempotent expressions are respectively An = 0 and An = A; but with reference to idempotent expressions, it will always be assumed that they are of the form An = A unless it be otherwise distinctly stated."
+Printed: Peirce, Benjamin (1881). "Linear associative algebra". American Journal of Mathematics. 4 (1): 97–229. doi:10.2307/2369153. JSTOR 2369153. See p. 104.
+Reprinted: Peirce, Benjamin (1882). Linear Associative Algebra (PDF). New York, New York, USA: D. Van Nostrand. p. 8.
+↑ Polcino & Sehgal 2002, p. 127.
+↑ Valenza, Robert (2012). Linear Algebra: An Introduction to Abstract Mathematics. Berlin: Springer Science & Business Media. p. 22. ISBN 9781461209010. An element s of a magma such that ss = s is called idempotent.
+↑ Doneddu, Alfred (1976). Polynômes et algèbre linéaire (in French). Paris: Vuibert. p. 180. Soit M un magma, noté multiplicativement. On nomme idempotent de M tout élément a de M tel que a2 = a.
+↑ George Grätzer (2003). General Lattice Theory. Basel: Birkhäuser. ISBN 978-3-7643-6996-5. Here: Sect.1.2, p.5.
+↑ Garrett Birkhoff (1967). Lattice Theory. Colloquium Publications. Vol. 25. Providence: Am. Math. Soc.. Here: Sect.I.5, p.8.
+↑ Balmaceda, Jose Maria. "Idempotents in Certain Matrix Rings Over Polynomial Rings". International Electronic Journal of Algebra. doi:10.24330/IEJA.662942.
+↑ Mac Lane 1978, Ch. I., § 5.
+↑ Mac Lane 1978, Ch. I., § 5., Exercise 6.
+↑ IETF, Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content Archived 2014-06-08 at the Wayback Machine. See also HyperText Transfer Protocol.
+↑ "Idempotent Methods". Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content. IETF. sec. 4.2.2. doi:10.17487/RFC7231. RFC 7231. It knows that repeating the request will have the same intended effect, even if the original request succeeded, though the response might differ.
+↑
+John Ousterhout.
+"Demand Paging".
+↑
+Marc A. de Kruijf.
+"Compiler construction of idempotent regions and applications in architecture design".
+2012.
+p. 10.
+↑ "Geared Traction Passenger Elevator Specification Guide Information/Instructions" (PDF). NC Department Of Labor, Elevator Bureau. 2002. Archived from the original (PDF) on 2011-05-23. For example, this design specification includes detailed algorithm for when elevator cars will respond to subsequent calls for service
+Further reading
+[edit]
+Goodearl, K. R. (1991), von Neumann regular rings (2 ed.), Malabar, FL: Robert E. Krieger Publishing Co. Inc., pp. xviii+412, ISBN 978-0-89464-632-4, MR 1150975
+Gunawardena, Jeremy (1998), "An introduction to idempotency" (PDF), in Gunawardena, Jeremy (ed.), Idempotency. Based on a workshop, Bristol, UK, October 3–7, 1994, Cambridge: Cambridge University Press, pp. 1–49, Zbl 0898.16032
+"Idempotent", Encyclopedia of Mathematics, EMS Press, 2001 [1994]
+Hazewinkel, Michiel; Gubareni, Nadiya; Kirichenko, V. V. (2004), Algebras, rings and modules. vol. 1, Mathematics and its Applications, vol. 575, Dordrecht: Kluwer Academic Publishers, pp. xii+380, ISBN 978-1-4020-2690-4, MR 2106764
+Lam, T. Y. (2001), A first course in noncommutative rings, Graduate Texts in Mathematics, vol. 131 (2 ed.), New York: Springer-Verlag, pp. xx+385, doi:10.1007/978-1-4419-8616-0, ISBN 978-0-387-95183-6, MR 1838439
+Lang, Serge (1993), Algebra (Third ed.), Reading, Mass.: Addison-Wesley, ISBN 978-0-201-55540-0, Zbl 0848.13001 p. 443
+Peirce, Benjamin. Linear Associative Algebra 1870.
+Polcino Milies, César; Sehgal, Sudarshan K. (2002), An Introduction to Group Rings, Algebras and Applications, vol. 1, Kluwer Academic Publishers, pp. 127, ISBN 978-1-4020-0238-0, MR 1896125
+Mac Lane, Saunders (1978). Categories for the Working Mathematician (Second ed.). New York, NY: Springer. ISBN 1441931236. OCLC 851741862.
+External links
+[edit]
+Wikibooks has more on the topic of: Idempotence
+Wikiversity has learning resources about Portal:Computer Science
+"idempotent" at the Free On-line Dictionary of Computing
+Portal: Mathematics
+Idempotence at Wikipedia's sister projects:
+Definitions from Wiktionary
+Retrieved from "https://en.wikipedia.org/w/index.php?title=Idempotence&oldid=1363406673"
+Categories: Properties of binary operations
+Algebraic properties of elements
+Closure operators
+Mathematical relations
+Theoretical computer science
+Hidden categories: Articles with short description
+Short description is different from Wikidata
+CS1 French-language sources (fr)
+Webarchive template wayback links
+All articles with unsourced statements
+Articles with unsourced statements from March 2017
+This page was last edited on 10 July 2026, at 00:38 (UTC).
+Page was rendered with Parsoid.
+Text is available under the Creative Commons Attribution-ShareAlike 4.0 License;
+additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
+Privacy policy
+About Wikipedia
+Disclaimers
+Contact Wikipedia
+Legal & safety contacts
+Code of Conduct
+Developers
+Statistics
+Cookie statement
+Mobile view
+Search
+Search
+Toggle the table of contents
+Idempotence
+33 languages
+Add topic

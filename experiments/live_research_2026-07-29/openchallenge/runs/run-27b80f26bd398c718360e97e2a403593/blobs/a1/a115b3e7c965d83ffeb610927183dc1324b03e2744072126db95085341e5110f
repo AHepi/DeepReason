@@ -1,0 +1,48 @@
+```json
+{
+  "candidate": {
+    "claim": "The stall at 23 is best explained by a symmetry obstruction: any rank-22 decomposition of <3,3,3> would necessarily break the tensor's large automorphism group into orbit configurations whose combinatorial constraints are unsatisfiable over integers, even though 22 may be achievable over extensions or modulo small primes.",
+    "mechanism": "The <3,3,3> tensor possesses a large symmetry group (order 6^3 × 2 from row/column/transposition permutations). A rank-r decomposition corresponds to a set of r rank-1 tensors whose sum equals the target. If r=22, each rank-1 term must carry enough 'information' that the aggregate symmetry cannot be preserved or split into orbits that sum correctly. Over integers, the orbit-stabilizer accounting under the symmetry group forces certain coefficient matrices to be zero or to collide, reducing effective rank below 22 and making exact reconstruction impossible. Over finite fields or algebraic extensions, the orbit constraints relax because characteristic divides group orders, permitting constructions that do not lift to characteristic zero.",
+    "counterconditions": [
+      "If a 22-term decomposition is found that preserves a nontrivial subgroup of the automorphism group over the integers, the obstruction is weakened and the stall is explained by search difficulty rather than structural impossibility.",
+      "If rank-22 is achievable modulo a small prime (e.g., p=2 or p=3) but does not lift, this supports the characteristic-dependent obstruction; if it lifts, the hypothesis is overturned.",
+      "If exhaustive search over a restricted symmetry class (e.g., decompositions invariant under a specific subgroup of order 6) finds rank-22, the symmetry obstruction hypothesis is falsified for that class.",
+      "If a rank-23 decomposition with a novel symmetry structure (not equivalent to Laderman under the symmetry group) is found, it suggests the stall at 23 is a search artifact, not a structural barrier."
+    ],
+    "analogy": {
+      "source_memory_refs": ["695e3101e0b7bef8", "1db0851ec995fd3d"],
+      "shared_structure": [
+        "A highly symmetric algebraic object whose low-rank decompositions are constrained by the interaction between the symmetry group and the rank-1 summand structure.",
+        "The rank-1 summands cannot individually respect the full symmetry, so the decomposition must split the symmetry into orbits, and the orbit arithmetic must work out exactly over the base field.",
+        "There is a gap between what is achievable over special fields (finite fields, algebraically closed fields) and what lifts to the integers, analogous to how certain Diophantine equations have solutions modulo every prime but no integer solution."
+      ],
+      "disanalogies": [
+        "Unlike generic tensors, matrix multiplication tensors have highly structured rank-1 decompositions corresponding to bilinear algorithms, which may admit constructions that bypass generic symmetry arguments.",
+        "The analogy to Diophantine local-global failures (e.g., Hasse principle counterexamples) assumes the obstruction is field-theoretic; it may instead be purely combinatorial and field-independent.",
+        "The symmetry group of <3,3,3> is not as well-characterized as, say, the Weyl group in root system theory, so orbit-counting arguments may be less rigorous than in those settings."
+      ],
+      "transfer_claims": [
+        "If symmetry obstruction explains the stall at 23 for <3,3,3>, then similar obstructions should explain stalls in other bilinear map rank problems (e.g., <2,2,3> or <3,3,2>) at their respective best-known ranks.",
+        "If rank-22 is found modulo a small prime but does not lift, this would parallel known local-global failures in quadratic forms and suggest a cohomological obstruction.",
+        "The orbit-counting method should predict a tight lower bound on the minimum orbit size for any rank-r decomposition, giving a computable threshold below which rank-r is impossible over the integers."
+      ],
+      "overturn_conditions": [
+        "A rank-22 decomposition of <3,3,3> over the integers is found and verified, directly overturning the obstruction claim.",
+        "The orbit-counting argument is shown to be non-binding because the relevant group actions on rank-1 tensors are not transitive on the needed orbits, making the combinatorial constraint vacuous.",
+        "An exhaustive search over a decidable smaller format (e.g., <2,2,3>) shows that symmetry obstruction predictions fail there, undermining the transfer of the mechanism to <3,3,3>."
+      ]
+    },
+    "evidence_refs": [
+      {"block": "695e3101e0b7bef8", "quote": "1. **Symmetry obstruction.** The `<3,3,3>` tensor has a large symmetry group. If every rank-22 decomposition would have to break that symmetry in a way that for"},
+      {"block": "1db0851ec995fd3d", "quote": "**R(3,3,3) is unknown.** The best construction anyone has found uses 23 multiplications. The best proved lower bound is 19. Whether 22, 21, or 20 is achievable"},
+      {"block": "70df46c005c36307", "quote": "23 has stood since 1976 despite: decades of hand construction; numerical alternating-least-squares searches; SAT and Groebner-basis attacks; and a"}
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.3
+  }
+}
+```

@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "The threshold 0.5 is an unexplained magic constant: there is no derivation linking it to a base error rate e, a critic recall r, or a break-to-fix ratio that would tell us whether k=7 with critic precision 0.43 (just above 0.5*sqrt(5/7) ≈ 0.423) should or should not show a harness advantage."}

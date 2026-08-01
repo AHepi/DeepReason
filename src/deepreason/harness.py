@@ -7,9 +7,14 @@ state byte-for-byte (P0 acceptance). Adjudication (§4) recomputes after
 every registration; its only inputs are att and dep (§0).
 """
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+from bisect import bisect_left
 from datetime import datetime, timezone
+import json
+import os
 from pathlib import Path
+
+from pydantic import BaseModel
 
 from deepreason.adjudication.edges import (
     DependenceCycleError,
@@ -19,10 +24,28 @@ from deepreason.adjudication.edges import (
 )
 from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
+from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
+from deepreason.bridge.state import (
+    BridgeState,
+    validate_terminal_bridge_history,
+)
+from deepreason.capabilities.events import CapabilityEventPayloadV1
+from deepreason.capabilities.state import CapabilityReplayState
+from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.control_events import (
+    ControlEventPayloadV1,
+    ControlEventPayloadV2,
+    ControlEventPayloadV3,
+)
+from deepreason.conjecture_turn import (
+    ConjectureAbstentionV1,
+    ContextRequestV1,
+)
 from deepreason.log.event_log import EventLog
 from deepreason.ontology import (
     Artifact,
     Commitment,
+    ConjectureTurnEventPayloadV1,
     EpistemicState,
     Event,
     Interface,
@@ -34,8 +57,15 @@ from deepreason.ontology import (
     Warrant,
 )
 from deepreason.ontology.problem import POPPER_BATTERY
-from deepreason.storage.blobs import BlobStore
-from deepreason.storage.objects import ObjectStore
+from deepreason.scratch.events import ScratchEventPayloadV1
+from deepreason.scratch.models import ScratchActor
+from deepreason.scratch.state import ScratchState
+from deepreason.storage.blobs import (
+    BlobStore,
+    FencedBlobStore,
+    historical_sealed_refs,
+)
+from deepreason.storage.objects import SCHEMAS, ObjectStore
 from deepreason.unification.isolation import conn_map
 
 
@@ -43,8 +73,18 @@ class WellFormednessError(ValueError):
     """A registration would violate the formation rules (spec §2)."""
 
 
+class ReadOnlyHarnessError(RuntimeError):
+    """A mutation was attempted through a time-travel materialization."""
+
+
 class Harness:
-    def __init__(self, root: Path | str, *, upto_seq: int | None = None) -> None:
+    def __init__(
+        self,
+        root: Path | str,
+        *,
+        upto_seq: int | None = None,
+        read_only: bool | None = None,
+    ) -> None:
         """Open (or create) a harness at ``root``; ``upto_seq`` truncates the
         replay for time-travel views (prefer the ``Harness.at`` spelling).
 
@@ -53,19 +93,88 @@ class Harness:
         so per-event adjudication during replay is discarded work (it made
         reopening an N-event log superlinear)."""
         self.root = Path(root)
-        self.root.mkdir(parents=True, exist_ok=True)
-        self.blobs = BlobStore(self.root / "blobs")
-        self.objects = ObjectStore(self.root / "objects")
-        self.log = EventLog(self.root / "log.jsonl")
+        self._read_only = (upto_seq is not None) if read_only is None else read_only
+        if self._read_only:
+            if not self.root.exists():
+                raise FileNotFoundError(f"read-only harness root does not exist: {self.root}")
+        else:
+            self.root.mkdir(parents=True, exist_ok=True)
+        self._workflow_manifest = self._load_workflow_manifest()
+        self.blobs = BlobStore(self.root / "blobs", read_only=self._read_only)
+        self.objects = ObjectStore(self.root / "objects", read_only=self._read_only)
+        self.log = EventLog(self.root / "log.jsonl", read_only=self._read_only)
         self._reset()
+        revealed_artifact_ids: set[str] = set()
         for event in self.log.read(upto_seq=upto_seq):
+            if event.rule == Rule.REVEAL:
+                revealed_artifact_ids.update(event.inputs)
             self._apply_event(event, adjudicate=False)
+        if upto_seq is None and self.workflow_state.terminal_commitments_by_epoch:
+            from deepreason.runtime.terminal_authority import (
+                validate_terminal_commitment_storage,
+            )
+
+            validate_terminal_commitment_storage(
+                self.root, self.workflow_state
+            )
         self._adjudicate()
+        if upto_seq is None:
+            self._verify_workflow_checkpoint()
+        if self._read_only:
+            self.blobs = FencedBlobStore(
+                self.blobs,
+                historical_sealed_refs(
+                    self.blobs, self.state.artifacts, revealed_artifact_ids
+                ),
+            )
 
     _TAIL_CAP = 512  # bounded in-memory event tail (windows are ~CAPTURE_W)
 
+    def _load_workflow_manifest(self):
+        """Load canonical transaction authority when this root has one."""
+
+        from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+        path = self.root / MANIFEST_NAME
+        try:
+            path.lstat()
+        except FileNotFoundError:
+            return None
+        return load_run_manifest(path)
+
+    def bind_transaction_manifest(self, manifest) -> None:
+        """Bind live transaction replay to the same immutable v6 manifest."""
+
+        current = self._workflow_manifest
+        if current is not None and current.sha256 != manifest.sha256:
+            raise ValueError("transaction manifest differs from bound root authority")
+        self._workflow_manifest = manifest
+        self.workflow_state.bind_run_manifest(manifest)
+
     def _reset(self) -> None:
         self.state = EpistemicState()
+        # Advisory scratch material is replayed beside, never inside, the
+        # formal ontology.  No ScratchState field participates in att, dep,
+        # warrant carriage, commitments, or adjudication.
+        self.scratch_state = ScratchState()
+        # Grounded final-view records are likewise process-only.  This index
+        # is reconstructed from Bridge events and has no path into formal
+        # graph materialization or adjudication.
+        self.bridge_state = BridgeState()
+        # Authority-only workflow state is reconstructed exclusively from
+        # typed Control events and immutable workflow records.  It never
+        # participates in formal graph adjudication.
+        from deepreason.workflow.replay import WorkflowReplayState
+
+        self.workflow_state = WorkflowReplayState()
+        if (
+            self._workflow_manifest is not None
+            and self._workflow_manifest.schema_version == 6
+        ):
+            self.workflow_state.bind_run_manifest(self._workflow_manifest)
+        # Autonomous capability authority is replayed independently from the
+        # conjecture-provider controller and never enters formal adjudication.
+        self.capability_state = CapabilityReplayState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
@@ -79,32 +188,201 @@ class Harness:
         self._trans_out: list[tuple[int, str, str | None, str]] = []
         self._embed_cache: dict[tuple[str, str], list[float]] = {}
         self._verdict_cache: dict[tuple[str, str], str] = {}
+        self._semantic_excluded_event_seqs: set[int] = set()
+        self._semantic_excluded_order: tuple[int, ...] | None = ()
+        self._semantic_split_call_candidates: set[int] = set()
+        # Live-only availability state: a sandbox resource abort is not an
+        # epistemic event and is never replayed/cached, but generator/property
+        # activation must fail closed until a later deterministic retry.
+        self._oracle_pending: set[tuple[str, str]] = set()
 
     @classmethod
     def at(cls, root: Path | str, seq: int) -> "Harness":
         """Time-travel: the harness as of event ``seq`` (spec §1). Read-only —
         do not register into a truncated view."""
-        return cls(root, upto_seq=seq)
+        return cls(root, upto_seq=seq, read_only=True)
+
+    def _ensure_writable(self) -> None:
+        if self._read_only:
+            raise ReadOnlyHarnessError("time-travel harness is read-only")
+
+    def reload_durable_authority(self) -> None:
+        """Replace this writable view with one fresh canonical root replay.
+
+        Process locks serialize a terminal first-writer decision, but a Harness
+        may have been opened before its contender acquired that lock.  Reloading
+        inside the critical section discards every stale pre-lock assumption,
+        including the event-log size/sequence fence, before authority is read or
+        appended.
+        """
+
+        self._ensure_writable()
+        refreshed = type(self)(self.root)
+        self.__dict__.clear()
+        self.__dict__.update(refreshed.__dict__)
+
+    @property
+    def _workflow_checkpoint_path(self) -> Path:
+        return self.root / "workflow-checkpoint.json"
+
+    def write_workflow_checkpoint(self) -> str | None:
+        """Seal the latest complete authority prefix for tail-loss detection."""
+
+        self._ensure_writable()
+        if not self.workflow_state.event_seqs:
+            return None
+        payload = {
+            "schema": "workflow.checkpoint.v1",
+            "process_digest": self.workflow_state.digest,
+            "last_control_seq": max(self.workflow_state.event_seqs),
+            "outstanding_work_order_ids": list(
+                self.workflow_state.outstanding_work_order_ids
+            ),
+        }
+        if self.workflow_state.terminal_commitments_by_epoch:
+            payload["terminal_commitment_ledger_digest"] = (
+                self.workflow_state.terminal_commitment_ledger_digest
+            )
+        target = self._workflow_checkpoint_path
+        temporary = target.with_suffix(f".tmp.{os.getpid()}")
+        data = canonical_json(payload)
+        with open(temporary, "wb") as stream:
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, target)
+        return sha256_hex(data)
+
+    def workflow_checkpoint_digest(self) -> str | None:
+        """Return the canonical generic workflow-checkpoint file digest."""
+
+        path = self._workflow_checkpoint_path
+        if not path.exists():
+            return None
+        try:
+            data = path.read_bytes()
+            payload = json.loads(data)
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("workflow checkpoint is corrupt") from error
+        if canonical_json(payload) != data:
+            raise ValueError("workflow checkpoint is not canonical JSON")
+        return sha256_hex(data)
+
+    def _verify_workflow_checkpoint(self) -> None:
+        path = self._workflow_checkpoint_path
+        if not path.exists():
+            return
+        try:
+            payload = json.loads(path.read_bytes())
+            required = {
+                "schema",
+                "process_digest",
+                "last_control_seq",
+                "outstanding_work_order_ids",
+            }
+            allowed = required | {"terminal_commitment_ledger_digest"}
+            if frozenset(payload) not in {frozenset(required), frozenset(allowed)} or payload[
+                "schema"
+            ] != "workflow.checkpoint.v1":
+                raise ValueError("workflow checkpoint has an invalid schema")
+            checkpoint_seq = payload["last_control_seq"]
+            if type(checkpoint_seq) is not int or checkpoint_seq < 0:
+                raise ValueError("workflow checkpoint sequence is invalid")
+            process_digest = payload["process_digest"]
+            outstanding = payload["outstanding_work_order_ids"]
+            terminal_ledger_digest = payload.get(
+                "terminal_commitment_ledger_digest"
+            )
+            if (
+                not isinstance(process_digest, str)
+                or not process_digest.startswith("sha256:")
+                or len(process_digest) != 71
+                or not isinstance(outstanding, list)
+                or any(not isinstance(item, str) for item in outstanding)
+                or outstanding != sorted(set(outstanding))
+                or (
+                    terminal_ledger_digest is not None
+                    and (
+                        not isinstance(terminal_ledger_digest, str)
+                        or not terminal_ledger_digest.startswith("sha256:")
+                        or len(terminal_ledger_digest) != 71
+                    )
+                )
+            ):
+                raise ValueError("workflow checkpoint authority fields are invalid")
+            current_seq = (
+                max(self.workflow_state.event_seqs)
+                if self.workflow_state.event_seqs
+                else -1
+            )
+            if current_seq < checkpoint_seq:
+                raise ValueError("workflow authority log lost its checkpointed tail")
+            # Verify the sealed authority prefix even when newer Control
+            # events exist.  Comparing only the latest state would let an
+            # attacker replace a checkpointed transition and append an
+            # unrelated later transition to bypass the equality check.
+            from deepreason.workflow.replay import replay_workflow
+
+            checkpoint_state = replay_workflow(
+                self.log.read(upto_seq=checkpoint_seq),
+                self.objects,
+                manifest=self._workflow_manifest,
+            )
+            if (
+                checkpoint_seq not in checkpoint_state.event_seqs
+                or process_digest != checkpoint_state.digest
+                or tuple(outstanding)
+                != checkpoint_state.outstanding_work_order_ids
+                or (
+                    terminal_ledger_digest is not None
+                    and terminal_ledger_digest
+                    != checkpoint_state.terminal_commitment_ledger_digest
+                )
+            ):
+                raise ValueError("workflow checkpoint differs from replayed authority")
+            if (
+                checkpoint_state.terminal_commitments_by_epoch
+                and terminal_ledger_digest is None
+            ):
+                raise ValueError(
+                    "workflow checkpoint omits terminal commitment authority"
+                )
+        except (KeyError, TypeError, json.JSONDecodeError) as error:
+            raise ValueError("workflow checkpoint is corrupt") from error
 
     # ------------------------------------------------------------------ #
     # Registration (live path: validate -> persist -> commit event)      #
     # ------------------------------------------------------------------ #
 
     def register_commitment(self, commitment: Commitment) -> Commitment:
+        self._ensure_writable()
         if commitment.id in self.commitments:
-            return self.commitments[commitment.id]
+            existing = self.commitments[commitment.id]
+            if existing != commitment:
+                raise WellFormednessError(
+                    f"commitment id {commitment.id!r} conflicts with its registered record"
+                )
+            return existing
         self.objects.put("commitment", commitment)
         self._commit(Rule.REGISTER, inputs=[], outputs=[commitment.id])
-        return commitment
+        return self.commitments[commitment.id]
 
     def register_problem(self, problem: Problem) -> Problem:
-        if problem.id in self.state.problems:
-            return self.state.problems[problem.id]
+        self._ensure_writable()
         # Popper battery auto-pinned (spec §1).
         criteria = list(problem.criteria) + [
             b for b in POPPER_BATTERY if b not in problem.criteria
         ]
-        problem = problem.model_copy(update={"criteria": criteria})
+        payload = problem.model_dump(mode="json", by_alias=True)
+        payload["criteria"] = criteria
+        problem = Problem.model_validate(payload)
+        if problem.id in self.state.problems:
+            existing = self.state.problems[problem.id]
+            if existing != problem:
+                raise WellFormednessError(
+                    f"problem id {problem.id!r} conflicts with its registered record"
+                )
+            return existing
         self.objects.put("problem", problem)
         self._commit(Rule.SPAWN, inputs=list(problem.provenance.from_), outputs=[problem.id])
         return self.state.problems[problem.id]
@@ -122,6 +400,7 @@ class Harness:
         llm: LLMCall | None = None,
     ) -> Artifact:
         """Store content, compute the canonical id, and register."""
+        self._ensure_writable()
         interface = interface or Interface()
         if isinstance(content, bytes):
             content_ref = self.blobs.put(content)
@@ -149,8 +428,9 @@ class Harness:
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
     ) -> Artifact:
-        if artifact.id in self.state.artifacts:
-            return self.state.artifacts[artifact.id]  # content-addressed dedupe
+        self._ensure_writable()
+        # register_batch handles both content dedupe and any NEW carriage
+        # declared for an existing content artifact.
         self.register_batch(
             [(artifact, list(warrants))], problem_id=problem_id, rule=rule, llm=llm
         )
@@ -163,31 +443,72 @@ class Harness:
         problem_id: str | None = None,
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
+        process_inputs: Iterable[str] = (),
     ) -> list[Artifact]:
-        """Register several artifacts (+ their warrants) in one event — e.g.
-        one Conj event per gamma-call carrying all admitted VS candidates."""
+        """Register artifacts and explicit warrant-carriage relations.
+
+        Content-addressed artifacts dedupe, but a new ``(artifact, warrant)``
+        pair still commits. This is what lets identical criticism prose attack
+        more than one target without changing the prose artifact's id.
+        """
+        self._ensure_writable()
         candidate = dict(self.state.artifacts)
         accepted_entries: list[tuple[Artifact, list[Warrant]]] = []
+        carry_add: list[tuple[str, str]] = []
+        known_carries = set(self.state.carries)
+        new_warrants: dict[str, Warrant] = {}
         for artifact, warrants in entries:
-            if artifact.id in candidate:
-                continue  # content-addressed dedupe (incl. within the batch)
+            is_new = artifact.id not in candidate
+            if not is_new:
+                existing_artifact = candidate[artifact.id]
+                if (
+                    existing_artifact.content_ref != artifact.content_ref
+                    or existing_artifact.codec != artifact.codec
+                    or existing_artifact.interface != artifact.interface
+                ):
+                    raise WellFormednessError(
+                        f"artifact id {artifact.id} conflicts with its content identity"
+                    )
             provided = {w.id: w for w in warrants}
             # Every attack edge carries a registered warrant (§2).
             for wid in artifact.warrants:
-                w = provided.get(wid) or self.warrants.get(wid)
+                w = provided.get(wid) or new_warrants.get(wid) or self.warrants.get(wid)
                 if w is None:
                     raise WellFormednessError(f"carried warrant not provided/registered: {wid}")
+                if (
+                    wid in provided
+                    and wid in self.warrants
+                    and provided[wid] != self.warrants[wid]
+                ):
+                    raise WellFormednessError(
+                        f"warrant id {wid} conflicts with the registered record"
+                    )
                 # A warrant's validity node may be an earlier artifact in this
                 # same batch, not only one already in state (one Conj event can
                 # carry both the nu and the critic that cites it).
                 self._validate_warrant(w, known_artifacts=candidate)
+                pair = (artifact.id, wid)
+                if pair not in known_carries:
+                    carry_add.append(pair)
+                    known_carries.add(pair)
+                if wid in provided and wid not in self.warrants:
+                    existing = new_warrants.get(wid)
+                    if existing is not None and existing != provided[wid]:
+                        raise WellFormednessError(
+                            f"warrant id {wid} has conflicting records in one batch"
+                        )
+                    new_warrants[wid] = provided[wid]
+            if not is_new:
+                # The content object already exists, but newly declared
+                # carriage above is still a real append-only graph relation.
+                continue
             # Interface commitments must be registered (§2).
             for cid in artifact.interface.commitments:
                 if cid not in self.commitments:
                     raise WellFormednessError(f"interface commitment not registered: {cid}")
             candidate[artifact.id] = artifact
             accepted_entries.append((artifact, warrants))
-        if not accepted_entries:
+        if not accepted_entries and not carry_add:
             return []
         # dep must remain a DAG (§1): check the materialized edge set.
         try:
@@ -196,27 +517,54 @@ class Harness:
             raise WellFormednessError(str(e)) from e
 
         outputs: list[str] = []
-        for artifact, warrants in accepted_entries:
-            provided = {w.id: w for w in warrants}
-            for wid in artifact.warrants:
-                if wid in provided and wid not in self.warrants and wid not in outputs:
-                    self.objects.put("warrant", provided[wid])
-                    outputs.append(wid)
+        for wid, warrant in new_warrants.items():
+            self.objects.put("warrant", warrant)
+            outputs.append(wid)
+        for artifact, _ in accepted_entries:
             self.objects.put("artifact", artifact)
             outputs.append(artifact.id)
-        self._commit(rule, inputs=[problem_id] if problem_id else [], outputs=outputs, llm=llm)
+        # Existing callers detect content dedupe and record a shared LLM call
+        # as a Measure. A carriage-only event therefore leaves llm unset so the
+        # same call is not counted twice; a newly registered artifact keeps the
+        # original attachment behavior.
+        event_llm = llm if accepted_entries else None
+        extra_inputs = tuple(process_inputs)
+        if any(not isinstance(value, str) or not value for value in extra_inputs):
+            raise ValueError("register_batch process inputs must be nonempty strings")
+        self._commit(
+            rule,
+            inputs=[*([problem_id] if problem_id else []), *extra_inputs],
+            outputs=outputs,
+            llm=event_llm,
+            carry_add=carry_add,
+        )
         return [self.state.artifacts[a.id] for a, _ in accepted_entries]
+
+    def carried_warrant_ids(self, artifact_id: str) -> list[str]:
+        """Warrants explicitly carried by an artifact, in registration order.
+
+        The materialized relation includes legacy Artifact.warrants entries,
+        so callers do not need to distinguish old and new logs.
+        """
+        return [wid for carrier, wid in self.state.carries if carrier == artifact_id]
+
+    def carrier_ids(self, warrant_id: str) -> list[str]:
+        """Every artifact carrying ``warrant_id``, in registration order."""
+        return [carrier for carrier, wid in self.state.carries if wid == warrant_id]
 
     def record_measure(
         self,
         *,
         hv: dict[str, float] | None = None,
         reach: dict[str, float] | None = None,
+        addr: list[tuple[str, str]] | None = None,
         inputs: Iterable[str] = (),
         llm: LLMCall | None = None,
     ) -> Event:
         """Measure event (spec §3/§6): estimates steer attention, never
-        status — they land in state.hv/state.reach only."""
+        status — they land in state.hv/state.reach only. ``addr`` carries the
+        reach amendment (Def 3.7): full cross-problem survival registers the
+        artifact as addressing the foreign problem (structure, not status)."""
         return self._commit(
             Rule.MEASURE,
             inputs=list(inputs),
@@ -224,7 +572,1159 @@ class Harness:
             llm=llm,
             hv_set=hv or {},
             reach_set=reach or {},
+            addr_add=addr or [],
         )
+
+    def record_dossier_pack_receipt(self, receipt) -> Event:
+        """Persist and expose one advisory evidence-packing receipt."""
+
+        from deepreason.evidence.models import DossierPackReceiptV1
+
+        self._ensure_writable()
+        receipt = DossierPackReceiptV1.model_validate(
+            receipt.model_dump(mode="python", by_alias=True)
+        )
+        self.objects.put("dossier-pack-receipt", receipt)
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[
+                "dossier-pack-receipt.v1",
+                receipt.receipt_digest,
+                *receipt.selected_source_ids,
+            ],
+            outputs=[receipt.receipt_digest],
+        )
+
+    def record_criticism_obligation(self, record) -> Event:
+        """Persist one assignment, attempt, or terminal coverage-debt record."""
+
+        from deepreason.workflow.criticism import (
+            CoverageDebtV1,
+            CriticismAssignmentV1,
+            CriticismAttemptV1,
+        )
+
+        self._ensure_writable()
+        mapping = {
+            CriticismAssignmentV1: "criticism-assignment-v1",
+            CriticismAttemptV1: "criticism-attempt-v1",
+            CoverageDebtV1: "criticism-coverage-debt-v1",
+        }
+        model_type = next(
+            (candidate for candidate in mapping if isinstance(record, candidate)),
+            None,
+        )
+        if model_type is None:
+            raise TypeError("unknown criticism obligation record")
+        record = model_type.model_validate(
+            record.model_dump(mode="python", by_alias=True)
+        )
+        schema = mapping[model_type]
+        self.objects.put(schema, record)
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[record.schema_, record.id],
+            outputs=[record.id],
+        )
+
+    def record_scratch_event(
+        self,
+        payload: ScratchEventPayloadV1,
+        *,
+        llm: LLMCall | None = None,
+    ) -> Event:
+        """Append one already-validated advisory scratch mutation.
+
+        This is the narrow harness-owned persistence seam used by the scratch
+        service and replay tests.  Callers must persist every named immutable
+        output first; the shared apply path resolves and type-checks those
+        records before the event becomes durable.  LLM accounting remains on
+        the enclosing Event and is therefore counted exactly once.
+        """
+        return self._commit(
+            Rule.SCRATCH,
+            inputs=list(payload.inputs),
+            outputs=list(payload.outputs),
+            llm=llm,
+            scratch=payload,
+        )
+
+    def record_conjecture_turn_event(
+        self,
+        payload: ConjectureTurnEventPayloadV1,
+        *,
+        request: ContextRequestV1 | None = None,
+        abstention: ConjectureAbstentionV1 | None = None,
+    ) -> Event:
+        """Validate and append one harness-authored conjecture-turn result."""
+
+        self._ensure_writable()
+        payload = ConjectureTurnEventPayloadV1.model_validate(payload)
+        source = next(
+            (
+                event
+                for event in self._events_since(payload.source_call_seq)
+                if event.seq == payload.source_call_seq
+            ),
+            None,
+        )
+        call = source.llm if source is not None else None
+        expected_inputs = [
+            "conjecture-turn-call",
+            payload.problem_id,
+            f"manifest:{payload.manifest_digest}",
+        ]
+        if payload.school_id is not None:
+            expected_inputs.append(f"school:{payload.school_id}")
+        if (
+            source is None
+            or source.seq >= self._next_seq
+            or list(source.inputs) != expected_inputs
+            or call is None
+            or call.role != "conjecturer"
+            or not call.attempt_trace
+            or any(
+                attempt.contract_id not in {
+                    "conjecturer.turn.v4",
+                    "conjecturer.turn.v5",
+                }
+                for attempt in call.attempt_trace
+            )
+        ):
+            raise ValueError(
+                "conjecture turn source must be one preceding manifest-bound controlled call"
+            )
+        route_school = (
+            call.school_route.school_id if call.school_route is not None else None
+        )
+        if route_school != payload.school_id:
+            raise ValueError("conjecture turn school differs from its source call")
+        context = call.conjecture_context
+        source_selection = (
+            context.selection_receipt_ref if context is not None else None
+        )
+        if source_selection != payload.prior_selection_receipt_ref:
+            raise ValueError(
+                "conjecture turn prior selection differs from its source context"
+            )
+        if context is not None and (
+            context.manifest_digest != payload.manifest_digest
+            or context.problem_id != payload.problem_id
+            or context.school_id != payload.school_id
+        ):
+            raise ValueError(
+                "conjecture turn source context belongs to another work item"
+            )
+
+        evidence = None
+        evidence_hash = None
+        evidence_ref = None
+        if payload.request_ref is not None:
+            if request is None or abstention is not None:
+                raise ValueError("context decisions require their canonical request")
+            evidence = ContextRequestV1.model_validate(request)
+            evidence_hash = evidence.request_hash
+            evidence_ref = payload.request_ref
+        elif payload.abstention_ref is not None:
+            if abstention is None or request is not None:
+                raise ValueError("abstention decisions require their canonical evidence")
+            evidence = ConjectureAbstentionV1.model_validate(abstention)
+            evidence_hash = evidence.abstention_hash
+            evidence_ref = payload.abstention_ref
+        if evidence is None or evidence_hash != (
+            payload.request_hash or payload.abstention_hash
+        ):
+            raise ValueError("conjecture turn evidence hash differs from its payload")
+        try:
+            stored = self.blobs.get(evidence_ref)
+        except KeyError as error:
+            raise ValueError("conjecture turn evidence blob is missing") from error
+        expected = canonical_json(
+            evidence.model_dump(mode="json", exclude_none=True)
+        )
+        if stored != expected:
+            raise ValueError("conjecture turn evidence blob is not canonical")
+
+        reference = payload.request_hash or payload.abstention_hash
+        assert reference is not None  # enforced by the typed payload
+        return self._commit(
+            Rule.CONJECTURE_TURN,
+            inputs=[payload.problem_id, reference],
+            outputs=[],
+            conjecture_turn=payload,
+        )
+
+    def record_bridge_event(
+        self,
+        action: BridgeAction | str,
+        *,
+        actor: ScratchActor | str = ScratchActor.HARNESS,
+        inputs: Iterable[str] = (),
+        outputs: Iterable[str] | None = None,
+        records: Iterable[tuple[str, BaseModel]] = (),
+        llm: LLMCall | None = None,
+        finding_ref: str | None = None,
+        error_code: str | None = None,
+    ) -> Event:
+        """Persist canonical bridge records and append one typed process event.
+
+        This is the sole public bridge persistence seam.  Every supplied
+        record is revalidated against the shared object-store schema and its
+        computed canonical identity before any write.  Explicit output IDs,
+        when supplied, must exactly match those records in order; callers
+        cannot author a different ID into the append-only log.
+        """
+
+        self._ensure_writable()
+
+        def bounded(values, label: str, maximum: int = 2_048):
+            if isinstance(values, (str, bytes)):
+                raise TypeError(f"{label} must be an iterable of values, not a string")
+            result = []
+            for value in values:
+                if len(result) >= maximum:
+                    raise ValueError(f"{label} exceeds the bounded limit of {maximum}")
+                result.append(value)
+            return result
+
+        normalized_records: list[tuple[str, str, BaseModel]] = []
+        for item in bounded(records, "records"):
+            if not isinstance(item, (tuple, list)) or len(item) != 2:
+                raise TypeError("each bridge record must be a (schema, object) pair")
+            schema, obj = item
+            if not isinstance(schema, str) or not schema.startswith("bridge-"):
+                raise ValueError("record_bridge_event accepts only bridge object schemas")
+            if not isinstance(obj, BaseModel):
+                raise TypeError("bridge records must be validated Pydantic models")
+            canonical = ObjectStore._record(schema, obj)
+            normalized = SCHEMAS[schema].model_validate(canonical["data"])
+            normalized_records.append((schema, canonical["id"], normalized))
+
+        record_ids = [oid for _schema, oid, _obj in normalized_records]
+        input_ids = bounded(inputs, "inputs")
+        output_ids = record_ids if outputs is None else bounded(outputs, "outputs")
+        if normalized_records and output_ids != record_ids:
+            raise ValueError("explicit bridge outputs must exactly match canonical record IDs")
+        if len(output_ids) != len(set(output_ids)):
+            raise ValueError("bridge outputs must not contain duplicate object IDs")
+
+        if normalized_records:
+            resolved_records = normalized_records
+        else:
+            resolved_records = []
+            for oid in output_ids:
+                schema, obj = self.objects.get(oid)
+                resolved_records.append((schema, oid, obj))
+
+        payload_values = {
+            "action": action,
+            "actor": actor,
+            "inputs": input_ids,
+            "outputs": output_ids,
+            "finding_ref": finding_ref,
+            "error_code": error_code,
+        }
+        payload = BridgeEventPayloadV1.model_validate(payload_values)
+        if payload.action == BridgeAction.WORKFLOW_RETRY_STARTED and llm is not None:
+            raise ValueError("workflow retry authorization cannot contain an LLM call")
+        terminal_commitment = self.workflow_state.current_terminal_commitment
+        terminal_commitment_ref = (
+            terminal_commitment.id
+            if terminal_commitment is not None
+            and self._next_seq > terminal_commitment.reasoning_event_horizon_seq
+            else None
+        )
+        self.bridge_state.validate(
+            payload,
+            resolved_records,
+            terminal_commitment_ref=terminal_commitment_ref,
+        )
+        if terminal_commitment_ref is not None:
+            candidate = Event(
+                seq=self._next_seq,
+                ts=datetime.now(timezone.utc).isoformat(),
+                rule=Rule.BRIDGE,
+                inputs=input_ids,
+                outputs=output_ids,
+                llm=llm,
+                state_diff=StateDiff(),
+                bridge=payload,
+            )
+            validate_terminal_bridge_history(
+                events=tuple(self.log.read()),
+                objects=self.objects,
+                workflow_state=self.workflow_state,
+                commitment_ref=terminal_commitment_ref,
+                horizon_seq=terminal_commitment.reasoning_event_horizon_seq,
+                candidate_event=candidate,
+                candidate_records=resolved_records,
+            )
+
+        if llm is not None:
+            if not llm.prompt_ref:
+                raise ValueError("bridge LLM call requires a prompt blob reference")
+            self.blobs.get(llm.prompt_ref)
+            empty_raw_allowed = bool(
+                llm.attempt_trace and llm.attempt_trace[-1].usage_unknown
+            )
+            if llm.raw_ref:
+                self.blobs.get(llm.raw_ref)
+            elif not empty_raw_allowed:
+                raise ValueError("bridge LLM call requires a raw-output blob reference")
+
+        for schema, _oid, obj in normalized_records:
+            self.objects.put(schema, obj)
+        return self._commit(
+            Rule.BRIDGE,
+            inputs=input_ids,
+            outputs=output_ids,
+            llm=llm,
+            bridge=payload,
+        )
+
+    def record_control_transition(
+        self,
+        decision,
+        *,
+        work_order=None,
+        repair_work_order=None,
+        proposal_receipt=None,
+        guard_result=None,
+    ) -> Event:
+        """Persist one canonical authority transition and its required record.
+
+        Callers supply validated records, never event references.  This seam
+        derives the exact input/output shape and the replay materializer
+        checks pairing, route, capability, budget, and state-digest authority
+        before the append becomes durable.
+        """
+
+        from deepreason.workflow.models import (
+            GuardResultV1,
+            ProposalReceiptV1,
+            RepairWorkOrderV1,
+            TransitionDecisionV1,
+            TransitionKind,
+            WorkOrderEnvelopeV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            if value is None:
+                return None
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        decision = canonical(TransitionDecisionV1, decision)
+        work_order = canonical(WorkOrderEnvelopeV1, work_order)
+        repair_work_order = canonical(RepairWorkOrderV1, repair_work_order)
+        proposal_receipt = canonical(ProposalReceiptV1, proposal_receipt)
+        guard_result = canonical(GuardResultV1, guard_result)
+        provider = decision.transition_kind in {
+            TransitionKind.PROPOSAL_RECEIVED,
+            TransitionKind.REPAIR_EXHAUSTED,
+        }
+        guarded = decision.transition_kind in {
+            TransitionKind.PROPOSAL_ADMITTED,
+            TransitionKind.PROPOSAL_REJECTED,
+            TransitionKind.PROPOSAL_DEDUPLICATED,
+        }
+        if (decision.transition_kind == TransitionKind.WORK_ENABLED) != (
+            work_order is not None
+        ):
+            raise ValueError("work_enabled requires exactly one work-order record")
+        repair_requested = (
+            decision.transition_kind == TransitionKind.REPAIR_REQUESTED
+        )
+        if repair_work_order is not None and not repair_requested:
+            raise ValueError(
+                "only repair_requested may carry a repair-work-order record"
+            )
+        if (
+            repair_requested
+            and decision.workflow_profile
+            in {"conjecture.active.v1", "inquiry.active.v1"}
+            and repair_work_order is None
+        ):
+            raise ValueError(
+                "active repair_requested requires one repair-work-order record"
+            )
+        if provider != (proposal_receipt is not None):
+            raise ValueError(
+                "provider-result transition requires exactly one proposal receipt"
+            )
+        if guarded != (guard_result is not None):
+            raise ValueError("guarded transition requires exactly one guard result")
+
+        records: list[tuple[str, BaseModel]] = []
+        if work_order is not None:
+            records.append(("workflow-work-order", work_order))
+        if repair_work_order is not None:
+            records.append(("workflow-repair-work-order", repair_work_order))
+        if proposal_receipt is not None:
+            records.append(("workflow-proposal-receipt", proposal_receipt))
+        if guard_result is not None:
+            records.append(("workflow-guard-result", guard_result))
+        records.append(("workflow-transition-decision", decision))
+        for schema, record in records:
+            self.objects.put(schema, record)
+        outputs = [record.id for _schema, record in records]
+        inputs = [decision.work_order_id, decision.trigger_ref]
+        payload_type = (
+            ControlEventPayloadV2
+            if decision.controller_version == "workflow.controller.v2"
+            else ControlEventPayloadV1
+        )
+        payload = payload_type(
+            decision_ref=decision.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
+    def record_transaction_transition(
+        self,
+        transition,
+        *,
+        records=(),
+        llm=None,
+    ) -> Event:
+        """Atomically reach one controller-v3 lifecycle transition and records.
+
+        Object-store writes intentionally precede the append.  If validation,
+        process replay, or the log append fails, those immutable bytes remain
+        unreachable and therefore cannot assert either context exposure or
+        provider authority.
+        """
+
+        from deepreason.workflow.transaction import (
+            CompactRecoveryTransitionV1,
+            ContextExposureReceiptV2,
+            ContextPackPlanV1,
+            DispatchAuthorizationBundleV1,
+            ProviderAttemptV1,
+            RouteSeatInsufficientCapabilityV1,
+            SemanticAdmissionV1,
+            TokenReservationV2,
+            WorkLifecycleTransitionV1,
+            WorkPreparationV1,
+            WorkTerminalV1,
+            WorkTransitionKind,
+        )
+
+        self._ensure_writable()
+        transition = WorkLifecycleTransitionV1.model_validate(
+            transition.model_dump(mode="python", by_alias=True)
+        )
+        schema_by_type = {
+            WorkPreparationV1: "workflow-work-preparation-v1",
+            ContextPackPlanV1: "workflow-context-pack-plan-v1",
+            TokenReservationV2: "workflow-token-reservation-v2",
+            ContextExposureReceiptV2: "workflow-context-exposure-v2",
+            DispatchAuthorizationBundleV1: "workflow-dispatch-authorization-v1",
+            ProviderAttemptV1: "workflow-provider-attempt-v1",
+            SemanticAdmissionV1: "workflow-semantic-admission-v1",
+            CompactRecoveryTransitionV1: (
+                "workflow-compact-recovery-transition-v1"
+            ),
+            RouteSeatInsufficientCapabilityV1: (
+                "workflow-route-seat-insufficient-capability-v1"
+            ),
+            WorkTerminalV1: "workflow-work-terminal-v1",
+        }
+        normalized: list[tuple[str, BaseModel]] = []
+        for supplied in records:
+            model_type = next(
+                (candidate for candidate in schema_by_type if isinstance(supplied, candidate)),
+                None,
+            )
+            if model_type is None:
+                raise TypeError("unknown controller-v3 transaction record")
+            value = model_type.model_validate(
+                supplied.model_dump(mode="python", by_alias=True)
+            )
+            if value.work_id != transition.work_id:
+                raise ValueError("transaction record belongs to another work item")
+            if value.attempt_index != transition.attempt_index:
+                raise ValueError("transaction record belongs to another attempt")
+            normalized.append((schema_by_type[model_type], value))
+
+        kinds = [type(value) for _schema, value in normalized]
+        expected = {
+            WorkTransitionKind.WORK_PREPARED: [WorkPreparationV1],
+            WorkTransitionKind.BUDGET_DENIED: [WorkTerminalV1],
+            WorkTransitionKind.PROVIDER_RESULT: [ProviderAttemptV1],
+            WorkTransitionKind.SEMANTIC_ADMISSION: [SemanticAdmissionV1],
+        }
+        if transition.transition_kind == WorkTransitionKind.WORK_ISSUED:
+            if (
+                kinds.count(TokenReservationV2) != 1
+                or kinds.count(ContextExposureReceiptV2) != 1
+                or kinds.count(DispatchAuthorizationBundleV1) != 1
+                or any(
+                    kind
+                    not in {
+                        ContextPackPlanV1,
+                        TokenReservationV2,
+                        ContextExposureReceiptV2,
+                        DispatchAuthorizationBundleV1,
+                    }
+                    for kind in kinds
+                )
+            ):
+                raise ValueError("work_issued requires plans, reservation, exposure, and bundle")
+        elif transition.transition_kind == WorkTransitionKind.WORK_TERMINATED:
+            if kinds not in (
+                [WorkTerminalV1],
+                [CompactRecoveryTransitionV1, WorkTerminalV1],
+                [RouteSeatInsufficientCapabilityV1, WorkTerminalV1],
+                [
+                    CompactRecoveryTransitionV1,
+                    RouteSeatInsufficientCapabilityV1,
+                    WorkTerminalV1,
+                ],
+            ):
+                raise ValueError(
+                    "work_terminated requires optional compact/capability authority "
+                    "followed by its terminal"
+                )
+            compact = next(
+                (
+                    value
+                    for _schema, value in normalized
+                    if isinstance(value, CompactRecoveryTransitionV1)
+                ),
+                None,
+            )
+            terminal = normalized[-1][1]
+            if compact is not None and (
+                terminal.compact_recovery_transition_ref != compact.id
+                or compact.semantic_admission_ref
+                != terminal.semantic_admission_ref
+            ):
+                raise ValueError(
+                    "compact recovery transition differs from its work terminal"
+                )
+            insufficient = next(
+                (
+                    value
+                    for _schema, value in normalized
+                    if isinstance(value, RouteSeatInsufficientCapabilityV1)
+                ),
+                None,
+            )
+            if insufficient is not None and (
+                terminal.insufficient_capability_ref != insufficient.id
+                or insufficient.semantic_admission_ref
+                != terminal.semantic_admission_ref
+                or insufficient.provider_attempt_ref
+                != terminal.provider_attempt_ref
+            ):
+                raise ValueError(
+                    "insufficient capability differs from its work terminal"
+                )
+        elif kinds != expected[transition.transition_kind]:
+            raise ValueError("controller-v3 transition has the wrong record shape")
+        if (llm is not None) != (
+            transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT
+        ):
+            raise ValueError("only provider_result may carry an LLM call")
+
+        normalized.append(("workflow-work-lifecycle-transition-v1", transition))
+        for schema, value in normalized:
+            self.objects.put(schema, value)
+        outputs = [value.id for _schema, value in normalized]
+        payload = ControlEventPayloadV3(
+            action=(
+                "provider_result"
+                if transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT
+                else "work_transition"
+            ),
+            decision_ref=transition.id,
+            inputs=[transition.work_id, transition.trigger_ref],
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=list(payload.inputs),
+            outputs=outputs,
+            llm=llm,
+            control=payload,
+        )
+
+    def bind_model_classification(self, manifest, report):
+        """Durably bind one already-validated route-seat classification plan."""
+
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.workflow.transaction import (
+            ModelClassificationBindingV1,
+            RouteSeatModelClassificationPlanV1,
+        )
+
+        self._ensure_writable()
+        plan = report.route_seat_model_classification
+        if not isinstance(plan, RouteSeatModelClassificationPlanV1):
+            raise ValueError("qualified report lacks route-seat model classification")
+        if plan.manifest_digest != manifest.sha256:
+            raise ValueError("model classification belongs to another manifest")
+        self.bind_transaction_manifest(manifest)
+        self.workflow_state._validate_model_classification(manifest, plan)
+        current = self.workflow_state.route_seat_model_classification
+        if current is not None:
+            if current != plan:
+                raise ValueError("model classification authority already differs")
+            return self.workflow_state.model_classification_binding
+        binding = ModelClassificationBindingV1.create(
+            manifest_digest=manifest.sha256,
+            classification_plan_ref=plan.id,
+            qualification_evidence_sha256=plan.qualification_evidence_sha256,
+        )
+        self.objects.put(
+            "workflow-route-seat-model-classification-plan-v1",
+            plan,
+        )
+        self.objects.put("workflow-model-classification-binding-v1", binding)
+        inputs = [plan.id, "classification:" + plan.qualification_evidence_sha256]
+        outputs = [plan.id, binding.id]
+        payload = ControlEventPayloadV3(
+            action="classification_bound",
+            decision_ref=binding.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+        return binding
+
+    def activate_contract_decomposition(
+        self,
+        manifest,
+        source_work_id: str,
+        *,
+        child_contexts: tuple[tuple[str, str], ...],
+    ):
+        """Persist one exact manifest-authorized strong-to-atomic transition."""
+
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.run_manifest import resolve_route_seat_contract_decomposition
+        from deepreason.workflow.transaction import ContractDecompositionTransitionV1
+
+        self._ensure_writable()
+        self.bind_transaction_manifest(manifest)
+        item = self.workflow_state.transaction_work.get(source_work_id)
+        if item is None or item.terminal is None:
+            raise ValueError("contract decomposition requires terminal source work")
+        existing = self.workflow_state.contract_decomposition_by_source_work.get(
+            source_work_id
+        )
+        if existing is not None:
+            return existing
+        terminal = item.terminal
+        admission = item.admissions.get(item.preparation.attempt_index)
+        if (
+            terminal.status != "schema_exhausted"
+            or admission is None
+            or admission.outcome != "schema_exhausted"
+        ):
+            raise ValueError("contract decomposition requires genuine schema exhaustion")
+        lease = item.preparation.route_lease
+        grant = resolve_route_seat_contract_decomposition(
+            manifest,
+            role=lease.role,
+            seat=lease.seat,
+            endpoint_id=lease.endpoint_id,
+            route_sha256=lease.route_sha256,
+            source_contract_id=item.preparation.contract_id,
+        )
+        child_keys = tuple(key for key, _pack in child_contexts)
+        if grant.child_partition == "conjecture_candidate_slot":
+            expected_keys = tuple(
+                f"candidate-slot-{index:03d}"
+                for index in range(grant.maximum_children)
+            )
+        elif grant.child_partition == "scratch_single_object":
+            payload = item.preparation.task_payload_value
+            if (
+                isinstance(payload, Mapping)
+                and payload.get("schema") == "repair.semantic-task.v1"
+            ):
+                parent = self.workflow_state.transaction_work.get(
+                    payload.get("parent_work_id")
+                )
+                payload = (
+                    parent.preparation.task_payload_value
+                    if parent is not None
+                    else None
+                )
+            operation = payload.get("operation") if isinstance(payload, Mapping) else None
+            if operation not in {"block", "link", "guide"}:
+                raise ValueError("scratch decomposition source operation is invalid")
+            expected_keys = (f"scratch-{operation}-minimal",)
+        else:
+            expected_keys = item.preparation.target_refs
+        if child_keys != expected_keys:
+            raise ValueError("decomposition child inventory differs from source work")
+        child_context_refs = tuple(
+            self.blobs.put(pack.encode("utf-8")) for _key, pack in child_contexts
+        )
+        transition = ContractDecompositionTransitionV1.create(
+            manifest_digest=manifest.sha256,
+            source_work_id=source_work_id,
+            source_attempt_index=item.preparation.attempt_index,
+            source_terminal_ref=terminal.id,
+            source_semantic_admission_ref=admission.id,
+            route_lease=lease,
+            source_contract_id=grant.source_contract_id,
+            atomic_contract_id=grant.atomic_contract_id,
+            trigger=grant.trigger,
+            child_partition=grant.child_partition,
+            maximum_children=grant.maximum_children,
+            coverage=grant.coverage,
+            execution=grant.execution,
+            source_failure_preserved=grant.source_failure_preserved,
+            child_keys=child_keys,
+            child_context_refs=child_context_refs,
+        )
+        self.workflow_state._validate_contract_decomposition_transition(transition)
+        self.objects.put(
+            "workflow-contract-decomposition-transition-v1",
+            transition,
+        )
+        inputs = [source_work_id, terminal.id]
+        outputs = [transition.id]
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=ControlEventPayloadV3(
+                action="contract_decomposition_activated",
+                decision_ref=transition.id,
+                inputs=inputs,
+                outputs=outputs,
+            ),
+        )
+        return transition
+
+    def complete_contract_decomposition(
+        self,
+        manifest,
+        transition,
+        *,
+        admitted_effect_refs: tuple[str, ...] = (),
+    ):
+        """Durably merge all exact atomic children without hiding source failure."""
+
+        from collections.abc import Mapping
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.workflow.transaction import (
+            ContractDecompositionCompletionV1,
+            ContractDecompositionTransitionV1,
+        )
+
+        self._ensure_writable()
+        self.bind_transaction_manifest(manifest)
+        transition = ContractDecompositionTransitionV1.model_validate(transition)
+        current = self.workflow_state.contract_decomposition_completion_by_transition.get(
+            transition.id
+        )
+        if current is not None:
+            if current.admitted_effect_refs != admitted_effect_refs:
+                raise ValueError("decomposition completion effects already differ")
+            return current
+        roots = [
+            item
+            for item in self.workflow_state.transaction_work.values()
+            if isinstance(item.preparation.task_payload_value, Mapping)
+            and item.preparation.task_payload_value.get("schema")
+            == "contract-decomposition-child.v1"
+            and item.preparation.task_payload_value.get(
+                "decomposition_transition_ref"
+            )
+            == transition.id
+        ]
+        roots.sort(key=lambda item: item.preparation.task_payload_value["child_index"])
+        if (
+            len(roots) != len(transition.child_keys)
+            or tuple(
+                item.preparation.task_payload_value["child_index"] for item in roots
+            )
+            != tuple(range(len(transition.child_keys)))
+        ):
+            raise ValueError("decomposition completion lacks exact child roots")
+        results = []
+        admissions = []
+        for root in roots:
+            candidates = [root]
+            candidates.extend(
+                item
+                for item in self.workflow_state.transaction_work.values()
+                if isinstance(item.preparation.task_payload_value, Mapping)
+                and item.preparation.task_payload_value.get("schema")
+                == "repair.semantic-task.v1"
+                and item.preparation.task_payload_value.get("parent_work_id")
+                == root.preparation.id
+            )
+            completed = [
+                item
+                for item in candidates
+                if item.terminal is not None and item.terminal.status == "completed"
+            ]
+            if len(completed) != 1:
+                raise ValueError("decomposition child lacks one completed result")
+            result = completed[0]
+            admission = result.admissions.get(result.preparation.attempt_index)
+            if admission is None or admission.outcome != "admitted":
+                raise ValueError("decomposition child result lacks semantic admission")
+            results.append(result)
+            admissions.append(admission)
+        self.workflow_state._validate_contract_decomposition_effects(
+            transition,
+            tuple(results),
+            tuple(dict.fromkeys(admitted_effect_refs)),
+            completion_event_seq=self._next_seq,
+        )
+        completion = ContractDecompositionCompletionV1.create(
+            manifest_digest=manifest.sha256,
+            transition_ref=transition.id,
+            source_work_id=transition.source_work_id,
+            child_work_ids=tuple(item.preparation.id for item in results),
+            child_semantic_admission_refs=tuple(item.id for item in admissions),
+            admitted_effect_refs=tuple(dict.fromkeys(admitted_effect_refs)),
+        )
+        self.objects.put(
+            "workflow-contract-decomposition-completion-v1", completion
+        )
+        inputs = [transition.source_work_id, transition.id]
+        outputs = [completion.id]
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=ControlEventPayloadV3(
+                action="contract_decomposition_completed",
+                decision_ref=completion.id,
+                inputs=inputs,
+                outputs=outputs,
+            ),
+        )
+        return completion
+
+    def record_capability_transition(
+        self,
+        transition,
+        *,
+        phase_record=None,
+    ) -> Event:
+        """Persist one simulation lifecycle transition and its exact record."""
+
+        from deepreason.capabilities.models import (
+            CapabilityLifecycle,
+            CapabilityTransitionV1,
+            CompiledResearchFetchV1,
+            CompiledSimulationV1,
+            ResearchConsumptionV1,
+            ResearchExecutionReceiptV1,
+            ResearchFetchProposalV1,
+            ResearchGrantV1,
+            ResearchResultPackageV1,
+            ResearchWorkOrderV1,
+            SimulationConsumptionV1,
+            SimulationExecutionReceiptV1,
+            SimulationGrantV1,
+            SimulationProposalV1,
+            SimulationResultPackageV1,
+            SimulationWorkOrderV1,
+        )
+
+        self._ensure_writable()
+        transition = CapabilityTransitionV1.model_validate(
+            transition.model_dump(mode="python", by_alias=True)
+        )
+        # One (schema, model) pair per capability kind per lifecycle; the
+        # supplied phase record's type selects its kind.
+        expected = {
+            CapabilityLifecycle.PROPOSED: (
+                ("capability-simulation-proposal", SimulationProposalV1),
+                ("capability-research-proposal", ResearchFetchProposalV1),
+            ),
+            CapabilityLifecycle.GRANTED: (
+                ("capability-simulation-grant", SimulationGrantV1),
+                ("capability-research-grant", ResearchGrantV1),
+            ),
+            CapabilityLifecycle.COMPILED: (
+                ("capability-compiled-simulation", CompiledSimulationV1),
+                ("capability-compiled-research-fetch", CompiledResearchFetchV1),
+            ),
+            CapabilityLifecycle.DISPATCHED: (
+                ("capability-simulation-work-order", SimulationWorkOrderV1),
+                ("capability-research-work-order", ResearchWorkOrderV1),
+            ),
+            CapabilityLifecycle.SUCCEEDED: (
+                ("capability-simulation-receipt", SimulationExecutionReceiptV1),
+                ("capability-research-receipt", ResearchExecutionReceiptV1),
+            ),
+            CapabilityLifecycle.FAILED: (
+                ("capability-simulation-receipt", SimulationExecutionReceiptV1),
+                ("capability-research-receipt", ResearchExecutionReceiptV1),
+            ),
+            CapabilityLifecycle.RESULT_PACKAGED: (
+                ("capability-simulation-result-package", SimulationResultPackageV1),
+                ("capability-research-result-package", ResearchResultPackageV1),
+            ),
+            CapabilityLifecycle.CONSUMED: (
+                ("capability-simulation-consumption", SimulationConsumptionV1),
+                ("capability-research-consumption", ResearchConsumptionV1),
+            ),
+        }.get(transition.lifecycle)
+        if expected is None:
+            if phase_record is not None or transition.phase_record_ref is not None:
+                raise ValueError("this capability transition cannot carry a phase record")
+            records = []
+        else:
+            if phase_record is None:
+                raise ValueError("capability transition requires its phase record")
+            matched = next(
+                (
+                    (schema, model)
+                    for schema, model in expected
+                    if isinstance(phase_record, model)
+                ),
+                None,
+            )
+            if matched is None:
+                raise ValueError("capability phase record has the wrong type")
+            schema, model = matched
+            phase_record = model.model_validate(
+                phase_record.model_dump(mode="python", by_alias=True)
+            )
+            if transition.phase_record_ref != phase_record.id:
+                raise ValueError("capability transition differs from its phase record")
+            records = [(schema, phase_record)]
+        records.append(("capability-transition", transition))
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [transition.originating_work_order_ref, transition.request_ref]
+        outputs = [record.id for _schema, record in records]
+        payload = CapabilityEventPayloadV1(
+            lifecycle=transition.lifecycle,
+            request_ref=transition.request_ref,
+            transition_ref=transition.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CAPABILITY,
+            inputs=inputs,
+            outputs=outputs,
+            capability=payload,
+        )
+
+    def record_lifecycle_transition(
+        self,
+        observation,
+        snapshot,
+        decision,
+    ) -> Event:
+        """Persist one v4 lifecycle decision through the Control event seam."""
+
+        from deepreason.workflow.models import (
+            StopMetricsObservationV1,
+            WorkflowLifecycleDecisionV1,
+            WorkflowLifecycleSnapshotV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        observation = canonical(StopMetricsObservationV1, observation)
+        snapshot = canonical(WorkflowLifecycleSnapshotV1, snapshot)
+        decision = canonical(WorkflowLifecycleDecisionV1, decision)
+        if (
+            decision.metrics_observation_ref != observation.id
+            or decision.checkpoint_ref != snapshot.id
+        ):
+            raise ValueError("lifecycle decision differs from its bound records")
+        for ref in observation.model_signal_blob_refs:
+            self.blobs.get(ref)
+        records = (
+            ("workflow-stop-metrics-observation", observation),
+            ("workflow-lifecycle-snapshot", snapshot),
+            ("workflow-lifecycle-decision", decision),
+        )
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [observation.id, snapshot.id]
+        outputs = [record.id for _schema, record in records]
+        if decision.controller_version == "workflow.controller.v3":
+            payload = ControlEventPayloadV3(
+                action="lifecycle_stopped",
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        else:
+            payload_type = (
+                ControlEventPayloadV2
+                if decision.controller_version == "workflow.controller.v2"
+                else ControlEventPayloadV1
+            )
+            payload = payload_type(
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
+    def record_resume_transition(self, snapshot, decision) -> Event:
+        """Persist one v4 RESUMED decision before post-terminal work."""
+
+        from deepreason.workflow.models import (
+            WorkflowLifecycleSnapshotV1,
+            WorkflowResumeDecisionV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        snapshot = canonical(WorkflowLifecycleSnapshotV1, snapshot)
+        decision = canonical(WorkflowResumeDecisionV1, decision)
+        terminal = self.workflow_state.terminal_lifecycle_decision
+        if terminal is None:
+            raise ValueError("resume requires one active typed terminal decision")
+        if (
+            decision.prior_terminal_decision_ref != terminal.id
+            or decision.resume_snapshot_ref != snapshot.id
+        ):
+            raise ValueError("resume decision differs from its bound records")
+        workflow_checkpoint_digest = self.workflow_checkpoint_digest()
+        if workflow_checkpoint_digest != decision.workflow_checkpoint_digest:
+            raise ValueError("resume decision differs from workflow-checkpoint bytes")
+        run_checkpoint_path = self.root / "checkpoint.json"
+        try:
+            run_checkpoint_bytes = run_checkpoint_path.read_bytes()
+            run_checkpoint = json.loads(run_checkpoint_bytes)
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("resume requires one valid generic checkpoint") from error
+        encoded_checkpoint = canonical_json(run_checkpoint)
+        if run_checkpoint_bytes not in {
+            encoded_checkpoint,
+            encoded_checkpoint + b"\n",
+            encoded_checkpoint + b"\r\n",
+        }:
+            raise ValueError("generic checkpoint bytes are not canonical")
+        checkpoint_seq = run_checkpoint.get("event_seq")
+        if (
+            sha256_hex(run_checkpoint_bytes) != decision.run_checkpoint_digest
+            or run_checkpoint.get("schema") != "deepreason-checkpoint-v1"
+            or run_checkpoint.get("manifest_digest") != decision.manifest_digest
+            or run_checkpoint.get("stop_digest") != decision.prior_stop_digest
+            # The checkpoint records the stop fence; a bridged run resumes
+            # past it (validated commitment-bound drift), never before it.
+            or type(checkpoint_seq) is not int
+            or checkpoint_seq > decision.resume_event_seq
+        ):
+            raise ValueError("resume decision differs from generic checkpoint bytes")
+        records = (
+            ("workflow-lifecycle-snapshot", snapshot),
+            ("workflow-resume-decision", decision),
+        )
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [terminal.id, snapshot.id]
+        outputs = [record.id for _schema, record in records]
+        if decision.controller_version == "workflow.controller.v3":
+            payload = ControlEventPayloadV3(
+                action="lifecycle_resumed",
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        else:
+            payload_type = (
+                ControlEventPayloadV2
+                if decision.controller_version == "workflow.controller.v2"
+                else ControlEventPayloadV1
+            )
+            payload = payload_type(
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
+    def record_terminal_commitment(self, commitment, result_draft) -> Event:
+        """Persist and latch one manifest-owned terminal epoch authority."""
+
+        from deepreason.workflow.models import (
+            RunTerminalCommitmentV1,
+            RunTerminalResultDraftV1,
+        )
+
+        self._ensure_writable()
+        payload_data = commitment.model_dump(mode="python", by_alias=True)
+        commitment = RunTerminalCommitmentV1.model_validate(payload_data)
+        draft_data = result_draft.model_dump(mode="python", by_alias=True)
+        result_draft = RunTerminalResultDraftV1.model_validate(draft_data)
+        if commitment.result_draft_ref != result_draft.id:
+            raise ValueError("terminal commitment differs from its result draft")
+        source_ref = (
+            commitment.lifecycle_decision_ref
+            if commitment.terminal_source == "workflow_lifecycle"
+            else commitment.id
+        )
+        assert source_ref is not None
+        self.objects.put("workflow-run-terminal-result-draft-v1", result_draft)
+        self.objects.put("workflow-run-terminal-commitment-v1", commitment)
+        control = ControlEventPayloadV3(
+            action="terminal_committed",
+            decision_ref=commitment.id,
+            inputs=[source_ref, commitment.stop_record_digest],
+            outputs=[result_draft.id, commitment.id],
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=list(control.inputs),
+            outputs=list(control.outputs),
+            control=control,
+        )
+
+    def build_bridge(self, problem_id: str, target: str, policy, **kwargs):
+        """Build one fixed-fence grounded final view through canonical services.
+
+        Adapters and the manifest digest are explicit keyword inputs until the
+        RunManifest-v3 compiler binds them.  The implementation lives outside
+        this already-large materializer so formal replay remains focused.
+        """
+
+        from deepreason.bridge.harness import build_grounded_bridge
+
+        return build_grounded_bridge(self, problem_id, target, policy, **kwargs)
 
     def recent_events(self, window: int) -> list[Event]:
         """The last ``window`` events. Served from the bounded in-memory tail
@@ -236,15 +1736,141 @@ class Harness:
             return self._tail[-window:]
         return list(self.log.read())[-window:]
 
+    @staticmethod
+    def _is_split_conjecture_call_carrier(event: Event) -> bool:
+        return bool(
+            event.llm is not None
+            and event.inputs
+            and event.inputs[0]
+            in {"workflow-conjecture-call", "conjecture-turn-call"}
+        )
+
+    @classmethod
+    def _split_conjecture_call_carriers(
+        cls,
+        values: Iterable[Event],
+    ) -> set[int]:
+        """Return provider carriers replaced by their referencing Conj action."""
+
+        events = tuple(values)
+        referenced_calls = {
+            int(value.removeprefix("conjecture-call:"))
+            for event in events
+            for value in event.inputs
+            if value.startswith("conjecture-call:")
+            and value.removeprefix("conjecture-call:").isdigit()
+        }
+        return {
+            event.seq
+            for event in events
+            if event.seq in referenced_calls
+            and cls._is_split_conjecture_call_carrier(event)
+        }
+
+    def _advance_semantic_event_clock(self, event: Event) -> None:
+        """Extend the derived clock with one replayed physical event."""
+
+        changed = False
+        if event.rule == Rule.CONTROL:
+            self._semantic_excluded_event_seqs.add(event.seq)
+            changed = True
+        if self._is_split_conjecture_call_carrier(event):
+            self._semantic_split_call_candidates.add(event.seq)
+        for value in event.inputs:
+            if not value.startswith("conjecture-call:"):
+                continue
+            suffix = value.removeprefix("conjecture-call:")
+            if not suffix.isdigit():
+                continue
+            carrier_seq = int(suffix)
+            if (
+                carrier_seq in self._semantic_split_call_candidates
+                and carrier_seq not in self._semantic_excluded_event_seqs
+            ):
+                self._semantic_excluded_event_seqs.add(carrier_seq)
+                changed = True
+        if changed:
+            self._semantic_excluded_order = None
+
+    def semantic_event_clock(self, event_seq: int | None = None) -> int:
+        """Count behavior-visible actions before one physical event boundary.
+
+        Control receipts do not advance semantic age. A split conjecturer-call
+        Measure that is referenced by a later Conj event is the process carrier
+        for that one semantic action, so it is replaced by (not counted beside)
+        the Conj event. Unreferenced calls remain actions in their own right.
+
+        ``event_seq`` is an exclusive physical boundary and defaults to the
+        current append position. This keeps historical artifact provenance
+        usable without letting C1 instrumentation accelerate semantic policy.
+        """
+
+        boundary = self._next_seq if event_seq is None else event_seq
+        if type(boundary) is not int or not 0 <= boundary <= self._next_seq:
+            raise ValueError("semantic event boundary is outside the replayed log")
+        if self._semantic_excluded_order is None:
+            self._semantic_excluded_order = tuple(
+                sorted(self._semantic_excluded_event_seqs)
+            )
+        return boundary - bisect_left(self._semantic_excluded_order, boundary)
+
+    def recent_semantic_events(self, window: int) -> list[Event]:
+        """Return the last ``window`` semantic actions and their call carriers.
+
+        C1 authority receipts are deliberately process-only.  Legacy capture
+        metrics must therefore take their window *after* excluding them;
+        filtering a normal recent-event window would let Control receipts or
+        a split provider-call carrier displace the semantic observations that
+        previously drove scheduling.  A carrier referenced by a chosen Conj
+        event is included without consuming its own window slot.
+        """
+
+        if window <= 0:
+            return []
+
+        def select(values: list[Event]) -> tuple[list[Event], int, bool]:
+            carriers = self._split_conjecture_call_carriers(values)
+            core = [
+                event
+                for event in values
+                if event.rule != Rule.CONTROL and event.seq not in carriers
+            ]
+            chosen = core[-window:]
+            needed = {
+                int(value.removeprefix("conjecture-call:"))
+                for event in chosen
+                for value in event.inputs
+                if value.startswith("conjecture-call:")
+                and value.removeprefix("conjecture-call:").isdigit()
+            }
+            chosen_seqs = {event.seq for event in chosen} | needed
+            present = {event.seq for event in values}
+            return (
+                [event for event in values if event.seq in chosen_seqs],
+                len(core),
+                not needed.issubset(present),
+            )
+
+        tail = list(self._tail)
+        selected, core_count, missing_carrier = select(tail)
+        if (
+            not missing_carrier
+            and (core_count >= window or self._next_seq <= len(tail))
+        ):
+            return selected
+        return select(list(self.log.read()))[0]
+
     def embed_artifact(self, embedder, aid: str) -> list[float]:
         """Embed an artifact's content, cached: artifacts are immutable and
         content-addressed, so re-embedding the same id every cycle (capture
         metrics, the refuted index) is pure waste — and real money with an
-        API embedder. Keyed by embedder type: embedders are deterministic
-        functions, distinct types give distinct vectors."""
+        API embedder. Keyed by embedder MODEL (falling back to type):
+        embedders are deterministic functions within a process, and distinct
+        models give distinct vectors — two NeuralEmbedders with different
+        model ids must not share entries."""
         from deepreason.programs import content_text
 
-        key = (type(embedder).__name__, aid)
+        key = (getattr(embedder, "model", type(embedder).__name__), aid)
         vec = self._embed_cache.get(key)
         if vec is None:
             vec = embedder.embed(content_text(self.state.artifacts[aid], self.blobs))
@@ -257,15 +1883,18 @@ class Harness:
             return [e for e in self._tail if e.seq >= seq]
         return (e for e in self.log.read() if e.seq >= seq)
 
-    def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str) -> None:
+    def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str, *extra: str) -> None:
         """Persist LLM calls that landed on no registration event — blocked
         trials, extra ensemble seats, defender/variator exchanges, all-deduped
         batches — as Measure events. Every call reaches the log exactly once
         (§0: replay consumes logged raws; token accounting reads event.llm),
-        or replay and eval_report silently under-count real spend."""
+        or replay and eval_report silently under-count real spend. ``extra``
+        strings are appended to inputs — e.g. the drop REASON on a
+        dropped-call, so the log answers 'why' without the in-memory
+        diagnostics."""
         for call in calls:
             if call is not None:
-                self.record_measure(inputs=[tag], llm=call)
+                self.record_measure(inputs=[tag, *extra], llm=call)
 
     def transitions(self) -> list[tuple[int, str, str | None, str]]:
         """(seq, artifact, old_status, new_status) per logged event — a
@@ -333,7 +1962,17 @@ class Harness:
         llm: LLMCall | None = None,
         hv_set: dict[str, float] | None = None,
         reach_set: dict[str, float] | None = None,
+        addr_add: list[tuple[str, str]] | None = None,
+        carry_add: list[tuple[str, str]] | None = None,
+        scratch: ScratchEventPayloadV1 | None = None,
+        bridge: BridgeEventPayloadV1 | None = None,
+        conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
+        control: (
+            ControlEventPayloadV1 | ControlEventPayloadV2 | ControlEventPayloadV3 | None
+        ) = None,
+        capability: CapabilityEventPayloadV1 | None = None,
     ) -> Event:
+        self._ensure_writable()
         event = Event(
             seq=self._next_seq,
             ts=datetime.now(timezone.utc).isoformat(),
@@ -341,10 +1980,27 @@ class Harness:
             inputs=inputs,
             outputs=outputs,
             llm=llm,
-            state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {}),
+            state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {},
+                                 addr_add=addr_add or [], carry_add=carry_add or []),
+            scratch=scratch,
+            bridge=bridge,
+            conjecture_turn=conjecture_turn,
+            control=control,
+            capability=capability,
         )
-        event.state_diff = self._apply_event(event)
-        self.log.append(event)
+        try:
+            state_diff = self._apply_event(event)
+            event = event.model_copy(update={"state_diff": state_diff})
+            self._tail[-1] = event  # _apply_event saw the provisional immutable event
+            self.log.append(event)
+        except Exception:
+            # Object/blob writes are content-addressed and may remain orphaned,
+            # but the live materialization must never outrun the durable log.
+            self._reset()
+            for durable in self.log.read():
+                self._apply_event(durable, adjudicate=False)
+            self._adjudicate()
+            raise
         return event
 
     def _apply_event(self, event: Event, adjudicate: bool = True) -> StateDiff | None:
@@ -356,6 +2012,51 @@ class Harness:
         pre_status = dict(self.state.status)
         a_add: list[str] = []
         pi_add: list[str] = []
+        # Validate and materialize process-only outputs before the formal
+        # object loop. A corrupt/malicious process event therefore cannot
+        # transiently register a formal artifact and rely on model_copy to
+        # bypass Event's StateDiff validator.
+        try:
+            self.workflow_state.observe_event(event)
+            if event.control is not None:
+                resolved_workflow = []
+                for object_id in event.outputs:
+                    schema, value = self.objects.get(object_id)
+                    if schema == "workflow-stop-metrics-observation":
+                        for ref in value.model_signal_blob_refs:
+                            self.blobs.get(ref)
+                    resolved_workflow.append((schema, object_id, value))
+                self.workflow_state.apply(event, resolved_workflow)
+                self.bridge_state.apply_v6_provider_result(event, self.workflow_state)
+            if event.capability is not None:
+                resolved_capability = []
+                for object_id in event.outputs:
+                    schema, value = self.objects.get(object_id)
+                    resolved_capability.append((schema, object_id, value))
+                self.capability_state.apply(event, resolved_capability)
+        except ValueError as error:
+            raise WellFormednessError(str(error)) from error
+        if event.scratch is not None:
+            self.scratch_state.apply(event, self.objects)
+        if event.bridge is not None:
+            try:
+                terminal_commitment = (
+                    self.workflow_state.current_terminal_commitment
+                )
+                terminal_commitment_ref = (
+                    terminal_commitment.id
+                    if terminal_commitment is not None
+                    and event.seq
+                    > terminal_commitment.reasoning_event_horizon_seq
+                    else None
+                )
+                self.bridge_state.apply(
+                    event,
+                    self.objects,
+                    terminal_commitment_ref=terminal_commitment_ref,
+                )
+            except ValueError as error:
+                raise WellFormednessError(str(error)) from error
         if event.rule == Rule.REVEAL:
             # Reveal (§10.5): move sealed bytes from the holdout namespace
             # into the blob store — idempotent, so replay reproduces it.
@@ -364,7 +2065,7 @@ class Harness:
                 if artifact is None:
                     continue
                 sealed = self.root / "holdout" / artifact.content_ref
-                if sealed.exists():
+                if sealed.exists() and not self._read_only:
                     self.blobs.put(sealed.read_bytes())
         for oid in event.outputs:
             schema, obj = self.objects.get(oid)
@@ -378,6 +2079,13 @@ class Harness:
             elif schema == "artifact":
                 self.state.artifacts[obj.id] = obj
                 a_add.append(obj.id)
+                # Backward compatibility: historical records embedded carriage
+                # on the artifact. Materialize those entries into the explicit
+                # relation during replay.
+                for wid in obj.warrants:
+                    pair = (obj.id, wid)
+                    if pair not in self.state.carries:
+                        self.state.carries.append(pair)
                 for pid in event.inputs:
                     if pid in self.state.problems and (obj.id, pid) not in self.state.addr:
                         self.state.addr.append((obj.id, pid))
@@ -385,7 +2093,18 @@ class Harness:
             self.state.hv[aid] = value
         for aid, value in event.state_diff.reach_set.items():
             self.state.reach[aid] = value
+        for aid, pid in event.state_diff.addr_add:
+            if pid in self.state.problems and (aid, pid) not in self.state.addr:
+                self.state.addr.append((aid, pid))
+        for carrier, wid in event.state_diff.carry_add:
+            if (
+                carrier in self.state.artifacts
+                and wid in self.warrants
+                and (carrier, wid) not in self.state.carries
+            ):
+                self.state.carries.append((carrier, wid))
         self._next_seq = event.seq + 1
+        self._advance_semantic_event_clock(event)
         self._tail.append(event)
         if len(self._tail) > self._TAIL_CAP:
             del self._tail[: -self._TAIL_CAP]
@@ -402,6 +2121,8 @@ class Harness:
             ),
             hv_set=event.state_diff.hv_set,
             reach_set=event.state_diff.reach_set,
+            addr_add=event.state_diff.addr_add,
+            carry_add=event.state_diff.carry_add,
         )
 
     # ------------------------------------------------------------------ #
@@ -410,7 +2131,12 @@ class Harness:
 
     def _adjudicate(self) -> None:
         nodes = set(self.state.artifacts)
-        att = build_att(self.state.artifacts, self.warrants, self.commitments)
+        att = build_att(
+            self.state.artifacts,
+            self.warrants,
+            self.commitments,
+            self.state.carries,
+        )
         dep = build_dep(self.state.artifacts)
         final = final_labels(compute_label0(nodes, att), dep)
         self.state.att = sorted(att)

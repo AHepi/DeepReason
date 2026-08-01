@@ -1,0 +1,36 @@
+{
+  "attempt": 1,
+  "candidate_file": "candidate.json",
+  "check_spec": {
+    "argv": [
+      "python3",
+      "checker.py",
+      "candidate.json"
+    ],
+    "cwd": ".",
+    "env": {},
+    "expected_exit": 0,
+    "id": "e31-constr-004-check",
+    "runner": "command",
+    "step_or_item_limit": 2000000
+  },
+  "family": "forbidden_words",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-004",
+  "parameters": {
+    "forbidden": [
+      "0110",
+      "1010",
+      "1100"
+    ],
+    "k": 6,
+    "n": 15
+  },
+  "schema": "e31-construction-problem-v1",
+  "sealed_refs": {
+    "answer_key.json": "87d51e462790ccdb8c57bfb9565e81ba6a5dbf18c59f0bb9eb3804b0113ae275",
+    "checker.py": "84240c615393159c3893cb3d9c7d75ec6d4328b45893e0cffeec96e4e7669946"
+  },
+  "seed": "20260713",
+  "statement": "Construct a binary string of length 15 with (P1) exactly 6 ones and (P2) none of the forbidden substrings '0110', '1010', '1100' occurring anywhere.  Submit the string as a JSON string (candidate.json)."
+}

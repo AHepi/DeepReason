@@ -1,0 +1,20 @@
+```json
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) by failing to provide a concrete, datable forbidden case for 'Egyptian early iron adoption in military contexts' that could realistically have obtained. The mechanism claims Egypt 'retained bronze for ritual/ideological reasons' and experienced 'delayed transition' with 'conservative rejection' of iron, but this is consistent with early Egyptian iron adoption in military contexts being absent—the very case under trial. The target's scope explicitly 'excludes: Egypt until 1060s (iron adoption under Shoshenq I),' which strategically removes the relevant temporal window where Egyptian military iron adoption would be expected to appear. The mechanism offers no specific datable observation that would falsify the claim: e.g., no specific reign, battle, or archaeological layer is named where Egyptian military iron adoption would constitute a counterexample. The 'temple inventories show deliberate bronze conservation' is asserted without citation to specific inventories (e.g., which temple, which reign, which document). The target conflates 'ritual/ideological' bronze retention with military absence of iron, but these are separable domains—Egypt could adopt iron militarily while retaining bronze ceremonially, yet no concrete observation is specified to test this. The mechanism invokes 'asymmetric metallurgical conservatism enforced by priestly-military elites' but names no specific institution, decree, or elite actor with datable action. The forbidden case 'Egyptian early iron adoption in military contexts' is therefore not genuinely engaged: the target simply defines it out of scope rather than identifying a concrete observation that could realistically have obtained and would falsify the claim. This violates std-hist's requirement for 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's Egypt argument amounts to post-hoc rationalization of survival rather than a falsifiable historical mechanism.",
+  "counterexample": [
+    {
+      "observation": "Egyptian military iron adoption in contexts such as the Battle of Qadesh (1274 BCE) or Ramesside period (1295-1077 BCE) campaigns, evidenced by iron weapons in military tombs (e.g., Tutankhamun's iron dagger, ca. 1323 BCE, already demonstrates early iron prestige objects)",
+      "relevance": "Would falsify 'asymmetric metallurgical conservatism' claim if iron appeared in military contexts before 1060s"
+    },
+    {
+      "observation": "Specific dated temple inventory (e.g., Wilbour Papyrus, ca. 1147 BCE, or earlier Ramesside documents) showing bronze conservation with explicit prohibition or absence of iron",
+      "relevance": "Would satisfy std-hist's requirement for concrete, datable record; target provides none"
+    },
+    {
+      "observation": "Shoshenq I's 1060s iron adoption occurring earlier than claimed (e.g., in Dynasty 20, ca. 1186-1077 BCE)",
+      "relevance": "Would falsify scope exclusion and show target's temporal boundary is arbitrary"
+    }
+  ]
+}
+```

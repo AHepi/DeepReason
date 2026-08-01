@@ -1,39 +1,15 @@
-"""M1 — dedupe + refuted-equivalence gate + orbit detector (MINI_PLAN §3.3).
+"""Process-only gate-block and orbit analytics for MiniReason.
 
-Gate refusals are logged Measure inputs in the parent's ``gate:<reason>``
-format, so the orbit counter here AND the parent's detection/invariants
-tooling both read them. NO embeddings in v0: the parent's embedding
-detector is scale-blind (within/cross medians 0.645 vs 0.671); the
-gate-rate detector separated healthy from orbiting perfectly on all 15
-parent roots (healthy: 0 blocks ever; orbiting: 7-14 per window).
+Admission is deliberately absent from this module.  MiniReason delegates
+every refuted-relapse decision to :mod:`deepreason.rules.guards.anti_relapse`
+through ``Session.admit_candidate``; keeping a second approximation here once
+made the two engine profiles disagree about battery equivalence and counter-
+warrants.  Gate refusals still use the parent's ``gate:<reason>`` Measure
+format, so these analytics and the parent's detection/invariant tooling read
+the same replayable process record.
 """
 
 import re
-
-
-def normalize(text: str) -> frozenset[str]:
-    """Normalized-token-set equivalence — the v0 stand-in for battery
-    equivalence (~=_B). If live smoke shows paraphrase orbiting slipping
-    this, the parent's verdict-vector check goes behind a flag (MINI_PLAN
-    §6 risk 1)."""
-    return frozenset(re.findall(r"[a-z0-9]+", text.lower()))
-
-
-def check(candidate_id: str, candidate_text: str, state) -> tuple[bool, str]:
-    """(admit, reason). Blocks ONLY relapse onto refuted-equivalents;
-    duplicates of LIVE artifacts are deduped by the caller, never gated
-    (blocking them would be a diversity gate adjudicating)."""
-    refuted = state.refuted
-    if candidate_id in refuted:
-        return False, f"hash: {candidate_id[:12]} is a refuted artifact"
-    tokens = normalize(candidate_text)
-    for prior_id in sorted(refuted):
-        prior = state.artifacts.get(prior_id)
-        if prior is None or not prior.get("content_ref", "").startswith("inline:"):
-            continue
-        if tokens == normalize(prior["content_ref"][len("inline:"):]):
-            return False, f"battery-equivalent (~=_B) to refuted {prior_id[:12]}"
-    return True, "admitted"
 
 
 def gate_blocks(events, window: int = 20) -> list[str]:

@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The notes iterate through designs at k=5 candidates (e.g., '40 questions x 2 tiers x 5 candidates x 2 arms x ~1.5k tokens avg = ~600k') and ultimately shrink to '30 questions x 2 tiers x 5 candidates x 2 arms x ~1k = ~300k' to fit a ~300k budget. This budgetary pressure directly incentivizes reducing candidate count k below 5 or truncating candidate generation, which violates the stated scope constraint of 'k >= 5'. More critically, if the token budget forces any reduction in the shared candidate pool size between the SC and harness arms to fit computational limits, it fundamentally breaks the requirement that all arms score one shared candidate pool per question."}
+```

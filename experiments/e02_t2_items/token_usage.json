@@ -1,0 +1,32 @@
+{
+  "prompt_tokens": 113428,
+  "completion_tokens": 124660,
+  "calls": 229,
+  "phases": {
+    "adversary-clean": {
+      "prompt_tokens": 15744,
+      "completion_tokens": 24271,
+      "calls": 57
+    },
+    "judge-same-B": {
+      "prompt_tokens": 24230,
+      "completion_tokens": 31406,
+      "calls": 42
+    },
+    "judge-cross-B": {
+      "prompt_tokens": 21198,
+      "completion_tokens": 568,
+      "calls": 40
+    },
+    "judge-cross-A": {
+      "prompt_tokens": 26788,
+      "completion_tokens": 35221,
+      "calls": 46
+    },
+    "judge-same-A": {
+      "prompt_tokens": 25468,
+      "completion_tokens": 33194,
+      "calls": 44
+    }
+  }
+}

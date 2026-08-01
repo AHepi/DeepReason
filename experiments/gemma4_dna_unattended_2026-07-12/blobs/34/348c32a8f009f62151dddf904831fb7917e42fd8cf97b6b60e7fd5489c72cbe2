@@ -1,0 +1,45 @@
+Define only the bounded global art direction requested in the input, including reduced-motion behavior and a complete static fallback. Do not emit components, HTML, routes, tools, or workflow instructions.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "description": "Flat, bounded transport for the canonical global art direction.", "properties": {"depth_structure": {"maxLength": 600, "minLength": 1, "title": "Depth Structure", "type": "string"}, "interaction_state_model": {"maxLength": 600, "minLength": 1, "title": "Interaction State Model", "type": "string"}, "motion_language": {"maxLength": 600, "minLength": 1, "title": "Motion Language", "type": "string"}, "palette": {"maxLength": 400, "minLength": 1, "title": "Palette", "type": "string"}, "reduced_motion_version": {"maxLength": 600, "minLength": 1, "title": "Reduced Motion Version", "type": "string"}, "responsive_strategy": {"maxLength": 600, "minLength": 1, "title": "Responsive Strategy", "type": "string"}, "scroll_narrative": {"maxLength": 600, "minLength": 1, "title": "Scroll Narrative", "type": "string"}, "spacing_strategy": {"maxLength": 400, "minLength": 1, "title": "Spacing Strategy", "type": "string"}, "static_fallback": {"maxLength": 600, "minLength": 1, "title": "Static Fallback", "type": "string"}, "texture_language": {"maxLength": 600, "minLength": 1, "title": "Texture Language", "type": "string"}, "transition_grammar": {"maxLength": 600, "minLength": 1, "title": "Transition Grammar", "type": "string"}, "typography": {"maxLength": 400, "minLength": 1, "title": "Typography", "type": "string"}}, "required": ["palette", "typography", "spacing_strategy", "responsive_strategy", "interaction_state_model", "motion_language", "scroll_narrative", "depth_structure", "transition_grammar", "texture_language", "reduced_motion_version", "static_fallback"], "title": "CompactArtDirection", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"palette":"x","typography":"x","spacing_strategy":"x","responsive_strategy":"x","interaction_state_model":"x","motion_language":"x","scroll_narrative":"x","depth_structure":"x","transition_grammar":"x","texture_language":"x","reduced_motion_version":"x","static_fallback":"x"}
+
+INPUT:
+
+WEBSITE ART DIRECTION
+Task: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+Specify one coherent visual and motion system, including palette, typography, spacing, responsive behavior, and interaction/state. Reduced-motion and static fallback fields must describe complete usable alternatives.
+ADJUDICATED PLAN:
+# Product Plan: The Bio-Digital Archive (Data-Centric)
+
+## Pages
+A single-page dashboard layout with embedded interactive modules.
+
+## Feature List
+- A data-grid showing nucleotide sequences.
+- A 'Live Simulation' window for transcription.
+- Parallax depth created via CSS transforms on data-cards.
+- 2026 'Cyber-Organic' visual design (deep greens, iridescent purples).
+
+## Key Interactions
+- **Sequence Scrubbing**: Dragging a slider moves a 'reading head' across a DNA sequence, causing the corresponding mRNA bases to appear in real-time (Causal link: Slider position -> Index lookup -> Visual render).
+- **Layered Depth**: Background elements move at 0.2x speed, midground at 0.5x, and foreground at 1.0x relative to scroll.
+- **Motion Control**: Global `isMotionEnabled` variable set via `prefers-reduced-motion` query; if false, parallax offsets are set to 0.
+
+## Content Inventory
+- **Header**: "The DNA Archive: Digitalized Life"
+- **Data Table**: "Sequence: ATGC... | Complement: TACG..."
+- **Replication Guide**: "DNA replication is semi-conservative; each new helix contains one old strand and one new strand."
+- **Transcription Guide**: "Transcription converts DNA into mRNA in the nucleus. This allows the original code to remain protected."
+- **Factoid**: "Human DNA contains approximately 3 billion base pairs."
+
+## Acceptance Criteria
+1. [ ] Single local HTML file.
+2. [ ] Slider accurately simulates transcription base-pairing.
+3. [ ] Parallax depth is visible on scroll.
+4. [ ] `prefers-reduced-motion` removes all parallax and sliding effects.
+5. [ ] Color palette matches the 'Cyber-Organic' 2026 specification.

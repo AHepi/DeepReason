@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target claims a 'rapid onset aridification event (300-year drought)' as the mechanism, but the forbidden case specifies 'stable precipitation levels' from paleoclimatic proxies for the exact region and period (Anatolia, 1250–1100 BC). If this evidence exists, the mechanism's causal claim is directly falsified for a core region it purports to cover. The target fails the standard because it does not provide a mechanism that can accommodate or explain away this contradictory observation; it merely asserts a climatic event without specifying how the mechanism would still operate if precipitation levels were stable. The forbidden case is a concrete, datable observation that, if true, severs the link between the proposed mechanism (aridification reducing surplus) and the outcome (bureaucratic collapse) in Anatolia.",
+  "counterexample": [
+    "Paleoclimatic data from Soreq Cave speleothems indicating stable or increased effective moisture in the Levant between 1250–1100 BC",
+    "Pollen core data from Lake Van showing no significant aridification during the Late Bronze Age collapse window"
+  ]
+}

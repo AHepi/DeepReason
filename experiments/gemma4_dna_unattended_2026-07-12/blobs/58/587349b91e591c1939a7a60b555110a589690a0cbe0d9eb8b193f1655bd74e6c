@@ -1,0 +1,16 @@
+```json
+{
+  "palette": "Cyber-Organic 2026: Deep Obsidian (#050A0C), Bioluminescent Green (#39FF14), Iridescent Purple (#B026FF), Cyan Glaze (#00F3FF), and muted Slate Gray (#2D3436).",
+  "typography": "Headings: Geometric Sans-Serif (Inter or Montserrat) with wide tracking. Body: Monospace (JetBrains Mono or Roboto Mono) for a data-centric, technical feel.",
+  "spacing_strategy": "Fluid 8pt grid with exaggerated whitespace (padding: 2rem to 5rem) to create a gallery-like aether around data modules.",
+  "responsive_strategy": "Adaptive Columnar: 3-column data grid on desktop, collapsing to a single vertical stream on mobile with scaled-down typography and touch-optimized slider handles.",
+  "interaction_state_model": "Bioluminescent Feedback: Hover states trigger a glow-bleed (box-shadow) and subtle scale-up (1.02x). Active states shift colors from Green to Cyan.",
+  "motion_language": "Organic Precision: Smooth, eased-out cubic-bezier(0.25, 1, 0.5, 1) transitions. Elements float with a low-frequency sine-wave oscillation to mimic fluid suspension.",
+  "scroll_narrative": "Layered Revelation: Content fades in via opacity and vertical translation as it enters the viewport, synced with a multi-speed parallax background.",
+  "depth_structure": "Tri-Planar Parallax: Z-axis layering with Background (0.2x), Midground (0.5x), and Foreground (1.0x) translation relative to scroll position.",
+  "transition_grammar": "Cross-fade and Slide: State changes occur via 300ms opacity blends and 400ms directional slides for sequence updates.",
+  "texture_language": "Glassmorphism & Digital Grain: Frosted semi-transparent overlays (backdrop-filter: blur) combined with a subtle noise overlay to mimic a high-tech monitor.",
+  "reduced_motion_version": "Static-Positioning: All parallax offsets are neutralized to 0; oscillation is disabled; fade-ins are replaced by immediate visibility; sliders trigger instant state updates.",
+  "static_fallback": "Flat Data-Dashboard: Fixed layout with high-contrast borders; all interactive simulations are replaced by static side-by-side comparison diagrams and text descriptions."
+}
+```

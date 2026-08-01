@@ -1,0 +1,44 @@
+{
+  "candidate": {
+    "claim": "The criticism mechanism fails to retire rivals because batch criticism dilutes per-target warrants below the retirement threshold; allocating criticism budget to a winner-takes-all tournament per batch will increase retirement rates.",
+    "mechanism": "By pooling the criticism budget onto the weakest rival(s) per batch, the system creates a threshold effect where targeted rivals accumulate enough criticism weight to be retired, rather than distributing attention uniformly across all 60 rivals such that none reach the retirement cutoff.",
+    "counterconditions": [
+      "The targeted rivals might adapt by generating stronger counter-warrants, nullifying the increased criticism weight.",
+      "Reducing attention to non-targeted rivals may allow unchallenged harmful divergence in the broader school population.",
+      "The schools may lack a reliable metric to identify the 'weakest' rival to target, leading to wasted criticism on robust rivals."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0efee9d35ff76f87"
+      },
+      {
+        "block": "0974daebd1665965"
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "concentrated_poisoning_analogy"
+      ],
+      "shared_structure": [
+        "Both involve a finite resource (criticism budget vs poison dosage) distributed over a growing population (rivals vs pests).",
+        "In both, distributing the resource too thinly leaves the population entirely unharmed, while concentrating it achieves the elimination threshold for at least some of the population."
+      ],
+      "disanalogies": [
+        "Pests do not actively defend themselves or build immunity, whereas school rivals can generate counter-warrants.",
+        "Poison acts chemically and predictably, whereas criticism relies on semantic alignment and may fail to apply even if heavily weighted."
+      ],
+      "transfer_claims": [
+        "Just as sub-lethal doses of poison fail to reduce pest populations, sub-threshold criticism weights fail to retire rival positions.",
+        "Concentrating the criticism resource on specific targets will cause a measurable drop in the rival population, unlike uniform distribution."
+      ],
+      "overturn_conditions": [
+        "If the overall diversity of the school system collapses to a monoculture due to excessive targeting.",
+        "If empirical testing shows that rival defenses scale linearly with criticism weight, preventing any retirement."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive"
+    },
+    "typicality": 0.75
+  }
+}

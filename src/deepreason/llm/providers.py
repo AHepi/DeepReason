@@ -47,13 +47,56 @@ def _openai_reasoning(value) -> dict:
     return {"reasoning_effort": effort}
 
 
+def _ollama_reasoning(value) -> dict:
+    # Ollama's OpenAI-compatible surface takes reasoning_effort with the SAME
+    # vocabulary as the neutral knob (none/low/medium/high/max), so pass it
+    # straight through. This is what makes `reasoning: none` actually disable
+    # thinking on Ollama (the dominant cost lever) instead of being silently
+    # dropped by the generic no-op. An int budget collapses to a coarse effort.
+    if value is None:
+        return {}
+    if isinstance(value, int):
+        value = "low" if value <= 2000 else "high"
+    return {"reasoning_effort": str(value)}
+
+
 def _no_reasoning_knob(value) -> dict:
     return {}
+
+
+# The neutral vocabulary's off token. Every adapter above maps it to the
+# provider's own most-off setting (OpenAI has no "none", so it takes
+# "minimal"); a provider with no adapter cannot be asked at all.
+REASONING_OFF = "none"
+
+
+def reasoning_knob_available(provider: str) -> bool:
+    """Whether this provider realizes the neutral reasoning knob at all.
+
+    Availability is decidable here rather than by probing the endpoint: a
+    provider whose adapter is the no-op cannot carry the request, so asking
+    it to disable thinking is meaningless.
+    """
+
+    return REASONING_ADAPTERS.get(provider, _no_reasoning_knob) is not _no_reasoning_knob
+
+
+def reasoning_disabled(value) -> bool:
+    """Whether a neutral reasoning value actually switches thinking off.
+
+    Unset is NOT off. A profile carrying ``None`` sends no reasoning field,
+    and a reasoning model then thinks by default — measured on glm-5.2 via
+    Ollama Cloud, where an unset knob returned a populated reasoning payload
+    and "none" returned an empty one.
+    """
+
+    return value is not None and str(value).strip().casefold() == REASONING_OFF
 
 
 REASONING_ADAPTERS = {
     "deepseek": _deepseek_reasoning,
     "openai": _openai_reasoning,
+    "ollama": _ollama_reasoning,
     "generic": _no_reasoning_knob,
 }
 
@@ -64,6 +107,11 @@ def infer_provider(base_url: str) -> str:
         return "deepseek"
     if "openai" in url:
         return "openai"
+    # ollama.com (cloud) — its reasoning_effort takes the neutral vocabulary
+    # natively. Local ollama at localhost:11434 has no "ollama" in the host, so
+    # it stays generic unless the role sets provider: ollama explicitly.
+    if "ollama" in url:
+        return "ollama"
     return "generic"
 
 

@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The target's precision threshold is given as \"p > (1-r) * F_broken / (r * F_fixed)\" where \"F_broke/F_fixed is the ratio of broken-to-fixed majority cases\" without providing a closed‑form expression in terms of the named measurable quantities (e, k, p, r)."}

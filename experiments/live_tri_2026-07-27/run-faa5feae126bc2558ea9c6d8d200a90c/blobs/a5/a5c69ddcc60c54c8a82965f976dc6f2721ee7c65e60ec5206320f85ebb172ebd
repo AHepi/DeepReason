@@ -1,0 +1,63 @@
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "unknown",
+      "claim": "Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?",
+      "qualification": "The bounded record presents 24 rival formal artifacts with incompatible proposals and supplies no basis to select one as safest.",
+      "source_conflict_keys": [
+        "CNF_1"
+      ]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_1: The safest protocol is an epoch-versioned intent log with an immutable, epoch-partitioned evidence store; it must durably record per problem ID the workspace epoch, the evidence destination binding, and a commit or abandon marker.",
+      "formal_artifact_handles": [
+        "ART_1"
+      ]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_2: The safest protocol is a consensus-backed session lease with a mandatory linearizable proof-of-absence query against the evidence namespace; it must durably record the lease grant, the last heartbeat timestamp, and any evidence digest upon promotion.",
+      "formal_artifact_handles": [
+        "ART_2"
+      ]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_3: The safest protocol is a write-ahead undo-log with reference-counted staging directories and deterministic workspace replay; it must durably record the problem ID, sequence number, staging directory handle, pristine workspace checksum, and the promotion record.",
+      "formal_artifact_handles": [
+        "ART_3"
+      ]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_4: The safest protocol is a monotonic per-problem state machine with a durable checkpoint journal; it must durably record each state transition entry comprising problem ID, from-state, to-state, timestamp, and process nonce.",
+      "formal_artifact_handles": [
+        "ART_4"
+      ]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_5: The safest protocol is an epidemic gossip layer that gathers causal null-witnesses for evidence absence; it must durably record the problem ID, the deterministic evidence hash that would have been expected, and a quorum of signed, timestamped null-attestations from distinct nodes.",
+      "formal_artifact_handles": [
+        "ART_5"
+      ]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_6: The safest protocol is a cryptographic commitment chain where the process publishes sequential state commitments and reclamation verifies non-opening of the terminal commitment; it must durably record the initial commitment, each intermediate commitment link, the problem ID, and the signed reclamation non-opening certificate.",
+      "formal_artifact_handles": [
+        "ART_6"
+      ]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "surviving_conjecture",
+      "claim": "Conjecture per ART_7: The safest protocol is an epoch-versioned intent log with an immutable, epoch-partitioned evidence store;

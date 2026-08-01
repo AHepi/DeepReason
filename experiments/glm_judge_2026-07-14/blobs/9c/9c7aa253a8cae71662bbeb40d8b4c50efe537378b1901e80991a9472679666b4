@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target": "5597507043f5427f7073b4c80fe87419bbf3b32c9207ae3f808100790dd11909",
+      "attack": true,
+      "case": "The proposed abstraction mischaracterizes the relationship between the endpoints as a chain of 'subsumption' (each artifact negating and generalizing its predecessor's impossibility claim), but this conflates a negative generalization (30e483eb's 'no fixed precision/recall regime suffices') with a positive mechanistic reduction (c9386a6c's per-question flag-rate inequality). c9386a6c does not merely broaden 30e483eb's impossibility to the full fixed-parameter space; it replaces the fixed-parameter framing entirely with a question-conditional variable model. These are not subsets of a single constraint family — one is a point-set impossibility in global parameter space, the other is a per-question covariance condition — so the claimed shared fixed-parameter impossibility axis does not hold.",
+      "counterexample": [
+        "30e483eb claims impossibility for all fixed (precision, recall) points, but explicitly allows strict advantage via a calibrated confidence threshold (a non-fixed, question-adaptive policy).",
+        "c9386a6c claims impossibility for all fixed (p, phi, psi, k) tuples, but locates the determining factor in per-question (r_w - r_c) sign, which is not a parameter-space subset of fixed (precision, recall) but a different model entirely.",
+        "If 30e483eb's impossibility is 'no fixed precision/recall point works' and c9386a6c's is 'no fixed (p, phi, psi, k) point works', c9386a6c does not subsume 30e483eb by broadening the same axis — it changes the axis from global point-impossibility to per-question distributional covariance."
+      ]
+    },
+    {
+      "target": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b",
+      "attack": false
+    },
+    {
+      "target": "c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495",
+      "attack": true,
+      "case": "The target's per-question strict-beat condition is mathematically incomplete: it requires r_w(q)*n_wrong(q) > n_wrong(q) - n_correct(q) on the SC-wrong question, but this only checks that the harness can flip that question's majority from wrong to right. It omits the necessary condition that the harness must NOT simultaneously break any SC-correct question — yet the 'for all other q' clause only constrains r_c(q')*n_correct(q') < n_correct(q') - n_wrong(q'), which is the condition for NOT breaking each individual question, not the condition for net strict improvement. If the harness fixes the one SC-wrong question but breaks even one SC-correct question, net fixed-minus-broke is zero, not strictly positive. The target conflates per-question non-breakage with net strict advantage, so the stated iff is false.",
+      "counterexample": [
+        "k=5, one question q* with SC wrong (3 wrong, 2 correct): r_w(q*)=1.0, so 1.0*3 > 3-2=1, harness fixes q*.",
+        "Another question q' with SC right (3 correct, 2 wrong): r_c(q')=0.5, so 0.5*3=1.5 < 3-2=1 is FALSE (1.5 > 1), so the target's condition correctly flags q' as broken.",
+        "But if r_c(q')=0.3, then 0.3*3=0.9 < 1, so q' is 'not broken' per the target, yet if the critic flags exactly 1 correct candidate on q' (reducing correct from 3 to 2, now tied 2-2), SC's majority is destroyed and the harness may output the wrong answer — a break the target's inequality 0.9 < 1 fails to catch because it uses a continuous fraction rather than the discrete integer count condition n_correct - ceil(r_c * n_correct) > n_wrong + floor(r_w * n_wrong)."
+      ]
+    }
+  ]
+}

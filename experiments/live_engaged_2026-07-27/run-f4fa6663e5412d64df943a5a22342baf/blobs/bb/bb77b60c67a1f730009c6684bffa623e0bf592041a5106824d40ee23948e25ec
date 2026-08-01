@@ -1,0 +1,36 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim assumes that a formal specification of the log's transition rules is sufficient to turn silent divergence into a contradiction, but this fails when the specification is incomplete or ambiguous. The problem requires a binding that *alone* guarantees contradiction, yet the countercondition explicitly acknowledges that the specification must be 'complete' and 'unambiguous'—a condition that is not inherently guaranteed by the specification itself. Without an external mechanism to enforce completeness (e.g., a proof system or exhaustive verification), the specification may permit silent divergence by omitting edge cases or underspecifying behavior, rendering the binding non-contradictory in practice.",
+      "counterexample": [
+        {
+          "scenario": "A log transition rule specifies that 'if input X is received, output Y must be produced,' but omits behavior for input Z. During replay, the log silently diverges by producing output W for input Z, yet this divergence is not a contradiction because the specification never addressed input Z."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "Social consensus as a durable binding fails to guarantee contradiction because it relies on collective trust, which is inherently probabilistic and subject to manipulation. The problem demands a binding that *alone* turns divergence into a contradiction, but social consensus cannot enforce this unilaterally: it depends on external factors like public verifiability (e.g., cryptographic hashes) and resistance to Sybil attacks, both of which are listed as counterconditions. Without these, silent divergence can persist undetected if the community is misled or colludes to accept an altered log. The binding is thus contingent, not self-sufficient.",
+      "counterexample": [
+        {
+          "scenario": "A log is altered by a majority of colluding participants who control the consensus mechanism (e.g., a 51% attack in a blockchain). The replayed log diverges from the original, but the community 'consensus' accepts the altered version as correct, rendering the divergence non-contradictory under the binding."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "Trusted timestamping fails as a durable binding because it does not inherently prevent silent divergence—it only binds the log's state to a *time*, not to its *content*. The problem requires a binding that turns divergence into a contradiction, but timestamping cannot detect divergence unless the log's state is fully captured and verifiable at the time of timestamping (a countercondition). If the log's state is underspecified or hidden (e.g., off-chain data), timestamping cannot distinguish between a valid update and a silent divergence, as the temporal anchor alone does not enforce logical consistency.",
+      "counterexample": [
+        {
+          "scenario": "A log's state is timestamped with a hash of its visible entries, but the log also includes hidden metadata (e.g., a 'deleted' flag). During replay, the hidden metadata is altered, causing silent divergence, but the timestamped hash remains valid because it only covers the visible entries. The divergence is undetectable by the timestamping mechanism alone."
+        }
+      ]
+    }
+  ]
+}
+```

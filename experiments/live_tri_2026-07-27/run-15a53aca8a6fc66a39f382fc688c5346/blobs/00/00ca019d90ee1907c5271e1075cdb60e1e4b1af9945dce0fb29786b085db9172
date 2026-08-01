@@ -1,0 +1,48 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "source_fact",
+      "claim": "Resumption is safe if and only if the last recorded event in the log is well-formed and complete, and the causal preconditions (program, inputs, model-state checkpoint) are demonstrably unchanged at resumption time; append-only identity is preserved because new events extend the same causal chain without rewriting any prior event.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "source_fact",
+      "claim": "Resumption must be refused whenever token-budget exhaustion interrupts mid-event, because the partial event either has no well-defined identity (cannot be referenced as a causal parent) or must be rewritten to become complete (violating append-only); there is no safe recovery path for mid-event interruption under strict append-only semantics.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "source_fact",
+      "claim": "Append-only identity is never corrupted by resumption per se; corruption only occurs if the resumption re-evaluates or rewrites already-committed events; therefore resumption is always permissible as long as the continuation starts strictly after the last committed event, regardless of whether the logical reasoning unit was complete.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "source_fact",
+      "claim": "Resumption is safe only if the system emitted an explicit barrier or suspend event before or at the point of token-budget exhaustion; without a barrier, even well-formed events may be part of an incomplete logical unit and resumption could produce events that semantically depend on context never written to the log.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "source_fact",
+      "claim": "Resumption requires an exact causal fingerprint match: the triple (program_hash, input_hash, model_checkpoint_hash) at resumption must equal the triple at run start; any divergence means resumed events belong to a different causal identity, making the append-only log internally inconsistent.",
+      "formal_artifact_handles": ["ART_5"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "source_fact",
+      "claim": "Adjudication between rival criteria: the last complete event criterion and the causal fingerprint criterion are both necessary but neither is sufficient alone; the correct criterion is their conjunction: resumption is safe iff (1) the last event is well-formed and complete, AND (2) the causal fingerprint matches, AND (3) no intermediate event declares logical incompleteness (e.g., a begin without a matching commit).",
+      "formal_artifact_handles": ["ART_6"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "source_fact",
+      "claim": "Resumption is permissible if the conjunction of the last complete event criterion, the causal fingerprint match, and the absence of any declared logical incompleteness all hold; each condition is independently necessary and jointly sufficient, so any failure of a single condition must force refusal rather than best-effort continuation.",
+      "formal_artifact_handles": ["ART_7"]
+    }
+  ]
+}
+```

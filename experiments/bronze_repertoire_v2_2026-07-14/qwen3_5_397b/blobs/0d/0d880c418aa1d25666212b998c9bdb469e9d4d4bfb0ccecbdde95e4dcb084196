@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case is not a concrete, datable observation that could realistically have obtained. It is a vague, theory-laden counterfactual ('robust local subsistence economies continuing uninterrupted within palace zones during the transition period') that lacks a specific site, material signature, or temporal boundary. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)'. A valid forbidden case would cite, for example, 'Linear B tablets at Pylos recording uninterrupted grain redistribution and bronze-working after the destruction horizon dated to c. 1180 BCE' or 'unbroken stratigraphic sequences at Tiryns showing continuous elite craft production through LH IIIC'. The provided case instead describes an abstract economic condition with no archaeological referent, making it unfalsifiable in practice and violating clause (2) of the standard.",
+  "counterexample": [
+    "Linear B tablets at Pylos recording uninterrupted grain redistribution and bronze-working after the destruction horizon dated to c. 1180 BCE",
+    "Unbroken stratigraphic sequences at Tiryns showing continuous elite craft production through LH IIIC"
+  ]
+}

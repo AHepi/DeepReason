@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The 0.5 * sqrt(5/k) form is a conservative empirical heuristic anchored at the k=5 measured point (where the required precision would be 0.5, consistent with the observed zero net gain), extrapolated so that as k grows the required precision relaxes because ties become less frequent"}
+```

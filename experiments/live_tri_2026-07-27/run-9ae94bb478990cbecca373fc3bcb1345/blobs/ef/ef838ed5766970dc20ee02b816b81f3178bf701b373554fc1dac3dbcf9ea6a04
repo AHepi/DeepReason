@@ -1,0 +1,31 @@
+{
+  "candidate": {
+    "claim": "The fetch budget must be denominated in both requests and bytes, and exhaustion must be recorded as a typed terminal event that includes a cryptographic hash of the budget policy and the cumulative counters, ensuring non-repudiation and replayability.",
+    "mechanism": "A dual-counter guard in the fetch loop atomically increments request count and byte count after each completed fetch. When either counter exceeds its limit, the agent transitions to a terminal state, logging an event with a unique type identifier, the policy hash, and the final counter values. The log is append-only and signed, and during replay the logged values are used instead of re-fetching to guarantee determinism.",
+    "counterconditions": [
+      "If byte counting is non-deterministic due to compression or content negotiation, a request-only budget with logged response bodies is sufficient.",
+      "If the agent can modify its own budget policy, a hardware-enforced or externally verified budget is required.",
+      "If the environment can delay or drop fetch responses, a timeout-based budget must be added to prevent indefinite blocking.",
+      "If the agent's memory is bounded and response sizes are predictable, a request-only budget with a separate memory budget may be simpler and equally auditable.",
+      "If the replay system can perfectly simulate network conditions, byte counting may be unnecessary because the original responses are replayed exactly."
+    ],
+    "typicality": 0.7,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005",
+      "SRC_006"
+    ],
+    "analogy": null,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  },
+  "abstention": null
+}

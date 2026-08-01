@@ -1,0 +1,116 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A halted run is resumable without corrupting append-only identity iff three conditions hold simultaneously: (1) the halt occurred at an event boundary, meaning the last event in the log was fully written and its identity digest (hash-chain link) is finalized and persisted; (2) the persisted token-budget state is consistent with the event-log position—every event's token cost has been accounted for and the remaining budget is exactly what it would be after replaying all committed events; (3) the system's continuation is a pure function of the persisted event log plus budget state, with no un-logged non-deterministic inputs (external tool-call results, RNG draws, real-world side effects) that would alter the next event's content. Resumption must be refused whenever any of these fails: a torn/partial tail event, a budget-state mismatch, a broken hash chain, or reliance on volatile external state not captured in the log.",
+      "mechanism": "Append-only identity is a hash chain (or equivalent digest structure) over the event sequence. Identity preservation requires that the chain be unbroken at the resumption point and that each new event links to the correct predecessor. A clean halt at an event boundary guarantees the predecessor is finalized. Budget consistency ensures the resumed run operates under the same resource constraints a continuous run would have had, so it produces the same sequence of decisions. Pure-function dependence on the log ensures the resumed events are causally consistent with the committed prefix—no divergence from an uninterrupted run. If any condition fails, appending new events would either link to a corrupted/incomplete predecessor or produce events whose content diverges from what the original run trajectory would have generated, corrupting the identity in the sense that the chain no longer represents a single coherent run.",
+      "counterconditions": [
+        "The tail event is partially written (torn write): the persisted bytes do not form a complete event with a valid digest, so the chain has no finalized link target for the next event.",
+        "Budget state and event log are inconsistent: e.g., budget was decremented for an event that failed to persist, or an event persisted without budget decrement, so the resumed run's resource decisions diverge from a continuous run.",
+        "The hash chain is broken at any point: a gap, a reordering, or a corrupted intermediate event makes the append-only identity already invalid before resumption.",
+        "The run consumed non-deterministic external inputs (tool calls, RNG, real-world state) whose outputs are not fully recorded in committed events, so the resumed run cannot reconstruct the exact continuation trajectory.",
+        "Volatile generation state (e.g., KV cache contents, attention state) that influences event content is not derivable from the event log alone, and the system cannot deterministically reconstruct it."
+      ],
+      "typicality": 0.95,
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    },
+    {
+      "claim": "Resumability reduces to a single atomicity invariant: the event-append and the budget-decrement must be a single atomic transaction. A halted run is resumable iff the persisted state is the result of a sequence of completed transactions—each one either fully committed (event written + budget decremented + digest linked) or fully rolled back (neither persisted). Resumption must be refused iff the transaction log shows a split: an event persisted without a matching budget decrement, or a budget decrement without a matching event, or a partially committed transaction (event bytes present but digest not finalized).",
+      "mechanism": "Treat (append_event, decrement_budget, finalize_digest) as one ACID transaction. If the system guarantees this atomicity—e.g., via a write-ahead log with two-phase commit or a single atomic store operation—then any halt, even a crash, leaves the persisted state at a consistent transaction boundary. The next run simply reads the last committed transaction and continues. The append-only identity is preserved because every committed event has a finalized digest linking to its predecessor, and no partial transactions leave orphaned state. Refusal is required exactly when the atomicity guarantee was violated by the halt: the transaction was split across the crash boundary.",
+      "counterconditions": [
+        "The system does not implement atomic append-and-decrement, so a halt can split the transaction, leaving an event without a budget update or vice versa.",
+        "The storage layer does not support atomic multi-key updates (event + budget + digest), making the invariant unenforceable.",
+        "A torn write occurs despite atomicity guarantees due to storage-level corruption (disk error, OS crash mid-flush).",
+        "The budget accounting is approximate or lazy (e.g., estimated token counts adjusted later), so the decrement is not a precise atomic counterpart to the event."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_001", "SRC_005"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    },
+    {
+      "claim": "Resumability is determined by whether the persisted state (event log, budget, and any non-deterministic state captures) forms a complete checkpoint at an event boundary. A halted run is resumable iff the checkpoint is complete: the event log is intact and self-verifying up to its last entry, the budget state equals the sum of all event costs subtracted from the initial budget, and every source of non-determinism that influenced the committed events is either (a) fully recorded in the events themselves or (b) reconstructable from a persisted seed. Resumption must be refused when the checkpoint is incomplete—any of these components is missing, inconsistent, or refers to external state that can no longer be reproduced.",
+      "mechanism": "A 'checkpoint' is the minimal persistent state from which the run can be exactly continued. For an append-only event log, the checkpoint includes the log itself (which encodes all committed decisions), the budget residue, and any non-determinism capture (RNG state, tool-call response caches). If all three are present and mutually consistent at an event boundary, the resumed run produces the same event sequence as a continuous run, preserving identity. If any component is absent or inconsistent, the resumed run would diverge—either producing different event content (non-determinism not reconstructable) or violating resource constraints (budget mismatch)—so resumption must be refused to avoid appending events that break the chain's coherence as a single run's record.",
+      "counterconditions": [
+        "The event log is self-verifying but the budget state was not persisted or is stale relative to the last event.",
+        "Non-deterministic inputs (external API calls, environment variables, wall-clock timestamps) influenced committed events but their outputs were not captured, so the continuation cannot reproduce the run's trajectory.",
+        "The RNG seed or state was not persisted, and the system's event generation depends on sampling, so resumed events would follow a different probabilistic path.",
+        "The checkpoint is at a non-event-boundary: intermediate generation state was persisted but no event was committed, so there is no valid link target for the next appended event."
+      ],
+      "typicality": 0.82,
+      "optional_refs": ["SRC_003", "SRC_005", "SRC_002"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    },
+    {
+      "claim": "If the token budget is reserved per-event before the write begins—each event write atomically reserves its cost from a global pool and releases unused reservation on completion—then budget exhaustion never interrupts an in-progress write; it only prevents the next write from starting. Under this construction, all halts are clean by design, and resumption is always safe provided the reservation protocol was followed. Resumption must be refused only when the reservation protocol itself was violated: a write started without a successful reservation, or a reservation was held but no event was committed (leaving the budget in a locked state).",
+      "mechanism": "Per-event budget reservation decouples exhaustion from write integrity. Before generating an event, the system estimates its token cost and atomically deducts that estimate from the budget. If insufficient budget remains, the write never starts—the halt is at an event boundary by construction. If the actual cost is lower, the difference is returned; if higher, the event is still committed (the estimate was a floor). This collapses the clean-halt condition into normal operation: there is no 'interrupted write' state to guard against. The only corruption risk is if the reservation protocol fails (e.g., a write begins without reservation due to a bug, or a crash leaves a reservation locked without a committed event), creating a budget-event inconsistency. In that case, the append-only identity of existing events is intact, but the budget state is inconsistent, and resumption under a wrong budget could produce events that a continuous run would not have—so refuse.",
+      "counterconditions": [
+        "The per-event reservation protocol was not actually implemented or was bypassed (e.g., streaming output without pre-reservation), so a halt could still interrupt a write.",
+        "A reservation was deducted but the corresponding event was not committed (crash between reservation and write), leaving the budget artificially reduced relative to the event log.",
+        "The token-cost estimate is systematically wrong (e.g., output exceeds the estimate), so the reservation does not actually prevent mid-write exhaustion.",
+        "The reservation is per-event but non-deterministic external inputs are still un-logged, so even with a clean halt the continuation trajectory diverges."
+      ],
+      "typicality": 0.4,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    },
+    {
+      "claim": "Append-only identity corruption has two distinct senses that must be separated: (structural) the hash chain is physically broken by a torn write, and (trajectory) the chain is structurally intact but the resumed events belong to a different run trajectory than the committed prefix. A halted run can be resumed without structural corruption iff the tail event is fully committed with a finalized digest (clean halt). It can be resumed without trajectory corruption iff the system's state at the halt point is fully determined by the committed event log, including all non-deterministic inputs. Resumption must be refused for structural corruption (torn write) unconditionally, and for trajectory corruption whenever non-deterministic state was consumed but not logged—even if the chain is structurally perfect.",
+      "mechanism": "Structural identity is a property of the byte sequence and its digest chain: either the bytes form a valid chain or they don't. Trajectory identity is a property of causal continuity: the resumed events must be what the same run would have produced had it not halted. A clean halt preserves structural identity but does not guarantee trajectory identity—if the run called an external tool and recorded only the call but not the response, or sampled from an RNG whose state was not persisted, the resumed events will be structurally valid links but causally alien to the prefix. Thus two independent refusal conditions exist: (1) structural—torn write, broken digest, missing event bytes; (2) trajectory—unlogged non-determinism, unpersisted volatile state, external side effects not replayable from the log. Both must be clean for safe resumption.",
+      "counterconditions": [
+        "Structural: the tail event's bytes are incomplete or its digest is not finalized, breaking the chain regardless of trajectory considerations.",
+        "Trajectory: the committed events reflect non-deterministic choices (sampling, tool responses) whose state was not persisted, so resumed events cannot follow the original trajectory.",
+        "Trajectory: the system's generation state (KV cache, position embeddings, attention window) is not reconstructable from the event log, causing the resumed model to produce different outputs for the same logical context.",
+        "Both: a torn write occurs at a point where non-deterministic state was also un-persisted, so neither identity sense is preserved."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_002", "SRC_007", "SRC_005"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    },
+    {
+      "claim": "A halted run is resumable without corrupting append-only identity iff the event log's identity structure (hash chain or equivalent) is self-verifying up to its last persisted entry AND the resumption procedure appends new events by linking to the last verified entry, treating the log as the sole source of truth and ignoring any non-persisted runtime state. Resumption must be refused iff the self-verification fails OR if the system cannot continue from the verified log alone—i.e., it requires runtime state (model internals, open file handles, environment) that is not encoded in or reconstructable from the event log. The key insight: resumption safety is not about how the halt happened but about whether the log is a sufficient and intact continuation point.",
+      "mechanism": "Reframe the question around the log's self-sufficiency rather than the halt's circumstances. The event log carries append-only identity via a digest chain; if that chain verifies, the log is structurally sound regardless of why the run stopped. The resumption question then reduces to: can the system generate the next event using only the verified log as input? If yes, append the next event linking to the last verified entry—identity is preserved because the chain is extended correctly. If no—because the system needs state that only existed in the halted process's memory or external environment and cannot be reconstructed—resumption would produce events that are not a faithful continuation, so refuse. This framing subsumes the clean-halt condition (a torn write fails self-verification) and the non-determinism condition (unreconstructable state means the log is not sufficient).",
+      "counterconditions": [
+        "Self-verification of the log fails: the hash chain is broken at some point, so there is no valid last entry to link from.",
+        "The log verifies but the system's next-event generation depends on process-internal state (e.g., attention cache, intermediate activations) not encoded in the event log and not reconstructable by replay.",
+        "The log verifies but events in it reference external resources (tool-call responses, fetched data) that are no longer available, so replay to reconstruct state fails.",
+        "The log verifies but the budget state was stored separately and is inconsistent with the event log, so the resumed run's resource-gated decisions diverge."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_005", "SRC_003", "SRC_006"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []}
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Does 'corrupting append-only identity' require only structural integrity of the digest chain, or does it also require trajectory coherence (resumed events matching what a continuous run would produce)? The answer determines whether un-logged non-determinism is a refusal condition or merely a semantic concern.",
+        "related_refs": ["SRC_007", "SCR_002"]
+      }
+    ],
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Distinguishing structural identity (hash chain intact) from trajectory identity (resumed events causally continuous with prefix) may be the key axis of disagreement among candidates. If the problem means only structural identity, then the refusal conditions narrow to torn writes and broken digests. If it means trajectory identity too, then non-determinism capture and runtime-state reconstructability become mandatory refusal conditions.",
+          "why_keep_this": "This distinction resolves the tension between mechanist and skeptic positions and maps to SRC_007's critique of conflating structural and semantic coherence.",
+          "possible_next_move": "Determine which sense of 'identity' the problem's append-only framing commits to by examining the reasoning-envelope-wf commitment."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_002",
+        "relation_hint": "The structural/trajectory distinction directly addresses SCR_002's question about non-determinism and resumption safety.",
+        "direction": "directed",
+        "holds_when": "The problem's notion of append-only identity includes trajectory coherence.",
+        "weakens_when": "The problem means only structural hash-chain integrity."
+      }
+    ]
+  },
+  "abstention": null,
+  "context_request": null,
+  "simulation_proposals": []
+}
+```

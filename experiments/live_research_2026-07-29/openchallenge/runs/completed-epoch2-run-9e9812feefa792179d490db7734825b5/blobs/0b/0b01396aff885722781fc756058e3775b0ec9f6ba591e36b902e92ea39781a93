@@ -1,0 +1,1 @@
+{"contract":"conjecturer.turn.v6","path":"/values","error":"Value error, a simulation parameter set requires at least one value","received":5000,"allowed":"","repair_scope":"/values","skeleton":null,"rejected_handle":null,"observed_handle_kind":null,"required_handle_kinds":null,"legal_handles":null,"omission_or_unknown_legal":null,"instruction":null}

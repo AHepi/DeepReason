@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2a0c5b6f09e922fbe5d2ddac: program:reasoning_observation_pending
+- reason-counter@ce1977dbb572f8d5eb36b42c: program:reasoning_observation_pending
+- reason-counter@502d954d82e8b900bcc1ebff: program:reasoning_observation_pending
+- reason-counter@4046de639294819674c5038c: program:reasoning_observation_pending
+- reason-counter@e4dc010c6169f7af07fb91a2: program:reasoning_observation_pending
+- reason-counter@a4be1337c4bffc80eeaf45df: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget should be denominated in a composite cost metric (e.g., weighted sum of requests and bytes), with exhaustion recorded as a typed terminal containing the cost breakdown.","counterconditions":[{"case":"If the weights are not known a priori or vary across environments, the composite budget is not reproducible without also recording the weights, adding complexity.","eval":"observation"},{"case":"If the underlying resources are independently constrained (e.g., hard rate limit and hard data cap), a composite budget could allow one resource to be exhausted while the other is underutilized, violating the hard constraints.","eval":"observation"},{"case":"If auditability requires direct mapping to physical resources, a composite metric obscures which resource actually caused termination.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Define a cost function C = \u03b1 * requests + \u03b2 * bytes. The agent tracks both, computes cost, and stops when cost exceeds budget. The terminal event records the cost, the component values, and the weights. This allows flexible trade-offs but requires tuning \u03b1 and \u03b2.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2a0c5b6f09e922fbe5d2ddac, reason-counter@ce1977dbb572f8d5eb36b42c, reason-counter@502d954d82e8b900bcc1ebff
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be denominated solely in requests, with exhaustion recorded as a typed terminal event containing the request count and limit.","counterconditions":[{"case":"If response sizes vary significantly, then a request-only budget fails to control data volume, leading to non-reproducible runs due to different amounts of data downloaded.","eval":"observation"},{"case":"If the cost model includes data transfer fees, then ignoring bytes leads to unbounded costs.","eval":"observation"},{"case":"If the agent's tasks require downloading large files, a request budget could be exhausted by many small requests while still needing large downloads, or vice versa.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent increments a request counter for each fetch attempt. When the counter reaches the limit, it enters a terminal state and logs a 'request_budget_exhausted' event with the limit and count. This is simple and directly maps to API rate limits.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4046de639294819674c5038c, reason-counter@e4dc010c6169f7af07fb91a2, reason-counter@a4be1337c4bffc80eeaf45df
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

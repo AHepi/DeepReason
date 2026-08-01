@@ -1,0 +1,16 @@
+{
+  "candidate": {
+    "claim": "Resumption is permitted if and only if the event framing protocol deterministically identifies trailing bytes from budget exhaustion as an incomplete, uncommitted fragment (a non-event), and is refused if such trailing bytes are indistinguishable from a corrupted complete event.",
+    "mechanism": "Self-delimiting framing with checksums causes the resumption protocol to recognize trailing bytes lacking a valid end-marker as non-events. Since non-events lack event identity, they were never committed to the logical stream. This causal separation means ignoring them does not delete or modify a committed event, preserving physical append-only integrity (SCR_006), while causal continuity (SCR_007) is preserved by resuming from the last validly framed event.",
+    "counterconditions": [
+      "The framing protocol uses length-prefixing alone without end-markers, making a partial event indistinguishable from a complete one and corrupting causal continuity upon resumption.",
+      "Budget exhaustion occurs between an event's data write and a subsequent mandatory commit record, leaving a structurally complete but logically uncommitted event that naive framing would incorrectly validate.",
+      "The resumption protocol attempts to overwrite or garbage-collect the trailing partial bytes in place, violating the physical append-only integrity of the log."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "typicality": 0.8
+  }
+}

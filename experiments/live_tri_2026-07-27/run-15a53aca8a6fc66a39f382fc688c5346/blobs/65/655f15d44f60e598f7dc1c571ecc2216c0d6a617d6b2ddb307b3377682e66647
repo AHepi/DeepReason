@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "Resumption is permitted without corrupting append-only identity if the framing protocol deterministically isolates the trailing partial byte sequence left by token-budget exhaustion as a non-event, but must be refused if the framing relies on length-prefixing alone, which risks mistaking the partial sequence for a committed event.",
+    "mechanism": "Token-budget exhaustion leaves an incomplete byte sequence in the append-only log. If the reasoning envelope uses a self-delimiting framing protocol with integrity checks (e.g., checksums or end-markers), this sequence lacks event identity and is skipped by the resumption protocol, preserving both physical append-only integrity and logical causal continuity. If the framing relies solely on length-prefixing, the resumption protocol might consume the partial sequence as a valid event, corrupting the causal fingerprint and breaking continuity, thus necessitating a refusal.",
+    "counterconditions": [
+      "The framing protocol uses length-prefixing without end-markers or checksums, making the non-event determination non-deterministic.",
+      "The system lacks a causal fingerprint mechanism to verify the identity of the last committed event before resuming."
+    ],
+    "typicality": 0.85,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

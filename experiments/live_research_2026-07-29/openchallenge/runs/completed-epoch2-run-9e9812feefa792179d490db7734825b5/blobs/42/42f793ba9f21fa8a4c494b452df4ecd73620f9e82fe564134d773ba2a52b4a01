@@ -1,0 +1,7 @@
+```json
+{
+  "op": "replace",
+  "path": "/requested_observables",
+  "value": ["size_found_by_greedy", "size_found_by_random"]
+}
+```

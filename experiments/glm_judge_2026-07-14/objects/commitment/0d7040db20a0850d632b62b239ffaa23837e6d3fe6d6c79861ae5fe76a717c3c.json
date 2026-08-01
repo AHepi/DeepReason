@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Per-candidate flag accuracy > 0.6 but mutual information I(C;B) < I(C;M_wrong) and harness still beats SC"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:c67c4f4a2ffd","observation_valued":false},"id":"fc:c67c4f4a2ffd","schema":"commitment"}

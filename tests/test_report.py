@@ -38,12 +38,38 @@ def test_eval_report_from_scheduler_run(tmp_path):
             provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
         )
     )
+
+    # Both candidates satisfy k-moon: no refutations means no successor
+    # spawn treadmill, and with discrimination paused the never-worked
+    # pool is reflexive-only — so a connection problem gets worked and
+    # its structural criteria programs (lineage-ref, relation-form) feed
+    # the program-grounding section this test asserts on. Reflexive
+    # problems lose selection ties to independent work, so the seed
+    # keeps first claim on the run.
+    def _vs_all_pass(prompt: str) -> str:
+        return json.dumps(
+            {
+                "candidates": [
+                    {
+                        "content": f"the moon pulls the sea ({hash(prompt) % 97})",
+                        "typicality": 0.8,
+                    },
+                    {
+                        "content": f"the moon's orbit drags the tide ({hash(prompt) % 89})",
+                        "typicality": 0.2,
+                    },
+                ]
+            }
+        )
+
     adapter = LLMAdapter(
-        {"conjecturer": MockEndpoint(_vs), "variator": MockEndpoint(_edits)},
+        {"conjecturer": MockEndpoint(_vs_all_pass), "variator": MockEndpoint(_edits)},
         harness.blobs,
         retry_max=2,
     )
-    config = Config(VS_K=2, N_SCHOOLS=2, HV_K=3, HV_MIN=0.5, CAPTURE_W=10)
+    config = Config(
+        VS_K=2, N_SCHOOLS=2, HV_K=3, HV_MIN=0.5, CAPTURE_W=10, DISC_ATTEMPTS_MAX=0
+    )
     Scheduler(harness, adapter, config).run(4)
     # Stage a trial block and an intervention so those sections populate.
     harness.record_measure(inputs=["trial-blocked:order-swap", "case-1"])
@@ -65,6 +91,22 @@ def test_eval_report_from_scheduler_run(tmp_path):
     assert set(report["schools"]["roster"]) == {"school-0", "school-1"}
     assert report["interventions"][-1]["rule"] == "stagnation-recruit"
     assert report["capture"]["lambda"] == 1.0  # program verdicts only
+    grounding = report["capture"]["program_grounding"]
+    assert set(grounding["counts"]) == {
+        "structural", "execution", "simulation", "formal", "observation"
+    }
+    assert grounding["structural_program_fraction"] == 1.0
+    assert grounding["execution_lambda"] == 0.0
+    assert grounding["simulation_lambda"] == 0.0
+    assert grounding["formal_lambda"] == 0.0
+    assert grounding["rubric_fraction"] == 0.0
+    assert 0.0 < grounding["predicate_fraction"] < 1.0
+    # The signals block: the log's table of contents, family-normalized.
+    signals = report["signals"]
+    assert signals["cycle"] == 4                      # one heartbeat per cycle
+    assert signals["trial-blocked:*"] == 1
+    assert signals["intervention:*"] >= 1
+    assert signals["judge-error-rate:*"] == 1
 
 
 def test_valid_json_rate_counts_repair_attempts(tmp_path):

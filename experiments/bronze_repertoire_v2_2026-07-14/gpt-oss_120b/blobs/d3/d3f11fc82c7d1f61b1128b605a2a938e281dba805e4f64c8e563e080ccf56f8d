@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case is not a concrete observation that could realistically have obtained; it is a hypothetical negative finding ('records show no significant temperature drop') that merely negates the claim rather than specifying a datable pattern or event that would falsify the mechanism. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)', such as 'a dated ice-core layer from 1200 BC showing elevated sulfate but no corresponding narrow tree-ring growth anomaly in Anatolian dendrochronology for the following five years.' The provided forbidden case fails this specificity requirement.",
+  "counterexample": [
+    "A dated Greenland ice-core sulfate spike at 1200 BC ± 2 years paired with Anatolian tree-ring records showing normal growth for the subsequent decade"
+  ]
+}

@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+contradicts: The winter storm surge hypothesis (8f32aa39316b) requires a period of extreme storminess to salinize coastal soils, while the cooler-wetter climate shift hypothesis (a440e9c75cc3) attributes agricultural collapse to flood-inducing hydroclimatic regime shift. These are mechanistically contradictory because the storm surge model depends on high-energy cyclonic activity (low-pressure systems generating marine inundation), whereas the cooler-wetter model depends on a persistent increase in precipitation and riverine flooding from a different atmospheric configuration. Refuted if the two climatic expressions can be shown to be products of the same synoptic-scale atmospheric pattern without requiring mutually exclusive storm-track or precipitation regimes.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

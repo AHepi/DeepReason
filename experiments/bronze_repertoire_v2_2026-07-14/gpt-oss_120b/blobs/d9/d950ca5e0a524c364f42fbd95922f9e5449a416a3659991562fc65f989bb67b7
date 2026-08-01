@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target names a mechanism ('socioeconomic resource depletion via elite over‑expansion') but fails to specify the concrete institutional or incentive structure that constitutes it. The phrase 'elite over‑expansion' is a description of an outcome, not a causal mechanism: it does not identify the specific rules, fiscal instruments, or decision‑making procedures that turned monumental construction and gift‑exchange into depletion. The forbidden case is also defective under std-hist because it is stated as a counterfactual observation ('Extant records reveal continued surplus revenues and no budget shortfalls') rather than a concrete, datable pattern or event that could realistically have been found in the archaeological or textual record. A valid forbidden case would cite, for example, a specific archive (e.g., the Pylos Ta series) showing sustained redistributive capacity in the final year before destruction.",
+  "counterexample": [
+    "A valid mechanism would be: 'The wanax at Pylos financed monumental projects by requisitioning bronze from provincial damos, stripping local elites of the metal needed for reciprocal gift‑exchange, which eroded their loyalty and reduced the palace's ability to mobilize corvée labor.'",
+    "A valid forbidden case would be: 'The Pylos Ta tablets record a large inventory of bronze vessels and furniture in the palace's final year, indicating no shortage of prestige goods for elite exchange.'"
+  ]
+}

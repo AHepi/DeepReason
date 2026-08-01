@@ -1,0 +1,37 @@
+{
+  "prompt_tokens": 261877,
+  "completion_tokens": 91024,
+  "calls": 512,
+  "phases": {
+    "dsflash_B_comparator_aware": {
+      "prompt_tokens": 52003,
+      "completion_tokens": 11044,
+      "calls": 85
+    },
+    "dsflash_A_original": {
+      "prompt_tokens": 42834,
+      "completion_tokens": 11043,
+      "calls": 86
+    },
+    "dsflash_C_scope_neutral_prose": {
+      "prompt_tokens": 34762,
+      "completion_tokens": 11412,
+      "calls": 85
+    },
+    "kimi_A_original": {
+      "prompt_tokens": 43984,
+      "completion_tokens": 19272,
+      "calls": 86
+    },
+    "kimi_B_comparator_aware": {
+      "prompt_tokens": 53006,
+      "completion_tokens": 18072,
+      "calls": 85
+    },
+    "kimi_C_scope_neutral_prose": {
+      "prompt_tokens": 35288,
+      "completion_tokens": 20181,
+      "calls": 85
+    }
+  }
+}

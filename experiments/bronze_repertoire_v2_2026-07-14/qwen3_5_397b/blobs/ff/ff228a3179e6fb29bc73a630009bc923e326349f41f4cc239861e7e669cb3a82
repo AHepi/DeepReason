@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (pi-bronze) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:109cf089560c: rubric:std-hist
+- fc:b8ddbd7dbc41: rubric:std-hist
+- fc:4bf3b193fbe4: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET 919f88a2232e78974c00b651e5fb20d3a5ee8445e8c52f8aee4c23068e4adfca
+{"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.", "mechanism": "Cascading resource starvation triggered by earthquake damage to port infrastructure and grain stores, breaking the feedback loop between central authority and peripheral producers.", "scope": {"covers": ["Mycenaean Greece", "Ugarit", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers.", "eval": "rubric:std-hist"}], "prose_notes": "This is the modal 'Systems Collapse' theory, attributing the event to fragility in interconnected supply chains exacerbated by natural disaster."}
+commitments: skeleton-wf, kappa-hist, fc:109cf089560c
+
+TARGET 6e2f0cab2cf607d6e1a2deb865edc00e84e1313f76be7b7a8fcea6ca35cbbb40
+{"claim": "The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.", "mechanism": "Asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups.", "eval": "rubric:std-hist"}], "prose_notes": "A traditional migration/invasion hypothesis, focusing on the military mismatch between rigid palace armies and flexible irregular forces."}
+commitments: skeleton-wf, kappa-hist, fc:b8ddbd7dbc41
+
+TARGET edc32e579a5add689e4929e786f177de6cb8b66a6c9940e75e2d2aa798aae6ab
+{"claim": "The collapse was an endogenous political revolution where subject populations deliberately dismantled the palatial bureaucracy to escape tribute obligations during a period of climate-induced stress.", "mechanism": "Social contract rupture: localized revolts against extractive institutions became contagious across the network as the cost of rebellion dropped below the cost of submission.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Settlement patterns showing continuous occupation of palace sites by the same elite class immediately following the destruction horizon without cultural break.", "eval": "rubric:std-hist"}], "prose_notes": "An atypical, internalist explanation framing the event not as a catastrophe inflicted from outside or nature, but as a successful class struggle against the palace system itself."}
+commitments: skeleton-wf, kappa-hist, fc:4bf3b193fbe4
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

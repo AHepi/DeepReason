@@ -5,6 +5,8 @@ Each role = prompt template + output contract (contracts.py) + endpoint
 ``pack -> schema-validated JSON`` (§0): templates demand raw JSON only.
 """
 
+from deepreason.llm.profiles import ModelProfile, get_profile
+
 ROLES = (
     "conjecturer",
     "argumentative_critic",
@@ -46,6 +48,17 @@ TEMPLATES = {
         "that is not listed. Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "config_referee": (
+        "You are a config referee: an argumentative critic whose only target is "
+        "the harness's dynamic token-steering configuration, shown to you as a "
+        "window of recorded signal observations plus the frozen policy bounds. "
+        "Judge only what the record shows. Every claim must cite the seq numbers "
+        "of specific observations from the window — an uncited verdict is "
+        "rejected. Recommend exactly one entry from the fixed menu; if the "
+        "configuration is doing its job, the only valid recommendation is "
+        "no_change. Your verdict is advice on the record, never an action.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
     "variator": (
         "You are the variator (mu): produce bounded edits of the target content. "
         "If the content is a JSON skeleton, substitute at role level — swap the "
@@ -73,6 +86,62 @@ TEMPLATES = {
         "decisive_point MUST quote a specific span of the exchange; a ruling "
         "whose grounds cannot be located is invalid.\n\n" + _JSON_ONLY + "{pack}"
     ),
+    "experimenter": (
+        "You are the experimenter: you DESIGN EXPERIMENTS, you do not judge. "
+        "The pack describes a property oracle — an entry point, frozen example "
+        "inputs, a correctness checker, and an input-admission gate. Write "
+        "input GENERATORS: each is the complete source of `def gen(k)` that "
+        "maps an integer index k to ONE input (the positional-args list). The "
+        "harness will enumerate k = 0, 1, 2, ... and RUN candidates on every "
+        "gate-valid input, so your generator's job is COVERAGE: reach corners "
+        "the frozen examples miss — sizes, orderings, degenerate shapes, "
+        "adversarial structure. Vary the output substantively with k (a "
+        "constant generator is refuted for novelty). Classic blind spot: vary "
+        "the PRESENTATION ORDER of every collection independently of its "
+        "content — build elements in one order, emit them permuted by k; "
+        "sorted-order emission silently hides every order-dependence bug. Every input must satisfy "
+        "the admission gate; outputs that violate it are silently skipped, and "
+        "a generator that mostly emits invalid inputs is refuted for yield. "
+        "HARD SANDBOX CONSTRAINTS: builtins only — no import statements, no "
+        "underscore/dunder names, no `**`, no integer literals above 1000000; "
+        "gen must be PURE in k (no randomness, no state). Return the source as "
+        "a plain string with real newlines — no markdown fences.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
+    "vision_critic": (
+        "You are the vision critic: you LOOK at the attached screenshot(s) of "
+        "the rendered candidate app and judge ONLY what is visible. The pack "
+        "states what the app is supposed to be and which moment of the "
+        "interaction each screenshot captures. Mount attack=true ONLY for a "
+        "concrete VISIBLE fault a user would hit — missing or unlabeled "
+        "controls, unreadable or overlapping text, broken layout, states that "
+        "should look different but don't, content contradicting the captured "
+        "moment. Tie the case to what the problem demands and set "
+        "screenshot_index to the image showing it. Do not speculate about "
+        "code, behavior between screenshots, or anything not visible; if the "
+        "rendering looks right for each captured moment, attack=false.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
+    "property_designer": (
+        "You are the property designer: you conjecture CORRECTNESS PROPERTIES "
+        "the problem statement demands but the current checker does not "
+        "enforce. Read the PROBLEM STATEMENT (the sole source of legitimacy — "
+        "you are shown no candidate code, so you cannot enshrine anyone's "
+        "bugs) and the CURRENT checker, and find requirements stated in the "
+        "problem that the checker fails to test. For each, return: claim — "
+        "ONE sentence naming the requirement, quoting the problem statement's "
+        "own words where possible (independent judges will rule on whether "
+        "the claim follows from the statement); checker — the complete source "
+        "of `def check(inp, out)` returning True iff the candidate output "
+        "`out` satisfies the property for input `inp` (inp is the positional-"
+        "args list). A checker that accepts every degenerate output is "
+        "refuted as vacuous; a checker stricter than the problem statement "
+        "will be refuted at trial and its verdicts voided. HARD SANDBOX "
+        "CONSTRAINTS: builtins only — no import statements, no underscore/"
+        "dunder names, no `**`, no integer literals above 1000000; check must "
+        "be a PURE function. Return sources as plain strings with real "
+        "newlines — no markdown fences.\n\n" + _JSON_ONLY + "{pack}"
+    ),
     "spec_generator": (
         "You are the diversity-specification generator: you design ORTHOGONAL "
         "outlines that later candidates must each realize. You produce "
@@ -84,6 +153,85 @@ TEMPLATES = {
         "You are the summarizer: render the skeleton in the pack as readable "
         "prose. The prose is a view, never the content — add nothing the "
         "skeleton does not assert.\n\n" + _JSON_ONLY + "{pack}"
+    ),
+    "scratch_block": (
+        "Author exactly one loose advisory scratch block from the bounded input. "
+        "Scratch material is non-authoritative and may contradict itself. Do not "
+        "turn uncertainty into a confident fact or invent a reason merely to fill "
+        "an optional field. Relationships are provisional. A guide is a temporary "
+        "navigation aid. Leave optional fields absent when they are unknown. "
+        "Do not issue workflow, routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "scratch_link": (
+        "Author exactly one provisional advisory relationship between local handles "
+        "in the bounded input. Scratch material is non-authoritative and may "
+        "contradict itself. Relationships are provisional. Do not turn uncertainty "
+        "into a confident fact or invent an explanation merely to fill an optional "
+        "field. A guide is a temporary navigation aid. Do not issue workflow, "
+        "routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "scratch_guide": (
+        "Author exactly one temporary navigation guide over the bounded cluster "
+        "snapshot. A guide is advisory, not authoritative, and may leave uncertainty "
+        "unresolved. Scratch material may contradict itself. Do not turn uncertainty "
+        "into a confident fact, classify every block, or invent text merely to fill "
+        "an optional field. Relationships are provisional. A guide is a temporary "
+        "navigation aid. Use only supplied local handles. Do not issue workflow, "
+        "routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_ledger": (
+        "Build exactly one claim ledger from the bounded record in the input. "
+        "Classify each claim as source_fact, recorded_observation, "
+        "supported_inference, surviving_conjecture, assumption, unknown, or "
+        "conflict. Use only supplied local handles. Facts and observations need "
+        "grounding handles; inferences need premise handles; conjectures must "
+        "remain visibly conjectural and name a supplied formal-artifact handle. "
+        "Scratch handles record intellectual provenance only and never ground a "
+        "claim. When the record is missing or underdetermined, emit unknown or an "
+        "uncovered requirement; never invent a source, observation, premise, or "
+        "answer. Do not issue workflow, routing, tool, status, or provider "
+        "instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_compose": (
+        "Compose exactly one final-output structure from the validated claim "
+        "ledger in the input. Every section must use supplied local ledger "
+        "handles and the rendering mode allowed for their epistemic class. New "
+        "wording is allowed; a new fact, observation, inference, conjecture, or "
+        "ledger entry is not. If the requested wording needs a new inference or "
+        "conjecture, request a ledger amendment instead of adding it. Preserve "
+        "unknown, partial, conflicting, underdetermined, and outside-scope "
+        "outcomes. Do not issue workflow, routing, tool, status, or provider "
+        "instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_review": (
+        "Review only the supplied output spans against their referenced ledger "
+        "entries, exact cited excerpts or evidence records, and premises. For "
+        "each span return supported, unsupported, overstated, misclassified, "
+        "citation_mismatch, or unclear. Do not edit prose, add claims, invent "
+        "grounding, browse, call tools, or change any formal status.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_grounding_repair": (
+        "Correct only the failed bridge spans named in the input. Use only the "
+        "permitted action for each finding: correct wording to match the supplied "
+        "record, downgrade the claim mode, change to a calibrated unresolved "
+        "resolution, remove the span, or request a ledger amendment based on "
+        "already supplied evidence. Never add a source, evidence reference, "
+        "premise, factual slot, positive answer, tool call, browse request, route, "
+        "or status change. Preserve all unrelated spans.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
     ),
     "thesis": (
         "You are the thesis writer: you turn the adjudicated record in the pack "
@@ -112,3 +260,119 @@ TEMPLATES = {
         "output.\n\n" + _JSON_ONLY + "{pack}"
     ),
 }
+
+
+# Compact variants contain one semantic task, no orchestration rationale,
+# configuration, endpoint names, or instructions for other roles.  The
+# syntax example is generated from the selected WireContract and is the only
+# example rendered in compact mode.
+COMPACT_TEMPLATES = {
+    "website_outline": (
+        "Design only the component outline requested in the input. Name local "
+        "component aliases and one concrete purpose each. Do not emit HTML, a "
+        "manifest, workflow instructions, routes, or implementation details."
+    ),
+    "website_component_contract": (
+        "Define only the named website component's local integration contract. "
+        "Use only component aliases listed in the input. Do not emit HTML, a "
+        "whole-page manifest, routes, tools, or workflow instructions."
+    ),
+    "website_art_direction": (
+        "Define only the bounded global art direction requested in the input, "
+        "including reduced-motion behavior and a complete static fallback. Do "
+        "not emit components, HTML, routes, tools, or workflow instructions."
+    ),
+    "conjecturer": (
+        "Propose diverse, criticizable candidates for the input. Give content, "
+        "typicality from 0 to 1, and relevant local neighbour aliases."
+    ),
+    "argumentative_critic": (
+        "Assess the named target. Give the strongest specific fault, grounded "
+        "in the input aliases, or set attack to false."
+    ),
+    "batch_critic": (
+        "Assess each named target independently and give one specific result per target."
+    ),
+    "config_referee": (
+        "Assess the shown configuration signals. Cite observation seqs and pick "
+        "one menu recommendation."
+    ),
+    "variator": "Make bounded substantive edits. Name which local fields each edit changes.",
+    "synthesizer": (
+        "State one specific relation between the named inputs and list its local "
+        "dependence aliases."
+    ),
+    "defender": "Answer each named criticism clause directly using its local alias.",
+    "judge": "Decide only the narrow question. Point to one exact exchange alias that decides it.",
+    "experimenter": (
+        "Return bounded pure input generators that cover distinct valid cases "
+        "described by the input."
+    ),
+    "vision_critic": (
+        "Assess only visible faults in the attached images against the stated requirement."
+    ),
+    "property_designer": (
+        "Return correctness properties required by the problem but absent from "
+        "the current checker."
+    ),
+    "spec_generator": "Return orthogonal candidate specifications, not candidate answers.",
+    "summarizer": "Render only the supplied skeleton as prose; add no claim.",
+    "scratch_block": (
+        "Author one non-authoritative scratch block. Preserve uncertainty and omit "
+        "unknown optional fields."
+    ),
+    "scratch_link": (
+        "Author one provisional relationship between supplied local handles. Omit "
+        "unknown optional fields."
+    ),
+    "scratch_guide": (
+        "Author one temporary advisory guide over supplied local handles. Leave "
+        "uncertainty unresolved where needed."
+    ),
+    "bridge_ledger": (
+        "Classify claims from the bounded record using supplied handles only. "
+        "Preserve unknowns; scratch handles never ground claims."
+    ),
+    "bridge_compose": (
+        "Compose mapped sections from the validated ledger only. Request an "
+        "amendment instead of adding a claim."
+    ),
+    "bridge_review": (
+        "Classify each supplied span against only its entry, excerpts, and premises; "
+        "do not edit it."
+    ),
+    "bridge_grounding_repair": (
+        "Apply one permitted correction to failed spans only; never add grounding "
+        "or a positive factual answer."
+    ),
+    "thesis": (
+        "Write one position supported only by the supplied adjudicated record "
+        "and its local references."
+    ),
+}
+
+
+def render_role_prompt(
+    role: str,
+    *,
+    schema: str,
+    pack: str,
+    profile: str | ModelProfile | None = None,
+    example: str = "",
+    aliases: str = "",
+) -> str:
+    """Render a profile-specific role prompt without changing role meaning."""
+    spec = get_profile(profile)
+    if spec.name != ModelProfile.COMPACT:
+        return TEMPLATES[role].format(schema=schema, pack=pack)
+    directive = COMPACT_TEMPLATES.get(role, "Complete the one task in the input.")
+    sections = [
+        directive,
+        "Return ONLY one JSON value matching this closed schema:",
+        schema,
+    ]
+    if aliases:
+        sections += ["LOCAL REFERENCES (copy aliases, not identifiers):", aliases]
+    # Exactly one syntax-only example in compact mode.
+    sections += ["ONE SYNTAX EXAMPLE:", example or "{}", "INPUT:", pack]
+    return "\n\n".join(sections)

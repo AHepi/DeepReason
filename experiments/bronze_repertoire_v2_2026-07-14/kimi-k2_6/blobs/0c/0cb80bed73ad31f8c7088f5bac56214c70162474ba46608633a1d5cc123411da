@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "e3628d3812013e1e2b162b4ef6554ba9808637fd1e1f36d66ea5aae8c0890a7b",
+      "attack": true,
+      "case": "The mechanism relies on a solar eclipse of 1223 BC as a trigger for ideological delegitimation, but the scope explicitly excludes Ugarit and the Levantine city-states while the problem asks why those very polities collapsed. An eclipse visible across the Eastern Mediterranean would have been witnessed in Ugarit and the Levant as well; if eclipse-induced ritual failure explains Mycenaean and Hittite collapse, the account owes an explanation for why Ugarit and the Levantine city-states—which also had palace-temple complexes with cosmic-ritual kingship ideologies—collapsed simultaneously, yet the scope simply excludes them without reconciling this tension. The target thus fails to address the problem's core comparative question by arbitrarily restricting scope to cases its mechanism fits while omitting contemporaneous collapses the mechanism should also implicate.",
+      "counterexample": null
+    },
+    {
+      "target": "a1e90b6f674c7b3d87daa70e668cdb5b264851ebd44019b877791883a452d6c3",
+      "attack": true,
+      "case": "The mechanism claims Hittite grain imports from Egypt and Ugarit failed simultaneously, triggering military mobilization for survival resources that further destabilized trade networks. However, the Hittite capital Hattusa was abandoned before its destruction, with archaeological evidence of a planned evacuation and the royal court relocating elsewhere—behavior inconsistent with a desperate military scramble for grain. A subsistence-crisis account must explain why the Hittite elite would orderly abandon their centuries-old capital rather than fight to control remaining stores, yet the target's mechanism of 'military mobilization for survival resources' predicts the opposite: intensified conflict over the capital's granaries and administrative apparatus.",
+      "counterexample": null
+    },
+    {
+      "target": "263738c8259bc4148e6f6816368a395fe17891165db7892347d95082bf955461",
+      "attack": true,
+      "case": "The mechanism asserts that ironworking diffusion after 1300 BC lowered barriers to arming non-palace actors, yet the target's own forbidden case correctly notes that iron weapons do not predominate in destruction layers before 1100 BC. The account therefore requires that iron's destabilizing effect operated through the mere threat or early diffusion of iron technology—not its actual battlefield presence—while simultaneously claiming Ugarit and Levantine ports 'were destroyed by actors they had armed.' If those actors were armed with iron, the forbidden case refutes the account; if they were armed with bronze, then bronze monopolies were already broken without iron, and the iron-diffusion mechanism is causally superfluous to the collapse. The target cannot have it both ways.",
+      "counterexample": null
+    }
+  ]
+}

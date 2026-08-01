@@ -88,28 +88,44 @@ def skeleton_wf_commitment() -> Commitment:
     return Commitment(id=SKELETON_WF_ID, eval="program:skeleton_wf")
 
 
+def forbidden_commitment(case: ForbiddenCase) -> Commitment:
+    """Pure canonical construction for one model-authored forbidden case.
+
+    Registration is deliberately left to the caller. Keeping identity,
+    budget, and observation semantics here lets both engine profiles consume
+    the same commitment without maintaining a reduced-engine copy.
+    """
+    cid = "fc:" + sha256_hex(canonical_json({
+        "case": case.case,
+        "eval": case.eval,
+        "observation_valued": case.observation_valued,
+    }))[:12]
+    return Commitment(
+        id=cid,
+        eval=case.eval,
+        observation_valued=case.observation_valued,
+        budget=Budget(extra={"case": case.case}),
+    )
+
+
+def draft_forbidden_commitments(skeleton: Skeleton) -> list[Commitment]:
+    """Pure construction of every forbidden-case Commitment; no registry
+    writes. Two-phase compilation (RC5) gates on these drafts and registers
+    them only after admission.
+
+    observation_valued is part of the commitment's identity: registration
+    dedupes by id, so omitting it would let an earlier
+    observation_valued=False case mask a later True one, silently
+    suppressing the research-evidence Spawn trigger (§12)."""
+    return [forbidden_commitment(case) for case in skeleton.forbidden]
+
+
 def compile_forbidden_commitments(harness, skeleton: Skeleton) -> list[str]:
     """Compile each forbidden case into a registered commitment; the case
     text rides in budget.extra for trial packs. Deterministic ids, so the
     same skeleton always compiles to the same interface."""
     ids: list[str] = []
-    for case in skeleton.forbidden:
-        # observation_valued is part of the commitment's identity: register_
-        # commitment dedupes by id, so omitting it would let an earlier
-        # observation_valued=False case mask a later True one, silently
-        # suppressing the research-evidence Spawn trigger (§12).
-        cid = "fc:" + sha256_hex(canonical_json({
-            "case": case.case,
-            "eval": case.eval,
-            "observation_valued": case.observation_valued,
-        }))[:12]
-        harness.register_commitment(
-            Commitment(
-                id=cid,
-                eval=case.eval,
-                observation_valued=case.observation_valued,
-                budget=Budget(extra={"case": case.case}),
-            )
-        )
-        ids.append(cid)
+    for commitment in draft_forbidden_commitments(skeleton):
+        harness.register_commitment(commitment)
+        ids.append(commitment.id)
     return ids

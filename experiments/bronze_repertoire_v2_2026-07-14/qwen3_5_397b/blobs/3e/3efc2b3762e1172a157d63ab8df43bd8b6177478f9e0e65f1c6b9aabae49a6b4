@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+{"clauses": [{"item_alias": "", "response": "The target's forbidden case is a concrete observation that could realistically have obtained under the target's own mechanism. If tin imports ceased, the mechanism predicts that existing bronze would be hoarded, recycled, and concentrated in elite or military contexts. Therefore, abundant bronze stockpiles in destruction layers are a predicted consequence, not a forbidden case. A proper forbidden case would be evidence of uninterrupted tin imports or continued production of new bronze tools during the collapse period."}]}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "defender.compact.v1", "error": "unknown local alias ''", "path": "", "repair_scope": "", "skeleton": {"clauses": [{"item_alias": "", "response": "x"}]}}

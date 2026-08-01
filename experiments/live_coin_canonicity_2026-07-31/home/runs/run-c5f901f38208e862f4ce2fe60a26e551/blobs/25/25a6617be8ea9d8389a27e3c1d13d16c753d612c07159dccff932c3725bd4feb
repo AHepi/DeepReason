@@ -1,0 +1,22 @@
+{
+  "candidate": {
+    "claim": "The candidate bound W(C) = c_{n-1} + c_n is insufficient to guarantee canonicity, refuted by the coin system C = (25, 10, 1) where the smallest counterexample is 30, strictly exceeding the bound of 11.",
+    "mechanism": "For the strictly decreasing coin system C = (25, 10, 1), the proposed bound yields W(C) = c_{n-1} + c_n = 10 + 1 = 11. However, the amount w = 30 requires 6 coins using the greedy algorithm (one 25 and five 1s), while the optimal representation uses three 10s (3 coins). Since 30 > 11, checking only amounts up to W(C) would fail to find this counterexample, proving the bound W(C) = c_{n-1} + c_n universally invalid.",
+    "counterconditions": [
+      "The refutation would fail if the greedy representation of 30 for C = (25, 10, 1) was optimal or tied with the 3-coin representation, which it is not.",
+      "The refutation would fail if the bound W(C) was defined differently, such as W(C) = c_1 + c_2, under which 30 < 35 would not constitute a refutation.",
+      "If the system C = (25, 10, 1) were canonical, there would be no counterexample to find, but it is demonstrably non-canonical."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0c2bebf8bed87d67",
+        "quote": "Canonicity quantifies over infinitely many amounts. Any procedure that terminates must therefore justify a finite search: either a bound W such that a counterex"
+      }
+    ],
+    "typicality": 0.6,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

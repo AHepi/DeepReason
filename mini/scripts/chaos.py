@@ -42,12 +42,12 @@ def _skeleton(rng: random.Random, i: int, flavor: str) -> str:
         "mechanism": f"mechanism {i} " + "x" * rng.randint(0, 200),
         "scope": {"covers": [f"c{i}"], "excludes": []},
         "forbidden": [{"case": f"case {i}",
-                       "eval": "predicate:len(content) > 10"}],
+                       "eval": "program:json-wf"}],
         "prose_notes": None,
     }
     if flavor == "failing":
-        body["forbidden"] = [{"case": "impossible",
-                              "eval": "predicate:len(content) > 10**6"}]
+        body["forbidden"] = [{"case": "must be a website manifest",
+                              "eval": "program:manifest_wf"}]
     elif flavor == "no_forbidden":
         body["forbidden"] = []
     elif flavor == "rubric_only":
@@ -58,8 +58,8 @@ def _skeleton(rng: random.Random, i: int, flavor: str) -> str:
     elif flavor == "huge":
         body["prose_notes"] = "pad " * rng.randint(2000, 8000)
     elif flavor == "bad_eval":
-        body["forbidden"] = [{"case": "syntax error eval",
-                              "eval": "predicate:len(content >"}]
+        body["forbidden"] = [{"case": "unknown program",
+                              "eval": "program:not_registered"}]
     return json.dumps(body, sort_keys=(rng.random() < 0.5))
 
 

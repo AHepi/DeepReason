@@ -1,0 +1,109 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "Per RFC 9110, a safe method is one whose semantics are essentially read-only: no server state change is intended or expected.",
+      "formal_artifact_handles": ["ART_1", "ART_2", "ART_5", "ART_7", "ART_8", "ART_10"],
+      "qualification": "Grounded only in formal-artifact excerpts; no verbatim RFC source text is available in this record."
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Per RFC 9110, an idempotent method is one where multiple identical requests have the same intended effect on the server as a single request.",
+      "formal_artifact_handles": ["ART_1", "ART_2", "ART_5", "ART_7", "ART_10"],
+      "qualification": "Grounded only in formal-artifact excerpts; no verbatim RFC source text is available in this record."
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Per RFC 9110, safe methods form a proper subset of idempotent methods: every safe method is trivially idempotent because repeating a no-op yields a no-op, but the converse fails (PUT and DELETE are idempotent but not safe).",
+      "formal_artifact_handles": ["ART_2", "ART_7"],
+      "qualification": "Whether RFC 9110 explicitly states this subset relation or merely implies it is unresolved without verbatim source text."
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "The precise distinction between safe and idempotent is that safe forbids side effects entirely, whereas idempotent permits side effects but requires them to converge under repetition.",
+      "formal_artifact_handles": ["ART_5", "ART_7", "ART_10"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "surviving_conjecture",
+      "claim": "RFC 9110 safety carries a client-expectation dimension: the client does not request and does not expect any state change. Idempotence carries no such expectation — the client expects a state change but expects it to be invariant under duplication. For the event log this dimension is decisive: writers always expect and request a state change (append), so safety is categorically impossible regardless of deduplication strategy.",
+      "formal_artifact_handles": ["ART_8"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "surviving_conjecture",
+      "claim": "An append-only event log with at-least-once delivery requires idempotence — not safety — of its writers, because appending events is inherently state-changing (violating safety) yet retried appends must not duplicate events (requiring idempotence).",
+      "formal_artifact_handles": ["ART_1", "ART_2", "ART_4", "ART_5", "ART_7", "ART_8", "ART_10"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "supported_inference",
+      "claim": "Because safe methods forbid all server state mutation and writers must mutate the log by appending events, requiring safety of writers would be self-contradictory; therefore the log categorically cannot require safety of its writers.",
+      "premise_keys": ["CLM_1", "CLM_6"]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "supported_inference",
+      "claim": "Because at-least-once delivery retries writes that may have already succeeded, and idempotence guarantees that repeated identical requests yield the same effect as a single request, the log's writers must be idempotent to prevent duplicate events from corrupting replay determinism. The causal mechanism is deduplication via a stable operation key, sequence number, or content hash that lets the append path detect and discard replays.",
+      "premise_keys": ["CLM_2", "CLM_6"]
+    },
+    {
+      "entry_key": "CLM_9",
+      "claim_class": "surviving_conjecture",
+      "claim": "The append-only event log requires a property that is distinct from or strictly stronger than RFC 9110 idempotence: either deterministic-replay idempotence (replay of a sequence reproduces the same final state regardless of delivery multiplicity), operational deduplication (a mechanical guarantee that duplicate physical writes are collapsed), or write-ordered idempotence (duplicate writes suppressed and ordering of non-duplicate writes preserved). RFC 9110 idempotence is order-insensitive and defined over individual HTTP method semantics, not over ordered sequences of operations with causality.",
+      "formal_artifact_handles": ["ART_3", "ART_6", "ART_9"]
+    },
+    {
+      "entry_key": "CLM_10",
+      "claim_class": "conflict",
+      "claim": "There is an unresolved rivalry over whether the append-only event log requires RFC 9110 idempotence simpliciter or a stronger, log-specific property. One position (ART_1, ART_2, ART_4, ART_5, ART_7, ART_8, ART_10) holds that the log requires idempotence in the RFC sense. The opposing position (ART_3, ART_6, ART_9) holds that the log requires a property distinct from or strictly stronger than RFC idempotence because RFC idempotence is order-insensitive and defined over individual method semantics, not ordered operation sequences.",
+      "conflict_handles": ["ART_1", "ART_3"],
+      "source_conflict_keys": ["CNF_1"]
+    },
+    {
+      "entry_key": "CLM_11",
+      "claim_class": "unknown",
+      "claim": "Whether RFC 9110 explicitly states that safe methods are a subset of idempotent methods, or whether the subset relation is only implied by the definitions, cannot be determined from this record because no verbatim RFC source text is available.",
+      "scratch_handles": ["SCR_3"]
+    },
+    {
+      "entry_key": "CLM_12",
+      "claim_class": "unknown",
+      "claim": "Whether RFC 9110 defines idempotence over the observable response, over server state, or over both cannot be determined from this record because no verbatim RFC source text is available. This distinction matters: if idempotence is defined over responses only, the event-log deduplication requirement is a separate, stronger property.",
+      "scratch_handles": ["SCR_1"]
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_1", "ART_3"],
+      "description": "ART_1 claims the log requires idempotence in the RFC 9110 sense because writers mutate state but retries must not compound. ART_3 claims the RFC 9110 distinction does not transfer cleanly to event-log writer semantics and the log requires a stronger, log-specific property (deterministic-replay idempotence) that is neither pure safety nor pure idempotence. The rivalry remains unresolved at formal sequence 281 (per PRC_11), with 10 accepted positions in contention."
+    }
+  ],
+  "uncovered_requirements": [
+    {
+      "requirement": "Verbatim text of RFC 9110 §9.2.1 (safe methods) and §9.2.2 (idempotent methods) is needed to confirm the precise definitions and whether the safe ⊂ idempotent hierarchy is explicitly stated or merely implied.",
+      "reason": "All available handles are formal-artifact excerpts that paraphrase or interpret RFC 9110; none is a citable source block. A research fetch of https://www.rfc-editor.org/rfc/rfc9110 is permitted by the allowlist but has not been performed in this record.",
+      "related_entry_keys": ["CLM_1", "CLM_2", "CLM_3", "CLM_11"],
+      "scratch_handles": ["SCR_3"]
+    },
+    {
+      "requirement": "Verbatim RFC 9110 text specifying whether idempotence is defined over observable responses, over server state, or over both is needed to determine whether event-log deduplication is a separate, stronger property or subsumed under RFC idempotence.",
+      "reason": "The formal artifacts disagree on this point (ART_3, ART_6, ART_9 vs ART_1, ART_2, ART_5, ART_7, ART_10), and no source evidence is available to adjudicate.",
+      "related_entry_keys": ["CLM_2", "CLM_9", "CLM_10", "CLM_12"],
+      "scratch_handles": ["SCR_1"]
+    },
+    {
+      "requirement": "A determination of whether the append-only event log's required property is RFC 9110 idempotence simpliciter or a stronger log-specific property (deterministic-replay idempotence, operational deduplication, or write-ordered idempotence) requires comparison of verbatim RFC definitions against the operational requirements of append-only logs under at-least-once delivery.",
+      "reason": "The record contains 10 accepted formal-artifact positions in unresolved rivalry (per PRC_11) with no source evidence to resolve whether RFC idempotence is sufficient or insufficient for the log's ordering and causality constraints.",
+      "related_entry_keys": ["CLM_6", "CLM_9", "CLM_10"],
+      "scratch_handles": ["SCR_2"]
+    }
+  ]
+}
+```

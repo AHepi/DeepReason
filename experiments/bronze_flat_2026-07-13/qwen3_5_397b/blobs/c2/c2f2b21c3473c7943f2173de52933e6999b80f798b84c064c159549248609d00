@@ -1,0 +1,33 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which severed the supply chains necessary to maintain elite legitimacy.\", \"mechanism\": \"Environmental stressors (drought, earthquakes) reduced agricultural surplus, triggering a feedback loop where centralized bureaucracies could no longer fund specialized labor or military defense, leading to internal revolt and abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous, uninterrupted grain storage facilities in Pylos or Hattusa during the final decades of the 13th century BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating climate data with economic fragility. It relies on the interdependence of the palace economies noted in neighborhood artifacts.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by the rapid diffusion of inexpensive iron weaponry and new infantry tactics that democratized violence, rendering the chariot-based aristocratic military monopoly obsolete.\", \"mechanism\": \"Technological shift from bronze to iron lowered the barrier to entry for warfare; decentralized infantry groups (including Sea Peoples) overwhelmed rigid, expensive chariot corps, causing a sudden loss of coercive power by central authorities.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician coastal enclaves\"]}, \"forbidden\": [{\"case\": \"Historical records indicating that iron weapons were rare, ceremonial, or technologically inferior to bronze in the Eastern Mediterranean prior to 1100 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A moderately typical candidate focusing on military technology. It faces the challenge noted in neighborhood artifacts regarding the timing of iron adoption versus the collapse events.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a contingent result of a specific, non-repeatable cascade of mercenary mutinies triggered by delayed payments, unrelated to environmental or technological shifts.\", \"mechanism\": \"Palatial states relied on foreign mercenaries for stability; a temporary liquidity crisis in the grain-silver exchange rate led to simultaneous mutinies across independent kingdoms, creating a power vacuum exploited by local bandits.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Rural hinterlands\"]}, \"forbidden\": [{\"case\": \"Epigraphic evidence showing that mercenary forces in Ugarit and Mycenae were paid in kind (land/grain) rather than silver, insulating them from currency/grain exchange fluctuations.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate that rejects broad structural causes in favor of a specific socio-economic accident. It deliberately narrows the mechanism to financial liquidity rather than resource scarcity.\"}",
+      "refs": [],
+      "typicality": 0.18
+    }
+  ]
+}

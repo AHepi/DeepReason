@@ -1,0 +1,37 @@
+{
+  "critiques": [
+    {
+      "seq": 436,
+      "inputs": [
+        "config-critique:config_mistuned",
+        "recommendation:research_allowance_step_tighten",
+        "cited:342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,430",
+        "view:0a1ef5667b85aae9d9ceeb45d8a2c48553953a9ce92e773f6f982843ec070064",
+        "verdict:21a38b23a559ae2f602db9dbef3ca46dbe283e26ed409c0c058664052dbcec6d"
+      ]
+    },
+    {
+      "seq": 452,
+      "inputs": [
+        "config-critique:config_mistuned",
+        "recommendation:research_allowance_step_tighten",
+        "cited:342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,430,436,437,446",
+        "view:82dd07ad9cae9faaecca3c32f50eecbace3f24ecad9498737e2d81262db2cc45",
+        "verdict:5cc9ce4b0c2173ead4c76c59fd33b012291f20e31e23f8cbee8db0b66446098f"
+      ]
+    }
+  ],
+  "referee_transactions": [
+    {
+      "work_id": "sha256:6e32456ad3cdcf29db91c8352342cfe9ff47589219b058a28c940e59ae796d0c",
+      "status": "completed",
+      "reason": "config_referee_output_admitted"
+    },
+    {
+      "work_id": "sha256:79543b5c5451616dfc12b436e142097d15c24cb409d288a0917feee8dea187c2",
+      "status": "completed",
+      "reason": "config_referee_output_admitted"
+    }
+  ],
+  "replay_violations": []
+}

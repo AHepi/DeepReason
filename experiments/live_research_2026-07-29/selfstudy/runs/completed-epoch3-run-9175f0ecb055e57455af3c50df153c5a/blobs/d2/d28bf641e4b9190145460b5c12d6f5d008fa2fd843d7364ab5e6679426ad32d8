@@ -1,0 +1,58 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "Artifact 0e26d6be54fd depends on SRC_004 (STATE_OF_THE_THEORY) as its foundational snapshot: whatever claim or structure 0e26d6be54fd encodes presupposes the set of currently-held propositions and their status as recorded in the state-of-theory document. The relation is dependence because 0e26d6be54fd cannot be interpreted or adjudicated without knowing which propositions the machine already holds and in what epistemic state. REFUTED IF 0e26d6be54fd makes no reference to, and requires no background from, the current held-theory inventory — for instance, if it is a standalone empirical observation or a purely syntactic artifact whose meaning is fully self-contained.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_004"]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd reduces to SRC_003 (harness-spec-v1.3): the content of 0e26d6be54fd is a specialization or downstream consequence of the formal build specification, such that every operation or structure it describes is already entailed by the rules, interfaces, and adjudication procedures defined in the v1.3 spec. The relation is reduction because 0e26d6be54fd adds no new normative or mechanical primitive — it is an instance of the spec's generative grammar. REFUTED IF 0e26d6be54fd introduces a mechanism, constraint, or interface element that is not derivable from the v1.3 spec and would require a spec amendment (e.g., something only found in SRC_002's v1.5 amendment) to be valid.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_003", "SRC_002"]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd contradicts SRC_005 (BASIN REPORT): if 0e26d6be54fd is itself a meta-artifact recording a prior failed connection attempt that escaped the repertoire-exhaustion / refuted-attractor basin, then its existence contradicts the basin report's characterization of such states as terminal or cycling. The contradiction is that 0e26d6be54fd demonstrates a successful exit from a state SRC_005 predicts should be absorbing. REFUTED IF 0e26d6be54fd does not describe an exit from a basin state, or if SRC_005's model already accounts for the kind of exit 0e26d6be54fd represents (i.e., the basin report predicts rather than excludes this outcome).",
+      "typicality": 0.3,
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd shares mechanism with SRC_001 (TOKEN_ECONOMY): both implement or discuss a strategy for reducing computational or token cost while preserving epistemic rigor — 0e26d6be54fd likely employs a technique (e.g., bounded search, cached adjudication, or compressed conjecture encoding) that operates on the same cost-epistemology tradeoff axis that SRC_001 analyzes. The relation is shared mechanism because the underlying optimization principle — spend fewer resources without sacrificing falsifiability — is common to both. REFUTED IF 0e26d6be54fd has no cost, resource, or efficiency dimension whatsoever, or if its mechanism operates on a completely different tradeoff axis (e.g., purely logical consistency with no resource constraint).",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd integrates SRC_002 (v1.5 normative amendment) into the existing harness framework: it represents a concrete application or operationalization of the amendment's new rules, interfaces, or adjudication changes, bridging the normative layer of SRC_002 with the mechanical layer of SRC_003. The relation is integration because 0e26d6be54fd combines the v1.5 amendment's normative adjustments with the v1.3 spec's existing machinery to produce a working artifact. REFUTED IF 0e26d6be54fd predates SRC_002, or if it can be fully explained using only SRC_003 without any v1.5 amendment concepts, or if it explicitly violates a normative rule introduced in SRC_002.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_002", "SRC_003"]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd abstracts from both SRC_004 and SRC_005: it generalizes the pattern of 'what the machine currently holds' (SRC_004) together with the pattern of 'when conjecture circles into basin exhaustion' (SRC_005) into a higher-level meta-claim about the lifecycle of held propositions — specifically, a framework that subsumes both the inventory of current holdings and the dynamics of how those holdings enter and exit attractor basins. The relation is abstraction because 0e26d6be54fd operates at a level of description above both artifacts, treating them as special cases. REFUTED IF 0e26d6be54fd is at the same or lower level of description as SRC_004 or SRC_005 (i.e., it is an instance or application rather than a generalization), or if it addresses only one of the two and not their common superstructure.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_004", "SRC_005"]
+    }
+  ],
+  "context_request": {
+    "query": "What is the actual content, type, and provenance of artifact 0e26d6be54fd? Is it a theory document, experimental result, spec amendment, meta-artifact about connection failure, or something else? Without this, all proposed relations are underdetermined.",
+    "purpose": "Resolving the content and type of 0e26d6be54fd is the single most important epistemic gap. All six candidates are speculative without it; adjudication requires knowing what the artifact actually says.",
+    "desired_retrieval_channels": ["focus", "semantic", "recent"],
+    "requested_visible_aliases": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005"]
+  },
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Is 0e26d6be54fd a meta-artifact recording a prior failed or successful connection attempt? If failed, does it sit inside the basin SRC_005 describes, or did it exit?",
+        "related_refs": ["SRC_005", "SCR_002", "SCR_004"]
+      },
+      {
+        "question": "Does 0e26d6be54fd predate or postdate SRC_002 (the v1.5 amendment)? If it predates, the 'integrates' candidate is refuted by chronology.",
+        "related_refs": ["SRC_002", "SCR_003"]
+      },
+      {
+        "question": "Are there already-accepted relations from 0e26d6be54fd to SRC_007–SRC_011 in the neighbourhood? If so, which relation types are already covered, and which of the current candidates are duplicative?",
+        "related_refs": ["SCR_001", "SCR_007"]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,1 @@
+{"error_code":"BRIDGE_STAGE_A_FAILED","formal_seq":939,"process_status":"failure","resolution":null,"schema":"deepreason-bridge-status-v1","source_terminal_commitment_ref":"sha256:380d17af3832ec30d64f0d9348ff736f6d79c7080325eca6b3fd11f507677250","state":"failed","terminal_event_seq":984}

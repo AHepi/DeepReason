@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-c2d9800e69e1f4456a91a6dfb99aed90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what exactly distinguishes an idempotent operation from a safe one, and which of the two properties must an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run's frozen domain allowlist permits only docs.python.org. Fetched pages become citable evidence blocks.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@82e5a1b0c9715cc35c193cda: program:reasoning_observation_pending
+- reason-counter@8108298cb212d60e80865d19: program:reasoning_observation_pending
+- reason-counter@3b8fc9ffdc4c549c1a198b2b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Safety is the strictly stronger property and the one the log must require. Safety subsumes idempotency: a safe operation is one whose retry is observationally indistinguishable from a single execution \u2014 both in its own result and in its effect on concurrent operations. Idempotency is merely the self-referential special case f(f(x))=f(x), which says nothing about interaction with other operations during replay.","counterconditions":[{"case":"If the log is strictly sequential (no interleaving), safety's isolation guarantee is vacuous and idempotency suffices.","eval":"observation"},{"case":"If 'safe' is defined narrowly as 'does not harm others' without requiring idempotency, then safety is weaker, not stronger.","eval":"observation"},{"case":"If the cited definitions treat safety and idempotency as independent properties with neither subsuming the other, this candidate's hierarchy collapses.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"At-least-once delivery in an append-only log creates a scenario where retried operations interleave with other operations during replay. A purely idempotent operation (e.g., 'set x=1') is safe against self-duplication, but if a concurrent operation reads x between the first and duplicate application, the intermediate state may violate invariants. Safety guarantees that the retry is invisible to all observers, not just to the operation itself. The causal mechanism: safe retry \u2192 no observable intermediate state difference \u2192 deterministic replay produces identical state regardless of delivery multiplicity. Mere idempotency \u2192 no self-effect difference but possible observable intermediate states \u2192 replay may diverge under interleaving.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@82e5a1b0c9715cc35c193cda, reason-counter@8108298cb212d60e80865d19, reason-counter@3b8fc9ffdc4c549c1a198b2b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"An abrupt shift to a colder, more variable climate around 1195‑1155 BCE caused recurrent early‑season frosts that destroyed cereal yields across the Eastern Mediterranean.\",\"mechanism\": \"Climate‑induced agricultural shortfall reduced state tax revenues, precipitating elite indebtedness and forced abandonment of peripheral settlements.\",\"scope\": {\"covers\": [\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\": [\"Egypt\"]},\"forbidden\": [{\"case\": \"Archaeobotanical records reveal no evidence of early‑season frost layers or sudden temperature drop in core sites\", \"eval\": \"rubric:std-hist\"}],\"prose_notes\": \"The hypothesis emphasizes a rapid climatic pivot rather than a protracted drought, distinguishing it from prevailing megadrought models.\"}",
+      "refs": [],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"Mass movements of displaced maritime communities formed autonomous seafaring coalitions that, seeking new trade routes, systematically disrupted inter‑city maritime commerce between 1200‑1150 BCE.\",\"mechanism\": \"Network fragmentation reduced exchange of essential commodities (e.g., tin, oil), causing economic contraction and political destabilization in affected polities.\",\"scope\": {\"covers\": [\"Mycenaean Greece\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\": [\"Hittite Anatolia\",\"Egypt\"]},\"forbidden\": [{\"case\": \"Contemporary Linear B tablets record uninterrupted grain imports from the Aegean during the crisis period\", \"eval\": \"rubric:std-hist\"}],\"prose_notes\": \"Focuses on commercial network disruption rather than violent raids, differentiating it from the canonical Sea Peoples narrative.\"}",
+      "refs": [],
+      "typicality": 0.70
+    },
+    {
+      "content": "{\"claim\": \"The administrative apparatus of the Late Bronze Age palace societies reached a complexity threshold that generated feedback loops of elite competition, fiscal overextension, and loss of bureaucratic cohesion.\",\"mechanism\": \"Increasingly layered hierarchies amplified coordination costs, leading to rapid institutional decay once external shocks reduced surplus resources.\",\"scope\": {\"covers\": [\"Mycenaean Greece\",\"Hittite Anatolia\"],\"excludes\": [\"Ugarit\",\"Levantine city‑states\",\"Egypt\"]},\"forbidden\": [{\"case\": \"Inscriptions from Hattusa during the 12th c BCE demonstrate a streamlined, low‑overhead administration\", \"eval\": \"rubric:std-hist\"}],\"prose_notes\": \"A systems‑theoretic model that attributes collapse to internal network dynamics, independent of climate or external invasion.\"}",
+      "refs": [],
+      "typicality": 0.45
+    }
+  ]
+}

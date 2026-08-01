@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of interconnected palatial supply chains triggered by prolonged drought and seismic activity.\", \"mechanism\": \"Climate-induced agricultural shortfalls cascaded through rigid, trade-dependent bureaucracies, causing famine, internal revolt, and the inability to pay mercenary forces.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in Ugarit dated to the final destruction layer.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating environmental stressors with socio-political fragility.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics that rendered chariot-based aristocracies obsolete.\", \"mechanism\": \"The proliferation of inexpensive infantry weapons (long swords, javelins) and loose-order tactics allowed decentralized groups to overwhelm expensive, rigid chariot armies, leading to the rapid decapitation of palace elites.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Evidence that Mycenaean palaces were abandoned peacefully prior to any recorded invasion or battle.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military-determinist explanation, focusing on the 'democratization of violence' but struggling to explain non-military abandonment sites.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an endogenous social revolution where subject populations rejected the extractive palatial ideology itself.\", \"mechanism\": \"Centuries of elite extraction created latent class resentment; when central authority showed slight weakness (due to minor climate fluctuation or external raid), the populace actively dismantled the palace infrastructure to escape tribute obligations, rather than being conquered.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as primary agents\"]}, \"forbidden\": [{\"case\": \"Inscriptions from Hattusa detailing successful suppression of major internal revolts in the decades immediately preceding the fire.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, Marxist-leaning interpretation that flips the agency from external 'Sea Peoples' or 'Nature' to internal class struggle, explaining the thoroughness of the destruction.\"}",
+      "refs": [],
+      "typicality": 0.35
+    }
+  ]
+}

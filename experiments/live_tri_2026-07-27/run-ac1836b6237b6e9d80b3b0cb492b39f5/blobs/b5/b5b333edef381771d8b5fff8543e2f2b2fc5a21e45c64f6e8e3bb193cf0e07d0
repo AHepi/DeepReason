@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target eliminates requests in favor of bytes, but fails to account for the replayability requirement: response bytes can vary across replays due to dynamic content, breaking deterministic exhaustion. The counterconditions only address streaming and caching, not server-side dynamism, so the denomination choice undermines the agent's replayability.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target claims the budget must be solely in requests, yet its own countercondition concedes that a request budget may allow excessive data transfer and suggests a separate data cap. This admission shows that requests alone are insufficient, contradicting the claim and failing to eliminate bytes as a necessary dimension.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The composite cost metric produces a single exhaustion terminal that conflates request count and byte volume, making it impossible to determine which resource was exhausted. This violates the requirement for a 'typed auditable terminal' because the type of resource exhaustion is lost.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The target eliminates single-denomination approaches but does not address the composite cost metric (e.g., α*requests + β*bytes) as a rival. Since that approach also uses both dimensions, the claim that only a dual budget provides complete control is unsubstantiated, and the elimination of weaker rivals is incomplete.",
+      "counterexample": null
+    }
+  ]
+}

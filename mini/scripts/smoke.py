@@ -20,7 +20,7 @@ sys.path.insert(0, str(MINI))
 sys.path.insert(0, str(MINI.parent / "src"))  # parent, for the ingest check
 
 from minireason.call import HttpEndpoint  # noqa: E402
-from minireason.gate import normalize  # noqa: E402
+from minireason.analytics import normalize  # noqa: E402
 from minireason.loop import Session, run  # noqa: E402
 
 PROBLEMS = [

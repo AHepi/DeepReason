@@ -1,0 +1,9 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "error": "Invalid target format: missing required fields"
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "defender.direct.v1", "error": "extra field at /error", "path": "", "repair_scope": "", "skeleton": {"answer": "x"}}

@@ -1,0 +1,63 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM tsp14-manhattan-20260701
+FINITE 14-CITY MANHATTAN TSP. Cities: 0=(33,78), 1=(1,19), 2=(15,73), 3=(9,97), 4=(30,5), 5=(72,51), 6=(33,69), 7=(30,21), 8=(16,63), 9=(90,24), 10=(74,53), 11=(64,28), 12=(96,60), 13=(21,65). Produce a Hamiltonian cycle beginning at city "0"; return to 0 is implicit. Minimise total Manhattan distance. Candidate content MUST be one JSON object exactly in this useful shape: {"tour":["0",...,"13"],"rationale":"short text"}. The tour must contain every city ID exactly once and must not repeat 0 at the end.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- tsp14-valid-tour-20260701: program:tsp14_tour_wf
+
+## experimental-generation-context
+GENERATION CONTEXT (attention only; truth, admission, and verifier standards are unchanged):
+VERIFIER SCORE FEEDBACK (same rendering in every arm; lower is better):
+- valid[000] admission=call-07-candidate-00 total_distance=528
+- valid[001] admission=call-07-candidate-01 total_distance=498
+- valid[002] admission=call-07-candidate-02 total_distance=522
+- valid[003] admission=call-08-candidate-00 total_distance=564
+- valid[004] admission=call-08-candidate-01 total_distance=522
+- valid[005] admission=call-08-candidate-02 total_distance=486
+- valid[006] admission=call-09-candidate-00 total_distance=486
+- valid[007] admission=call-09-candidate-01 total_distance=564
+- valid[008] admission=call-09-candidate-02 total_distance=522
+- valid[009] admission=call-10-candidate-00 total_distance=498
+- valid[010] admission=call-10-candidate-01 total_distance=468
+- valid[011] admission=call-10-candidate-02 total_distance=440
+- valid[012] admission=call-15-candidate-00 total_distance=440
+- valid[013] admission=call-15-candidate-01 total_distance=486
+- valid[014] admission=call-15-candidate-02 total_distance=522
+- valid[015] admission=call-19-candidate-00 total_distance=440
+- valid[016] admission=call-19-candidate-01 total_distance=498
+- valid[017] admission=call-19-candidate-02 total_distance=486
+- valid[018] admission=call-20-candidate-00 total_distance=440
+- valid[019] admission=call-20-candidate-01 total_distance=440
+- valid[020] admission=call-20-candidate-02 total_distance=486
+- valid[021] admission=call-22-candidate-00 total_distance=440
+- valid[022] admission=call-22-candidate-01 total_distance=440
+- valid[023] admission=call-22-candidate-02 total_distance=522
+- valid[024] admission=call-23-candidate-00 total_distance=440
+- valid[025] admission=call-23-candidate-01 total_distance=486
+- valid[026] admission=call-23-candidate-02 total_distance=476
+
+RECENT VALID TOUR HISTORY (ordinary sequence representation):
+- admission=call-20-candidate-01 tour=0,5,10,12,9,11,7,4,1,3,2,13,8,6
+- admission=call-20-candidate-02 tour=0,6,8,13,2,3,1,4,7,11,5,10,12,9
+- admission=call-22-candidate-00 tour=0,5,10,12,9,11,7,4,1,3,2,13,8,6
+- admission=call-22-candidate-01 tour=0,5,10,12,9,11,7,4,1,3,2,13,8,6
+- admission=call-22-candidate-02 tour=0,2,13,8,6,3,1,4,7,11,5,10,12,9
+- admission=call-23-candidate-00 tour=0,5,10,12,9,11,7,4,1,3,2,13,8,6
+- admission=call-23-candidate-01 tour=0,6,8,13,2,3,1,4,7,11,5,10,12,9
+- admission=call-23-candidate-02 tour=0,2,6,8,13,3,1,4,7,11,9,12,10,5
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

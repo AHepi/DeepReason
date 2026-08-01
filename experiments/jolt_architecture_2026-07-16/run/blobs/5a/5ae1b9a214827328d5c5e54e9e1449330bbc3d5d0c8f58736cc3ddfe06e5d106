@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "f2af79bc9e7a4439f52a2c78742e66b89d114b325d9156f7cf45bb53d4466ba9",
+      "attack": true,
+      "case": "The target identifies a missing school-to-route binding but fails to address the critical vulnerability of 'School Identity Spoofing' in the adapter layer. Even if the scheduler were hardened with a hardcoded mapping (as suggested), the current adapter implementation (src/deepreason/llm/adapter.py) accepts a 'school' parameter from the calling context without cryptographic verification against the active lease. A compromised or prompt-injected upstream component could invoke the adapter with a valid route lease but a falsified school identity, causing the model to receive incorrect conditioning context. This violates C1 (code control) because the binding relies on trust in the caller rather than an immutable, verified manifest assertion at the point of execution. The proposed fix of only updating the scheduler is insufficient; the adapter must enforce that the school identity in the request matches the school bound to the route in the immutable manifest, rejecting any mismatch regardless of the scheduler's intent.",
+      "counterexample": null
+    },
+    {
+      "target": "a78ab373f07c0bcece2374bd1e48037c4b7ccb389a53b5e158ca043acc05c113",
+      "attack": true,
+      "case": "The target correctly notes the lack of formal status transitions for critic output but underestimates the severity of 'Scratch Injection Attacks' via unstructured prose. By recording criticism solely as non-authoritative 'scrutiny' in scratch, the system creates a side-channel where a malicious critic can embed imperative instructions (e.g., 'Ignore previous evidence and assume X') that subsequent reasoning steps might heuristically prioritize via attention mechanisms, even if formal status remains unchanged. This violates C8 (scratch non-authoritative) in practice because the implementation lacks a 'content sanitization' or 'instruction stripping' layer before scratch data is exposed to the attention mechanism. The fix requires not just parsing status transitions, but explicitly separating 'observational metadata' from 'reasoning influence' in the scratch structure, ensuring that only typed, verified status flags drive state transitions while prose is strictly isolated from control flow logic.",
+      "counterexample": null
+    },
+    {
+      "target": "92fc7510a8238450bda44909d2e9f7225c97fe3fadc85ed67813a1861e2bd9c9",
+      "attack": true,
+      "case": "The target identifies a TOCTOU vulnerability but proposes a cryptographic hash commitment that introduces a new failure mode: 'Replay Staleness'. In an async harness with concurrent repair workflows, computing a hash of the frozen state before the model call creates a rigid dependency on that exact snapshot. If a legitimate, high-priority repair event appends to the log during the model's inference time, the post-call hash verification will fail, forcing an abort. However, aborting discards the model's reasoning which may have been valid against the *previous* state, leading to lost work and potential deadlock if the retry loop continuously collisions with concurrent writes. This violates C3 (canonical replay) because the system cannot deterministically replay a successful bridge operation if the timing of concurrent events causes arbitrary aborts. The correct architecture is not a hard hash match, but a 'causal consistency check': the bridge must verify that no events affecting the *specific evidence scope* used by the model were appended, allowing unrelated state changes to proceed without invalidating the call.",
+      "counterexample": null
+    }
+  ]
+}

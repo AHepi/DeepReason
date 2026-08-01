@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The claim's iff condition is E[P(SC_right | C) - P(SC_right | !C)] > 0 (positive question-conditional net signal), which is a distinct quantity from critic positive-class precision-on-fragile. A critic with precision-on-fragile = 0.4 can still exhibit positive net signal if its recall on right-majority fragile questions is sufficiently high, so an outcome showing harness > SC at precision = 0.4 does not contradict the stated claim."}
+```

@@ -1,0 +1,17 @@
+context_window_tokens: 131072
+credential_env: OLLAMA_API_KEY
+endpoint: https://ollama.com/v1
+family: glm
+logprobs: false
+maximum_completion_tokens: 24576
+model_id: glm-5.2
+model_profile: standard
+model_revision: glm-5.2
+output_mechanism: json_text
+output_mode: json_object
+profile_digest: bc6ec47224efdcf3236d6f37588bbb55df0ee3794eb1fe19eea3c01fe58990ea
+provider: ollama
+reasoning: null
+schema: deepreason-provider-profile.v1
+temperature: null
+timeout_s: 120

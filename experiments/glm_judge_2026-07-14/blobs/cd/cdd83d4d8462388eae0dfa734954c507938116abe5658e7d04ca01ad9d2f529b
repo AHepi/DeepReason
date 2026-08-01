@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The precision condition is given as R·(1 - SC_majority_margin) > (1-P)·SC_majority_rate, but SC_majority_margin and SC_majority_rate are not defined as functions of the named measurable quantities (e, k, P, R)."}

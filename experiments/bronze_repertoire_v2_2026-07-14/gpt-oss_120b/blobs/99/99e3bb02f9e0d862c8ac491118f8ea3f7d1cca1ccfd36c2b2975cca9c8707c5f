@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "A wave of charismatic Aegean cultic caravans, carrying new religious ideologies and mercantile networks, spread across the Eastern Mediterranean, destabilising existing political hierarchies and provoking coordinated maritime raids.", "mechanism": "The influx of itinerant priest‑warriors created a network‑disruption matrix: trade routes were repurposed for pilgrimage, elite gift‑exchange collapsed, and local rulers were overthrown by cult‑aligned militias.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Contemporary inscriptions from the period make no mention of new cultic movements or related social upheaval", "eval": "rubric:std-hist"}], "prose_notes": "This model replaces the generic ‘Sea Peoples’ narrative with a culturally driven migration, aligning with comparative case‑study methodology and a network‑analysis framework."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target's 'forbidden' case is a concrete observation that would falsify the claim, but the target fails to provide any positive evidence that the claimed mechanism actually occurred. The mechanism describes a 'network-disruption matrix' involving repurposed trade routes, collapsed gift-exchange, and cult-aligned militias, yet the target cites no specific archaeological or textual evidence—such as destruction layers, administrative tablets, or diplomatic correspondence—that would distinguish this culturally-driven process from the very 'generic Sea Peoples narrative' it purports to replace. Without such evidence, the mechanism remains an untethered narrative, not a historically grounded causal account.
+
+THE DEFENCE:
+The critic demands positive evidence for the mechanism while ignoring that the target explicitly includes a falsification condition: the absence of contemporary inscriptions mentioning new cultic movements or related social upheaval. The target’s forbidden case is not a concession of missing evidence but a methodological rubric—if such inscriptions are absent, the model is weakened. However, the critic provides no demonstration that this condition is actually met (i.e., that a thorough survey of contemporary inscriptions from the relevant regions yields no such mentions). The target’s network-disruption mechanism is framed as a testable alternative to the generic Sea Peoples narrative, and the burden is on the critic to engage with the stated falsification criterion rather than assert an absence of positive evidence. The target does not claim to have already proven the mechanism but to offer a model that can be evaluated against the specified forbidden case.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

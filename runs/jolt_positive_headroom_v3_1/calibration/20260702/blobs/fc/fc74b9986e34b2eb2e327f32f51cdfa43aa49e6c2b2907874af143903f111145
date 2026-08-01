@@ -1,0 +1,44 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM tsp14-manhattan-20260702
+FINITE 14-CITY MANHATTAN TSP. Cities: 0=(91,16), 1=(86,15), 2=(12,37), 3=(26,15), 4=(39,40), 5=(24,38), 6=(22,71), 7=(21,72), 8=(64,28), 9=(9,33), 10=(5,26), 11=(50,73), 12=(85,37), 13=(71,46). Produce a Hamiltonian cycle beginning at city "0"; return to 0 is implicit. Minimise total Manhattan distance. Candidate content MUST be one JSON object exactly in this useful shape: {"tour":["0",...,"13"],"rationale":"short text"}. The tour must contain every city ID exactly once and must not repeat 0 at the end.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- tsp14-valid-tour-20260702: program:tsp14_tour_wf
+
+## experimental-generation-context
+GENERATION CONTEXT (attention only; truth, admission, and verifier standards are unchanged):
+VERIFIER SCORE FEEDBACK (same rendering in every arm; lower is better):
+- valid[000] admission=call-00-candidate-00 total_distance=362
+- valid[001] admission=call-00-candidate-01 total_distance=452
+- valid[002] admission=call-00-candidate-02 total_distance=358
+- valid[003] admission=call-01-candidate-00 total_distance=424
+- valid[004] admission=call-01-candidate-01 total_distance=380
+- valid[005] admission=call-01-candidate-02 total_distance=372
+- valid[006] admission=call-02-candidate-00 total_distance=358
+- valid[007] admission=call-02-candidate-01 total_distance=424
+- valid[008] admission=call-02-candidate-02 total_distance=358
+- valid[009] admission=call-03-candidate-00 total_distance=362
+- valid[010] admission=call-03-candidate-01 total_distance=368
+- valid[011] admission=call-03-candidate-02 total_distance=358
+- valid[012] admission=call-04-candidate-00 total_distance=358
+- valid[013] admission=call-04-candidate-01 total_distance=362
+- valid[014] admission=call-04-candidate-02 total_distance=358
+
+RECENT VALID TOUR HISTORY (ordinary sequence representation):
+- admission=call-02-candidate-01 tour=0,1,12,8,13,11,7,6,5,4,2,3,9,10
+- admission=call-02-candidate-02 tour=0,1,12,8,13,11,7,6,4,5,2,9,10,3
+- admission=call-03-candidate-00 tour=0,1,12,8,13,11,7,6,5,4,2,9,10,3
+- admission=call-03-candidate-01 tour=0,1,8,12,13,11,7,6,4,5,2,9,10,3
+- admission=call-03-candidate-02 tour=0,1,12,8,13,11,7,6,4,5,2,9,10,3
+- admission=call-04-candidate-00 tour=0,1,12,8,13,11,7,6,4,5,2,9,10,3
+- admission=call-04-candidate-01 tour=0,1,12,8,13,11,7,6,5,4,2,9,10,3
+- admission=call-04-candidate-02 tour=0,1,12,8,13,11,7,6,4,5,2,9,10,3
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

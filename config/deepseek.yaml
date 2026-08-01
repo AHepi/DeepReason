@@ -1,39 +1,27 @@
-# DeepSeek live-run knob file (spec §15). DeepSeek's API is OpenAI-compatible.
+# DeepSeek live-run profile (spec §15). Omitted knobs inherit the canonical
+# defaults from deepreason.config.Config; only deliberate differences belong
+# here. DeepSeek's API is OpenAI-compatible.
 # Set DEEPSEEK_API_KEY in the environment. Model ids marked "auto"/"auto-alt"
-# are resolved against the provider's /models list at adapter build time
-# (llm/endpoints.py:resolve_model) — works from `deepreason run`, the MCP
-# server, and the scripts alike.
+# are source-only sentinels resolved by `deepreason config compile` before the
+# first role-model call. Runtime adapters consume only the persisted concrete
+# RunManifest; they never inspect this file or discover models.
 #
-# Honest note (§9/§17): the judge SHOULD run on >=2 endpoints from different
-# model FAMILIES; with a single provider we approximate with two different
-# DeepSeek models, which catches intra-provider disagreement only.
+# This profile's two DeepSeek judge seats are useful for non-normative probes
+# but do NOT satisfy the rubric trial requirement. Compile program/predicate
+# workloads with `--rubric-policy forbid`; rubric workloads must supply and
+# freeze a second judge family or preflight fails.
 
-FLOOR: 1
-K: 4
-INTEGRATION_BUDGET_SHARE: 0.30
 HV_MIN: 0.5
 HV_K: 5
-PRECEDENT_K: 4
-TRIAL_PARAPHRASE_N: 2
 JUDGE_ERR_MAX: 0.25
 AUDIT_PERIOD: 10
-USER_RULINGS_BUDGET: 2
-HOLDOUT_SHARE: 0.2
 N_SCHOOLS: 2
 STANCE_DECAY: 20
-XEXAM_SHARE: 0.15
 RESEED_DIST_MIN: 0.15
 NEAR_DUP_EPS: 0.35
 VS_K: 3                       # 4 skeleton candidates truncated at sane caps; 3 fits
-PARETO_AXES: [hv, reach, coverage]
 LAMBDA_FLOOR: 0.3
 CAPTURE_W: 10
-ATTACK_ENTROPY_FLOOR: 0.2
-CRIT_DEBT_CEILING: 0.5
-MIN_ATTACKS_FOR_RITUAL: 5
-RESEARCH_PERIOD: 5
-PACK_TOKEN_BUDGET: 2500
-RETRY_MAX: 2
 # Budget triage (attention only, never status): cap the two most expensive
 # call sites the first live run exposed.
 ARG_CRIT_PER_CYCLE: 3
@@ -48,6 +36,12 @@ CRIT_BATCH_K: 3
 # v4-pro call was reasoning we never asked for); an int is a token budget;
 # null keeps the provider default. Downgrades are certified by the audit
 # battery (planted-flaw, paraphrase-flip, valid-JSON), not assumed.
+# timeout_s: transport read timeout per completion attempt (default 300).
+# After a read timeout the retry waits 2x; a second read timeout is
+# terminal, so the total wait is bounded at 3x. Raise timeout_s for slow
+# hosted open-model endpoints whose full generations exceed the wait — a
+# run lost two variator calls to a 120s ceiling while ~110s generations
+# were succeeding at the same endpoint.
 roles:
   conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true, logprobs: true }
   argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2800, json_mode: true }  # sized for CRIT_BATCH_K cases per call
@@ -61,3 +55,4 @@ roles:
     - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2400, json_mode: true }
     - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 2400, json_mode: true }
   synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }
+  thesis:               { endpoint: "https://api.deepseek.com", model: deepseek-v4-flash, temperature: 0.3, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 6000, json_mode: true }

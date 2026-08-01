@@ -1,0 +1,11 @@
+```json
+{
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/values",
+      "value": [13]
+    }
+  ]
+}
+```

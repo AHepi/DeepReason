@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@40dbb3b7babe1e40fd53bcd0: program:reasoning_observation_pending
+- reason-counter@6401ef2c1c31ae2947c17e52: program:reasoning_observation_pending
+- reason-counter@5da926e51410e1fd17cd50d2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest reclamation protocol is a generation-tracked consensus lease protocol that requires proof-of-absence before reclaiming any workspace associated with a generation.","counterconditions":[{"case":"A consensus group partition during reclamation can void the safety guarantee by allowing a minority to issue a stale or forged proof-of-absence.","eval":"observation"},{"case":"Corruption of the generation registry itself cascades into wrongful reclamation if the registry is not itself protected by the same consensus layer.","eval":"observation"},{"case":"Asynchronous evidence commits from the crashed process may race with the proof-of-absence issuance, allowing completed evidence to be displaced before it is observed.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A generation registry durably records the count and identity of completed evidence nodes per generation. When a process crashes without a terminal record, its workspace cannot be reclaimed until a consensus lease among surviving witnesses issues a proof-of-absence asserting that no evidence nodes from that workspace have been merged into the completed set.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@40dbb3b7babe1e40fd53bcd0, reason-counter@6401ef2c1c31ae2947c17e52, reason-counter@5da926e51410e1fd17cd50d2
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

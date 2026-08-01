@@ -1,0 +1,96 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "A halted run can be safely resumed iff (1) the halt was clean—the final event was fully committed and persisted before exhaustion, leaving no partial write; (2) the resuming process can reconstitute the exact internal state at the tail of the committed event log; (3) the event log was not mutated during the pause; (4) a fresh token budget is allocated. Resumption must be refused when the halt left a partial or uncommitted event, when the log or state was externally tampered with, or when no new budget is available.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe only if the system implements an atomic checkpoint that pairs the full mutable state snapshot with the last committed event identity, and the halt occurred at such a checkpoint boundary. Without this, even a 'clean' event-level halt may hide state divergence, so resumption must be refused.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is always safe when the system follows pure event sourcing: all state is derivable by replaying the append-only log, the last event is complete, and a write-budget guard prevented initiating any event that could not be completed within remaining tokens. Resumption is refused when the write-budget guard was absent, failed, or when the last event is incomplete.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption should always be refused; instead, a new run must be spawned that explicitly references the halted run's event log as prior context. This eliminates all corruption risk by never mutating the original log's causal stream.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe iff the halt was triggered by a pre-write token-reservation check (the system verified sufficient tokens before starting each event write) AND the resuming process validates the log tail integrity (checksum/hash chain) before appending. Resumption is refused if the halt was triggered by a mid-write exhaustion (the reservation check failed or was absent) or if tail integrity validation fails.",
+      "formal_artifact_handles": ["ART_5"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption safety depends on the distinction between budget-exhaustion halts and all other halt causes. Budget-exhaustion halts are resumable iff the event log maintains a monotonic, content-addressed identity chain (each event's ID is a hash of its content plus the prior event's ID) and the halt did not interrupt a write. Any halt caused by crash, power loss, or process kill—rather than graceful budget exhaustion—must be refused resumption pending a full integrity audit, because the causal mechanism of the halt differs.",
+      "formal_artifact_handles": ["ART_6"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "surviving_conjecture",
+      "claim": "A token-exhausted run can be safely resumed iff three conditions jointly hold: (1) clean halt—the final event was fully committed and persisted before the exhaustion signal was raised, so no partial write exists at the log tail; (2) append-only identity integrity—the hash chain (or equivalent identity structure) from genesis to the tail event is verifiable and unbroken; (3) resumption strictly appends new events after the verified tail without mutating, inserting, or reordering any existing event. Resumption must be refused when the tail is a partial or uncommitted write, when the chain is broken, or when any evidence suggests an interrupted commit.",
+      "formal_artifact_handles": ["ART_7"]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "surviving_conjecture",
+      "claim": "Under pure event sourcing—where all system state is derivable by replaying the append-only log, no external mutable state exists, and every event is deterministic given its predecessors—resumption is safe iff the log is intact and complete up to some committed event N. State is reconstructed by replaying events 1..N, and resumption appends from N+1. Resumption must be refused when the run involved non-deterministic external side effects (tool calls, I/O, randomness) that cannot be replayed, or when external mutable state was modified outside the log.",
+      "formal_artifact_handles": ["ART_8"]
+    },
+    {
+      "entry_key": "CLM_9",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe only if the system implements an atomic checkpoint that consistently pairs a full state snapshot with the last committed event's identity (hash and sequence number). The checkpoint and the log must be updated in a single atomic transaction. Resumption is safe when the checkpoint's recorded event identity exactly matches the actual log tail. Resumption must be refused when the checkpoint is stale (behind the log tail—some committed events are not in the snapshot), when the checkpoint is ahead (the snapshot references events not yet durable in the log), or when no checkpoint exists at all.",
+      "formal_artifact_handles": ["ART_9"]
+    },
+    {
+      "entry_key": "CLM_10",
+      "claim_class": "surviving_conjecture",
+      "claim": "Any run that invoked non-deterministic components—external tool calls, real-world I/O, unseeded randomness, or reads from mutable external state—must refuse resumption unconditionally. Only fully deterministic runs (pure computation over immutable inputs, all randomness seeded and recorded as events) are resumable. This is conservative: it refuses resumption even when a clean halt occurred, because the continuation after resumption may produce semantically different events than an uninterrupted run would have, and the append-only log cannot distinguish 'genuinely continued' from 'divergently restarted' events.",
+      "formal_artifact_handles": ["ART_10"]
+    },
+    {
+      "entry_key": "CLM_11",
+      "claim_class": "surviving_conjecture",
+      "claim": "If the token budget is reserved atomically per-event before event generation begins, then exhaustion can only prevent the next event from starting—it can never interrupt an in-progress write. This makes every budget-exhaustion halt clean by construction, so resumption is always safe as long as the log's append-only identity is intact. The only refusal case is log corruption from causes other than budget exhaustion (hardware failure, concurrent writes). The cost is potential underutilization of the global budget pool and the need to estimate per-event token costs before generation.",
+      "formal_artifact_handles": ["ART_11"]
+    },
+    {
+      "entry_key": "CLM_12",
+      "claim_class": "surviving_conjecture",
+      "claim": "If the token budget accounting is itself recorded as an event in the same append-only log, budget exhaustion creates a circular dependency that can corrupt the append-only identity: the event recording 'budget exhausted' must itself be written, consuming tokens. If exhaustion occurs during the write of this accounting event, the chain is torn at the very moment the system is trying to record why it is halting. Resumption must be refused whenever budget state and event log are coupled in the same append-only structure, unless the budget-exhaustion record is written via a separate out-of-band channel. This is a counterexample to the claim that pure event sourcing alone guarantees resumability.",
+      "formal_artifact_handles": ["ART_12"]
+    },
+    {
+      "entry_key": "CLM_13",
+      "claim_class": "surviving_conjecture",
+      "claim": "A halted run is resumable without corrupting append-only identity iff three conditions hold simultaneously: (1) the halt occurred at an event boundary, meaning the last event in the log was fully written and its identity digest (hash-chain link) is finalized and persisted; (2) the persisted token-budget state is consistent with the event-log position—every event's token cost has been accounted for and the remaining budget is exactly what it would be after replaying all committed events; (3) the system's continuation is a pure function of the persisted event log plus budget state, with no un-logged non-deterministic inputs (external tool-call results, RNG draws, real-world side effects) that would alter the next event's content. Resumption must be refused whenever any of these fails: a torn/partial tail event, a budget-state mismatch, a broken hash",
+      "formal_artifact_handles": ["ART_13"]
+    },
+    {
+      "entry_key": "CLM_14",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumability reduces to a single atomicity invariant: the event-append and the budget-decrement must be a single atomic transaction. A halted run is resumable iff the persisted state is the result of a sequence of completed transactions—each one either fully committed (event written + budget decremented + digest linked) or fully rolled back (neither persisted). Resumption must be refused iff the transaction log shows a split: an event persisted without a matching budget decrement, or a budget decrement without a matching event, or a partially committed transaction (event bytes present but digest not finalized).",
+      "formal_artifact_handles": ["ART_14"]
+    },
+    {
+      "entry_key": "CLM_15",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumability is determined by whether the persisted state (event log, budget, and any non-deterministic state captures) forms a complete checkpoint at an event boundary. A halted run is resumable iff the checkpoint is complete: the event log is intact and self-verifying up to its last entry, the budget state equals the sum of all event costs subtracted from the initial budget, and every source of non-determinism that influenced the committed events is either (a) fully recorded in the events themselves, or (b) captured in a separate, replayable state vector. Resumption must be refused if any of these conditions are not met.",
+      "formal_artifact_handles": ["ART_15"]
+    }
+  ]
+}
+```

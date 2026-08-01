@@ -1,0 +1,28 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@536bf2602fed3f52397d1419: program:reasoning_observation_pending
+- reason-counter@36d57151d9c6508433cddee1: program:reasoning_observation_pending
+- reason-counter@b0aab8ea51ead6c5791f5882: program:reasoning_observation_pending
+- reason-counter@69f271d467a621b79fb8d4a1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget should be denominated in terms of allowed domains and per-domain quotas (requests and/or bytes), because the true resource is access to specific services; exhaustion is recorded per domain as a typed terminal when a domain's quota is reached.","counterconditions":[{"case":"If the agent encounters a new domain not in the budget, it must either deny the fetch or have a default quota, which could be exploited.","eval":"observation"},{"case":"The budget specification becomes complex.","eval":"observation"},{"case":"Reproducibility requires that the domain set is fixed and the quotas are part of the state hash.","eval":"observation"},{"case":"This approach may be overkill for a simple research agent.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent's budget is a set of (domain, max_requests, max_bytes) tuples. Before a fetch, the agent checks the target domain's remaining quota. If either requests or bytes would be exceeded, the fetch is denied and the terminal state records exhaustion with reason 'domain_quota_exhausted' and the domain. The agent may continue fetching from other domains. The terminal state includes the quota usage per domain. This covers the principle that different domains have different costs and limits.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@536bf2602fed3f52397d1419, reason-counter@36d57151d9c6508433cddee1, reason-counter@b0aab8ea51ead6c5791f5882, reason-counter@69f271d467a621b79fb8d4a1
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

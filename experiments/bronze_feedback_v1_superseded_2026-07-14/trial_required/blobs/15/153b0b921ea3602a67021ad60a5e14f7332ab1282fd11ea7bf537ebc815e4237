@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target asserts a contradiction between two accounts, but the relation it states ('contradicts') is not substantively argued: it merely juxtaposes a structural buffer explanation against a stochastic null model and says the former is refuted if the latter cannot be rejected. That is a conditional logical relation, not a substantive dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction between the two accounts themselves. The target fails to name a kind of relation and state what it is refuted by, as required by the problem context for 3c884acf0d40.
+
+TARGET:
+contradicts: 3c884acf0d40 attributes Egypt's persistence to a specific structural buffer (dispersed irrigation/private entrepreneurship), while c3a117d0bb0b attributes it to stochastic variation without causal structure. The former is refuted if the latter's null model (random survival) cannot be rejected.

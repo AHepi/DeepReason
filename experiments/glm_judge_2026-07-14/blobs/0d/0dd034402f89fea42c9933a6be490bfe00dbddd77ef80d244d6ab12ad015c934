@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "a case can be measurable via controlled proxies (prompting the critic toward low precision / high recall) or via held-out slices with empirically near-target parameters, not only by direct randomization of latent population parameters"}
+```

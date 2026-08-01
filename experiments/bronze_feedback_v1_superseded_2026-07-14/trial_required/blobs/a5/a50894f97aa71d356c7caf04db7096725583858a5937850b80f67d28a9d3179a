@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target violates the std-hist standard because its mechanism is not a specific causal institution, incentive, or process, but rather a geographic description ('linear coastal geography' vs. 'compact riparian geography with unified command') that merely rephrases the outcome (rapid sequential destruction vs. defensive in-depth attrition) without naming a concrete mechanism. Additionally, the forbidden cases directly contradict the claim: the first forbidden case states that destruction layers post-date administrative collapse, which would mean the invasions were not the cause of destruction; the second states that Sea Peoples were integrated as mercenaries, not repelled invaders; the third states Hattusa shows no destruction layer but gradual abandonment. These forbidden cases are concrete observations that could realistically have obtained, and they undermine the target's core causal claim. The target's prose_notes itself admits vulnerability to the charge of reversing cause and effect, which is precisely the violation of the standard's requirement for a mechanism that is not a mood, essence, or inevitability.",
+  "counterexample": [
+    "At Ugarit, the destruction layer post-dates administrative collapse and abandonment, contradicting the claim that Sea Peoples invasions caused direct military destruction.",
+    "Egyptian records describe Sea Peoples as settled mercenaries integrated into the military, not as repelled invaders, undermining the claim of absorption of refugee waves and raiding parties.",
+    "Hattusa shows no destruction layer but gradual abandonment, contradicting the claim of rapid sequential destruction of palatial states."
+  ]
+}

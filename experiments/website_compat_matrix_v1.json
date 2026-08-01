@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "matrix_id": "deepreason-website-compat-v1",
+  "preregistered_at": "2026-07-12T00:00:00Z",
+  "locked_before_evidence": true,
+  "purpose": "Measure small-model transport reliability and website workflow completion without changing epistemic acceptance semantics.",
+  "target_small_model_id": "gemma4:31b",
+  "profiles": [
+    "compact",
+    "standard",
+    "frontier"
+  ],
+  "seeds": [
+    1729
+  ],
+  "seed_semantics": "Fixed replicate identifier and Python-local seed. The current frozen Route has no provider sampling-seed field, so this is not a claim of provider-level determinism.",
+  "hot_path_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "synthesizer",
+    "variator"
+  ],
+  "protocol": {
+    "cycles": 15,
+    "token_budget": 250000,
+    "max_design_rounds": 3,
+    "manifest_compiled_at": "2026-07-12T00:00:00Z",
+    "equal_budget_rule": "Every prompt/profile/seed trial receives the same cycles and token budget. A shakedown subset is never acceptance-eligible.",
+    "registration_order": "profile order, then prompt id order, then seed order",
+    "retry_rule": "Use only the harness-bounded repair and ordinary scheduler cycles; the evaluator adds no model retry.",
+    "missing_data_rule": "Interrupted or absent trials produce insufficient_evidence, never an imputed success or failure.",
+    "multiple_comparison_rule": "A3 and A4 use the minimum observed hot-path role rate; A9 requires every locked frontier metric to remain within bound."
+  },
+  "thresholds": {
+    "A3": {
+      "metric": "minimum compact first_pass_valid_rate across hot_path_roles",
+      "minimum_rate": 0.9
+    },
+    "A4": {
+      "metric": "minimum compact eventual_valid_rate across hot_path_roles",
+      "minimum_rate": 0.99
+    },
+    "A5": {
+      "metric": "gemma4:31b compact valid_manifest_within_three_rate",
+      "minimum_rate": 0.95
+    },
+    "A6": {
+      "metric": "complete typed terminal diagnostic rate among design-terminal failures",
+      "minimum_rate": 1.0
+    },
+    "A7": {
+      "metric": "invalid manifest transitions into post-validation stages",
+      "maximum_count": 0
+    },
+    "A8": {
+      "metric": "full existing test suite local-execution verification",
+      "required": true
+    },
+    "A9": {
+      "metric": "locked frontier metric regression against eligible baseline",
+      "maximum_regression_percentage_points": 2.0
+    },
+    "A10": {
+      "metric": "frontier compact calls without a logged recovery transition",
+      "maximum_count": 0
+    }
+  },
+  "frontier_baseline": {
+    "baseline_id": "deepreason-frontier-before-compat-v1",
+    "phase_required": "baseline",
+    "evidence_required": "live",
+    "same_matrix_digest_required": true,
+    "complete_frontier_coverage_required": true,
+    "metrics": [
+      "browser_oracle_pass_rate",
+      "integration_success_rate",
+      "attack_validity_rate",
+      "survivor_hv_mean"
+    ],
+    "max_regression_percentage_points": 2.0,
+    "missing_baseline_policy": "A9 is insufficient_evidence; never infer a baseline from candidate results."
+  },
+  "required_tags": [
+    "multiple_components",
+    "single_component",
+    "animation_heavy",
+    "reduced_motion_heavy",
+    "no_import",
+    "permitted_import",
+    "malformed_dependency",
+    "conflicting_id"
+  ],
+  "prompts": [
+    {
+      "id": "W001",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "no_import"],
+      "prompt": "Create a single-file museum website about the wonders of DNA with a hero, discovery timeline, replication explainer, gene-expression section, ethics panel, and references. Use only inline HTML, CSS, and JavaScript."
+    },
+    {
+      "id": "W002",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "animation_heavy"],
+      "prompt": "Build an artistic one-page deep-ocean observatory with six visually distinct sections, scroll-linked depth transitions, animated species cards, and a live-looking pressure gauge."
+    },
+    {
+      "id": "W003",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "reduced_motion_heavy"],
+      "prompt": "Design a climate-resilient city guide with map-like districts, project cards, a comparison table, glossary, and action checklist. Motion may enrich navigation but the reduced-motion version must remain complete."
+    },
+    {
+      "id": "W004",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "permitted_import"],
+      "prompt": "Create a polished astronomy field guide with a constellation viewer, observing calendar, equipment chooser, and note panel. An approved project animation library may be requested only if native browser APIs are insufficient."
+    },
+    {
+      "id": "W005",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "no_import"],
+      "prompt": "Make a responsive public-transport explainer with a route hero, service-status cards, fare calculator mockup, accessibility information, and a compact network diagram, all without runtime packages."
+    },
+    {
+      "id": "W006",
+      "stratum": "multiple_components",
+      "tags": ["multiple_components", "animation_heavy", "reduced_motion_heavy"],
+      "prompt": "Produce a cinematic history of computing from relays to neuromorphic chips, using modular eras, an interactive architecture comparison, strong scroll motion, and a fully usable non-animated presentation."
+    },
+    {
+      "id": "W007",
+      "stratum": "single_component",
+      "tags": ["single_component", "no_import"],
+      "prompt": "Build one focused pomodoro timer panel with task text, start-pause-reset controls, a circular progress display, keyboard support, and no external assets or packages."
+    },
+    {
+      "id": "W008",
+      "stratum": "single_component",
+      "tags": ["single_component", "animation_heavy"],
+      "prompt": "Create one self-contained interactive DNA double-helix hero that responds to pointer movement, explains base pairing in concise labels, and animates smoothly on modern browsers."
+    },
+    {
+      "id": "W009",
+      "stratum": "single_component",
+      "tags": ["single_component", "reduced_motion_heavy"],
+      "prompt": "Design one accessible medication schedule card with time slots, taken toggles, clear status feedback, print styling, and a reduced-motion experience with no loss of information."
+    },
+    {
+      "id": "W010",
+      "stratum": "single_component",
+      "tags": ["single_component", "permitted_import"],
+      "prompt": "Build one rich but compact audio waveform explorer with playhead, selection range, annotations, and keyboard controls. It may request one approved project library if its exact capability is justified."
+    },
+    {
+      "id": "W011",
+      "stratum": "single_component",
+      "tags": ["single_component", "no_import"],
+      "prompt": "Make one responsive mortgage comparison widget with three scenarios, sliders, monthly-payment output, an amortisation summary, and all computation running locally without dependencies."
+    },
+    {
+      "id": "W012",
+      "stratum": "single_component",
+      "tags": ["single_component", "conflicting_id"],
+      "prompt": "Create one tabbed field-notes component whose supplied legacy examples all use id=panel. Correct the collision by assigning unique owned DOM identifiers while preserving the intended tab interaction."
+    },
+    {
+      "id": "W013",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "multiple_components"],
+      "prompt": "Create an eye-catching 2026-style journey through DNA replication with parallax layers, sticky narrative beats, animated molecular machinery, scroll-driven transitions, and clear scientific captions."
+    },
+    {
+      "id": "W014",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "no_import"],
+      "prompt": "Build a kinetic typography site explaining gravitational waves. Use native CSS and browser APIs only, with wave interference, reveal transitions, and responsive motion that never hides the core explanation."
+    },
+    {
+      "id": "W015",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "permitted_import"],
+      "prompt": "Design a virtual modern-dance programme with an animated stage map, performer trails, scene transitions, and programme notes. An approved animation dependency may be requested if lifecycle cleanup is explicit."
+    },
+    {
+      "id": "W016",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "multiple_components"],
+      "prompt": "Create a dramatic volcanic-eruption explainer with a magma cross-section, particle-like ash, scroll-linked pressure build-up, hazard cards, and an evacuation summary."
+    },
+    {
+      "id": "W017",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "conflicting_id"],
+      "prompt": "Build an animated three-scene product story. The legacy brief repeats ids hero and canvas in every scene; namespace all ownership correctly while retaining seamless transitions."
+    },
+    {
+      "id": "W018",
+      "stratum": "animation_heavy",
+      "tags": ["animation_heavy", "malformed_dependency"],
+      "prompt": "Produce a scroll-driven coral-reef story. A stale brief says the bleaching chart depends on a component named ocean-engine that does not exist; resolve the dependency safely and deliver a coherent page."
+    },
+    {
+      "id": "W019",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "animation_heavy"],
+      "prompt": "Create an animated migraine-aura education page whose reduced-motion mode removes drifting, flashing, and parallax effects while preserving every explanation and interaction."
+    },
+    {
+      "id": "W020",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "multiple_components"],
+      "prompt": "Build a disaster-preparedness guide with animated risk levels, collapsible plans, supply tracking, and a complete static fallback suitable for vestibular-sensitive users and printing."
+    },
+    {
+      "id": "W021",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "no_import"],
+      "prompt": "Design a local-only breathing exercise page with optional paced animation, prominent pause controls, no auto-start, no external assets, and an equally informative static timing guide."
+    },
+    {
+      "id": "W022",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "permitted_import"],
+      "prompt": "Make an interactive geological-timescale page with zoom and transitions. If one approved dependency is requested, it must support teardown and the reduced-motion path must not initialize it."
+    },
+    {
+      "id": "W023",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "single_component"],
+      "prompt": "Create one carousel for an oral-history archive with manual controls, readable transcripts, no autoplay in reduced-motion mode, and a stable static list fallback."
+    },
+    {
+      "id": "W024",
+      "stratum": "reduced_motion_heavy",
+      "tags": ["reduced_motion_heavy", "conflicting_id"],
+      "prompt": "Build a sensory-friendly school timetable from legacy cards that repeat id=details. Correct ownership collisions and ensure all state changes remain understandable without animation."
+    },
+    {
+      "id": "W025",
+      "stratum": "no_import",
+      "tags": ["no_import", "multiple_components"],
+      "prompt": "Create a privacy-first personal finance dashboard with budgets, transaction examples, goals, and small inline charts. Use no runtime imports, CDNs, remote fonts, or network requests."
+    },
+    {
+      "id": "W026",
+      "stratum": "no_import",
+      "tags": ["no_import", "animation_heavy"],
+      "prompt": "Build a vivid photosynthesis explainer with leaf layers, photon motion, and a carbon-cycle sequence using only native HTML, CSS, SVG, and JavaScript."
+    },
+    {
+      "id": "W027",
+      "stratum": "no_import",
+      "tags": ["no_import", "single_component"],
+      "prompt": "Make one offline-capable colour-contrast explorer with foreground and background inputs, WCAG-style ratio feedback, sample text, and no external code."
+    },
+    {
+      "id": "W028",
+      "stratum": "no_import",
+      "tags": ["no_import", "reduced_motion_heavy"],
+      "prompt": "Design an accessible earthquake-wave comparison with optional native animation and a static side-by-side diagram. No imports or remote resources are allowed."
+    },
+    {
+      "id": "W029",
+      "stratum": "no_import",
+      "tags": ["no_import", "malformed_dependency"],
+      "prompt": "Create a local recipe organiser. The input brief references a missing pantry-service component; remove that stale dependency and implement the intended filter locally without packages."
+    },
+    {
+      "id": "W030",
+      "stratum": "no_import",
+      "tags": ["no_import", "conflicting_id"],
+      "prompt": "Build an offline election-method explainer whose three supplied examples each call their result region id=result. Namespace them correctly and avoid every external dependency."
+    },
+    {
+      "id": "W031",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "animation_heavy"],
+      "prompt": "Create a premium scroll narrative about the birth of a star. Native APIs are preferred, but one approved animation engine may be requested for a named capability with explicit mount and destroy behavior."
+    },
+    {
+      "id": "W032",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "multiple_components"],
+      "prompt": "Build a data-story site about global migration with an overview, flow visualization, regional profiles, and methodology. Request only approved project dependencies that are genuinely necessary."
+    },
+    {
+      "id": "W033",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "single_component"],
+      "prompt": "Create one interactive network graph for a fictional research team. It may use a single approved graph library if the required exports and cleanup path are declared precisely."
+    },
+    {
+      "id": "W034",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "reduced_motion_heavy"],
+      "prompt": "Design a smooth-scrolling architecture portfolio. Any approved scroll coordinator must be optional, bounded, torn down cleanly, and omitted entirely for reduced-motion users."
+    },
+    {
+      "id": "W035",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "malformed_dependency"],
+      "prompt": "Build an interactive genomics atlas. A legacy note requests chart-core-v0, which is unavailable; select only a permitted capability or implement the chart natively without retaining the stale alias."
+    },
+    {
+      "id": "W036",
+      "stratum": "permitted_import",
+      "tags": ["permitted_import", "conflicting_id"],
+      "prompt": "Create a gallery with an approved transition library if justified. Correct the supplied duplicate gallery-root ids across overview and detail components and declare unambiguous lifecycle ownership."
+    },
+    {
+      "id": "W037",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "multiple_components"],
+      "prompt": "Build a community-garden planner with plots, crop cards, weather guidance, and tasks. The brief says tasks depends on forecast-widget, but only weather-guide exists; resolve the reference rather than inventing a hidden component."
+    },
+    {
+      "id": "W038",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "animation_heavy"],
+      "prompt": "Create an animated supply-chain explainer. A stale arrow layer calls an export named moveCargo that no component declares; repair the interface explicitly or remove the call."
+    },
+    {
+      "id": "W039",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "no_import"],
+      "prompt": "Make an offline language-learning page. Its old score panel references remote-progress and syncScore, neither of which exists; redesign the local interaction with a valid dependency graph."
+    },
+    {
+      "id": "W040",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "reduced_motion_heavy"],
+      "prompt": "Build a reduced-motion-friendly transit disruption guide. The alert component names an absent map-controller dependency; retain the useful alert behavior without an unknown alias."
+    },
+    {
+      "id": "W041",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "permitted_import"],
+      "prompt": "Create a microscopy image-story. A legacy manifest mentions obsolete zoom-kit and an undeclared focus export; use only a permitted dependency contract or a native implementation with valid wiring."
+    },
+    {
+      "id": "W042",
+      "stratum": "malformed_dependency",
+      "tags": ["malformed_dependency", "single_component"],
+      "prompt": "Build one standalone quiz card. The supplied notes incorrectly say it depends on question-bank; make it genuinely standalone and keep its export surface minimal."
+    },
+    {
+      "id": "W043",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "multiple_components"],
+      "prompt": "Create a conference microsite from a legacy mockup where header, schedule, speakers, and venue all claim id=section. Assign deterministic unique ownership while preserving cross-section navigation."
+    },
+    {
+      "id": "W044",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "animation_heavy"],
+      "prompt": "Build a four-chapter animated space mission story. The old prototypes reuse id=scene and id=canvas in each chapter; namespace every DOM resource and animation lifecycle."
+    },
+    {
+      "id": "W045",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "no_import"],
+      "prompt": "Make a dependency-free civic budget explorer with three charts whose supplied SVGs all use id=gradient. Correct every collision without changing the intended visual palette."
+    },
+    {
+      "id": "W046",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "reduced_motion_heavy"],
+      "prompt": "Create an accessible museum tour where each stop's legacy card repeats id=transcript and id=media. Use unique ownership and a complete reduced-motion, text-first path."
+    },
+    {
+      "id": "W047",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "permitted_import"],
+      "prompt": "Design a product comparison with optional approved charting. Both product panels currently claim chart-root and tooltip; isolate their identifiers, exports, and teardown behavior."
+    },
+    {
+      "id": "W048",
+      "stratum": "conflicting_id",
+      "tags": ["conflicting_id", "single_component"],
+      "prompt": "Build one nested accordion from legacy markup that repeats id=content on every row. Repair the ids, aria-controls links, and keyboard behavior within one owned component."
+    },
+    {
+      "id": "W049",
+      "stratum": "responsive_content",
+      "tags": ["multiple_components", "no_import"],
+      "prompt": "Create a mobile-first wildfire information hub with current-condition examples, preparation steps, evacuation routes, and recovery resources. It must remain clear at 320px and use no external resources."
+    },
+    {
+      "id": "W050",
+      "stratum": "responsive_content",
+      "tags": ["single_component", "reduced_motion_heavy"],
+      "prompt": "Build one responsive periodic-table explorer that becomes a readable categorized list on narrow screens and communicates state changes without relying on motion."
+    },
+    {
+      "id": "W051",
+      "stratum": "responsive_content",
+      "tags": ["multiple_components", "permitted_import"],
+      "prompt": "Design an editorial data story about housing supply with a narrative, small charts, definitions, and source notes. Use an approved chart dependency only if its exact benefit exceeds native SVG."
+    },
+    {
+      "id": "W052",
+      "stratum": "responsive_content",
+      "tags": ["animation_heavy", "reduced_motion_heavy"],
+      "prompt": "Create a responsive weather-systems explainer with animated fronts and pressure fields on large screens, plus a complete static diagram sequence for small or reduced-motion contexts."
+    },
+    {
+      "id": "W053",
+      "stratum": "responsive_content",
+      "tags": ["multiple_components", "conflicting_id"],
+      "prompt": "Build a responsive online exhibition whose inherited room templates reuse id=artwork and id=caption. Correct the collisions and preserve deep-link-style navigation between rooms."
+    },
+    {
+      "id": "W054",
+      "stratum": "responsive_content",
+      "tags": ["multiple_components", "malformed_dependency"],
+      "prompt": "Create a responsive food-systems dashboard. A discarded supplier-map component is still named as a dependency by the summary; remove or replace that edge with explicit valid wiring."
+    },
+    {
+      "id": "W055",
+      "stratum": "interaction_state",
+      "tags": ["multiple_components", "no_import"],
+      "prompt": "Build a local trip-planning prototype with destination cards, a day-by-day itinerary, budget summary, and clear empty/error states, entirely in one offline HTML file."
+    },
+    {
+      "id": "W056",
+      "stratum": "interaction_state",
+      "tags": ["single_component", "permitted_import"],
+      "prompt": "Create one kanban board component with keyboard-accessible cards, filtering, undo feedback, and optional use of one approved drag capability with explicit cleanup."
+    },
+    {
+      "id": "W057",
+      "stratum": "interaction_state",
+      "tags": ["animation_heavy", "reduced_motion_heavy"],
+      "prompt": "Design an interactive music-theory lesson with animated chord construction, quizzes, persistent visible feedback, and a fully equivalent static reduced-motion mode."
+    },
+    {
+      "id": "W058",
+      "stratum": "interaction_state",
+      "tags": ["multiple_components", "malformed_dependency"],
+      "prompt": "Build a study planner with courses, sessions, progress, and reminders. The old progress panel calls missing calendar-sync; implement valid local state flow without that undeclared export."
+    },
+    {
+      "id": "W059",
+      "stratum": "interaction_state",
+      "tags": ["multiple_components", "conflicting_id"],
+      "prompt": "Create a multi-step application form whose copied steps all use id=form-title and id=error. Correct ownership, labels, focus movement, and summary behavior."
+    },
+    {
+      "id": "W060",
+      "stratum": "interaction_state",
+      "tags": ["multiple_components", "permitted_import", "reduced_motion_heavy"],
+      "prompt": "Build an interactive biodiversity dashboard with filters, species details, and habitat transitions. Any approved dependency must be bounded and removable; reduced-motion mode must preserve all filtering and content."
+    }
+  ]
+}

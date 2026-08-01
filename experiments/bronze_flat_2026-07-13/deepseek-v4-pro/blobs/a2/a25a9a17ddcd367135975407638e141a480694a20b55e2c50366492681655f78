@@ -1,0 +1,1 @@
+{"attack": true, "case": "The target declares a 'unifier' stance but references a reseed_of target that is not present in the pack, making the commitment unverifiable and semantically vacuous.", "counterexample": null}

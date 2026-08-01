@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-3ee6e1c8fb111609cf76492962d56f70) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Which durable binding, alone, turns silent divergence between a published result and its replayed log from a possibility into a contradiction?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e0e598ec0593f73b7165b49b: program:reasoning_observation_pending
+- reason-counter@15356296fbe076148540c187: program:reasoning_observation_pending
+- reason-counter@ac37821461abb7cb5930f5cf: program:reasoning_observation_pending
+- reason-counter@5194301899b5d4d29f4cf19f: program:reasoning_observation_pending
+- reason-counter@84764a75649135415be57bda: program:reasoning_observation_pending
+- reason-counter@934238512fdac042824288be: program:reasoning_observation_pending
+- reason-counter@be98d5ade577127a264b22e6: program:reasoning_observation_pending
+- reason-counter@edcc033a5258b9a19e4f41f6: program:reasoning_observation_pending
+- reason-counter@f0162ccd6d20454ca15bf670: program:reasoning_observation_pending
+- reason-counter@a05c4438741cc9c69b682957: program:reasoning_observation_pending
+- reason-counter@f47fe6a6fb85db4b2a571d70: program:reasoning_observation_pending
+- reason-counter@b3486cc095f3fa2737f86c6f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The durable binding is **formal specification of the log's transition rules**, where silent divergence becomes a contradiction because the replayed log must adhere to the specified rules, and any deviation is a logical inconsistency.","counterconditions":[{"case":"The specification must be complete (i.e., cover all possible transitions) and unambiguous.","eval":"observation"},{"case":"The replay mechanism must be able to verify adherence to the specification (e.g., via model checking or theorem proving).","eval":"observation"},{"case":"The specification must account for non-determinism (e.g., external inputs) if present in the log.","eval":"observation"},{"case":"The specification itself must be immutable or versioned to prevent retroactive changes.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A formal specification (e.g., temporal logic, state machine) defines the valid transitions of the log. If the replayed log violates these rules, the divergence is a contradiction because the log cannot simultaneously satisfy the specification and diverge from it. This binding does not rely on cryptography but on logical consistency.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e0e598ec0593f73b7165b49b, reason-counter@15356296fbe076148540c187, reason-counter@ac37821461abb7cb5930f5cf, reason-counter@5194301899b5d4d29f4cf19f
+
+TARGET SRC_002
+{"analogy":null,"claim":"The durable binding is **social consensus on the log's integrity**, where silent divergence becomes a contradiction because the community's shared belief in the log's correctness makes any divergence a violation of collective trust.","counterconditions":[{"case":"The community must be large and decentralized enough to resist collusion or coercion.","eval":"observation"},{"case":"The log's state must be publicly verifiable (e.g., via cryptographic hashes or signatures).","eval":"observation"},{"case":"The replay mechanism must be able to detect divergence from the consensus view (e.g., via majority voting or quorum systems).","eval":"observation"},{"case":"The consensus mechanism must be resistant to Sybil attacks or other forms of manipulation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Social consensus (e.g., via distributed ledger networks or reputational systems) binds the log's state through collective agreement. If the replayed log diverges from the consensus view, the divergence is a contradiction because the log cannot simultaneously be correct in the eyes of the community and diverge from it.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@84764a75649135415be57bda, reason-counter@934238512fdac042824288be, reason-counter@be98d5ade577127a264b22e6, reason-counter@edcc033a5258b9a19e4f41f6
+
+TARGET SRC_003
+{"analogy":null,"claim":"The durable binding is **trusted timestamping**, where the log's state at publication time is anchored to a globally trusted time source, making retroactive alterations detectable as temporal inconsistencies.","counterconditions":[{"case":"The timestamping authority must be trusted and tamper-proof.","eval":"observation"},{"case":"The log's state must be fully captured at the time of timestamping (e.g., no hidden state).","eval":"observation"},{"case":"The replay mechanism must be able to verify the timestamp's authenticity and integrity.","eval":"observation"},{"case":"The timestamping mechanism must be resistant to replay attacks (e.g., by including a nonce or unique identifier).","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Trusted timestamping (e.g., via a timestamping authority or decentralized network) binds the log's state to a specific time. If the replayed log diverges from the timestamped state, the divergence is a contradiction because the log cannot simultaneously exist in two states at the same time.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f0162ccd6d20454ca15bf670, reason-counter@a05c4438741cc9c69b682957, reason-counter@f47fe6a6fb85db4b2a571d70, reason-counter@b3486cc095f3fa2737f86c6f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

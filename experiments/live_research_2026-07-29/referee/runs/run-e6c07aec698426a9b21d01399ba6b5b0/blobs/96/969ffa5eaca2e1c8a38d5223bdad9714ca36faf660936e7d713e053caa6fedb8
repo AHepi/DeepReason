@@ -1,0 +1,108 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Idempotence means f(f(x)) = f(x): repeated invocation produces the same observable result as a single invocation. Safety means the operation preserves all system invariants. These are orthogonal: an operation can be idempotent but unsafe (e.g., a delete that removes a required invariant-maintaining record), or safe but non-idempotent (e.g., append to a monotonic log, where duplicating an entry changes the log's content without violating its invariants). An append-only event log must require safety of its writers, not idempotence, because at-least-once delivery will produce duplicate entries, and the log survives as long as its invariants (monotonicity, immutability of past entries) remain intact.",
+      "mechanism": "An append-only log's invariants are structural: once written, entries are immutable; the sequence index is monotonically increasing. A retried append inserts a duplicate entry at a new index. The log's invariants are preserved because (1) no past entry is modified, (2) the new index is still monotonically larger, and (3) the log remains append-only. The operation is safe but not idempotent: the log state after two appends differs from the state after one append (two entries vs. one), yet no invariant is violated. Consumers downstream handle deduplication; the log itself only needs the safety guarantee.",
+      "counterconditions": [
+        "If the log's invariants include uniqueness of event content (not just structural monotonicity), then a duplicate append would violate an invariant, making safety insufficient without additional deduplication.",
+        "If the log models a state machine where each entry's effect is applied immediately and non-commutatively, then safety alone would not prevent incorrect state from duplicate entries.",
+        "If 'safety' is defined relative to application-level invariants rather than log-level invariants, then append is not automatically safe."
+      ],
+      "optional_refs": ["SRC_002", "SRC_006", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.9
+    },
+    {
+      "claim": "An append-only event log requires neither idempotence nor safety from its writers in the traditional sense. The log's invariants are preserved by the semantics of append itself — any byte sequence appended to a monotonic, immutable log trivially maintains monotonicity and immutability. The requirement is not a property of the write operation but a property of the log's construction: the log enforces append-only-ness structurally, so no writer can violate invariants regardless of retries. Idempotence and safety are concerns for the consumers who must deduplicate and interpret entries, not for the writers who merely produce them.",
+      "mechanism": "The log is a data structure with enforced invariants: it only accepts append operations, and once data is written it cannot be modified. Because the only permitted mutation is 'add at end,' the invariants (monotonic index growth, past-immutability) are tautologically preserved by any append, including duplicates. The writer's operation doesn't need a special property — the log's interface restricts the operation space so that no unsafe or invariant-violating action is expressible. At-least-once delivery simply produces duplicate entries; the log's invariants are unaffected. Deduplication becomes a reader contract, not a writer requirement.",
+      "counterconditions": [
+        "If the log interface permits operations beyond pure append (e.g., conditional append, compare-and-set), then the invariants are no longer automatically preserved, and safety/idempotence become relevant.",
+        "If the log's correctness depends on external observers seeing exactly-once delivery (not just structural integrity), then the log does need to constrain writers beyond mere append semantics.",
+        "If 'safety' is a property ascribed to the write operation itself (not the log interface), then claiming the log 'requires neither' conflates interface enforcement with operation-level guarantees."
+      ],
+      "optional_refs": ["SRC_001", "SRC_007"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.7
+    },
+    {
+      "claim": "Idempotence and safety are complementary requirements that apply at different system boundaries. Idempotence (f(f(x))=f(x)) is the property required at the retry/replay boundary to make at-least-once delivery behave like exactly-once from the caller's perspective. Safety (preserving invariants) is the property required at the log/state boundary to ensure the system's correctness conditions hold under any operation. An append-only event log must require safety of its writers to preserve log invariants under duplicates, while the broader system must provide idempotence at the consumer boundary to make retried processing correct. The log requires safety; the pipeline requires idempotence.",
+      "mechanism": "At the log boundary, a writer appends entries. Retries produce duplicates. Safety ensures the log's invariants (monotonicity, immutability) survive duplicates. At the consumer boundary, a processor reads entries and applies effects. Retried processing of a duplicate entry would double-apply effects unless the consumer is idempotent. The two properties address different failure modes: safety prevents structural corruption of the log; idempotence prevents semantic corruption of derived state. The log's survival under at-least-once delivery depends on safety (writers don't break the log), while correct replay depends on consumer-side idempotence (reprocessing doesn't break derived state).",
+      "counterconditions": [
+        "If the log's writers and consumers are the same actor (e.g., a single process that both logs and applies), the boundary distinction collapses and the system needs both properties simultaneously at one boundary.",
+        "If the log's invariants already imply idempotence (e.g., a set-based log where duplicate appends are structurally absorbed), then requiring safety alone is sufficient and the boundary distinction is unnecessary.",
+        "If safety is defined broadly enough to include semantic correctness of downstream effects, then safety subsumes idempotence and the two-property framework is redundant."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.5
+    },
+    {
+      "claim": "The distinction between idempotent and safe is best demonstrated by counterexamples showing they are independent dimensions. (A) Idempotent but unsafe: an operation that sets a critical flag to 'disabled' — calling it once or twice yields the same state (idempotent), but it violates an invariant requiring the flag to be 'enabled.' (B) Safe but non-idempotent: appending a timestamped event to a log — the log's invariants are preserved (safe), but two appends produce two entries with different indices (not idempotent). An append-only event log requires safety, not idempotence, because the counterexamples prove that idempotence neither implies nor is implied by invariant preservation.",
+      "mechanism": "Orthogonality proof by counterexample: (A) shows idempotence does not guarantee safety (the disabled-flag operation is idempotent but breaks an invariant). (B) shows safety does not guarantee idempotence (append preserves invariants but repeated append changes state). Therefore, requiring idempotence of writers would be both insufficient (idempotent operations can be unsafe) and unnecessary (safe operations need not be idempotent). The log must require the property that actually protects its invariants — safety — and must not require the property that doesn't — idempotence.",
+      "counterconditions": [
+        "If the log's invariants are defined to include content-level uniqueness (no duplicate events), then append-with-duplicates is neither safe nor idempotent, and the counterexample (B) fails.",
+        "If there exists a class of operations that are both idempotent and safe where idempotence is the stronger guarantee (idempotence implies safety for that class), then requiring idempotence would be sufficient even if not necessary.",
+        "If the log's consumers cannot tolerate duplicate entries (e.g., a financial ledger where duplicates cause double-counting), then safety of the log alone is insufficient and the log must enforce deduplication, effectively requiring idempotent semantics at the log boundary."
+      ],
+      "optional_refs": ["SRC_002", "SRC_007"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.35
+    },
+    {
+      "claim": "The real property an append-only event log needs from its writers is neither idempotence nor safety but commutativity of concurrent appends under a total order. The log's correctness under at-least-once delivery depends on the fact that any permutation of valid appends (including duplicates) yields a log whose invariants hold and whose set of distinct events is the same. Idempotence and safety are special cases of this more general requirement: idempotence is commutativity of an operation with itself, and safety is preservation of invariants under any operation in the commutative closure. The log survives at-least-once delivery because appends commute under the total order imposed by the log's index.",
+      "mechanism": "Consider the set of all append operations issued by writers, including duplicates from retries. The log assigns each a unique monotonic index. The final log is a sequence of these appends in index order. Regardless of which duplicates arrive and in what order, the log's invariants (monotonicity, immutability) hold because they are properties of the index assignment, not of the content. The set of distinct events in the log is invariant under duplication because duplicates are identified by content keys. This is a commutativity property: the multiset of appended events is the same regardless of retry patterns; only the ordering (which the log controls) varies.",
+      "counterconditions": [
+        "If appends are not content-addressable (no deduplication key), then the multiset of events is NOT invariant under duplication, and commutativity doesn't help.",
+        "If the log's correctness depends on a specific ordering of events (not just any total order), then commutativity under arbitrary total orders is too weak.",
+        "If the log uses a distributed consensus protocol where append ordering depends on arrival timing, then appends do not commute and the commutativity claim fails."
+      ],
+      "optional_refs": ["SRC_003"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.15
+    },
+    {
+      "claim": "Published definitions make idempotence a strictly stronger property than safety for the specific case of append-only logs: if an append operation were truly idempotent (re-appending the same event yields identical log state), then it would necessarily be safe (invariants preserved, since the state is unchanged). But the converse fails: safe appends that produce duplicate entries are not idempotent. Therefore, if the log could enforce idempotent writes (e.g., via content-addressed deduplication keys), it would get safety for free. The log should require idempotence if it can enforce it, falling back to safety only when idempotent enforcement is infeasible.",
+      "mechanism": "Define idempotent-append as: append(event) with a content-derived key k; if an entry with k already exists, the log state is unchanged. This is idempotent (append(append(e)) = append(e)) and therefore safe (invariants trivially preserved since state is unchanged). Define safe-append as: append(event) unconditionally, producing a new entry at the next index. This is safe (invariants preserved) but not idempotent (state changes). The idempotent variant is strictly stronger: it implies safety. For at-least-once delivery, the idempotent variant is preferable because it eliminates duplicates entirely, not just tolerates them.",
+      "counterconditions": [
+        "If the log's purpose is to record a complete history including retry attempts (e.g., an audit log), then idempotent-append that suppresses duplicates would violate the audit completeness invariant, making idempotence unsafe.",
+        "If content-addressed deduplication keys are expensive to compute or require global coordination, then enforcing idempotence may be impractical and safety-only is the realistic requirement.",
+        "If two semantically distinct events happen to share the same content key (hash collision or semantic ambiguity), idempotent-append would incorrectly suppress the second event, violating correctness."
+      ],
+      "optional_refs": ["SRC_005", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.25
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "python-glossary-idempotent",
+      "purpose": "Check whether the Python glossary contains a published definition of 'idempotent' or 'safe' operations that could serve as citable evidence for distinguishing these properties.",
+      "urls": ["https://docs.python.org/3/glossary.html"]
+    },
+    {
+      "request_identifier": "python-logging-handlers",
+      "purpose": "Examine Python's logging module documentation for how it handles append-only log semantics, retry behavior, and duplicate prevention — potentially relevant to the append-only event log question.",
+      "urls": ["https://docs.python.org/3/library/logging.handlers.html"]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Open question: Does the answer change if the append-only log is distributed (e.g., a replicated log with multiple writers)? In a single-writer log, safety is trivially satisfied by append semantics. In a multi-writer log, concurrent appends may conflict, and the question of whether idempotence or safety is required becomes entangled with consensus and ordering guarantees. The neighbourhood artifacts seem to assume a single-writer model, but the problem statement says 'its writers' (plural).",
+          "why_keep_this": "The plural 'writers' in the problem statement may be a subtle hint that multi-writer semantics matter, and none of the current candidates fully address this.",
+          "possible_next_move": "Investigate whether multi-writer append-only logs (e.g., Kafka, Raft logs) have different requirements for idempotence vs. safety compared to single-writer logs."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "If the log has multiple concurrent writers, does at-least-once delivery require idempotent producers (to prevent duplicate entries from the same producer) AND safety (to preserve ordering invariants under concurrent writes from different producers)?",
+        "related_refs": ["SRC_006", "SRC_008"]
+      }
+    ]
+  }
+}
+```

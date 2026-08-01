@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target fails to name a specific causal mechanism as required by the standard. It invokes 'theological-institutional endurance' but does not identify a concrete institution, incentive, or process that would cause the differential outcomes. Instead, it offers a vague contrast between 'ideological legitimation crisis' and 'ma'at ideology' without specifying how these operated as mechanisms. Moreover, the forbidden cases directly contradict the target's claims: (1) the Egyptian 19th Dynasty case shows explicit pharaonic apologetics and usurpation during crisis, which undermines the assertion of 'theological continuity' and 'reabsorption of catastrophe'; (2) the Hittite case demonstrates theological flexibility without regime collapse, which the target's mechanism would predict as a crisis; (3) the Mycenaean case shows the wanax title disappearing but ritual functions persisting under basileus, which the target's mechanism cannot explain as a distinct collapse. These forbidden cases are concrete observations that could realistically have obtained, and they violate the target's causal story.",
+  "counterexample": [
+    "Egyptian 19th Dynasty shows explicit pharaonic apologetics and usurpation precisely during crisis decades (Ramesses III assassination, Twosret supplantation)",
+    "Hittite vassal treaties and oracle texts show theological flexibility accepting temporary divine disfavor without regime collapse",
+    "Mycenaean palatial collapse correlates with wanax title disappearance from Linear B but post-palatial Greece retains basileus with identical ritual functions"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target violates the std-hist standard because its forbidden case (2) — 'Archaeological evidence of palace-controlled port facilities expanding, not contracting, through 1200 BC at Ugarit and coastal Levant' — is a concrete observation that could realistically have obtained, yet the target's mechanism (merchant sabotage and diversion of bulk cargo) would predict contraction or loss of palace control over port facilities, not expansion. The target offers no mechanism to reconcile expanding palace-controlled ports with simultaneous merchant-led collapse, and the forbidden case directly contradicts the causal story of palace economies starving from diverted trade. Since the target does not address or exclude this counterexample, it fails to satisfy the standard's requirement to state forbidden cases that are concrete observations which could realistically have obtained.",
+"counterexample": ["Archaeological evidence of palace-controlled port facilities expanding, not contracting, through 1200 BC at Ugarit and coastal Levant"]
+}

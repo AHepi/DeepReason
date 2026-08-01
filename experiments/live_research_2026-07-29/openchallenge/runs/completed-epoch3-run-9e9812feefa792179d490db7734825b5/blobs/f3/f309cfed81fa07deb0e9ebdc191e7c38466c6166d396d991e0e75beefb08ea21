@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "A branch-and-bound search utilizing the reflection symmetry (i -> n-1-i) and a 0-1 principle-based admissible lower bound heuristic can exhaustively eliminate the existence of a 44-comparator network for n=13, explaining why search stalls at 45.",
+    "mechanism": "The search constructs comparators sequentially. At each step, the partial network is evaluated against the 8192 binary vectors allowed by the 0-1 principle. An admissible heuristic estimates the minimum additional comparators needed to sort the remaining unsorted binary vectors. If current_comparators + estimated_additional > 44, the branch is pruned. The reflection symmetry i -> n-1-i is used to canonicalize isomorphic networks, reducing the search space.",
+    "counterconditions": [
+      "The heuristic does not actually yield a valid lower bound for the unsorted binary vectors, making the pruning unsafe and potentially missing a valid 44-comparator network.",
+      "The canonicalization of the reflection symmetry fails to correctly prune symmetric equivalents, leading to redundant search instead of a reduction.",
+      "The 0-1 principle is incorrectly applied to partial networks, invalidating the pruning logic."
+    ],
+    "evidence_refs": [
+      {
+        "block": "bfc42b3064ed02fe"
+      },
+      {
+        "block": "6050cf69f391fa33"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    },
+    "typicality": 0.65
+  }
+}

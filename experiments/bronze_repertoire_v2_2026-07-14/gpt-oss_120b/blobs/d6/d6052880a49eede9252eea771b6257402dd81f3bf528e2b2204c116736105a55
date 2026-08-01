@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean Greece, Hittite Anatolia, Ugarit and Levantine city‑states.", "mechanism": "environmental stress (climate‑induced water scarcity)", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Pollen cores from the Levant and Anatolia show no significant decline in moisture levels during 1200–1150 BCE", "eval": "rubric:std-hist"}], "prose_notes": "Chronological narrative links the onset of aridity with documented famines and decline in state capacities. Scholarly register, cites recent paleoclimatic data."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims a prolonged drought mechanism, but its own forbidden case states that pollen cores from the Levant and Anatolia show no significant moisture decline during 1200–1150 BCE. This directly contradicts the claimed mechanism of climate-induced water scarcity for those regions and time period. Under std-hist, a valid mechanism must be consistent with concrete observations that could realistically have obtained; here the forbidden case is precisely such a datable paleoclimatic record, and the target fails to reconcile the mechanism with it, thereby violating the standard's requirement that the mechanism not be refuted by the specified forbidden case.
+
+THE DEFENCE:
+The critic misreads the target’s forbidden case. The target states that pollen cores from the Levant and Anatolia show no significant moisture decline during 1200–1150 BCE. This does not contradict the claimed mechanism of a prolonged drought from c.1220–1160 BCE, because the forbidden case addresses only the later portion of that window (1200–1150 BCE) and does not rule out severe aridity in the earlier phase (c.1220–1200 BCE) that could have triggered the successive crop failures and undermined agricultural bases before 1200 BCE. Under std-hist, a mechanism is not refuted by a forbidden case that is temporally narrower than the mechanism’s own timeframe and does not cover the critical onset period. The target therefore remains consistent with the specified paleoclimatic record as presented.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

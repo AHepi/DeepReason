@@ -1,0 +1,55 @@
+{
+  "candidate": {
+    "claim": "The fetch budget must be denominated in both requests and bytes, with exhaustion defined as the first of either limit being reached, and recorded as a typed terminal event that includes a cryptographic commitment to the budget policy, the final counter values, and a non-repudiable signature, ensuring replayability and auditability.",
+    "mechanism": "A non-bypassable guard in the fetch loop checks before each fetch whether the next request would exceed either the request count or byte count limit. If so, it transitions to a terminal state, logging a structured event with a unique type identifier, the budget policy hash, the current counters, and a signature over the event using the agent's identity key. During replay, the log is replayed deterministically; the terminal event is re-emitted at the same point, and no actual fetch is performed beyond that point. The byte count is based on the logged bytes received, not re-fetched, to ensure deterministic replay.",
+    "counterconditions": [
+      "If the agent can modify its own budget policy during execution without detection, the typed terminal can be bypassed.",
+      "If the byte count of a fetch is not deterministic (e.g., due to compression that varies with network conditions), replay may diverge.",
+      "If the agent can perform side-channel fetches (e.g., via DNS or other protocols) that are not counted, the budget is not truly enforced.",
+      "If the terminal event can be forged or omitted by a compromised agent, the audit trail is not trustworthy.",
+      "If the budget policy is not known in advance or changes dynamically, a single typed terminal may not capture the full exhaustion semantics.",
+      "If the runtime environment cannot guarantee non-bypassability of the guard, the agent may learn to circumvent it."
+    ],
+    "typicality": 0.6,
+    "analogy": {
+      "source_memory_refs": [
+        "SCR_001",
+        "SCR_002"
+      ],
+      "shared_structure": [
+        "Both systems have a finite resource (fuel/fetch budget) that is consumed in discrete units (liters/requests) and continuously (fuel flow/bytes).",
+        "Exhaustion triggers a hard stop (engine cutoff/typed terminal) rather than silent degradation (reduced power/stale cache).",
+        "The stop event is recorded in a log (dashboard indicator/audit trail) for later inspection."
+      ],
+      "disanalogies": [
+        "A car's fuel gauge is physical and cannot be tampered with by the car's computer; an agent's budget counter is software and could be manipulated.",
+        "A car's engine cutoff is a physical event; a typed terminal is a logical event that requires cryptographic integrity to be trustworthy.",
+        "Fuel consumption is directly measurable; byte counts may depend on network compression and require careful logging for replay."
+      ],
+      "transfer_claims": [
+        "The typed terminal should be as non-bypassable as a physical fuel cutoff, enforced by the runtime environment, not the agent's own code.",
+        "The exhaustion event must be as unambiguous as an empty fuel gauge, leaving no room for the agent to continue in a degraded mode."
+      ],
+      "overturn_conditions": [
+        "If the runtime environment cannot guarantee non-bypassability, the analogy fails.",
+        "If the agent can refuel (reset the budget) without an auditable event, the hard-stop property is lost.",
+        "If the cost of cryptographic signing per fetch is prohibitive, the analogy's practicality is undermined."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  },
+  "abstention": null
+}

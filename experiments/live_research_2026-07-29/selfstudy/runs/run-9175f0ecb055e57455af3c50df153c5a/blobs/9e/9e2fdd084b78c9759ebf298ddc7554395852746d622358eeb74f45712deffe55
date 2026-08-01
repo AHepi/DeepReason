@@ -1,0 +1,3 @@
+```json
+{"op": "add", "path": "/values", "value": [1, 2, 5]}
+```

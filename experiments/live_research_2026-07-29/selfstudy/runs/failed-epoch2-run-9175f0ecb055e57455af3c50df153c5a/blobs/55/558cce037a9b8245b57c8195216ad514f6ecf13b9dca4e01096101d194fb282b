@@ -1,0 +1,13 @@
+```json
+{
+  "candidate": {
+    "content": "STATE_OF_THE_THEORY.md shares mechanism with BASIN REPORT.md: both implement self-referential auditing of the theory's conjecture-production pipeline — the state inventory in the former and the refuted-attractor / repertoire-exhaustion diagnosis in the latter arise from the same lineage-ref tracking primitive that lets the system inspect its own propositional history. The state report enumerates what the machine currently holds (claims, lineage, open questions), while the basin report diagnoses the failure mode where that inventory stops growing productively. This relation is refuted if the state inventory in STATE_OF_THE_THEORY.md can be faithfully produced without any lineage tracking, or if the refuted-attractor phenomenon in BASIN REPORT.md is shown to arise from a mechanism wholly independent of the theory's self-reported state (e.g., purely from external token constraints with no lineage dependency), since that would sever the shared-mechanism link.",
+    "typicality": 0.62,
+    "evidence_refs": [
+      {"block": "0e26d6be54fd", "quote": null},
+      {"block": "0f99efbab8a4", "quote": null}
+    ],
+    "neighbours": ["SRC_002", "SRC_003", "SRC_001"]
+  }
+}
+```

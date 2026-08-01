@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's mechanism posits a critical bronze shortage that delegitimized warrior elites, yet it explicitly lists as forbidden 'Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation.' This forbidden case is a concrete, datable observation that directly contradicts the claimed mechanism: if a bronze shortage caused the collapse, abundant stockpiles in the final decade should not exist. The target fails to explain how its mechanism is compatible with this evidence, thereby violating the standard's requirement that forbidden cases be concrete observations which could realistically have obtained and that the mechanism must account for them.
+The standard requires naming a specific causal mechanism and stating forbidden cases that are concrete observations. The target's own forbidden case—abundant bronze stockpiles in the final decade—directly undermines the claimed mechanism of a bronze shortage causing elite delegitimization. The mechanism does not explain how a shortage could coexist with abundant stockpiles, making the account internally inconsistent and failing the standard's demand for a coherent causal process.
+cites: {"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source (e.g., from Afghanistan or Central Asia) caused a bronze shortage that delegitimized warrior elites whose power depended on monopoly access to metal weaponry, triggering internal revolts.", "mechanism": "Resource bottleneck leading to legitimacy crisis: the inability to produce bronze arms broke the social contract between the palace and the military caste, allowing marginalized groups to overthrow the hierarchy.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Iron-working peripheral groups"]}, "forbidden": [{"case": "Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain hypothesis found in 83eb... by specifying the political mechanism of elite delegitimization rather than just economic contraction."}
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source (e.g., from Afghanistan or Central Asia) caused a bronze shortage that delegitimized warrior elites whose power depended on monopoly access to metal weaponry, triggering internal revolts.", "mechanism": "Resource bottleneck leading to legitimacy crisis: the inability to produce bronze arms broke the social contract between the palace and the military caste, allowing marginalized groups to overthrow the hierarchy.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Iron-working peripheral groups"]}, "forbidden": [{"case": "Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain hypothesis found in 83eb... by specifying the political mechanism of elite delegitimization rather than just economic contraction."}

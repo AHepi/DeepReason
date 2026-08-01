@@ -1,0 +1,42 @@
+{
+  "candidate": {
+    "claim": "Resumption is safely permitted when the causal fingerprint of the recovered complete-event stream aligns with the uninterrupted stream, skipping any trailing partial bytes as non-events; resumption must be refused if the event framing protocol lacks deterministic delimiters to distinguish partial bytes from committed events.",
+    "mechanism": "Token-budget exhaustion may leave partial bytes at the end of the log. Under a self-delimiting framing protocol, these bytes lack event identity and are simply ignored by the resumption protocol. Physical append-only integrity (SCR_006) is preserved because no committed event is modified or deleted. Logical causal continuity (SCR_007) is verified by matching the causal fingerprint of the recovered complete events against the expected uninterrupted stream.",
+    "counterconditions": [
+      "The event framing protocol relies solely on length-prefixing without integrity checks or end-markers, making the quarantine of partial bytes non-deterministic.",
+      "The resumption protocol attempts to re-evaluate or garbage-collect the trailing partial bytes, treating them as committed events and violating append-only integrity.",
+      "A causal fingerprint cannot be computed or matched due to insufficient protocol state, preventing verification of logical causal continuity."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "shared_structure": [
+        "Two-level decomposition of integrity into physical append-only integrity and logical causal continuity.",
+        "Quarantine of incomplete records to preserve causal identity without violating append-only semantics."
+      ],
+      "disanalogies": [
+        "Database Write-Ahead Logs use explicit checkpoint records, whereas token-budget exhaustion leaves implicit unframed fragments.",
+        "Database recovery explicitly replays and re-applies transactions, whereas reasoning resumption simply matches fingerprints and skips non-events."
+      ],
+      "transfer_claims": [
+        "The quarantine mechanism for partial logs in physical systems applies directly to reasoning event streams: partial data is skipped without violating integrity.",
+        "Causal fingerprint matching from distributed systems applies to logical causal continuity verification in reasoning runs."
+      ],
+      "overturn_conditions": [
+        "If event framing is proven non-deterministic even with checksums, the quarantine mechanism fails and resumption must be refused.",
+        "If causal fingerprints are found to be computationally indistinguishable for divergent event streams, logical continuity verification fails."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.75
+  }
+}

@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Ugarit had multiple merchant guilds and parallel administrative structures analogous to Egyptian temple networks
+TARGET:
+{"claim": "Egypt survived because its centralized temple-state redistributive apparatus was structurally antifragile compared to peer-polity palace systems","mechanism": "The New Kingdom combined pharaonic ideology with temple estates (Amun, Ptah, Ra) that maintained parallel surplus networks; when one node failed, others compensated, unlike Mycenaean wanax-systems or Hittite vassal networks that collapsed through single-point administrative failure","scope": {"covers": ["Egypt", "Mycenaean Greece", "Hittite Anatolia"], "excludes": ["Ugarit", "Levantine city-states"]}, "forbidden": [{"case": "Egyptian temple estates show simultaneous collapse and centralization under Ramesses III, not mutual buffering", "eval": "rubric:std-hist"}, {"case": "Ugarit had multiple merchant guilds and parallel administrative structures analogous to Egyptian temple networks", "eval": "rubric:std-hist"}, {"case": "The Egyptian state under Ramesses III experienced precisely the same invasion pressures but with identical institutional responses to peer polities", "eval": "rubric:std-hist"}], "prose_notes": "Institutional-comparison candidate; deliberately atypical in applying Taleb-style antifragility to Bronze Age. Requires Egypt as controlled exception."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

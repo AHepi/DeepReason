@@ -65,6 +65,19 @@ def resolve_standard(harness, spec_id: str) -> Artifact | None:
     return found
 
 
+def registered_specs(harness) -> list[str]:
+    """Sorted spec ids of every registered standard — for actionable errors:
+    an operator must know which spec ids appellate_rule will accept (observed
+    live: an operator invented a spec id and hit a bare KeyError)."""
+    return sorted(
+        {
+            body["spec"]
+            for artifact in harness.state.artifacts.values()
+            if (body := _body(artifact, harness)) is not None
+        }
+    )
+
+
 def standard_body(harness, artifact: Artifact) -> dict:
     body = _body(artifact, harness)
     if body is None:

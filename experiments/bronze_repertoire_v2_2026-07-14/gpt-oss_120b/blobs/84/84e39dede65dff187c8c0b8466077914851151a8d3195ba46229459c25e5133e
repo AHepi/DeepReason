@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:8f32aa39316b
+connect isolated 8f32aa39316b to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 8f32aa39316b49f3d34b3e0f454c645b7d1da4d35ab590667aca06bad4c3c9f1: {"claim": "A series of unprecedented winter storm surges between 1220‑1180 BC inundated coastal lowlands, salinizing soils and destroying agricultural productivity across Mycenaean Greece, Hittite Ana
+- 1fe6d68867d2405aa1202375e144b92c864775b817f8e9209c166ede656022a9: {"claim": "The abrupt collapse of the long‑distance tin trade network originating in Central Asia removed the essential alloying component for bronze, crippling weapon production and elite prestige ec
+- 16c66d431a97d1e7c10aca0319fb2f8f19019eead005b860d0e9acf1fa126872: {"claim": "A trans‑Mediterranean coalition of early Iron‑age hill‑state warriors, often identified in epigraphic fragments as the ‘Northern Confederation’, launched coordinated raids on coastal palace
+- a440e9c75cc3bebc97f382106b94ab768f1ecdd1f660549ce689261a080073c4: {"claim":"A rapid shift to cooler, wetter climate around 1190‑1150 BCE caused agricultural system collapse in the Eastern Mediterranean.","mechanism":"Hydroclimatic regime shift leading to flood‑induc
+- b99ba6a6418c0b1c1d6a8a7e51ecd6a7e9e1607032a61e256898f85fa510dbd0: {"claim":"Emergent coastal alliances instituted a systematic naval blockade of Eastern Mediterranean trade lanes, choking the resource inflow to palace economies.","mechanism":"Maritime coalition econ
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

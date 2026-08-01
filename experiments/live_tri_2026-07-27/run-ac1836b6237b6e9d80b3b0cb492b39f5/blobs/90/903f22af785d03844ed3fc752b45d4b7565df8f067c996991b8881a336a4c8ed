@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@206eb164fb9c6a33e69cb829: program:reasoning_observation_pending
+- reason-counter@83e4b0620871b4d6226c3e6a: program:reasoning_observation_pending
+- reason-counter@4b63045a9d564e503ab18cc6: program:reasoning_observation_pending
+- reason-counter@edf792d08ce10fd82fa3685e: program:reasoning_observation_pending
+- reason-counter@9e52e05f9271d6feba8f9cf2: program:reasoning_observation_pending
+- reason-counter@37c74f8fe538b44b857f69b5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget must be denominated in both requests and bytes, with exhaustion recorded as a typed terminal state containing the exhausted resource type, remaining budget of the other, and a timestamp.","counterconditions":[{"case":"If all fetch operations are guaranteed to have uniform response sizes and identical request overhead, then a single denomination (requests or bytes) would suffice without loss of reproducibility.","eval":"observation"},{"case":"If the environment provides only one type of constraint (e.g., API rate limits but no data caps), then the dual budget is unnecessarily complex.","eval":"observation"},{"case":"If the agent's fetch strategy can dynamically adapt to avoid exhaustion of one resource while the other is still plentiful, then a composite cost function might be more efficient.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent maintains two monotonic counters: requests_sent and bytes_received. Before each fetch, it checks if either counter would exceed its limit. If so, it transitions to a terminal state, recording a typed event with fields: exhausted_resource (enum: requests, bytes), limit_value, current_value, timestamp, and the other resource's remaining budget. This event is written to an audit log. The terminal state is a specific state in the agent's state machine, ensuring replayability because the same budget limits and same sequence of fetches will deterministically lead to the same exhaustion point.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@206eb164fb9c6a33e69cb829, reason-counter@83e4b0620871b4d6226c3e6a, reason-counter@4b63045a9d564e503ab18cc6
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be denominated in wall-clock time, with exhaustion recorded as a typed terminal event containing the elapsed time and time limit.","counterconditions":[{"case":"If the agent is run on different hardware or under different network conditions, the same time budget will lead to different amounts of work, breaking reproducibility.","eval":"observation"},{"case":"If the goal is cost control, time is a poor proxy because costs are typically per request or per byte, not per second.","eval":"observation"},{"case":"If the agent's tasks are CPU-bound rather than I/O-bound, time budget might be dominated by computation, not fetch.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent sets a timer before starting. If a fetch operation would exceed the remaining time, it is not started, and a 'time_budget_exhausted' event is logged. This is useful for real-time constraints but problematic for replayability because execution time varies.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@edf792d08ce10fd82fa3685e, reason-counter@9e52e05f9271d6feba8f9cf2, reason-counter@37c74f8fe538b44b857f69b5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

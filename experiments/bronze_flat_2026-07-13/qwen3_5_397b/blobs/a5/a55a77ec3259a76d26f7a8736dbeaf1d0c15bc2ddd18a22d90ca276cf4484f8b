@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the interdependent trade networks.\", \"mechanism\": \"Climate-induced agricultural collapse triggered a cascade failure in centralized bureaucracies that could not buffer local shortages without long-distance grain imports, leading to internal revolt and abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed palaces immediately prior to destruction layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal climate-systems view, relying on the high connectivity of the Late Bronze Age as a vulnerability rather than a strength.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a sudden, revolutionary shift in military technology and tactics where decentralized infantry groups overwhelmed static chariot-based aristocracies.\", \"mechanism\": \"The proliferation of inexpensive javelin throwers and raiding bands neutralized the expensive chariot corps that underpinned palace authority, allowing non-state actors to dismantle central power structures rapidly.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Nubia\"]}, \"forbidden\": [{\"case\": \"Evidence showing palace armies successfully adapting infantry tactics prior to their final destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A military-determinist approach that treats the 'Sea Peoples' not as a migration but as a symptom of tactical asymmetry.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The simultaneity is an illusion caused by the fragility of complex supply chains for essential prestige goods (tin and copper), where a localized disruption in Cyprus triggered a continent-wide loss of elite legitimacy.\", \"mechanism\": \"A critical node failure in the copper supply chain prevented the production of bronze weapons and ritual objects, causing immediate delegitimization of kings who could no longer reward followers or arm defenses, leading to rapid political fragmentation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Cyprus\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Iran\", \"Italy\"]}, \"forbidden\": [{\"case\": \"Discovery of functional bronze foundries operating at full capacity in destroyed cities during the terminal phase\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical supply-chain shock model that prioritizes economic legitimacy over environmental or direct military causes.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "mention",
+          "target": "f06b3cabf9fc833417c5ceb4f0c88a7f9d49b36e10e668a2f23abf58c48c4115"
+        }
+      ],
+      "typicality": 0.28
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target explicitly claims that Cypriot copper production declined due to resource exhaustion and deforestation, causing a systemic trade collapse. However, the first forbidden case directly contradicts this: 'Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive.' Under the std-hist rubric, a valid historical-mechanism account must be falsifiable by concrete, datable observations. The forbidden case provides precisely such an observation—a specific archaeological record showing peak production and extensive forests at the very moment the target claims depletion and deforestation occurred. This is a direct empirical refutation of the mechanism's core factual premise, rendering the causal chain unsound.",
+  "counterexample": [
+    "Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive, directly contradicting the claimed exhaustion of copper and deforestation."
+  ]
+}

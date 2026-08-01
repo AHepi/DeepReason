@@ -1,0 +1,77 @@
+{
+  "prompt_tokens": 831645,
+  "completion_tokens": 670012,
+  "calls": 1873,
+  "phases": {
+    "judge-zoo:gpt-oss:120b": {
+      "prompt_tokens": 65681,
+      "completion_tokens": 88515,
+      "calls": 136
+    },
+    "judge-zoo:qwen3-coder:480b": {
+      "prompt_tokens": 49551,
+      "completion_tokens": 1860,
+      "calls": 120
+    },
+    "judge-zoo:deepseek-v4-flash": {
+      "prompt_tokens": 48328,
+      "completion_tokens": 2066,
+      "calls": 120
+    },
+    "judge-zoo:deepseek-v4-pro": {
+      "prompt_tokens": 48328,
+      "completion_tokens": 1989,
+      "calls": 120
+    },
+    "judge-zoo:glm-5.2": {
+      "prompt_tokens": 48733,
+      "completion_tokens": 2058,
+      "calls": 120
+    },
+    "judge-zoo:kimi-k2.6": {
+      "prompt_tokens": 48896,
+      "completion_tokens": 1973,
+      "calls": 120
+    },
+    "judge-zoo:minimax-m2.7": {
+      "prompt_tokens": 214494,
+      "completion_tokens": 461684,
+      "calls": 410
+    },
+    "judge-zoo:mistral-large-3:675b": {
+      "prompt_tokens": 49639,
+      "completion_tokens": 2323,
+      "calls": 120
+    },
+    "judge-zoo:nemotron-3-ultra": {
+      "prompt_tokens": 51319,
+      "completion_tokens": 1967,
+      "calls": 120
+    },
+    "judge-zoo:qwen3.5:397b": {
+      "prompt_tokens": 50652,
+      "completion_tokens": 3753,
+      "calls": 121
+    },
+    "judge-zoo:gemma3:27b": {
+      "prompt_tokens": 49272,
+      "completion_tokens": 1965,
+      "calls": 120
+    },
+    "judge-rlow:deepseek-v4-flash": {
+      "prompt_tokens": 50849,
+      "completion_tokens": 85385,
+      "calls": 125
+    },
+    "judge-rlow:gpt-oss:120b": {
+      "prompt_tokens": 55704,
+      "completion_tokens": 14228,
+      "calls": 120
+    },
+    "judge-rlow:kimi-k2.6": {
+      "prompt_tokens": 199,
+      "completion_tokens": 246,
+      "calls": 1
+    }
+  }
+}
