@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import ast
 import inspect
+import json
 from pathlib import Path
 
 from deepreason.llm import packs
@@ -635,6 +636,184 @@ def test_the_cross_school_gate_governs_only_a_single_family_run():
     one_school = (_judge_binding("school-0", seats[0]), _judge_binding("school-0", seats[1]))
     with pytest.raises(JudgeSchoolEnsemblePolicyError):
         _adapter({"judge": seats}, one_school)._select_judge_ensemble()
+
+
+_DEMO_CASE = "clause 2 forbids parallel fifths and bar 3 has them"
+_DEMO_DEFENCE = "the fifths echo the cantus firmus deliberately"
+_DEMO_RULING = json.dumps(
+    {"verdict": "fail", "decisive_point": "bar 3 has them"}
+)
+
+
+def _single_family_trial_adapter(harness):
+    """critic + defender + two judge seats, ONE family, TWO schools bound.
+
+    Both judge endpoints share a model id, so `infer_model_family` gives them
+    one family and the cross-family gate is unsatisfiable by construction --
+    the situation R13/R15 scope the new path to.
+    """
+
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.llm.firewall import leases_from_endpoints
+
+    # Every seat carries the same model id: R15 is "a single model is running
+    # the ENTIRE harness", so a mock-family critic beside a glm-family judge
+    # would be a multi-family run and correctly disqualified.
+    endpoints = {
+        "argumentative_critic": MockEndpoint(
+            [json.dumps({"attack": True, "case": _DEMO_CASE})],
+            name="mock://critic",
+            model="glm-test",
+        ),
+        "defender": MockEndpoint(
+            [json.dumps({"answer": _DEMO_DEFENCE})],
+            name="mock://defender",
+            model="glm-test",
+        ),
+        "judge": [
+            MockEndpoint([_DEMO_RULING], name="mock://judge-a", model="glm-test"),
+            MockEndpoint([_DEMO_RULING], name="mock://judge-b", model="glm-test"),
+        ],
+    }
+    leases = leases_from_endpoints(endpoints)
+    bindings = (
+        _judge_binding("school-0", leases["judge"][0]),
+        _judge_binding("school-1", leases["judge"][1]),
+    )
+    return LLMAdapter(
+        endpoints,
+        harness.blobs,
+        retry_max=2,
+        leases=leases,
+        school_judge_bindings=bindings,
+    )
+
+
+def test_a_single_family_run_can_refute_by_prose_end_to_end(harness):
+    """Implements S2/R2 ("Prose can refute") in a single-family run.
+
+    The whole extension, exercised rather than described: one model family
+    across both judge seats, two schools bound to those seats, the new
+    authority mode, and a target carrying no evaluable commitment. The
+    outcome asserted is the typed record -- an attack edge and a REFUTED
+    status -- not the model's prose.
+
+    The refutation must come from PROSE, not from the mechanical channel that
+    already mints defeats (FEASIBILITY.md risk 6, A7). The target here carries
+    a `rubric:` commitment, which `programs.evaluable` rejects and no oracle
+    can run, and the warrant is asserted to be ARGUMENTATIVE rather than
+    DEMONSTRATIVE. That is what makes this evidence for S2.
+    """
+
+    from deepreason import programs
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment, Interface, Provenance, Status, WarrantType
+    from deepreason.rules.crit import crit_argumentative
+    from deepreason.informal.standards import register_standard
+
+    register_standard(harness, "std-fifths", "clause 2: no parallel fifths")
+    kappa = Commitment(id="kappa-fifths", eval="rubric:std-fifths")
+    harness.register_commitment(kappa)
+    assert programs.evaluable(kappa) is False
+
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    adapter = _single_family_trial_adapter(harness)
+    from deepreason.llm.firewall import is_single_family_run
+
+    assert is_single_family_run(adapter.leases) is True
+
+    critic = crit_argumentative(
+        harness,
+        target.id,
+        adapter,
+        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+    )
+
+    assert critic is not None
+    assert len(harness.state.att) >= 1
+    assert harness.state.status[target.id] == Status.REFUTED
+
+    warrant = next(w for w in harness.warrants.values() if w.target == target.id)
+    assert warrant.type == WarrantType.ARGUMENTATIVE, warrant.type
+
+
+def test_the_same_run_under_the_old_mode_refutes_nothing(harness):
+    """Implements S2's contrast: the mode is what changed, not the fixture.
+
+    Identical target and identical adapter under `observe_only` must leave the
+    graph unmoved. Without this the previous test could be passing because of
+    the fixture rather than because of the authority value.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment, Interface, Provenance, Status
+    from deepreason.rules.crit import crit_argumentative
+    from deepreason.informal.standards import register_standard
+
+    register_standard(harness, "std-fifths", "clause 2: no parallel fifths")
+    kappa = Commitment(id="kappa-fifths", eval="rubric:std-fifths")
+    harness.register_commitment(kappa)
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    critic = crit_argumentative(
+        harness, target.id, _single_family_trial_adapter(harness), Config()
+    )
+
+    assert critic is not None  # the case is still recorded as scrutiny
+    assert not harness.state.att
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    assert not harness.warrants
+
+
+def test_the_minting_critic_carries_a_school_other_than_the_targets(harness):
+    """Implements R14 at the point a warrant is actually minted.
+
+    The trial stamps the critic and its validity node with the critic's school.
+    Asserted here on the artifact the warrant hangs from, so "a critic isn't
+    from the same school" is checked where the status change happens rather
+    than only where the assignment was planned (step 4).
+    """
+
+    from deepreason.config import Config
+    from deepreason.informal.trial import run_argument_trial_from_case
+    from deepreason.ontology import Commitment, Interface, Provenance, Status
+    from deepreason.informal.standards import register_standard
+
+    register_standard(harness, "std-fifths", "clause 2: no parallel fifths")
+    kappa = Commitment(id="kappa-fifths", eval="rubric:std-fifths")
+    harness.register_commitment(kappa)
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    critic = run_argument_trial_from_case(
+        harness,
+        _single_family_trial_adapter(harness),
+        Config(),
+        target.id,
+        _DEMO_CASE,
+        None,
+        authority="status",
+        critic_school_id="school-1",
+    )
+
+    assert critic is not None
+    assert harness.state.status[target.id] == Status.REFUTED
+    assert target.provenance.school == "school-0"
+    assert critic.provenance.school == "school-1"
+    assert critic.provenance.school != target.provenance.school
 
 
 def test_the_single_family_predicate_fails_closed_on_no_leases():

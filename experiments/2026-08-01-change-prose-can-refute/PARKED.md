@@ -15,6 +15,14 @@ One line each. Noticed while capturing this request, not part of it.
   widening the guard would change what every existing run may do, so it is not
   done under an assumption. Asserted as-is in
   `test_the_formal_boundary_is_execution_backing_and_not_evaluability`.
+- **The cross-school gate is unwired for live runs.** `llm/adapter.py:1467` is
+  the only production `LLMAdapter` construction and it passes no
+  `school_judge_bindings`, so `_select_judge_ensemble` always falls back to
+  cross-family in a real run. The architecture is complete and proven offline
+  (step 12); it is not reachable from a ladder. Natural source:
+  `run_manifest.criticism_policy.bindings` filtered to `role == "judge"`.
+  Not done here — nothing in R7-R17 or S7-S12 asks for it, and it would change
+  gate selection for every v6 run that carries judge bindings.
 - **`render_batch_crit_pack` still prefix-clips its targets**
   (`llm/packs.py:594`, `content_text(target, blobs)[:content_chars]`) — the
   exact "ends abruptly" truncation `_document_excerpt` was written to avoid,

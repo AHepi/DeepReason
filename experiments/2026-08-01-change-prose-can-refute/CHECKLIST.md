@@ -549,12 +549,70 @@ this tranche is not a frozen-surface change.
       no longer appears anywhere in the module, so a third branch added later
       cannot silently reintroduce the split.
 
-- [ ] 12. (S2) [COMMIT] Show the end-to-end result offline: a single-family run
+- [x] 12. (S2) [COMMIT] Show the end-to-end result offline: a single-family run
       with the new mode produces `len(state.att) >= 1` and at least one
       `Status.REFUTED`, from a criticism whose target carries no evaluable
       commitment and whose critic school differs from the target's.
       files: `tests/test_prose_refutation_boundaries.py`
       done-when: that test passes (paste it)
+
+      Output:
+
+          test_a_single_family_run_can_refute_by_prose_end_to_end PASSED
+          test_the_same_run_under_the_old_mode_refutes_nothing PASSED
+          test_the_minting_critic_carries_a_school_other_than_the_targets PASSED
+          3 passed, 24 deselected in 0.22s
+
+      The typed record the demo produces, printed rather than described:
+
+          single_family_run: True
+          judge families   : {'mock:glm'}
+          bound schools    : ('school-0', 'school-1')
+          len(state.att)   : 1
+          target status    : refuted
+          warrant type     : argumentative
+
+      **This is the first attack edge any prose case has produced in this
+      codebase.** The baseline at step 1 was 26 of 42 roots carrying
+      `adjudication-blindness` — criticism executed, zero attacks, every
+      artifact vacuously ACCEPTED.
+
+      Three guards on the claim, because "it went red" is not by itself
+      evidence for S2:
+
+        - **The refutation is prose, not machinery.** CHECKLIST's own risk note
+          says that if the defeat came from the mechanical-checking channel the
+          step has NOT demonstrated S2. The warrant is asserted to be
+          `ARGUMENTATIVE`, and the target's only commitment is `rubric:`, which
+          `programs.evaluable` rejects and no oracle can run. Printed above as
+          `warrant type: argumentative`.
+        - **The mode is what changed, not the fixture.** The identical target
+          and identical adapter under `observe_only` leave `state.att` empty and
+          the target ACCEPTED, with the case still recorded as scrutiny. Without
+          this the first test could have been passing for the wrong reason.
+        - **The minting critic's school differs from the target's**, asserted on
+          the artifact the warrant hangs from rather than only where the
+          assignment was planned (step 4).
+
+      **The fixture failed first, and the predicate was right.** The initial
+      adapter gave the judges `glm-test` and left critic/defender on the default
+      mock model, and `is_single_family_run` returned False. That is R15 working
+      as specified — "a single model is running the ENTIRE harness" — and it is
+      the case step 5 deliberately widened the predicate to catch. Every seat
+      now carries one model id.
+
+      **RESIDUE — what this does NOT show.** The one production adapter factory
+      (`llm/adapter.py:1467`) does not pass `school_judge_bindings`, so no live
+      run can select the cross-school gate today: the architecture is complete
+      and proven offline, and unwired. The natural source is
+      `run_manifest.criticism_policy.bindings` filtered to `role == "judge"`,
+      but nothing in R7-R17 or S7-S12 asks for that wiring, and adding it would
+      change gate selection for every v6 run carrying judge bindings. Parked
+      rather than typed in. Related: in a v6 manifest run authority comes from
+      `CriticismPolicyV1.authority` (`scheduler.py:1321`), so such a run reaches
+      this same trial through `defended_trial` and never reads the Config value
+      — `single_family_trial` is the direct-helper switch, and route topology is
+      what selects the ensemble in both cases.
 
 - [ ] 13. (S3, S10) Re-run steps 3 and 4's assertions now that the mode exists.
       files: none
