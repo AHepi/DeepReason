@@ -19,11 +19,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import hashlib
 import json
 import re
+import os
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -115,20 +118,33 @@ def _save_cache(cache: dict) -> None:
         pass
 
 
-def run(cmd: str) -> tuple[bool, str]:
+# A check is meant to be cheap enough to run often. 300s is generous for the
+# heaviest legitimate one (a focused pytest file) and short enough that a check
+# which accidentally invokes the whole suite is reported as a defect in the
+# check rather than silently costing fifteen minutes on every run.
+CHECK_TIMEOUT_S = 300
+
+
+def run(cmd: str) -> tuple[bool, str, float]:
+    started = time.monotonic()
     try:
         proc = subprocess.run(
-            cmd, shell=True, cwd=REPO, capture_output=True, text=True, timeout=900
+            cmd, shell=True, cwd=REPO, capture_output=True, text=True,
+            timeout=CHECK_TIMEOUT_S,
         )
     except subprocess.TimeoutExpired:
-        return False, "TIMEOUT after 900s"
+        return False, f"TIMEOUT after {CHECK_TIMEOUT_S}s - this check is too "\
+                      "expensive; narrow it to the claim it actually tests", \
+               time.monotonic() - started
+    elapsed = time.monotonic() - started
     if proc.returncode == 0:
-        return True, ""
+        return True, "", elapsed
     tail = (proc.stderr or proc.stdout or "").strip().splitlines()
-    return False, " | ".join(tail[-3:])[:400]
+    return False, " | ".join(tail[-3:])[:400], elapsed
 
 
-def cmd_run(fast: bool = False, only_failed: bool = False) -> int:
+def cmd_run(fast: bool = False, only_failed: bool = False, jobs: int = 0,
+            slow: float = 0.0) -> int:
     docs = documents()
     if not docs:
         print("no documents in docs/map/", file=sys.stderr)
@@ -136,7 +152,8 @@ def cmd_run(fast: bool = False, only_failed: bool = False) -> int:
     cache = _load_cache() if (fast or only_failed) else {}
     fresh = dict(cache)
     failures: list[str] = []
-    total = reused = skipped = 0
+    reused = skipped = 0
+    pending: list[tuple[str, int, str, str]] = []  # doc, line, cmd, key
     for doc in docs:
         if doc.doc_id is None:
             failures.append(f"{doc.path.name}: no `<!-- DR-... -->` id on the first line")
@@ -146,18 +163,41 @@ def cmd_run(fast: bool = False, only_failed: bool = False) -> int:
             if only_failed and prior is not None and prior.get("ok"):
                 skipped += 1
                 continue
-            total += 1
             if fast and prior is not None:
-                ok, detail, reused = prior["ok"], prior.get("detail", ""), reused + 1
-            else:
-                ok, detail = run(cmd)
+                reused += 1
+                if not prior["ok"]:
+                    failures.append(
+                        f"{doc.path.name}:{number}: {cmd}\n      -> "
+                        f"{prior.get('detail', '')} (cached)")
+                continue
+            pending.append((doc.path.name, number, cmd, key))
+
+    total = len(pending) + reused
+    # Checks are independent subprocesses, so they parallelise cleanly. Serially,
+    # the 180-odd pytest checks in this map take over an hour and get killed;
+    # that made the authoritative run - the only one a gate may trust - the one
+    # nobody could complete.
+    workers = jobs or min(16, (os.cpu_count() or 4))
+    timings: list[tuple[float, str, int]] = []
+    if pending:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {pool.submit(run, item[2]): item for item in pending}
+            for future in concurrent.futures.as_completed(futures):
+                name, number, cmd, key = futures[future]
+                ok, detail, elapsed = future.result()
                 fresh[key] = {"ok": ok, "detail": detail, "cmd": cmd}
-            if not ok:
-                failures.append(f"{doc.path.name}:{number}: {cmd}\n      -> {detail}")
+                timings.append((elapsed, name, number))
+                if not ok:
+                    failures.append(f"{name}:{number}: {cmd}\n      -> {detail}")
     _save_cache(fresh)
+    if slow:
+        for elapsed, name, number in sorted(timings, reverse=True):
+            if elapsed >= slow:
+                print(f"  SLOW {elapsed:6.1f}s  {name}:{number}")
     mode = "fast" if fast else ("failed-only" if only_failed else "full")
     note = f", {reused} reused" if reused else ""
     note += f", {skipped} skipped (green last run)" if skipped else ""
+    note += f", {workers} workers" if pending else ""
     print(f"docs_verify [{mode}]: {len(docs)} documents, {total} checks{note}")
     for failure in failures:
         print(f"  FAIL {failure}")
@@ -269,6 +309,10 @@ def main() -> int:
                         help="reuse cached results whose named files are unchanged")
     parser.add_argument("--failed", action="store_true",
                         help="re-run only checks that were not green last run")
+    parser.add_argument("--jobs", type=int, default=0,
+                        help="parallel checks (default: min(16, cpus))")
+    parser.add_argument("--slow", type=float, default=0.0, metavar="SECONDS",
+                        help="report checks slower than SECONDS")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
@@ -279,7 +323,8 @@ def main() -> int:
         return cmd_links()
     if args.audit:
         return cmd_audit()
-    return cmd_run(fast=args.fast, only_failed=args.failed)
+    return cmd_run(fast=args.fast, only_failed=args.failed, jobs=args.jobs,
+                   slow=args.slow)
 
 
 if __name__ == "__main__":
