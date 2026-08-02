@@ -304,3 +304,136 @@ word, not a plan:
 I have not chosen. (a) is the smaller reading and consistent with R2; (b) is the
 more literal reading of R4's word "formal". They differ in what the harness is
 permitted to do, which is the operator's call and not an implementation detail.
+
+---
+
+# VALIDATION ROUND 2 — after amendments 5-6 and steps 17-26
+
+Round 1's verdict was FAIL, scoped to S4's first acceptance clause. That clause
+is now implemented, and two further amendments (R18-R22) added S13-S20. Every
+acceptance check is re-run here against `e86b10f0`.
+
+## Acceptance checks
+
+S1-S3, S5-S12: **unchanged and re-run PASS.** The 44-assertion inventory below
+covers them; nothing in steps 17-26 touched `authority.py`, `config.py`,
+`packs.py` or the scratchpad boundary.
+
+### S4 (R4, R21) — the formal/informal boundary — **now PASS**
+
+Round 1 measured a target carrying `predicate:'chorale' in content` being
+refuted by prose, `att=1`. R21 ("they are both formal") selected the wider
+line. Re-measured:
+
+    passing predicate: (FORMAL)     att=0 status=accepted
+    rubric: only (informal)         att=1 status=refuted
+    ONLY program:json-wf            att=1 status=refuted
+
+Row 1 is the clause that failed. Rows 2 and 3 confirm the line did not widen
+past what R21 selects. **The FAIL is closed.**
+
+### S13 (R19) — a single-MODEL predicate — PASS
+
+    test_the_single_model_predicate_is_narrower_than_the_family_one PASSED
+    test_the_single_model_predicate_reads_every_position PASSED
+    test_the_single_model_predicate_fails_closed_on_no_leases PASSED
+
+True for one model everywhere; **False for two models sharing one family**;
+False for an empty lease set. `is_single_family_run` unmodified and still
+passing its own assertions.
+
+### S14 (R18, R20) — cross-school CRITICISM is the substitute — PASS
+
+    single-model, critic school-1 (differs)  att=1 refuted warrant=argumentative
+    single-model, critic school-0 (SAME)     att=0 declined=same-school-critic
+    single-model, NO critic school           att=0 declined=no-critic-school
+    TWO models (glm-4 second seat)           RAISED SECOND_JUDGE_FAMILY_REQUIRED
+
+All four clauses. The fourth is what makes S13's narrowing load-bearing.
+
+### S15 (R20) — exposure with nothing configured — PASS
+
+    test_the_substitute_is_exposed_by_build_adapter_with_nothing_configured PASSED
+    test_nothing_the_operator_configures_can_turn_the_substitute_on PASSED
+
+Built by the production factory from a §15 role table. No constructor
+argument, no Config value, no manifest field. A two-model adapter handed every
+opt-in the old design offered still reports False, and the guard's
+neighbourhood in `trial.py` contains no `config` reference — so a qualifying
+run cannot opt out either.
+
+### S16-S20 — nothing retroactive, hole shut, gate green — PASS
+
+    roots BEFORE=42 AFTER=42 | valid: 0 changed | att: 0 changed
+    epistemic_passed: 0 changed | blind: 0 changed | ERROR: 0 changed
+    diff -q sweep_BEFORE.txt sweep_AFTER2.txt -> BYTE-IDENTICAL
+
+    test_a_structural_program_confers_no_formal_backing PASSED
+    test_a_structural_only_target_is_still_refutable_by_prose PASSED
+    test_the_forbidden_case_form_still_refuses_a_predicate PASSED
+
+## Full gate
+
+    3287 passed, 7 skipped in 842.84s (0:14:02)
+
+**0 failed.** 3243 at tranche start.
+
+The first run of this gate FAILED 2, and that is recorded at CHECKLIST step 23
+rather than overwritten, together with the process error that caused it
+(step 21 changed trial behaviour; only the assertions step 21 added were
+re-run). Both failures were in tests written earlier in this tranche. Neither
+was resolved by weakening an assertion: they were rewired to the path that
+carries a critic school, keeping every assertion they made, and a new test
+pins the limit the failure exposed.
+
+C2 audited across the WHOLE tranche — two existing test files touched:
+
+    tests/test_pack_prefix.py                 |   26 +-
+    tests/test_prose_refutation_boundaries.py | 1386 +++++++++++++++++++++
+
+`test_pack_prefix.py` asserts strictly more than before (whole target body
+byte-for-byte, where it accepted an excerpt) and SPEC.md's S3 predicted it.
+
+## Record-behavior preservation
+
+    capabilities/state.py -> UNTOUCHED    harness.py       -> UNTOUCHED
+    run_manifest.py       -> UNTOUCHED    invariants.py    -> UNTOUCHED
+
+Two byte-identical 42-root sweeps: step 15 (before any permission changed) and
+step 24 (after the formal line widened and the ensemble precondition changed
+shape). C1 and C3 hold.
+
+## Requirement sweep — amendments 5 and 6
+
+- **R18** "It should be cross school criticism" — S14. Also CLOSES A4: the
+  operator confirmed the cross-school reading, so it is settled, not assumed.
+- **R19** "only work for single model runs" — S13, and S14's fourth row.
+- **R20** "exposed whenever a single model is occupying all positions" — S15,
+  through the production factory with nothing configured.
+- **R21** "they are both formal" — S4, now PASS.
+- **R22** "a conjecture endpoint might not fill out the form properly" —
+  S17/S19. Traced to `workloads/models.py:105` and `skeleton.py:30-45`, and
+  shut: `program:json-wf` confers nothing, `predicate:` stays un-authorable.
+- **C9** "you didn't listen" — the failure was re-opening A4 after the operator
+  settled it. Recorded in REQUEST.md so the delivery report states confirmed
+  assumptions as facts rather than re-surfacing them as choices.
+
+## Assumptions carried
+
+A8 (single MODEL, not family) · A9 (cross-school CRITICISM, not a judge
+ensemble — **load-bearing**) · A10 (the judge gate retained, unused) ·
+A11 (evaluable AND substantive — inverts if structural programs should immunise).
+
+A1 is now SUPERSEDED by R21 and is no longer carried.
+
+## Verdict: PASS
+
+Three items require an operator decision and are recorded in PARKED.md rather
+than taken. None blocks the verdict; two would change future work.
+
+1. **`ARGUMENTATIVE_AUTHORITY=single_family_trial` is dead weight.** It cannot
+   complete a trial (step 26), and R20 makes it redundant in principle. Removing
+   it reverts part of steps 10-11.
+2. **The 11.6%.** 148 of 1279 recorded artifacts become prose-immune; one root
+   goes 79 -> 31 refutable.
+3. **`render_batch_crit_pack` still prefix-clips**, so R3 is unmet on that path.
