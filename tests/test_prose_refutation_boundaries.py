@@ -1023,6 +1023,75 @@ def test_the_minting_critic_carries_a_school_other_than_the_targets(harness):
     assert critic.provenance.school != target.provenance.school
 
 
+def _lease_model(model: str, role: str = "judge", seat: int = 0):
+    """A lease whose MODEL identity is what varies, family held constant."""
+
+    from deepreason.llm.firewall import EndpointLease, Route
+
+    return EndpointLease(
+        role=role,
+        seat=seat,
+        route=Route(
+            endpoint_id=f"{role}-{model}-{seat}",
+            base_url=f"mock://{model}",
+            model_id=model,
+            provider="mock",
+            family="glm",
+            max_tokens=64,
+            context_window_tokens=1024,
+        ),
+    )
+
+
+def test_the_single_model_predicate_is_narrower_than_the_family_one():
+    """Implements R19/R20: "single model runs", "a single model is occupying
+    all positions".
+
+    The distinguishing case: two models that SHARE a family. The family
+    predicate says yes -- one family -- and the model predicate must say no.
+    Narrower is the safe direction, because this unlocks a substitute for an
+    independence guarantee and must not fire on a run that has more
+    independence available than it thinks.
+    """
+
+    from deepreason.llm.firewall import is_single_family_run, is_single_model_run
+
+    two_models_one_family = {
+        "judge": (_lease_model("glm-4", seat=0), _lease_model("glm-5", seat=1))
+    }
+    assert is_single_family_run(two_models_one_family) is True
+    assert is_single_model_run(two_models_one_family) is False
+
+
+def test_the_single_model_predicate_reads_every_position(harness=None):
+    """Implements R20: "occupying ALL positions" -- roles, not just judges."""
+
+    from deepreason.llm.firewall import is_single_model_run
+
+    assert is_single_model_run(
+        {
+            "judge": (_lease_model("glm-5", seat=0), _lease_model("glm-5", seat=1)),
+            "defender": (_lease_model("glm-5", role="defender"),),
+        }
+    ) is True
+
+    assert is_single_model_run(
+        {
+            "judge": (_lease_model("glm-5", seat=0), _lease_model("glm-5", seat=1)),
+            "defender": (_lease_model("glm-4", role="defender"),),
+        }
+    ) is False
+
+
+def test_the_single_model_predicate_fails_closed_on_no_leases():
+    """Implements R20's fail-closed sense. No model is not one model."""
+
+    from deepreason.llm.firewall import is_single_model_run
+
+    assert is_single_model_run({}) is False
+    assert is_single_model_run({"judge": ()}) is False
+
+
 def test_the_single_family_predicate_fails_closed_on_no_leases():
     """Implements R15: "only make it active if a single model is running the
     entire harness".

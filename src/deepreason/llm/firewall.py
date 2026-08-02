@@ -308,6 +308,36 @@ def is_single_family_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> boo
     return len(_lease_families(leases)) == 1
 
 
+def _lease_models(leases: Mapping[str, tuple[EndpointLease, ...]]) -> set[str]:
+    """Every non-blank model identity across every leased seat, folded.
+
+    Identity is (provider, model_id): the same model string served by two
+    providers is two deployments, and treating them as one would claim a
+    sameness nothing here has checked.
+    """
+
+    return {
+        f"{lease.route.provider.strip().casefold()}:"
+        f"{lease.route.model_id.strip().casefold()}"
+        for seats in leases.values()
+        for lease in seats
+        if lease.route.model_id.strip()
+    }
+
+
+def is_single_model_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> bool:
+    """True when one model occupies every position in the run.
+
+    Strictly narrower than ``is_single_family_run``: two different models of
+    one family are one family and two models. Narrower is the safe direction —
+    this predicate unlocks a substitute for an independence guarantee, so it
+    must not fire on a run that has more independence available than it thinks.
+    An empty lease set is not one model; it is no model at all.
+    """
+
+    return len(_lease_models(leases)) == 1
+
+
 def require_cross_family_judge_ensemble(
     leases: Mapping[str, tuple[EndpointLease, ...]],
 ) -> tuple[EndpointLease, ...]:

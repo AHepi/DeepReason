@@ -848,12 +848,40 @@ make step 21's demo prove nothing.
       model-authorable structural program is still refuted by prose; and
       `ForbiddenCase` still refuses `predicate:` — paste both
 
-- [ ] 20. (S13) [COMMIT] Add `is_single_model_run`: exactly one distinct model
+- [x] 20. (S13) [COMMIT] Add `is_single_model_run`: exactly one distinct model
       identity across every leased seat of every role.
       files: `src/deepreason/llm/firewall.py`
       done-when: True for one model across all roles; **False for two models
       sharing one family** (this is what distinguishes it from S7); False for
       an empty lease set; and `is_single_family_run` still passes its own tests
+
+      Output — the single-model and single-family assertions together, so the
+      narrowing is visible rather than asserted:
+
+          test_the_single_model_predicate_is_narrower_than_the_family_one PASSED
+          test_the_single_model_predicate_reads_every_position PASSED
+          test_the_single_model_predicate_fails_closed_on_no_leases PASSED
+          test_the_single_family_predicate_fails_closed_on_no_leases PASSED
+          test_the_single_family_predicate_reads_every_role_not_just_judges PASSED
+          test_the_cross_school_gate_governs_only_a_single_family_run PASSED
+          test_a_single_family_run_can_refute_by_prose_end_to_end PASSED
+          test_the_single_family_authority_value_exists PASSED
+          8 passed, 29 deselected in 0.45s
+
+      The distinguishing assertion is two models that SHARE a family:
+      `is_single_family_run` True, `is_single_model_run` False. A5 read "a
+      single model is running the entire harness" as one FAMILY; R19/R20 say
+      "single model" twice, and this is the narrower reading. Narrower is the
+      safe direction here, because the predicate unlocks a SUBSTITUTE for an
+      independence guarantee and must not fire on a run that has more
+      independence available than it thinks it has.
+
+      Identity is `(provider, model_id)`, not `model_id` alone: the same model
+      string served by two providers is two deployments, and folding them would
+      claim a sameness nothing here has checked.
+
+      `is_single_family_run` is unmodified and its own tests still pass — it
+      remains what S7/S8's cross-school judge gate keys on.
 
 - [ ] 21. (S14) [COMMIT] In a single-model run the trial requires >=2 judge
       seats plus a critic school present and differing from the target's
