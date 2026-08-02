@@ -124,12 +124,41 @@ this tranche is not a frozen-surface change.
       a probe confirmed `_engaged_root` IS reusable twice in one process
       (2 passed), so the fixture was sound and the test was not.
 
-- [ ] 4. (S9) Write the author-school exclusion assertion: no criticism
+- [x] 4. (S9) Write the author-school exclusion assertion: no criticism
       assignment is ever produced whose critic school equals its target's
       school, under both the old and the new mode.
       files: `tests/test_prose_refutation_boundaries.py`
       done-when: the old-mode half passes today (paste it); the new-mode half
       is RED for the same unknown-value reason as step 3
+
+      Output:
+
+          $ pytest tests/test_prose_refutation_boundaries.py -q
+          1 failed, 9 passed in 2.65s
+          (the 1 is still test_the_single_family_authority_value_exists,
+           RED on the missing ARGUMENTATIVE_AUTHORITY value — unchanged
+           from step 3; both new assertions PASS)
+
+      The exclusion turns out to hold THREE times over, not once, so all
+      three layers are pinned rather than the one the step assumed:
+
+        1. `plan_foreign_criticism` computes
+           `sorted(set(bindings) - {target.owner_school_id})` — the author is
+           subtracted from the eligible set by construction.
+        2. `ForeignCriticismTargetV1._owner_is_not_completed` refuses a record
+           that lists the owner among completed critics.
+        3. The assignment's `_selected_school_is_eligible` refuses to be
+           constructed with the owner in `eligible_school_order`.
+
+      Also pinned: with ONE school, the planner yields an empty eligible set.
+      That is the degenerate case the single-family path must not paper over —
+      with nobody but the author available the correct outcome is no
+      criticism, not self-criticism.
+
+      This is why R14 matters and why it is asserted rather than assumed: it
+      is the operator's answer to the feasibility survey's worst finding, that
+      a point of view criticising its own work is close to marking its own
+      homework and that withholding shared context does not buy independence.
 
 - [ ] 5. (S7) [COMMIT] Add the single-family predicate, derived from immutable
       leases exactly as `require_cross_family_judge_ensemble` derives families.

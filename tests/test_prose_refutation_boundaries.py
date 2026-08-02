@@ -192,3 +192,48 @@ def test_the_criticism_prompt_never_names_an_author_or_a_school(tmp_path):
         assert school not in rendered, school
     for label in ("school", "author", "provenance"):
         assert label not in rendered.lower(), label
+
+
+def test_a_school_can_never_be_scheduled_to_criticise_its_own_work():
+    """Implements R14: "as long as a critic isn't from the same school, it's fine".
+
+    This is a PRESERVATION test, not a new rule.  The exclusion already holds
+    three times over, and the single-family path must not weaken any of them:
+
+      1. the planner subtracts the owner from the eligible set;
+      2. a target record refuses to list the owner among completed critics;
+      3. an assignment refuses to be constructed with the owner eligible.
+
+    R14 is the operator's answer to the deepest risk in the feasibility
+    survey -- a point of view criticising its own work is close to marking its
+    own homework, and this repository's own pre-registered study found that
+    withholding shared context does not buy independence.  The exclusion is
+    what makes that risk not arise, so it is asserted rather than assumed.
+    """
+
+    import pytest
+    from deepreason.workflow import criticism
+
+    source = inspect.getsource(criticism.plan_foreign_criticism)
+    assert "- {target.owner_school_id}" in source, source
+
+    with pytest.raises(ValueError, match="owner school cannot be a completed"):
+        criticism.ForeignCriticismTargetV1(
+            target_id="a" * 64,
+            owner_school_id="school-0",
+            completed_critic_school_ids=("school-0",),
+        )
+
+
+def test_the_planner_leaves_a_single_school_run_with_no_eligible_critic():
+    """Implements R14 at the boundary that matters for R15.
+
+    One school and one family is the degenerate case the single-family path
+    must NOT paper over: with nobody but the author available, the correct
+    outcome is no criticism, not self-criticism.
+    """
+
+    from deepreason.workflow import criticism
+
+    source = inspect.getsource(criticism.plan_foreign_criticism)
+    assert "foreign_schools = sorted(set(bindings) - {target.owner_school_id})" in source
