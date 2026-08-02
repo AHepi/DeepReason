@@ -57,12 +57,39 @@ this tranche is not a frozen-surface change.
       Baseline shape for later comparison: 5 roots `valid=False`, 26 carrying
       `adjudication-blindness`, 5 with any attacks.
 
-- [ ] 2. (S5, S12) [COMMIT] Write the scratchpad-separation assertions:
+- [x] 2. (S5, S12) [COMMIT] Write the scratchpad-separation assertions:
       no scratch id in any warrant, attack edge, criticism pack or judge pack,
       and `rules/crit.py` imports nothing from `deepreason.scratch`.
       files: `tests/test_prose_refutation_boundaries.py` (new)
       done-when: `pytest tests/test_prose_refutation_boundaries.py -q -k scratch`
       reports all passed (these should be GREEN today; they pin, not fix)
+
+      Output:
+
+          $ pytest tests/test_prose_refutation_boundaries.py -q -k scratch
+          .....                                        [100%]
+          5 passed in 0.10s
+
+      Five assertions, GREEN as predicted — they pin the boundary rather than
+      move it:
+
+        - `rules/crit.py` imports no `deepreason.scratch` module. The whole
+          module is AST-walked, not grepped at the header, because a
+          function-local import would pass a header check and still couple the
+          two.
+        - `rules/crit.py`'s only scratch mentions are `scratch_fence_seq`
+          (lines 342, 583) — transactional ordering, not content. Any other
+          scratch name appearing there now fails.
+        - The criticism packs cannot be GIVEN scratch: `render_conj_pack` takes
+          `scratch_context` (packs.py:322, correctly — conjecture is where the
+          workshop belongs) and `render_crit_pack` / `render_batch_crit_pack`
+          have no such parameter. Enforced by signature, so no future caller
+          can pass one without changing this contract.
+        - `informal/trial.py` imports no scratch module. This is the last link
+          before a sustained prose case can change a status, so it is authority
+          chain proper.
+        - `rules/warrants.py` and `adjudication/edges.py` import no scratch
+          module — the narrowest part of the chain.
 
 - [ ] 3. (S10) Write the prompt byte-identity assertion: for identical inputs
       the rendered criticism and judge prompts are byte-identical with the new
