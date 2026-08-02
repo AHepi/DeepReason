@@ -170,6 +170,32 @@ lies, which is worse than no document.
    say it was fixed and when. Traps are the memory of what has actually gone
    wrong, and that memory is the most expensive content here to regenerate.
 
+### Completeness is the failure mode checks cannot catch
+
+Every check in a seam document can pass while the document is still WRONG by
+omission. A check proves the sites listed are real; nothing proves the list is
+complete, and an implementer who trusts an incomplete list ships a change that
+misses a guard.
+
+This has already happened. `SEAM-schools-x-scratch` named five enforcement
+sites and every check passed. A mechanical sweep — every file mentioning
+`school_id` alongside a conjecture-context symbol, filtered to those that
+actually COMPARE or RAISE on it — found a sixth, in `harness.py`, a frozen
+surface. The document said "caught four more times"; it was five.
+
+So when writing or reviewing a seam, run the sweep rather than reasoning about
+coverage:
+
+    # candidate sites: mentions both sides
+    grep -rln "<side-a-symbol>" src/deepreason --include=*.py |
+      xargs grep -ln "<side-b-symbol>"
+    # of those, the ones that ENFORCE rather than pass through
+    grep -nE "<field>\s*(!=|==)|raise.*<field>" <candidates>
+
+The second filter is the one that matters: it separates the files that carry
+the agreement from the far larger set that merely mention both sides. Then add
+a check per site, so a deletion is caught even though an omission was not.
+
 ### Do not measure the tree while a falsification pass is running
 
 A falsification agent proves a check can fail by editing `src/` to make the

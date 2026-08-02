@@ -44,6 +44,7 @@ rather than routine.
 | Durable receipt | `ontology/event.py` | `ConjectureContextCallReceiptV1.school_id` | the school travels with the advisory-context proof onto the append-only log |
 | v4/v5 replay authority | `workflow/replay.py` | `_validate_proposal` | `context_receipt.school_id != work.school_id` fails the root |
 | v6 recovery authority | `workflow/conjecture_recovery.py` | `_validate_authority` | a scratch-bearing exposure is re-validated against the frozen payload's `school_id` on every restart |
+| Event well-formedness | `harness.py` | conjecture-turn application (`context.school_id != payload.school_id`) | `"conjecture turn source context belongs to another work item"` — the turn is refused at APPEND time, before any replay reads it. A FROZEN surface: this guard cannot be relaxed |
 | Replay validation | `invariants.py` | `validate_conjecture_context` | a receipt carrying a `school_id` with no `SchoolRouteReceiptV1` on the same call is not a valid root |
 
 `check: python -c "import inspect; from deepreason.llm import packs; sig=lambda n: set(inspect.signature(getattr(packs,n)).parameters); assert {'school','scratch_context'} <= sig('render_conj_pack'); assert all(not sig(n) & {'school','scratch_context'} for n in ('render_crit_pack','render_batch_crit_pack'))"`
@@ -54,11 +55,11 @@ rather than routine.
 
 `check: python -c "import pytest; from deepreason.ontology.event import ConjectureContextCallReceiptV1 as R; from deepreason.scratch.conjecture import validate_conjecture_context_call as v; r=R(manifest_digest='a'*64, problem_id='P', school_id='school-0', formal_fence_seq=3, scratch_fence_seq=3, selection_receipt_ref='sha256:'+'1'*64, advisory_context_ref='sha256:'+'2'*64, render_receipt_ref='3'*64, rendered_context_ref='4'*64); k=dict(manifest_digest='a'*64, problem_id='P', scratch_aliases={}, provider_prompt=b''); assert all('belongs to another school' in str(pytest.raises(ValueError, v, None, r, school_id=s, **k).value) for s in ('school-1', None))"`
 
-The same mismatch is caught four more times, at four different distances from
+The same mismatch is caught five more times, at five different distances from
 the call: in the rule before dispatch, in the expansion planner against the
 prior plan, in v4/v5 replay against the work order, in v6 restart recovery
-against the frozen payload, and in `verify_root` against the route receipt on
-the same event. The check below reads each guard through the AST rather than by
+against the frozen payload, in `harness.py` when the conjecture turn is
+APPENDED, and in `verify_root` against the route receipt on the same event. The check below reads each guard through the AST rather than by
 grep, because a commented-out comparison leaves the text intact — the earlier
 grep form of this check passed with `workflow/replay.py`'s clause disabled by a
 single `#`. That matters more here than elsewhere: the v4/v5 replay comparison,
@@ -107,6 +108,8 @@ transaction is ORDERED against the scratch log without being allowed to read it.
 Deleting it to "complete the separation" would remove ordering, not coupling.
 
 `check: python -c "import typing; from deepreason.workflow.transaction import WorkPreparationV1 as K; from deepreason.workflow.models import WorkOrderEnvelopeV1 as W, WorkflowTaskKind as T; assert 'advisory_context_ref' in W.model_fields and 'school_id' in W.model_fields and W.model_fields['task_kind'].annotation == typing.Literal[T.CONJECTURE]; assert not {'advisory_context_ref','school_id'} & set(K.model_fields) and K.model_fields['task_kind'].annotation is T" && grep -q 'critic_school_id' src/deepreason/rules/crit.py && grep -q 'payload.get("critic_school_id")' src/deepreason/invariants.py && grep -q "transactional work requires one immutable state fence" src/deepreason/workflow/transaction.py && grep -q "conjecture work requires one formal/scratch state fence" src/deepreason/workflow/models.py && grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && test "$(grep -c "scratch_fence_seq=fence" src/deepreason/rules/crit.py)" -eq 2`
+
+`check: python -c "import ast,inspect; import deepreason.harness as h; src=inspect.getsource(h); t=ast.parse(src); found=any(isinstance(n,ast.Compare) and any('school_id' in ast.dump(c) for c in [n.left]+n.comparators) for n in ast.walk(t)); assert found, 'harness no longer compares school_id on conjecture-turn application'"`
 
 ## What is deliberately absent
 
