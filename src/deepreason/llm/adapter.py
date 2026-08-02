@@ -13,7 +13,7 @@ import hashlib
 import os
 import re
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 from pydantic import BaseModel
 
@@ -26,8 +26,10 @@ from deepreason.llm.firewall import (
     RouteFirewallError,
     leases_from_endpoints,
     leases_from_manifest,
+    is_single_family_run,
     reject_model_control_fields,
     require_cross_family_judge_ensemble,
+    require_cross_school_judge_ensemble,
     route_fingerprint,
     sanitize_model_control_fields_for_repair,
     select_lease,
@@ -55,6 +57,7 @@ from deepreason.ontology.event import (
     SchoolRouteReceiptV1,
 )
 from deepreason.run_manifest import (
+    SchoolRoleBindingV1,
     infer_model_family,
     resolve_route_seat_behavioral_capability,
     resolve_route_seat_base_profile,
@@ -225,6 +228,7 @@ class LLMAdapter:
         output_mechanism: str | OutputMechanism | None = None,
         leases: dict[str, tuple[EndpointLease, ...]] | None = None,
         transaction_authority_required: bool = False,
+        school_judge_bindings: Sequence[SchoolRoleBindingV1] = (),
     ) -> None:
         self.endpoints = endpoints
         self.blobs = blob_store
@@ -240,6 +244,10 @@ class LLMAdapter:
         )
         self.leases = leases if leases is not None else leases_from_endpoints(endpoints)
         self.transaction_authority_required = bool(transaction_authority_required)
+        # Opt-in only. Supplying school-to-judge-seat bindings makes the
+        # cross-school ensemble available; it does not make it govern. Route
+        # topology decides that, below.
+        self.school_judge_bindings = tuple(school_judge_bindings)
         self._compact_recovery_roles: set[str] = set()
         self._v6_authority_harness = None
         self._v6_authority_manifest = None
@@ -607,10 +615,32 @@ class LLMAdapter:
         entry = self.endpoints.get(role)
         return len(entry) if isinstance(entry, (list, tuple)) else (1 if entry else 0)
 
-    def require_cross_family_judges(self) -> tuple[EndpointLease, ...]:
-        """Preflight the frozen normative rubric ensemble and its bindings."""
+    def _select_judge_ensemble(self) -> tuple[EndpointLease, ...]:
+        """Apply the ensemble gate this run's route topology makes available.
 
-        seats = require_cross_family_judge_ensemble(self.leases)
+        Cross-family governs whenever more than one family is present, whether
+        or not school bindings are configured: a substitute guarantee is only
+        admissible where the guarantee it substitutes for is unobtainable. So
+        the single-family predicate is a precondition on selection, never a
+        preference expressible by configuration.
+        """
+
+        if self.school_judge_bindings and is_single_family_run(self.leases):
+            return require_cross_school_judge_ensemble(
+                self.leases, self.school_judge_bindings
+            )
+        return require_cross_family_judge_ensemble(self.leases)
+
+    def require_cross_family_judges(self) -> tuple[EndpointLease, ...]:
+        """Preflight the frozen normative rubric ensemble and its bindings.
+
+        Named for the gate that governs every run today. Under single-family
+        route topology with school bindings configured, the ensemble is instead
+        cross-school; the seat count, the endpoint pairing and the whole-ensemble
+        preflight below are identical either way.
+        """
+
+        seats = self._select_judge_ensemble()
         configured = self.endpoints.get("judge")
         endpoints = (
             tuple(configured)

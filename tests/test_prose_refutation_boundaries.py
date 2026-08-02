@@ -370,6 +370,99 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
     assert require_cross_family_judge_ensemble({"judge": two_families}) == two_families
 
 
+class _StubEndpoint:
+    """The minimum surface `EndpointLease.verify` reads off a live endpoint."""
+
+    def __init__(self, lease):
+        self.name = lease.route.base_url
+        self.model = lease.route.model_id
+
+
+def _adapter(leases, bindings):
+    """An adapter carrying leases and school bindings and nothing else live."""
+
+    from deepreason.llm.adapter import LLMAdapter
+
+    endpoints = {
+        role: tuple(_StubEndpoint(lease) for lease in seats)
+        for role, seats in leases.items()
+    }
+    return LLMAdapter(
+        endpoints, blob_store=None, leases=leases, school_judge_bindings=bindings
+    )
+
+
+def test_configuring_school_bindings_does_not_reach_the_gate_with_two_families():
+    """Implements R15: "only make it active if a single model is running the
+    entire harness".
+
+    This is the assertion the whole extension turns on. Two families are
+    present AND school bindings are configured -- the configuration is
+    satisfiable, and it still must not be consulted, because a substitute
+    guarantee is admissible only where the guarantee it substitutes for is
+    unobtainable. The proof is the TYPE of the stop: the run fails on the
+    cross-FAMILY code, so cross-school was never selected.
+
+    The two judge seats here share no family, so the cross-school gate would
+    have ACCEPTED them (both schools are bound). Selection by configuration
+    would therefore be silent, not loud -- which is why it is asserted.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import JudgeEnsemblePolicyError
+
+    two_families = (_lease("glm", seat=0), _lease("qwen", seat=1))
+    bindings = (
+        _judge_binding("school-0", two_families[0]),
+        _judge_binding("school-1", two_families[1]),
+    )
+    adapter = _adapter({"judge": two_families}, bindings)
+
+    assert adapter.school_judge_bindings == bindings
+    assert adapter._select_judge_ensemble() == two_families
+
+    one_family_only = (_lease("glm", seat=0), _lease("glm", seat=1))
+    mixed = _adapter(
+        {"judge": one_family_only, "conjecturer": (_lease("qwen", role="conjecturer"),)},
+        (
+            _judge_binding("school-0", one_family_only[0]),
+            _judge_binding("school-1", one_family_only[1]),
+        ),
+    )
+    with pytest.raises(JudgeEnsemblePolicyError, match="SECOND_JUDGE_FAMILY_REQUIRED"):
+        mixed._select_judge_ensemble()
+
+
+def test_the_cross_school_gate_governs_only_a_single_family_run():
+    """Implements R15's positive half: the path is reachable when it should be.
+
+    One family across the whole run, two schools bound to the two judge seats:
+    this is the configuration `require_cross_family_judge_ensemble` refuses by
+    construction, and the only one in which cross-school stands in for it.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import (
+        JudgeEnsemblePolicyError,
+        JudgeSchoolEnsemblePolicyError,
+    )
+
+    seats = (_lease("glm", seat=0), _lease("glm", seat=1))
+    bindings = (_judge_binding("school-0", seats[0]), _judge_binding("school-1", seats[1]))
+
+    assert _adapter({"judge": seats}, bindings)._select_judge_ensemble() == seats
+
+    # Same topology, bindings withheld: the run falls back to the gate it
+    # cannot satisfy rather than to no gate at all.
+    with pytest.raises(JudgeEnsemblePolicyError):
+        _adapter({"judge": seats}, ())._select_judge_ensemble()
+
+    # Same topology, one school holding both seats: selected, and refused.
+    one_school = (_judge_binding("school-0", seats[0]), _judge_binding("school-0", seats[1]))
+    with pytest.raises(JudgeSchoolEnsemblePolicyError):
+        _adapter({"judge": seats}, one_school)._select_judge_ensemble()
+
+
 def test_the_single_family_predicate_fails_closed_on_no_leases():
     """Implements R15: "only make it active if a single model is running the
     entire harness".

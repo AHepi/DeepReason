@@ -264,12 +264,63 @@ this tranche is not a frozen-surface change.
       family gate. Only the dimension along which the two seats must differ
       moves. Nothing calls this yet — step 7 is what selects it.
 
-- [ ] 7. (S8) [COMMIT] Make the ensemble choice select cross-school ONLY when
+- [x] 7. (S8) [COMMIT] Make the ensemble choice select cross-school ONLY when
       the single-family predicate holds; cross-family governs otherwise.
       files: `src/deepreason/llm/adapter.py`
       done-when: with two families present the cross-school gate is not
       selected even when configured (paste the assertion); the existing
       cross-family tests still pass
+
+      Output — the assertion the whole extension turns on:
+
+          test_configuring_school_bindings_does_not_reach_the_gate_with_two_families PASSED
+          test_the_cross_school_gate_governs_only_a_single_family_run PASSED
+          test_the_cross_school_ensemble_accepts_one_family_with_two_schools PASSED
+          test_the_cross_school_ensemble_raises_on_one_family_and_one_school PASSED
+          test_the_cross_school_ensemble_does_not_count_an_unverifiable_binding PASSED
+          test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling PASSED
+          test_the_single_family_predicate_fails_closed_on_no_leases PASSED
+          test_the_single_family_predicate_reads_every_role_not_just_judges PASSED
+          8 passed, 10 deselected in 0.05s
+
+      Existing tests still pass — the ring around every caller of the gate
+      (`informal/trial.py`, `informal/audits.py`, `rules/experiment.py`):
+
+          $ python -m pytest tests/ -q -k "adapter or firewall or judge or trial or audits"
+          145 passed, 2 skipped, 3121 deselected in 60.70s
+
+      **Why the negative assertion is constructed the way it is.** The two
+      judge seats in that test are bound to two DIFFERENT schools, so the
+      cross-school gate would have ACCEPTED them. Selection-by-configuration
+      would therefore have been silent rather than loud, and a test that merely
+      checked "the call still raises" would have proved nothing. What is
+      asserted instead is the TYPE of the outcome: two families with bindings
+      configured returns the cross-family gate's acceptance, and one family of
+      judges under a second-family conjecturer raises
+      `SECOND_JUDGE_FAMILY_REQUIRED` — the cross-family code, so cross-school
+      was never consulted. That second case is also where S7's whole-run
+      predicate earns its keep: judged by the judge role alone it would have
+      looked single-family and unlocked the substitute.
+
+      Also pinned, the fallback direction: same single-family topology with
+      bindings WITHHELD falls back to the gate it cannot satisfy, not to no
+      gate at all. Absence of configuration must not be absence of a check.
+
+      `school_judge_bindings` is a constructor opt-in defaulting to `()`, so
+      every existing construction of `LLMAdapter` selects cross-family exactly
+      as before. **No manifest field**; the standing prohibition holds.
+
+      Two things recorded rather than silently done:
+
+        - `require_cross_family_judges` KEEPS its name though it may now apply
+          the cross-school gate. Renaming it would touch `informal/trial.py`,
+          `informal/audits.py` and `rules/experiment.py` at 12 call sites, and
+          this step's spec item names `adapter.py` alone. Its docstring states
+          the truth instead.
+        - The seat/endpoint count mismatch inside it still raises
+          `JudgeEnsemblePolicyError` under both gates. That failure is about
+          pairing, not about distinctness, so it is not the school gate's stop;
+          left as-is deliberately.
 
 - [ ] 8. (S4) Confirm the formal/informal boundary needs no code change:
       demonstrative outcomes are already status-changing under every mode and
