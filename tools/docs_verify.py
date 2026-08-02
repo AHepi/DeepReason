@@ -13,6 +13,7 @@ Usage:
     python tools/docs_verify.py --stale     # list docs whose Owns: files moved
     python tools/docs_verify.py --audit     # flag checks that cannot fail
     python tools/docs_verify.py --links     # every DR- reference resolves
+    python tools/docs_verify.py --coverage  # enforcement sites a seam omits
     python tools/docs_verify.py --ring      # list each document's test ring
     python tools/docs_verify.py --ring scratch   # run the scratch subsystem ring
     python tools/docs_verify.py --self-test # verify this tool's own parsing
@@ -44,7 +45,7 @@ _PATHISH = re.compile(r"(?:src|tests|tools|docs)/[\w./-]+")
 # rule is what lets SCHEMA.md show worked examples inside indented code blocks
 # without the verifier trying to run them.
 _CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")
-_HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Seams-undocumented|Sides|Depends-on):\s*(?P<val>.*)$")
+_HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Seams-undocumented|Sides|Sweep|Depends-on):\s*(?P<val>.*)$")
 _ID = re.compile(r"^<!--\s*(?P<id>DR-[A-Z]+-[a-z0-9\-]+|DR-[A-Z]+)\s*-->\s*$")
 
 # Commands that pass no matter what the tree looks like. A check built only from
@@ -270,6 +271,80 @@ def cmd_ring(targets: list[str]) -> int:
     return status
 
 
+def cmd_coverage() -> int:
+    """Completeness sweep: find enforcement sites a seam document omits.
+
+    A check proves a listed site is real; nothing proves the list is whole —
+    that is the one failure mode per-claim checks cannot catch, and it has
+    already produced a real omission (a sixth school_id guard in harness.py,
+    a frozen surface, while every check in the seam document passed).
+
+    So the sweep that found it runs mechanically. A document declares, in one
+    header line, the terms that identify its agreement:
+
+        Sweep: school_id && conjecture_context|PlannedConjectureContext|scratch
+
+    Left of `&&`: the FIELD the agreement moves (a regex). Right: the other
+    side's symbols (a regex). A source file matching both is a candidate; a
+    candidate that COMPARES or RAISES on the field is an enforcement site; an
+    enforcement site not NAMED anywhere in the document is a finding.
+
+    Naming is the dismissal mechanism, deliberately: a flagged file that
+    belongs to a different seam is resolved by one sentence saying so. The
+    rule is not "every site gets a table row"; it is "no enforcing site may
+    be invisible to the reader".
+
+    Documents without a Sweep: header are reported once and skipped — the
+    header arrives when the document is next touched, per SCHEMA.md.
+    """
+    findings = missing = swept = 0
+    src = REPO / "src" / "deepreason"
+    sources = [
+        (f, f.read_text(encoding="utf-8", errors="ignore"))
+        for f in sorted(src.rglob("*.py"))
+        if "__pycache__" not in str(f)
+    ]
+    for doc in documents():
+        if not (doc.doc_id or "").startswith("DR-SEAM-"):
+            continue
+        spec = doc.headers.get("Sweep", "").strip()
+        if not spec:
+            missing += 1
+            print(f"{doc.path.name}: no Sweep: header (add when next touched)")
+            continue
+        if "&&" not in spec:
+            findings += 1
+            print(f"{doc.path.name}: malformed Sweep: (need FIELD && OTHER_SIDE)")
+            continue
+        swept += 1
+        field, other = (part.strip() for part in spec.split("&&", 1))
+        try:
+            field_re = re.compile(field)
+            other_re = re.compile(other)
+            enforce_re = re.compile(
+                rf"(?:{field})\s*(?:!=|==)|(?:!=|==)\s*[\w.]*(?:{field})"
+                rf"|raise[^\n]*(?:{field})"
+            )
+        except re.error as error:
+            findings += 1
+            print(f"{doc.path.name}: Sweep: regex error: {error}")
+            continue
+        body = doc.path.read_text(encoding="utf-8")
+        for f, text in sources:
+            if not (field_re.search(text) and other_re.search(text)):
+                continue
+            if not enforce_re.search(text):
+                continue
+            if f.name in body or str(f.relative_to(REPO)) in body:
+                continue
+            findings += 1
+            print(f"{doc.path.name}: enforcement site not named: "
+                  f"{f.relative_to(REPO)}")
+    print(f"docs_verify --coverage: {swept} seam(s) swept, {missing} without a "
+          f"Sweep: header, {findings} finding(s)")
+    return 1 if findings else 0
+
+
 def cmd_links() -> int:
     """Every DR- reference must resolve to a document that exists.
 
@@ -344,6 +419,8 @@ def main() -> int:
     parser.add_argument("--stale", action="store_true")
     parser.add_argument("--audit", action="store_true")
     parser.add_argument("--links", action="store_true")
+    parser.add_argument("--coverage", action="store_true",
+                        help="flag enforcement sites a seam document omits")
     parser.add_argument("--fast", action="store_true",
                         help="reuse cached results whose named files are unchanged")
     parser.add_argument("--failed", action="store_true",
@@ -362,6 +439,8 @@ def main() -> int:
         return cmd_stale()
     if args.ring is not None:
         return cmd_ring(args.ring)
+    if args.coverage:
+        return cmd_coverage()
     if args.links:
         return cmd_links()
     if args.audit:

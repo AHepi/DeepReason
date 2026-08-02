@@ -183,18 +183,26 @@ sites and every check passed. A mechanical sweep — every file mentioning
 actually COMPARE or RAISE on it — found a sixth, in `harness.py`, a frozen
 surface. The document said "caught four more times"; it was five.
 
-So when writing or reviewing a seam, run the sweep rather than reasoning about
-coverage:
+The sweep is now a tool mode, so completeness no longer depends on anyone
+remembering to run it. A seam document declares its agreement in one header
+line:
 
-    # candidate sites: mentions both sides
-    grep -rln "<side-a-symbol>" src/deepreason --include=*.py |
-      xargs grep -ln "<side-b-symbol>"
-    # of those, the ones that ENFORCE rather than pass through
-    grep -nE "<field>\s*(!=|==)|raise.*<field>" <candidates>
+    Sweep: school_id && conjecture_context|PlannedConjectureContext|scratch
 
-The second filter is the one that matters: it separates the files that carry
-the agreement from the far larger set that merely mention both sides. Then add
-a check per site, so a deletion is caught even though an omission was not.
+Left of `&&`: the field the agreement moves. Right: the other side's symbols
+(both regexes). `python tools/docs_verify.py --coverage` then flags every
+source file that matches both sides AND compares-or-raises on the field but is
+named nowhere in the document. Dismissal is by NAMING: a flagged file that
+belongs to another seam is resolved with one sentence saying which — the rule
+is not "every site gets a table row", it is "no enforcing site may be
+invisible to the reader".
+
+The header ratchets in: a seam without one is reported by `--coverage` but not
+failed, and MUST gain one the next time the document is edited. On its first
+run the sweep found a seventh guard (`llm/adapter.py` dispatch refusal) and an
+eighth observational site (`workflow/shadow.py`) in the one seam that had
+already been hand-corrected once — which is the argument for the tool over
+another pass of prose.
 
 ### Do not measure the tree while a falsification pass is running
 

@@ -3,6 +3,7 @@ Verified-at: 08dcdf3c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scratch/conjecture.py, src/deepreason/rules/conj.py, src/deepreason/scheduler/scheduler.py
 Sides: DR-CON-schools, DR-SUB-scratch
+Sweep: school_id && conjecture_context|ConjectureContextCall|PlannedConjectureContext|scratch
 
 # Schools x scratchpad
 
@@ -41,6 +42,8 @@ rather than routine.
 | Rule-level pairing | `rules/conj.py` | `conj` (`execution_school_id` vs `conjecture_context_plan.school_id`) | `"conjecture context was planned for another school"` — plan and routed school must be one school, or the turn dies before dispatch |
 | Prompt assembly | `llm/packs.py` | `render_conj_pack` (`school=`, `scratch_context=`) | the only renderer holding both; stance is section 5 (compressible), advisory context section 7 (never compressed, never dropped) |
 | Per-cycle wiring | `scheduler/scheduler.py` | `_plan_conjecture_context`, `_school_dict` | the planner is handed the bare allocated id; the stance/weight/crossover dict goes only to `conj`'s `school=` argument |
+| Dispatch boundary | `llm/adapter.py` | `LLMAdapter.call` (`school_id != conjecture_context.school_id`) | `"school route and advisory context must name one school"` — refused before the provider is contacted; the same block refuses advisory context for any role but `conjecturer` |
+| Shadow replay audit | `workflow/shadow.py` | school/context comparison (`actual_school != ticket.work_order.school_id`) | records typed `ShadowMismatchCode.SCHOOL` — observational, an audit signal rather than a raise |
 | Durable receipt | `ontology/event.py` | `ConjectureContextCallReceiptV1.school_id` | the school travels with the advisory-context proof onto the append-only log |
 | v4/v5 replay authority | `workflow/replay.py` | `_validate_proposal` | `context_receipt.school_id != work.school_id` fails the root |
 | v6 recovery authority | `workflow/conjecture_recovery.py` | `_validate_authority` | a scratch-bearing exposure is re-validated against the frozen payload's `school_id` on every restart |
@@ -55,8 +58,10 @@ rather than routine.
 
 `check: python -c "import pytest; from deepreason.ontology.event import ConjectureContextCallReceiptV1 as R; from deepreason.scratch.conjecture import validate_conjecture_context_call as v; r=R(manifest_digest='a'*64, problem_id='P', school_id='school-0', formal_fence_seq=3, scratch_fence_seq=3, selection_receipt_ref='sha256:'+'1'*64, advisory_context_ref='sha256:'+'2'*64, render_receipt_ref='3'*64, rendered_context_ref='4'*64); k=dict(manifest_digest='a'*64, problem_id='P', scratch_aliases={}, provider_prompt=b''); assert all('belongs to another school' in str(pytest.raises(ValueError, v, None, r, school_id=s, **k).value) for s in ('school-1', None))"`
 
-The same mismatch is caught five more times, at five different distances from
-the call: in the rule before dispatch, in the expansion planner against the
+The same mismatch is caught seven more times, at different distances from the
+call — two of them (`llm/adapter.py` at dispatch, `workflow/shadow.py` in
+shadow replay) found by the `--coverage` sweep after the hand-written list had
+already been corrected once: in the rule before dispatch, in the expansion planner against the
 prior plan, in v4/v5 replay against the work order, in v6 restart recovery
 against the frozen payload, in `harness.py` when the conjecture turn is
 APPENDED, and in `verify_root` against the route receipt on the same event. The check below reads each guard through the AST rather than by
@@ -110,6 +115,17 @@ Deleting it to "complete the separation" would remove ordering, not coupling.
 `check: python -c "import typing; from deepreason.workflow.transaction import WorkPreparationV1 as K; from deepreason.workflow.models import WorkOrderEnvelopeV1 as W, WorkflowTaskKind as T; assert 'advisory_context_ref' in W.model_fields and 'school_id' in W.model_fields and W.model_fields['task_kind'].annotation == typing.Literal[T.CONJECTURE]; assert not {'advisory_context_ref','school_id'} & set(K.model_fields) and K.model_fields['task_kind'].annotation is T" && grep -q 'critic_school_id' src/deepreason/rules/crit.py && grep -q 'payload.get("critic_school_id")' src/deepreason/invariants.py && grep -q "transactional work requires one immutable state fence" src/deepreason/workflow/transaction.py && grep -q "conjecture work requires one formal/scratch state fence" src/deepreason/workflow/models.py && grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && test "$(grep -c "scratch_fence_seq=fence" src/deepreason/rules/crit.py)" -eq 2`
 
 `check: python -c "import ast,inspect; import deepreason.harness as h; src=inspect.getsource(h); t=ast.parse(src); found=any(isinstance(n,ast.Compare) and any('school_id' in ast.dump(c) for c in [n.left]+n.comparators) for n in ast.walk(t)); assert found, 'harness no longer compares school_id on conjecture-turn application'"`
+
+`check: grep -q "school route and advisory context must name one school" src/deepreason/llm/adapter.py`
+`check: grep -q "only conjecturer calls accept advisory context" src/deepreason/llm/adapter.py`
+`check: grep -q "ShadowMismatchCode.SCHOOL" src/deepreason/workflow/shadow.py`
+
+Two files trip the coverage sweep but belong elsewhere, named here so the
+sweep's dismissal rule is satisfied by an explanation rather than silence:
+`verification/report.py` compares `school_id` only to FILTER candidates when
+assembling the epistemic report (read side, no refusal), and
+`workflow/nonconjecture_recovery.py` guards `critic_school_id` for the
+criticism-assignment seam, not this one.
 
 ## What is deliberately absent
 
