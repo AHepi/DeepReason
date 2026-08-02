@@ -40,7 +40,13 @@ _SURFACE_FIELDS = {
     AuthoritySurface.PAIRWISE: "PAIRWISE_AUTHORITY",
     AuthoritySurface.INFRASTRUCTURE: "INFRASTRUCTURE_REVIEW_AUTHORITY",
 }
-_ARGUMENTATIVE_VALUES = {"observe_only", "trial_required"}
+_ARGUMENTATIVE_VALUES = {"observe_only", "trial_required", "single_family_trial"}
+
+# Modes under which a sustained prose case can reach a warrant. Both route
+# through the same defended trial and differ only in which ensemble gate the
+# run's route topology makes available, so every policy check that applies to
+# one applies to the other.
+_TRIAL_AUTHORITIES = frozenset({"trial_required", "single_family_trial"})
 
 
 @dataclass(frozen=True)
@@ -95,9 +101,33 @@ def trial_authority_for(
     if workload_profile != "text":
         return TrialAuthority.STATUS
     mode = text_authority_mode(config, surface)
-    # calibrated_status is unavailable prospectively until a receipt
-    # verifier exists. Never let a bare config value create status authority.
+    if mode == TextAuthorityMode.CALIBRATED_STATUS:
+        return (
+            TrialAuthority.STATUS
+            if calibration_receipt_is_verified(config)
+            else TrialAuthority.OBSERVE_ONLY
+        )
     return TrialAuthority.OBSERVE_ONLY
+
+
+def calibration_receipt_is_verified(config) -> bool:
+    """Whether a declared calibration receipt has been VERIFIED, not just named.
+
+    Always False: no receipt verifier exists. Receipt matching -- domain,
+    routes, prompts, calibration metrics -- is the verifier's job, and a
+    reference string is a claim about a receipt rather than a checked one.
+
+    This is the whole gate on the direct-helper path. `ops.review_infrastructure`
+    and the scheduler's rubric trials call `trial_authority_for` with no
+    manifest in play, so `text_status_authority_issues` never runs for them:
+    if this returns True before a verifier lands, an unverified reference in a
+    config file becomes live status authority. Named and isolated so the
+    verifier has exactly one place to attach, rather than staying an
+    unconditional return that made the surface knob unreadable.
+    """
+
+    del config
+    return False
 
 
 def calibration_receipt(config) -> str | None:
@@ -128,7 +158,7 @@ def text_status_authority_issues(
     receipt = calibration_receipt(config)
 
     argumentative = argumentative_authority_mode(config)
-    if argumentative == "trial_required":
+    if argumentative in _TRIAL_AUTHORITIES:
         if receipt is None:
             issues.append(
                 AuthorityPolicyIssue(

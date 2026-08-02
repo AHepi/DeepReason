@@ -368,10 +368,17 @@ class Config(BaseModel):
     #   trial_required - the case goes to the defended cross-family trial;
     #                    only a guard-accepted sustained ruling mints the
     #                    ARGUMENTATIVE warrant.
+    #   single_family_trial
+    #                  - the same defended trial, but the judge ensemble's
+    #                    independence is carried by SCHOOL rather than by model
+    #                    family. Selectable only where cross-family judging is
+    #                    unobtainable, i.e. one route family across the run's
+    #                    leases (llm/firewall.py is_single_family_run); route
+    #                    topology, not this value, decides which gate applies.
     # Demonstrative outcomes (counterexamples, program/verifier failures)
     # remain status-changing under every mode.
     ARGUMENTATIVE_AUTHORITY: Literal[
-        "observe_only", "trial_required"
+        "observe_only", "trial_required", "single_family_trial"
     ] = "observe_only"
     # LLM-mediated text adjudication has its own policy surface.  A status
     # mode is prospective only: schema-v2 text manifests preflight it against

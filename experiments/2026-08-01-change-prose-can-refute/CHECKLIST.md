@@ -430,14 +430,77 @@ this tranche is not a frozen-surface change.
         - `_document_excerpt` consequently has no caller. Kept, not deleted: it
           is the right tool for the batch path if the operator extends R3 there.
 
-- [ ] 10. (S1, S11) [COMMIT] Stop discarding the computed text authority mode,
+- [x] 10. (S1, S11) [COMMIT] Stop discarding the computed text authority mode,
       and add the single-family authority value to `Config`. Default unchanged
       at `observe_only`. No manifest field.
       files: `src/deepreason/authority.py`, `src/deepreason/config.py`
-      done-when: `trial_authority_for` varies with the knob for every
-      `AuthoritySurface`; non-text still returns `STATUS`; and
+      done-when: ~~`trial_authority_for` varies with the knob for every
+      `AuthoritySurface`~~ **CORRECTED at execution — see SPEC.md's S1
+      amendment.** done-when: `trial_authority_for` READS the knob for every
+      `AuthoritySurface` and routes on it, with `calibrated_status` gated on a
+      verified receipt; non-text still returns `STATUS`; and
       `grep -rn "ARGUMENTATIVE_AUTHORITY\|require_distinct_families"
       src/deepreason/run_manifest.py` shows no new field
+
+      Output:
+
+          rubric          knob=calibrated_status  verified=False -> observe_only
+          pairwise        knob=calibrated_status  verified=False -> observe_only
+          infrastructure  knob=calibrated_status  verified=False -> observe_only
+          non-text  -> status
+          default   -> observe_only
+          new value -> single_family_trial
+
+          $ grep -rn "ARGUMENTATIVE_AUTHORITY|require_distinct_families" \
+                src/deepreason/run_manifest.py
+          495:    require_distinct_families: bool
+          515:  if self.require_distinct_models or self.require_distinct_families:
+          2703: if school_policy.require_distinct_families:
+
+          $ git diff --stat HEAD -- src/deepreason/run_manifest.py
+          (empty)
+
+      All three `require_distinct_families` hits pre-date this tranche and are
+      the proposing-side school policy SPEC.md already cited; `run_manifest.py`
+      is untouched and `ARGUMENTATIVE_AUTHORITY` appears in it nowhere.
+      **No manifest field, no state digest, no replay format.**
+
+          $ python -m pytest tests/ -q -k authority -n 4
+          191 passed, 2 skipped in 44.70s
+
+      **The done-criterion as planned would have deleted a safeguard the
+      operator explicitly kept, and that is why it is corrected rather than
+      met.** Implemented literally — knob varies, so `calibrated_status`
+      returns `STATUS` — the run of the authority ring failed on
+      `test_unverified_calibrated_infrastructure_review_is_observe_only`
+      (`tests/test_text_authority_policy.py:166`). That test is right: SPEC.md
+      asked Q-B ("does R1 also remove the calibration-receipt precondition?")
+      and answered "under (a) it is untouched", and the operator chose (a).
+
+      The gate is load-bearing on a path with no preflight. `ops.py:141`
+      `review_infrastructure` and `scheduler.py:1022,1761` call
+      `trial_authority_for` with no manifest, so
+      `text_status_authority_issues` — which refuses an unverified receipt —
+      never runs for them. The unconditional return was the only thing standing
+      between a reference string in a config file and live status authority.
+
+      So S1 lands as: the mode is honoured and no longer discarded, and
+      `calibrated_status` is refused by a NAMED predicate,
+      `calibration_receipt_is_verified(config)`, returning False until a
+      verifier exists. Behaviour is unchanged. What changes is that the block is
+      one identified gate with one attachment point, instead of a computed
+      value thrown away — which is what made the surface knob unreadable in the
+      first place, and is the shape already parked as a defect class.
+      Recorded as an append-only amendment to SPEC.md S1, not typed in
+      silently; overturning it is one operator word and a separate decision
+      from R1-R4.
+
+      S11's half landed as planned: `ARGUMENTATIVE_AUTHORITY` gains
+      `single_family_trial`, default unchanged at `observe_only`, and
+      `authority.py` gains `_TRIAL_AUTHORITIES` so every policy check that
+      applies to `trial_required` applies to the new value too — both route
+      through the same defended trial and differ only in which ensemble gate
+      the run's topology makes available.
 
 - [ ] 11. (S1, S11) Reconcile the two authority vocabularies at
       `rules/crit.py:56,87` (`_POLICY_AUTHORITIES` vs `_ARGUMENTATIVE_VALUES`)

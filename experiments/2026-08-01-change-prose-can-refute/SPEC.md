@@ -254,6 +254,42 @@ scope") — it is an interpretation, and the operator can overturn it in one wor
 - Making the schools genuinely different models. FEASIBILITY.md notes a mode
   for this exists and has never run; not requested.
 
+---
+
+# AMENDMENT to S1, made at step 10 execution (append-only)
+
+**S1's acceptance clause as written contradicts the operator's own answer to
+Q-B, and the operator's answer wins.**
+
+S1 accepts on: "`trial_authority_for(cfg, "text", surface)` varies with the
+config knob for every surface". Implemented literally, `calibrated_status`
+returns `TrialAuthority.STATUS`. That deletes the calibration-receipt
+precondition — and Q-B asked exactly whether R1 removes it, with this spec
+answering "Under (a) it is untouched." The operator chose (a).
+
+The collision is not theoretical. `ops.py:141` `review_infrastructure` and
+`scheduler.py:1022,1761` call `trial_authority_for` on the DIRECT-HELPER path,
+with no manifest in play, so `text_status_authority_issues` — the preflight
+that refuses an unverified receipt — never runs for them. The unconditional
+return was the only gate there. `tests/test_text_authority_policy.py:166`
+`test_unverified_calibrated_infrastructure_review_is_observe_only` pins this,
+and failed under the literal implementation.
+
+**S1 as executed:** the computed mode is honoured and is no longer discarded,
+and `calibrated_status` is refused by a named, isolated predicate
+`calibration_receipt_is_verified(config)` which returns False until a receipt
+verifier exists. Behaviour is unchanged; what changes is that the block is one
+identified gate with one attachment point instead of a computation thrown away.
+
+**S1 accept, corrected:** `trial_authority_for` reads the knob for every
+surface in `AuthoritySurface` and routes on it; `calibrated_status` yields
+`STATUS` only when the receipt is verified, and no verifier exists, so today it
+yields `OBSERVE_ONLY` for every surface; non-text still returns `STATUS`.
+
+Overturning this needs one word from the operator, and it is a separate
+decision from R1-R4: it would grant status authority to an unverified
+reference string on a path with no preflight.
+
 ## Budget
 
 ~130 lines across 3 source files plus tests, 1 commit, on top of S1-S6's ~120.
