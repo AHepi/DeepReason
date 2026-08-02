@@ -25,3 +25,7 @@ Next action: deepreason qualify
 setup_rc=0
 qualify_rc=0 qualify_seconds=199
 preflight: 0 manifest(s) present pre-reason (expect 0; policy prints post-run)
+reason_rc=0 reason_seconds=727
+run_id=run-1a0d4168a446f052bc7ccc9aa20b9829 state=completed
+audit_rc=0
+=== workshop ladder end 2026-08-02T23:19:04Z ===

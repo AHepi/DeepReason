@@ -1,0 +1,61 @@
+{
+  "cycles": [
+    {
+      "seq": 8,
+      "cycle": [
+        "0",
+        "question-18f64f2cc436c51240e21fd3c74bf575"
+      ]
+    },
+    {
+      "seq": 490,
+      "cycle": [
+        "1",
+        "disc:question-18f64f2cc436c51240e21fd3c74bf575"
+      ]
+    },
+    {
+      "seq": 492,
+      "cycle": [
+        "2",
+        "conn:08fedf4d2716"
+      ]
+    },
+    {
+      "seq": 887,
+      "cycle": [
+        "3",
+        "question-18f64f2cc436c51240e21fd3c74bf575"
+      ]
+    },
+    {
+      "seq": 1087,
+      "cycle": [
+        "4",
+        "conn:23cb3972e5b9"
+      ]
+    },
+    {
+      "seq": 1096,
+      "cycle": [
+        "5",
+        "disc:question-18f64f2cc436c51240e21fd3c74bf575"
+      ]
+    }
+  ],
+  "declines": {},
+  "crit": 0,
+  "scratch_events": 0,
+  "research": [
+    "research-awaiting-agent"
+  ],
+  "simulation": [],
+  "att": 0,
+  "statuses": {
+    "accepted": 100
+  },
+  "criticism_authority": "observe_only",
+  "criticism_bindings": 4,
+  "replay_valid": null,
+  "replay_violations": []
+}
