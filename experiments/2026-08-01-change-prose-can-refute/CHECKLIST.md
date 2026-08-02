@@ -91,12 +91,38 @@ this tranche is not a frozen-surface change.
         - `rules/warrants.py` and `adjudication/edges.py` import no scratch
           module — the narrowest part of the chain.
 
-- [ ] 3. (S10) Write the prompt byte-identity assertion: for identical inputs
+- [x] 3. (S10) Write the prompt byte-identity assertion: for identical inputs
       the rendered criticism and judge prompts are byte-identical with the new
       mode enabled and disabled, and contain no author or school label.
       files: `tests/test_prose_refutation_boundaries.py`
       done-when: the test exists and is RED only because the new mode value
       does not exist yet (paste the error naming the unknown value)
+
+      Output:
+
+          $ pytest tests/test_prose_refutation_boundaries.py -q
+          E  ValidationError: 1 validation error for Config
+          E  ARGUMENTATIVE_AUTHORITY
+          E    Input should be 'observe_only' or 'trial_required'
+          1 failed, 7 passed in 16.62s
+
+      RED for exactly one reason: the value does not exist yet. Everything
+      else is green.
+
+      **Byte-identity is proved STRUCTURALLY, not empirically, and that is a
+      stronger result than the step asked for.** The first draft rendered the
+      pack twice under two authorities and compared. That test was confused:
+      `render_crit_pack` takes `(target_id, state, commitments, blobs,
+      token_budget)` and no config or authority argument at all, so there was
+      nothing for the mode to vary. The assertion is now that the criticism
+      packs accept no `config`/`authority`/`mode`/`trial_authority` parameter,
+      which makes byte-identity a property of the signature rather than a
+      lucky observation, and fails if a future parameter lets a mode through.
+
+      The first draft also failed for a second, unrelated reason — it rebuilt
+      the same fixture root twice on one path. Diagnosed rather than assumed:
+      a probe confirmed `_engaged_root` IS reusable twice in one process
+      (2 passed), so the fixture was sound and the test was not.
 
 - [ ] 4. (S9) Write the author-school exclusion assertion: no criticism
       assignment is ever produced whose critic school equals its target's

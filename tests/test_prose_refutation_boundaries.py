@@ -121,3 +121,74 @@ def test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge():
     assert not [name for name in imported if name.startswith("deepreason.scratch")], (
         sorted(imported)
     )
+
+
+SINGLE_FAMILY_AUTHORITY = "single_family_trial"
+"""The value S11 adds to ``ARGUMENTATIVE_AUTHORITY``.
+
+Named here so the assertion below fails on its ABSENCE until step 10 lands it,
+rather than silently testing nothing.
+"""
+
+
+def test_the_single_family_authority_value_exists():
+    """Implements R13/R15: the switch that makes the path reachable.
+
+    RED until step 10.  Every other assertion in this section is structural and
+    would pass vacuously without it, so this is what proves they are testing a
+    mode that exists.
+    """
+
+    from deepreason.config import Config
+
+    assert Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY)
+
+
+def test_the_criticism_prompt_cannot_vary_with_the_authority_mode():
+    """Implements R9: nothing new is shown at the model boundary.
+
+    The operator chose to dispatch an author-side critic WITHOUT telling the
+    model who wrote the target.  Byte-identity across modes is proved
+    STRUCTURALLY rather than by rendering twice: the criticism packs take no
+    config and no authority argument, so no mode can reach them.  A future
+    parameter that let one through fails this.
+    """
+
+    for name in ("render_crit_pack", "render_batch_crit_pack"):
+        parameters = set(inspect.signature(getattr(packs, name)).parameters)
+        assert not parameters & {"config", "authority", "mode", "trial_authority"}, (
+            name,
+            sorted(parameters),
+        )
+
+
+def test_the_criticism_prompt_never_names_an_author_or_a_school(tmp_path):
+    """Implements R9: the model boundary carries no authorship.
+
+    Targets reach the critic under call-local aliases.  If a school id or an
+    author label ever appeared in the rendered text, that label would become an
+    input to deciding what stands.
+    """
+
+    from deepreason.harness import Harness
+    from tests.test_v6_engaged_repair_verification import _engaged_root
+
+    harness = Harness(_engaged_root(tmp_path / "authorship"), read_only=True)
+    target_id = sorted(harness.state.artifacts)[0]
+    rendered = packs.render_crit_pack(
+        target_id,
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        token_budget=2048,
+    )
+
+    schools = {
+        artifact.provenance.school
+        for artifact in harness.state.artifacts.values()
+        if artifact.provenance.school
+    }
+    for school in schools:
+        assert school not in rendered, school
+    for label in ("school", "author", "provenance"):
+        assert label not in rendered.lower(), label
