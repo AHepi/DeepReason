@@ -132,3 +132,41 @@ C6 (process): "Read claude.md again." — operator, message 2. CLAUDE.md re-read
 in full before this amendment was written. The governing line for this
 situation: "Cross-routing: a defect found mid-change is PARKED, not fixed; a
 change wished for mid-defect is PARKED, not implemented. One tranche, one goal."
+
+### 2026-08-01, message 3 — answering SPEC.md's Q-A and opening a new line
+
+> Ok. So keep the current path. But add an experimental path for same school
+> criticisms. Leverage the schools architecture to create and mint criticisms.
+> They key is that stateless endpoints don't have access to who created the
+> conjecture artifact. Before figuring out how adjudication might work, you
+> need to figure out what actually exists. Return with feasibility and risks.
+> Your report must be returned without technical terms. Use subagents
+
+**ANSWER to SPEC.md Q-A: reading (a).** "keep the current path" — the defended
+cross-family trial stays. No self-certifying prose warrant. S1-S6 stand as
+specified under (a). Q-B is therefore moot (the calibration-receipt
+precondition is untouched under (a)); Q-C stays assumed attack-only.
+
+R7 (behavior): "add an experimental path for same school criticisms."
+
+R8 (behavior): "Leverage the schools architecture to create and mint
+criticisms."
+
+R9 (context/constraint): "They key is that stateless endpoints don't have
+access to who created the conjecture artifact."
+
+R10 (process): "Before figuring out how adjudication might work, you need to
+figure out what actually exists. Return with feasibility and risks."
+
+R11 (artifact): "Your report must be returned without technical terms."
+
+R12 (process): "Use subagents"
+
+**R10 GATES R7/R8.** No design and no adjudication scheme may be produced until
+a feasibility report on what EXISTS is returned. This supersedes the normal
+route from SPEC.md to dr-plan-steps for R7/R8 only; R1-R6 under reading (a) are
+unaffected and remain specified.
+
+C7 (process): "Your report must be returned without technical terms." — the
+deliverable for R10 is prose, not a code map.
+
