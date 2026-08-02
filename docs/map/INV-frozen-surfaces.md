@@ -71,6 +71,16 @@ school-bound JUDGE seats. The Pydantic model permits
 manifest entirely rather than widen the validator. **Reading the model and not
 the validator is the specific mistake to avoid here.**
 
+### Frozen-adjacent, found by falsification: `route_fingerprint`
+
+The v6 behavioral gate compares stored route digests against
+`route_fingerprint(route)` — recorded roots therefore depend on its exact
+serialization, yet neither `llm/firewall.py` nor the function was filed here
+until the map's falsification pass flagged it (see
+`DR-SEAM-llm-x-manifest`). Treat its output format as frozen.
+
+`check: grep -q "def route_fingerprint" src/deepreason/llm/firewall.py`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the
@@ -121,9 +131,12 @@ Fields compared:
     valid, epistemic_checks_passed, len(state.att), adjudication-blindness count
 
 No root's `valid` and no root's `att` may change. The two sweeps should compare
-byte-identical. 11 of the 42 recorded roots are pre-v6 and raise
-`UnsupportedRunManifestVersionError` — that is the expected baseline, not a
-failure.
+byte-identical. The sweep's expected baseline is 11 ERROR lines, all
+`UnsupportedRunManifestVersionError` — not a failure. Note the instrument
+matters: by DIRECT manifest load the census is 25 v6 / 14 raising / 3 with no
+manifest (pinned by a check in `DR-SEAM-harness-x-verification`); the sweep
+reads through `verify_root_report`, which surfaces three of those differently.
+Two true numbers, two instruments — cite the instrument with the number.
 
 `check: python -c "from deepreason.verification.report import verify_root_report"`
 

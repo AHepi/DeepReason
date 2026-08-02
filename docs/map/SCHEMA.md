@@ -119,6 +119,42 @@ not laziness. Two consequences to design around:
    `--stale` exist for it. When you re-read a document, the checks are already
    proven; spend the attention on the sentences no check protects.
 
+### Check-writing rules learned by falsification (each class was found live)
+
+Ten Opus falsification passes over the seam documents proved ~160 checks
+failable and rewrote 44 that were not. Every rewrite fell into one of six
+classes — write new checks against this list:
+
+1. **Pair every negative grep with a positive anchor on the same file.** A
+   missing or renamed file makes `grep` exit 2, and `!` inverts that to a
+   pass; four documents had checks that passed with their subject deleted.
+2. **Never bind a guard by its message string alone.** Guards gutted to
+   `_authority(True, …)`, `if False:`, `or False`, or a dead `raise` kept
+   their strings and passed message-greps in six documents. Pin the guard's
+   AST (test + raise together) or call the code and demand the typed refusal.
+3. **Substring import greps miss relative imports.** `from ..rules.spawn
+   import …` walked past `deepreason.rules` greps, including on a seam's core
+   dependency-arrow claim. Resolve `ImportFrom` levels via AST.
+4. **Pin signatures whole and enumerate dynamically.** `**kwargs`, a renamed
+   parameter, or a new sibling class (`AtomicCriticWireContractV2`) evaded
+   spot-greps; pin the full parameter list, discover class families with a
+   floor count.
+5. **In shell checks, the last command decides.** An `A && B … ; for …; done`
+   chain returns the loop's status and silently discards every conjunct — one
+   document's central check was entirely dead code.
+6. **Counts are claims.** `-ge N` floors hid a 6-file error and a 28-vs-29
+   mismatch; when the prose states a number, the check pins it with `-eq`.
+
+And one measurement rule: **stale `__pycache__` survives a revert.** A
+falsification pass produced a phantom test failure with `git status` clean
+because bytecode outlived the reverted source. Clear `__pycache__` before
+trusting any measurement taken near a mutation window.
+
+A `Sweep:` header must target ENFORCEMENT (sites that compare or raise on the
+field), not readers. When every candidate spec flags only readers — it happens;
+`SEAM-evaluation-x-ontology` is the recorded case — leave the header off and
+say why in the body rather than shipping a spec that cries wolf.
+
 **Do not write a check that cannot fail.** `check: true` and
 `check: test -f src/deepreason/harness.py` are worse than no check, because they
 buy the claim false credibility. `tools/docs_verify.py --audit` flags checks
