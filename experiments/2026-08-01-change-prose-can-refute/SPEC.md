@@ -256,6 +256,135 @@ scope") — it is an interpretation, and the operator can overturn it in one wor
 
 ---
 
+# EXTENSION 2 for R18-R20 — expose it, and put the guarantee where the
+# operator keeps pointing
+
+S1-S12 and the S1 amendment stand. This extension corrects two things about
+S7/S8 and adds the exposure R20 demands.
+
+## What the code establishes (checked, not assumed)
+
+- **A judge cannot carry a school through the manifest.**
+  `run_manifest.py:2751` — `_validate_v4_criticism_policy` raises
+  `V4_CRITICISM_ROLE_UNSUPPORTED: bindings must name argumentative_critic` for
+  any binding whose role is not `argumentative_critic`. The Pydantic model
+  permits `role="judge"`; the validator does not. **Step 6 recorded the
+  opposite and was wrong** — it read the model and not the validator. So Q9 has
+  no answer that leaves manifests untouched: there is no manifest-authored
+  judge-school binding, and adding one changes a manifest validator.
+- `resolve_school_role_lease` (`firewall.py:379`) supports exactly two roles,
+  `conjecturer` and `argumentative_critic`. Judges are not school-routed
+  anywhere.
+- The trial already carries `critic_school_id` end to end
+  (`trial.py:553,599,671,684`) and stamps it on the validity node and the
+  critic. The target's author school is `target.provenance.school`.
+  **Both schools are already in hand at the moment a warrant is minted.**
+- The school roster is a run-level fact, not a manifest binding:
+  `config.N_SCHOOLS` (default 4) and `schools.init_schools`
+  (`scheduler.py:272`).
+
+## The correction (Q8, Q9 resolved; Q7 resolved)
+
+**R18/R20 say "cross school CRITICISM", and that is what the substitute
+guarantee should be — not a cross-school judge ensemble.**
+
+The operator has now written "criticism" three times across messages 4 and 5
+("same school criticisms", "as long as a critic isn't from the same school",
+"It should be cross school criticism") and has never written "judge". S8 built
+a cross-school JUDGE ensemble because the blocker was a JUDGE gate
+(`require_cross_family_judge_ensemble`). That was reasoning from the obstacle
+rather than from the requirement.
+
+Reading the requirement instead: in a single-model run the independence that
+cross-family judging was standing in for is supplied by **the critic being from
+a different school than the author** — which is R14 verbatim, already true, and
+already enforced at four layers (S9). Nothing needs to bind a school to a judge
+seat, so Q9 dissolves rather than being answered, and no manifest validator is
+touched.
+
+This also resolves the tension the judge-ensemble reading would have created
+with S10: conditioning judge seats by school would change judge prompts, and
+S10 requires them byte-identical across modes.
+
+Q7 — **model, not family.** R19 and R20 say "single model runs" and "a single
+model is occupying all positions". Keyed on model identity, which is strictly
+narrower than family and therefore fails closed: two different glm models share
+a family and are not one model. A5's family reading is superseded for this gate.
+
+Q8 — **automatic.** "exposed whenever" is read as: no configuration selects it;
+the run's route topology does.
+
+## Items
+
+S13 (R19, Q7) — a single-MODEL predicate
+  files: `src/deepreason/llm/firewall.py`
+  after: `is_single_model_run(leases)` is True iff exactly one distinct model
+  identity occupies every leased seat of every role.
+  accept: True for one model across all roles; False for two models sharing one
+  family; False for an empty lease set. `is_single_family_run` is unchanged and
+  still passes its own tests.
+
+S14 (R18, R20) — the substitute guarantee is cross-school CRITICISM
+  files: `src/deepreason/informal/trial.py`
+  before: `_argument_trial_steps` calls `adapter.require_cross_family_judges()`,
+  which is unsatisfiable in a single-model run.
+  after: in a single-model run the trial requires instead (a) >=2 frozen judge
+  seats, and (b) a critic school that is present and differs from the target's
+  `provenance.school`. Outside a single-model run the cross-family gate governs
+  exactly as today.
+  accept: a single-model run with critic school != author school completes and
+  mints an ARGUMENTATIVE warrant; the same run with critic school == author
+  school is refused with a typed reason; the same run with no critic school is
+  refused with a typed reason; a two-model run still raises
+  `SECOND_JUDGE_FAMILY_REQUIRED`.
+
+S15 (R20) — exposure, with nothing to configure
+  files: `src/deepreason/llm/adapter.py`
+  before: `school_judge_bindings` is a constructor opt-in that the only
+  production adapter construction (`adapter.py:1467`) never passes, so
+  `_select_judge_ensemble` always falls back to cross-family.
+  after: selection keys on S13's predicate alone. No constructor argument, no
+  Config value, no manifest field is required for a qualifying run to get the
+  substitute guarantee.
+  accept: an adapter built exactly as `build_adapter` builds it, with one model
+  on every seat, selects the substitute path; with two models it does not.
+
+S16 (R20, C3, C2) — still nothing retroactive
+  accept: 42-root sweep before and after unchanged; full gate 0 failed.
+
+## Assumptions (operator may override)
+
+A8 (Q7): "a single model is occupying all positions" is model IDENTITY across
+every leased seat of every role. Narrower than A5's family reading, and
+narrower fails closed.
+
+A9 (R18): the substitute guarantee is cross-school CRITICISM, not a cross-school
+judge ensemble. **Load-bearing.** Grounds: the operator's word is "criticism"
+in all three statements; the guarantee is already enforced and already recorded
+on the artifact a warrant hangs from; and the judge-ensemble route cannot be
+supplied without changing a manifest validator.
+
+A10 (S14): `require_cross_school_judge_ensemble` and `school_judge_bindings`
+are RETAINED, not deleted — they remain correct for a manifest that does author
+judge bindings, and deleting tested, working code to tidy up is not what was
+asked. They simply stop being the mechanism R20 exposes.
+
+## Out of scope
+
+- The S4/A1 formal-boundary question. Still unanswered by the operator, carried
+  in VALIDATION.md, and untouched here.
+- Making the schools genuinely different models.
+- Widening `_validate_v4_criticism_policy` to admit judge bindings — A9 removes
+  the need, and it is a manifest validator.
+
+## Budget
+
+~90 lines across 3 source files plus tests. Frozen surfaces touched: **none**.
+No manifest schema, no manifest validator, no state digest, no event
+application, no replay record format, no qualification subject.
+
+---
+
 # AMENDMENT to S1, made at step 10 execution (append-only)
 
 **S1's acceptance clause as written contradicts the operator's own answer to
