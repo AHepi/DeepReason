@@ -971,7 +971,7 @@ make step 21's demo prove nothing.
       that authors judge bindings — which `run_manifest.py:2751` does not
       currently permit — and deleting tested, working code was not asked for.
 
-- [ ] 23. (S16, S20) Full gate: `pytest tests/ -q -n 4`
+- [x] 23. (S16, S20) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" — paste it
 
       **FIRST RUN FAILED. Recorded, not overwritten.**
@@ -991,6 +991,16 @@ make step 21's demo prove nothing.
       not the new assertions. The gate caught what the step should have.
 
       The finding is larger than the two tests, and step 26 records it.
+
+      **SECOND RUN, after step 26:**
+
+          3287 passed, 7 skipped in 842.84s (0:14:02)
+
+      **0 failed.** 3243 at the start of this tranche, 3270 at step 14, 3287
+      now. No assertion weakened: the two tests that failed were rewired to
+      the path that carries a school, keeping every assertion they made
+      (attack edge, REFUTED, ARGUMENTATIVE warrant), and one test was added
+      that pins the limit the failure exposed.
 
 
 - [x] 24. (S16, S20) AFTER sweep with the step-1 script; diff against
