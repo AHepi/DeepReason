@@ -68,3 +68,22 @@ defect its own harness carries.
 - rc=5 root is committed evidence of the attached-evidence defect; it stays
   as-is (never edit a committed root).
 - 42-root prior-baseline sweep running at close; result appended when done.
+
+## Sweep appendix (post-triplet, same instrument as every prior baseline)
+
+45 roots. The prior 42: zero movement in valid, att, epistemic_checks_passed
+or blindness — the triplet changed nothing retroactively. The three new rows
+are each individually informative:
+
+    orbit     valid=True   epistemic_passed=False  att=0  blind=1
+    triage    valid=False  epistemic_passed=True   att=1  blind=0
+    workshop  valid=True   epistemic_passed=False  att=0  blind=1
+
+- triage: the ONLY root in the whole corpus with epistemic_passed=True —
+  its attack edge clears the adjudication-blindness check every other
+  criticism-bearing root trips — while simultaneously valid=False on the
+  attached-evidence integrity violation. One root, both instruments doing
+  their jobs in opposite directions.
+- orbit and workshop: replay-valid but blind=1 — criticism ran, nothing
+  attacked, the epistemic finding fires exactly as designed under
+  observe_only.
