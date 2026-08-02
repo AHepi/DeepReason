@@ -51,6 +51,12 @@ live where a reader expects it.
 | Replay | `invariants.py` | `verify_root` (`school-route`, `foreign-criticism`) | every `SchoolRouteReceiptV1` re-derived against the bindings; coverage counted against `minimum_foreign_school_coverage` |
 | The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` |
 
+Two of those rows have no test anywhere in `tests/`: nothing imports
+`resolve_conjecture_route` or `compile_criticism_assignments`, so their claims
+are held up by this check and by the root sweep alone.
+
+`check: python -c "from types import SimpleNamespace as N; import pytest; from deepreason.run_manifest import Route, CriticismPolicyV1 as C, SchoolRoleBindingV1 as B; from deepreason.workflow.criticism import plan_foreign_criticism as P, compile_criticism_assignments as K, ForeignCriticismTargetV1 as T; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); pol=C(minimum_foreign_school_coverage=1,bindings=tuple(B(school_id='school-%d'%i,role='argumentative_critic',seat=0,endpoint_id='ep') for i in (0,1)),max_batch_size=4,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True); D='a1b2'*16; m=lambda v: N(schema_version=v,criticism_policy=pol,roles={'argumentative_critic':(r,)},sha256=D,control_plane_policy=N(workflow_retry=N(max_workflow_retries=1))); plan=P(m(6),(T(target_id='A',owner_school_id='school-0'),)); assert [(x.critic_school_id,x.manifest_digest,x.seat,x.endpoint_id) for x in K(m(6),plan)]==[('school-1',D,0,'ep')]; assert str(pytest.raises(ValueError,K,m(5),plan).value)=='criticism obligation records require RunManifest v6'" && grep -q 'select_lease(leases, "conjecturer", 0)' src/deepreason/workflow/profiles.py && grep -q 'if lease.route != manifest.roles\["conjecturer"\]\[lease.seat\]:' src/deepreason/workflow/profiles.py && grep -q "WORKFLOW_ROUTE_LEASE_MISMATCH" src/deepreason/workflow/profiles.py && sh -c '! grep -rq "resolve_conjecture_route\|compile_criticism_assignments" tests/ --include=*.py'`
+
 ### The model is not the gate
 
 `SchoolRoleBindingV1` is ONE model serving TWO policies with different role

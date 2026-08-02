@@ -236,4 +236,9 @@ fail-closed behaviour of the pre-replay controller-v3 correlation.
 - **`seq-stream` is defence in depth, not the enforcement.** The reader raises
   `EventSequenceError` on any gap, so a gapped log never reaches the graph
   checks; it becomes an `open` finding instead. Reading the `seq-stream` name in
-  a report and concluding the log was parsed successfully is backwards.
+  a report and concluding the log was parsed successfully is backwards. The
+  collapse is not special-cased per damage type: ONE `try` wraps the read-only
+  open, and its handler mints `open` — which is why a seq gap, a corrupt
+  checkpoint and a failed `validate_terminal_commitment_storage` are
+  indistinguishable in a verdict.
+`check: python -W ignore -c "import ast,json,tempfile,pathlib;from deepreason.harness import Harness;from deepreason.invariants import verify_root;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['a']);h.record_measure(inputs=['b']);p=h.log.path;L=p.read_text().splitlines();o=json.loads(L[1]);o['seq']=5;L[1]=json.dumps(o);p.write_text(chr(10).join(L)+chr(10));g=verify_root(d);assert [v['check'] for v in g['violations']]==['open'] and g['stats']=={},g;src=pathlib.Path('src/deepreason/invariants.py').read_text();assert 'seq-stream' in src;T=ast.parse(src);V=[n for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and n.name=='verify_root'][0];t=[n for n in V.body if isinstance(n,ast.Try) and any('h = Harness(root, read_only=True)' in ast.unparse(s) for s in n.body)];assert len(t)==1,len(t);assert any((chr(39)+'open'+chr(39)) in ast.unparse(x) for x in t[0].handlers),ast.unparse(t[0].handlers[0])"`
