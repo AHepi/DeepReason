@@ -932,12 +932,44 @@ make step 21's demo prove nothing.
       The two `>=2 judge seats` and frozen-lease requirements are unchanged
       from the cross-family gate. Only the dimension of independence moves.
 
-- [ ] 22. (S15) [COMMIT] Exposure: selection keys on the predicate alone. No
+- [x] 22. (S15) [COMMIT] Exposure: selection keys on the predicate alone. No
       constructor argument, Config value or manifest field is required.
       files: `src/deepreason/llm/adapter.py`
       done-when: an adapter built by `build_adapter` itself — not hand-fed
       bindings — with one model on every seat reaches the substitute path;
       with two models it does not
+
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py -q \
+                -k "exposed_by_build_adapter or nothing_the_operator"
+          2 passed, 41 deselected in 0.14s
+
+      **No source change was needed, and that is the result rather than a
+      shortcut.** S15 named `llm/adapter.py` because the previous design made
+      exposure an adapter concern — `school_judge_bindings` had to be threaded
+      from somewhere into a constructor. Putting the guarantee in the trial
+      (step 21) keyed on `adapter.is_single_model()`, which reads immutable
+      leases and nothing else, removes the thing that needed wiring. The
+      accessors it uses landed with step 21.
+
+      The first test builds the adapter with the PRODUCTION factory from a §15
+      role table, exactly as a ladder does: no constructor argument, no Config
+      value, no manifest field, nothing hand-fed. One model on every seat ->
+      `is_single_model()` True with 2 judge seats; swap one judge to `glm-4`
+      -> False. This is the assertion the previous round could not have passed.
+
+      The second test pins the other edge: route topology decides, not
+      configuration. A two-model adapter handed every opt-in the old design
+      offered still reports False, and the guard's neighbourhood in
+      `informal/trial.py` contains no `config` reference at all — so a
+      single-model run cannot opt out either. "Exposed whenever" is a fact
+      about the run, not a preference.
+
+      `require_cross_school_judge_ensemble` and `school_judge_bindings` are
+      retained per A10, unused by this path. They remain correct for a manifest
+      that authors judge bindings — which `run_manifest.py:2751` does not
+      currently permit — and deleting tested, working code was not asked for.
 
 - [ ] 23. (S16, S20) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" — paste it

@@ -1023,6 +1023,93 @@ def test_the_minting_critic_carries_a_school_other_than_the_targets(harness):
     assert critic.provenance.school != target.provenance.school
 
 
+def _role_spec(model: str) -> dict:
+    """One §15 role-table entry — the same shape a ladder's config carries."""
+
+    return {
+        "endpoint_id": f"route-{model}",
+        "endpoint": "https://models.invalid/v1",
+        "model": model,
+        "provider": "fixture",
+        "family": "glm",
+    }
+
+
+def test_the_substitute_is_exposed_by_build_adapter_with_nothing_configured(harness):
+    """Implements R20: "it should be EXPOSED whenever a single model is
+    occupying all positions".
+
+    The adapter is built by the production factory from a role table, exactly
+    as a ladder builds one -- no constructor argument, no Config value, no
+    manifest field, and nothing hand-fed. This is the assertion the previous
+    round failed: the cross-school ensemble was an opt-in kwarg that
+    `build_adapter` never passed, so no live run could reach it.
+    """
+
+    from deepreason.config import Config
+    from deepreason.llm.adapter import build_adapter
+
+    one_model = build_adapter(
+        Config(
+            roles={
+                "argumentative_critic": _role_spec("glm-5"),
+                "defender": _role_spec("glm-5"),
+                "judge": [_role_spec("glm-5"), _role_spec("glm-5")],
+            }
+        ),
+        harness.blobs,
+    )
+    assert one_model.is_single_model() is True
+    assert len(one_model.judge_seats()) == 2
+
+    two_models = build_adapter(
+        Config(
+            roles={
+                "argumentative_critic": _role_spec("glm-5"),
+                "defender": _role_spec("glm-5"),
+                "judge": [_role_spec("glm-5"), _role_spec("glm-4")],
+            }
+        ),
+        harness.blobs,
+    )
+    assert two_models.is_single_model() is False
+
+
+def test_nothing_the_operator_configures_can_turn_the_substitute_on(harness):
+    """Implements R20's other edge: route topology decides, not configuration.
+
+    "Exposed whenever" is a fact about the run, not a preference. A two-model
+    run cannot opt in, and a single-model run cannot opt out -- the predicate
+    reads immutable leases and there is no knob in the path at all.
+    """
+
+    from deepreason.config import Config
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.llm.firewall import leases_from_endpoints
+
+    endpoints = {
+        "judge": [
+            MockEndpoint(["{}"], name="mock://j0", model="glm-5"),
+            MockEndpoint(["{}"], name="mock://j1", model="glm-4"),
+        ]
+    }
+    # Every opt-in the previous design offered, supplied at once.
+    adapter = LLMAdapter(
+        endpoints,
+        harness.blobs,
+        leases=leases_from_endpoints(endpoints),
+        school_judge_bindings=(),
+    )
+    assert adapter.is_single_model() is False
+
+    source = inspect.getsource(
+        __import__("deepreason.informal.trial", fromlist=["trial"])
+    )
+    guard = source.index("if adapter.is_single_model():")
+    assert "config" not in source[guard : guard + 200], source[guard : guard + 200]
+
+
 def _substitute_adapter(harness, second_judge_model: str = "glm-test"):
     """critic + defender + two judge seats, all one model unless told otherwise.
 
