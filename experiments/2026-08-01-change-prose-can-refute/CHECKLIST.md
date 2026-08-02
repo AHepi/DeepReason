@@ -206,13 +206,63 @@ this tranche is not a frozen-surface change.
       shim that cannot see the package. `pip install -e . --break-system-packages`
       plus `python -m pytest` is the working invocation; later steps use it.
 
-- [ ] 6. (S8) Add `require_cross_school_judge_ensemble`: >=2 judge seats from
+- [x] 6. (S8) Add `require_cross_school_judge_ensemble`: >=2 judge seats from
       >=2 distinct SCHOOLS. `require_cross_family_judge_ensemble` is NOT
       modified.
       files: `src/deepreason/llm/firewall.py`
       done-when: accepts one family + two schools; raises on one family + one
       school; and `git diff` shows zero changed lines inside
       `require_cross_family_judge_ensemble`
+
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -q -k "cross_school or cross_family or single_family_predicate"
+          ......                                        [100%]
+          6 passed, 10 deselected in 0.06s
+
+      Third clause, proved by bytes rather than by reading the diff — the diff
+      is additive but its hunk header names the neighbouring function, which is
+      exactly the kind of thing an eye slides over:
+
+          $ python - <<'PY'   # AST-extract the gate at HEAD and in the tree
+          cross-family gate byte-identical to HEAD: True
+          bytes: 640 -> 640
+          PY
+
+      That is also pinned as a test (`..._cross_family_gate_is_untouched...`):
+      one family raises `SECOND_JUDGE_FAMILY_REQUIRED`, two families are
+      accepted. The `git diff` clause is a one-time check; the test survives it.
+
+      **Where school identity comes from, established rather than assumed.**
+      Neither `EndpointLease` nor `Route` carries a school
+      (`firewall.py:201-206` — role, seat, route, and nothing else), and two
+      schools may legitimately share one route. So the new gate cannot read
+      school off a lease the way the family gate reads family off one. School
+      is manifest-owned: `SchoolRoleBindingV1` (`run_manifest.py:467`) binds
+      `school_id` + `role` + `seat` + `endpoint_id`, and its `role` field is an
+      open `^[a-z][a-z0-9_]*$`, so `judge` bindings are expressible in
+      `CriticismPolicyV1.bindings` today with no schema change. The gate
+      therefore takes `(leases, bindings)` — the same immutability guarantee,
+      from the other immutable source. **No manifest field was added**; the
+      standing prohibition holds.
+
+      Two things the step did not ask for, both narrowing:
+
+        - A binding whose `endpoint_id` disagrees with the seat it names is not
+          counted. That is `resolve_school_role_lease`'s own
+          `SCHOOL_ROUTE_ENDPOINT_MISMATCH` check (`firewall.py:489`) applied
+          here: coverage that cannot be verified is absence, not coverage. A
+          third test asserts two *nominal* schools with one unverifiable
+          binding still raises.
+        - A typed sibling stop, `JudgeSchoolEnsemblePolicyError` /
+          `SECOND_JUDGE_SCHOOL_REQUIRED`, rather than reusing
+          `SECOND_JUDGE_FAMILY_REQUIRED`. The two gates are never both in force
+          for one run, so a stop must say which one produced it.
+
+      The seat count and the frozen-lease requirement are unchanged from the
+      family gate. Only the dimension along which the two seats must differ
+      moves. Nothing calls this yet — step 7 is what selects it.
 
 - [ ] 7. (S8) [COMMIT] Make the ensemble choice select cross-school ONLY when
       the single-family predicate holds; cross-family governs otherwise.

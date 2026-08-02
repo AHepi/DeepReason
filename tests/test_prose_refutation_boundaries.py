@@ -239,16 +239,20 @@ def test_the_planner_leaves_a_single_school_run_with_no_eligible_critic():
     assert "foreign_schools = sorted(set(bindings) - {target.owner_school_id})" in source
 
 
-def _lease(family: str, school: str = "school-0", role: str = "judge"):
-    """One frozen lease carrying only what the ensemble gates read."""
+def _lease(family: str, role: str = "judge", seat: int = 0):
+    """One frozen lease carrying only what the ensemble gates read.
+
+    The endpoint identity varies with the seat, so a binding that names the
+    wrong seat's endpoint is distinguishable from one that names the right one.
+    """
 
     from deepreason.llm.firewall import EndpointLease, Route
 
     return EndpointLease(
         role=role,
-        seat=0,
+        seat=seat,
         route=Route(
-            endpoint_id=f"{role}-{family}-{school}",
+            endpoint_id=f"{role}-{family}-{seat}",
             base_url=f"mock://{family}",
             model_id=f"model-{family}",
             provider="mock",
@@ -257,6 +261,113 @@ def _lease(family: str, school: str = "school-0", role: str = "judge"):
             context_window_tokens=1024,
         ),
     )
+
+
+def _judge_binding(school_id: str, lease):
+    """One manifest-owned judge binding naming exactly the seat it is given."""
+
+    from deepreason.run_manifest import SchoolRoleBindingV1
+
+    return SchoolRoleBindingV1(
+        school_id=school_id,
+        role="judge",
+        seat=lease.seat,
+        endpoint_id=lease.route.endpoint_id,
+    )
+
+
+def test_the_cross_school_ensemble_accepts_one_family_with_two_schools():
+    """Implements R14/R15: cross-SCHOOL stands in for cross-FAMILY.
+
+    One family across both judge seats is exactly the case
+    `require_cross_family_judge_ensemble` refuses, and exactly the case R15
+    scopes the new path to.  Two schools bound to those two seats is what the
+    substitute guarantee requires.
+    """
+
+    from deepreason.llm.firewall import require_cross_school_judge_ensemble
+
+    seats = (_lease("glm", seat=0), _lease("glm", seat=1))
+    accepted = require_cross_school_judge_ensemble(
+        {"judge": seats},
+        (_judge_binding("school-0", seats[0]), _judge_binding("school-1", seats[1])),
+    )
+
+    assert accepted == seats
+
+
+def test_the_cross_school_ensemble_raises_on_one_family_and_one_school():
+    """Implements R14: one point of view is not an ensemble.
+
+    A single school holding both judge seats is the degenerate case -- the same
+    objection R14 rules out on the criticism side, arriving instead at the seat
+    that decides whether a case is sustained.  Two seats are present, so what
+    is asserted is that seat count alone does not satisfy the gate.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import (
+        JudgeSchoolEnsemblePolicyError,
+        require_cross_school_judge_ensemble,
+    )
+
+    seats = (_lease("glm", seat=0), _lease("glm", seat=1))
+
+    with pytest.raises(
+        JudgeSchoolEnsemblePolicyError, match="SECOND_JUDGE_SCHOOL_REQUIRED"
+    ):
+        require_cross_school_judge_ensemble(
+            {"judge": seats},
+            (_judge_binding("school-0", seats[0]), _judge_binding("school-0", seats[1])),
+        )
+
+
+def test_the_cross_school_ensemble_does_not_count_an_unverifiable_binding():
+    """Implements R15's fail-closed sense at the binding.
+
+    A binding naming an endpoint the leased seat does not carry cannot be shown
+    to describe that seat.  Coverage that cannot be verified is absence, so the
+    gate must refuse rather than accept two nominal schools.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import (
+        JudgeSchoolEnsemblePolicyError,
+        require_cross_school_judge_ensemble,
+    )
+    from deepreason.run_manifest import SchoolRoleBindingV1
+
+    seats = (_lease("glm", seat=0), _lease("glm", seat=1))
+    elsewhere = SchoolRoleBindingV1(
+        school_id="school-1", role="judge", seat=1, endpoint_id="some-other-endpoint"
+    )
+
+    with pytest.raises(JudgeSchoolEnsemblePolicyError):
+        require_cross_school_judge_ensemble(
+            {"judge": seats}, (_judge_binding("school-0", seats[0]), elsewhere)
+        )
+
+
+def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
+    """Implements R15/S8: the new gate is a sibling, never a relaxation.
+
+    Byte-level proof that the existing gate did not move lives in `git diff`;
+    this pins the behaviour that diff is protecting, so a future edit to the
+    cross-family gate fails here even if the diff is never inspected again.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import (
+        JudgeEnsemblePolicyError,
+        require_cross_family_judge_ensemble,
+    )
+
+    one_family = (_lease("glm"), _lease("glm"))
+    with pytest.raises(JudgeEnsemblePolicyError, match="SECOND_JUDGE_FAMILY_REQUIRED"):
+        require_cross_family_judge_ensemble({"judge": one_family})
+
+    two_families = (_lease("glm"), _lease("qwen"))
+    assert require_cross_family_judge_ensemble({"judge": two_families}) == two_families
 
 
 def test_the_single_family_predicate_fails_closed_on_no_leases():

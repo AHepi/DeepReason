@@ -12,10 +12,15 @@ from copy import deepcopy
 import hashlib
 import json
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 from deepreason.llm.endpoints import DEFAULT_TIMEOUT_S
-from deepreason.run_manifest import Route, RunManifest, infer_model_family
+from deepreason.run_manifest import (
+    Route,
+    RunManifest,
+    SchoolRoleBindingV1,
+    infer_model_family,
+)
 
 
 FORBIDDEN_MODEL_CONTROL_FIELDS = frozenset(
@@ -77,6 +82,23 @@ class JudgeEnsemblePolicyError(RuntimeError):
         super().__init__(
             f"{self.code} at {self.pointer}: rubric trials require at least "
             "two frozen judge seats from distinct route families"
+        )
+
+
+class JudgeSchoolEnsemblePolicyError(RuntimeError):
+    """A rubric trial has no valid frozen cross-school judge ensemble.
+
+    Distinct from ``JudgeEnsemblePolicyError`` so a stop is attributable to the
+    gate that produced it: the two are never both in force for one run.
+    """
+
+    code = "SECOND_JUDGE_SCHOOL_REQUIRED"
+    pointer = "/criticism_policy/bindings"
+
+    def __init__(self) -> None:
+        super().__init__(
+            f"{self.code} at {self.pointer}: single-family rubric trials require "
+            "at least two frozen judge seats bound to distinct schools"
         )
 
 
@@ -303,6 +325,39 @@ def require_cross_family_judge_ensemble(
     }
     if len(seats) < 2 or len(families) < 2:
         raise JudgeEnsemblePolicyError()
+    return seats
+
+
+def require_cross_school_judge_ensemble(
+    leases: Mapping[str, tuple[EndpointLease, ...]],
+    bindings: Sequence[SchoolRoleBindingV1],
+) -> tuple[EndpointLease, ...]:
+    """Validate the substitute judge ensemble available to a single-family run.
+
+    Cross-family independence is unobtainable when one family serves the whole
+    run, so distinctness is carried by SCHOOL instead. This is a sibling of
+    ``require_cross_family_judge_ensemble``, never a relaxation of it: the two
+    seats and the frozen-lease requirement are unchanged, and only the
+    dimension along which the seats must differ moves.
+
+    School is not a property of a route -- two schools may share one -- so it
+    comes only from manifest-owned bindings, which is the same immutability
+    guarantee the family check gets from the lease. A binding whose endpoint
+    identity disagrees with the seat it names is not counted: coverage that
+    cannot be verified is absence, not coverage.
+    """
+
+    seats = tuple(leases.get("judge", ()))
+    by_seat = {lease.seat: lease for lease in seats}
+    schools = {
+        binding.school_id
+        for binding in bindings
+        if binding.role == "judge"
+        and binding.seat in by_seat
+        and binding.endpoint_id == by_seat[binding.seat].route.endpoint_id
+    }
+    if len(seats) < 2 or len(schools) < 2:
+        raise JudgeSchoolEnsemblePolicyError()
     return seats
 
 
