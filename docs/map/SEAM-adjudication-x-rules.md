@@ -40,7 +40,7 @@ The independence is mutual and is at the level of names, not only of imports.
 | Evidence closure, hand-built | `rules/vision.py` | `crit_vision`'s ν, one `EVIDENCE` ref per screenshot | the visual case falls when the images it judged are refuted |
 | Source-artifact closure | `oracle.property_violation_commitment` → `rules/crit.py` → `adjudication/edges.py` | `budget.extra["source_artifact"]` | refuting a proposed property collapses every verdict minted under it |
 | Credit without closure | `rules/crit.py` | `nu_interface = Interface(refs=[Ref(target=gen_id, role=RefRole.MENTION)])`, forwarded as `nu_interface=nu_interface` | the generator that designed the killing experiment is visible in the graph and load-bearing in none of it |
-| Case-law closure | `informal/trial.py` → `adjudication/edges.py` | `Ref(target=standard.id, role="mention")` + `kappa.eval.startswith("rubric:")` | the only mint site that can reach the rubric branch, and it is not in `rules/`; owned by `DR-CON-warrants-and-attacks` |
+| Case-law closure | `informal/trial.py` → `adjudication/edges.py` | `nu_interface=Interface(refs=[Ref(target=standard.id, role="mention")])` + `kappa.eval.startswith("rubric:")` | the only mint site in the tree that can reach the rubric branch, and it is not in `rules/`; owned by `DR-CON-warrants-and-attacks` |
 | Duplicate-verdict guard | `rules/warrants.py` | `verdict_on_record`, `skip_if_on_record` | one (κ, target) fail verdict at a time — `att` is a set and cannot tell a second critic from a first |
 | Supremacy guards | `rules/warrants.py` | `execution_backed`, `formally_backed` | whether an edge is CREATED; adjudication never learns either exists |
 | Availability handoff | `rules/crit.py` | `harness._oracle_pending`, `QUARANTINE_TICK` | an oracle that could not run mints no warrant, which downstream is indistinguishable from one that passed |
@@ -56,7 +56,7 @@ implementation of the fixpoint can drift from the first.
 
 One constructor, twelve call sites, and exactly two hand-built warrants inside
 `rules/` — both `ARGUMENTATIVE`, because `DEMONSTRATIVE` is written in one file.
-`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 12 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 2 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
+`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 12 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 8 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 2 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
 
 `nu_interface` is a single optional parameter and the whole propagation surface a
 rule has; four sites in the tree pass it.
@@ -86,7 +86,7 @@ Both ends of the seam, end to end, on two committed roots: engaged
 `run-f4fa6663` carries one `register_fail_warrant` warrant with the `w:<κ>:<target>`
 id, one carriage pair, one edge and exactly one `REFUTED`; jolt
 `run-b4d6dfda` ran to completion with none of the four and 72 `ACCEPTED`.
-`check: python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/live_jolt_2026-07-31/home/runs/run-b4d6dfda0c20676a864a051fbc97bda4'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 72; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"`
+`check: python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/live_jolt_2026-07-31/home/runs/run-b4d6dfda0c20676a864a051fbc97bda4'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 72 and len(list(h.log.read())) == 851; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"`
 
 ## What is deliberately absent
 
@@ -120,11 +120,17 @@ an oversight.** `crit_program` mints only against commitments `programs.evaluabl
 admits, and `evaluable` recognises `predicate:` and `program:` only; every other
 rules-side mint uses a `program:` commitment the rule constructed itself
 (counterexample, prop-oracle, browser, checker-wf). So no ν minted inside
-`rules/` can ever enter the `rubric:` branch of the fixpoint. The rubric branch
-belongs to `informal/trial.py` and `informal/audits.py`. A change that lets a
-rules-side route mint against a rubric κ silently turns every `mention` on its ν
-into case law.
-`check: python -c "from deepreason.programs import evaluable; from deepreason.ontology import Commitment as K; assert not evaluable(K(id='k', eval='rubric:std-1')); assert evaluable(K(id='k', eval='predicate:1==1'))" && grep -q "if kappa is None or not programs.evaluable(kappa):" src/deepreason/rules/crit.py && grep -q "kappa.eval.startswith(\"rubric:\")" src/deepreason/adjudication/edges.py && grep -q "nu_interface=Interface(refs=\[Ref(target=standard.id, role=\"mention\")\])," src/deepreason/informal/trial.py`
+`rules/` can ever enter the `rubric:` branch of the fixpoint. The branch belongs
+to `informal/trial.py` alone — the one site in the tree that hands
+`register_fail_warrant` a ν mentioning a standard, under the rubric κ the trial
+was called on. `informal/audits.py` is NOT a second such site, though it is the
+other module that reasons about rubric warrants: it walks them
+(`_rubric_warrants`) and attacks their ν, but its own warrant carries
+`audit:paraphrase-invariance` / `audit:premise-deletion`, both `program:`, so it
+lands on the ordinary validity-node closure and never on the case-law one. A
+change that lets a rules-side route mint against a rubric κ silently turns every
+`mention` on its ν into case law.
+`check: python -c "from deepreason.programs import evaluable; from deepreason.ontology import Commitment as K; assert not evaluable(K(id='k', eval='rubric:std-1')); assert evaluable(K(id='k', eval='predicate:1==1'))" && grep -q "if kappa is None or not programs.evaluable(kappa):" src/deepreason/rules/crit.py && grep -q "kappa.eval.startswith(\"rubric:\")" src/deepreason/adjudication/edges.py && test "$(grep -rln "nu_interface=Interface(refs=\[Ref(target=standard.id, role=\"mention\")\])," --include=*.py src/deepreason)" = src/deepreason/informal/trial.py && python -c "from deepreason.informal.audits import PARAPHRASE_AUDIT, PREMISE_AUDIT; assert [k.eval for k in (PARAPHRASE_AUDIT, PREMISE_AUDIT)] == ['program:paraphrase_audit', 'program:premise_deletion_audit']"`
 
 **The generator credit on a fuzz ν is deliberately inert.** `crit_fuzz` mentions
 the generator that designed the killing experiment so the credit is in the graph,
@@ -219,7 +225,7 @@ roots).
   looks like from outside: 851 events, 72 artifacts, zero warrants, everything
   ACCEPTED, `epistemic_checks_passed: true`. The detector lives in
   `verification/report.py` (`DR-SUB-verification`) and has to.
-`check: grep -q "harness._oracle_pending.add(pending_key)" src/deepreason/rules/crit.py && grep -q "QUARANTINE_TICK\[0\] += 1" src/deepreason/rules/crit.py && grep -q "^def build_att(" src/deepreason/adjudication/edges.py && ! grep -qiE "pending|abort|unavailable|quarantine" src/deepreason/adjudication/edges.py && grep -q "adjudication-blindness" src/deepreason/verification/report.py`
+`check: grep -q "harness._oracle_pending.add(pending_key)" src/deepreason/rules/crit.py && grep -q "QUARANTINE_TICK\[0\] += 1" src/deepreason/rules/crit.py && grep -q "^def build_att(" src/deepreason/adjudication/edges.py && ! grep -qiE "pending|abort|unavailable|quarantine" src/deepreason/adjudication/edges.py && grep -q "adjudication-blindness" src/deepreason/verification/report.py && grep -q '"epistemic_checks_passed": true,' experiments/live_jolt_2026-07-31/jolt-reason-epoch3.json`
 - **A warrant can commit while its critic artifact does not.** Critic artifacts
   are content-addressed, so a byte-identical critic — same target, same spec, same
   decisive quote from a second rubric κ — dedupes and registers nothing, while the

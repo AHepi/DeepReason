@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-verification -->
-Verified-at: 546544b5
+Verified-at: 461cf287
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/log/event_log.py, src/deepreason/storage/blobs.py
 Sides: DR-SUB-harness, DR-SUB-verification
@@ -28,30 +28,32 @@ and evidence whose meaning moves with the code is not evidence.
 
 `verify_root` opens the root only read-only, and takes no configuration beyond
 the meter total.
-`check: python -c "import re,pathlib,inspect;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();c=re.findall(r'Harness\([^)]*\)',t);assert c and all('read_only=True' in x for x in c),c;assert list(inspect.signature(verify_root).parameters)==['root','meter_total']"`
+`check: python -c "import ast,pathlib,inspect;import deepreason.harness as H;import deepreason.log.event_log as L;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();c=[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.Call) and getattr(n.func,'id',getattr(n.func,'attr',None)) in ('Harness','EventLog')];assert len(c)>=4 and all(any(k.arg=='read_only' and getattr(k.value,'value',None) is True for k in n.keywords) for n in c),[ast.unparse(n) for n in c];assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];o=[];oh=H.Harness.__init__;ol=L.EventLog.__init__;H.Harness.__init__=lambda s,*a,**k:(oh(s,*a,**k),o.append(s._read_only))[0];L.EventLog.__init__=lambda s,*a,**k:(ol(s,*a,**k),o.append(s.read_only))[0];verify_root(pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd'));H.Harness.__init__=oh;L.EventLog.__init__=ol;assert len(o)>=19 and all(o),o"`
 
 The dependency arrow points one way only: the verifier imports the writer, and
 importing the writer pulls in no verifier. The one place the arrow appears to
 reverse — `Harness.__init__` calling `validate_terminal_commitment_storage`,
 which lives in the module that later calls `verify_root` — is broken by
 function-local imports on both hops.
-`check: grep -q "^class Harness" src/deepreason/harness.py && grep -q "^def verify_root" src/deepreason/invariants.py && ! grep -qE "deepreason\.(invariants|verification)" src/deepreason/harness.py && python -c "import sys,deepreason.harness;assert not [m for m in ('deepreason.invariants','deepreason.verification.report') if m in sys.modules];import deepreason.invariants;assert 'deepreason.harness' in sys.modules"`
+`check: grep -q "^class Harness:" src/deepreason/harness.py && grep -q "^def verify_root(" src/deepreason/invariants.py && ! grep -qE "deepreason\.(invariants|verification)|from \.+(invariants|verification)" src/deepreason/harness.py && python -c "import sys,deepreason.harness;assert not [m for m in ('deepreason.invariants','deepreason.verification.report') if m in sys.modules];import deepreason.invariants;assert 'deepreason.harness' in sys.modules"`
 
 Every state family the harness rebuilds in `_reset` has its own determinism
 finding name, and the correspondence is exact in both directions.
-`check: python -c "import re,pathlib,inspect;from deepreason.harness import Harness;inv=pathlib.Path('src/deepreason/invariants.py').read_text();e=set(re.findall(r'fail\(.([a-z-]*replay).',inv));assert e=={'replay','scratch-replay','bridge-replay','workflow-replay','capability-replay'},e;s=set(re.findall(r'self\.(\w+_state) = ',inspect.getsource(Harness._reset)));assert s=={'scratch_state','bridge_state','workflow_state','capability_state'},s"`
+`check: python -c "import ast,re,pathlib,inspect;from deepreason.harness import Harness;T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());want={'replay':'state','scratch-replay':'scratch_state','bridge-replay':'bridge_state','workflow-replay':'workflow_state','capability-replay':'capability_state'};got={k:ast.unparse(n.test) for n in ast.walk(T) if isinstance(n,ast.If) for s in n.body for k in want if ('fail('+chr(39)+k+chr(39)) in ast.unparse(s)};assert set(got)==set(want),sorted(got);assert all(('second.'+want[k]) in v and ('h.'+want[k]) in v for k,v in got.items()),got;s=set(re.findall(r'self\.(\w+_state) = ',inspect.getsource(Harness._reset)));assert s=={'scratch_state','bridge_state','workflow_state','capability_state'},s"`
 
-The finding vocabulary is closed: of the 219 `fail(` sites in `invariants.py`,
-exactly one passes a non-literal name, and that one forwards a name another
-literal already minted. Only `detail` is free text.
-`check: python -c "import re,pathlib;t=pathlib.Path('src/deepreason/invariants.py').read_text();c=[m for m in re.finditer(r'(?<!def )\bfail\(',t)];d=[m for m in c if not t[m.end():m.end()+40].lstrip().startswith(chr(34))];assert len(c)>150 and len(d)==1,(len(c),len(d))"`
+The finding vocabulary is closed: of the 218 `fail(` sites in `invariants.py`,
+exactly one passes a non-literal name — `fail(str(item["check"]), ...)`, which
+forwards the `_controller_v3_history` findings — and every name that pass can
+forward is a string literal some `fail(` already minted (`school-route`,
+`workflow-call-pairing`, `workflow-decision`). Only `detail` is free text.
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());C=lambda nm:[n for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'id',None)==nm];lit=lambda n:bool(n.args) and isinstance(n.args[0],ast.Constant) and isinstance(n.args[0].value,str);f=C('fail');g=C('finding');assert len(f)==218,len(f);assert len([n for n in f if not lit(n)])==1,[ast.unparse(n) for n in f if not lit(n)];assert len(g)>15 and all(map(lit,g)),[ast.unparse(n) for n in g if not lit(n)];assert {n.args[0].value for n in g}<={n.args[0].value for n in f if lit(n)}"`
 
 `StateDiff` carries two different kinds of thing, and only one is replay input.
 `hv_set`, `reach_set`, `addr+` and `carry+` are read back and applied;
 `status_changed` is read back only by the incremental transition program;
 `att+`, `dep+`, `A+` and `Π+` are written for the record and never read again,
 because adjudication recomputes them.
-`check: python -c "import re,pathlib;from deepreason.ontology.event import StateDiff;t=pathlib.Path('src/deepreason/harness.py').read_text();read=set(re.findall(r'event\.state_diff\.(\w+)',t));assert read=={'status_changed','hv_set','reach_set','addr_add','carry_add'},read;assert {'att_add','dep_add','a_add','pi_add'} <= set(StateDiff.model_fields)"`
+`check: python -c "import ast,pathlib;from deepreason.ontology.event import StateDiff;F=set(StateDiff.model_fields);T=ast.parse(pathlib.Path('src/deepreason/harness.py').read_text());I={id(x) for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'id',None)=='StateDiff' for x in ast.walk(n)};r={n.attr for n in ast.walk(T) if isinstance(n,ast.Attribute) and n.attr in F and id(n) not in I};assert r=={'status_changed','hv_set','reach_set','addr_add','carry_add'},r;assert {'att_add','dep_add','a_add','pi_add'}<=F,F"`
 
 ## Where it is expressed
 
@@ -86,7 +88,7 @@ prefix sample is five quantiles rather than every seq.
 Reader tolerance is a defaulted field plus a gate, not a special case:
 `attempt_trace` defaults empty so an old event still validates, and the demand
 for a trace fires only when the root is manifest-bound.
-`check: python -c "from deepreason.ontology.event import LLMCall;assert not LLMCall.model_fields['attempt_trace'].is_required()" && grep -q "manifest-bound LLM call has no attempt trace" src/deepreason/invariants.py && grep -q "def _legacy_bridge_failure_call_seqs" src/deepreason/invariants.py`
+`check: python -c "import ast,pathlib;from deepreason.ontology.event import LLMCall;assert not LLMCall.model_fields['attempt_trace'].is_required();t=pathlib.Path('src/deepreason/invariants.py').read_text();M='manifest-bound LLM call has no attempt trace';G=[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.If) and any(M in ast.unparse(s) for s in n.body)];assert len(G)==1 and ast.unparse(G[0].test)=='manifest is not None',[ast.unparse(g.test) for g in G];assert 'def _legacy_bridge_failure_call_seqs' in t"`
 
 ## What is deliberately absent
 
@@ -130,7 +132,7 @@ verifier that could read them could leak the answer into a finding's `detail`.
 allow-list, and no way to skip a check — because a verdict that depends on
 options is not comparable across roots or across time, which is the property
 `REPLAY_VALIDATION.json` is stored to assert.
-`check: python -c "import pathlib;t=pathlib.Path('src/deepreason/invariants.py').read_text();bad=[m for m in ('import os','os.environ','getenv','import random','datetime','time.time','uuid') if m in t];assert not bad,bad;assert 'def verify_root(' in t"`
+`check: python -c "import ast,pathlib,inspect;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();T=ast.parse(t);full={a.name for n in ast.walk(T) if isinstance(n,ast.Import) for a in n.names}|{n.module for n in ast.walk(T) if isinstance(n,ast.ImportFrom) and not n.level and n.module};ext={x for x in full if not x.startswith('deepreason')};assert ext=={'enum','json','pathlib','urllib.parse'},sorted(ext);assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];i=t.index('if meter_total is not None');assert 'accounting' in t[i:i+200];assert 'def verify_root(' in t"`
 
 **Not every prefix is verified.** `Harness.at` is probed at five quantile seqs,
 not at every seq. Bounded on purpose — the cost is linear in events per probe —
@@ -140,7 +142,10 @@ expression.
 
 **`verify_root` writes no file at all**, including `REPLAY_VALIDATION.json`.
 That record is assembled by callers out of the return value; see
-`DR-SUB-verification` for who writes it and what else it binds.
+`DR-SUB-verification` for who writes it and what else it binds. Not "creates no
+new file" — every byte under the root is unchanged, on a one-event root and on a
+521-file committed one.
+`check: python -c "import hashlib,pathlib,tempfile;from deepreason.harness import Harness;from deepreason.invariants import verify_root;s=lambda r:{str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file()};d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);b=s(d);assert b;verify_root(d);assert s(d)==b,'verify_root wrote to a fresh root';r=pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd');c=s(r);assert len(c)>100,len(c);verify_root(r);assert s(r)==c,'verify_root wrote to a committed root'"`
 
 ## How to change it
 
@@ -181,7 +186,7 @@ which is the expensive one, because by then you need to know whether a committed
 root moved.
 
 `check: python -m pytest tests/test_replay.py tests/test_persistence_invariants.py -q`
-`check: python -m pytest tests/test_chaos_invariants.py "tests/test_process_metadata.py::test_invariants_detect_manifest_hash_corruption" -q`
+`check: python -m pytest tests/test_chaos_invariants.py "tests/test_run_manifest.py::test_manifest_is_immutable_canonical_and_hash_verified" -q`
 
 Also worth running when you touch the correlation passes rather than the replay
 itself: `tests/test_v6_controller3_replay_verification.py`, which pins the
@@ -201,7 +206,7 @@ fail-closed behaviour of the pre-replay controller-v3 correlation.
   {}`. `_controller_v3_history` runs BEFORE replay precisely so its typed
   findings survive that collapse — nothing else does. A caller that indexes into
   `stats` unconditionally crashes on exactly the roots most worth inspecting.
-`check: python -c "import tempfile,pathlib,json;from deepreason.harness import Harness;from deepreason.invariants import verify_root;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);g=verify_root(d);assert set(g)=={'violations','stats'} and g['stats']['events']==1,g;(d/'workflow-checkpoint.json').write_text(json.dumps({'schema':'workflow.checkpoint.v0'}));b=verify_root(d);assert b['stats']=={} and [v['check'] for v in b['violations']]==['open'],b" && grep -q "controller_v3_findings, controller_v3 = _controller_v3_history(Path(root))" src/deepreason/invariants.py`
+`check: python -c "import tempfile,pathlib,json;from deepreason.harness import Harness;from deepreason.invariants import verify_root;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);g=verify_root(d);assert set(g)=={'violations','stats'} and g['stats']['events']==1,g;(d/'workflow-checkpoint.json').write_text(json.dumps({'schema':'workflow.checkpoint.v0'}));b=verify_root(d);assert b['stats']=={} and [v['check'] for v in b['violations']]==['open'],b" && python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());F=[n for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and n.name=='verify_root'][0];s=[ast.unparse(x) for x in F.body];a=[i for i,x in enumerate(s) if '_controller_v3_history(' in x];b=[i for i,x in enumerate(s) if 'Harness(root, read_only=True)' in x];assert a and b and max(a)<min(b),(a,b)"`
 - **Two replays of the same code are not a correctness check.** The `replay`
   finding compares two `Harness` opens of one log; both run the same
   `_apply_event`. It catches NONDETERMINISM — an iteration order that leaked
@@ -217,10 +222,12 @@ fail-closed behaviour of the pre-replay controller-v3 correlation.
   experiment that mutates only the first group will report, correctly and
   uselessly, that nothing happened. The read-back set is pinned by the check
   under *The agreement*.
-- **Pre-v6 roots are expected to refuse.** 11 of the 42 recorded roots raise
-  `UnsupportedRunManifestVersionError` on open. That is the sweep's baseline, not
-  a regression to be fixed by widening the manifest loader —
-  see `DR-INV-frozen-surfaces`, surface 4.
+- **Pre-v6 roots are expected to refuse.** Of the 42 recorded roots, 14 raise
+  `UnsupportedRunManifestVersionError` on open, 3 predate run manifests entirely
+  and open fine, and 25 load a v6 manifest. That is the sweep's baseline, not a
+  regression to be fixed by widening the manifest loader —
+  see `DR-INV-frozen-surfaces`, surface 4, whose prose still says 11.
+`check: python -W ignore -c "import pathlib,subprocess,collections;from deepreason.run_manifest import load_run_manifest as L,UnsupportedRunManifestVersionError as U;R=[pathlib.Path(p).parent for p in subprocess.run(['git','ls-files'],capture_output=True,text=True).stdout.splitlines() if p.endswith('/log.jsonl')];g={'L':L,'U':U,'N':'run-manifest.json'};exec(chr(10).join(['def k(r):','    m=r/N','    if not m.exists(): return 2','    try:','        L(m)','        return 0','    except U:','        return 1']),g);c=collections.Counter(g['k'](r) for r in R);assert len(R)==42 and c[0]==25 and c[1]==14 and c[2]==3,(len(R),dict(c))"`
 - **`seq-stream` is defence in depth, not the enforcement.** The reader raises
   `EventSequenceError` on any gap, so a gapped log never reaches the graph
   checks; it becomes an `open` finding instead. Reading the `seq-stream` name in

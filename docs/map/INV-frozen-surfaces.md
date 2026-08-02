@@ -63,8 +63,10 @@ is a closed two-value Literal, and the v4 validator additionally rejects any
 criticism binding whose role is not `argumentative_critic`:
 
 `check: grep -q 'V4_CRITICISM_ROLE_UNSUPPORTED' src/deepreason/run_manifest.py`
+`check: grep -rq 'V4_CRITICISM_ROLE_UNSUPPORTED\|role == .judge' experiments/2026-08-01-change-prose-can-refute/SPEC.md`
 
-A 2026-08-02 tranche wanted school-bound JUDGE seats. The Pydantic model permits
+The tranche in `experiments/2026-08-01-change-prose-can-refute/` wanted
+school-bound JUDGE seats. The Pydantic model permits
 `role="judge"`; the validator forbids it. The change was redesigned to avoid the
 manifest entirely rather than widen the validator. **Reading the model and not
 the validator is the specific mistake to avoid here.**

@@ -27,7 +27,7 @@ the adapter is duck-typed: `rules/` never imports `LLMAdapter`, only its typed
 failures and its data, so every rule is testable against a fake adapter exactly
 as it is against a fake harness.
 
-Twenty-eight files under `src/deepreason` mention both words today. Six modules
+More than two dozen files under `src/deepreason` mention both words. Six modules
 in `rules/` actually import `llm/`; five of those dispatch; two — `conj.py` and
 `crit.py` — carry the route, contract and transaction agreement and hold eight of
 the thirteen `adapter.call` sites in the package.
@@ -41,7 +41,7 @@ alias builders and `AllocatedPack`, six wire-contract classes with
 `distance`. What does not cross is every transport primitive — no `LLMAdapter`,
 `build_adapter`, `TokenMeter`, endpoint class, `select_lease`,
 `render_role_prompt` or `reject_model_control_fields` is importable by a rule.
-`check: python -c "import ast,pathlib; n=[x for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for x in ast.walk(ast.parse(p.read_text())) if isinstance(x, ast.ImportFrom) and (x.module or '').startswith('deepreason.llm')]; mods={x.module for x in n}; seen={a.name for x in n for a in x.names}; banned={'LLMAdapter','build_adapter','TokenMeter','Reservation','OpenAICompatEndpoint','MockEndpoint','render_role_prompt','reject_model_control_fields','select_lease','resolve_school_role_lease','probe_capabilities','apply_model_profile','clip_pack'}; assert not (seen & banned), sorted(seen & banned); assert mods >= {'deepreason.llm.adapter','deepreason.llm.contracts','deepreason.llm.firewall','deepreason.llm.packs','deepreason.llm.wire'}; assert seen >= {'EndpointError','SchemaRepairError','EndpointLease','RouteFirewallError','WorkflowAuthorizationError','RequestEnvelopeExceeded'}" && ! grep -rq "LLMAdapter" --include=*.py src/deepreason/rules/conj.py`
+`check: python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')]; n=[x for t in T for x in ast.walk(t) if isinstance(x, ast.ImportFrom) and (x.module or '').startswith('deepreason.llm')]; mods={x.module for x in n}; seen={a.name for x in n for a in x.names}; plain={a.name for t in T for x in ast.walk(t) if isinstance(x, ast.Import) for a in x.names if a.name.startswith('deepreason.llm')}; attrs={x.attr for t in T for x in ast.walk(t) if isinstance(x, ast.Attribute)}; banned={'LLMAdapter','build_adapter','TokenMeter','Reservation','OpenAICompatEndpoint','MockEndpoint','render_role_prompt','reject_model_control_fields','select_lease','resolve_school_role_lease','probe_capabilities','apply_model_profile','clip_pack'}; assert not (seen & banned), sorted(seen & banned); assert not plain, sorted(plain); assert not (attrs & banned), sorted(attrs & banned); assert mods >= {'deepreason.llm.adapter','deepreason.llm.contracts','deepreason.llm.firewall','deepreason.llm.packs','deepreason.llm.wire'}; assert seen >= {'EndpointError','SchemaRepairError','EndpointLease','RouteFirewallError','WorkflowAuthorizationError','RequestEnvelopeExceeded'}" && test "$(grep -rh "LLMAdapter" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && grep -q "LLMAdapter" src/deepreason/rules/crit.py`
 
 ## Where it is expressed
 
@@ -68,7 +68,7 @@ alias builders and `AllocatedPack`, six wire-contract classes with
 | Grounds must be in the pack | `rules/experiment.py` | `ruling.decisive_point not in pack` → invalid ruling | a judge may not ground a verdict in text it was not shown |
 | Provenance owns the endpoints | `rules/synth.py` | `endpoints + [i for i in output.connects if i in harness.state.artifacts]` | model refs may add a mention, never remove a deterministic endpoint |
 | One call, one log entry | `rules/crit.py`, `rules/experiment.py` | `llm_pending` | the shared call attaches to the first committing event, else to a `Measure` |
-| Typed failure vocabulary | `rules/conj.py`, `rules/crit.py` | `except EndpointError / SchemaRepairError / RouteFirewallError / RequestEnvelopeExceeded / WorkflowAuthorizationError` | the adapter's typed failures are the only failure shapes a rule handles |
+| Typed failure vocabulary | `rules/conj.py`, `rules/crit.py` | `except EndpointError / SchemaRepairError` in both; `RouteFirewallError`, `RequestEnvelopeExceeded` and `WorkflowAuthorizationError` in `conj.py` only | the adapter's typed failures are the only failure shapes a rule handles |
 
 The firewall is the load-bearing row and it is enforced twice, on both sides of
 one call: once directly in `call`, and once inside every wire contract's
@@ -78,7 +78,7 @@ duplication — reversed, a control key that is not in the schema becomes a gene
 into the next repair pack. The forbidden set names authority, never content, and
 the one exemption is the counterexample payload: application data whose keys
 belong to the domain, not to the harness.
-`check: python -c "import re,pathlib; a=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); w=pathlib.Path('src/deepreason/llm/wire.py').read_text(); assert re.search(r'candidate = repair\.candidate_from_raw\(turn, raw\)\n\s+reject_model_control_fields\(candidate\)\n\s+wire_value = wire_contract\.validate_value\(candidate\)', a); assert re.search(r'_reject_control_fields\(value\)\n\s+schema = self\.model_json_schema\(\)\n\s+_reject_unknown_fields\(value, schema, schema\)', w); from deepreason.llm.firewall import FORBIDDEN_MODEL_CONTROL_FIELDS as F, _OPAQUE_DATA_FIELDS as O; assert {'model','endpoint','route','tool','delegate','permission','spawn','guard_policy','acceptance','status','context_window_tokens'} <= F; assert O == {'counterexample'}" && ! grep -rq "reject_model_control_fields" --include=*.py src/deepreason/rules && grep -q "^def reject_model_control_fields(" src/deepreason/llm/firewall.py && grep -q "self._preflight_value(value)" src/deepreason/llm/wire.py && python -m pytest tests/test_model_firewall.py tests/test_wire_contracts.py::test_counterexample_payload_remains_opaque_domain_data -q`
+`check: python -c "import re,pathlib; a=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); w=pathlib.Path('src/deepreason/llm/wire.py').read_text(); assert re.search(r'candidate = repair\.candidate_from_raw\(turn, raw\)\n\s+reject_model_control_fields\(candidate\)\n\s+wire_value = wire_contract\.validate_value\(candidate\)', a); assert re.search(r'_reject_control_fields\(value\)\n\s+schema = self\.model_json_schema\(\)\n\s+_reject_unknown_fields\(value, schema, schema\)', w); from deepreason.llm.firewall import FORBIDDEN_MODEL_CONTROL_FIELDS as F, _OPAQUE_DATA_FIELDS as O; assert {'model','endpoint','route','tool','delegate','permission','spawn','guard_policy','acceptance','status','context_window_tokens'} <= F; assert O == {'counterexample'}; assert re.search(r'self\._preflight_value\(value\)\n\s+return self\.wire_model\.model_validate\(value\)', w)" && ! grep -rq "reject_model_control_fields" --include=*.py src/deepreason/rules && grep -q "^def reject_model_control_fields(" src/deepreason/llm/firewall.py && python -m pytest tests/test_model_firewall.py tests/test_wire_contracts.py::test_counterexample_payload_remains_opaque_domain_data -q`
 
 The lease travels one way. The scheduler resolves it, a rule carries it, and the
 adapter re-verifies it against the live endpoint immediately before dispatch.
@@ -86,19 +86,19 @@ adapter re-verifies it against the live endpoint immediately before dispatch.
 
 Presentation is read, never written: no rule passes `model_profile` or
 `output_mechanism`, and under v6 both are refused outright.
-`check: ! grep -rqE "model_profile=|output_mechanism=" --include=*.py src/deepreason/rules && grep -q "adapter.profile_for(\"argumentative_critic\")" src/deepreason/rules/crit.py && grep -q "output mechanism is frozen by endpoint lease" src/deepreason/llm/adapter.py && grep -q "class V6ModelProfileOverrideForbidden" src/deepreason/llm/adapter.py`
+`check: ! grep -rqE "model_profile=|output_mechanism=" --include=*.py src/deepreason/rules && grep -q "adapter.profile_for(\"argumentative_critic\")" src/deepreason/rules/crit.py && grep -q "output mechanism is frozen by endpoint lease" src/deepreason/llm/adapter.py && grep -q "class V6ModelProfileOverrideForbidden" src/deepreason/llm/adapter.py && python -m pytest tests/test_v6_profile_authority.py::test_v6_per_call_profile_override_fails_before_any_effect -q`
 
 Which target is attacked is a deterministic decision, so it is carried by the
 contract rather than asked for in prose: a bound `Literal` in the schema, a
 resolve-and-compare in `compile`, and a factory that refuses to build at all
 without one. Naming a known-but-wrong alias is therefore an ordinary repairable
 schema violation.
-`check: grep -q "target_alias=(Literal\[expected_alias\], ...)," src/deepreason/llm/wire.py && test "$(grep -c "expected_target=target_id" src/deepreason/rules/crit.py)" -eq 3 && grep -q "class CriticTargetRequiredError" src/deepreason/llm/wire.py && python -m pytest tests/test_wire_contracts.py::test_compact_critic_target_is_bound_in_schema_and_validation tests/test_wire_contracts.py::test_compact_critic_factory_fails_closed_without_attacked_target tests/test_compact_role_alias_integration.py::test_compact_critic_repairs_a_known_alias_for_the_wrong_target -q`
+`check: grep -q "target_alias=(Literal\[expected_alias\], ...)," src/deepreason/llm/wire.py && test "$(grep -c "expected_target=target_id" src/deepreason/rules/crit.py)" -eq 3 && grep -q "class CriticTargetRequiredError" src/deepreason/llm/wire.py && python -c "import unittest; from deepreason.llm.wire import AliasTable, CriticWireContract, UnknownAliasError; c=CriticWireContract(AliasTable({'SRC_001':'a','SRC_002':'b'}),'a'); w=c.wire_model.model_construct(attack=True,target_alias='SRC_002',claim='x',grounds='y',cited_input_aliases=[]); unittest.TestCase().assertRaisesRegex(UnknownAliasError,'does not name the attacked',c.compile,w)" && python -m pytest tests/test_wire_contracts.py::test_compact_critic_target_is_bound_in_schema_and_validation tests/test_wire_contracts.py::test_compact_critic_factory_fails_closed_without_attacked_target tests/test_compact_role_alias_integration.py::test_compact_critic_repairs_a_known_alias_for_the_wrong_target -q`
 
 The batch contract and the batch rule guard the same roster from two directions:
 the contract rejects duplicate targets before compilation, the rule drops any
 target it did not assign.
-`check: grep -q "if case.target not in target_ids or case.target in ruled:" src/deepreason/rules/crit.py && grep -q "batch critic cannot return duplicate target cases" src/deepreason/llm/wire.py && grep -q "def _one_case_per_target" src/deepreason/llm/wire.py && python -m pytest tests/test_crit_batch.py -q`
+`check: grep -q "if case.target not in target_ids or case.target in ruled:" src/deepreason/rules/crit.py && grep -q "batch critic cannot return duplicate target cases" src/deepreason/llm/wire.py && grep -q "def _one_case_per_target" src/deepreason/llm/wire.py && python -c "import unittest; from deepreason.llm.wire import BatchCriticWireV2; unittest.TestCase().assertRaisesRegex(ValueError,'duplicate target cases',BatchCriticWireV2,cases=[{'target_alias':'SRC_001','attack':True},{'target_alias':'SRC_001','attack':False}])" && python -m pytest tests/test_crit_batch.py -q`
 
 Two agreements exist only because the same fact is stated to the model and
 enforced by the machine, and both are wired to a single source. The
@@ -111,11 +111,11 @@ Three smaller rules hold the same line in three different shapes: a synthesizer
 may add refs but not remove the endpoints its problem's provenance owns; a judge
 whose `decisive_point` is not in the pack rules nothing; and the path that needs
 cross-family independence is the path that calls the asserting reader.
-`check: grep -q "endpoints + \[i for i in output.connects if i in harness.state.artifacts\]" src/deepreason/rules/synth.py && grep -q "if ruling.decisive_point and ruling.decisive_point not in pack:" src/deepreason/rules/experiment.py && grep -q "judge_seats = adapter.require_cross_family_judges()" src/deepreason/rules/experiment.py && grep -q "    def require_cross_family_judges(" src/deepreason/llm/adapter.py`
+`check: grep -q "endpoints + \[i for i in output.connects if i in harness.state.artifacts\]" src/deepreason/rules/synth.py && grep -q "if ruling.decisive_point and ruling.decisive_point not in pack:" src/deepreason/rules/experiment.py && grep -q "judge_seats = adapter.require_cross_family_judges()" src/deepreason/rules/experiment.py && grep -q "    def require_cross_family_judges(" src/deepreason/llm/adapter.py && python -m pytest tests/test_judge_ensemble_boundary.py -q`
 
 A pack that survives allocation must survive the rule's own edits too, and bytes
 a rule adds must be paid for before the pack is built, not after.
-`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 3 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
+`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 3 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && test "$(grep -c "token_budget=" src/deepreason/rules/crit.py)" -eq "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" && test "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" -ge 5 && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
 
 ## What is deliberately absent
 
@@ -289,10 +289,14 @@ The tests that catch you, cheapest first: `tests/test_model_firewall.py` and
   firewall exists to prevent, since that diagnostic goes into the next repair
   pack. **Residue: each site is held only by the structural check in this
   document.** Reversing the order inside `_preflight_value` is likewise green.
-  Do not delete either site on the grounds that the tests still pass.
+  Do not delete either site on the grounds that the tests still pass. The same
+  redundancy hides a subtler mutation: deleting the `self._preflight_value(value)`
+  CALL from `WireContract.validate_value` — leaving the method defined, and a
+  subclass override still calling it — is green everywhere, so the structural
+  check pins the call site and its position, not just the method body.
 - **Reading `adapter.meter` is not metering.** `conj.py` and `crit.py` read
   `adapter.meter` to hand it to `InquiryTransactionService`; neither calls
   `reserve` or `check`. A rule that booked its own reservation would double-count
   against a bound the workflow already owns (`DR-SEAM-llm-x-workflow`), and the
   ceiling test compares work items, logged calls and metered calls for equality.
-`check: ! grep -rqE "meter\.reserve|meter\.check\(" --include=*.py src/deepreason/rules && grep -q "InquiryTransactionService(harness, manifest, adapter.meter)" src/deepreason/rules/conj.py && grep -q "^class TokenMeter:" src/deepreason/llm/budget.py`
+`check: ! grep -rqE "meter\.reserve|meter\.check\(" --include=*.py src/deepreason/rules && grep -q "InquiryTransactionService(harness, manifest, adapter.meter)" src/deepreason/rules/conj.py && grep -q "InquiryTransactionService(harness, manifest, adapter.meter)" src/deepreason/rules/crit.py && grep -q "^class TokenMeter:" src/deepreason/llm/budget.py`

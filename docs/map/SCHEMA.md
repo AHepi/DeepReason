@@ -99,6 +99,26 @@ cheapest command that would actually fail if the claim became false: a `grep`
 that a rename would break beats a test run that takes a minute, and a test id
 beats a grep when the claim is behavioural rather than structural.
 
+### What a check can and cannot bind
+
+A check binds a claim about STRUCTURE — a symbol exists, a module does not
+import another, a behaviour holds under test. It cannot bind a claim about
+HISTORY, INTENT, or WHY. "This guard exists because prose immunity must not
+suppress scrutiny evidence" is unfalsifiable by grep, and it is also the most
+valuable sentence in the document.
+
+So roughly nine in ten prose lines here are unbacked, and that is structural,
+not laziness. Two consequences to design around:
+
+1. **Convert unbackable claims into backable ones where you can.** A date in
+   prose cannot be checked and two documents will eventually disagree about it
+   — this has already happened here. Cite the artifact instead: a tranche
+   directory, a test id, a typed error code. A path is unambiguous AND
+   greppable, so the same sentence becomes checkable.
+2. **Treat unbacked prose as the part that decays.** `Verified-at` and
+   `--stale` exist for it. When you re-read a document, the checks are already
+   proven; spend the attention on the sentences no check protects.
+
 **Do not write a check that cannot fail.** `check: true` and
 `check: test -f src/deepreason/harness.py` are worse than no check, because they
 buy the claim false credibility. `tools/docs_verify.py --audit` flags checks

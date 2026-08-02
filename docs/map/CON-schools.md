@@ -167,7 +167,7 @@ but the plan refuses to advertise that as route diversity.
 
 - **Reading `SchoolRoleBindingV1` and not the validator.** The Pydantic model
   accepts `role="judge"` (the field's only constraint is `^[a-z][a-z0-9_]*$`);
-  both v4 validators reject it. A 2026-08-01 tranche wanted school-bound judge
+  both v4 validators reject it. The tranche in `experiments/2026-08-01-change-prose-can-refute/` wanted school-bound judge
   seats, read the model, and had to redesign the change to avoid the manifest
   entirely
   (`experiments/2026-08-01-change-prose-can-refute/DELIVERY.md`, A9).

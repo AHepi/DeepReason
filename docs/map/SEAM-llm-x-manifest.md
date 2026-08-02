@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-manifest -->
-Verified-at: 08dcdf3c
+Verified-at: 461cf287
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/run_manifest.py
 Sides: DR-SUB-llm, DR-SUB-manifest
@@ -34,8 +34,11 @@ keeps the cycle from closing.
 Twenty-nine modules mention both sides. Three carry the agreement. The import
 surface is seven names across three `llm/` modules, and the reverse edge is at
 module scope only for the two `llm/` modules that do not import the manifest
-back.
-`check: python -c "import ast, pathlib; llm=pathlib.Path('src/deepreason/llm'); names={a.name for p in llm.rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.run_manifest') for a in n.names}; assert names == {'Route','RunManifest','SchoolRoleBindingV1','infer_model_family','resolve_route_seat_base_profile','resolve_route_seat_behavioral_capability','validate_route_base_url'}, sorted(names); t=ast.parse(pathlib.Path('src/deepreason/run_manifest.py').read_text()); top={n.module for n in t.body if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')}; every={n.module for n in ast.walk(t) if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')}; assert top == {'deepreason.llm.endpoints','deepreason.llm.providers'}, sorted(top); assert 'deepreason.llm.firewall' in every - top" && ! grep -q "run_manifest" src/deepreason/llm/endpoints.py src/deepreason/llm/providers.py && test "$(for f in $(grep -rl "deepreason\.llm" --include=*.py src/deepreason); do grep -ql "RunManifest\|run_manifest" "$f" && echo x; done | wc -l)" -ge 25`
+back. Named imports are not the only way in: a plain `import
+deepreason.run_manifest` would let the provider boundary reach every symbol
+under an attribute, so the check forbids that form outright rather than
+enumerating what it could reach.
+`check: python -c "import ast, pathlib; llm=pathlib.Path('src/deepreason/llm'); names={a.name for p in llm.rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.run_manifest') for a in n.names}; assert names == {'Route','RunManifest','SchoolRoleBindingV1','infer_model_family','resolve_route_seat_base_profile','resolve_route_seat_behavioral_capability','validate_route_base_url'}, sorted(names); plain={a.name for p in llm.rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.Import) for a in n.names if a.name.startswith('deepreason.run_manifest')}; assert plain == set(), sorted(plain); t=ast.parse(pathlib.Path('src/deepreason/run_manifest.py').read_text()); top={n.module for n in t.body if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')}; every={n.module for n in ast.walk(t) if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')}; assert top == {'deepreason.llm.endpoints','deepreason.llm.providers'}, sorted(top); assert 'deepreason.llm.firewall' in every - top" && ! grep -q "run_manifest" src/deepreason/llm/endpoints.py src/deepreason/llm/providers.py && test "$(for f in $(grep -rl "deepreason\.llm" --include=*.py src/deepreason); do grep -ql "RunManifest\|run_manifest" "$f" && echo x; done | wc -l)" -eq 29`
 
 ## Where it is expressed
 
@@ -46,7 +49,7 @@ back.
 | Legacy translation | `llm/firewall.py` | `leases_from_endpoints`, `route_from_endpoint` | a pre-manifest role table gets the same frozen shape by reading a live endpoint object |
 | Seat lookup | `llm/firewall.py` | `select_lease` | total on (role, seat) or it raises; a lease whose own role/seat disagrees is a `RouteFirewallError`, never a silent substitution |
 | Adapter wiring | `llm/adapter.py` | `build_adapter(..., run_manifest=...)` | role table, presentation profile, transactional mode AND the lease map all come from the manifest when one is supplied |
-| Endpoint construction | `run_manifest.py`, `llm/adapter.py` | `Route.endpoint_spec()` into `_endpoint_from_spec` | the only manifest-to-endpoint constructor; the credential is read from `os.environ[api_key_env]` here and nowhere else |
+| Endpoint construction | `run_manifest.py`, `llm/adapter.py` | `Route.endpoint_spec()` into `_endpoint_from_spec` | the only manifest-to-endpoint constructor; the credential VALUE is read by `os.environ.get(api_key_env)` here and, at compile time only, in `_route_from_spec` — see Traps |
 | Dispatch guard | `llm/firewall.py` | `EndpointLease.verify` | `ROUTE_LEASE_MISMATCH`: `base_url` and `model_id` always, ten more fields whenever the endpoint object exposes them |
 | Re-verification | `llm/adapter.py` | `lease.verify(endpoint)` at three sites | whole-ensemble preflight, render, and again before every repair turn; a mid-call mutation is terminal but carries prior spend |
 | Route identity | `llm/firewall.py` | `route_fingerprint` | sha256 over the entire serialized `Route`; the `route_sha256` of every typed record |
@@ -67,9 +70,11 @@ seat that does not exist raises instead of falling back to seat zero.
 `check: python -c "import types, pytest; from deepreason.run_manifest import Route; from deepreason.llm.firewall import EndpointLease, RouteFirewallError, leases_from_manifest, select_lease; r=Route(endpoint_id='a', base_url='https://h/v1', model_id='m', provider='p', family='f'); m=types.SimpleNamespace(roles={'conjecturer': (r, r), 'judge': ()}); L=leases_from_manifest(m); assert set(L) == {'conjecturer'}; assert [x.seat for x in L['conjecturer']] == [0, 1] and L['conjecturer'][1].route is r; pytest.raises(KeyError, select_lease, L, 'judge', 0); pytest.raises(KeyError, select_lease, L, 'conjecturer', 2); pytest.raises(RouteFirewallError, select_lease, {'judge': (EndpointLease(role='conjecturer', seat=0, route=r),)}, 'judge', 0)"`
 
 `ROUTE_LEASE_MISMATCH` fires on model or base-url substitution unconditionally,
-on any optional field the endpoint exposes, and on `max_tokens` only when the
-route carries a qualified capacity. Four sites in the tree re-verify.
-`check: python -c "import types, pytest; from deepreason.run_manifest import Route; from deepreason.llm.firewall import EndpointLease, RouteFirewallError; r=Route(endpoint_id='a', base_url='https://h/v1', model_id='m', provider='p', family='f', max_tokens=100); L=EndpointLease(role='judge', seat=1, route=r); e=types.SimpleNamespace(name='https://h/v1', model='m'); L.verify(e); e.max_tokens=999; e.timeout_s=1; L.verify(e); e.temperature=0.9; pytest.raises(RouteFirewallError, L.verify, e).match('field=temperature'); pytest.raises(RouteFirewallError, L.verify, types.SimpleNamespace(name='https://h/v1', model='other')).match('ROUTE_LEASE_MISMATCH'); q=EndpointLease(role='judge', seat=1, route=Route(endpoint_id='a', base_url='https://h/v1', model_id='m', provider='p', family='f', max_tokens=100, context_window_tokens=1000)); pytest.raises(RouteFirewallError, q.verify, types.SimpleNamespace(name='https://h/v1', model='m', max_tokens=999)).match('field=max_tokens')" && test "$(grep -rn "\.verify(endpoint)" --include=*.py src/deepreason | wc -l)" -eq 4`
+on each of the ten optional fields the endpoint exposes, and on `max_tokens` as
+an eleventh only when the route carries a qualified capacity. Four sites in the
+tree re-verify. Dropping any single entry from the `optional` map is a silent
+weakening of the guard, so the check names all eleven rather than a sample.
+`check: python -c "import types, pytest; from deepreason.run_manifest import Route; from deepreason.llm.firewall import EndpointLease, RouteFirewallError; r=Route(endpoint_id='a', base_url='https://h/v1', model_id='m', provider='p', family='f', max_tokens=100); L=EndpointLease(role='judge', seat=1, route=r); e=types.SimpleNamespace(name='https://h/v1', model='m'); L.verify(e); e.max_tokens=999; e.timeout_s=1; L.verify(e); e.temperature=0.9; pytest.raises(RouteFirewallError, L.verify, e).match('field=temperature'); pytest.raises(RouteFirewallError, L.verify, types.SimpleNamespace(name='https://h/v1', model='other')).match('ROUTE_LEASE_MISMATCH.*field=model_id'); pytest.raises(RouteFirewallError, L.verify, types.SimpleNamespace(name='https://other/v1', model='m')).match('ROUTE_LEASE_MISMATCH.*field=base_url'); q=Route(endpoint_id='a', base_url='https://h/v1', model_id='m', provider='p', family='f', model_revision='rev', reasoning='high', output_mode='json_object', output_mechanism='grammar', temperature=0.2, max_tokens=100, context_window_tokens=1000, logprobs=True); Q=EndpointLease(role='judge', seat=1, route=q); good=dict(name='https://h/v1', model='m', endpoint_id='a', family='f', model_revision='rev', provider='p', reasoning='high', temperature=0.2, json_mode=True, output_mechanism='grammar', request_logprobs=True, context_window_tokens=1000, max_tokens=100); Q.verify(types.SimpleNamespace(**good)); wrong=dict(endpoint_id='z', family='g', model_revision='other', provider='q', reasoning='low', temperature=0.9, json_mode=False, output_mechanism='json_text', request_logprobs=False, context_window_tokens=2000, max_tokens=999); assert len(wrong) == 11; [pytest.raises(RouteFirewallError, Q.verify, types.SimpleNamespace(**{**good, k: v})).match('ROUTE_LEASE_MISMATCH.*field=' + k) for k, v in wrong.items()]" && test "$(grep -rn "\.verify(endpoint)" --include=*.py src/deepreason | wc -l)" -eq 4`
 
 The digest is over the route and nothing else: canonical JSON of the whole
 model dump, so any single field move produces a different `route_sha256`, and an
@@ -114,31 +119,43 @@ firewall's two translators, the doctor's battery, and the bridge's ledger
 lookup, and the last two build theirs directly from `manifest.roles[role][seat]`.
 Adding a `RunManifest` parameter to a firewall helper "so it can check one more
 thing" inverts this: the firewall's whole value is that it holds no document and
-therefore cannot be argued with.
-`check: ! grep -q "EndpointLease" src/deepreason/run_manifest.py && grep -q "^class EndpointLease:" src/deepreason/llm/firewall.py && grep -q "^def leases_from_manifest(" src/deepreason/llm/firewall.py && test "$(grep -rl "EndpointLease(" --include=*.py src/deepreason | sort | tr '\n' ' ')" = "src/deepreason/bridge/harness.py src/deepreason/cli/doctor.py src/deepreason/llm/firewall.py " && grep -q "route = manifest.roles\[pair.role\]\[pair.seat\]" src/deepreason/cli/doctor.py && ! grep -rqE "load_run_manifest|bind_run_manifest|persist_run_manifest|write_run_manifest|compile_run_manifest|MANIFEST_NAME" --include=*.py src/deepreason/llm && for s in load_run_manifest compile_run_manifest bind_run_manifest; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done`
+therefore cannot be argued with. Every name the absence clause forbids is also
+pinned as still-defined, because a document-handling name that gets renamed
+would otherwise make its own prohibition vacuous.
+`check: ! grep -q "EndpointLease" src/deepreason/run_manifest.py && grep -q "^class EndpointLease:" src/deepreason/llm/firewall.py && grep -q "^def leases_from_manifest(" src/deepreason/llm/firewall.py && test "$(grep -rl "EndpointLease(" --include=*.py src/deepreason | sort | tr '\n' ' ')" = "src/deepreason/bridge/harness.py src/deepreason/cli/doctor.py src/deepreason/llm/firewall.py " && grep -q "route = manifest.roles\[pair.role\]\[pair.seat\]" src/deepreason/cli/doctor.py && ! grep -rqE "load_run_manifest|bind_run_manifest|persist_run_manifest|write_run_manifest|compile_run_manifest|MANIFEST_NAME" --include=*.py src/deepreason/llm && for s in load_run_manifest compile_run_manifest bind_run_manifest persist_run_manifest write_run_manifest; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && grep -q "^MANIFEST_NAME = " src/deepreason/run_manifest.py`
 
-**The firewall reads five manifest attributes and the adapter reads four, out of
-thirty-two fields — and the two sets do not overlap.** The firewall sees
+**The firewall reads five manifest attributes and the adapter reads five, out of
+thirty-two fields — and they share only `schema_version`.** The firewall sees
 `roles`, `schema_version`, `control_plane_policy`, `criticism_policy` and
 `engine_config_json` (only to bound the school roster); it sees no plan, no
 profile, no contract vocabulary. The adapter sees `model_profile`, `sha256`,
-`compact_recovery_policy` and `route_seat_behavioral_capability_plan`, and
-notably NOT `roles` — inside `LLMAdapter` a route is reachable only through a
-lease. Presentation and behavioural authority are resolved in `adapter.py`
-through the manifest's own resolvers; route legitimacy is decided in
-`firewall.py` with no plan in hand. Searching the firewall for the
-behavioural-grant check and finding nothing is the expected result.
-`check: python -c "import re, pathlib; from deepreason.run_manifest import RunManifest; read=lambda p: set(re.findall(r'(?<![a-z_])manifest\.([a-z_0-9]+)', pathlib.Path(p).read_text())); assert read('src/deepreason/llm/firewall.py') == {'control_plane_policy', 'criticism_policy', 'engine_config_json', 'roles', 'schema_version'}; assert read('src/deepreason/llm/adapter.py') == {'compact_recovery_policy', 'model_profile', 'route_seat_behavioral_capability_plan', 'sha256'}; assert len(RunManifest.model_fields) == 32"`
+`compact_recovery_policy`, `route_seat_behavioral_capability_plan` and
+`schema_version` — the last only as a v6 gate at the two authority entry points,
+read through `getattr` because the argument is duck-typed — and notably NOT
+`roles`: inside `LLMAdapter` a route is reachable only through a lease.
+Presentation and behavioural authority are resolved in `adapter.py` through the
+manifest's own resolvers; route legitimacy is decided in `firewall.py` with no
+plan in hand. Searching the firewall for the behavioural-grant check and finding
+nothing is the expected result. Both attribute forms are counted: a dotted read
+and a `getattr` read widen the surface identically, and enumerating only the
+first is how `schema_version` sat unrecorded in the adapter's set.
+`check: python -c "import re, pathlib; from deepreason.run_manifest import RunManifest; src=lambda p: pathlib.Path(p).read_text(); read=lambda p: set(re.findall(r'(?<![a-z_])manifest\.([a-z_0-9]+)', src(p))) | set(re.findall(r'getattr\(\s*manifest\s*,\s*[\x27\"]([a-z_0-9]+)', src(p))); assert read('src/deepreason/llm/firewall.py') == {'control_plane_policy', 'criticism_policy', 'engine_config_json', 'roles', 'schema_version'}; assert read('src/deepreason/llm/adapter.py') == {'compact_recovery_policy', 'model_profile', 'route_seat_behavioral_capability_plan', 'schema_version', 'sha256'}; assert read('src/deepreason/llm/firewall.py') & read('src/deepreason/llm/adapter.py') == {'schema_version'}; assert len(RunManifest.model_fields) == 32"`
 
 **No credential ever reaches a lease, a digest or a record.** `Route` has an
 `api_key_env` field and no `api_key` field; the value is looked up from the
-environment once, while constructing the endpoint, and `route_from_endpoint`
-writes `api_key_env=None` because an endpoint object does not retain the name.
+environment at exactly two sites — `_endpoint_from_spec` when building the
+endpoint, and `_route_from_spec` at compile time, where `resolve_model` needs a
+live provider call to turn `auto` into a concrete model — plus one presence-only
+test in `missing_manifest_credentials`. Neither value ever lands on a `Route`,
+and `route_from_endpoint` writes `api_key_env=None` because an endpoint object
+does not retain the name.
 The firewall mentions the word once, in that assignment. This is why the URL
 validator rejects userinfo, queries and fragments outright rather than
 stripping them: a route is hashed and persisted, so a value-shaped loophole
-would put a secret into the append-only record.
-`check: python -c "import types; from deepreason.run_manifest import Route; from deepreason.llm.firewall import route_from_endpoint; assert 'api_key' not in Route.model_fields and 'api_key_env' in Route.model_fields; assert route_from_endpoint(types.SimpleNamespace(name='https://h/v1', model='m', provider='p', family='f')).api_key_env is None" && test "$(grep -c "api_key" src/deepreason/llm/firewall.py)" -eq 1 && grep -q "api_key = os.environ.get(api_key_env) if api_key_env else None" src/deepreason/llm/adapter.py && grep -q 'raise RouteSecretError()' src/deepreason/run_manifest.py`
+would put a secret into the append-only record. The drop is exercised against an
+endpoint that *does* carry both `api_key_env` and a live `api_key`: a fixture
+without them proves only that the attribute was absent, not that it was dropped.
+`check: python -c "import types; from deepreason.run_manifest import Route; from deepreason.llm.firewall import route_from_endpoint, route_fingerprint; assert 'api_key' not in Route.model_fields and 'api_key_env' in Route.model_fields; bare=types.SimpleNamespace(name='https://h/v1', model='m', provider='p', family='f'); assert route_from_endpoint(bare).api_key_env is None; loaded=types.SimpleNamespace(name='https://h/v1', model='m', provider='p', family='f', api_key_env='OLLAMA_API_KEY', api_key='sk-live-secret'); r=route_from_endpoint(loaded); assert r.api_key_env is None, r.api_key_env; assert 'OLLAMA_API_KEY' not in str(r.model_dump(mode='json')) and 'sk-live-secret' not in str(r.model_dump(mode='json')); route_fingerprint(r)" && test "$(grep -o "api_key" src/deepreason/llm/firewall.py | wc -l)" -eq 1 && grep -q "api_key = os.environ.get(api_key_env) if api_key_env else None" src/deepreason/llm/adapter.py && grep -q "api_key = os.environ.get(api_key_env) if api_key_env else None" src/deepreason/run_manifest.py && test "$(grep -rnE "os\.environ(\.get)?[(\[][^)]*api_key" --include=*.py src/deepreason | wc -l)" -eq 3 && grep -q 'raise RouteSecretError()' src/deepreason/run_manifest.py`
 
 **`FORBIDDEN_MODEL_CONTROL_FIELDS` is not derived from `Route`, and must not
 become so.** Four of `Route`'s fifteen field names are also refused as model
@@ -265,8 +282,14 @@ subject digest is built from).
   green** — verified by mutation — because that fixture's route carries no
   `api_key_env`. The claim is held by the structural check under "Where it is
   expressed" and by `bind_v6_authority`'s equality, not by a behavioural test.
-  A fixture without a credential reference cannot see this class of defect.
-`check: python -c "from deepreason.run_manifest import Route; from deepreason.llm.adapter import _endpoint_from_spec; from deepreason.llm.firewall import route_fingerprint, route_from_endpoint; r=Route(endpoint_id='e', base_url='https://h/v1', model_id='m', provider='ollama', family='f', api_key_env='OLLAMA_API_KEY'); back=route_from_endpoint(_endpoint_from_spec(r.endpoint_spec())); assert back != r and route_fingerprint(back) != route_fingerprint(r); assert back.model_copy(update={'api_key_env': 'OLLAMA_API_KEY'}) == r; free=r.model_copy(update={'api_key_env': None}); assert route_from_endpoint(_endpoint_from_spec(free.endpoint_spec())) == free"`
+  A fixture without a credential reference cannot see this class of defect. The
+  route here sets all fifteen fields to a non-default value on purpose: the
+  round trip is the only place `endpoint_spec`, `_endpoint_from_spec` and
+  `route_from_endpoint` are compared field-for-field, and a fixture that leaves
+  a field at its default cannot notice that link dropping it. A new `Route`
+  field fails this check until it is added to the fixture, which is what forces
+  it through the five-place list in "How to change it".
+`check: python -c "from deepreason.run_manifest import Route; from deepreason.llm.adapter import _endpoint_from_spec; from deepreason.llm.firewall import route_fingerprint, route_from_endpoint; r=Route(endpoint_id='e', base_url='https://h/v1', model_id='m', model_revision='2026-01', provider='ollama', family='f', reasoning='high', output_mode='json_object', output_mechanism='grammar', temperature=0.25, max_tokens=512, context_window_tokens=4096, timeout_s=97, logprobs=True, api_key_env='OLLAMA_API_KEY'); assert len(Route.model_fields) == 15; assert all(getattr(r, f) is not None for f in Route.model_fields), [f for f in Route.model_fields if getattr(r, f) is None]; back=route_from_endpoint(_endpoint_from_spec(r.endpoint_spec())); assert back != r and route_fingerprint(back) != route_fingerprint(r); assert back.model_copy(update={'api_key_env': 'OLLAMA_API_KEY'}) == r, back.model_dump(); free=r.model_copy(update={'api_key_env': None}); assert route_from_endpoint(_endpoint_from_spec(free.endpoint_spec())) == free"`
 - **`EndpointLease.verify` treats a missing attribute as a pass.** Only
   `base_url` and `model_id` are unconditional; the other ten — eleven when the
   route carries a qualified capacity — are compared only

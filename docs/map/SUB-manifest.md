@@ -22,7 +22,7 @@ error. The manifest is also deliberately process metadata: it names the
 environment variable holding a credential but never a credential value, it
 rejects query strings and userinfo in a route URL rather than filter them, and
 it imports nothing from the harness, the ontology or the adjudication graph.
-`check: grep -q "if 1 <= schema_version <= 5:" src/deepreason/run_manifest.py && grep -q "class UnsupportedRunManifestVersionError" src/deepreason/run_manifest.py && grep -q "^def _discriminate_raw_run_manifest_version(raw: bytes) -> None:" src/deepreason/run_manifest.py && sh -c '! grep -qE "^    api_key: " src/deepreason/run_manifest.py' && grep -q "route URL must not contain credentials" src/deepreason/run_manifest.py && sh -c '! grep -qE "^from deepreason\.(harness|adjudication|ontology|scheduler|rules|informal) " src/deepreason/run_manifest.py'`
+`check: grep -q "if 1 <= schema_version <= 5:" src/deepreason/run_manifest.py && grep -q "class UnsupportedRunManifestVersionError" src/deepreason/run_manifest.py && grep -q "^def _discriminate_raw_run_manifest_version(raw: bytes) -> None:" src/deepreason/run_manifest.py && grep -q "^    api_key_env: str | None = None$" src/deepreason/run_manifest.py && sh -c '! grep -qE "^    api_key: " src/deepreason/run_manifest.py' && grep -q "if parsed.username is not None or parsed.password is not None:" src/deepreason/run_manifest.py && grep -q "if parsed.query or parsed.fragment:" src/deepreason/run_manifest.py && grep -q "route URL must not contain credentials" src/deepreason/run_manifest.py && sh -c '! grep -qE "^(from|import) deepreason\.(harness|adjudication|ontology|scheduler|rules|informal)[. ]" src/deepreason/run_manifest.py'`
 
 Manifest schemas, their validators, and anything entering a qualification
 subject digest are a **frozen surface** — see `DR-INV-frozen-surfaces` before
@@ -51,11 +51,18 @@ Compilation, binding, reconstruction (`run_manifest.py`):
 - `preflight_payload(manifest, payload)` / `preflight_harness(manifest, harness, config)`
   — refuse workload/policy conflicts (rubric input, text status authority drift,
   a rubric-reaching property path) before any endpoint exists.
-- `resolve_route_seat_base_profile` / `resolve_route_seat_behavioral_capability`
-  / `resolve_route_seat_contract_decomposition` — the only route from
-  `(role, seat, endpoint_id, route_sha256)` to a frozen grant; absence is never
-  implicit permission.
-`check: for s in compile_run_manifest bind_run_manifest persist_run_manifest load_run_manifest write_run_manifest config_from_run_manifest materialize_run_config role_matrix render_role_matrix preflight_payload preflight_harness resolve_route_seat_base_profile resolve_route_seat_behavioral_capability resolve_route_seat_contract_decomposition; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done`
+- `resolve_route_seat_base_profile(manifest, *, role, seat, endpoint_id)` /
+  `resolve_route_seat_behavioral_capability(..., route_sha256)` /
+  `resolve_route_seat_contract_decomposition(..., route_sha256, source_contract_id)`
+  — the only route from an exact seat identity to a frozen grant; within a plan,
+  absence of a grant is never implicit permission. **The seat identity is not
+  uniform across the three.** The presentation resolver keys on
+  `(role, seat, endpoint_id)` only — it never sees `route_sha256`, so route
+  bytes cannot move a base profile — and when the manifest carries no
+  presentation plan at all it falls back to the global `manifest.model_profile`
+  rather than refusing. The behavioural and decomposition resolvers both bind
+  `route_sha256`, and both refuse outright when their plan is absent.
+`check: for s in compile_run_manifest bind_run_manifest persist_run_manifest load_run_manifest write_run_manifest config_from_run_manifest materialize_run_config role_matrix render_role_matrix preflight_payload preflight_harness resolve_route_seat_base_profile resolve_route_seat_behavioral_capability resolve_route_seat_contract_decomposition; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && python -c "import inspect, deepreason.run_manifest as m; sig = lambda f: list(inspect.signature(f).parameters); assert sig(m.resolve_route_seat_base_profile) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\"], sig(m.resolve_route_seat_base_profile); assert sig(m.resolve_route_seat_behavioral_capability) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\", \"route_sha256\"], sig(m.resolve_route_seat_behavioral_capability); assert sig(m.resolve_route_seat_contract_decomposition) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\", \"route_sha256\", \"source_contract_id\"], sig(m.resolve_route_seat_contract_decomposition)" && grep -q "return manifest.model_profile" src/deepreason/run_manifest.py`
 
 Qualification evidence (`qualification.py`):
 
@@ -112,7 +119,7 @@ In the qualification cache directory, keyed by subject digest:
 diagnosing a failed battery never costs a second battery). This subsystem does
 not choose where that directory lives — the surfaces do
 (`provider_state_dir() / "qualification-cache"`).
-`check: grep -q 'MANIFEST_NAME = "run-manifest.json"' src/deepreason/run_manifest.py && grep -q 'MANIFEST_HASH_NAME = "run-manifest.sha256"' src/deepreason/run_manifest.py && grep -q '".run-manifest-config.json"' src/deepreason/run_manifest.py && grep -q 'RUN_MANIFEST_LOCK_NAME = ".run-manifest.lock"' src/deepreason/locking.py && grep -q 'f"{subject_digest}.json"' src/deepreason/qualification.py && grep -q 'f"{subject_digest}.tier.json"' src/deepreason/qualification.py && grep -q '".unqualified-doctor.json"' src/deepreason/qualification.py && sh -c '! grep -q "qualification-cache" src/deepreason/qualification.py' && grep -q "qualification-cache" src/deepreason/cli/main.py`
+`check: grep -q 'MANIFEST_NAME = "run-manifest.json"' src/deepreason/run_manifest.py && grep -q 'MANIFEST_HASH_NAME = "run-manifest.sha256"' src/deepreason/run_manifest.py && test "$(grep -c 'target.with_suffix(target.suffix + ".sha256")' src/deepreason/run_manifest.py)" = 4 && grep -q "^def _atomic_write(target: Path, payload: bytes) -> None:" src/deepreason/run_manifest.py && grep -q "os.fsync(directory_fd)" src/deepreason/run_manifest.py && grep -q '".run-manifest-config.json"' src/deepreason/run_manifest.py && grep -q 'RUN_MANIFEST_LOCK_NAME = ".run-manifest.lock"' src/deepreason/locking.py && grep -q 'f"{subject_digest}.json"' src/deepreason/qualification.py && grep -q 'f"{subject_digest}.tier.json"' src/deepreason/qualification.py && grep -q '".unqualified-doctor.json"' src/deepreason/qualification.py && sh -c '! grep -q "qualification-cache" src/deepreason/qualification.py' && grep -q "qualification-cache" src/deepreason/cli/main.py`
 
 No provider content is ever persisted: a case result carries booleans, counts
 and an uppercase sanitized `failure_code`, never a prompt, response, base URL or

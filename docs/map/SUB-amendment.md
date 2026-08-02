@@ -19,14 +19,16 @@ append-only record file and separated from its parent by a declared ledger
 sequence — the fence. Events below a fence answer to the parent epoch's
 documents, events at or above it to the successor's, which is what keeps replay
 validation piecewise and lets an unamended root read exactly as it always did.
-The package refuses far more than it accepts, and every refusal is a typed,
-durable code; a crash mid-amendment leaves a staged epoch that `continue`
-declines to run past rather than a half-state it silently accepts.
+The package refuses far more than it accepts: one entry point writes, and
+twenty-two typed, durable refusal codes guard it. A crash mid-amendment leaves
+a staged epoch that `continue` declines to run past rather than a half-state it
+silently accepts.
+`check: python -c 'import re,pathlib; d=pathlib.Path("src/deepreason/amendment"); codes=set(); [codes.update(re.findall(r"AmendmentError\(\s*\"([A-Z][A-Z_]+)\"", (d/n).read_text())) for n in ("apply.py","state.py","models.py")]; assert len(codes)==22, sorted(codes); assert {"AMENDMENT_EPOCH_OUT_OF_RANGE","AMEND_PENDING_CONFLICT","AMEND_NOT_AT_TERMINAL"} <= codes'`
 
 Nothing here rewrites a byte. Documents are created through `mkstemp` +
 `os.replace`, the chain is opened append-only, and a staged document that
 already exists with different content is a refusal, not an overwrite.
-`check: sh -c '! grep -nE "open\(\"w|write_text\(|write_bytes\(" src/deepreason/amendment/apply.py src/deepreason/amendment/state.py' && grep -q 'with path.open("ab") as stream:' src/deepreason/amendment/apply.py && grep -q "staged epoch already binds different" src/deepreason/amendment/apply.py`
+`check: python -c 'import pathlib; d=pathlib.Path("src/deepreason/amendment"); t={n:(d/n).read_text() for n in ("apply.py","state.py","models.py")}; assert not [(n,b) for n,body in t.items() for b in ("write_text(","write_bytes(","open(\"w") if b in body]; a=t["apply.py"]; assert all(s in a for s in ("tempfile.mkstemp(","os.replace(temporary, target)","with path.open(\"ab\") as stream:","staged epoch already binds different"))'`
 
 ## Entry points
 
@@ -59,9 +61,9 @@ already exists with different content is a refusal, not an overwrite.
 - `AmendmentError(code, message)` — the typed refusal carrying `.code`.
 - `amendment_lock(root)` and `record_bytes(record)` — the per-root lock and the
   canonical serialization the chain line and the staged record share.
-`check: python -c "import deepreason.amendment as a; [getattr(a, n) for n in ('amend_run','RunAmendmentV1','AmendmentError','current_epoch','dossier_union','epoch_problem_ids','epoch_directory','load_amendments','load_epoch_dossier','load_epoch_manifest','load_epoch_run_input','require_no_partial_amendment','staged_amendment','union_citable_blocks','verify_epoch_run_input')]; from deepreason.amendment.state import amendment_lock, epoch_workload_path, record_bytes"`
+`check: python -c 'import inspect; import deepreason.amendment as a; [getattr(a, n) for n in ("amend_run","RunAmendmentV1","AmendmentError","current_epoch","dossier_union","epoch_problem_ids","epoch_directory","load_amendments","load_epoch_dossier","load_epoch_manifest","load_epoch_run_input","require_no_partial_amendment","staged_amendment","union_citable_blocks","verify_epoch_run_input")]; from deepreason.amendment.state import amendment_lock, epoch_workload_path, record_bytes; p=inspect.signature(a.amend_run).parameters; assert list(p)==["root","attach","reshape_question","supplied_by","allow_partial"]; assert all(p[k].kind is inspect.Parameter.KEYWORD_ONLY for k in list(p)[1:]); assert (p["attach"].default,p["reshape_question"].default,p["supplied_by"].default,p["allow_partial"].default)==((),None,"operator",False)'`
 
-An unamended root pays one `exists` check for all of this: with no chain file,
+An unamended root pays one missing-file check per reader: with no chain file,
 every reader short-circuits and answers as though the package were absent.
 `check: python -c "import tempfile; from deepreason.amendment.state import current_epoch, load_amendments, staged_amendment; d = tempfile.mkdtemp(); assert current_epoch(d) == 0 and load_amendments(d) == () and staged_amendment(d) is None"`
 
@@ -81,7 +83,7 @@ On disk, under the run root:
 `run-amendment.json` is staged **last** on purpose: its presence is exactly the
 claim that the other seven documents are already durable. A reshaped question is
 capped at `MAX_QUESTION_CHARS` (262 144) before any of this is touched.
-`check: grep -q 'AMENDMENT_CHAIN_NAME = "run-amendments.jsonl"' src/deepreason/amendment/state.py && grep -q 'AMENDMENT_EPOCH_DIR = "run-epochs"' src/deepreason/amendment/state.py && grep -q 'AMENDMENT_RECORD_NAME = "run-amendment.json"' src/deepreason/amendment/state.py && grep -q 'AMENDMENT_LOCK_NAME = ".run-amendment.lock"' src/deepreason/amendment/state.py && grep -q "_MAX_EPOCHS = 999" src/deepreason/amendment/state.py && grep -q "_MAX_CHAIN_BYTES = 4 \* 1024 \* 1024" src/deepreason/amendment/state.py && grep -q "MAX_QUESTION_CHARS = 262_144" src/deepreason/amendment/apply.py && for s in EVIDENCE_DOSSIER_NAME EVIDENCE_DOSSIER_HASH_NAME RUN_INPUT_NAME RUN_INPUT_HASH_NAME MANIFEST_NAME MANIFEST_HASH_NAME WORKLOAD_NAME AMENDMENT_RECORD_NAME; do grep -q "directory / $s" src/deepreason/amendment/apply.py || exit 1; done; grep -q "Staged last: its presence is exactly the claim" src/deepreason/amendment/apply.py`
+`check: python -c 'import inspect,re; from deepreason.amendment import apply, state; from deepreason.evidence.state import EVIDENCE_DOSSIER_NAME as E, EVIDENCE_DOSSIER_HASH_NAME as EH, RUN_INPUT_NAME as R, RUN_INPUT_HASH_NAME as RH; from deepreason.run_manifest import MANIFEST_NAME as M, MANIFEST_HASH_NAME as MH; assert (state.AMENDMENT_CHAIN_NAME,state.AMENDMENT_EPOCH_DIR,state.AMENDMENT_RECORD_NAME,state.AMENDMENT_LOCK_NAME,state.WORKLOAD_NAME)==("run-amendments.jsonl","run-epochs","run-amendment.json",".run-amendment.lock","text-workload.json"); assert (E,EH,R,RH,M,MH)==("evidence-dossier.json","evidence-dossier.sha256","run-input.json","run-input.sha256","run-manifest.json","run-manifest.sha256"); assert (state._MAX_EPOCHS,state._MAX_CHAIN_BYTES,apply.MAX_QUESTION_CHARS)==(999,4*1024*1024,262144); assert str(state.epoch_directory("/r",1)).endswith("run-epochs/001") and str(state.epoch_directory("/r",999)).endswith("run-epochs/999"); o=re.findall(r"_write_once\(\s*directory / (\w+)", inspect.getsource(apply._stage_epoch_documents)); assert len(o)==8 and o[-1]=="AMENDMENT_RECORD_NAME" and set(o)=={"EVIDENCE_DOSSIER_NAME","EVIDENCE_DOSSIER_HASH_NAME","RUN_INPUT_NAME","RUN_INPUT_HASH_NAME","MANIFEST_NAME","MANIFEST_HASH_NAME","WORKLOAD_NAME","AMENDMENT_RECORD_NAME"}'`
 
 It owns no blob storage. Supplemental source bytes go into the **root's**
 content-addressed store and are referenced by a second dossier; they are never
@@ -95,7 +97,7 @@ source the supplemental dossier admits. Nothing else — no conjecture, no
 criticism, no control, no status change — is authorized to cross a terminal
 horizon this way. Both appends are content-addressed and therefore idempotent,
 which is what lets a byte-identical re-run complete a partly applied epoch.
-`check: grep -q "harness.register_problem(" src/deepreason/amendment/apply.py && grep -q "attach_bound_evidence(" src/deepreason/amendment/apply.py && grep -q '"trigger": "seed", "from": \[record.superseded_problem_id\]' src/deepreason/amendment/apply.py && grep -q 'return f"question-{_question_digest(question)\[:32\]}"' src/deepreason/amendment/apply.py`
+`check: grep -q "harness.register_problem(" src/deepreason/amendment/apply.py && grep -q "attach_bound_evidence(" src/deepreason/amendment/apply.py && grep -q '"trigger": "seed", "from": \[record.superseded_problem_id\]' src/deepreason/amendment/apply.py && grep -q 'return f"question-{_question_digest(question)\[:32\]}"' src/deepreason/amendment/apply.py && python -m pytest "tests/test_amendment_chain_integrity.py::test_a_stray_post_horizon_event_is_still_refused_after_an_amendment" -q`
 
 Every epoch-0 document keeps its exact canonical bytes across an amendment, the
 log only grows, and `verify_root` stays clean on both sides of the fence.
@@ -115,15 +117,16 @@ log only grows, and `verify_root` stays clean on both sides of the fence.
 | Which dossiers and questions a conjecture may cite after an amendment | `dossier_union` / `union_citable_blocks` / `epoch_problem_ids` in `state.py`, consumed in `rules/conj.py` | `python -m pytest "tests/test_amendment_epochs.py::test_old_citations_verify_identically_after_the_amendment" -q` |
 | The attached-evidence budget an amendment must respect | `_check_evidence_budget`, `apply.py` | `python -m pytest "tests/test_amendment_chain_integrity.py::test_amend_refuses_evidence_beyond_the_frozen_budget" "tests/test_amendment_chain_integrity.py::test_amend_refuses_when_the_manifest_does_not_enable_evidence" -q` |
 | Which run states may be amended at all | `_require_terminal_stop`, plus the v6/`RunInputManifestV2` guards in `_amend_locked`, `apply.py` | `python -m pytest "tests/test_amendment_epochs.py::test_amendment_refuses_a_run_that_is_not_at_a_terminal_stop" -q` |
-| The operator surface — flags, MCP arguments, refusal text | `_cmd_amend` and its `add_parser("amend")` in `cli/main.py`; the `amend_run` branch in `mcp_server.py` | `python -m pytest "tests/test_amendment_epochs.py::test_cli_amend_reports_the_epoch_and_refuses_typed" "tests/test_amendment_epochs.py::test_mcp_amend_run_is_exposed_and_hides_host_paths" -q` |
+| The operator surface — flags, MCP arguments, refusal text | `_cmd_amend` and the `amend_cmd = sub.add_parser(` block in `cli/main.py`; the `amend_run` branch in `mcp_server.py` | `python -m pytest "tests/test_amendment_epochs.py::test_cli_amend_reports_the_epoch_and_refuses_typed" "tests/test_amendment_epochs.py::test_mcp_amend_run_is_exposed_and_hides_host_paths" -q` |
 | The epoch ceiling, chain size bound, or question size bound | `_MAX_EPOCHS` / `_MAX_CHAIN_BYTES` in `state.py`; `MAX_QUESTION_CHARS` in `apply.py` | `python -m pytest "tests/test_amendment_chain_integrity.py::test_epoch_directory_refuses_an_out_of_range_epoch" "tests/test_amendment_chain_integrity.py::test_an_oversized_chain_file_is_refused" -q` |
 `check: python -m pytest "tests/test_amendment_chain_integrity.py::test_the_record_model_refuses_incoherent_amendments" "tests/test_amendment_chain_integrity.py::test_a_record_whose_digest_does_not_cover_its_payload_is_refused" "tests/test_amendment_chain_integrity.py::test_epoch_directory_refuses_an_out_of_range_epoch" -q`
-`check: grep -q "from deepreason.amendment.state import dossier_union, epoch_problem_ids" src/deepreason/rules/conj.py && grep -q "from deepreason.amendment.state import current_epoch, epoch_workload_path" src/deepreason/application/text_runs.py && grep -q "def _assert_amendment_committed(root: Path) -> None:" src/deepreason/runtime/continuation.py && grep -q "def _is_amendment_application_event(harness, event, problem_ids)" src/deepreason/runtime/terminal_authority.py && grep -q "def _cmd_amend(args) -> int:" src/deepreason/cli/main.py && grep -q 'if name == "amend_run":' src/deepreason/mcp_server.py`
+`check: python -c 'import re,pathlib; g=lambda p: pathlib.Path(p).read_text(); c=g("src/deepreason/cli/main.py"); k=g("src/deepreason/runtime/continuation.py"); assert "from deepreason.amendment.state import dossier_union, epoch_problem_ids" in g("src/deepreason/rules/conj.py"); assert "from deepreason.amendment.state import current_epoch, epoch_workload_path" in g("src/deepreason/application/text_runs.py"); assert "def _assert_amendment_committed(root: Path) -> None:" in k and "CONTINUE_AMENDMENT_INCOMPLETE" in k; assert "def _is_amendment_application_event(harness, event, problem_ids)" in g("src/deepreason/runtime/terminal_authority.py"); assert "def _cmd_amend(args) -> int:" in c and re.search(r"amend_cmd = sub\.add_parser\(\s*\"amend\"", c); assert "if name == \"amend_run\":" in g("src/deepreason/mcp_server.py"); assert "def _question_digest(question: str) -> str:" in g("src/deepreason/preparation.py")'`
+`check: python -c 'import re,pathlib,subprocess; want=set(re.findall(r"::(test_[a-z0-9_]+)", pathlib.Path("docs/map/SUB-amendment.md").read_text())); out=subprocess.run(["python","-m","pytest","tests/test_amendment_epochs.py","tests/test_amendment_chain_integrity.py","--collect-only","-q"],capture_output=True,text=True).stdout; have=set(re.findall(r"::(test_[a-z0-9_]+)", out)); assert len(want)>=20 and not want-have, sorted(want-have)'`
 
 Validation in this package is deliberately **local**: `load_amendments` proves
 the chain is well shaped, and whether the ledger obeys the fences it declares is
 `verify_root`'s question. The package imports nothing from `invariants.py`.
-`check: grep -q "Whether the ledger honours those" src/deepreason/amendment/state.py && grep -q "def _amendment_epochs(" src/deepreason/invariants.py && sh -c '! grep -q "deepreason.invariants" src/deepreason/amendment/apply.py src/deepreason/amendment/state.py src/deepreason/amendment/models.py'`
+`check: python -c 'import pathlib; d=pathlib.Path("src/deepreason/amendment"); assert all("deepreason.invariants" not in (d/n).read_text() for n in ("apply.py","state.py","models.py")); assert "Whether the ledger honours those" in (d/"state.py").read_text(); assert "def _amendment_epochs(" in pathlib.Path("src/deepreason/invariants.py").read_text()'`
 
 ## Traps
 
@@ -170,7 +173,7 @@ the chain is well shaped, and whether the ledger obeys the fences it declares is
   decodable — and a field that is sometimes `None` and sometimes not changes
   them conditionally. Both the staged `run-amendment.json` and the chain line
   come from the same `record_bytes`.
-`check: python -c "import inspect; from deepreason.amendment import state; s = inspect.getsource(state.dossier_union) + inspect.getsource(state.epoch_problem_ids); assert s.count('except (RunInputError, OSError):') == 2" && grep -q "exclude_none=True" src/deepreason/amendment/state.py && grep -q "amendment record bytes are not canonical" src/deepreason/amendment/state.py`
+`check: python -c 'import inspect,pathlib; from deepreason.amendment import state; s=inspect.getsource(state.dossier_union)+inspect.getsource(state.epoch_problem_ids); assert s.count("except (RunInputError, OSError):")==2; t=pathlib.Path("src/deepreason/amendment/state.py").read_text(); assert "exclude_none=True" in t and "amendment record bytes are not canonical" in t; assert "\"amendment-epoch\"" in pathlib.Path("src/deepreason/invariants.py").read_text()'`
 - **Coherence is enforced by model validators, not by the call site.** A
   question-only amendment must cite its parent's dossier unchanged; a supplement
   must be the successor dossier; `problem_id` and `superseded_problem_id` are

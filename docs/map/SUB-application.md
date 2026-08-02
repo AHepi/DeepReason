@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 08dcdf3c
+Verified-at: 461cf287
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py
 Seams: 
@@ -23,8 +23,11 @@ controller, continuation preparation from a typed stop, and the terminal
 commitment and result publication that make a finished run inspectable.
 `easy.py` is host-side provider setup — the wizard, the endpoint presets, and
 the credentials file — plus a fail-closed tombstone where the retired website
-execution facade used to be; `workflows/` is the website state machine that
-tombstone once drove, which no public entry point reaches any more.
+execution facade used to be, and, still live beside that tombstone, the website
+graph helpers (`seed_component`, `register_assembly`, `integration_criticism`)
+whose only callers are in `workflows/`; `workflows/` is the website state
+machine that tombstone once drove, which no public entry point reaches any more.
+`check: for s in seed_component register_assembly integration_criticism; do grep -q "^def $s(" src/deepreason/easy.py || exit 1; grep -q "easy.$s(" src/deepreason/workflows/website.py || exit 1; test "$(grep -rl "easy\.$s(" --include=*.py src/deepreason | wc -l)" -eq 1 || exit 1; done; grep -q "^def setup_wizard(" src/deepreason/easy.py && grep -q "^def base_dir(" src/deepreason/easy.py`
 
 Exactly two client families use the typed services, and neither reaches a
 scheduler, a harness or a stop policy of its own.
@@ -99,8 +102,12 @@ an immutable `run-stops/<event_seq>-<digest>.json` history.
 `REPLAY_VALIDATION.json`. `application/text_runs.py` owns the frozen
 `run-request.json` and `text-workload.json` written at bind time, and
 `checkpoint.json` at stop. `workflows/website.py` owns `website-checkpoint.json`
-and `website-terminal.json`. All of them are published through one atomic
-temp-file-plus-rename helper with a directory fsync.
+and `website-terminal.json`. Everything under `runtime/` and `application/` is
+published through one shared helper, `runtime.progress._atomic_json`, which
+fsyncs the payload, renames it over the target, then fsyncs the directory so the
+rename itself survives a power loss. `workflows/website.py` is the exception and
+not the shape to copy: it open-codes its own temp-and-rename with no directory
+fsync, and writes `website-terminal.json` with a bare `write_text`.
 
 Outside any run root it owns the host's provider state: `easy.base_dir()`
 (`$DEEPREASON_HOME` or `~/.deepreason`) holds `credentials`, created
@@ -110,12 +117,19 @@ CLI invocation, and an already-set environment variable always wins. In memory,
 `TEXT_RUN_WORKERS` and `GROUNDED_BRIDGE_WORKERS` are process-global registries
 of live worker threads; they are advisory only — durable concurrency safety
 comes from the operator locks and the terminal-commitment lock.
+`check: grep -q '"progress.jsonl"' src/deepreason/runtime/progress.py && grep -q '"run-status.json"' src/deepreason/runtime/progress.py && grep -q '"cancel.requested"' src/deepreason/runtime/progress.py && grep -q '"run-stops"' src/deepreason/runtime/stop.py && grep -q '"run-stop.json"' src/deepreason/runtime/stop.py && grep -q '"continuations.jsonl"' src/deepreason/runtime/continuation.py && grep -q '"run-request.json"' src/deepreason/application/text_runs.py && grep -q '"text-workload.json"' src/deepreason/application/text_runs.py && grep -q '"checkpoint.json"' src/deepreason/application/text_runs.py && grep -q '_REPLAY_VALIDATION_NAME = "REPLAY_VALIDATION.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"run-result.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"website-checkpoint.json"' src/deepreason/workflows/website.py && grep -q '(self.harness.root / "website-terminal.json").write_text(' src/deepreason/workflows/website.py && grep -q "^def _atomic_json(" src/deepreason/runtime/progress.py && grep -q "^from deepreason.runtime.progress import _atomic_json" src/deepreason/runtime/stop.py && grep -q "^from deepreason.runtime.progress import _atomic_json" src/deepreason/runtime/terminal_authority.py && grep -q "from deepreason.runtime.progress import ProgressSink, _atomic_json" src/deepreason/application/text_runs.py && ! grep -q "_atomic_json" src/deepreason/workflows/website.py && grep -q "os.replace(temporary, target)" src/deepreason/workflows/website.py && ! grep -q "O_RDONLY" src/deepreason/workflows/website.py && grep -q 'os.environ.get("DEEPREASON_HOME")' src/deepreason/easy.py && grep -q 'return base_dir() / "credentials"' src/deepreason/easy.py && grep -q 'return base_dir() / "engine.yaml"' src/deepreason/easy.py && grep -q "stat.S_IRUSR | stat.S_IWUSR" src/deepreason/easy.py && grep -q "easy.load_credentials()  # stored keys reach every command; env vars win" src/deepreason/cli/main.py && grep -q "^TEXT_RUN_WORKERS = TextRunWorkerRegistry()" src/deepreason/application/text_runs.py && grep -q "^GROUNDED_BRIDGE_WORKERS = GroundedBridgeWorkerRegistry()" src/deepreason/application/bridge.py && python -m pytest tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope tests/test_continuation.py::test_stop_history_is_preserved_behind_latest_pointer tests/test_easy.py::test_save_and_load_credentials_roundtrip tests/test_easy.py::test_existing_environment_wins_over_stored_key -q`
 
-It owns no events. `cli/` never appends to the log at all; `runtime/` appends
-exactly one kind, the terminal commitment, and does it through
-`harness.record_terminal_commitment`; `application/text_runs.py` and
-`workflows/website.py` append only `harness.record_measure` entries.
-`check: grep -q '"progress.jsonl"' src/deepreason/runtime/progress.py && grep -q '"run-status.json"' src/deepreason/runtime/progress.py && grep -q '"cancel.requested"' src/deepreason/runtime/progress.py && grep -q '"run-stops"' src/deepreason/runtime/stop.py && grep -q '"run-stop.json"' src/deepreason/runtime/stop.py && grep -q '"continuations.jsonl"' src/deepreason/runtime/continuation.py && grep -q '"run-request.json"' src/deepreason/application/text_runs.py && grep -q '"text-workload.json"' src/deepreason/application/text_runs.py && grep -q '"checkpoint.json"' src/deepreason/application/text_runs.py && grep -q '_REPLAY_VALIDATION_NAME = "REPLAY_VALIDATION.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"run-result.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"website-checkpoint.json"' src/deepreason/workflows/website.py && grep -q 'os.environ.get("DEEPREASON_HOME")' src/deepreason/easy.py && grep -q 'return base_dir() / "credentials"' src/deepreason/easy.py && grep -q 'return base_dir() / "engine.yaml"' src/deepreason/easy.py && grep -q "stat.S_IRUSR | stat.S_IWUSR" src/deepreason/easy.py && grep -q "easy.load_credentials()  # stored keys reach every command; env vars win" src/deepreason/cli/main.py && ! grep -rqE "record_measure|record_terminal_commitment" --include=*.py src/deepreason/cli && test "$(grep -rlE "record_measure|record_terminal_commitment" --include=*.py src/deepreason/runtime | wc -l)" -eq 1 && grep -q "harness.record_terminal_commitment(expected, expected_draft)" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope tests/test_continuation.py::test_stop_history_is_preserved_behind_latest_pointer tests/test_easy.py::test_save_and_load_credentials_roundtrip tests/test_easy.py::test_existing_environment_wins_over_stored_key -q`
+The boundary appends few events, and only through named harness recorders —
+never by reaching the log itself. `cli/` appends none at all. `runtime/`
+appends two Control-family kinds, not one: the terminal commitment from
+`terminal_authority` and the RESUMED transition from `continuation`.
+`application/` appends `record_measure` entries plus the single
+`record_lifecycle_transition` that gives a budget-exhausted stop its lifecycle
+receipt (see Traps); its one writing scratch branch goes through the scratch
+service rather than a harness recorder. `workflows/website.py` and the website
+graph helpers in `easy.py` append only Measure events — `record_llm_calls` is a
+`record_measure` wrapper.
+`check: test -z "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/cli)" && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/runtime | sort -u | tr "\n" " ")" = "harness.record_resume_transition harness.record_terminal_commitment " && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/application | sort -u | tr "\n" " ")" = "harness.record_lifecycle_transition harness.record_measure " && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/workflows src/deepreason/easy.py | sort -u | tr "\n" " ")" = "harness.record_llm_calls harness.record_measure " && grep -q "harness.record_terminal_commitment(expected, expected_draft)" src/deepreason/runtime/terminal_authority.py && grep -q "harness.record_resume_transition(snapshot, resume)" src/deepreason/runtime/continuation.py && grep -q "harness.record_lifecycle_transition(observation, snapshot, lifecycle)" src/deepreason/application/text_runs.py && grep -q "self.record_measure(inputs=\[tag, \*extra\], llm=call)" src/deepreason/harness.py && grep -q "service.record_attention_receipt(receipt, context_ref=" src/deepreason/application/scratch.py`
 
 ## Where to change what
 
@@ -149,7 +163,7 @@ exactly one kind, the terminal commitment, and does it through
   `workloads.website.WebsiteWorkloadAdapter.workflow_class` has no caller at
   all, and both `run` and `start` refuse any manifest whose workload profile is
   not `text`.
-`check: grep -q "V6_PREPARATION_REQUIRED" src/deepreason/easy.py && ! grep -rq "deepreason.workflows\|WebsiteWorkflow\|run_website_workflow" --include=*.py src/deepreason/cli src/deepreason/application src/deepreason/runtime && test "$(grep -rc "workflow_class()" --include=*.py src/deepreason | grep -cv ':0$')" -eq 1 && grep -q 'f"run requires text, got {manifest.workload_profile}"' src/deepreason/cli/main.py && grep -q "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest" src/deepreason/application/text_runs.py && python -m pytest tests/test_easy.py::test_easy_make_requires_future_v6_preparation_before_any_side_effect tests/test_easy.py::test_internal_easy_execution_facades_are_fail_closed_tombstones -q`
+`check: grep -q "V6_PREPARATION_REQUIRED" src/deepreason/easy.py && ! grep -rq "deepreason.workflows\|WebsiteWorkflow\|run_website_workflow" --include=*.py src/deepreason/cli src/deepreason/application src/deepreason/runtime && test "$(grep -roh "workflow_class()" --include=*.py src/deepreason tests | wc -l)" -eq 1 && grep -q "    def workflow_class():" src/deepreason/workloads/website.py && grep -q 'f"run requires text, got {manifest.workload_profile}"' src/deepreason/cli/main.py && grep -q "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest" src/deepreason/application/text_runs.py && python -m pytest tests/test_easy.py::test_easy_make_requires_future_v6_preparation_before_any_side_effect tests/test_easy.py::test_internal_easy_execution_facades_are_fail_closed_tombstones -q`
 - **`result()` re-derives the terminal; it does not read a file.** For a v6
   root it replays and calls `recover_terminal_result`, rewriting
   `run-result.json` when the durable authority disagrees with it. Two guards

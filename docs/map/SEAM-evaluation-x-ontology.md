@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-ontology -->
-Verified-at: 08dcdf3c
+Verified-at: 461cf287
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/programs.py, src/deepreason/ontology/commitment.py, src/deepreason/ontology/artifact.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/hv.py, src/deepreason/informal/skeleton.py
 Sides: DR-SUB-evaluation, DR-SUB-ontology
@@ -34,15 +34,24 @@ Purity behaviourally: the same address, two records differing in every
 unaddressed field — role, school, `event_seq`, carried warrants, and the `id`
 itself — produce identical `(verdict, trace)` under a predicate, a structural
 program, and an interface-reading program.
-`check: python -c "from deepreason.ontology import Artifact, Commitment, Interface, Provenance, Ref; from deepreason import programs; i=Interface(commitments=['k'], refs=[Ref(target='t', role='dependence')]); mk=lambda **kw: Artifact(content_ref='inline:hello', codec='utf8', interface=i, **kw); a=mk(id=Artifact.compute_id('inline:hello','utf8',i), provenance=Provenance(role='conjecturer', school='s1', event_seq=9), warrants=['w1']); b=mk(id='', provenance=Provenance(role='variator')); assert {'provenance','warrants'} <= set(Artifact.model_fields) and a.id != b.id; assert all(programs.evaluate(Commitment(id='k', eval=e), a, None) == programs.evaluate(Commitment(id='k', eval=e), b, None) for e in ('predicate:len(content)>2','predicate:len(codec)==4','program:json-wf','program:lineage_ref'))"`
+`check: python -c "from deepreason.ontology import Artifact, Commitment, Interface, Provenance, Ref; from deepreason import programs; from deepreason.ontology.frozen import FrozenRecord; assert all(issubclass(R, FrozenRecord) and R.model_config['frozen'] for R in (Artifact, Commitment)); i=Interface(commitments=['k'], refs=[Ref(target='t', role='dependence')]); mk=lambda **kw: Artifact(content_ref='inline:hello', codec='utf8', interface=i, **kw); a=mk(id=Artifact.compute_id('inline:hello','utf8',i), provenance=Provenance(role='conjecturer', school='s1', event_seq=9), warrants=['w1']); b=mk(id='', provenance=Provenance(role='variator')); assert {'provenance','warrants'} <= set(Artifact.model_fields) and a.id != b.id; assert all(programs.evaluate(Commitment(id='k', eval=e), a, None) == programs.evaluate(Commitment(id='k', eval=e), b, None) for e in ('predicate:len(content)>2','predicate:len(codec)==4','program:json-wf','program:lineage_ref'))"`
 
 Structurally: `evaluate` touches exactly three attributes of the artifact it is
 given, its predicate namespace is exactly the safe names plus `content` and
 `codec`, and its trace is exactly the commitment id, the eval string, the verdict
 and the program's own detail. Of the program implementations that receive the
 artifact object, only `_lineage_ref` and `manifest.component_wf` read it at all,
-and both read only `interface.refs` — which is inside the address.
-`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/programs.py').read_text()); ev=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='evaluate'][0]; D=[[k.value if isinstance(k,ast.Constant) else '**'+ast.unparse(v) for k,v in zip(d.keys,d.values)] for d in sorted([n for n in ast.walk(ev) if isinstance(n,ast.Dict)], key=lambda n:(n.lineno,n.col_offset))]; assert D[0]==['__builtins__','**_SAFE_NAMES','content','codec'], D[0]; assert D[-1]==['commitment','eval','verdict','**detail'], D[-1]; A=lambda f: sorted({n.attr for n in ast.walk(ast.parse(pathlib.Path(f).read_text())) if isinstance(n,ast.Attribute) and isinstance(n.value,ast.Name) and n.value.id=='artifact'}); assert A('src/deepreason/programs.py')==['codec','content_ref','interface']; assert A('src/deepreason/manifest.py')==['interface'] and A('src/deepreason/workloads/text.py')==[] and A('src/deepreason/oracle.py')==[]"`
+and both read only `interface.refs` — which is inside the address. The scan is
+receiver-BLIND for the five distinctive `Artifact` fields (`content_ref`,
+`codec`, `interface`, `provenance`, `warrants`) and it pins where the object may
+TRAVEL: the only calls it is passed to are `content_text` and the registry
+dispatch, it is never rebound to another name, and every registered program AND
+every delegate they forward to takes it as a parameter literally called
+`artifact`. Those three clauses exist because a receiver-scoped scan alone is
+defeated by a rename, and the field it would then hide is `id` — too common a
+name to scan for blind, and the one whose absence "What is deliberately absent"
+leans on this very check to prove.
+`check: python -c "import ast,inspect,pathlib; from deepreason import programs as P; F=('src/deepreason/programs.py','src/deepreason/manifest.py','src/deepreason/workloads/text.py','src/deepreason/oracle.py'); T={f: ast.parse(pathlib.Path(f).read_text()) for f in F}; ev=[n for n in ast.walk(T[F[0]]) if isinstance(n,ast.FunctionDef) and n.name=='evaluate'][0]; D=[[k.value if isinstance(k,ast.Constant) else '**'+ast.unparse(v) for k,v in zip(d.keys,d.values)] for d in sorted([n for n in ast.walk(ev) if isinstance(n,ast.Dict)], key=lambda n:(n.lineno,n.col_offset))]; assert D[0]==['__builtins__','**_SAFE_NAMES','content','codec'], D[0]; assert D[-1]==['commitment','eval','verdict','**detail'], D[-1]; A=lambda f: sorted({n.attr for n in ast.walk(T[f]) if isinstance(n,ast.Attribute) and isinstance(n.value,ast.Name) and n.value.id=='artifact'}); R=lambda f: sorted({ast.unparse(n) for n in ast.walk(T[f]) if isinstance(n,ast.Attribute) and n.attr in {'content_ref','codec','interface','provenance','warrants'}}); G=lambda f: sorted({ast.unparse(n.func) for n in ast.walk(T[f]) if isinstance(n,ast.Call) and any(isinstance(a,ast.Name) and a.id=='artifact' for a in list(n.args)+[k.value for k in n.keywords])}); assert [A(f) for f in F]==[['codec','content_ref','interface'],['interface'],[],[]], [A(f) for f in F]; assert [R(f) for f in F]==[['artifact.codec','artifact.content_ref','artifact.interface'],['artifact.interface'],[],[]], [R(f) for f in F]; assert [G(f) for f in F]==[['BLOB_PROGRAMS[arg]','component_wf','content_text','dataset_from_spec','fn','integration_wf','manifest_wf','reasoning_wf_program','self.fn'],[],[],[]], [G(f) for f in F]; assert {list(inspect.signature(getattr(s,'fn',s)).parameters)[2] for s in list(P.PROGRAMS.values())+list(P.BLOB_PROGRAMS.values())}=={'artifact'}; import deepreason.manifest as M, deepreason.workloads.text as W, deepreason.oracle as O; assert {list(inspect.signature(f).parameters)[2] for f in (M.component_wf,M.manifest_wf,M.integration_wf,W.reasoning_wf_program,O.dataset_from_spec)}=={'artifact'} and list(inspect.signature(P.content_text).parameters)[0]=='artifact'; assert not [ast.unparse(n) for f in F for n in ast.walk(T[f]) if isinstance(n,(ast.Assign,ast.AnnAssign,ast.AugAssign)) and isinstance(getattr(n,'value',None),ast.Name) and n.value.id=='artifact']"`
 
 The grammar, asserted rather than described. Note the asymmetry between the two
 machine kinds: an unknown `program:` name is `evaluable=False` and raises, while
@@ -68,7 +77,7 @@ draft time.
 The commitment half of purity, which the ontology does not supply: eight mint
 sites hash the canonical spec into the id, so identical parameters reconstruct a
 byte-identical `Commitment` and different parameters cannot share one.
-`check: python -c "import json; from deepreason.oracle import exec_oracle_commitment; a=exec_oracle_commitment('f',[[[1],1]]); b=exec_oracle_commitment('f',[[[1],1]]); c=exec_oracle_commitment('f',[[[2],2]]); assert a==b and a.id!=c.id and a.id.startswith('exec-oracle@') and json.loads(a.budget.extra['spec'])['tests']==[[[1],1]]" && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/oracle.py)" -eq 6 && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/measures/hv.py)" -eq 1 && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/informal/skeleton.py)" -eq 1`
+`check: python -c "import json; from deepreason.oracle import exec_oracle_commitment; a=exec_oracle_commitment('f',[[[1],1]]); b=exec_oracle_commitment('f',[[[1],1]]); c=exec_oracle_commitment('f',[[[2],2]]); assert a==b and a.id!=c.id and a.id.startswith('exec-oracle@') and json.loads(a.budget.extra['spec'])['tests']==[[[1],1]]" && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/oracle.py)" -eq 6 && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/measures/hv.py)" -eq 1 && test "$(grep -c 'sha256_hex(canonical_json' src/deepreason/informal/skeleton.py)" -eq 1 && python -c "from deepreason.oracle import _load_spec; from deepreason.ontology.commitment import Budget; assert [_load_spec(b) for b in (None, Budget(), Budget(extra={'other': 1}), Budget(extra={'spec': 'not json'}), Budget(extra={'spec': '{}'}))]==[{}]*5 and _load_spec(Budget(extra={'spec': '{\"a\": 1}'}))=={'a': 1}"`
 
 ## Where it is expressed
 
@@ -82,7 +91,7 @@ byte-identical `Commitment` and different parameters cannot share one.
 | Grammar, untrusted | `informal/skeleton.py` | `ForbiddenCase._eval_kind_is_safe` | model-authored eval may not be a `predicate:` — the ontology would have taken it |
 | Grammar, untrusted (2) | `workloads/text.py` | `Countercondition.eval` pattern | the same job, tighter: charset regex plus a `PROGRAMS` membership check in `draft_countercondition_commitments` |
 | Frozen-spec channel | `ontology/commitment.py` | `Budget.extra`, `_freeze_extra` | `Mapping[str, int \| str]`, copied into a `FrozenDict` at validation |
-| Spec load | `oracle.py` | `_load_spec` | `json.loads(budget.extra["spec"])`; unparseable or absent yields `{}`, which every adapter turns into `overrun` |
+| Spec load | `oracle.py` | `_load_spec` | `json.loads(budget.extra.get("spec", "{}"))` under a guarding `except`; unparseable OR absent yields `{}`, which every adapter turns into `overrun` |
 | Commitment content address | `oracle.py`, `measures/hv.py`, `informal/skeleton.py` | `sha256_hex(canonical_json(spec))` in the id | the half of purity the ontology does not provide; eight sites |
 | Off-record evaluation | `measures/hv.py` | `Artifact(id="", ...)` in `_text_vector`, `_survival` | an HV variant is evaluated without ever being addressed, registered or replayed |
 | Interface as content | `programs.py`, `manifest.py` | `_lineage_ref`, `component_wf` | the only two programs that read the artifact object, and only `interface.refs` |
@@ -95,13 +104,13 @@ Registration keeps the two records honest in the only way it can — by refusing
 second record under an id already taken — and the ontology's own immutability does
 the rest. `register_commitment` computes nothing: it does not re-derive the spec
 digest, does not call `evaluable`, and does not look at `eval` at all.
-`check: python -c "import inspect, tempfile, shutil, pytest; from deepreason.harness import Harness, WellFormednessError; from deepreason.ontology import Commitment; from deepreason.ontology.commitment import Budget; s=inspect.getsource(Harness.register_commitment); assert 'canonical_json' not in s and 'compute_id' not in s and 'evaluable' not in s; d=tempfile.mkdtemp(); h=Harness(d); liar=Commitment(id='exec-oracle@deadbeefdead', eval='program:exec_oracle', budget=Budget(extra={'spec': '{}'})); assert h.register_commitment(liar).id==liar.id and h.register_commitment(liar).id==liar.id; pytest.raises(WellFormednessError, h.register_commitment, Commitment(id='exec-oracle@deadbeefdead', eval='program:json-wf')); shutil.rmtree(d)"`
+`check: python -c "import inspect, tempfile, shutil, pytest; from deepreason.harness import Harness, WellFormednessError; from deepreason.ontology import Commitment; from deepreason.ontology.commitment import Budget; s=inspect.getsource(Harness.register_commitment); assert 'canonical_json' not in s and 'compute_id' not in s and 'evaluable' not in s and 'eval' not in s; d=tempfile.mkdtemp(); h=Harness(d); liar=Commitment(id='exec-oracle@deadbeefdead', eval='program:exec_oracle', budget=Budget(extra={'spec': '{}'})); assert h.register_commitment(liar).id==liar.id and h.register_commitment(liar).id==liar.id; pytest.raises(WellFormednessError, h.register_commitment, Commitment(id='exec-oracle@deadbeefdead', eval='program:json-wf')); shutil.rmtree(d)"`
 
 `content_text` is the whole bytes-resolution rule and it has exactly two accepting
 shapes. It also never consults `codec`: the decode is UTF-8 with replacement for
 every artifact, and `codec` reaches the evaluation only as a value in the predicate
 namespace.
-`check: python -c "import inspect, tempfile, shutil; from deepreason.storage.blobs import BlobStore; from deepreason.ontology import Artifact, Interface, Provenance; from deepreason import programs; assert 'codec' not in inspect.getsource(programs.content_text); d=tempfile.mkdtemp(); b=BlobStore(d); ref=b.put(b'X'); mk=lambda r: Artifact(id='x', content_ref=r, codec='utf8', interface=Interface(), provenance=Provenance(role='seed')); assert programs.content_text(mk('inline:hi'), None)=='hi' and programs.content_text(mk(ref), b)=='X'; assert [programs.content_text(mk(r), b) for r in ('sha256:'+ref, 'blob:'+ref, 'inline:', '0'*64)]==['','','','']; shutil.rmtree(d)" && grep -q 'decode("utf-8", errors="replace")' src/deepreason/programs.py && test "$(grep -c codec src/deepreason/programs.py)" -eq 1 && grep -q '"sha256:" + sha256_hex(' src/deepreason/capabilities/models.py`
+`check: python -c "import inspect, pathlib, tempfile, shutil; from deepreason.storage.blobs import BlobStore; from deepreason.ontology import Artifact, Interface, Provenance; from deepreason import programs; assert 'codec' not in inspect.getsource(programs.content_text); d=tempfile.mkdtemp(); b=BlobStore(d); ref=b.put(b'X'); mk=lambda r: Artifact(id='x', content_ref=r, codec='utf8', interface=Interface(), provenance=Provenance(role='seed')); assert programs.content_text(mk('inline:hi'), None)=='hi' and programs.content_text(mk(ref), b)=='X'; assert [programs.content_text(mk(r), b) for r in ('sha256:'+ref, 'blob:'+ref, 'inline:', '0'*64)]==['','','','']; from deepreason.ontology import Commitment; V=lambda e: programs.evaluate(Commitment(id='k', eval=e), mk('sha256:'+ref), b)[0]; assert (V('predicate:len(content)==0'), V('program:json-wf'))==('pass','fail'); Q=chr(34); A=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); assert Q+'sha256:'+Q+' + ' not in A and 'f'+Q+'sha256:{' not in A; shutil.rmtree(d)" && grep -q 'decode("utf-8", errors="replace")' src/deepreason/programs.py && test "$(grep -c codec src/deepreason/programs.py)" -eq 1 && grep -q '"sha256:" + sha256_hex(' src/deepreason/capabilities/models.py && grep -q '"sha256:" + sha256_hex(' src/deepreason/conjecture_events.py && grep -q 'f"sha256:{digest}"' src/deepreason/scratch/service.py`
 
 Trace determinism, end to end: the trace key set is fixed, two evaluations
 canonicalize to the same bytes, and that canonical JSON is what becomes the blob
@@ -147,14 +156,18 @@ the evaluator is the change this absence exists to stop.
 `check: python -c "import ast,pathlib; hits=[(str(p),n.lineno,ast.unparse(n)) for p in pathlib.Path('src/deepreason').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Attribute) and n.attr in ('steps','time_ms')]; assert hits==[], hits; from deepreason.ontology.commitment import Budget; assert set(Budget.model_fields)=={'steps','time_ms','extra'} and Budget.model_fields['steps'].default==100_000 and Budget.model_fields['time_ms'].default==2_000" && grep -q "_STEP_LIMIT_DEFAULT = 100_000" src/deepreason/oracle.py`
 
 **No wall-clock and no randomness on the pure path, and the one clock that does
-exist can only produce `overrun`.** `programs.py` and `oracle.py` import neither
-`time` nor `random`; the sole timing construct in the whole stack is the sandbox's
-`cpu_seconds + WALL_GRACE_SECONDS` watchdog, whose only outcome is `SandboxAborted`
-→ `_sandbox_abort_verdict` → `overrun`, a verdict from which no warrant may be
-minted. So machine availability can make a verdict *unavailable* but can never flip
-`pass` to `fail`, and `Warrant.verdict`, which is only ever `"fail"`, is never
-timing-dependent.
-`check: sh -c '! grep -nE "^import time|^import random|^from time|^from random|time\.time\(|random\.|datetime" src/deepreason/programs.py src/deepreason/oracle.py' && grep -q "timeout=cpu_seconds + WALL_GRACE_SECONDS" src/deepreason/oracle_sandbox.py && python -c "from deepreason.oracle import _sandbox_abort_verdict, OVERRUN; from deepreason.oracle_sandbox import SandboxAborted; v,d=_sandbox_abort_verdict(SandboxAborted('watchdog')); assert (v, sorted(d))==(OVERRUN, ['error','sandbox_abort'])"`
+exist can only produce `overrun`.** `programs.py` and `oracle.py` import no clock
+and no entropy source AT ANY NESTING DEPTH — not `time`, `random`, `datetime`,
+`secrets`, `uuid` or `importlib`, and never through `__import__`. The check walks
+the AST rather than grepping line starts, because a function-local
+`import time as _t` followed by `_t.monotonic()` passes every textual pattern a
+module-level grep can express. The sole timing construct in the whole stack is
+the sandbox's `cpu_seconds + WALL_GRACE_SECONDS` watchdog, whose only outcome is
+`SandboxAborted` → `_sandbox_abort_verdict` → `overrun`, a verdict from which no
+warrant may be minted. So machine availability can make a verdict *unavailable*
+but can never flip `pass` to `fail`, and `Warrant.verdict`, which is only ever
+`"fail"`, is never timing-dependent.
+`check: python -c "import ast,pathlib; BAD={'time','random','datetime','secrets','uuid','importlib'}; hits=[(f,n.lineno,ast.unparse(n)) for f in ('src/deepreason/programs.py','src/deepreason/oracle.py') for n in ast.walk(ast.parse(pathlib.Path(f).read_text())) if (isinstance(n,ast.Import) and any(a.name.split('.')[0] in BAD for a in n.names)) or (isinstance(n,ast.ImportFrom) and (n.module or '').split('.')[0] in BAD) or (isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='__import__')]; assert hits==[], hits" && grep -q "timeout=cpu_seconds + WALL_GRACE_SECONDS" src/deepreason/oracle_sandbox.py && python -c "from deepreason.oracle import _sandbox_abort_verdict, OVERRUN; from deepreason.oracle_sandbox import SandboxAborted; v,d=_sandbox_abort_verdict(SandboxAborted('watchdog')); assert (v, sorted(d))==(OVERRUN, ['error','sandbox_abort'])"`
 
 **The ontology never crosses the sandbox boundary.** `oracle_sandbox.py` imports
 `deepreason.canonical` and (worker-side, function-locally) `deepreason.oracle`, and
@@ -180,10 +193,12 @@ surface 3).
 exactly the log machinery.** Fourteen import statements bring in twelve names —
 `Artifact`, `Commitment`, `Budget`, `Interface`, `Ref`, `RefRole`, `Provenance`,
 `Warrant`, `WarrantType`, `Rule`, `Status`, `SpawnTrigger`. Absent are `Event`,
-`StateDiff`, `EpistemicState`, `LLMCall`, `LLMAttempt`, the five typed process
-payloads, and `Problem`/`ProblemProvenance`. Evaluation therefore cannot author a
-log line, cannot describe a state delta, and cannot construct the materialized
-view it reads: it names a `Rule` and calls a harness method, and it reads
+`StateDiff`, `EpistemicState`, `LLMCall`, `LLMAttempt`, the SIX typed process
+payloads (three `ControlEventPayload` versions, the two conjecture receipts, and
+`SchoolRouteReceiptV1`), and `Problem`/`ProblemProvenance`. Evaluation therefore
+cannot author a log line, cannot describe a state delta, and cannot construct
+the materialized view it reads: it names a `Rule` and calls a harness method,
+and it reads
 `harness.state` duck-typed. Even `informal/appellate.py`, which causes problems to
 exist, goes through `rules.spawn` rather than building a `Problem`.
 `check: python -c "import ast,pathlib; import deepreason.ontology as o; F=[pathlib.Path(p) for p in ('src/deepreason/programs.py','src/deepreason/oracle.py','src/deepreason/oracle_sandbox.py')]+[p for d in ('measures','informal') for p in pathlib.Path('src/deepreason').joinpath(d).rglob('*.py')]; I=[n for p in F for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom) and (n.module or '').startswith('deepreason.ontology')]; N={a.name for n in I for a in n.names}; assert len(I)==14, len(I); assert N-set(o.__all__)=={'RefRole'}, sorted(N); assert set(o.__all__)-N=={'ConjectureContextCallReceiptV1','ConjectureTurnEventPayloadV1','ControlEventPayloadV1','ControlEventPayloadV2','ControlEventPayloadV3','EpistemicState','Event','LLMAttempt','LLMCall','Problem','ProblemProvenance','SchoolRouteReceiptV1','StateDiff'}, sorted(set(o.__all__)-N)"`
@@ -259,8 +274,11 @@ design question and becomes a broken root.
 - **Two blob-reference spellings coexist and only one resolves.** `BlobStore._path`
   accepts a bare 64-hex digest and raises `KeyError` for everything else;
   `content_text` swallows that `KeyError` and returns `""`. Meanwhile the prefixed
-  `sha256:<hex>` spelling is live and widespread — `capabilities/`,
-  `conjecture_events.py`, `llm/adapter.py` all mint it. An `Artifact.content_ref`
+  `sha256:<hex>` spelling is live and widespread — `capabilities/models.py`,
+  `capabilities/state.py`, `conjecture_events.py`, `scratch/service.py` and
+  `workflow/` all mint it. (`llm/adapter.py` does NOT: it only matches work-order
+  ids against `sha256:[0-9a-f]{64}`, so it reads the spelling and never sources
+  one.) An `Artifact.content_ref`
   carrying the prefixed form evaluates as the empty string with full confidence:
   `predicate:len(content)==0` passes, `program:json-wf` fails, and nothing anywhere
   reports a missing blob. The same swallow is what lets sealed holdout evidence

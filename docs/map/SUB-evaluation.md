@@ -1,9 +1,9 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: 08dcdf3c
+Verified-at: 461cf287
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
-Seams: DR-SEAM-evaluation-x-rules
-Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluation x harness, evaluation x llm, evaluation x ontology, evaluation x periphery, evaluation x scheduler, evaluation x schools, evaluation x verification, evaluation x warrants-and-attacks
+Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
+Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluation x harness, evaluation x llm, evaluation x periphery, evaluation x scheduler, evaluation x schools, evaluation x verification, evaluation x warrants-and-attacks
 
 # Evaluation — how a commitment becomes a verdict, and where formal stops and informal begins
 
@@ -33,8 +33,14 @@ or a trace, and `rubric:` never reaches a program at all.
 - `evaluable(commitment)` — is this commitment machine-decidable at all
   (`predicate:`, or a `program:` name in `PROGRAMS`/`BLOB_PROGRAMS`).
 - `evaluate(commitment, artifact, blobs)` — the ONE route from a commitment to a
-  verdict. Callers: `crit_program`, `execution_backed`/`formally_backed`,
-  `reach._verdict`, `hv._survival`, `rules/experiment.py`, `skills/`.
+  verdict. Exactly ten modules call it: `rules/crit.py` (`crit_program`,
+  `try_counterexample`, `crit_fuzz`, `_crit_proposed_properties`),
+  `rules/warrants.py` (`execution_backed`/`formally_backed`),
+  `rules/experiment.py::_oracle_ready`,
+  `rules/guards/anti_relapse.py::verdict_vector`, `measures/reach.py::_verdict`,
+  `measures/hv.py` (`_survival`, `_text_vector`),
+  `scheduler.py::Scheduler.report`, `skills/validate.py`, `skills/adoption.py`
+  and `experiments/lambda_run.py`.
 - `program_class(commitment)` — process classification only (`structural`,
   `execution`, `simulation`, `formal`, `observation`); consumed by the
   anti-relapse gate, never by adjudication.
@@ -60,6 +66,7 @@ or a trace, and `rubric:` never reaches a program at all.
 - `dataset_rows(data, delimiter)` — bounded deterministic sidecar parse.
 `check: for s in evaluable evaluate program_class content_text programs_by_class external_toolchains; do grep -q "def $s(" src/deepreason/programs.py || exit 1; done; for s in run_from_spec run_property_from_spec check_generator_from_spec check_checker_from_spec dataset_from_spec fuzz_property admit_counterexample counterexample_commitment exec_oracle_commitment property_oracle_commitment generator_wf_commitment checker_wf_commitment property_violation_commitment dataset_oracle_commitment dataset_rows; do grep -q "def $s(" src/deepreason/oracle.py || exit 1; done; grep -q "^PROGRAMS: dict\[str, ProgramSpec\] = {" src/deepreason/programs.py && grep -q "^BLOB_PROGRAMS: dict = {" src/deepreason/programs.py && grep -q "def crit_program(" src/deepreason/rules/crit.py`
 `check: python -c 'from deepreason.programs import PROGRAMS, BLOB_PROGRAMS, programs_by_class, external_toolchains; from deepreason.oracle import EXEC_PROGRAMS; assert set(programs_by_class()) == {"structural","execution","simulation","formal","observation"}; assert external_toolchains()["lean4"]; assert "hv_floor" not in PROGRAMS; assert "dataset_oracle" in BLOB_PROGRAMS and "dataset_oracle" not in PROGRAMS; assert EXEC_PROGRAMS == {"exec_oracle","property_oracle","dataset_oracle"}'`
+`check: python -c 'import ast,pathlib; found=set(); [found.add(str(f.relative_to("src/deepreason"))) for f in pathlib.Path("src").rglob("*.py") for n in ast.walk(ast.parse(f.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=="evaluate" and isinstance(n.func.value,ast.Name) and n.func.value.id=="programs"]; raise SystemExit(0 if found == {"measures/hv.py","measures/reach.py","rules/crit.py","rules/experiment.py","rules/guards/anti_relapse.py","rules/warrants.py","scheduler/scheduler.py","skills/adoption.py","skills/validate.py","experiments/lambda_run.py"} else 1)'`
 
 Every public oracle wrapper reaches untrusted code only through
 `oracle_sandbox.run_isolated`; the seven `*_local` implementations run in the
@@ -98,8 +105,9 @@ starts an interpreter, applies OS limits, exchanges bounded JSON, and raises
   `planted_flaw_calibration`, `bias_probes` — program-checked attacks on judge
   BEHAVIOUR, landing as demonstrative warrants against the relevant ν. Only
   `paraphrase_invariance_audit` has a production call site (`scheduler.py`); the
-  other three are reachable from tests and operator code only.
-`check: grep -q "paraphrase_invariance_audit(self.harness, self.adapter, self.config)" src/deepreason/scheduler/scheduler.py && sh -c '! grep -q "premise_deletion_audit\|planted_flaw_calibration\|bias_probes" src/deepreason/scheduler/scheduler.py'; grep -q "def reach_sweep(" src/deepreason/measures/reach.py; for s in hv_spot_check run_hv_floor is_hv_floor hv_floor_commitment; do grep -q "def $s(" src/deepreason/measures/hv.py || exit 1; done; for s in run_trial run_argument_trial_from_case pairwise_discriminate conforming_transcript; do grep -q "def $s(" src/deepreason/informal/trial.py || exit 1; done; for s in register_standard resolve_standard precedent_slice registered_specs standard_body; do grep -q "def $s(" src/deepreason/informal/standards.py || exit 1; done; for s in parse_skeleton skeleton_wf_program draft_forbidden_commitments compile_forbidden_commitments; do grep -q "def $s(" src/deepreason/informal/skeleton.py || exit 1; done; for s in docket rule spawn_audit_problem; do grep -q "def $s(" src/deepreason/informal/appellate.py || exit 1; done; for s in seal is_sealed reveal; do grep -q "def $s(" src/deepreason/informal/holdout.py || exit 1; done; for s in paraphrase_invariance_audit premise_deletion_audit planted_flaw_calibration bias_probes; do grep -q "def $s(" src/deepreason/informal/audits.py || exit 1; done`
+  other three are named nowhere in `src/` outside `informal/audits.py` itself,
+  so they run only from tests and operator code.
+`check: grep -q "paraphrase_invariance_audit(self.harness, self.adapter, self.config)" src/deepreason/scheduler/scheduler.py || exit 1; sh -c '! grep -rn "premise_deletion_audit\|planted_flaw_calibration\|bias_probes" --include=*.py src/ | grep -v "^src/deepreason/informal/audits\.py:"' || exit 1; grep -q "def reach_sweep(" src/deepreason/measures/reach.py || exit 1; for s in hv_spot_check run_hv_floor is_hv_floor hv_floor_commitment; do grep -q "def $s(" src/deepreason/measures/hv.py || exit 1; done; for s in run_trial run_argument_trial_from_case pairwise_discriminate conforming_transcript; do grep -q "def $s(" src/deepreason/informal/trial.py || exit 1; done; for s in register_standard resolve_standard precedent_slice registered_specs standard_body; do grep -q "def $s(" src/deepreason/informal/standards.py || exit 1; done; for s in parse_skeleton skeleton_wf_program draft_forbidden_commitments compile_forbidden_commitments; do grep -q "def $s(" src/deepreason/informal/skeleton.py || exit 1; done; for s in docket rule spawn_audit_problem; do grep -q "def $s(" src/deepreason/informal/appellate.py || exit 1; done; for s in seal is_sealed reveal; do grep -q "def $s(" src/deepreason/informal/holdout.py || exit 1; done; for s in paraphrase_invariance_audit premise_deletion_audit planted_flaw_calibration bias_probes; do grep -q "def $s(" src/deepreason/informal/audits.py || exit 1; done`
 
 ## State it owns
 
@@ -121,9 +129,12 @@ from content the log already holds. What it does own:
   store, so the deterministic pack renderer cannot leak them. `reveal` is a
   logged `Rule.REVEAL` event; replay reproduces the unsealing.
 - **`harness._verdict_cache`** — an in-memory `(commitment_id, artifact_id) →
-  verdict` map that `reach._verdict` fills. It is a cache of a pure function,
-  never persisted, and deliberately skips sandbox aborts.
-`check: python -c "import pathlib; blob=''.join(pathlib.Path(f).read_text() for f in ('src/deepreason/measures/hv.py','src/deepreason/measures/reach.py','src/deepreason/informal/trial.py','src/deepreason/informal/audits.py')); raise SystemExit(0 if all(t in blob for t in ('reach-provisional','hv-nomeasure','hv-floor-nomeasure','trial-blocked:','trial-declined','trial-observation','pairwise-observation','audit-hit:','audit-blocked:ensemble-split','judge-error-rate:','judge-self-preference:','judge-verbosity-bias:','trial-llm','audit-llm')) else 1)" && grep -q 'tag.startswith("trial-blocked:ensemble-split")' src/deepreason/informal/appellate.py && grep -q 'holdout_dir = harness.root / "holdout"' src/deepreason/informal/holdout.py && grep -q "harness._commit(Rule.REVEAL" src/deepreason/informal/holdout.py && grep -q "_verdict_cache: dict\[tuple\[str, str\], str\] = {}" src/deepreason/harness.py && grep -q 'if "sandbox_abort" not in trace:' src/deepreason/measures/reach.py`
+  verdict` map. TWO fillers, not one: `reach._verdict` and
+  `rules/experiment.py::_oracle_ready`. It is a cache of a pure function, never
+  persisted, and both fillers deliberately skip sandbox aborts —
+  `_oracle_ready` additionally parks the pair in `harness._oracle_pending` so
+  the experiment retries rather than treating the envelope as an answer.
+`check: python -c "import pathlib; blob=''.join(pathlib.Path(f).read_text() for f in ('src/deepreason/measures/hv.py','src/deepreason/measures/reach.py','src/deepreason/informal/trial.py','src/deepreason/informal/audits.py')); raise SystemExit(0 if all(t in blob for t in ('reach-provisional','hv-nomeasure','hv-floor-nomeasure','trial-blocked:','trial-declined','trial-observation','pairwise-observation','audit-hit:','audit-blocked:ensemble-split','judge-error-rate:','judge-self-preference:','judge-verbosity-bias:','trial-llm','audit-llm')) else 1)" && grep -q 'tag.startswith("trial-blocked:ensemble-split")' src/deepreason/informal/appellate.py && grep -q 'holdout_dir = harness.root / "holdout"' src/deepreason/informal/holdout.py && grep -q "harness._commit(Rule.REVEAL" src/deepreason/informal/holdout.py && grep -q 'tag.startswith("audit-hit:")' src/deepreason/informal/appellate.py && grep -q "_verdict_cache: dict\[tuple\[str, str\], str\] = {}" src/deepreason/harness.py && grep -q 'if "sandbox_abort" not in trace:' src/deepreason/measures/reach.py && grep -q 'if trace.get("sandbox_abort"):' src/deepreason/rules/experiment.py && grep -q "harness._oracle_pending.add(key)" src/deepreason/rules/experiment.py && grep -q "harness._verdict_cache\[key\] = verdict" src/deepreason/rules/experiment.py`
 
 Verdict traces, HV per-edit payloads, trial transcripts and audit findings all
 land in the caller's content-addressed blob store as `trace_ref` digests.
@@ -146,8 +157,8 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
 | Add a judge audit | a `Commitment` constant plus an audit function in `informal/audits.py`; wire it beside the `paraphrase_invariance_audit` call in `scheduler.py` or it never runs | `python -m pytest tests/test_audits.py -q` |
 | Standard resolution, precedent ranking, or docket weights | `informal/standards.py`; `docket`'s `bump` weights in `informal/appellate.py` | `python -m pytest tests/test_standards.py -q` |
 | The skeleton schema, or what a model-authored forbidden case may name | `Skeleton` / `ForbiddenCase._eval_kind_is_safe`, `informal/skeleton.py` | `python -m pytest tests/test_informal.py -q` |
-`check: for s in _validate_predicate _SAFE_NAMES; do grep -q "$s" src/deepreason/programs.py || exit 1; done; grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/oracle.py && grep -q "_INT_LITERAL_CAP = 1_000_000" src/deepreason/oracle.py && grep -q "^_ALLOWED = (" src/deepreason/oracle.py && grep -q "MEMORY_CAP_BYTES = 512 \* 1024 \* 1024" src/deepreason/oracle_sandbox.py && grep -q "IPC_CAP_BYTES = 8 \* 1024 \* 1024" src/deepreason/oracle_sandbox.py && grep -q "def _cpu_seconds(step_limit: int, units: int) -> int:" src/deepreason/oracle_sandbox.py && grep -q "REACH_COVERAGE_MIN: float = 0.5" src/deepreason/config.py && grep -q "coverage_min=config.REACH_COVERAGE_MIN" src/deepreason/scheduler/scheduler.py`
-`check: grep -q "_STRUCTURAL_PROGRAMS = frozenset(" src/deepreason/measures/reach.py && grep -q "def _substantive(commitment) -> bool:" src/deepreason/measures/reach.py && grep -q "_EQUIV_BATTERY_CAP = 12" src/deepreason/measures/hv.py && grep -q "def _equivalence_battery(harness, artifact)" src/deepreason/measures/hv.py && grep -q "def _paraphrase_screen(" src/deepreason/informal/trial.py && grep -q 'PARAPHRASE_AUDIT = Commitment(id="audit:paraphrase-invariance"' src/deepreason/informal/audits.py && grep -q "def _eval_kind_is_safe(cls, v: str) -> str:" src/deepreason/informal/skeleton.py`
+`check: for s in _validate_predicate _SAFE_NAMES; do grep -q "$s" src/deepreason/programs.py || exit 1; done; grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/oracle.py && grep -q "_INT_LITERAL_CAP = 1_000_000" src/deepreason/oracle.py && grep -q "^_ALLOWED = (" src/deepreason/oracle.py && grep -q "MEMORY_CAP_BYTES = 512 \* 1024 \* 1024" src/deepreason/oracle_sandbox.py && grep -q "IPC_CAP_BYTES = 8 \* 1024 \* 1024" src/deepreason/oracle_sandbox.py && grep -q "def _cpu_seconds(step_limit: int, units: int) -> int:" src/deepreason/oracle_sandbox.py && grep -q "^CPU_SECONDS_MAX = 30" src/deepreason/oracle_sandbox.py && grep -q "REACH_COVERAGE_MIN: float = 0.5" src/deepreason/config.py && grep -q "coverage_min=config.REACH_COVERAGE_MIN" src/deepreason/scheduler/scheduler.py`
+`check: grep -q "_STRUCTURAL_PROGRAMS = frozenset(" src/deepreason/measures/reach.py && grep -q "def _substantive(commitment) -> bool:" src/deepreason/measures/reach.py && grep -q "_EQUIV_BATTERY_CAP = 12" src/deepreason/measures/hv.py && grep -q "def _equivalence_battery(harness, artifact)" src/deepreason/measures/hv.py && grep -q "def _sample_edits(" src/deepreason/measures/hv.py && grep -q "def _equivalent(" src/deepreason/measures/hv.py && grep -q "HV_K: int = 8" src/deepreason/config.py && grep -q "HV_MIN: float | None = None" src/deepreason/config.py && grep -q "def _paraphrase_screen(" src/deepreason/informal/trial.py && grep -q "def _trial_steps(" src/deepreason/informal/trial.py && grep -q "class TrialAuthority" src/deepreason/authority.py && grep -q 'PARAPHRASE_AUDIT = Commitment(id="audit:paraphrase-invariance"' src/deepreason/informal/audits.py && grep -q "def bump(case: str, kind: str, weight: int = 1) -> None:" src/deepreason/informal/appellate.py && grep -q "^class Skeleton(BaseModel):" src/deepreason/informal/skeleton.py && grep -q "def _eval_kind_is_safe(cls, v: str) -> str:" src/deepreason/informal/skeleton.py`
 
 ## Traps
 
@@ -161,8 +172,9 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
 - **Zero samples must not vacuously pass a floor.** `run_hv_floor` returns
   `overrun` when the variator emitted no edits; falling through would record
   `s_hat=0`, hence `hv=1.0`, hence a PASS from no evidence at all.
-  `hv_spot_check` guards the same way.
-`check: grep -q "vacuously PASSing the floor from zero" src/deepreason/measures/hv.py && grep -q "return programs.OVERRUN" src/deepreason/measures/hv.py`
+  `hv_spot_check` guards the SAME branch but returns `None`, not `overrun`: a
+  spot-check reaches no verdict, so it logs `hv-nomeasure` and declines.
+`check: python -c 'import ast,pathlib; t=ast.parse(pathlib.Path("src/deepreason/measures/hv.py").read_text()); f={n.name:n for n in t.body if isinstance(n,ast.FunctionDef)}; g=lambda k: next((ast.unparse(x.body[-1]) for x in f[k].body if isinstance(x,ast.If) and isinstance(x.test,ast.UnaryOp) and isinstance(x.test.op,ast.Not) and getattr(x.test.operand,"id","")=="edits"),None); raise SystemExit(0 if g("run_hv_floor")=="return programs.OVERRUN" and g("hv_spot_check")=="return None" else 1)' && grep -q 'record_llm_calls(\[llm_call\], "hv-nomeasure")' src/deepreason/measures/hv.py`
 - **Structural well-formedness protects nothing and proves nothing.** Passing
   `json-wf`, `skeleton_wf`, `lineage_ref` or `checker_wf` says the bytes are
   well-formed, not that they answer the problem. `_STRUCTURAL_PROGRAMS` is what
