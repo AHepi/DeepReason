@@ -28,6 +28,21 @@ invalidates the checklist's audit trail.
    or validator of the append-only record, re-run `verify_root` on
    one known-good committed root and one defect-era root — prior
    verdicts must be unchanged except where SPEC.md says otherwise.
+4b. **Map validation — the documentation half of the gate:**
+
+        python tools/docs_verify.py          # must report 0 failed
+        python tools/docs_verify.py --audit  # must report 0 findings
+        python tools/docs_verify.py --stale  # read; judge each entry
+
+   A failing check is a FAIL verdict exactly like a failing test: it
+   means a document now asserts something untrue about the tree, and
+   shipping it is shipping a lie the next reader will act on.
+   `--stale` is advisory, but every entry it lists must be either
+   updated or explicitly dismissed in VALIDATION.md with the reason —
+   silence about a stale document is how the map dies.
+   Confirm too that behaviour the change ADDED is covered by at least
+   one new map check. A change with no new check has documented nothing
+   falsifiable.
 5. Requirement sweep: for every R in REQUEST.md, one line — which
    acceptance output demonstrates it, or why it is legitimately
    deferred (operator's words required). An R with neither is a FAIL:
@@ -45,6 +60,11 @@ invalidates the checklist's audit trail.
     <last line pasted, e.g. "3107 passed, 7 skipped"> : PASS|FAIL
     ## Record-behavior preservation
     <root>: <unchanged | changed as specified> (or "n/a")
+    ## Map
+    docs_verify: <N documents, M checks, 0 failed> : PASS|FAIL
+    docs_verify --audit: <N findings> : PASS|FAIL
+    docs_verify --stale: <each entry, updated or dismissed with reason>
+    new checks added by this change: <ids/files, or "none - see why">
     ## Requirement sweep
     R1: demonstrated by S1 output | deferred (operator: "<quote>")
     ...
@@ -57,6 +77,9 @@ invalidates the checklist's audit trail.
 
 - VALIDATION.md committed and pushed, every acceptance check run with
   pasted output, every R swept.
-- No file other than VALIDATION.md (and PARKED.md) modified.
+- No file other than VALIDATION.md (and PARKED.md) modified. A map
+  document that needs updating is a FAIL routed back to
+  `dr-execute-step`, not something validation fixes in passing —
+  validation that edits the thing it validates proves nothing.
 - Return to the orchestrator: PASS -> dr-deliver-change; FAIL ->
   dr-plan-steps with the FAIL detail.

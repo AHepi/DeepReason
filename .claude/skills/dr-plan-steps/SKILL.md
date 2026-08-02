@@ -28,6 +28,18 @@ missing steps here means missed work later. Plan against that.
    `git status --porcelain` cleanliness check.
 4. Every step cites its spec item (S-number). A step with no S-number
    is scope creep — delete it or send it to PARKED.md.
+4b. **Scope from the map before planning steps.** Open
+   `docs/map/INDEX.md`, resolve the change to `DR-SUB-`/`DR-CON-`/
+   `DR-SEAM-` ids, and read the seam document before the subsystem
+   ones. Name those ids in CHECKLIST.md's header so execution starts
+   from the same map the plan was built on. A change whose ids you
+   cannot name is a change you have not scoped.
+4c. **Plan the map update as part of the step that changes behaviour**,
+   never as a trailing "update docs" step. A trailing documentation
+   step is the one that gets dropped when a tranche runs long. If a
+   seam document must be CREATED, that is its own step, and it comes
+   BEFORE the code steps — writing down the agreement is how you find
+   out whether you understand it.
 5. Mark checkpoint steps `[COMMIT]` at natural boundaries (at minimum:
    after tests-written, after each spec item lands, after the gate).
    The container can vanish; work between commits is work at risk.
@@ -44,6 +56,8 @@ missing steps here means missed work later. Plan against that.
           done-when: ...
     - [ ] 3. (S2) ...
     ...
+    - [ ] N-2. (all) Map check: python tools/docs_verify.py
+          done-when: 0 failed, and --audit reports 0 findings
     - [ ] N-1. (all) Full gate: pytest tests/ -q -n 4
           done-when: output ends "N passed, 0 failed" (paste it)
     - [ ] N. (all) [COMMIT] push and confirm clean tree

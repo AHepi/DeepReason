@@ -25,6 +25,13 @@ what was asked and what was done impossible to miss.
 3. Surface the assumptions (from VALIDATION.md) and PARKED.md
    contents as explicit lists. Parked items are offered as candidate
    next tranches, never silently promised.
+3b. **Report the map delta.** One short section: which `docs/map/`
+   documents this tranche changed or created, how many checks it added,
+   and any document `--stale` still lists with the reason it was left.
+   The operator needs to know whether the next reader of this subsystem
+   will be told the truth. "No map change" is a legitimate answer for a
+   tranche that changed no behaviour — say it rather than omitting the
+   section, so its absence is never ambiguous.
 4. Write DELIVERY.md leading with the outcome in plain sentences a
    reader who saw none of the work can follow: what changed, where,
    how it is proven. No process narration ("first I read the file...").
@@ -49,6 +56,10 @@ what was asked and what was done impossible to miss.
 
     ## Assumptions the operator may override
     A1: <one line>
+
+    ## Map delta
+    changed: <files>   created: <files>   new checks: <n>
+    left stale: <file: reason, or "none">
 
     ## Parked (not done, not promised)
     <PARKED.md lines, or "none">

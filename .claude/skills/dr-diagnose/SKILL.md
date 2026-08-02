@@ -8,6 +8,22 @@ description: Locate the cause of a DeepReason defect from the typed record, not 
 Input: GOAL.md. Output: DIAGNOSIS.md naming ONE primary cause. You
 read the record first and the code second. You change nothing.
 
+## Read the map's Traps FIRST — it is cheaper than the record
+
+Before opening the record, read the `Traps` section of the map document
+covering the suspect subsystem (`docs/map/SUB-*.md`, `CON-*.md`,
+`SEAM-*.md`). Traps are the accumulated memory of what has actually
+gone wrong there, and a recurrence is the cheapest diagnosis available.
+
+This costs one file read and can end the phase. It is not a substitute
+for the record: the record still decides, and a trap that merely LOOKS
+like your symptom is a hypothesis to test against the blob, not an
+answer. But a defect matching a recorded trap is the single most likely
+explanation, and checking is nearly free.
+
+If the diagnosis turns out to be a NEW failure mode, `dr-implement-fix`
+will add it to that document's Traps as part of the fix commit.
+
 ## Where the truth lives (in priority order)
 
 For a failed or suspect run root `<root>`:

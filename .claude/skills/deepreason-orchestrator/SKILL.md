@@ -29,6 +29,31 @@ to select the next. You never blend phases.
    replay validation record formats); or the diff would exceed ~150
    changed lines.
 
+## Map preflight (do this before routing, every time)
+
+`docs/map/` is the navigation layer over 125k lines of source. Scoping
+from grep instead of from the map is how a change misses a call site.
+
+1. Read `docs/map/INDEX.md` and resolve the work to ids:
+   `DR-SUB-<pkg>`, `DR-CON-<concept>`, `DR-SEAM-<a>-x-<b>`.
+2. If the work spans two things, **read the SEAM document first**. It
+   says which fraction of each side is actually involved, which is
+   usually small. Reading both subsystem documents first is reading ten
+   times more than you need.
+3. Read `docs/map/INV-frozen-surfaces.md` BEFORE designing anything.
+   Discovering a frozen surface after the code is written is the
+   expensive order to discover it in.
+4. Record the resolved ids in the tranche's first artifact (GOAL.md or
+   REQUEST.md). Every later phase starts from the same map.
+
+If the map has no id for something the work touches, that is a finding,
+not a blocker: say so, and creating the missing document becomes part of
+the tranche. `docs/map/SCHEMA.md` is the contract for writing one.
+
+The map is maintained by the phases that change code, in the same
+commit — see `dr-execute-step` and `dr-implement-fix`. Nothing else may
+advance a `Verified-at:` stamp.
+
 ## Environment preflight (run once per session, before routing)
 
 The cloud container rolls back silently. Verify, in order:

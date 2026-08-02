@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+"""Re-run every checkable claim in `docs/map/` and report the ones that rot.
+
+A map document is authenticated by RE-DERIVATION, not by a signature: each
+load-bearing claim carries a shell command that must still exit 0.  A signature
+would prove who wrote a sentence; this proves the sentence is still true, which
+is the property that actually decays.
+
+Usage:
+    python tools/docs_verify.py             # run every check; nonzero on failure
+    python tools/docs_verify.py --stale     # list docs whose Owns: files moved
+    python tools/docs_verify.py --audit     # flag checks that cannot fail
+    python tools/docs_verify.py --self-test # verify this tool's own parsing
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+
+MAP_DIR = Path(__file__).resolve().parents[1] / "docs" / "map"
+REPO = Path(__file__).resolve().parents[1]
+
+# A check rides its own line as an inline-code span, at COLUMN 0. The column
+# rule is what lets SCHEMA.md show worked examples inside indented code blocks
+# without the verifier trying to run them.
+_CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")
+_HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Depends-on):\s*(?P<val>.*)$")
+_ID = re.compile(r"^<!--\s*(?P<id>DR-[A-Z]+-[a-z0-9\-]+|DR-[A-Z]+)\s*-->\s*$")
+
+# Commands that pass no matter what the tree looks like. A check built only from
+# these is worse than absent: it lends a claim credibility it has not earned.
+_VACUOUS = re.compile(
+    r"^\s*(true|:|echo\b|test\s+-[efd]\s+\S+\s*$|ls\s+\S+\s*$)", re.IGNORECASE
+)
+
+
+@dataclass
+class Doc:
+    path: Path
+    doc_id: str | None = None
+    headers: dict[str, str] = field(default_factory=dict)
+    checks: list[tuple[int, str]] = field(default_factory=list)
+
+
+def parse_text(text: str, path: Path | None = None) -> Doc:
+    doc = Doc(path=path or Path("<memory>"))
+    for number, line in enumerate(text.splitlines(), 1):
+        if doc.doc_id is None and (m := _ID.match(line)):
+            doc.doc_id = m.group("id")
+            continue
+        if m := _HEADER.match(line):
+            doc.headers.setdefault(m.group("key"), m.group("val").strip())
+            continue
+        if m := _CHECK.match(line):
+            doc.checks.append((number, m.group("cmd").strip()))
+    return doc
+
+
+def parse(path: Path) -> Doc:
+    return parse_text(path.read_text(encoding="utf-8"), path)
+
+
+def documents() -> list[Doc]:
+    return [parse(p) for p in sorted(MAP_DIR.glob("*.md"))]
+
+
+def run(cmd: str) -> tuple[bool, str]:
+    try:
+        proc = subprocess.run(
+            cmd, shell=True, cwd=REPO, capture_output=True, text=True, timeout=900
+        )
+    except subprocess.TimeoutExpired:
+        return False, "TIMEOUT after 900s"
+    if proc.returncode == 0:
+        return True, ""
+    tail = (proc.stderr or proc.stdout or "").strip().splitlines()
+    return False, " | ".join(tail[-3:])[:400]
+
+
+def cmd_run() -> int:
+    docs = documents()
+    if not docs:
+        print("no documents in docs/map/", file=sys.stderr)
+        return 1
+    failures: list[str] = []
+    total = 0
+    for doc in docs:
+        if doc.doc_id is None:
+            failures.append(f"{doc.path.name}: no `<!-- DR-... -->` id on the first line")
+        for number, cmd in doc.checks:
+            total += 1
+            ok, detail = run(cmd)
+            if not ok:
+                failures.append(f"{doc.path.name}:{number}: {cmd}\n      -> {detail}")
+    print(f"docs_verify: {len(docs)} documents, {total} checks")
+    for failure in failures:
+        print(f"  FAIL {failure}")
+    print(f"docs_verify: {len(failures)} failed")
+    return 1 if failures else 0
+
+
+def cmd_stale() -> int:
+    """Report documents whose owned files changed after their Verified-at stamp.
+
+    Advisory by design. Most source edits do not invalidate a description, so
+    this ranks documents for a human re-read rather than failing a gate.
+    """
+    stale = 0
+    for doc in documents():
+        stamp = doc.headers.get("Verified-at", "").strip()
+        owns = [o.strip() for o in doc.headers.get("Owns", "").split(",") if o.strip()]
+        if not stamp or not owns:
+            continue
+        proc = subprocess.run(
+            ["git", "log", "--oneline", f"{stamp}..HEAD", "--", *owns],
+            cwd=REPO, capture_output=True, text=True,
+        )
+        moved = [line for line in proc.stdout.splitlines() if line.strip()]
+        if moved:
+            stale += 1
+            print(f"{doc.path.name}: {len(moved)} commit(s) to owned files since {stamp}")
+            for line in moved[:3]:
+                print(f"    {line}")
+    print(f"docs_verify --stale: {stale} document(s) worth re-reading")
+    return 0
+
+
+def cmd_audit() -> int:
+    """Flag checks that cannot fail, and documents with no checks at all."""
+    flagged = 0
+    for doc in documents():
+        if not doc.checks and doc.doc_id not in {"DR-SCHEMA", "DR-INDEX"}:
+            print(f"{doc.path.name}: no checks — every claim in it is unverifiable")
+            flagged += 1
+        for number, cmd in doc.checks:
+            if _VACUOUS.match(cmd):
+                print(f"{doc.path.name}:{number}: vacuous check `{cmd}`")
+                flagged += 1
+    print(f"docs_verify --audit: {flagged} finding(s)")
+    return 1 if flagged else 0
+
+
+def cmd_self_test() -> int:
+    """Prove the parser reads what the schema says it reads."""
+    sample = """<!-- DR-SUB-example -->
+Verified-at: deadbee
+Verify: true
+Owns: src/deepreason/example.py
+
+A claim.
+`check: test 1 -eq 1`
+Prose mentioning `check: not-a-check` inline should not parse.
+"""
+    tmp = MAP_DIR / "_selftest.md"
+    try:
+        tmp.write_text(sample, encoding="utf-8")
+        doc = parse(tmp)
+        assert doc.doc_id == "DR-SUB-example", doc.doc_id
+        assert doc.headers["Verified-at"] == "deadbee", doc.headers
+        assert doc.headers["Owns"] == "src/deepreason/example.py", doc.headers
+        assert len(doc.checks) == 1, doc.checks
+        assert doc.checks[0][1] == "test 1 -eq 1", doc.checks
+        # An indented check is an EXAMPLE, not a claim, and must not parse.
+        assert parse_text("    `check: false`").checks == []
+        assert _VACUOUS.match("true") and not _VACUOUS.match("grep -q x y")
+    finally:
+        tmp.unlink(missing_ok=True)
+    print("docs_verify --self-test: ok")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--stale", action="store_true")
+    parser.add_argument("--audit", action="store_true")
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+    if args.self_test:
+        return cmd_self_test()
+    if args.stale:
+        return cmd_stale()
+    if args.audit:
+        return cmd_audit()
+    return cmd_run()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
