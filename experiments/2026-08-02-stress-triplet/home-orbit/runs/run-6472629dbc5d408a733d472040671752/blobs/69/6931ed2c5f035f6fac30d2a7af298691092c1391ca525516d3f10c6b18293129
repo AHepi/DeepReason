@@ -1,0 +1,121 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Rules 90 and 184 reach cycles of length at most 2 within 4*W steps for all widths 5-11, while Rule 110 does not for any width > 5. Rule 54 is predicted NOT to reach short cycles.",
+      "mechanism": "Rule 90 is additive linear over GF(2), so maximum cycle length is governed by the multiplicative order of 2 modulo (2^W - 1), which is strictly > W for W between 5 and 11, guaranteeing transients are short but cycles can be long; however, for small widths 5-11, the maximum transient is bounded by W. Rule 184 is a conservative cellular automaton where the number of 1s is preserved, and it resolves to a cycle of length 1 or 2 in O(W) steps. Rule 110 is Turing-complete and exhibits chaotic interactions, causing long transients and complex cycles that vastly exceed 4*W for almost all widths.",
+      "counterconditions": [
+        "If exhaustive simulation of Rule 90 for W=7 yields a transient > 28, the linearity bound on transients is violated.",
+        "If Rule 184 for any width 5-11 exhibits a transient > 4*W, the conservative bound is falsified.",
+        "If Rule 110 for W=5 reaches a cycle of length <= 2 within 20 steps for all states, the claim that Rule 110 fails for all W > 5 is too broad."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "Only Rule 184 reaches a cycle of length at most 2 within 4*W steps for all widths 5-11. Rules 90 and 110 do not.",
+      "mechanism": "Rule 184 is a monotonic traffic rule where particles (1s) move right into holes (0s) or oscillate between two states if block. This immediate, bounded annihilation ensures O(W) transient and cycle length <= 2. Rule 90, while linear, has cycles up to 2^W - 1 (e.g., long cycles for W=7). Rule 110 has glider collisions that create arbitrarily long transients and cycles.",
+      "counterconditions": [
+        "If Rule 90 for W=5 has all states reaching a cycle of length <= 2 within 20 steps, the claim fails.",
+        "If Rule 184 for any W in 5-11 has a cycle of length > 2, the conservative traffic rule assumption is wrong."
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "The structural property separating the rules is number-conservation: conservative rules (184) reach length-1 or 2 cycles quickly, while non-conservative rules (90, 110, 54) do not.",
+      "mechanism": "In a number-conserving CA, the dynamics are effectively particles moving on a 1D ring. They cannot create or destroy each other, restricting the state space reachable from any initial state and forcing quick stabilization into moving or oscillating configurations (cycles <= 2). Non-conservative rules do not have this restriction.",
+      "counterconditions": [
+        "If Rule 54 (non-conserving) demonstrably reaches short cycles for W=5-11 within 4*W steps, the separating property is wrong.",
+        "If Rule 184 exhibits a cycle of length > 2 for any odd width W in 5-11, the cycle length <= 2 conclusion for conserving rules is false."
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "All three rules (90, 110, 184) fail to reach cycles of length at most 2 within 4*W steps for at least some widths between 5 and 11.",
+      "mechanism": "Because the state space is 2^W and 4*W is a very small boundary, even simple rules like 90 have maximum cycle lengths scaling as 2^W. Rule 110 is known to be complex. Even Rule 184 can have transient lengths scaling with W^2 if evaluated in specific block configurations, which might exceed 4*W for W >= 5.",
+      "counterconditions": [
+        "If exhaustive simulation of Rule 184 for all W 5-11 shows all_short_cycles is True, the claim is directly falsified.",
+        "If Rule 90 for all W 5-11 limits to cycle length 2, the claim is falsified."
+      ],
+      "typicality": 0.2
+    },
+    {
+      "claim": "Only Rule 90 and Rule 184 reach short cycles within 4*W steps for all W in 5-11. Rule 54 is predicted to behave like Rule 110 and fail.",
+      "mechanism": "Rule 90 and Rule 184 both have algebraic structures that strictly limit their maximum transient lengths to O(W). Rule 90 is linear, and its transient is bounded by W. Rule 184 is a traffic rule with transients bounded by W. Rule 110 and Rule 54 lack these structures and exhibit chaotic glider interactions, leading to long transients.",
+      "counterconditions": [
+        "If Rule 90 for W=7 yields a maximum transient > 28, the O(W) transient bound is incorrect.",
+        "If Rule 54 for W=5 settles into a cycle of length 2 within 20 steps for all states, the prediction that Rule 54 fails is incorrect."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "Rules 110 and 184 reach cycles of length at most 2 within 4*W steps, while Rule 90 does not for W > 5.",
+      "mechanism": "Rule 110, despite Turing-completeness, has a de Bruijn graph structure that for very small ring sizes (W=5 to 11) collapses quickly into stable periodic backgrounds (cycles of length 1 or 2). Rule 184 is conserving and stabilizes quickly. Rule 90 is linear, meaning it cycles through a large subspace of 2^W states with a period related to the multiplicative order of 2, which is > 2 for W > 2.",
+      "counterconditions": [
+        "If Rule 110 for W=7 has a transient > 28 or a cycle length > 2 for any state, the small-ring collapse hypothesis is falsified.",
+        "If Rule 90 for W=5 has a cycle length > 2 for any state, it aligns with the claim, but if all cycles are <= 2, the W > 5 condition is too strict."
+      ],
+      "typicality": 0.1
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "eca_short_cycle_sim_v1",
+      "hypothesis": "Rules 90 and 184 reach cycles of length <= 2 within 4*W steps for all W in 5-11, while Rule 110 and Rule 54 do not.",
+      "rival_predictions": [
+        "Rule 184 fails for some W in 5-11",
+        "Rule 90 fails for all W in 5-11",
+        "Rule 110 succeeds for all W in 5-11",
+        "Rule 54 succeeds for all W in 5-11"
+      ],
+      "discriminating_purpose": "Compute the maximum transient length and maximum cycle length for rules 54, 90, 110, 184 across widths 5 to 11. This separates the hypothesis from rivals by explicitly identifying which (rule, W) pairs have max_cycle_length <= 2 and max_transient_length <= 4*W.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def simulate(inputs, rng):\n    rule = inputs['parameters']['rule']\n    W = inputs['parameters']['width']\n    max_steps = 4 * W\n\n    def step(state):\n        next_state = 0\n        for i in range(W):\n            left = (state >> ((i - 1) % W)) & 1\n            center = (state >> i) & 1\n            right = (state >> ((i + 1) % W)) & 1\n            pattern = (left << 2) | (center << 1) | right\n            if (rule >> pattern) & 1:\n                next_state |= (1 << i)\n        return next_state\n\n    max_observed_transient = 0\n    max_observed_cycle = 0\n    witness_state = 0\n\n    for initial_state in range(1 << W):\n        seen = {initial_state: 0}\n        current = initial_state\n        t = 0\n        transient = -1\n        cycle_len = -1\n\n        while t <= max_steps:\n            current = step(current)\n            t += 1\n            if current in seen:\n                transient = seen[current]\n                cycle_len = t - seen[current]\n                break\n            seen[current] = t\n\n        if transient == -1:\n            transient = max_steps + 1\n            cycle_len = -1\n\n        if transient > max_observed_transient:\n            max_observed_transient = transient\n            witness_state = initial_state\n        if cycle_len > max_observed_cycle:\n            max_observed_cycle = cycle_len\n\n    return {\n        'max_transient': max_observed_transient,\n        'max_cycle_length': max_observed_cycle,\n        'all_short_cycles': (max_observed_cycle_length <= 2 and max_observed_transient <= max_steps),\n        'witness': witness_state\n    }",
+      "parameter_definitions": [
+        {
+          "name": "eca_params",
+          "values_json": "[{\"rule\": 54, \"width\": 5}, {\"rule\": 54, \"width\": 6}, {\"rule\": 54, \"width\": 7}, {\"rule\": 54, \"width\": 8}, {\"rule\": 54, \"width\": 9}, {\"rule\": 54, \"width\": 10}, {\"rule\": 54, \"width\": 11}, {\"rule\": 90, \"width\": 5}, {\"rule\": 90, \"width\": 6}, {\"rule\": 90, \"width\": 7}, {\"rule\": 90, \"width\": 8}, {\"rule\": 90, \"width\": 9}, {\"rule\": 90, \"width\": 10}, {\"rule\": 90, \"width\": 11}, {\"rule\": 110, \"width\": 5}, {\"rule\": 110, \"width\": 6}, {\"rule\": 110, \"width\": 7}, {\"rule\": 110, \"width\": 8}, {\"rule\": 110, \"width\": 9}, {\"rule\": 110, \"width\": 10}, {\"rule\": 110, \"width\": 11}, {\"rule\": 184, \"width\": 5}, {\"rule\": 184, \"width\": 6}, {\"rule\": 184, \"width\": 7}, {\"rule\": 184, \"width\": 8}, {\"rule\": 184, \"width\": 9}, {\"rule\": 184, \"width\": 10}, {\"rule\": 184, \"width\": 11}]"
+        }
+      ],
+      "requested_observables": [
+        "max_transient",
+        "max_cycle_length",
+        "all_short_cycles",
+        "witness"
+      ],
+      "requested_seed_set": [
+        1
+      ],
+      "interpretation_conditions": [
+        "Simulation must exhaustively evaluate all 2^W initial states for each (rule, W) pair.",
+        "A cycle is detected when a state repeats in the trajectory history.",
+        "If a cycle is not detected within max_steps, transient is recorded as max_steps + 1 and cycle_length as -1."
+      ],
+      "declared_assumptions": [
+        "The simulation correctly implements elementary cellular automaton rules with wrap-around boundaries.",
+        "Floyd's cycle-finding or hash-based state tracking is sufficiently accurate for W up to 11.",
+        "The runtime can handle 2^11 * 44 steps within resource limits."
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Explored the maximum transient and cycle lengths for elementary cellular automata rules 90, 110, 184, and 54 across widths 5 to 11. Rule 90 is linear (GF(2)), Rule 184 is number-conserving (traffic), Rule 110 is Turing-complete, and Rule 54 is chaotic. The hypothesis is that 90 and 184 will stabilize within 4*W steps into cycles of length <= 2, while 110 and 54 will not. This requires exhaustive simulation, which has been filed via the simulation channel.",
+          "why_keep_this": "Tracks the structural reasoning behind the ECA cycle predictions and links the algebraic properties (linearity, conservation) to the expected transient bounds.",
+          "possible_next_move": "Analyze the simulation results to confirm if Rule 54 behaves like Rule 110 (failing the short cycle constraint) or if it unexpectedly aligns with 90/184."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does Rule 54's chaotic behavior for small ring widths (5-11) necessarily produce transients > 4*W, or does the small state space force it into short cycles like the conserving rules?",
+        "related_refs": [
+          "NEW_001"
+        ]
+      }
+    ]
+  }
+}
+```

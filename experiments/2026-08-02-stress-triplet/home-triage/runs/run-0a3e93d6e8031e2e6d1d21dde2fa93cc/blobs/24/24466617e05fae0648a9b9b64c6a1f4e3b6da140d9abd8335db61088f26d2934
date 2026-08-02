@@ -1,0 +1,53 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@900fb01ec08ed21b3c260df9: program:reasoning_observation_pending
+- reason-counter@92164e3092fbf0d15425f06e: program:reasoning_observation_pending
+- reason-counter@a32956e040582354625f5a04: program:reasoning_observation_pending
+- reason-counter@eadcdafc5884002cca677142: program:reasoning_observation_pending
+- reason-counter@e781add2f2e41e4a72942186: program:reasoning_observation_pending
+- reason-counter@30b01a38c95905aea37247c5: program:reasoning_observation_pending
+- reason-counter@32c380814b4651f29f59e68f: program:reasoning_observation_pending
+- reason-counter@436e3c88f06a81ea273d714f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Priority 4: Add a test that exercises a context receipt without scratch exposure and asserts the recovery guard fires. Deleting that guard currently passes the suite.","counterconditions":[{"case":"If the guard is redundant with another tested recovery mechanism, this drops to Priority 5 or below.","eval":"observation"},{"case":"If the recovery path is never exercised in production, the guard may be dead code.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The recovery guard protects a specific recovery path (context receipt without scratch). Its death is a silent failure in a recovery mechanism, not a data-integrity or security failure. The cheapest test constructs a context receipt without scratch exposure and asserts the guard's behavior. This ranks below routing rot because a recovery path is a secondary concern compared to the primary routing path.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@900fb01ec08ed21b3c260df9, reason-counter@92164e3092fbf0d15425f06e
+
+TARGET SRC_002
+{"analogy":null,"claim":"Priority 5: Assert that the torn-tail repair gate is covered by test_torn_append.py, closing the gate-level gap. This is a partial-coverage gap (the seam doc's ring now includes the test) rather than a total absence, so it has the lowest blast radius among the guard-death gaps.","counterconditions":[{"case":"If test_torn_append.py is confirmed to already exercise the gate-level repair, the gap is closed and this priority is moot.","eval":"observation"},{"case":"If the torn-tail repair is proven to be handled by a lower-level integrity check, the gate-level gap is redundant.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The cheapest test verifies that test_torn_append.py actually exercises the repair gate by mutating the gate and asserting the test fails. If the test already covers it, the gap is closed and no new test is needed\u2014only verification. The blast radius is marginal: partial coverage exists, and the failure mode is a corrupted tail in a ring buffer, which is a localized data integrity issue rather than a global record corruption.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"sim
+commitments: reasoning-envelope-wf, reason-counter@a32956e040582354625f5a04, reason-counter@eadcdafc5884002cca677142
+
+TARGET SRC_003
+{"analogy":null,"claim":"Priority 2: Add a unit test that directly imports the firewall guard and asserts it raises `SCHOOL_ROUTE_LEASE_MISMATCH` when provided a mismatched lease. Disabling the guard currently leaves the entire suite green because no test imports or asserts either code.","counterconditions":[{"case":"If the guard is redundant with another tested enforcement layer that catches the same mismatch, this is not Priority 2.","eval":"observation"},{"case":"If the guard is dead code that is never reached in production, it drops to the unimported-functions tier.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The lease-mismatch refusal is a security-policy guard; its death silently allows invalid requests through the firewall. The cheapest test is a direct unit test that calls the guard with mismatched inputs and asserts the specific exception code. This ranks second because a silent security-policy bypass is a larger blast radius than routing rot or recovery-path failure, but smaller than append-only record corruption.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e781add2f2e41e4a72942186, reason-counter@30b01a38c95905aea37247c5
+
+TARGET SRC_004
+{"analogy":null,"claim":"Priority 5: Add a gate-level assertion to `test_torn_append.py` that verifies the torn-tail repair logic executes. The seam doc's ring now includes this test, but the gate-level gap remains.","counterconditions":[{"case":"If `test_torn_append.py` already covers the gate-level behavior despite the PARKED.md note, this is not a gap.","eval":"observation"},{"case":"If torn-tail repair is handled entirely by the storage layer outside the harness's responsibility, this drops off the list.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The torn-tail repair gap is ranked second-to-last because partial coverage already exists (`test_torn_append.py` is in the ring), making the marginal gap smaller than the complete-absence gaps above. The cheapest test is an additional assertion in the existing test file that checks the repair gate fires. This ranks above the census delta because it is a functional gap rather than an observability discrepancy.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@32c380814b4651f29f59e68f, reason-counter@436e3c88f06a81ea273d714f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

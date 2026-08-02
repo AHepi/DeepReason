@@ -1,0 +1,54 @@
+{
+  "candidate": {
+    "claim": "For wrap-around widths W from 5 to 11, every initial state reaches a cycle of length at most 2 within 4*W steps for rules 90 and 184, but rule 110 fails for widths containing factors other than 1 and 2 (specifically W=6 fails due to factor 3, and W=9 fails due to factor 3). The separating structural property is that rules 90 and 184 are right-permutative (the left cell acts purely as a selector between permutations of the right two cells), which strictly bounds the maximum cycle length in finite rings, whereas rule 110 is not right-permutative and supports chaotic localization. Extrapolating this, rule 54 (which is also not right-permutative) is predicted to fail for W=6, W=7, and W=9.",
+    "mechanism": "In right-permutative rules like 90 (XOR) and 184 (traffic flow), the update acts as a permutation on the state space when viewed through appropriate algebraic or particle-conservation lenses, bounding the state transition graph strictly to cycles of length <= 2 under synchronous update on rings. Rule 110 lacks this algebraic permutativity and its local rule supports gliders and chaotic interactions. On small rings, gliders destructively interfere, but rings whose lengths are multiples of 3 permit stable glider phases that take longer than 4*W steps to settle. Rule 54 is dynamically similar to 110 (lacking right-permutativity) and exhibits chaotic defects that will similarly fail to settle within 4*W steps on rings whose lengths permit defect propagation loops.",
+    "counterconditions": [
+      "Rule 110 might fail for W=5, W=7, or W=11 if the ring length traps a long-lived chaotic period-3 oscillator, violating the assumed W=2^n-1 settling.",
+      "Rule 90 might fail for W=6 or W=9 if it reaches a cycle of length 3 or 6, rather than strictly length <=2.",
+      "The right-permutativity property might be insufficient to explain the behavior, if rule 30 (which is also right-permutative) is observed to fail for small W despite the property."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "Right-permutative CA rules strictly bound the state transition graph cycle lengths on finite rings."
+      ],
+      "shared_structure": [
+        "Both Rule 90 and Rule 184 map the left context cell to a strict permutation of the right two cells.",
+        "Both systems exhibit deterministic, reversible-like, or conservational dynamics on small wrap-around grids.",
+        "Rule 110 and Rule 54 both lack the right-permutative property, allowing local perturbations to propagate as interacting waves rather than linear shifts."
+      ],
+      "disanalogies": [
+        "Rule 184 is a number-conserving rule (particles), whereas Rule 90 is an additive linear rule (XOR over GF(2)).",
+        "Rule 110 is Turing-complete and supports universal gliders, whereas Rule 54's defects are spatially chaotic and typically non-translational."
+      ],
+      "transfer_claims": [
+        "If a rule is right-permutative, it will guarantee short cycles (<=2) within 4*W steps for all W from 5 to 11.",
+        "If a rule is not right-permutative, it will fail the 4*W step constraint for at least one W that has a small odd prime factor (e.g., 3)."
+      ],
+      "overturn_conditions": [
+        "Sandboxed enumeration shows rule 110 reaches a cycle of length >2 within 4*W steps for W=5, W=7, or W=11.",
+        "Sandboxed enumeration shows rule 90 or 184 fails to reach a cycle of length <=2 within 4*W steps for any W between 5 and 11.",
+        "Rule 54 is empirically observed to settle within 4*W steps for all W from 5 to 11, overturning the extrapolation."
+      ]
+    },
+    "evidence_refs": [
+      {
+        "block": "5344e98e1f8b4aa2",
+        "quote": "Contained Python: scratch working directory, scrubbed environment, hard resource limits, NO network. Deterministic and self-contained; integer and float arithme"
+      },
+      {
+        "block": "2c7f9139e06d0e4c",
+        "quote": "`sandboxed_python_v1` executes model-authored Python inside an unshared network namespace (`unshare --net`), and the backend REFUSES TO RUN if the host cannot c"
+      }
+    ],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  }
+}

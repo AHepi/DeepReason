@@ -1,0 +1,127 @@
+{
+  "patch": {
+    "op": "replace",
+    "path": "/values",
+    "value": [
+      {
+        "rule": 54,
+        "width": 5
+      },
+      {
+        "rule": 54,
+        "width": 6
+      },
+      {
+        "rule": 54,
+        "width": 7
+      },
+      {
+        "rule": 54,
+        "width": 8
+      },
+      {
+        "rule": 54,
+        "width": 9
+      },
+      {
+        "rule": 54,
+        "width": 10
+      },
+      {
+        "rule": 54,
+        "width": 11
+      },
+      {
+        "rule": 90,
+        "width": 5
+      },
+      {
+        "rule": 90,
+        "width": 6
+      },
+      {
+        "rule": 90,
+        "width": 7
+      },
+      {
+        "rule": 90,
+        "width": 8
+      },
+      {
+        "rule": 90,
+        "width": 9
+      },
+      {
+        "rule": 90,
+        "width": 10
+      },
+      {
+        "rule": 90,
+        "width": 11
+      },
+      {
+        "rule": 110,
+        "width": 5
+      },
+      {
+        "rule": 110,
+        "width": 6
+      },
+      {
+        "rule": 110,
+        "width": 7
+      },
+      {
+        "rule": 110,
+        "width": 8
+      },
+      {
+        "rule": 110,
+        "width": 9
+      },
+      {
+        "rule": 110,
+        "width": 10
+      },
+      {
+        "rule": 110,
+        "width": 11
+      },
+      {
+        "rule": 184,
+        "width": 5
+      },
+      {
+        "rule": 184,
+        "width": 6
+      },
+      {
+        "rule": 184,
+        "width": 7
+      },
+      {
+        "rule": 184,
+        "width": 8
+      },
+      {
+        "rule": 184,
+        "width": 9
+      },
+      {
+        "rule": 184,
+        "width": 10
+      },
+      {
+        "rule": 184,
+        "width": 11
+      }
+    ]
+  },
+  "repair_meta": {
+    "baseline_sha256": "9f4b04daa19d62f30bcd5ddf7b53fa29889374b3252d0323b40e01fb6a699e18",
+    "contract": "conjecturer.turn.v6",
+    "diagnostics addressed": [
+      "value_error"
+    ]
+  }
+}

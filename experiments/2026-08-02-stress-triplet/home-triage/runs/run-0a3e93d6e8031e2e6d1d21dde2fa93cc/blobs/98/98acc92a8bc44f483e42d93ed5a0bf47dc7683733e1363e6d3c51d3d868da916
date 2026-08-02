@@ -1,0 +1,132 @@
+{
+  "candidates": [
+    {
+      "claim": "Priority 1: Append `assert mock__reset.called` to `test_failed_control_append_rolls_live_materialization_back`. Deleting `_reset()` currently passes the suite because the test never verifies the rollback was triggered. This gap allows a failed append to corrupt the append-only record silently.",
+      "mechanism": "WorkflowReplayState.digest cannot see a failed append if _reset() is deleted, meaning the replay state diverges from the actual workflow history. The single cheapest fix is adding one assertion to the existing test that already exercises the failed-append path. This ranks first because a corrupt append-only record is the largest blast radius: it poisons all downstream replay and integrity guarantees, unlike a hidden refusal which merely fails to stop an invalid request.",
+      "counterconditions": [
+        "If WorkflowReplayState.digest is not consumed by any downstream integrity check or replay mechanism, the blast radius is contained and this drops below the lease-mismatch refusal.",
+        "If another test transitively asserts _reset() behavior through an integration path, the gap is already covered and this is not Priority 1."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99",
+          "quote": "- `SCHOOL_ROUTE_LEASE_MISMATCH` / `SCHOOL_ROUTE_ENDPOINT_MISMATCH`: disabling\n  the firewall's lease-mismatch refusal leaves the entire test suite green;\n  no test asserts either code (found via SEAM-manifest-x-schools)."
+        },
+        {
+          "block": "011b245be57b1172"
+        },
+        {
+          "block": "f45a51a53e37246e"
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.95
+    },
+    {
+      "claim": "Priority 2: Add a unit test that directly imports the firewall guard and asserts it raises `SCHOOL_ROUTE_LEASE_MISMATCH` when provided a mismatched lease. Disabling the guard currently leaves the entire suite green because no test imports or asserts either code.",
+      "mechanism": "The lease-mismatch refusal is a security-policy guard; its death silently allows invalid requests through the firewall. The cheapest test is a direct unit test that calls the guard with mismatched inputs and asserts the specific exception code. This ranks second because a silent security-policy bypass is a larger blast radius than routing rot or recovery-path failure, but smaller than append-only record corruption.",
+      "counterconditions": [
+        "If the guard is redundant with another tested enforcement layer that catches the same mismatch, this is not Priority 2.",
+        "If the guard is dead code that is never reached in production, it drops to the unimported-functions tier."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99",
+          "quote": "- `SCHOOL_ROUTE_LEASE_MISMATCH` / `SCHOOL_ROUTE_ENDPOINT_MISMATCH`: disabling\n  the firewall's lease-mismatch refusal leaves the entire test suite green;\n  no test asserts either code (found via SEAM-manifest-x-schools)."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.9
+    },
+    {
+      "claim": "Priority 3: Add import-level smoke tests for `resolve_conjecture_route` and `compile_criticism_assignments`. No test anywhere imports these functions, meaning they can be deleted or broken without detection.",
+      "mechanism": "Unimported functions suffer from routing rot: silent breakage in the routing layer that only surfaces when a user hits the path in production. The cheapest test is a one-line import assertion. This ranks below append-only corruption and security bypass because routing rot hides a failure rather than corrupting data or enabling policy bypass, but ranks above recovery-path gaps because complete import absence means zero coverage.",
+      "counterconditions": [
+        "If these functions are dead code intended for removal, the correct action is deletion rather than a test, and this drops off the list.",
+        "If these functions are transitively tested via an integration test that calls them indirectly, the gap is smaller than stated."
+      ],
+      "evidence_refs": [
+        {
+          "block": "011b245be57b1172"
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    },
+    {
+      "claim": "Priority 4: Add a test that exercises a context receipt without scratch exposure and asserts the recovery guard fires. Deleting that guard currently passes the suite.",
+      "mechanism": "The recovery guard protects a specific recovery path (context receipt without scratch). Its death is a silent failure in a recovery mechanism, not a data-integrity or security failure. The cheapest test constructs a context receipt without scratch exposure and asserts the guard's behavior. This ranks below routing rot because a recovery path is a secondary concern compared to the primary routing path.",
+      "counterconditions": [
+        "If the guard is redundant with another tested recovery mechanism, this drops to Priority 5 or below.",
+        "If the recovery path is never exercised in production, the guard may be dead code."
+      ],
+      "evidence_refs": [
+        {
+          "block": "011b245be57b1172"
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "Priority 5: Add a gate-level assertion to `test_torn_append.py` that verifies the torn-tail repair logic executes. The seam doc's ring now includes this test, but the gate-level gap remains.",
+      "mechanism": "The torn-tail repair gap is ranked second-to-last because partial coverage already exists (`test_torn_append.py` is in the ring), making the marginal gap smaller than the complete-absence gaps above. The cheapest test is an additional assertion in the existing test file that checks the repair gate fires. This ranks above the census delta because it is a functional gap rather than an observability discrepancy.",
+      "counterconditions": [
+        "If `test_torn_append.py` already covers the gate-level behavior despite the PARKED.md note, this is not a gap.",
+        "If torn-tail repair is handled entirely by the storage layer outside the harness's responsibility, this drops off the list."
+      ],
+      "evidence_refs": [
+        {
+          "block": "011b245be57b1172"
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.75
+    },
+    {
+      "claim": "Priority 6: Write an instrument-vs-instrument census test that asserts the census count is self-consistent. The census delta (measured as an unexplained discrepancy) is the lowest priority because it is an observability discrepancy, not a functional or integrity gap.",
+      "mechanism": "An instrument-vs-instrument census discrepancy means the harness's own observability is inconsistent, but it does not corrupt data, bypass security, or break routing. The cheapest test is an assertion that two census instruments report the same count. This ranks last because observability discrepancies have the smallest blast radius and the PARKED.md notes the delta is 'unexplained, measured only,' suggesting it may be a documentation or design artifact rather than a bug.",
+      "counterconditions": [
+        "If the census delta is by design (e.g., different instruments count different things), the correct action is documentation, not a test, and this drops off the list entirely.",
+        "If the census delta reflects a real bug where an enforcement site is silently skipped, this rises above Priority 3."
+      ],
+      "evidence_refs": [
+        {
+          "block": "011b245be57b1172"
+        }
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    }
+  ]
+}

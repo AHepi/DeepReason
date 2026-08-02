@@ -1,0 +1,53 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@263ed10f4a5f1267e08d2af6: program:reasoning_observation_pending
+- reason-counter@379e310b107edcfe4dd1eb36: program:reasoning_observation_pending
+- reason-counter@f6ca2b60d05e5695e9d878e9: program:reasoning_observation_pending
+- reason-counter@a82e9336bb3f3071b9f0a689: program:reasoning_observation_pending
+- reason-counter@e6ea45f2e4466cfafab18c56: program:reasoning_observation_pending
+- reason-counter@2de474b90d832ec514f4368e: program:reasoning_observation_pending
+- reason-counter@73746a696b247c81ee8fdd05: program:reasoning_observation_pending
+- reason-counter@932760c8d7181f28587c4dda: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Priority 6: Explain the census delta (11 ERROR vs 14 raising manifests) by determining whether verify_root_report surfaces three pre-v6 roots as verdicts rather than errors by design or by bug. This is an observability discrepancy, not a guard death, so it has the lowest blast radius and may require investigation before a test is written.","counterconditions":[{"case":"If the census delta is confirmed to be a documented behavior (verdicts for pre-v6 roots by design), no test is needed\u2014only documentation.","eval":"observation"},{"case":"If the delta is confirmed to be a measurement artifact with no behavioral consequence, it can be ignored.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The cheapest test asserts the expected verdict type for pre-v6 roots in verify_root_report. If the behavior is by design, the test documents it; if it is a bug, the test fails and drives a fix. The blast radius is minimal: this is an observability discrepancy, not a functional failure. It is last because it does not corrupt records, bypass security, break routing, or disable recovery. However, it is included because unexplained behavior in a verification in
+commitments: reasoning-envelope-wf, reason-counter@263ed10f4a5f1267e08d2af6, reason-counter@379e310b107edcfe4dd1eb36
+
+TARGET SRC_002
+{"analogy":null,"claim":"Priority 2: Assert that disabling the SCHOOL_ROUTE_LEASE_MISMATCH or SCHOOL_ROUTE_ENDPOINT_MISMATCH refusal causes a test to fail. This outranks routing and recovery gaps because it is a security policy bypass\u2014a silent failure in the firewall that allows invalid lease/route states to be accepted without refusal, violating the boundary invariants of the system.","counterconditions":[{"case":"If the lease-mismatch guard is confirmed to be redundant with another, tested enforcement layer, the blast radius is mitigated and this drops below routing rot.","eval":"observation"},{"case":"If the SCHOOL_ROUTE codes are vestigial and the firewall boundary is enforced elsewhere, the test is unnecessary.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The cheapest test attempts an operation with a mismatched lease/endpoint and asserts that the specific refusal code is raised. If the guard is disabled, the operation succeeds and the test fails. The blast radius is high: the firewall is a security boundary, and its silent failure means corrupted or unauthorized state can pass into the append-only record unchecked. This is second only to direct record cor
+commitments: reasoning-envelope-wf, reason-counter@f6ca2b60d05e5695e9d878e9, reason-counter@a82e9336bb3f3071b9f0a689
+
+TARGET SRC_003
+{"analogy":null,"claim":"Priority 1: Append `assert mock__reset.called` to `test_failed_control_append_rolls_live_materialization_back`. Deleting `_reset()` currently passes the suite because the test never verifies the rollback was triggered. This gap allows a failed append to corrupt the append-only record silently.","counterconditions":[{"case":"If WorkflowReplayState.digest is not consumed by any downstream integrity check or replay mechanism, the blast radius is contained and this drops below the lease-mismatch refusal.","eval":"observation"},{"case":"If another test transitively asserts _reset() behavior through an integration path, the gap is already covered and this is not Priority 1.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"WorkflowReplayState.digest cannot see a failed append if _reset() is deleted, meaning the replay state diverges from the actual workflow history. The single cheapest fix is adding one assertion to the existing test that already exercises the failed-append path. This ranks first because a corrupt append-only record is the largest blast radius: it poisons all downstream replay and integrity guarantees, unlike a hidden refusal which mer
+commitments: reasoning-envelope-wf, reason-counter@e6ea45f2e4466cfafab18c56, reason-counter@2de474b90d832ec514f4368e
+
+TARGET SRC_004
+{"analogy":null,"claim":"Priority 3: Add import-level smoke tests for `resolve_conjecture_route` and `compile_criticism_assignments`. No test anywhere imports these functions, meaning they can be deleted or broken without detection.","counterconditions":[{"case":"If these functions are dead code intended for removal, the correct action is deletion rather than a test, and this drops off the list.","eval":"observation"},{"case":"If these functions are transitively tested via an integration test that calls them indirectly, the gap is smaller than stated.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Unimported functions suffer from routing rot: silent breakage in the routing layer that only surfaces when a user hits the path in production. The cheapest test is a one-line import assertion. This ranks below append-only corruption and security bypass because routing rot hides a failure rather than corrupting data or enabling policy bypass, but ranks above recovery-path gaps because complete import absence means zero coverage.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@73746a696b247c81ee8fdd05, reason-counter@932760c8d7181f28587c4dda
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

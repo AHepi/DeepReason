@@ -1,0 +1,36 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@30e467fe2236f551b43fc918: program:reasoning_observation_pending
+- reason-counter@705770fede137db2d2e71287: program:reasoning_observation_pending
+- reason-counter@80734c4f2132aa237b919d9f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The cheapest test for the _reset() guard is: perform a failed append, assert that WorkflowReplayState.digest reflects the failed append (i.e., that _reset() was called). The uncovered failure mode is: a failed append leaves digest stale, silently corrupting the replay state that downstream integrity checks consume.","counterconditions":[{"case":"If digest is never consumed after a failed append, the assertion is vacuous and the test does not actually catch the guard's death.","eval":"observation"},{"case":"If the existing test already covers digest but through an indirect path that was not detected by the falsification mutation, the test may need a different assertion shape.","eval":"observation"},{"case":"If _reset() is called by a code path unrelated to the failed append being tested, the test may pass even when _reset() is deleted from _commit specifically.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The existing test test_failed_control_append_rolls_live_materialization_back passes with _reset() deleted, meaning it does not check the digest's post-failure state. The cheapest fix is to extend (or add) a test that performs a failed append and then asserts WorkflowReplayState.digest has been reset to reflect the failed attempt. This is one assertion added to an existing test or one new test function, making it implementable tomorrow morning. The blast radius justifies its priority: the append-only record is the foundational integrity substrate; if digest cannot see a failed append, replay state diverges silently from ground truth.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@30e467fe2236f551b43fc918, reason-counter@705770fede137db2d2e71287, reason-counter@80734c4f2132aa237b919d9f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

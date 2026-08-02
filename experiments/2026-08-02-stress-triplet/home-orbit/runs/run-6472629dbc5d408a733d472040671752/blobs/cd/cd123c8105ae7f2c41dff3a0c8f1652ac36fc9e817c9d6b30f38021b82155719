@@ -1,0 +1,47 @@
+{
+  "candidate": {
+    "claim": "Rules 90 and 184 exhibit maximum transient and cycle lengths bounded by W (often resolving to cycles of length 1 or 2 almost immediately) because their additive or conservative, monotonic dynamics guarantee rapid stabilization on small ring topologies, whereas Rule 110 is Turing-complete and produces chaotic, structurally complex attractors whose transient lengths strictly exceed 4*W for some W in [5, 11]. The separating structural property is 'additivity/conservation vs. universal computation'.",
+    "mechanism": "Rule 90 is linear over GF(2): each step is a bitwise XOR of neighbors, so its behavior on a ring of width W is entirely determined by the roots of the characteristic polynomial of its circulant transition matrix over GF(2), bounding cycle lengths by 2^W - 1 and ensuring rapid stabilization. Rule 184 is a conservative particle traffic model where particles (1s) move right; on a finite ring, it stabilizes into free-flowing or jammed blocks within W steps, yielding cycle lengths of at most 2. Rule 110 lacks these algebraic or monotonic constraints, allowing for collisions that generate gliders and chaotic transients that persist far longer than 4*W steps. Rule 54 is also nonlinear but has simpler, isotropic glider interactions than 110; we predict it will behave like 90 and 184 for W <= 11, falling into short cycles within 4*W steps, which would be verified by an exhaustive Python simulation.",
+    "counterconditions": [
+      "If the sandboxed simulation shows that Rule 110 stabilizes within 4*W steps for all W in [5,11], the claim is false.",
+      "If the simulation reveals that Rule 90 or 184 enters a cycle of length strictly greater than 2 after a transient longer than 4*W for any tested W, the claim is false.",
+      "If Rule 54 fails to fall into cycles of length <= 2 within 4*W steps for W in [5,11], the prediction and the separating property must be re-evaluated."
+    ],
+    "typicality": 0.7,
+    "analogy": {
+      "source_memory_refs": ["SRC_001"],
+      "shared_structure": [
+        "Both Rule 184 and simple particle cellular automata model ballistic annihilation or traffic flow, where the fundamental conserved quantities (density) bound the time to reach a frozen or periodic state.",
+        "Both Rule 90 and linear cellular automata over finite fields exhibit dynamics determined by the algebraic factorization of polynomials over GF(2), providing a hard upper bound on cycle lengths."
+      ],
+      "disanalogies": [
+        "Rule 90 is strictly linear, whereas Rule 110 is chaotic and nonlinear, so the algebraic boundedness does not transfer.",
+        "The behavior of Rule 54 is not guaranteed by the same monotonicity as Rule 184, making its predicted inclusion in the 'short cycle' category an extrapolation of empirical observations rather than a structural necessity."
+      ],
+      "transfer_claims": [
+        "If Rule 184 stabilizes quickly on a ring due to particle conservation, other conservative rules (like Rule 54 in certain regimes) might also stabilize quickly on small rings.",
+        "If Rule 90's cycle length is bounded by the multiplicative order of x modulo its characteristic polynomial, any linear rule's cycle length can be similarly bounded."
+      ],
+      "overturn_conditions": [
+        "Discovery of a specific initial state for Rule 184 on a small ring that takes >4*W steps to stabilize or enters a cycle >2.",
+        "Algebraic proof or empirical demonstration that Rule 110's transients on rings of size 5 to 11 are actually bounded by 4*W."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [
+      {
+        "block": "2c7f9139e06d0e4c",
+        "quote": "`sandboxed_python_v1` executes model-authored Python inside an unshared network namespace (`unshare --net`), and the backend REFUSES TO RUN if the host cannot c"
+      },
+      {
+        "block": "d1090aab641fd485",
+        "quote": "A simulation that cannot separate rival predictions is weight, not evidence. Return the discriminating quantity — the cell, the histogram, the divergence — neve"
+      }
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    }
+  }
+}

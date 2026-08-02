@@ -1,0 +1,135 @@
+{
+  "candidates": [
+    {
+      "claim": "The minimal regression-test plan must be ordered by blast radius, with the _reset() guard test first because it uniquely protects append-only record integrity, followed by the lease-mismatch refusal, unimported functions, scratch recovery guard, torn-tail repair, and census delta.",
+      "mechanism": "Blast radius is determined by what the dead guard allows to happen silently. Deleting _commit's _reset() makes WorkflowReplayState.digest blind to a failed append, corrupting the append-only record that all downstream replay and integrity checking depends on. Disabling the lease-mismatch refusal is second: it does not corrupt the record but silently admits a forbidden routing state (a security policy silent failure). Unimported functions are third: they hide routing rot but do not corrupt data or admit forbidden states. The scratch recovery guard is fourth: it hides a recovery-path failure but only after a safe fallback context receipt. Torn-tail repair is fifth: the doc's ring already includes test_torn_append.py, so coverage is partial, not absent. The census delta is sixth: it is an unexplained observability discrepancy, not a missing guard at all. This ranking encodes the principle: what corrupts the append-only record outranks what hides a refusal, which outranks what hides a routing failure, which outranks what hides a recovery failure, which outranks partial coverage gaps, which outranks unexplained observations.",
+      "counterconditions": [
+        "If WorkflowReplayState.digest is not consumed by any downstream integrity check or replay state machine, the _reset() gap's blast radius is smaller than assumed and the lease-mismatch refusal (security policy silent failure) may outrank it.",
+        "If the lease-mismatch refusal is not the only barrier preventing an invalid routing state from propagating (i.e., there is a redundant downstream guard that catches the same condition), it falls in priority.",
+        "If resolve_conjecture_route or compile_criticism_assignments are actually imported by tests introduced after PARKED.md was written, those gaps are closed and drop out of the ordering.",
+        "If a torn-tail repair failure can corrupt the append-only record (not just hide a partial write), it outranks the scratch recovery guard and possibly the lease-mismatch refusal.",
+        "If the census delta (11 ERROR vs 14 raising manifests) is traced to a bug in verify_root_report that causes it to silently pass invalid roots, it outranks everything except direct append-only corruption."
+      ],
+      "evidence_refs": [
+        {
+          "block": "011b245be57b1172",
+          "quote": "# Parked — repo-level gaps found while falsifying the map"
+        },
+        {
+          "block": "fe535bda97486be3",
+          "quote": "One line each; found 2026-08-02, none fixed here."
+        },
+        {
+          "block": "b8e27770dbe0927f",
+          "quote": "Falsification stopped finding documentation defects and started finding REPO defects: guards whose death no test detects. Parked below; each is a defect-tranche"
+        }
+      ],
+      "typicality": 0.95,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001", "SRC_002"]
+    },
+    {
+      "claim": "The cheapest test for the _reset() guard is: perform a failed append, assert that WorkflowReplayState.digest reflects the failed append (i.e., that _reset() was called). The uncovered failure mode is: a failed append leaves digest stale, silently corrupting the replay state that downstream integrity checks consume.",
+      "mechanism": "The existing test test_failed_control_append_rolls_live_materialization_back passes with _reset() deleted, meaning it does not check the digest's post-failure state. The cheapest fix is to extend (or add) a test that performs a failed append and then asserts WorkflowReplayState.digest has been reset to reflect the failed attempt. This is one assertion added to an existing test or one new test function, making it implementable tomorrow morning. The blast radius justifies its priority: the append-only record is the foundational integrity substrate; if digest cannot see a failed append, replay state diverges silently from ground truth.",
+      "counterconditions": [
+        "If digest is never consumed after a failed append, the assertion is vacuous and the test does not actually catch the guard's death.",
+        "If the existing test already covers digest but through an indirect path that was not detected by the falsification mutation, the test may need a different assertion shape.",
+        "If _reset() is called by a code path unrelated to the failed append being tested, the test may pass even when _reset() is deleted from _commit specifically."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99"
+        }
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The cheapest test for the lease-mismatch refusal is: send a context receipt with a mismatched school_route_lease, assert the firewall raises SCHOOL_ROUTE_LEASE_MISMATCH. The uncovered failure mode is: a forbidden routing state is silently admitted because the refusal guard is dead.",
+      "mechanism": "PARKED.md states that disabling the firewall's lease-mismatch refusal leaves the entire suite green and no test asserts either SCHOOL_ROUTE_LEASE_MISMATCH or SCHOOL_ROUTE_ENDPOINT_MISMATCH. The cheapest test is a single unit test that constructs a request with a mismatched lease and asserts the specific error code is raised. This directly catches the guard's death by failing if the refusal is disabled. It is second in priority because the failure mode is a security policy silent failure: a routing state that should be refused is admitted, but the append-only record itself is not corrupted. This is lower blast radius than digest corruption but higher than routing rot or recovery-path failure because it silently violates an active firewall policy.",
+      "counterconditions": [
+        "If a downstream guard catches the same mismatched lease before it can propagate, the refusal guard's death is less severe and may drop in priority.",
+        "If the firewall is not deployed in any production configuration (i.e., it is test-only scaffolding), the blast radius is smaller than assumed.",
+        "If SCHOOL_ROUTE_LEASE_MISMATCH and SCHOOL_ROUTE_ENDPOINT_MISMATCH require different test fixtures, two tests are needed, slightly raising the cost."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99"
+        }
+      ],
+      "typicality": 0.85,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The cheapest test for the unimported functions is: add an import-only smoke test that imports resolve_conjecture_route and compile_criticism_assignments and calls each with a minimal valid input, asserting no exception. The uncovered failure mode is: routing rot — the functions silently bit-rot or are deleted and no test detects it.",
+      "mechanism": "PARKED.md states these functions are imported by no test anywhere. The cheapest catch is a test that imports and calls each with a minimal valid input. If the function is deleted or its signature changes, the import or call fails. This is third in priority because the failure mode is routing rot: the functions may silently degrade or disappear, but no data is corrupted and no security policy is bypassed. It is a structural integrity gap, not a runtime safety gap.",
+      "counterconditions": [
+        "If the functions are already imported by tests added after PARKED.md was written, this gap is closed.",
+        "If the functions are intentionally dead code slated for removal, the test is a liability, not an asset.",
+        "If a minimal valid input cannot be constructed without complex fixtures, the test is not cheap and the cost-benefit may shift."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99"
+        }
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The cheapest test for the scratch recovery guard is: send a context receipt without scratch exposure, assert the recovery guard fires. The uncovered failure mode is: a recovery path that should handle scratch-less receipts silently fails.",
+      "mechanism": "PARKED.md states no test covers a context receipt without scratch exposure and deleting that recovery guard passes the suite. The cheapest test constructs a context receipt with no scratch exposure and asserts the recovery guard's expected behavior (either a specific recovery action or a specific error code). This is fourth in priority because the failure mode is a recovery-path failure: a receipt that should trigger recovery silently falls through. The blast radius is limited to the recovery path, not the append-only record or the firewall.",
+      "counterconditions": [
+        "If the recovery guard's expected behavior is not specified (i.e., it is unclear what 'firing' means), the test cannot be written without a design decision.",
+        "If scratch-less receipts never occur in practice, the guard may be dead code and the test is low-value.",
+        "If the recovery guard feeds back into append-only record integrity, it may outrank the lease-mismatch refusal."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99"
+        }
+      ],
+      "typicality": 0.75,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The cheapest test for the torn-tail repair gate is: extend test_torn_append.py with an assertion that the repair gate specifically fires (not just that the torn append is detected). The uncovered failure mode is: a torn-tail repair is silently skipped even though the torn append itself is caught.",
+      "mechanism": "PARKED.md states the writer-side torn-tail repair was uncovered by the ring the seam doc named, but the doc's ring now includes test_torn_append.py. This means partial coverage exists: the torn append is detected, but the repair gate itself is not asserted. The cheapest test is an extension of the existing test_torn_append.py to assert that the repair gate fires, not just that the torn append is caught. This is fifth in priority because coverage is partial, not absent — the gap is marginal compared to the fully uncovered guards above.",
+      "counterconditions": [
+        "If test_torn_append.py already asserts the repair gate (added after PARKED.md), this gap is closed.",
+        "If a torn-tail repair failure can corrupt the append-only record (not just skip a repair), it outranks the scratch recovery guard and possibly the lease-mismatch refusal.",
+        "If the repair gate is not distinguishable from the torn-append detection in the test output, the assertion may need a new observable, raising cost."
+      ],
+      "evidence_refs": [
+        {
+          "block": "1e881e3ddc7c5a99"
+        }
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": ["SRC_001"]
+    }
+  ]
+}

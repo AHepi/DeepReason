@@ -1,0 +1,41 @@
+{
+  "candidate": {
+    "claim": "Under rules 90, 110, and 184 with wrap-around widths 5 through 11, only rule 90 has pairs (W = 5, 6, 7, 8, 11) where every state enters a cycle of length at most 2 within 4*W steps. Rule 184 exhibits much longer transients, but its right-shift dynamics ensure eventual synchronization, whereas rule 110 contains propagating gliders whose phase shift prevents short cycles. Rule 90's short-cycle behavior is driven by additive linearity over GF(2): the width-W state space decomposes into invariant subspaces determined by the order of 2 modulo W, causing the global period to divide 2^ord - 1, which is small for the specified W. Rule 54 is also additive over GF(2) but with period-3 temporal memory, so its period divides 3^ord - 1 instead.",
+    "mechanism": "Rule 90's dynamics can be represented exactly as a linear transformation over GF(2) using the polynomial multiplier (1 + x^2). Under wrap-around (mod x^W - 1), the period of the global transition matrix is governed by the multiplicative order of 2 modulo the square-free part of W. For W = 7, the order of 2 is 3, so the global period divides 2^3 - 1 = 7. Because 7 is less than 2^4 = 16, all non-zero states live in cycles of length 7 (or 1 for the zero vector), and all transients are zero. Thus, the maximum cycle length is well below 2, achieving the bound within 4*W = 28 steps. This purely algebraic property cleanly separates rule 90 from rule 184 (which has additive constants breaking linearity) and rule 110 (which is strongly nonlinear). To verify, a sandboxed Python simulation should map the exact transition graph for each (rule, W) and file the full state-to-cycle-length table as proof of exhaustiveness.",
+    "counterconditions": [
+      "If a width W (between 5 and 11) is found for rule 90 where a state takes a transient longer than 4*W or enters a cycle longer than 2, the linearity claim fails.",
+      "If rule 184 or 110 is shown to enter cycles of length 1 or 2 for all initial states in any W between 5 and 11, the separating property is invalid.",
+      "If the cycle length of rule 90 does not rigorously match the algebraic prediction 2^ord_W(2) - 1 for a tested W, the GF(2) mechanism is falsified.",
+      "If simulating rule 54 in Python yields maximum cycle lengths diverging from the predicted period 3^ord_W(3) - 1, the generalization to additive memory rules is incorrect."
+    ],
+    "analogy": {
+      "source_memory_refs": ["linear-algebra-finite-fields"],
+      "shared_structure": [
+        "Both rule 90 and linear transformations over GF(2) operate by bitwise XOR without carrying.",
+        "The evolution of rule 90 corresponds precisely to multiplying the state vector by the tridiagonal matrix (I + S^2) over GF(2).",
+        "In both, the long-term behavior (periods and invariant subspaces) is completely determined by the minimal polynomial of the transition matrix, which factors via cyclotomic polynomials depending on the ring size (width W)."
+      ],
+      "disanalogies": [
+        "Standard linear transformations act on a static vector space, whereas elementary cellular automata have spatially structured, local neighborhoods mapped to states.",
+        "Rule 90 is temporally memoryless (depends only on t), while rule 54 depends on the state at both t and t-1, requiring an augmented state space to map linearly.",
+        "The wrap-around boundary in cellular automata imposes the specific quotient ring GF(2)[x]/(x^W - 1), which introduces repeated factors not present in standard unbounded vector spaces."
+      ],
+      "transfer_claims": [
+        "The invariant subspace decomposition predicts that rule 90 on a prime width W will have no non-zero transients; all states are purely periodic.",
+        "The algebraic mechanism implies that if 2 is a primitive root modulo W, the maximum cycle length for rule 90 will be exactly 2^(W-1) - 1, which vastly exceeds 4*W.",
+        "Rule 54, viewed as an additive rule with period-3 memory, will have its state space decomposition governed by the multiplicative order of 3 modulo W, producing cycle lengths dividing 3^ord - 1."
+      ],
+      "overturn_conditions": [
+        "The transition matrix of rule 90 over GF(2) fails to diagonalize into blocks corresponding to cyclotomic polynomials modulo x^W - 1.",
+        "A width W is found where rule 90 reaches a cycle of length > 2 despite 2^ord_W(2) - 1 being mathematically small (e.g., yielding a 7-cycle instead of a 1-cycle for W=7).",
+        "The period of rule 54 for a given width W is found to be independent of the multiplicative order of 3 modulo the square-free part of W."
+      ],
+      "adopted_commitment_refs": ["program:reasoning-envelope-wf"]
+    },
+    "typicality": 0.65,
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    }
+  }
+}

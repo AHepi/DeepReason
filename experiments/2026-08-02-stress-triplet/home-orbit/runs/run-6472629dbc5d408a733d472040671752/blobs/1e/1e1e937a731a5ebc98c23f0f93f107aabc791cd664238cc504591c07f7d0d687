@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-1a585e9647728d95c37d95ec939c7898) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Consider width-W elementary cellular automata with wrap-around, W between 5
+and 11, under rules 90, 110 and 184. Question: for which (rule, W) pairs does
+every initial state reach a cycle of length at most 2 within 4*W steps, and
+what structural property of the rule separates the pairs that do from the
+pairs that do not? Candidates must include a runnable Python entry point
+solve(rule, width) returning {"all_short_cycles": bool, "witness": [...]}
+where witness is a concrete initial state achieving the longest observed
+transient. Claims about exhaustiveness are claims about enumeration: file
+typed sandboxed Python simulations (simulation_mode sandboxed_python_v1) that
+RETURN the per-(rule,width) transient and cycle-length tables your claim
+rests on - never a summary boolean. A separating property that is merely
+renamed data is worth little; predict the behaviour of rule 54, which is NOT
+in the required set, and state how the prediction would be checked.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ce8f9f0cebc53dafe16386d4: program:reasoning_observation_pending
+- reason-counter@267f2ae395efa2d07d129c06: program:reasoning_observation_pending
+- reason-counter@7a939c82441850df2f2082e9: program:reasoning_observation_pending
+- reason-counter@9ec4e3d991c9c72a1fcb365f: program:reasoning_observation_pending
+- reason-counter@c9c5e6b42735b82450a82e24: program:reasoning_observation_pending
+- reason-counter@3e1e47647e250fbf81833c64: program:reasoning_observation_pending
+- reason-counter@f4b3647e863a2b1a84e20fea: program:reasoning_observation_pending
+- reason-counter@6d051a693bf00e409da417db: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Rule 90 reaches a length-2 cycle within 4*W steps for W=5,6,7,8,9,10,11. Rule 184 reaches a length-2 cycle within 4*W steps for W=5,6,7,8,9,10,11. Rule 110 reaches a length-2 cycle within 4*W steps ONLY for W=5. The structural property separating the pairs is additivity: rules 90 and 184 are additive (linear/affine over GF(2)). Rule 110 is non-additive, and its evolution can create or destroy 01 boundaries. Rule 54 is non-additive; it creates 11 boundaries and will NOT reach length-2 cycles within 4*W steps for W>5.","counterconditions":[{"case":"If exhaustive enumeration of Rule 90 shows any initial state of width W (5..11) whose transient + cycle length exceeds 4*W, the additivity bound claim is falsified.","eval":"observation"},{"case":"If Rule 184 simulation reveals an initial state with cycle length > 2 or transient > 4*W for any W in 5..11, the Rule 90 decomposition equivalence is falsified.","eval":"observation"},{"case":"If Rule 110 enumeration demonstrates all states for W=6 reach a cycle of length <= 2 within 24 steps, the claim that W=5 is the sole passing width for Rule 110 is falsified.","eval":"observation"},{"case":"If Rule 54 enumeration demonstrates all states for W=7 reach a cycle of length <= 2 within 28 steps, the prediction that Rule 54 fails the bound due to non-additivity is falsified.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rule 90 is linear over GF(2) (new cell = left XOR right). In a cyclic topology, the state evolves by squaring the transition matrix. Over GF(2), matrix squaring yields A^(2^k) = I after O(log N) steps, bounding maximum cycle length by 2 and transient by W. Rule 184 is the ballistic annihilation model (traffic rule). Its dynamics are equivalent to two independent Rule 90 subsystems (left-moving and right-moving particles). Therefore, its cycle and transient lengths inherit the same 4*W bound from Rule 90. Rule 110 is Turing complete and non-linear. Boundaries between 0-regions and 1-regions interact non-trivially. While small widths (W=5) lack the configuration space to avoid settling, W>=6 admits glider collisions that extend transients far beyond 4*W steps, failing the property. Rule 54 shares the non-linear boundary creation of Rule 110, failing similarly.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ce8f9f0cebc53dafe16386d4, reason-counter@267f2ae395efa2d07d129c06, reason-counter@7a939c82441850df2f2082e9, reason-counter@9ec4e3d991c9c72a1fcb365f
+
+TARGET SRC_002
+{"analogy":null,"claim":"Rules 90 and 184 reach a cycle of length at most 2 within 4*W steps for all initial states across all widths W between 5 and 11, whereas Rule 110 does not. The separating structural property is additive number-conservation: the global state transition graph of an ECA decomposes into independent trajectories determined by a set of conserved linear invariants (e.g., sum of cells mod 2 for Rule 90, total particle count for Rule 184). This linearly bounded phase space forces short transients and cycles independent of system size, unlike Rule 110's nonlinear, mixing dynamics which support exponentially long transients.","counterconditions":[{"case":"A specific width W in [5, 11] is found for Rule 90 or 184 where an initial state has a transient strictly greater than 4*W.","eval":"observation"},{"case":"The transient + cycle length of the longest-lived state for Rule 90 or 184 in widths 5-11 is found to exceed 4*W.","eval":"observation"},{"case":"Rule 110 is found to reach a cycle of length <= 2 within 4*W for ALL initial states in some width W in [5, 11], refuting its status as structurally distinct.","eval":"observation"},{"case":"The structural property fails to predict Rule 54's behavior: if Rule 54, despite lacking obvious additive invariants, is empirically shown to always reach short cycles (<=2) within 4*W for W in [5, 11].","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rule 90 is a linear cellular automaton over GF(2) governed by x_i(t+1) = x_{i-1}(t) XOR x_{i+1}(t). Because it is linear, its global dynamics over a finite ring of width W are described by the characteristic polynomial of its adjacency matrix modulo 2. This forces the state space to decompose into independent linear subspaces, strictly bounding transients and cycle lengths (which cannot exceed 2^W but typically fall far below 4*W for small W). Rule 184 is a ballistic annihilation model where the number of 1s (particles) is strictly conserved. For a ring of width W, the state space is partitioned into invariant slices of size C(W, k) for k = 0...W. The dynamics within each slice are equivalent to cyclic shifts of particles, bounding the maximum cycle length to W and transient to W. In both rules, the existence of these conserved linear/additive quantities fundamentally limits the reachable temporal evolution. Rule 110 lacks such invariants, allowing for chaotic interactions that stretc
+commitments: reasoning-envelope-wf, reason-counter@c9c5e6b42735b82450a82e24, reason-counter@3e1e47647e250fbf81833c64, reason-counter@f4b3647e863a2b1a84e20fea, reason-counter@6d051a693bf00e409da417db
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

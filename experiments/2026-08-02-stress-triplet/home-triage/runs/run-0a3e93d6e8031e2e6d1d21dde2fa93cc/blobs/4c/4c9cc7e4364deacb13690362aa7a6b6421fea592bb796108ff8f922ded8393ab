@@ -1,0 +1,57 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3f236b8641c02acc9bbe2dce: program:reasoning_observation_pending
+- reason-counter@82c81964c6f1dab7070208a1: program:reasoning_observation_pending
+- reason-counter@369823aa2de4360420eace70: program:reasoning_observation_pending
+- reason-counter@81f1e0780c192641814a7020: program:reasoning_observation_pending
+- reason-counter@5d3463bceca481682b0aac61: program:reasoning_observation_pending
+- reason-counter@fb70635ee7ceb2fffade99a1: program:reasoning_observation_pending
+- reason-counter@9787fe9ff7e347c37327727b: program:reasoning_observation_pending
+- reason-counter@8315798fa01aa1597e72d50e: program:reasoning_observation_pending
+- reason-counter@1cdc9152e65e5468497dbc89: program:reasoning_observation_pending
+- reason-counter@36523d52452e8f8c2c5b17db: program:reasoning_observation_pending
+- reason-counter@3ffe71849fcaa6abde0a5392: program:reasoning_observation_pending
+- reason-counter@f6c8751a3a25a6a6ee908f25: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The cheapest test for the lease-mismatch refusal is: send a context receipt with a mismatched school_route_lease, assert the firewall raises SCHOOL_ROUTE_LEASE_MISMATCH. The uncovered failure mode is: a forbidden routing state is silently admitted because the refusal guard is dead.","counterconditions":[{"case":"If a downstream guard catches the same mismatched lease before it can propagate, the refusal guard's death is less severe and may drop in priority.","eval":"observation"},{"case":"If the firewall is not deployed in any production configuration (i.e., it is test-only scaffolding), the blast radius is smaller than assumed.","eval":"observation"},{"case":"If SCHOOL_ROUTE_LEASE_MISMATCH and SCHOOL_ROUTE_ENDPOINT_MISMATCH require different test fixtures, two tests are needed, slightly raising the cost.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states that disabling the firewall's lease-mismatch refusal leaves the entire suite green and no test asserts either SCHOOL_ROUTE_LEASE_MISMATCH or SCHOOL_ROUTE_ENDPOINT_MISMATCH. The cheapest test is a single unit test that constructs a request with a mismatched lease and asserts the
+commitments: reasoning-envelope-wf, reason-counter@3f236b8641c02acc9bbe2dce, reason-counter@82c81964c6f1dab7070208a1, reason-counter@369823aa2de4360420eace70
+
+TARGET SRC_002
+{"analogy":null,"claim":"The cheapest test for the scratch recovery guard is: send a context receipt without scratch exposure, assert the recovery guard fires. The uncovered failure mode is: a recovery path that should handle scratch-less receipts silently fails.","counterconditions":[{"case":"If the recovery guard's expected behavior is not specified (i.e., it is unclear what 'firing' means), the test cannot be written without a design decision.","eval":"observation"},{"case":"If scratch-less receipts never occur in practice, the guard may be dead code and the test is low-value.","eval":"observation"},{"case":"If the recovery guard feeds back into append-only record integrity, it may outrank the lease-mismatch refusal.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states no test covers a context receipt without scratch exposure and deleting that recovery guard passes the suite. The cheapest test constructs a context receipt with no scratch exposure and asserts the recovery guard's expected behavior (either a specific recovery action or a specific error code). This is fourth in priority because the failure mode is a recovery-path failure: a receipt that s
+commitments: reasoning-envelope-wf, reason-counter@81f1e0780c192641814a7020, reason-counter@5d3463bceca481682b0aac61, reason-counter@fb70635ee7ceb2fffade99a1
+
+TARGET SRC_003
+{"analogy":null,"claim":"The cheapest test for the unimported functions is: add an import-only smoke test that imports resolve_conjecture_route and compile_criticism_assignments and calls each with a minimal valid input, asserting no exception. The uncovered failure mode is: routing rot \u2014 the functions silently bit-rot or are deleted and no test detects it.","counterconditions":[{"case":"If the functions are already imported by tests added after PARKED.md was written, this gap is closed.","eval":"observation"},{"case":"If the functions are intentionally dead code slated for removal, the test is a liability, not an asset.","eval":"observation"},{"case":"If a minimal valid input cannot be constructed without complex fixtures, the test is not cheap and the cost-benefit may shift.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states these functions are imported by no test anywhere. The cheapest catch is a test that imports and calls each with a minimal valid input. If the function is deleted or its signature changes, the import or call fails. This is third in priority because the failure mode is routing rot: the functions may silently degrade or disappea
+commitments: reasoning-envelope-wf, reason-counter@9787fe9ff7e347c37327727b, reason-counter@8315798fa01aa1597e72d50e, reason-counter@1cdc9152e65e5468497dbc89
+
+TARGET SRC_004
+{"analogy":null,"claim":"The cheapest test for the torn-tail repair gate is: extend test_torn_append.py with an assertion that the repair gate specifically fires (not just that the torn append is detected). The uncovered failure mode is: a torn-tail repair is silently skipped even though the torn append itself is caught.","counterconditions":[{"case":"If test_torn_append.py already asserts the repair gate (added after PARKED.md), this gap is closed.","eval":"observation"},{"case":"If a torn-tail repair failure can corrupt the append-only record (not just skip a repair), it outranks the scratch recovery guard and possibly the lease-mismatch refusal.","eval":"observation"},{"case":"If the repair gate is not distinguishable from the torn-append detection in the test output, the assertion may need a new observable, raising cost.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states the writer-side torn-tail repair was uncovered by the ring the seam doc named, but the doc's ring now includes test_torn_append.py. This means partial coverage exists: the torn append is detected, but the repair gate itself is not asserted. The cheapest test is an extension of the e
+commitments: reasoning-envelope-wf, reason-counter@36523d52452e8f8c2c5b17db, reason-counter@3ffe71849fcaa6abde0a5392, reason-counter@f6c8751a3a25a6a6ee908f25
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

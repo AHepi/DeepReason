@@ -1,0 +1,42 @@
+{
+  "candidate": {
+    "claim": "For all widths W from 5 to 11, Rule 90 and Rule 110 do NOT always reach a cycle of length <= 2 within 4*W steps (finding witnesses with transients > 4*W or cycles > 2). Rule 184, representing conservative traffic flow, always reaches a cycle of length <= 2 within W steps. The separating structural property is additive superposition vs non-linear particle conservation: Rule 90 is additive, so large random states behave as superpositions of unbounded Sierpinski gliders, preventing rapid stabilization. Rule 110 is Turing-complete and exhibits interacting gliders that cause arbitrarily long transients and chaotic attractors. Rule 184 conserves the number of 1s (particle number) and lacks interacting gliders; all configurations collapse into blocked jams (shifted copies of themselves) rapidly. Thus, additive rules and Turing-complete rules fail the short-cycle bound, while conservative, non-interacting rules pass.",
+    "mechanism": "Rule 184 is a conservative cellular automaton: the number of 1s is conserved. Its dynamics are exactly solvable as a traffic flow model where 1s are cars and 0s are empty spaces. Every configuration eventually resolves into a free-flow phase or a jam phase, both of which are simply translated copies of a fixed pattern. Because the maximum relative distance between particles is W, the transient before this blockage forms is at most W. The resulting periodic behavior has period 1 (if all cars move freely or are entirely jammed) or period 2 (if partially jammed). Rule 90 (XOR/additive) and Rule 110 (complex glider interactions) lack this conservation property and generate expanding Sierpinski-like patterns or Turing-complete interactions, ensuring that for certain initial states, the cycle length exceeds 2 or the transient exceeds 4*W.",
+    "counterconditions": [
+      "If a Python enumeration of Rule 90 for W in 5..11 finds NO state with a transient > 4*W or a cycle > 2, the claim is falsified.",
+      "If a Python enumeration of Rule 110 for W in 5..11 finds NO state with a transient > 4*W or a cycle > 2, the claim is falsified.",
+      "If Rule 184 has any state for W in 5..11 with a transient > W or a cycle > 2, the separating property is insufficient.",
+      "If Rule 54 is empirically found to always reach a cycle of length <= 2 within 4*W steps for all W in 5..11, the predicted connection to Rule 110's chaotic interactions is falsified."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": ["ECA_dynamics_184_90_110"],
+      "shared_structure": [
+        "Rule 184's dynamics are analogous to the Burgers cellular automaton (Traffic rule), where particles undergo ballistic annihilation and jamming.",
+        "Rule 90's dynamics are analogous to linear convolution over GF(2), meaning state evolution is equivalent to multiplying polynomials modulo x^W - 1.",
+        "Rule 110's dynamics are analogous to a tag system or cyclic tag system, where interacting gliders simulate Turing machines."
+      ],
+      "disanalogies": [
+        "Unlike continuous traffic flow, ECA is discrete and deterministic with wrap-around boundaries.",
+        "Rule 90 over a finite ring does not exhibit infinite unbounded growth; it eventually cycles, but the cycle length scales with the multiplicative order of 2 modulo the factors of x^W-1, often exceeding 2.",
+        "Rule 110's Turing-completeness requires infinite width; for small W in 5..11, the 'interacting gliders' analogy might break down if the width is too small to contain a single glider or collision structure."
+      ],
+      "transfer_claims": [
+        "Rule 54, which shares structural properties with Rule 110 (non-additive, exhibits chaotic glider interactions and complex behavior), is predicted to NOT always reach a cycle of length <= 2 within 4*W steps for all W in 5..11.",
+        "Because Rule 54 exhibits interacting particles/gliders similar to Rule 110, it will have a witness state with a transient > 4*W or a cycle > 2.",
+        "Rule 184's rapid stabilization is transferable to other conservative, non-interacting rules (like Rule 232, the majority rule) which also rapidly freeze."
+      ],
+      "overturn_conditions": [
+        "The enumeration of Rule 110 for W=5..11 shows that all states actually fall into length <= 2 cycles quickly, perhaps because the small width prevents the glider interactions from sustaining long transients.",
+        "Rule 54 is found to behave like Rule 184 (e.g., if its interactions are restricted by small widths), falsifying the prediction that it behaves like Rule 110.",
+        "A mathematical proof shows that Rule 90 on a ring of size W always has cycles of length <= 2, which would require W to be a power of 2, overturning the claim for W=5..11."
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
