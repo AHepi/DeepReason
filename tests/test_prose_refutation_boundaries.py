@@ -370,6 +370,77 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
     assert require_cross_family_judge_ensemble({"judge": two_families}) == two_families
 
 
+def test_the_formal_boundary_is_execution_backing_and_not_evaluability(harness):
+    """Implements R4: "only formal claims in formal prose require formal
+    refutation" -- and CORRECTS SPEC.md's A1 about where that line sits.
+
+    A1 read R4 as `programs.evaluable`. The implemented line is narrower:
+    `rules/warrants.py:24` `execution_backed` protects a target only when it
+    carries at least one EXEC-ORACLE commitment (`oracle.EXEC_PROGRAMS` --
+    exec, property, dataset_oracle) and every one of them currently passes.
+
+    A `predicate:` commitment is `evaluable` and is NOT execution-backed, so a
+    target carrying only predicates is open to prose. Asserted rather than
+    described, because the two readings differ in what is protected and the
+    difference is invisible from either function alone.
+    """
+
+    from deepreason import programs
+    from deepreason.ontology import Commitment, Interface, Provenance
+    from deepreason.rules.warrants import execution_backed
+    from tests.test_oracle import _oracle_candidate
+
+    predicate = Commitment(id="k-prose", eval="predicate:'moon' in content")
+    assert programs.evaluable(predicate) is True
+
+    harness.register_commitment(predicate)
+    only_predicate = harness.create_artifact(
+        "the moon is not made of cheese",
+        interface=Interface(commitments=[predicate.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert execution_backed(harness, only_predicate.id) is False
+
+    _, executable = _oracle_candidate(harness, "def solve(x):\n    return x * 2")
+    assert execution_backed(harness, executable.id) is True
+
+
+def test_the_execution_guard_is_consulted_before_the_authority_branch():
+    """Implements S4: the boundary needs no code change under any mode.
+
+    Proved by ORDER rather than by running every mode: in both the criticism
+    rule and the trial, `execution_backed` is consulted strictly before the
+    authority value is branched on, so no authority -- including one that does
+    not exist yet -- can reach past it.  A future mode added below the guard
+    would still be caught; a guard moved below the branch fails here.
+    """
+
+    source = (_SOURCE_ROOT / "rules" / "crit.py").read_text(encoding="utf-8")
+    guard = source.index("if execution_backed(harness, target_id):")
+    branch = source.index('if authority == "observe_only":')
+    assert guard < branch, (guard, branch)
+
+    trial = (_SOURCE_ROOT / "informal" / "trial.py").read_text(encoding="utf-8")
+    assert '_decline(harness, target_id, "execution-backed", diagnostics)' in trial
+
+
+def test_a_prose_case_against_an_execution_backed_target_is_refused_by_type():
+    """Implements S4's acceptance: refused WITH A TYPED REASON, not silently.
+
+    The trial declines with `execution-backed` before any seat spends, so the
+    refusal is attributable in the record rather than appearing as a case that
+    simply failed to persuade.
+    """
+
+    import inspect
+    from deepreason.informal import trial
+
+    body = inspect.getsource(trial)
+    guard_at = body.index("if execution_backed(harness, target_id):")
+    decline = body.index('"execution-backed"', guard_at)
+    assert decline - guard_at < 400, body[guard_at:decline]
+
+
 class _StubEndpoint:
     """The minimum surface `EndpointLease.verify` reads off a live endpoint."""
 

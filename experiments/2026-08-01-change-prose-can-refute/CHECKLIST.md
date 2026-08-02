@@ -322,12 +322,55 @@ this tranche is not a frozen-surface change.
           pairing, not about distinctness, so it is not the school gate's stop;
           left as-is deliberately.
 
-- [ ] 8. (S4) Confirm the formal/informal boundary needs no code change:
+- [x] 8. (S4) Confirm the formal/informal boundary needs no code change:
       demonstrative outcomes are already status-changing under every mode and
       `programs.evaluable` is already the line (A1).
       files: `tests/test_prose_refutation_boundaries.py`
       done-when: a test shows prose cannot alter a target carrying an evaluable
       commitment, and can alter one that carries none — under the new mode
+
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -q -k "formal_boundary or execution_guard or refused_by_type"
+          ...                                           [100%]
+          3 passed, 18 deselected in 0.52s
+
+      **The step's own premise is half wrong, and correcting it is the
+      finding.** The boundary needs no code change — that part holds. But it is
+      NOT `programs.evaluable`, as A1 assumed. The line the code enforces is
+      `execution_backed` (`rules/warrants.py:24`), consulted at five sites
+      including `rules/crit.py:1233` and `informal/trial.py:610`:
+
+        - `execution_backed` = the target carries >=1 commitment whose eval is
+          in `oracle.EXEC_PROGRAMS` (exec / property / dataset_oracle) AND
+          every one of them currently passes.
+        - `programs.evaluable` = any `predicate:` or any known `program:`.
+
+      These are different sets. A `predicate:` commitment is `evaluable` and is
+      not execution-backed, so **a target carrying only predicate commitments is
+      open to prose refutation today, and remains so under the new mode.**
+      Whether R4's "formal claims" is meant to cover those is the operator's
+      call, not an assumption to act on: widening the guard would change what
+      every existing run may do. Parked in PARKED.md, asserted as-is in the
+      test so the current line is pinned either way.
+
+      **Why this is proved by ORDER rather than by running the new mode.** The
+      step asked for the assertion "under the new mode", which does not exist
+      until step 10. Running it under one mode would in any case only show that
+      mode. Instead: in `rules/crit.py` the `execution_backed` guard is
+      consulted strictly before `if authority == "observe_only"` is ever
+      evaluated, and in `informal/trial.py` the guard `_decline`s with the typed
+      reason `execution-backed` before any seat spends. No authority value —
+      including one not yet written — can reach past a guard above the branch.
+      A future mode added below the guard is still caught; a guard moved below
+      the branch fails the test. That is stronger than what the step asked for,
+      and it is why this step is GREEN today rather than RED pending step 10.
+
+      S4's acceptance clause "refused with a typed reason" is met by
+      `_decline(harness, target_id, "execution-backed", diagnostics)` — the
+      refusal is attributable in the record rather than looking like a case
+      that merely failed to persuade.
 
 - [ ] 9. (S3) Give the refuting endpoint the full argument: the target's
       complete text (no excerpt marker) and its declared `Interface.refs`
