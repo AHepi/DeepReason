@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-workflow -->
-Verified-at: 546544b5
+Verified-at: d930af85
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/workflow/replay.py, src/deepreason/control_events.py, src/deepreason/ontology/event.py
 Sides: DR-SUB-harness, DR-SUB-workflow
@@ -33,8 +33,9 @@ events landed.
 `check: python -W ignore -c "import inspect,tempfile,pathlib,pytest;from deepreason.harness import Harness;from deepreason.ontology.event import Rule;from deepreason.control_events import ControlEventPayloadV3;c=inspect.getsource(Harness._commit);i=[c.index(x) for x in ('self.log.append(event)','except Exception:','self._reset()','for durable in self.log.read():','raise')];assert i==sorted(i),i;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);o='sha256:'+'2'*64;p=ControlEventPayloadV3(action='work_transition',decision_ref=o,inputs=['sha256:'+'1'*64,'t'],outputs=[o]);pytest.raises(Exception,h._commit,Rule.CONTROL,inputs=list(p.inputs),outputs=list(p.outputs),control=p);assert list(h.workflow_state.event_inputs_by_seq)==[0],h.workflow_state.event_inputs_by_seq;assert len(list(h.log.read()))==1 and h._next_seq==1"`
 
 Fifty-seven files under `src/deepreason` name both sides. Eight call a
-Control-minting seam. Four carry the agreement, and the dependency arrow between
-the two packages is absolute in one direction: no module under `workflow/` names
+Control-minting seam. Four — this document's `Owns:` set — carry the agreement,
+and the dependency arrow between the two packages is absolute in one direction:
+no module under `workflow/` names
 `deepreason.harness` at all, while `harness.py` names four workflow modules,
 always inside a function body. That deferral is not isolation — `storage/
 objects.py` imports `workflow.models` at module scope to register the schemas,

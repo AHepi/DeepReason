@@ -234,9 +234,10 @@ any prompt is rendered; then `ValueError("work preparation is no longer open for
 dispatch")` at issue; then `"dispatch differs from its authorization bundle"` —
 raised from `llm/adapter.py` but defined on
 `DispatchAuthorizationBundleV1.verify_dispatch` in `workflow/transaction.py`, so
-grepping the adapter for it finds nothing (`DR-SEAM-llm-x-workflow`); then, on reopen, `"transaction
-must begin with durable work preparation"` or `"transaction transition follows
-typed termination"` from `replay.py`; and finally `verify_root`'s
+grepping the adapter for it finds nothing (`DR-SEAM-llm-x-workflow`); then, on
+reopen, `"transaction must begin with durable work preparation"` or
+`"transaction transition follows typed termination"` from `replay.py`; and
+finally `verify_root`'s
 `workflow-replay` failure, which is the expensive one because the root is already
 committed.
 
@@ -301,7 +302,7 @@ of a canonical controller-v3 history).
   by the code, and the code is the only evidence here.
 `check: python -c "import inspect; from deepreason.workflow import nonconjecture_recovery as N; from deepreason.rules import crit as R; assert 'authority=\"observe_only\",' in inspect.getsource(N._recover_criticism_effect); assert 'authority=authority,' in inspect.getsource(R.crit_argumentative_batch); assert 'trial_required' in inspect.getsource(R._resolve_authority)" && grep -q "defended_trial" src/deepreason/run_manifest.py && grep -q "def test_recovered_criticism_applies_canonical_effect_exactly_once" tests/test_v6_nonconjecture_recovery.py && ! grep -q "defended_trial" tests/test_v6_nonconjecture_recovery.py`
 - **Residue: hoisting a rule's workflow import to module scope is not an
-  `ImportError`.** Measured at `546544b5`: adding
+  `ImportError`.** Re-measured at `9fa394d9`: adding
   `from deepreason.workflow.transaction_service import InquiryTransactionService`
   at the top of `conj.py` imports cleanly in both directions. The 32
   function-local imports are therefore held by the structural check in "The

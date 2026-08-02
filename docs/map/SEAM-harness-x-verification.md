@@ -145,7 +145,7 @@ That record is assembled by callers out of the return value; see
 `DR-SUB-verification` for who writes it and what else it binds. Not "creates no
 new file" — every byte under the root is unchanged, on a one-event root and on a
 521-file committed one.
-`check: python -c "import hashlib,pathlib,tempfile;from deepreason.harness import Harness;from deepreason.invariants import verify_root;s=lambda r:{str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file()};d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);b=s(d);assert b;verify_root(d);assert s(d)==b,'verify_root wrote to a fresh root';r=pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd');c=s(r);assert len(c)>100,len(c);verify_root(r);assert s(r)==c,'verify_root wrote to a committed root'"`
+`check: python -c "import hashlib,pathlib,tempfile;from deepreason.harness import Harness;from deepreason.invariants import verify_root;s=lambda r:{str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file()};d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);b=s(d);assert b;verify_root(d);assert s(d)==b,'verify_root wrote to a fresh root';r=pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd');c=s(r);assert len(c)==521,len(c);verify_root(r);assert s(r)==c,'verify_root wrote to a committed root'"`
 
 ## How to change it
 

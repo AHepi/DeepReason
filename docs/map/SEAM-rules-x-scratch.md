@@ -1,8 +1,9 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: 08dcdf3c
+Verified-at: d930af85
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
+Sweep: scratch_fence_seq|conjecture_context && Conj|Crit
 
 # rules x scratch
 
@@ -37,7 +38,7 @@ of the scratchpad is `conj.py`.
 | Fence identity | `scratch/conjecture.py` | `PlannedConjectureContextV1._parts_share_one_fence_and_selection` | one prefix names both logs; the pack, the advisory context and the render receipt all name one selection receipt |
 | Model-facing rename | `scratch/conjecture.py` | `render_v6_conjecture_context`, `_v6_aliases_for_render_receipt` | local `B*/C*/L*/G*` handles become `SCR_###` before the provider sees them |
 | Pack section | `llm/packs.py` | `render_conj_pack(scratch_context=...)` | scratch enters a pack only as a validated `RenderedScratchPackV1`, in one undroppable, uncompressible section |
-| Absence by signature | `llm/packs.py` | `render_crit_pack`, `render_batch_crit_pack` | no parameter exists through which a caller could hand scratch to a criticism pack |
+| Absence by signature | `llm/packs.py` | `render_crit_pack`, `render_batch_crit_pack` | no parameter exists through which a caller could hand scratch to a criticism pack; their parameter lists are pinned whole, so a rename or a `**kwargs` cannot reopen the door quietly |
 | Alias namespaces | `llm/wire.py` | `ConjecturerTurnWireContractV4.__init__`, `ConjecturerTurnWireContractV6._require_namespace` | `SRC_` formal, `SCR_` scratch, `SIM_` sealed inputs; overlap is refused at contract construction |
 | Exposure ledger | `rules/conj.py` | `context_plan(plan_kind="scratch")` with `ContextNamespace.SCRATCH` items | every visible scratch handle is byte-accounted in the transaction's exposure receipt |
 | Exactly-once, three points | `rules/conj.py`, `scratch/conjecture.py`, `llm/adapter.py` | `pack.count(canonical_scratch_text)`, `final_conjecture_pack.count(receipt_text)`, `prompt.count(advisory_text)` | the committed bytes reach the provider once, checked before dispatch rather than post hoc |
@@ -45,8 +46,18 @@ of the scratchpad is `conj.py`.
 | Write-back gate | `rules/conj.py` | `validate_proposal(..., visible_aliases=scratch_aliases, context_ref=exposure_ref)` then `admit_proposal(...)` with the same pair | the whole proposal resolves against what was actually shown BEFORE the first scratch event |
 | Component isolation | `rules/conj.py` | `_v6_component_diagnostic(component="scratch", ...)` at `semantic_validation` and `materialization` | a rejected or half-written scratch proposal does not cancel the candidates in the same turn |
 | The fence, and only the fence | `rules/crit.py` | `scratch_fence_seq=fence` in `_v6_transactional_batch_call` and `_v6_transactional_atomic_critic_call`, the two helpers `crit_argumentative_batch` dispatches through | criticism orders itself against the scratch log without reading it |
+| Record-level role guard | `ontology/event.py` | `LLMCall`'s validator (`only conjecturer calls may carry advisory context`) and `ConjectureContextCallReceiptV1._one_state_prefix` | the durable record refuses a criticism call carrying a context receipt, and re-states the one-prefix rule, independently of any pack or wire guard |
 | Replay-side mirror | `workflow/conjecture_recovery.py` | scratch exposure ⟺ `call.conjecture_context`, then `validate_conjecture_context_call` | a recovered scratch-bearing provider result with no context authority is refused; owned by `DR-SUB-workflow`, but it re-derives THIS agreement |
 | Replay validation | `invariants.py` | `validate_conjecture_context` | the context fence strictly precedes the call event it authorized |
+
+The agreement is enforced a second time on the durable record, so a pack-side or
+wire-side hole alone cannot put scratch in front of a critic.
+`check: python -c "import ast,pathlib as P;t=ast.parse(P.Path('src/deepreason/ontology/event.py').read_text());I=[(ast.unparse(n.test),[ast.unparse(s) for s in n.body if isinstance(s,ast.Raise)]) for n in ast.walk(t) if isinstance(n,ast.If)];need=[(['self.formal_fence_seq','!=','self.scratch_fence_seq'],'conjecture context formal and scratch fences must name one prefix'),(['self.role','!=','conjecturer'],'only conjecturer calls may carry advisory context')];assert all(any(all(f in k for f in F) and any(m in r for r in R) for k,R in I) for F,m in need),[k for k,_ in I]"`
+
+`workflow/reducer.py` and `workflow/state.py` compare the same fence pair, but on
+the WORKFLOW state rather than on this agreement; they belong to
+`DR-SEAM-scratch-x-workflow` and are named here only so the `Sweep:` header above
+does not report them as omissions from this document.
 
 The criticism side's total scratch surface is two fence assignments, each equal
 to the formal fence at the same call.
@@ -93,8 +104,10 @@ mistake this section exists to prevent.
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
-contract takes aliases and no critic output model has any scratch field at all.
-The workshop belongs to the move that invents, in both directions.
+contract takes aliases and no critic wire model has any scratch field at all.
+The check enumerates every `Critic`-named class in `llm/wire.py` rather than a
+fixed three, so a new critic contract or wire model is covered the moment it is
+written. The workshop belongs to the move that invents, in both directions.
 `check: python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;assert 'scratch_aliases' in inspect.signature(wire.ConjecturerTurnWireContractV6.__init__).parameters;assert 'scratch_proposal' in wire.ConjecturerTurnWireV6.model_fields;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];C=[c for c in K if issubclass(c,wire.WireContract)];M=[c for c in K if issubclass(c,BaseModel)];assert len(C)>=3 and len(M)>=5,([c.__name__ for c in C],[c.__name__ for c in M]);P=[(c.__name__,k) for c in C for k,v in inspect.signature(c.__init__).parameters.items() if 'scratch' in k or v.kind in (v.VAR_KEYWORD,v.VAR_POSITIONAL)];assert not P,P;A=[(c.__name__,a) for c in C for a in dir(c) if 'scratch' in a.lower()];assert not A,A;F=[(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert not F,F"`
 
 **The separation is enforced by an AST walk, not a header grep**, because a
@@ -151,8 +164,10 @@ compare it.
 
 1. **Read `DR-INV-frozen-surfaces` first.** `ScratchPolicy` and its
    `attention_policy()` are manifest surfaces, so any change to pack size,
-   channels or roles moves every qualification subject digest. A per-run mode
-   goes on `Config`, never on the manifest.
+   channels or roles moves every qualification subject digest — the subject
+   payload is a dump of the WHOLE manifest, and `scratch_policy` is a field on
+   it. A per-run mode goes on `Config`, never on the manifest.
+`check: python -c "import inspect;from deepreason.run_manifest import RunManifest,ScratchPolicy;import deepreason.qualification as q;assert 'scratch_policy' in RunManifest.model_fields,sorted(RunManifest.model_fields);assert callable(getattr(ScratchPolicy,'attention_policy'));s=inspect.getsource(q.qualification_subject_payload);assert 'manifest.model_dump' in s,s"`
 2. **Decide which direction you are changing.** Read (scratch → pack) and write
    (turn → scratch) are separately gated and separately recovered; a change that
    touches only one must leave the other's receipts byte-identical.

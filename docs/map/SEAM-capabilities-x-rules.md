@@ -1,8 +1,9 @@
 <!-- DR-SEAM-capabilities-x-rules -->
-Verified-at: 546544b5
+Verified-at: 9fa394d9
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/capabilities/simulation.py, src/deepreason/capabilities/research.py
 Sides: DR-SUB-capabilities, DR-SUB-rules
+Sweep: policy_digest|maximum_proposals_per_turn|MAXIMUM_PROPOSALS_PER_TURN && CapabilityController|stage_transactional_proposals|capability_state|simulation_controller|research_controller
 
 # capabilities x rules
 

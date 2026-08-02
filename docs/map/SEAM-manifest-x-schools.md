@@ -1,5 +1,5 @@
 <!-- DR-SEAM-manifest-x-schools -->
-Verified-at: 08dcdf3c
+Verified-at: 9fa394d9
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/workflow/criticism.py, src/deepreason/v6_policy.py
 Sides: DR-CON-schools, DR-SUB-manifest
@@ -250,7 +250,11 @@ is a reader, and readers may be fixed; the freeze may not.
    before assuming it is free.
 6. **Finish with the root sweep.** `DR-INV-frozen-surfaces` names the
    instrument; 11 of the 42 recorded roots are pre-v6 and raise
-   `UnsupportedRunManifestVersionError` as the expected baseline.
+   `UnsupportedRunManifestVersionError` as the expected baseline. Three more
+   carry no `run-manifest.json` at all and are not part of that 11 — counting
+   "roots older than v6" gives 14 and is the wrong baseline.
+
+`check: python -c "exec(\"import pathlib\nfrom deepreason.run_manifest import load_run_manifest as L, UnsupportedRunManifestVersionError as U\nroots=sorted({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')})\nassert len(roots)==42, len(roots)\nn=0\nm=0\nfor r in roots:\n    p=r/'run-manifest.json'\n    if not p.exists():\n        m+=1\n        continue\n    try: L(p)\n    except U: n+=1\n    except Exception: pass\nassert (n,m)==(11,3), (n,m)\")"`
 
 What breaks first, cheapest first: `tests/test_run_manifest_v4.py` (topology
 admissibility, sub-second) and `tests/test_foreign_criticism_policy_c3.py`

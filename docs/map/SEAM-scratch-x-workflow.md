@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scratch-x-workflow -->
-Verified-at: 08dcdf3c
+Verified-at: d930af85
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scratch/authoring.py, src/deepreason/workflow/nonconjecture_recovery.py
 Sides: DR-SUB-scratch, DR-SUB-workflow
@@ -100,7 +100,11 @@ a grep would look for and re-proves nothing.
 Replay computes the minimal-contract child key from the operation literal alone,
 inside a method that imports nothing from `scratch`; `verify_root` then re-checks
 the fence against the replayed scratch state and proves an expanded context from
-the durable transaction lineage. Each replay-validation message is located
+the durable transaction lineage. The method's import list is read from its AST,
+not searched for the string `deepreason.scratch`, so a relative
+`from ..scratch import` inside it fails; the three-valued literal is pinned as a
+set, so a fourth operation cannot be added silently. Each replay-validation
+message is located
 through the `if` that raises it and the GUARD is inspected, because a diagnostic
 string survives the comparison that earns it: `elif False:` above
 `selection receipt names another scratch fence` leaves the grep green and the
