@@ -669,10 +669,50 @@ this tranche is not a frozen-surface change.
       the editable install, which reports a conftest ImportError rather than a
       test failure.
 
-- [ ] 15. (S6, S11) Capture the AFTER sweep with the identical script from
+- [x] 15. (S6, S11) Capture the AFTER sweep with the identical script from
       step 1 and diff.
       done-when: no root's `valid` changes and no root's `len(state.att)`
       changes; report any `epistemic_checks_passed` movement as a number
+
+      Output — the same `root_sweep.py`, unedited since step 1:
+
+          SWEEP COMPLETE: 42 roots -> .../scratchpad/sweep_AFTER.txt
+
+          roots BEFORE=42 AFTER=42
+          only in BEFORE: none
+          only in AFTER : none
+
+          valid:            0 changed
+          att:              0 changed
+          epistemic_passed: 0 changed
+          blind:            0 changed
+          ERROR:            0 changed
+
+          $ diff -q sweep_BEFORE.txt sweep_AFTER.txt
+          BEFORE and AFTER sweeps are BYTE-IDENTICAL
+
+      **`epistemic_checks_passed` movement: 0 roots.** Reported as the number
+      the step asked for rather than as "none", because zero is the claim.
+
+      The field-by-field diff is the weaker check and the byte comparison is
+      the stronger one; both are run, and the field diff is kept because it
+      would localise a difference if one appeared. The diff script treats a
+      root present in one file and absent from the other as a DIFFERENCE rather
+      than skipping it — a no-change result computed over an intersection would
+      hide exactly the thing a retroactivity check exists to catch. Both
+      "only in" lines are empty.
+
+      Unchanged distribution, for the record: 21 roots `valid=True
+      epistemic_passed=False`, 11 `UnsupportedRunManifestVersionError` (the
+      known pre-v6 set), 5 `valid=True epistemic_passed=True`, 5
+      `valid=False`.
+
+      This is S6 and S11's acceptance met: **the change is prospective only.**
+      Every existing root verifies to the same verdict, carries the same
+      attacks, and passes or fails the same epistemic checks as before — which
+      is what C3 requires and what makes the new authority mode a change to
+      what future runs may do rather than a reinterpretation of what past runs
+      did.
 
 - [ ] 16. (all) [COMMIT] Push and confirm clean.
       done-when: `git status --porcelain` is empty AND the branch head is on
