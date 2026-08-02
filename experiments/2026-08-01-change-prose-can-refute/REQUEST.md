@@ -298,12 +298,57 @@ from? Nothing binds a school to a judge seat today: `SchoolRoleBindingV1` can
 express one (`run_manifest.py:467`, its `role` field is an open pattern) but no
 manifest authors one. NOT resolved here.
 
-## STILL OPEN from VALIDATION.md — message 5 does not answer it
+### 2026-08-02, message 6 — answering VALIDATION.md's FAIL
+
+> they are both formal. I have a feeling a conjecture endpoint might not fill
+> out the form properly for this distinction.
+
+R21 (behavior): "they are both formal."
+
+R22 (context/risk): "I have a feeling a conjecture endpoint might not fill out
+the form properly for this distinction."
+
+**R21 ANSWERS VALIDATION.md's FAIL, and answers it as reading (b).** The FAIL
+asked whether R4's "formal claims" means `execution_backed` (exec-oracle
+commitments only) or `programs.evaluable` (`predicate:` and known `program:`).
+"They are both formal" selects the wider set: a `predicate:` commitment is a
+formal claim, and so is a `program:` one. The prose-immunity line therefore
+moves from `execution_backed` to the evaluable set. S4's first acceptance
+clause becomes the thing to implement rather than the thing that failed.
+
+**R22 is a warning about the mechanism R21 selects, and it is not a
+side-remark.** The set of commitments an artifact carries is DECLARED BY THE
+CONJECTURING ENDPOINT in its own output (`Interface.commitments`). R21 makes
+that declaration decide whether the artifact is immune to prose criticism. R22
+says the endpoint may not fill the form properly for this distinction. Recorded
+here as the operator stated it; what follows from it is dr-spec-change's job,
+not this phase's.
+
+## Open questions (from message 6, for dr-spec-change)
+
+Q10 (R21+R22): if a declared evaluable commitment confers prose immunity, what
+stops an endpoint — by carelessness or otherwise — from declaring a cheap or
+trivially-satisfied formal commitment and thereby immunising its own artifact
+against criticism? R2 says "Prose can refute"; a self-conferred immunity would
+take that back. NOT resolved here.
+
+Q11 (R22): "not fill out the form properly" runs in both directions —
+under-declaring (a formal claim carried as `rubric:`, so it gets no formal
+protection) and over-declaring (a substantive prose claim carried with a formal
+commitment, so it gets protection it should not have). Which direction the
+operator means, or both, is not stated. NOT resolved here.
+
+Q12 (R21): `execution_backed` also requires every exec commitment to currently
+PASS — a failing one earns no protection, because execution already refutes it.
+Does the widened line keep that "and all currently pass" clause? NOT resolved
+here.
+
+## RESOLVED — VALIDATION.md's FAIL is answered by message 6
 
 The validation verdict was FAIL on S4's first acceptance clause: A1 named
 `programs.evaluable` as the formal/informal line, the implemented line is
 `execution_backed`, and a target carrying a `predicate:` commitment is therefore
-refutable by prose (measured: `att=1`, not refused). Message 5 concerns the
-schools/single-model axis only and says nothing about this. It is carried
-forward UNANSWERED and must not be treated as resolved by this amendment.
+refutable by prose (measured: `att=1`, not refused). Message 5 concerned the
+schools/single-model axis only and left it open. **Message 6 answers it: "they
+are both formal" — reading (b), the wider set.** See R21 above.
 
