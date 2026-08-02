@@ -28,7 +28,11 @@ from deepreason.llm.wire import wire_contract_for
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
-from deepreason.rules.warrants import execution_backed, register_fail_warrant
+from deepreason.rules.warrants import (
+    execution_backed,
+    formally_backed,
+    register_fail_warrant,
+)
 
 
 def conforming_transcript(blobs, trace_ref: str) -> bool:
@@ -607,9 +611,17 @@ def _argument_trial_steps(
     target = harness.state.artifacts.get(target_id)
     if target is None:
         return _decline(harness, target_id, "unknown-target", diagnostics)
-    if execution_backed(harness, target_id):
-        # Execution supremacy (§3): a verdict from reality stands; a prose
-        # case cannot reach a warrant against it through any trial.
+    if formally_backed(harness, target_id):
+        # Formal supremacy (§3, widened to the whole formal set): a passing
+        # formal commitment stands, and a prose case cannot reach a warrant
+        # against it through any trial. This is the ONLY point where prose can
+        # mint one, so it is the only place the widened guard belongs: the
+        # criticism rule's own execution guard still governs whether a case is
+        # RECORDED, and widening that one would delete scrutiny evidence for
+        # every target carrying a passing problem criterion.
+        # The decline reason keeps its historical spelling: it is compared
+        # against recorded roots, and renaming it would change what those
+        # roots' diagnostics mean.
         return _decline(harness, target_id, "execution-backed", diagnostics)
     if not case_text.strip():
         return _decline(harness, target_id, "empty-case", diagnostics)

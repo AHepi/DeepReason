@@ -557,6 +557,125 @@ def test_a_failing_formal_commitment_earns_no_protection(harness):
     assert formally_backed(harness, failing.id) is False
 
 
+def test_a_passing_formal_commitment_now_resists_prose(harness):
+    """Implements R21 and closes VALIDATION.md's FAIL on S4's first clause.
+
+    Measured before this step: a target carrying `predicate:'chorale' in
+    content` -- `programs.evaluable` True -- was refuted by prose, `att=1`.
+    "They are both formal", so it must not be.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment, Interface, Provenance, Status
+    from deepreason.rules.crit import crit_argumentative
+
+    harness.register_commitment(
+        Commitment(id="k-formal", eval="predicate:'chorale' in content")
+    )
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=["k-formal"]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    crit_argumentative(
+        harness,
+        target.id,
+        _single_family_trial_adapter(harness),
+        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+    )
+
+    assert not harness.state.att
+    assert harness.state.status[target.id] == Status.ACCEPTED
+
+
+def test_a_structural_only_target_is_still_refutable_by_prose(harness):
+    """Implements R22 end to end, not just at the predicate.
+
+    `program:json-wf` is the cheap formal commitment a conjecturer can reach
+    through safe skeleton compilation. If attaching it bought immunity, an
+    endpoint could take back R2 by filling in the form. It buys nothing: the
+    target is still refuted.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment, Interface, Provenance, Status
+    from deepreason.rules.crit import crit_argumentative
+
+    harness.register_commitment(Commitment(id="k-wf", eval="program:json-wf"))
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=["k-wf"]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    crit_argumentative(
+        harness,
+        target.id,
+        _single_family_trial_adapter(harness),
+        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+    )
+
+    assert len(harness.state.att) == 1
+    assert harness.state.status[target.id] == Status.REFUTED
+
+
+def test_the_forbidden_case_form_still_refuses_a_predicate():
+    """Implements R22's other half: the trustworthy class stays un-authorable.
+
+    `predicate:` commitments confer immunity, so it matters that a model
+    cannot write one. The bar is an RCE guard rather than an epistemic one,
+    which is exactly why it needs a test on this side too -- a future
+    relaxation for security reasons would silently hand endpoints the immunity
+    key.
+    """
+
+    import pytest
+    from deepreason.informal.skeleton import ForbiddenCase
+
+    assert ForbiddenCase(case="c", eval="rubric:std-1")
+    assert ForbiddenCase(case="c", eval="program:json-wf")
+
+    with pytest.raises(ValueError):
+        ForbiddenCase(case="c", eval="predicate:True")
+
+
+def test_the_criticism_rule_still_records_scrutiny_for_a_formal_target(harness):
+    """Implements R21 WITHOUT deleting evidence -- the correction made at
+    step 18.
+
+    Widening the criticism rule's own guard would have suppressed the scrutiny
+    record for every target carrying a passing problem criterion, because
+    problem criteria are instantiated into every candidate's interface. That
+    loses the case entirely rather than declining to act on it, which moves
+    toward adjudication blindness, not away from it. So only the trial -- the
+    one place prose can mint a warrant -- consults the widened guard.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment, Interface, Provenance, Status
+    from deepreason.rules.crit import crit_argumentative
+
+    harness.register_commitment(
+        Commitment(id="k-formal", eval="predicate:'chorale' in content")
+    )
+    target = harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=["k-formal"]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+    critic = crit_argumentative(
+        harness, target.id, _single_family_trial_adapter(harness), Config()
+    )
+
+    assert critic is not None
+    assert any(
+        event.inputs[:2] == ["scrutiny", target.id] for event in harness.log.read()
+    )
+    assert harness.state.status[target.id] == Status.ACCEPTED
+
+
 def test_the_formal_boundary_is_execution_backing_and_not_evaluability(harness):
     """Implements R4: "only formal claims in formal prose require formal
     refutation" -- and CORRECTS SPEC.md's A1 about where that line sits.
@@ -611,21 +730,26 @@ def test_the_execution_guard_is_consulted_before_the_authority_branch():
     assert '_decline(harness, target_id, "execution-backed", diagnostics)' in trial
 
 
-def test_a_prose_case_against_an_execution_backed_target_is_refused_by_type():
+def test_a_prose_case_against_a_formally_backed_target_is_refused_by_type():
     """Implements S4's acceptance: refused WITH A TYPED REASON, not silently.
 
-    The trial declines with `execution-backed` before any seat spends, so the
-    refusal is attributable in the record rather than appearing as a case that
-    simply failed to persuade.
+    The trial declines before any seat spends, so the refusal is attributable
+    in the record rather than appearing as a case that simply failed to
+    persuade.
+
+    Step 18 widened this guard from `execution_backed` to `formally_backed`
+    per R21. The decline REASON deliberately keeps its historical spelling
+    `execution-backed`: it is compared against recorded roots, and renaming it
+    would change what those roots' diagnostics mean.
     """
 
     import inspect
     from deepreason.informal import trial
 
     body = inspect.getsource(trial)
-    guard_at = body.index("if execution_backed(harness, target_id):")
+    guard_at = body.index("if formally_backed(harness, target_id):")
     decline = body.index('"execution-backed"', guard_at)
-    assert decline - guard_at < 400, body[guard_at:decline]
+    assert decline - guard_at < 800, body[guard_at:decline]
 
 
 class _StubEndpoint:

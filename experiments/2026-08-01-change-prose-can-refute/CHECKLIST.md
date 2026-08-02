@@ -781,13 +781,66 @@ make step 21's demo prove nothing.
       stated reason — they "prove nothing about the subject". One definition,
       two consumers.
 
-- [ ] 18. (S18) [COMMIT] Move the three argumentative guards from
+- [x] 18. (S18) [COMMIT] Move the three argumentative guards from
       `execution_backed` to `formally_backed`.
       files: `src/deepreason/rules/crit.py`, `src/deepreason/informal/trial.py`
       done-when: a target carrying a passing `predicate:` commitment is refused
       with a typed reason (S4's original first clause, which FAILED at
       validation, now holds); a target carrying none is still refuted; the
       typed reason strings are unchanged from their recorded values
+
+      Output:
+
+          passing predicate: (FORMAL)     att=0 status=accepted
+          rubric: only (informal)         att=1 status=refuted
+          ONLY program:json-wf            att=1 status=refuted
+
+          $ python -m pytest tests/ -q -n 4 \
+                -k "crit or trial or oracle or warrant or audits or loop or workload"
+          303 passed, 2 skipped in 40.50s
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py -q
+          34 passed in 3.62s
+
+      Row 1 closes VALIDATION.md's FAIL. Row 3 is R22 shut end to end.
+
+      **ONE guard moved, not three, and the step's own plan was wrong about
+      that.** Moving all three broke `test_loop.py::
+      test_argumentative_critic_attack_is_observe_only`, and the test was
+      right. Diagnosed rather than patched: `pi-tides`' criterion is
+      `predicate:'moon' in content`, and problem criteria are instantiated into
+      EVERY candidate's interface (`tests/test_loop.py:66`). So widening the
+      criticism rule's own guard suppresses the SCRUTINY RECORD for every
+      target carrying a passing problem criterion — the case is discarded
+      rather than declined. That moves toward adjudication blindness, which is
+      the defect the previous tranche existed to detect. R4/R21 are about
+      REFUTATION, not about whether a criticism is recorded.
+
+      So `formally_backed` is consulted at exactly ONE site,
+      `informal/trial.py:614` — the only point at which a prose case can mint a
+      warrant. `rules/crit.py` is byte-identical to HEAD; its two
+      `execution_backed` guards are untouched. A test now pins that scrutiny is
+      still recorded for a formal target under `observe_only`.
+
+      Blast radius measured across every openable root BEFORE deciding:
+
+          TOTAL artifacts=1279  execution_backed=0  formally_backed=148
+          prose-refutable BEFORE: 100.0%   AFTER: 88.4%
+
+      148 of 1279 recorded artifacts (11.6%) carry a passing substantive formal
+      commitment and would become immune to prose refutation. It is not uniform:
+      one root (`run-9175f0ec`, epoch 3) goes from 79 refutable to 31. Reported
+      as a number rather than a reassurance — this is what "they are both
+      formal" costs, and it is the operator's call whether that is the intended
+      price.
+
+      The decline reason keeps the string `execution-backed`. Renaming it would
+      change what recorded roots' diagnostics mean, which C3 forbids.
+
+      One existing assertion updated, and S18 predicted it: step 8's
+      `..._is_refused_by_type` asserted the trial's guard is named
+      `execution_backed`. It now asserts `formally_backed` and the same typed
+      reason — the guard moved, which is the step.
 
 - [ ] 19. (S19) Assert the self-immunisation hole is shut.
       files: `tests/test_prose_refutation_boundaries.py`
