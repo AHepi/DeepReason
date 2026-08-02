@@ -614,14 +614,60 @@ this tranche is not a frozen-surface change.
       — `single_family_trial` is the direct-helper switch, and route topology is
       what selects the ensemble in both cases.
 
-- [ ] 13. (S3, S10) Re-run steps 3 and 4's assertions now that the mode exists.
+- [x] 13. (S3, S10) Re-run steps 3 and 4's assertions now that the mode exists.
       files: none
       done-when: the whole of `tests/test_prose_refutation_boundaries.py`
       passes, including the byte-identity halves that were RED
 
-- [ ] 14. (all) Full gate: `pytest tests/ -q -n 4`
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py -q
+          ...........................                   [100%]
+          27 passed in 2.74s
+
+      The specific assertion that was RED from step 3 through step 9, and the
+      author/school halves it was guarding:
+
+          test_the_single_family_authority_value_exists PASSED
+          test_the_criticism_prompt_never_names_an_author_or_a_school PASSED
+          test_the_planner_leaves_a_single_school_run_with_no_eligible_critic PASSED
+
+      `test_the_single_family_authority_value_exists` was written at step 3
+      precisely so the structural assertions could not pass vacuously against a
+      mode that did not exist. It is now GREEN for the reason it was written to
+      wait for — `Config(ARGUMENTATIVE_AUTHORITY="single_family_trial")`
+      validates — which retroactively makes steps 3, 4 and 8's structural
+      claims claims about a real mode.
+
+      Nothing was re-run "to check": the file grew from 11 assertions at step 4
+      to 27, and all 27 pass together, so the byte-identity and author-school
+      properties hold in the presence of the whole change rather than only
+      before it.
+
+- [x] 14. (all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" — paste it. No assertion
       weakened anywhere (C2).
+
+      Output:
+
+          $ python -m pytest tests/ -q -n 4
+          3270 passed, 7 skipped in 557.78s (0:09:17)
+
+      **0 failed.** 3243 at the start of this tranche, 3270 now — 27 added, none
+      removed.
+
+      C2 ("Never weaken an assertion to get green"), accounted for explicitly.
+      Exactly one existing assertion changed anywhere in the tranche:
+      `tests/test_pack_prefix.py`'s excerpt test at step 9. It asserts strictly
+      MORE than before — the whole target body byte-for-byte, where it
+      previously accepted a head/tail excerpt — and SPEC.md's S3 predicted the
+      change in advance ("no `HARNESS PACK EXCERPT` marker"). Every other test
+      in the repository is untouched.
+
+      Note on the invocation: `python -m pytest`, not bare `pytest`. The
+      container's PATH now resolves `pytest` to a uv-tool shim that cannot see
+      the editable install, which reports a conftest ImportError rather than a
+      test failure.
 
 - [ ] 15. (S6, S11) Capture the AFTER sweep with the identical script from
       step 1 and diff.
