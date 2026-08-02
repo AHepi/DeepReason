@@ -385,6 +385,136 @@ application, no replay record format, no qualification subject.
 
 ---
 
+# EXTENSION 3 for R21-R22 — widen the formal line, and close the hole
+# widening it opens
+
+## R22 is a real hazard, not a hunch. Traced to the line.
+
+An artifact's `interface.commitments` is compiled at
+`workloads/models.py:99-103` from `problem.criteria` plus harness-owned
+mandatory commitments — neither of which the model chooses. **But there is one
+model-authored route**, and the code says so in as many words
+(`models.py:105`): "Safe skeleton compilation remains the only route by which
+model-authored counterconditions can add commitments." A conjecturer's own
+content is parsed as a skeleton, and each forbidden case becomes a Commitment
+(`informal/skeleton.py:91-108`).
+
+What the endpoint may put in that form is already restricted, for a different
+reason. `ForbiddenCase._eval_kind_is_safe` (`skeleton.py:30-45`) permits
+`rubric:` or `program:` and **forbids `predicate:`** — because a predicate from
+untrusted output reaches `eval()`. That security rule has an epistemic
+consequence nobody needed until now:
+
+- `predicate:` commitments **cannot** be model-authored. They come only from
+  operator-authored problem criteria. As formal claims they are trustworthy.
+- `program:` commitments **can** be model-authored, provided they name a known
+  safe program.
+
+So under R21 as literally stated — every `programs.evaluable` commitment confers
+prose immunity — a conjecturer that attaches `program:json-wf` or
+`program:skeleton_wf` as a forbidden case makes its own artifact immune to prose
+criticism. Those programs pass for anything well-formed. **That is
+self-conferred immunity, and it would take back R2 by the same mechanism
+`rules/crit.py` already forbids in the other direction ("No configuration may
+grant a self-certifying prose warrant").**
+
+## The distinction the codebase already has
+
+`measures/reach.py:37-44` refuses reach from exactly this class:
+
+    _STRUCTURAL_PROGRAMS = frozenset({"json-wf", "skeleton_wf",
+                                      "lineage_ref", "checker_wf"})
+    def _substantive(commitment):
+        if not programs.evaluable(commitment): return False
+        kind, _, arg = commitment.eval.partition(":")
+        return not (kind == "program" and arg in _STRUCTURAL_PROGRAMS)
+
+with the reason stated: structural well-formedness programs "qualify anything
+well-formed and prove nothing about the foreign problem's subject".
+`programs.program_class` carries the same registry class and notes that
+predicates are substantive content criteria.
+
+**A commitment that proves nothing about the subject must not immunise the
+subject.** So the widened line is EVALUABLE AND SUBSTANTIVE, not merely
+evaluable — which is also the only reading of R21 that survives R22.
+
+## Items
+
+S17 (R21, R22) — a formal-backing predicate beside the execution one
+  files: `src/deepreason/rules/warrants.py`
+  after: `formally_backed(harness, target_id)` is True iff the target carries
+  at least one EVALUABLE AND SUBSTANTIVE commitment and every such commitment
+  it carries currently passes. `execution_backed` is unchanged and keeps its
+  own callers.
+  accept: True for a passing `predicate:` target; True for a passing exec-oracle
+  target (so it is a superset of `execution_backed`); **False for a target whose
+  only evaluable commitment is `program:json-wf` or `program:skeleton_wf`**;
+  False when any qualifying commitment currently fails.
+
+S18 (R21) — prose immunity moves to the wider line
+  files: `src/deepreason/rules/crit.py`, `src/deepreason/informal/trial.py`
+  before: the three argumentative guards consult `execution_backed`
+  (`crit.py:1233`, `crit.py:1779`, `trial.py:610`).
+  after: they consult `formally_backed`.
+  accept: S4's original first clause now holds — a target carrying an evaluable
+  substantive commitment is refused with a typed reason; a target carrying none
+  is still refutable by prose; the typed reasons (`execution-backed`,
+  `arg-crit-overridden-by-execution`) keep their existing values so no recorded
+  root's reasons change meaning.
+
+S19 (R22) — the self-immunisation hole is asserted shut
+  files: `tests/`
+  accept: a test builds a target whose ONLY evaluable commitment is a
+  model-authorable structural program, and shows prose still refutes it; and a
+  test shows `ForbiddenCase` still refuses `predicate:`, so the trustworthy
+  class stays un-authorable by a model.
+
+S20 (C2, C3) — nothing retroactive, again
+  accept: 42-root sweep unchanged; full gate 0 failed. Widening what is
+  PROTECTED can only remove attack edges from future runs, never add them to
+  recorded ones, and S6's sweep measures it rather than assuming it.
+
+## Answers to the open questions
+
+Q10 — closed by S17: a structural program confers nothing, so the cheap
+self-immunisation move does not work.
+
+Q11 — both directions considered; only one needs code. Over-declaring is the
+dangerous direction and S17 blocks it. Under-declaring (a formal claim carried
+as `rubric:`) leaves the claim refutable by prose, which is the safe direction
+and consistent with R2 — no change.
+
+Q12 — **keep the "and every one currently passes" clause.** A failing formal
+commitment is already refuted mechanically; protecting it from prose would
+protect a claim that is already defeated. This is `execution_backed`'s existing
+rule and there is no reason it changes when the set widens.
+
+## Assumptions (operator may override)
+
+A11 (R21+R22): "they are both formal" is implemented as evaluable AND
+substantive. The literal reading — evaluable alone — is rejected because R22
+names the failure it causes and the code confirms the route. If the operator
+means structural well-formedness programs should also immunise, A11 inverts.
+
+A12: `execution_backed` is retained with its current callers
+(`rules/vision.py:91`, `informal/trial.py:896` pairwise). Those are not the
+prose-refutation guard R4 speaks to, and changing them is not requested.
+
+## Out of scope
+
+- Restricting what the skeleton route may author. The security validator is
+  correct as it stands and S17 removes the epistemic incentive without touching
+  it.
+- Any change to `programs.evaluable` or `program_class` themselves — S17 reads
+  them, and `measures/reach.py` keeps its own copy of the structural set until
+  someone asks for that duplication to be resolved.
+
+## Budget
+
+~60 lines across 3 source files plus tests. Frozen surfaces touched: **none**.
+
+---
+
 # AMENDMENT to S1, made at step 10 execution (append-only)
 
 **S1's acceptance clause as written contradicts the operator's own answer to
