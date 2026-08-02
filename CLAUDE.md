@@ -10,6 +10,12 @@ never evidence; `log.jsonl`, `objects/`, `progress.jsonl`,
 
 ## Which workflow to use
 
+Both families now begin with a MAP PREFLIGHT: resolve the work to
+`DR-SUB-`/`DR-CON-`/`DR-SEAM-` ids from `docs/map/INDEX.md`, read the seam
+before the subsystems, and read `INV-frozen-surfaces.md` before designing.
+Record the ids in the tranche's first artifact so every later phase starts
+from the same map.
+
 Two skill families live in `.claude/skills/`. Route ALL substantive work
 through one of them — they exist to prevent scope creep, missed steps,
 and forgotten inputs:
@@ -136,7 +142,53 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   recorded as one.
 - Scratch/temp files go in the session scratchpad, never the repo.
 
-## Map
+## The map — `docs/map/` (read this before scoping any change)
+
+125 000 lines across 34 packages. Do not scope a change by grepping; scope it
+from the map. **`docs/map/INDEX.md` is the entry point** and routes to
+everything else. `docs/map/SCHEMA.md` is the contract for reading and writing
+map documents — read it once, before you touch one.
+
+Five kinds of document; the filename is the identifier:
+
+    SUB-<pkg>.md         a subsystem: what it owns, entry points, state
+    CON-<slug>.md        a cross-cutting concept that is NOT a package
+                         (schools, authority, warrants, run identity)
+    SEAM-<a>-x-<b>.md    how two of them meet — sides alphabetical
+    INV-<slug>.md        an invariant / frozen surface
+    REC-<slug>.md        a change recipe
+
+**How to read it.** `INDEX.md` → the routing table. For a change that spans two
+things, read the SEAM document BEFORE either subsystem: it says which fraction
+of each side is actually involved, and it is usually small. Read
+`INV-frozen-surfaces.md` before designing anything — discovering a frozen
+surface after the code is written is the expensive order to discover it in. For
+a defect, read the covering document's `Traps` section before the record: a
+recurrence is the cheapest diagnosis available.
+
+**Documents are authenticated by RE-DERIVATION, not by signature.** Every
+load-bearing claim carries a `check:` shell command at column 0 that must exit
+0. A signature would prove who wrote a sentence; this proves the sentence is
+still true, which is the property that decays.
+
+    python tools/docs_verify.py           # every check; 0 failed required
+    python tools/docs_verify.py --audit   # refuses checks that cannot fail
+    python tools/docs_verify.py --links   # every DR- reference resolves
+    python tools/docs_verify.py --stale   # advisory: docs worth re-reading
+
+**How to modify it.** The map moves in the SAME COMMIT as the code — a separate
+"update docs" commit is the commit that gets dropped. Advance `Verified-at:`
+only if you actually re-ran that document's checks; a stale stamp is honest, a
+false one is not. New behaviour needs a new check that would fail if the
+behaviour regressed — run it before you write it down. Every fix earns a
+`Traps` entry naming its run id, and a `Traps` entry is never deleted, only
+rewritten to say when it was fixed. The orchestrator skills enforce all of
+this; `SCHEMA.md` states it in full.
+
+A seam document that does not exist means the pair has not been written up —
+`INDEX.md`'s matrix says which. It never means the two do not interact.
+
+## Directory map
 
     src/deepreason/
       scheduler/scheduler.py   problem selection, cycles, budgets
