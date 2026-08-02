@@ -1,0 +1,246 @@
+<!-- DR-CON-run-identity -->
+Verified-at: 69f89d21
+Verify: python tools/docs_verify.py
+Owns: src/deepreason/preparation.py, src/deepreason/application/text_runs.py, src/deepreason/runtime/continuation.py, src/deepreason/runtime/progress.py, src/deepreason/amendment/apply.py, src/deepreason/amendment/models.py, src/deepreason/amendment/state.py, src/deepreason/ui/status.py
+Seams: DR-SEAM-amendment-x-run-identity, DR-SEAM-application-x-run-identity, DR-SEAM-harness-x-run-identity, DR-SEAM-manifest-x-run-identity, DR-SEAM-run-identity-x-verification
+
+# Run identity and lifecycle — one question, one root, forever
+
+## What it is
+
+A run's identity is a content address, not a name someone chose. Preparation
+digests the question, the budget, the provider profile, the frozen policy
+preset and (when present) the attached-evidence dossier, and mints
+`run-<digest[:32]>` — so the same question under the same configuration lands
+on the same directory on any machine, at any hour. Everything the run will
+ever produce accumulates inside that one directory as an append-only record,
+and nothing in it is ever edited. The lifecycle that follows has exactly four
+legal moves: **start** it, **continue** it, **amend** it, or **retire** it.
+Determinism is what makes the fourth move necessary: a relaunch cannot pick a
+fresh root by accident, so a leftover root must be deliberately renamed out of
+the way. This concept is spread across `preparation.py`, `application/`,
+`runtime/`, `amendment/` and `cli/` because identity is minted in one place,
+enforced in another, extended in a third, and operated from a fourth.
+
+## Where it lives
+
+| Aspect | File | Symbol |
+|---|---|---|
+| Run id minted from question + config | `preparation.py` | `RunPreparationService.prepare`, `_request_digest` |
+| What the identity digest covers | `preparation.py` | `_request_digest` payload, `_REQUEST_DOMAIN` |
+| The question digest — a DIFFERENT digest, not part of run identity | `preparation.py` | `_question_digest`, `_QUESTION_DOMAIN` |
+| The durable identity record in the root | `preparation.py` | `RunPreparationRecordV1`, `PREPARATION_RECORD_NAME` |
+| Re-opening an existing identity without rewriting it | `preparation.py` | `RunPreparationService._load_existing` |
+| Id → root, resolved from the record and never from a path | `preparation.py` | `resolve_managed_run_root` |
+| Legal id charset | `preparation.py` | `_RUN_ID` |
+| Where managed roots live on disk | `provider_profile.py` + `preparation.py` | `provider_state_dir` resolves `DEEPREASON_HOME` alone; `preparation.py` joins `runs/` onto it |
+| One-shot manifest binding | `run_manifest.py` | `bind_run_manifest`, `MANIFEST_NAME`, `MANIFEST_HASH_NAME` |
+| Start vs. continue dispatch, and the started-root refusal | `application/text_runs.py` | `TextRunApplicationService.start`, `.continue_run`, `._launch` |
+| The terminal file and its readers | `application/text_runs.py` | `TextRunApplicationService.result` (`run-result.json`) |
+| Append-only log and content stores | `harness.py` | `Harness.log`, `Harness.objects`, `Harness.blobs` |
+| Operational telemetry: the two progress files | `runtime/progress.py` | `ProgressSink`, `ProgressEvent` |
+| Status must be derivable from the progress log | `ui/status.py` | `read_run_status` |
+| Single-owner locks on a root | `locking.py` | `operator_locks`, `OPERATOR_LOCK_NAMES` |
+| Resume preconditions and the stop archive | `runtime/continuation.py` | `prepare_continuation` (`run-stops/`) |
+| Typed continuation history | `runtime/continuation.py` | `_continuation_history`, `_validate_typed_history` |
+| The amendment record and its chaining rules | `amendment/models.py` | `RunAmendmentV1` |
+| Epoch staging, chain commitment, crash recovery | `amendment/apply.py` | `amend_run`, `_amend_locked`, `_stage_epoch_documents`, `_commit_chain_line` |
+| Epoch layout and epoch-aware readers | `amendment/state.py` | `AMENDMENT_EPOCH_DIR`, `AMENDMENT_CHAIN_NAME`, `load_amendments`, `current_epoch`, `staged_amendment` |
+| Replay windowed by the epoch fence | `invariants.py` | `_amendment_epochs` |
+| Whether a run stands at a stop that may be amended | `runtime/terminal_authority.py` | `derive_terminal_authority` |
+| Operator surface | `cli/main.py` | `_cmd_reason`, `_cmd_continue`, `_cmd_amend`, `_cmd_cancel` |
+| Same surface over MCP, by opaque id | `mcp_server.py` | `_resolve_managed_root` |
+
+## The rules it obeys
+
+**The id is `run-` plus the first 32 hex of a domain-separated request digest.**
+
+`check: grep -q 'f"run-{request_digest\[:32\]}"' src/deepreason/preparation.py`
+
+**The digest covers question, budget, provider-profile digest, policy preset id
+and policy preset digest — and nothing time-varying.** No clock, no uuid, no
+path enters it, which is the whole reason identity is reproducible. The run
+MANIFEST digest is the opposite: it carries `compiled_at`, so it moves between
+preparations that the run id does not distinguish.
+
+`check: python -c "import inspect,deepreason.preparation as p;from deepreason.run_manifest import RunManifest;s=inspect.getsource(p._request_digest);assert not any(t in s for t in ('compiled_at','uuid','clock','_QUESTION_DOMAIN')) and '_REQUEST_DOMAIN' in s and 'compiled_at' in RunManifest.model_fields"`
+
+**Budget is part of identity.** `--cycles` and `--token-budget` enter
+`_request_digest` through `request.budget`, so the same question at a different
+budget is a DIFFERENT root — not a relaunch of the old one.
+
+**A dossier digest enters the payload only when evidence is attached**, so
+question-only ids stay byte-identical to their historical values. Widening this
+unconditionally would rename every existing question-only root.
+
+`check: grep -q 'payload\["dossier_digest"\] = request.dossier_digest' src/deepreason/preparation.py`
+
+**Preparing the same request twice mutates nothing.** The second call re-opens
+the root, re-validates every bound document against `run-preparation.json`, and
+leaves file mtimes untouched.
+
+`check: python -m pytest tests/test_run_preparation_service.py::test_preparation_is_idempotent_without_requalification_or_rewrites -q`
+
+**An identity may never be re-pointed at different input.** A conflicting
+question, profile or request under the same `managed_run_id` raises
+`PREPARATION_INPUT_CONFLICT` before any filesystem write.
+
+`check: python -m pytest tests/test_run_preparation_service.py::test_explicit_managed_identity_rejects_conflicting_input_without_mutation -q`
+
+**A root that has already run may never be started again.** `_launch` refuses
+when `progress.jsonl` or `run-result.json` exists, inside the registry lock and
+with the operator locks already held, BEFORE `bind_run_manifest` is reached.
+
+`check: python -c "import inspect;from deepreason.application.text_runs import TextRunApplicationService as S;s=inspect.getsource(S._launch);assert s.index('operator_locks(root') < s.index('RUN_ALREADY_STARTED: choose a fresh root or continue_run') < s.index('bind_run_manifest(manifest, root)')"`
+
+**A root binds exactly one manifest for life.** `bind_run_manifest` is
+idempotent only for byte-identical canonical bytes; anything else is
+`RUN_MANIFEST_CONFLICT`. A surviving `.sha256` sidecar with no manifest file is
+itself a binding record and still refuses a different digest.
+
+`check: grep -q 'run root is already bound to a different manifest' src/deepreason/run_manifest.py && grep -q 'run root already records a different manifest digest' src/deepreason/run_manifest.py`
+
+**The root's files divide into evidence and telemetry.** `log.jsonl`,
+`objects/` and `blobs/` are the harness's append-only record; `progress.jsonl`
+and `run-status.json` are the progress sink's, and are never evidence.
+
+`check: python -c "import inspect;from deepreason.harness import Harness;from deepreason.runtime.progress import ProgressSink;h=inspect.getsource(Harness.__init__);g=inspect.getsource(ProgressSink.__init__);assert all(n in h for n in ('log.jsonl','objects','blobs'));assert all(n in g for n in ('progress.jsonl','run-status.json'));assert not any(n in h for n in ('progress.jsonl','run-status.json'))"`
+
+**`run-status.json` is a projection, not an independent record.** A status file
+that is not the last line of `progress.jsonl` is refused rather than believed.
+
+`check: grep -q "run-status.json is not derived from the progress log" src/deepreason/ui/status.py`
+
+**A run is addressed by opaque id, never by operator-chosen path.** `deepreason
+reason` refuses any `--root` other than the default; managed run paths are
+host-owned, and `resolve_managed_run_root` resolves an id through its record.
+
+`check: grep -q "PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned" src/deepreason/cli/main.py`
+
+**The `runs/` segment is not part of `DEEPREASON_HOME`.** `provider_state_dir`
+returns the home itself; `preparation.py` is the only place that joins `runs/`
+onto it, for both `resolve_managed_run_root` and the service's own `_runs_dir`.
+A reader who greps `provider_profile.py` for the layout will not find it.
+
+`check: python -c "import inspect,deepreason.preparation as p;from deepreason.provider_profile import provider_state_dir;assert 'state / \"runs\"' in inspect.getsource(p.resolve_managed_run_root) and 'runs' not in inspect.getsource(provider_state_dir)"`
+
+**`continue` resumes; it never re-specifies.** Its only arguments are
+`--budget`, `--token-budget` and `--expected-manifest-digest`. Before resuming
+it demands: no staged amendment (`CONTINUE_AMENDMENT_INCOMPLETE`), a
+`run-stop.json` whose digest matches (`CONTINUE_STOP_REQUIRED`,
+`CONTINUE_STOP_DIGEST_MISMATCH`), a `checkpoint.json` fenced on the manifest
+and stop digests (`CONTINUE_CHECKPOINT_REQUIRED`,
+`CONTINUE_CHECKPOINT_MISMATCH`), and no live operator lock
+(`CONTINUE_RUN_ACTIVE`). The prior stop is archived under
+`run-stops/<event_seq>-<digest>.json` before the latest pointer can move.
+
+`check: python -c "import pathlib;s=pathlib.Path('src/deepreason/runtime/continuation.py').read_text();assert all(c in s for c in ('CONTINUE_AMENDMENT_INCOMPLETE','CONTINUE_STOP_REQUIRED','CONTINUE_STOP_DIGEST_MISMATCH','CONTINUE_CHECKPOINT_REQUIRED','CONTINUE_CHECKPOINT_MISMATCH','CONTINUE_RUN_ACTIVE'))"`
+
+**An amendment supersedes the question and the evidence, never the authority.**
+The successor epoch's manifest is the parent's copied verbatim — the two
+digests are equal by construction — so routing, policy and budget authority
+cannot move across a fence.
+
+`check: grep -q 'successor_manifest_digest=parent_manifest.sha256' src/deepreason/amendment/apply.py`
+
+**An amendment appends and edits nothing.** Epoch N lands as a complete
+document set under `run-epochs/NNN/` plus one canonical line in
+`run-amendments.jsonl`; epoch 0's manifest, run input and dossier keep their
+exact bytes forever. Order is fail-closed: stage documents → apply the ledger
+chain → commit the chain line.
+
+`check: python -m pytest tests/test_amendment_epochs.py::test_amendment_appends_an_epoch_and_edits_nothing -q`
+
+**Replay stays valid across the fence.** `verify_root` windows the log by
+`fence_seq`, validating events below it against the parent epoch's documents
+and events at or above it against the successor's.
+
+`check: python -m pytest tests/test_amendment_epochs.py::test_verify_root_stays_valid_across_the_amendment_fence -q`
+
+**A reshaped question is registered as a `seed` problem** carrying
+`from: [superseded_problem_id]`, so the scheduler's seed-priority guarantee
+gives it first claim on the continuation budget — and a half-committed epoch
+blocks the resume outright.
+
+`check: python -m pytest tests/test_amendment_epochs.py::test_reshaped_question_wins_the_continuation_first_cycle tests/test_amendment_epochs.py::test_partial_amendment_refuses_continuation_and_completes_on_rerun -q`
+
+**Retirement is a git rename of a committed root, not a code path.** Nothing in
+`src/` renames or deletes a run root. The recorded instance is the self-study
+ladder: five directories, all carrying the same `managed_run_id`, exactly one
+of which still matches its own directory name.
+
+`check: python -c "import json,glob,os;ps=sorted(glob.glob('experiments/live_research_2026-07-29/selfstudy/runs/*/run-preparation.json'));ids={json.load(open(p))['managed_run_id'] for p in ps};assert len(ps)==5 and len(ids)==1 and sum(os.path.basename(os.path.dirname(p))==json.load(open(p))['managed_run_id'] for p in ps)==1"`
+
+**Only two of those four retirements are recorded as git renames.** Whole-commit
+rename detection over the ladder's `runs/` directory finds exactly two:
+`a7cb7dfb` → `failed-epoch1` (buried inside an unrelated commit) and `1637e808`
+→ `failed-epoch2` (the only rename commit whose subject announces what it is
+doing). `completed-epoch3` and `failed-epoch4` entered the tree as fresh adds
+whose old `run-<id>` path was removed in a *later* commit — for epoch3 the copy
+landed in `6a8758a5` and the delete followed in `f304fec1`, so a commit whose
+subject reads "retire ... as epoch3" contains no rename at all. That is the
+operation CLAUDE.md warns against, preserved here as evidence. Do not use
+`git log --follow` to audit this: `--follow` traces every one of the four back
+through the shared `run-<id>` ancestor path and reports a rename for all of
+them, including the two that were never renamed.
+
+`check: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '`
+
+`check: git log -1 --format=%s 1637e808 | grep -qi retire`
+
+`check: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"`
+
+## Where to change what
+
+| To change... | Edit | Test |
+|---|---|---|
+| what enters the deterministic run id | `preparation.py` `_request_digest` (see Traps — this renames roots) | `tests/test_run_preparation_service.py` |
+| what a re-prepared identity re-validates | `preparation.py` `RunPreparationService._load_existing` | `tests/test_run_preparation_service.py::test_preparation_is_idempotent_without_requalification_or_rewrites` |
+| the refusal when a root has already run | `application/text_runs.py` `TextRunApplicationService._launch` | `tests/test_application_text_runs_d0.py` |
+| what `continue` demands before resuming | `runtime/continuation.py` `prepare_continuation` | `tests/test_continuation.py` |
+| the amendment record's shape or chaining rules | `amendment/models.py` `RunAmendmentV1` | `tests/test_amendment_chain_integrity.py` |
+| what an amendment may supersede, and its staging order | `amendment/apply.py` `_amend_locked`, `_stage_epoch_documents` | `tests/test_amendment_epochs.py` |
+| the progress/status file contract | `runtime/progress.py` `ProgressSink` | `tests/test_progress.py` |
+| how replay windows events by epoch fence | `invariants.py` `_amendment_epochs` — FROZEN, see `DR-INV-frozen-surfaces` | `tests/test_amendment_chain_integrity.py` |
+
+## Traps
+
+- **Two different things are called `run_id`.** `progress.jsonl` and
+  `run-status.json` carry `run_id = manifest.sha256`; the CLI's `reason` payload
+  and every MCP handle carry `run_id = managed_run_id`. They are never equal.
+  The manifest digest embeds `compiled_at`, so two preparations of the same
+  question in two `DEEPREASON_HOME`s share a managed id and differ in manifest
+  digest. Monitoring that greps `run_id` out of `progress.jsonl` and compares it
+  to the directory name will never match.
+- **Reading `RUN_ALREADY_STARTED` as "the run is still running".** It is not a
+  liveness error. Liveness is `RUN_ALREADY_RUNNING` (a live thread in the
+  registry, or a busy operator lock). `RUN_ALREADY_STARTED` says only that
+  `progress.jsonl` or `run-result.json` already exists in the root — which is
+  the normal state of a finished or crashed run, and the signal to retire,
+  continue, or amend.
+- **Changing the budget to "re-run the same question".** Budget is inside the
+  identity digest, so a different `--cycles` mints a different root and a fresh
+  qualification-cached preparation. That is often what an operator wanted, and
+  never what they expected.
+- **Retiring a root without committing the rename first.** CLAUDE.md's rule —
+  `git mv run-<id> failed-epochN-run-<id>`, COMMIT THE RENAME FIRST — exists
+  because the cloud container can roll back to a stale checkout, restoring the
+  old directory name while the relaunch is already in flight. The self-study
+  ladder retired four roots; only `1637e808` ("retire attempt-4 failed root as
+  epoch2 to free run identity") did it the prescribed way, as a single
+  rename-and-commit. See the retirement rule above for what the other three
+  actually look like in the history.
+- **Expecting a retired root to still resolve by id.** The rename does not touch
+  `run-preparation.json`, so the record still names the original
+  `managed_run_id` while the directory does not. `resolve_managed_run_root`
+  refuses it with `MANAGED_RUN_IDENTITY_MISMATCH`. That is the intent: a retired
+  root is evidence, openable by path for `verify_root` and replay, not a run.
+- **Expecting `amend` to hand back a fresh identity.** It does not. The root,
+  the bound manifest digest and the managed id are all unchanged; only
+  `current_epoch` advances. A ladder that keys on the root name observes nothing.
+- **Deleting `run-epochs/NNN/` to clear a half-committed amendment.** Recovery
+  depends on whether the staged epoch reached the ledger. If it applied events,
+  `amend` refuses a different amendment with `AMEND_PENDING_CONFLICT` and only a
+  byte-identical re-run completes it; if it applied none, a different amendment
+  discards the staging itself. Hand-deleting the directory in the first case
+  orphans committed events.

@@ -10,6 +10,7 @@ Usage:
     python tools/docs_verify.py             # run every check; nonzero on failure
     python tools/docs_verify.py --stale     # list docs whose Owns: files moved
     python tools/docs_verify.py --audit     # flag checks that cannot fail
+    python tools/docs_verify.py --links     # every DR- reference resolves
     python tools/docs_verify.py --self-test # verify this tool's own parsing
 """
 
@@ -130,6 +131,31 @@ def cmd_stale() -> int:
     return 0
 
 
+def cmd_links() -> int:
+    """Every DR- reference must resolve to a document that exists.
+
+    A dangling reference is not a harmless TODO: SCHEMA.md tells the reader that
+    an absent seam means the two sides do not interact. A reference to a
+    document nobody wrote makes the map assert an interaction it cannot
+    describe, which is worse than silence. Candidate-but-undocumented seams
+    belong in INDEX.md's matrix, where they are labelled as such.
+    """
+    known = {parse(p).doc_id for p in MAP_DIR.glob("*.md")} - {None}
+    ref = re.compile(r"DR-(?:SUB|CON|SEAM|INV|REC)-[a-z0-9][a-z0-9\-]*")
+    dangling: dict[str, set[str]] = {}
+    for path in sorted(MAP_DIR.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        for match in ref.findall(text):
+            if match not in known:
+                dangling.setdefault(match, set()).add(path.name)
+    for target in sorted(dangling):
+        where = ", ".join(sorted(dangling[target]))
+        print(f"dangling {target}  <- {where}")
+    print(f"docs_verify --links: {len(dangling)} dangling reference(s), "
+          f"{len(known)} document(s)")
+    return 1 if dangling else 0
+
+
 def cmd_audit() -> int:
     """Flag checks that cannot fail, and documents with no checks at all."""
     flagged = 0
@@ -178,12 +204,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--stale", action="store_true")
     parser.add_argument("--audit", action="store_true")
+    parser.add_argument("--links", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         return cmd_self_test()
     if args.stale:
         return cmd_stale()
+    if args.links:
+        return cmd_links()
     if args.audit:
         return cmd_audit()
     return cmd_run()
