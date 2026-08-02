@@ -714,9 +714,23 @@ this tranche is not a frozen-surface change.
       what future runs may do rather than a reinterpretation of what past runs
       did.
 
-- [ ] 16. (all) [COMMIT] Push and confirm clean.
+- [x] 16. (all) [COMMIT] Push and confirm clean.
       done-when: `git status --porcelain` is empty AND the branch head is on
       origin
+
+      Output:
+
+          $ git status --porcelain
+          (empty)
+
+          local  HEAD: 2f02dfc1137de41b31d2dd23446af28622aa753a
+          origin HEAD: 2f02dfc1137de41b31d2dd23446af28622aa753a
+          branch head IS on origin
+
+      Twelve commits, one per step, `c1cfb891`..`2f02dfc1` on
+      `claude/amendment-epochs-om0ztb`. Every scratch artifact — the sweep
+      script, both sweep files, the diff script — lives in the session
+      scratchpad and none of it is in the repository.
 
 ## Coverage
 
