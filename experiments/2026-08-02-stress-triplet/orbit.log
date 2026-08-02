@@ -8,3 +8,5 @@ Credential reference: OLLAMA_API_KEY (already available)
 Provider configuration saved. Qualification remains an explicit action.
 Next action: deepreason qualify
 setup_rc=0
+qualify_rc=0 qualify_seconds=337
+preflight: 0 manifest(s) present pre-reason (expect 0; policy prints post-run)

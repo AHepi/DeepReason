@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "Rule 90 reaches a length-2 cycle within 4*W steps for W=5,6,7,8,9,10,11. Rule 184 reaches a length-2 cycle within 4*W steps for W=5,6,7,8,9,10,11. Rule 110 reaches a length-2 cycle within 4*W steps ONLY for W=5. The structural property separating the pairs is additivity: rules 90 and 184 are additive (linear/affine over GF(2)). Rule 110 is non-additive, and its evolution can create or destroy 01 boundaries. Rule 54 is non-additive; it creates 11 boundaries and will NOT reach length-2 cycles within 4*W steps for W>5.",
+    "mechanism": "Rule 90 is linear over GF(2) (new cell = left XOR right). In a cyclic topology, the state evolves by squaring the transition matrix. Over GF(2), matrix squaring yields A^(2^k) = I after O(log N) steps, bounding maximum cycle length by 2 and transient by W. Rule 184 is the ballistic annihilation model (traffic rule). Its dynamics are equivalent to two independent Rule 90 subsystems (left-moving and right-moving particles). Therefore, its cycle and transient lengths inherit the same 4*W bound from Rule 90. Rule 110 is Turing complete and non-linear. Boundaries between 0-regions and 1-regions interact non-trivially. While small widths (W=5) lack the configuration space to avoid settling, W>=6 admits glider collisions that extend transients far beyond 4*W steps, failing the property. Rule 54 shares the non-linear boundary creation of Rule 110, failing similarly.",
+    "counterconditions": [
+      "If exhaustive enumeration of Rule 90 shows any initial state of width W (5..11) whose transient + cycle length exceeds 4*W, the additivity bound claim is falsified.",
+      "If Rule 184 simulation reveals an initial state with cycle length > 2 or transient > 4*W for any W in 5..11, the Rule 90 decomposition equivalence is falsified.",
+      "If Rule 110 enumeration demonstrates all states for W=6 reach a cycle of length <= 2 within 24 steps, the claim that W=5 is the sole passing width for Rule 110 is falsified.",
+      "If Rule 54 enumeration demonstrates all states for W=7 reach a cycle of length <= 2 within 28 steps, the prediction that Rule 54 fails the bound due to non-additivity is falsified."
+    ],
+    "typicality": 0.65,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}

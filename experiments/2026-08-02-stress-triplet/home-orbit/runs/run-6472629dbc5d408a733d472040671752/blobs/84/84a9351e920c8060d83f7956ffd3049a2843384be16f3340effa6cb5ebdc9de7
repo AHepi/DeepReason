@@ -1,0 +1,64 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded reasoning-envelope candidate or honest abstention.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/ReasoningCandidateProposal"}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-1a585e9647728d95c37d95ec939c7898
+Consider width-W elementary cellular automata with wrap-around, W between 5
+and 11, under rules 90, 110 and 184. Question: for which (rule, W) pairs does
+every initial state reach a cycle of length at most 2 within 4*W steps, and
+what structural property of the rule separates the pairs that do from the
+pairs that do not? Candidates must include a runnable Python entry point
+solve(rule, width) returning {"all_short_cycles": bool, "witness": [...]}
+where witness is a concrete initial state achieving the longest observed
+transient. Claims about exhaustiveness are claims about enumeration: file
+typed sandboxed Python simulations (simulation_mode sandboxed_python_v1) that
+RETURN the per-(rule,width) transient and cycle-length tables your claim
+rests on - never a summary boolean. A separating property that is merely
+renamed data is worth little; predict the behaviour of rule 54, which is NOT
+in the required set, and state how the prediction would be checked.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[11cc8b29802dfcc7] You are being asked to invent a runtime intervention on language models, and the obvious way to test one is to call a language model. You cannot do that from th
+[1f2dcf37214f166e] ## Directed research (allowlist: en.wikipedia.org, ollama.com)
+[2ad5ee975aa47cfd] Requirement 4 asks for a mechanism that predicts something the data does not already show. That does not arrive in one step. Use scratch to carry the provisiona
+[2c7f9139e06d0e4c] `sandboxed_python_v1` executes model-authored Python inside an unshared network namespace (`unshare --net`), and the backend REFUSES TO RUN if the host cannot c
+[47e8268b67f829b3] Each capability has a typed proposal channel. Work that only DESCRIBES using a capability in prose — without filing the typed proposal — is unverified by constr
+[4bb7e20614908425] # Capability contract for this run
+[5344e98e1f8b4aa2] Contained Python: scratch working directory, scrubbed environment, hard resource limits, NO network. Deterministic and self-contained; integer and float arithme
+[66c39360f07fd93e] This is a real constraint on what you can conclude, and you should say so in your answer rather than write as though you had run the experiments yourself.
+[76f0279ea0f32132] The nine jolts are: `baseline`, `temperature_high` (T=1.3), `temperature_max` (T=1.8), `top_p_wide` (T=1.0, top_p=0.99), `seed_varied` (explicit per-call seed),
+[80bd9d138bfedbd8] samples how many calls returned usable text distinct number of distinct normalised answers top_mass share of samples on the single most common answer (1.0 = tot
+[87d860c3986771e9] So the live calls were made for you, in advance, by a fixed harness-side driver whose source you are shown (`probe.py`, summarised below). You reason over real 
+[99957307cd0311ac] They are ATTACHED as an evidence document (`JOLT_MEASUREMENTS.md`), not sealed into the simulation input catalog: this CLI exposes no flag for the catalog, so t
+[a58a38b484411c80] `school_stance` is measured deliberately: it is the mechanism you are being asked to improve on, and it gets no benefit of the doubt.
+[b3c47bbbb01a0cec] `ollama.com` is on the allowlist for this run so you can read the provider's own documentation on the runtime knobs actually exposed — sampling parameters, seed
+[b59c15516dc68b7a] ## Sandboxed simulation (simulation_mode sandboxed_python_v1)
+[c8a3ea0ddfb3827d] ## The supplied measurements
+[cd18be814740a545] ## Scratch workshop
+[d1090aab641fd485] A simulation that cannot separate rival predictions is weight, not evidence. Return the discriminating quantity — the cell, the histogram, the divergence — neve
+[e0661e2159f4f710] Fit for this challenge, in rough order of how decisive it is:
+[e2da1a9e211cce02] ## What is different about this run, stated plainly
+[e509adc584787ed1] - **Testing a claim about the measurements.** Any statement that a jolt works is a statement about `top_mass` and `distinct` across cells. Compute it and RETURN
+[eeb13668505186e9] Per cell you get:
+[f29a9220b4b956df] model glm-5.2 samples 12 independent calls per (jolt, task) cell tasks 6 prompts with a known d

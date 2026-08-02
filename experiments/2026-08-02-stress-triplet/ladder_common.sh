@@ -17,6 +17,11 @@ REASONING_FLAG=""
 [ "$REASONING" = "none" ] && REASONING_FLAG="--reasoning none"
 ATTACH_FLAGS=""
 for f in ${ATTACHES:-}; do ATTACH_FLAGS="$ATTACH_FLAGS --attach $f"; done
+# Qualification subjects include opt-ins: qualify with --attached-evidence
+# only when reason will actually attach, or the two phases qualify different
+# subjects and reason refuses with QUALIFICATION_NOT_CONFIGURED.
+QUAL_EVIDENCE_FLAG=""
+[ -n "${ATTACHES:-}" ] && QUAL_EVIDENCE_FLAG="--attached-evidence"
 {
   echo "=== $NAME ladder start $(date -u +%FT%TZ) ==="
   timeout 300 deepreason setup \
@@ -26,7 +31,7 @@ for f in ${ATTACHES:-}; do ATTACH_FLAGS="$ATTACH_FLAGS --attach $f"; done
     --credential-env OLLAMA_API_KEY $REASONING_FLAG
   echo "setup_rc=$?"
   q0=$SECONDS
-  timeout 14400 deepreason qualify --yes --json --concurrency 4 --attached-evidence \
+  timeout 14400 deepreason qualify --yes --json --concurrency 4 $QUAL_EVIDENCE_FLAG \
     > "$LIVE/$NAME-qual.json" 2> "$LIVE/$NAME-qual.err"
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
   # Preflight gate: the compiled policy surface, printed BEFORE any reasoning

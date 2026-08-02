@@ -1,0 +1,7 @@
+```json
+{
+  "operation": "replace",
+  "path": "/simulation_proposals/0/parameter_definitions/0/values",
+  "value": "[{\"rule\": 90, \"width\": 5}, {\"rule\": 90, \"width\": 6}, {\"rule\": 90, \"width\": 7}, {\"rule\": 90, \"width\": 8}, {\"rule\": 90, \"width\": 9}, {\"rule\": 90, \"width\": 10}, {\"rule\": 90, \"width\": 11}, {\"rule\": 110, \"width\": 5}, {\"rule\": 110, \"width\": 6}, {\"rule\": 110, \"width\": 7}, {\"rule\": 110, \"width\": 8}, {\"rule\": 110, \"width\": 9}, {\"rule\": 110, \"width\": 10}, {\"rule\": 110, \"width\": 11}, {\"rule\": 184, \"width\": 5}, {\"rule\": 184, \"width\": 6}, {\"rule\": 184, \"width\": 7}, {\"rule\": 184, \"width\": 8}, {\"rule\": 184, \"width\": 9}, {\"rule\": 184, \"width\": 10}, {\"rule\": 184, \"width\": 11}, {\"rule\": 54, \"width\": 5}, {\"rule\": 54, \"width\": 6}, {\"rule\": 54, \"width\": 7}, {\"rule\": 54, \"width\": 8}, {\"rule\": 54, \"width\": 9}, {\"rule\": 54, \"width\": 10}, {\"rule\": 54, \"width\": 11}]"
+}
+```
