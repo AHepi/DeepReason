@@ -109,7 +109,14 @@ the editable install.
 ### The root sweep
 
 Before and after any change to a reader, a guard, or an authority rule, sweep
-every openable run root and diff:
+every openable run root and diff. The instrument is committed, not per-session:
+
+    python tools/root_sweep.py <output.txt>    # ~10 min over 42 roots
+
+`check: python -c "import ast; ast.parse(open('tools/root_sweep.py').read())"`
+`check: grep -q "verify_root_report" tools/root_sweep.py`
+
+Fields compared:
 
     valid, epistemic_checks_passed, len(state.att), adjudication-blindness count
 

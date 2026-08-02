@@ -28,10 +28,24 @@ invalidates the checklist's audit trail.
    or validator of the append-only record, re-run `verify_root` on
    one known-good committed root and one defect-era root — prior
    verdicts must be unchanged except where SPEC.md says otherwise.
+4a2. **Frozen-surface diff — paste it, empty or explained:**
+
+        git diff --stat <tranche-base>..HEAD -- \
+          src/deepreason/capabilities/state.py src/deepreason/harness.py \
+          src/deepreason/invariants.py src/deepreason/run_manifest.py \
+          src/deepreason/qualification.py
+
+   Empty output is the expected result and is pasted as proof. Non-empty
+   output is a FAIL unless REQUEST.md quotes the operator approving that
+   exact surface — convention guards these files at design time, but this
+   paste is the one MECHANICAL tripwire on the path, so it is not optional.
+
 4b. **Map validation — the documentation half of the gate:**
 
         python tools/docs_verify.py          # must report 0 failed
         python tools/docs_verify.py --audit  # must report 0 findings
+        python tools/docs_verify.py --links  # must report 0 dangling
+        python tools/docs_verify.py --coverage  # 0 findings on swept seams
         python tools/docs_verify.py --stale  # read; judge each entry
 
    A failing check is a FAIL verdict exactly like a failing test: it
@@ -63,6 +77,8 @@ invalidates the checklist's audit trail.
     ## Map
     docs_verify: <N documents, M checks, 0 failed> : PASS|FAIL
     docs_verify --audit: <N findings> : PASS|FAIL
+    docs_verify --links: <N dangling> : PASS|FAIL
+    docs_verify --coverage: <N findings, M seams without a Sweep header> : PASS|FAIL
     docs_verify --stale: <each entry, updated or dismissed with reason>
     new checks added by this change: <ids/files, or "none - see why">
     ## Requirement sweep

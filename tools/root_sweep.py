@@ -1,0 +1,33 @@
+"""One sweep of every openable run root. Re-run verbatim before and after.
+
+Probe rule: a missing attribute returns a falsy default indistinguishable from
+a real measurement, so every attribute is asserted before its value is read.
+"""
+
+import pathlib
+import sys
+
+from deepreason.harness import Harness
+from deepreason.verification.report import verify_root_report
+
+out = pathlib.Path(sys.argv[1])
+lines = []
+for root in sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jsonl")}):
+    try:
+        report = verify_root_report(root)
+        for field in ("valid", "epistemic_checks_passed", "epistemic"):
+            assert hasattr(report, field), f"report has no {field}"
+        blind = sum(
+            1 for f in report.epistemic if f.check == "adjudication-blindness"
+        )
+        harness = Harness(root, read_only=True)
+        assert hasattr(harness.state, "att"), "state has no att"
+        lines.append(
+            f"{str(root):72} valid={str(report.valid):5} "
+            f"epistemic_passed={str(report.epistemic_checks_passed):5} "
+            f"att={len(harness.state.att):3} blind={blind}"
+        )
+    except Exception as error:
+        lines.append(f"{str(root):72} ERROR {type(error).__name__}: {error}")
+out.write_text("\n".join(lines) + "\n")
+print(f"SWEEP COMPLETE: {len(lines)} roots -> {out}")
