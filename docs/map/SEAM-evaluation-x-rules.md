@@ -123,9 +123,15 @@ would look like tidying and would change what prose may refute (see Traps).
 `oracle`, not `measures`, not `informal`.** A verdict reaches the labelling
 machinery only after it has become a warrant on the graph; the module that
 decides what stands cannot recompute a verdict, and so cannot disagree with the
-record about one. The check is an AST walk over all three import forms, because
-`from deepreason import programs` defeats a module-path grep.
-`check: python -c "import ast,pathlib;E={'programs','oracle','oracle_sandbox','measures','informal'};F=list(pathlib.Path('src/deepreason/adjudication').rglob('*.py'));assert F;N=[n for p in F for n in ast.walk(ast.parse(p.read_text()))];B=[a.name for n in N if isinstance(n,ast.ImportFrom) and n.module=='deepreason' for a in n.names if a.name in E]+[n.module for n in N if isinstance(n,ast.ImportFrom) and n.module and n.module.split('.')[1:2] and n.module.split('.')[1] in E]+[a.name for n in N if isinstance(n,ast.Import) for a in n.names if a.name.split('.')[1:2] and a.name.split('.')[1] in E];raise SystemExit(1 if B else 0)"`
+record about one. The check is an AST walk because `from deepreason import
+programs` defeats a module-path grep, and it RESOLVES relative imports against
+each file's own package before judging them: the earlier version compared
+`n.module` verbatim, so `from ..programs import evaluate` and `from .. import
+programs` both walked straight through it (measured — both now fail it). The
+three positive greps are the counterpart: an absence check over a directory
+passes for free once the directory is a husk, so the labelling entry points must
+still be there for the absence to mean anything.
+`check: python -c "import ast,pathlib;E={'programs','oracle','oracle_sandbox','measures','informal'};R=pathlib.Path('src/deepreason');Q=lambda p:p.relative_to(R.parent).with_suffix('').parts;M=lambda p,n:'.'.join(list(Q(p)[:len(Q(p))-n.level] if n.level else [])+([n.module] if n.module else []));F=sorted(R.joinpath('adjudication').rglob('*.py'));assert len(F)>=4;N=[(p,n) for p in F for n in ast.walk(ast.parse(p.read_text()))];A=lambda s:s.split('.');B=[a.name for p,n in N if isinstance(n,ast.ImportFrom) and M(p,n)=='deepreason' for a in n.names if a.name in E]+[M(p,n) for p,n in N if isinstance(n,ast.ImportFrom) and A(M(p,n))[:1]==['deepreason'] and A(M(p,n))[1:2] and A(M(p,n))[1] in E]+[a.name for p,n in N if isinstance(n,ast.Import) for a in n.names if A(a.name)[:1]==['deepreason'] and A(a.name)[1:2] and A(a.name)[1] in E];raise SystemExit(1 if B else 0)" && grep -q "^def build_att(" src/deepreason/adjudication/edges.py && grep -q "^def grounded_extension(" src/deepreason/adjudication/grounded.py && grep -q "^def final_labels(" src/deepreason/adjudication/support.py`
 
 **No rule indexes the program registry, and no rule reaches the sandbox.**
 `PROGRAMS` and `BLOB_PROGRAMS` are never imported into `rules/` and never touched
@@ -143,8 +149,13 @@ sandbox import does not make the pair pass.
 guards, never a rule that proposes or criticises. Evaluation does not get to
 conjecture, and it does not get to mount an argument; it produces verdicts and
 hands them to the one constructor. The check pins the exact set, so importing
-`crit_argumentative` into `measures/hv.py` fails it (measured).
-`check: python -c "import ast,pathlib;F=[p for d in ('measures','informal') for p in pathlib.Path('src/deepreason').joinpath(d).rglob('*.py')];assert F;N=[n for p in F for n in ast.walk(ast.parse(p.read_text()))];names={a.name for n in N if isinstance(n,ast.ImportFrom) and n.module and n.module.startswith('deepreason.rules') for a in n.names};raise SystemExit(0 if names == {'register_fail_warrant','verdict_on_record','spawn','_observe_case','execution_backed','formally_backed'} else 1)"`
+`crit_argumentative` into `measures/hv.py` fails it (measured) — in the relative
+form `from ..rules.crit import ...` as well as the absolute one, which the
+earlier `n.module.startswith('deepreason.rules')` test missed (also measured).
+Pinning NAMES only works while the package itself stays unimported, so
+`from deepreason import rules` and `import deepreason.rules.crit` are refused
+too: either would make the arrow silently unbounded.
+`check: python -c "import ast,pathlib;R=pathlib.Path('src/deepreason');Q=lambda p:p.relative_to(R.parent).with_suffix('').parts;M=lambda p,n:'.'.join(list(Q(p)[:len(Q(p))-n.level] if n.level else [])+([n.module] if n.module else []));F=[p for d in ('measures','informal') for p in sorted(R.joinpath(d).rglob('*.py'))];assert len(F)>=11;N=[(p,n) for p in F for n in ast.walk(ast.parse(p.read_text()))];names={a.name for p,n in N if isinstance(n,ast.ImportFrom) and M(p,n).startswith('deepreason.rules') for a in n.names};whole=[a.name for p,n in N if isinstance(n,ast.ImportFrom) and M(p,n)=='deepreason' for a in n.names if a.name=='rules']+[a.name for p,n in N if isinstance(n,ast.Import) for a in n.names if a.name.split('.')[:2]==['deepreason','rules']];raise SystemExit(0 if not whole and names=={'register_fail_warrant','verdict_on_record','spawn','_observe_case','execution_backed','formally_backed'} else 1)"`
 
 **Prose never mints a DEMONSTRATIVE warrant, and `crit.py` mints no
 ARGUMENTATIVE one.** `WarrantType.DEMONSTRATIVE` is constructed exactly once in
@@ -154,8 +165,12 @@ ARGUMENTATIVE constructors and none is in the criticism rule: two in
 `informal/trial.py` (the defended trial and the pairwise loser), one in
 `rules/vision.py` behind the narrow guard, one in `rules/experiment.py` against
 a proposed PROPERTY rather than a candidate, and one in `imports.py` for an
-imported design. `crit.py` routes to the trial instead of packaging.
-`check: test "$(grep -rn "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason | wc -l)" -eq 1 && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && test "$(grep -rn "WarrantType.ARGUMENTATIVE" --include=*.py src/deepreason | wc -l)" -eq 5 && ! grep -q "WarrantType.ARGUMENTATIVE" src/deepreason/rules/crit.py && grep -q "execution_backed" src/deepreason/rules/vision.py`
+imported design. `crit.py` routes to the trial instead of packaging. The
+`crit_argumentative` grep is there to pay for the negative next to it: measured,
+renaming or deleting `rules/crit.py` made the bare `! grep` pass while proving
+nothing, and the ARGUMENTATIVE count does not notice because the file
+contributes none.
+`check: test "$(grep -rn "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason | wc -l)" -eq 1 && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && test "$(grep -rn "WarrantType.ARGUMENTATIVE" --include=*.py src/deepreason | wc -l)" -eq 5 && grep -q "^def crit_argumentative(" src/deepreason/rules/crit.py && ! grep -q "WarrantType.ARGUMENTATIVE" src/deepreason/rules/crit.py && grep -q "execution_backed" src/deepreason/rules/vision.py`
 
 **There is no cache of "is this target formal", and the guards do not read the
 one cache that exists.** Both predicates call `programs.evaluate` live on every

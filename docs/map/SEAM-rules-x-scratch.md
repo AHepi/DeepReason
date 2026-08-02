@@ -44,13 +44,13 @@ of the scratchpad is `conj.py`.
 | Commit point | `scratch/conjecture.py` | `prepare_conjecture_context_call` / `commit_conjecture_context` | the receipt and its coverage progress become durable only immediately before dispatch |
 | Write-back gate | `rules/conj.py` | `validate_proposal(..., visible_aliases=scratch_aliases, context_ref=exposure_ref)` then `admit_proposal(...)` with the same pair | the whole proposal resolves against what was actually shown BEFORE the first scratch event |
 | Component isolation | `rules/conj.py` | `_v6_component_diagnostic(component="scratch", ...)` at `semantic_validation` and `materialization` | a rejected or half-written scratch proposal does not cancel the candidates in the same turn |
-| The fence, and only the fence | `rules/crit.py` | `scratch_fence_seq=fence` in `crit_argumentative_batch` and the atomic critic child | criticism orders itself against the scratch log without reading it |
+| The fence, and only the fence | `rules/crit.py` | `scratch_fence_seq=fence` in `_v6_transactional_batch_call` and `_v6_transactional_atomic_critic_call`, the two helpers `crit_argumentative_batch` dispatches through | criticism orders itself against the scratch log without reading it |
 | Replay-side mirror | `workflow/conjecture_recovery.py` | scratch exposure ⟺ `call.conjecture_context`, then `validate_conjecture_context_call` | a recovered scratch-bearing provider result with no context authority is refused; owned by `DR-SUB-workflow`, but it re-derives THIS agreement |
 | Replay validation | `invariants.py` | `validate_conjecture_context` | the context fence strictly precedes the call event it authorized |
 
 The criticism side's total scratch surface is two fence assignments, each equal
 to the formal fence at the same call.
-`check: test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c "scratch_fence_seq=fence" src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c "formal_fence_seq=fence" src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c "fence = max(0, harness._next_seq - 1)" src/deepreason/rules/crit.py)" -eq 2`
+`check: test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c fence src/deepreason/rules/crit.py)" -eq 6 && test "$(grep -cE "^ +(formal|scratch)_fence_seq=fence,$" src/deepreason/rules/crit.py)" -eq 4 && test "$(grep -cE "^ +fence = max\(0, harness\._next_seq - 1\)$" src/deepreason/rules/crit.py)" -eq 2`
 
 Scratch reaches a conjecture pack only through the typed record, in a section
 the allocator may not drop or compress.
@@ -60,7 +60,7 @@ The planned context carries one fence for both logs, matched to the attention
 pack it was built from; a plan whose fence has moved cannot commit, a historical
 view can neither plan nor commit at all, and `verify_root` re-checks on replay
 that the fence precedes its call.
-`check: grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && grep -q "attention pack does not match the scratch fence" src/deepreason/scratch/conjecture.py && grep -q "plan_fence = harness._next_seq - 1" src/deepreason/rules/conj.py && grep -q "context fence does not precede the call event" src/deepreason/invariants.py && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
+`check: grep -qE "^ +if self\.formal_fence_seq != self\.scratch_fence_seq:$" src/deepreason/scratch/conjecture.py && grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && grep -qE "^ +if self\.attention_pack\.state_seq != self\.scratch_fence_seq:$" src/deepreason/scratch/conjecture.py && grep -q "attention pack does not match the scratch fence" src/deepreason/scratch/conjecture.py && test "$(grep -cE "^ +plan_fence = harness\._next_seq - 1$" src/deepreason/rules/conj.py)" -eq 2 && grep -qE "^ +if receipt\.formal_fence_seq >= event\.seq:$" src/deepreason/invariants.py && grep -q "context fence does not precede the call event" src/deepreason/invariants.py && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
 
 The sealed bytes are counted three times on the way to the provider: in the
 pack, in the receipt, and in the finished prompt.
@@ -75,7 +75,7 @@ scratch event.
 
 A scratch component that fails is diagnosed in two typed phases; the turn's
 valid candidates still commit.
-`check: test "$(grep -c 'component="scratch",' src/deepreason/rules/conj.py)" -eq 2 && python -m pytest tests/test_v6_conjecture_component_atomicity.py::test_valid_candidate_and_invalid_optional_scratch_complete_partially -q`
+`check: test "$(grep -c 'component="scratch",' src/deepreason/rules/conj.py)" -eq 2 && python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/conj.py').read_text());C=[(h,c) for n in ast.walk(t) if isinstance(n,ast.Try) for h in n.handlers for c in ast.walk(h) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_v6_component_diagnostic' and any(k.arg=='component' and getattr(k.value,'value',None)=='scratch' for k in c.keywords)];assert sorted(getattr(k.value,'value',None) for _,c in C for k in c.keywords if k.arg=='phase')==['materialization','semantic_validation'],C;assert not [r for h,_ in C for r in ast.walk(h) if isinstance(r,ast.Raise)],'a scratch component handler re-raises and cancels the turn'" && python -m pytest tests/test_v6_conjecture_component_atomicity.py::test_valid_candidate_and_invalid_optional_scratch_complete_partially -q`
 
 Recovery refuses the two mismatched shapes: scratch exposure without a context
 receipt, and a context receipt without scratch exposure.
@@ -95,7 +95,7 @@ mistake this section exists to prevent.
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
 contract takes aliases and no critic output model has any scratch field at all.
 The workshop belongs to the move that invents, in both directions.
-`check: python -c "import inspect;from deepreason.llm import wire;assert 'scratch_aliases' in inspect.signature(wire.ConjecturerTurnWireContractV6.__init__).parameters;assert 'scratch_proposal' in wire.ConjecturerTurnWireV6.model_fields;assert not [n for n in ('BatchCriticWireContractV2','CriticWireContract','AtomicCriticWireContractV1') if 'scratch_aliases' in inspect.signature(getattr(wire,n).__init__).parameters];assert not [f for m in (wire.ArgumentativeCriticOutput,wire.BatchCriticOutput) for f in m.model_fields if 'scratch' in f]"`
+`check: python -c "import inspect;from deepreason.llm import wire;N=('BatchCriticWireContractV2','CriticWireContract','AtomicCriticWireContractV1');S=[inspect.signature(getattr(wire,n).__init__).parameters for n in N];assert 'scratch_aliases' in inspect.signature(wire.ConjecturerTurnWireContractV6.__init__).parameters;assert 'scratch_proposal' in wire.ConjecturerTurnWireV6.model_fields;assert not [k for p in S for k in p if 'scratch' in k];assert not [k for p in S for k,v in p.items() if v.kind in (v.VAR_KEYWORD,v.VAR_POSITIONAL)],'a variadic critic __init__ can absorb scratch_aliases without naming it';assert not [a for n in N for a in dir(getattr(wire,n)) if 'scratch' in a],'a critic contract exposes a scratch attribute';assert not [f for m in (wire.ArgumentativeCriticOutput,wire.BatchCriticOutput) for f in m.model_fields if 'scratch' in f]"`
 
 **The separation is enforced by an AST walk, not a header grep**, because a
 function-local `import deepreason.scratch...` inside `crit.py` would satisfy a
@@ -107,11 +107,16 @@ and a trace blob, never a scratch object.
 `check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence tests/test_prose_refutation_boundaries.py::test_the_defended_trial_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge -q`
 
 **An unresolved question is not a problem.** `ScratchProposalV1` has an
-`unresolved_questions` field and `scan_spawns` mints problems from nine
-structural triggers over the formal graph; no edge joins them, and none should.
-A spawn is a commitment to spend the run's budget; a question in the workshop is
-explicitly allowed to be idle, wrong, or unanswerable. The same holds for the
-anti-relapse gate, which compares formal verdict vectors and never a note.
+`unresolved_questions` field and `scan_spawns` mints problems from seven
+structural triggers over the formal graph — successor, discrimination,
+remove-arbitrariness, explanation-debt, connection, integration, research. (The
+`SpawnTrigger` enum carries two more that `scan_spawns` never mints: `SEED` is
+the operator's question, and `AUDIT_CRITIC` is raised by the response ladder in
+`informal/appellate.py`.) No edge joins the two, and none should. A spawn is a
+commitment to spend the run's budget; a question in the workshop is explicitly
+allowed to be idle, wrong, or unanswerable. The same holds for the anti-relapse
+gate, which compares formal verdict vectors and never a note.
+`check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SUCCESSOR'],sorted(m)" && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
 
 **Nothing that crosses the seam leaves a mark on the formal graph.** A scratch
 event's `state_diff` is empty, no scratch handle or receipt id appears in any

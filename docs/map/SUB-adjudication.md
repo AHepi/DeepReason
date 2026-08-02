@@ -19,11 +19,15 @@ topological order and demotes anything whose premises fell to
 `suspended_unsupported`, because an orphaned claim is not a false one. Its inputs
 are deliberately starved: measures, school membership, novelty and Pareto rank
 must not enter here, and act upstream through Spawn, budgeted commitments, or
-attention instead. Three files, no I/O, no configuration, no state.
+attention instead. Three logic modules plus a docstring-only `__init__`, no I/O,
+no configuration, no state.
 
 The package imports nothing but `deepreason.ontology`, and that narrowness is the
-blindness property, not an accident of the current implementation.
-`check: [ "$(grep -rhoE "from deepreason\.[a-z]+" src/deepreason/adjudication/*.py | sort -u | tr "\n" ",")" = "from deepreason.adjudication,from deepreason.ontology," ]`
+blindness property, not an accident of the current implementation. Read the
+import graph from the AST, not from one spelling of `import`: `import
+deepreason.harness`, `from deepreason import harness` and `from . import edges`
+are all ways in, and a grep for `from deepreason\.` sees none of them.
+`check: python -c "import ast,pathlib; d=pathlib.Path('src/deepreason/adjudication'); assert sorted(p.name for p in d.glob('*.py'))==['__init__.py','edges.py','grounded.py','support.py']; names=[x for p in sorted(d.glob('*.py')) for n in ast.walk(ast.parse(p.read_text())) for x in ([a.name for a in n.names] if isinstance(n,ast.Import) else ([n.module or '']+(['deepreason.'+a.name for a in n.names] if n.module=='deepreason' else [])+(['deepreason.RELATIVE'] if n.level else []) if isinstance(n,ast.ImportFrom) else []))]; roots={'.'.join(x.split('.')[:2]) for x in names if x.split('.')[0]=='deepreason'}; assert roots=={'deepreason.adjudication','deepreason.ontology'}, roots"`
 
 No provenance, school, measure, or ranking word appears anywhere in the three
 logic modules, and no function touches instance state, a file, or JSON.
@@ -40,12 +44,16 @@ logic modules, and no function touches instance state, a file, or JSON.
 - `final_labels(label0, dep_edges)` — pass 2. The only producer of `Status` values in the codebase.
 - `evidence_lineage` (nested in `build_att`) — an evidence artifact plus its transitive registered `dependence` sources; the reach of evidence invalidation.
 
-`check: grep -q "def build_att" src/deepreason/adjudication/edges.py && grep -q "def build_dep" src/deepreason/adjudication/edges.py && grep -q "def toposort" src/deepreason/adjudication/edges.py && grep -q "def evidence_lineage" src/deepreason/adjudication/edges.py && grep -q "class DependenceCycleError" src/deepreason/adjudication/edges.py && grep -q "def grounded_extension" src/deepreason/adjudication/grounded.py && grep -q "def label0" src/deepreason/adjudication/grounded.py && grep -q "def final_labels" src/deepreason/adjudication/support.py`
+Resolved from the AST, so that a rename to `final_labels_v2` is a failure rather
+than a substring match, and so that `evidence_lineage`'s nesting inside
+`build_att` — the reason its cache cannot outlive one call — is asserted
+structurally.
+`check: python -c "import ast,pathlib; top=lambda f: {n.name:n for n in ast.parse(pathlib.Path('src/deepreason/adjudication/'+f).read_text()).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}; e=top('edges.py'); assert {'build_att','build_dep','toposort','DependenceCycleError'} <= set(e), sorted(e); assert isinstance(e['DependenceCycleError'],ast.ClassDef); assert 'evidence_lineage' not in e; assert 'evidence_lineage' in {n.name for n in ast.walk(e['build_att']) if isinstance(n,ast.FunctionDef)}; assert {'grounded_extension','label0'} <= set(top('grounded.py')), sorted(top('grounded.py')); assert 'final_labels' in top('support.py'), sorted(top('support.py'))"`
 
 Exactly two modules in `src/` call any of them: `harness.py` (`Harness._adjudicate`,
 the sole writer of `state.status`) and `invariants.py` (`verify_root` re-derives
 `dep` and re-runs `toposort` rather than trusting the recorded graph).
-`check: [ "$(grep -rl "from deepreason.adjudication" --include=*.py src/ | grep -cv "^src/deepreason/adjudication/")" = 2 ] && [ "$(grep -rc "self.state.status = " src/deepreason/harness.py)" = 1 ] && grep -q "def _adjudicate" src/deepreason/harness.py && grep -q "self._apply_event(event, adjudicate=False)" src/deepreason/harness.py && grep -q "raise WellFormednessError(str(e)) from e" src/deepreason/harness.py && grep -q "toposort(set(h.state.artifacts), build_dep(h.state.artifacts))" src/deepreason/invariants.py`
+`check: python -c "import pathlib; imp=sorted(str(p) for p in pathlib.Path('src').rglob('*.py') if 'from deepreason.adjudication' in p.read_text() and 'deepreason/adjudication/' not in str(p)); assert imp==['src/deepreason/harness.py','src/deepreason/invariants.py'], imp" && [ "$(grep -rc "self.state.status = " src/deepreason/harness.py)" = 1 ] && grep -qE "^    def _adjudicate\(" src/deepreason/harness.py && grep -q "self._apply_event(event, adjudicate=False)" src/deepreason/harness.py && grep -A2 "except DependenceCycleError as e:" src/deepreason/harness.py | grep -q "raise WellFormednessError(str(e)) from e" && grep -q "toposort(set(h.state.artifacts), build_dep(h.state.artifacts))" src/deepreason/invariants.py`
 
 ## State it owns
 
@@ -56,8 +64,10 @@ a single `build_att` invocation. What persists is its *output*.
 `.status` and `.conn`, and `Harness._apply_event` records the per-event delta on
 the log line as `att+`, `dep+` and `status_changed`. Those three keys on every
 line of `log.jsonl` are this package's only durable trace — and the only
-epistemic field the record has.
-`check: python -c "import json,pathlib; L=[json.loads(l) for l in pathlib.Path('experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf/log.jsonl').read_text().splitlines()]; assert {'att+','dep+','status_changed'} <= set(L[0]['state_diff']); assert any(e['state_diff']['status_changed'] for e in L)"`
+epistemic field the record has. Reading a committed root proves only that the
+record once had those keys; the writer has to be exercised too, or renaming the
+`att+` wire alias and zeroing `status_changed` both pass.
+`check: python -c "import json,pathlib,tempfile; from deepreason.harness import Harness; from deepreason.ontology import Provenance,Warrant,WarrantType; t=pathlib.Path(tempfile.mkdtemp())/'run'; h=Harness(t); a=h.create_artifact('claim',provenance=Provenance(role='seed')); nu=h.create_artifact('nu',provenance=Provenance(role='critic')); h.create_artifact('critic',provenance=Provenance(role='critic'),warrants=[Warrant(id='w',target=a.id,type=WarrantType.ARGUMENTATIVE,validity_node=nu.id)]); L=[json.loads(l) for l in (t/'log.jsonl').read_text().splitlines()]; assert all({'att+','dep+','status_changed'} <= set(e['state_diff']) for e in L); assert L[-1]['state_diff']['att+'] and L[-1]['state_diff']['status_changed'], L[-1]; assert h.state.att and h.state.status and h.state.conn is not None; R=[json.loads(l) for l in pathlib.Path('experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf/log.jsonl').read_text().splitlines()]; assert all({'att+','dep+','status_changed'} <= set(e['state_diff']) for e in R); assert any(e['state_diff']['status_changed'] for e in R)"`
 
 The two passes have different output types, and the boundary is load-bearing:
 `label0` hands back plain strings, `final_labels` is where `Status` enters, and
@@ -78,12 +88,20 @@ The two passes have different output types, and the boundary is load-bearing:
 | dep ordering, or how a cycle is refused | `toposort` / `DependenceCycleError` in `edges.py`; the refusal itself is `Harness.register_batch` | `tests/test_adjudication.py::test_dep_cycle_rejected` |
 | when adjudication runs (per event vs once at the end) | `Harness._adjudicate` and the `adjudicate=` flag on `Harness._apply_event` — not this package | `tests/test_replay.py::test_replay_reproduces_state_byte_for_byte` |
 | catch a run in which criticism ran and attacked nothing | `verification/report.py` `_adjudication_blindness_findings` — this package structurally cannot see it | `tests/test_adjudication_blindness.py::test_a_run_whose_criticism_attacked_nothing_is_flagged` |
-| let a measure, school, or rank steer status | nothing here, by construction — route it through `rules/spawn.py`, a budgeted `Commitment`, or attention | the import-surface and blindness checks under *What it is* |
+| let a measure, school, or rank steer status | nothing here, by construction — route it through `rules/spawn.py`, a budgeted `Commitment`, or attention | the import-surface and starved-input checks under *What it is* (not a pytest id — this row is a prohibition) |
 
-The behavioural core of the first eight rows is one fast module: grounded
-correctness, reinstatement, validity-node closure across every carrier, the
-support cascade, cycle rejection, and case-law collapse.
-`check: python -m pytest tests/test_adjudication.py -q`
+Six of those eleven rows land in one fast module: grounded correctness,
+reinstatement, validity-node closure across every carrier, the support cascade,
+cycle rejection, and case-law collapse. The other five are deliberately tested
+elsewhere — the two closure rows go through the rules that mint their interfaces
+(next paragraph), and the scheduling, blindness and route-it-upstream rows are
+outside this package by construction.
+`check: python -m pytest tests/test_adjudication.py -q && python -c "import pathlib; rows=[l for l in pathlib.Path('docs/map/SUB-adjudication.md').read_text().splitlines() if l.startswith('| ') and '---' not in l][1:]; assert len(rows)==11, len(rows); assert sum(1 for r in rows if 'tests/test_adjudication.py::' in r)==6, [r for r in rows if 'tests/test_adjudication.py::' in r]"`
+
+Every test named in that table is collectable — including the two rows no other
+check on this page touches (`test_replay.py` for the `adjudicate=` flag,
+`test_adjudication_blindness.py` for the detector this package cannot host).
+`check: IDS=$(python -c "import pathlib,re; print(' '.join(sorted(set(re.findall(r'tests/[A-Za-z0-9_/]+[.]py::[A-Za-z0-9_]+', pathlib.Path('docs/map/SUB-adjudication.md').read_text())))))") && [ "$(echo $IDS | wc -w)" -ge 9 ] && python -m pytest --collect-only -q $IDS > /dev/null`
 
 Source-artifact closure and evidence closure are exercised end-to-end through the
 rules that actually mint those interfaces, not through hand-built graphs.
@@ -102,7 +120,7 @@ that state is in `verification/report.py`, and it has to be, because this packag
 sees no rules and no calls. Upstream, `Harness.register_batch` refuses an
 unregistered carried warrant and `verify_root` fails `carry-warrant`; the silent
 skip here is safe only because of those two.
-`check: grep -q "adjudication-blindness" src/deepreason/verification/report.py && ! grep -rqi "blind" src/deepreason/adjudication/ && python -m pytest tests/test_adjudication.py::test_unregistered_warrant_rejected -q && python -c "from deepreason.adjudication.grounded import label0; assert set(label0({'a','b'}, set()).values())=={'accepted'}"`
+`check: grep -q "adjudication-blindness" src/deepreason/verification/report.py && grep -qE "^def _adjudication_blindness_findings\(" src/deepreason/verification/report.py && ! grep -rqi "blind" src/deepreason/adjudication/ && python -m pytest tests/test_adjudication.py::test_unregistered_warrant_rejected -q && python -c "import json,pathlib; from deepreason.adjudication.edges import build_att; from deepreason.adjudication.grounded import label0; from deepreason.harness import Harness; from deepreason.ontology import Artifact,Provenance,Status; c=Artifact(id='C',content_ref='inline:C',provenance=Provenance(role='critic'),warrants=['nope']); assert build_att({'C':c},{},{})==set(); assert set(label0({'C'},set()).values())=={'accepted'}; r='experiments/live_jolt_2026-07-31/home/runs/run-b4d6dfda0c20676a864a051fbc97bda4'; h=Harness(r,read_only=True); assert len(pathlib.Path(r+'/log.jsonl').read_text().splitlines())==851; assert (len(h.state.artifacts),len(h.warrants),len(h.state.att))==(72,0,0); assert set(h.state.status.values())=={Status.ACCEPTED}; assert json.loads(pathlib.Path(r+'/run-result.json').read_text())['verification']['epistemic_checks_passed'] is True"`
 
 **A `mention` ref on a validity node is inert — until the warrant's commitment is
 a `rubric:`.** Then case-law closure treats *every* `mention` target on the nu as
@@ -141,7 +159,7 @@ rather than by the one that declares it.
 keeps an incremental shadow: the from-scratch per-event rewalk was measured
 quadratic in the log length. Any closure rule added to the fixpoint pays that cost
 on every event of every run.
-`check: grep -q "was measured quadratic" src/deepreason/harness.py && grep -c "for x, target in list(att)" src/deepreason/adjudication/edges.py | grep -qx 4`
+`check: grep -q "was measured quadratic" src/deepreason/harness.py && grep -qE "^    def transitions\(" src/deepreason/harness.py && grep -q "INCREMENTAL: the shadow" src/deepreason/harness.py && grep -c "for x, target in list(att)" src/deepreason/adjudication/edges.py | grep -qx 4`
 
 **Changing anything here changes the status map of every committed root.** Labels
 are never read back from the log — reopening a root replays the events and

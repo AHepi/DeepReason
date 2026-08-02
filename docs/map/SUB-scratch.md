@@ -1,9 +1,9 @@
 <!-- DR-SUB-scratch -->
-Verified-at: 08dcdf3c
+Verified-at: 546544b5
 Verify: python -m pytest tests/test_scratch_replay.py tests/test_scratch_attention.py tests/test_scratch_render.py tests/test_scratch_contracts.py tests/test_scratch_provenance_refs.py -q
 Owns: src/deepreason/scratch/
-Seams: DR-SEAM-rules-x-scratch, DR-SEAM-schools-x-scratch
-Seams-undocumented: application x scratch, bridge x scratch, harness x scratch, llm x scratch, manifest x scratch, ontology x scratch, packs-and-token-economy x scratch, periphery x scratch, scheduler x scratch, scratch x verification, scratch x workflow
+Seams: DR-SEAM-rules-x-scratch, DR-SEAM-schools-x-scratch, DR-SEAM-scratch-x-workflow
+Seams-undocumented: application x scratch, bridge x scratch, harness x scratch, llm x scratch, manifest x scratch, ontology x scratch, packs-and-token-economy x scratch, periphery x scratch, scheduler x scratch, scratch x verification
 
 # The scratchpad — the imaginative workshop, advisory and non-grounding
 
@@ -17,10 +17,23 @@ support for one. The package's whole job is therefore RETRIEVAL under a budget:
 keep an immutable, replayable graph of notes, links, clusters and guides; choose
 deterministically which small subset a model sees next; render it behind opaque
 local handles; and admit whatever the model writes back without ever letting it
-become evidence. It reaches into no epistemic machinery — the dependency arrow
-points only at the harness, the ontology, the manifest, the workflow ledger and
-the LLM plumbing, and never at the rules, the scheduler, or adjudication.
-`check: ! grep -rqE "deepreason\.(adjudication|rules|scheduler|measures|informal)" --include=*.py src/deepreason/scratch/`
+become evidence. It reaches into no epistemic machinery: its whole top-level
+dependency set is `canonical`, `conjecture_turn`, `frozen`, `harness`, `llm`,
+`ontology`, `ops`, `run_manifest`, `runtime`, `storage` and `workflow` — plumbing,
+the manifest and the workflow ledger — and never `rules`, `scheduler`,
+`adjudication`, `measures` or `informal`. The second half of the check is an
+ALLOWLIST, because a denylist only forbids what someone already thought of.
+`check: ! grep -rqE "deepreason\.(adjudication|rules|scheduler|measures|informal)" --include=*.py src/deepreason/scratch/ && test "$(grep -rhoE "deepreason\.[a-z_]+" --include=*.py src/deepreason/scratch/ | sort -u | grep -vcE "deepreason\.(canonical|conjecture_turn|frozen|harness|llm|ontology|ops|run_manifest|runtime|scratch|storage|workflow)$")" -eq 0`
+
+Ten of this package's seams are identified but unwritten, so the two header lines
+above rot in opposite directions: `Seams:` goes stale when a new seam document
+names `DR-SUB-scratch` and nobody adds it, and `Seams-undocumented:` goes stale
+when a pair on that list finally gets written. Both directions are checked,
+because a reader routing through the map trusts the header over the directory
+listing — and this check has already caught one real drift, when
+`DR-SEAM-scratch-x-workflow` was written while `scratch x workflow` was still
+sitting on the undocumented list.
+`check: for d in docs/map/SEAM-*.md; do grep -q "^Sides:.*DR-SUB-scratch" "$d" || continue; id=$(sed -n "1s/.*\(DR-SEAM-[a-z0-9-]*\).*/\1/p" "$d"); grep -q "^Seams:.*$id" docs/map/SUB-scratch.md || exit 1; done; sed -n "s/^Seams-undocumented: //p" docs/map/SUB-scratch.md | tr "," "\n" | sed "s/^ *//; s/ *$//; s/ x /-x-/" | while read p; do if test -f "docs/map/SEAM-$p.md"; then exit 1; fi; done`
 
 The boundary is a typed declaration, not a comment: the authoring policy carries
 `purpose="imaginative_workshop"` and `epistemic_boundary="advisory_non_grounding"`
@@ -46,19 +59,23 @@ adjudication chain must not exist together.
 - `ScratchService.cluster_map`, `search_phrase`, `dormant_blocks`,
   `underexposed_blocks`, `unlinked_blocks` — the read side the retrieval
   channels are built from.
-- `attention.AttentionPlanner.plan` — deterministic multi-channel selection
-  (focus, linked, clustered, keyword, semantic, recent, exploratory,
-  underexposed, coverage) under `AttentionPolicyV1`, producing an
-  `AttentionPackV1` and its `AttentionReceiptV1`; `_candidates`,
-  `_apply_channel_limits` and `_final_order` are where the ordering lives.
-  `commit_render` is the durable half.
+- `attention.AttentionPlanner.plan` — deterministic multi-channel selection under
+  `AttentionPolicyV1`, producing an `AttentionPackV1` and its
+  `AttentionReceiptV1`; `_candidates`, `_apply_channel_limits` and `_final_order`
+  are where the ordering lives. `commit_render` is the durable half.
+  `_ATTENTION_CHANNELS` is ELEVEN — every `RetrievalChannel` except
+  `direct_open`, in this order: focus, link, cluster, keyword, semantic, recent,
+  loose, dormant, underexposed, exploratory, coverage. The order is load-bearing
+  (`channel_priority` must contain each exactly once and start at focus), and
+  `loose`/`dormant` are easy to forget because no `ScratchService` reader is
+  named for them.
 - `render.ScratchRenderer.render_attention_pack` / `render_advisory_context` —
   turn records into bounded model-facing text carrying only opaque handles
   (`B1`, `C3`, `L2`, `G1`); `persist_receipt` is the sole writing method.
 - `render.ScratchRenderReceiptV1.resolve` / `alias_map` / `ordered_refs` — the
   handle→hash direction. `ordered_refs` is the only correct way to compare a
   receipt against a selection's order.
-`check: for s in create_block revise_block create_link retire_link store_guide record_attention_receipt prepare_advisory_context commit_prepared_advisory_context cluster_map search_phrase dormant_blocks underexposed_blocks unlinked_blocks; do grep -q "    def $s(" src/deepreason/scratch/service.py || exit 1; done; for s in plan commit_render _candidates _apply_channel_limits _final_order; do grep -q "    def $s(" src/deepreason/scratch/attention.py || exit 1; done; for s in render_attention_pack render_advisory_context persist_receipt resolve alias_map ordered_refs; do grep -q "    def $s(" src/deepreason/scratch/render.py || exit 1; done`
+`check: for s in create_block revise_block create_link retire_link store_guide record_attention_receipt prepare_advisory_context commit_prepared_advisory_context cluster_map search_phrase dormant_blocks underexposed_blocks unlinked_blocks; do grep -q "    def $s(" src/deepreason/scratch/service.py || exit 1; done; for s in plan commit_render _candidates _apply_channel_limits _final_order; do grep -q "    def $s(" src/deepreason/scratch/attention.py || exit 1; done; for s in render_attention_pack render_advisory_context persist_receipt resolve alias_map ordered_refs; do grep -q "    def $s(" src/deepreason/scratch/render.py || exit 1; done; python -c "import deepreason.ontology; from deepreason.scratch.attention import _ATTENTION_CHANNELS as C; assert [c.value for c in C] == ['focus','link','cluster','keyword','semantic','recent','loose','dormant','underexposed','exploratory','coverage'], [c.value for c in C]"`
 
 - `authoring.ScratchAuthoringService.validate_proposal` / `admit_proposal` — the
   v6 path: check one whole `ScratchProposalV1` against the manifest's ceilings
@@ -107,7 +124,7 @@ a typed payload. It is replayed BESIDE the formal state, never inside it, so a
 scratch event cannot move a status; two replays of one root must produce equal
 `scratch_state`, and `verify_root` additionally pins each conjecture-context
 receipt to the render receipt and scratch fence it names (`DR-SUB-verification`).
-`check: grep -q "self.scratch_state = ScratchState()" src/deepreason/harness.py && grep -q "self.scratch_state.apply(event, self.objects)" src/deepreason/harness.py && grep -q "    def record_scratch_event(" src/deepreason/harness.py && grep -q 'if (self.rule == Rule.SCRATCH) != (self.scratch is not None):' src/deepreason/ontology/event.py && grep -q 'fail("scratch-replay"' src/deepreason/invariants.py && grep -q "selection receipt names another scratch fence" src/deepreason/invariants.py`
+`check: grep -q "self.scratch_state = ScratchState()" src/deepreason/harness.py && grep -q "self.scratch_state.apply(event, self.objects)" src/deepreason/harness.py && grep -q "    def record_scratch_event(" src/deepreason/harness.py && test "$(grep -rn "record_scratch_event" --include=*.py src/deepreason/ | grep -vc "def record_scratch_event")" -eq 1 && grep -q 'if (self.rule == Rule.SCRATCH) != (self.scratch is not None):' src/deepreason/ontology/event.py && grep -q 'fail("scratch-replay"' src/deepreason/invariants.py && grep -q "selection receipt names another scratch fence" src/deepreason/invariants.py`
 
 ## Where to change what
 
@@ -166,25 +183,34 @@ receipt to the render receipt and scratch fence it names (`DR-SUB-verification`)
   It may still record link USE, similarity, attention renders, advisory-context
   binding and coverage. Otherwise the system could manufacture its own notes and
   read them back as if a model had thought them.
-`check: grep -q "the harness cannot author interpretive scratch action" src/deepreason/scratch/events.py`
+`check: python -c "import deepreason.ontology; from deepreason.scratch.events import _INTERPRETIVE_ACTIONS as I; assert {a.value for a in I} == {'block_created','block_revised','link_created','link_retired','cluster_created','cluster_member_added','cluster_member_removed','cluster_guide_written'}, sorted(a.value for a in I)" && python -m pytest tests/test_scratch_replay.py::test_typed_event_contract_rejects_raw_actions_and_formal_graph_injection -q`
 - **A historical view must be inert.** Every mutating path re-checks writability
-  and raises `ScratchReadOnly`, including all three Conj planning functions —
-  planning future work off a replayed prefix would append events into a root that
-  was already verified.
-`check: test "$(grep -c "ScratchReadOnly(" src/deepreason/scratch/conjecture.py)" -eq 3 && python -m pytest tests/test_scratch_historical.py -q`
+  and raises `ScratchReadOnly` — planning future work off a replayed prefix would
+  append events into a root that was already verified. In `conjecture.py` the
+  guard sits in exactly three functions: `plan_conjecture_context`,
+  `prepare_conjecture_context_call` and `plan_conjecture_context_expansion`.
+  `commit_conjecture_context` has no guard of its own; it inherits one by calling
+  `prepare_conjecture_context_call` first, so moving that call would silently open
+  a write path.
+`check: python -c "import inspect, deepreason.scratch.conjecture as c; missing = [f for f in ('plan_conjecture_context','prepare_conjecture_context_call','plan_conjecture_context_expansion') if 'raise ScratchReadOnly' not in inspect.getsource(getattr(c, f))]; assert not missing, missing" && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context tests/test_scratch_historical.py -q`
 - **Formal and scratch aliases share one prompt but must not share a namespace.**
   `SRC_###` is formal, `SCR_###`/`NEW_###` is scratch; an overlap is refused at
   wire construction, because a collision would let a scratch note resolve as a
-  formal artifact reference.
-`check: grep -q "formal and scratch alias namespaces must not overlap" src/deepreason/llm/wire.py`
+  formal artifact reference. The refusal lives in
+  `ConjecturerTurnWireContractV4.__init__`; no test in `tests/` asserts it, so
+  this check exercises it directly.
+`check: grep -q "formal and scratch alias namespaces must not overlap" src/deepreason/llm/wire.py && python -c "from deepreason.llm.wire import AliasTable, ConjecturerTurnWireContractV4 as C; C(reasoning=False, aliases=AliasTable({'SRC_001':'a'}), scratch_aliases={'SRC_001':'b'})" 2>&1 | grep -q "formal and scratch alias namespaces must not overlap"`
 - **Provenance refs are aim-at-time-of-writing, not live pointers.**
   `experiment_refs` and `bears_on_refs` record what a note was FOR; nothing in the
   harness follows them, and they are admissible whether or not the aim turns out
   right. `MAX_PROVENANCE_REFS = 4` is a measured stop against `maximum_total_bytes`
   crowding, not a guess.
 `check: grep -q "^MAX_PROVENANCE_REFS = 4" src/deepreason/scratch/models.py && python -m pytest tests/test_scratch_provenance_refs.py -q -k "history_and_not_as_live_pointers or hashes_as_it_did_before"`
-- **Known and parked, not fixed:** block identity dumps with `exclude_none` while
-  the byte accounting in `validate_proposal` does not, so two `null` placeholders
-  cost the budget roughly five blocks of headroom (133 → 128 in the measurement
-  recorded beside `MAX_PROVENANCE_REFS`). The divergence predates the
-  provenance-ref fields and was not introduced by them.
+- **Known and parked, not fixed:** block identity dumps with `exclude_none`
+  (`_canonical_value` in `scratch/models.py`) while the byte accounting in
+  `validate_proposal` dumps without it, so `null` placeholders cost the budget
+  roughly five blocks of headroom (133 → 128 in the measurement recorded beside
+  `MAX_PROVENANCE_REFS`). The divergence predates the provenance-ref fields and
+  was not introduced by them. The check fails the day someone closes it, which is
+  the point: this entry must then be rewritten rather than quietly left standing.
+`check: python -c "from deepreason.scratch.models import ScratchBlockBodyV1, _canonical_value; from deepreason.canonical import canonical_json; b = ScratchBlockBodyV1(content='x'); accounted = len(canonical_json(b.model_dump(mode='json'))); identity = len(canonical_json(_canonical_value(b))); assert accounted > identity, (accounted, identity)"`

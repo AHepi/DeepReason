@@ -1,9 +1,9 @@
 <!-- DR-SUB-verification -->
-Verified-at: 08dcdf3c
+Verified-at: 546544b5
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/
-Seams: 
-Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, harness x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
+Seams: DR-SEAM-harness-x-verification
+Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
 
 # Verification — replay validation of a run root, and the pinned mechanical verifiers
 
@@ -74,7 +74,7 @@ a rename silently reinterprets every stored verdict.
 The package exports lazily through a `_EXPORTS` table in
 `verification/__init__.py`; importing `deepreason.verification` pulls in no
 backend, which is what keeps Lean and the sandbox off the harness startup path.
-`check: grep -q "_EXPORTS = {" src/deepreason/verification/__init__.py && grep -q "def __getattr__(name: str):" src/deepreason/verification/__init__.py`
+`check: grep -q "_EXPORTS = {" src/deepreason/verification/__init__.py && python -c "import sys, deepreason.verification as v; eager=[m for m in sys.modules if m.startswith('deepreason.verification.')]; assert not eager, eager; assert v.LeanBackend and any(m.startswith('deepreason.verification.lean') for m in sys.modules)"`
 
 ## State it owns
 
@@ -142,7 +142,7 @@ value and are the numbers experiment reports quote.
   text: `target ... policy requires ...` is re-routed to `completion`, every
   other `foreign-criticism` finding stays `integrity`. Changing that detail
   string changes the channel.
-`check: grep -q 'check == "foreign-criticism"' src/deepreason/verification/report.py && grep -q '"policy requires" in detail' src/deepreason/verification/report.py`
+`check: grep -q 'check == "foreign-criticism"' src/deepreason/verification/report.py && grep -q 'detail.startswith("target ")' src/deepreason/verification/report.py && grep -q '"policy requires" in detail' src/deepreason/verification/report.py`
 - **An unopenable root returns empty `stats`.** `verify_root` short-circuits to
   a single `open` (or the controller-v3) finding with `"stats": {}`. Callers
   that index into `stats` unconditionally crash on exactly the roots most worth
@@ -175,7 +175,7 @@ value and are the numbers experiment reports quote.
   no `add_parser` registers them, so `deepreason ... simulate` exits 2 with
   `invalid choice`. Do not "fix" the missing subcommand; the workflows are
   unqualified.
-`check: sh -c 'grep -q "def _cmd_check_proof" src/deepreason/cli/main.py && ! grep -q "add_parser(\"check-proof\"" src/deepreason/cli/main.py && ! grep -q "add_parser(\"simulate\"" src/deepreason/cli/main.py' && python -m pytest tests/test_cli_verifiers.py -q`
+`check: python -c "import subprocess,sys; r=[subprocess.run([sys.executable,'-m','deepreason.cli.main',c],capture_output=True,text=True) for c in ('check-proof','code','simulate')]; assert all(p.returncode==2 and 'invalid choice' in p.stderr for p in r)" && grep -q "def _cmd_check_proof" src/deepreason/cli/main.py && grep -q "def _cmd_code" src/deepreason/cli/main.py && grep -q "def _cmd_simulate" src/deepreason/cli/main.py && python -m pytest tests/test_cli_verifiers.py -q`
 - **`report.py` imports `verify_root` inside the function body on purpose.** A
   module-level import reintroduces an import cycle during harness startup.
-`check: sh -c 'grep -q "    from deepreason.invariants import verify_root" src/deepreason/verification/report.py && ! grep -q "^from deepreason.invariants" src/deepreason/verification/report.py'`
+`check: grep -q "    from deepreason.invariants import verify_root" src/deepreason/verification/report.py && python -c "import sys, deepreason.verification.report; assert 'deepreason.invariants' not in sys.modules"`

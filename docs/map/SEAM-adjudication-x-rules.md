@@ -39,14 +39,20 @@ The independence is mutual and is at the level of names, not only of imports.
 | Evidence closure | `rules/act.py` → `adjudication/edges.py` | `nu_interface=Interface(refs=[Ref(..., role=RefRole.EVIDENCE)])`, `dep_reliability` → `evidence_lineage` | an attack on the browser's source-reliability artifact reaches the ν through the screenshots' `dependence` refs |
 | Evidence closure, hand-built | `rules/vision.py` | `crit_vision`'s ν, one `EVIDENCE` ref per screenshot | the visual case falls when the images it judged are refuted |
 | Source-artifact closure | `oracle.property_violation_commitment` → `rules/crit.py` → `adjudication/edges.py` | `budget.extra["source_artifact"]` | refuting a proposed property collapses every verdict minted under it |
-| Credit without closure | `rules/crit.py` | `nu_interface=Interface(refs=[Ref(target=gen_id, role=RefRole.MENTION)])` | the generator that designed the killing experiment is visible in the graph and load-bearing in none of it |
+| Credit without closure | `rules/crit.py` | `nu_interface = Interface(refs=[Ref(target=gen_id, role=RefRole.MENTION)])`, forwarded as `nu_interface=nu_interface` | the generator that designed the killing experiment is visible in the graph and load-bearing in none of it |
 | Case-law closure | `informal/trial.py` → `adjudication/edges.py` | `Ref(target=standard.id, role="mention")` + `kappa.eval.startswith("rubric:")` | the only mint site that can reach the rubric branch, and it is not in `rules/`; owned by `DR-CON-warrants-and-attacks` |
 | Duplicate-verdict guard | `rules/warrants.py` | `verdict_on_record`, `skip_if_on_record` | one (κ, target) fail verdict at a time — `att` is a set and cannot tell a second critic from a first |
 | Supremacy guards | `rules/warrants.py` | `execution_backed`, `formally_backed` | whether an edge is CREATED; adjudication never learns either exists |
 | Availability handoff | `rules/crit.py` | `harness._oracle_pending`, `QUARANTINE_TICK` | an oracle that could not run mints no warrant, which downstream is indistinguishable from one that passed |
 | Return path, edges | `rules/experiment.py`, `rules/guards/anti_relapse.py` | `harness.state.att` | the only two rules-side readers of the attack relation |
-| Return path, labels | `rules/act.py`, `rules/experiment.py`, `rules/spawn.py` | `harness.state.status` | rules read labels to choose what to work on; no rule writes one |
-| Recompute point | `harness.py` | `Harness._adjudicate` | the sole caller of `build_att` on the write path (`invariants.verify_root` is the other, on the read path) |
+| Return path, labels | `rules/act.py`, `rules/experiment.py`, `rules/spawn.py`, `rules/vision.py`, `rules/guards/anti_relapse.py` | `state.status` | five rules read labels to choose what to work on; no rule writes one |
+| Recompute point | `harness.py` | `Harness._adjudicate` | the ONLY caller of `build_att` anywhere in `src/`; `invariants.verify_root` does not call it, it reopens the root as a `Harness` and so recomputes through this same method |
+
+There is one recompute point, not two. `invariants.verify_root` never names
+`build_att`: it reopens the root as a `Harness`, so the read path re-derives
+labels through the same `_adjudicate` the write path uses, and no second
+implementation of the fixpoint can drift from the first.
+`check: test "$(grep -rn "build_att(" --include=*.py src/deepreason | grep -vc "def build_att(")" -eq 1 && ! grep -q "build_att" src/deepreason/invariants.py && grep -q "h = Harness(root, read_only=True)" src/deepreason/invariants.py && python -c "import ast,inspect;from deepreason import harness as H;t=ast.parse(inspect.getsource(H));f=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='_adjudicate'];assert len(f)==1;assert sum(1 for c in ast.walk(f[0]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='build_att')==1"`
 
 One constructor, twelve call sites, and exactly two hand-built warrants inside
 `rules/` — both `ARGUMENTATIVE`, because `DEMONSTRATIVE` is written in one file.
@@ -54,16 +60,21 @@ One constructor, twelve call sites, and exactly two hand-built warrants inside
 
 `nu_interface` is a single optional parameter and the whole propagation surface a
 rule has; four sites in the tree pass it.
-`check: test "$(grep -rn "nu_interface=" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 4 && grep -q "interface=nu_interface," src/deepreason/rules/warrants.py && grep -q "nu_interface: Interface | None = None," src/deepreason/rules/warrants.py`
+`check: test "$(grep -rnE "\bnu_interface=" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 4 && grep -q "interface=nu_interface," src/deepreason/rules/warrants.py && grep -q "nu_interface: Interface | None = None," src/deepreason/rules/warrants.py`
 
 Evidence closure is two declarations on the rules side and one walk on the
 adjudication side: the ν names the evidence, the screenshots name the browser's
 reliability as a `dependence`, and `evidence_lineage` follows that transitively.
-`check: grep -q "dep_reliability = Ref(target=reliability.id, role=RefRole.DEPENDENCE)" src/deepreason/rules/act.py && grep -q "nu_interface=Interface(refs=\[Ref(target=evidence.id, role=RefRole.EVIDENCE)\])" src/deepreason/rules/act.py && test "$(grep -c "RefRole.DEPENDENCE" src/deepreason/adjudication/edges.py)" -eq 2 && grep -q "^    def evidence_lineage(evidence_id: str)" src/deepreason/adjudication/edges.py`
+The role on the ν's ref is what buys the closure: the same graph with `mention`
+in place of `evidence` reaches neither the ν nor the carrier.
+`check: grep -q "dep_reliability = Ref(target=reliability.id, role=RefRole.DEPENDENCE)" src/deepreason/rules/act.py && grep -q "nu_interface=Interface(refs=\[Ref(target=evidence.id, role=RefRole.EVIDENCE)\])" src/deepreason/rules/act.py && test "$(grep -c "RefRole.DEPENDENCE" src/deepreason/adjudication/edges.py)" -eq 2 && grep -q "^    def evidence_lineage(evidence_id: str)" src/deepreason/adjudication/edges.py && python -c "from deepreason.adjudication.edges import build_att; from deepreason.ontology import Artifact, Commitment, Interface, Provenance, Warrant, WarrantType; from deepreason.ontology.artifact import Ref, RefRole; p=Provenance(role='critic'); A=lambda i,**k: Artifact(id=i, content_ref='inline:'+i, provenance=p, **k); ws={'w':Warrant(id='w',target='T',type=WarrantType.DEMONSTRATIVE,commitment='k',verdict='fail',validity_node='N'),'wx':Warrant(id='wx',target='R',type=WarrantType.ARGUMENTATIVE,validity_node='T')}; g=lambda role: build_att({x.id:x for x in [A('C',warrants=['w']),A('T'),A('N',interface=Interface(refs=[Ref(target='E',role=role)])),A('E',interface=Interface(refs=[Ref(target='R',role=RefRole.DEPENDENCE)])),A('R'),A('X',warrants=['wx'])]}, ws, {'k':Commitment(id='k',eval='program:x')}); closes=g(RefRole.EVIDENCE); inert=g(RefRole.MENTION); assert {('X','N'),('X','C')} <= closes, sorted(closes); assert not ({('X','N'),('X','C')} & inert), sorted(inert)"`
 
 Source-artifact closure crosses the seam as one dictionary key, minted in the
-oracle, requested by the criticism rule, read in the fixpoint.
-`check: grep -q "\"source_artifact\": property_artifact_id," src/deepreason/oracle.py && grep -q "kappa.budget.extra.get(\"source_artifact\")" src/deepreason/adjudication/edges.py && grep -q "cx = property_violation_commitment(base, prop_id, prop_source, violation)" src/deepreason/rules/crit.py`
+oracle, requested by the criticism rule, read in the fixpoint. The oracle writes
+that id twice — once inside the content-addressed spec, once as the top-level
+`budget.extra` key — and only the second is the one `edges.py` reads, so the
+check exercises the minted commitment rather than grepping for either line.
+`check: python -c "import json; from deepreason.ontology import Budget, Commitment; from deepreason.oracle import property_violation_commitment; base=Commitment(id='b',eval='program:property_oracle',budget=Budget(extra={'spec':json.dumps({'entry':'f','inputs':[],'checker':'x','input_check':None,'step_limit':10})})); cx=property_violation_commitment(base,'P','source',[1]); assert cx.budget.extra['source_artifact'] == 'P', cx.budget.extra; from deepreason.adjudication.edges import build_att; from deepreason.ontology import Artifact, Provenance, Warrant, WarrantType; p=Provenance(role='critic'); A=lambda i,**k: Artifact(id=i, content_ref='inline:'+i, provenance=p, **k); arts={x.id:x for x in [A('C',warrants=['w']),A('T'),A('N'),A('P'),A('X',warrants=['wx'])]}; ws={'w':Warrant(id='w',target='T',type=WarrantType.DEMONSTRATIVE,commitment=cx.id,verdict='fail',validity_node='N'),'wx':Warrant(id='wx',target='P',type=WarrantType.ARGUMENTATIVE,validity_node='T')}; closes=build_att(arts,ws,{cx.id:cx}); inert=build_att(arts,ws,{cx.id:Commitment(id=cx.id,eval=cx.eval)}); assert {('X','N'),('X','C')} <= closes, sorted(closes); assert not ({('X','N'),('X','C')} & inert), sorted(inert)" && grep -q "kappa.budget.extra.get(\"source_artifact\")" src/deepreason/adjudication/edges.py && grep -q "cx = property_violation_commitment(base, prop_id, prop_source, violation)" src/deepreason/rules/crit.py`
 
 The write boundary refuses the three ways a rule can hand over an incoherent
 warrant; the criticism rule registers its counterexample commitment before
@@ -85,7 +96,11 @@ An AST walk over `edges.py` finds exactly three attributes read off a warrant.
 `register_fail_warrant` and all invisible downstream. The asymmetry between a
 demonstrative and an argumentative warrant is entirely a property of what each
 MINT SITE was allowed to do, never of what the graph does with the result.
-`check: python -c "import ast,inspect;from deepreason.adjudication import edges;from deepreason.ontology.warrant import Warrant;t=ast.parse(inspect.getsource(edges));a={n.attr for n in ast.walk(t) if isinstance(n,ast.Attribute) and isinstance(n.value,ast.Name) and n.value.id=='w'};assert a=={'target','validity_node','commitment'},a;assert {'id','type','verdict','trace_ref'}<=set(Warrant.model_fields)"`
+The walk cannot be dodged by renaming: it first asserts that `w` is the ONLY
+name `edges.py` binds from the `warrants` map (so `ww = warrants[wid]` fails the
+check before any attribute is read), and it then reads attributes off `w` and
+off `warrants[...]` / `warrants.get(...)` alike.
+`check: python -c "import ast,inspect;from deepreason.adjudication import edges;from deepreason.ontology.warrant import Warrant;t=ast.parse(inspect.getsource(edges));NW=lambda n: any(isinstance(x,ast.Name) and x.id=='warrants' for x in ast.walk(n));b={n.id for s in ast.walk(t) if isinstance(s,(ast.Assign,ast.For,ast.comprehension)) for v in [s.value if isinstance(s,ast.Assign) else s.iter] if NW(v) for x in (s.targets if isinstance(s,ast.Assign) else [s.target]) for n in ast.walk(x) if isinstance(n,ast.Name)};assert b=={'w'},b;a={n.attr for n in ast.walk(t) if isinstance(n,ast.Attribute) and ((isinstance(n.value,ast.Name) and n.value.id=='w') or (isinstance(n.value,(ast.Subscript,ast.Call)) and NW(n.value)))};assert a=={'target','validity_node','commitment'},a;assert {'id','type','verdict','trace_ref'}<=set(Warrant.model_fields)"`
 
 **"Fail" is a rules-side constant, not an adjudication test.** A warrant whose
 `verdict` is `"pass"` produces the same attack edge as one whose verdict is
@@ -94,8 +109,11 @@ it too. Nothing in the graph re-checks that a fail warrant records a failure.
 That is why `register_fail_warrant` hard-codes `verdict="fail"` and
 `type=WarrantType.DEMONSTRATIVE` instead of taking them as parameters — the
 single constructor IS the enforcement, and a hand-built demonstrative warrant
-elsewhere would be unpoliced by anything downstream of it.
-`check: python -c "from deepreason.adjudication.edges import build_att; from deepreason.ontology import Artifact, Provenance, Warrant, WarrantType; p=Provenance(role='critic'); c=Artifact(id='C',content_ref='inline:c',warrants=['zz'],provenance=p); t=Artifact(id='T',content_ref='inline:t',provenance=p); e=lambda v,ty: build_att({'C':c,'T':t},{'zz':Warrant(id='zz',target='T',type=ty,verdict=v,commitment='k',validity_node='N')},{}); assert e('fail',WarrantType.DEMONSTRATIVE)==e('pass',WarrantType.ARGUMENTATIVE)=={('C','T')}" && grep -q 'verdict="fail",' src/deepreason/rules/warrants.py && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && grep -q 'warrant_id or f"w:{commitment_id}:{target_id}"' src/deepreason/rules/warrants.py`
+elsewhere would be unpoliced by anything downstream of it. The graph the check
+builds registers the ν and an attacker of it, so the equality covers the closure
+fixpoint and not only the base edge: a verdict or type test added ANYWHERE in
+`build_att` breaks it.
+`check: python -c "from deepreason.adjudication.edges import build_att; from deepreason.ontology import Artifact, Provenance, Warrant, WarrantType; p=Provenance(role='critic'); A=lambda i,**k: Artifact(id=i,content_ref='inline:'+i,provenance=p,**k); e=lambda v,ty: build_att({x.id:x for x in [A('C',warrants=['zz']),A('T'),A('N'),A('X',warrants=['wx'])]},{'zz':Warrant(id='zz',target='T',type=ty,verdict=v,commitment='k',validity_node='N'),'wx':Warrant(id='wx',target='N',type=WarrantType.ARGUMENTATIVE,validity_node='T')},{}); assert e('fail',WarrantType.DEMONSTRATIVE)==e('pass',WarrantType.ARGUMENTATIVE)=={('C','T'),('C','X'),('X','C'),('X','N')}, sorted(e('pass',WarrantType.ARGUMENTATIVE))" && grep -q 'verdict="fail",' src/deepreason/rules/warrants.py && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && grep -q 'warrant_id or f"w:{commitment_id}:{target_id}"' src/deepreason/rules/warrants.py`
 
 **Case-law closure is unreachable from `rules/`, and that is a filter rather than
 an oversight.** `crit_program` mints only against commitments `programs.evaluable`
@@ -122,7 +140,7 @@ other, so an execution-backed target that a prose case was refused against can
 still be refuted later by execution, and the graph has no memory that a refusal
 ever happened. Adding a "this warrant was argumentative, weigh it less" test to
 the fixpoint is the change this absence forbids.
-`check: ! grep -qE "execution_backed|formally_backed|verdict_on_record|programs\.|EXEC_PROGRAMS" src/deepreason/adjudication/edges.py && grep -q "^def execution_backed(" src/deepreason/rules/warrants.py && grep -q "^def formally_backed(" src/deepreason/rules/warrants.py && grep -q "^def verdict_on_record(" src/deepreason/rules/warrants.py && grep -q "    from deepreason import programs" src/deepreason/rules/warrants.py`
+`check: grep -q "^def build_att(" src/deepreason/adjudication/edges.py && ! grep -qE "execution_backed|formally_backed|verdict_on_record|programs\.|EXEC_PROGRAMS" src/deepreason/adjudication/edges.py && grep -q "^def execution_backed(" src/deepreason/rules/warrants.py && grep -q "^def formally_backed(" src/deepreason/rules/warrants.py && grep -q "^def verdict_on_record(" src/deepreason/rules/warrants.py && grep -q "    from deepreason import programs" src/deepreason/rules/warrants.py`
 
 **Nothing removes an edge, on either side.** `build_att` starts from an empty set
 on every call and only ever adds; there is no retraction, no `discard`, no
@@ -130,13 +148,14 @@ on every call and only ever adds; there is no retraction, no `discard`, no
 D8 (nothing is deleted) expressed as an absence of code rather than as a rule.
 `check: ! grep -qE "\.discard\(|\.remove\(|^ *del " src/deepreason/adjudication/edges.py && grep -q "att: set\[tuple\[str, str\]\] = set()" src/deepreason/adjudication/edges.py && test "$(grep -c "att.add(" src/deepreason/adjudication/edges.py)" -eq 5`
 
-**No rule computes, asserts or mutates a label, and only two read the attack
-relation.** Reading is deliberately allowed and is the seam's return path:
+**No rule computes, asserts or mutates a label; five read labels and only two
+read the attack relation.** Reading is deliberately allowed and is the seam's
+return path:
 `promoted_properties` uses `state.att` for "was this property ever attacked and
 did it survive", and the anti-relapse gate uses it to find a prior's refuters.
 Both go through `EpistemicState`, so what they see is whatever the last
 `_adjudicate` produced — never a graph they computed themselves.
-`check: test "$(grep -rl "harness\.state\.att" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py " && ! grep -rqE "state\.(att|dep|status|conn)\s*(=[^=]|\.(add|update|discard|pop|clear)\()" --include=*.py src/deepreason/rules/ && grep -q "self.state.status = " src/deepreason/harness.py`
+`check: test "$(grep -rl "harness\.state\.att" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py " && test "$(grep -rl "state\.status" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/act.py src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py src/deepreason/rules/spawn.py src/deepreason/rules/vision.py " && ! grep -rqE "state\.(att|dep|status|conn)\s*(=[^=]|\.(add|update|discard|pop|clear)\()" --include=*.py src/deepreason/rules/ && grep -q "self.state.status = " src/deepreason/harness.py`
 
 ## How to change it
 
@@ -200,17 +219,18 @@ roots).
   looks like from outside: 851 events, 72 artifacts, zero warrants, everything
   ACCEPTED, `epistemic_checks_passed: true`. The detector lives in
   `verification/report.py` (`DR-SUB-verification`) and has to.
-`check: grep -q "harness._oracle_pending.add(pending_key)" src/deepreason/rules/crit.py && grep -q "QUARANTINE_TICK\[0\] += 1" src/deepreason/rules/crit.py && ! grep -qiE "pending|abort|unavailable|quarantine" src/deepreason/adjudication/edges.py && grep -q "adjudication-blindness" src/deepreason/verification/report.py`
+`check: grep -q "harness._oracle_pending.add(pending_key)" src/deepreason/rules/crit.py && grep -q "QUARANTINE_TICK\[0\] += 1" src/deepreason/rules/crit.py && grep -q "^def build_att(" src/deepreason/adjudication/edges.py && ! grep -qiE "pending|abort|unavailable|quarantine" src/deepreason/adjudication/edges.py && grep -q "adjudication-blindness" src/deepreason/verification/report.py`
 - **A warrant can commit while its critic artifact does not.** Critic artifacts
   are content-addressed, so a byte-identical critic — same target, same spec, same
   decisive quote from a second rubric κ — dedupes and registers nothing, while the
   carriage pair still commits and the edge still appears. Code that treats "the
   critic came back" as "an event was written" mis-accounts: the 1M arrow-of-time
   run leaked 13 judge rulings (~770 tokens each) this way, `verify_root` metering
-  1 000 214 against a log of 990 192. Both trial paths now compare `critic.id`
-  against the pre-registration artifact set. Evidence:
+  1 000 214 against a log of 990 192. All THREE trial paths — `_trial_steps`,
+  `_argument_trial_steps`, `_pairwise_steps` — now compare `critic.id` against
+  the pre-registration artifact set. Evidence:
   `docs/MINI_STRESS_REPORT.md` §F4, `tests/test_trial_accounting.py`.
-`check: grep -q "if critic is not None and critic.id not in before:" src/deepreason/informal/trial.py && python -m pytest tests/test_trial_accounting.py -q`
+`check: test "$(grep -c "critic.id not in before" src/deepreason/informal/trial.py)" -eq 3 && python -c "import ast,inspect;from deepreason.informal import trial;t=ast.parse(inspect.getsource(trial));f={n.name for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and 'critic.id not in before' in ast.unparse(n)};assert f=={'_trial_steps','_argument_trial_steps','_pairwise_steps'}, f" && python -m pytest tests/test_trial_accounting.py -q`
 - **A decorative `mention` on a ν is inert only for as long as its commitment is
   not `rubric:`.** The two `MENTION` refs minted in `rules/crit.py` are credit and
   readability, and today no rules-side route can reach the rubric branch. That is

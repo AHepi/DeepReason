@@ -1,9 +1,9 @@
 <!-- DR-SUB-rules -->
-Verified-at: 08dcdf3c
+Verified-at: 546544b5
 Verify: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_crit_batch.py tests/test_act.py tests/test_vision.py -q
 Owns: src/deepreason/rules/
-Seams: DR-SEAM-rules-x-scratch
-Seams-undocumented: authority x rules, capabilities x rules, harness x rules, llm x rules, manifest x rules, ontology x rules, rules x scheduler, rules x workflow
+Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-capabilities-x-rules, DR-SEAM-evaluation-x-rules, DR-SEAM-llm-x-rules, DR-SEAM-ontology-x-rules, DR-SEAM-rules-x-scratch, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-rules
+Seams-undocumented: authority x rules, harness x rules, manifest x rules
 
 # The rules — the epistemic moves: conjecture, criticism, spawn, warrant
 
@@ -19,7 +19,13 @@ attacked", `adjudication/` answers "what therefore stands", and neither can
 reach into the other. The package is duck-typed on the harness rather than
 importing it, so the dependency arrow points one way only and every rule is
 testable against a fake.
-`check: ! grep -rq --include=*.py "deepreason\.\(harness\|adjudication\)" src/deepreason/rules/`
+`check: ! grep -rqE "deepreason\.(harness|adjudication)|from deepreason import [^#]*\b(harness|adjudication)\b" --include=*.py src/deepreason/rules/ && ! grep -rqE "deepreason\.rules|from deepreason import [^#]*\brules\b" --include=*.py src/deepreason/adjudication/ src/deepreason/harness.py`
+
+Because most of this package's work is agreeing with a neighbour, the `Seams:`
+header above is load-bearing: every seam document that names `DR-SUB-rules` as a
+side must be listed there, or a reader routing through the map silently misses
+one side of the change they are making.
+`check: for d in docs/map/SEAM-*.md; do grep -q "^Sides:.*DR-SUB-rules" "$d" || continue; id=$(sed -n '1s/.*\(DR-SEAM-[a-z0-9-]*\).*/\1/p' "$d"); grep -q "^Seams:.*$id" docs/map/SUB-rules.md || exit 1; done`
 
 The moves are unequal on purpose. A demonstrative warrant (a program verdict, a
 counterexample that was RUN, a browser failure) changes status under every
@@ -55,7 +61,8 @@ that would move every qualification subject digest (`DR-INV-frozen-surfaces`).
   deterministic, so rescans are free.
 - `warrants.register_fail_warrant` — the single constructor for the
   (attackable ν, DEMONSTRATIVE `w:<κ>:<target>`, critic artifact) triple. Eight
-  modules use it; nobody hand-builds the triple.
+  modules call it, from twelve call sites; nobody hand-builds the triple —
+  `WarrantType.DEMONSTRATIVE` is constructed in this one file and nowhere else.
 - `warrants.execution_backed`, `warrants.formally_backed`,
   `warrants.verdict_on_record` — the supremacy and duplicate-verdict guards.
 - `guards.anti_relapse.check` — the mandatory pre-commit gate: hash, then
@@ -77,7 +84,7 @@ that would move every qualification subject digest (`DR-INV-frozen-surfaces`).
   `experiment.promoted_properties` — what is currently live for `crit_fuzz`.
 - `guards.anti_relapse.relapse_domain`, `record_domain`, `recorded_domains`,
   `verdict_vector` — compile, persist and re-read a candidate's comparison scope.
-`check: for s in propose_generators propose_properties accepted_generators active_properties promoted_properties relevance_trial; do grep -q "^def $s(" src/deepreason/rules/experiment.py || exit 1; done; for s in check relapse_domain record_domain recorded_domains verdict_vector; do grep -q "^def $s(" src/deepreason/rules/guards/anti_relapse.py || exit 1; done; grep -q "^def synthesize(" src/deepreason/rules/synth.py && grep -q "^def crit_vision(" src/deepreason/rules/vision.py; for s in browser_evidence needs_browser_run run_browser_evidence; do grep -q "^def $s(" src/deepreason/rules/act.py || exit 1; done`
+`check: for s in propose_generators propose_properties accepted_generators active_properties promoted_properties relevance_trial; do grep -q "^def $s(" src/deepreason/rules/experiment.py || exit 1; done; for s in check relapse_domain record_domain recorded_domains verdict_vector; do grep -q "^def $s(" src/deepreason/rules/guards/anti_relapse.py || exit 1; done; grep -q "^def synthesize(" src/deepreason/rules/synth.py || exit 1; grep -q "^def crit_vision(" src/deepreason/rules/vision.py || exit 1; for s in browser_evidence needs_browser_run run_browser_evidence; do grep -q "^def $s(" src/deepreason/rules/act.py || exit 1; done`
 
 `refl.refl` is declared and raises `NotImplementedError`: rule-artifacts are in
 the spec, not in the code. Do not describe it as working.
@@ -97,7 +104,7 @@ the epistemic log — gate telemetry must not perturb the scheduler's
 event-sequence policy. `recorded_domains` still backward-reads the short-lived
 `Measure`/event-input encoding that development builds emitted. This is the only
 place in the whole package that touches a file.
-`check: test "$(grep -rlE 'path\.open|write_text|write_bytes' --include=*.py src/deepreason/rules | wc -l)" -eq 1 && grep -q '_RELAPSE_LOG = "relapse.log.jsonl"' src/deepreason/rules/guards/anti_relapse.py && grep -q 'if getattr(harness, "_read_only", False)' src/deepreason/rules/guards/anti_relapse.py`
+`check: test "$(grep -rlE 'path\.open|write_text|write_bytes|read_text|read_bytes|\bopen\(' --include=*.py src/deepreason/rules | wc -l)" -eq 1 && grep -q '_RELAPSE_LOG = "relapse.log.jsonl"' src/deepreason/rules/guards/anti_relapse.py && grep -q 'os\.fsync' src/deepreason/rules/guards/anti_relapse.py && grep -q 'if getattr(harness, "_read_only", False)' src/deepreason/rules/guards/anti_relapse.py`
 
 In memory: `crit.QUARANTINE_TICK` is a module-level counter the scheduler
 snapshots so a fuzz sweep does not mark a target clean when the oracle was
@@ -112,7 +119,7 @@ registered in `src/deepreason/signals.py`, which is AST-scanned by the gate.
 
 `scan_spawns` covers seven of the nine `SpawnTrigger` values. `SEED` is the
 operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
-`check: for t in SUCCESSOR DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && ! grep -q "SpawnTrigger.AUDIT_CRITIC" src/deepreason/rules/spawn.py`
+`check: for t in SUCCESSOR DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC)" src/deepreason/rules/spawn.py`
 
 ## Where to change what
 
@@ -124,7 +131,7 @@ operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
 | Whether a sustained prose case changes a status or is only recorded | `_resolve_authority` / `_TRIAL_MODES` in `rules/crit.py` and `Config.ARGUMENTATIVE_AUTHORITY` — never the manifest (`DR-INV-frozen-surfaces`) | `tests/test_criticism_authority.py::test_observe_only_no_status_change` |
 | Which candidates the anti-relapse gate blocks, or the scope it compares within | `RelapseDomain.compatible` and `check` in `rules/guards/anti_relapse.py` | `tests/test_relapse_domains.py::test_archived_gemma_shape_scopes_battery_equivalence` |
 | Counterexample admission, or the deterministic reason echoed on retry | `try_counterexample` in `rules/crit.py`; retry count is `Config.CX_RETRY_MAX` | `tests/test_criticism_authority.py::test_execution_counterexample_still_refutes_under_observe_only` |
-| The shape of every demonstrative fail warrant (ν, id scheme, critic wiring) | `register_fail_warrant` in `rules/warrants.py`, once — all eight call sites inherit it | `tests/test_act.py::test_fail_registers_demonstrative_warrant` |
+| The shape of every demonstrative fail warrant (ν, id scheme, critic wiring) | `register_fail_warrant` in `rules/warrants.py`, once — all twelve call sites, in eight modules, inherit it | `tests/test_act.py::test_fail_registers_demonstrative_warrant` |
 | Which generators or properties `crit_fuzz` probes with | `accepted_generators` / `active_properties` / `promoted_properties` in `rules/experiment.py` | `tests/test_experiment.py::test_refuted_generators_are_never_used` |
 | When a proposed property earns promotion | `promoted_properties` (age + attack-survival-or-witness) and `population_supports` in `rules/experiment.py` | `tests/test_experiment.py::test_fuzz_kills_trap_with_a_proposed_generator` |
 | The conjecture turn contract version or its dispatch | the `active_v4` / `active_v5` / `active_v6` branch in `conj`, against `llm/wire.py` contracts | `tests/test_v6_conjecture_component_atomicity.py` |
@@ -132,7 +139,7 @@ operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
 | Giving criticism any scratchpad context | refused by contract — see `DR-SEAM-rules-x-scratch` | `python -m pytest tests/test_prose_refutation_boundaries.py -k scratch` |
 
 `check: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_harness_fixes.py::test_connection_problem_pins_lineage_ref_commitment tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest tests/test_experiment.py::test_refuted_generators_are_never_used tests/test_experiment.py::test_fuzz_kills_trap_with_a_proposed_generator tests/test_act.py::test_fail_registers_demonstrative_warrant tests/test_act.py::test_overrun_is_a_spec_defect_not_a_refutation tests/test_vision.py::test_supremacy_boundary_in_process_oracle_blocks_visual_argument -q`
-`check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "scratch or formal_backing or structural_program or execution_guard" && test "$(grep -rl 'register_fail_warrant' --include=*.py src/deepreason | wc -l)" -ge 8`
+`check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "scratch or formal_backing or structural_program or execution_guard" && test "$(grep -rl 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc 'rules/warrants.py')" -eq 8 && test "$(grep -rn 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc '^src/deepreason/rules/warrants.py:')" -eq 12 && test "$(grep -rl 'WarrantType.DEMONSTRATIVE' --include=*.py src/deepreason)" = "src/deepreason/rules/warrants.py"`
 
 ## Traps
 
@@ -200,3 +207,4 @@ operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
   inside `crit.py` would pass a naive check and still couple them. The single
   legitimate appearance of the word on that side is `scratch_fence_seq`, which
   is transactional ordering and reads no content.
+`check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence -q && grep -q "ast.walk" tests/test_prose_refutation_boundaries.py && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq "$(grep -c scratch_fence_seq src/deepreason/rules/crit.py)"`

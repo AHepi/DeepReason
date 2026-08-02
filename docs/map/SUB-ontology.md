@@ -2,8 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
-Seams: 
-Seams-undocumented: adjudication x ontology, bridge x ontology, capabilities x ontology, harness x ontology, ontology x rules, ontology x scratch, ontology x workflow
+Seams: DR-SEAM-ontology-x-rules
+Seams-undocumented: adjudication x ontology, bridge x ontology, capabilities x ontology, harness x ontology, ontology x scratch, ontology x workflow
 
 # Ontology — the one schema every other subsystem speaks
 
@@ -33,7 +33,7 @@ the bytes on disk.
 - `StateDiff` — the graph delta an event applies, under its on-record aliases (`att+`, `dep+`, `A+`, `Π+`, `addr+`, `carry+`).
 - `LLMCall`, `LLMAttempt` — provider accounting and per-attempt repair trace; process-only, never graph state.
 - `SchoolRouteReceiptV1`, `ConjectureContextCallReceiptV1` — durable proof of the routing and the advisory scratch a conjecture call actually saw.
-- `deepreason.ontology.frozen` — compatibility re-export of `FrozenRecord`/`FrozenList`/`FrozenDict`, imported by the process-payload modules that `Event` in turn imports.
+- `deepreason.ontology.frozen` — compatibility re-export of `FrozenRecord`/`FrozenList`/`FrozenDict` from `deepreason.frozen`, used by the two process-payload modules (`scratch/events.py`, `bridge/events.py`) that reach back through the ontology package; the other three import `deepreason.frozen` directly.
 
 ## State it owns
 Nothing at runtime — the package is pure schema and holds no module-level mutable
@@ -50,7 +50,7 @@ authoritative relation is `EpistemicState.carries`, appended through
 `StateDiff.carry_add`. Warrants and commitments themselves are *not* in the view —
 the harness keeps them in its own `self.warrants` / `self.commitments` maps,
 persisted through the object store under the four registered schema names.
-`check: python -c "from deepreason.storage.objects import SCHEMAS; from deepreason.ontology import Artifact, Commitment, Problem, Warrant, EpistemicState as S; assert [SCHEMAS[k] for k in ('artifact','commitment','warrant','problem')]==[Artifact,Commitment,Warrant,Problem]; assert set(S.model_fields)=={'artifacts','problems','carries','att','dep','addr','status','hv','reach','conn'}"`
+`check: python -c "from deepreason.storage.objects import SCHEMAS; from deepreason.ontology import Artifact, Commitment, Problem, Warrant, Rule, EpistemicState as S; assert [SCHEMAS[k] for k in ('artifact','commitment','warrant','problem')]==[Artifact,Commitment,Warrant,Problem]; assert set(S.model_fields)=={'artifacts','problems','carries','att','dep','addr','status','hv','reach','conn'}; assert len(Rule)==15"`
 
 ## Where to change what
 
@@ -60,7 +60,7 @@ persisted through the object store under the four registered schema names.
 | add a ref role, or what a role means for the graph | `RefRole` in `ontology/artifact.py`, then `build_dep` / `build_att` in `adjudication/edges.py` | `tests/test_adjudication.py` |
 | add a generator role (a new rule that authors artifacts) | `ProvenanceRole` in `ontology/artifact.py` — and nothing in `adjudication/` may branch on it | `tests/test_adjudication_blindness.py` |
 | add a spawn trigger | `SpawnTrigger` in `ontology/problem.py`, then a `_spawn` branch in `rules/spawn.py` | `tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria` |
-| pin new criteria into every problem at registration | `POPPER_BATTERY` in `ontology/problem.py` (consumed by `Harness.register_problem`) | `tests/test_ontology.py::test_problem_provenance_alias` |
+| pin new criteria into every problem at registration | `POPPER_BATTERY` in `ontology/problem.py` (consumed by `Harness.register_problem`) | `tests/test_reflexive_discipline.py::test_debt_problem_asks_the_genuine_question` |
 | add a status label | `Status` in `ontology/state.py`, then `final_labels` in `adjudication/support.py` | `tests/test_adjudication.py::test_support_cascade_orphaned_not_false` |
 | add a materialized relation to the view | `EpistemicState` in `ontology/state.py` + an aliased field on `StateDiff` in `ontology/event.py` + `Harness._apply_event` | `tests/test_adjudication.py::test_validity_attack_disables_every_carrier_of_a_warrant` |
 | add a budget dimension a test program reads | `Budget.extra` in `ontology/commitment.py` | `tests/test_ontology.py::test_commitment_defaults` |
@@ -81,24 +81,26 @@ critics emitting byte-identical prose against different targets produce the *sam
 artifact id. That is why carriage had to move out of `Artifact.warrants` and into
 `EpistemicState.carries` / `StateDiff.carry_add` — content dedupe would otherwise
 silently erase the second attack edge.
-`check: python -c "from deepreason.ontology import Artifact, Interface, Provenance; i=Interface(); b=Artifact.compute_id('inline:x','utf8',i); a=Artifact(id=b, content_ref='inline:x', codec='utf8', interface=i, warrants=['w1'], provenance=Provenance(role='critic', school='school-3')); assert Artifact.compute_id(a.content_ref,a.codec,a.interface)==b"`
+`check: python -c "from deepreason.canonical import canonical_json, sha256_hex; from deepreason.ontology import Artifact, Interface, Provenance; i=Interface(); mk=lambda w,p: Artifact(id=Artifact.compute_id('inline:x','utf8',i), content_ref='inline:x', codec='utf8', interface=i, warrants=w, provenance=p); a=mk(['w1'], Provenance(role='critic', school='school-3')); b=mk([], Provenance(role='conjecturer')); assert a.id==b.id and a!=b; assert a.id==sha256_hex(canonical_json({'content_ref':'inline:x','codec':'utf8','interface':i.model_dump(mode='json')}))"`
 
 **These models declare less than they appear to.** Unlike `scratch/models.py`
 records, which self-check `id == compute_id(...)` in a model validator, `Artifact`
 accepts any id string — the harness only detects a *collision* (same id, different
 content), so an artifact built without calling `compute_id` registers, replays,
-and is wrong. Likewise `Codec` is a `Literal[...] | str` union that admits any
-string, and the `Verdict` enum is neither exported from `deepreason.ontology` nor
-imported anywhere: `Warrant.verdict` is a plain `str | None` that rules populate
-with the literal `"fail"`. Typing either field is a change to on-record shapes,
-not a cleanup.
-`check: python -c "import deepreason.ontology as o; from deepreason.ontology.commitment import Verdict; from deepreason.ontology import Artifact, Interface, Provenance, Warrant; a=Artifact(id='not-a-content-address', content_ref='inline:x', interface=Interface(), provenance=Provenance(role='seed')); assert a.id != Artifact.compute_id(a.content_ref, a.codec, a.interface); assert Artifact.model_fields['codec'].annotation is str; assert 'Verdict' not in o.__all__ and Warrant.model_fields['verdict'].annotation != Verdict"`
+and is wrong. Two module-level types in this package look load-bearing and bind
+nothing: `Codec` is a `Literal[...] | str` union that admits any string *and is
+referenced nowhere* — `Artifact.codec` is a bare `str` that accepts a junk codec —
+and the `Verdict` enum in `ontology/commitment.py` is neither exported from
+`deepreason.ontology` nor imported by any module, so `Warrant.verdict` is a plain
+`str | None` that rules populate with the literal `"fail"`. Typing either field is
+a change to on-record shapes, not a cleanup.
+`check: python -c "import typing, pathlib, deepreason.ontology as o; from deepreason.ontology.artifact import Codec; from deepreason.ontology import Artifact, Interface, Provenance, Warrant; from deepreason.ontology.commitment import Verdict; a=Artifact(id='not-a-content-address', content_ref='inline:x', codec='not-a-declared-codec', interface=Interface(), provenance=Provenance(role='seed')); assert a.id != Artifact.compute_id(a.content_ref, a.codec, a.interface); assert Artifact.model_fields['codec'].annotation is str; assert typing.get_origin(Codec) is typing.Union and str in typing.get_args(Codec) and pathlib.Path('src/deepreason/ontology/artifact.py').read_text().count('Codec')==1; assert 'Verdict' not in o.__all__ and not hasattr(o,'Verdict') and Warrant.model_fields['verdict'].annotation==(str|None)" && ! grep -rEq "^[[:space:]]*(from|import).*\bVerdict\b" --include=*.py src tests`
 
 **Only `RefRole.DEPENDENCE` builds a `dep` edge.** `EVIDENCE` refs are read by
 `build_att` for validity-node closure and `MENTION` refs are edge-inert — but all
 three are ordinary refs on the same `Interface`, so a role added without touching
 `adjudication/edges.py` is silently a `mention`.
-`check: grep -q "ref.role == RefRole.DEPENDENCE" src/deepreason/adjudication/edges.py`
+`check: python -c "from deepreason.adjudication.edges import build_dep; from deepreason.ontology import Artifact, Interface, Ref, Provenance; p=Provenance(role='seed'); mk=lambda n,r: Artifact(id=n, content_ref='inline:'+n, interface=Interface(refs=[Ref(target='t', role=r)]), provenance=p); arts={a.id: a for a in (Artifact(id='t', content_ref='inline:t', provenance=p), mk('d','dependence'), mk('e','evidence'), mk('m','mention'))}; assert build_dep(arts)=={('d','t')}, build_dep(arts)"`
 
 **Provenance is never a warrant (D2).** `role` and `school` may steer packs and
 scheduling; no adjudication code reads them, and that blindness is the property,
@@ -143,7 +145,7 @@ together, and exact `prompt_tokens`/`completion_tokens` must sum to `tokens`.
 expansion lineage.** `formal_fence_seq` must equal `scratch_fence_seq`; an
 `expansion_decision_ref` demands the complete lineage evidence (request hash,
 index, added blocks) and root/added block sets must be disjoint.
-`check: python -c "import pytest; from pydantic import ValidationError; from deepreason.ontology.event import ConjectureContextCallReceiptV1 as R; h='0'*64; s='sha256:'+h; pytest.raises(ValidationError, R, manifest_digest=h, problem_id='p', formal_fence_seq=4, scratch_fence_seq=5, selection_receipt_ref=s, advisory_context_ref=s, render_receipt_ref=h, rendered_context_ref=h)"`
+`check: python -c "import pytest; from pydantic import ValidationError; from deepreason.ontology.event import ConjectureContextCallReceiptV1 as R; h='0'*64; s='sha256:'+h; b1='sha256:'+'1'*64; b2='sha256:'+'2'*64; base=dict(manifest_digest=h, problem_id='p', formal_fence_seq=4, scratch_fence_seq=4, selection_receipt_ref=s, advisory_context_ref=s, render_receipt_ref=h, rendered_context_ref=h); assert R(**base).expansion_decision_ref is None; pytest.raises(ValidationError, R, **{**base,'scratch_fence_seq':5}); pytest.raises(ValidationError, R, **{**base,'expansion_decision_ref':s}); pytest.raises(ValidationError, R, **{**base,'expansion_decision_ref':s,'expansion_request_hash':s,'expansion_index':1,'added_block_refs':[b1],'root_block_refs':[b1]}); assert R(**base, expansion_decision_ref=s, expansion_request_hash=s, expansion_index=1, added_block_refs=[b1], root_block_refs=[b2]).expansion_index==1"`
 
 **Immutability and aliasing are two separate failure modes.** `FrozenList` and
 `FrozenDict` are `list`/`dict` subclasses with mutators disabled, so an in-place
@@ -152,12 +154,16 @@ mutation raises `TypeError`, not `ValidationError` (field *reassignment* on a
 `self`. And `ProblemProvenance.from_` serializes as `from` — both spellings
 construct under `populate_by_name=True`, but `log.jsonl` and `objects/problem/`
 contain `from`, so a `by_alias=False` dump writes a key no existing root has.
-`check: python -c "import json, pytest; from pydantic import ValidationError; from deepreason.ontology import Interface, Ref, ProblemProvenance, SpawnTrigger; i=Interface(refs=[Ref(target='x',role='mention')]); pytest.raises(TypeError, i.refs.append, Ref(target='y',role='mention')); pytest.raises(ValidationError, setattr, i.refs[0], 'target', 'y'); p=ProblemProvenance(trigger=SpawnTrigger.SEED, from_=['a']); assert json.loads(p.model_dump_json(by_alias=True))['from']==['a']"`
+`check: python -c "import copy, json, pytest; from pydantic import ValidationError; from deepreason.frozen import FrozenDict; from deepreason.ontology import Interface, Ref, ProblemProvenance, SpawnTrigger; i=Interface(refs=[Ref(target='x',role='mention')]); pytest.raises(TypeError, i.refs.append, Ref(target='y',role='mention')); pytest.raises(ValidationError, setattr, i.refs[0], 'target', 'y'); assert copy.copy(i.refs) is i.refs and copy.deepcopy(i.refs) is i.refs; d=FrozenDict({'a':1}); pytest.raises(TypeError, d.__setitem__, 'b', 2); assert copy.deepcopy(d) is d; p=ProblemProvenance(trigger=SpawnTrigger.SEED, from_=['a']); assert json.loads(p.model_dump_json(by_alias=True))['from']==['a'] and 'from_' not in json.loads(p.model_dump_json(by_alias=True))"`
 
 **The ontology is not a leaf.** `ontology/event.py` imports the typed process
 payloads from `scratch`, `bridge`, `capabilities`, `control_events` and
-`conjecture_events`. Those modules stay importable only because they reach for
-`deepreason.ontology.frozen` (a re-export of `deepreason.frozen`) rather than
-`deepreason.ontology`; a top-level `from deepreason.ontology import ...` in any of
-them closes the cycle.
-`check: ! grep -rq "^from deepreason.ontology import" src/deepreason/scratch/events.py src/deepreason/bridge/events.py src/deepreason/capabilities/events.py src/deepreason/control_events.py src/deepreason/conjecture_events.py`
+`conjecture_events`. Those modules stay importable only because none of them names
+`deepreason.ontology` itself at top level: three (`capabilities/events.py`,
+`control_events.py`, `conjecture_events.py`) import the leaf `deepreason.frozen`
+directly, and two (`scratch/events.py`, `bridge/events.py`) go through the
+`deepreason.ontology.frozen` re-export — which works only because importing a
+*submodule* of a half-initialised package is legal while `from deepreason.ontology
+import ...` is not. A top-level `from deepreason.ontology import ...` in any of the
+five closes the cycle.
+`check: grep -q "^from deepreason.ontology.frozen import" src/deepreason/scratch/events.py && grep -q "^from deepreason.ontology.frozen import" src/deepreason/bridge/events.py && grep -q "^from deepreason.frozen import" src/deepreason/capabilities/events.py && grep -q "^from deepreason.frozen import" src/deepreason/control_events.py && grep -q "^from deepreason.frozen import" src/deepreason/conjecture_events.py && ! grep -rq "^from deepreason.ontology import" src/deepreason/scratch/events.py src/deepreason/bridge/events.py src/deepreason/capabilities/events.py src/deepreason/control_events.py src/deepreason/conjecture_events.py`

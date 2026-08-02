@@ -150,6 +150,23 @@ lies, which is worse than no document.
    say it was fixed and when. Traps are the memory of what has actually gone
    wrong, and that memory is the most expensive content here to regenerate.
 
+### Do not measure the tree while a falsification pass is running
+
+A falsification agent proves a check can fail by editing `src/` to make the
+claim false, confirming the check catches it, then reverting. During that
+window the working tree is deliberately wrong, and any test run, gate, or
+sweep measured against it is measuring someone else's mutation.
+
+This has already produced one false alarm: a subsystem ring reported 15
+failures that did not exist — the same command returned 64 passed a minute
+later, and `git status` was clean both times, because the mutation had already
+been reverted by the time anyone looked.
+
+So: run a falsification pass, or measure the tree, never both at once. If you
+must overlap, give the agents `isolation: 'worktree'` so their mutations land
+in a private copy — at the cost that their document edits land there too, and
+have to be brought back.
+
 ### Staleness
 
 `Verified-at` older than the file it documents is a warning, not an error —

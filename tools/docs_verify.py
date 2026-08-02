@@ -13,6 +13,8 @@ Usage:
     python tools/docs_verify.py --stale     # list docs whose Owns: files moved
     python tools/docs_verify.py --audit     # flag checks that cannot fail
     python tools/docs_verify.py --links     # every DR- reference resolves
+    python tools/docs_verify.py --ring      # list each document's test ring
+    python tools/docs_verify.py --ring scratch   # run the scratch subsystem ring
     python tools/docs_verify.py --self-test # verify this tool's own parsing
 """
 
@@ -231,6 +233,43 @@ def cmd_stale() -> int:
     return 0
 
 
+def cmd_ring(targets: list[str]) -> int:
+    """Run the test ring a document declares, for iterating on that subsystem.
+
+    This is what `Verify:` is FOR. A subsystem document already knows which
+    test files guard its code; without this the reader either re-derives that
+    list or reaches for the whole suite, which is how a fourteen-minute gate
+    becomes a feedback loop.
+
+    Naming no target lists every ring, so "what do I run for scratch?" is one
+    command rather than a search.
+    """
+    docs = documents()
+    if not targets:
+        for doc in docs:
+            ring = doc.headers.get("Verify", "").strip()
+            if ring and "docs_verify" not in ring:
+                print(f"{doc.path.stem}\n    {ring}")
+        return 0
+    status = 0
+    for target in targets:
+        match = [d for d in docs if target.lower() in d.path.stem.lower()]
+        if not match:
+            print(f"no map document matches {target!r}", file=sys.stderr)
+            status = 1
+            continue
+        for doc in match:
+            ring = doc.headers.get("Verify", "").strip()
+            if not ring or "docs_verify" in ring:
+                print(f"{doc.path.stem}: no test ring declared "
+                      f"(its Verify: is the map checker, not a ring)")
+                continue
+            print(f"== {doc.path.stem} ==\n{ring}")
+            proc = subprocess.run(ring, shell=True, cwd=REPO)
+            status = status or proc.returncode
+    return status
+
+
 def cmd_links() -> int:
     """Every DR- reference must resolve to a document that exists.
 
@@ -313,12 +352,16 @@ def main() -> int:
                         help="parallel checks (default: min(16, cpus))")
     parser.add_argument("--slow", type=float, default=0.0, metavar="SECONDS",
                         help="report checks slower than SECONDS")
+    parser.add_argument("--ring", nargs="*", metavar="DOC",
+                        help="run the test ring a document declares; no arg lists all")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         return cmd_self_test()
     if args.stale:
         return cmd_stale()
+    if args.ring is not None:
+        return cmd_ring(args.ring)
     if args.links:
         return cmd_links()
     if args.audit:

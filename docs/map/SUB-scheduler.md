@@ -1,9 +1,9 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 08dcdf3c
+Verified-at: 546544b5
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py -q
 Owns: src/deepreason/scheduler/
-Seams: 
-Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, rules x scheduler, scheduler x schools, scheduler x scratch, scheduler x workflow
+Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow
+Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, scheduler x schools, scheduler x scratch
 
 # The scheduler — what gets worked on, in what order, under what budget
 
@@ -20,7 +20,7 @@ stylistic — the package writes no file and mutates no status, HV or reach map,
 so an attention bug cannot become an epistemic one. Almost everything that
 costs tokens is rationed, and almost every ration has a live-run postmortem
 behind it; the cheap deterministic work is deliberately not rationed.
-`check: ! grep -qE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/scheduler.py && ! grep -qE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/scheduler.py`
+`check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py && grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/runtime/progress.py && grep -qE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/harness.py`
 
 ## Entry points
 
@@ -62,7 +62,7 @@ The internal phases are the real surface for a change: `_select_problem`,
 `_experiment_step`, `_property_step`, `_fuzz_sweep`, `_browser_step`,
 `_vision_step`, `_research_step`, `_audit_step`, `_capture_step`, `_lazy_hv`,
 `_maybe_config_referee`, `_recover_workflow_prefixes`, `_record_stop`.
-`check: grep -q "^class Scheduler:" src/deepreason/scheduler/scheduler.py && for s in reflexive_problems problem_family problem_family_key lineage_endpoints stable_component_spec; do grep -q "^def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done && for s in step run report activate_interventions _select_problem _criticize _arg_crit _foreign_arg_crit _simulation_capability_step _experiment_step _property_step _fuzz_sweep _browser_step _vision_step _research_step _audit_step _capture_step _lazy_hv _maybe_config_referee _recover_workflow_prefixes _record_stop; do grep -q "^    def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done`
+`check: grep -q "^class Scheduler:" src/deepreason/scheduler/scheduler.py && grep -q "def run_scheduler(" src/deepreason/ops.py && grep -q "RunManifest v6 scheduler requires the global transaction dispatch guard" src/deepreason/scheduler/scheduler.py && for s in reflexive_problems problem_family problem_family_key lineage_endpoints stable_component_spec; do grep -q "^def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done && for s in step run report activate_interventions _select_problem _criticize _arg_crit _foreign_arg_crit _simulation_capability_step _experiment_step _property_step _fuzz_sweep _browser_step _vision_step _research_step _audit_step _capture_step _lazy_hv _maybe_config_referee _recover_workflow_prefixes _record_stop; do grep -q "^    def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done && for c in rules/conj.py jolts.py views/jolt_signals.py easy.py; do grep -q "from deepreason.scheduler.scheduler import" "src/deepreason/$c" || exit 1; done`
 
 Two orderings are load-bearing. The tail of `step()` runs the design steps
 before the fuzz sweep, so new generators and properties apply in the same cycle,
@@ -93,6 +93,10 @@ epistemic — `_problem_worked` (liveness ages), `_disc_attempts` / `_disc_last`
 early-stop hook instead. Every signal the package emits is registered in
 `src/deepreason/signals.py` — with one exception, recorded under Traps.
 `check: for s in _problem_worked _disc_attempts _disc_last _fuzz_clean _vision_done _hv_skipped _recrit_cursor _flag_streak _cooldown _intervention_until _v6_deferred_model_phases; do grep -q "self\.$s" src/deepreason/scheduler/scheduler.py || exit 1; done && for t in cycle embedder spec-generation scheduler-stop stop-escape disc-attempts-exhausted disc-transport-deferred hv-skip-oversize research-awaiting-agent research-fetch-exhausted foreign-criticism-coverage.v1; do grep -q "\"$t\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py tests/test_scheduler.py::test_on_cycle_true_stops_the_run_early -q`
+The "one exception" is an exact count, not a hedge: this check AST-scans every
+`record_measure` head in the package, fails on any unregistered literal, and
+fails if a SECOND variable-headed signal appears (both mutations were run).
+`check: python -c "import ast,deepreason.signals as S; h=[(n.lineno,next((k.value.elts[0] for k in n.keywords if k.arg=='inputs' and getattr(k.value,'elts',None)),None)) for n in ast.walk(ast.parse(open('src/deepreason/scheduler/scheduler.py').read())) if isinstance(n,ast.Call) and getattr(n.func,'attr',getattr(n.func,'id',''))=='record_measure']; g=lambda e: e.values[0] if isinstance(e,ast.JoinedStr) and e.values else e; bad=[(l,g(e).value) for l,e in h if isinstance(g(e),ast.Constant) and not S.is_known(g(e).value)]; var=sorted(ast.unparse(e) for l,e in h if not isinstance(g(e),ast.Constant)); assert h, 'scan found no record_measure calls'; assert not bad, bad; assert var==['marker','signal'], var"`
 
 ## Where to change what
 
@@ -115,8 +119,12 @@ early-stop hook instead. Every signal the package emits is registered in
 | Config-referee cadence | `_maybe_config_referee`; manifest `inquiry_capability_policy.config_referee` | `tests/test_config_referee.py::test_scheduler_fires_referee_only_on_the_frozen_cadence`, `::test_scheduler_absorbs_budget_denied_referee` |
 | What `report()` returns / the Pareto frontier axes | `report`; `Config.PARETO_AXES` and `capture/pareto.frontier` | `tests/test_scheduler.py::test_multi_cycle_spawns_and_persistence` |
 
-`check: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage tests/test_budget.py::test_arg_crit_per_cycle_cap tests/test_properties.py::test_standing_recrit_pool_includes_active_properties tests/test_experiment.py::test_fuzz_sweep_is_not_rationed_behind_llm_slots tests/test_diversity.py::test_stagnation_ladder_switches_on_spec_injection -q`
-`check: python -m pytest tests/test_v6_scheduler_model_phase_deferral.py tests/test_workflow_stop_lifecycle_c4.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_config_referee.py::test_scheduler_fires_referee_only_on_the_frozen_cadence tests/test_config_referee.py::test_scheduler_absorbs_budget_denied_referee tests/test_simulation_capability_v5.py::test_conjecture_records_only_proposal_and_scheduler_executes_later tests/test_simulation_capability_v5.py::test_dispatched_crash_recovers_as_unknown_without_silent_rerun tests/test_research.py::test_backend_exception_is_caught_logged_and_cooled_down tests/test_research.py::test_agent_mode_waits_and_never_claims_research_off -q`
+Every Test cell above is a node id this check runs by name, so renaming a test
+breaks the row instead of silently passing under a whole-file run; every Edit
+cell names a symbol the check greps for.
+`check: python -m pytest tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_scheduler.py::test_integration_budget_share_caps_connection_work tests/test_scheduler.py::test_multi_cycle_spawns_and_persistence tests/test_rotation.py::test_attempt_cap_frees_the_rotation tests/test_rotation.py::test_transport_drop_defers_instead_of_burning_the_futility_cap tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage tests/test_budget.py::test_arg_crit_per_cycle_cap tests/test_properties.py::test_standing_recrit_pool_includes_active_properties tests/test_experiment.py::test_fuzz_sweep_is_not_rationed_behind_llm_slots tests/test_diversity.py::test_stagnation_ladder_switches_on_spec_injection -q`
+`check: python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_v6_experiment_and_property_design_defer_before_provider tests/test_v6_scheduler_model_phase_deferral.py::test_v6_deferral_marker_is_durable_bounded_and_resume_deduplicated tests/test_workflow_stop_lifecycle_c4.py::test_v4_stop_is_a_replayable_control_event_bound_to_run_stop tests/test_foreign_school_criticism_scheduler_c3.py tests/test_config_referee.py::test_scheduler_fires_referee_only_on_the_frozen_cadence tests/test_config_referee.py::test_scheduler_absorbs_budget_denied_referee tests/test_simulation_capability_v5.py::test_conjecture_records_only_proposal_and_scheduler_executes_later tests/test_simulation_capability_v5.py::test_dispatched_crash_recovers_as_unknown_without_silent_rerun tests/test_research.py::test_backend_exception_is_caught_logged_and_cooled_down tests/test_research.py::test_agent_mode_waits_and_never_claims_research_off -q`
+`check: for c in LIVENESS_QUEUE FOCUS_PROBLEM FOCUS_FAMILY INTEGRATION_BUDGET_SHARE ARG_CRIT_PER_CYCLE CRIT_BATCH_K RECRIT_STANDING DISC_ATTEMPTS_MAX DISC_COOLDOWN GEN_PROPOSE_PERIOD GEN_MAX PROP_PROPOSE_PERIOD PROP_MAX RESEARCH_PERIOD RESEARCH_COOLDOWN RESEARCH_ATTEMPTS_MAX PARETO_AXES CAPTURE_W; do grep -qE "^    $c:" src/deepreason/config.py || exit 1; done && for m in _disc_paused _standing_recrit_pool _foreign_criticism_coverage _v6_simulation_result_follow_up _log_research_failure _stop_metrics _defer_untransactional_v6_phase; do grep -q "^    def $m(" src/deepreason/scheduler/scheduler.py || exit 1; done && grep -q "^_REFLEXIVE_TRIGGERS = (" src/deepreason/scheduler/scheduler.py && grep -q "^def respond(" src/deepreason/capture/ladder.py && grep -q "config_referee" src/deepreason/run_manifest.py`
 
 ## Traps
 
@@ -199,4 +207,4 @@ early-stop hook instead. Every signal the package emits is registered in
   elements — so the marker is neither scanned nor registered in `signals.py`.
   Any signal emitted through a variable has the same hole. Observed on
   `08dcdf3c`; recorded, not fixed here.
-`check: grep -q "marker = \"v6-model-phase-deferred.v1\"" src/deepreason/scheduler/scheduler.py && grep -q "v6-model-phase-deferred.v1" src/deepreason/verification/report.py && ! python -c "from deepreason.signals import is_known; raise SystemExit(0 if is_known(\"v6-model-phase-deferred.v1\") else 1)"`
+`check: grep -q "marker = \"v6-model-phase-deferred.v1\"" src/deepreason/scheduler/scheduler.py && grep -q "v6-model-phase-deferred.v1" src/deepreason/verification/report.py && python -c "from deepreason.signals import is_known; assert is_known('cycle'), 'registry lookup is broken - this check proved nothing'; assert not is_known('v6-model-phase-deferred.v1'), 'marker is now registered: delete this trap'"`

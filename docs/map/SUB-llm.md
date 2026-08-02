@@ -1,9 +1,9 @@
 <!-- DR-SUB-llm -->
-Verified-at: 08dcdf3c
+Verified-at: 546544b5
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
-Seams: DR-SEAM-llm-x-workflow
-Seams-undocumented: bridge x llm, capabilities x llm, harness x llm, llm x manifest, llm x ontology, llm x rules, llm x scheduler, llm x schools, llm x scratch, llm x verification
+Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
+Seams-undocumented: bridge x llm, capabilities x llm, harness x llm, llm x ontology, llm x scheduler, llm x schools, llm x scratch, llm x verification
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 
@@ -24,7 +24,7 @@ arrow points strictly outward and a transport bug cannot become an adjudication
 bug. That asymmetry is enforced structurally: `llm/` never imports the harness,
 the scheduler, the rules or the adjudicator, and `LLMCall` is minted in exactly
 one function.
-`check: ! grep -rqE "from deepreason\.(harness|scheduler|rules|adjudication|capture|informal|verification|amendment) " src/deepreason/llm/ && ! grep -rqE "append_event|log\.jsonl" src/deepreason/llm/ && test "$(grep -rl "LLMCall(" src/deepreason --include=*.py | grep -v "src/deepreason/ontology/" | tr "\n" " ")" = "src/deepreason/llm/adapter.py " && ! grep -rn "\.complete(" src/deepreason --include=*.py | grep -v "^src/deepreason/llm/" | grep -qv "^src/deepreason/cli/doctor.py:"`
+`check: ! grep -rqE "^[[:space:]]*(from|import) +deepreason\.(harness|scheduler|rules|adjudication|capture|informal|verification|amendment)\b" src/deepreason/llm/ --include=*.py && ! grep -rqE "append_event|log\.jsonl" src/deepreason/llm/ && test "$(grep -rl "LLMCall(" src/deepreason --include=*.py | grep -v "src/deepreason/ontology/" | tr "\n" " ")" = "src/deepreason/llm/adapter.py " && python -c "import ast, pathlib; t = ast.parse(pathlib.Path('src/deepreason/llm/adapter.py').read_text()); c = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == 'call'][0]; m = [n.lineno for n in ast.walk(t) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'LLMCall']; assert m and all(c.lineno <= l <= c.end_lineno for l in m), (m, c.lineno, c.end_lineno)" && ! grep -rn "\.complete(" src/deepreason --include=*.py | grep -v "^src/deepreason/llm/" | grep -qv "^src/deepreason/cli/doctor.py:"`
 
 Pack construction and the cost model are documented separately in
 DR-CON-packs-and-token-economy; school-to-seat routing in DR-CON-schools; the
@@ -79,6 +79,7 @@ lets an auxiliary contract — batch critic, config referee, experimenter,
 property designer, spec generator, the scratch and bridge authors, thesis —
 reuse a configured seat under a different prompt. Compact mode adds three
 website directives that have no standard-profile template at all.
+`check: python -c "from deepreason.llm.roles import ROLES, TEMPLATES, COMPACT_TEMPLATES; assert len(ROLES) == 8 and 'embedder' in ROLES and 'embedder' not in TEMPLATES; assert len(TEMPLATES) > len(ROLES); assert sorted(set(COMPACT_TEMPLATES) - set(TEMPLATES)) == ['website_art_direction', 'website_component_contract', 'website_outline']"`
 
 ## State it owns
 
@@ -99,7 +100,7 @@ outstanding `reserved` bound, all under one lock. Per endpoint object:
 after `complete()`, to build the attempt trace. There is also a module-level
 `_MODEL_CACHE` in `endpoints.py` memoizing `/models` per `(base_url, api_key)`
 for the `auto` / `auto-alt` sentinels; it is process-global, not per-run.
-`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && ! grep -rqE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/adapter.py src/deepreason/llm/wire.py src/deepreason/llm/repair.py src/deepreason/llm/packs.py src/deepreason/llm/firewall.py src/deepreason/llm/endpoints.py && grep -q "^_MODEL_CACHE: dict" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 5`
+`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && test "$(grep -rlE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/ --include=*.py)" = "src/deepreason/llm/capabilities.py" && grep -q "^_MODEL_CACHE: dict\[tuple\[str, str | None\]" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 5`
 
 **Typed records it constructs** (shapes owned by DR-SUB-ontology): `LLMCall`,
 one per completed or abandoned call; `LLMAttempt`, one per provider request
@@ -198,7 +199,7 @@ through the caller, including on the failure paths.
   substitute for cross-FAMILY independence, so they must fail closed on zero
   leases — no family is not one family — and cross-family governs whenever more
   than one family is present, regardless of configuration.
-`check: ! sed -n "/    def judge_seats(/,/    def _select_judge_ensemble(/p" src/deepreason/llm/adapter.py | grep -q "require_cross" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_single_family_predicate_fails_closed_on_no_leases tests/test_prose_refutation_boundaries.py::test_the_single_model_predicate_fails_closed_on_no_leases tests/test_prose_refutation_boundaries.py::test_the_cross_school_gate_governs_only_a_single_family_run -q`
+`check: sed -n "/    def judge_seats(/,/    def _select_judge_ensemble(/p" src/deepreason/llm/adapter.py | grep -qF "self.leases.get(" && ! sed -n "/    def judge_seats(/,/    def _select_judge_ensemble(/p" src/deepreason/llm/adapter.py | grep -q "require_cross" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_single_family_predicate_fails_closed_on_no_leases tests/test_prose_refutation_boundaries.py::test_the_single_model_predicate_fails_closed_on_no_leases tests/test_prose_refutation_boundaries.py::test_the_cross_school_gate_governs_only_a_single_family_run -q`
 - **Compact recovery arms the NEXT call and can never be armed by the model.**
   Switching transport inside a failing call would make one `LLMCall` describe
   two presentations; `_mark_compact_recovery` therefore only sets a flag after
@@ -222,5 +223,7 @@ through the caller, including on the failure paths.
 - **`_document_excerpt` is dead code.** The labeled head/tail excerpt existed
   because prefix-only clipping made compact critics refute valid compiled
   designs for "ending abruptly"; the critic target is now a mandatory section
-  and the helper has no callers. Recorded in full, with its check, under
-  DR-CON-packs-and-token-economy — do not re-derive it here.
+  and the helper has no callers anywhere in `src/`. Why it was built, and why
+  it stays, is recorded in full under DR-CON-packs-and-token-economy — do not
+  re-derive that here.
+`check: test "$(grep -rc "_document_excerpt" src/deepreason --include=*.py | grep -v ":0$")" = "src/deepreason/llm/packs.py:1"`

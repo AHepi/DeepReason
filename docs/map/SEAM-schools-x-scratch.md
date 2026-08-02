@@ -43,7 +43,7 @@ rather than routine.
 | Per-cycle wiring | `scheduler/scheduler.py` | `_plan_conjecture_context`, `_school_dict` | the planner is handed the bare allocated id; the stance/weight/crossover dict goes only to `conj`'s `school=` argument |
 | Durable receipt | `ontology/event.py` | `ConjectureContextCallReceiptV1.school_id` | the school travels with the advisory-context proof onto the append-only log |
 | v4/v5 replay authority | `workflow/replay.py` | `_validate_proposal` | `context_receipt.school_id != work.school_id` fails the root |
-| v6 recovery authority | `workflow/conjecture_recovery.py` | `_authorized_provider_result` | a scratch-bearing exposure is re-validated against the frozen payload's `school_id` on every restart |
+| v6 recovery authority | `workflow/conjecture_recovery.py` | `_validate_authority` | a scratch-bearing exposure is re-validated against the frozen payload's `school_id` on every restart |
 | Replay validation | `invariants.py` | `validate_conjecture_context` | a receipt carrying a `school_id` with no `SchoolRouteReceiptV1` on the same call is not a valid root |
 
 `check: python -c "import inspect; from deepreason.llm import packs; sig=lambda n: set(inspect.signature(getattr(packs,n)).parameters); assert {'school','scratch_context'} <= sig('render_conj_pack'); assert all(not sig(n) & {'school','scratch_context'} for n in ('render_crit_pack','render_batch_crit_pack'))"`
@@ -54,11 +54,19 @@ rather than routine.
 
 `check: python -c "import pytest; from deepreason.ontology.event import ConjectureContextCallReceiptV1 as R; from deepreason.scratch.conjecture import validate_conjecture_context_call as v; r=R(manifest_digest='a'*64, problem_id='P', school_id='school-0', formal_fence_seq=3, scratch_fence_seq=3, selection_receipt_ref='sha256:'+'1'*64, advisory_context_ref='sha256:'+'2'*64, render_receipt_ref='3'*64, rendered_context_ref='4'*64); k=dict(manifest_digest='a'*64, problem_id='P', scratch_aliases={}, provider_prompt=b''); assert all('belongs to another school' in str(pytest.raises(ValueError, v, None, r, school_id=s, **k).value) for s in ('school-1', None))"`
 
-The same mismatch is caught three more times, at three different distances from
-the call: in the rule before dispatch, in v4/v5 replay against the work order,
-and in `verify_root` against the route receipt on the same event.
+The same mismatch is caught four more times, at four different distances from
+the call: in the rule before dispatch, in the expansion planner against the
+prior plan, in v4/v5 replay against the work order, in v6 restart recovery
+against the frozen payload, and in `verify_root` against the route receipt on
+the same event. The check below reads each guard through the AST rather than by
+grep, because a commented-out comparison leaves the text intact — the earlier
+grep form of this check passed with `workflow/replay.py`'s clause disabled by a
+single `#`. That matters more here than elsewhere: the v4/v5 replay comparison,
+and the receipt comparison the v6 restart path leans on, have no gate test
+behind them at all (see Traps), so this check is their only tripwire short of
+the root sweep.
 
-`check: grep -q "conjecture context was planned for another school" src/deepreason/rules/conj.py && grep -q "context_receipt.school_id != work.school_id" src/deepreason/workflow/replay.py && grep -q "def validate_conjecture_context(" src/deepreason/invariants.py && grep -q "school context has no matching route receipt" src/deepreason/invariants.py`
+`check: python -c "import ast, pathlib; fn=lambda p,n: next(f for f in ast.walk(ast.parse(pathlib.Path(p).read_text())) if isinstance(f, ast.FunctionDef) and f.name==n); live=lambda f,e: any(ast.unparse(n)==e for n in ast.walk(f)); msg=lambda f,m: any(m in ast.unparse(n) for n in ast.walk(f) if isinstance(n, (ast.Raise, ast.Call))); c=fn('src/deepreason/rules/conj.py','conj'); assert live(c, 'conjecture_context_plan.school_id != execution_school_id') and msg(c, 'conjecture context was planned for another school'); x=fn('src/deepreason/scratch/conjecture.py','plan_conjecture_context_expansion'); assert live(x, 'prior.school_id != school_id'); r=fn('src/deepreason/workflow/replay.py','_validate_proposal'); assert live(r, 'context_receipt.school_id != work.school_id'); a=fn('src/deepreason/workflow/conjecture_recovery.py','_validate_authority'); assert live(a, \"payload.get('school_id')\"); v=fn('src/deepreason/invariants.py','validate_conjecture_context'); assert live(v, 'receipt.school_id is not None and route_receipt is None') and msg(v, 'school context has no matching route receipt'); assert live(fn('src/deepreason/invariants.py','verify_root'), 'validate_conjecture_context(e)')"`
 
 ### The pad is shared, not partitioned
 
@@ -66,17 +74,20 @@ One scratchpad serves every school. A note written during `school-3`'s turn is
 an ordinary retrieval candidate for `school-0` on the next cycle, because
 nothing in the record says who wrote it in school terms. The school changes the
 selection SEED, and therefore tie-breaks and exploratory draws; it does not
-change the candidate set. Three plans over one block at one fence: identical
-`final_order`, three distinct request hashes.
+change the candidate set. Three plans over one pad of six blocks at one fence:
+one `final_order` of at least three blocks, identical across all three, and
+three distinct request hashes. The pad has to hold several blocks for that to
+mean anything — over a single-block pad the order assertion is satisfied by any
+selector at all, including one that reorders or partitions by school.
 
-`check: python -c "import sys,tempfile,pathlib; sys.path.insert(0,'tests'); from deepreason.harness import Harness; from deepreason.scratch.service import ScratchService; from deepreason.scratch.conjecture import plan_conjecture_context as P; import test_conjecture_scratch_context_v4 as T; h=Harness(pathlib.Path(tempfile.mkdtemp())/'run'); p=T._seed(h); s=ScratchService(h); T._relevant_block(s,p); m=T._manifest(T._config()); f=h._next_seq-1; pl=[P(s,problem=p,school_id=i,manifest_digest=m.sha256,scratch_policy=m.scratch_policy,context_policy=m.control_plane_policy.conjecture_context,formal_fence_seq=f,scratch_fence_seq=f) for i in (None,'school-0','school-1')]; assert len({tuple(x.attention_pack.selection_receipt.final_order) for x in pl})==1; assert len({x.attention_pack.selection_receipt.request_hash for x in pl})==3; assert [x.school_id for x in pl]==[None,'school-0','school-1']"`
+`check: python -c "import sys,tempfile,pathlib; sys.path.insert(0,'tests'); from deepreason.harness import Harness; from deepreason.scratch.service import ScratchService; from deepreason.scratch.models import ScratchProvenanceV1 as V; from deepreason.scratch.conjecture import plan_conjecture_context as P; import test_conjecture_scratch_context_v4 as T; h=Harness(pathlib.Path(tempfile.mkdtemp())/'run'); p=T._seed(h); s=ScratchService(h); [s.create_block({'content': 'Note %d: a delayed negative feedback loop might stabilize the observed oscillation.' % i, 'unfinished': 'Check whether delay %d changes sign.' % i}, V(actor='user', origin='b3-test', formal_artifact_refs=[p.id])) for i in range(6)]; m=T._manifest(T._config()); f=h._next_seq-1; pl=[P(s,problem=p,school_id=i,manifest_digest=m.sha256,scratch_policy=m.scratch_policy,context_policy=m.control_plane_policy.conjecture_context,formal_fence_seq=f,scratch_fence_seq=f) for i in (None,'school-0','school-1')]; o=[tuple(x.attention_pack.selection_receipt.final_order) for x in pl]; assert len(o[0]) >= 3, o; assert len(set(o))==1, o; assert len({x.attention_pack.selection_receipt.request_hash for x in pl})==3; assert [x.school_id for x in pl]==[None,'school-0','school-1']"`
 
 The record agrees. In the committed selfstudy root
 `completed-epoch3-run-9175f0ec`, four schools consumed advisory context across
 seven distinct seeds; `school-0` and `school-1` selected the identical five
 blocks, and every school's selection is a subset of `school-3`'s thirteen.
 
-`check: python -c "import json,pathlib,collections; R=pathlib.Path('experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a'); recs={r['id']: r['data'] for r in (json.loads(p.read_text()) for p in (R/'objects'/'scratch-attention-receipt').rglob('*') if p.is_file())}; ctx=[e['llm']['conjecture_context'] for e in (json.loads(l) for l in (R/'log.jsonl').open()) if (e.get('llm') or {}).get('conjecture_context')]; by=collections.defaultdict(set); seeds=set(); [(by[c['school_id']].update(recs[c['selection_receipt_ref']]['final_order']), seeds.add(recs[c['selection_receipt_ref']]['deterministic_seed'])) for c in ctx]; assert sorted(by)==['school-0','school-1','school-2','school-3']; assert len(seeds)==7; assert by['school-0']==by['school-1'] and by['school-0'] < by['school-3']"`
+`check: python -c "import json,pathlib,collections; R=pathlib.Path('experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a'); recs={r['id']: r['data'] for r in (json.loads(p.read_text()) for p in (R/'objects'/'scratch-attention-receipt').rglob('*') if p.is_file())}; ctx=[e['llm']['conjecture_context'] for e in (json.loads(l) for l in (R/'log.jsonl').open()) if (e.get('llm') or {}).get('conjecture_context')]; by=collections.defaultdict(set); seeds=set(); [(by[c['school_id']].update(recs[c['selection_receipt_ref']]['final_order']), seeds.add(recs[c['selection_receipt_ref']]['deterministic_seed'])) for c in ctx]; assert sorted(by)==['school-0','school-1','school-2','school-3']; assert len(seeds)==len(ctx)==7; assert len(by['school-3'])==13 and all(v <= by['school-3'] for v in by.values()); assert by['school-0']==by['school-1'] and len(by['school-0'])==5"`
 
 ### Where each side carries the school
 
@@ -114,7 +125,7 @@ mechanism of the refusal (AST-walked imports, absent parameters, absent wire
 fields); what belongs here is that the refusal survives school conditioning
 rather than being an artifact of the critic having no context at all.
 
-`check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "the_criticism_rule_imports_no_scratch_module or the_criticism_pack_cannot_be_given_scratch or the_defended_trial_imports_no_scratch_module or no_scratch_identifier_reaches_a_warrant_or_an_attack_edge" && python -c "from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; p=X(endpoint_lease=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')), critic_school_id='school-3', critic_school_context={'id':'school-3','stance_text':'counterexample first'})[1]; assert 'school-3' in p and 'counterexample first' in p and 'scratch' not in p.lower()"`
+`check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch tests/test_prose_refutation_boundaries.py::test_the_defended_trial_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge -q && python -c "from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; p=X(endpoint_lease=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')), critic_school_id='school-3', critic_school_context={'id':'school-3','stance_text':'counterexample first'})[1]; assert 'school-3' in p and 'counterexample first' in p and 'scratch' not in p.lower()"`
 
 **Criticism cannot even declare a scratch context plan.** Every
 `ContextPackPlanV1` the criticism rule builds is `plan_kind="dossier"` — frozen
@@ -123,7 +134,7 @@ exposure ledger is the record of what a seat was shown, so this is not a habit
 of the current call sites: a criticism seat that showed scratch would have to
 mint a plan kind it never mints.
 
-`check: test "$(grep -o 'plan_kind="[a-z_]*"' src/deepreason/rules/crit.py | sort -u)" = 'plan_kind="dossier"' && grep -q 'plan_kind="scratch"' src/deepreason/rules/conj.py`
+`check: python -c "import ast, pathlib; kinds=lambda p: [k.value for n in ast.walk(ast.parse(pathlib.Path(p).read_text())) if isinstance(n, ast.Call) for k in n.keywords if k.arg=='plan_kind']; c=kinds('src/deepreason/rules/crit.py'); assert c, 'criticism builds no context pack plan at all'; assert all(isinstance(v, ast.Constant) and v.value=='dossier' for v in c), [ast.unparse(v) for v in c]; assert any(isinstance(v, ast.Constant) and v.value=='scratch' for v in kinds('src/deepreason/rules/conj.py'))"`
 
 **The scratchpad does not know what a school IS.** `scratch/conjecture.py` is
 the only module under `scratch/` in which the word appears at all, and there it
@@ -140,14 +151,14 @@ partitioning would actually be implemented: `attention.py` — `_candidates`,
 rule: the first line naming a school in the selector is the line that turns the
 commons into silos.
 
-`check: grep -q "school_id" src/deepreason/scratch/conjecture.py && grep -q "    def _final_order(" src/deepreason/scratch/attention.py && ! grep -rl "school" src/deepreason/scratch --include=*.py | grep -qv "conjecture.py" && ! grep -rq "deepreason\.capture" src/deepreason/scratch/ && grep -q "^STANCE_LIBRARY" src/deepreason/capture/schools.py && grep -q "def allocate" src/deepreason/capture/schools.py`
+`check: python -c "import pathlib; S=pathlib.Path('src/deepreason/scratch'); mods={p: p.read_text() for p in S.rglob('*.py')}; assert 'school_id' in mods[S/'conjecture.py']; assert '    def _final_order(' in mods[S/'attention.py']; assert [p.name for p in mods if 'school' in mods[p]]==['conjecture.py'], sorted(p.name for p in mods if 'school' in mods[p]); assert not [p.name for p in mods if 'deepreason.capture' in mods[p]]; t=pathlib.Path('src/deepreason/capture/schools.py').read_text(); assert '\nSTANCE_LIBRARY' in '\n'+t and '\ndef allocate' in t and '\ndef reseed' in t"`
 
 **Stance text never crosses.** The school dict handed to `conj` carries `id`,
 `stance_text`, `weight` and `crossover`; only `id` continues into the planner.
 Retrieval cannot be steered by what a school BELIEVES — the seed sees an
 identifier, and the identifier's pattern would reject prose anyway.
 
-`check: python -c "import inspect; from deepreason.scratch import conjecture as c; ps=[inspect.signature(f).parameters for f in (c.plan_conjecture_context, c.plan_conjecture_context_expansion)]; assert all(p['school_id'].annotation=='str | None' for p in ps); assert not [k for p in ps for k in p if 'stance' in k or 'weight' in k or k=='school']; assert 'school' not in inspect.signature(c._focus_blocks).parameters"`
+`check: python -c "import inspect; from deepreason.scratch import conjecture as c; ps=[inspect.signature(f).parameters for f in (c.plan_conjecture_context, c.plan_conjecture_context_expansion)]; assert all(p['school_id'].annotation=='str | None' for p in ps); assert not [k for p in ps for k in p if 'stance' in k or 'weight' in k or k=='school']; assert not [k for k in inspect.signature(c._focus_blocks).parameters if 'school' in k]"`
 
 **A stored note records no school, and an artifact records no note.** The
 reference arrow is one-way: `ScratchProvenanceV1.formal_artifact_refs` lets a
@@ -180,11 +191,14 @@ back, so the order is fixed.
    content address, so every recorded root's `scratch_state` re-derives
    differently — wrong by definition. If schools need private notes, the seam to
    change is retrieval (a channel keyed on the seed), not storage.
-4. **Move the four school comparisons together.** `conj`'s plan/execution
-   pairing, `validate_conjecture_context_call`, `replay._validate_proposal` and
-   `invariants.validate_conjecture_context` all compare a receipt's school
+4. **Move the five school comparisons together.** `conj`'s plan/execution
+   pairing, `plan_conjecture_context_expansion`'s `prior_plan` refusal,
+   `validate_conjecture_context_call` (which `conjecture_recovery.
+   _validate_authority` re-runs on every restart), `replay._validate_proposal`
+   and `invariants.validate_conjecture_context` all compare a receipt's school
    against an authority. Change one and a run dispatches, then fails its own
-   replay.
+   replay. Two of them are unguarded by the gate, so the map check on the
+   agreement section is what catches a half-move.
 5. **Then the prompt.** `render_conj_pack` is the only renderer that may gain
    scratch material. If a change makes the criticism pack want it, the change is
    wrong.
@@ -218,16 +232,25 @@ expensive one, because by then the root is committed.
   return `None` for some mode and the plan carries a school the turn does not,
   and `conj` refuses the plan it was just handed.
 `check: grep -q "context_plan = self._plan_conjecture_context(problem, school_id)" src/deepreason/scheduler/scheduler.py && grep -q "school_id if school_id in school_leases else None" src/deepreason/scheduler/scheduler.py && grep -q "def _plan_conjecture_context(self, problem, school_id: str | None):" src/deepreason/scheduler/scheduler.py`
-- **The v4/v5 replay school-context guard has no test behind it.** Deleting
+- **Two of the five school comparisons have no test behind them, and the v6 one
+  is not the exception it was written up as.** Deleting
   `or context_receipt.school_id != work.school_id` from
-  `workflow/replay.py::_validate_proposal` left 712 tests green under
-  `python -m pytest tests/ -n 4 -k "replay or workflow or scratch or context or
-  school"` (measured 2026-08-02; mutation reverted, tree confirmed clean). The
-  v6 path IS covered — the recovery test named in "How to change it" fails at
-  once — so the gap is on the pre-v6 envelope alone. Treat that guard as
-  protected by the root sweep, not by the gate. Residue: the full gate was not
-  run under the mutation, so a covering test outside that keyword selection has
-  not been excluded.
+  `workflow/replay.py::_validate_proposal` left 483 passed / 0 failed across
+  every `tests/test_*{school,scratch,context,recover,conjecture}*.py` file.
+  Deleting the v6 twin — `receipt.school_id != school_id` in
+  `validate_conjecture_context_call` — left the same set at 482 passed, its one
+  failure a thread-liveness flake in `test_mcp_scratch_bridge.py` that is green
+  on a clean re-run. No test in the repository names
+  `validate_conjecture_context_call` or the string "belongs to another school"
+  at all. An earlier revision of this trap asserted the v6 path WAS covered,
+  because `test_recovery_rejects_scratch_exposure_without_durable_context_authority`
+  fails when recovery is broken; that test covers the ADJACENT guard — that a
+  scratch-bearing exposure carry a context receipt at all — and passes with the
+  school comparison deleted. Treat both comparisons as protected by the root
+  sweep and by this document's AST check, not by the gate. (Measured
+  2026-08-02; both mutations reverted, tree confirmed clean.) Residue: the full
+  gate was not run under either mutation, so a covering test outside that file
+  selection has not been excluded.
 - **"School-blind" and "school-scoped" describe different things here.** The
   criticism PROMPT is blind to the target's school and deliberately names the
   critic's own (`DR-CON-schools`). The scratchpad is the reverse: school-scoped
@@ -239,4 +262,4 @@ expensive one, because by then the root is committed.
   `school-stance` section is `droppable=False, compressible=True` with a
   24-token floor. A budget change that starts compressing section 7 to make room
   for section 5 breaks the receipt, not the prompt.
-`check: python -c "import inspect; from deepreason.llm import packs; s=inspect.getsource(packs.render_conj_pack); a=s[s.index('\"scratch-advisory-context\"'):][:300]; b=s[s.index('\"school-stance\"'):][:300]; assert 'droppable=False' in a and 'compressible=False' in a; assert 'droppable=False' in b and 'compressible=True' in b and 'min_tokens=24' in b"`
+`check: python -c "import inspect; from deepreason.llm import packs; s=inspect.getsource(packs.render_conj_pack); a=s[s.index('\"scratch-advisory-context\"'):][:200]; b=s[s.index('\"school-stance\"'):][:300]; assert 'droppable=False' in a and 'compressible=False' in a and '\n                7,\n' in a; assert 'droppable=False' in b and 'compressible=True' in b and 'min_tokens=24' in b and '\n                5,\n' in b"`
