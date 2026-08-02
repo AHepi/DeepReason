@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-ontology -->
-Verified-at: 461cf287
+Verified-at: 9fa394d9
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/programs.py, src/deepreason/ontology/commitment.py, src/deepreason/ontology/artifact.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/hv.py, src/deepreason/informal/skeleton.py
 Sides: DR-SUB-evaluation, DR-SUB-ontology
@@ -187,7 +187,7 @@ is a plain `str | None` that `register_fail_warrant` fills with the literal
 `"fail"`. The strings are on-record in every existing root, so typing the field is
 a change to recorded shapes rather than a cleanup (`DR-INV-frozen-surfaces`,
 surface 3).
-`check: python -c "import deepreason.ontology as o; from deepreason.ontology.commitment import Verdict; from deepreason.ontology import Warrant; from deepreason import programs, oracle; assert (programs.PASS, programs.FAIL, programs.OVERRUN)==('pass','fail','overrun')==tuple(v.value for v in Verdict); assert (oracle.PASS, oracle.FAIL, oracle.OVERRUN)==(programs.PASS, programs.FAIL, programs.OVERRUN); assert 'Verdict' not in o.__all__ and not hasattr(o,'Verdict'); assert Warrant.model_fields['verdict'].annotation==(str|None)" && sh -c '! grep -rEn "\bVerdict\b" --include=*.py src/deepreason/programs.py src/deepreason/oracle.py src/deepreason/measures src/deepreason/informal' && grep -q 'verdict="fail",' src/deepreason/rules/warrants.py`
+`check: python -c "import deepreason.ontology as o; from deepreason.ontology.commitment import Verdict; from deepreason.ontology import Warrant; from deepreason import programs, oracle; assert (programs.PASS, programs.FAIL, programs.OVERRUN)==('pass','fail','overrun')==tuple(v.value for v in Verdict); assert (oracle.PASS, oracle.FAIL, oracle.OVERRUN)==(programs.PASS, programs.FAIL, programs.OVERRUN); assert 'Verdict' not in o.__all__ and not hasattr(o,'Verdict'); assert Warrant.model_fields['verdict'].annotation==(str|None)" && python -c "import re, pathlib; F=[pathlib.Path('src/deepreason/programs.py'), pathlib.Path('src/deepreason/oracle.py')]+sorted(p for d in ('measures','informal') for p in pathlib.Path('src/deepreason').joinpath(d).rglob('*.py')); assert len(F)>=13, len(F); hits=[(p.name, i, l.strip()) for p in F for i, l in enumerate(p.read_text().split(chr(10)), 1) if re.search(r'\bVerdict\b', l)]; assert hits==[], hits" && grep -q 'verdict="fail",' src/deepreason/rules/warrants.py`
 
 **Thirteen of the ontology's exported names never reach this side, and they are
 exactly the log machinery.** Fourteen import statements bring in twelve names —
