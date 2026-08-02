@@ -57,12 +57,10 @@ the allocator may not drop or compress.
 `check: grep -q "scratch_context = RenderedScratchPackV1.model_validate(scratch_context)" src/deepreason/llm/packs.py && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "droppable=False" && grep -q "^class RenderedScratchPackV1" src/deepreason/scratch/render.py`
 
 The planned context carries one fence for both logs, matched to the attention
-pack it was built from; `verify_root` re-checks that it precedes its call.
-`check: grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && grep -q "attention pack does not match the scratch fence" src/deepreason/scratch/conjecture.py && grep -q "plan_fence = harness._next_seq - 1" src/deepreason/rules/conj.py && grep -q "context fence does not precede the call event" src/deepreason/invariants.py`
-
-A plan whose fence has moved cannot commit, and a historical view can neither
-plan nor commit at all.
-`check: python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
+pack it was built from; a plan whose fence has moved cannot commit, a historical
+view can neither plan nor commit at all, and `verify_root` re-checks on replay
+that the fence precedes its call.
+`check: grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && grep -q "attention pack does not match the scratch fence" src/deepreason/scratch/conjecture.py && grep -q "plan_fence = harness._next_seq - 1" src/deepreason/rules/conj.py && grep -q "context fence does not precede the call event" src/deepreason/invariants.py && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
 
 The sealed bytes are counted three times on the way to the provider: in the
 pack, in the receipt, and in the finished prompt.
@@ -70,12 +68,10 @@ pack, in the receipt, and in the finished prompt.
 
 Every visible handle is exposed under its own namespace in the transaction
 ledger, so what the model saw is a typed record rather than an inference from
-the prompt text.
-`check: grep -q "namespace=ContextNamespace.SCRATCH," src/deepreason/rules/conj.py && grep -q 'plan_kind="scratch",' src/deepreason/rules/conj.py && grep -q 'SCRATCH = "scratch"' src/deepreason/workflow/transaction.py`
-
-Validation and admission are given the same visible aliases and the same
-exposure receipt, and an unknown reference is refused before any scratch event.
-`check: test "$(grep -c "visible_aliases=scratch_aliases," src/deepreason/rules/conj.py)" -eq 2 && test "$(grep -c "context_ref=exposure_ref," src/deepreason/rules/conj.py)" -eq 2 && python -m pytest tests/test_v6_scratch_atomicity.py::test_unknown_reference_is_rejected_before_any_scratch_event -q`
+the prompt text; validation and admission are then given that same alias set and
+that same exposure receipt, and an unknown reference is refused before any
+scratch event.
+`check: grep -q "namespace=ContextNamespace.SCRATCH," src/deepreason/rules/conj.py && grep -q 'plan_kind="scratch",' src/deepreason/rules/conj.py && grep -q 'SCRATCH = "scratch"' src/deepreason/workflow/transaction.py && test "$(grep -c "visible_aliases=scratch_aliases," src/deepreason/rules/conj.py)" -eq 2 && test "$(grep -c "context_ref=exposure_ref," src/deepreason/rules/conj.py)" -eq 2 && python -m pytest tests/test_v6_scratch_atomicity.py::test_unknown_reference_is_rejected_before_any_scratch_event -q`
 
 A scratch component that fails is diagnosed in two typed phases; the turn's
 valid candidates still commit.
