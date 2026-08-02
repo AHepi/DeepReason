@@ -237,3 +237,55 @@ def test_the_planner_leaves_a_single_school_run_with_no_eligible_critic():
 
     source = inspect.getsource(criticism.plan_foreign_criticism)
     assert "foreign_schools = sorted(set(bindings) - {target.owner_school_id})" in source
+
+
+def _lease(family: str, school: str = "school-0", role: str = "judge"):
+    """One frozen lease carrying only what the ensemble gates read."""
+
+    from deepreason.llm.firewall import EndpointLease, Route
+
+    return EndpointLease(
+        role=role,
+        seat=0,
+        route=Route(
+            endpoint_id=f"{role}-{family}-{school}",
+            base_url=f"mock://{family}",
+            model_id=f"model-{family}",
+            provider="mock",
+            family=family,
+            max_tokens=64,
+            context_window_tokens=1024,
+        ),
+    )
+
+
+def test_the_single_family_predicate_fails_closed_on_no_leases():
+    """Implements R15: "only make it active if a single model is running the
+    entire harness".
+
+    No family is not one family.  An empty lease set must not unlock the
+    substitute guarantee, because "we could not tell" is not "we checked".
+    """
+
+    from deepreason.llm.firewall import is_single_family_run
+
+    assert is_single_family_run({}) is False
+    assert is_single_family_run({"judge": ()}) is False
+
+
+def test_the_single_family_predicate_reads_every_role_not_just_judges():
+    """Implements R15: "a single model is running the ENTIRE harness".
+
+    A run whose judges share a family while its conjecturer does not is a
+    multi-family run, and must not qualify.
+    """
+
+    from deepreason.llm.firewall import is_single_family_run
+
+    assert is_single_family_run({"judge": (_lease("glm"), _lease("glm"))}) is True
+    assert (
+        is_single_family_run(
+            {"judge": (_lease("glm"),), "conjecturer": (_lease("qwen", role="conjecturer"),)}
+        )
+        is False
+    )

@@ -258,6 +258,34 @@ class EndpointLease:
                 )
 
 
+def _lease_families(leases: Mapping[str, tuple[EndpointLease, ...]]) -> set[str]:
+    """Every non-blank route family across every leased seat, folded.
+
+    Family comes only from immutable leases, never from runtime endpoints or
+    model output; blank families are dropped so an unset field cannot masquerade
+    as a distinct one.
+    """
+
+    return {
+        lease.route.family.strip().casefold()
+        for seats in leases.values()
+        for lease in seats
+        if lease.route.family.strip()
+    }
+
+
+def is_single_family_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> bool:
+    """True when exactly one model family serves the whole run.
+
+    A cross-family judge ensemble is unobtainable here by construction, so this
+    is the only condition under which cross-SCHOOL independence may stand in
+    for cross-FAMILY independence.  An empty lease set is not single-family: it
+    is no family at all, and must not unlock a substitute guarantee.
+    """
+
+    return len(_lease_families(leases)) == 1
+
+
 def require_cross_family_judge_ensemble(
     leases: Mapping[str, tuple[EndpointLease, ...]],
 ) -> tuple[EndpointLease, ...]:

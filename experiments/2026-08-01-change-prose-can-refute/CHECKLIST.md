@@ -160,11 +160,51 @@ this tranche is not a frozen-surface change.
       a point of view criticising its own work is close to marking its own
       homework and that withholding shared context does not buy independence.
 
-- [ ] 5. (S7) [COMMIT] Add the single-family predicate, derived from immutable
+- [x] 5. (S7) [COMMIT] Add the single-family predicate, derived from immutable
       leases exactly as `require_cross_family_judge_ensemble` derives families.
       files: `src/deepreason/llm/firewall.py`
       done-when: a new test shows True for one family, False for two, False for
       an empty lease set (fails closed) — paste all three
+
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -k single_family_predicate -v
+          test_the_single_family_predicate_fails_closed_on_no_leases PASSED
+          test_the_single_family_predicate_reads_every_role_not_just_judges PASSED
+          2 passed, 10 deselected in 0.04s
+
+      All three cases the criterion named, as asserted:
+
+          is_single_family_run({})                               is False
+          is_single_family_run({"judge": ()})                    is False
+          is_single_family_run({"judge": (glm, glm)})            is True
+          is_single_family_run({"judge": (glm,),
+                                "conjecturer": (qwen,)})         is False
+
+      `_lease_families` folds families exactly as
+      `require_cross_family_judge_ensemble` does — `.strip().casefold()` off the
+      immutable lease's route, blanks dropped so an unset field cannot
+      masquerade as a distinct family. That gate is unmodified; the shared
+      derivation is duplicated rather than refactored out of it, because step 6
+      requires `git diff` to show zero changed lines inside it.
+
+      Two departures from the literal criterion, both widening it:
+
+        - "False for two" is asserted as **False for two families across
+          DIFFERENT ROLES**, not two judge seats. R15 says "a single model is
+          running the ENTIRE harness", so the predicate reads every leased seat,
+          not the judge role the cross-family gate reads. A run whose judges
+          share a family while its conjecturer does not is a multi-family run
+          and must not qualify — that is the case asserted.
+        - The empty case is asserted twice: no roles at all, and a role present
+          with no seats. Both are "we could not tell", which is not "we
+          checked", and neither may unlock the substitute guarantee.
+
+      Environment note (not a step outcome): the container lost its editable
+      install between steps, and the `pytest` first on PATH is now a uv-tool
+      shim that cannot see the package. `pip install -e . --break-system-packages`
+      plus `python -m pytest` is the working invocation; later steps use it.
 
 - [ ] 6. (S8) Add `require_cross_school_judge_ensemble`: >=2 judge seats from
       >=2 distinct SCHOOLS. `require_cross_family_judge_ensemble` is NOT
