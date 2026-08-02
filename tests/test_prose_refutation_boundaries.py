@@ -1023,6 +1023,148 @@ def test_the_minting_critic_carries_a_school_other_than_the_targets(harness):
     assert critic.provenance.school != target.provenance.school
 
 
+def _substitute_adapter(harness, second_judge_model: str = "glm-test"):
+    """critic + defender + two judge seats, all one model unless told otherwise.
+
+    `second_judge_model` is the only knob: setting it to another model of the
+    SAME family makes the run multi-model without making it multi-family, which
+    is the case the substitute guarantee must not fire on.
+    """
+
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.llm.firewall import leases_from_endpoints
+
+    endpoints = {
+        "argumentative_critic": MockEndpoint(
+            [json.dumps({"attack": True, "case": _DEMO_CASE})],
+            name="mock://critic", model="glm-test",
+        ),
+        "defender": MockEndpoint(
+            [json.dumps({"answer": _DEMO_DEFENCE})],
+            name="mock://defender", model="glm-test",
+        ),
+        "judge": [
+            MockEndpoint([_DEMO_RULING], name="mock://j0", model="glm-test"),
+            MockEndpoint([_DEMO_RULING], name="mock://j1", model=second_judge_model),
+        ],
+    }
+    return LLMAdapter(
+        endpoints, harness.blobs, retry_max=2, leases=leases_from_endpoints(endpoints)
+    )
+
+
+def _rubric_target(harness):
+    from deepreason.informal.standards import register_standard
+    from deepreason.ontology import Commitment, Interface, Provenance
+
+    register_standard(harness, "std-fifths", "clause 2: no parallel fifths")
+    kappa = Commitment(id="k-rubric", eval="rubric:std-fifths")
+    harness.register_commitment(kappa)
+    return harness.create_artifact(
+        "a chorale passage with parallel fifths in bar 3",
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+
+def _run_substitute_trial(harness, adapter, target, critic_school):
+    from deepreason.config import Config
+    from deepreason.informal.trial import run_argument_trial_from_case
+
+    diagnostics: list = []
+    critic = run_argument_trial_from_case(
+        harness, adapter, Config(), target.id, _DEMO_CASE, None,
+        authority="status", critic_school_id=critic_school,
+        diagnostics=diagnostics,
+    )
+    return critic, diagnostics
+
+
+def test_a_single_model_run_mints_a_warrant_on_cross_school_criticism(harness):
+    """Implements R18/R20: "It should be cross school criticism", exposed
+    "whenever a single model is occupying all positions".
+
+    One model in every position cannot supply cross-FAMILY independence, so the
+    trial was unreachable rather than strict. The substitute is that the case
+    comes from a school other than the one that authored the target.
+    """
+
+    from deepreason.ontology import Status, WarrantType
+
+    target = _rubric_target(harness)
+    critic, _ = _run_substitute_trial(
+        harness, _substitute_adapter(harness), target, "school-1"
+    )
+
+    assert critic is not None
+    assert len(harness.state.att) == 1
+    assert harness.state.status[target.id] == Status.REFUTED
+    warrant = next(w for w in harness.warrants.values() if w.target == target.id)
+    assert warrant.type == WarrantType.ARGUMENTATIVE
+
+
+def test_the_substitute_refuses_a_critic_from_the_targets_own_school(harness):
+    """Implements R14/R18: the guarantee IS the cross-school property.
+
+    Same run, same model, same case -- only the critic's school changes. If
+    this minted a warrant, the substitute would be guaranteeing nothing.
+    """
+
+    from deepreason.ontology import Status
+
+    target = _rubric_target(harness)
+    critic, diagnostics = _run_substitute_trial(
+        harness, _substitute_adapter(harness), target, "school-0"
+    )
+
+    assert critic is None
+    assert not harness.state.att
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    assert diagnostics[-1]["declined"] == "same-school-critic"
+
+
+def test_the_substitute_refuses_a_case_with_no_school_at_all(harness):
+    """Implements R20's fail-closed sense at the guarantee itself.
+
+    An absent school is not a different school. Without this the substitute
+    would silently degrade to no guarantee whenever a caller omitted it.
+    """
+
+    target = _rubric_target(harness)
+    critic, diagnostics = _run_substitute_trial(
+        harness, _substitute_adapter(harness), target, None
+    )
+
+    assert critic is None
+    assert not harness.state.att
+    assert diagnostics[-1]["declined"] == "no-critic-school"
+
+
+def test_two_models_of_one_family_still_face_the_cross_family_gate(harness):
+    """Implements R19: this is why the predicate keys on MODEL, not family.
+
+    Both judge seats are family `glm`; the seats differ only by model id. The
+    run is therefore NOT single-model, the substitute is not offered, and the
+    cross-family gate applies and raises -- which is correct, because a run
+    with two models has more independence available than the substitute
+    assumes.
+    """
+
+    import pytest
+    from deepreason.llm.firewall import JudgeEnsemblePolicyError
+
+    target = _rubric_target(harness)
+
+    with pytest.raises(JudgeEnsemblePolicyError, match="SECOND_JUDGE_FAMILY_REQUIRED"):
+        _run_substitute_trial(
+            harness,
+            _substitute_adapter(harness, second_judge_model="glm-4"),
+            target,
+            "school-1",
+        )
+
+
 def _lease_model(model: str, role: str = "judge", seat: int = 0):
     """A lease whose MODEL identity is what varies, family held constant."""
 

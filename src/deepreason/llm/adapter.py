@@ -27,6 +27,7 @@ from deepreason.llm.firewall import (
     leases_from_endpoints,
     leases_from_manifest,
     is_single_family_run,
+    is_single_model_run,
     reject_model_control_fields,
     require_cross_family_judge_ensemble,
     require_cross_school_judge_ensemble,
@@ -614,6 +615,22 @@ class LLMAdapter:
     def ensemble_size(self, role: str) -> int:
         entry = self.endpoints.get(role)
         return len(entry) if isinstance(entry, (list, tuple)) else (1 if entry else 0)
+
+    def is_single_model(self) -> bool:
+        """One model in every position, from immutable leases only."""
+
+        return is_single_model_run(self.leases)
+
+    def judge_seats(self) -> tuple[EndpointLease, ...]:
+        """The frozen judge seats, with no gate applied.
+
+        For code DOWNSTREAM of a preflight that has already run. Re-running the
+        gate to count seats made the count and the guarantee the same call, so
+        a path whose guarantee is supplied elsewhere could not ask how many
+        seats it had without also asserting a guarantee it does not use.
+        """
+
+        return tuple(self.leases.get("judge", ()))
 
     def _select_judge_ensemble(self) -> tuple[EndpointLease, ...]:
         """Apply the ensemble gate this run's route topology makes available.

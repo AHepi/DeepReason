@@ -207,7 +207,7 @@ def _judge_all(
     Appends every seat's LLMCall to the CALLER's list as it lands — a local
     list dropped seat 1's completed spend whenever a later seat raised
     (found by the mock accounting sweep: judge2-storm leaked seat 1)."""
-    judge_seats = adapter.require_cross_family_judges()
+    judge_seats = adapter.judge_seats()
     ruling, first = adapter.call("judge", pack, JudgeRuling, aliases=aliases)
     calls.append(first)
     seat_calls = [first]
@@ -605,12 +605,28 @@ def _argument_trial_steps(
     for role in ("defender", "judge"):
         if not adapter.has_role(role):
             return _decline(harness, target_id, f"no-{role}-role", diagnostics)
-    # Normative rubric policy is a process preflight, not a model decision:
-    # the frozen cross-family ensemble must verify before any seat spends.
-    adapter.require_cross_family_judges()
     target = harness.state.artifacts.get(target_id)
     if target is None:
         return _decline(harness, target_id, "unknown-target", diagnostics)
+    # Normative policy is a process preflight, not a model decision, and it
+    # runs before any seat spends. Which guarantee is demanded depends on which
+    # one the run's route topology can supply, never on configuration.
+    if adapter.is_single_model():
+        # One model in every position cannot supply cross-FAMILY independence:
+        # the ensemble gate is unsatisfiable by construction, so the trial was
+        # unreachable rather than strict. The substitute is cross-SCHOOL
+        # CRITICISM -- the case must come from a school other than the one that
+        # authored the target. It is a weaker guarantee than two model families
+        # and is deliberately confined to the runs where the stronger one does
+        # not exist.
+        if len(adapter.leases.get("judge", ())) < 2:
+            return _decline(harness, target_id, "single-judge-seat", diagnostics)
+        if not critic_school_id:
+            return _decline(harness, target_id, "no-critic-school", diagnostics)
+        if critic_school_id == target.provenance.school:
+            return _decline(harness, target_id, "same-school-critic", diagnostics)
+    else:
+        adapter.require_cross_family_judges()
     if formally_backed(harness, target_id):
         # Formal supremacy (§3, widened to the whole formal set): a passing
         # formal commitment stands, and a prose case cannot reach a warrant
@@ -655,7 +671,7 @@ def _argument_trial_steps(
         return _decline(harness, target_id, "defence-sustained", diagnostics)
 
     exchange = f"{case_text}\n{defence.answer}"
-    checks: dict = {"ensemble": len(adapter.require_cross_family_judges())}
+    checks: dict = {"ensemble": len(adapter.judge_seats())}
 
     # 3. Referential integrity (program check).
     if any(item.decisive_point not in exchange for item in judge_rulings):

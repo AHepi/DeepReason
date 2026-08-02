@@ -883,7 +883,7 @@ make step 21's demo prove nothing.
       `is_single_family_run` is unmodified and its own tests still pass — it
       remains what S7/S8's cross-school judge gate keys on.
 
-- [ ] 21. (S14) [COMMIT] In a single-model run the trial requires >=2 judge
+- [x] 21. (S14) [COMMIT] In a single-model run the trial requires >=2 judge
       seats plus a critic school present and differing from the target's
       author school, instead of the cross-family ensemble.
       files: `src/deepreason/informal/trial.py`
@@ -891,6 +891,46 @@ make step 21's demo prove nothing.
       warrant; same run with critic school == author school is refused with a
       typed reason; same run with no critic school is refused with a typed
       reason; a two-MODEL run still raises `SECOND_JUDGE_FAMILY_REQUIRED`
+
+      Output — all four, the fixture differing only in the named variable:
+
+          single-model, critic school-1 (differs)  att=1 status=refuted
+                                                   warrant=['argumentative']
+          single-model, critic school-0 (SAME)     att=0 status=accepted
+                                                   declined='same-school-critic'
+          single-model, NO critic school           att=0 status=accepted
+                                                   declined='no-critic-school'
+          TWO models (glm-4 second seat)           RAISED
+                                                   SECOND_JUDGE_FAMILY_REQUIRED
+
+          $ python -m pytest tests/ -q -n 4 \
+                -k "trial or crit or audits or loop or workload or experiment"
+          257 passed, 2 skipped in 41.26s
+
+      Row 4 is why S13's predicate keys on MODEL rather than family: both judge
+      seats are family `glm` and differ only by model id, so the run is NOT
+      single-model, the substitute is not offered, and the cross-family gate
+      applies. A run with two models has more independence available than the
+      substitute assumes, and must use it.
+
+      Rows 2 and 3 are what make the guarantee a guarantee. Row 2 changes
+      nothing but the critic's school; if it minted a warrant the substitute
+      would guarantee nothing. Row 3 fixes the fail-closed direction: an absent
+      school is not a different school, so a caller omitting it cannot silently
+      degrade the substitute to nothing.
+
+      **One counting call had to be separated from its gate.** `_judge_all` and
+      the argument trial's `checks={"ensemble": ...}` both asked
+      `require_cross_family_judges()` merely for the seat COUNT, which made the
+      count and the guarantee the same call — so a path whose guarantee comes
+      from elsewhere could not ask how many seats it had without also asserting
+      a guarantee it does not use. `adapter.judge_seats()` returns the frozen
+      seats with no gate, for code downstream of a preflight that has already
+      run. The rubric trial's own preflight (`trial.py:245`) and the audits and
+      experiment paths are untouched and still demand cross-family.
+
+      The two `>=2 judge seats` and frozen-lease requirements are unchanged
+      from the cross-family gate. Only the dimension of independence moves.
 
 - [ ] 22. (S15) [COMMIT] Exposure: selection keys on the predicate alone. No
       constructor argument, Config value or manifest field is required.
