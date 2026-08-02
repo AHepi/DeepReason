@@ -25,7 +25,7 @@ document — not a signature, and not the fact that someone once wrote it down.
 ## File naming, which is also the ID grammar
 
 One flat directory. The filename IS the identifier, so `ls docs/map/` is the
-whole table of contents and `grep -rl DR-SEAM-scratch-x-rules docs/` finds every
+whole table of contents and `grep -rl DR-SEAM-rules-x-scratch docs/` finds every
 reference.
 
 | Prefix | Means | Example |
@@ -48,6 +48,13 @@ Inside each file the first line is an HTML comment holding the canonical ID:
 collides with prose. Cross-references use the bare ID, never a relative path —
 paths break when files move, IDs do not.
 
+`Seams:` may name only documents that EXIST. A seam that has been identified
+but not written goes in `Seams-undocumented:` as a plain pair (`rules x
+workflow`), deliberately without a `DR-` prefix so `--links` cannot mistake it
+for a document. This keeps the identification — which is real analysis, and
+expensive to redo — without letting a reference promise a file nobody wrote.
+`python tools/docs_verify.py --links` enforces it.
+
 **Seams are the point.** Most large changes are seam changes: the work is not
 inside one subsystem, it is in how two of them agree. A subsystem document that
 does not name its seams has not finished.
@@ -58,7 +65,8 @@ does not name its seams has not finished.
     Verified-at: <short commit the claims were last checked against>
     Verify: <one shell command; must exit 0>
     Owns: <the files this document is authoritative for>
-    Seams: <DR-SEAM ids this subsystem participates in>
+    Seams: <DR-SEAM ids this subsystem participates in — MUST all exist>
+    Seams-undocumented: <plain pairs, no DR- prefix, for seams not yet written>
 
     # <Human title>
 

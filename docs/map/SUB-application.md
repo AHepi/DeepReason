@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py
-Seams: DR-SEAM-application-x-bridge, DR-SEAM-application-x-run-identity, DR-SEAM-application-x-scratch, DR-SEAM-application-x-verification, DR-SEAM-application-x-workflow
+Seams: 
+Seams-undocumented: application x bridge, application x run-identity, application x scratch, application x verification, application x workflow
 
 # The application boundary — starting, watching, and ending a run
 

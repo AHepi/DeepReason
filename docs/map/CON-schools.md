@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py
-Seams: DR-SEAM-adjudication-x-schools, DR-SEAM-llm-x-schools, DR-SEAM-manifest-x-schools, DR-SEAM-rules-x-schools, DR-SEAM-scheduler-x-schools, DR-SEAM-schools-x-scratch, DR-SEAM-schools-x-workflow
+Seams: DR-SEAM-schools-x-scratch
+Seams-undocumented: adjudication x schools, llm x schools, manifest x schools, rules x schools, scheduler x schools, schools x workflow
 
 # Schools — a stance, a lineage, and sometimes a route
 

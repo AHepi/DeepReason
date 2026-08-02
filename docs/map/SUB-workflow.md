@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
-Seams: DR-SEAM-application-x-workflow, DR-SEAM-bridge-x-workflow, DR-SEAM-capabilities-x-workflow, DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-manifest-x-workflow, DR-SEAM-ontology-x-workflow, DR-SEAM-packs-and-token-economy-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-workflow, DR-SEAM-scratch-x-workflow, DR-SEAM-verification-x-workflow
+Seams: DR-SEAM-llm-x-workflow
+Seams-undocumented: application x workflow, bridge x workflow, capabilities x workflow, harness x workflow, manifest x workflow, ontology x workflow, packs-and-token-economy x workflow, rules x workflow, scheduler x workflow, schools x workflow, scratch x workflow, verification x workflow
 
 # The workflow control plane — process authority for every model call
 

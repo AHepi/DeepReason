@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_crit_batch.py tests/test_act.py tests/test_vision.py -q
 Owns: src/deepreason/rules/
-Seams: DR-SEAM-authority-x-rules, DR-SEAM-capabilities-x-rules, DR-SEAM-harness-x-rules, DR-SEAM-llm-x-rules, DR-SEAM-manifest-x-rules, DR-SEAM-ontology-x-rules, DR-SEAM-rules-x-scheduler, DR-SEAM-rules-x-scratch, DR-SEAM-rules-x-workflow
+Seams: DR-SEAM-rules-x-scratch
+Seams-undocumented: authority x rules, capabilities x rules, harness x rules, llm x rules, manifest x rules, ontology x rules, rules x scheduler, rules x workflow
 
 # The rules — the epistemic moves: conjecture, criticism, spawn, warrant
 

@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
-Seams: DR-SEAM-adjudication-x-ontology, DR-SEAM-bridge-x-ontology, DR-SEAM-capabilities-x-ontology, DR-SEAM-harness-x-ontology, DR-SEAM-ontology-x-rules, DR-SEAM-ontology-x-scratch, DR-SEAM-ontology-x-workflow
+Seams: 
+Seams-undocumented: adjudication x ontology, bridge x ontology, capabilities x ontology, harness x ontology, ontology x rules, ontology x scratch, ontology x workflow
 
 # Ontology — the one schema every other subsystem speaks
 

@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_adjudication.py -q
 Owns: src/deepreason/adjudication/
-Seams: DR-SEAM-adjudication-x-authority, DR-SEAM-adjudication-x-harness, DR-SEAM-adjudication-x-ontology, DR-SEAM-adjudication-x-rules, DR-SEAM-adjudication-x-schools, DR-SEAM-adjudication-x-verification
+Seams: DR-SEAM-adjudication-x-rules
+Seams-undocumented: adjudication x authority, adjudication x harness, adjudication x ontology, adjudication x schools, adjudication x verification
 
 # Adjudication — the two passes that turn a graph into a verdict
 

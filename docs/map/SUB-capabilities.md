@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_simulation_capability_v5.py tests/test_research_capability.py tests/test_research_root_replay.py -q
 Owns: src/deepreason/capabilities/
-Seams: DR-SEAM-capabilities-x-harness, DR-SEAM-capabilities-x-llm, DR-SEAM-capabilities-x-ontology, DR-SEAM-capabilities-x-rules, DR-SEAM-capabilities-x-scheduler, DR-SEAM-capabilities-x-verification, DR-SEAM-capabilities-x-workflow
+Seams: 
+Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x ontology, capabilities x rules, capabilities x scheduler, capabilities x verification, capabilities x workflow
 
 # Capabilities — running a program and fetching a document, under frozen authority
 

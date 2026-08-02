@@ -79,10 +79,10 @@ and every one of them is seat 0.
 `check: python -m pytest "tests/test_cli_production_doctor_v6.py::test_matrix_preserves_core_pairs_and_adds_enabled_grounding_pairs" -q && grep -q "seat, route = next(iter(enumerate(routes)))" src/deepreason/bridge/harness.py && grep -q "    reviewer_seat: Literal\[0\] = 0" src/deepreason/run_manifest.py && grep -q "(contracts.bridge_ledger_wire_contract, bridge.ledger_role, 0)" src/deepreason/run_manifest.py`
 
 A pre-v4 manifest gets the caller's policy back verbatim with retries disabled
-and no lease, and an absent manifest keeps the same fallback — unless a
-transactional adapter is present, in which case both are
-`BRIDGE_MANIFEST_MISMATCH`, because the v6 path is exact in both directions: the
-adapter refuses anything but schema 6 and the frozen contract pair, and the real
+and no lease, and an absent manifest keeps that same fallback — unless a
+transactional adapter is present, which turns the missing file into
+`BRIDGE_MANIFEST_MISMATCH`. The v6 path is exact in both directions: the adapter
+refuses anything but schema 6 and the frozen contract pair, and the real
 application build resolves v3/v2 from the manifest rather than from what it
 passed down.
 `check: python -c "import types; from deepreason.bridge.harness import _derive_bridge_execution_policy as D; from deepreason.bridge.workflow import BridgeWorkflowPolicy; from deepreason.bridge.retry import WorkflowRetryPolicyV1; s=BridgeWorkflowPolicy(grounding_review=False, composer_role='summarizer'); e,r,l=D(types.SimpleNamespace(schema_version=3), s); assert e==s and l is None and r==WorkflowRetryPolicyV1() and r.max_workflow_retries==0" && grep -q "if manifest.schema_version != 6:" src/deepreason/bridge/transactional_adapter.py && grep -q "v6 bridge adapter requires the frozen v3/v2 contract pair" src/deepreason/bridge/transactional_adapter.py && python -m pytest tests/test_v6_bridge_transactions.py::test_nontransactional_manifest_absent_bridge_retains_legacy_fallback tests/test_v6_bridge_transactions.py::test_transactional_bridge_missing_manifest_fails_before_any_mutation tests/test_v6_bridge_transactions.py::test_real_application_bridge_uses_harness_derived_v3_v2_policy tests/test_v6_bridge_transactions.py::test_transactional_bridge_replaced_manifest_fails_before_any_mutation -q`

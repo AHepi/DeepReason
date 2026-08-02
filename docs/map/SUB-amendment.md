@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_amendment_epochs.py tests/test_amendment_chain_integrity.py -q
 Owns: src/deepreason/amendment/
-Seams: DR-SEAM-amendment-x-application, DR-SEAM-amendment-x-harness, DR-SEAM-amendment-x-manifest, DR-SEAM-amendment-x-periphery, DR-SEAM-amendment-x-rules, DR-SEAM-amendment-x-run-identity, DR-SEAM-amendment-x-verification
+Seams: 
+Seams-undocumented: amendment x application, amendment x harness, amendment x manifest, amendment x periphery, amendment x rules, amendment x run-identity, amendment x verification
 
 # Amendment epochs — reshaping the question of a run that has already stopped
 

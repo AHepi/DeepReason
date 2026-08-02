@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_bridge_workflow.py tests/test_bridge_events_replay.py tests/test_bridge_validate.py tests/test_bridge_failure_replay.py -q
 Owns: src/deepreason/bridge/
-Seams: DR-SEAM-application-x-bridge, DR-SEAM-bridge-x-harness, DR-SEAM-bridge-x-llm, DR-SEAM-bridge-x-manifest, DR-SEAM-bridge-x-ontology, DR-SEAM-bridge-x-scratch, DR-SEAM-bridge-x-verification, DR-SEAM-bridge-x-workflow
+Seams: DR-SEAM-bridge-x-manifest
+Seams-undocumented: application x bridge, bridge x harness, bridge x llm, bridge x ontology, bridge x scratch, bridge x verification, bridge x workflow
 
 # Bridge — turning a stopped epistemic record into a grounded final answer
 

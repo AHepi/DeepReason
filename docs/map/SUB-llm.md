@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
-Seams: DR-SEAM-bridge-x-llm, DR-SEAM-capabilities-x-llm, DR-SEAM-harness-x-llm, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-ontology, DR-SEAM-llm-x-rules, DR-SEAM-llm-x-scheduler, DR-SEAM-llm-x-schools, DR-SEAM-llm-x-scratch, DR-SEAM-llm-x-verification, DR-SEAM-llm-x-workflow
+Seams: DR-SEAM-llm-x-workflow
+Seams-undocumented: bridge x llm, capabilities x llm, harness x llm, llm x manifest, llm x ontology, llm x rules, llm x scheduler, llm x schools, llm x scratch, llm x verification
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 

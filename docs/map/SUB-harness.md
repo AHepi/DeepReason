@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_replay.py tests/test_persistence_invariants.py -q
 Owns: src/deepreason/harness.py
-Seams: DR-SEAM-adjudication-x-harness, DR-SEAM-bridge-x-harness, DR-SEAM-capabilities-x-harness, DR-SEAM-harness-x-llm, DR-SEAM-harness-x-manifest, DR-SEAM-harness-x-ontology, DR-SEAM-harness-x-scratch, DR-SEAM-harness-x-verification, DR-SEAM-harness-x-workflow
+Seams: 
+Seams-undocumented: adjudication x harness, bridge x harness, capabilities x harness, harness x llm, harness x manifest, harness x ontology, harness x scratch, harness x verification, harness x workflow
 
 # The harness — append-only record, event application, materialized state
 

@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/
-Seams: DR-SEAM-adjudication-x-verification, DR-SEAM-amendment-x-verification, DR-SEAM-application-x-verification, DR-SEAM-capabilities-x-verification, DR-SEAM-harness-x-verification, DR-SEAM-llm-x-verification, DR-SEAM-manifest-x-verification, DR-SEAM-run-identity-x-verification, DR-SEAM-scratch-x-verification, DR-SEAM-verification-x-warrants-and-attacks, DR-SEAM-verification-x-workflow
+Seams: 
+Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, harness x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
 
 # Verification — replay validation of a run root, and the pinned mechanical verifiers
 

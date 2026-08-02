@@ -2,7 +2,8 @@
 Verified-at: 69f89d21
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/ontology/warrant.py
-Seams: DR-SEAM-adjudication-x-warrants-and-attacks, DR-SEAM-harness-x-warrants-and-attacks, DR-SEAM-ontology-x-warrants-and-attacks, DR-SEAM-rules-x-warrants-and-attacks, DR-SEAM-verification-x-warrants-and-attacks
+Seams: 
+Seams-undocumented: adjudication x warrants-and-attacks, harness x warrants-and-attacks, ontology x warrants-and-attacks, rules x warrants-and-attacks, verification x warrants-and-attacks
 
 # Warrants and attack edges — the only route to REFUTED
 

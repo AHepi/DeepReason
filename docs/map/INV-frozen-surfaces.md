@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
-Seams: DR-SEAM-harness-x-verification, DR-SEAM-llm-x-manifest
+Seams: 
+Seams-undocumented: harness x verification, llm x manifest
 
 # Frozen surfaces — what you may not change, and why
 

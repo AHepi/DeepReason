@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/enums.py, src/deepreason/capabilities/events.py, src/deepreason/capabilities/models.py, src/deepreason/capabilities/policy.py, src/deepreason/capabilities/state.py, src/deepreason/capabilities/simulation.py, src/deepreason/capabilities/research.py, src/deepreason/capabilities/audit.py
-Seams: DR-SEAM-capabilities-x-harness, DR-SEAM-capabilities-x-llm, DR-SEAM-capabilities-x-rules, DR-SEAM-capabilities-x-scheduler, DR-SEAM-capabilities-x-verification, DR-SEAM-capabilities-x-workflow
+Seams: 
+Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x rules, capabilities x scheduler, capabilities x verification, capabilities x workflow
 
 # The capability lifecycle — proposal, admission, work order, result
 

@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
-Seams: DR-SEAM-authority-x-manifest, DR-SEAM-bridge-x-manifest, DR-SEAM-capabilities-x-manifest, DR-SEAM-harness-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-packs-and-token-economy, DR-SEAM-manifest-x-rules, DR-SEAM-manifest-x-run-identity, DR-SEAM-manifest-x-scheduler, DR-SEAM-manifest-x-schools, DR-SEAM-manifest-x-scratch, DR-SEAM-manifest-x-verification, DR-SEAM-manifest-x-workflow
+Seams: DR-SEAM-bridge-x-manifest
+Seams-undocumented: authority x manifest, capabilities x manifest, harness x manifest, llm x manifest, manifest x packs-and-token-economy, manifest x rules, manifest x run-identity, manifest x scheduler, manifest x schools, manifest x scratch, manifest x verification, manifest x workflow
 
 # Manifest — the frozen plan a run may execute, and the evidence its routes can execute it
 

@@ -2,7 +2,8 @@
 Verified-at: 69f89d21
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
-Seams: DR-SEAM-manifest-x-packs-and-token-economy, DR-SEAM-packs-and-token-economy-x-rules, DR-SEAM-packs-and-token-economy-x-schools, DR-SEAM-packs-and-token-economy-x-scratch, DR-SEAM-packs-and-token-economy-x-workflow
+Seams: 
+Seams-undocumented: manifest x packs-and-token-economy, packs-and-token-economy x rules, packs-and-token-economy x schools, packs-and-token-economy x scratch, packs-and-token-economy x workflow
 
 # Packs and the token economy — what the model is shown, and what it costs
 

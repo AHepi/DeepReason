@@ -157,11 +157,16 @@ a proposed PROPERTY rather than a candidate, and one in `imports.py` for an
 imported design. `crit.py` routes to the trial instead of packaging.
 `check: test "$(grep -rn "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason | wc -l)" -eq 1 && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && test "$(grep -rn "WarrantType.ARGUMENTATIVE" --include=*.py src/deepreason | wc -l)" -eq 5 && ! grep -q "WarrantType.ARGUMENTATIVE" src/deepreason/rules/crit.py && grep -q "execution_backed" src/deepreason/rules/vision.py`
 
-**There is no cache of "is this target formal".** Both predicates re-evaluate
-every carried commitment on every call. That is affordable because verdicts are
-pure functions of content, and it is necessary because protection must track the
+**There is no cache of "is this target formal", and the guards do not read the
+one cache that exists.** Both predicates call `programs.evaluate` live on every
+carried commitment on every call, and neither touches `harness._verdict_cache`,
+which only `reach._verdict` fills. That is affordable because verdicts are pure
+functions of content, and it is necessary because protection must track the
 CURRENT verdict: a target whose exec-oracle starts failing loses its immunity in
-the same cycle. `reach._verdict`'s `_verdict_cache` is not shared with them.
+the same cycle rather than at the next cache eviction. Adding a memo here would
+also inherit `_verdict_cache`'s deliberate sandbox-abort hole, turning machine
+availability into an immunity decision.
+`check: python -c "import inspect; from deepreason.rules import warrants; s=inspect.getsource(warrants); assert '_verdict_cache' not in s; assert s.count('programs.evaluate(kappa, target, harness.blobs)')==2" && grep -q "_verdict_cache" src/deepreason/measures/reach.py && grep -q 'if \"sandbox_abort\" not in trace:' src/deepreason/measures/reach.py`
 
 ## How to change it
 
@@ -211,9 +216,10 @@ out.
   `component_wf`, `generator_wf`, `integration_wf`, `manifest_wf` and
   `reasoning-envelope-wf` are structural to the anti-relapse gate (they
   establish no equivalence) and SUBSTANTIVE to `formally_backed` (a passing one
-  confers prose immunity). `_STRUCTURAL_PROGRAMS` predates the chunked-website
-  and reasoning-envelope programs and its comment still names only the original
-  four. **Residue: this is a code-reading finding at the predicate level, not an
+  confers prose immunity). The set was written on 2026-07-10 (`aea0b9a0`); the
+  chunked-website programs landed on 2026-07-11 (`1634b35f`) and were never
+  added to it, and its comment still names only the original four.
+  **Residue: this is a code-reading finding at the predicate level, not an
   observed live failure** — no recorded root has been shown to carry a passing
   `manifest_wf` that then defeated a prose case, and whether these five *should*
   be structural for backing is an operator's call, not an implementer's. The
@@ -255,7 +261,9 @@ out.
   refuses to cache a trace carrying `sandbox_abort` — three separate places that
   each have to get it right, because there is no shared "did this actually
   decide?" helper.
-- **`register_fail_warrant` is used by nine modules including three on the
-  evaluation side.** A change to the ν wording, the `w:<κ>:<target>` id scheme or
-  the critic provenance is not local to `rules/`; it moves the HV floor's
-  warrants and the judge audits' findings too.
+- **`register_fail_warrant` has eight callers and three of them are on the
+  evaluation side** (`measures/hv.py`, `informal/trial.py`,
+  `informal/audits.py`). A change to the ν wording, the `w:<κ>:<target>` id
+  scheme or the critic provenance is not local to `rules/`; it moves the HV
+  floor's warrants and the judge audits' findings too.
+`check: test "$(grep -rl register_fail_warrant --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 8 && test "$(grep -rl register_fail_warrant --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`

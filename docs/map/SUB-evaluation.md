@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
-Seams: DR-SEAM-adjudication-x-evaluation, DR-SEAM-authority-x-evaluation, DR-SEAM-evaluation-x-harness, DR-SEAM-evaluation-x-llm, DR-SEAM-evaluation-x-ontology, DR-SEAM-evaluation-x-periphery, DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-scheduler, DR-SEAM-evaluation-x-schools, DR-SEAM-evaluation-x-verification, DR-SEAM-evaluation-x-warrants-and-attacks
+Seams: DR-SEAM-evaluation-x-rules
+Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluation x harness, evaluation x llm, evaluation x ontology, evaluation x periphery, evaluation x scheduler, evaluation x schools, evaluation x verification, evaluation x warrants-and-attacks
 
 # Evaluation — how a commitment becomes a verdict, and where formal stops and informal begins
 

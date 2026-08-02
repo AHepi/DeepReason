@@ -2,7 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_scratch_replay.py tests/test_scratch_attention.py tests/test_scratch_render.py tests/test_scratch_contracts.py tests/test_scratch_provenance_refs.py -q
 Owns: src/deepreason/scratch/
-Seams: DR-SEAM-application-x-scratch, DR-SEAM-bridge-x-scratch, DR-SEAM-harness-x-scratch, DR-SEAM-llm-x-scratch, DR-SEAM-manifest-x-scratch, DR-SEAM-ontology-x-scratch, DR-SEAM-packs-and-token-economy-x-scratch, DR-SEAM-periphery-x-scratch, DR-SEAM-rules-x-scratch, DR-SEAM-scheduler-x-scratch, DR-SEAM-schools-x-scratch, DR-SEAM-scratch-x-verification, DR-SEAM-scratch-x-workflow
+Seams: DR-SEAM-rules-x-scratch, DR-SEAM-schools-x-scratch
+Seams-undocumented: application x scratch, bridge x scratch, harness x scratch, llm x scratch, manifest x scratch, ontology x scratch, packs-and-token-economy x scratch, periphery x scratch, scheduler x scratch, scratch x verification, scratch x workflow
 
 # The scratchpad — the imaginative workshop, advisory and non-grounding
 

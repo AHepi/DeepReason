@@ -2,7 +2,8 @@
 Verified-at: 69f89d21
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/preparation.py, src/deepreason/application/text_runs.py, src/deepreason/runtime/continuation.py, src/deepreason/runtime/progress.py, src/deepreason/amendment/apply.py, src/deepreason/amendment/models.py, src/deepreason/amendment/state.py, src/deepreason/ui/status.py
-Seams: DR-SEAM-amendment-x-run-identity, DR-SEAM-application-x-run-identity, DR-SEAM-harness-x-run-identity, DR-SEAM-manifest-x-run-identity, DR-SEAM-run-identity-x-verification
+Seams: 
+Seams-undocumented: amendment x run-identity, application x run-identity, harness x run-identity, manifest x run-identity, run-identity x verification
 
 # Run identity and lifecycle — one question, one root, forever
 

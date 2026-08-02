@@ -42,7 +42,7 @@ _PATHISH = re.compile(r"(?:src|tests|tools|docs)/[\w./-]+")
 # rule is what lets SCHEMA.md show worked examples inside indented code blocks
 # without the verifier trying to run them.
 _CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")
-_HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Depends-on):\s*(?P<val>.*)$")
+_HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Seams-undocumented|Sides|Depends-on):\s*(?P<val>.*)$")
 _ID = re.compile(r"^<!--\s*(?P<id>DR-[A-Z]+-[a-z0-9\-]+|DR-[A-Z]+)\s*-->\s*$")
 
 # Commands that pass no matter what the tree looks like. A check built only from
