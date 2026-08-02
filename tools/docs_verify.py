@@ -7,7 +7,9 @@ would prove who wrote a sentence; this proves the sentence is still true, which
 is the property that actually decays.
 
 Usage:
-    python tools/docs_verify.py             # run every check; nonzero on failure
+    python tools/docs_verify.py             # authoritative: every check, no cache
+    python tools/docs_verify.py --fast      # iteration: skip checks whose files are unchanged
+    python tools/docs_verify.py --failed    # re-run only what was not green last time
     python tools/docs_verify.py --stale     # list docs whose Owns: files moved
     python tools/docs_verify.py --audit     # flag checks that cannot fail
     python tools/docs_verify.py --links     # every DR- reference resolves
@@ -17,6 +19,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -25,6 +29,11 @@ from pathlib import Path
 
 MAP_DIR = Path(__file__).resolve().parents[1] / "docs" / "map"
 REPO = Path(__file__).resolve().parents[1]
+CACHE = REPO / ".docs_verify_cache.json"
+
+# Paths a check names. Checks are greps and pytest invocations over explicit
+# paths, so the files a command reads are almost always spelled in it.
+_PATHISH = re.compile(r"(?:src|tests|tools|docs)/[\w./-]+")
 
 # A check rides its own line as an inline-code span, at COLUMN 0. The column
 # rule is what lets SCHEMA.md show worked examples inside indented code blocks
@@ -70,6 +79,42 @@ def documents() -> list[Doc]:
     return [parse(p) for p in sorted(MAP_DIR.glob("*.md"))]
 
 
+def _fingerprint(cmd: str) -> str:
+    """Identity of a check: its text, plus the content of every path it names.
+
+    HEURISTIC, and its limit is the reason the cache is opt-in: a command that
+    reads a file it does not name will be reused when it should have re-run.
+    Every authoritative run - the gate, validation, delivery - uses the default
+    full mode, which never reads the cache. --fast is for iteration only, where
+    being wrong costs a re-run rather than a false green.
+    """
+    h = hashlib.sha256(cmd.encode())
+    for token in sorted(set(_PATHISH.findall(cmd))):
+        path = REPO / token.split("::")[0]
+        if path.is_file():
+            h.update(path.read_bytes())
+        elif path.is_dir():
+            for child in sorted(path.rglob("*.py")):
+                h.update(child.read_bytes())
+        else:
+            h.update(b"<absent>")
+    return h.hexdigest()
+
+
+def _load_cache() -> dict:
+    try:
+        return json.loads(CACHE.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_cache(cache: dict) -> None:
+    try:
+        CACHE.write_text(json.dumps(cache, indent=0, sort_keys=True))
+    except OSError:
+        pass
+
+
 def run(cmd: str) -> tuple[bool, str]:
     try:
         proc = subprocess.run(
@@ -83,22 +128,37 @@ def run(cmd: str) -> tuple[bool, str]:
     return False, " | ".join(tail[-3:])[:400]
 
 
-def cmd_run() -> int:
+def cmd_run(fast: bool = False, only_failed: bool = False) -> int:
     docs = documents()
     if not docs:
         print("no documents in docs/map/", file=sys.stderr)
         return 1
+    cache = _load_cache() if (fast or only_failed) else {}
+    fresh = dict(cache)
     failures: list[str] = []
-    total = 0
+    total = reused = skipped = 0
     for doc in docs:
         if doc.doc_id is None:
             failures.append(f"{doc.path.name}: no `<!-- DR-... -->` id on the first line")
         for number, cmd in doc.checks:
+            key = _fingerprint(cmd)
+            prior = cache.get(key)
+            if only_failed and prior is not None and prior.get("ok"):
+                skipped += 1
+                continue
             total += 1
-            ok, detail = run(cmd)
+            if fast and prior is not None:
+                ok, detail, reused = prior["ok"], prior.get("detail", ""), reused + 1
+            else:
+                ok, detail = run(cmd)
+                fresh[key] = {"ok": ok, "detail": detail, "cmd": cmd}
             if not ok:
                 failures.append(f"{doc.path.name}:{number}: {cmd}\n      -> {detail}")
-    print(f"docs_verify: {len(docs)} documents, {total} checks")
+    _save_cache(fresh)
+    mode = "fast" if fast else ("failed-only" if only_failed else "full")
+    note = f", {reused} reused" if reused else ""
+    note += f", {skipped} skipped (green last run)" if skipped else ""
+    print(f"docs_verify [{mode}]: {len(docs)} documents, {total} checks{note}")
     for failure in failures:
         print(f"  FAIL {failure}")
     print(f"docs_verify: {len(failures)} failed")
@@ -205,6 +265,10 @@ def main() -> int:
     parser.add_argument("--stale", action="store_true")
     parser.add_argument("--audit", action="store_true")
     parser.add_argument("--links", action="store_true")
+    parser.add_argument("--fast", action="store_true",
+                        help="reuse cached results whose named files are unchanged")
+    parser.add_argument("--failed", action="store_true",
+                        help="re-run only checks that were not green last run")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
@@ -215,7 +279,7 @@ def main() -> int:
         return cmd_links()
     if args.audit:
         return cmd_audit()
-    return cmd_run()
+    return cmd_run(fast=args.fast, only_failed=args.failed)
 
 
 if __name__ == "__main__":

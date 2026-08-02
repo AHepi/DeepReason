@@ -56,6 +56,24 @@ snapshot_loop.sh <driver>.sh`) during any long live run.
     pytest tests/ -q -n 4                       # full gate, ~8 min
                                                 # expect ~3100 passed, 0 failed
 
+Iterate on the RING, gate at the BOUNDARY. The full suite is a gate, not a
+feedback loop: run the affected test files while iterating, and the whole
+suite only at a phase boundary. `.pytest_cache` already holds `lastfailed`
+and every collected nodeid, so use it instead of re-deriving it:
+
+    pytest tests/test_<subsystem>*.py -q      # the ring, while iterating
+    pytest tests/ -q -n 4 --lf                # only what failed last time
+    pytest tests/ -q -n 4                     # the gate, at the boundary
+
+This is a recorded mistake, not a style note: one tranche ran the full gate
+four times (9:17, 9:19, 10:53, 14:02 — ~44 minutes) to learn about roughly
+forty tests that could have been affected, with `--lf` available and unused
+throughout. Preserve results and re-derive only what moved.
+
+The 42-root sweep obeys the same rule for the same reason. A committed root
+is immutable, so its verdict can only move if the READER moved; when no
+reader changed, the previous sweep IS the current answer.
+
 Gate discipline: 0 failed is the only acceptable result. Never weaken an
 assertion to get green. A fixture that depended on defective behavior may
 be minimally updated only when the fix's design doc predicted it.

@@ -15,15 +15,21 @@ to the in-memory materialized view, and appends it to `log.jsonl` — in that
 order, through one `_commit`/`_apply_event` path shared byte-for-byte with
 replay. That sharing is the whole point: reopening a root reconstructs the same
 state as the live session that wrote it, which is what makes the log admissible
-evidence rather than a diary. Everything else in DeepReason — schools, rules,
-scheduler, capabilities, workflow controllers — is a *caller*; the harness
-imports none of them, so the dependency arrow never reverses.
-`check: grep -q "final_labels(compute_label0(nodes, att), dep)" src/deepreason/harness.py && ! grep -q "from deepreason.llm" src/deepreason/harness.py && ! grep -q "deepreason.scheduler" src/deepreason/harness.py`
+evidence rather than a diary. The drivers of DeepReason — `rules`, `schools`,
+`scheduler`, `llm` — are *callers*; the harness imports none of them, so that
+dependency arrow never reverses. The four typed process subsystems are the
+deliberate exception: replay cannot rebuild a state whose types it cannot name,
+so the harness does import `bridge`, `capabilities`, `scratch` and `workflow`
+— but only their event/model/state modules, never a controller or service that
+would call back into it. `bridge`, `capabilities` and `scratch` come in at
+module level; every `workflow` import (and `bridge.harness`) is deferred inside
+a function, which is what keeps the import graph acyclic.
+`check: grep -q "final_labels(compute_label0(nodes, att), dep)" src/deepreason/harness.py && ! grep -qE "deepreason\.(rules|schools|scheduler|llm)\b" src/deepreason/harness.py && grep -q "^from deepreason.capabilities.state import CapabilityReplayState" src/deepreason/harness.py && grep -q "from deepreason.workflow.replay import" src/deepreason/harness.py && ! grep -qE "^from deepreason\.(workflow|bridge\.harness)" src/deepreason/harness.py && ! grep -qE "deepreason\.(workflow\.(transaction_service|shadow)|capabilities\.(simulation|research))" src/deepreason/harness.py`
 
 Event application and well-formedness here are a **frozen surface**: see
 `DR-INV-frozen-surfaces`. A change that invalidates an existing replay-valid
 root is wrong by definition — fix readers, not the record.
-`check: grep -q "harness.py. event application / well-formedness" CLAUDE.md`
+`check: grep -q "harness.py. event application / well-formedness" CLAUDE.md && grep -q "harness.py. — event application and well-formedness" docs/map/INV-frozen-surfaces.md`
 
 ## Entry points
 
@@ -79,9 +85,13 @@ which this document does not own):
   event, so replay reproduces the reveal.
 - `workflow-checkpoint.json` — written by `write_workflow_checkpoint`,
   re-verified against a fresh prefix replay on every writable open.
-- It *reads* `run-manifest` (transaction authority) and `checkpoint.json` (the
-  generic run checkpoint, on resume); it does not write either.
+- It *reads* `run-manifest.json` (transaction authority, via
+  `run_manifest.MANIFEST_NAME`) and `checkpoint.json` (the generic run
+  checkpoint, on resume); it does not write either. `workflow-checkpoint.json`
+  is the ONLY durable file the harness itself writes outside the three stores —
+  one atomic `os.replace`, and no `write_text`/`write_bytes` anywhere in it.
 `check: grep -q 'BlobStore(self.root / "blobs"' src/deepreason/harness.py && grep -q 'ObjectStore(self.root / "objects"' src/deepreason/harness.py && grep -q 'EventLog(self.root / "log.jsonl"' src/deepreason/harness.py && grep -q 'self.root / "workflow-checkpoint.json"' src/deepreason/harness.py && grep -q 'self.root / "holdout"' src/deepreason/harness.py`
+`check: grep -q "from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest" src/deepreason/harness.py && grep -q 'run_checkpoint_path = self.root / "checkpoint.json"' src/deepreason/harness.py && grep -q "run_checkpoint_path.read_bytes()" src/deepreason/harness.py && ! grep -qE "(write_text|write_bytes|run_checkpoint_path\.(write|open))" src/deepreason/harness.py`
 
 **In memory, rebuilt from the log on every open:** `state` (an
 `EpistemicState`: `artifacts`, `problems`, `carries`, `att`, `dep`, `addr`,
@@ -89,6 +99,7 @@ which this document does not own):
 and four replay states applied *beside* the formal ontology and never inside it
 — `scratch_state`, `bridge_state`, `workflow_state`, `capability_state`. None
 of the four participates in `att`, `dep`, warrant carriage, or adjudication.
+`check: python -c "import sys; from deepreason.ontology.state import EpistemicState as E; from deepreason.harness import Harness; f=set(E.model_fields); sys.exit(f != {'artifacts','problems','carries','att','dep','addr','status','hv','reach','conn'} or not {'scratch_state','bridge_state','workflow_state','capability_state','commitments','warrants'} <= set(Harness._reset.__code__.co_names))"`
 
 **Derived caches**, pure functions of the append-only history and therefore
 extended, never invalidated: `_tail` (bounded at 512 events), `_embed_cache`,
@@ -111,13 +122,15 @@ open replay reproduces state byte-for-byte against the session that wrote it.
 | Read-only / time-travel enforcement | `_ensure_writable`, `Harness.at`, the `FencedBlobStore` wiring in `__init__` | `tests/test_persistence_invariants.py::test_time_travel_harness_rejects_every_write_and_changes_no_bytes` |
 | Crash behaviour on a failed append | the `except` branch of `Harness._commit` | `tests/test_persistence_invariants.py::test_failed_append_rolls_live_state_back_to_durable_log` |
 | Sequence/torn-tail fencing | `deepreason/log/event_log.py` (not owned here); the harness only consumes it | `tests/test_persistence_invariants.py::test_replay_rejects_duplicate_or_gapped_event_sequence` |
-| Embedding cache identity | the key expression in `Harness.embed_artifact` | grep check under *State it owns* |
+| Embedding cache identity | the key expression in `Harness.embed_artifact` | `tests/test_embedder.py::test_embed_cache_is_keyed_by_model` (skips without the neural extra — the grep under *State it owns* is the always-live guard) |
 
+`check: grep -q "^class Rule" src/deepreason/ontology/event.py && grep -q "^class Event" src/deepreason/ontology/event.py && grep -q "^class StateDiff" src/deepreason/ontology/event.py`
 `check: python -m pytest tests/test_signals.py -q`
 `check: python -m pytest tests/test_trial.py::test_rubric_warrant_without_transcript_rejected -q`
 `check: python -m pytest tests/test_review_fixes.py::test_incremental_transitions_and_event_tail -q`
 `check: python -m pytest tests/test_workflow_shadow_c0.py::test_semantic_clock_collapses_split_conjecture_call_carrier -q`
-`check: python -m pytest tests/test_persistence_invariants.py::test_time_travel_harness_rejects_every_write_and_changes_no_bytes tests/test_persistence_invariants.py::test_time_travel_does_not_create_or_repair_storage -q`
+`check: python -m pytest tests/test_persistence_invariants.py::test_time_travel_harness_rejects_every_write_and_changes_no_bytes tests/test_persistence_invariants.py::test_time_travel_does_not_create_or_repair_storage tests/test_persistence_invariants.py::test_replay_rejects_duplicate_or_gapped_event_sequence -q`
+`check: grep -q "def test_embed_cache_is_keyed_by_model" tests/test_embedder.py`
 
 ## Traps
 
@@ -136,6 +149,7 @@ open replay reproduces state byte-for-byte against the session that wrote it.
 - **`_apply_event` sees a provisional event.** `_commit` recomputes
   `state_diff` afterwards and overwrites `self._tail[-1]`; drop that fix-up and
   the in-memory tail carries an empty diff while the log carries the real one.
+`check: grep -q "event = event.model_copy(update={.state_diff.: state_diff})" src/deepreason/harness.py && grep -q "self._tail\[-1\] = event" src/deepreason/harness.py`
 - **A carriage-only re-registration must not re-bill its LLM call.** In
   `register_batch`, an event that adds only `(artifact, warrant)` pairs leaves
   `llm` unset, because the caller already attached that call to the original
@@ -153,6 +167,7 @@ open replay reproduces state byte-for-byte against the session that wrote it.
   file size and raises `ConcurrentWriterError`; `reload_durable_authority`
   exists so a harness opened before its contender took the process lock discards
   every stale pre-lock assumption inside the critical section.
+`check: grep -q "class ConcurrentWriterError" src/deepreason/log/event_log.py && grep -q "concurrent writer" src/deepreason/log/event_log.py && grep -q "st_size" src/deepreason/log/event_log.py && grep -q "def reload_durable_authority" src/deepreason/harness.py`
 - **A torn final log line is repaired only on a writable open.** Time-travel
   views and `verify_root` must observe the damage without rewriting bytes;
   `Harness.at` on a missing root raises rather than creating storage.

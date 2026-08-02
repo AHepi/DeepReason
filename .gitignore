@@ -38,3 +38,4 @@ experiments/live_jolt_2026-07-31/probe.env
 # when the agent finishes; committing one would commit a second checkout of the
 # repository into itself.
 .claude/worktrees/
+.docs_verify_cache.json
