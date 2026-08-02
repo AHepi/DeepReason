@@ -1,0 +1,215 @@
+<!-- DR-SUB-application -->
+Verified-at: 08dcdf3c
+Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
+Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py
+Seams: DR-SEAM-application-x-bridge, DR-SEAM-application-x-run-identity, DR-SEAM-application-x-scratch, DR-SEAM-application-x-verification, DR-SEAM-application-x-workflow
+
+# The application boundary — starting, watching, and ending a run
+
+## What it is
+
+Everything between a human (or a ladder shell script) and the reasoning engine
+lives here, and none of it is epistemic: no rule fires, no status moves, no
+artifact is adjudicated. `application/` defines a closed typed vocabulary —
+intents in, result records out — for the three things a client can ask for: a
+text reasoning run, a grounded bridge, and a read-only scratchpad query. `cli/`
+and the MCP server are the only clients of that vocabulary, and both are
+deliberately thin: they parse arguments, build an intent, call one shared
+service object, and render what comes back. `runtime/` holds the workload-
+neutral machinery every run needs whatever it is reasoning about — budget
+limits, the progress files a watcher polls, the deterministic stopping
+controller, continuation preparation from a typed stop, and the terminal
+commitment and result publication that make a finished run inspectable.
+`easy.py` is host-side provider setup — the wizard, the endpoint presets, and
+the credentials file — plus a fail-closed tombstone where the retired website
+execution facade used to be; `workflows/` is the website state machine that
+tombstone once drove, which no public entry point reaches any more.
+
+Exactly two client families use the typed services, and neither reaches a
+scheduler, a harness or a stop policy of its own.
+`check: grep -q '^deepreason = "deepreason.cli.main:main"' pyproject.toml && ! grep -rl "TEXT_RUN_SERVICE\|GROUNDED_BRIDGE_SERVICE\|SCRATCH_QUERY_SERVICE" --include=*.py src/deepreason | grep -qvE "^src/deepreason/(application/|cli/|mcp_server\.py|mcp_scratch_bridge\.py)" && python -m pytest tests/test_application_text_runs_d0.py::test_clients_have_only_thin_service_dispatch_and_one_registry tests/test_application_scratch.py::test_cli_and_mcp_handlers_are_thin_application_adapters tests/test_application_bridge_service.py::test_bridge_clients_do_not_own_workflow_or_persistence tests/test_application_text_runs_d0.py::test_cli_and_mcp_compile_the_same_start_intent tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands -q`
+
+Admission precedes interpretation. Every CLI verb that touches an existing run
+root passes through one V6 gate — RunManifest v6, run-input manifest v2, a
+matching evidence dossier — before its own code runs, so a pre-V6 or tampered
+root fails with a typed code instead of being half-read by a view.
+`check: grep -q "^_ROOT_ADMISSION_COMMANDS = frozenset(" src/deepreason/cli/main.py && grep -q "^def _admit_v6_root(" src/deepreason/cli/main.py && python -m pytest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_missing_manifest_before_interpretation tests/test_v6_only_cli_admission.py::test_historical_roots_with_sidecars_fail_before_command_services -q`
+
+## Entry points
+
+- `cli.main.main` — the `deepreason` console script; `build_parser` is the whole
+  public verb surface, and `_main` is the dispatch table. `_admit_v6_root` and
+  `_ROOT_ADMISSION_COMMANDS` are the gate described above.
+- `application.TEXT_RUN_SERVICE` (`TextRunApplicationService`) — the only way to
+  run text reasoning: `start`, `continue_run`, `inspect`,
+  `inspect_outstanding_work`, `result`, `cancel`, `watch`, `wait`. `_launch`
+  performs the whole admission sequence and then hands one daemon thread to
+  `TEXT_RUN_WORKERS`; `_worker` owns the scheduler call, stop record,
+  capability audits and terminalization.
+- `application.GROUNDED_BRIDGE_SERVICE` (`GroundedBridgeApplicationService`) —
+  `build`, `start`, `status`, `result`, `claims`, `inspect`, `validate` over a
+  finished reasoning root (see `DR-SUB-bridge` for what a bridge is).
+- `application.SCRATCH_QUERY_SERVICE.execute` — dispatches the closed scratch
+  query union; every branch is read-only except the explicit record-direct-open.
+- `application.intents.start_text_run_intent` / `continue_text_run_intent` /
+  `budget_intent` — the pure parsers a client uses so CLI and MCP compile
+  byte-identical intents. `application.models.run_result_exit_code` is the
+  process exit contract.
+- `application.ConjectureApplicationBoundary.begin` — the shared authority
+  envelope wrapped around one conjecture provider call, so the full scheduler
+  and the reduced loop record the same control chain.
+- `runtime.launch_policy.require_v6_launch_allowed` (schema gate plus the
+  rollback kill switch and release policy), `resolve_effective_run_manifest`
+  (explicit vs. bound manifest reconciliation), and
+  `require_v6_production_qualification` (one exact doctor report authorizes the
+  launch).
+- `runtime.terminal_authority.ensure_terminal_commitment`,
+  `finalize_terminal_result`, `recover_terminal_result`,
+  `derive_terminal_authority`, `validate_terminal_commitment_storage` — build,
+  publish, revalidate and re-derive the one terminal head of a run.
+- `runtime.continuation.prepare_continuation` — the only way a stopped root
+  becomes runnable again; validates the stop digest, the typed continuation
+  history and the checkpoint fence before authorizing a RESUMED transition.
+- `runtime.progress.ProgressSink`, `runtime.stop.StopController` /
+  `write_stop_record`, `runtime.budget.parse_limit` / `AggregateMeter` — the
+  observation, stopping and metering primitives every workload shares.
+- `cli.doctor.run_production_contract_doctor` / `load_production_contract_report`
+  — the production-contract battery whose report is launch authority.
+- `cli.bridge.handle_bridge_command`, `cli.scratch.dispatch_scratch` — the
+  rendering-only subcommand front ends.
+- `easy.setup_wizard` / `apply_setup` / `setup_options` / `load_credentials` /
+  `save_credential` — provider configuration and key storage. `easy.make` is a
+  tombstone, not an entry point (see Traps).
+- `workflows.manifest_compiler.compile_compact_manifest` / `ManifestCompiler` and
+  `workflows.website.WebsiteWorkflow` — the legacy website path, exercised only
+  by its tests.
+`check: for s in main build_parser _admit_v6_root; do grep -q "^def $s(" src/deepreason/cli/main.py || exit 1; done; for s in start continue_run inspect inspect_outstanding_work result cancel watch wait _launch _worker; do grep -q "    def $s(" src/deepreason/application/text_runs.py || exit 1; done; for s in build start status result claims inspect validate; do grep -q "    def $s(" src/deepreason/application/bridge.py || exit 1; done; grep -q "    def execute(" src/deepreason/application/scratch.py && grep -q "    def begin(" src/deepreason/application/conjecture.py && grep -q "^def run_result_exit_code(" src/deepreason/application/models.py; for s in budget_intent start_text_run_intent continue_text_run_intent; do grep -q "^def $s(" src/deepreason/application/intents.py || exit 1; done; grep -q "^TEXT_RUN_SERVICE = TextRunApplicationService()" src/deepreason/application/text_runs.py && grep -q "^GROUNDED_BRIDGE_SERVICE = GroundedBridgeApplicationService()" src/deepreason/application/bridge.py && grep -q "^SCRATCH_QUERY_SERVICE = ScratchQueryApplicationService()" src/deepreason/application/scratch.py`
+`check: for s in require_v6_launch_allowed resolve_effective_run_manifest require_v6_production_qualification; do grep -q "^def $s(" src/deepreason/runtime/launch_policy.py || exit 1; done; for s in derive_terminal_authority ensure_terminal_commitment finalize_terminal_result recover_terminal_result validate_terminal_commitment_storage; do grep -q "^def $s(" src/deepreason/runtime/terminal_authority.py || exit 1; done; grep -q "^def prepare_continuation(" src/deepreason/runtime/continuation.py && grep -q "^class ProgressSink" src/deepreason/runtime/progress.py && grep -q "^class StopController" src/deepreason/runtime/stop.py && grep -q "^def write_stop_record(" src/deepreason/runtime/stop.py && grep -q "^def parse_limit(" src/deepreason/runtime/budget.py && grep -q "^class AggregateMeter" src/deepreason/runtime/budget.py; for s in setup_wizard setup_options apply_setup load_credentials save_credential make; do grep -q "^def $s(" src/deepreason/easy.py || exit 1; done; grep -q "^def run_production_contract_doctor(" src/deepreason/cli/doctor.py && grep -q "^def load_production_contract_report(" src/deepreason/cli/doctor.py && grep -q "^def handle_bridge_command(" src/deepreason/cli/bridge.py && grep -q "^def dispatch_scratch(" src/deepreason/cli/scratch.py && grep -q "^class WebsiteWorkflow" src/deepreason/workflows/website.py && grep -q "^def compile_compact_manifest(" src/deepreason/workflows/manifest_compiler.py && grep -q "^class ManifestCompiler" src/deepreason/workflows/manifest_compiler.py`
+
+## State it owns
+
+Every mutable control file in a run root that is not the append-only record
+itself. `runtime/progress.py` owns `progress.jsonl` (append-only, contiguous
+sequence), its `run-status.json` latest snapshot, and the `cancel.requested`
+flag. `runtime/stop.py` owns `run-stop.json` as a mutable latest pointer over
+an immutable `run-stops/<event_seq>-<digest>.json` history.
+`runtime/continuation.py` owns `continuations.jsonl`.
+`runtime/terminal_authority.py` owns `run-result.json` and
+`REPLAY_VALIDATION.json`. `application/text_runs.py` owns the frozen
+`run-request.json` and `text-workload.json` written at bind time, and
+`checkpoint.json` at stop. `workflows/website.py` owns `website-checkpoint.json`
+and `website-terminal.json`. All of them are published through one atomic
+temp-file-plus-rename helper with a directory fsync.
+
+Outside any run root it owns the host's provider state: `easy.base_dir()`
+(`$DEEPREASON_HOME` or `~/.deepreason`) holds `credentials`, created
+owner-read-write before any key bytes exist, and `engine.yaml`.
+`load_credentials` injects stored keys into the environment at the top of every
+CLI invocation, and an already-set environment variable always wins. In memory,
+`TEXT_RUN_WORKERS` and `GROUNDED_BRIDGE_WORKERS` are process-global registries
+of live worker threads; they are advisory only — durable concurrency safety
+comes from the operator locks and the terminal-commitment lock.
+
+It owns no events. `cli/` never appends to the log at all; `runtime/` appends
+exactly one kind, the terminal commitment, and does it through
+`harness.record_terminal_commitment`; `application/text_runs.py` and
+`workflows/website.py` append only `harness.record_measure` entries.
+`check: grep -q '"progress.jsonl"' src/deepreason/runtime/progress.py && grep -q '"run-status.json"' src/deepreason/runtime/progress.py && grep -q '"cancel.requested"' src/deepreason/runtime/progress.py && grep -q '"run-stops"' src/deepreason/runtime/stop.py && grep -q '"run-stop.json"' src/deepreason/runtime/stop.py && grep -q '"continuations.jsonl"' src/deepreason/runtime/continuation.py && grep -q '"run-request.json"' src/deepreason/application/text_runs.py && grep -q '"text-workload.json"' src/deepreason/application/text_runs.py && grep -q '"checkpoint.json"' src/deepreason/application/text_runs.py && grep -q '_REPLAY_VALIDATION_NAME = "REPLAY_VALIDATION.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"run-result.json"' src/deepreason/runtime/terminal_authority.py && grep -q '"website-checkpoint.json"' src/deepreason/workflows/website.py && grep -q 'os.environ.get("DEEPREASON_HOME")' src/deepreason/easy.py && grep -q 'return base_dir() / "credentials"' src/deepreason/easy.py && grep -q 'return base_dir() / "engine.yaml"' src/deepreason/easy.py && grep -q "stat.S_IRUSR | stat.S_IWUSR" src/deepreason/easy.py && grep -q "easy.load_credentials()  # stored keys reach every command; env vars win" src/deepreason/cli/main.py && ! grep -rqE "record_measure|record_terminal_commitment" --include=*.py src/deepreason/cli && test "$(grep -rlE "record_measure|record_terminal_commitment" --include=*.py src/deepreason/runtime | wc -l)" -eq 1 && grep -q "harness.record_terminal_commitment(expected, expected_draft)" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope tests/test_continuation.py::test_stop_history_is_preserved_behind_latest_pointer tests/test_easy.py::test_save_and_load_credentials_roundtrip tests/test_easy.py::test_existing_environment_wins_over_stored_key -q`
+
+## Where to change what
+
+| To change... | Edit | Test |
+|---|---|---|
+| Add, rename or retire a CLI verb | `build_parser` and the matching `_main` branch in `cli/main.py`; add it to `_ROOT_ADMISSION_COMMANDS` if it reads a run root | `tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands` |
+| What a command may do to a pre-V6, unbound or tampered root | `_admit_v6_root` in `cli/main.py` | `tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest` |
+| The process exit-code contract | `run_result_exit_code` in `application/models.py` | `tests/test_r0_terminal_verification.py::test_run_result_exit_contract` |
+| What a client is allowed to ask for (intent fields) | the `*IntentV1` models in `application/models.py`, constructed only via `application/intents.py` | `tests/test_application_text_runs_d0.py::test_start_intent_is_strict_and_has_no_client_authority_fields` |
+| The order of checks before a text run touches disk | `TextRunApplicationService._launch` in `application/text_runs.py` | `tests/test_v6_only_application_admission.py::test_v6_rejects_mismatched_question` |
+| Whether launches are permitted at all (kill switch, release policy) | `require_v6_launch_allowed` and `_read_policy` in `runtime/launch_policy.py` | `tests/test_v6_only_application_admission.py::test_require_v6_launch_allowed_fails_closed_for_non_v6` |
+| Which qualification evidence authorizes a launch | `require_v6_production_qualification` in `runtime/launch_policy.py` | `tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock` |
+| The production-contract release gate (20 cases, 19 must be eventually valid) | `PRODUCTION_CASES_PER_PAIR` / `PRODUCTION_EVENTUAL_VALID_MINIMUM` / `_release_gate` in `cli/doctor.py` | `tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics` |
+| Stopping thresholds, or the fixed escape ladder | `StopPolicy` and `ESCAPE_LADDER` in `runtime/stop.py` | `tests/test_stop_policy.py::test_corroborated_stuck_exhausts_fixed_escape_ladder_before_stop` |
+| What a watcher can observe | `ProgressEvent` and `ProgressSink.emit` in `runtime/progress.py` | `tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic` |
+| What a continuation may resume from | `prepare_continuation` in `runtime/continuation.py` | `tests/test_continuation.py::test_continue_rejects_tampered_stop_digest` |
+| The published terminal result envelope | `_v6_run_result` in `application/text_runs.py` and `finalize_terminal_result` in `runtime/terminal_authority.py` | `tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope` |
+| Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
+| Website stage order, retry scope, or design-manifest compilation | `_NEXT_STAGE` and `WebsiteStateMachine` in `workflows/website.py`; `ManifestCompiler.compile` in `workflows/manifest_compiler.py` | `tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition` |
+`check: python -m pytest tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock tests/test_v6_only_application_admission.py::test_v6_rejects_mismatched_question tests/test_v6_only_application_admission.py::test_require_v6_launch_allowed_fails_closed_for_non_v6 tests/test_application_text_runs_d0.py::test_start_intent_is_strict_and_has_no_client_authority_fields tests/test_r0_terminal_verification.py::test_run_result_exit_contract tests/test_stop_policy.py::test_corroborated_stuck_exhausts_fixed_escape_ladder_before_stop tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic tests/test_continuation.py::test_continue_rejects_tampered_stop_digest tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics tests/test_easy.py::test_setup_wizard_writes_config_without_the_key tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition tests/test_website_state_machine.py::test_manifest_failure_selects_component_contract_repair -q && grep -q "^PRODUCTION_CASES_PER_PAIR = 20" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19" src/deepreason/cli/doctor.py && grep -q "^ESCAPE_LADDER = (" src/deepreason/runtime/stop.py && grep -q "^_NEXT_STAGE = {" src/deepreason/workflows/website.py`
+
+## Traps
+
+- **`easy.make` and the whole website execution path are tombstones, not code
+  you can call.** `make`, `_make_single`, `_make_chunked` and `_run_stage` all
+  raise `EasyV6PreparationRequired` (`V6_PREPARATION_REQUIRED`) before touching
+  configuration, a root, an adapter or a provider, because managed
+  question-to-run preparation is not wired to a public surface yet. Reading
+  `workflows/website.py` as live behaviour is the mistake it invites: the CLI
+  imports nothing from `deepreason.workflows`, and both `run` and `start`
+  refuse any manifest whose workload profile is not `text`.
+`check: grep -q "V6_PREPARATION_REQUIRED" src/deepreason/easy.py && ! grep -rq "deepreason.workflows" src/deepreason/cli/ && grep -q 'f"run requires text, got {manifest.workload_profile}"' src/deepreason/cli/main.py && grep -q "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest" src/deepreason/application/text_runs.py && python -m pytest tests/test_easy.py::test_easy_make_requires_future_v6_preparation_before_any_side_effect tests/test_easy.py::test_internal_easy_execution_facades_are_fail_closed_tombstones -q`
+- **`result()` re-derives the terminal; it does not read a file.** For a v6
+  root it replays and calls `recover_terminal_result`, rewriting
+  `run-result.json` when the durable authority disagrees with it. Two guards
+  make that safe and are easy to break: it refuses with
+  `RUN_RESULT_NOT_READY: terminalization remains active` while a process-local
+  worker still holds the root, and it runs the replay *outside* the registry
+  lock on purpose — holding a process-wide lock across an O(run length) replay
+  serialized every start, cancel and result for every root behind one slow
+  reader, and gave no safety a cross-process worker did not already need.
+`check: grep -q "RUN_RESULT_NOT_READY: terminalization remains active" src/deepreason/application/text_runs.py && grep -q "Recovery runs outside the registry lock" src/deepreason/application/text_runs.py && python -m pytest tests/test_application_text_runs_d0.py::test_result_does_not_enter_recovery_while_process_local_worker_is_alive -q`
+- **Recovering a terminal during a live continuation can destroy a valid
+  result.** When a successor epoch has opened but not committed, the current
+  commitment's publication is settled history, not an interrupted one;
+  rebuilding it would overwrite a valid final result with the fail-closed
+  pending projection, possibly from another process. `recover_terminal_result`
+  compares `current_terminal_epoch` against the commitment's epoch and returns
+  the settled publication untouched. Any new caller of the recovery path needs
+  the same regression guard.
+`check: grep -q "if harness.workflow_state.current_terminal_epoch > commitment.terminal_epoch:" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_v6_resumed_terminal_revalidation.py::test_restart_recovers_stale_preceding_epoch_without_redispatch tests/test_v6_resumed_terminal_revalidation.py::test_worker_post_commit_publication_failure_preserves_terminal_authority -q`
+- **A bridged run's workflow state legitimately drifts past its stop
+  checkpoint.** Bridge composition appends commitment-bound transactions after
+  the typed stop, so `fence.event_seq` no longer equals the harness's next seq
+  and the naive equality check fails a perfectly legal continuation.
+  `prepare_continuation` re-derives terminal authority and passes
+  `validated_post_terminal_drift` into `build_resumed_lifecycle`; everything
+  else still fails closed as `CONTINUE_TYPED_STOP_MISMATCH`. Removing that flag
+  makes every bridged run uncontinuable; setting it unconditionally lets an
+  unvalidated tail resume.
+`check: grep -q "validated_post_terminal_drift = True" src/deepreason/runtime/continuation.py && grep -q "CONTINUE_TYPED_STOP_MISMATCH" src/deepreason/runtime/continuation.py && grep -q ") and not validated_post_terminal_drift:" src/deepreason/workflow/lifecycle.py && python -m pytest tests/test_continuation.py -q`
+- **A budget-exhausted run must end with a typed STOPPED receipt, or it can
+  never be continued.** `_record_exhaustion_lifecycle_stop` gives the exhaustion
+  a lifecycle receipt so `budget_exhausted` counts as resumable; a root that
+  cannot take one (no owned control plane, or unfinished workflow authority)
+  deliberately falls back to the bare fail-closed stop record. Both branches
+  exist; deleting either changes what a budget stop means for the record.
+`check: grep -q "^def _record_exhaustion_lifecycle_stop(" src/deepreason/application/text_runs.py && python -m pytest tests/test_v6_resumed_terminal_revalidation.py::test_budget_exhausted_terminal_is_a_typed_resumable_stop -q`
+- **An amendment epoch supersedes the question, and only from its own durable
+  workload.** `_read_request` reads the newest epoch's workload for a
+  continuation while leaving the root's original `run-request.json` exactly as
+  written; epoch 0 keeps the strict request/workload agreement check in
+  `_spec_from_request`. Letting epoch 0 restate the question would make the
+  frozen run input unenforceable, and letting a continuation ignore the epoch
+  would silently rerun the superseded question. See `DR-SUB-amendment`.
+`check: grep -q "Only an amendment epoch may restate the question" src/deepreason/application/text_runs.py && grep -q "^def _spec_from_request(" src/deepreason/application/text_runs.py && python -m pytest tests/test_amendment_epochs.py::test_continuation_runs_the_reshaped_question_under_the_same_root tests/test_amendment_epochs.py::test_reshaped_question_wins_the_continuation_first_cycle -q`
+- **Run-root occupancy has three distinct refusals, and a leaked lock imitates
+  a running run.** `_launch` refuses a root that already has `progress.jsonl`
+  or `run-result.json` with `RUN_ALREADY_STARTED`, and refuses a live registry
+  entry or a held operator lock with `RUN_ALREADY_RUNNING`. Because the lock is
+  taken before the preparation block, every failure in between must release it
+  — `_launch` wraps the block in `except BaseException: locks.release()` and
+  releases again if `thread.start()` raises after the registry entry exists;
+  the bridge service has the same shape for its async terminal race. Miss one
+  path and the root is bricked, indistinguishably from a concurrent operator.
+  `deepreason reason` sidesteps the whole question by refusing an
+  operator-chosen root (`PUBLIC_REASON_ROOT_FORBIDDEN`): managed run paths are
+  host-owned and derived from the question and profile, see
+  `DR-CON-run-identity`.
+`check: grep -q "RUN_ALREADY_STARTED: choose a fresh root or continue_run" src/deepreason/application/text_runs.py && grep -q "RUN_ALREADY_RUNNING: another operator owns this run root" src/deepreason/application/text_runs.py && grep -q "PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned" src/deepreason/cli/main.py && python -m pytest tests/test_application_text_runs_d0.py::test_worker_harness_constructor_failure_releases_operator_lock tests/test_application_bridge_service.py::test_async_terminal_race_error_releases_acquired_operator_lock tests/test_v6_only_cli_admission.py::test_reason_rejects_caller_owned_root_before_application_service -q`
+- **`inspect` caches the outstanding-work projection, and the cache key is the
+  durable input, not time.** A full replay per status poll is O(run length) and
+  starved the worker's own terminalization replays on slow filesystems. The
+  projection is a pure function of an append-only log, so identical durable
+  inputs reuse the previous answer — which means a corruption introduced with
+  no input change is not re-raised by a poll. Result reads and every input
+  change still revalidate.
+`check: grep -q "_outstanding_cache" src/deepreason/application/text_runs.py && grep -q "A full replay per status poll is O(run length) and starves the" src/deepreason/application/text_runs.py && python -m pytest tests/test_application_text_runs_d0.py::test_outstanding_work_projection_reads_replay_state_without_reducing tests/test_application_text_runs_d0.py::test_outstanding_work_projection_accepts_v6_transaction_ids -q`

@@ -130,7 +130,15 @@ lies, which is worse than no document.
 5. **Adding a subsystem** means: a new `SUB-` file, a row in `INDEX.md`'s
    routing table, and a seam document for every subsystem it imports or is
    imported by with more than incidental traffic.
-6. **Never delete a `Traps` entry** because the trap was fixed. Rewrite it to
+6. **Choose the next seam to write by MEASURED coupling and risk, not by
+   whatever the last conversation happened to mention.** An example someone
+   gives to illustrate a task SHAPE is not a priority ranking. This rule exists
+   because it was broken: a seam named in passing was written up as "the
+   flagship" while `llm x workflow`, the second-highest-coupled pair in the
+   repo, was skipped entirely. `INDEX.md`'s matrix is the ranking; a pair with
+   no import count is not thereby unimportant, but it needs a stated reason
+   beyond having been mentioned.
+7. **Never delete a `Traps` entry** because the trap was fixed. Rewrite it to
    say it was fixed and when. Traps are the memory of what has actually gone
    wrong, and that memory is the most expensive content here to regenerate.
 
