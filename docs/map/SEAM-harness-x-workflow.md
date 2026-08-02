@@ -3,6 +3,7 @@ Verified-at: 546544b5
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/workflow/replay.py, src/deepreason/control_events.py, src/deepreason/ontology/event.py
 Sides: DR-SUB-harness, DR-SUB-workflow
+Sweep: workflow_state && Rule\.CONTROL|record_control_transition|record_transaction_transition
 
 # harness x workflow
 
@@ -29,6 +30,7 @@ The one shared number is the harness's event sequence: work fences are minted
 from `harness._next_seq`, and `WorkflowReplayState.digest`, the value sealed
 into `workflow-checkpoint.json`, is a function of the seqs at which control
 events landed.
+`check: python -W ignore -c "import inspect,tempfile,pathlib,pytest;from deepreason.harness import Harness;from deepreason.ontology.event import Rule;from deepreason.control_events import ControlEventPayloadV3;c=inspect.getsource(Harness._commit);i=[c.index(x) for x in ('self.log.append(event)','except Exception:','self._reset()','for durable in self.log.read():','raise')];assert i==sorted(i),i;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);o='sha256:'+'2'*64;p=ControlEventPayloadV3(action='work_transition',decision_ref=o,inputs=['sha256:'+'1'*64,'t'],outputs=[o]);pytest.raises(Exception,h._commit,Rule.CONTROL,inputs=list(p.inputs),outputs=list(p.outputs),control=p);assert list(h.workflow_state.event_inputs_by_seq)==[0],h.workflow_state.event_inputs_by_seq;assert len(list(h.log.read()))==1 and h._next_seq==1"`
 
 Fifty-seven files under `src/deepreason` name both sides. Eight call a
 Control-minting seam. Four carry the agreement, and the dependency arrow between
@@ -78,13 +80,20 @@ pre-controller root has always digested to.
 | Manifest binding | `harness.py`, `workflow/replay.py` | `bind_transaction_manifest` → `WorkflowReplayState.bind_run_manifest` | one root, one v6 manifest; a different digest raises on both halves |
 | Auto-bind at open | `harness.py` | `_reset`'s `schema_version == 6` branch, after `_load_workflow_manifest` | a v6 root replays under manifest authority with no caller involved |
 | Checkpoint seal | `harness.py` | `write_workflow_checkpoint` | `workflow_state.digest` + `max(event_seqs)` + outstanding ids, one atomic `os.replace` |
-| Checkpoint verify | `harness.py` | `_verify_workflow_checkpoint` → `replay_workflow(upto_seq=checkpoint_seq)` | the sealed *prefix* re-derives; a lost tail raises at open |
+| Checkpoint verify | `harness.py` | `_verify_workflow_checkpoint` → `replay_workflow(self.log.read(upto_seq=checkpoint_seq), ...)` | the sealed *prefix* re-derives; a lost tail raises at open |
 | Resume cross-check | `harness.py` | `record_resume_transition`'s checkpoint comparisons | a RESUMED decision must quote this root's `workflow-checkpoint.json` bytes and its generic `checkpoint.json` |
 | Blob liveness | `harness.py` | `record_lifecycle_transition` and `_apply_event`'s `workflow-stop-metrics-observation` branch | a stop decision cannot name model-signal bytes the root does not hold |
 | Object namespace | `storage/objects.py` | 26 `workflow-*` + 3 `criticism-*` schema rows | the schema string is the shared vocabulary: `objects.get` returns it, `apply` dispatches on it |
 | Log clock | `harness.py`, callers | `_next_seq`, read as `fence = harness._next_seq - 1` | the work fence is a harness event seq the harness never validates |
 | Cross-read | `harness.py` | `bridge_state.apply_v6_provider_result(event, self.workflow_state)` | the bridge reads workflow authority through the harness, inside the same apply |
 | Downstream binding | `invariants.py` | `workflow-replay` finding; `stats["workflow_process_digest"]` | two replays of one root must reach one process digest (`DR-SEAM-harness-x-verification`) |
+| Open-time terminal storage | `runtime/terminal_authority.py` | `validate_terminal_commitment_storage(self.root, self.workflow_state)`, called from `Harness.__init__` only when `terminal_commitments_by_epoch` is non-empty | a latched terminal commitment whose local stop object is missing or disagrees makes the root unopenable, before `_verify_workflow_checkpoint` runs |
+
+The last row is the one the seam did not name until the `--coverage` sweep found
+it: it is the only workflow authority the harness re-validates against files
+outside `log.jsonl`/`objects/`, and it raises typed `TERMINAL_*` codes rather
+than the seam's usual `WellFormednessError`.
+`check: python -c "import inspect;from deepreason.harness import Harness;from deepreason.runtime.terminal_authority import validate_terminal_commitment_storage as v;s=inspect.getsource(Harness.__init__);assert 'self.workflow_state.terminal_commitments_by_epoch' in s and 'validate_terminal_commitment_storage(' in s;assert s.index('validate_terminal_commitment_storage(\n')<s.index('self._verify_workflow_checkpoint()');assert list(inspect.signature(v).parameters)==['root','workflow_state'];b=inspect.getsource(v);assert 'workflow_state.terminal_commitments_by_epoch' in b and 'TERMINAL_STOP_OBJECT_REQUIRED' in b and 'TERMINAL_STOP_OBJECT_MISMATCH' in b"`
 
 The digest the checkpoint seals is a function of harness sequence numbers, at
 both branch and transaction level; inserting an unrelated event between two
@@ -94,7 +103,7 @@ control events moves it.
 The checkpoint seals the process digest, replaces atomically, re-derives the
 sealed prefix rather than the tip, and raises on a lost tail — and a root that
 has recorded no control authority has no checkpoint file at all.
-`check: python -W ignore -c "import inspect,tempfile,pathlib;from deepreason.harness import Harness;w=inspect.getsource(Harness.write_workflow_checkpoint);v=inspect.getsource(Harness._verify_workflow_checkpoint);assert '\"process_digest\": self.workflow_state.digest,' in w and 'os.replace(temporary, target)' in w;assert 'self.log.read(upto_seq=checkpoint_seq)' in v and 'process_digest != checkpoint_state.digest' in v and 'workflow authority log lost its checkpointed tail' in v;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);assert h.write_workflow_checkpoint() is None and not (d/'workflow-checkpoint.json').exists() and h.workflow_checkpoint_digest() is None;Harness(d)" && python -m pytest "tests/test_workflow_control_replay_c1.py::test_checkpoint_detects_deleted_final_authority_event" "tests/test_workflow_control_replay_c1.py::test_checkpoint_verifies_its_prefix_when_newer_controls_exist" -q`
+`check: python -W ignore -c "import inspect,tempfile,pathlib;from deepreason.harness import Harness;w=inspect.getsource(Harness.write_workflow_checkpoint);v=inspect.getsource(Harness._verify_workflow_checkpoint);assert '\"process_digest\": self.workflow_state.digest,' in w and 'os.replace(temporary, target)' in w;assert 'self.log.read(upto_seq=checkpoint_seq)' in v and 'process_digest != checkpoint_state.digest' in v and 'workflow authority log lost its checkpointed tail' in v;assert v.count('checkpoint_state =')==1 and 'self.workflow_state.digest' not in v;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);assert h.write_workflow_checkpoint() is None and not (d/'workflow-checkpoint.json').exists() and h.workflow_checkpoint_digest() is None;Harness(d)" && python -m pytest "tests/test_workflow_control_replay_c1.py::test_checkpoint_detects_deleted_final_authority_event" "tests/test_workflow_control_replay_c1.py::test_checkpoint_verifies_its_prefix_when_newer_controls_exist" -q`
 
 The manifest is loaded before `_reset`, re-bound by `_reset` (which never
 reassigns `_workflow_manifest`, so a rollback keeps live authority), and refused
@@ -135,7 +144,7 @@ unauthorized event. `criticism-*` obligations are the visible edge of this — t
 ride `Rule.MEASURE`, not `Rule.CONTROL`, and the string `criticism` appears zero
 times in `workflow/replay.py`, so coverage debt is durable evidence that is
 invisible to `WorkflowReplayState` and to its digest.
-`check: ! grep -rqE "objects\.put\(|log\.append\(" --include=*.py src/deepreason/workflow/ && grep -rq "harness\.blobs\.put(" --include=*.py src/deepreason/workflow/ && grep -q "self.harness.record_control_transition(" src/deepreason/workflow/trace.py && python -c "import inspect;from deepreason.harness import Harness;s=inspect.getsource(Harness.record_criticism_obligation);assert 'Rule.MEASURE' in s and 'Rule.CONTROL' not in s and 'control=' not in s" && ! grep -q "criticism" src/deepreason/workflow/replay.py`
+`check: ! grep -rqE "objects\.put\(|log\.append\(" --include=*.py src/deepreason/workflow/ && grep -rq "harness\.blobs\.put(" --include=*.py src/deepreason/workflow/ && grep -q "self.harness.record_control_transition(" src/deepreason/workflow/trace.py && python -c "import inspect;from deepreason.harness import Harness;s=inspect.getsource(Harness.record_criticism_obligation);assert 'Rule.MEASURE' in s and 'Rule.CONTROL' not in s and 'control=' not in s" && grep -q "class WorkflowReplayState" src/deepreason/workflow/replay.py && ! grep -q "criticism" src/deepreason/workflow/replay.py`
 
 **There is no schema the harness does not name.** All 29 registered
 `workflow-*`/`criticism-*` schemas appear as literals in `harness.py`, because
@@ -247,7 +256,7 @@ must fail closed on reopen), then
   post-horizon tail. When you add a fifth place that compares a stop fence to a
   resume fence, it needs the same asymmetry, or bridged runs silently become
   un-continuable again.
-`check: grep -q "or checkpoint_seq > decision.resume_event_seq" src/deepreason/harness.py && grep -q "The checkpoint records the stop fence; a bridged run resumes" src/deepreason/harness.py && test -d experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332 && python -m pytest tests/test_workflow_resume_lifecycle_c4.py -q`
+`check: grep -q "or checkpoint_seq > decision.resume_event_seq" src/deepreason/harness.py && grep -q "The checkpoint records the stop fence; a bridged run resumes" src/deepreason/harness.py && grep -q "sha256_hex(run_checkpoint_bytes) != decision.run_checkpoint_digest" src/deepreason/harness.py && test -d experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332 && python -m pytest tests/test_workflow_resume_lifecycle_c4.py -q`
 - **`bind_transaction_manifest` is not one transaction across the seam.** The
   harness assigns `self._workflow_manifest` *before* delegating, and
   `WorkflowReplayState.bind_run_manifest` restores its own previous value on any
@@ -264,9 +273,26 @@ must fail closed on reopen), then
   `_verify_workflow_checkpoint` replays the log *up to* `last_control_seq` and
   compares that prefix, because comparing current state against the sealed value
   would let a tampered transition be masked by appending an unrelated later one.
-  The comment in the method says so; `test_checkpoint_verifies_its_prefix_when_
-  newer_controls_exist` pins it. A "faster" equality against
+  The comment in the method says so. A "faster" equality against
   `self.workflow_state.digest` passes every honest root and defeats the purpose.
+  Do not trust the test named for it:
+  `test_checkpoint_verifies_its_prefix_when_newer_controls_exist` tampers with an
+  event *inside* the sealed prefix, which moves the tip digest as well, so it
+  passes under either implementation. Falsified 2026-08-02 by rewriting
+  `checkpoint_state` to `self.workflow_state` after the replay — 45 ring tests
+  green. What pins the property now is the structural clause in the checkpoint
+  check above (`checkpoint_state` assigned exactly once, `self.workflow_state.
+  digest` never read in the method).
+- **`WorkflowReplayState.digest` cannot see a failed append, so a digest-only
+  rollback test proves nothing.** `observe_event` writes `event_inputs_by_seq` /
+  `event_outputs_by_seq`, and neither feeds the digest. Delete `_commit`'s
+  `_reset()` and `test_failed_control_append_rolls_live_materialization_back`
+  still passes: its refusal is a record-shape `ValueError` raised *before*
+  `_commit`, and it asserts only the digest and an empty log. Falsified
+  2026-08-02 — a refusal raised inside `_apply_event` (a duplicate transition
+  decision) leaves seq 1 indexed against a one-row log. The agreement's check
+  above now drives the refusal through `_commit` and asserts the seq index, not
+  the digest.
 - **Process-only outputs are materialized before the formal object loop on
   purpose.** The comment in `_apply_event` records why: otherwise a corrupt
   process event could transiently register a formal artifact and lean on

@@ -3,6 +3,7 @@ Verified-at: 08dcdf3c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/workflow/criticism.py, src/deepreason/v6_policy.py
 Sides: DR-CON-schools, DR-SUB-manifest
+Sweep: school_id && RunManifest|criticism_policy|school_execution
 
 # Manifest x schools
 
@@ -103,11 +104,29 @@ dispatch (`resolve_school_role_lease`, with its own `SCHOOL_ROUTE_*` codes), at
 restart (`_criticism_contract`, which also refuses to recover anything but
 `observe_only`), and at replay (`verify_root`).
 
-`check: grep -q "SCHOOL_ROUTE_BINDING_MISSING" src/deepreason/llm/firewall.py && grep -q "SCHOOL_ROUTE_LEASE_MISMATCH" src/deepreason/llm/firewall.py && grep -q "SCHOOL_ROUTE_ENDPOINT_MISMATCH" src/deepreason/llm/firewall.py && python -m pytest tests/test_school_execution_binding_v4.py -q -k "unbound_school_fails_before or resolves_all_school_bindings_before_any_dispatch"`
+Three is the count of places that RE-DERIVE from the bindings, and the `Sweep:`
+header flags five more files that compare `school_id` without doing so. They are
+named here so the sweep resolves and so a reader does not mistake them for a
+fourth authority. `src/deepreason/ontology/event.py` and
+`src/deepreason/rules/conj.py` enforce that a school-route receipt and a
+conjecture-context binding name ONE school — that is `DR-SEAM-schools-x-scratch`,
+not this seam. `src/deepreason/rules/crit.py` compares the prompt-side critic
+school block to the dispatched critic id and mediates no binding at all.
+`src/deepreason/workflow/replay.py` and `src/deepreason/workflow/shadow.py`
+compare the receipt against the DURABLE WORK ORDER's frozen `school_id` and
+`route_lease`, never against `criticism_policy.bindings`: they INHERIT the
+binding through the authorization that minted the work order rather than
+re-deriving it (`DR-SUB-workflow`). None of the five reads a manifest school
+policy, which is exactly why changing one is not enough to change what they
+enforce.
 
-`check: grep -q '"critic route differs from school binding"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q '"critic authority is not recoverable"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q '"referee school has no manifest binding"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q "critic_school_id = min(" src/deepreason/referee.py && sh -c '! grep -q "deepreason.capture" src/deepreason/referee.py' && python -m pytest tests/test_v6_nonconjecture_recovery.py -q -k "recovered_criticism_applies_canonical_effect_exactly_once or authority_mismatch_fails_closed"`
+`check: grep -q "school_receipt.school_id != work.school_id" src/deepreason/workflow/replay.py && grep -q "actual_school != ticket.work_order.school_id" src/deepreason/workflow/shadow.py && grep -q "context.school_id != receipt.school_id" src/deepreason/ontology/event.py && grep -q "binding.school_id == school_id" src/deepreason/rules/conj.py && grep -q 'critic_school_context.get("id") != critic_school_id' src/deepreason/rules/crit.py && sh -c '! grep -qE "criticism_policy|school_execution|\.bindings" src/deepreason/workflow/replay.py src/deepreason/workflow/shadow.py src/deepreason/rules/crit.py src/deepreason/rules/conj.py src/deepreason/ontology/event.py'`
 
-`check: grep -q "receipt has no unique manifest binding" src/deepreason/invariants.py && grep -q "criticism_policy.minimum_foreign_school_coverage" src/deepreason/invariants.py && grep -q "^def verify_root" src/deepreason/invariants.py && python -m pytest tests/test_school_execution_binding_v4.py -q -k "receipt_survives_replay"`
+`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import Route, CriticismPolicyV1 as C, SchoolRoleBindingV1 as B; from deepreason.llm.firewall import resolve_school_role_lease as R, EndpointLease as L, SchoolRouteResolutionError as E; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); r2=Route(endpoint_id='ep',base_url='http://y',model_id='m2',provider='p',family='f'); r3=Route(endpoint_id='other',base_url='http://x',model_id='m',provider='p',family='f'); pol=lambda *ids: C(minimum_foreign_school_coverage=1,bindings=tuple(B(school_id=i,role='argumentative_critic',seat=0,endpoint_id='ep') for i in ids),max_batch_size=1,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True); m=lambda p,rt: N(schema_version=6,control_plane_policy=N(school_execution=None),criticism_policy=p,engine_config_json='{\"N_SCHOOLS\": 2}',roles={'argumentative_critic':(rt,)}); ls=lambda rt: {'argumentative_critic':(L(role='argumentative_critic',seat=0,route=rt),)}; code=lambda *a,**k: pytest.raises(E,R,*a,**k).value.code; assert R(m(pol('school-0','school-1'),r),ls(r),school_id='school-0',role='argumentative_critic').route is r; assert code(m(pol('school-0','school-1'),r),ls(r2),school_id='school-0',role='argumentative_critic')=='SCHOOL_ROUTE_LEASE_MISMATCH'; assert code(m(pol('school-0','school-1'),r3),ls(r3),school_id='school-0',role='argumentative_critic')=='SCHOOL_ROUTE_ENDPOINT_MISMATCH'; assert code(m(pol('school-0'),r),ls(r),school_id='school-1',role='argumentative_critic')=='SCHOOL_ROUTE_BINDING_MISSING'; assert code(m(pol('school-0','school-1'),r),ls(r),school_id='school-0',role='judge')=='SCHOOL_ROUTE_ROLE_UNSUPPORTED'" && python -m pytest tests/test_school_execution_binding_v4.py -q -k "unbound_school_fails_before or resolves_all_school_bindings_before_any_dispatch"`
+
+`check: python -c "import hashlib,pytest; from types import SimpleNamespace as N; from deepreason.canonical import canonical_json; from deepreason.run_manifest import CriticismPolicyV1 as C, SchoolRoleBindingV1 as B; from deepreason.workflow.nonconjecture_recovery import _criticism_contract as K, NonConjectureRecoveryAuthorityError as A; pol=lambda auth: C(minimum_foreign_school_coverage=1,bindings=tuple(B(school_id='school-%d'%i,role='argumentative_critic',seat=0,endpoint_id='ep') for i in (0,1)),max_batch_size=1,target_eligibility='accepted_school_artifacts',authority=auth,allow_shared=True); pay=lambda sid: {'schema':'criticism.semantic-task.v1','critic_school_id':sid}; prep=lambda p,seat=0,ep='ep': N(trigger_ref='criticism:'+hashlib.sha256(canonical_json(p)).hexdigest(),contract_id='c1',route_lease=N(role='argumentative_critic',seat=seat,endpoint_id=ep),target_refs=('T',),input_refs=('I',),attempt_index=0); man=lambda auth='observe_only': N(control_plane_policy=N(contract_versions=N(batch_critic_contract='c1')),criticism_policy=pol(auth)); msg=lambda m,p,pr: str(pytest.raises(A,K,None,m,None,pr,p).value); p=pay('school-0'); q=pay('school-9'); assert msg(man(),p,prep(p))=='critic targets differ from preparation'; assert msg(man('defended_trial'),p,prep(p))=='critic authority is not recoverable'; assert msg(man(),p,prep(p,seat=1))=='critic route differs from school binding'; assert msg(man(),p,prep(p,ep='other'))=='critic route differs from school binding'; assert msg(man(),q,prep(q))=='critic school has no manifest binding'" && grep -q '"referee school has no manifest binding"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q "critic_school_id = min(" src/deepreason/referee.py && sh -c '! grep -q "deepreason.capture" src/deepreason/referee.py' && python -m pytest tests/test_v6_nonconjecture_recovery.py -q -k "recovered_criticism_applies_canonical_effect_exactly_once or authority_mismatch_fails_closed"`
+
+`check: grep -q "receipt has no unique manifest binding" src/deepreason/invariants.py && grep -q "criticism_policy.minimum_foreign_school_coverage" src/deepreason/invariants.py && grep -q "^def verify_root" src/deepreason/invariants.py && test "$(grep -c 'expected_seat = matches\[0\]\.seat' src/deepreason/invariants.py)" = 2 && test "$(grep -c 'expected_endpoint = matches\[0\]\.endpoint_id' src/deepreason/invariants.py)" = 2 && grep -q "if receipt.seat != expected_seat:" src/deepreason/invariants.py && grep -q "if expected_endpoint is not None and receipt.endpoint_id != expected_endpoint:" src/deepreason/invariants.py && python -m pytest tests/test_school_execution_binding_v4.py -q -k "receipt_survives_replay" && python -m pytest tests/test_v6_controller3_replay_verification.py -q -k "route_lease or route_differing" && python -m pytest "tests/test_incident_wave_a_v2_fixtures.py::test_incident_derived_roots_receive_expected_v2_dimensions[A1]" -q`
 
 ### A school binding is priced in provider calls
 
@@ -247,15 +266,21 @@ root is committed.
 
 ## Traps
 
-- **27 files name both a school and a `RunManifest`; nine carry the agreement.**
-  `report.py`, `findings.py`, `jolts.py` and `skills/adoption.py` reach schools
-  only through `Provenance.school` or the roster and mediate no binding at all.
-  The nine are the four in `Owns:` plus five downstream enforcers —
-  `workflow/profiles.py`, `workflow/nonconjecture_recovery.py`, `referee.py`,
-  `cli/doctor.py`, `invariants.py` — which this seam describes but does not own
-  (`invariants.py` belongs to `DR-INV-frozen-surfaces`). Starting from grep
-  costs a day; the table above is the answer.
-`check: test "$(for f in $(grep -rl school src/deepreason --include=*.py); do grep -ql RunManifest "$f" && echo x; done | wc -l)" -ge 20`
+- **Grep for "school" and "RunManifest" together returns 21 files and still
+  misses a third of the agreement.** Nine files carry it: the four in `Owns:`
+  plus five downstream enforcers — `workflow/profiles.py`,
+  `workflow/nonconjecture_recovery.py`, `referee.py`, `cli/doctor.py`,
+  `invariants.py` — which this seam describes but does not own
+  (`invariants.py` belongs to `DR-INV-frozen-surfaces`). Only SIX of the nine
+  name both words. `referee.py` and `invariants.py` reach the policy through
+  `manifest.criticism_policy` without ever spelling `RunManifest`, and
+  `cli/doctor.py` projects critic seats without ever spelling `school`. The 21
+  meanwhile include files like `harness.py` and `scheduler/scheduler.py` that
+  mediate no binding at all, while `report.py`, `findings.py`, `jolts.py` and
+  `skills/adoption.py` reach schools only through `Provenance.school` or the
+  roster and do not name a manifest at all. Starting from grep costs a day and
+  still comes up short in both directions; the table above is the answer.
+`check: test "$(for f in $(grep -rl school src/deepreason --include=*.py); do grep -ql RunManifest "$f" && echo x; done | wc -l)" = 21 && test "$(for f in run_manifest.py llm/firewall.py workflow/criticism.py v6_policy.py workflow/profiles.py workflow/nonconjecture_recovery.py referee.py cli/doctor.py invariants.py; do p=src/deepreason/$f; grep -ql school $p && grep -ql RunManifest $p && echo $f; done | sort | tr '\n' ' ')" = "llm/firewall.py run_manifest.py v6_policy.py workflow/criticism.py workflow/nonconjecture_recovery.py workflow/profiles.py " && grep -q "manifest.criticism_policy" src/deepreason/referee.py && grep -q "criticism_policy.minimum_foreign_school_coverage" src/deepreason/invariants.py && grep -q "argumentative_critic" src/deepreason/cli/doctor.py`
 - **Reading a model and not its validator.** The recorded instance is A9 of
   `experiments/2026-08-01-change-prose-can-refute/DELIVERY.md`: a tranche read
   `SchoolRoleBindingV1`, saw that `role` accepts `judge`, designed school-bound

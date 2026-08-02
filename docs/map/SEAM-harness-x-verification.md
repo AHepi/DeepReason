@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-verification -->
-Verified-at: 461cf287
+Verified-at: 9fa394d9
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/log/event_log.py, src/deepreason/storage/blobs.py
 Sides: DR-SUB-harness, DR-SUB-verification
@@ -79,16 +79,16 @@ because adjudication recomputes them.
 
 The binding record and the digests it quotes come from the harness's own replay
 states, not from a recomputation.
-`check: grep -q '"workflow_process_digest": h.workflow_state.digest' src/deepreason/invariants.py && grep -q '"capability_process_digest": h.capability_state.digest' src/deepreason/invariants.py && grep -q "replayed = Harness(root, read_only=True)" src/deepreason/runtime/terminal_authority.py && grep -q "replayed.workflow_state.digest" src/deepreason/runtime/terminal_authority.py && grep -q "not verification\[.violations.\]" src/deepreason/runtime/terminal_authority.py`
+`check: grep -q '"workflow_process_digest": h.workflow_state.digest' src/deepreason/invariants.py && grep -q '"capability_process_digest": h.capability_state.digest' src/deepreason/invariants.py && grep -q "replayed = Harness(root, read_only=True)" src/deepreason/runtime/terminal_authority.py && python -W ignore -c "import ast,pathlib;from deepreason.harness import Harness;from deepreason.invariants import verify_root;from deepreason.runtime.terminal_authority import _fresh_replay_validation;q=chr(39);T=ast.parse(pathlib.Path('src/deepreason/runtime/terminal_authority.py').read_text());F=[n for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and n.name=='_fresh_replay_validation'][0];R=[n for n in ast.walk(F) if isinstance(n,ast.Return)];assert len(R)==1 and isinstance(R[0].value,ast.Dict),ast.unparse(F);d={k.value:ast.unparse(v) for k,v in zip(R[0].value.keys,R[0].value.values)};assert d=={'schema':q+'replay-validation.v1'+q,'manifest_digest':'manifest.sha256','workflow_process_digest':'replayed.workflow_state.digest','capability_process_digest':'replayed.capability_state.digest','valid':'not verification['+q+'violations'+q+']','verification':'verification'},d;r=pathlib.Path('experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a');h=Harness(r,read_only=True);w,c=h.workflow_state.digest,h.capability_state.digest;assert w.startswith('sha256:') and c.startswith('sha256:') and w!=c,(w,c);g=verify_root(r);assert g['stats']['workflow_process_digest']==w and g['stats']['capability_process_digest']==c,g['stats'];p=_fresh_replay_validation(r);assert p['workflow_process_digest']==w and p['capability_process_digest']==c and p['valid']==(not p['verification']['violations']),p"`
 
 The transition cross-check and the sampled prefix probe are both present, and the
 prefix sample is five quantiles rather than every seq.
-`check: grep -q "h.transitions() != Harness(root, read_only=True).transitions()" src/deepreason/invariants.py && grep -q "seqs\[i \* (len(seqs) - 1) // 4\]" src/deepreason/invariants.py`
+`check: grep -q "seqs\[i \* (len(seqs) - 1) // 4\]" src/deepreason/invariants.py && python -W ignore -c "import ast,pathlib;import deepreason.harness as H;from deepreason.invariants import verify_root;q=chr(39);T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());I=[n for n in ast.walk(T) if isinstance(n,ast.If) and any(('fail('+q+'transitions'+q) in ast.unparse(s) for s in n.body)];assert len(I)==1 and ast.unparse(I[0].test)=='h.transitions() != Harness(root, read_only=True).transitions()',[ast.unparse(x.test) for x in I];r=pathlib.Path('experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a');n=len([l for l in (r/'log.jsonl').read_text().splitlines() if l.strip()]);want={i*(n-1)//4 for i in range(5)};at=[];tr=[];oa=H.Harness.at.__func__;H.Harness.at=classmethod(lambda cls,root,seq,*a,**k:(at.append(seq),oa(cls,root,seq,*a,**k))[1]);ot=H.Harness.transitions;H.Harness.transitions=lambda s,*a,**k:(tr.append(1),ot(s,*a,**k))[1];verify_root(r);H.Harness.at=classmethod(oa);H.Harness.transitions=ot;assert len(tr)>=2,tr;assert want<=set(at),(sorted(want),sorted(set(at)));assert len(set(at))<n//4,(sorted(set(at)),n)"`
 
 Reader tolerance is a defaulted field plus a gate, not a special case:
 `attempt_trace` defaults empty so an old event still validates, and the demand
 for a trace fires only when the root is manifest-bound.
-`check: python -c "import ast,pathlib;from deepreason.ontology.event import LLMCall;assert not LLMCall.model_fields['attempt_trace'].is_required();t=pathlib.Path('src/deepreason/invariants.py').read_text();M='manifest-bound LLM call has no attempt trace';G=[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.If) and any(M in ast.unparse(s) for s in n.body)];assert len(G)==1 and ast.unparse(G[0].test)=='manifest is not None',[ast.unparse(g.test) for g in G];assert 'def _legacy_bridge_failure_call_seqs' in t"`
+`check: python -c "import ast,pathlib;from deepreason.ontology.event import LLMCall;assert not LLMCall.model_fields['attempt_trace'].is_required();t=pathlib.Path('src/deepreason/invariants.py').read_text();A=ast.parse(t);M='manifest-bound LLM call has no attempt trace';G=[n for n in ast.walk(A) if isinstance(n,ast.If) and any(M in ast.unparse(s) for s in n.body)];assert len(G)==1 and ast.unparse(G[0].test)=='manifest is not None',[ast.unparse(g.test) for g in G];D=[n for n in ast.walk(A) if isinstance(n,ast.FunctionDef) and n.name=='_legacy_bridge_failure_call_seqs'];V=[n for n in ast.walk(A) if isinstance(n,ast.FunctionDef) and n.name=='verify_root'][0];C=[n for n in ast.walk(V) if isinstance(n,ast.Call) and getattr(n.func,'id',None)=='_legacy_bridge_failure_call_seqs'];assert len(D)==1 and len(C)==1,(len(D),len(C))"`
 
 ## What is deliberately absent
 
@@ -123,7 +123,7 @@ the damage it exists to report.
 read-only open, not only on a truncated `Harness.at` view, so `verify_root`'s
 own harness sees `KeyError` for holdout bytes no `Reveal` event released. A
 verifier that could read them could leak the answer into a finding's `detail`.
-`check: python -c "import tempfile,pathlib;from deepreason.harness import Harness;from deepreason.storage.blobs import FencedBlobStore;d=pathlib.Path(tempfile.mkdtemp())/'run';Harness(d);assert isinstance(Harness(d,read_only=True).blobs,FencedBlobStore);assert not isinstance(Harness(d).blobs,FencedBlobStore)"`
+`check: python -c "import tempfile,pathlib;from deepreason.harness import Harness;from deepreason.storage.blobs import FencedBlobStore;d=pathlib.Path(tempfile.mkdtemp())/'run';w=Harness(d);ref=w.blobs.put(b'holdout');b=Harness(d,read_only=True).blobs;assert isinstance(b,FencedBlobStore),type(b);assert not isinstance(Harness(d).blobs,FencedBlobStore);f=FencedBlobStore(b._store,frozenset({ref}));g={};exec(chr(10).join(['def sealed(s,r):','    try:','        s.get(r)','        return False','    except KeyError:','        return True']),g);assert g['sealed'](f,ref) and not g['sealed'](b,ref),'FencedBlobStore does not seal';assert not f.is_grounding_available(ref) and b.is_grounding_available(ref)"`
 
 **Nothing outside the root enters the verdict.** `invariants.py` imports no
 `os`, no clock, no randomness and no uuid; its only non-root input is
@@ -132,7 +132,7 @@ verifier that could read them could leak the answer into a finding's `detail`.
 allow-list, and no way to skip a check — because a verdict that depends on
 options is not comparable across roots or across time, which is the property
 `REPLAY_VALIDATION.json` is stored to assert.
-`check: python -c "import ast,pathlib,inspect;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();T=ast.parse(t);full={a.name for n in ast.walk(T) if isinstance(n,ast.Import) for a in n.names}|{n.module for n in ast.walk(T) if isinstance(n,ast.ImportFrom) and not n.level and n.module};ext={x for x in full if not x.startswith('deepreason')};assert ext=={'enum','json','pathlib','urllib.parse'},sorted(ext);assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];i=t.index('if meter_total is not None');assert 'accounting' in t[i:i+200];assert 'def verify_root(' in t"`
+`check: python -W ignore -c "import ast,json,pathlib,inspect,tempfile,time,shutil;from deepreason.harness import Harness;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();T=ast.parse(t);full={a.name for n in ast.walk(T) if isinstance(n,ast.Import) for a in n.names}|{n.module for n in ast.walk(T) if isinstance(n,ast.ImportFrom) and not n.level and n.module};ext={x for x in full if not x.startswith('deepreason')};assert ext=={'enum','json','pathlib','urllib.parse'},sorted(ext);dyn=[ast.unparse(n) for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'id',getattr(n.func,'attr',None)) in ('__import__','import_module','eval','exec','compile')];assert not dyn,dyn;assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];i=t.index('if meter_total is not None');assert 'accounting' in t[i:i+200];d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);dump=lambda p: json.dumps(verify_root(pathlib.Path(str(p)),12345),sort_keys=True,default=str);a=dump(d);assert [v['check'] for v in verify_root(d,12345)['violations']]==['accounting'],a;time.sleep(1.1);assert dump(d)==a,'verdict moved between two calls on one root';e=pathlib.Path(tempfile.mkdtemp())/'copy';shutil.copytree(d,e);assert dump(e)==a,'verdict depends on something outside the root bytes (path or filesystem metadata)'"`
 
 **Not every prefix is verified.** `Harness.at` is probed at five quantile seqs,
 not at every seq. Bounded on purpose — the cost is linear in events per probe —
@@ -178,14 +178,16 @@ new file" — every byte under the root is unchanged, on a one-event root and on
    produced.
 
 What breaks first, in the order you will meet it:
-`test_replay_reproduces_state_byte_for_byte` (the only test that compares replay
-against the state a LIVE session actually held); then the persistence
+`test_replay_reproduces_state_byte_for_byte` (the test that exists FOR the
+property — replay against the state a LIVE session actually held; it is not the
+only test that makes that comparison, about ten subsystem tests reopen a root
+and compare too, but it is the one that names it); then the persistence
 invariants — read-only enforcement, torn-tail repair, failed-append rollback,
 seq fencing; then `verify_root` over generated messy runs; then the root sweep,
 which is the expensive one, because by then you need to know whether a committed
 root moved.
 
-`check: python -m pytest tests/test_replay.py tests/test_persistence_invariants.py -q`
+`check: python -m pytest tests/test_replay.py tests/test_persistence_invariants.py tests/test_torn_append.py -q`
 `check: python -m pytest tests/test_chaos_invariants.py "tests/test_run_manifest.py::test_manifest_is_immutable_canonical_and_hash_verified" -q`
 
 Also worth running when you touch the correlation passes rather than the replay
@@ -210,11 +212,14 @@ fail-closed behaviour of the pre-replay controller-v3 correlation.
 - **Two replays of the same code are not a correctness check.** The `replay`
   finding compares two `Harness` opens of one log; both run the same
   `_apply_event`. It catches NONDETERMINISM — an iteration order that leaked
-  into serialization, a set where a list was needed — and nothing else. The only
-  evidence that replay reproduces what the live session held is
-  `tests/test_replay.py`, which captures the live state before reopening and
-  compares against it. Deleting that test removes the property; deleting the
-  `replay` finding does not.
+  into serialization, a set where a list was needed — and nothing else. Nothing
+  in `verify_root` ever sees the state a live session held; only tests do, by
+  snapshotting before they reopen. `tests/test_replay.py` is the one written for
+  it; roughly ten subsystem tests (`test_budget`, `test_hv`, `test_loop`,
+  `test_merge`, `test_scheduler`, `test_schools`, ...) repeat the comparison
+  incidentally, so deleting `test_replay.py` alone weakens the evidence rather
+  than removing the property. Deleting the `replay` finding removes neither.
+`check: python -c "import pathlib,subprocess;t=pathlib.Path('tests/test_replay.py').read_text();assert 'def test_replay_reproduces_state_byte_for_byte' in t and 'snapshot = live.state.model_dump_json()' in t and 'reopened.state.model_dump_json() == snapshot' in t;o=subprocess.run(['grep','-rlE',r'Harness\([^)]*\)\.state\.model_dump_json\(\) == |\.state\.model_dump_json\(\) == (harness|live)\.state\.model_dump_json\(\)','tests'],capture_output=True,text=True).stdout.split();assert len(o)>=8,o;i=pathlib.Path('src/deepreason/invariants.py').read_text();assert 'model_dump_json' in i and i.count('model_dump_json')==2,i.count('model_dump_json')"`
 - **Tampering with a derived `state_diff` field proves nothing.** `att+`, `dep+`,
   `A+` and `Π+` are written for the record and never read back, so editing them
   in a stored log changes no reopened state; `carry+`, `addr+`, `hv_set` and

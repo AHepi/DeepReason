@@ -36,14 +36,14 @@ Exactly one rules module reaches the capabilities package, it reaches it only
 through function-local imports, and the arrow never points back. `crit.py` is the
 second and last rules module that names a capability at all, and its entire
 surface is one read of `harness.capability_state`.
-`check: test "$(grep -rl 'deepreason\.capabilities' --include=*.py src/deepreason/rules | wc -l)" -eq 1 && ! grep -rq 'deepreason\.rules' --include=*.py src/deepreason/capabilities/ && ! grep -rqE '^(from|import) deepreason\.capabilities' --include=*.py src/deepreason/rules/ && grep -q 'from deepreason.capabilities.simulation import' src/deepreason/rules/conj.py && test "$(grep -rl 'capabilit' --include=*.py src/deepreason/rules | wc -l)" -eq 2 && test "$(grep -c 'capability_state' src/deepreason/rules/crit.py)" -eq 1`
+`check: test "$(grep -rl 'deepreason\.capabilities' --include=*.py src/deepreason/rules | wc -l)" -eq 1 && test "$(grep -rlE '^class (Simulation|Research)CapabilityController' --include=*.py src/deepreason/capabilities/ | wc -l)" -eq 2 && ! grep -rq 'deepreason\.rules' --include=*.py src/deepreason/capabilities/ && ! grep -rqE '^(from|import) deepreason\.capabilities' --include=*.py src/deepreason/rules/ && grep -q 'from deepreason.capabilities.simulation import' src/deepreason/rules/conj.py && test "$(grep -rl 'capabilit' --include=*.py src/deepreason/rules | wc -l)" -eq 2 && test "$(grep -c 'capability_state' src/deepreason/rules/crit.py)" -eq 1`
 
 ## Where it is expressed
 
 | Site | File | Symbol | What it enforces |
 |---|---|---|---|
 | Authority published | `rules/conj.py` | `payload["simulation_authority"]`, `payload["research_authority"]` in `conjecture.semantic-task.v2` | the turn states, before dispatch, which channels are open and under which policy digest |
-| Authority re-derived | `capabilities/simulation.py`, `capabilities/research.py` | `_stage_transactional_proposal` | a proposal is refused unless the preparation it names carries a matching enabled flag, policy digest and ceiling |
+| Authority re-derived | `capabilities/simulation.py`, `capabilities/research.py` | `_stage_transactional_proposal` and `require_transactional_origin` | a proposal is refused unless the preparation it names carries a matching enabled flag, policy digest and ceiling — checked at staging AND again at origin admission |
 | Provenance re-derived | `capabilities/simulation.py`, `capabilities/research.py` | the `source.llm.work_order_id` / `dispatch_authorization_ref` / `provider_attempt.id in source.outputs` triple | the semantic content came from the one authorized provider result, not from the caller |
 | Sealed-input authority | `capabilities/simulation.py` | `expected_aliases = SIM_###` from `policy.input_catalog` vs `draft.input_aliases` | a proposal may name only the catalog aliases the turn was shown |
 | Batch staging | `rules/conj.py` | `simulation_controller.stage_transactional_proposals`, `research_controller.stage_transactional_proposals` | the whole batch validates before the first capability event |
@@ -63,8 +63,10 @@ surface is one read of `harness.capability_state`.
 | Replay validation | `invariants.py` | the `capability-origin` per-call proposal-count checks | a recorded root is re-judged against both per-turn ceilings |
 
 The published authority and the controller's re-derivation are one agreement in
-two packages.
-`check: grep -q '"simulation_authority": {' src/deepreason/rules/conj.py && grep -q '"research_authority": {' src/deepreason/rules/conj.py && grep -q 'simulation_authority.get("policy_digest") != self.policy.digest' src/deepreason/capabilities/simulation.py && grep -q 'research_authority.get("policy_digest") != self.policy.digest' src/deepreason/capabilities/research.py`
+two packages. Each controller re-derives it TWICE — once when staging a draft,
+once in `require_transactional_origin` — and both sites are pinned, because a
+file-wide grep is satisfied by whichever one survives.
+`check: grep -q '"simulation_authority": {' src/deepreason/rules/conj.py && grep -q '"research_authority": {' src/deepreason/rules/conj.py && python -c "import inspect; from deepreason.capabilities.simulation import SimulationCapabilityController as S; from deepreason.capabilities.research import ResearchCapabilityController as R; q=chr(34); pat=lambda k: k+'_authority.get('+q+'policy_digest'+q+') != self.policy.digest'; assert all(pat(k) in inspect.getsource(getattr(c, m)) for c, k in ((S, 'simulation'), (R, 'research')) for m in ('_stage_transactional_proposal', 'require_transactional_origin'))"`
 
 Staging appends nothing; only the `propose_transactional` step writes a
 transition. This is the property that makes a refused batch leave no record.
@@ -76,7 +78,7 @@ is a typed component diagnostic rather than a lost turn.
 
 The rules side files and consumes; it never constructs a transition, and never
 imports the frozen state machine.
-`check: ! grep -rq "record_capability_transition\|CapabilityReplayState\|capabilities\.state" --include=*.py src/deepreason/rules/ && grep -q "    def record_capability_transition(" src/deepreason/harness.py && grep -q "self.harness.record_capability_transition(" src/deepreason/capabilities/simulation.py && grep -q "self.harness.record_capability_transition(" src/deepreason/capabilities/research.py`
+`check: test "$(grep -rl 'stage_transactional_proposals' --include=*.py src/deepreason/rules/ | wc -l)" -eq 1 && ! grep -rq "record_capability_transition\|CapabilityReplayState\|capabilities\.state" --include=*.py src/deepreason/rules/ && grep -q "    def record_capability_transition(" src/deepreason/harness.py && grep -q "self.harness.record_capability_transition(" src/deepreason/capabilities/simulation.py && grep -q "self.harness.record_capability_transition(" src/deepreason/capabilities/research.py`
 
 The research ceiling is a module constant three off-package readers import
 rather than restate; the simulation ceiling is a manifest field.
@@ -86,15 +88,19 @@ Recovery and `verify_root` re-derive the same authority the controllers checked
 on write, and the follow-up context is re-derived rather than believed: the
 package, its transition lifecycle and the context blob's bytes must all agree
 before the `SIM_###` alias is minted.
-`check: grep -q "simulation authority differs from manifest" src/deepreason/workflow/conjecture_recovery.py && grep -q "research authority differs from manifest" src/deepreason/workflow/conjecture_recovery.py && grep -q "reconstructed contract id differs" src/deepreason/workflow/conjecture_recovery.py && grep -q "one provider call exceeds its frozen research-proposal authority" src/deepreason/invariants.py && grep -q "one provider call exceeds its frozen proposal-count authority" src/deepreason/invariants.py && grep -q "v6 simulation follow-up result binding is not canonical" src/deepreason/rules/conj.py && grep -q "simulation result context requires a follow-up work index" src/deepreason/rules/conj.py && grep -q "_capability_result_package_ref=package.id" src/deepreason/scheduler/scheduler.py`
+A message grep would survive a guard neutered to `or False`, so the comparison
+itself is re-derived here, not just its error text.
+`check: grep -q "simulation authority differs from manifest" src/deepreason/workflow/conjecture_recovery.py && grep -q "research authority differs from manifest" src/deepreason/workflow/conjecture_recovery.py && grep -q "reconstructed contract id differs" src/deepreason/workflow/conjecture_recovery.py && grep -q "one provider call exceeds its frozen research-proposal authority" src/deepreason/invariants.py && grep -q "one provider call exceeds its frozen proposal-count authority" src/deepreason/invariants.py && grep -q "simulation result context requires a follow-up work index" src/deepreason/rules/conj.py && grep -q "_capability_result_package_ref=package.id" src/deepreason/scheduler/scheduler.py && python -c "import inspect; from deepreason.rules import conj; from deepreason.workflow import conjecture_recovery as cr; s=inspect.getsource(conj); i=s.index('v6 simulation follow-up result binding is not canonical'); g=s[s.rindex('if (', 0, i):i]; assert all(c in g for c in ('result_package is None', 'result_context_ref != transaction_capability_result_ref', 'transition.lifecycle != CapabilityLifecycle.RESULT_PACKAGED', 'harness.blobs.get(transaction_capability_result_ref).decode', '!= _capability_result_context')), g; r=inspect.getsource(cr); a=r[r.rindex('_authority(', 0, r.index('simulation authority differs from manifest')):r.index('simulation authority differs from manifest')]; b=r[r.rindex('_authority(', 0, r.index('research authority differs from manifest')):r.index('research authority differs from manifest')]; assert all(c in a for c in ('policy.enabled', 'policy.digest', 'policy.maximum_proposals_per_turn')), a; assert all(c in b for c in ('research_policy.enabled', 'research_policy.digest', '_RESEARCH_TURN_MAXIMUM')), b"`
 
 Both rules-side readers of the pooled proposal map discriminate by record kind,
 and the criticism reader really does drop a research proposal rather than report
 it as a simulation.
 `check: python -c "import inspect; from types import SimpleNamespace as N; from deepreason.rules import conj; from deepreason.rules.crit import _filed_simulations as F; from deepreason.capabilities.models import ResearchFetchProposalV1 as R, SimulationProposalV1 as S; assert 'isinstance(proposal, proposal_model)' in inspect.getsource(conj._v6_capability_effect_refs); assert 'proposal_model=SimulationProposalV1' in inspect.getsource(conj._v6_simulation_effect_refs); assert 'proposal_model=ResearchFetchProposalV1' in inspect.getsource(conj._v6_research_effect_refs); c=dict(proposal_index=0, originating_work_order_ref='sha256:'+'a'*64, originating_provider_attempt_ref='sha256:'+'a'*64, source_call_seq=3, problem_ref='pi-1', run_input_digest='b'*64); r=R.create(purpose='p'*20, request_identifier='r-1', urls=('https://example.org/a',), **c); s=S.create(request_identifier='s-1', hypothesis='h', rival_predictions=('a','b'), discriminating_purpose='d', model_source='x=1', requested_observables=('x',), interpretation_conditions=('c',), **c); assert F(N(capability_state=N(proposals={r.id: r, s.id: s}, current_transition_by_request={}, transitions={}))) == (('s-1', 'declarative_numeric_v1', 'proposed', ''),)"`
 
-The wire's observable pattern IS the record's, by reference.
-`check: python -c "from deepreason.llm.wire import SimulationProposalWireV1 as W; from deepreason.capabilities.models import OBSERVABLE_NAME_PATTERN as P; assert W.model_json_schema()['properties']['requested_observables']['items']['pattern'] == P" && grep -q "run-b4d6dfda0c20676a864a051fbc97bda4 died at cycle 0" src/deepreason/capabilities/models.py`
+The wire's observable pattern IS the record's, by reference — the annotation is
+the capability package's own constrained type, not a literal that happens to
+match it today.
+`check: python -c "from deepreason.llm import wire; from deepreason.capabilities import models as m; assert wire.ObservableName is m.ObservableName; assert wire.SimulationProposalWireV1.model_fields['requested_observables'].annotation == list[m.ObservableName]; assert wire.SimulationProposalWireV1.model_json_schema()['properties']['requested_observables']['items']['pattern'] == m.OBSERVABLE_NAME_PATTERN" && grep -q "run-b4d6dfda0c20676a864a051fbc97bda4 died at cycle 0" src/deepreason/capabilities/models.py`
 
 The in-turn asymmetry, end to end: the wire admits the field only when the
 manifest enables it, an off-allowlist URL is a typed denial rather than a raise,
@@ -117,10 +123,12 @@ is in no position to make.
 structural.** `render_batch_crit_pack` is the only pack function in the codebase
 with a `simulation_proposals` parameter, and it renders a summary of proposals
 that already exist; no critic output model has a simulation or research field at
-all, so there is no channel through which a critic could author intent. The
+all — the check discovers the models rather than listing them, so a critic model
+added tomorrow is covered — so there is no channel through which a critic could
+author intent. The
 critic's stated job in that section is to judge whether the claim NEEDED an
 experiment, which is a judgement about the target, not a request for compute.
-`check: python -c "import inspect; from deepreason.llm import packs, wire; names=[n for n in dir(packs) if n.startswith('render_') and 'simulation_proposals' in inspect.signature(getattr(packs, n)).parameters]; assert names == ['render_batch_crit_pack'], names; assert not [f for m in (wire.ArgumentativeCriticOutput, wire.BatchCriticOutput, wire.CompactCritic, wire.BatchCriticCaseWireV2) for f in m.model_fields if 'simulation' in f or 'research' in f]"`
+`check: python -c "import inspect; from pydantic import BaseModel; from deepreason.llm import packs, wire, contracts; names=[n for n in dir(packs) if n.startswith('render_') and 'simulation_proposals' in inspect.signature(getattr(packs, n)).parameters]; assert names == ['render_batch_crit_pack'], names; models={n: o for mod in (contracts, wire) for n, o in vars(mod).items() if isinstance(o, type) and issubclass(o, BaseModel) and 'Critic' in n}; assert len(models) >= 6, sorted(models); assert not [(n, f) for n, o in models.items() for f in o.model_fields if 'simulation' in f or 'research' in f]"`
 
 **A simulation result never enters the formal graph.** `simulation.py` creates no
 artifact, no commitment and no warrant; the only thing it hands back to the rules
@@ -131,7 +139,7 @@ canonical entry the rest of the system uses, at `role="import"`, and the
 scheduler excludes import-role artifacts from its survivor count. Nothing at
 this seam constructs a `Warrant`; `rules/warrants.py` and the whole of
 `adjudication/` do not mention capabilities in any spelling.
-`check: ! grep -qE "create_artifact|register_batch|register_commitment|register_evidence" src/deepreason/capabilities/simulation.py && grep -q "    def result_context(" src/deepreason/capabilities/simulation.py && grep -q "from deepreason.research.backends import register_evidence" src/deepreason/capabilities/research.py && grep -q 'role: str = "import"' src/deepreason/research/backends.py && grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py && ! grep -rqE "capabilit|imulation" --include=*.py src/deepreason/adjudication/ src/deepreason/rules/warrants.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
+`check: ! grep -qE "create_artifact|register_batch|register_commitment|register_evidence" src/deepreason/capabilities/simulation.py && grep -q "    def result_context(" src/deepreason/capabilities/simulation.py && grep -q "from deepreason.research.backends import register_evidence" src/deepreason/capabilities/research.py && python -c "import inspect; from deepreason.capabilities.research import ResearchCapabilityController as R; assert 'register_evidence(' in inspect.getsource(R.consume)" && grep -q 'role: str = "import"' src/deepreason/research/backends.py && grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py && test "$(ls src/deepreason/adjudication/*.py | wc -l)" -ge 3 && ! grep -rqE "capabilit|imulation" --include=*.py src/deepreason/adjudication/ src/deepreason/rules/warrants.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
 
 **No capability record spawns a problem, and no rule but `conj` can reach a
 controller.** `spawn.py`, `warrants.py`, `act.py`, `vision.py`, `experiment.py`,
@@ -157,7 +165,7 @@ bug, and price the pack-baseline movement before opening it.
 `conj.py`; no test in the suite names either. The materialization-failure path
 next to it IS pinned. Do not read the missing coverage as evidence the path is
 dead — read it as the gap it is.
-`check: grep -q 'reason_code="simulation_semantic_rejected"' src/deepreason/rules/conj.py && grep -q 'reason_code="research_semantic_rejected"' src/deepreason/rules/conj.py && ! grep -rq "semantic_rejected" --include=*.py tests/`
+`check: grep -q 'reason_code="simulation_semantic_rejected"' src/deepreason/rules/conj.py && grep -q 'reason_code="research_semantic_rejected"' src/deepreason/rules/conj.py && test "$(grep -rl 'simulation_semantic_rejected\|research_semantic_rejected' --include=*.py src/ | wc -l)" -eq 1 && test "$(grep -rl 'test_simulation_materialization_failure_admits_valid_partial_components' --include=*.py tests/ | wc -l)" -eq 1 && ! grep -rq "semantic_rejected" --include=*.py tests/`
 
 ## How to change it
 

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scheduler-x-rules -->
-Verified-at: 546544b5
+Verified-at: 9fa394d9
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/rules/spawn.py
 Sides: DR-SUB-rules, DR-SUB-scheduler
@@ -42,8 +42,11 @@ The `Config` partition is the agreement in its most testable form. Cadence,
 caps, focus and rotation are the scheduler's; pack size, retry counts and
 thresholds are the rules'. `FUZZ_N` is the single shared name, and it is shared
 because it is an on/off switch on both sides: the scheduler skips the sweep when
-it is zero, `crit_fuzz` uses it as the enumeration bound.
-`check: python -c 'import re, pathlib; cfg = lambda d: {n for p in pathlib.Path(d).rglob("*.py") for n in re.findall(r"config\.([A-Z_]+)", p.read_text())}; r = cfg("src/deepreason/rules"); s = cfg("src/deepreason/scheduler"); assert len(r) >= 12 and len(s) >= 28, (len(r), len(s)); assert r & s == {"FUZZ_N"}, sorted(r & s); from deepreason.config import Config; c = Config(); assert all(hasattr(c, n) for n in r | s)'`
+it is zero, `crit_fuzz` uses it as the enumeration bound. Both counts are
+pinned exactly, not as floors: a new `Config` read on either side is a seam
+change for the same reason a sixteenth rules import is, and a floor would have
+let either side grow silently past the number written here.
+`check: python -c 'import re, pathlib; cfg = lambda d: {n for p in pathlib.Path(d).rglob("*.py") for n in re.findall(r"config\.([A-Z_]+)", p.read_text())}; r = cfg("src/deepreason/rules"); s = cfg("src/deepreason/scheduler"); assert (len(r), len(s)) == (12, 29), (len(r), len(s)); assert r & s == {"FUZZ_N"}, sorted(r & s); from deepreason.config import Config; c = Config(); assert all(hasattr(c, n) for n in r | s)'`
 
 ## Where it is expressed
 
@@ -110,7 +113,7 @@ thing a "small convenience" breaks: minting a problem inline rather than letting
 `scan_spawns` find it next cycle is the intuitive shortcut, and it produces a
 problem with no structural trigger and no provenance that any rescan can
 reproduce.
-`check: ! grep -qE "\bspawn\(|register_fail_warrant|WarrantType|anti_relapse|try_counterexample|relapse_domain|_RELAPSE_LOG" src/deepreason/scheduler/scheduler.py && ! grep -rqE "path\.open|write_text|\bopen\(" --include=*.py src/deepreason/scheduler/ && grep -q "^def spawn(" src/deepreason/rules/spawn.py && grep -q "        problem = spawn(harness, \*args, \*\*kwargs)" src/deepreason/rules/spawn.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py && grep -q "register_fail_warrant(" src/deepreason/rules/act.py && grep -q "^def try_counterexample(" src/deepreason/rules/crit.py && grep -q "try_counterexample(" src/deepreason/rules/crit.py && grep -q "_RELAPSE_LOG = \"relapse.log.jsonl\"" src/deepreason/rules/guards/anti_relapse.py && grep -q "anti_relapse" src/deepreason/rules/conj.py`
+`check: grep -qx "        scan_spawns(harness, config)" src/deepreason/scheduler/scheduler.py && test "$(ls src/deepreason/scheduler/*.py | wc -l)" -eq 2 && ! grep -qE "\bspawn\(|register_fail_warrant|WarrantType|anti_relapse|try_counterexample|relapse_domain|_RELAPSE_LOG" src/deepreason/scheduler/scheduler.py && ! grep -rqE "path\.open|write_text|\bopen\(" --include=*.py src/deepreason/scheduler/ && grep -q "^def spawn(" src/deepreason/rules/spawn.py && grep -q "        problem = spawn(harness, \*args, \*\*kwargs)" src/deepreason/rules/spawn.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py && grep -q "register_fail_warrant(" src/deepreason/rules/act.py && grep -q "^def try_counterexample(" src/deepreason/rules/crit.py && grep -q "try_counterexample(" src/deepreason/rules/crit.py && grep -q "_RELAPSE_LOG = \"relapse.log.jsonl\"" src/deepreason/rules/guards/anti_relapse.py && grep -q "anti_relapse" src/deepreason/rules/conj.py`
 
 **The scheduler never chooses a prose authority.** On the local path it passes
 `crit_argumentative_batch` no authority at all and the rule reads the validated
@@ -149,8 +152,11 @@ over every standing candidate whose clean bit is unset, and the standing
 argumentative sweep runs the fuzz pass *first* so a free refutation saves the
 call. Making fuzz reachable only from leftover arg-crit slots is the symmetric
 error, and it was a recorded defect: a token-economy constraint imposed on
-criticism that spends no tokens.
-`check: python -m pytest tests/test_experiment.py::test_fuzz_sweep_is_not_rationed_behind_llm_slots tests/test_crit_batch.py::test_standing_goodhart_trap_is_fuzz_refuted_in_the_sweep tests/test_crit_batch.py::test_standing_survivor_swept_into_leftover_slots tests/test_properties.py::test_standing_recrit_pool_includes_active_properties -q`
+criticism that spends no tokens. The mechanism is asserted structurally as well
+as behaviourally: the outcome tests alone survive both a dead `_fuzz_sweep` and
+a standing sweep that skips its free pass, because the other arm still fells the
+trap (mutation-audited at `9fa394d9`).
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; assert "\n        self._fuzz_sweep()" in inspect.getsource(S.step); f = inspect.getsource(S._fuzz_sweep); assert "config.ARG_CRIT_PER_CYCLE" not in f and "_arg_crit_this_cycle" not in f; assert "        if config.FUZZ_N <= 0:\n            return\n" in f; assert f.index("if aid in self._fuzz_clean:") < f.index("crit_fuzz(harness, aid, config)"); a = inspect.getsource(S._arg_crit); assert "_fuzz_sweep" not in a; assert "                    if aid not in self._fuzz_clean:\n                        crit_fuzz(harness, aid, config)\n" in a; i = a.index("if config.RECRIT_STANDING:"); assert a.index("crit_fuzz(harness, aid, config)", i) < a.index("eligible.append(aid)", i) < a.index("self._arg_crit_this_cycle += 1", i)' && python -m pytest tests/test_properties.py::test_scheduler_conjectures_ground_truth_and_kills_the_trap tests/test_experiment.py::test_fuzz_sweep_is_not_rationed_behind_llm_slots tests/test_crit_batch.py::test_standing_goodhart_trap_is_fuzz_refuted_in_the_sweep tests/test_crit_batch.py::test_standing_survivor_swept_into_leftover_slots tests/test_properties.py::test_standing_recrit_pool_includes_active_properties -q`
 
 **`rules/` does not import the scheduler, with exactly one exception, and it is
 about identity rather than control.** `conj.root_problem_family` calls

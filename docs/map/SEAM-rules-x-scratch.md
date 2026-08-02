@@ -27,7 +27,7 @@ reach the machinery that decides what stands.
 
 Exactly one module on each side carries this, and the whole rules-side surface
 of the scratchpad is `conj.py`.
-`check: test "$(grep -rl "deepreason\.scratch" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && ! grep -rq "deepreason\.rules" --include=*.py src/deepreason/scratch/ && grep -q "^def plan_conjecture_context(" src/deepreason/scratch/conjecture.py && grep -q "deepreason.scratch.conjecture import" src/deepreason/rules/conj.py`
+`check: python -c "import ast,pathlib as P;pk=lambda p:p.relative_to(P.Path('src')).parts[:-1];res=lambda p,n:(n.module or '') if not n.level else ('.'.join(pk(p)[:len(pk(p))-n.level+1])+'.'+(n.module or '')).strip('.');mods=lambda p:[a.name for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Import) for a in n.names]+[res(p,n) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom)];hit=lambda m,t:m==t or m.startswith(t+'.');R=sorted(P.Path('src/deepreason/rules').rglob('*.py'));S=sorted(P.Path('src/deepreason/scratch').rglob('*.py'));assert len(R)>=8 and len(S)>=10,(len(R),len(S));u=sorted(p.relative_to(P.Path('src/deepreason/rules')).as_posix() for p in R if any(hit(m,'deepreason.scratch') for m in mods(p)));assert u==['conj.py'],u;b=[(p.name,m) for p in S for m in mods(p) if hit(m,'deepreason.rules')];assert not b,b" && grep -q "^def plan_conjecture_context(" src/deepreason/scratch/conjecture.py && grep -q "scratch.conjecture import" src/deepreason/rules/conj.py`
 
 ## Where it is expressed
 
@@ -54,24 +54,24 @@ to the formal fence at the same call.
 
 Scratch reaches a conjecture pack only through the typed record, in a section
 the allocator may not drop or compress.
-`check: grep -q "scratch_context = RenderedScratchPackV1.model_validate(scratch_context)" src/deepreason/llm/packs.py && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "droppable=False" && grep -q "^class RenderedScratchPackV1" src/deepreason/scratch/render.py`
+`check: grep -q "scratch_context = RenderedScratchPackV1.model_validate(scratch_context)" src/deepreason/llm/packs.py && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "droppable=False" && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "compressible=False" && grep -q "^class RenderedScratchPackV1" src/deepreason/scratch/render.py`
 
 The planned context carries one fence for both logs, matched to the attention
 pack it was built from; a plan whose fence has moved cannot commit, a historical
 view can neither plan nor commit at all, and `verify_root` re-checks on replay
 that the fence precedes its call.
-`check: grep -qE "^ +if self\.formal_fence_seq != self\.scratch_fence_seq:$" src/deepreason/scratch/conjecture.py && grep -q "formal and scratch context fences must name one event prefix" src/deepreason/scratch/conjecture.py && grep -qE "^ +if self\.attention_pack\.state_seq != self\.scratch_fence_seq:$" src/deepreason/scratch/conjecture.py && grep -q "attention pack does not match the scratch fence" src/deepreason/scratch/conjecture.py && test "$(grep -cE "^ +plan_fence = harness\._next_seq - 1$" src/deepreason/rules/conj.py)" -eq 2 && grep -qE "^ +if receipt\.formal_fence_seq >= event\.seq:$" src/deepreason/invariants.py && grep -q "context fence does not precede the call event" src/deepreason/invariants.py && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
+`check: python -c "import ast,pathlib as P;t=ast.parse(P.Path('src/deepreason/scratch/conjecture.py').read_text());f=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='_parts_share_one_fence_and_selection'][0];g={ast.unparse(n.test):[ast.unparse(b.exc) for b in n.body if isinstance(b,ast.Raise)] for n in f.body if isinstance(n,ast.If)};need={'self.formal_fence_seq != self.scratch_fence_seq':'formal and scratch context fences must name one event prefix','self.attention_pack.state_seq != self.scratch_fence_seq':'attention pack does not match the scratch fence'};assert all(any(m in r and 'ValueError' in r for r in g.get(k,[])) for k,m in need.items()),g" && test "$(grep -cE "^ +plan_fence = harness\._next_seq - 1$" src/deepreason/rules/conj.py)" -eq 2 && python -c "import ast,pathlib as P;t=ast.parse(P.Path('src/deepreason/invariants.py').read_text());g=[n for n in ast.walk(t) if isinstance(n,ast.If) and ast.unparse(n.test)=='receipt.formal_fence_seq >= event.seq'];assert len(g)==1,len(g);b=[ast.unparse(s) for s in g[0].body];assert any('fail(' in s and 'conjecture-context' in s and 'context fence does not precede the call event' in s for s in b),b" && python -m pytest tests/test_conjecture_scratch_context_v4.py::test_stale_plan_cannot_commit_and_a_fresh_rebuild_can tests/test_conjecture_scratch_context_v4.py::test_historical_views_can_neither_plan_nor_commit_context -q`
 
 The sealed bytes are counted three times on the way to the provider: in the
 pack, in the receipt, and in the finished prompt.
-`check: grep -q "if pack.count(canonical_scratch_text) != 1:" src/deepreason/rules/conj.py && grep -q "if final_conjecture_pack.count(receipt_text) != 1:" src/deepreason/scratch/conjecture.py && grep -q "if prompt.count(advisory_text) != 1:" src/deepreason/llm/adapter.py && grep -q "advisory context bytes are absent or duplicated before aliasing" src/deepreason/llm/adapter.py && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_initial_v6_conjecture_commits_exact_model_facing_scratch_once -q`
+`check: python -c "import ast,pathlib as P;S=[('src/deepreason/rules/conj.py','pack.count(canonical_scratch_text) != 1','v6 Conj pack must contain canonical scratch context once'),('src/deepreason/scratch/conjecture.py','final_conjecture_pack.count(receipt_text) != 1','final Conj pack must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','prompt.count(advisory_text) != 1','rendered provider request must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','rendered_pack.count(protected) != 1','advisory context bytes are absent or duplicated before aliasing')];G=[(f,e,m,[n for n in ast.walk(ast.parse(P.Path(f).read_text())) if isinstance(n,ast.If) and ast.unparse(n.test)==e]) for f,e,m in S];assert all(len(g)==1 and any(isinstance(s,ast.Raise) and m in ast.unparse(s) for s in g[0].body) for f,e,m,g in G),[(f,e,len(g)) for f,e,m,g in G]" && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_initial_v6_conjecture_commits_exact_model_facing_scratch_once -q`
 
 Every visible handle is exposed under its own namespace in the transaction
 ledger, so what the model saw is a typed record rather than an inference from
 the prompt text; validation and admission are then given that same alias set and
 that same exposure receipt, and an unknown reference is refused before any
 scratch event.
-`check: grep -q "namespace=ContextNamespace.SCRATCH," src/deepreason/rules/conj.py && grep -q 'plan_kind="scratch",' src/deepreason/rules/conj.py && grep -q 'SCRATCH = "scratch"' src/deepreason/workflow/transaction.py && test "$(grep -c "visible_aliases=scratch_aliases," src/deepreason/rules/conj.py)" -eq 2 && test "$(grep -c "context_ref=exposure_ref," src/deepreason/rules/conj.py)" -eq 2 && python -m pytest tests/test_v6_scratch_atomicity.py::test_unknown_reference_is_rejected_before_any_scratch_event -q`
+`check: grep -q "namespace=ContextNamespace.SCRATCH," src/deepreason/rules/conj.py && grep -q 'plan_kind="scratch",' src/deepreason/rules/conj.py && grep -q 'SCRATCH = "scratch"' src/deepreason/workflow/transaction.py && python -c "import ast,pathlib as P;t=ast.parse(P.Path('src/deepreason/rules/conj.py').read_text());C=[c for c in ast.walk(t) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith(('.validate_proposal','.admit_proposal'))];assert len(C)==2,[ast.unparse(c.func) for c in C];k={ast.unparse(c.func).split('.')[-1]:{a.arg:ast.unparse(a.value) for a in c.keywords} for c in C};assert sorted(k)==['admit_proposal','validate_proposal'],sorted(k);assert all(k[n].get('visible_aliases')=='scratch_aliases' and k[n].get('context_ref')=='exposure_ref' for n in k),k" && python -m pytest tests/test_v6_scratch_atomicity.py::test_unknown_reference_is_rejected_before_any_scratch_event -q`
 
 A scratch component that fails is diagnosed in two typed phases; the turn's
 valid candidates still commit.
@@ -79,7 +79,7 @@ valid candidates still commit.
 
 Recovery refuses the two mismatched shapes: scratch exposure without a context
 receipt, and a context receipt without scratch exposure.
-`check: grep -q "scratch-bearing provider result has no conjecture context authority" src/deepreason/workflow/conjecture_recovery.py && grep -q "provider call claims scratch context absent from transaction exposure" src/deepreason/workflow/conjecture_recovery.py && grep -q "^def validate_conjecture_context_call(" src/deepreason/scratch/conjecture.py && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_recovery_rejects_scratch_exposure_without_durable_context_authority -q`
+`check: python -c "import ast,pathlib as P;t=ast.parse(P.Path('src/deepreason/workflow/conjecture_recovery.py').read_text());d=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='_authority'][0];assert [s for s in ast.walk(d) if isinstance(s,ast.Raise)],'_authority no longer raises';A=[(ast.unparse(c.args[0]),ast.unparse(c.args[1])) for c in ast.walk(t) if isinstance(c,ast.Call) and ast.unparse(c.func)=='_authority' and len(c.args)==2];need=[('call.conjecture_context is not None','scratch-bearing provider result has no conjecture context authority'),('call.conjecture_context is None','provider call claims scratch context absent from transaction exposure')];assert all(any(a==x and y in b for a,b in A) for x,y in need),A" && grep -q "^def validate_conjecture_context_call(" src/deepreason/scratch/conjecture.py && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_recovery_rejects_scratch_exposure_without_durable_context_authority -q`
 
 ## What is deliberately absent
 
@@ -89,13 +89,13 @@ the operator's R5/R6 requirement: the scratchpad authority chain and the
 conjecture/criticism adjudication chain must not exist together. Reading the
 absence as an oversight and "wiring the critic to the workshop" is the specific
 mistake this section exists to prevent.
-`check: python -c "import inspect;from deepreason.llm import packs;bad=[n for n in dir(packs) if n.startswith('render_') and 'scratch_context' in inspect.signature(getattr(packs,n)).parameters];assert bad==['render_conj_pack'],bad" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
 contract takes aliases and no critic output model has any scratch field at all.
 The workshop belongs to the move that invents, in both directions.
-`check: python -c "import inspect;from deepreason.llm import wire;N=('BatchCriticWireContractV2','CriticWireContract','AtomicCriticWireContractV1');S=[inspect.signature(getattr(wire,n).__init__).parameters for n in N];assert 'scratch_aliases' in inspect.signature(wire.ConjecturerTurnWireContractV6.__init__).parameters;assert 'scratch_proposal' in wire.ConjecturerTurnWireV6.model_fields;assert not [k for p in S for k in p if 'scratch' in k];assert not [k for p in S for k,v in p.items() if v.kind in (v.VAR_KEYWORD,v.VAR_POSITIONAL)],'a variadic critic __init__ can absorb scratch_aliases without naming it';assert not [a for n in N for a in dir(getattr(wire,n)) if 'scratch' in a],'a critic contract exposes a scratch attribute';assert not [f for m in (wire.ArgumentativeCriticOutput,wire.BatchCriticOutput) for f in m.model_fields if 'scratch' in f]"`
+`check: python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;assert 'scratch_aliases' in inspect.signature(wire.ConjecturerTurnWireContractV6.__init__).parameters;assert 'scratch_proposal' in wire.ConjecturerTurnWireV6.model_fields;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];C=[c for c in K if issubclass(c,wire.WireContract)];M=[c for c in K if issubclass(c,BaseModel)];assert len(C)>=3 and len(M)>=5,([c.__name__ for c in C],[c.__name__ for c in M]);P=[(c.__name__,k) for c in C for k,v in inspect.signature(c.__init__).parameters.items() if 'scratch' in k or v.kind in (v.VAR_KEYWORD,v.VAR_POSITIONAL)];assert not P,P;A=[(c.__name__,a) for c in C for a in dir(c) if 'scratch' in a.lower()];assert not A,A;F=[(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert not F,F"`
 
 **The separation is enforced by an AST walk, not a header grep**, because a
 function-local `import deepreason.scratch...` inside `crit.py` would satisfy a
@@ -103,20 +103,26 @@ naive check and still couple the two. The same walk covers `informal/trial.py`,
 which is where a sustained prose case actually changes a status, and
 `rules/warrants.py` and `adjudication/edges.py`, which are the narrowest part of
 the chain: a warrant's referents are an artifact, a commitment, a validity node
-and a trace blob, never a scratch object.
-`check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence tests/test_prose_refutation_boundaries.py::test_the_defended_trial_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge -q`
+and a trace blob, never a scratch object. The walk in
+`tests/test_prose_refutation_boundaries.py` matches on the ABSOLUTE module name,
+so `from ..scratch.render import ...` slips past it on all four modules; the
+probe below resolves each `ImportFrom` level against the importing package
+first, and is the half of this claim that catches a relative import.
+`check: python -c "import ast,pathlib as P;pk=lambda p:p.relative_to(P.Path('src')).parts[:-1];res=lambda p,n:(n.module or '') if not n.level else ('.'.join(pk(p)[:len(pk(p))-n.level+1])+'.'+(n.module or '')).strip('.');mods=lambda p:[a.name for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Import) for a in n.names]+[res(p,n) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom)];F=['src/deepreason/rules/crit.py','src/deepreason/informal/trial.py','src/deepreason/rules/warrants.py','src/deepreason/adjudication/edges.py'];assert all(P.Path(f).is_file() for f in F),F;b=[(f,m) for f in F for m in mods(P.Path(f)) if m=='deepreason.scratch' or m.startswith('deepreason.scratch.')];assert not b,b" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence tests/test_prose_refutation_boundaries.py::test_the_defended_trial_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge -q`
 
 **An unresolved question is not a problem.** `ScratchProposalV1` has an
 `unresolved_questions` field and `scan_spawns` mints problems from seven
 structural triggers over the formal graph — successor, discrimination,
 remove-arbitrariness, explanation-debt, connection, integration, research. (The
-`SpawnTrigger` enum carries two more that `scan_spawns` never mints: `SEED` is
-the operator's question, and `AUDIT_CRITIC` is raised by the response ladder in
-`informal/appellate.py`.) No edge joins the two, and none should. A spawn is a
+`SpawnTrigger` enum carries exactly two more that `scan_spawns` never mints:
+`SEED` is the operator's question — set as a problem's provenance at run setup,
+never spawned by a call — and `AUDIT_CRITIC` is raised from two ladders,
+`informal/appellate.py`'s `spawn_audit_problem` and `capture/ladder.py`'s
+adjudication-ritual debt sweep.) No edge joins the two, and none should. A spawn is a
 commitment to spend the run's budget; a question in the workshop is explicitly
 allowed to be idle, wrong, or unanswerable. The same holds for the anti-relapse
 gate, which compares formal verdict vectors and never a note.
-`check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SUCCESSOR'],sorted(m)" && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
+`check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SUCCESSOR'],sorted(m)" && python -c "from deepreason.ontology.problem import SpawnTrigger;n=sorted(t.name for t in SpawnTrigger);assert n==['AUDIT_CRITIC','CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SEED','SUCCESSOR'],n" && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/informal/appellate.py && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/capture/ladder.py && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
 
 **Nothing that crosses the seam leaves a mark on the formal graph.** A scratch
 event's `state_diff` is empty, no scratch handle or receipt id appears in any
@@ -130,7 +136,7 @@ convention.** Both the v4/v5 and v6 contracts reject a scratch alias that
 collides with a formal one at construction, because a collision would let a
 speculative note resolve as a formal artifact reference in a `requested_refs`
 list.
-`check: grep -q "formal and scratch alias namespaces must not overlap" src/deepreason/llm/wire.py && grep -q "v6 visible alias namespaces must be disjoint" src/deepreason/llm/wire.py && grep -q '_require_namespace(scratch, "SCR")' src/deepreason/llm/wire.py`
+`check: python -c "exec('def R(f):\n try:\n  f()\n  return chr(32)\n except ValueError as e:\n  return str(e)');from deepreason.llm.wire import AliasTable as A,ConjecturerTurnWireContractV4 as V4,ConjecturerTurnWireContractV6 as V6;a=A({'SRC_001':'art:1'});m=R(lambda: V4(reasoning=False,aliases=a,scratch_aliases={'SRC_001':'s'}));assert 'formal and scratch alias namespaces must not overlap' in m,m;m=R(lambda: V6(reasoning=False,aliases=a,scratch_aliases={'SRC_002':'s'}));assert 'SCR' in m,m;m=R(lambda: V6(reasoning=False,aliases=a,scratch_aliases={'SCR_001':'s'},simulation_enabled=True,maximum_simulation_proposals=1,simulation_input_aliases=('SIM_001','SIM_001')));assert 'v6 visible alias namespaces must be disjoint' in m,m;V6(reasoning=False,aliases=a,scratch_aliases={'SCR_001':'s'},simulation_enabled=True,maximum_simulation_proposals=1,simulation_input_aliases=('SIM_001','SIM_002'))" && grep -q '_require_namespace(scratch, "SCR")' src/deepreason/llm/wire.py`
 
 **The fence on the criticism side is NOT an absence.** It is present and
 deliberate: a criticism transaction still has to be ordered against the scratch
