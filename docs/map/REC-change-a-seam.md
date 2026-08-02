@@ -37,7 +37,7 @@ matrix means the two genuinely do not interact, and a request to change their
 interaction is a request to CREATE one — a different and larger job, which needs
 a new seam document as part of the work.
 
-`check: test -f docs/map/INDEX.md`
+`check: grep -q '^| Coupling | Pair | Document |' docs/map/INDEX.md`
 
 ## Step 3 — check the invariants before you design anything
 
