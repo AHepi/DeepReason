@@ -236,3 +236,74 @@ exists as a policy flag (`v6_policy.py:69,119`, currently False),
 `require_cross_family_judge_ensemble` exists (`llm/firewall.py:261`). The
 distinction the operator expected does exist.
 
+### 2026-08-02, message 5 — answering the delivery report
+
+> you didn't listen. I didn't ask for same school criticism. It should be cross
+> school  criticism. It should only work for single model runs. it should be
+> exposed whenever a single model is occupying all positions
+
+R18 (behavior): "It should be cross school  criticism."
+
+R19 (behavior): "It should only work for single model runs."
+
+R20 (behavior): "it should be exposed whenever a single model is occupying all
+positions."
+
+C9 (process): "you didn't listen. I didn't ask for same school criticism." —
+the operator states that a settled decision was re-opened.
+
+**R18 CONFIRMS A4 and CLOSES it.** A4 recorded, as an assumption the operator
+could overturn in one word, that R14 supersedes R7's literal "same school
+criticisms" and that the guarantee is cross-SCHOOL. R18 states that reading
+back. A4 is therefore SETTLED, not assumed: cross-school is what was asked for
+and cross-school is what was built. `S8`/`S9` do NOT invert.
+
+**What C9 names.** The delivery report raised A4 to the operator as a live
+question ("if you actually meant same-school, S8 and S9 invert and the extension
+needs rebuilding") when the operator had already decided it in message 4 ("as
+long as a critic isn't from the same school, it's fine"). Re-opening a settled
+decision is the failure being reported. Recorded here so the delivery phase does
+not repeat it: a recorded assumption that the operator has since confirmed is
+CLOSED, and must be reported as a fact, not re-surfaced as a choice.
+
+**R20 is the substantive change, and it is NOT satisfied by what was built.**
+The cross-school ensemble is currently opt-in: `LLMAdapter.__init__` takes
+`school_judge_bindings` defaulting to `()`, and `llm/adapter.py:1467` — the only
+production construction of an adapter — never passes it. `_select_judge_ensemble`
+therefore falls back to cross-family in every live run.
+`VALIDATION.md` and `PARKED.md` both record this as unwired, and the delivery
+report stated it as parked residue. R20 says it must be EXPOSED whenever a
+single model occupies all positions. Opt-in that nothing opts into is not
+exposed.
+
+## Open questions (from message 5, for dr-spec-change)
+
+Q7 (R19, R20 vs A5): **"single model" or "single family"?** Message 4 said "I
+want this designed for single family runs" and "only make it active if a single
+model is running the entire harness", and A5 read the latter as ONE ROUTE
+FAMILY across the run's leases — explicitly not one model id and not one seat.
+Message 5 says "single model runs" and "a single model is occupying all
+positions", twice, and does not say family. This may mean the predicate should
+key on model IDENTITY rather than family, which is strictly narrower: two
+different glm models share a family but are not one model. `is_single_family_run`
+implements the family reading today. NOT resolved here.
+
+Q8 (R20): "exposed" — does the cross-school ensemble become the gate
+automatically in a qualifying run with no configuration at all, or does it
+become AVAILABLE and something in the run's own configuration still selects it?
+The word "exposed" admits both. NOT resolved here.
+
+Q9 (R20): if it is automatic, where do the judge seats' SCHOOL identities come
+from? Nothing binds a school to a judge seat today: `SchoolRoleBindingV1` can
+express one (`run_manifest.py:467`, its `role` field is an open pattern) but no
+manifest authors one. NOT resolved here.
+
+## STILL OPEN from VALIDATION.md — message 5 does not answer it
+
+The validation verdict was FAIL on S4's first acceptance clause: A1 named
+`programs.evaluable` as the formal/informal line, the implemented line is
+`execution_backed`, and a target carrying a `predicate:` commitment is therefore
+refutable by prose (measured: `att=1`, not refused). Message 5 concerns the
+schools/single-model axis only and says nothing about this. It is carried
+forward UNANSWERED and must not be treated as resolved by this amendment.
+
