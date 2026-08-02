@@ -880,6 +880,46 @@ def render_crit_pack(
                 provenance_refs=tuple(attackers),
             )
         )
+    # The declared support chain is part of the argument, not context around
+    # it: a case that a target is unsupported cannot be mounted or answered
+    # without seeing what the target claims to rest on. Ids and roles are
+    # exact, because a chain missing an entry reads as a chain that has none.
+    # The referents' text is separately droppable — losing it costs the critic
+    # detail, losing the declaration would misstate the argument.
+    support = target.interface.refs
+    if support:
+        sections.append(
+            _pack_section(
+                "target-support-chain",
+                "\n".join(
+                    ["TARGET SUPPORT CHAIN (what the target declares it rests on):"]
+                    + [f"- {ref.target} [{ref.role.value}]" for ref in support]
+                ),
+                4,  # sorts after "target" on id; the chain follows what it supports
+                droppable=False,
+                compressible=False,
+                provenance_refs=tuple(ref.target for ref in support),
+            )
+        )
+        known = [ref for ref in support if ref.target in state.artifacts]
+        if known:
+            sections.append(
+                _pack_section(
+                    "target-support-content",
+                    "\n".join(
+                        ["SUPPORT CONTENT:"]
+                        + [
+                            f"- {ref.target}: {_head(state, ref.target, blobs)}"
+                            for ref in known
+                        ]
+                    ),
+                    6,
+                    droppable=True,
+                    compressible=True,
+                    min_tokens=24,
+                    provenance_refs=tuple(ref.target for ref in known),
+                )
+            )
     counterexample_note = (
         _COUNTEREXAMPLE_NOTE
         if _carries_execution_oracle(target, commitments)
@@ -889,13 +929,12 @@ def render_crit_pack(
         "DIRECTIVE: mount the strongest NEW specific case against the target, "
         "or attack=false if you find no genuine fault."
     )
-    total_chars = token_budget * _CHARS_PER_TOKEN
-    overhead = sum(
-        len(section.text_ref.removeprefix("inline:")) + len(section.id) + 6
-        for section in sections
-    ) + len(counterexample_note) + len(directive) + len(target_id) + 32
-    target_budget = max(256, total_chars - overhead)
-    target_text = _document_excerpt(content_text(target, blobs), target_budget)
+    # The target arrives whole. An excerpted argument cannot be refuted on the
+    # bytes that were omitted, so budgeting it silently converted a transport
+    # limit into an epistemic one. The section is mandatory and exact, so the
+    # allocator retains it in full and an oversize prompt becomes a typed
+    # envelope failure at dispatch rather than a quietly partial case.
+    target_text = content_text(target, blobs)
     sections.append(
         _pack_section(
             "target",

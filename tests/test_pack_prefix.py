@@ -65,14 +65,25 @@ def test_crit_pack_prefix_diverges_only_at_per_target_extras(harness):
     assert "fc-x" in pack_a and "fc-y" in pack_b  # nothing dropped
 
 
-def test_long_critic_target_preserves_labeled_tail_instead_of_fake_truncation(
+def test_long_critic_target_arrives_whole_rather_than_excerpted(
     harness,
 ):
+    """Implements R3 ("the endpoint that wants to refute just needs access to
+    the full argument"), S3 of
+    experiments/2026-08-01-change-prose-can-refute/SPEC.md.
+
+    This test previously asserted the labeled head/tail excerpt, which existed
+    because prefix-only clipping made compact critics refute valid designs for
+    "ending abruptly".  The excerpt fixed the appearance of truncation without
+    fixing the truncation: an argument cannot be refuted on bytes the critic
+    was never shown.  The concern that motivated the excerpt is satisfied more
+    strongly here -- the whole document arrives, so no section is unshown and
+    no label is needed to explain one away.
+    """
+
+    body = ("component detail\n" * 600)
     _problem(harness)
-    target = _sibling(
-        harness,
-        "BEGIN-DESIGN\n" + ("component detail\n" * 600) + "END-MANIFEST",
-    )
+    target = _sibling(harness, "BEGIN-DESIGN\n" + body + "END-MANIFEST")
     pack = render_crit_pack(
         target.id,
         harness.state,
@@ -80,9 +91,8 @@ def test_long_critic_target_preserves_labeled_tail_instead_of_fake_truncation(
         harness.blobs,
         1200,
     )
-    assert "HARNESS PACK EXCERPT" in pack
-    assert "do not claim that unshown sections are missing" in pack
-    assert "BEGIN-DESIGN" in pack and "END-MANIFEST" in pack
+    assert "HARNESS PACK EXCERPT" not in pack
+    assert "BEGIN-DESIGN\n" + body + "END-MANIFEST" in pack
     assert pack.rstrip().endswith(
         "or attack=false if you find no genuine fault."
     )

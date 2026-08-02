@@ -372,13 +372,63 @@ this tranche is not a frozen-surface change.
       refusal is attributable in the record rather than looking like a case
       that merely failed to persuade.
 
-- [ ] 9. (S3) Give the refuting endpoint the full argument: the target's
+- [x] 9. (S3) Give the refuting endpoint the full argument: the target's
       complete text (no excerpt marker) and its declared `Interface.refs`
       support chain. Scratch stays out (R5/R6).
       files: `src/deepreason/llm/packs.py`
       done-when: for a target exceeding the old budget the pack contains the
       whole text, no `HARNESS PACK EXCERPT` marker, every id in
       `target.interface.refs`, and no `SCR_` handle
+
+      Output — all four clauses in one test, against a ~10 KB target rendered
+      at `token_budget=1200`:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -q -k whole_argument
+          .                                             [100%]
+          1 passed, 21 deselected in 0.08s
+
+          $ python -m pytest tests/ -q -k "pack or crit or trial or audits"
+          213 passed, 2 skipped, 3057 deselected in 107.34s
+
+      **Why removing the budget is safe rather than reckless.** The `target`
+      section was already `droppable=False, compressible=False`, and
+      `packs/allocate.py:76` states the rule: "A non-droppable, non-compressible
+      section is retained in full even when it exceeds its declared target."
+      So the allocator was never what truncated the argument — the pre-pass
+      `_document_excerpt` call was. Removing it lets the existing mandatory-
+      section guarantee apply to the target as it already applies to criteria
+      and output contracts. An oversize prompt now surfaces as a typed envelope
+      failure at dispatch (`RequestEnvelopeExceeded`), which is a visible stop
+      rather than a quietly partial case.
+
+      The support chain is rendered in two sections, deliberately:
+
+        - `target-support-chain` (ids + roles) is exact and non-droppable. A
+          chain missing an entry reads as a chain that has none, which would
+          misstate the argument the critic is answering.
+        - `target-support-content` (heads of the referents) is droppable and
+          compressible. Losing it costs detail; losing the declaration would
+          change what is being claimed.
+
+      **One existing test was updated, and SPEC.md predicted it.**
+      `test_long_critic_target_preserves_labeled_tail_instead_of_fake_truncation`
+      asserted the excerpt marker's presence. S3's acceptance clause says "no
+      `HARNESS PACK EXCERPT` marker", so this is the fixture-update CLAUDE.md
+      permits, not an assertion weakened to get green — the replacement asserts
+      strictly more: the whole body arrives byte-for-byte, and the pack still
+      ends with the directive. Its docstring records why the excerpt existed
+      (compact critics refuting valid designs for "ending abruptly") and why
+      the new behaviour satisfies that concern more strongly: nothing is
+      unshown, so no label is needed to explain an omission away.
+
+      Two findings parked rather than fixed here:
+
+        - `render_batch_crit_pack` still prefix-clips (`packs.py:594`) — the
+          very truncation the excerpt helper existed to prevent, and now the
+          only crit path where R3 is unmet. S3 names `render_crit_pack` alone.
+        - `_document_excerpt` consequently has no caller. Kept, not deleted: it
+          is the right tool for the batch path if the operator extends R3 there.
 
 - [ ] 10. (S1, S11) [COMMIT] Stop discarding the computed text authority mode,
       and add the single-family authority value to `Config`. Default unchanged

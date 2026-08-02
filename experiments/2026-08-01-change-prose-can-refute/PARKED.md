@@ -15,6 +15,14 @@ One line each. Noticed while capturing this request, not part of it.
   widening the guard would change what every existing run may do, so it is not
   done under an assumption. Asserted as-is in
   `test_the_formal_boundary_is_execution_backing_and_not_evaluability`.
+- **`render_batch_crit_pack` still prefix-clips its targets**
+  (`llm/packs.py:594`, `content_text(target, blobs)[:content_chars]`) — the
+  exact "ends abruptly" truncation `_document_excerpt` was written to avoid,
+  and now the only crit path where R3 is unmet. S3 names `render_crit_pack`
+  alone, so the batch path is left as it is rather than widened under this
+  tranche. Related: after step 9, `_document_excerpt` has no caller anywhere;
+  it is deliberately kept rather than deleted, because it is the right tool for
+  this path if the operator wants R3 extended to it.
 - Everything already parked in
   `experiments/2026-08-01-fix-adjudication-blindness/PARKED.md`, which carries
   the nine items from the jolt investigation plus the discarded detection flags.

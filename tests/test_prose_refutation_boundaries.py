@@ -370,6 +370,51 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
     assert require_cross_family_judge_ensemble({"judge": two_families}) == two_families
 
 
+def test_the_refuting_endpoint_is_given_the_whole_argument(harness):
+    """Implements R3: "the endpoint that wants to refute just needs access to
+    the full argument" -- and R5/R6, which say what "full" excludes.
+
+    Four things at once, because they are one property: the target's complete
+    text, no excerpt marker, every id the target declares it rests on, and no
+    scratch object anywhere in the result.  The support chain belongs to the
+    argument -- a case that a target is unsupported cannot be answered without
+    it -- and the scratchpad does not, at any budget.
+    """
+
+    from deepreason.llm import packs
+    from deepreason.ontology import Commitment, Interface, Provenance
+    from deepreason.ontology.artifact import Ref, RefRole
+
+    harness.register_commitment(
+        Commitment(id="k-whole", eval="predicate:'DESIGN' in content")
+    )
+    ground = harness.create_artifact(
+        "the supporting measurement, recorded elsewhere",
+        provenance=Provenance(role="conjecturer"),
+    )
+    body = "component detail\n" * 600
+    target = harness.create_artifact(
+        "BEGIN-DESIGN\n" + body + "END-MANIFEST",
+        interface=Interface(
+            commitments=["k-whole"],
+            refs=[Ref(target=ground.id, role=RefRole.EVIDENCE)],
+        ),
+        provenance=Provenance(role="conjecturer"),
+    )
+
+    # A budget far below the target's size: the point is that the transport
+    # limit no longer decides how much of the argument is refutable.
+    rendered = packs.render_crit_pack(
+        target.id, harness.state, harness.commitments, harness.blobs, token_budget=1200
+    )
+
+    assert "BEGIN-DESIGN\n" + body + "END-MANIFEST" in rendered
+    assert "HARNESS PACK EXCERPT" not in rendered
+    assert ground.id in rendered
+    assert "SCR_" not in rendered
+    assert "scratch" not in rendered.lower()
+
+
 def test_the_formal_boundary_is_execution_backing_and_not_evaluability(harness):
     """Implements R4: "only formal claims in formal prose require formal
     refutation" -- and CORRECTS SPEC.md's A1 about where that line sits.
