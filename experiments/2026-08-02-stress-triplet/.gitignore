@@ -1,0 +1,4 @@
+env
+home-*/qualification-cache/
+home-*/provider-profile*
+*.err

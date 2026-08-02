@@ -1,0 +1,13 @@
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.

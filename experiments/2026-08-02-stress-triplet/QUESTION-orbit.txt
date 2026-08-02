@@ -1,0 +1,13 @@
+Consider width-W elementary cellular automata with wrap-around, W between 5
+and 11, under rules 90, 110 and 184. Question: for which (rule, W) pairs does
+every initial state reach a cycle of length at most 2 within 4*W steps, and
+what structural property of the rule separates the pairs that do from the
+pairs that do not? Candidates must include a runnable Python entry point
+solve(rule, width) returning {"all_short_cycles": bool, "witness": [...]}
+where witness is a concrete initial state achieving the longest observed
+transient. Claims about exhaustiveness are claims about enumeration: file
+typed sandboxed Python simulations (simulation_mode sandboxed_python_v1) that
+RETURN the per-(rule,width) transient and cycle-length tables your claim
+rests on - never a summary boolean. A separating property that is merely
+renamed data is worth little; predict the behaviour of rule 54, which is NOT
+in the required set, and state how the prediction would be checked.
