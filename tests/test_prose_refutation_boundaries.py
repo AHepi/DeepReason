@@ -609,11 +609,8 @@ def test_a_structural_only_target_is_still_refutable_by_prose(harness):
         provenance=Provenance(role="conjecturer", school="school-0"),
     )
 
-    crit_argumentative(
-        harness,
-        target.id,
-        _single_family_trial_adapter(harness),
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+    _run_substitute_trial(
+        harness, _single_family_trial_adapter(harness), target, "school-1"
     )
 
     assert len(harness.state.att) == 1
@@ -897,8 +894,8 @@ def _single_family_trial_adapter(harness):
     )
 
 
-def test_a_single_family_run_can_refute_by_prose_end_to_end(harness):
-    """Implements S2/R2 ("Prose can refute") in a single-family run.
+def test_a_single_model_run_refutes_by_prose_end_to_end(harness):
+    """Implements S2/R2 ("Prose can refute") in a single-model run.
 
     The whole extension, exercised rather than described: one model family
     across both judge seats, two schools bound to those seats, the new
@@ -935,12 +932,7 @@ def test_a_single_family_run_can_refute_by_prose_end_to_end(harness):
 
     assert is_single_family_run(adapter.leases) is True
 
-    critic = crit_argumentative(
-        harness,
-        target.id,
-        adapter,
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
-    )
+    critic, _ = _run_substitute_trial(harness, adapter, target, "school-1")
 
     assert critic is not None
     assert len(harness.state.att) >= 1
@@ -1021,6 +1013,47 @@ def test_the_minting_critic_carries_a_school_other_than_the_targets(harness):
     assert target.provenance.school == "school-0"
     assert critic.provenance.school == "school-1"
     assert critic.provenance.school != target.provenance.school
+
+
+def test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee(harness):
+    """A limit of the assembled whole, asserted so it cannot be forgotten.
+
+    R18 makes cross-school criticism the guarantee, so a case with no school
+    is not a complete case.  `crit_argumentative`'s direct-helper path -- the
+    one a bare `Config` drives -- passes `critic_school_id=None`, and a school
+    can only be supplied through the v4 envelope, which requires an endpoint
+    lease and a school context together and then demands a MANIFEST-bound
+    authority value.
+
+    So in a single-model run a Config-driven prose trial always declines
+    `no-critic-school`.  The reachable path is the school-routed one, where
+    the scheduler supplies the critic's school and the manifest supplies
+    `defended_trial`.  This is a real narrowing of where the substitute
+    applies, and it is asserted rather than described.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Status
+    from deepreason.rules.crit import crit_argumentative
+
+    target = _rubric_target(harness)
+
+    critic = crit_argumentative(
+        harness,
+        target.id,
+        _substitute_adapter(harness),
+        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+    )
+
+    assert critic is None
+    assert not harness.state.att
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    declines = [
+        event.inputs[2]
+        for event in harness.log.read()
+        if event.inputs and event.inputs[0] == "trial-declined"
+    ]
+    assert declines == ["no-critic-school"], declines
 
 
 def _role_spec(model: str) -> dict:

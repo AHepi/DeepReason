@@ -974,11 +974,67 @@ make step 21's demo prove nothing.
 - [ ] 23. (S16, S20) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" — paste it
 
+      **FIRST RUN FAILED. Recorded, not overwritten.**
+
+          2 failed, 3284 passed, 7 skipped in 653.95s (0:10:53)
+          FAILED test_a_structural_only_target_is_still_refutable_by_prose
+          FAILED test_a_single_family_run_can_refute_by_prose_end_to_end
+
+      Both were MY tests, from steps 12 and 18, and both failed for one
+      reason — reproduced rather than guessed:
+
+          DECLINE REASON: no-critic-school
+
+      Process error that let it through: step 21 changed trial behaviour, and
+      I ran only the three tests step 21 added plus a `-k` ring that did not
+      match these two names. A behavioural change needs the whole file re-run,
+      not the new assertions. The gate caught what the step should have.
+
+      The finding is larger than the two tests, and step 26 records it.
+
+
 - [ ] 24. (S16, S20) AFTER sweep with the step-1 script; diff against
       `sweep_BEFORE.txt`.
       done-when: no root's `valid` and no root's `att` changes. Widening what
       is PROTECTED can only remove future attack edges, never add edges to
       recorded roots — measured, not assumed.
+
+- [x] 26. (S14 consequence) Assert the limit the gate exposed: the
+      Config-only path cannot satisfy the cross-school guarantee.
+      files: `tests/test_prose_refutation_boundaries.py`
+      done-when: a test shows a Config-driven single-model trial declines
+      `no-critic-school`, and the two demos are rewired to the school-carrying
+      path
+
+      Output:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py -q
+          44 passed in 5.77s
+
+      **What the gate actually exposed.** R18 makes cross-school criticism the
+      guarantee, so a case carrying no school is not a complete case. But
+      `crit_argumentative`'s direct-helper path — the one a bare `Config`
+      drives — passes `critic_school_id=None`, and a school can only be
+      supplied through the v4 envelope, which requires an endpoint lease and a
+      school context TOGETHER (`crit.py:_critic_execution`) and then demands a
+      manifest-bound authority value (step 11). The two cannot be combined.
+
+      So in a single-model run **a Config-driven prose trial always declines**.
+      The reachable path is the school-routed one: the scheduler supplies the
+      critic's school (`scheduler.py:1320`) and the manifest supplies
+      `defended_trial`. That path gets the substitute automatically, which is
+      exactly R20 — but `ARGUMENTATIVE_AUTHORITY=single_family_trial` on
+      `Config` cannot complete a trial and is now dead weight.
+
+      Not removed here. Removing it reverts part of steps 10-11, touches
+      `authority.py`, `config.py` and `crit.py`, and is a decision about the
+      Config surface rather than a fix to this step. Recorded in PARKED.md and
+      surfaced at delivery instead of being quietly deleted or quietly kept.
+
+      The two demos are rewired to `run_argument_trial_from_case` with a
+      critic school — the path that can actually mint — so they demonstrate
+      the guarantee rather than a fixture that predates it. Their assertions
+      are unchanged: attack edge, REFUTED, ARGUMENTATIVE warrant.
 
 - [ ] 25. (all) [COMMIT] Push and confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
