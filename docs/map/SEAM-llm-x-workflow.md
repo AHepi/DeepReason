@@ -218,16 +218,16 @@ The tests that catch you, cheapest first:
 - **Preview/dispatch digest agreement proves identity, never correctness.**
   Both `preview_request` and `call` render through the same `_render_request`,
   so the bundle's `prompt_sha256` matches whatever that helper produces — even
-  when what it produces is wrong. The v6 post-allocation pack edits demoted the
-  `AllocatedPack` marker to plain `str`, the profile's prefix clip re-applied to
-  a pack `PackIR` had already budgeted section-by-section, and the sealed
-  advisory context was cut mid-JSON: observed live with 86 percent of the
-  context bytes never dispatched, while every pre-dispatch authority check
-  passed. The fix is a CONTENT check inside `_render_request` — so preview and
-  dispatch both see it — plus the `pack_is_allocated` guard. When you add a
-  step between issue and dispatch, ask what its failure would look like to the
-  digest; the answer is usually "nothing".
-`check: grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "rendered provider request must contain the exact " src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_initial_v6_conjecture_commits_exact_model_facing_scratch_once tests/test_v6_conjecture_scratch_consumption.py::test_context_commit_failure_abandons_prepared_work_before_dispatch -q`
+  when what it produces is wrong. In live `run-646f41b8` seq 565 the v6
+  post-allocation pack edits demoted the `AllocatedPack` marker to plain `str`,
+  the profile's aggregate prefix clip re-applied to a pack `PackIR` had already
+  budgeted section-by-section, and the sealed advisory context was cut mid-JSON
+  — 86 percent of the context bytes never dispatched, with every pre-dispatch
+  authority check passing. The fix is a CONTENT check inside `_render_request`,
+  so preview and dispatch both see it, plus the `pack_is_allocated` guard. When
+  you add a step between issue and dispatch, ask what its failure would look
+  like to the digest; the answer is usually "nothing".
+`check: grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "rendered provider request must contain the exact " src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact tests/test_v6_conjecture_scratch_consumption.py::test_context_commit_failure_abandons_prepared_work_before_dispatch -q`
 - **A budget denial arrives already terminalized.** `reserve_dispatch` appends
   the `budget_denied` terminal and then raises `WorkBudgetDenied`, so a caller
   whose `except BaseException: abandon(...)` sees it will write a second
