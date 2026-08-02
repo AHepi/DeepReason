@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's separating property is 'linearity' and it predicts that nonlinear rules will not satisfy the short-cycle criterion. But Rule 184 is nonlinear (its lookup table is 01110110, not affine over GF(2)), yet SRC_001 itself admits Rule 184 'settles into length-2 cycles within 4W' under its own overturn_conditions. This internally contradicts the proposed separator: if linearity is what guarantees short cycles, a nonlinear rule satisfying the criterion falsifies the property. SRC_001 thus cannot consistently use linearity as the structural separator while acknowledging a nonlinear rule meets the bound.",
+      "counterexample": [
+        {
+          "rule": 184,
+          "width": 5,
+          "is_linear_over_GF2": false,
+          "satisfies_short_cycle": true,
+          "explanation": "Rule 184 is nonlinear over GF(2) but still reaches cycles of length <= 2 within 4W for W in [5,11], contradicting the claim that linearity separates the pairs that do from those that do not."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's structural property groups Rule 90 and Rule 184 together as 'number-conserving (or linear/additive in the case of Rule 90)' and contrasts them with Rule 110's 'irreversible non-linear interactions.' This conflation obscures the fact that Rule 184 is NOT additive/linear over GF(2) and Rule 90 is NOT number-conserving. These are two distinct properties unequally distributed across the two rules, so neither property individually separates the passing pair from the failing one. 'Number-conserving OR linear' is a disjunctive ad hoc union of two unrelated mechanisms with no single causal pathway explaining why both rules satisfy the bound. Furthermore, Rule 184 is not reversible (it is many-to-one), so appealing to the absence of 'irreversible' interactions to explain Rule 184's short cycles contradicts Rule 184's actual dynamics.",
+      "counterexample": [
+        {
+          "rule": 90,
+          "is_number_conserving": false,
+          "is_linear_over_GF2": true,
+          "note": "Rule 90 is additive but not number-conserving; the separator conflates two orthogonal properties."
+        },
+        {
+          "rule": 184,
+          "is_number_conserving": true,
+          "is_linear_over_GF2": false,
+          "is_reversible": false,
+          "note": "Rule 184 is number-conserving but nonlinear and irreversible; claiming it lacks 'irreversible non-linear interactions' is false."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_003's claimed separating property is 'additive linearity,' and it asserts that this 'guarantees the phase space is a disjoint union of cycles (no long transients).' But additive linearity over GF(2) does NOT guarantee the absence of long transients: linear maps on finite vector spaces can have nontrivial nilpotent parts (Jordan blocks for eigenvalue 0), which produce transient trees feeding into cycles. The claim that linearity means 'no long transients' is mathematically false. Additionally, Rule 184 is not linear over GF(2) (its local rule 184 = 0b10111000 is not affine), so attributing its behavior to 'additive linearity' is factually wrong. SRC_003 also claims Rule 110 fails 'for all W > 5,' but W=6 yields a state space of only 64 states; whether Rule 110 exceeds the bound at W=6 depends on the actual enumeration, and SRC_003's structural reasoning (gliders/chaos) does not causally demonstrate this for such small rings where glider interactions may not even fit.",
+      "counterexample": [
+        {
+          "linear_map_example": "Consider a linear map on GF(2)^n with a nilpotent Jordan block of size k for eigenvalue 0. A state in the image chain reaches 0 only after k-1 steps, producing a transient of length k-1. Linearity alone does not bound this transient; nilpotent structure does.",
+          "note": "This refutes the claim that additive linearity guarantees 'no long transients.'"
+        },
+        {
+          "rule": 184,
+          "local_rule_decimal": 184,
+          "is_affine_over_GF2": false,
+          "note": "Rule 184 is not linear/additive over GF(2); its behavior cannot be attributed to additive linearity."
+        }
+      ]
+    }
+  ]
+}

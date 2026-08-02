@@ -1,0 +1,54 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_003 (school-to-seat rubric) inherits from SRC_005 (typed lease-mismatch program eval): both target identity homogenization mutations under a minimal frozen fixture, but SRC_003 generalises from a single typed code assertion to a coverage-decision rubric. The inherited lineage is refuted if SRC_003's rubric fails to reject the same homogenization mutation SRC_005's program eval catches under the identical fixture, or if SRC_003's counterconditions do not logically subsume SRC_005's synchronous-precondition counterconditions.",
+      "typicality": 0.42,
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_004 (async post-call mutation) contradicts SRC_005 (sync pre-call lease-mismatch): SRC_004 requires evaluating a mutation that moves validation after the provider call, while SRC_005 requires the refusal to occur before the provider call. Both are enforced by program eval under minimal frozen fixtures. The contradiction is refuted if the firewall can enforce synchronous pre-checks and detect post-call mutations under the same minimal fixture without invoking the provider, or if SRC_004's counterconditions overlap with SRC_005's synchronous precondition rather than negating it.",
+      "typicality": 0.31,
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_002 (typed exception mutation) and SRC_004 (async mutation) share mechanism of typed-contract enforcement: both use program eval to mutate typed error fidelity (exception code vs validation timing) and assert the mutation is forbidden. The shared mechanism is refuted if SRC_004's mutation requires an asynchronous routing phase that SRC_002's typed exception cannot be evaluated against synchronously, or if either one does not use program: eval for the forbidden case.",
+      "typicality": 0.25,
+      "neighbours": [
+        "SRC_002",
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "SRC_003 (rubric for homogenized school-to-seat) reduces to SRC_001 (frozen lease drift mutation): the rubric form in SRC_003 can be reduced to a program eval by instantiating a minimal fixture with school and seat mismatched under the same school ID, asserting coverage fails under the mutation. The reduction is refuted if the rubric evaluates a declarative coverage property that cannot be verified by program execution on a minimal fixture, or if the school-to-seat binding requires a topology representation that violates the frozen-lease constraint.",
+      "typicality": 0.18,
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "SRC_001 (frozen lease drift field) and SRC_002 (typed exception mutation) are compatible with each other under a single minimal fixture that freezes a single lease with a drifted endpoint and asserts a typed LEASE_MISMATCH code: SRC_001 contributes the frozen fixture with drift mutation, SRC_002 contributes the typed exception assertion and mutation to generic exception. Compatibility is refuted if the drift field mutation and typed exception mutation are not independent under the same fixture (i.e., applying one silently bypasses the other), or if the two tests require different frozen lease states.",
+      "typicality": 0.22,
+      "neighbours": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "SRC_005 (program eval with typed lease-mismatch code) abstracts SRC_004's (async post-call mutation) enforcement mechanism: SRC_005 requires only the assertion of a typed code before the provider call, while SRC_004 specifies the full mutation to move the check after the call. The abstraction is refuted if SRC_005's program eval does not cover the async mutation described in SRC_004, or if SRC_004's mutation requires evaluating the provider call outcome, which is outside SRC_005's synchronous-precondition scope.",
+      "typicality": 0.15,
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ]
+    }
+  ]
+}
+```

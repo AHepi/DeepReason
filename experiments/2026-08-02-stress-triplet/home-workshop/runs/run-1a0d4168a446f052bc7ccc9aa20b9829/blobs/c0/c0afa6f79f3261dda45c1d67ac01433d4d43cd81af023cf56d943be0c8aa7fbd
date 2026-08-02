@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "The suite must include a forbidden case that asserts the firewall does NOT silently mutate or relax the typed lease-mismatch code into a generic 500 error when the provider call is bypassed.",
+    "mechanism": "Cause: Frozen leases carry a distinct type that must be preserved at the ejection site before any provider call. Effect: A mutation that converts `LEASE_MISMATCH` into `INTERNAL_ERROR` today passes silently because the bypass still happens, no provider is called, and tests may only assert on absence. Asserting `resp.code == LEASE_MISMATCH` (program: eval) makes this mutation fail.",
+    "counterconditions": [
+      "If the routing firewall intentionally reserves typed codes for lease drifts and maps all other infrastructural failures to 500, a generic 500 wrapper is permitted.",
+      "If the lease-mismatch type is removed entirely by protocol change, this forbidden case becomes invalid."
+    ],
+    "typicality": 0.72,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "optional_refs": [
+      "SRC_003"
+    ]
+  }
+}
+```

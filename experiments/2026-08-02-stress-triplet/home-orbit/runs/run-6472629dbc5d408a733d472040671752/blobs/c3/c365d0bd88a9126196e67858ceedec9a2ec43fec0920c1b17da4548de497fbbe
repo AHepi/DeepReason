@@ -1,0 +1,40 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-1a585e9647728d95c37d95ec939c7898) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Consider width-W elementary cellular automata with wrap-around, W between 5
+and 11, under rules 90, 110 and 184. Question: for which (rule, W) pairs does
+every initial state reach a cycle of length at most 2 within 4*W steps, and
+what structural property of the rule separates the pairs that do from the
+pairs that do not? Candidates must include a runnable Python entry point
+solve(rule, width) returning {"all_short_cycles": bool, "witness": [...]}
+where witness is a concrete initial state achieving the longest observed
+transient. Claims about exhaustiveness are claims about enumeration: file
+typed sandboxed Python simulations (simulation_mode sandboxed_python_v1) that
+RETURN the per-(rule,width) transient and cycle-length tables your claim
+rests on - never a summary boolean. A separating property that is merely
+renamed data is worth little; predict the behaviour of rule 54, which is NOT
+in the required set, and state how the prediction would be checked.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5f26b548edff67f43fd95c13: program:reasoning_observation_pending
+- reason-counter@63ea93c861fe4ce5b1353060: program:reasoning_observation_pending
+- reason-counter@f4e1781df4cf62d23ca1e24c: program:reasoning_observation_pending
+- reason-counter@ee346fd1f9ca3e86ca4ae869: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Rules 90 and 184 reach a cycle of length at most 2 within 4*W steps for all W between 5 and 11, whereas Rule 110 does not for any width in this range. The structural property separating them is that Rule 90 is a linear (additive) rule over GF(2), ensuring the state space decomposes into independent subspaces with transient lengths bounded by the matrix nilpotency (at most W), and Rule 184 is a conservative, monotonic particle-conserving rule where the number of 01 and 10 boundaries strictly decreases until reaching a fixed point or 2-cycle. Rule 110 lacks both properties, possessing nonlinear interactions that support gliders and chaotic attractors. Consequently, Rule 54 (which is also nonlinear and lacks monotonicity/conservation) is predicted to fail this criterion for all W in 5..11.","counterconditions":[{"case":"If a width-W configuration of Rule 90 with wrap-around exhibits a transient longer than W (contradicting the GF(2) nilpotency bound), the claim fails.","eval":"observation"},{"case":"If Rule 184 exhibits a transient longer than W/2 or a cycle longer than 2 for any W in 5..11, the monotonic boundary-decrease mechanism is falsified.","eval":"observation"},{"case":"If Rule 110 reaches a cycle of length <= 2 within 4*W steps for all 2^W states across all W in 5..11, the claim regarding Rule 110's structural complexity is falsified.","eval":"observation"},{"case":"If Rule 54 reaches a cycle of length <= 2 within 4*W steps for all states across all W in 5..11, the prediction that nonlinear non-conservative rules fail this criterion is overturned.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rule 90 computes the XOR of left and right neighbors. This linearity over GF(2) restricts the maximum transient length to the nilpotency index of its transition matrix, which cannot exceed W. Thus, it falls well within 4*W. Rule 184 conserves the number of '1's and acts as a deterministic traffic flow model. The number of alternating boundaries (0110 patterns) strictly decreases over time, bounding the transient by W/2 and inevitably leading to a 1-cycle (blocked traffic) or 2-cycle (moving traffic). Rule 110 is nonlinear and capable of universal computation, exhibiting gliders that collide stochastically, yielding arbitrarily long transients and cycles >2. Rule 54 exhibits similar nonlinear, non-conservative glider interactions, so its transient length is expected to exceed 4*W for some initial states.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5f26b548edff67f43fd95c13, reason-counter@63ea93c861fe4ce5b1353060, reason-counter@f4e1781df4cf62d23ca1e24c, reason-counter@ee346fd1f9ca3e86ca4ae869
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

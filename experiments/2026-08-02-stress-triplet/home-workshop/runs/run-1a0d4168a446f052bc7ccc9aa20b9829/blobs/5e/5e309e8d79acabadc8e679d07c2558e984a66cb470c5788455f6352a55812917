@@ -1,0 +1,51 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_004 inherits SRC_003: both artifacts share the shared mechanism of forbidding an identity homogenization mutation that collapses a structured identity comparison to a partial key, yet SRC_004 generalizes the endpoint-level comparison to the temporal layer while SRC_003 anchors it to school-ID seat binding. This inheritance is refuted if SRC_004's temporal precondition (refusal before provider call) depends on a non-identity-based mechanism orthogonal to SRC_003's partial-match collapse, severing the structural homology.",
+      "typicality": 0.32,
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_004",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "SRC_001 reduces to SRC_005: SRC_005's minimal single-lease fixture with a typed lease-mismatch code is a strict specialization of SRC_001's frozen-route-lease and mocked-drift-state skeleton, so SRC_001 abstracts SRC_005 by delegating the assertion fidelity to the eval form. This reduction is refuted if SRC_001 depends on verifying the mutation's descriptive name ('ignore-drift-field') as a required observable, which cannot reduce to SRC_005's typed-code assertion without losing the name-explicitness invariant.",
+      "typicality": 0.55,
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_002 contradicts SRC_001: SRC_002 asserts a program: eval will reject a generic-exception mutation silently because the typed contract is violated, whereas SRC_001 demands the suite verify the mutation's name explicitly describes ignoring endpoint drift. These are incompatible because a mutation named 'generic_exception' passes SRC_002's typed-code assertion while failing SRC_001's name-description check. This contradiction is refuted if the eval framework couples mutation naming conventions to typed exception contracts, making a name violation mechanically imply a type violation.",
+      "typicality": 0.18,
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_002",
+        "SRC_001"
+      ]
+    },
+    {
+      "content": "SRC_005 integrates with SRC_002 by composing SRC_005's minimal-fixture typed lease-mismatch assertion with SRC_002's forbidden generic-exception mutation, creating a single eval that asserts both temporal precedence and typed fidelity. The integration is refuted if SRC_005's minimal-fixture constraint depends on excluding the generic-exception mutation class, since SRC_002's mutation requires the fixture to resolve exception type hierarchies, increasing fixture cost beyond the single-frozen-lease bound.",
+      "typicality": 0.68,
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_005",
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "SRC_004 abstracts SRC_002: SRC_004's mechanism frames the provider-call temporal boundary as the invariant under mutation, whereas SRC_002 operationalizes a specific violation (typed exception to generic). SRC_004 thus abstracts SRC_002 by separating the temporal invariant from the typed-contract invariant. This abstraction is refuted if SRC_002's typed exception is the only machine-checkable signal for the temporal precondition, meaning the temporal boundary depends on the typed contract and cannot be abstracted away from it.",
+      "typicality": 0.45,
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_004",
+        "SRC_002"
+      ]
+    }
+  ]
+}
+```

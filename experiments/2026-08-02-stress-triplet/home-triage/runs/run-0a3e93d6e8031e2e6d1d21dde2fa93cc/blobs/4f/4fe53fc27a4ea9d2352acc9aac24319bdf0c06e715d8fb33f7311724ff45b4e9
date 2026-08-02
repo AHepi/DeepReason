@@ -1,0 +1,3 @@
+```json
+{"candidate": {"content": "The foundation artifact 024cbd0e1e4f depends on verify_root_report routing pre-v6 roots through a verdict path rather than an error path. It is refuted if the 3-root census delta (11 ERROR vs 14 raising manifests) is a measurement artifact with no behavioral consequence, because that would mean the observed classification discrepancy in verify_root_report has no functional or observational significance.", "typicality": 0.7, "neighbours": ["SRC_001", "SRC_003", "SRC_005"]}}
+```

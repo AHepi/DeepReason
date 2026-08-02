@@ -1,0 +1,51 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@16972240ba5e6988ee448066: program:reasoning_observation_pending
+- reason-counter@c3dd3e6822e68e50ebd81bde: program:reasoning_observation_pending
+- reason-counter@ad2941ae469c05fe1f533232: program:reasoning_observation_pending
+- reason-counter@6fa0433125991ae84aa1add2: program:reasoning_observation_pending
+- reason-counter@678f5468ffb6bbb1cbaffc36: program:reasoning_observation_pending
+- reason-counter@f4f0510d4f2101165d6194e2: program:reasoning_observation_pending
+- reason-counter@d85c4b244c93c06e68754890: program:reasoning_observation_pending
+- reason-counter@5628eef0b80ead4601beafc2: program:reasoning_observation_pending
+- reason-counter@696360db4de818a3492ad137: program:reasoning_observation_pending
+- reason-counter@652f5d2ad547d331fffd1e24: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The cheapest test for the context-receipt-without-scratch-exposure recovery guard is to send a context receipt that does not expose scratch, then assert the recovery guard fires (raises or returns the expected error). The failure mode left uncovered: the recovery path silently fails when scratch is not exposed, meaning the harness cannot recover from a context receipt that omits scratch. Priority 4 because this is a recovery-path silent failure\u2014it hides a refusal (the harness should recover but does not), but the blast radius is narrower than the lease-mismatch refusal because it affects only the recovery path, not the main firewall. It is the same class as #2 (silent refusal) but with a smaller surface.","counterconditions":[{"case":"If the recovery guard is redundant with another tested recovery path, this test may be redundant.","eval":"observation"},{"case":"If the recovery path is never exercised in production (context receipts always include scratch exposure), the guard may be dead code and Priority 4 drops to the bottom.","eval":"observation"},{"case":"If the recovery guard is security-critical (e.g., it prevents unauthorized access when scratch is not exposed), its priority could rise above the unimported-functions gap.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states that no test covers a context receipt without scratch exposure and that deleting the recovery guard passes the suite. The cheapest test is to construct a context receipt without scratch exposure and assert the guard fires. The blast radius is moderate: t
+commitments: reasoning-envelope-wf, reason-counter@16972240ba5e6988ee448066, reason-counter@c3dd3e6822e68e50ebd81bde, reason-counter@ad2941ae469c05fe1f533232
+
+TARGET SRC_002
+{"analogy":null,"claim":"The cheapest test for the lease-mismatch refusal is to assert that SCHOOL_ROUTE_LEASE_MISMATCH or SCHOOL_ROUTE_ENDPOINT_MISMATCH is raised when the lease and endpoint disagree. The failure mode left uncovered: the firewall silently accepts a request with a mismatched lease/endpoint, bypassing the security policy with no test signal. Priority 2 because a silent security-policy bypass hides a refusal (the harness should reject but accepts), but does not corrupt the append-only record\u2014the integrity substrate is intact even if the policy is bypassed.","counterconditions":[{"case":"If the lease-mismatch refusal is redundant with another tested layer (e.g., a route-level check that rejects mismatched leases), this test may be redundant.","eval":"observation"},{"case":"If the lease-mismatch refusal is not security-critical (e.g., it is a convenience check, not a policy enforcement), its priority may drop below the unimported-functions gap.","eval":"observation"},{"case":"If the guard has been moved or renamed since PARKED.md was written, the test may need to target a different code path.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"PARKED.md states that disabling the firewall's lease-mismatch refusal leaves the entire test suite green and no test asserts either code. The cheapest test is a direct assertion that the error code is raised on mismatch. The blast radius is high but strictly below _reset() because the record is not corrupted\u2014the harness merely fails to refuse when it should. The RESULTS.md evidence that 44 checks were vacuous, ev
+commitments: reasoning-envelope-wf, reason-counter@6fa0433125991ae84aa1add2, reason-counter@678f5468ffb6bbb1cbaffc36, reason-counter@f4f0510d4f2101165d6194e2
+
+TARGET SRC_003
+{"analogy":null,"claim":"The minimal regression-test plan is ordered by blast radius: (1) lease-mismatch refusal test, (2) unimported functions test, (3) _reset() guard test, (4) context receipt recovery guard test, (5) census delta test, (6) torn-tail repair gate test. This ordering is justified by the evidence that routing-related guard death (lease-mismatch refusal disabling, unimported routing functions) is the empirically recurring failure class in RESULTS.md, making routing integrity the highest blast radius; _reset() is deprioritized because the digest may not be downstream-consumed.","counterconditions":[{"case":"WorkflowReplayState.digest IS downstream-consumed, proving _reset() guard's blast radius is critical and restoring it to Priority 1 or 2","eval":"observation"},{"case":"The unimported functions are dead code, converting Priority 2 from a test to a deletion task","eval":"observation"},{"case":"test_torn_append.py does NOT cover gate-level torn-tail repair, making Priority 6 more urgent than Priority 5","eval":"observation"},{"case":"The census delta is explained by design documentation, converting Priority 5 from a test to a documentation task","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The ordering principle is empirically driven: RESULTS.md shows that guard-death defects (vacuous, evadable, dead, absent checks) are the recurring failure class, and the lease-mismatch refusal is explicitly documented as undetected by the entire test suite. The unimported functions represent the same class (routing code no test exercises). _reset() is deprioritized bec
+commitments: reasoning-envelope-wf, reason-counter@d85c4b244c93c06e68754890, reason-counter@5628eef0b80ead4601beafc2, reason-counter@696360db4de818a3492ad137, reason-counter@652f5d2ad547d331fffd1e24
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

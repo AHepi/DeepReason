@@ -1,0 +1,46 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-18f64f2cc436c51240e21fd3c74bf575) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a4c62a430b671d3ee19a520b: program:reasoning_observation_pending
+- reason-counter@c9825bdd362cdf32f207d8d0: program:reasoning_observation_pending
+- reason-counter@093bbd77cba30af5f7a1a4a9: program:reasoning_observation_pending
+- reason-counter@620c150249f21a1b9619830d: program:reasoning_observation_pending
+- reason-counter@cd3b2d4987ab56f8d2373221: program:reasoning_observation_pending
+- reason-counter@54985833eadebbbf476d681b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The lease-mismatch forbidden case can be covered by a fixture that freezes a lease binding, mutates the endpoint drift field, and asserts the firewall emits the typed mismatch code via a program: eval predicate before any provider call counter increments.","counterconditions":[{"case":"The firewall uses a homogeneous identity comparison that ignores drift fields, making the mutation invisible.","eval":"observation"},{"case":"The program: eval predicate does not inspect the provider call counter, allowing a silent call alongside the mismatch code.","eval":"observation"},{"case":"The lease object is not actually frozen in the fixture, so the mutation does not represent drift but a legitimate in-place update.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The firewall checks a hash or identity field in the lease against the live endpoint descriptor. A mutation that alters the endpoint drift field invalidates the lease binding. The typed lease-mismatch code is emitted synchronously in the routing path, prior to the provider call branch. The program: eval form asserts both the emission of the mismatch code and that the provider call counter remains zero. A mutation that bypasses the check would fail because the counter would increment, violating the program: assertion.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a4c62a430b671d3ee19a520b, reason-counter@c9825bdd362cdf32f207d8d0, reason-counter@093bbd77cba30af5f7a1a4a9
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":["program:reasoning-envelope-wf"],"disanalogies":["The lease-mismatch test has a synchronous precondition (before any provider call), whereas the seat-binding test may be evaluated at coverage time, so the injection points differ.","The seat-binding test concerns a coverage accounting side effect, not a direct refusal code, so the observable failure signal differs."],"overturn_conditions":["If the suite is already mutation-tested by an external harness, naming the same mutation in forbidden cases is redundant.","If the routing firewall has a totalizing invariant that no disagreeing endpoint can ever be called under a frozen seat, the vacuous-green risk disappears."],"shared_structure":["A passing test that should verify a refusal can pass vacuously if the triggering event never occurs.","The mutation that injects the missing event exposes whether the test has real power or is green by absence.","Both lease-mismatch and seat-disagreement refusal tests face this vacuous-green failure mode unless a forbidden case names the injection mutation."],"source_memory_refs":["SRC_001"],"transfer_claims":["A forbidden case should be named for each refusal test: inject the event the suite does not expect and assert the suite turns red."]},"claim":"The false-green risk for the seat-binding test (not counting a disagreeing binding as coverage) is dominated by a mutation where the suite passes simply because no call is made to the disagreeing endpoint; therefore, a forbidden case must assert a mutation that injects a call to the disagreeing endpoint and verifies the suite fails, or the suite silently passes a coverage lie.","counterconditions":[{"case":"If a separate assertion in the suite already requires all provider calls to fail closed on identity mismatch, then the silent-pass concern is mitigated and this forbidden case is redundant.","eval":"observation"},{"case":"If the suite uses an exact-match stub that already throws on any call to the disagreeing endpoint, a no-call test may be sufficient and this forbidden case is less critical.","eval":"observation"},{"case":"If the routing firewall is structurally incapable of calling the disagreeing endpoint given the frozen seat, the mutation is unreachable and the forbidden case is invalid.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal mechanism: a green result on a 'disagreement is not coverage'
+commitments: reasoning-envelope-wf, reason-counter@620c150249f21a1b9619830d, reason-counter@cd3b2d4987ab56f8d2373221, reason-counter@54985833eadebbbf476d681b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

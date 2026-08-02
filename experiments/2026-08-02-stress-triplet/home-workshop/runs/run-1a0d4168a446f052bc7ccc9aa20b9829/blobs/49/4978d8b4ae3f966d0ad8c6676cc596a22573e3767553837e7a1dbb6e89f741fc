@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The named relation is 'contradiction,' but the target never demonstrates a causal mechanism by which introducing a rubric eval form actually breaks or invalidates the program eval form. It asserts that the two eval forms 'require mutually exclusive assertion structures,' yet this is asserted as a surface-level incompatibility, not a demonstrated causal conflict — the target does not show why a single minimal fixture cannot carry both a rubric assertion and a typed assertion in separate test paths or composable assertion layers. The refutation condition even concedes this gap, asking whether the skeleton can 'simultaneously carry' both forms, which confirms the contradiction mechanism was never substantiated.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target names 'integration' but provides no causal mechanism connecting the two integrated constraints. It restates that SRC_005 proposes 'a single frozen lease binding' asserting both a typed lease-mismatch code and endpoint drift detection, but this is a summary of co-occurrence, not an integration mechanism. The target never explains HOW the minimal-fixture constraint and the typed-error-contract enforcement are causally combined — e.g., whether the drift field is exposed on the same object that raises the typed exception, whether the assertion chain interleaves them, or whether one depends on the other's execution. The 'single frozen lease binding' is named as the carrier but its integrating mechanism (how one binding enforces both simultaneously at the implementation level) is never specified.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

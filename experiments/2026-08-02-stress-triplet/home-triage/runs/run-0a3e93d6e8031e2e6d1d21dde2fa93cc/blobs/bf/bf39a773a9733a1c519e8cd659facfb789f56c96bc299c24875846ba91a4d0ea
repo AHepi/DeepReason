@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f8cf984131a898290ca72fb6: program:reasoning_observation_pending
+- reason-counter@782efb56f6a569e2ffff79d1: program:reasoning_observation_pending
+- reason-counter@c0b24ef65305d3dc8518565b: program:reasoning_observation_pending
+- reason-counter@f935ae3b4ec957c428a3b487: program:reasoning_observation_pending
+- reason-counter@6bfe4a5b107a6ce99bbc43a7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The minimal regression-test plan is ordered by blast radius: (1) _reset() guard test, (2) lease-mismatch refusal test, (3) unimported functions test, (4) context receipt recovery guard test, (5) torn-tail repair gate test, (6) census delta test. This ordering is justified because _reset() guard corruption attacks the append-only record's integrity (the foundation of the entire replay system), whereas the lease-mismatch refusal is a security policy bypass that hides a refusal but does not corrupt stored data; both outrank routing rot, recovery-path failure, partial coverage, and observability.","counterconditions":[{"case":"WorkflowReplayState.digest is NOT consumed by any downstream integrity check, making _reset() guard's blast radius smaller and dropping it below lease-mismatch refusal","eval":"observation"},{"case":"The lease-mismatch refusal is the sole enforcement site with no defense-in-depth, making it Priority 1 over _reset() guard","eval":"observation"},{"case":"resolve_conjecture_route and compile_criticism_assignments are dead code, converting Priority 3 from a test to a deletion task","eval":"observation"},{"case":"test_torn_append.py already covers the gate-level torn-tail repair, collapsing Priority 5 into Priority 6","eval":"observation"},{"case":"The census delta is by design, converting Priority 6 from a test to a documentation task","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The ordering principle is: what corrupts the append-only record (_reset() guard, digest corruption) outranks what hides a refusal (lease-mismatch refusal, security bypass), which outranks what hides a routing failure (unimported functions), which outranks what hides a recovery failure (context receipt guard), which outranks partial coverage gaps (torn-tail), which outranks unexplained observations (census delta). The cheapest test for each: (1) call _reset() and assert WorkflowReplayState.digest is wiped; (2) call the firewall with mismatched lease/endpoint and assert it raises; (3) import resolve_conjecture_route and compile_criticism_assignments; (4) call the context receipt handler with malformed input and assert recovery; (5) simulate a torn-tail write and assert gate rejection; (6) assert census count matches.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f8cf984131a898290ca72fb6, reason-counter@782efb56f6a569e2ffff79d1, reason-counter@c0b24ef65305d3dc8518565b, reason-counter@f935ae3b4ec957c428a3b487, reason-counter@6bfe4a5b107a6ce99bbc43a7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

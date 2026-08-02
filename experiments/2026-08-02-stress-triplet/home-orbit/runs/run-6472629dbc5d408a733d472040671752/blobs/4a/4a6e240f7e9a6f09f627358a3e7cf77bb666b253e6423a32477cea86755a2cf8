@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "Rule 184 separates from 90 and 110 for all W in [5,11] because its number-conserving, additive algebraic structure under right-shift forces a maximum transient of W-1 and cycle of at most 2.",
+      "mechanism": "Rule 184 operates as a traffic flow CA where the count of 1s is conserved. On a finite ring, this prevents the exponential state-space explosion seen in additive rules. The dynamics strictly correspond to moving particles (1s) into holes (0s), guaranteeing that any initial state stabilizes into a cycle of length 1 (traffic jam or free flow) or 2 (alternating blocks) within W-1 steps. Rules 90 and 110 lack this conservation property, allowing for transients and cycles much longer than 4*W.",
+      "counterconditions": [
+        "If an enumeration of Rule 184 on W=11 yields any transient exceeding 4*11=44 steps.",
+        "If Rule 90 or Rule 110 are shown to be number-conserving under a different algebraic basis.",
+        "If a Rule 184 initial state on W=7 achieves a cycle of length greater than 2."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Rules 90 and 184 reach a cycle of length at most 2 within 4*W steps for all W in [5,11], while Rule 110 fails for W >= 7, separated by the property of left-right permutability.",
+      "mechanism": "Rule 90 is a linear additive rule over GF(2), acting as a bitwise XOR of neighbors, which constrains its cycle structure over finite fields. Rule 184 is a deterministic sorting rule. Both respect a form of spatial permutation or conservation that bounds their transient lengths. Rule 110 is a chaotic rule that emulates Turing machines, and its lack of permutability leads to transients and attractors scaling exponentially, exceeding 4*W for larger W.",
+      "counterconditions": [
+        "If Rule 110 reaches cycles of length <= 2 within 4*W steps for all W in [5,11].",
+        "If Rule 90 exhibits a cycle length > 2 for any W in [5,11].",
+        "If the permutability property is proven insufficient to guarantee short transients."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Rule 54 is predicted to reach a cycle of length at most 2 within 4*W steps for W in [5,11], grouping with Rules 90 and 184, driven by a localized, non-chaotic interaction structure.",
+      "mechanism": "Rule 54, while visually complex, operates on a localized collision basis between domain walls, lacking the universal computation capability of Rule 110 and the global additive linearity of Rule 90. If its domain walls annihilate or reflect predictably on small rings, the state space collapses quickly into short limit cycles.",
+      "counterconditions": [
+        "If a simulation of Rule 54 on W=9 yields a transient or cycle length greater than 4*W or 2, respectively.",
+        "If Rule 54 is proven to be Turing complete, invalidating the bounded complexity assumption."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "No (rule, W) pair in the required set achieves the 4*W transient bound with a maximum cycle length of 2; the separating property is the absence of universal computation, which fails to constrain any of rules 90, 110, or 184 on finite rings.",
+      "mechanism": "Even simple rules on finite rings experience a state-space size of 2^W. For W=11, 2^11 = 2048. Without strict conservation laws, complex rules like 90 and 110 easily generate transients that wander through a significant portion of this space before cycling, easily exceeding 4*11=44 steps. The absence of universal computation does not guarantee short cycles on finite domains.",
+      "counterconditions": [
+        "If any (rule, W) pair is shown to consistently bound transients at 4*W with cycle length <= 2.",
+        "If Rule 184 is shown to exceed the 4*W transient bound for W in [5,11]."
+      ],
+      "typicality": 0.1,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "eca_enumeration_001",
+      "hypothesis": "Exhaustive enumeration of elementary cellular automata on rings of width W=5 to 11 will show that rules 90 and 184 have maximum transients <= 4*W and maximum cycle lengths <= 2, while rule 110 violates this bound for W >= 7.",
+      "rival_predictions": [
+        "Rule 90 will have a maximum cycle length > 2 for W=8.",
+        "Rule 110 will satisfy the 4*W transient bound for all W in [5,11].",
+        "Rule 184 will exhibit a transient > 4*W for W=11."
+      ],
+      "discriminating_purpose": "Return the exact maximum transient length and maximum cycle length for each (rule, width) pair, explicitly testing the 4*W boundary and identifying the longest transient witness.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def simulate(inputs, rng):\n    rule = inputs['parameters']['rule']\n    width = inputs['parameters']['width']\n    \n    def step(state):\n        nxt = 0\n        for i in range(width):\n            l = (state >> ((i - 1) % width)) & 1\n            c = (state >> i) & 1\n            r = (state >> ((i + 1) % width)) & 1\n            idx = (l << 2) | (c << 1) | r\n            if (rule >> idx) & 1:\n                nxt |= (1 << i)\n        return nxt\n\n    max_transient = 0\n    max_cycle = 0\n    witness = 0\n    \n    for init in range(1 << width):\n        state = init\n        visited = {state: 0}\n        t = 0\n        while True:\n            state = step(state)\n            t += 1\n            if state in visited:\n                cycle_len = t - visited[state]\n                transient = visited[state]\n                if transient > max_transient:\n                    max_transient = transient\n                    witness = init\n                if cycle_len > max_cycle:\n                    max_cycle = cycle_len\n                break\n            visited[state] = t\n            if t > 4 * width + 256:\n                if t > max_transient:\n                    max_transient = t\n                    witness = init\n                if t > max_cycle:\n                    max_cycle = t\n                break\n                \n    return {\"max_transient\": max_transient, \"max_cycle\": max_cycle, \"witness": witness}",
+      "parameter_definitions": [
+        {
+          "name": "eca_params",
+          "values_json": "[{\"rule\": 90, \"width\": 5}, {\"rule\": 90, \"width\": 6}, {\"rule\": 90, \"width\": 7}, {\"rule\": 90, \"width\": 8}, {\"rule\": 90, \"width\": 9}, {\"rule\": 90, \"width\": 10}, {\"rule\": 90, \"width\": 11}, {\"rule\": 110, \"width\": 5}, {\"rule\": 110, \"width\": 6}, {\"rule\": 110, \"width\": 7}, {\"rule\": 110, \"width\": 8}, {\"rule\": 110, \"width\": 9}, {\"rule\": 110, \"width\": 10}, {\"rule\": 110, \"width\": 11}, {\"rule\": 184, \"width\": 5}, {\"rule\": 184, \"width\": 6}, {\"rule\": 184, \"width\": 7}, {\"rule\": 184, \"width\": 8}, {\"rule\": 184, \"width\": 9}, {\"rule\": 184, \"width\": 10}, {\"rule\": 184, \"width\": 11}]"
+        }
+      ],
+      "requested_observables": [
+        "max_transient",
+        "max_cycle",
+        "witness"
+      ],
+      "interpretation_conditions": [
+        "The simulation runs in a fully deterministic environment without network access.",
+        "For W=11, the state space is 2^11=2048, easily iterable within the time limits.",
+        "A cycle detection limit of 4*W + 256 is enforced to prevent infinite loops if a cycle is unexpectedly massive."
+      ]
+    }
+  ]
+}

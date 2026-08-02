@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1": {"pointer": "/scratch_proposal/new_blocks/0/body/local_key", "op": "remove"}}
+```

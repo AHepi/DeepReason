@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:024cbd0e1e4f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 024cbd0e1e4f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@7939832425f6: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+ABSTRACTION: all six priority artifacts (SRC_001–SRC_005 plus the torn-tail gap) inherit a single shared ranking schema — blast radius as a monotonic function of (corrupts-record, bypasses-security, breaks-routing, disables-recovery, observability-gap). The census delta (SRC_004/SRC_005) abstracts to the same observability-gap class as the unimported-functions gap (SRC_003) and the recovery-guard gap (SRC_001), differing only in blast-radius magnitude. Refuted if any artifact's priority assignment cannot be derived from that schema alone — e.g. if SRC_003's routing-rot rank depends on call-graph frequency rather than blast-radius category.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+TARGET SRC_002
+SHARED MECHANISM: the census-delta gap (SRC_004/SRC_005) and the recovery-guard gap (SRC_001) share a failure mechanism — a guard that silently converts an error-class event into a non-error-class event (verify_root_report converts ERROR to verdict; the recovery guard converts a context-receipt error into a silent proceed). Both are silent-classification-drift defects where the system presents a degraded condition as normal. Refuted if the recovery guard does not perform classification but instead performs state transition or fallback — i.e., if its mechanism is recovery execution, not error reclassification.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+TARGET SRC_003
+DEPENDS ON: SRC_004 depends on SRC_005 because the test design (assert ERROR vs verdict classification for three pre-v6 roots) presupposes the prior investigation SRC_005 mandates (determine whether the delta is by design or by bug). The test is vacuous — it asserts an unknown expectation — without the design determination SRC_005 requires. This is a sequential dependence: investigation gates the test. Refuted if the test can be written with a parameterised expectation (assert ERROR OR assert verdict, document which) that does not require prior design knowledge — in that case the test is self-contained and does not depend on the investigation.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

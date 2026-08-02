@@ -1,0 +1,13 @@
+```json
+{
+  "candidate": {
+    "content": "The verify_root_report classification discrepancy integrates with the isolated observability gap: it shares mechanism with resolve_conjecture_route in that both classify system states into error vs verdict paths, and the pre-v6 root routing is refuted if the sweep instrument and direct-load census use identical ERROR definitions, which would eliminate the 3-root delta and collapse the discrepancy to a measurement artifact.",
+    "typicality": 0.42,
+    "neighbours": [
+      "SRC_001",
+      "SRC_003",
+      "SRC_005"
+    ]
+  }
+}
+```

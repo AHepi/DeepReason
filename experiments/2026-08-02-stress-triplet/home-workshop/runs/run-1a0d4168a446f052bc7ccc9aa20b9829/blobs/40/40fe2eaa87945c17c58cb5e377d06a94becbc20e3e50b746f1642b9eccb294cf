@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 frames its reduction from SRC_001 to SRC_002 as sound, then supplies a refutation condition (SRC_001 checks the mutation name as a string property independent of the typed-error contract) that is exactly what the target's own fixture description already establishes: SRC_001's eval checks the mutation name ('ignore-drift-field') while SRC_002 asserts a typed LEASE_MISMATCH. The target thus articulates a refutation of its own relation but never reconciles it — the relation is named as 'reduces to' yet the stated refutation condition is satisfied by the target's own endpoints, meaning the substantive relation is self-refuting rather than genuinely proposed.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 proposes a 'shared mechanism' relation between SRC_003 and SRC_005, but the endpoints it describes do not share a mechanism — they share only an analogous risk surface. SRC_003's mechanism is a rubric-level declaration forbidding a homogenization mutation (no program assertion), while SRC_005's mechanism is a program-level mutation-and-assertion cycle. The target even concedes the difference is enforcement (rubric marking vs program assertion), which means the actual mechanism (the enforcement discipline by which the mutation is caught) differs. Calling this a shared mechanism conflates the attack vector (identity homogenization) with the mechanism (rubric declaration vs program assertion), and the target's own refutation condition — different comparison axes mean the mechanism is merely analogous — is substantively triggered since school-ID partial-key binding and endpoint-drift-field lease binding are distinct comparison axes.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

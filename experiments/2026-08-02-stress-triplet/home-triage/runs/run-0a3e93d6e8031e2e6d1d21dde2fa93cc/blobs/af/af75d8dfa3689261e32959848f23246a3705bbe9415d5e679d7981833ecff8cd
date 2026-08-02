@@ -1,0 +1,11 @@
+```json
+{
+  "repair": "repair.patch.v1",
+  "patch": [
+    {
+      "op": "remove",
+      "path": "/scratch_proposal/new_blocks/0/body/local_key"
+    }
+  ]
+}
+```

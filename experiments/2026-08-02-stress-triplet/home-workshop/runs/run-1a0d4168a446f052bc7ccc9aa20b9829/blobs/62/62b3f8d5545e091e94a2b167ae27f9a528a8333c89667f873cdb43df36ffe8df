@@ -1,0 +1,45 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-18f64f2cc436c51240e21fd3c74bf575) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9c2f27d6cce33a1b853c2feb: program:reasoning_observation_pending
+- reason-counter@9916a067e72e1cd003f81f47: program:reasoning_observation_pending
+- reason-counter@3a0dd4857e5274e166740efd: program:reasoning_observation_pending
+- reason-counter@8c6afe9d8c8a45b27f6ef7a0: program:reasoning_observation_pending
+- reason-counter@821394b5a1517bfe58c1aa98: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The suite must include a forbidden case that asserts the firewall does NOT silently mutate or relax the typed lease-mismatch code into a generic 500 error when the provider call is bypassed.","counterconditions":[{"case":"If the routing firewall intentionally reserves typed codes for lease drifts and maps all other infrastructural failures to 500, a generic 500 wrapper is permitted.","eval":"observation"},{"case":"If the lease-mismatch type is removed entirely by protocol change, this forbidden case becomes invalid.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Cause: Frozen leases carry a distinct type that must be preserved at the ejection site before any provider call. Effect: A mutation that converts `LEASE_MISMATCH` into `INTERNAL_ERROR` today passes silently because the bypass still happens, no provider is called, and tests may only assert on absence. Asserting `resp.code == LEASE_MISMATCH` (program: eval) makes this mutation fail.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9c2f27d6cce33a1b853c2feb, reason-counter@9916a067e72e1cd003f81f47
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["TLS handshake errors are transport-layer and cryptographic; lease-mismatch codes are application-layer and identity-policy-layer.","TLS clients can be configured to accept generic errors for usability; the firewall's pre-provider boundary is a hard policy gate, not a convenience surface.","The TLS analogy has no 'coverage counting' counterpart to the school-to-seat binding problem."],"overturn_conditions":["If typed codes are explicitly non-load-bearing in this firewall's architecture, the analogy's core principle does not transfer.","If the firewall's provider call is idempotent and reversible, the 'costly/irreversible downstream operation' shared premise is false."],"shared_structure":["Both systems rely on a typed early-refusal token emitted before a costly/irreversible downstream operation.","Both forbid silent acceptance of a genericized or missing refusal token when the upstream frozen state indicates mismatch.","Both use a single-difference mutation that leaves the frozen state intact to prove the suite asserts on the token, not on side effects."],"source_memory_refs":["SRC_001"],"transfer_claims":["The test-design principle transfers: assert on the specific typed token at the correct boundary, not on generic failure or downstream absence.","The minimal-fixture principle transfers: the frozen state needed for the assertion is a single record, not a rebuilt ecosystem."]},"claim":"Each forbidden case must be a single-difference mutation: mutate the expected typed lease-mismatch code into a generic 500 error (or into a fall-through success that reaches the provider call) while leaving the fixture's frozen-lease state untouched. If the suite still passes, the firewall is relying on side effects or non-typed status codes, silently accepting the mutation. The minimal fixture is a single frozen-lease record and a mismatched endpoint descriptor; no full manifest is rebuilt because the frozen lease alone carries the identity commitment to be checked.","counterconditions":[{"case":"If the firewall intentionally maps all lease-mismatch subtypes to a single opaque 500 for external callers, the generic-500 mutation is not silently passing but conformant; the suite must then assert on internal sub-codes rather than the external code.","eval":"observation"},{"case":"If the frozen-lease fixture in the test harness is itself produced by a manifest projection, the claim's '
+commitments: reasoning-envelope-wf, reason-counter@3a0dd4857e5274e166740efd, reason-counter@8c6afe9d8c8a45b27f6ef7a0, reason-counter@821394b5a1517bfe58c1aa98
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,128 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The regression suite skeleton must use program: eval forms to enforce forbidden mutations, specifically targeting a homogeneous identity comparison on the frozen lease that ignores endpoint drift by asserting a typed lease-mismatch code is returned before provider call.",
+      "mechanism": "A minimal fixture freezes a single lease binding. The program: eval mutates the endpoint identity comparison to ignore drift, which must fail the assertion of a typed lease-mismatch code, proving the suite catches this silent pass.",
+      "counterconditions": [
+        "If the eval form permits the mutation to bypass the synchronous precondition check without triggering the typed code, the suite fails to cover the false-green risk.",
+        "If the fixture requires a full manifest to assert the typed lease-mismatch, the suite violates the minimal fixture cost constraint."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    },
+    {
+      "claim": "The seat-binding refusal skeleton must use a rubric: eval form to ensure a school-to-seat binding with endpoint identity disagreement is not counted as coverage, explicitly forbidding a mutation that homogenizes the identity check between school and seat.",
+      "mechanism": "Using a minimal fixture representing the school-to-seat relationship, the rubric: eval targets a mutation that homogenizes the identity check, ensuring the mutated code incorrectly counts the binding as coverage, which the suite must catch.",
+      "counterconditions": [
+        "If the rubric: eval allows the homogenized identity check to count the binding as valid coverage, the suite provides a false-green.",
+        "If the fixture rebuilds the entire routing topology to test the seat-binding, it violates the constraint of avoiding a full manifest."
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    },
+    {
+      "claim": "The suite skeleton should abstract both refusals into a shared graph fixture (nodes=endpoints, edges=bindings) and frame them as a unified identity-drift problem, using program: eval forms to forbid mutations that bypass unified identity comparisons.",
+      "mechanism": "By modeling endpoints as nodes and bindings as edges, a single program: eval can target mutations that ignore drift across both lease-mismatch and seat-binding refusals, reducing fixture duplication.",
+      "counterconditions": [
+        "If the problem explicitly requires separate forbidden cases for the two untested refusals, a unified abstraction might fail to provide the explicit plural cases.",
+        "If the shared graph fixture inadvertently rebuilds a full manifest, it violates the minimal fixture cost constraint."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    },
+    {
+      "claim": "The suite skeleton should propose a single unified forbidden-case rubric spanning both refusals, using rubric: eval forms to ensure mutations that ignore drift in either lease-mismatch or seat-binding are caught.",
+      "mechanism": "A single rubric: eval can assess whether the mutated code fails to return the correct typed code or incorrectly counts coverage for both refusals, streamlining the test suite.",
+      "counterconditions": [
+        "If the problem requires explicit forbidden cases (plural) for the two untested refusals, a single unified rubric may not satisfy the explicitness requirement.",
+        "If the rubric: eval does not distinctly address the synchronous precondition check for the lease-mismatch, it may miss the false-green risk."
+      ],
+      "typicality": 0.25,
+      "optional_refs": ["SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    },
+    {
+      "claim": "The regression suite should be designed empirically by observing the actual behavior of the LLM routing firewall under specific mutations, using program: eval forms to assert the observed behavior matches the expected refusal codes.",
+      "mechanism": "Empirical observation of the firewall under mutated conditions provides concrete evidence of false-green risks, which the program: eval forms encode as forbidden cases.",
+      "counterconditions": [
+        "If the empirical observations are limited to a subset of mutations, the suite may miss other false-green risks not observed.",
+        "If the observation setup requires a full manifest to reproduce the firewall behavior, it violates the minimal fixture cost constraint."
+      ],
+      "typicality": 0.5,
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    },
+    {
+      "claim": "The suite skeleton should mechanistically decompose the lease-mismatch and seat-binding refusals into separate program: eval forms, each targeting a specific mutation in the identity comparison logic, ensuring no shared abstraction obscures the false-green risks.",
+      "mechanism": "By separating the eval forms, the suite explicitly targets the synchronous precondition check for lease-mismatch and the coverage counting logic for seat-binding, ensuring each mutation is caught individually.",
+      "counterconditions": [
+        "If the separate eval forms inadvertently share fixtures in a way that rebuilds a full manifest, the suite violates the minimal fixture cost constraint.",
+        "If the mechanistic decomposition misses an interaction between the two refusals that allows a mutation to pass silently, the suite provides a false-green."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_001"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SCR_002", "SCR_003"]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative mechanism: What if the lease-mismatch and seat-binding refusals are two manifestations of a single underlying identity-drift problem? If so, a single program: eval form targeting the core identity comparison logic might catch both. However, this risks violating the explicit plural forbidden cases requirement.",
+          "why_keep_this": "This note explores a speculative mechanism that could simplify the suite but risks failing the explicitness requirement.",
+          "bears_on_refs": ["SRC_007", "SRC_008"],
+          "possible_next_move": "Evaluate whether a single eval form can explicitly address both refusals without obscuring the distinct false-green risks."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: If the firewall's lease validation logic were fully isolated from the seat-binding logic, a mutation in one would not affect the other. This would justify separate eval forms, but may increase fixture cost if the isolation is not reflected in the minimal fixtures.",
+          "why_keep_this": "This note examines a counterfactual that supports separate eval forms but raises fixture cost concerns.",
+          "bears_on_refs": ["SRC_001", "SRC_005"],
+          "possible_next_move": "Assess whether the isolation justifies the increased fixture cost or if a shared fixture can maintain isolation."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_002",
+        "relation_hint": "The speculative mechanism directly relates to the attack surface analysis by proposing a unified eval form for the identity comparison logic."
+      },
+      {
+        "from_ref": "NEW_002",
+        "to_ref": "SCR_001",
+        "relation_hint": "The counterfactual impacts the fixture cost assessment by questioning whether isolation justifies increased cost."
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can a single program: eval form explicitly address both lease-mismatch and seat-binding refusals without violating the requirement for explicit plural forbidden cases?",
+        "related_refs": ["NEW_001", "SCR_002"]
+      },
+      {
+        "question": "Does the isolation of lease validation logic from seat-binding logic justify the potential increase in fixture cost, or can a shared fixture maintain the isolation?",
+        "related_refs": ["NEW_002", "SCR_001"]
+      }
+    ]
+  }
+}
+```

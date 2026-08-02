@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-18f64f2cc436c51240e21fd3c74bf575) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@db017d18f4bce00aa3c2d32f: program:reasoning_observation_pending
+- reason-counter@5d5786a8b86c6a6422d70db3: program:reasoning_observation_pending
+- reason-counter@622fd71b8f13d8b00ffb2d6d: program:reasoning_observation_pending
+- reason-counter@28f971c5e3170f9fc7838696: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"For the school-to-seat binding, a true negative coverage test must assert that a frozen seat identity explicitly disagrees with a mutated school endpoint, using a rubric: eval form that fails if the mutation's name implies a homogeneous identity comparison.","counterconditions":[{"case":"If the seat binding logic does not evaluate endpoint identity but instead relies on a higher-level manifest, the test fails to isolate the false-green risk.","eval":"observation"},{"case":"If the school-to-seat binding is not computationally distinct from the lease-mismatch, the test may incorrectly inherit the synchronous precondition, causing a false negative.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The seat-binding test targets a different stage than the lease-mismatch (as noted in SRC_006). The mechanism involves binding a school to a seat with an explicit identity conflict, ensuring the mutation would silently pass if it homogenizes the identity check, aligning with the counterexample-first stance.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@db017d18f4bce00aa3c2d32f, reason-counter@5d5786a8b86c6a6422d70db3
+
+TARGET SRC_002
+{"analogy":null,"claim":"A lease-mismatch regression suite can be constructed without a full provider manifest by declaring a frozen route lease and a mocked endpoint drift state, applying a mutation that flips the drift field, and using a program: eval form to verify the mutation's name explicitly describes ignoring endpoint drift fields.","counterconditions":[{"case":"If the firewall implementation allows lease validation to occur concurrently or after provider calls, the synchronous precondition is violated, rendering the fixture invalid.","eval":"observation"},{"case":"If the endpoint representation does not expose 'drift' as a discrete field, the mutation cannot be applied as described, invalidating the program: eval form.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The firewall evaluates route leases before provider calls. By freezing a single lease object and mutating its endpoint representation, we isolate the synchronous precondition without simulating the entire routing topology. The test suite's forbidden case checks if a mutation named 'ignore-drift-field' passes silently, directly targeting the false-green risk identified in SRC_007.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@622fd71b8f13d8b00ffb2d6d, reason-counter@28f971c5e3170f9fc7838696
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

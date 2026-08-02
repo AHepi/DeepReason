@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:024cbd0e1e4f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 024cbd0e1e4f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@7939832425f6: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The foundation artifact 024cbd0e1e4f depends on verify_root_report routing pre-v6 roots through a verdict path rather than an error path. It is refuted if the 3-root census delta (11 ERROR vs 14 raising manifests) is a measurement artifact with no behavioral consequence, because that would mean the observed classification discrepancy in verify_root_report has no functional or observational significance.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+TARGET SRC_002
+024cbd0e1e4f abstracts SRC_001 and SRC_002 by representing their census-instrument disagreement as a generalizable observability gap. Specifically, the Priority 6 directive abstracts the concrete '11 ERROR vs 14 raising manifests' counting discrepancy into a universalized test: asserting that verify_root_report produces consistent error vs verdict classification for pre-v6 roots. This abstraction is refuted if the pre-v6 roots' routing to the verdict path is isolated purely to the direct-load instrument's tallying logic, rather than being a generalizable classification divergence in verify_root_report itself that can be tested independently of the census sweep.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+TARGET SRC_003
+024cbd0e1e4f contradicts the direct-load census: verify_root_report abstracts pre-v6 roots to the verdict path, meaning the 3-root delta is a true classification discrepancy (instrument sees failures the other does not). Refuted if pre-v6 roots surfacing as verdicts rather than errors is a documented, intentional behavior, OR if verify_root_report is an internal diagnostic not relied upon for correctness decisions.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

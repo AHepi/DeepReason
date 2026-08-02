@@ -1,0 +1,49 @@
+```json
+{
+  "candidate": {
+    "claim": "The false-green risk for the seat-binding test (not counting a disagreeing binding as coverage) is dominated by a mutation where the suite passes simply because no call is made to the disagreeing endpoint; therefore, a forbidden case must assert a mutation that injects a call to the disagreeing endpoint and verifies the suite fails, or the suite silently passes a coverage lie.",
+    "mechanism": "Causal mechanism: a green result on a 'disagreement is not coverage' test can arise from the simple absence of the disagreeing call rather than from correct refusal. Mutation tests check the suite's power by injecting the call the suite does not expect. If the suite is blind to the injected call, the suite itself is faulty. Therefore the forbidden cases should include program:(inject-disagreeing-call, assert-suite-fails) as a machine-checkable expression.",
+    "counterconditions": [
+      "If a separate assertion in the suite already requires all provider calls to fail closed on identity mismatch, then the silent-pass concern is mitigated and this forbidden case is redundant.",
+      "If the suite uses an exact-match stub that already throws on any call to the disagreeing endpoint, a no-call test may be sufficient and this forbidden case is less critical.",
+      "If the routing firewall is structurally incapable of calling the disagreeing endpoint given the frozen seat, the mutation is unreachable and the forbidden case is invalid."
+    ],
+    "typicality": 0.42,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001"
+      ],
+      "shared_structure": [
+        "A passing test that should verify a refusal can pass vacuously if the triggering event never occurs.",
+        "The mutation that injects the missing event exposes whether the test has real power or is green by absence.",
+        "Both lease-mismatch and seat-disagreement refusal tests face this vacuous-green failure mode unless a forbidden case names the injection mutation."
+      ],
+      "disanalogies": [
+        "The lease-mismatch test has a synchronous precondition (before any provider call), whereas the seat-binding test may be evaluated at coverage time, so the injection points differ.",
+        "The seat-binding test concerns a coverage accounting side effect, not a direct refusal code, so the observable failure signal differs."
+      ],
+      "transfer_claims": [
+        "A forbidden case should be named for each refusal test: inject the event the suite does not expect and assert the suite turns red."
+      ],
+      "overturn_conditions": [
+        "If the suite is already mutation-tested by an external harness, naming the same mutation in forbidden cases is redundant.",
+        "If the routing firewall has a totalizing invariant that no disagreeing endpoint can ever be called under a frozen seat, the vacuous-green risk disappears."
+      ],
+      "adopted_commitment_refs": [
+        "program:reasoning-envelope-wf"
+      ]
+    }
+  }
+}
+```

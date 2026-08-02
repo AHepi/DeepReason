@@ -1,0 +1,7 @@
+```json
+{
+  "authorized_pointer": "/scratch_proposal/new_blocks/4",
+  "operation": "remove",
+  "schema": "repair.patch.v1"
+}
+```

@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "claim": "A regression suite skeleton must include a program: forbidden case that mutates the typed `LEASE_MISMATCH` exception to a generic `Exception` or 500 status code, verifying the firewall rejects the mutation silently because the error type contract is violated.",
+      "mechanism": "By freezing a single lease object with a drifted endpoint and asserting a typed `LEASE_MISMATCH` code is returned before a provider call, the test guards the typed contract. A forbidden case mutating the typed exception to a generic one is machine-checkable and catches silent regressions where the refusal still occurs but loses its typed fidelity.",
+      "counterconditions": [
+        "If the routing firewall architecture does not support typed exceptions or typed error codes, the program: mutation cannot be evaluated.",
+        "If the test framework flattens all exceptions to HTTP 500 regardless of type, the mutation and assertion are indistinguishable."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006"],
+      "sidecar": {"requested_context_aliases": ["SCR_001", "SCR_003"], "search_signal": "productive"},
+      "typicality": 0.85
+    },
+    {
+      "claim": "A regression suite skeleton must include a rubric: forbidden case for the school-to-seat binding where the endpoint identity homogenization mutation (comparing only school ID instead of full endpoint identity) is explicitly marked as silent-pass forbidden.",
+      "mechanism": "The school-to-seat binding coverage check is vulnerable to a mutation that weakens the identity comparison to a partial match. A rubric: eval form can declare this specific mutation as forbidden if the suite lacks a test providing a mismatched endpoint under the same school ID and asserting it is not counted as coverage.",
+      "counterconditions": [
+        "If the system validates endpoint identity exclusively via a complete hash or exact string match, the partial match mutation is unrepresentative.",
+        "If the coverage logic does not use school ID as a fallback or partial key, the homogenization mutation is irrelevant."
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"],
+      "sidecar": {"requested_context_aliases": ["SCR_002", "SCR_003"], "search_signal": "productive"},
+      "typicality": 0.75
+    },
+    {
+      "claim": "A regression suite skeleton must include a program: forbidden case that asserts a fixture built without a full manifest is sufficient, mutating the setup to rebuild the entire routing topology and verifying the suite fails to flag the unnecessary cost.",
+      "mechanism": "The problem explicitly requires that fixtures avoid rebuilding a full manifest where a frozen lease alone suffices. A program: eval can check the test setup's dependency graph or fixture size, triggering a failure if a full manifest is constructed. This enforces the minimal fixture requirement mechanically.",
+      "counterconditions": [
+        "If the test framework lacks introspection capabilities to count fixture dependencies or measure setup size, the program: eval cannot execute.",
+        "If the frozen lease inherently requires the full manifest to be loaded for context, the minimal fixture mutation is invalid."
+      ],
+      "optional_refs": ["SRC_006", "SRC_007", "SRC_008"],
+      "sidecar": {"requested_context_aliases": ["SCR_001"], "search_signal": "productive"},
+      "typicality": 0.65
+    },
+    {
+      "claim": "A regression suite skeleton must include a program: forbidden case for requirement (1) mutating the synchronous precondition check to an asynchronous post-provider-call check, ensuring the test suite catches the delayed validation as a failure.",
+      "mechanism": "The requirement explicitly demands refusal before any provider call. A mutation that moves the lease-mismatch check to after the provider call violates this temporal constraint. A program: eval can stub the provider call and assert it was never invoked when a lease mismatch is present, catching the silent pass.",
+      "counterconditions": [
+        "If the firewall architecture is purely asynchronous and lacks a synchronous pre-check phase, the mutation cannot be evaluated.",
+        "If the provider call is trivially mocked and does not accurately reflect execution order, the program: assertion is void."
+      ],
+      "optional_refs": ["SRC_001", "SRC_005"],
+      "sidecar": {"requested_context_aliases": ["SCR_002"], "search_signal": "productive"},
+      "typicality": 0.55
+    },
+    {
+      "claim": "An atypical regression suite skeleton should express the false-green risks for both refusals as a single unified rubric: forbidden case, declaring that any mutation which homogenizes identity comparisons across both the lease-mismatch and seat-binding logic is silent-pass forbidden.",
+      "mechanism": "Instead of separate forbidden cases, a unified rubric covers the systemic false-green risk where a developer might introduce a shared utility function that ignores drift and endpoint identity fields. This unified approach critiques the problem's separation of the two refusals, suggesting they share an identical structural vulnerability.",
+      "counterconditions": [
+        "If the lease-mismatch and seat-binding logic are maintained by entirely disjoint teams with no shared utilities, the unified mutation is practically impossible.",
+        "If the grading rubric strictly demands separate forbidden cases for each requirement, the unified rubric will fail the structural criteria."
+      ],
+      "optional_refs": ["SRC_003", "SRC_007"],
+      "sidecar": {"requested_context_aliases": ["SCR_003"], "search_signal": "productive"},
+      "typicality": 0.2
+    },
+    {
+      "claim": "An atypical regression suite skeleton should include a program: forbidden case for the seat-binding test asserting that the endpoint identity disagreement is not counted as coverage even if the routing table falls back to a wildcard match.",
+      "mechanism": "A highly specific false-green risk occurs if the coverage logic uses a fallback mechanism (like a wildcard or default route) that accidentally counts a mismatched endpoint as covered. A program: eval can inject a wildcard route and assert the seat-binding test still refuses to count it as coverage, catching a subtle bypass.",
+      "counterconditions": [
+        "If the routing firewall does not support wildcard or fallback routes, this mutation is unrepresentative.",
+        "If the coverage logic strictly validates bindings without any fallback mechanism, the wildcard mutation is irrelevant."
+      ],
+      "optional_refs": ["SRC_002", "SRC_008"],
+      "sidecar": {"requested_context_aliases": ["SCR_002"], "search_signal": "productive"},
+      "typicality": 0.15
+    }
+  ]
+}

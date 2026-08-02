@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The temporal-ordering invariant shared by SRC_001 and SRC_004 reduces to a single abstract mechanism: a synchronous precondition that must fire before provider invocation. The shared mechanism abstracts both the typed lease-mismatch code and the endpoint drift field into a unified pre-call barrier. It is refuted if the two foundations can be satisfied by a test suite where the precondition check executes concurrently or after the provider call, or if a minimal frozen lease cannot represent both drift-field mutation and typed-exception mutation without rebuilding the routing topology.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_004", "SRC_005"]
+    },
+    {
+      "content": "SRC_003 contradicts the regression suite skeleton defined by SRC_001, SRC_002, SRC_004, and SRC_005 because it introduces a rubric: eval form for the school-to-seat binding, which is incompatible with the program: eval-only constraint implied by the frozen-lease mechanism. The contradiction manifests when the suite tries to enforce both a homogeneous identity comparison (rubric) and a typed lease-mismatch assertion (program) on the same minimal fixture, since the two eval forms require mutually exclusive assertion structures. It is refuted if the regression suite skeleton can simultaneously carry a rubric: eval form and a program: eval form without the rubric undermining the program's machine-checkable typed-code assertion.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"]
+    },
+    {
+      "content": "SRC_002 inherits from SRC_004 by specializing the general temporal-violation forbidden case into a typed-contract forbidden case, where the inherited synchronous pre-call barrier is narrowed to also enforce exception type fidelity. The inheritance is refuted if SRC_004's mechanism can be satisfied without the typed `LEASE_MISMATCH` contract—that is, if a generic exception or 500 status code returned before the provider call still fulfills the temporal constraint without violating the spirit of the regression suite's false-green guard.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_002", "SRC_004", "SRC_005"]
+    },
+    {
+      "content": "SRC_005 integrates the minimal-fixture constraint from SRC_001 with the typed-error-contract enforcement from SRC_002 by proposing a single frozen lease binding that asserts both a typed lease-mismatch code and endpoint drift detection before the provider call. The integration is refuted if the minimal fixture cannot simultaneously expose the drift field as a discrete mutable property and carry a typed exception contract without requiring a full provider manifest or additional routing topology context.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_005"]
+    },
+    {
+      "content": "SRC_003 depends on SRC_004 because the rubric: forbidden case for the school-to-seat binding's endpoint identity homogenization mutation structurally requires the same synchronous precondition check architecture that SRC_004 establishes for the lease-mismatch temporal constraint. The dependence is refuted if the school-to-seat binding coverage check can be adequately tested by a rubric: eval form in a system that performs its identity comparison asynchronously or after a provider call, severing the shared architectural prerequisite.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_001"]
+    },
+    {
+      "content": "SRC_004 and SRC_003 share a mechanism: both define a forbidden mutation that silently passes because the test suite fails to distinguish a weakened identity comparison (homogenized school ID in SRC_003, ignored endpoint drift in SRC_004) from a correct one. The shared mechanism is a structural equivalence class where the mutation collapses a multi-field identity comparison to a partial key match. It is refuted if the endpoint drift check in SRC_004 operates on a single immutable field rather than a composite identity tuple, making the collapse-to-partial-match mutation inapplicable and severing the shared mechanism.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_001"]
+    }
+  ]
+}
+```

@@ -1,0 +1,58 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@12dade4fc3d4295d25354164: program:reasoning_observation_pending
+- reason-counter@8802f881ccfe36696793878e: program:reasoning_observation_pending
+- reason-counter@9b92500077346a1f2cae0042: program:reasoning_observation_pending
+- reason-counter@cd8d1e29fc218882012786a2: program:reasoning_observation_pending
+- reason-counter@bb24fd92a1c1ddaa10d1dc80: program:reasoning_observation_pending
+- reason-counter@ee1e75a41e84369d23493c96: program:reasoning_observation_pending
+- reason-counter@6b83bb86a6b84b1e3718fb08: program:reasoning_observation_pending
+- reason-counter@3d17d23c178670f0451f215c: program:reasoning_observation_pending
+- reason-counter@e31185be3bac8bb86bbc4fbe: program:reasoning_observation_pending
+- reason-counter@0523f1899c9ca08f38767856: program:reasoning_observation_pending
+- reason-counter@9daba3492092b85074e136a5: program:reasoning_observation_pending
+- reason-counter@4cb811b7844a09e37f723599: program:reasoning_observation_pending
+- reason-counter@dc1e65c7a8dc67d2c8865436: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The cheapest test for the _reset() guard is a one-line assertion in the existing test_failed_control_append_rolls_live_materialization_back: after the failed append, assert WorkflowReplayState.digest changes (or raises) when _commit's _reset() is deleted. This test would catch the guard dying because the digest would fail to reflect the failed append, making the deletion visible. The failure mode left uncovered if skipped: the append-only record can be silently corrupted by a failed append that the digest does not see, meaning every replay or audit based on the digest is unreliable. This is the highest priority because it is the only gap that corrupts the integrity substrate rather than merely hiding a failure.","counterconditions":[{"case":"If WorkflowReplayState.digest is not consumed by any downstream integrity check or replay mechanism, the blast radius of this gap is smaller than assumed and this test may not be Priority 1.","eval":"observation"},{"case":"If the existing test already exercises the digest but the _reset() deletion does not affect the digest path, the test may need a different assertion strategy.","eval":"observation"},{"case":"If there is a separate integrity check t
+commitments: reasoning-envelope-wf, reason-counter@12dade4fc3d4295d25354164, reason-counter@8802f881ccfe36696793878e, reason-counter@9b92500077346a1f2cae0042
+
+TARGET SRC_002
+{"analogy":null,"claim":"Counterfactual ordering: if the lease-mismatch refusal guard is the sole enforcement site for a security boundary that external callers can hit (not an internal-only check), it should be Priority 1, not Priority 2. The _reset() guard corrupts the append-only record, but if the record is only consumed internally and never exposed to external callers, while the lease-mismatch refusal is the only thing preventing external access to unauthorized routes, then the security bypass has a larger real-world blast radius than the integrity corruption. The ordering should be: (1) lease-mismatch refusal, (2) _reset() guard, (3) unimported functions, (4) context receipt recovery guard, (5) torn-tail repair, (6) census delta. Justification: external-facing security bypass outranks internal-only integrity corruption when the security boundary is the first line of defense.","counterconditions":[{"case":"If the lease-mismatch refusal is an internal-only check (no external caller can reach it), the counterfactual collapses and the default ordering holds.","eval":"observation"},{"case":"If the _reset() guard's corruption is externally exploitable (e.g., the digest is published and trusted by external consum
+commitments: reasoning-envelope-wf, reason-counter@cd8d1e29fc218882012786a2, reason-counter@bb24fd92a1c1ddaa10d1dc80, reason-counter@ee1e75a41e84369d23493c96
+
+TARGET SRC_003
+{"analogy":null,"claim":"The minimal regression-test plan cannot be responsibly ordered without first resolving whether WorkflowReplayState.digest is downstream-consumed (SCR_005/SCR_006). The plan is therefore: Phase 0 (cheapest investigation): grep for WorkflowReplayState.digest consumers. Phase 1 (ordered by blast radius conditional on Phase 0): if digest IS consumed, Priority 1 is _reset() guard test, Priority 2 is lease-mismatch refusal test; if digest is NOT consumed, Priority 1 is lease-mismatch refusal test, Priority 2 is _reset() guard test. Phase 2: (3) unimported functions or deletion, (4) context receipt guard, (5) torn-tail gate, (6) census delta.","counterconditions":[{"case":"A maintainer rejects Phase 0 as over-engineering and demands a single ordering, making this plan impractical","eval":"observation"},{"case":"The grep for digest consumers is ambiguous (e.g., consumed in some configurations but not others), failing to resolve the branch","eval":"observation"},{"case":"A downstream consumer exists but is itself untested, making the blast radius of _reset() guard still speculative even after Phase 0","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The
+commitments: reasoning-envelope-wf, reason-counter@6b83bb86a6b84b1e3718fb08, reason-counter@3d17d23c178670f0451f215c, reason-counter@e31185be3bac8bb86bbc4fbe
+
+TARGET SRC_004
+{"analogy":null,"claim":"The minimal regression-test plan is: (1) lease-mismatch refusal test, (2) _reset() guard test, (3) context receipt recovery guard test, (4) census delta test, (5) torn-tail repair gate test, and DELETE the unimported functions rather than testing them. The ordering is justified because the unimported functions (resolve_conjecture_route, compile_criticism_assignments) are likely dead code given no test imports them and no evidence shows production calls them; deleting dead code is cheaper than writing regression tests for it, and removes a routing-rot surface entirely.","counterconditions":[{"case":"resolve_conjecture_route or compile_criticism_assignments are called by a production code path, making deletion wrong and restoring them to the test plan as Priority 4","eval":"observation"},{"case":"WorkflowReplayState.digest is downstream-consumed, making _reset() guard Priority 1 over lease-mismatch refusal","eval":"observation"},{"case":"The census delta is by design, converting Priority 4 to a documentation task","eval":"observation"},{"case":"test_torn_append.py already covers gate-level torn-tail repair, collapsing Priority 5 into the census delta priority","eval":"observation"}],"defin
+commitments: reasoning-envelope-wf, reason-counter@0523f1899c9ca08f38767856, reason-counter@9daba3492092b85074e136a5, reason-counter@4cb811b7844a09e37f723599, reason-counter@dc1e65c7a8dc67d2c8865436
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

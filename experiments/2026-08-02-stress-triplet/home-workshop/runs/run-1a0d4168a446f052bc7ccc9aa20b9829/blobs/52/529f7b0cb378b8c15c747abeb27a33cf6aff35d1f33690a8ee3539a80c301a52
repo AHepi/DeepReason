@@ -1,0 +1,17 @@
+```json
+{
+  "patch": {
+    "op": "remove",
+    "path": "/scratch_proposal/new_blocks/4"
+  },
+  "expected_sha256": "1025a8c14b398deae632c3bc7c99b595bb9b1501b0bb9520e586f57f270e4fbd",
+  "repair_hash": "e8f052b2b398de86c4ee8f46e6fa5dd4d04c9f37ed8d77c8452c8ec3dd1cf4be",
+  "diagnostics": [
+    {
+      "code": "V6_WIRE_REFERENCE_INVALID",
+      "path": "/scratch_proposal/new_blocks/4",
+      "status": "resolved"
+    }
+  ]
+}
+```

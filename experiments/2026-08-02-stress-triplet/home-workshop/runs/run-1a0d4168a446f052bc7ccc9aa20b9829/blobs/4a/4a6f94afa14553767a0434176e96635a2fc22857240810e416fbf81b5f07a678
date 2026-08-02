@@ -1,0 +1,57 @@
+```json
+{
+  "candidate": {
+    "claim": "The frozen lease acts as a capability token bound to a specific endpoint identity; any observed drift at runtime indicates token invalidation, making a provider call under that token an unsafe, unscoped escalation that must be rejected at the control plane boundary rather than passed to the provider.",
+    "mechanism": "Following a capability-based access control model, a route lease is issued against a cryptographic endpoint identity. The firewall enforces a precondition check comparing the lease's bound identity against the live endpoint's attested identity. If they diverge, the capability is invalidated. Because the firewall possesses the necessary state (the frozen lease) to perform this check locally, it intercepts the request before any network egress to the provider, enforcing the typed lease-mismatch code as a boundary condition guard.",
+    "counterconditions": [
+      "The firewall lacks access to the live endpoint's attested identity, forcing it to either pass the request to the provider or fail with a generic state-resolution error rather than a typed lease-mismatch.",
+      "The lease is intentionally mutable and versioned, such that an endpoint drift triggers a lease refresh rather than a refusal, invalidating the capability invalidation model.",
+      "The lease-mismatch is detected only after the provider call returns an error, meaning the firewall did not actually intercept the request before egress.",
+      "The drift is purely a network-level address change (e.g., DNS rotation) while the endpoint identity remains constant, causing the firewall to false-positive refuse a valid route.",
+      "The firewall treats the lease as a cache key rather than a capability token, invalidating the premise that a mismatch constitutes a security boundary violation.",
+      "The typed lease-mismatch code is emitted as a non-blocking warning, allowing the provider call to proceed despite the mismatch."
+    ],
+    "typicality": 0.7,
+    "analogy": {
+      "source_memory_refs": [
+        "Capability-based security",
+        "Kernel boundary checks",
+        "Object capability model"
+      ],
+      "shared_structure": [
+        "Both the LLM routing firewall and a capability-based kernel enforce access via unforgeable tokens (frozen lease / capability) bound to specific object identities (endpoint / kernel object).",
+        "Both must perform identity validation at a strict control boundary (firewall egress gate / kernel call gate) before delegating any action to a privileged executor (LLM provider / kernel driver).",
+        "Both require a typed, preemptive rejection (lease-mismatch code / EACCES) when the bound identity no longer matches the live target, preventing confused-deputy attacks.",
+        "Both can execute the boundary check using only local state without needing to rebuild the entire system manifest (the frozen lease suffices, just as a capability table entry suffices)."
+      ],
+      "disanalogies": [
+        "Kernel capabilities are typically cryptographically unforgeable via hardware memory protection, whereas LLM route leases might be vulnerable to state-poisoning in application memory.",
+        "Endpoint identity drift in an LLM routing context often stems from deployment pipeline issues (e.g., rolling updates, misconfigured drift), whereas kernel object identity changes usually stem from object destruction and reallocation.",
+        "A kernel enforces spatial and temporal safety for arbitrary memory, while an LLM firewall enforces a narrower routing and cost-control policy, making the 'capability' metaphor potentially over-engineered."
+      ],
+      "transfer_claims": [
+        "If endpoint drift invalidates a frozen lease, then mutations that disable the local identity precondition check should be explicitly forbidden by the regression suite's machine-checkable rubric.",
+        "If the frozen lease alone suffices for the boundary check, then test fixtures that construct a full route manifest to validate the lease should be forbidden to minimize fixture cost.",
+        "If a provider call must be refused before egress, then test assertions must mock the provider interface to guarantee it is never invoked during a lease-mismatch scenario."
+      ],
+      "overturn_conditions": [
+        "The system architecture explicitly delegates identity validation to the provider, making the firewall a pass-through that cannot refuse based on lease mismatch.",
+        "The 'frozen lease' is actually just a performance cache with no security semantics, invalidating the capability analogy.",
+        "The problem constraints are relaxed to allow 'best-effort' routing where a lease mismatch is logged but not enforced as a refusal."
+      ],
+      "adopted_commitment_refs": [
+        "program:reasoning-envelope-wf"
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

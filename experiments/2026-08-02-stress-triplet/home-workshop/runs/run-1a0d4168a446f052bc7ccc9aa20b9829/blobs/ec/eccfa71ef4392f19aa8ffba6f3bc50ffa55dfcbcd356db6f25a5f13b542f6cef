@@ -1,0 +1,50 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-18f64f2cc436c51240e21fd3c74bf575) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@91b99834162730536614d2c9: program:reasoning_observation_pending
+- reason-counter@fae55439cee1d2dfc6b4b1db: program:reasoning_observation_pending
+- reason-counter@698a555b3c7ad328c1711124: program:reasoning_observation_pending
+- reason-counter@47af2f30bb0b6949a0155f84: program:reasoning_observation_pending
+- reason-counter@27d13b241f6051d8862bc89c: program:reasoning_observation_pending
+- reason-counter@d16e1d90772b00200ed30ab5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A regression suite skeleton must include a program: forbidden case for requirement (1) mutating the synchronous precondition check to an asynchronous post-provider-call check, ensuring the test suite catches the delayed validation as a failure.","counterconditions":[{"case":"If the firewall architecture is purely asynchronous and lacks a synchronous pre-check phase, the mutation cannot be evaluated.","eval":"observation"},{"case":"If the provider call is trivially mocked and does not accurately reflect execution order, the program: assertion is void.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The requirement explicitly demands refusal before any provider call. A mutation that moves the lease-mismatch check to after the provider call violates this temporal constraint. A program: eval can stub the provider call and assert it was never invoked when a lease mismatch is present, catching the silent pass.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@91b99834162730536614d2c9, reason-counter@fae55439cee1d2dfc6b4b1db
+
+TARGET SRC_002
+{"analogy":null,"claim":"A regression suite skeleton must include a program: forbidden case that asserts a fixture built without a full manifest is sufficient, mutating the setup to rebuild the entire routing topology and verifying the suite fails to flag the unnecessary cost.","counterconditions":[{"case":"If the test framework lacks introspection capabilities to count fixture dependencies or measure setup size, the program: eval cannot execute.","eval":"observation"},{"case":"If the frozen lease inherently requires the full manifest to be loaded for context, the minimal fixture mutation is invalid.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem explicitly requires that fixtures avoid rebuilding a full manifest where a frozen lease alone suffices. A program: eval can check the test setup's dependency graph or fixture size, triggering a failure if a full manifest is constructed. This enforces the minimal fixture requirement mechanically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@698a555b3c7ad328c1711124, reason-counter@47af2f30bb0b6949a0155f84
+
+TARGET SRC_003
+{"analogy":null,"claim":"A regression suite skeleton must include a program: forbidden case that mutates the typed `LEASE_MISMATCH` exception to a generic `Exception` or 500 status code, verifying the firewall rejects the mutation silently because the error type contract is violated.","counterconditions":[{"case":"If the routing firewall architecture does not support typed exceptions or typed error codes, the program: mutation cannot be evaluated.","eval":"observation"},{"case":"If the test framework flattens all exceptions to HTTP 500 regardless of type, the mutation and assertion are indistinguishable.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By freezing a single lease object with a drifted endpoint and asserting a typed `LEASE_MISMATCH` code is returned before a provider call, the test guards the typed contract. A forbidden case mutating the typed exception to a generic one is machine-checkable and catches silent regressions where the refusal still occurs but loses its typed fidelity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@27d13b241f6051d8862bc89c, reason-counter@d16e1d90772b00200ed30ab5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

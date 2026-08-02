@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:08fedf4d2716) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 08fedf4d2716 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@1af0160f1ec9: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_001 reduces to SRC_002 because both isolate the same synchronous precondition — a frozen lease with endpoint drift checked before a provider call — but SRC_002 adds a stricter typed-error-contract requirement that SRC_001 omits. The reduction is that SRC_001's minimal fixture (frozen lease, mutated drift field, program: eval checking the mutation name) is a special case of SRC_002's minimal fixture (frozen lease with drifted endpoint, typed `LEASE_MISMATCH` assertion, forbidden case mutating the typed exception to generic). Any suite skeleton implementing SRC_002's typed-exception forbidden case already covers SRC_001's drift-field mutation scenario, because asserting a typed `LEASE_MISMATCH` before a provider call subsumes checking that a mutation named 'ignore-drift-field' does not pass silently. This claim is REFUTED IF SRC_001's program: eval form checks for the mutation's name as a string property independent of the typed-error contract, such that a suite could pass SRC_002's typed-exception assertion while failing SRC_001's name-check, meaning the reduction does not hold.
+commitments: hv-floor@2a45b7988522, lineage-ref@1af0160f1ec9, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_003 shares mechanism with SRC_005 because both target the same false-green risk: an endpoint identity comparison that is silently weakened to a partial or homogeneous match. SRC_003's mechanism is a rubric: eval form declaring the school-to-seat homogenization mutation as forbidden when no test provides a mismatched endpoint under the same school ID. SRC_005's mechanism is a program: eval form that mutates the endpoint identity comparison to ignore drift and asserts a typed lease-mismatch code is returned. The shared mechanism is the mutation class — both forbid weakening the endpoint identity comparison to ignore a discriminating field (school ID vs. full endpoint identity in SRC_003; drift field vs. full endpoint identity in SRC_005). The difference is enforcement: rubric: marking (SRC_003) vs. program: assertion (SRC_005), but the underlying attack vector — identity homogenization — is identical. This claim is REFUTED IF the identity comparison in SRC_003 (school-to-seat binding using school ID as partial key) operates on a different comparison axis than SRC_005 (lease binding using endpoint drift field), such that no single mutation class covers both, meaning the mechanism is not shared but merely analogous.
+commitments: hv-floor@2a45b7988522, lineage-ref@1af0160f1ec9, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_002 contradicts SRC_003 because SRC_002 demands a program: eval form that machine-checks a mutation from a typed `LEASE_MISMATCH` exception to a generic `Exception`, whereas SRC_003 demands a rubric: eval form that declaratively marks an identity homogenization mutation as silent-pass forbidden without machine-checking it. These two enforcement regimes are mutually incompatible for a unified suite skeleton: a rubric: marking is not a program: assertion, so a suite cannot simultaneously enforce both the typed-error-contract guard and the partial-match guard using a single eval form without splitting the skeleton's evaluation discipline. This claim is REFUTED IF a single eval form can satisfy both the program: typed-exception assertion and the rubric: forbidden-case marking simultaneously without collapsing one into the other.
+commitments: hv-floor@2a45b7988522, lineage-ref@1af0160f1ec9, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

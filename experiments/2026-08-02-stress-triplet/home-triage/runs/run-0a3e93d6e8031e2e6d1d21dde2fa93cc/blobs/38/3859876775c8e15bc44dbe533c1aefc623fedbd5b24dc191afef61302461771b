@@ -1,0 +1,13 @@
+```json
+{
+  "candidate": {
+    "content": "024cbd0e1e4f abstracts SRC_001 and SRC_002 by representing their census-instrument disagreement as a generalizable observability gap. Specifically, the Priority 6 directive abstracts the concrete '11 ERROR vs 14 raising manifests' counting discrepancy into a universalized test: asserting that verify_root_report produces consistent error vs verdict classification for pre-v6 roots. This abstraction is refuted if the pre-v6 roots' routing to the verdict path is isolated purely to the direct-load instrument's tallying logic, rather than being a generalizable classification divergence in verify_root_report itself that can be tested independently of the census sweep.",
+    "typicality": 0.7,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003"
+    ]
+  }
+}
+```

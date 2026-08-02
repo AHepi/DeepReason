@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:024cbd0e1e4f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 024cbd0e1e4f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@7939832425f6: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SHARES MECHANISM: The 024cbd0e1e4f observability gap shares mechanism with SRC_001's context-receipt recovery guard: both are silent-failure paths where the system encounters an unexpected input state (pre-v6 root format vs. absent scratch exposure) and processes it through a non-error path that masks the anomaly from operators. The shared mechanism is 'default-path swallowing': when an edge-case input is encountered, the code falls through to a normal-return path instead of raising, hiding the anomaly. In SRC_001 this manifests as context receipts proceeding without recovery; in 024cbd0e1e4f it manifests as pre-v6 roots returning verdicts instead of errors. The same fix pattern — explicit guard that raises on the edge case — applies to both. This is REFUTED IF the context-receipt recovery guard and verify_root_report's pre-v6 handling use structurally different control flow (e.g., one is a try/except swallow and the other is a missing conditional branch), or if one gap is confirmed to be by-design behavior while the other is a confirmed bug — they would then not share a mechanism.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+TARGET SRC_002
+ABSTRACTS: The 024cbd0e1e4f census delta abstracts a latent invariant violation in the verification instrument layer: the principle that every instrument counting failures (sweep, direct-load, verify_root_report) must agree on the ERROR vs verdict partition for any given root. SRC_002, SRC_004, and SRC_005 each treat the 3-root delta as a specific bug to be tested, but the abstraction is that the verification layer lacks a shared classification contract — there is no canonical mapping from root state to (ERROR | verdict) that all instruments reference, so each instrument implements its own classification logic and they diverge on boundary cases (pre-v6 roots). The 024cbd0e1e4f gap is one instance of this missing-contract abstraction. This is REFUTED IF the instruments do share a single classification function or lookup table and the delta arises from a call-site bug (wrong arguments) rather than a missing contract — the divergence would then be a local error, not an abstraction-level invariant violation.
+commitments: hv-floor@2a45b7988522, lineage-ref@7939832425f6, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

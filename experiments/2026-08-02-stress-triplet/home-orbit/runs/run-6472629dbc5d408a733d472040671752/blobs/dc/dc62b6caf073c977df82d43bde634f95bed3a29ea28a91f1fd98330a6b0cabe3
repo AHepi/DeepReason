@@ -1,0 +1,34 @@
+{
+  "candidate": {
+    "claim": "For rules 90 and 184, every initial state reaches a cycle of length at most 2 within 4*W steps for W in [5, 11]. Rule 110 fails this for all W > 5 (e.g., W=6 has a transient/cycle structure exceeding 2). The structural property separating these pairs is additive linearity (Rule 90 is XOR-linear; Rule 184's particle dynamics map to a linear ballot problem conservation law), which guarantees the phase space is a disjoint union of cycles (no long transients) and limits maximal cycle periods to powers of 2 (bounded by 2^W, but strictly ≤ 2 for small W), whereas nonlinear rules like 110 possess gliders/particles that interact chaotically to create unbounded transients. Rule 54 is predicted to FAIL this property for all W because it exhibits nonlinear glider interactions similar to Rule 110, producing long transients.",
+    "mechanism": "Rule 90 is an additive cellular automaton governed by XOR over a finite vector space GF(2)^W. Its evolution is a linear transformation, meaning its state graph consists entirely of cycles rooted at 0, strictly bounding transient lengths. Rule 184 is a traffic model where particles (1s) move right; its dynamics are isomorphic to a solvable ballot problem, mapping to a linear permutation of spacetime diagonals, fundamentally constraining its state space to short cycles and immediate transients. Rule 110 is Turing complete; its nonlinear local rule generates interacting localized structures (gliders). These gliders undergo elastic and inelastic collisions, taking O(W^2) steps to resolve into periodic background, easily exceeding 4*W steps and yielding complex attractors of length > 2. Rule 54 shares this nonlinear glider-collision phenomenology, thus it is predicted to similarly generate long-lived transients and fail the bound.",
+    "counterconditions": [
+      "Rule 110 unexpectedly settles into a global homogeneous state for all W <= 11, making all cycles length 1.",
+      "Rule 184 possesses a chaotic attractor of length > 2 for W=9 due to an unforeseen boundary resonance.",
+      "Rule 90's cycle length is strictly 1 (not 2) for all W in [5,11], invalidating the structural necessity of the 'length 2' bound.",
+      "Rule 54 is discovered to be perfectly additive over GF(2) in a way previously unrecognized, bounding its cycle length to 2."
+    ],
+    "evidence_refs": [
+      {
+        "block": "2c7f9139e06d0e4c",
+        "quote": "`sandboxed_python_v1` executes model-authored Python inside an unshared network namespace"
+      },
+      {
+        "block": "5344e98e1f8b4aa2",
+        "quote": "Contained Python: scratch working directory, scrubbed environment, hard resource limits, NO network."
+      },
+      {
+        "block": "d1090aab641fd485",
+        "quote": "Return the discriminating quantity — the cell, the histogram, the divergence — neve"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  }
+}
