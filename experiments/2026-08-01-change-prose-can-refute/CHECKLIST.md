@@ -732,10 +732,110 @@ this tranche is not a frozen-surface change.
       script, both sweep files, the diff script — lives in the session
       scratchpad and none of it is in the repository.
 
+---
+
+# APPENDED after VALIDATION.md's FAIL and amendments 5-6 (S13-S20)
+
+Steps 1-16 are history and are not rewritten. These continue from 17.
+Same standing prohibition: no manifest field, no manifest VALIDATOR, no state
+digest, no event application order, no replay record format. A step that turns
+out to need one STOPS and reports.
+
+Order rationale: the formal-line work (S17-S19) lands FIRST because it changes
+what is protected, and the exposure work (S13-S15) builds a demo whose target
+must still be refutable under the new line — running them the other way would
+make step 21's demo prove nothing.
+
+- [x] 17. (S17) [COMMIT] Add `formally_backed` beside `execution_backed`:
+      carries >=1 EVALUABLE AND SUBSTANTIVE commitment and every such
+      commitment currently passes. `execution_backed` unmodified.
+      files: `src/deepreason/rules/warrants.py`,
+      `tests/test_prose_refutation_boundaries.py`
+      done-when: True for a passing `predicate:` target; True for a passing
+      exec-oracle target; **False for a target whose only evaluable commitment
+      is `program:json-wf`**; False when a qualifying commitment fails — paste
+      all four, plus `git diff` showing zero changed lines inside
+      `execution_backed`
+
+      Output — all four, with `execution_backed` shown alongside so the
+      superset relation is visible rather than claimed:
+
+          passing predicate:              formally_backed=True  execution_backed=False
+          passing exec oracle             formally_backed=True  execution_backed=True
+          ONLY program:json-wf            formally_backed=False execution_backed=False
+          FAILING predicate:              formally_backed=False execution_backed=False
+
+          execution_backed byte-identical to HEAD: True (1947 bytes)
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -q -k "formal_backing or structural_program or failing_formal"
+          3 passed, 27 deselected in 1.20s
+
+      The third row is R22 made concrete: `program:json-wf` is evaluable and
+      passes for anything well-formed, and it is reachable by a model through
+      safe skeleton compilation. Under R21 read as "evaluable" it would confer
+      immunity. It confers none.
+
+      `_substantive` is reused from `measures/reach.py` rather than copied:
+      that module already refuses reach from structural programs for the same
+      stated reason — they "prove nothing about the subject". One definition,
+      two consumers.
+
+- [ ] 18. (S18) [COMMIT] Move the three argumentative guards from
+      `execution_backed` to `formally_backed`.
+      files: `src/deepreason/rules/crit.py`, `src/deepreason/informal/trial.py`
+      done-when: a target carrying a passing `predicate:` commitment is refused
+      with a typed reason (S4's original first clause, which FAILED at
+      validation, now holds); a target carrying none is still refuted; the
+      typed reason strings are unchanged from their recorded values
+
+- [ ] 19. (S19) Assert the self-immunisation hole is shut.
+      files: `tests/test_prose_refutation_boundaries.py`
+      done-when: a target whose ONLY evaluable commitment is a
+      model-authorable structural program is still refuted by prose; and
+      `ForbiddenCase` still refuses `predicate:` — paste both
+
+- [ ] 20. (S13) [COMMIT] Add `is_single_model_run`: exactly one distinct model
+      identity across every leased seat of every role.
+      files: `src/deepreason/llm/firewall.py`
+      done-when: True for one model across all roles; **False for two models
+      sharing one family** (this is what distinguishes it from S7); False for
+      an empty lease set; and `is_single_family_run` still passes its own tests
+
+- [ ] 21. (S14) [COMMIT] In a single-model run the trial requires >=2 judge
+      seats plus a critic school present and differing from the target's
+      author school, instead of the cross-family ensemble.
+      files: `src/deepreason/informal/trial.py`
+      done-when: single-model + differing schools mints an ARGUMENTATIVE
+      warrant; same run with critic school == author school is refused with a
+      typed reason; same run with no critic school is refused with a typed
+      reason; a two-MODEL run still raises `SECOND_JUDGE_FAMILY_REQUIRED`
+
+- [ ] 22. (S15) [COMMIT] Exposure: selection keys on the predicate alone. No
+      constructor argument, Config value or manifest field is required.
+      files: `src/deepreason/llm/adapter.py`
+      done-when: an adapter built by `build_adapter` itself — not hand-fed
+      bindings — with one model on every seat reaches the substitute path;
+      with two models it does not
+
+- [ ] 23. (S16, S20) Full gate: `pytest tests/ -q -n 4`
+      done-when: output ends "N passed, 0 failed" — paste it
+
+- [ ] 24. (S16, S20) AFTER sweep with the step-1 script; diff against
+      `sweep_BEFORE.txt`.
+      done-when: no root's `valid` and no root's `att` changes. Widening what
+      is PROTECTED can only remove future attack edges, never add edges to
+      recorded roots — measured, not assumed.
+
+- [ ] 25. (all) [COMMIT] Push and confirm clean.
+      done-when: `git status --porcelain` empty AND branch head on origin
+
 ## Coverage
 
-S1 -> 10, 11.  S2 -> 12.  S3 -> 9, 13.  S4 -> 8.  S5 -> 2.  S6 -> 1, 15.
+S1 -> 10, 11.  S2 -> 12.  S3 -> 9, 13.  S4 -> 8, 18.  S5 -> 2.  S6 -> 1, 15.
 S7 -> 5.  S8 -> 6, 7.  S9 -> 4.  S10 -> 3, 13.  S11 -> 1, 10, 15.  S12 -> 2.
+S13 -> 20.  S14 -> 21.  S15 -> 22.  S16 -> 23, 24.  S17 -> 17.  S18 -> 18.
+S19 -> 19.  S20 -> 23, 24.
 
 ## Risks carried from FEASIBILITY.md that steps must respect
 

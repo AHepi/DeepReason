@@ -58,6 +58,50 @@ def execution_backed(harness, target_id: str) -> bool:
     return saw
 
 
+def formally_backed(harness, target_id: str) -> bool:
+    """Prose-immunity guard: True iff the target carries at least one EVALUABLE
+    AND SUBSTANTIVE commitment and EVERY such commitment currently passes.
+
+    A superset of ``execution_backed``: every exec-oracle commitment is
+    substantive, so anything execution protects this protects too. What it adds
+    is the rest of the formal set — ``predicate:`` criteria and substantive
+    ``program:`` checks — which are formal claims and so require formal
+    refutation.
+
+    SUBSTANTIVE is load-bearing and is not decoration. An artifact's
+    commitments are compiled from the problem's criteria plus harness-owned
+    mandatory ones, EXCEPT for one model-authored route: safe skeleton
+    compilation turns a conjecturer's own forbidden cases into Commitments
+    (workloads/models.py:105). ``ForbiddenCase`` forbids ``predicate:`` there
+    for RCE reasons, so predicates can only come from operator-authored
+    criteria — but ``program:`` can be model-authored. Were mere evaluability
+    enough, a candidate could attach ``program:json-wf``, which passes for
+    anything well-formed, and immunise itself against criticism. Structural
+    well-formedness proves nothing about the subject, so it protects nothing
+    about the subject; ``measures/reach.py`` refuses reach on the same ground.
+
+    The all-currently-pass clause is ``execution_backed``'s and is kept for its
+    reason: a failing formal commitment is already refuted mechanically, and
+    protecting it would protect a claim that is already defeated.
+    """
+    from deepreason import programs
+    from deepreason.measures.reach import _substantive
+
+    target = harness.state.artifacts.get(target_id)
+    if target is None:
+        return False
+    saw = False
+    for cid in target.interface.commitments:
+        kappa = harness.commitments.get(cid)
+        if kappa is None or not _substantive(kappa):
+            continue
+        saw = True
+        verdict, _ = programs.evaluate(kappa, target, harness.blobs)
+        if verdict != programs.PASS:
+            return False
+    return saw
+
+
 def register_fail_warrant(
     harness,
     *,

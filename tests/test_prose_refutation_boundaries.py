@@ -474,6 +474,89 @@ def test_the_refuting_endpoint_is_given_the_whole_argument(harness):
     assert "scratch" not in rendered.lower()
 
 
+_DOUBLE = [{"in": [1], "out": 2}, {"in": [5], "out": 10}]
+
+
+def _target_with(harness, kappa, content, codec="utf8"):
+    from deepreason.ontology import Interface, Provenance
+
+    harness.register_commitment(kappa)
+    return harness.create_artifact(
+        content,
+        codec=codec,
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+
+
+def test_formal_backing_covers_the_whole_formal_set_not_only_execution(harness):
+    """Implements R21: "they are both formal".
+
+    `predicate:` and substantive `program:` commitments are formal claims, so
+    they require formal refutation.  `formally_backed` is a superset of
+    `execution_backed`: anything execution protected it protects too.
+    """
+
+    from deepreason.ontology import Commitment
+    from deepreason.oracle import exec_oracle_commitment
+    from deepreason.rules.warrants import execution_backed, formally_backed
+
+    predicate = _target_with(
+        harness, Commitment(id="k-moon", eval="predicate:'moon' in content"),
+        "the moon pulls the sea",
+    )
+    assert formally_backed(harness, predicate.id) is True
+    assert execution_backed(harness, predicate.id) is False
+
+    runnable = _target_with(
+        harness, exec_oracle_commitment("solve", _DOUBLE),
+        "def solve(x):\n    return x * 2", codec="code:python",
+    )
+    assert formally_backed(harness, runnable.id) is True
+    assert execution_backed(harness, runnable.id) is True
+
+
+def test_a_structural_program_confers_no_formal_backing(harness):
+    """Implements R22: "a conjecture endpoint might not fill out the form
+    properly for this distinction".
+
+    This is the hole R21 would open if "formal" meant merely evaluable.
+    `workloads/models.py:105` names safe skeleton compilation as the one route
+    by which model-authored counterconditions add commitments, and
+    `ForbiddenCase` allows `program:` there.  A candidate could therefore
+    attach `program:json-wf` -- which passes for anything well-formed -- and
+    immunise itself against criticism.  Structural well-formedness proves
+    nothing about the subject, so it protects nothing about the subject.
+    """
+
+    from deepreason.ontology import Commitment
+    from deepreason.rules.warrants import formally_backed
+
+    structural = _target_with(
+        harness, Commitment(id="k-wf", eval="program:json-wf"), '{"a": 1}'
+    )
+
+    assert formally_backed(harness, structural.id) is False
+
+
+def test_a_failing_formal_commitment_earns_no_protection(harness):
+    """Implements Q12's answer: the all-currently-pass clause survives.
+
+    A formal claim that is already refuted mechanically has nothing left to
+    protect; shielding it from prose would shield a defeated claim.
+    """
+
+    from deepreason.ontology import Commitment
+    from deepreason.rules.warrants import formally_backed
+
+    failing = _target_with(
+        harness, Commitment(id="k-absent", eval="predicate:'moon' in content"),
+        "no such word here",
+    )
+
+    assert formally_backed(harness, failing.id) is False
+
+
 def test_the_formal_boundary_is_execution_backing_and_not_evaluability(harness):
     """Implements R4: "only formal claims in formal prose require formal
     refutation" -- and CORRECTS SPEC.md's A1 about where that line sits.
