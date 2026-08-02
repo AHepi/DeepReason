@@ -53,7 +53,20 @@ def _authority(config) -> str:
     return argumentative_authority_mode(config)
 
 
+# The manifest's own vocabulary (`CriticismPolicyV1.authority`), deliberately
+# NOT extended with `single_family_trial`. That field is a frozen manifest
+# Literal: admitting a value there would change the manifest schema and every
+# qualification subject digest derived from it, and would make existing
+# replay-valid roots read against a schema they were not written under.
+# Authority modes that vary by run therefore live on `Config`, which is the
+# precedent this codebase already set for `ARGUMENTATIVE_AUTHORITY`.
 _POLICY_AUTHORITIES = frozenset({"observe_only", "defended_trial"})
+
+# Modes that route a sustained prose case into the defended trial. Which judge
+# ensemble that trial demands is decided downstream by the run's route
+# topology (`llm/adapter.py _select_judge_ensemble`), never here: this rule
+# only decides whether the case is observed or tried.
+_TRIAL_MODES = frozenset({"trial_required", "single_family_trial"})
 
 
 def _authority_value(value: object) -> str:
@@ -82,7 +95,10 @@ def _resolve_authority(
     authority = _authority_value(explicit_authority)
     if authority not in _POLICY_AUTHORITIES:
         raise ValueError(
-            "manifest-bound criticism authority must be observe_only or defended_trial"
+            "ARGUMENTATIVE_AUTHORITY_NOT_MANIFEST_BOUND: manifest-bound criticism "
+            "authority must be observe_only or defended_trial; "
+            f"{authority!r} is a Config-only mode and cannot be frozen into a "
+            "criticism policy"
         )
     return "trial_required" if authority == "defended_trial" else authority
 
@@ -1294,7 +1310,7 @@ def crit_argumentative(
                 llm_call,
                 critic_school_id=critic_school_id,
             )
-        if authority == "trial_required":
+        if authority in _TRIAL_MODES:
             from deepreason.informal.trial import run_argument_trial_from_case
 
             return run_argument_trial_from_case(
@@ -1818,7 +1834,7 @@ def _crit_argumentative_batch_result(
             llm_pending = None  # accounted inside _observe_case
             critics.append(critic)
             continue
-        if authority == "trial_required":
+        if authority in _TRIAL_MODES:
             from deepreason.informal.trial import run_argument_trial_from_case
 
             trial_critic = run_argument_trial_from_case(

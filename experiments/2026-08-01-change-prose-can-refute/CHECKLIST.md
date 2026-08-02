@@ -502,12 +502,52 @@ this tranche is not a frozen-surface change.
       through the same defended trial and differ only in which ensemble gate
       the run's topology makes available.
 
-- [ ] 11. (S1, S11) Reconcile the two authority vocabularies at
+- [x] 11. (S1, S11) Reconcile the two authority vocabularies at
       `rules/crit.py:56,87` (`_POLICY_AUTHORITIES` vs `_ARGUMENTATIVE_VALUES`)
       so the new value is accepted consistently or deliberately excluded.
       files: `src/deepreason/rules/crit.py`, `src/deepreason/authority.py`
       done-when: a test asserts the same value is accepted by both, or that the
       new value is rejected by the manifest-bound path with a typed reason
+
+      Output — the second branch of the criterion, DELIBERATELY EXCLUDED:
+
+          $ python -m pytest tests/test_prose_refutation_boundaries.py \
+                -q -k "config_only or routes_to_the_same"
+          ..                                            [100%]
+          2 passed, 22 deselected in 0.17s
+
+          $ python -m pytest tests/ -q -k "crit or authority or scheduler" -n 4
+          366 passed, 2 skipped in 90.53s
+
+      **The choice between the criterion's two branches is forced, and by the
+      standing prohibition rather than by taste.** `_POLICY_AUTHORITIES` mirrors
+      `CriticismPolicyV1.authority`, which is
+      `Literal["observe_only", "defended_trial"]` at `run_manifest.py:535` — a
+      manifest field. Admitting a third value there changes the manifest schema
+      and every qualification subject digest derived from it, and makes roots
+      that are replay-valid today read against a schema they were not written
+      under. That is precisely what CLAUDE.md calls wrong by definition. So the
+      new value is Config-only, and the manifest-bound path refuses it.
+
+      The refusal now names which vocabulary the value belongs to
+      (`ARGUMENTATIVE_AUTHORITY_NOT_MANIFEST_BOUND: ... is a Config-only mode
+      and cannot be frozen into a criticism policy`) rather than only reporting
+      that it is unknown — a caller hitting this needs to know the value is
+      real and misplaced, not misspelled. `defended_trial` and `observe_only`
+      still resolve exactly as before, asserted alongside.
+
+      Routing: both authority branches in `rules/crit.py` (1313, 1837) now read
+      `if authority in _TRIAL_MODES`, so the new mode reaches the IDENTICAL
+      defended trial rather than a parallel one. A6 reads "mint criticisms" as
+      making the existing path completable, not as inventing a second route to
+      a warrant, and a second trial call would have been exactly that. Which
+      ensemble that trial then demands is decided downstream by route topology
+      in `adapter._select_judge_ensemble`; the criticism rule decides only
+      observe-or-try, and knows nothing about families or schools.
+
+      The test asserts the literal string `if authority == "trial_required":`
+      no longer appears anywhere in the module, so a third branch added later
+      cannot silently reintroduce the split.
 
 - [ ] 12. (S2) [COMMIT] Show the end-to-end result offline: a single-family run
       with the new mode produces `len(state.att) >= 1` and at least one

@@ -144,6 +144,64 @@ def test_the_single_family_authority_value_exists():
     assert Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY)
 
 
+def test_the_new_mode_is_config_only_and_refused_by_the_manifest_path():
+    """Implements S11's reconciliation of the two authority vocabularies.
+
+    `authority.py` `_ARGUMENTATIVE_VALUES` (Config) and `rules/crit.py`
+    `_POLICY_AUTHORITIES` (manifest `CriticismPolicyV1.authority`) are separate
+    closed sets, and the new value belongs to exactly one of them ON PURPOSE.
+
+    Admitting it to the manifest set would change a frozen manifest Literal,
+    and with it every qualification subject digest derived from the manifest --
+    making roots that are replay-valid today read against a schema they were
+    not written under. So the manifest-bound path REFUSES it, with a reason
+    that says which vocabulary it belongs to rather than only that it is
+    unknown.
+    """
+
+    import pytest
+    from deepreason.authority import _ARGUMENTATIVE_VALUES
+    from deepreason.rules import crit
+
+    assert SINGLE_FAMILY_AUTHORITY in _ARGUMENTATIVE_VALUES
+    assert SINGLE_FAMILY_AUTHORITY not in crit._POLICY_AUTHORITIES
+
+    with pytest.raises(ValueError, match="ARGUMENTATIVE_AUTHORITY_NOT_MANIFEST_BOUND"):
+        crit._resolve_authority(None, SINGLE_FAMILY_AUTHORITY, policy_call=True)
+
+    # The manifest's own two values still resolve exactly as before.
+    assert crit._resolve_authority(None, "defended_trial", policy_call=True) == (
+        "trial_required"
+    )
+    assert crit._resolve_authority(None, "observe_only", policy_call=True) == (
+        "observe_only"
+    )
+
+
+def test_the_new_mode_routes_to_the_same_defended_trial(harness):
+    """Implements R15/A6: "mint criticisms" reuses the path, not a new one.
+
+    The criticism rule decides only observe-or-try. WHICH judge ensemble the
+    trial then demands is decided downstream by route topology, so this mode
+    must reach the identical branch `trial_required` reaches -- a second,
+    parallel trial call would be a second path to a warrant, which A6 rules out.
+    """
+
+    from deepreason.config import Config
+    from deepreason.rules import crit
+
+    assert crit._authority(Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY)) == (
+        SINGLE_FAMILY_AUTHORITY
+    )
+    assert SINGLE_FAMILY_AUTHORITY in crit._TRIAL_MODES
+    assert "trial_required" in crit._TRIAL_MODES
+    assert "observe_only" not in crit._TRIAL_MODES
+
+    source = (_SOURCE_ROOT / "rules" / "crit.py").read_text(encoding="utf-8")
+    assert 'if authority == "trial_required":' not in source
+    assert source.count("if authority in _TRIAL_MODES:") == 2
+
+
 def test_the_criticism_prompt_cannot_vary_with_the_authority_mode():
     """Implements R9: nothing new is shown at the model boundary.
 
