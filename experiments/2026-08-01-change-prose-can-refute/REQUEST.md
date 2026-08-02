@@ -170,3 +170,69 @@ unaffected and remain specified.
 C7 (process): "Your report must be returned without technical terms." — the
 deliverable for R10 is prose, not a code map.
 
+### 2026-08-01, message 4 — answering the feasibility report
+
+> The second, obviously. I want this designed for single family runs. Also, as
+> long as a critic isn't from the same school, it's fine. So build this
+> architecture, but only make it active if a single model is running the entire
+> harness. The architecture to distinguish between single and many should
+> already exist. Read claude.md before running. Do not ask for permission to do
+> anything unless it is out of scope.
+
+**ANSWER to the feasibility report's blocking question: the second reading.**
+Dispatch an author-side critic WITHOUT telling the model who wrote the target.
+Nothing new is shown at the model boundary. This is the low-risk option the
+report identified.
+
+R13 (behavior): "I want this designed for single family runs."
+
+R14 (behavior): "as long as a critic isn't from the same school, it's fine."
+
+R15 (behavior): "only make it active if a single model is running the entire
+harness."
+
+R16 (context): "The architecture to distinguish between single and many should
+already exist."
+
+R17 (process): "Read claude.md before running." — done, in full, before this
+amendment.
+
+C8 (process): "Do not ask for permission to do anything unless it is out of
+scope."
+
+## APPARENT CONTRADICTION: R7 vs R14 — recorded, not silently resolved
+
+R7 asked for "same school criticisms". R14 says "as long as a critic isn't from
+the same school, it's fine". Read literally these are opposites, and the skill
+forbids picking a side silently.
+
+**Reading carried forward (state it, proceed under it, correct on operator
+word):** R14 supersedes the literal sense of R7. The thing R7 was reaching for
+is criticism that works INSIDE ONE MODEL FAMILY; the independence guarantee is
+cross-SCHOOL, not cross-family.
+
+Why this reading and not the literal one:
+  - The report established that prose can never mint a defeat today because the
+    path requires a defended trial across two DISTINCT MODEL FAMILIES
+    (`llm/firewall.py:79`, "two frozen judge seats from distinct route
+    families"). A single-family run can never satisfy that. That is exactly the
+    blocker R13/R15 name.
+  - R14 then supplies the substitute guarantee: cross-school independence
+    standing in for cross-family independence, but only where cross-family is
+    unavailable (R15).
+  - Under the literal reading of R7, R14 would forbid the very thing R7 asks
+    for, and R15's single-model gate would be pointless.
+  - It also answers the report's worst finding: a school criticising its own
+    work is marking its own homework, and this repository's own pre-registered
+    study shows removing shared context does not buy independence. R14 avoids
+    that failure entirely.
+
+R7 is therefore marked `superseded-by:R14` for its literal sense, and retained
+for its intent: use the schools architecture as the vehicle.
+
+R16 CONFIRMED against the codebase before proceeding: `require_distinct_families`
+exists as a policy flag (`v6_policy.py:69,119`, currently False),
+`V4_SCHOOL_DISTINCT_FAMILY_REQUIRED` exists (`run_manifest.py:2704-2707`), and
+`require_cross_family_judge_ensemble` exists (`llm/firewall.py:261`). The
+distinction the operator expected does exist.
+
