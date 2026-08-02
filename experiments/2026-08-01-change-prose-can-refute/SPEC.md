@@ -137,3 +137,128 @@ deliberately.
 1 commit under (a). Frozen surfaces touched: none — no state digest, no event
 application, no replay format, no manifest schema, no qualification subject.
 S6 proves existing roots do not move.
+
+---
+
+# EXTENSION for R7-R17 — the single-family path
+
+S1-S6 above are unchanged and remain specified under reading (a). Everything
+below is additional.
+
+## What the record and the code establish (cited, not re-derived)
+
+- The prose trial is unreachable in a single-family run by construction.
+  `llm/firewall.py:261-279` `require_cross_family_judge_ensemble` raises unless
+  there are **>=2 judge seats from >=2 distinct route families**. One family
+  means `JudgeEnsemblePolicyError`, so `ARGUMENTATIVE_AUTHORITY="trial_required"`
+  can never complete. This is exactly the blocker R13/R15 name.
+- Every recorded run bound all schools to ONE model on ONE seat, so no run has
+  ever instantiated genuine cross-family criticism. The independence the current
+  rule appears to protect has never existed in practice (FEASIBILITY.md).
+- The chooser already looks up the author's school in order to EXCLUDE it, and
+  the critic is already routed by school and stamped with its own school. So
+  R14's "a critic isn't from the same school" is already true today and needs
+  no new enforcement — only preservation.
+- Authority modes live on `Config` (`config.py:373` `ARGUMENTATIVE_AUTHORITY`,
+  read via `authority.py:73-80`), NOT on the run manifest.
+  `require_distinct_families` by contrast IS a manifest field
+  (`run_manifest.py:495`) and governs the PROPOSING side only.
+
+## Items
+
+S7 (R13, R15, R16) — a single-family predicate
+  files: `src/deepreason/llm/firewall.py`
+  before: family counting exists only inside the cross-family judge check.
+  after: a named predicate reports whether the run's route families number
+  exactly one, derived from immutable leases exactly as the existing check does.
+  accept: the predicate returns True for a lease set of one family, False for
+  two or more, and False for an empty set (fails closed).
+
+S8 (R14, R15, R8) — a cross-SCHOOL judge ensemble, reachable only in a
+single-family run
+  files: `src/deepreason/llm/firewall.py`
+  before: `require_cross_family_judge_ensemble` is the only ensemble gate.
+  after: a sibling `require_cross_school_judge_ensemble` requires >=2 judge
+  seats from >=2 distinct SCHOOLS, and is selectable ONLY when S7's predicate
+  is True. The cross-family gate is untouched and remains the gate whenever
+  more than one family is present.
+  accept: with two families present the cross-school gate is not selected even
+  if configured; with one family and two schools it accepts; with one family and
+  one school it raises; the existing cross-family gate's own tests are unchanged
+  and still pass.
+
+S9 (R7-intent, R14) — the author's own school stays excluded
+  files: none (assertion only)
+  before: the chooser subtracts the author's school by construction.
+  after: unchanged, and pinned.
+  accept: a test asserts no criticism assignment is ever produced whose critic
+  school equals its target's school, under the new mode as well as the old.
+
+S10 (R9, second reading) — nothing new is shown at the model boundary
+  files: none (assertion only)
+  before: the crit prompt never names the author; targets arrive under blank
+  aliases.
+  after: unchanged.
+  accept: for identical inputs, the rendered criticism and judge prompts are
+  byte-identical with the new mode enabled and disabled; no author or school
+  label appears in either.
+
+S11 (R15, C3, C2) — off by default, and existing roots do not move
+  files: `src/deepreason/config.py`, `src/deepreason/authority.py`
+  before: `ARGUMENTATIVE_AUTHORITY` is a closed pair
+  `{"observe_only", "trial_required"}`.
+  after: one additional value selecting the single-family path. Default
+  unchanged at `observe_only`. **No manifest field is added** — authority modes
+  live on `Config`, per the precedent above — so no manifest schema, no
+  qualification subject digest, and no replay record format is touched.
+  accept: a 42-root verdict sweep before and after shows no root changing
+  `valid`, and no root changing `state.att`; full gate 0 failed.
+
+S12 (R5, R6) — the scratchpad stays out of this entirely
+  files: `tests/`
+  accept: S5's assertion extended to the new path — no scratch object appears
+  in any warrant, attack edge, criticism pack or judge pack under the new mode.
+
+## Assumptions (operator may override)
+
+A4 (R7/R14 contradiction): R14 supersedes R7's literal sense; the vehicle is
+the schools architecture and the independence guarantee is cross-school. Stated
+at length in REQUEST.md's amendment 3. **This is the load-bearing assumption of
+the whole extension** — if the operator did mean literal same-school criticism,
+S8/S9 invert.
+
+A5 (R15): "a single model is running the entire harness" is read as ONE ROUTE
+FAMILY across the run's leases, not one model id and not one seat. Smallest
+reading consistent with R13's "single family runs" and with how
+`require_cross_family_judge_ensemble` already counts.
+
+A6 (R8): "mint criticisms" is read as making the EXISTING argumentative-warrant
+path completable in a single-family run, not as inventing a new warrant kind.
+Smallest reading; no new record type, so C1/C3 hold trivially.
+
+A7: the mechanical-checking channel that already mints defeats blind to
+authorship (FEASIBILITY.md risk 6) is left exactly as it is. Not requested.
+
+## Questions for operator
+
+None. A4 is recorded as an assumption with its reasoning rather than a
+question, per C8 ("Do not ask for permission to do anything unless it is out of
+scope") — it is an interpretation, and the operator can overturn it in one word.
+
+## Out of scope (explicit)
+
+- The scratchpad, in every direction (R5/R6).
+- The mechanical-checking defeat channel (A7).
+- `require_distinct_families` on the proposing side — it is a manifest field
+  governing school bindings, and nothing in R7-R17 asks for it.
+- Making the schools genuinely different models. FEASIBILITY.md notes a mode
+  for this exists and has never run; not requested.
+
+## Budget
+
+~130 lines across 3 source files plus tests, 1 commit, on top of S1-S6's ~120.
+Frozen surfaces touched: **none**. No manifest schema (authority stays on
+`Config`), no state digest, no event application, no replay record format, no
+qualification subject. S11 measures the no-movement claim rather than asserting
+it.
+
