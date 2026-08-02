@@ -25,11 +25,37 @@ this tranche is not a frozen-surface change.
 
 ---
 
-- [ ] 1. (S6, S11) Capture the 42-root BEFORE baseline to the session
+- [x] 1. (S6, S11) Capture the 42-root BEFORE baseline to the session
       scratchpad, recording per root: `valid`, `epistemic_checks_passed`,
       `len(state.att)`, and the count of `adjudication-blindness` findings.
       files: none (read-only script in the scratchpad)
-      done-when: the baseline file has 42 lines and `grep -c ERROR` is 0
+      done-when: ~~the baseline file has 42 lines and `grep -c ERROR` is 0~~
+      **CORRECTED at execution — the second clause was mis-specified.**
+      done-when: 42 lines, and every ERROR line is
+      `UnsupportedRunManifestVersionError` (the known pre-v6 set)
+
+      Output:
+
+          SWEEP COMPLETE: 42 roots -> .../scratchpad/sweep_BEFORE.txt
+          lines: 42
+          ERROR count: 11
+          valid=False: 5 | blind=1: 26 | att>0: 5
+
+          $ grep ERROR sweep_BEFORE.txt | cut -d: -f1 | sort | uniq -c
+               11 UnsupportedRunManifestVersionError
+
+      Why the criterion was wrong, recorded rather than quietly fixed: 11 of
+      42 roots being unopenable pre-v6 was established three separate times
+      earlier this session (INVESTIGATION.md, the adjudication-blindness
+      GOAL.md, FEASIBILITY.md) and I wrote `0` into the criterion anyway. The
+      first clause passed unchanged; the second is corrected to what the fact
+      always was, and all 11 are verified to be the single expected exception
+      type rather than assumed. The substance of the step — one complete,
+      reusable baseline — is achieved, and the script is saved for verbatim
+      re-run at step 15.
+
+      Baseline shape for later comparison: 5 roots `valid=False`, 26 carrying
+      `adjudication-blindness`, 5 with any attacks.
 
 - [ ] 2. (S5, S12) [COMMIT] Write the scratchpad-separation assertions:
       no scratch id in any warrant, attack edge, criticism pack or judge pack,
