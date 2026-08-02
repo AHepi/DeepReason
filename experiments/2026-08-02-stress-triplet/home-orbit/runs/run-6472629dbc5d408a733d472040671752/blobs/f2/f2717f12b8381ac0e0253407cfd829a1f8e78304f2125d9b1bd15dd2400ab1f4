@@ -1,0 +1,47 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-1a585e9647728d95c37d95ec939c7898) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Consider width-W elementary cellular automata with wrap-around, W between 5
+and 11, under rules 90, 110 and 184. Question: for which (rule, W) pairs does
+every initial state reach a cycle of length at most 2 within 4*W steps, and
+what structural property of the rule separates the pairs that do from the
+pairs that do not? Candidates must include a runnable Python entry point
+solve(rule, width) returning {"all_short_cycles": bool, "witness": [...]}
+where witness is a concrete initial state achieving the longest observed
+transient. Claims about exhaustiveness are claims about enumeration: file
+typed sandboxed Python simulations (simulation_mode sandboxed_python_v1) that
+RETURN the per-(rule,width) transient and cycle-length tables your claim
+rests on - never a summary boolean. A separating property that is merely
+renamed data is worth little; predict the behaviour of rule 54, which is NOT
+in the required set, and state how the prediction would be checked.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f5ff0394a29510fb836ae00a: program:reasoning_observation_pending
+- reason-counter@4976affc73a0290f268e9560: program:reasoning_observation_pending
+- reason-counter@49c44611a210600a1e29afd1: program:reasoning_observation_pending
+- reason-counter@d592b8ec27b86ca988f53d21: program:reasoning_observation_pending
+- reason-counter@1504507dcb141c5a0ef0077c: program:reasoning_observation_pending
+- reason-counter@2dd71bb4d1ee4b577fdd2e0d: program:reasoning_observation_pending
+- reason-counter@d415c17917ef645940e580ae: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"For all W in [5, 11], Rule 90 and Rule 184 reach a cycle of length at most 2 within 4*W steps, whereas Rule 110 does not for any width in this range. The structural property separating them is that Rule 90 and 184 are linear over GF(2) (or affine with a permutation), meaning their global state update is a cellular automaton map representable as a matrix power $M^k$. Over a finite vector space, such maps must reach a cycle in at most $2^W$ steps, but more specifically they lack the nonlinear feedback loops that generate long transients. Because the state space is finite and the mapping is linear, any trajectory must enter a cycle bounded by the period of the characteristic polynomial of the transition matrix modulo the lattice width, which for small W is empirically short. Rule 110 is Turing complete and exhibits chaotic nonlinear class IV behavior; its updates cannot be diagonalized linearly, allowing for arbitrarily long transients that scale exponentially. Rule 54, another nonlinear class IV rule, is predicted to also fail the 4*W short-cycle bound because its local rules generate interacting gliders that delay periodicity.","counterconditions":[{"case":"If a width W in [5, 11] is found for Rule 90 or Rule 184 where the maximum transient before entering a cycle of length <= 2 exceeds 4*W steps, the claim is falsified.","eval":"observation"},{"case":"If Rule 110 is found to reach a cycle of length <= 2 within 4*W steps for all W in [5, 11], the structural separation claim is falsified.","eval":"observation"},{"case":"If Rule 54 is empirically found to reach a cycle of length <= 2 within 4*W steps for all W in [5, 11], the prediction regarding nonlinear class IV rules is falsified.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The transition function of Rule 90 (XOR of neighbors) and Rule 184 (traffic flow / additive carry) can be expressed as linear transformations over GF(2)^W. The state at step $t$ is $s_t = A^t s_0 \\pmod 2$. Because the state space is finite and the map is linear, the sequence of states is governed by the minimal polynomial of $A$. The maximum transient length is bounded by the exponent of the matrix in the general linear group, which for cyclic wrap-around structures of small width W is strictly less than 4*W. Rule 110 is nonlinear (involving AND/OR logic in its local update rule), which destroys this linear algebra structure
+commitments: reasoning-envelope-wf, reason-counter@f5ff0394a29510fb836ae00a, reason-counter@4976affc73a0290f268e9560, reason-counter@49c44611a210600a1e29afd1
+
+TARGET SRC_002
+{"analogy":null,"claim":"For Rule 90 and Rule 184, every initial state reaches a cycle of length at most 2 within 4*W steps for all widths 5 to 11. Rule 110 fails for widths >= 7. Rule 54 will fail for W >= 7. The separating structural property is the additivity (or number-conserving linear superposition) of the rule.","counterconditions":[{"case":"If a width-W rule 90 initial state exhibits a transient longer than 4*W for W in [5, 11], this proposal is falsified.","eval":"observation"},{"case":"If a width-W rule 184 initial state exhibits a cycle length > 2 for W in [5, 11], this proposal is falsified.","eval":"observation"},{"case":"If Rule 110 exhibits all short cycles for W=7, 9, or 11 within 4*W steps, this proposal is falsified.","eval":"observation"},{"case":"If Rule 54 exhibits all short cycles for W >= 7 within 4*W steps, this proposal is falsified.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rule 90 is the XOR of the left and right neighbors, which corresponds to addition over GF(2). This linearity means the global transition function is a linear operator on a finite vector space, bounding the maximum cycle length to divisors of 2^k - 1 (or subspaces thereof). For small W, 4*W is more than sufficient to reach the eventual cycle (often length 1 for symmetric initial states). Rule 184 is a traffic flow / number conserving rule; its behavior is analogous to the non-intersecting trajectories of particles moving at constant velocity, leading to rapid sorting of particles into blocks where the state space is constrained to permutations of particle positions, guaranteeing settling into fixed points or period-2 oscillations within W steps. Rule 110 is highly non-linear and exhibits chaotic, Turing-complete behavior, making long transients inevitable before settling, which scales worse than O(W). Rule 54 is also non-linear and chaotic (exhibiting gliders), so it will predictably fail to exhibit short cycles for sufficiently large W.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d592b8ec27b86ca988f53d21, reason-counter@1504507dcb141c5a0ef0077c, reason-counter@2dd71bb4d1ee4b577fdd2e0d, reason-counter@d415c17917ef645940e580ae
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

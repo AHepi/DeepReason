@@ -1,0 +1,54 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@07a7cd8f8366f71d4cfb1cab: program:reasoning_observation_pending
+- reason-counter@c5132323818ffdb44f3305c3: program:reasoning_observation_pending
+- reason-counter@3181767301586fa2758c3edd: program:reasoning_observation_pending
+- reason-counter@0a396d167de8fe31bc8c7637: program:reasoning_observation_pending
+- reason-counter@4246d65882d7b43e33022818: program:reasoning_observation_pending
+- reason-counter@4e22d9ecb4fa84bc6f058cbd: program:reasoning_observation_pending
+- reason-counter@aa066bf09ab979f904e18402: program:reasoning_observation_pending
+- reason-counter@d83da9e941d03002b0545180: program:reasoning_observation_pending
+- reason-counter@8c264ab23878e668533aa240: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Test #3: a test that calls resolve_conjecture_route and compile_criticism_assignments with representative inputs and asserts they return non-trivial results. This is third priority because untested functions could silently rot, but their blast radius is bounded to the specific code paths they serve \u2014 a dead route resolver does not corrupt the append-only record, it merely fails to route correctly.","counterconditions":[{"case":"If these functions are pure glue whose failure would be immediately caught by integration tests that import their callers, the gap is lower priority.","eval":"observation"},{"case":"If the functions are never called in production (dead code), testing them wastes effort better spent on the census discrepancy.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Functions imported by no test are invisible to the regression suite. If their internals mutate (e.g., a refactor breaks routing logic), no test fails. The cheapest test: a smoke test importing both functions and calling them with minimal valid inputs, asserting non-None returns and basic structural properties. Blast radius: if resolve_conjecture_route breaks, conje
+commitments: reasoning-envelope-wf, reason-counter@07a7cd8f8366f71d4cfb1cab, reason-counter@c5132323818ffdb44f3305c3
+
+TARGET SRC_002
+{"analogy":null,"claim":"Priority 3: test that resolve_conjecture_route and compile_criticism_assignments are importable and callable \u2014 cheapest test: import both functions and call each with a minimal valid input, asserting a non-None return. Failure if skipped: routing rot; these functions silently become unimportable (deleted, renamed, or moved) with no test catching the breakage, and the routing layer they serve degrades undetected.","counterconditions":[{"case":"If these functions are called indirectly by integration tests that exercise the full routing path, the import gap is overstated","eval":"observation"},{"case":"If the functions are internal helpers never meant to be called directly, testing direct import may be testing an implementation detail","eval":"observation"},{"case":"If the functions are deprecated and slated for removal, an import test creates a false coupling","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Both functions are imported by no test anywhere, meaning no test verifies their continued existence or importability. The mechanism of failure is simple code rot: a refactor deletes or renames one function, no test breaks, and the routing 
+commitments: reasoning-envelope-wf, reason-counter@3181767301586fa2758c3edd, reason-counter@0a396d167de8fe31bc8c7637, reason-counter@4246d65882d7b43e33022818
+
+TARGET SRC_003
+{"analogy":null,"claim":"Test #5: a test that exercises writer-side torn-tail repair by injecting a corrupted append (truncated tail) and asserting the repair logic restores consistency. This is fifth because the seam doc's ring now includes test_torn_append.py, meaning partial coverage exists \u2014 the gap is at the gate level, not a total absence.","counterconditions":[{"case":"If test_torn_append.py already covers the specific torn-tail repair gate mentioned, the gap is already closed and this test is redundant.","eval":"observation"},{"case":"If torn-tail repair is handled by the storage layer rather than the harness, the gap may belong to a different test suite.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Torn-tail repair fixes partially-written appends (power failure, crash during write). The seam doc's ring now includes test_torn_append.py, but a gate-level gap remains \u2014 meaning the specific guard that detects and repairs torn tails may not be directly asserted. Blast radius: a torn tail that escapes repair corrupts the append-only record, but because partial coverage exists (test_torn_append.py is in the ring), the marginal risk is lower than the comp
+commitments: reasoning-envelope-wf, reason-counter@4e22d9ecb4fa84bc6f058cbd, reason-counter@aa066bf09ab979f904e18402
+
+TARGET SRC_004
+{"analogy":null,"claim":"Test #6: a reconciliation test that runs verify_root_report on the three pre-v6 roots and asserts the census delta (11 ERROR vs 14 raising manifests) is explained and documented or eliminated. This is last because the discrepancy is 'unexplained, measured only' \u2014 it is an observation, not a confirmed guard death, and its blast radius is observability rather than correctness.","counterconditions":[{"case":"If the three pre-v6 roots produce genuinely different verdicts by design (ERROR is the correct verdict for them), the discrepancy is not a defect and needs documentation, not a test.","eval":"observation"},{"case":"If the census delta is caused by a bug in the sweep instrument rather than verify_root_report, the test should target the instrument instead.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The census delta means the sweep instrument reports 11 ERRORs while direct-load reports 14 raising manifests \u2014 three roots surface as verdicts through verify_root_report rather than errors. This is an instrument-vs-instrument discrepancy, not a guard death. Blast radius: if the discrepancy indicates a real bug, verify_root_report may be
+commitments: reasoning-envelope-wf, reason-counter@d83da9e941d03002b0545180, reason-counter@8c264ab23878e668533aa240
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

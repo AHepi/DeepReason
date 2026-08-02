@@ -1,0 +1,22 @@
+{
+  "candidate": {
+    "claim": "For Rule 90 and Rule 184, every initial state reaches a cycle of length at most 2 within 4*W steps for all widths 5 to 11. Rule 110 fails for widths >= 7. Rule 54 will fail for W >= 7. The separating structural property is the additivity (or number-conserving linear superposition) of the rule.",
+    "mechanism": "Rule 90 is the XOR of the left and right neighbors, which corresponds to addition over GF(2). This linearity means the global transition function is a linear operator on a finite vector space, bounding the maximum cycle length to divisors of 2^k - 1 (or subspaces thereof). For small W, 4*W is more than sufficient to reach the eventual cycle (often length 1 for symmetric initial states). Rule 184 is a traffic flow / number conserving rule; its behavior is analogous to the non-intersecting trajectories of particles moving at constant velocity, leading to rapid sorting of particles into blocks where the state space is constrained to permutations of particle positions, guaranteeing settling into fixed points or period-2 oscillations within W steps. Rule 110 is highly non-linear and exhibits chaotic, Turing-complete behavior, making long transients inevitable before settling, which scales worse than O(W). Rule 54 is also non-linear and chaotic (exhibiting gliders), so it will predictably fail to exhibit short cycles for sufficiently large W.",
+    "counterconditions": [
+      "If a width-W rule 90 initial state exhibits a transient longer than 4*W for W in [5, 11], this proposal is falsified.",
+      "If a width-W rule 184 initial state exhibits a cycle length > 2 for W in [5, 11], this proposal is falsified.",
+      "If Rule 110 exhibits all short cycles for W=7, 9, or 11 within 4*W steps, this proposal is falsified.",
+      "If Rule 54 exhibits all short cycles for W >= 7 within 4*W steps, this proposal is falsified."
+    ],
+    "typicality": 0.7,
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-2d75a71328957032505c67f7d41250bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Six defects in a Popperian reasoning harness's own test suite are attached as
+PARKED.md: guards whose death no test detects, functions no test imports, and
+one instrument-vs-instrument census discrepancy. Derive a prioritized, minimal
+regression-test plan: for each gap, state the single cheapest test that would
+catch the guard dying, the failure mode left uncovered if it is skipped, and
+an explicit ordering justified by blast radius (what corrupts the append-only
+record vs what merely hides a refusal). Treat the attached falsification
+RESULTS.md as evidence about which failure classes recur. A plan that simply
+says "test everything" is worthless; the deliverable is the ordering and its
+justification, stated so a maintainer could implement test 1 tomorrow morning.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7c92ac39317444e5cea7d8bc: program:reasoning_observation_pending
+- reason-counter@5623b0b4dbe13389dc58caa8: program:reasoning_observation_pending
+- reason-counter@0dc82d41f8ab5a5786a046f7: program:reasoning_observation_pending
+- reason-counter@d13ea645a9c85f4c8b5b2425: program:reasoning_observation_pending
+- reason-counter@7324b5f485256c22772a542c: program:reasoning_observation_pending
+- reason-counter@3993b1a0c473fe6f3dea7df7: program:reasoning_observation_pending
+- reason-counter@1809ef1d5b42a54ed04ea389: program:reasoning_observation_pending
+- reason-counter@772aede666bbe86d29b1006e: program:reasoning_observation_pending
+- reason-counter@3dd2cefc9c87e53fa4c6f8cd: program:reasoning_observation_pending
+- reason-counter@d212f18da9ed1b60bdc22e78: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Priority 2: test that the lease-mismatch refusal guard fires \u2014 cheapest test: send a context receipt with mismatched lease/endpoint metadata, assert the harness raises SCHOOL_ROUTE_LEASE_MISMATCH or SCHOOL_ROUTE_ENDPOINT_MISMATCH. Failure if skipped: the firewall's refusal policy silently disappears; requests with invalid leases are accepted instead of refused, a security-policy bypass with no detection.","counterconditions":[{"case":"If the lease-mismatch guard is tested indirectly by an integration test that asserts the refusal behavior without naming the error codes, the gap may be smaller than stated","eval":"observation"},{"case":"If the firewall is not the primary enforcement layer for lease validation (e.g., upstream proxy handles it), the blast radius is reduced","eval":"observation"},{"case":"If SCHOOL_ROUTE_LEASE_MISMATCH and SCHOOL_ROUTE_ENDPOINT_MISMATCH are deprecated codes no longer raised in practice, the test would be vacuous","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The lease-mismatch guard is a firewall-level refusal: it blocks requests whose lease or endpoint metadata do not match expected values. Disabling it le
+commitments: reasoning-envelope-wf, reason-counter@7c92ac39317444e5cea7d8bc, reason-counter@5623b0b4dbe13389dc58caa8, reason-counter@0dc82d41f8ab5a5786a046f7
+
+TARGET SRC_002
+{"analogy":null,"claim":"Test #2: a mutation-based test that disables the firewall's lease-mismatch refusal (e.g., monkeypatch SCHOOL_ROUTE_LEASE_MISMATCH to pass-through) and asserts the test suite catches it. This is second priority because a dead refusal guard hides a security-policy refusal, allowing invalid school-route leases through \u2014 a silent policy bypass rather than record corruption.","counterconditions":[{"case":"If the lease-mismatch refusal is purely defensive and no code path can actually produce a mismatched lease in production, the guard is dead code and lower priority than unimported functions.","eval":"observation"},{"case":"If an integration test already exercises mismatched leases end-to-end, the gap is covered.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The lease-mismatch refusal is a firewall guard: it blocks requests with inconsistent lease/route metadata. If the guard dies, invalid routing decisions pass undetected. Unlike the digest gap, this does not corrupt stored records \u2014 it silently allows unauthorized or inconsistent routing. The cheapest test: inject a request with a mismatched lease/endpoint pair and assert the firewal
+commitments: reasoning-envelope-wf, reason-counter@d13ea645a9c85f4c8b5b2425, reason-counter@7324b5f485256c22772a542c
+
+TARGET SRC_003
+{"analogy":null,"claim":"Test #4: a test that exercises a context receipt path with scratch exposure disabled and asserts the recovery guard fires. This is fourth because the blast radius is a recovery path failure \u2014 the system fails to recover from a context receipt problem, but the primary record is not directly corrupted.","counterconditions":[{"case":"If the recovery guard is only reachable through an error path that is itself untested and likely unreachable in practice, the gap is theoretical.","eval":"observation"},{"case":"If the scratch exposure path is tested elsewhere under a different configuration, the gap may be narrower than stated.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The recovery guard handles context receipts when scratch exposure is absent. If the guard dies, a context receipt that should trigger recovery instead silently proceeds or fails without recovery. Blast radius: a context receipt error leaves the system in an unrecovered state, potentially causing downstream confusion but not directly corrupting the append-only record. The cheapest test: create a context receipt with scratch exposure disabled, trigger the recovery path, and 
+commitments: reasoning-envelope-wf, reason-counter@3993b1a0c473fe6f3dea7df7, reason-counter@1809ef1d5b42a54ed04ea389
+
+TARGET SRC_004
+{"analogy":null,"claim":"Priority 4: test that a context receipt without scratch exposure triggers the recovery guard \u2014 cheapest test: produce a context receipt with no scratch surface, assert the recovery guard raises or handles it. Failure if skipped: the recovery path for missing scratch exposure silently disappears; contexts that should trigger recovery are processed without recovery, potentially leaving the harness in an inconsistent state.","counterconditions":[{"case":"If context receipts without scratch exposure are unreachable in production due to upstream validation, the recovery path is dead code","eval":"observation"},{"case":"If the recovery guard is tested indirectly by an integration test that triggers the recovery path without explicitly targeting the no-scratch-exposure case, the gap is narrower","eval":"observation"},{"case":"If scratch exposure is always present in practice, the guard protects against a theoretical scenario","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The recovery guard handles the case where a context receipt arrives without scratch exposure \u2014 a recovery-path mechanism. Deleting it passes the suite, meaning no test ex
+commitments: reasoning-envelope-wf, reason-counter@772aede666bbe86d29b1006e, reason-counter@3dd2cefc9c87e53fa4c6f8cd, reason-counter@d212f18da9ed1b60bdc22e78
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

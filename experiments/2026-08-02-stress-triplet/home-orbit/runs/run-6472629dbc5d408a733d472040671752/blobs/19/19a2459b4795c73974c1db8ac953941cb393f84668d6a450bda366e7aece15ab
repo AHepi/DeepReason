@@ -1,0 +1,22 @@
+{
+  "candidate": {
+    "claim": "Rules 90 and 184 reach a cycle of length at most 2 within 4*W steps for all initial states across all widths W between 5 and 11, whereas Rule 110 does not. The separating structural property is additive number-conservation: the global state transition graph of an ECA decomposes into independent trajectories determined by a set of conserved linear invariants (e.g., sum of cells mod 2 for Rule 90, total particle count for Rule 184). This linearly bounded phase space forces short transients and cycles independent of system size, unlike Rule 110's nonlinear, mixing dynamics which support exponentially long transients.",
+    "mechanism": "Rule 90 is a linear cellular automaton over GF(2) governed by x_i(t+1) = x_{i-1}(t) XOR x_{i+1}(t). Because it is linear, its global dynamics over a finite ring of width W are described by the characteristic polynomial of its adjacency matrix modulo 2. This forces the state space to decompose into independent linear subspaces, strictly bounding transients and cycle lengths (which cannot exceed 2^W but typically fall far below 4*W for small W). Rule 184 is a ballistic annihilation model where the number of 1s (particles) is strictly conserved. For a ring of width W, the state space is partitioned into invariant slices of size C(W, k) for k = 0...W. The dynamics within each slice are equivalent to cyclic shifts of particles, bounding the maximum cycle length to W and transient to W. In both rules, the existence of these conserved linear/additive quantities fundamentally limits the reachable temporal evolution. Rule 110 lacks such invariants, allowing for chaotic interactions that stretch transients and cycles well beyond 4*W.",
+    "counterconditions": [
+      "A specific width W in [5, 11] is found for Rule 90 or 184 where an initial state has a transient strictly greater than 4*W.",
+      "The transient + cycle length of the longest-lived state for Rule 90 or 184 in widths 5-11 is found to exceed 4*W.",
+      "Rule 110 is found to reach a cycle of length <= 2 within 4*W for ALL initial states in some width W in [5, 11], refuting its status as structurally distinct.",
+      "The structural property fails to predict Rule 54's behavior: if Rule 54, despite lacking obvious additive invariants, is empirically shown to always reach short cycles (<=2) within 4*W for W in [5, 11]."
+    ],
+    "typicality": 0.8,
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}
