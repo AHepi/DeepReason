@@ -1,0 +1,46 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-18f64f2cc436c51240e21fd3c74bf575) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2b76a87f63a8bbf7568b692c: program:reasoning_observation_pending
+- reason-counter@2940664efded31e7823ec389: program:reasoning_observation_pending
+- reason-counter@d200f9d7da53733ae2b2e7b9: program:reasoning_observation_pending
+- reason-counter@5d0d29d68b2947d67e78f110: program:reasoning_observation_pending
+- reason-counter@073deb5f1fc6739a9c05b0ed: program:reasoning_observation_pending
+- reason-counter@d7023b7ab4e3f6eabfe69c83: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The suite must include a forbidden case using a rubric: eval form that asserts a mutation replacing the endpoint identity check with a subset-prefix match (e.g., startswith) fails when the seat identity is a malicious prefix of the frozen endpoint.","counterconditions":[{"case":"If the routing specification explicitly requires prefix-matching for seat identities, the mutation is intended behavior.","eval":"observation"},{"case":"If the frozen endpoint identities are cryptographically guaranteed to be fixed-length with no slash delimiters, the prefix attack is untriggerable.","eval":"observation"},{"case":"If the rubric evaluator cannot parse structural string relationships, the eval form is unparseable.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A firewall might mutate the exact identity comparison to a startswith check to lazily resolve wildcard routes. A rubric: eval form can describe a fixture where the frozen seat identity is 'endpoint/v1' and the school binding is 'endpoint/v1/malicious'. The rubric asserts the suite fails if this mutation passes, targeting the false-green risk of prefix homogenization.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2b76a87f63a8bbf7568b692c, reason-counter@2940664efded31e7823ec389, reason-counter@d200f9d7da53733ae2b2e7b9
+
+TARGET SRC_002
+{"analogy":null,"claim":"The lease-mismatch forbidden case must include a program: eval form that verifies a mutation bypassing provider calls via a catch-all exception handler still emits the typed lease-mismatch code, failing the suite if the exception short-circuits the typed response.","counterconditions":[{"case":"If the firewall architecture mandates pure functions with no exception handling, the try/except mutation is unreachable.","eval":"observation"},{"case":"If the typed lease-mismatch code is structurally identical to the generic exception payload, the assertion cannot distinguish them.","eval":"observation"},{"case":"If the contract explicitly permits suppressing typed error codes in favor of generic 500-level crashes, the mutation is compliant.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A mutated firewall might wrap the routing logic in a try/except block that catches the lease-mismatch precondition and raises a generic RuntimeError, preventing the provider call but skipping the typed code. The program: eval form injects a poisoned lease that triggers the precondition, asserting that the output explicitly contains the typed code rather than a generic exception payload, exposing the silent failure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5d0d29d68b2947d67e78f110, reason-counter@073deb5f1fc6739a9c05b0ed, reason-counter@d7023b7ab4e3f6eabfe69c83
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

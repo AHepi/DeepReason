@@ -10,3 +10,7 @@ Next action: deepreason qualify
 setup_rc=0
 qualify_rc=0 qualify_seconds=308
 preflight: 0 manifest(s) present pre-reason (expect 0; policy prints post-run)
+reason_rc=5 reason_seconds=692
+run_id=run-0a3e93d6e8031e2e6d1d21dde2fa93cc state=completed
+audit_rc=0
+=== triage ladder end 2026-08-02T23:14:41Z ===

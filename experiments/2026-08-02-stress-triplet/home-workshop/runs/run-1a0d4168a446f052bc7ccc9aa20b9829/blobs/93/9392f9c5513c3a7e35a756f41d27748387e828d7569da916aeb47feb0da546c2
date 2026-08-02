@@ -1,0 +1,66 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The seat-binding forbidden case must use a program: eval form that passes a minimal frozen seat with an inlined adversarial school identity, proving the suite fails a mutation that coerces both to a stringified JSON representation before comparison.",
+      "mechanism": "A mutated firewall could bypass the identity disagreement by calling str() or json.dumps() on both the seat endpoint identity and the school binding, making disparate objects structurally equal. A program: eval form that constructs two objects with identical JSON representations but different runtime types forces the suite to assert deep type strictness, failing the mutation without rebuilding a routing manifest.",
+      "counterconditions": [
+        "If the firewall explicitly standardizes endpoint identities as JSON strings at the boundary, string coercion is no longer a mutation but intended behavior.",
+        "If the seat identity and school binding natively share the same immutable type, this specific mutation is vacuous.",
+        "If the runtime language does not support distinct object types with identical JSON representations, the fixture cannot be constructed."
+      ],
+      "typicality": 0.2
+    },
+    {
+      "claim": "The lease-mismatch forbidden case must include a program: eval form that verifies a mutation bypassing provider calls via a catch-all exception handler still emits the typed lease-mismatch code, failing the suite if the exception short-circuits the typed response.",
+      "mechanism": "A mutated firewall might wrap the routing logic in a try/except block that catches the lease-mismatch precondition and raises a generic RuntimeError, preventing the provider call but skipping the typed code. The program: eval form injects a poisoned lease that triggers the precondition, asserting that the output explicitly contains the typed code rather than a generic exception payload, exposing the silent failure.",
+      "counterconditions": [
+        "If the firewall architecture mandates pure functions with no exception handling, the try/except mutation is unreachable.",
+        "If the typed lease-mismatch code is structurally identical to the generic exception payload, the assertion cannot distinguish them.",
+        "If the contract explicitly permits suppressing typed error codes in favor of generic 500-level crashes, the mutation is compliant."
+      ],
+      "typicality": 0.3
+    },
+    {
+      "claim": "The suite must include a forbidden case using a rubric: eval form that asserts a mutation replacing the endpoint identity check with a subset-prefix match (e.g., startswith) fails when the seat identity is a malicious prefix of the frozen endpoint.",
+      "mechanism": "A firewall might mutate the exact identity comparison to a startswith check to lazily resolve wildcard routes. A rubric: eval form can describe a fixture where the frozen seat identity is 'endpoint/v1' and the school binding is 'endpoint/v1/malicious'. The rubric asserts the suite fails if this mutation passes, targeting the false-green risk of prefix homogenization.",
+      "counterconditions": [
+        "If the routing specification explicitly requires prefix-matching for seat identities, the mutation is intended behavior.",
+        "If the frozen endpoint identities are cryptographically guaranteed to be fixed-length with no slash delimiters, the prefix attack is untriggerable.",
+        "If the rubric evaluator cannot parse structural string relationships, the eval form is unparseable."
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "The suite must use a program: eval form to assert that a mutation caching the lease-mismatch typed code as a static constant fails when the lease drift field is mutated to a different value, forcing the suite to verify dynamic error generation.",
+      "mechanism": "A mutated firewall might optimize by returning a hardcoded lease-mismatch error string regardless of the actual drift field, bypassing the provider call but ignoring the drift. The program: eval form runs the fixture twice with different drift values and asserts the typed code or error payload reflects the specific drift, failing the mutation that returns a static constant.",
+      "counterconditions": [
+        "If the typed lease-mismatch code is defined by specification as a single static enum regardless of drift context, dynamic verification is impossible.",
+        "If the firewall architecture separates the typed code from the drift payload, the mutation might still pass by returning the static code while attaching the dynamic payload.",
+        "If the test harness cannot parameterize the drift field across multiple runs, the program: eval form cannot execute."
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The seat-binding forbidden case must include a program: eval form that fails a mutation using a truthy fallback (e.g., `identity or default_identity`) to mask coverage, by injecting a seat identity that evaluates to false in the target language.",
+      "mechanism": "A mutated firewall might accidentally introduce a truthy fallback during identity comparison, causing an empty or zero-value seat identity to match a default frozen seat and count as coverage. The program: eval form constructs a fixture with a falsey seat identity and asserts the suite fails if the mutation counts it as covered, exposing the false-green risk of implicit type coercion.",
+      "counterconditions": [
+        "If the firewall language strictly enforces non-empty string types at the deserialization boundary, falsey identities are impossible.",
+        "If the frozen seat identity itself is falsey, the mutation and fixture produce an indeterminate match.",
+        "If the coverage contract explicitly treats falsey identities as valid wildcards, the mutation is intended behavior."
+      ],
+      "typicality": 0.15
+    },
+    {
+      "claim": "The suite must include a program: eval form that asserts a mutation skipping the lease-mismatch check when the endpoint drift is exactly zero (falsy) fails by injecting a zero-value drift that still represents a semantic mismatch.",
+      "mechanism": "A mutated firewall might use a truthy check on the drift field (e.g., `if drift: raise Mismatch`), silently passing when drift is 0 or empty string, even if 0 is an invalid endpoint state. The program: eval form uses a minimal frozen lease with a zero-value drift and asserts the suite fails if the mutation skips the typed code, catching the false-green risk of falsy short-circuiting.",
+      "counterconditions": [
+        "If the routing protocol defines 0 or empty string as the canonical null state with no mismatch implications, the mutation is compliant.",
+        "If the drift field is strictly typed as a non-zero float, the zero-value fixture is unrepresentable.",
+        "If the lease-mismatch check is structurally incapable of being bypassed by falsy values due to an upstream validator, the mutation is unreachable."
+      ],
+      "typicality": 0.25
+    }
+  ]
+}
+```

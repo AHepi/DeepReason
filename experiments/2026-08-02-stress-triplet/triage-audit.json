@@ -1,0 +1,74 @@
+{
+  "cycles": [
+    {
+      "seq": 20,
+      "cycle": [
+        "0",
+        "question-2d75a71328957032505c67f7d41250bc"
+      ]
+    },
+    {
+      "seq": 690,
+      "cycle": [
+        "1",
+        "simulation-request:sha256:98cbf11e309d9758243f47f9c6c8c57de1fc10b96a4836a96d3a2ba1ea7524ad"
+      ]
+    },
+    {
+      "seq": 888,
+      "cycle": [
+        "2",
+        "disc:question-2d75a71328957032505c67f7d41250bc"
+      ]
+    },
+    {
+      "seq": 890,
+      "cycle": [
+        "3",
+        "conn:024cbd0e1e4f"
+      ]
+    },
+    {
+      "seq": 1277,
+      "cycle": [
+        "4",
+        "conn:026a1c585082"
+      ]
+    },
+    {
+      "seq": 1286,
+      "cycle": [
+        "5",
+        "question-2d75a71328957032505c67f7d41250bc"
+      ]
+    }
+  ],
+  "declines": {},
+  "crit": 0,
+  "scratch_events": 0,
+  "research": [
+    "research-awaiting-agent"
+  ],
+  "simulation": [
+    {
+      "kind": "SimulationProposalV1",
+      "mode": "sandboxed_python_v1",
+      "lifecycle": "denied",
+      "reason": "runner_profile_mismatch"
+    }
+  ],
+  "att": 1,
+  "statuses": {
+    "accepted": 116,
+    "refuted": 1
+  },
+  "criticism_authority": "observe_only",
+  "criticism_bindings": 4,
+  "replay_valid": null,
+  "replay_violations": [
+    {
+      "check": "attached-evidence",
+      "detail": "bound source src-56d86e9b3a1d59413e02c76cdf675f84f6288fa7 lacks one reliability-dependent candidate evidence artifact"
+    }
+  ]
+}

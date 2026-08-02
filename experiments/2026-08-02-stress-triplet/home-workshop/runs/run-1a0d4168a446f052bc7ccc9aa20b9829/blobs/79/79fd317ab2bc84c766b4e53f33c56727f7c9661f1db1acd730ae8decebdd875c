@@ -1,0 +1,11 @@
+```json
+{
+  "authorized_pointer": "/scratch_proposal/new_blocks/4",
+  "operations": [
+    {
+      "op": "remove",
+      "path": "/scratch_proposal/new_blocks/4"
+    }
+  ]
+}
+```

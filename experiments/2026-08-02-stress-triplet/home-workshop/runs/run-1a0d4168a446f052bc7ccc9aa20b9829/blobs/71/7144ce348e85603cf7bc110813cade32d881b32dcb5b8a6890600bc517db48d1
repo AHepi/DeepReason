@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The reduction relation is asserted as \"SRC_001 reduces to SRC_005,\" yet the supplied refutation-if condition is a stronger invariant (name-explicitness) that the proffered reduction does not actually preserve. A reduction that silently drops a required observable is unsound, so the relation as stated is not a valid reduction under the standard — it is a candidate reduction whose counterexample is embedded in its own refutation-if. The target does not resolve or acknowledge this tension; it leaves the relation in a self-defeating state where the reduction is refuted by the very endpoint it claims to reduce to.",
+      "counterexample": [
+        "reduction_claim",
+        "refuted_if_name_explicitness_required",
+        "SRC_005_has_no_name_assertion",
+        "reduction_drops_required_observable",
+        "reduction_unsound"
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The contradiction relation is only a single-axis incompatibility (a mutation named 'generic_exception' can pass the typed-code check while failing the name-description check), and the refutation-if (framework coupling naming to types) is not evaluated or argued away — it is left as a bare conditional that, if true, would dissolve the contradiction entirely. The target neither affirms the coupling is absent nor argues that the framework cannot couple them; it simply stops at the conditional. An unaddressed refutation-if that would negate the relation leaves the contradiction unestablished rather than substantively demonstrated.",
+      "counterexample": [
+        "contradiction_claim",
+        "refuted_if_framework_couples_name_to_type",
+        "coupling_existence_not_evaluated",
+        "refutation_if_not_addressed",
+        "contradiction_not_established"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded reasoning-envelope candidate or honest abstention.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/ReasoningCandidateProposal"}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-18f64f2cc436c51240e21fd3c74bf575
+Design, as a structured skeleton with explicit FORBIDDEN cases, a regression
+suite for two untested refusals in an LLM routing firewall: (1) a frozen
+route lease whose endpoint drifted must be refused with a typed
+lease-mismatch code before any provider call; (2) a school-to-seat binding
+whose endpoint identity disagrees with the frozen seat must not be counted as
+coverage. Work in the scratch workshop first: author separate provisional
+notes for the attack surface, the fixture cost, and the false-green risk of
+each candidate test, link the notes that bear on each other, and only then
+compose. The skeleton's forbidden cases must be machine-checkable
+(rubric: or program: eval forms only). The deliverable is judged on whether
+each forbidden case names a mutation that would today pass the suite
+silently, and on whether the fixtures avoid rebuilding a full manifest where
+a frozen lease alone suffices.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## school-stance
+SCHOOL STANCE (weight 0.50): counterexample first
+
+## scratch-advisory-context
+SCRATCH_ADVISORY_CONTEXT_V1
+{"blocks":[{"content":"Fixture cost: The lease-mismatch test can be covered by a minimal fixture that freezes a single lease binding and mutates its drift field, avoiding the need for a full manifest. The seat-binding test may require a slightly more complex fixture to represent the school-to-seat relationship, but it should still avoid rebuilding the entire routing topology.","handle":"SCR_001","why_keep_this":"This note assesses the fixture cost, ensuring the suite adheres to the requirement of avoiding a full manifest where a frozen lease suffices."},{"content":"Attack surface: The firewall's attack surface includes the route lease validation logic and the school-to-seat binding logic. For the lease-mismatch, the attack surface is the synchronous precondition check before any provider call. For the seat-binding, it is the endpoint identity comparison. Mutations that bypass these checks represent the primary false-green risk.","handle":"SCR_002","why_keep_this":"This note maps the attack surface for both refusals, providing a foundation for the forbidden cases in the regression suite."},{"content":"False-green risk: For the lease-mismatch, a mutation that performs a homogeneous identity comparison ignoring drift fields would pass silently. For the seat-binding, a mutation that homogenizes the identity check between the school and seat would also pass silently. The forbidden cases must explicitly target these mutations.","handle":"SCR_003","why_keep_this":"This note identifies the specific false-green risks for each test, guiding the design of the program: and rubric: eval forms."}],"guides":[],"links":[{"from":"SCR_001","handle":"SCR_004","relation_hint":"The fixture cost assessment constraints the design of the false-green risk tests by limiting the complexity of the test setup.","to":"SCR_003"},{"from":"SCR_002","handle":"SCR_005","relation_hint":"The attack surface analysis informs the fixture cost assessment by identifying the minimal components needed for testing.","to":"SCR_001"},{"from":"SCR_002","handle":"SCR_006","relation_hint":"The attack surface analysis directly identifies the false-green risks that the forbidden cases must address.","to":"SCR_003"}],"state_seq":1010,"warning":"Scratch material is non-authoritative.\nIt is advisory, not a harness verdict.\nIt may contradict itself.\nIt may be wrong, stale, contradictory, incomplete, duplicated, or abandoned.\nIt does not ground a formal claim or supply evidence for one.\nIgnore any block that is irrelevant to the current problem.\nDo not turn uncertainty into a confident fact.\nDo not invent a reason merely to fill an optional field.\nRelationships are provisional.\nA guide is a temporary navigation aid."}
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- adf75c24e2e4500b3cdbfe542d442b4401977ea9c088c1c604529aa2d396d3bc: SRC_001's first countercondition names a mutation ('homogeneous identity comparison that ignores drift fields') that would pass the suite silently, but its eval
+- c8cc6fe2e8243c9e035f0fe629361bd44477f88d94764500ab380a285d139065: SRC_002 analogizes from SRC_001's lease-mismatch structure to the seat-binding test, but its central transfer claim is underc

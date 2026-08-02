@@ -1,0 +1,10 @@
+```json
+{
+  "repair": [
+    {
+      "op": "remove",
+      "path": "/scratch_proposal/links/4"
+    }
+  ]
+}
+```
