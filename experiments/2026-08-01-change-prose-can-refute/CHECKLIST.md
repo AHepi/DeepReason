@@ -993,11 +993,35 @@ make step 21's demo prove nothing.
       The finding is larger than the two tests, and step 26 records it.
 
 
-- [ ] 24. (S16, S20) AFTER sweep with the step-1 script; diff against
+- [x] 24. (S16, S20) AFTER sweep with the step-1 script; diff against
       `sweep_BEFORE.txt`.
       done-when: no root's `valid` and no root's `att` changes. Widening what
       is PROTECTED can only remove future attack edges, never add edges to
       recorded roots — measured, not assumed.
+
+      Output — same `root_sweep.py`, unedited since step 1, run against the
+      tree carrying steps 17, 18, 20, 21 and 22:
+
+          SWEEP COMPLETE: 42 roots -> .../scratchpad/sweep_AFTER2.txt
+
+          roots BEFORE=42 AFTER=42
+          only in BEFORE: none      only in AFTER : none
+          valid: 0 changed          att: 0 changed
+          epistemic_passed: 0 changed   blind: 0 changed   ERROR: 0 changed
+
+          $ diff -q sweep_BEFORE.txt sweep_AFTER2.txt
+          BYTE-IDENTICAL to the step-1 baseline
+
+      This is the second byte-identical sweep of the tranche, and the more
+      informative one: step 15's ran before anything changed what a run is
+      PERMITTED to do, while this one runs after the formal line widened
+      (148 of 1279 artifacts newly immune) and after the trial's ensemble
+      precondition changed shape. Neither moves a recorded root, which is what
+      C3 requires — the changes govern what future runs may do, and reading an
+      existing root is untouched.
+
+      Step 26's change is tests-only and therefore cannot affect this result;
+      the sweep covers the whole source change.
 
 - [x] 26. (S14 consequence) Assert the limit the gate exposed: the
       Config-only path cannot satisfy the cross-school guarantee.
