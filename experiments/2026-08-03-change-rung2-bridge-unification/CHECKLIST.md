@@ -100,13 +100,19 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       ```
       Not committed yet — bundled at step 7.
 
-- [ ] 7. (all) [COMMIT] Commit steps 1-6 together (v6_policy.py change,
+- [x] 7. (all) [COMMIT] Commit steps 1-6 together (v6_policy.py change,
       new test, map update) as one tranche commit — code and map in the
       SAME commit per R6.
       done-when: `git log -1 --stat` shows `src/deepreason/v6_policy.py`,
       `tests/test_v6_policy_preset.py`, and `docs/map/CON-authority.md`
       all in the same commit; `git push -u origin claude/delivery-rungs-handover-m22sdy`
       succeeds (paste confirmation).
+      DONE. Commit `e15103d8` (4 files: v6_policy.py, test_v6_policy_preset.py,
+      CON-authority.md, this CHECKLIST.md). Push initially rejected (403 /
+      fetch-first — the monitoring session had pushed X11 in the
+      meantime); fetched, merged cleanly (`11e25189`, no conflicts,
+      unrelated files), pushed successfully. `git rev-parse HEAD
+      origin/...` both `11e25189` — confirmed synced.
 
 - [ ] 8. (all) Map check: `python tools/docs_verify.py` (full, not
       `--fast`) AND `python tools/docs_verify.py --audit`.
