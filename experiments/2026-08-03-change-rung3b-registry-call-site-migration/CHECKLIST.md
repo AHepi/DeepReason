@@ -141,6 +141,9 @@ same commit.
       `docs/map/SEAM-schools-x-scheduler.md` all in the same commit;
       `git push -u origin claude/delivery-rungs-handover-m22sdy` succeeds
       (paste confirmation).
+      DONE. Commit `c76eda34`, 10 files changed (5 source + 2 map + this
+      tranche's 3 ledger files), code and map together. Pushed cleanly:
+      `caac8374..c76eda34`.
 
 - [ ] 8. (S7) Add `tests/test_school_population_determinism.py`: two
       mock-endpoint `Scheduler` runs over identically-seeded harnesses
@@ -157,6 +160,33 @@ same commit.
       assert run A's log is byte-identical to a run whose call shape is
       reconstructed in the test itself, and record the deviation.
       done-when: `python -m pytest tests/test_school_population_determinism.py -q` ends "N passed, 0 failed", N >= 1 (paste it).
+      DONE. Two tests. Output:
+      ```
+      ..                                                                       [100%]
+      2 passed in 0.64s
+      ```
+      Bypass shape settled as planned: `monkeypatch.setattr(schools,
+      "active_backend", _BareFunctionBackend)` — a backend whose four
+      methods call the bare module functions, i.e. the exact
+      pre-migration call shape. Both `Scheduler.__init__` (init_schools)
+      and `.run()` (allocate) execute under the patch.
+      **Comparison scope, stated rather than quietly weakened:** raw log
+      bytes do NOT match between any two runs, so I measured what
+      actually differs before asserting. Across 14 events the ONLY
+      differing fields are `ts` and `llm.ms` — both wall-clock. Every
+      content address (`prompt_ref`, `raw_ref`), rule, input and output
+      id already matches. The test therefore asserts (a)
+      `harness.state.model_dump_json()` byte-identical — the repo's own
+      replay idiom, used by
+      `test_forced_convergence_triggers_reseed_and_replays` — and (b)
+      the full event log identical after excluding exactly those two
+      named wall-clock fields. That is not a trivially-true claim.
+      A SECOND test (`test_the_determinism_comparison_can_actually_fail`)
+      is the mutation check, kept permanently in the suite rather than
+      run once and discarded: a backend that reverses allocation must
+      break the equality. Together the pair establishes sensitivity —
+      equal when behaviour is equal, unequal when it is not.
+      Not committed — step 9 commits it.
 
 - [ ] 9. (all) [COMMIT] Commit step 8's new test file.
       done-when: `git log -1 --stat` shows
