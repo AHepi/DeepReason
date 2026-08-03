@@ -170,4 +170,14 @@ a literal two-tree comparison the test framework cannot express.
 
 ## Amendments
 
-(none yet)
+**Amendment 1** (discovered during dr-execute-step, step 6): S2's
+migration forced `scheduler.py:272`'s call to wrap across lines (the
+one-line form is 110 chars against the repo's own 100-char limit),
+which broke a FOURTH map document's form-brittle check —
+`docs/map/CON-schools.md:121` greps for the contiguous literal
+`if config.N_SCHOOLS > 0 else {}`. The claim that check pins
+("`N_SCHOOLS = 0` disables the mechanism entirely") is NOT violated;
+only its formatting moved. R4 ("map preflight... read them BEFORE the
+subsystems") and the map's same-commit rule already cover this —
+recorded as SPEC.md's S9 rather than a new requirement. See SPEC.md
+"Amendment 1" for the full account and fix.

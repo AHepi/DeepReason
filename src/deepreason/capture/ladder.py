@@ -25,7 +25,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
         applied.append("stagnation-recruit")
 
     if active_flags.get("school_convergence"):
-        current = schools.roster(harness)
+        current = schools.active_backend().roster(harness)
         novelty = detection.school_novelty(harness, scheduler.embedder, config.CAPTURE_W)
         laggard = min(
             sorted(current),
@@ -36,7 +36,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
         foreign = detection.most_distant_school(
             harness, scheduler.embedder, config.CAPTURE_W, of=laggard
         )
-        new_policy = schools.reseed(
+        new_policy = schools.active_backend().reseed(
             harness, laggard, current[laggard],
             reason="school-convergence", crossover_from=foreign,
         )
@@ -70,7 +70,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
         # and separation). Without schools, fall back to tail-weighted
         # selection + spec injection so SOMETHING rotates the proposal
         # distribution; attention only, never status.
-        current = schools.roster(harness)
+        current = schools.active_backend().roster(harness)
         target = detection.orbit_attractor_school(harness, config.CAPTURE_W)
         if current:
             if target not in current:
@@ -78,7 +78,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
                     harness, scheduler.embedder, config.CAPTURE_W)
                 target = min(sorted(current),
                              key=lambda s: (novelty.get(s, -1.0), s))
-            new_policy = schools.reseed(
+            new_policy = schools.active_backend().reseed(
                 harness, target, current[target], reason="attractor-orbiting")
             scheduler.schools[target] = new_policy
             applied.append(f"orbit-reseed:{target}")

@@ -399,7 +399,7 @@ def eval_report(harness, config, embedder=None) -> dict:
     verbosity_bias = _latest_tagged(events, "judge-verbosity-bias:")
 
     # --- Schools -------------------------------------------------------- #
-    roster = schools.roster(harness)
+    roster = schools.active_backend().roster(harness)
     novelty = detection.school_novelty(harness, embedder, window)
     school_rows = {
         sid: {

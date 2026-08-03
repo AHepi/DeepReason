@@ -269,7 +269,11 @@ class Scheduler:
         self._stop_resume_rehydrated = False
         self._stop_cycle_offset = 0
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
-        self.schools = schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
+        self.schools = (
+            schools.active_backend().init_schools(harness, config)
+            if config.N_SCHOOLS > 0
+            else {}
+        )
         self.diagnostics: list[dict] = []
         # Ladder state (§11.4) — attention only. An intervention is active for a
         # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
@@ -1801,7 +1805,9 @@ class Scheduler:
             self._cycles += 1
             return
 
-        assigned = schools.allocate(harness, problem, self.schools, config)
+        assigned = schools.active_backend().allocate(
+            harness, problem, self.schools, config
+        )
         if self.recruit_all and self.schools:
             assigned = sorted(self.schools)
         if not assigned:

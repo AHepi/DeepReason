@@ -903,7 +903,7 @@ def _main(argv: list[str] | None = None) -> int:
 
         harness = Harness(Path(args.root))
         config = load_config(Path(args.config) if args.config else None)
-        roster = schools_mod.roster(harness)
+        roster = schools_mod.active_backend().roster(harness)
         if not roster:
             print("(no schools registered)")
         for school_id in sorted(roster):
@@ -1061,11 +1061,11 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.capture import schools as schools_mod
 
         harness = Harness(Path(args.root))
-        roster = schools_mod.roster(harness)
+        roster = schools_mod.active_backend().roster(harness)
         if args.school_id not in roster:
             print(f"unknown school: {args.school_id}", file=sys.stderr)
             return 1
-        policy = schools_mod.reseed(
+        policy = schools_mod.active_backend().reseed(
             harness, args.school_id, roster[args.school_id], reason="manual"
         )
         print(f"{args.school_id} reseeded: stance={policy['stance']}")

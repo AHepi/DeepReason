@@ -322,3 +322,14 @@ class DefaultSchoolPopulationBackend:
 
 SCHOOL_POPULATION = SchoolPopulationRegistry()
 SCHOOL_POPULATION.register(DefaultSchoolPopulationBackend(), backend_id="default")
+
+# The single place the active backend's NAME lives, so no call site spells it.
+# A run-selected name (rung 5's "a run configured with the alternative") would
+# replace this constant's value, not the call sites.
+_ACTIVE_BACKEND_ID = "default"
+
+
+def active_backend() -> SchoolPopulationBackend:
+    """The registered population backend every caller resolves through."""
+
+    return SCHOOL_POPULATION.resolve(_ACTIVE_BACKEND_ID).backend

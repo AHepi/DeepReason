@@ -118,7 +118,7 @@ the `XEXAM_SHARE` floor admitting a starved school as cross-examiner.
 **`N_SCHOOLS = 0` disables the mechanism entirely** — the scheduler holds an
 empty roster and `allocate` returns `[]`, which the caller turns into a single
 unschooled pass.
-`check: grep -q "if config.N_SCHOOLS > 0 else {}" src/deepreason/scheduler/scheduler.py`
+`check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text(); assert re.search(r'if config\.N_SCHOOLS > 0\s*else \{\}', s)"`
 
 **Exactly two roles may be school-routed: `conjecturer` and
 `argumentative_critic`.** Every other role, `judge` included, raises

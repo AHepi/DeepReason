@@ -22,26 +22,71 @@ same commit.
       `active_backend()` helper to `src/deepreason/capture/schools.py`,
       returning `SCHOOL_POPULATION.resolve(_ACTIVE_BACKEND_ID).backend`.
       done-when: `python -c "from deepreason.capture.schools import active_backend, DefaultSchoolPopulationBackend; assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"` exits 0.
+      DONE. Output: `STEP1_OK`. Constant + helper appended after the
+      Tranche A singleton, with a comment stating the constraint (one
+      place holds the name; rung 5 replaces its value, not the call
+      sites). No call site migrated yet. Not committed — bundled at
+      step 7.
 
 - [ ] 2. (S2) Migrate `src/deepreason/scheduler/scheduler.py`'s two call
       sites — line 272 `schools.init_schools(harness, config)` and line
       1804 `schools.allocate(harness, problem, self.schools, config)` —
       to `schools.active_backend().init_schools(...)` / `.allocate(...)`.
       done-when: `test "$(grep -c 'schools.active_backend()' src/deepreason/scheduler/scheduler.py)" = 2` exits 0 AND `python -m pytest tests/test_schools.py tests/test_scheduler.py tests/test_rotation.py -q` ends "N passed, 0 failed" (paste it).
+      DONE. Both sites migrated; the `if config.N_SCHOOLS > 0 else {}`
+      tail and the `assigned = ...` binding preserved exactly (both
+      wrapped across lines for width, no logic change). Lines 951/952/955
+      untouched. Output:
+      ```
+      GREP_COUNT_OK
+      ...............                                                          [100%]
+      15 passed in 5.65s
+      ```
+      Not committed — bundled at step 7.
 
 - [ ] 3. (S3) Migrate `src/deepreason/capture/ladder.py`'s four call
       sites (28, 73 `roster`; 39, 81 `reseed`) the same way.
       done-when: `test "$(grep -c 'schools.active_backend()' src/deepreason/capture/ladder.py)" = 4` exits 0 AND `python -m pytest tests/test_orbit.py tests/test_schools.py -q` ends "N passed, 0 failed" (paste it).
+      DONE. All four migrated; each call's arguments preserved exactly
+      (the convergence reseed keeps `reason=`/`crossover_from=`, the
+      orbit reseed keeps `reason=` only). Output:
+      ```
+      GREP_COUNT_OK
+      .........                                                                [100%]
+      9 passed in 0.90s
+      ```
+      Not committed — bundled at step 7.
 
 - [ ] 4. (S4) Migrate `src/deepreason/cli/main.py`'s three call sites
       (906, 1064 `roster`; 1068 `reseed`) and `src/deepreason/report.py`'s
       one (402 `roster`).
       done-when: `test "$(grep -c 'active_backend()' src/deepreason/cli/main.py)" = 3` AND `test "$(grep -c 'active_backend()' src/deepreason/report.py)" = 1` both exit 0 (paste both).
+      DONE. Each file's own alias used (`schools_mod.` in cli/main.py,
+      `schools.` in report.py). `stance_weight`/`lineage_size` sites left
+      untouched in both. Output:
+      ```
+      CLI_COUNT_OK
+      REPORT_COUNT_OK
+      IMPORT_OK
+      ```
+      Not committed — bundled at step 7.
 
 - [ ] 5. (S5) Verification-only: confirm no bare call site of the four
       named functions survives outside `capture/schools.py`, and that
       exactly one backend remains registered.
       done-when: `python -c "import pathlib,re; bad=[(p,l) for p in ('src/deepreason/scheduler/scheduler.py','src/deepreason/capture/ladder.py','src/deepreason/cli/main.py','src/deepreason/report.py') for l in pathlib.Path(p).read_text().splitlines() if re.search(r'schools(_mod)?\.(init_schools|roster|allocate|reseed)\(', l)]; assert not bad, bad; from deepreason.capture.schools import SCHOOL_POPULATION; assert SCHOOL_POPULATION.ids() == ('default',)"` exits 0.
+      DONE. Instrument self-tested FIRST (a sweep that cannot fail
+      proves nothing — `docs_verify --audit`'s own principle): confirmed
+      the regex matches both bare forms (`schools.roster(`,
+      `schools_mod.reseed(`) and matches NEITHER migrated form
+      (`schools.active_backend().roster(`,
+      `schools_mod.active_backend().reseed(`), so a false pass was ruled
+      out before the verdict was trusted. Output:
+      ```
+      instrument self-test: PASS (catches bare, ignores migrated)
+      STEP5_OK
+      ```
+      No file modified this step.
 
 - [ ] 6. (S6) Update `docs/map/SEAM-schools-x-scheduler.md`: INVERT the
       two `! grep -q "SCHOOL_POPULATION"` checks (lines 64-65) into
@@ -54,6 +99,38 @@ same commit.
       header, exactly as that document's own "How to change it" step 4
       instructed.
       done-when: `python tools/docs_verify.py --fast` reports 0 failed (paste it).
+      DONE. Inverted both checks into per-file count + negative
+      bare-call assertions (mutation-tested first: they accept the real
+      tree and provably FAIL on a reverted call site). Rewrote "The
+      agreement" and "What is deliberately absent" (the no-call-sites
+      paragraph was false); the absent section now records what is still
+      absent — no second backend, no `Config` knob (with the
+      frozen-surface reason), and the four non-migrated helpers. Table
+      gained the six migrated-site rows plus the `active_backend()`
+      resolution point; "How to change it" and "Traps" rewritten for the
+      post-migration world. `Owns:` gained `scheduler/scheduler.py` and
+      `capture/ladder.py`; `cli/main.py`/`report.py` deliberately NOT
+      claimed (they are `DR-SUB-periphery`'s, and the document says so
+      in-line so the choice is visible rather than silent).
+      `Verified-at:` left at `5eaf4bcb` — advancing it would mean naming
+      a commit that does not exist until step 7; a stale stamp is
+      honest, a false one is not (SCHEMA.md's own rule), and validation
+      re-runs every check anyway.
+      Output:
+      ```
+      docs_verify [fast]: 50 documents, 803 checks, 802 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+      (803 checks, up from 800 — the three new enforcement checks.)
+      A FOURTH map document turned out to be affected mid-step:
+      `CON-schools.md:121` pinned the contiguous literal
+      `if config.N_SCHOOLS > 0 else {}`, which step 2's forced line-wrap
+      broke. Recorded as SPEC.md Amendment 1 / S9 BEFORE fixing, and
+      fixed by a whitespace-tolerant regex that mutation-testing proves
+      still rejects a deleted guard and a changed `else` branch. Keeping
+      the old literal was ruled out on evidence: it needs a 110-char
+      line against the repo's own 100-char limit.
+      Not committed — bundled at step 7.
 
 - [ ] 7. (all) [COMMIT] Commit steps 1-6 together (helper, four migrated
       files, seam document) as one tranche commit — code and map in the

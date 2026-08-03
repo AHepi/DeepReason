@@ -171,6 +171,34 @@ known flake fails, per C5); `python tools/root_sweep.py` compared
 against the last accepted capture — must be byte-identical (42 rows, 11
 ERROR).
 
+## Amendment 1 (discovered executing step 6/S6, R4)
+
+S9 (R4, and the map's same-commit rule): `docs/map/CON-schools.md:121`
+carries a checked claim — "**`N_SCHOOLS = 0` disables the mechanism
+entirely**" — pinned by `grep -q "if config.N_SCHOOLS > 0 else {}"
+src/deepreason/scheduler/scheduler.py`. S2's migration made that call
+too long for one line (the single-line form is 110 characters against
+the repo's own `line-length = 100` in `pyproject.toml`), so it wraps,
+and the pinned literal no longer appears contiguously. **The claim is
+untouched** — the guard is still `if config.N_SCHOOLS > 0 ... else {}`,
+still returns an empty roster at zero; only its formatting moved. This
+is a FOURTH map document affected, and the same class as Tranche A's
+own Amendment 1: a form-brittle check broken by a legitimate edit, not
+a violated invariant.
+
+Fix: replace the contiguous-literal grep with a whitespace-tolerant
+regex over the file that pins the SAME claim
+(`if config.N_SCHOOLS > 0` ... `else {}` across an optional line
+break). The check is thereby made robust to formatting without being
+weakened — it still fails if the guard is deleted or its `else {}`
+branch changed. Keeping the original literal was considered first and
+rejected on evidence: it would require a 110-character line, which the
+repo's own linter forbids.
+accept: `python tools/docs_verify.py --fast` 0 failed, with
+`CON-schools.md`'s claim still failing if the guard is removed
+(mutation-tested before the new check is written down, per the map's
+"run it before you write it down" rule).
+
 ## Assumptions (operator may override)
 
 A1 (Q2): the backend name is a module-level constant
