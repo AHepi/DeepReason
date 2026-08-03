@@ -138,6 +138,17 @@ Cross-routing is strict: a defect found mid-change is PARKED, not fixed;
 a change wished for mid-defect is PARKED, not implemented. One tranche,
 one goal.
 
+**Calibration for less capable executors.** The documents this manual
+points at are complete by design — execute them literally rather than
+improvising a summary of them. Never generalize an instruction beyond its
+stated scope; if a spec seems silent about your case, that is a question
+(load `dr-ask-the-right-question`), not an invitation to infer. A
+multi-step program (a handover, a checklist, a ladder) runs one step per
+tranche — finishing a step early is never a reason to start the next in
+the same tranche. Stop conditions and DESIGN-AND-STOP gates are hard
+stops: the deliverable at a gate is a committed document and an ended
+turn, not an implementation.
+
 **Exit criterion.** You know you are driving properly when every claim
 you make about a run ends in a typed artifact, every modification you
 plan started from `INDEX.md` and `INV-frozen-surfaces.md`, and every
