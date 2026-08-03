@@ -8,16 +8,19 @@ Map ids: none — every touched file (`.claude/skills/`, `README.md`,
 docs_verify runs as the regression guard (map checks grep CLAUDE.md and
 README-adjacent paths).
 
-- [ ] 1. (S1) Write `.claude/skills/dr-drive-harness/SKILL.md` — six
+- [x] 1. (S1) Write `.claude/skills/dr-drive-harness/SKILL.md` — six
       sections per SPEC S1, index-over-authorities style.
       done-when: `grep -c "^## " <file>` -> 6; frontmatter grep ok; one
       grep hit each for deepreason-orchestrator, dr-change-orchestrator,
       dr-ask-the-right-question, REC-change-a-seam, INV-frozen-surfaces,
       "SEAM-<a>-x-<b>".
+      OUTPUT: sections: 6 | frontmatter: ok | all six greps >= 1
+      (INV-frozen-surfaces: 2, SEAM-<a>-x-<b>: 2).
 
-- [ ] 2. (S1) [COMMIT] Commit the driving skill alone; push with retry.
+- [x] 2. (S1) [COMMIT] Commit the driving skill alone; push with retry.
       done-when: commit on origin; porcelain shows no .claude/skills
       entries.
+      OUTPUT: recorded in the step-2 commit hash below (git log).
 
 - [ ] 3. (S3) Write `.claude/skills/README.md` — the organising index.
       done-when: contains both family names, all 12 phase skills, both
