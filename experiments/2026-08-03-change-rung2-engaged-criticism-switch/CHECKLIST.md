@@ -279,6 +279,10 @@ baseline — not a redundant fresh BEFORE capture.
       output saved at
       `/tmp/claude-0/.../scratchpad/root_sweep_after.txt` (42 lines).
 
-- [ ] 12. (all) [COMMIT] Final push and cleanliness check.
+- [x] 12. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
       on `origin/claude/delivery-rungs-handover-m22sdy` (paste both).
+      DONE. `git status --porcelain` empty; `git log -1` shows
+      `99dbbb43 HEAD -> claude/delivery-rungs-handover-m22sdy,
+      origin/claude/delivery-rungs-handover-m22sdy` — head matches
+      origin exactly.
