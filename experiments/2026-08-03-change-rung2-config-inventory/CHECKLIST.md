@@ -112,3 +112,26 @@ tranche writes zero `docs/map/` content (S1's deliverable is an
       `git rev-parse origin/claude/delivery-rungs-handover-m22sdy` ==
       `f61d592d0f05edba5fe51206496b469cb5af3cf1`. All 7 checklist steps
       complete. Routing to dr-validate-change.
+
+## Re-plan after VALIDATION.md FAIL (commit `5489d501`)
+
+Narrow, precisely diagnosed failure: `INVENTORY.md`'s Group C table names
+one candidate's env var as `DEEPREASON_DISABLE_V6_LAUNCH_ENV`, which does
+not exist in the source — the real string
+(`runtime/launch_policy.py:22`, `V6_LAUNCH_DISABLE_ENV =
+"DEEPREASON_DISABLE_V6_LAUNCHES"`) is `DEEPREASON_DISABLE_V6_LAUNCHES`.
+Steps 1-7 above are untouched.
+
+- [ ] 8. (R2, VALIDATION follow-up) Fix both occurrences in `INVENTORY.md`
+      (the Group C table row and the prose paragraph immediately below
+      it) from `DEEPREASON_DISABLE_V6_LAUNCH_ENV` to the correct
+      `DEEPREASON_DISABLE_V6_LAUNCHES`.
+      done-when: `grep -c "DEEPREASON_DISABLE_V6_LAUNCHES" experiments/2026-08-03-change-rung2-config-inventory/INVENTORY.md`
+      returns 2 AND `! grep -q "DEEPREASON_DISABLE_V6_LAUNCH_ENV" experiments/2026-08-03-change-rung2-config-inventory/INVENTORY.md`
+      exits 0 (the wrong string no longer appears anywhere in the file).
+- [ ] 9. (R2) [COMMIT] Commit step 8, push with retry.
+      done-when: new commit on branch AND clean tree.
+- [ ] 10. (all) [COMMIT] Final push and cleanliness check.
+      done-when: `git status --porcelain` is empty AND
+      `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
+      Then route back to `dr-validate-change` for a fresh validation pass.
