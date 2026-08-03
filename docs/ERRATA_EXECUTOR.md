@@ -104,3 +104,13 @@ monitor intervention. Residue, honestly: one rung of seven; the
 DESIGN-AND-STOP discipline (rungs 6–7) and the guardrailed rungs (4–5)
 remain untested; "accepted does not mean true" applies to the five new
 socket contracts until a rung actually builds against them.
+
+**X5 — the X1 sequencing gap is closed.** Merge commit `b73db3ba` on the
+executor branch brings the monitoring branch's history (this ledger
+through X4, the R3a amendment, the handover's feed-instruction) into the
+executor's own checkout — the operator-directed first step of the rung-2
+authorization. From this commit on, the executor CAN follow the
+feed-instruction its rung-1 checkout never carried; X1's compensation
+clause ("the monitor reviews the executor's artifacts directly") drops
+from necessary to belt-and-braces. Rung-2 work proper (inventory
+tranche) not yet begun at this check.
