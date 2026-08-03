@@ -51,17 +51,21 @@ map checks).
       `python tools/docs_verify.py --audit` -> 0 findings.
       OUTPUT: docs_verify: 0 failed | docs_verify --audit: 0 finding(s).
 
-- [ ] 6. (S2, S3) [COMMIT] Commit the four wiring edits (message cites R5,
+- [x] 6. (S2, S3) [COMMIT] Commit the four wiring edits (message cites R5,
       C1 and notes S3's survey lives in SPEC.md), push with retry.
       done-when: `git status --porcelain` empty AND
       `git ls-remote origin claude/handover-defect-audit-33pv3d` equals
       local HEAD.
+      OUTPUT: b4141169 both sides; porcelain 0 lines.
 
-- [ ] 7. (all) Full gate (no `src/` changed; the gate is the standing
+- [x] 7. (all) Full gate (no `src/` changed; the gate is the standing
       proof of that).
       done-when: `python -m pytest tests/ -q -n 4` output ends
       "<N> passed, <k> skipped" with 0 failed — paste output.
+      OUTPUT: 3290 passed, 7 skipped in 668.07s (0:11:08) — 0 failed.
 
-- [ ] 8. (all) [COMMIT] Tranche artifacts current (CHECKLIST boxes ticked
+- [x] 8. (all) [COMMIT] Tranche artifacts current (CHECKLIST boxes ticked
       with pasted outputs), committed, pushed, tree clean.
       done-when: `git status --porcelain` empty AND branch head on origin.
+      OUTPUT: recorded in the step-8 commit itself; verified in
+      VALIDATION.md.
