@@ -39,6 +39,18 @@ matching evidence dossier — before its own code runs, so a pre-V6 or tampered
 root fails with a typed code instead of being half-read by a view.
 `check: grep -q "^_ROOT_ADMISSION_COMMANDS = frozenset(" src/deepreason/cli/main.py && grep -q "^def _admit_v6_root(" src/deepreason/cli/main.py && python -m pytest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_missing_manifest_before_interpretation tests/test_v6_only_cli_admission.py::test_historical_roots_with_sidecars_fail_before_command_services -q`
 
+## Seams
+
+No `Seams:` entries yet.
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| application x bridge | undocumented | real: `application.GROUNDED_BRIDGE_SERVICE` is a thin client over `DR-SUB-bridge`'s `build`/`start`/`status`/`result`/`claims`/`inspect`/`validate` — this doc says so explicitly ("see `DR-SUB-bridge` for what a bridge is") |
+| application x scratch | undocumented | real: `application.SCRATCH_QUERY_SERVICE.execute` is the whole public surface for read-only scratchpad queries |
+| application x run-identity | undocumented | likely real, unverified here: every admitted CLI verb resolves and locks a run root, which is `DR-CON-run-identity`'s charter ("deterministic run ids, roots on disk") — candidate, worth a seam document rather than an assumption |
+| application x verification | undocumented | plausible: the V6 admission gate (`_admit_v6_root`) refuses a tampered or historical root by manifest/dossier shape before any command runs — whether it calls into `verify_root` itself or only manifest-level checks is not confirmed here |
+| application x workflow | undocumented, likely near-dead | `workflows/` is the retired website state machine this package still `Owns:`, but "no public entry point reaches any more" per this document's own "What it is" — if the interaction is real today it is legacy-only, not a living agreement; worth confirming before writing a seam doc that describes it as active |
+
 ## Entry points
 
 - `cli.main.main` — the `deepreason` console script; `build_parser` is the whole

@@ -74,6 +74,17 @@ The two passes have different output types, and the boundary is load-bearing:
 `suspended_unsupported` exists only on the far side of pass 2.
 `check: python -c "from deepreason.adjudication.grounded import label0; from deepreason.adjudication.support import final_labels; from deepreason.ontology.state import Status; l=label0({'a','b','c'},{('a','b')}); assert l=={'a':'accepted','b':'refuted','c':'accepted'}, l; f=final_labels(l,{('c','b')}); assert (f['a'],f['b'],f['c'])==(Status.ACCEPTED,Status.REFUTED,Status.SUSPENDED_UNSUPPORTED), f; assert label0({'a','b'},{('a','b'),('b','a')})=={'a':'suspended','b':'suspended'}"`
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-adjudication-x-rules` | documented | the rules construct attackable objects; adjudication alone decides what they do to the graph — a rule's entire power over status is the right to put warrant/target/validity-node on an artifact, never a `Status` value itself |
+| adjudication x harness | undocumented | real and load-bearing (not merely unanalyzed): `harness.py` is the ONLY caller of `build_att`/`build_dep`/`toposort` (`Harness._adjudicate`, the sole writer of `state.status`) — a genuine candidate seam, just not yet written up |
+| adjudication x ontology | undocumented | the one package adjudication imports at all (its whole import surface is `deepreason.ontology` plus itself) — likely foundational vocabulary rather than a two-way agreement, but not shown uninteresting merely because it's one-directional |
+| adjudication x verification | undocumented | real: `invariants.py`'s `verify_root` re-derives `dep` and reruns `toposort` independently rather than trusting the recorded graph, and `verification/report.py` hosts the adjudication-blindness detector this package structurally cannot host itself |
+| adjudication x authority | undocumented | indirect, not absent: `DR-CON-authority` gates whether an LLM-mediated judgement may mint a warrant AT ALL, upstream in `rules/crit.py`/`informal/trial.py` — by the time a warrant reaches `build_att`, authority's decision is already baked in; adjudication itself never imports `authority.py` |
+| adjudication x schools | **deliberately absent** | this package's own check proves it: no `provenance`, `school`, or ranking word appears anywhere in the three logic modules. A school's self-criticism refusal is enforced upstream, in criticism planning — not here, and should not be |
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -96,7 +107,7 @@ cycle rejection, and case-law collapse. The other five are deliberately tested
 elsewhere — the two closure rows go through the rules that mint their interfaces
 (next paragraph), and the scheduling, blindness and route-it-upstream rows are
 outside this package by construction.
-`check: python -m pytest tests/test_adjudication.py -q && python -c "import pathlib; rows=[l for l in pathlib.Path('docs/map/SUB-adjudication.md').read_text().splitlines() if l.startswith('| ') and '---' not in l][1:]; assert len(rows)==11, len(rows); assert sum(1 for r in rows if 'tests/test_adjudication.py::' in r)==6, [r for r in rows if 'tests/test_adjudication.py::' in r]"`
+`check: python -m pytest tests/test_adjudication.py -q && python -c "import pathlib; text=pathlib.Path('docs/map/SUB-adjudication.md').read_text(); section=text.split('## Where to change what',1)[1].split('## Traps',1)[0]; rows=[l for l in section.splitlines() if l.startswith('| ') and '---' not in l][1:]; assert len(rows)==11, len(rows); assert sum(1 for r in rows if 'tests/test_adjudication.py::' in r)==6, [r for r in rows if 'tests/test_adjudication.py::' in r]"`
 
 Every test named in that table is collectable — including the two rows no other
 check on this page touches (`test_replay.py` for the `adjudicate=` flag,

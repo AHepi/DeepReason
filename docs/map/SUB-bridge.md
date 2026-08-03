@@ -2,8 +2,8 @@
 Verified-at: 546544b5
 Verify: python -m pytest tests/test_bridge_workflow.py tests/test_bridge_events_replay.py tests/test_bridge_validate.py tests/test_bridge_failure_replay.py -q
 Owns: src/deepreason/bridge/
-Seams: DR-SEAM-bridge-x-manifest
-Seams-undocumented: application x bridge, bridge x harness, bridge x llm, bridge x ontology, bridge x scratch, bridge x verification, bridge x workflow
+Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-bridge-x-llm
+Seams-undocumented: application x bridge, bridge x harness, bridge x ontology, bridge x scratch, bridge x verification, bridge x workflow
 
 # Bridge — turning a stopped epistemic record into a grounded final answer
 
@@ -26,6 +26,19 @@ fails if the two bridge states differ. The package is deliberately import-light
 at the top level, because `ontology/event.py` imports the bridge event envelope
 and eager re-exports would close the cycle.
 `check: grep -q "raise RuntimeError(\"bridge workflow altered formal materialized state\")" src/deepreason/bridge/harness.py && grep -q "raise ValueError(\"process events cannot mutate formal StateDiff\")" src/deepreason/ontology/event.py && grep -q "if (self.rule == Rule.BRIDGE) != (self.bridge is not None):" src/deepreason/ontology/event.py && ! grep -qE "^(from|import) " src/deepreason/bridge/__init__.py && grep -q "def __getattr__" src/deepreason/bridge/__init__.py && python -c 'import sys, deepreason.bridge; assert "deepreason.bridge.workflow" not in sys.modules and "deepreason.bridge.harness" not in sys.modules; assert deepreason.bridge.BridgeWorkflow.__name__ == "BridgeWorkflow"' && python -m pytest tests/test_bridge_events_replay.py::test_bridge_events_leave_every_formal_state_component_byte_identical -q`
+
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-bridge-x-manifest` | documented | the manifest promises the bridge one immutable, already-validated authority document: whether the run's final view is built in `grounded_two_stage` mode, and nothing about that promise may move at runtime |
+| `DR-SEAM-bridge-x-llm` | documented | `llm/` sells one bounded `pack -> schema-valid JSON` call on a frozen route and knows nothing about grounding; `bridge/` buys exactly that (the claim-ledger write, the review role, the repair kernel) and owns everything downstream of the JSON |
+| bridge x verification | undocumented | real: this document's own claim — `verify_root` replays the bridge log twice and fails if the two derived bridge states differ — is `DR-SUB-verification`'s territory, unwritten as a seam |
+| bridge x ontology | undocumented | real, and unusually directed: `ontology/event.py` imports the bridge event envelope (not the other way round) — `bridge/`'s own top-level `__init__.py` is import-light specifically to avoid closing that cycle |
+| bridge x harness | undocumented | real: `harness.build_grounded_bridge` binds the manifest and appends typed `Rule.BRIDGE` events through the ordinary harness API, advisory-only (no artifacts, warrants, edges, or status) |
+| application x bridge | undocumented | real: `application.GROUNDED_BRIDGE_SERVICE` is the thin client documented on `DR-SUB-application`'s side |
+| bridge x scratch | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| bridge x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
 
 ## Entry points
 

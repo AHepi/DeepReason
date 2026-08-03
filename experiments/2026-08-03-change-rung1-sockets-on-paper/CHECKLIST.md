@@ -11,6 +11,14 @@ edited by this tranche — S1-S5 add socket-contract prose inside existing
 or new CON- documents; S6 only surfaces EXISTING `Seams:`/
 `Seams-undocumented:` header content, it does not write new SEAM- files.
 
+**Inserted step 10b (between steps 10 and 11), not in the original plan:**
+starting S6 required first auditing every `Seams:` header for accuracy —
+found `INDEX.md`'s matrix wrongly marked 7 real seam documents "not yet
+written", and 8 further `Seams:` header omissions across 6 files. Fixed
+`INDEX.md` immediately (commit `01b934b8`, `docs/ERRATA.md` E9); the 8
+per-document header fixes land as each affected file's own S6 batch is
+reached below, folded into that step rather than a separate one.
+
 No root sweep step: `tools/root_sweep.py` proves innocence for changes to a
 READER, guard, or authority rule under `src/`; this tranche touches no
 `src/` file (R4), so the sweep has nothing to compare and is not run.
@@ -154,15 +162,34 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       DONE — committed together with step 9's write. This completes R1
       (all five sockets: S1-S5).
 
-- [ ] 11. (S6) Batch A — add `## Seams` table (documented seams glossed
+- [x] 11. (S6) Batch A — add `## Seams` table (documented seams glossed
       from the seam doc's "The agreement"; undocumented pairs glossed
       honestly) to: `SUB-adjudication.md`, `SUB-amendment.md`,
       `SUB-application.md`, `SUB-bridge.md`.
       done-when: `for f in adjudication amendment application bridge; do
       grep -q "^## Seams" docs/map/SUB-$f.md || exit 1; done` exits 0 AND
       `python tools/docs_verify.py --links` reports 0 dangling.
-- [ ] 12. (S6) [COMMIT] Commit step 11, push with retry.
+      DONE, with a real bug caught and fixed along the way: adding the
+      section broke `SUB-adjudication.md`'s existing "Where to change
+      what" row-count check (it counted ALL `| ` lines in the whole file,
+      which was safe when there was one table and stopped being safe once
+      a second table existed). Fixed the check to scope to the section
+      between `## Where to change what` and `## Traps` — a scoping fix,
+      not a weakened assertion; the claim (11 rows, 6 hitting
+      `tests/test_adjudication.py`) is unchanged and still verified true.
+      Also folded in: `SUB-bridge.md`'s header corrected per the E9 audit
+      (`DR-SEAM-bridge-x-llm` moved from `Seams-undocumented:` to `Seams:`
+      — the file exists and is now cited in its own Seams table).
+      `for f in adjudication amendment application bridge; do grep -q
+      "^## Seams" docs/map/SUB-$f.md || exit 1; done` -> exit 0.
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 760 checks, 758 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 12. (S6) [COMMIT] Commit step 11, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 11's write.
 
 - [ ] 13. (S6) Batch B — same treatment for: `SUB-capabilities.md`,
       `SUB-evaluation.md`, `SUB-harness.md`, `SUB-llm.md`.

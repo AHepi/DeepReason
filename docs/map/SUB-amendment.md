@@ -103,6 +103,22 @@ Every epoch-0 document keeps its exact canonical bytes across an amendment, the
 log only grows, and `verify_root` stays clean on both sides of the fence.
 `check: python -m pytest "tests/test_amendment_epochs.py::test_amendment_appends_an_epoch_and_edits_nothing" "tests/test_amendment_epochs.py::test_verify_root_stays_valid_across_the_amendment_fence" "tests/test_amendment_epochs.py::test_question_only_amendment_keeps_its_parent_dossier" -q`
 
+## Seams
+
+No `Seams:` entries yet — every one of the seven pairs below is a REAL,
+evidenced interaction (not merely a candidate), just not yet written up as
+its own document.
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| amendment x rules | undocumented | `rules/conj.py` imports `dossier_union`/`epoch_problem_ids` directly — what a conjecture may cite after an amendment is this package's decision |
+| amendment x harness | undocumented | `amend_run` appends exactly two record kinds through the ordinary `Harness` API (`register_problem` for the reshaped question, `attach_bound_evidence` for supplemental sources) — nothing else may cross a terminal horizon this way |
+| amendment x verification | undocumented, one-directional | `invariants.py`'s `_amendment_epochs` decides whether the LEDGER honours the fences this package declares; this package validates only the chain's own shape and imports nothing from `invariants.py` at all |
+| amendment x manifest | undocumented | `RunAmendmentV1` carries `parent_manifest_digest`/`successor_manifest_digest` (always equal — an amendment never moves routing/policy/budget authority) and `_amend_locked` consults the v6/`RunInputManifestV2` guards before staging |
+| amendment x periphery | undocumented | the supplemental evidence dossier (`evidence-dossier.json`, `attach_bound_evidence`) is `DR-SUB-periphery`'s `evidence/` subsystem — an amendment's whole "more evidence" half lives on that side |
+| amendment x application | undocumented | whether a continuation actually runs the reshaped question is decided in `application/text_runs.py`'s epoch-workload branch, which imports `current_epoch`/`epoch_workload_path` from here |
+| amendment x run-identity | undocumented | `_reshaped_problem_id` delegates to `_question_digest` in `preparation.py`, `DR-CON-run-identity`'s own territory ("deterministic run ids... retiring and amending") — the two documents' charters already overlap in prose without a seam joining them |
+
 ## Where to change what
 
 | To change... | Edit | Test |
