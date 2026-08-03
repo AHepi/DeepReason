@@ -201,11 +201,16 @@ baseline — not a redundant fresh BEFORE capture.
       tranche's own REQUEST.md/SPEC.md/CHECKLIST.md). Pushed cleanly:
       `e0d4eacb..9607f739  claude/delivery-rungs-handover-m22sdy -> claude/delivery-rungs-handover-m22sdy`.
 
-- [ ] 10. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`. Rerun
+- [x] 10. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`. Rerun
       once if only the known flake
       (`test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`)
       fails, per C3.
       done-when: output ends "N passed, 0 failed" (paste it).
+      SECOND RUN (after commit `2dd12542`, with the widened fix):
+      ```
+      3291 passed, 7 skipped in 590.86s (0:09:50)
+      ```
+      0 failed. The known flake did not fire; no rerun needed.
       FIRST RUN (after commit `9607f739`) FAILED with 2 failures beyond
       the known flake — a THIRD mid-flight discovery (SPEC.md Amendment 2,
       revised): `_versioned_source_config_data`'s `schema_version < 4`
