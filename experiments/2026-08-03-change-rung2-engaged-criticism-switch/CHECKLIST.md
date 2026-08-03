@@ -229,7 +229,7 @@ baseline — not a redundant fresh BEFORE capture.
       commit actually contains) needs its own follow-up commit before
       re-running the full gate — see step 9b below.
 
-- [ ] 9b. (S8, Amendment 2 revision) [COMMIT] Commit the widened
+- [x] 9b. (S8, Amendment 2 revision) [COMMIT] Commit the widened
       `run_manifest.py` fix (unconditional pop, replacing the
       `schema_version < 4` guard) plus the SPEC.md/REQUEST.md/
       CHECKLIST.md amendment narrative, as its own follow-up commit
@@ -237,6 +237,15 @@ baseline — not a redundant fresh BEFORE capture.
       amend a pushed commit).
       done-when: `git log -1 --stat` shows `src/deepreason/run_manifest.py`
       and this tranche's ledger files; push succeeds (paste confirmation).
+      DONE. Commit `f642f980`. Push initially rejected (403/fetch-first —
+      the monitoring session had pushed `161dc094`/`e7ca2146`/`6cafc8c9`
+      to the same branch in the meantime, touching only
+      `docs/HANDOVER_2026-08-03.md` and `docs/ERRATA_EXECUTOR.md`, no
+      overlap with this tranche's files). Fetched, merged cleanly (no
+      conflicts, commit `1106c665`), pushed successfully:
+      `6cafc8c9..1106c665  claude/delivery-rungs-handover-m22sdy -> claude/delivery-rungs-handover-m22sdy`
+      (the usual "must not contain merge commits" bypass warning, as
+      seen throughout this session).
 
 - [ ] 11. (S6, R5) Root sweep: `python tools/root_sweep.py`, compared
       against the existing accepted baseline (42 rows, 11 ERROR
