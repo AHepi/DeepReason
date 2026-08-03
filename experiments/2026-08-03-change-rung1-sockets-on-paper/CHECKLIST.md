@@ -293,7 +293,7 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 17's write.
 
-- [ ] 19. (S7) Add `## Triage: is a change isolated, or does it need
+- [x] 19. (S7) Add `## Triage: is a change isolated, or does it need
       REC-change-a-seam?` to `docs/map/SCHEMA.md`, placed directly before
       `## How to CHANGE the map`, per SPEC.md's S7 content (the decidable
       rule: seam-document membership or multi-document `Owns:` overlap
@@ -301,8 +301,30 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       `Verified-at:`.
       done-when: `grep -q "Triage: is a change isolated" docs/map/SCHEMA.md`
       AND `python tools/docs_verify.py --self-test` exits 0 (paste).
-- [ ] 20. (S7) [COMMIT] Commit step 19, push with retry.
+      DONE, with one real bug caught and fixed: the check's first draft
+      used bash syntax (`<<<` here-string, `IFS=... read -ra`) but
+      `docs_verify.py` runs checks through `/bin/sh`, which doesn't
+      support either — `--fast` caught it immediately with a syntax
+      error. Rewrote as a portable `python3 -c` one-liner (matching the
+      style most other checks in this repo already use for anything
+      non-trivial) proving the same claim: `rules/conj.py` is
+      `Owns:`-listed by two SUB-/CON- documents by exact-path match
+      (`CON-conjecture-source.md`, `CON-schools.md`) — a third,
+      `SUB-rules.md`, covers it only via directory-level `Owns:`, which
+      the check does not resolve; the prose says so explicitly rather
+      than overclaiming what the check proves.
+      `grep -q "Triage: is a change isolated" docs/map/SCHEMA.md` -> exit 0.
+      `python tools/docs_verify.py --self-test`: `docs_verify --self-test: ok`.
+      `python tools/docs_verify.py --fast` (full confirmation):
+      ```
+      docs_verify [fast]: 49 documents, 762 checks, 761 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+      This completes R3 (S7) and all of rung 1's artifact requirements
+      (R1, R2, R3).
+- [x] 20. (S7) [COMMIT] Commit step 19, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 19's write.
 
 - [ ] 21. (S8, R4) Scope-boundary proof: confirm zero `src/` changes across
       the whole tranche.

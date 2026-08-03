@@ -1,5 +1,5 @@
 <!-- DR-SCHEMA -->
-Verified-at: 08dcdf3c
+Verified-at: 9ae772e6
 Verify: python tools/docs_verify.py --self-test
 
 # The map schema — how to read these documents, and how to change them
@@ -175,6 +175,56 @@ Start at `INDEX.md`. It routes; it does not explain. Then, by task shape:
 Read the seam before the subsystems it joins. The seam document says which parts
 of each subsystem the change actually touches, which is usually a small fraction
 of either.
+
+## Triage: is a change isolated, or does it need REC-change-a-seam?
+
+Before scoping ANY change to a file under `docs/map/`'s charter, decide which
+kind of change it is — the two need different care, and treating a seam
+change as isolated is how a correct pair of subsystem documents ends up next
+to a stale seam between them (`docs/map/REC-change-a-seam.md`'s own Traps
+section names this as the recurring mistake).
+
+**The rule, mechanical and decidable:**
+
+    A change to file F (or symbol S in F) is SEAM-GUIDED if either holds:
+      1. F or S appears in any SEAM-*.md document's "Where it is expressed"
+         table (grep every docs/map/SEAM-*.md for the file/symbol name).
+      2. F is named in the `Owns:` header of TWO OR MORE SUB-/CON- documents.
+    Otherwise the change is ISOLATED: edit F and the ONE document that owns it.
+
+Rule 2 exists because `Owns:` overlap is itself evidence of a seam even before
+anyone has written the seam document down — a file two documents both claim
+authority over is a file where an undocumented agreement already lives. This
+is exactly the shape `docs/map/REC-change-a-seam.md` Step 1 assumes has
+already been done ("name both sides as IDs") — this triage is what to run
+BEFORE that recipe, to decide whether it applies at all.
+
+`check: python3 -c "import glob, re; owners = {}; [owners.setdefault(p.strip(), []).append(f) for f in sorted(glob.glob('docs/map/SUB-*.md') + glob.glob('docs/map/CON-*.md')) for m in [re.search(r'^Owns: (.*)$', open(f).read(), re.MULTILINE)] if m for p in m.group(1).split(',') if p.strip()]; dupes = {p: fs for p, fs in owners.items() if len(fs) > 1}; assert 'src/deepreason/rules/conj.py' in dupes, sorted(dupes)"`
+
+**A worked example already in this repo, both directions:**
+
+- SEAM-GUIDED by rule 2: `src/deepreason/rules/conj.py` is named directly in
+  `DR-CON-schools`'s and `DR-CON-conjecture-source`'s `Owns:` headers (the
+  check below), and is additionally covered by `DR-SUB-rules`'s directory-
+  level `Owns: src/deepreason/rules/` — three documents in total once
+  directory ownership is resolved, so a change here follows
+  `REC-change-a-seam.md`, not an isolated edit to whichever document the
+  author happened to have open.
+- ISOLATED: `src/deepreason/adjudication/edges.py` is `Owns:`-listed by
+  `DR-SUB-adjudication` alone, and appears in no `SEAM-*.md` "Where it is
+  expressed" table except `DR-SEAM-adjudication-x-rules`'s own — so a change
+  purely internal to `build_att`'s fixpoint body, not touching that seam's
+  named sites, is an isolated change: edit `edges.py` and
+  `SUB-adjudication.md` only.
+
+**What this triage does NOT decide:** whether a seam document needs to be
+CREATED (that is `REC-change-a-seam.md` Step 7, reached only after this
+triage says SEAM-GUIDED and Step 2 finds no existing document) or whether an
+`Owns:` overlap found by rule 2 is itself a map defect worth flagging (it
+usually is not — shared ownership of one file by a `SUB-` and a `CON-`
+document is normal, e.g. `capture/schools.py` under both `DR-SUB-scheduler`-
+adjacent packages and `DR-CON-schools`; three or more, as in the worked
+example above, is the stronger signal).
 
 ## How to CHANGE the map
 
