@@ -81,3 +81,26 @@ seven seam documents unreferenced by INDEX.md's matrix, eight missing
 that its findings would land in ERRATA.md rather than this ledger.
 Tranche still mid-flight: fresh validation pass and DELIVERY.md pending;
 X2's verdict remains deferred.
+
+**X4 — rung 1 delivered; X2's deferred verdict closes as
+load-bearing-and-correct.** Head `f0e9af30` at third check: a fresh,
+from-scratch second validation pass returned PASS on every acceptance
+check, both process constraints, all five requirements, the
+frozen-surface diff, and all four `docs_verify` modes (VALIDATION.md,
+commit `8785ed44`: 793 checks / 0 failed, `--audit` 0, `--links` 0
+dangling, 49 documents), and DELIVERY.md shipped with a full R1–R5
+reconciliation table, five explicitly-flagged assumptions, and a
+PARKED.md that correctly declines rungs 2–7 and everything R2 named but
+did not ask to resolve (commit `f0e9af30`). Zero `src/` lines across the
+whole tranche (base `9a319c10`), verified in both validation passes.
+The infrastructure verdict the whole program was staged to test: a
+complete per-rung spec (HANDOVER_2026-08-03.md rung 1) plus the
+dr-change-orchestrator phase discipline held a less capable executor to
+scope, through a mid-flight audit finding (E9), two self-caught defects
+in its own work (~30 column-indented checks that `docs_verify`'s
+column-0 parser never registered, caught by `--audit`; and the one-sided
+E9 header fix of X3), and a validation FAIL loop — with zero operator or
+monitor intervention. Residue, honestly: one rung of seven; the
+DESIGN-AND-STOP discipline (rungs 6–7) and the guardrailed rungs (4–5)
+remain untested; "accepted does not mean true" applies to the five new
+socket contracts until a rung actually builds against them.
