@@ -90,11 +90,18 @@ tranche writes zero `docs/map/` content (S1's deliverable is an
       ```
 - [x] 5. (S1) [COMMIT] Commit step 4, push with retry (2s/4s/8s/16s).
       done-when: new commit on branch AND clean tree.
-- [ ] 6. (S2, R3) Scope-boundary proof: confirm zero `src/` changes across
+- [x] 6. (S2, R3) Scope-boundary proof: confirm zero `src/` changes across
       the whole tranche.
       done-when: `git diff --stat <tranche-base-sha>..HEAD -- src/` prints
       nothing (paste the empty result and the base sha it was measured
       against).
+      DONE. Base identified as the parent of REQUEST.md's first commit,
+      `b73db3ba9f53540fac5c92f657b418238b13fcd7` (the merge commit that
+      brought in the executor-errata ledger, immediately before this
+      tranche began). `git diff --stat b73db3ba..HEAD -- src/` -> empty
+      output, exit 0. R3 held for the entire tranche.
+      Also noted: the push after step 5 hit a transient 503 from the git
+      proxy; retried with backoff (2s) and succeeded on the first retry.
 - [ ] 7. (S3, R4) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
