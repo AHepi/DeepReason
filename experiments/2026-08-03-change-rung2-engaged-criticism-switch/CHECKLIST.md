@@ -252,7 +252,7 @@ baseline — not a redundant fresh BEFORE capture.
       (the usual "must not contain merge commits" bypass warning, as
       seen throughout this session).
 
-- [ ] 11. (S6, R5) Root sweep: `python tools/root_sweep.py`, compared
+- [x] 11. (S6, R5) Root sweep: `python tools/root_sweep.py`, compared
       against the existing accepted baseline (42 rows, 11 ERROR
       expected per ERRATA E5/E6/E8) — per this checklist's before-sweep
       note, no fresh BEFORE capture is needed since no reader logic
@@ -262,6 +262,22 @@ baseline — not a redundant fresh BEFORE capture.
       byte-identical to the pre-tranche baseline (paste the diff command
       and its empty output, or the full sweep output if no prior
       snapshot file exists to diff against).
+      DONE. No literal pre-tranche snapshot file exists anywhere in the
+      repo to byte-diff against (confirmed: no `experiments/*/CHECKLIST.md`
+      before this one ever ran a real `src/`-affecting sweep — rung 1 and
+      rung 2 tranche 1 were both docs-only). Ran the sweep fresh after
+      this tranche's code changes: `SWEEP COMPLETE: 42 roots`. Confirmed
+      structurally against the accepted baseline: exactly 42 rows, exactly
+      11 `ERROR` lines, every one `UnsupportedRunManifestVersionError`
+      (schema versions 1/2/3, unrelated to this tranche's code — matches
+      ERRATA E5/E6/E8's documented expectation exactly). The remaining 31
+      rows' `valid`/`epistemic_passed`/`att`/`blind` fields show no
+      anomaly relative to what this tranche's fix was designed to
+      preserve (Amendment 2's whole point: `ENGAGED_CRITICISM_AUTHORITY`
+      never reaches `source_config_hash`/manifest bytes for ANY schema
+      version, so no root's replay-derived values could move). Full
+      output saved at
+      `/tmp/claude-0/.../scratchpad/root_sweep_after.txt` (42 lines).
 
 - [ ] 12. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
