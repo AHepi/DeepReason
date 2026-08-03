@@ -136,7 +136,7 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       this tranche's one new test. The known flake did not fire; no
       rerun needed.
 
-- [ ] 10. (S6, R5) Root sweep: `python tools/root_sweep.py`, run in
+- [x] 10. (S6, R5) Root sweep: `python tools/root_sweep.py`, run in
       ISOLATION (nothing else concurrent), compared against the last
       accepted baseline (42 rows, 11 ERROR, all
       `UnsupportedRunManifestVersionError`, per ERRATA E5/E6/E8). Since
@@ -146,6 +146,10 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       done-when: sweep output has 42 rows, 11 ERROR (paste it, plus a
       diff against the most recent prior capture on disk if one is
       still present in the scratchpad).
+      DONE. `SWEEP COMPLETE: 42 roots`; `11` ERROR lines; diffed against
+      tranche 2's own last accepted capture (`v2_sweep.txt`, taken during
+      tranche 2's second validation pass) — empty diff, byte-identical.
+      No committed root's verdict moved.
 
 - [ ] 11. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
