@@ -197,13 +197,16 @@ re-confirmed untouched by this tranche's design.
       failed; exactly rung 2's 3292 baseline plus this tranche's 9 new
       tests. The known flake did not fire; no rerun needed.
 
-- [ ] 12. (S6, R6) Root sweep: `python tools/root_sweep.py`, ISOLATED,
+- [x] 12. (S6, R6) Root sweep: `python tools/root_sweep.py`, ISOLATED,
       compared against the last accepted baseline (42 rows, 11 ERROR,
       all `UnsupportedRunManifestVersionError`). Since no reader logic
       changes in this tranche, this run IS the after-answer.
       done-when: sweep output has 42 rows, 11 ERROR (paste it, plus a
       diff against the most recent prior capture on disk if one is
       still present in the scratchpad).
+      DONE. `SWEEP COMPLETE: 42 roots`; 11 ERROR lines; diffed against
+      rung 2's own last accepted capture (`v_sweep.txt`) — empty diff,
+      byte-identical. No committed root's verdict moved.
 
 - [ ] 13. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
