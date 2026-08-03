@@ -10,7 +10,7 @@ subsystem document moves; docs_verify still runs as the regression guard
 that the wiring edits broke nothing the map pins (CLAUDE.md is grepped by
 map checks).
 
-- [ ] 1. (S1) Write `.claude/skills/dr-ask-the-right-question/SKILL.md`:
+- [x] 1. (S1) Write `.claude/skills/dr-ask-the-right-question/SKILL.md`:
       frontmatter (name, description with load triggers) + the six
       sections of SPEC S1, worked examples only from committed artifacts.
       done-when: all of
@@ -19,6 +19,9 @@ map checks).
         `grep -q "name: dr-ask-the-right-question" <file>` -> exit 0, and
         `grep -q "86f1248e" <file>` -> exit 0 (dr-decide-or-ask provenance),
         and `grep -cE "ERRATA|Traps|experiments/2026-08" <file>` -> >= 4.
+      OUTPUT: sections: 6 | frontmatter: ok | provenance: ok | refs: 14
+      (first run showed 7 sections — the Exit-criterion H2; demoted to a
+      bold paragraph to match the criterion as written, content unchanged)
 
 - [ ] 2. (S1) [COMMIT] Commit the new skill file alone (message cites R1,
       R3, R4), push with retry.
