@@ -19,17 +19,18 @@ whole `rules/` package, which is `DR-SUB-rules`'s wider concern.
 
 ## The socket contract — what it promises, what it is handed, what it must never do
 
-**Promises:**
-- Every admitted candidate passes the anti-relapse gate before it can be
-  registered; a blocked candidate registers no commitment and emits no
-  `Register` event.
-  `check: python -c "s=open('src/deepreason/rules/conj.py').read(); assert s.count('anti_relapse.check(')==1, s.count('anti_relapse.check('); assert s.count('register_batch(')==1, s.count('register_batch('); assert s.index('anti_relapse.check(') < s.index('register_batch('); assert 'if not admitted:' in s"`
-- The whole batch commits through exactly one `harness.register_batch`
-  call — candidates are never registered one at a time.
-  `check: test "$(grep -c 'register_batch(' src/deepreason/rules/conj.py)" -eq 1`
-- Every candidate's interface is compiled from the problem's own criteria,
-  never invented independently of them.
-  `check: grep -q "for commitment_id in problem.criteria" src/deepreason/rules/conj.py && grep -q "compile_interface_draft(" src/deepreason/rules/conj.py`
+**Promises:** every admitted candidate passes the anti-relapse gate before
+it can be registered; a blocked candidate registers no commitment and
+emits no `Register` event.
+`check: python -c "s=open('src/deepreason/rules/conj.py').read(); assert s.count('anti_relapse.check(')==1, s.count('anti_relapse.check('); assert s.count('register_batch(')==1, s.count('register_batch('); assert s.index('anti_relapse.check(') < s.index('register_batch('); assert 'if not admitted:' in s"`
+
+The whole batch commits through exactly one `harness.register_batch` call
+— candidates are never registered one at a time.
+`check: test "$(grep -c 'register_batch(' src/deepreason/rules/conj.py)" -eq 1`
+
+Every candidate's interface is compiled from the problem's own criteria,
+never invented independently of them.
+`check: grep -q "for commitment_id in problem.criteria" src/deepreason/rules/conj.py && grep -q "compile_interface_draft(" src/deepreason/rules/conj.py`
 
 **What it is handed:** the registered `problem` (and its `criteria`); the
 manifest's `run_manifest` object itself (injected, optional — legacy v4/v5
@@ -41,19 +42,21 @@ context it may both read and, uniquely among rules-side callers, write back
 into (`DR-SEAM-rules-x-scratch`).
 `check: grep -q "if (endpoint_lease is None) != (execution_school_id is None):" src/deepreason/rules/conj.py`
 
-**Must never do:**
-- Write the log, compute a label, or decide a `Status` — that is the
-  harness's and adjudication's job; `rules/` only constructs the records
-  that make the harness do so (the package-wide guarantee `DR-SUB-rules`
-  already checks, which binds `conj.py` as a member of `rules/`).
-  `check: ! grep -rqE "deepreason\.(harness|adjudication)|from deepreason import [^#]*\b(harness|adjudication)\b" --include=*.py src/deepreason/rules/`
-- Let a candidate bypass the anti-relapse gate to reach `register_batch`
-  (see the ordering check above — there is no second path into `batch`).
-- Hand-build a demonstrative fail warrant. `conj` proposes; it never
-  constructs the `(attackable ν, DEMONSTRATIVE w:<κ>:<target>, critic)`
-  triple — that constructor is `rules/warrants.py::register_fail_warrant`
-  alone, and `conj.py` does not call it.
-  `check: ! grep -q "register_fail_warrant" src/deepreason/rules/conj.py`
+**Must never do:** write the log, compute a label, or decide a `Status` —
+that is the harness's and adjudication's job; `rules/` only constructs the
+records that make the harness do so (the package-wide guarantee
+`DR-SUB-rules` already checks, which binds `conj.py` as a member of
+`rules/`).
+`check: ! grep -rqE "deepreason\.(harness|adjudication)|from deepreason import [^#]*\b(harness|adjudication)\b" --include=*.py src/deepreason/rules/`
+
+Let a candidate bypass the anti-relapse gate to reach `register_batch`
+(see the ordering check above — there is no second path into `batch`).
+
+Hand-build a demonstrative fail warrant. `conj` proposes; it never
+constructs the `(attackable ν, DEMONSTRATIVE w:<κ>:<target>, critic)`
+triple — that constructor is `rules/warrants.py::register_fail_warrant`
+alone, and `conj.py` does not call it.
+`check: ! grep -q "register_fail_warrant" src/deepreason/rules/conj.py`
 
 ## Where it lives
 

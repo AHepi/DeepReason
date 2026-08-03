@@ -326,18 +326,60 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 19's write.
 
-- [ ] 21. (S8, R4) Scope-boundary proof: confirm zero `src/` changes across
+- [x] 21. (S8, R4) Scope-boundary proof: confirm zero `src/` changes across
       the whole tranche.
       done-when: `git diff --stat <tranche-base-sha>..HEAD -- src/` prints
       nothing (paste the empty result and the base sha it was measured
       against).
-- [ ] 22. (S9, R5) Full map gate, all three modes, pasted in full:
+      DONE. Base identified as the parent of REQUEST.md's first commit
+      (`c7d06dd9`), i.e. `9a319c10b66f39963c64a5142311c07aa8460fa6` (the
+      handover tranche's own delivered head, before this rung-1 tranche
+      began). `git diff --stat 9a319c10..HEAD -- src/` -> empty output,
+      exit 0. R4 held for the entire tranche.
+- [x] 22. (S9, R5) Full map gate, all three modes, pasted in full:
       `python tools/docs_verify.py` (expect 0 failed),
       `python tools/docs_verify.py --audit` (expect 0 findings against the
       checks added in steps 1-19), `python tools/docs_verify.py --links`
       (expect 0 dangling).
       done-when: all three commands exit 0 and their output is pasted
       verbatim into the step's execution record.
+
+      A REAL, SEVERE defect was found and fixed at this step, across every
+      file this tranche wrote in steps 1, 3, 5, 7, 9: `--audit` flagged
+      `CON-scheduler-ranking.md` as having "no checks — every claim in it
+      is unverifiable". Investigation: `docs_verify.py`'s check parser is
+      `_CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")` — anchored to
+      column 0, deliberately (its own test pins
+      `assert parse_text("    `check: false`").checks == []`; SCHEMA.md's
+      own rule already said this: "A check must start at column 0"). Every
+      "socket contract" bullet list I wrote (Promises/Handed/Must-never-do
+      in CON-schools.md, CON-authority.md, CON-conjecture-source.md,
+      CON-criticism-source.md, CON-scheduler-ranking.md, plus two Traps
+      bullets in CON-criticism-source.md) used markdown `- ` bullets with
+      the check indented as a continuation line — which the codebase's
+      OWN pre-existing documents never do (confirmed: `SUB-rules.md`'s
+      Traps section uses bold-label paragraphs with the check breaking OUT
+      to column 0, even directly against the next bullet). Net effect:
+      roughly 30 checks I had individually verified standalone earlier in
+      this tranche were never actually registered with the tool at all —
+      each step's "0 failed" was true but was not exercising the new
+      claims it appeared to guard.
+      FIXED: converted every affected bullet list to the established
+      paragraph-plus-column-0-check style across all five files. Re-ran
+      each individually verified check standalone again post-fix (all
+      still pass), then:
+      `python tools/docs_verify.py --audit`: `docs_verify --audit: 0
+      finding(s)`
+      `python tools/docs_verify.py --links`: `docs_verify --links: 0
+      dangling reference(s), 49 document(s)`
+      `python tools/docs_verify.py` (full, unflagged, ~5 min):
+      ```
+      docs_verify [full]: 49 documents, 793 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+      Check count rose from 762 (last full run, after step 20) to 793 — a
+      genuine +31, confirming the previously-invisible checks are now
+      actually parsed and executed, not merely present as text.
 - [ ] 23. (all) Full gate, confirmatory (no `src/` changed so no regression
       is expected; run per CLAUDE.md/dr-plan-steps boilerplate anyway):
       `python -m pytest tests/ -q -n 4`.

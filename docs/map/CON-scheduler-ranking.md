@@ -23,20 +23,20 @@ made zero provider calls.
 
 ## The socket contract — what it promises, what it is handed, what it must never do
 
-**Promises:**
-- The operator's `SEED` question always wins a rank tie, in both selection
-  modes — ranked directly after the age term, before the reflexive
-  tie-break, in both the `LIVENESS_QUEUE` sort key and the round-robin
-  pool's sort key.
-  `check: grep -q "p.provenance.trigger != SpawnTrigger.SEED," src/deepreason/scheduler/scheduler.py && test "$(grep -c "provenance.trigger != SpawnTrigger.SEED" src/deepreason/scheduler/scheduler.py)" -eq 2`
-- Import-role admission records (attached-source records, source-
-  reliability assertions) never count as a "survivor" — the aging weight
-  cannot be depressed by evidence-admission bookkeeping mistaken for a
-  solved candidate.
-  `check: grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py`
-- Both guarantees are pinned by regression, not only by reading the sort
-  key.
-  `check: python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
+**Promises:** the operator's `SEED` question always wins a rank tie, in
+both selection modes — ranked directly after the age term, before the
+reflexive tie-break, in both the `LIVENESS_QUEUE` sort key and the
+round-robin pool's sort key.
+`check: grep -q "p.provenance.trigger != SpawnTrigger.SEED," src/deepreason/scheduler/scheduler.py && test "$(grep -c "provenance.trigger != SpawnTrigger.SEED" src/deepreason/scheduler/scheduler.py)" -eq 2`
+
+Import-role admission records (attached-source records, source-
+reliability assertions) never count as a "survivor" — the aging weight
+cannot be depressed by evidence-admission bookkeeping mistaken for a
+solved candidate.
+`check: grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py`
+
+Both guarantees are pinned by regression, not only by reading the sort key.
+`check: python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
 
 **What it is handed:** the harness's `state` (problems, artifacts, status —
 read only, never mutated here); `reflexive_problems(state)`, the lineage-
@@ -45,20 +45,21 @@ following meta-work set; the `Config` knobs `FOCUS_PROBLEM`, `FOCUS_FAMILY`,
 per-instance attention cache `_problem_worked` (liveness ages — rebuildable,
 non-epistemic).
 
-**Must never do:**
-- Write to disk or assign a `Status`/`hv`/`reach` value — attention and
-  ranking only, exactly like the rest of `DR-SUB-scheduler` (the package-
-  wide guarantee this socket inherits, not a separate one).
-  `check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py`
-- Select a `RESEARCH`-triggered problem for ordinary gamma work — research
-  problems are worked by backends, never by `_select_problem`'s candidate
-  pool.
-  `check: grep -q "p.provenance.trigger != SpawnTrigger.RESEARCH" src/deepreason/scheduler/scheduler.py`
-- Let reflexive (meta-economy) work escape its `INTEGRATION_BUDGET_SHARE`
-  cap by following only the spawn trigger and not the lineage — the Bronze
-  Age postmortem: debt/remove-arbitrariness successors escaped the
-  reflexive set entirely when tracked by trigger alone.
-  `check: grep -q "self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE" src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
+**Must never do:** write to disk or assign a `Status`/`hv`/`reach` value —
+attention and ranking only, exactly like the rest of `DR-SUB-scheduler`
+(the package-wide guarantee this socket inherits, not a separate one).
+`check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py`
+
+Select a `RESEARCH`-triggered problem for ordinary gamma work — research
+problems are worked by backends, never by `_select_problem`'s candidate
+pool.
+`check: grep -q "p.provenance.trigger != SpawnTrigger.RESEARCH" src/deepreason/scheduler/scheduler.py`
+
+Let reflexive (meta-economy) work escape its `INTEGRATION_BUDGET_SHARE`
+cap by following only the spawn trigger and not the lineage — the Bronze
+Age postmortem: debt/remove-arbitrariness successors escaped the
+reflexive set entirely when tracked by trigger alone.
+`check: grep -q "self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE" src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
 
 ## Where it lives
 
