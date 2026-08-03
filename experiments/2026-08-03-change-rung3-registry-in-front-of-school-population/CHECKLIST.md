@@ -208,6 +208,8 @@ re-confirmed untouched by this tranche's design.
       rung 2's own last accepted capture (`v_sweep.txt`) — empty diff,
       byte-identical. No committed root's verdict moved.
 
-- [ ] 13. (all) [COMMIT] Final push and cleanliness check.
+- [x] 13. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
       on `origin/claude/delivery-rungs-handover-m22sdy` (paste both).
+      DONE. `git status --porcelain` empty; local and origin both at
+      `8cff76e7`.
