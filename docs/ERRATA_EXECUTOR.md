@@ -32,14 +32,17 @@ written by whichever session holds the evidence: the executor session
 itself (per the feed-instruction in `docs/HANDOVER_2026-08-03.md`) or the
 monitoring session reviewing its record.
 
-Numbering rule (added 2026-08-03 after the X5 collision, operator-
-directed — see X6): the two writers use disjoint id spaces. The
-MONITORING session writes `X<n>` (this file's original sequence). The
-EXECUTOR session writes `XE<n>`, starting at XE1, numbered off the ledger
-tail in its OWN checkout. Neither renumbers the other's entries, ever;
-on merge, both sequences stand as written. The executor's one
-pre-rule colliding entry (commit `4e4c26e8`, "X5" in its branch) is
-cited as **X5-E** everywhere, including after merge.
+Single-writer rule (operator-directed 2026-08-03, superseding the
+short-lived two-writer numbering rule below): this ledger has ONE
+writer, the monitoring session, `X<n>` sequence. The executor records
+its observations in its own tranche artifacts; the monitor carries what
+matters here. Historical note — the two-writer period produced two
+executor-authored entries that stand as written per append-only
+discipline: the pre-rule collision cited as **X5-E** (commit
+`4e4c26e8`) and **XE1** (commit `de2b5826`); the `XE<n>` id space is
+retired at XE1. Original numbering rule, kept for the citations it
+defined: monitor `X<n>`, executor `XE<n>` off its own checkout's tail,
+neither renumbering the other, both sequences standing on merge.
 
 ## Entries
 

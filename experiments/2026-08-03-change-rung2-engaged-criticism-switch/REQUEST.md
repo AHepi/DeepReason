@@ -155,3 +155,22 @@ fix preserving old-schema-version identity, per that document's own
 governing principle ("fix READERS so old roots stay valid") — not a
 widened validator or new manifest semantics, and not a flipped default
 (R3 unaffected). See SPEC.md "Amendment 2" for the full account and fix.
+
+## Amendment 3 — operator approval of the frozen-surface touch
+
+Recorded 2026-08-03 by the monitoring session, which put the decision to
+the operator directly after VALIDATION.md's governance FAIL. The
+question asked (verbatim): "Approve the 7-line fix in run_manifest.py so
+tranche 2 can finish?" with the consequences of both options stated
+(approve = fix stays, proven safe by full gate 3291/0 and the monitor's
+byte-identical before/after sweeps, X8; reject = re-plan avoiding the
+frozen file). The operator's answer (verbatim):
+
+> Approve it
+
+This is the operator approval VALIDATION.md required for the
+`run_manifest.py` (surface 4) touch — the unconditional scrub of
+`ENGAGED_CRITICISM_AUTHORITY` in `_versioned_source_config_data`.
+Validation's remaining ask stands: the Traps entry in
+`docs/map/INV-frozen-surfaces.md` documenting the Config-field-addition
+failure mode.
