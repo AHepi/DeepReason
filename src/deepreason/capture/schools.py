@@ -10,9 +10,15 @@ roster is a deterministic function of the log. Schools never touch att/dep,
 adjudication, or statuses.
 """
 
+import copy
 import json
+from collections.abc import Iterable
+from dataclasses import dataclass
+from typing import Any, Protocol
 
+from deepreason.canonical import canonical_json
 from deepreason.ontology import Provenance, Rule, SpawnTrigger, Status
+from deepreason.ontology.frozen import FrozenDict
 
 # One-time global curation, declared (§11.1 cold start; §17 residue).
 STANCE_LIBRARY = {
@@ -189,3 +195,130 @@ def allocate(harness, problem, schools: dict[str, dict], config) -> list[str]:
                 harness, [artifact.provenance.school], schools, config
             )
     return everyone
+
+
+class SchoolPopulationRegistryError(ValueError):
+    pass
+
+
+class UnknownSchoolPopulationBackend(SchoolPopulationRegistryError, KeyError):
+    pass
+
+
+@dataclass(frozen=True)
+class SchoolPopulationRegistration:
+    backend_id: str
+    backend: "SchoolPopulationBackend"
+    pinned_fingerprint: dict
+
+
+class SchoolPopulationBackend(Protocol):
+    def fingerprint(self) -> dict[str, Any]: ...
+
+    def init_schools(self, harness, config) -> dict[str, dict]: ...
+
+    def roster(self, harness) -> dict[str, dict]: ...
+
+    def allocate(self, harness, problem, schools: dict[str, dict], config) -> list[str]: ...
+
+    def reseed(
+        self, harness, school_id: str, current: dict, reason: str,
+        crossover_from: str | None = None,
+    ) -> dict: ...
+
+
+class SchoolPopulationRegistry:
+    """Resolve only trusted registered names; model output never routes policy."""
+
+    def __init__(self, backends: Iterable[SchoolPopulationBackend] = ()) -> None:
+        self._registrations: dict[str, SchoolPopulationRegistration] = {}
+        for backend in backends:
+            self.register(backend)
+
+    def register(
+        self,
+        backend: SchoolPopulationBackend,
+        *,
+        backend_id: str | None = None,
+    ) -> SchoolPopulationRegistration:
+        if not all(
+            hasattr(backend, attr)
+            for attr in ("fingerprint", "init_schools", "roster", "allocate", "reseed")
+        ):
+            raise TypeError("backend does not implement the school-population protocol")
+        fingerprint = backend.fingerprint()
+        resolved = backend_id or str(
+            fingerprint.get("backend") or getattr(backend, "name", "")
+        )
+        if not resolved:
+            raise SchoolPopulationRegistryError(
+                "backend fingerprint has no backend identifier"
+            )
+        if resolved in self._registrations:
+            raise SchoolPopulationRegistryError(
+                f"school-population backend already registered: {resolved}"
+            )
+        if fingerprint.get("backend") not in {None, resolved}:
+            raise SchoolPopulationRegistryError(
+                "backend identifier disagrees with fingerprint"
+            )
+        registration = SchoolPopulationRegistration(
+            backend_id=resolved,
+            backend=backend,
+            pinned_fingerprint=FrozenDict(copy.deepcopy(fingerprint)),
+        )
+        self._registrations[resolved] = registration
+        return registration
+
+    def get(self, backend_id: str) -> SchoolPopulationRegistration:
+        try:
+            registration = self._registrations[backend_id]
+        except KeyError as error:
+            raise UnknownSchoolPopulationBackend(
+                f"unknown school-population backend: {backend_id}"
+            ) from error
+        if not self.fingerprint_is_pinned(backend_id):
+            raise SchoolPopulationRegistryError(
+                "school-population backend fingerprint changed after registration"
+            )
+        return registration
+
+    resolve = get
+
+    def ids(self) -> tuple[str, ...]:
+        return tuple(sorted(self._registrations))
+
+    def fingerprint(self, backend_id: str) -> dict[str, Any]:
+        return self._registrations[backend_id].backend.fingerprint()
+
+    def fingerprint_is_pinned(self, backend_id: str) -> bool:
+        registration = self._registrations[backend_id]
+        return canonical_json(registration.backend.fingerprint()) == canonical_json(
+            registration.pinned_fingerprint
+        )
+
+
+class DefaultSchoolPopulationBackend:
+    """Today's behavior, unchanged, made resolvable by name."""
+
+    def fingerprint(self) -> dict[str, Any]:
+        return {"backend": "default", "stance_count": len(_STANCES)}
+
+    def init_schools(self, harness, config) -> dict[str, dict]:
+        return init_schools(harness, config)
+
+    def roster(self, harness) -> dict[str, dict]:
+        return roster(harness)
+
+    def allocate(self, harness, problem, schools: dict[str, dict], config) -> list[str]:
+        return allocate(harness, problem, schools, config)
+
+    def reseed(
+        self, harness, school_id: str, current: dict, reason: str,
+        crossover_from: str | None = None,
+    ) -> dict:
+        return reseed(harness, school_id, current, reason, crossover_from)
+
+
+SCHOOL_POPULATION = SchoolPopulationRegistry()
+SCHOOL_POPULATION.register(DefaultSchoolPopulationBackend(), backend_id="default")

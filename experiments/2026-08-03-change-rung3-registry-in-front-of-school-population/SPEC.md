@@ -211,6 +211,32 @@ None for Tranche A's own scope.
   the only, default entry" (R2's own words); this tranche registers
   exactly one.
 
+## Amendment 1 (discovered executing step 6/S3, R6)
+
+S7 (R6): `docs/map/SEAM-manifest-x-schools.md`'s checked claim at line
+179 ("The school side cannot describe what a route is") asserts a
+CLOSED-WORLD import set for `capture/schools.py`:
+`mods=={'json','deepreason.ontology'}`. S1's new imports
+(`copy`, `typing.Any`/`typing.Protocol`, `collections.abc.Iterable`,
+`dataclasses.dataclass`, `deepreason.canonical.canonical_json`,
+`deepreason.ontology.frozen.FrozenDict`) break this literal assertion.
+The invariant the check exists to protect — schools.py cannot reach the
+manifest, the firewall, or `Config`'s type, so allocation cannot become
+route-aware — is NOT violated: none of the six new imports touch
+`run_manifest`, `llm.firewall`, or `config`. This is the same class of
+discovery as tranche 2's Amendment 1 (a literal-grep/closed-world check
+too narrow for a legitimate addition, not a violated invariant). Fix:
+widen the closed-world set in the check to include the six new imports,
+while preserving the check's actual protective assertions unchanged
+(the `SchoolRoleBindingV1` pattern tests, the
+`! grep -q "deepreason\.capture" src/deepreason/run_manifest.py`
+reverse-direction check, and the `school_id = f"school-{i}"` grep) —
+none of those need to change, only the import-set literal.
+accept: `python tools/docs_verify.py --fast` 0 failed (SEAM-manifest-x-schools.md's check specifically passing) AND the check still asserts
+`not {'run_manifest', 'llm.firewall', 'deepreason.config'} & mods`-style
+exclusion (i.e., the fix widens, it does not weaken the exclusion the
+check exists to prove).
+
 ## Budget
 
 ~90 lines (protocol + registration dataclass + registry class +

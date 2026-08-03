@@ -2,8 +2,8 @@
 Verified-at: 546544b5
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py -q
 Owns: src/deepreason/scheduler/
-Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow
-Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, scheduler x schools, scheduler x scratch
+Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler
+Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, scheduler x scratch
 
 # The scheduler — what gets worked on, in what order, under what budget
 

@@ -116,4 +116,14 @@ rungs' exact words before proceeding.
 
 ## Amendments
 
-(none yet)
+**Amendment 1** (discovered during dr-execute-step, step 6): S1's new
+imports in `capture/schools.py` (`copy`, `typing`, `collections.abc`,
+`dataclasses`, `deepreason.canonical`, `deepreason.ontology.frozen`)
+broke a THIRD map document's closed-world check —
+`docs/map/SEAM-manifest-x-schools.md:179` asserts `capture/schools.py`
+imports exactly `{'json', 'deepreason.ontology'}`. The invariant this
+check protects (schools.py cannot reach the manifest, firewall, or
+`Config`'s type) is NOT violated by the new imports — R6 ("map updated
+in the SAME commit as the code") already covers this — recorded as
+SPEC.md's S7 rather than a new requirement. See SPEC.md "Amendment 1"
+for the full account and fix.
