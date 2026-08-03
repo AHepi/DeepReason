@@ -190,3 +190,41 @@ for now: adding these documents to a check regime is a change the
 operator has not requested; until then, any charter change here must be
 hand-propagated to the handover's calibration block, and this entry is
 the reminder.
+
+**X8 — the program's first frozen-surface contact, survived three
+layers deep, closed with a monitor-verified byte-identical sweep
+(load-bearing-and-correct at every layer).** Rung 2 tranche 2
+(`experiments/2026-08-03-change-rung2-engaged-criticism-switch/`), the
+first `src/` change of the whole executor program. The event chain, all
+from the committed record: (1) the new Config field
+`ENGAGED_CRITICISM_AUTHORITY` leaked into the source-config echo and the
+repo's own golden test
+(`test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`)
+FAILED — the frozen-surface protection fired exactly as designed;
+(2) the executor's first fix (scrub for `schema_version < 4`, commit
+`9607f739`) followed the documented precedent but rested on the
+inference "no pinned-hash test above v3"; (3) the FULL GATE refuted
+that inference — two v5 goldens failed
+(`test_v5_canonical_bytes_match_incident_head_golden`,
+`test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic`)
+— and the executor recorded the false inference verbatim in a SPEC
+amendment ("a false inference from an incomplete grep, not a verified
+fact") and widened the scrub to UNCONDITIONAL (commit `f642f980`): the
+field now never enters any schema version's source-config echo; its
+runtime effect flows solely through the manifest's first-class
+`criticism_policy.authority`. (4) Final gate: 3291 passed, 0 failed
+(commit `6a6a2462`). (5) The executor's sweep matched the 42-row /
+11-ERROR baseline structurally but had no committed pre-tranche
+snapshot to byte-diff (its checklist says so honestly, commit
+`99dbbb43`); the MONITOR supplied the missing proof — independent
+sweeps at base `e0d4eacb` and head `50e4eb89` in isolated worktrees,
+each under its own tree's reader code: identical sha256
+(`9c092414...e050cd2`), diff empty, 42 rows, 11 ERROR. No committed
+root's verdict moved. Infrastructure claims confirmed: the golden
+tests + full gate caught BOTH the initial leak and the too-narrow
+fix with zero operator/monitor intervention, and the handover's
+"cite the instrument with every number" discipline held under
+pressure. Residue: the executor's own VALIDATION/DELIVERY for this
+tranche were still pending at this entry; the monitor's sweep
+verification lives in the session scratchpad (session-local by
+design), with its digest recorded here as the durable citation.
