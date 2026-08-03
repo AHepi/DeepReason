@@ -84,9 +84,12 @@ mints the interface rather than through a hand-built graph.
 
 Both ends of the seam, end to end, on two committed roots: engaged
 `run-f4fa6663` carries one `register_fail_warrant` warrant with the `w:<κ>:<target>`
-id, one carriage pair, one edge and exactly one `REFUTED`; jolt
-`run-b4d6dfda` ran to completion with none of the four and 72 `ACCEPTED`.
-`check: python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/live_jolt_2026-07-31/home/runs/run-b4d6dfda0c20676a864a051fbc97bda4'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 72 and len(list(h.log.read())) == 851; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"`
+id, one carriage pair, one edge and exactly one `REFUTED`; stress-triplet
+orbit `run-6472629d` ran to completion with none of the four and 42 `ACCEPTED`.
+(The none-of-the-four half originally pinned jolt `run-b4d6dfda` — 72
+`ACCEPTED`, 851 events — but that root's home was gitignored by its ladder and
+never entered the record; `docs/ERRATA.md` E7.)
+`check: python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 42 and len(list(h.log.read())) == 600; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"`
 
 ## What is deliberately absent
 

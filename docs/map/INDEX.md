@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: 08dcdf3c
+Verified-at: df0fd0fd
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -103,9 +103,12 @@ traffic at all.
 | — | adjudication × rules | `SEAM-adjudication-x-rules.md` |
 | — | capabilities × rules | `SEAM-capabilities-x-rules.md` |
 | — | harness × verification | `SEAM-harness-x-verification.md` |
+| — | periphery × verification | `SEAM-periphery-x-verification.md` |
 
-The last five carry no import-count because at least one side is a concept
-rather than a package, or the agreement is enforced without a direct import.
+The last six carry no import-count because at least one side is a concept
+rather than a package, the agreement is enforced without a direct import, or —
+the periphery × verification case — every import between the sides is
+function-local, which the coupling metric cannot see.
 **That is exactly why they need documents**: coupling metrics cannot see them,
 so nothing but a written seam will tell the next reader they exist.
 

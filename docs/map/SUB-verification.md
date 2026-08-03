@@ -1,8 +1,8 @@
 <!-- DR-SUB-verification -->
-Verified-at: 546544b5
+Verified-at: df0fd0fd
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/
-Seams: DR-SEAM-harness-x-verification
+Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
 Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
 
 # Verification — replay validation of a run root, and the pinned mechanical verifiers
@@ -179,3 +179,15 @@ value and are the numbers experiment reports quote.
 - **`report.py` imports `verify_root` inside the function body on purpose.** A
   module-level import reintroduces an import cycle during harness startup.
 `check: grep -q "    from deepreason.invariants import verify_root" src/deepreason/verification/report.py && python -c "import sys, deepreason.verification.report; assert 'deepreason.invariants' not in sys.modules"`
+- **A demand for "exactly one artifact shaped like X" must key on a
+  discriminator the model cannot emit.** Until 2026-08-03 the
+  `attached-evidence` check selected its candidate set by `mention` refs to
+  the source record alone, so the first live conjecture that cited its own
+  attached evidence (stress-triplet `run-0a3e93d6e8031e2e6d1d21dde2fa93cc`,
+  completed rc=5) flipped its root to `valid=False`, with a detail string
+  naming as missing an artifact that existed. Fixed in tranche
+  `experiments/2026-08-03-fix-attached-evidence-integrity`: the predicate now
+  also requires `import` provenance — the writer's stamp, unreachable from
+  rule-driven creation — and the uniqueness and dependence demands are
+  unchanged. The agreement is documented in `DR-SEAM-periphery-x-verification`.
+`check: grep -q "artifact.provenance.role == \"import\"" src/deepreason/invariants.py && grep -q "Regression (stress-triplet run-0a3e93d6)" tests/test_attached_evidence_citation.py`

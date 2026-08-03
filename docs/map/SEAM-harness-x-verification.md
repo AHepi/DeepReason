@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-verification -->
-Verified-at: 9fa394d9
+Verified-at: df0fd0fd
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/log/event_log.py, src/deepreason/storage/blobs.py
 Sides: DR-SUB-harness, DR-SUB-verification
@@ -28,7 +28,7 @@ and evidence whose meaning moves with the code is not evidence.
 
 `verify_root` opens the root only read-only, and takes no configuration beyond
 the meter total.
-`check: python -c "import ast,pathlib,inspect;import deepreason.harness as H;import deepreason.log.event_log as L;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();c=[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.Call) and getattr(n.func,'id',getattr(n.func,'attr',None)) in ('Harness','EventLog')];assert len(c)>=4 and all(any(k.arg=='read_only' and getattr(k.value,'value',None) is True for k in n.keywords) for n in c),[ast.unparse(n) for n in c];assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];o=[];oh=H.Harness.__init__;ol=L.EventLog.__init__;H.Harness.__init__=lambda s,*a,**k:(oh(s,*a,**k),o.append(s._read_only))[0];L.EventLog.__init__=lambda s,*a,**k:(ol(s,*a,**k),o.append(s.read_only))[0];verify_root(pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd'));H.Harness.__init__=oh;L.EventLog.__init__=ol;assert len(o)>=19 and all(o),o"`
+`check: python -c "import ast,pathlib,inspect;import deepreason.harness as H;import deepreason.log.event_log as L;from deepreason.invariants import verify_root;t=pathlib.Path('src/deepreason/invariants.py').read_text();c=[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.Call) and getattr(n.func,'id',getattr(n.func,'attr',None)) in ('Harness','EventLog')];assert len(c)>=4 and all(any(k.arg=='read_only' and getattr(k.value,'value',None) is True for k in n.keywords) for n in c),[ast.unparse(n) for n in c];assert list(inspect.signature(verify_root).parameters)==['root','meter_total'];o=[];oh=H.Harness.__init__;ol=L.EventLog.__init__;H.Harness.__init__=lambda s,*a,**k:(oh(s,*a,**k),o.append(s._read_only))[0];L.EventLog.__init__=lambda s,*a,**k:(ol(s,*a,**k),o.append(s.read_only))[0];verify_root(pathlib.Path('experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752'));H.Harness.__init__=oh;L.EventLog.__init__=ol;assert len(o)>=19 and all(o),o"`
 
 The dependency arrow points one way only: the verifier imports the writer, and
 importing the writer pulls in no verifier. The one place the arrow appears to
@@ -144,8 +144,10 @@ expression.
 That record is assembled by callers out of the return value; see
 `DR-SUB-verification` for who writes it and what else it binds. Not "creates no
 new file" — every byte under the root is unchanged, on a one-event root and on a
-521-file committed one.
-`check: python -c "import hashlib,pathlib,tempfile;from deepreason.harness import Harness;from deepreason.invariants import verify_root;s=lambda r:{str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file()};d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);b=s(d);assert b;verify_root(d);assert s(d)==b,'verify_root wrote to a fresh root';r=pathlib.Path('experiments/live_turmite_2026-07-31/home/runs/run-bc3e8797b3e0609eddb324299c8257bd');c=s(r);assert len(c)==521,len(c);verify_root(r);assert s(r)==c,'verify_root wrote to a committed root'"`
+1083-file committed one. (Until 2026-08-03 this check pinned the turmite root,
+whose home was gitignored by its ladder and so never survived a fresh clone —
+`docs/ERRATA.md` E7.)
+`check: python -c "import hashlib,pathlib,tempfile;from deepreason.harness import Harness;from deepreason.invariants import verify_root;s=lambda r:{str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file()};d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);b=s(d);assert b;verify_root(d);assert s(d)==b,'verify_root wrote to a fresh root';r=pathlib.Path('experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752');c=s(r);assert len(c)==1083,len(c);verify_root(r);assert s(r)==c,'verify_root wrote to a committed root'"`
 
 ## How to change it
 
@@ -194,6 +196,16 @@ Also worth running when you touch the correlation passes rather than the replay
 itself: `tests/test_v6_controller3_replay_verification.py`, which pins the
 fail-closed behaviour of the pre-replay controller-v3 correlation.
 
+No `Sweep:` header yet, deliberately (SCHEMA.md sanctions the omission when
+stated): this seam's agreement is the replay relation itself, not a single
+field — its enforcement sites compare whole materialized states
+(`model_dump_json`, digest pairs) rather than testing one symbol, so every
+candidate FIELD && OTHER_SIDE spec tried either matches nothing the
+compare-or-raise detector can see or flags half the tree. A spec that targets
+the state-comparison sites specifically is parked in
+`experiments/2026-08-03-fix-attached-evidence-integrity/PARKED.md` with the
+other headerless seams.
+
 ## Traps
 
 - **Opening a suspect root writable destroys the evidence.** `Harness(root)` is
@@ -227,12 +239,29 @@ fail-closed behaviour of the pre-replay controller-v3 correlation.
   experiment that mutates only the first group will report, correctly and
   uselessly, that nothing happened. The read-back set is pinned by the check
   under *The agreement*.
-- **Pre-v6 roots are expected to refuse.** Of the 42 recorded roots, 14 raise
+- **Pre-v6 roots are expected to refuse.** Of the 45 recorded roots, 14 raise
   `UnsupportedRunManifestVersionError` on open, 3 predate run manifests entirely
-  and open fine, and 25 load a v6 manifest. That is the sweep's baseline, not a
+  and open fine, and 28 load a v6 manifest. That is the census baseline, not a
   regression to be fixed by widening the manifest loader —
-  see `DR-INV-frozen-surfaces`, surface 4, whose prose still says 11.
-`check: python -W ignore -c "import pathlib,subprocess,collections;from deepreason.run_manifest import load_run_manifest as L,UnsupportedRunManifestVersionError as U;R=[pathlib.Path(p).parent for p in subprocess.run(['git','ls-files'],capture_output=True,text=True).stdout.splitlines() if p.endswith('/log.jsonl')];g={'L':L,'U':U,'N':'run-manifest.json'};exec(chr(10).join(['def k(r):','    m=r/N','    if not m.exists(): return 2','    try:','        L(m)','        return 0','    except U:','        return 1']),g);c=collections.Counter(g['k'](r) for r in R);assert len(R)==42 and c[0]==25 and c[1]==14 and c[2]==3,(len(R),dict(c))"`
+  see `DR-INV-frozen-surfaces`, surface 4. This count is by DIRECT manifest
+  load over every git-tracked root, `runs/jolt_positive_headroom_v3_1/`
+  included; `tools/root_sweep.py` scans `experiments/` only and reports 11
+  ERROR rows — two instruments, two true numbers, cite the instrument with the
+  number. (This check itself went stale-false for one day when the
+  stress-triplet roots were committed without re-running it: 42/25 → 45/28 on
+  2026-08-02, corrected 2026-08-03 — see `docs/ERRATA.md`.)
+`check: python -W ignore -c "import pathlib,subprocess,collections;from deepreason.run_manifest import load_run_manifest as L,UnsupportedRunManifestVersionError as U;R=[pathlib.Path(p).parent for p in subprocess.run(['git','ls-files'],capture_output=True,text=True).stdout.splitlines() if p.endswith('/log.jsonl')];g={'L':L,'U':U,'N':'run-manifest.json'};exec(chr(10).join(['def k(r):','    m=r/N','    if not m.exists(): return 2','    try:','        L(m)','        return 0','    except U:','        return 1']),g);c=collections.Counter(g['k'](r) for r in R);assert len(R)==45 and c[0]==28 and c[1]==14 and c[2]==3,(len(R),dict(c))"`
+- **A verify_root predicate must select by the writer's discriminator, never
+  by citation shape.** The `attached-evidence` check keyed its candidate set
+  on `mention` refs alone and was tripped by the first live conjecture that
+  cited its own evidence (stress-triplet
+  `run-0a3e93d6e8031e2e6d1d21dde2fa93cc` — the root this seam's instruments
+  flagged with rc=5 plus one violation, both correct about the verdict and
+  wrong about the cause). Fixed 2026-08-03 by requiring `import` provenance;
+  the writer-reader agreement now has its own document,
+  `DR-SEAM-periphery-x-verification`, and the worked diagnosis is in
+  `experiments/2026-08-03-fix-attached-evidence-integrity`.
+`check: grep -q "artifact.provenance.role == \"import\"" src/deepreason/invariants.py && test -f docs/map/SEAM-periphery-x-verification.md`
 - **`seq-stream` is defence in depth, not the enforcement.** The reader raises
   `EventSequenceError` on any gap, so a gapped log never reaches the graph
   checks; it becomes an `open` finding instead. Reading the `seq-stream` name in

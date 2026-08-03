@@ -1,8 +1,8 @@
 <!-- DR-SUB-periphery -->
-Verified-at: 08dcdf3c
+Verified-at: df0fd0fd
 Verify: python -m pytest tests/test_torn_append.py tests/test_merge.py tests/test_pack_ir.py tests/test_workload_text.py tests/test_admission.py tests/test_research.py tests/test_schools.py tests/test_simulation_compiler.py tests/test_webapp.py tests/test_campaign_coordinator.py -q
 Owns: src/deepreason/log/, src/deepreason/storage/, src/deepreason/evidence/, src/deepreason/admission/, src/deepreason/packs/, src/deepreason/workloads/, src/deepreason/capture/, src/deepreason/research/, src/deepreason/simulation/, src/deepreason/unification/, src/deepreason/views/, src/deepreason/ui/, src/deepreason/brain/, src/deepreason/skills/, src/deepreason/experiments/, src/deepreason/mcp_server.py, src/deepreason/webapp.py, src/deepreason/imports.py, src/deepreason/compat_eval.py
-Seams: 
+Seams: DR-SEAM-periphery-x-verification
 Seams-undocumented: application x periphery, capabilities x periphery, harness x periphery, llm x periphery, manifest x periphery, periphery x scheduler, periphery x scratch
 
 # The periphery — everything no other map document owns

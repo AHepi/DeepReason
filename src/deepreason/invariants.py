@@ -2153,10 +2153,18 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
                     continue
                 record_ref = record[1]
+                # Import provenance is the writer's discriminator: the
+                # candidate evidence artifact is registered by
+                # attach_bound_evidence before the first LLM call, and
+                # rule-driven creation can never carry the import role. A
+                # mention ref alone is just a citation — any cycle-time
+                # artifact may cite the source record without becoming a
+                # candidate (stress-triplet run-0a3e93d6).
                 candidates = [
                     artifact
                     for artifact in h.state.artifacts.values()
-                    if any(
+                    if artifact.provenance.role == "import"
+                    and any(
                         ref.target == record_ref and ref.role == "mention"
                         for ref in artifact.interface.refs
                     )

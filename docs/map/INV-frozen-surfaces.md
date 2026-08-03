@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: 08dcdf3c
+Verified-at: df0fd0fd
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -133,10 +133,14 @@ Fields compared:
 No root's `valid` and no root's `att` may change. The two sweeps should compare
 byte-identical. The sweep's expected baseline is 11 ERROR lines, all
 `UnsupportedRunManifestVersionError` — not a failure. Note the instrument
-matters: by DIRECT manifest load the census is 25 v6 / 14 raising / 3 with no
-manifest (pinned by a check in `DR-SEAM-harness-x-verification`); the sweep
-reads through `verify_root_report`, which surfaces three of those differently.
-Two true numbers, two instruments — cite the instrument with the number.
+matters twice over: by DIRECT manifest load over every git-tracked root the
+census is 28 v6 / 14 raising / 3 with no manifest (pinned by a check in
+`DR-SEAM-harness-x-verification`; 25 v6 before the stress-triplet roots were
+committed), while the sweep scans `experiments/` only — the three
+no-manifest calibration roots live under `runs/` and never enter it — and
+reads through `verify_root_report`, which surfaces three of the raisers
+differently. Two true numbers, two instruments — cite the instrument with
+the number.
 
 `check: python -c "from deepreason.verification.report import verify_root_report"`
 

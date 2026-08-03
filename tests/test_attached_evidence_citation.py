@@ -1,26 +1,18 @@
-"""Reproduction for the attached-evidence citation defect (tranche artifact).
+"""Regression (stress-triplet run-0a3e93d6): citing attached evidence must not
+invalidate the root.
 
-Not part of the gate. Run explicitly:
-
-    python -m pytest experiments/2026-08-03-fix-attached-evidence-integrity/repro_attached_evidence.py -q -s
-
-Two v6 roots differing in ONE respect: whether the cycle-time conjecture
-carries a `mention` ref to the bound source's source-record artifact. The
-control is what every clean root in the corpus looks like. The repro is what
-run-0a3e93d6 looks like at seq 43 — a model citing the evidence it was given.
-
-INVERTED after the fix (see FIX.md): both roots and the committed record now
-verify clean. REPRO.md preserves the pre-fix output; the permanent guard is
-tests/test_attached_evidence_citation.py.
-
-Every piece of scaffolding is imported from the existing gate fixtures; only
-the scheduler stub varies, because that is the one thing `_converged_root`
-does not expose as a hook.
+The triage run of experiments/2026-08-02-stress-triplet completed rc=5 with one
+verify_root violation because its conjecture at seq 43 carried a mention ref to
+the bound source's source-record artifact, and the attached-evidence check
+selected candidates by mention alone. The reliability-dependent candidate the
+finding named as missing was present at seq 4 the whole time. The candidate
+predicate now demands the writer's discriminator — import provenance — which
+rule-driven creation can never carry; the uniqueness and dependence demands are
+unchanged and still catch real writer faults.
 """
 
 from __future__ import annotations
 
-import json
 import pathlib
 
 from deepreason.admission.parse import AdmissionInput, admit_sources
@@ -53,14 +45,16 @@ from tests.test_run_input_v6_commitments import _commitment, _write_qualificatio
 from tests.test_v6_resumed_terminal_revalidation import _record_converged_stop
 
 
-COMMITTED_ROOT = (
+COMMITTED_ROOT = pathlib.Path(
     "experiments/2026-08-02-stress-triplet/home-triage/runs/"
     "run-0a3e93d6e8031e2e6d1d21dde2fa93cc"
 )
 
 
 def _source_record_id(harness) -> str:
-    """The attached-source-record.v1 artifact, found the way verify_root finds it."""
+    """The attached-source-record.v1 artifact, found as verify_root finds it."""
+
+    import json
 
     for artifact in harness.state.artifacts.values():
         if not artifact.content_ref.startswith("inline:"):
@@ -74,8 +68,9 @@ def _source_record_id(harness) -> str:
     raise AssertionError("fixture bound no attached source record")
 
 
-def _run(tmp_path, monkeypatch, *, name, cite_the_source):
-    """One converged v6 root whose single conjecture may or may not cite evidence."""
+def _attached_evidence_root(tmp_path, monkeypatch, *, name, in_cycle):
+    """A converged v6 root with one bound source; `in_cycle` runs extra
+    artifact creation inside the scheduler stub, after evidence attachment."""
 
     root = tmp_path / name
     commitment = _commitment()
@@ -84,7 +79,7 @@ def _run(tmp_path, monkeypatch, *, name, cite_the_source):
         [AdmissionInput(locator="delayed.md", data=SOURCE_TEXT.encode("utf-8"))],
         problem_ref=problem_id,
         provenance=AttachedSourceProvenanceV1(
-            supplied_by="repro fixture",
+            supplied_by="regression fixture",
             acquisition_method="offline construction",
         ),
     )
@@ -103,19 +98,7 @@ def _run(tmp_path, monkeypatch, *, name, cite_the_source):
     _write_qualification(root, manifest)
 
     def finish_without_provider(harness, _config, _cycles, token_budget, **_kwargs):
-        # The one varying line. A conjecture that cites its evidence is the
-        # system working; it must not decide the root's integrity verdict.
-        interface = None
-        if cite_the_source:
-            interface = Interface(
-                refs=[Ref(target=_source_record_id(harness), role="mention")]
-            )
-        harness.create_artifact(
-            "Loop gain above unity is what sustains the oscillation.",
-            interface=interface,
-            provenance=Provenance(role="conjecturer"),
-            problem_id=problem_id,
-        )
+        in_cycle(harness, problem_id)
         stop = _record_converged_stop(root, manifest, harness)
         return (
             {"frontier": [], "survivors": [], "stop_reason": stop["reason"]},
@@ -150,40 +133,72 @@ def _run(tmp_path, monkeypatch, *, name, cite_the_source):
     return root
 
 
-def test_repro_a_cited_source_invalidates_an_otherwise_clean_root(
+def _attached_evidence_findings(root) -> list[dict]:
+    return [
+        v
+        for v in verify_root(root)["violations"]
+        if v["check"] == "attached-evidence"
+    ]
+
+
+def test_a_conjecture_citing_the_bound_source_leaves_the_root_valid(
     tmp_path, monkeypatch
 ):
-    control = _run(tmp_path, monkeypatch, name="control", cite_the_source=False)
-    control_findings = [
-        v for v in verify_root(control)["violations"] if v["check"] == "attached-evidence"
-    ]
-    print("\ncontrol  (conjecture does NOT cite the source):", control_findings)
+    """Regression (stress-triplet run-0a3e93d6): the live failure shape —
+    a cycle-time conjecture mentioning the source record."""
 
-    cited = _run(tmp_path, monkeypatch, name="cited", cite_the_source=True)
-    cited_findings = [
-        v for v in verify_root(cited)["violations"] if v["check"] == "attached-evidence"
-    ]
-    print("repro    (conjecture DOES cite the source):", cited_findings)
+    def conjecture_cites_the_source(harness, problem_id):
+        harness.create_artifact(
+            "Loop gain above unity is what sustains the oscillation.",
+            interface=Interface(
+                refs=[Ref(target=_source_record_id(harness), role="mention")]
+            ),
+            provenance=Provenance(role="conjecturer"),
+            problem_id=problem_id,
+        )
 
-    assert control_findings == []
-    assert cited_findings == []
-
-    # The artifact the finding calls missing is present in both roots.
-    harness = Harness(cited, read_only=True)
-    record_ref = _source_record_id(harness)
-    proper = [
-        a
-        for a in harness.state.artifacts.values()
-        if any(r.target == record_ref and r.role == "mention" for r in a.interface.refs)
-        and any(r.role == "dependence" for r in a.interface.refs)
-    ]
-    print("reliability-dependent candidate evidence artifacts present:", len(proper))
-    assert len(proper) == 1
+    root = _attached_evidence_root(
+        tmp_path, monkeypatch, name="cited", in_cycle=conjecture_cites_the_source
+    )
+    assert _attached_evidence_findings(root) == []
 
 
-def test_repro_the_committed_root_shows_the_same_single_finding():
-    """Record replay: the defect as the live run recorded it. Read-only."""
+def test_the_committed_triage_root_verifies_clean():
+    """Regression (stress-triplet run-0a3e93d6): the committed live record,
+    replayed read-only, no longer reports its citation as an integrity breach."""
 
-    findings = verify_root(pathlib.Path(COMMITTED_ROOT))
-    print("\ncommitted run-0a3e93d6 violations:", findings["violations"])
-    assert findings["violations"] == []
+    report = verify_root(COMMITTED_ROOT)
+    assert report["violations"] == []
+
+
+def test_a_duplicate_import_candidate_still_fails_uniqueness(tmp_path, monkeypatch):
+    """The narrowing must not weaken the demand it narrows: a second
+    import-role artifact mentioning the same source record — a writer fault —
+    is still exactly one attached-evidence violation."""
+
+    def duplicate_import_candidate(harness, problem_id):
+        record_ref = _source_record_id(harness)
+        anchor = harness.create_artifact(
+            "source-reliability: duplicate anchor for the writer-fault fixture",
+            provenance=Provenance(role="import"),
+        )
+        harness.create_artifact(
+            "a second import-time artifact claiming the same source record",
+            interface=Interface(
+                refs=[
+                    Ref(target=anchor.id, role="dependence"),
+                    Ref(target=record_ref, role="mention"),
+                ]
+            ),
+            provenance=Provenance(role="import"),
+            problem_id=problem_id,
+        )
+
+    root = _attached_evidence_root(
+        tmp_path, monkeypatch, name="duplicated", in_cycle=duplicate_import_candidate
+    )
+    findings = _attached_evidence_findings(root)
+    assert len(findings) == 1
+    assert findings[0]["detail"].endswith(
+        "lacks one reliability-dependent candidate evidence artifact"
+    )

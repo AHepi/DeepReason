@@ -115,12 +115,16 @@ carry pair whose warrant id resolves in the `warrants` map; an unresolvable pair
 is skipped silently (`if w is None: continue`). With `att` empty, pass 1 accepts
 everything, which is indistinguishable from "everything survived criticism".
 Regression `jolt run-b4d6dfda0c20676a864a051fbc97bda4`: 851 events, 72 artifacts,
-zero warrants, all `ACCEPTED`, `epistemic_checks_passed: true`. The detector for
+zero warrants, all `ACCEPTED`, `epistemic_checks_passed: true` — that root
+predates the detector and its home was gitignored by the ladder, so it exists
+only in the session that ran it (`docs/ERRATA.md` E7). The committed
+demonstration is stress-triplet `run-6472629d` (orbit): `att` empty, everything
+`ACCEPTED`, and the blindness finding fires. The detector for
 that state is in `verification/report.py`, and it has to be, because this package
 sees no rules and no calls. Upstream, `Harness.register_batch` refuses an
 unregistered carried warrant and `verify_root` fails `carry-warrant`; the silent
 skip here is safe only because of those two.
-`check: grep -q "adjudication-blindness" src/deepreason/verification/report.py && grep -qE "^def _adjudication_blindness_findings\(" src/deepreason/verification/report.py && ! grep -rqi "blind" src/deepreason/adjudication/ && python -m pytest tests/test_adjudication.py::test_unregistered_warrant_rejected -q && python -c "import json,pathlib; from deepreason.adjudication.edges import build_att; from deepreason.adjudication.grounded import label0; from deepreason.harness import Harness; from deepreason.ontology import Artifact,Provenance,Status; c=Artifact(id='C',content_ref='inline:C',provenance=Provenance(role='critic'),warrants=['nope']); assert build_att({'C':c},{},{})==set(); assert set(label0({'C'},set()).values())=={'accepted'}; r='experiments/live_jolt_2026-07-31/home/runs/run-b4d6dfda0c20676a864a051fbc97bda4'; h=Harness(r,read_only=True); assert len(pathlib.Path(r+'/log.jsonl').read_text().splitlines())==851; assert (len(h.state.artifacts),len(h.warrants),len(h.state.att))==(72,0,0); assert set(h.state.status.values())=={Status.ACCEPTED}; assert json.loads(pathlib.Path(r+'/run-result.json').read_text())['verification']['epistemic_checks_passed'] is True"`
+`check: grep -q "adjudication-blindness" src/deepreason/verification/report.py && grep -qE "^def _adjudication_blindness_findings\(" src/deepreason/verification/report.py && ! grep -rqi "blind" src/deepreason/adjudication/ && python -m pytest tests/test_adjudication.py::test_unregistered_warrant_rejected -q && python -c "import json,pathlib; from deepreason.adjudication.edges import build_att; from deepreason.adjudication.grounded import label0; from deepreason.harness import Harness; from deepreason.ontology import Artifact,Provenance,Status; from deepreason.verification.report import verify_root_report; c=Artifact(id='C',content_ref='inline:C',provenance=Provenance(role='critic'),warrants=['nope']); assert build_att({'C':c},{},{})==set(); assert set(label0({'C'},set()).values())=={'accepted'}; r='experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752'; h=Harness(r,read_only=True); assert (len(h.state.artifacts),len(h.warrants),len(h.state.att))==(42,0,0); assert set(h.state.status.values())=={Status.ACCEPTED}; rep=verify_root_report(pathlib.Path(r)); assert rep.valid and not rep.epistemic_checks_passed; assert sum(1 for f in rep.epistemic if f.check=='adjudication-blindness')==1; assert json.loads(pathlib.Path(r+'/run-result.json').read_text())['verification']['epistemic_checks_passed'] is False"`
 
 **A `mention` ref on a validity node is inert — until the warrant's commitment is
 a `rubric:`.** Then case-law closure treats *every* `mention` target on the nu as

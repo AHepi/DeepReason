@@ -14,4 +14,9 @@ these was looked at, scoped, and excluded from THIS goal.
   load and 3 predate manifests. Two instruments, two true numbers; the SEAM doc
   already flags the disagreement. Handover item 2 — a diagnosis of its own.
 - 14 seam documents lack `Sweep:` headers (handover, open decisions). Ratchet:
-  added when each is next touched, not swept for here.
+  added when each is next touched, not swept for here. This tranche touched
+  `SEAM-harness-x-verification` (Traps entry) and recorded the sanctioned
+  stated-reason instead of a header: that seam's agreement is the replay
+  relation, enforced by whole-state comparisons (`model_dump_json`, digest
+  pairs) that the FIELD && OTHER_SIDE detector cannot see; a spec targeting
+  the state-comparison sites specifically remains to be designed.
