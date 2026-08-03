@@ -109,3 +109,31 @@ excluded projection). Net effect: the before/after sweeps compare
 byte-identical — the strongest possible frozen-surface outcome — and the
 prediction error was about which instrument shows the flip, not whether the
 defect is fixed. Same lesson as E4/E5: cite the instrument with the number.
+
+## 2026-08-03 (continued — rung 1 of the modularisation ladder)
+
+**E9 — seven seam documents existed but `INDEX.md`'s matrix and six owning
+`SUB-`/`CON-` headers still said "not yet written" or omitted them
+entirely.** `SEAM-bridge-x-llm.md`, `SEAM-harness-x-workflow.md`,
+`SEAM-llm-x-workflow.md`, `SEAM-bridge-x-manifest.md`,
+`SEAM-ontology-x-rules.md`, `SEAM-scheduler-x-workflow.md` and
+`SEAM-evaluation-x-ontology.md` are all full, substantial documents (not
+stubs) — `INDEX.md`'s seam matrix marked all seven "— not yet written".
+Independently, cross-referencing every seam document's `Sides:` line
+against its two owning documents' `Seams:` headers found eight further
+misses across six files: `SUB-ontology.md` (missing
+`DR-SEAM-evaluation-x-ontology`), `SUB-manifest.md` (missing
+`DR-SEAM-llm-x-manifest` and `DR-SEAM-manifest-x-schools`),
+`SUB-bridge.md` and `SUB-llm.md` (both missing `DR-SEAM-bridge-x-llm`),
+`CON-schools.md` (missing `DR-SEAM-manifest-x-schools`), and
+`SUB-harness.md` (missing BOTH `DR-SEAM-harness-x-workflow` and
+`DR-SEAM-harness-x-verification` — its `Seams:` header was entirely empty
+despite two real seam documents). No mechanism in `tools/docs_verify.py`
+checks a `Sides:` line against both parties' `Seams:` headers, so nothing
+would have caught this short of the cross-reference done here. Corrected
+2026-08-03 in `experiments/2026-08-03-change-rung1-sockets-on-paper/`:
+`INDEX.md`'s seven matrix rows repointed at their real documents, and all
+eight missing `Seams:` entries added (each document's `Seams-undocumented:`
+line correspondingly shortened). Discovered while executing R2 of rung 1
+(every `SUB-*.md` surfaces its seams in prose) — the header had to be
+accurate before it could be honestly surfaced.

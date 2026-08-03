@@ -84,19 +84,19 @@ traffic at all.
 | Coupling | Pair | Document |
 |---|---|---|
 | 37 | rules × workflow | `SEAM-rules-x-workflow.md` |
-| 33 | llm × workflow | — not yet written |
+| 33 | llm × workflow | `SEAM-llm-x-workflow.md` |
 | 29 | evaluation × rules | `SEAM-evaluation-x-rules.md` |
 | 24 | llm × manifest | `SEAM-llm-x-manifest.md` |
 | 22 | llm × rules | `SEAM-llm-x-rules.md` |
-| 21 | bridge × manifest | — not yet written |
-| 18 | ontology × rules | — not yet written |
+| 21 | bridge × manifest | `SEAM-bridge-x-manifest.md` |
+| 18 | ontology × rules | `SEAM-ontology-x-rules.md` |
 | 18 | rules × scratch | `SEAM-rules-x-scratch.md` |
-| 16 | scheduler × workflow | — not yet written |
-| 16 | bridge × llm | — not yet written |
+| 16 | scheduler × workflow | `SEAM-scheduler-x-workflow.md` |
+| 16 | bridge × llm | `SEAM-bridge-x-llm.md` |
 | 15 | bridge × ontology | — not yet written |
-| 14 | evaluation × ontology | — not yet written |
+| 14 | evaluation × ontology | `SEAM-evaluation-x-ontology.md` |
 | 13 | scratch × workflow | `SEAM-scratch-x-workflow.md` |
-| 11 | harness × workflow | — not yet written |
+| 11 | harness × workflow | `SEAM-harness-x-workflow.md` |
 | 11 | rules × scheduler | `SEAM-scheduler-x-rules.md` |
 | 11 | capabilities × workflow | — not yet written |
 | 11 | manifest × workflow | — not yet written |
