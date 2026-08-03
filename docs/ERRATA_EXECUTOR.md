@@ -294,3 +294,24 @@ load-bearing-and-correct this time on the FIRST layer (preflight);
 load-bearing-and-correct on the LAST one (the validation tripwire).
 Corrected going forward: preflight runs at the actual start of a
 continuation, not only when the operator points out it was skipped.
+
+**X10 — tranche 2 delivered; the X8/X9 arc closes clean.** Executor head
+`5ecd5d62`: second validation pass verdict PASS with every section green
+— fresh gate 3291/0 (pasted, 0:09:41), sweep byte-identical for the
+third independent time (Pass 1's two runs, the monitor's X8 worktree
+diff, and Pass 2's fresh run all agree: 42 rows, 11 ERROR, no committed
+root's verdict moved), and the frozen-surface diff now PASSING because
+REQUEST.md Amendment 3 carries the operator's verbatim approval —
+governance closed the way the workflow demands, not waived. The Traps
+entry landed in `INV-frozen-surfaces.md` (commit `51ceaa58`) with a
+real check and the future rule ("a new top-level Config field is not
+done until `_versioned_source_config_data` has an explicit line for
+it"). DELIVERY.md reconciles R1–R8 (commit `5ecd5d62`). The full arc
+this tranche exercised, end to end: golden test fired → precedent fix →
+gate refuted the narrow fix → honest widening → monitor byte-identity →
+validation FAIL on governance despite total technical correctness →
+operator asked, operator approved, approval ledgered verbatim → Traps
+entry → PASS → delivered. Every layer that should have fired did, in
+order, and nothing was self-blessed. Rung 2 status: inventory + first
+switch delivered; authorized next is tranche 3 (BridgeConfig
+unification), then rung 2 closes pending the operator's further picks.
