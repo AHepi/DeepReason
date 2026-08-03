@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.config import Config
+from deepreason.config import BridgeConfig, Config
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     PUBLIC_SCHOOL_COUNT,
@@ -80,6 +80,29 @@ def test_engaged_bridge_source_enables_the_reviewed_grounded_bridge():
         "max_grounding_repair_attempts": 0,
         "output_section_limit": 4,
     }
+
+
+def test_engaged_bridge_source_is_built_through_bridge_config():
+    """Implements R2/R3 (rung 2 tranche 3): engaged_bridge_source() is
+    constructed from a BridgeConfig instance, not a second hard-coded
+    literal that could independently drift from it."""
+
+    override = BridgeConfig(
+        mode="grounded_two_stage",
+        grounding_review=True,
+        max_schema_repair_attempts=1,
+        max_grounding_repair_attempts=0,
+        output_section_limit=4,
+    )
+    assert engaged_bridge_source() == override.model_dump(
+        include={
+            "mode",
+            "grounding_review",
+            "max_schema_repair_attempts",
+            "max_grounding_repair_attempts",
+            "output_section_limit",
+        }
+    )
 
 
 def test_engaged_policy_digest_reflects_the_bridge_source():

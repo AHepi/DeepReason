@@ -32,6 +32,7 @@ from deepreason.capabilities.policy import (
     ResearchCapabilityPolicyV1,
     SimulationCapabilityPolicyV1,
 )
+from deepreason.config import BridgeConfig
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
@@ -176,13 +177,22 @@ def engaged_bridge_source() -> dict:
     needs it defers ``transaction-contract-unavailable``.
     """
 
-    return {
-        "mode": "grounded_two_stage",
-        "grounding_review": True,
-        "max_schema_repair_attempts": 1,
-        "max_grounding_repair_attempts": 0,
-        "output_section_limit": 4,
-    }
+    override = BridgeConfig(
+        mode="grounded_two_stage",
+        grounding_review=True,
+        max_schema_repair_attempts=1,
+        max_grounding_repair_attempts=0,
+        output_section_limit=4,
+    )
+    return override.model_dump(
+        include={
+            "mode",
+            "grounding_review",
+            "max_schema_repair_attempts",
+            "max_grounding_repair_attempts",
+            "output_section_limit",
+        }
+    )
 
 
 def engaged_criticism_policy(

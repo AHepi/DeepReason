@@ -255,3 +255,28 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
   Measure inputs are compared against recorded roots, exactly as
   `execution-backed` was kept spelled that way when its guard widened. Changing
   the strings reinterprets stored evidence — see DR-INV-frozen-surfaces.
+
+## Adjacent, not authority: preset-construction hygiene in `v6_policy.py`
+
+This document is the established `Owns:` home for `v6_policy.py` and
+`preparation.py` (added when `ENGAGED_CRITICISM_AUTHORITY` landed), not
+because every claim about those files is about authority — the claim
+below is not. It lives here because no other `docs/map/` document owns
+these two files, and creating a new one for a single hygiene fix would
+be disproportionate; `docs/map/INDEX.md` was checked first and lists no
+better home.
+
+**`engaged_bridge_source()` builds through `BridgeConfig`, not a
+parallel hard-coded literal.** The engaged preset's compiled bridge
+settings (`mode`, `grounding_review`, `max_schema_repair_attempts`,
+`max_grounding_repair_attempts`, `output_section_limit`) are constructed
+by instantiating `BridgeConfig` with the preset's override values and
+projecting onto those five fields — not by writing a bare dict that
+could silently drift from `BridgeConfig`'s own field names, types, and
+validators. `BridgeConfig`'s own class-level defaults (`config.py`,
+`mode="legacy_thesis"` etc.) are deliberately UNCHANGED: they are the
+tested "safe by default, features remain opt-in" contract every bare
+`Config()` relies on (`tests/test_config_scratch_bridge.py::
+test_safe_defaults_are_bounded_and_features_remain_opt_in`), not a dead
+value — only the engaged preset's explicit override differs from them.
+`check: python -c "import inspect; from deepreason import v6_policy as p; src = inspect.getsource(p.engaged_bridge_source); assert 'BridgeConfig(' in src"`
