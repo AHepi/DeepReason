@@ -228,3 +228,37 @@ pressure. Residue: the executor's own VALIDATION/DELIVERY for this
 tranche were still pending at this entry; the monitor's sweep
 verification lives in the session scratchpad (session-local by
 design), with its digest recorded here as the durable citation.
+
+**XE1 — skipped session preflight let a frozen-surface fix land before
+asking, instead of before implementing; the validation gate caught it,
+one layer later than the repo's own precedent shows it should have
+been caught (executor self-report, first entry under the numbering
+rule).** Same tranche as X8. `dr-validate-change`'s frozen-surface
+diff (4a2) returned non-empty (`src/deepreason/run_manifest.py`) with
+no operator quote in REQUEST.md approving that surface — a mechanical
+FAIL, recorded honestly in VALIDATION.md (commit `03b2d2fe`). The
+proximate cause: this continuation session never re-ran `dr-drive-
+harness`'s own session-preflight step 1 ("read, in order: CLAUDE.md,
+the newest `experiments/*/RESULTS.md` segments, `docs/ERRATA.md`") at
+its own start — it resumed straight into `dr-plan-steps` from a
+compaction summary. The newest `RESULTS.md`
+(`experiments/2026-08-03-fix-attached-evidence-integrity/`, one day
+old) states the established pattern in so many words: "What was fixed
+(verdict R, reader-only, **frozen surface 3 with operator
+approval**)" — approval sought and obtained BEFORE the fix landed.
+`dr-ask-the-right-question` section 4 independently confirms this is
+not a dominance-test fork at all: "frozen-surface or irreversible
+action" is explicitly listed among what "earns a question," and "no
+frozen surface without explicit approval" is named as one of this
+repo's own recorded operator values — not a judgment call the executor
+could derive its way past. Had preflight been run at session start,
+this precedent would have been in view BEFORE Amendment 2's fix was
+written, and the correct move (stop, batch one question with a
+recommendation, wait) would have been available at the cheap point —
+before three commits of implementation, not after. Instead the gap
+surfaced only at `dr-validate-change`, which did exactly its job:
+caught it, named it precisely, and did not fix it in passing. Not
+load-bearing-and-correct this time on the FIRST layer (preflight);
+load-bearing-and-correct on the LAST one (the validation tripwire).
+Corrected going forward: preflight runs at the actual start of a
+continuation, not only when the operator points out it was skipped.
