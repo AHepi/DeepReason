@@ -286,3 +286,22 @@ baseline — not a redundant fresh BEFORE capture.
       `99dbbb43 HEAD -> claude/delivery-rungs-handover-m22sdy,
       origin/claude/delivery-rungs-handover-m22sdy` — head matches
       origin exactly.
+
+- [ ] 13. (Amendment 3, VALIDATION.md's "remaining ask") Add a Traps
+      entry to `docs/map/INV-frozen-surfaces.md` documenting the
+      Config-field-addition failure mode this tranche discovered:
+      adding ANY new top-level `Config` field can silently break pinned
+      canonical-hash goldens across multiple, non-obviously-related
+      schema versions (v1/v2/v3 AND v5 here, not just the versions an
+      "obvious" grep for existing tests would suggest). Cite this
+      tranche's commits (`9607f739`, `f642f980`) as the run evidence,
+      per the map's own "every fix earns a Traps entry naming its run
+      id" convention. This is a map-document-only change (not a
+      frozen-surface touch itself — `INV-frozen-surfaces.md` is
+      documentation, not one of the five frozen source files it
+      describes).
+      done-when: `grep -q "ENGAGED_CRITICISM_AUTHORITY" docs/map/INV-frozen-surfaces.md` exits 0 AND `python tools/docs_verify.py` 0 failed AND `python tools/docs_verify.py --audit` 0 findings (paste all three).
+
+- [ ] 14. (all) [COMMIT] Commit the Traps entry, push, confirm clean tree.
+      done-when: `git status --porcelain` empty AND branch head matches
+      origin (paste both).
