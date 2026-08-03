@@ -157,6 +157,15 @@ re-confirmed untouched by this tranche's design.
       four methods (`init_schools`, `roster`, `allocate`, `reseed`),
       at least 5 test functions total.
       done-when: `python -m pytest tests/test_school_population_registry.py -q` ends "N passed, 0 failed", N >= 5 (paste it) AND `python -m pytest tests/test_school_population_registry.py --collect-only -q` lists >= 5 test names (paste it).
+      DONE. 9 test functions (4 registry-mechanics, 4 default-backend
+      equivalence covering all four protocol methods, 1 module-singleton
+      check). Output:
+      ```
+      .........                                                                [100%]
+      9 passed in 0.29s
+      ```
+      Collection: 9 tests collected, all listed. Not committed yet —
+      bundled at step 9.
 
 - [ ] 9. (all) [COMMIT] Commit step 8's new test file.
       done-when: `git log -1 --stat` shows
