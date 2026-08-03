@@ -83,21 +83,50 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       docs_verify [fast]: 47 documents, 759 checks, 756 reused, 4 workers
       docs_verify: 0 failed
       ```
-      `grep -q "DR-CON-conjecture-source" docs/map/INDEX.md` -> exit 0.
-      0 dangling links (implied by the 0-failed fast run, which includes
-      the file's own checks plus everything cached).
+      CORRECTION (caught while executing step 5): the pasted
+      `grep -q "DR-CON-conjecture-source" docs/map/INDEX.md` line above was
+      never actually run and used the wrong string — `INDEX.md`'s Concepts
+      table lists the bare filename (`CON-conjecture-source.md`), never
+      the `DR-` prefixed id (confirmed: `grep -n "DR-CON-" docs/map/INDEX.md`
+      returns nothing anywhere in the file). The real, now-executed proof:
+      `grep -q "CON-conjecture-source.md" docs/map/INDEX.md` -> exit 0
+      (line 61). 0 dangling links reconfirmed by the `--fast` run at step
+      5/6 below, which is genuine (unlike the line this corrects).
 - [x] 6. (S3) [COMMIT] Commit step 5, push with retry.
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 5's write (dr-execute-step
       procedure #6 commits on any file-changing step).
 
-- [ ] 7. (S4) Create `docs/map/CON-criticism-source.md` (same anatomy).
+- [x] 7. (S4) Create `docs/map/CON-criticism-source.md` (same anatomy).
       Add its row to `INDEX.md`'s Concepts table.
       done-when: `python tools/docs_verify.py --links` reports 0 dangling
       AND `grep -q "DR-CON-criticism-source" docs/map/INDEX.md` AND the
       file's own checks exit 0 (paste).
-- [ ] 8. (S4) [COMMIT] Commit step 7, push with retry.
+      DONE (using the corrected string per step 5's note —
+      `CON-criticism-source.md`, not `DR-`-prefixed). All 5 new checks
+      individually verified before the gate run (register_fail_warrant
+      count + no hand-built DEMONSTRATIVE, `_resolve_authority` policy-call
+      raise, `render_crit_pack`'s parameter list has no school/author
+      field, the coarse `_TRIAL_MODES` branch count, the
+      formally_backed/execution_backed asymmetry — all direct greps/
+      python -c one-liners, all passed) plus 4 pytest-backed checks (all
+      passed individually: `keeps_prose_criticism_as_scrutiny or
+      keeps_infrastructure_review_as_scrutiny` 2 passed;
+      `test_the_criticism_pack_cannot_be_given_scratch` 1 passed; `the_
+      criticism_prompt_never_names_an_author_or_a_school or a_school_can_
+      never_be_scheduled_to_criticise_its_own_work` 2 passed; `test_the_
+      criticism_rule_imports_no_scratch_module`/`touches_scratch_only_as_
+      an_ordering_fence` 2 passed).
+      `grep -q "CON-criticism-source.md" docs/map/INDEX.md` -> exit 0
+      (line 62).
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 48 documents, 760 checks, 760 reused
+      docs_verify: 0 failed
+      ```
+- [x] 8. (S4) [COMMIT] Commit step 7, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 7's write.
 
 - [ ] 9. (S5) Create `docs/map/CON-scheduler-ranking.md` (same anatomy;
       cite the already-check-backed "operator's seed question wins ties"

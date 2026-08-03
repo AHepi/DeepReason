@@ -59,6 +59,7 @@ than you need.
 | `CON-capability-lifecycle.md` | typed proposal → admission → work order → result |
 | `CON-packs-and-token-economy.md` | prompt construction, section allocation, budgets |
 | `CON-conjecture-source.md` | the socket that proposes candidate artifacts (`rules/conj.py`) |
+| `CON-criticism-source.md` | the socket that attacks or scrutinises a target (`rules/crit.py`) |
 
 ## Invariants and recipes
 
