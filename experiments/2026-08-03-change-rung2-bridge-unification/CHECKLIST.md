@@ -114,9 +114,15 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       unrelated files), pushed successfully. `git rev-parse HEAD
       origin/...` both `11e25189` — confirmed synced.
 
-- [ ] 8. (all) Map check: `python tools/docs_verify.py` (full, not
+- [x] 8. (all) Map check: `python tools/docs_verify.py` (full, not
       `--fast`) AND `python tools/docs_verify.py --audit`.
       done-when: both show 0 failed / 0 findings (paste both).
+      DONE. Output:
+      ```
+      docs_verify [full]: 49 documents, 796 checks, 4 workers
+      docs_verify: 0 failed
+      docs_verify --audit: 0 finding(s)
+      ```
 
 - [ ] 9. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`, ISOLATED
       (nothing else running concurrently — tranche 2's validation pass
