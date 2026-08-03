@@ -167,3 +167,27 @@ before and after a change that widened what prose may refute, is in
   guard widened to `formally_backed`, because the string's meaning in old roots
   must not shift.
 `check: grep -q '"execution-backed"' src/deepreason/informal/trial.py`
+- **Adding a `Config` field is not automatically invisible to replay.**
+  "A `Config` value costs nothing to add and is invisible to replay"
+  (above) is true of the manifest's own schema, but `_versioned_source_
+  config_data` in `run_manifest.py` is what actually keeps a NEW field out
+  of `source_config_hash`/`engine_config_json`/the compiled manifest's
+  `sha256` — and it must be told about each one, per schema version,
+  explicitly. Adding `Config.ENGAGED_CRITICISM_AUTHORITY`
+  (`experiments/2026-08-03-change-rung2-engaged-criticism-switch/`)
+  broke `test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`
+  immediately, and a first fix scoped to `schema_version < 4` — reasoning
+  "no pinned-hash test exists above v3" — was ITSELF refuted by the full
+  gate: two more goldens at schema v5
+  (`test_v5_canonical_bytes_match_incident_head_golden`,
+  `test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic`)
+  failed too. "No test above v3" was a false inference from an incomplete
+  grep, not a verified fact. Fixed by popping the new key
+  UNCONDITIONALLY (every schema version), not by enumerating which
+  versions happen to have a pinned test today. Operator-approved per
+  that tranche's REQUEST.md Amendment 3 (the fix touches this file,
+  surface 4). Rule for the future: a new top-level `Config` field is
+  not done until `_versioned_source_config_data` has an explicit line
+  for it, and "no test covers version N" must be proven by running the
+  full gate, not by grepping test names.
+`check: grep -q "ENGAGED_CRITICISM_AUTHORITY" src/deepreason/run_manifest.py`

@@ -287,7 +287,7 @@ baseline — not a redundant fresh BEFORE capture.
       origin/claude/delivery-rungs-handover-m22sdy` — head matches
       origin exactly.
 
-- [ ] 13. (Amendment 3, VALIDATION.md's "remaining ask") Add a Traps
+- [x] 13. (Amendment 3, VALIDATION.md's "remaining ask") Add a Traps
       entry to `docs/map/INV-frozen-surfaces.md` documenting the
       Config-field-addition failure mode this tranche discovered:
       adding ANY new top-level `Config` field can silently break pinned
@@ -301,6 +301,18 @@ baseline — not a redundant fresh BEFORE capture.
       documentation, not one of the five frozen source files it
       describes).
       done-when: `grep -q "ENGAGED_CRITICISM_AUTHORITY" docs/map/INV-frozen-surfaces.md` exits 0 AND `python tools/docs_verify.py` 0 failed AND `python tools/docs_verify.py --audit` 0 findings (paste all three).
+      DONE. Traps entry added (with a new checked claim,
+      `grep -q "ENGAGED_CRITICISM_AUTHORITY" src/deepreason/run_manifest.py`),
+      also correcting an adjacent overstatement in passing note: this
+      entry does NOT edit the "Config value... invisible to replay" line
+      itself (out of step 13's stated scope) -- flagged instead in
+      PARKED.md for a future ERRATA.md correction. Output:
+      ```
+      grep: PASS
+      docs_verify [full]: 49 documents, 795 checks, 4 workers
+      docs_verify: 0 failed
+      docs_verify --audit: 0 finding(s)
+      ```
 
 - [ ] 14. (all) [COMMIT] Commit the Traps entry, push, confirm clean tree.
       done-when: `git status --porcelain` empty AND branch head matches
