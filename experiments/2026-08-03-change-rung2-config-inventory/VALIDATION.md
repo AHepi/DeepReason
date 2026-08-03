@@ -1,89 +1,76 @@
 # Validation for: rung 2, tranche 1 — buried choices become visible switches (inventory)
+(Second, fresh pass — the first VALIDATION.md, commit `5489d501`,
+returned FAIL on one gap: `INVENTORY.md`'s
+`DEEPREASON_DISABLE_V6_LAUNCH_ENV` pointer. That gap is fixed, commits
+`835248fb`/`4e4c26e8`. This document supersedes the first entirely —
+every check re-run from scratch, including every pointer this time, not
+only the ones the first pass happened to check.)
 
 ## Acceptance checks
 
-S1 (R1, R2): `test -f experiments/2026-08-03-change-rung2-config-inventory/INVENTORY.md`
--> exit 0. `grep -q "observe_only" .../INVENTORY.md` -> exit 0 (present,
-Group A, row 1 — the named candidate).
+S1 (R1, R2): `test -f .../INVENTORY.md` -> exit 0. `grep -q "observe_only"
+.../INVENTORY.md` -> exit 0.
 
-Fresh, independent spot-checks against the real files (not reused from
-CHECKLIST.md's pasted output):
+**The specific FAIL condition from the first pass, re-checked directly:**
 ```
-sed -n '212p' src/deepreason/v6_policy.py -> authority="observe_only",
-sed -n '115p' src/deepreason/v6_policy.py -> mode="conditioning_only",
-sed -n '122p' src/deepreason/v6_policy.py -> mode="harness_plus_model_request",
-sed -n '72p'  src/deepreason/v6_policy.py -> mode="disabled",
-sed -n '352p' src/deepreason/v6_policy.py -> env.get("DEEPREASON_CONFIG_REFEREE", "")
+grep -n "DEEPREASON_DISABLE_V6_LAUNCH" .../INVENTORY.md
+67: ... | `DEEPREASON_DISABLE_V6_LAUNCHES` | unset (launches enabled) |
+71: launch-policy pair (`DEEPREASON_DISABLE_V6_LAUNCHES`, ...
 ```
-All five match INVENTORY.md's tables exactly : PASS.
+Correct string present twice; the wrong string (`..._ENV` suffix) is
+absent. Fixed.
 
-**A sixth spot-check found a real inaccuracy, not caught during
-execution:**
-```
-sed -n '22p' src/deepreason/runtime/launch_policy.py
-V6_LAUNCH_DISABLE_ENV = "DEEPREASON_DISABLE_V6_LAUNCHES"
-```
-INVENTORY.md's Group C table (and its prose paragraph immediately below
-the table) names this candidate's env var as
-`DEEPREASON_DISABLE_V6_LAUNCH_ENV` — a name that does not exist anywhere
-in the source. The actual STRING VALUE read from `os.environ` is
-`DEEPREASON_DISABLE_V6_LAUNCHES` (plural "LAUNCHES", no "_ENV" suffix);
-`DEEPREASON_DISABLE_V6_LAUNCH_ENV` appears to be an accidental splice of
-the Python constant's NAME (`V6_LAUNCH_DISABLE_ENV`) with the word
-"launch" from the surrounding prose, producing a third string that
-matches neither. `grep -rn "DEEPREASON_DISABLE_V6_LAUNCH_ENV"
-src/deepreason/` returns nothing — an operator who set that env var
-believing it would disable v6 launches would set NOTHING, silently: the
-real switch would remain off. This is exactly the kind of pointer
-accuracy R2 ("a map/code pointer ... for each candidate") requires and
-this row fails it. Independent re-check of the OTHER five Group C rows
-(`DEEPREASON_SIMULATION_RUNNER`, `DEEPREASON_RESEARCH_ALLOWLIST`,
-`DEEPREASON_RESEARCH_MAX_REQUESTS`/`_MAX_SOURCES`,
-`DEEPREASON_CONFIG_REFEREE`, `DEEPREASON_RELEASE_POLICY`) confirms all
-five are correct as written.
+**All twelve candidate pointers re-verified fresh this pass** (the first
+pass checked five and missed the sixth env-var row before finding it via
+a further ad-hoc check; this pass checks every one, not a sample):
 
-S1 (Group B finding, independently re-verified via AST rather than grep,
-since it is the deliverable's one substantive analytical claim): parsed
-`BridgeConfig`'s field defaults directly from `config.py`'s AST —
-`mode='legacy_thesis'`, `grounding_review=True`,
-`max_schema_repair_attempts` default `2`,
+Group A (5):
+```
+sed -n '212p' v6_policy.py -> authority="observe_only",
+sed -n '115p' v6_policy.py -> mode="conditioning_only",
+sed -n '122p' v6_policy.py -> mode="harness_plus_model_request",
+sed -n '180p' v6_policy.py -> "mode": "grounded_two_stage",
+sed -n '181p' v6_policy.py -> "grounding_review": True,
+```
+Group B (BridgeConfig, 5 fields) — re-parsed via AST from `config.py`
+directly (mode default `'legacy_thesis'`, `grounding_review` default
+`True`, `max_schema_repair_attempts` default `2`,
 `max_grounding_repair_attempts` default `4`, `output_section_limit`
-default `32` — against `engaged_bridge_source()`'s literal returned dict
-(`v6_policy.py` lines 179-185, re-pasted above): `mode='grounded_two_stage'`,
-`grounding_review=True` (agrees), `max_schema_repair_attempts=1`,
-`max_grounding_repair_attempts=0`, `output_section_limit=4`. Matches
-INVENTORY.md's Group B table exactly on all five fields : PASS,
-confirmed independently.
+default `32`) against `engaged_bridge_source()`'s literal dict — matches
+INVENTORY.md's table on all five fields.
+Group C (6):
+```
+sed -n '230p' v6_policy.py -> DEEPREASON_SIMULATION_RUNNER
+sed -n '321p' v6_policy.py -> DEEPREASON_RESEARCH_ALLOWLIST
+sed -n '334,335p' v6_policy.py -> DEEPREASON_RESEARCH_MAX_REQUESTS / _MAX_SOURCES (lines match INVENTORY.md exactly)
+sed -n '352p' v6_policy.py -> DEEPREASON_CONFIG_REFEREE
+sed -n '22p,99p' launch_policy.py -> V6_LAUNCH_DISABLE_ENV = "DEEPREASON_DISABLE_V6_LAUNCHES"; os.environ.get(V6_LAUNCH_DISABLE_ENV) at line 99 (matches INVENTORY.md's cited line)
+sed -n '23p,110p' launch_policy.py -> RELEASE_POLICY_ENV = "DEEPREASON_RELEASE_POLICY"; os.environ.get(RELEASE_POLICY_ENV) at line 110 (matches INVENTORY.md's cited line)
+```
+Group D (1): `grep -n "STANCE_LIBRARY" capture/schools.py` -> line 18,
+`STANCE_LIBRARY = {`. Matches.
 
-S2 (R3): `git diff --stat b73db3ba..HEAD -- src/` -> empty output, exit 0
-(re-run fresh at validation time, tranche base `b73db3ba` — the merge
-commit that brought in the executor-errata ledger, immediately preceding
-this tranche's first commit) : PASS.
+All twelve : PASS, no further inaccuracies found.
 
-Also checked, per SPEC.md's A2 (this tranche is an `experiments/`
-deliverable, not a `docs/map/` document): `git diff --stat b73db3ba..HEAD
--- docs/map/` -> empty output, exit 0. Confirmed: this tranche changed
-exactly four files, all under
-`experiments/2026-08-03-change-rung2-config-inventory/`
-(`REQUEST.md`, `SPEC.md`, `CHECKLIST.md`, `INVENTORY.md`) — 586 insertions,
-0 deletions, nothing outside that directory.
+S2 (R3): `git diff --stat b73db3ba..HEAD -- src/` -> empty, exit 0 : PASS.
 
-S3 (R4): tranche stops after the inventory; no tranche-2 work (the
-`engaged_criticism_policy` switch), no rung 3, opened in this tranche —
-confirmed by the diff above (no `src/` or `docs/map/` file touched at
-all) and by this being the first validation pass, not a continuation.
+Also re-confirmed per A2: `git diff --stat b73db3ba..HEAD -- docs/map/`
+-> empty, exit 0.
+
+S3 (R4): confirmed — the full tranche diff (below) shows only
+`experiments/2026-08-03-change-rung2-config-inventory/*` and
+`docs/ERRATA_EXECUTOR.md`; no tranche-2 or rung-3 work.
 
 ## Full gate
 
-Not applicable in the usual sense — zero `src/` files changed, so no
-regression is possible and the ~10-minute `pytest tests/ -q -n 4` run
-would only reconfirm a result nothing in this tranche could have moved.
-Not run, by the same citation logic used at the end of rung 1's tranche
-(cite the "no src/ diff" proof rather than re-prove an unmoved number).
+Not re-run: `git diff --stat b73db3ba..HEAD -- src/` is empty (proof
+above) — no `src/` file has moved since the last time it was run for
+this session (rung 1's tranche), so nothing here could have changed that
+result. Cited rather than re-proven, same reasoning as the first pass.
 
 ## Record-behavior preservation
 
-n/a — no reader, guard, code path, or record format changed.
+n/a — no reader, guard, or record format changed.
 
 ## Frozen-surface diff
 
@@ -97,71 +84,49 @@ Empty output. PASS.
 
 ## Map
 
-Not applicable — this tranche's deliverable is an `experiments/`
-document, not a `docs/map/` one (SPEC.md's A2), and the diff above
-confirms zero `docs/map/` files were touched. `docs_verify` was not
-re-run because nothing it checks could have changed; a fresh
-`python tools/docs_verify.py --fast` confirms this directly:
+Not applicable — zero `docs/map/` changes (re-confirmed above), per
+SPEC.md's A2 (this tranche's deliverable is an `experiments/` document).
+`docs_verify` not re-run a third time this session for the same reason:
+nothing it checks moved.
 
-```
-docs_verify [fast]: 49 documents, 793 checks, 793 reused
-docs_verify: 0 failed
-```
+New checks added by this change: none (A2 — not a `docs/map/` document,
+carries no `check:` obligation).
 
-(793 reused of 793 — every check served from cache, since no map file's
-mtime changed. This is the honest confirmation that nothing here touched
-the map, not a claim that this tranche added map checks — R2's own words
-never asked for any.)
-
-New checks added by this change: none — R2 asked for an inventory
-document, not a falsifiable map claim (A2). This is not a gap: an
-`experiments/` deliverable carries no `Verify:`/`check:` obligation under
-`docs/map/SCHEMA.md`'s contract, which governs `docs/map/` only.
+**One file OUTSIDE the tranche directory was touched, by design, not
+scope creep:** `docs/ERRATA_EXECUTOR.md` gained entry X5, logging that
+this tranche's own validation FAIL→re-plan→fix loop fired correctly
+(commit `4e4c26e8`). This is C3's standing constraint from the operator's
+opening message ("append an entry ... whenever ... a guardrail fires as
+designed"), binding on the whole session, not only this tranche's
+R1-R4 — recorded here so its presence in the diff is never mistaken for
+an unexplained change.
 
 ## Requirement sweep
 
-R1: demonstrated by S1 (the bounded sweep methodology, executed and
-recorded in CHECKLIST.md steps 1-3) — **with one gap**: see Verdict below.
+R1: demonstrated by S1 (bounded sweep, CHECKLIST steps 1-3).
 
-R2: demonstrated by S1 — the inventory document exists with map/code
-pointers and current values for each candidate — **with one pointer
-found inaccurate this pass** (the `DEEPREASON_DISABLE_V6_LAUNCH_ENV` row).
+R2: demonstrated by S1 — **and this pass confirms the gap the first
+validation caught is closed, with every pointer (not only a sample)
+re-verified accurate.**
 
 R3: demonstrated by S2 (empty `src/` diff, re-confirmed fresh).
 
-R4: demonstrated by S3 (no tranche-2 or rung-3 work present in the diff).
+R4: demonstrated by S3 (no tranche-2/rung-3 work present).
 
-R5-R8 (tranche 2, the `engaged_criticism_policy` switch): correctly NOT
-addressed by this tranche — `deferred (operator's own words: "TRANCHE 2
-— one switch: ...", explicitly split from "TRANCHE 1 — inventory only")`.
-Not a gap in this tranche's scope.
+R5-R8 (tranche 2): correctly deferred, not this tranche's scope.
 
 ## Assumptions carried
 
-A1: the inventory sweep is general ("hard-coded behavior choices"), not
-narrowed to authority-shaped values, but practically bounded to
-preset/policy-shaped files plus rung 1's five mapped sockets plus
-`config.py` as baseline.
+A1: general-but-bounded sweep methodology (preset/policy files + rung 1's
+five sockets + `config.py` baseline).
+A2: `experiments/`-tranche Markdown format, not `docs/map/SCHEMA.md`
+anatomy.
 
-A2: inventory format is a plain `experiments/`-tranche Markdown document,
-not a `docs/map/SCHEMA.md`-anatomy document.
+## Verdict: PASS
 
-## Verdict: FAIL
-
-FAIL detail: `INVENTORY.md`'s Group C table names one candidate's
-environment variable as `DEEPREASON_DISABLE_V6_LAUNCH_ENV`, which does
-not exist anywhere in the source (`grep -rn "DEEPREASON_DISABLE_V6_LAUNCH_ENV"
-src/deepreason/` returns nothing). The real string, read at
-`runtime/launch_policy.py` line 22 (`V6_LAUNCH_DISABLE_ENV =
-"DEEPREASON_DISABLE_V6_LAUNCHES"`) and consumed at line 99
-(`os.environ.get(V6_LAUNCH_DISABLE_ENV)`), is
-`DEEPREASON_DISABLE_V6_LAUNCHES`. This fails R2's own words — "a map/code
-pointer ... for each candidate" — for exactly this one row; every other
-pointer in the document (11 other candidates across Groups A-D, all
-spot-checked this pass, several independently) is accurate. Suspected
-step: CHECKLIST.md step 1, where the six env-var pointers were
-transcribed from a single read of both files — five were copied
-correctly and this one was misremembered as a hybrid of the Python
-constant's name and the surrounding prose rather than the actual string
-literal. Route: back to `dr-plan-steps` for a one-line correction to
-`INVENTORY.md`, then re-validate.
+Every acceptance check (S1-S3), both process constraints (R3, R4), all
+four requirements this tranche addresses (R1-R4), the frozen-surface
+diff, and the zero-`src/`/zero-`docs/map/` scope boundary are green on a
+fresh, independent re-run that checked ALL twelve candidate pointers this
+time (not a sample) specifically to guard against repeating the class of
+miss the first pass caught. Route: `dr-deliver-change`.
