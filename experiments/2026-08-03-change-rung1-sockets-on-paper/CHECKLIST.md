@@ -394,3 +394,37 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       `git rev-parse origin/claude/delivery-rungs-handover-m22sdy` ==
       `88e209fbf9c77aaa01be932e5e7b1b60bb165fff`. All 24 checklist steps
       complete. Routing to dr-validate-change.
+
+## Re-plan after VALIDATION.md FAIL (commit `0b133f25`)
+
+Narrow, precisely diagnosed failure: `docs/map/CON-schools.md`'s header
+still lists `manifest x schools` under `Seams-undocumented:` even though
+`docs/map/SEAM-manifest-x-schools.md` exists — one of the eight ERRATA E9
+header fixes this tranche's own audit identified as needed (`docs/ERRATA.md`
+E9), but only `SUB-manifest.md`'s side of the pair was ever fixed (commit
+`10549d1e`); `CON-schools.md`'s side fell through because it is a `CON-`
+document outside the four `SUB-*.md` batches the step-10b note scoped the
+per-file fixes to. Steps 1-24 above are untouched — their pasted outputs
+remain the audit trail for the work that did land correctly.
+
+- [ ] 25. (R2, E9 follow-up) Fix `docs/map/CON-schools.md`'s header: move
+      `DR-SEAM-manifest-x-schools` from `Seams-undocumented:` to `Seams:`
+      (the exact same fix already correctly applied to `SUB-manifest.md`
+      in commit `10549d1e`). No prose-table change needed elsewhere in
+      the file — this is purely the header line SCHEMA.md's own rule
+      requires to be accurate.
+      done-when: `grep -q "^Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools$" docs/map/CON-schools.md`
+      (or equivalent exact header line) AND
+      `python tools/docs_verify.py --fast` exits 0 (paste output).
+- [ ] 26. (R2) [COMMIT] Commit step 25, push with retry.
+      done-when: new commit on branch AND clean tree.
+- [ ] 27. (S9, R5) Re-run the full S9/R5 gate fresh, since VALIDATION.md's
+      FAIL means the tranche must prove clean again before re-validating:
+      `python tools/docs_verify.py` (expect 0 failed),
+      `python tools/docs_verify.py --audit` (expect 0 findings),
+      `python tools/docs_verify.py --links` (expect 0 dangling).
+      done-when: all three commands exit 0, pasted verbatim.
+- [ ] 28. (all) [COMMIT] Final push and cleanliness check.
+      done-when: `git status --porcelain` is empty AND
+      `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
+      Then route back to `dr-validate-change` for a fresh validation pass.
