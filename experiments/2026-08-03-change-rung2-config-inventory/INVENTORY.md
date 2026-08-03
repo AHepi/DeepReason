@@ -64,11 +64,11 @@ just sourced differently:
 | Research allowlist | `v6_policy.py::engaged_research_policy`, line 321 | `DEEPREASON_RESEARCH_ALLOWLIST` | unset (research disabled) |
 | Research request/source caps | `v6_policy.py::engaged_research_policy`, lines 334-335 | `DEEPREASON_RESEARCH_MAX_REQUESTS`/`_MAX_SOURCES` | `"6"`/`"3"` (only read if allowlist is set) |
 | Config-referee cadence | `v6_policy.py::engaged_config_referee_policy`, line 352 | `DEEPREASON_CONFIG_REFEREE` | unset (referee absent) |
-| V6 launch kill switch | `runtime/launch_policy.py::require_v6_launch_allowed`, line 99 | `DEEPREASON_DISABLE_V6_LAUNCH_ENV` | unset (launches enabled) |
+| V6 launch kill switch | `runtime/launch_policy.py::require_v6_launch_allowed`, line 99 | `DEEPREASON_DISABLE_V6_LAUNCHES` | unset (launches enabled) |
 | Release policy file | `runtime/launch_policy.py::require_v6_launch_allowed`, line 110 | `DEEPREASON_RELEASE_POLICY` | unset (no policy file consulted) |
 
 Not necessarily migration candidates in the same sense as Group A/B — the
-launch-policy pair (`DEEPREASON_DISABLE_V6_LAUNCH_ENV`,
+launch-policy pair (`DEEPREASON_DISABLE_V6_LAUNCHES`,
 `DEEPREASON_RELEASE_POLICY`) are deliberately operator-facing rollback
 levers meant to be flippable WITHOUT touching any per-run `Config`
 compilation (this module's own docstring: "Rollback is deliberately a
