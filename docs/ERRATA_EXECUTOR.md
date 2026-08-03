@@ -150,3 +150,20 @@ branch, and a writer must fetch and check every branch's ledger tail
 before numbering — or, failing that, suffix its id with `-E` (executor)
 / nothing (monitor). Both X5 texts stand unedited when the branches
 merge; append-only survives, only the citation rule changes.
+
+**X7 — the numbering-rule fix itself failed to propagate, and nothing
+mechanical would ever have caught it.** The two-writer rule went into
+this file's charter (commit `8611bcdc`) but NOT into
+`docs/HANDOVER_2026-08-03.md`'s feed-instruction — the one document the
+executor actually reads — until the operator's propagation test caught
+the gap (fixed, `161dc094`). Root cause is structural, not carelessness:
+this ledger and the handover both live OUTSIDE `docs/map/`'s check net,
+so no `docs_verify` run fails when they drift apart — the exact
+protection the map gives its own documents ("authenticated by
+re-derivation") does not extend here. The repo's own law ("the map moves
+in the SAME COMMIT as the code") has no enforcement arm for non-map
+documents that mutually constrain each other. Known residue, accepted
+for now: adding these documents to a check regime is a change the
+operator has not requested; until then, any charter change here must be
+hand-propagated to the handover's calibration block, and this entry is
+the reminder.
