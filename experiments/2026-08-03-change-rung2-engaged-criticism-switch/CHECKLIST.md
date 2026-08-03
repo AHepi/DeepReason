@@ -314,6 +314,8 @@ baseline — not a redundant fresh BEFORE capture.
       docs_verify --audit: 0 finding(s)
       ```
 
-- [ ] 14. (all) [COMMIT] Commit the Traps entry, push, confirm clean tree.
+- [x] 14. (all) [COMMIT] Commit the Traps entry, push, confirm clean tree.
       done-when: `git status --porcelain` empty AND branch head matches
       origin (paste both).
+      DONE. `git status --porcelain` empty; local and origin both at
+      `51ceaa58`.
