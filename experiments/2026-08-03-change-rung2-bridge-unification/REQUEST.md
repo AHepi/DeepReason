@@ -143,4 +143,38 @@ tests BEFORE specifying the fix, not discovered mid-execution again.
 
 ## Amendments
 
-(none yet)
+**Amendment 1 — resolving a contradiction between R1's premise and the
+record.** R1's parenthetical claim, "BridgeConfig's current defaults are
+the dead ones," is contradicted by
+`tests/test_config_scratch_bridge.py::test_safe_defaults_are_bounded_and_features_remain_opt_in`,
+which explicitly pins `Config().bridge == BridgeConfig()` and
+`config.bridge.mode == "legacy_thesis"` as part of a deliberate
+"safe defaults, features remain opt-in" contract (the same pattern
+`scratchpad.enabled == False` uses). Flipping `BridgeConfig`'s shared
+class-level defaults to match `engaged_bridge_source()`'s override
+values would break this test and change behavior for every bare
+`Config()` construction across the codebase — not just the engaged
+preset — including the `deepreason config compile` CLI subcommand
+(`cli/main.py`, `load_config(None)` path, which does not go through
+`_config_for_profile`/`engaged_bridge_source()` at all).
+
+Presented to the operator as a genuine fork (per `dr-ask-the-right-
+question`, since this is a frozen-behavior-adjacent, wide-blast-radius
+decision the record does not resolve): (a) build
+`engaged_bridge_source()` from `BridgeConfig` via an explicit-override
+instance, leaving `BridgeConfig`'s shared class defaults and the
+safe-defaults test untouched — satisfies R2/R3, only partially R1's
+literal words; or (b) flip the shared class default as R1 literally
+says, updating the safe-defaults test to match and accepting that every
+bare `Config()` now defaults to the grounded bridge.
+
+**Operator's answer:** "Build from BridgeConfig, don't flip the shared
+default (Recommended)" — i.e., option (a). `engaged_bridge_source()`
+must build from `BridgeConfig` (R2), proven by a test showing zero net
+behavior change (R3), WITHOUT changing `BridgeConfig`'s shared
+class-level field defaults. R1's literal instruction to "change
+BridgeConfig's defaults" is accordingly NOT implemented as first worded;
+R1's underlying goal — stop `engaged_bridge_source()` bypassing
+`BridgeConfig` with a hard-coded dict that silently drifts from it — is
+achieved via R2's mechanism instead. `test_safe_defaults_are_bounded_and_
+features_remain_opt_in` stays unchanged and passing.
