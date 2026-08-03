@@ -104,3 +104,24 @@ monitor intervention. Residue, honestly: one rung of seven; the
 DESIGN-AND-STOP discipline (rungs 6–7) and the guardrailed rungs (4–5)
 remain untested; "accepted does not mean true" applies to the five new
 socket contracts until a rung actually builds against them.
+
+**X5 — the validation FAIL loop fired a second time, on a different
+tranche shape, and caught a different class of defect
+(load-bearing-and-correct).** Rung 2 tranche 1
+(`experiments/2026-08-03-change-rung2-config-inventory/`), a docs-only
+inventory with zero `src/`/`docs/map/` lines — a much smaller tranche
+than rung 1's, testing whether the discipline holds outside the shape it
+was first proven in. `dr-validate-change`'s own instruction to re-verify
+every pointer FRESH rather than trust the checklist's pasted output
+caught a genuine inaccuracy the execution-time record had missed: one
+environment-variable name (`DEEPREASON_DISABLE_V6_LAUNCH_ENV`, invented
+by conflating a Python constant's name with the string it holds) that
+does not exist anywhere in the source; the real string is
+`DEEPREASON_DISABLE_V6_LAUNCHES` (VALIDATION.md, commit `5489d501`). The
+loop ran exactly as X3 recorded for rung 1 — FAIL, re-plan (`5bcc0edb`),
+one-line fix (`835248fb`), re-validate — with the same zero-intervention
+property. New signal beyond X3: the caught defect this time was a factual
+transcription error in a DELIVERABLE'S OWN CONTENT (not a map-header
+consistency gap), showing the "re-verify fresh, don't trust the record"
+instruction generalizes across defect classes, not just the one X3
+happened to catch.

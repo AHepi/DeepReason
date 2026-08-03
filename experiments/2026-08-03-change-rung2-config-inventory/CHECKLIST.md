@@ -134,7 +134,11 @@ Steps 1-7 above are untouched.
       ("wrong string absent").
 - [x] 9. (R2) [COMMIT] Commit step 8, push with retry.
       done-when: new commit on branch AND clean tree.
-- [ ] 10. (all) [COMMIT] Final push and cleanliness check.
+- [x] 10. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
       Then route back to `dr-validate-change` for a fresh validation pass.
+      DONE. `git status --porcelain`: empty. `git rev-parse HEAD` ==
+      `git rev-parse origin/claude/delivery-rungs-handover-m22sdy` ==
+      `835248fb564b6e452bd992c67a5f681637ff81ee`. All 10 steps complete.
+      Routing back to dr-validate-change.
