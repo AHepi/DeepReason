@@ -228,3 +228,33 @@ pressure. Residue: the executor's own VALIDATION/DELIVERY for this
 tranche were still pending at this entry; the monitor's sweep
 verification lives in the session scratchpad (session-local by
 design), with its digest recorded here as the durable citation.
+
+**X9 — the frozen-surface tripwire out-ranked the monitor: validation
+FAILED a technically-perfect tranche on governance, exactly as written
+(load-bearing-and-correct, and a correction to this ledger's own X8
+framing).** Executor head `03b2d2fe`: `dr-validate-change`'s mechanical
+frozen-surface diff came back non-empty (`run_manifest.py`, 7 lines —
+surface 4) and REQUEST.md contains no operator words approving that
+surface, so the executor recorded **Verdict: FAIL** while every other
+check passed — gate 3291/0 reproduced twice in isolation, sweep run
+twice more and three-way byte-identical, and this ledger's X8 cited as
+independent corroboration. The decisive sentence is the executor's own:
+the monitor's endorsement "is a second AI session's review, not operator
+sign-off, and the two are not interchangeable here." That corrects X8's
+"judged lawful" framing: X8 established the change is CORRECT
+(reader-preserving, precedent-following, byte-identical sweeps); it
+could not and did not establish that it was AUTHORIZED. The rule exists
+precisely so a frozen-surface touch cannot be self-blessed by good
+reasoning — including the monitor's. Infrastructure claims confirmed:
+the workflow's one mechanical tripwire on the frozen path fired through
+THREE layers of plausible legitimacy (in-repo precedent, honest SPEC
+amendment, independent monitor verification), and a less capable
+executor applied it against its own finished, twice-verified work
+without being told. Now blocked, correctly, on the operator's own words:
+approve the `run_manifest.py` scrub line (then deliver, plus the Traps
+entry VALIDATION.md asks for in `INV-frozen-surfaces.md`) or reject it
+(then the tranche re-plans the field out of the manifest echo some other
+way). The monitor's off-course clause for future checks is restated to
+match the workflow's stricter rule: a frozen-surface commit is
+deliverable only with operator words in the tranche's REQUEST.md, and
+correctness evidence — anyone's — never substitutes.
