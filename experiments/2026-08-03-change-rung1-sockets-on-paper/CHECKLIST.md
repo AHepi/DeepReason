@@ -380,10 +380,13 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       Check count rose from 762 (last full run, after step 20) to 793 — a
       genuine +31, confirming the previously-invisible checks are now
       actually parsed and executed, not merely present as text.
-- [ ] 23. (all) Full gate, confirmatory (no `src/` changed so no regression
+- [x] 23. (all) Full gate, confirmatory (no `src/` changed so no regression
       is expected; run per CLAUDE.md/dr-plan-steps boilerplate anyway):
       `python -m pytest tests/ -q -n 4`.
       done-when: output ends `N passed, 0 failed` (paste the final line).
+      DONE. `3290 passed, 7 skipped in 573.44s (0:09:33)`. No failures, as
+      expected for a docs-only tranche; the flaky test named in the
+      handover's "Environment facts" section did not fire this run.
 - [ ] 24. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
