@@ -32,6 +32,15 @@ written by whichever session holds the evidence: the executor session
 itself (per the feed-instruction in `docs/HANDOVER_2026-08-03.md`) or the
 monitoring session reviewing its record.
 
+Numbering rule (added 2026-08-03 after the X5 collision, operator-
+directed — see X6): the two writers use disjoint id spaces. The
+MONITORING session writes `X<n>` (this file's original sequence). The
+EXECUTOR session writes `XE<n>`, starting at XE1, numbered off the ledger
+tail in its OWN checkout. Neither renumbers the other's entries, ever;
+on merge, both sequences stand as written. The executor's one
+pre-rule colliding entry (commit `4e4c26e8`, "X5" in its branch) is
+cited as **X5-E** everywhere, including after merge.
+
 ## Entries
 
 **X1 — the infrastructure's own deployment raced the executor.** The
@@ -105,9 +114,21 @@ DESIGN-AND-STOP discipline (rungs 6–7) and the guardrailed rungs (4–5)
 remain untested; "accepted does not mean true" applies to the five new
 socket contracts until a rung actually builds against them.
 
+**X5 — the X1 sequencing gap is closed.** Merge commit `b73db3ba` on the
+executor branch brings the monitoring branch's history (this ledger
+through X4, the R3a amendment, the handover's feed-instruction) into the
+executor's own checkout — the operator-directed first step of the rung-2
+authorization. From this commit on, the executor CAN follow the
+feed-instruction its rung-1 checkout never carried; X1's compensation
+clause ("the monitor reviews the executor's artifacts directly") drops
+from necessary to belt-and-braces. Rung-2 work proper (inventory
+tranche) not yet begun at this check.
+
 **X5 — the validation FAIL loop fired a second time, on a different
 tranche shape, and caught a different class of defect
-(load-bearing-and-correct).** Rung 2 tranche 1
+(load-bearing-and-correct).** [Cited as **X5-E** after the numbering rule
+below — this entry predates that rule and stands unedited, per the
+resolution X6 records.] Rung 2 tranche 1
 (`experiments/2026-08-03-change-rung2-config-inventory/`), a docs-only
 inventory with zero `src/`/`docs/map/` lines — a much smaller tranche
 than rung 1's, testing whether the discipline holds outside the shape it
@@ -125,3 +146,30 @@ transcription error in a DELIVERABLE'S OWN CONTENT (not a map-header
 consistency gap), showing the "re-verify fresh, don't trust the record"
 instruction generalizes across defect classes, not just the one X3
 happened to catch.
+
+**X6 — rung 2 tranche 1 delivered on course; the feed-instruction
+worked; and the ledger's first two-writer collision (an infrastructure
+defect in THIS document's charter).** Executor head `5a4926fd`: the
+config inventory shipped with a from-scratch second validation PASS (all
+12 pointers re-checked, not sampled), zero `src/` and zero `docs/map/`
+lines, an R1–R8 reconciliation that correctly defers the switch tranche,
+and a substantive unanticipated finding — `v6_policy.py::
+engaged_bridge_source()` bypasses the `BridgeConfig` home `config.py`
+already declares, with three of five values differing from that class's
+own defaults (INVENTORY.md Group B). The validation FAIL loop fired a
+second time on a different defect class (an invented env-var name,
+`DEEPREASON_DISABLE_V6_LAUNCH_ENV` for the real
+`DEEPREASON_DISABLE_V6_LAUNCHES` — VALIDATION.md, `5489d501`), and the
+executor followed the feed-instruction for the first time, writing the
+entry itself (commit `4e4c26e8`). THE DEFECT: it numbered that entry
+**X5**, while this branch already carried a different X5 (the merge-gap
+closure, commit `d0fb3056`) — the charter said "written by whichever
+session holds the evidence" but gave two concurrent writers no numbering
+rule, so the first genuinely concurrent append collided. Not an executor
+fault: its checkout's ledger ended at X4. Resolution, binding from this
+entry on: the executor's colliding entry is cited as **X5-E** wherever
+disambiguation matters; entry ids are claimed by FIRST PUSH TIME on any
+branch, and a writer must fetch and check every branch's ledger tail
+before numbering — or, failing that, suffix its id with `-E` (executor)
+/ nothing (monitor). Both X5 texts stand unedited when the branches
+merge; append-only survives, only the citation rule changes.
