@@ -1,0 +1,87 @@
+<!-- DR-CON-scheduler-ranking -->
+Verified-at: d2660928
+Verify: python tools/docs_verify.py
+Owns: src/deepreason/scheduler/scheduler.py
+Seams: DR-SEAM-scheduler-x-rules
+Seams-undocumented: authority x scheduler-ranking, harness x scheduler-ranking, scheduler-ranking x schools
+
+# Scheduler ranking — which problem a cycle works on
+
+## What it is
+
+`Scheduler._select_problem` is the single tie-break authority for "which
+problem does this cycle spend its call on". It is a narrower socket than
+`DR-SUB-scheduler` (which also covers budgets, capability dispatch and the
+whole `step()` sweep): ranking is exactly the ordering decision, expressed
+as one sort key under `LIVENESS_QUEUE` and one under the legacy
+round-robin path. Both modes hold the same guarantee in different shapes —
+the operator's seed question outranks every spawn, always — because a
+recorded run (`selfstudy run-9175f0ec`) spent an entire 200k-call budget
+inside a connection problem that won cycle 0 on the bare id tie-break
+alone, and the operator's own question terminated `budget_denied` having
+made zero provider calls.
+
+## The socket contract — what it promises, what it is handed, what it must never do
+
+**Promises:**
+- The operator's `SEED` question always wins a rank tie, in both selection
+  modes — ranked directly after the age term, before the reflexive
+  tie-break, in both the `LIVENESS_QUEUE` sort key and the round-robin
+  pool's sort key.
+  `check: grep -q "p.provenance.trigger != SpawnTrigger.SEED," src/deepreason/scheduler/scheduler.py && test "$(grep -c "provenance.trigger != SpawnTrigger.SEED" src/deepreason/scheduler/scheduler.py)" -eq 2`
+- Import-role admission records (attached-source records, source-
+  reliability assertions) never count as a "survivor" — the aging weight
+  cannot be depressed by evidence-admission bookkeeping mistaken for a
+  solved candidate.
+  `check: grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py`
+- Both guarantees are pinned by regression, not only by reading the sort
+  key.
+  `check: python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
+
+**What it is handed:** the harness's `state` (problems, artifacts, status —
+read only, never mutated here); `reflexive_problems(state)`, the lineage-
+following meta-work set; the `Config` knobs `FOCUS_PROBLEM`, `FOCUS_FAMILY`,
+`LIVENESS_QUEUE`, `INTEGRATION_BUDGET_SHARE`; and the scheduler's own
+per-instance attention cache `_problem_worked` (liveness ages — rebuildable,
+non-epistemic).
+
+**Must never do:**
+- Write to disk or assign a `Status`/`hv`/`reach` value — attention and
+  ranking only, exactly like the rest of `DR-SUB-scheduler` (the package-
+  wide guarantee this socket inherits, not a separate one).
+  `check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py`
+- Select a `RESEARCH`-triggered problem for ordinary gamma work — research
+  problems are worked by backends, never by `_select_problem`'s candidate
+  pool.
+  `check: grep -q "p.provenance.trigger != SpawnTrigger.RESEARCH" src/deepreason/scheduler/scheduler.py`
+- Let reflexive (meta-economy) work escape its `INTEGRATION_BUDGET_SHARE`
+  cap by following only the spawn trigger and not the lineage — the Bronze
+  Age postmortem: debt/remove-arbitrariness successors escaped the
+  reflexive set entirely when tracked by trigger alone.
+  `check: grep -q "self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE" src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
+
+## Where it lives
+
+| Aspect | File | Symbol |
+|---|---|---|
+| The ranking entry point | `scheduler/scheduler.py` | `Scheduler._select_problem` |
+| Meta-work set (lineage, not just trigger) | `scheduler/scheduler.py` | `reflexive_problems` |
+| Stage isolation for a staged pipeline | `scheduler/scheduler.py` | `problem_family`, `Config.FOCUS_FAMILY` |
+| Discrimination backoff feeding the candidate filter | `scheduler/scheduler.py` | `_disc_paused` |
+| The attention cache ranking reads | `scheduler/scheduler.py` | `_problem_worked` |
+
+## Where to change what
+
+| To change... | Edit | Test |
+|---|---|---|
+| Which problem a cycle works on, or the rank tie-break | `_select_problem`; `Config.LIVENESS_QUEUE`, `FOCUS_PROBLEM`, `FOCUS_FAMILY` | `tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero`, `tests/test_scheduler.py::test_focus_family_restricts_selection` |
+| What counts as reflexive/meta work, or its budget share | `_REFLEXIVE_TRIGGERS`/`reflexive_problems`; `Config.INTEGRATION_BUDGET_SHARE` | `tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage` |
+
+## Traps
+
+See `DR-SUB-scheduler`'s Traps for the package-wide hazards this socket
+also inherits (the capability-state pooling filter, ladder interventions
+must not latch). Socket-specific, already covered above and not
+re-derived: cycle 0 falling to the bare id tie-break
+(`selfstudy run-9175f0ec`), and the meta-economy eating the inquiry
+(Bronze Age postmortem).

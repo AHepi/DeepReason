@@ -128,7 +128,7 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 7's write.
 
-- [ ] 9. (S5) Create `docs/map/CON-scheduler-ranking.md` (same anatomy;
+- [x] 9. (S5) Create `docs/map/CON-scheduler-ranking.md` (same anatomy;
       cite the already-check-backed "operator's seed question wins ties"
       and "import-role never counts as survivor" claims from
       `SUB-scheduler.md`'s Traps rather than re-deriving new checks for
@@ -136,8 +136,23 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: `python tools/docs_verify.py --links` reports 0 dangling
       AND `grep -q "DR-CON-scheduler-ranking" docs/map/INDEX.md` AND the
       file's own checks exit 0 (paste).
-- [ ] 10. (S5) [COMMIT] Commit step 9, push with retry.
+      DONE (correct string per step 5's note: `CON-scheduler-ranking.md`).
+      All 6 new checks verified individually first (4 grep one-liners +
+      the package-wide no-write/no-status-mutate check, all OK; the 3
+      pytest-backed checks: `test_operator_question_outranks_spawns_at_
+      cycle_zero`, `test_focus_family_restricts_selection`, `test_
+      reflexive_budget_follows_lineage` — 3 passed).
+      `grep -q "CON-scheduler-ranking.md" docs/map/INDEX.md` -> exit 0
+      (line 63).
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 760 checks, 759 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 10. (S5) [COMMIT] Commit step 9, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 9's write. This completes R1
+      (all five sockets: S1-S5).
 
 - [ ] 11. (S6) Batch A — add `## Seams` table (documented seams glossed
       from the seam doc's "The agreement"; undocumented pairs glossed
