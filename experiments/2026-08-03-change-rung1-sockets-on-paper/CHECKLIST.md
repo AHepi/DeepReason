@@ -15,7 +15,7 @@ No root sweep step: `tools/root_sweep.py` proves innocence for changes to a
 READER, guard, or authority rule under `src/`; this tranche touches no
 `src/` file (R4), so the sweep has nothing to compare and is not run.
 
-- [ ] 1. (S1) Extend `docs/map/CON-schools.md`: add
+- [x] 1. (S1) Extend `docs/map/CON-schools.md`: add
       `## The socket contract — what it promises, what it is handed, what it must never do`
       after `## What it is`, before `## Where it lives`, per SPEC.md's S1
       bullet content (reuse existing checks where the claim is already
@@ -25,6 +25,21 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: `grep -q "The socket contract" docs/map/CON-schools.md`
       AND `python tools/docs_verify.py --ring schools` exits 0 (paste
       output).
+      DONE. `--ring schools` does not resolve: CON- documents' `Verify:`
+      line is `python tools/docs_verify.py` itself (no pytest ring is
+      declared), unlike `SUB-*` documents. Substituted the full run, which
+      is what actually exercises this document's inline checks:
+      `grep -q "The socket contract" docs/map/CON-schools.md` -> exit 0.
+      `python tools/docs_verify.py`:
+      ```
+      docs_verify [full]: 46 documents, 756 checks, 4 workers
+      docs_verify: 0 failed
+      real 5m6.417s
+      ```
+      Each of the section's four new check lines also individually
+      confirmed standalone before the full run (grep for the marker, the
+      two `python -c` checks, `conditioning_only cannot carry route
+      bindings` grep, and the two `pytest -k` checks — all passed).
 - [ ] 2. (S1) [COMMIT] Commit step 1, push with retry (2s/4s/8s/16s).
       done-when: `git log -1 --format=%H` on the tranche branch shows the
       new commit AND `git status --porcelain` is empty.

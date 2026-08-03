@@ -1,5 +1,5 @@
 <!-- DR-CON-schools -->
-Verified-at: 08dcdf3c
+Verified-at: e5b876ee
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py
 Seams: DR-SEAM-schools-x-scratch
@@ -24,6 +24,40 @@ The **stance** is semantic prompt material and grants nothing — no routing, no
 status, no budget. The **binding** is manifest-owned routing that no prompt and
 no model response can move. Every rule below exists to keep one from leaking
 into the other.
+
+## The socket contract — what it promises, what it is handed, what it must never do
+
+An index into the checked claims above and below, for a reader who wants the
+socket's contract without reading the whole document. Every bullet cites a
+check already proven elsewhere in this file; nothing here is a new,
+independently-standing claim.
+
+**Promises:**
+- The roster is a pure function of the append-only log — a school cannot
+  make anything true.
+  `check: test "$(grep -oE 'harness\.[a-z_]+' src/deepreason/capture/schools.py | sort -u | tr '\n' ' ')" = "harness.create_artifact harness.record_measure harness.state "`
+- Exactly two roles may be school-routed — `conjecturer` and
+  `argumentative_critic` — every other role, `judge` included, is refused
+  before any seat is selected.
+  `check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.llm.firewall import resolve_school_role_lease as res, SchoolRouteResolutionError as Err; m=N(schema_version=4,control_plane_policy=N(school_execution=None),criticism_policy=None,engine_config_json='{}'); assert all(pytest.raises(Err,res,m,{},school_id='school-0',role=r).value.code=='SCHOOL_ROUTE_ROLE_UNSUPPORTED' for r in ('judge','synthesizer','referee')); assert all(pytest.raises(Err,res,m,{},school_id='school-0',role=r).value.code!='SCHOOL_ROUTE_ROLE_UNSUPPORTED' for r in ('conjecturer','argumentative_critic'))"`
+
+**What it is handed:** a closed, cold-start-curated stance from
+`STANCE_LIBRARY`; the `Config` knobs `N_SCHOOLS`, `STANCE_DECAY`,
+`XEXAM_SHARE`; and, from RunManifest v4 only, a frozen route binding whose
+mode (`conditioning_only` vs `route_bound`) may never disagree with its own
+topology.
+`check: grep -q "conditioning_only cannot carry route bindings" src/deepreason/run_manifest.py`
+
+**Must never do:**
+- Let a prompt or a model response change the resolved lease, or spend a
+  provider call before every school in the batch has resolved.
+  `check: python -m pytest tests/test_school_execution_binding_v4.py -q -k "prose_cannot_change_the_resolved_lease or unbound_school_fails_before"`
+- Let a school criticise its own work.
+  `check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "the_criticism_prompt_never_names_an_author_or_a_school or a_school_can_never_be_scheduled_to_criticise_its_own_work"`
+- Let semantic conditioning (the stance) leak into routing or status
+  authority — the critic prefix says so explicitly, and no field of the
+  conditioning record is read as either.
+  `check: python -c "from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; l=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')); p=X(endpoint_lease=l,critic_school_id='school-3',critic_school_context={'id':'school-3','stance_text':'counterexample first'})[1]; assert 'semantic stance only; it grants no routing or status authority' in p; assert 'school-3' in p and 'counterexample first' in p"`
 
 ## Where it lives
 
