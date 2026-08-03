@@ -426,12 +426,30 @@ remain the audit trail for the work that did land correctly.
 - [x] 26. (R2) [COMMIT] Commit step 25, push with retry.
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 25's write.
-- [ ] 27. (S9, R5) Re-run the full S9/R5 gate fresh, since VALIDATION.md's
+- [x] 27. (S9, R5) Re-run the full S9/R5 gate fresh, since VALIDATION.md's
       FAIL means the tranche must prove clean again before re-validating:
       `python tools/docs_verify.py` (expect 0 failed),
       `python tools/docs_verify.py --audit` (expect 0 findings),
       `python tools/docs_verify.py --links` (expect 0 dangling).
       done-when: all three commands exit 0, pasted verbatim.
+      DONE. Also re-ran the full `Sides:`-vs-`Seams:` cross-reference
+      script from the E9 audit one more time first, over all 20 seam
+      documents and all 49 SUB-/CON- documents: "Zero mismatches — every
+      seam document is cited by both its Sides:." (no shortcuts this
+      time — every side, not just the one VALIDATION.md caught).
+      ```
+      python tools/docs_verify.py
+      docs_verify [full]: 49 documents, 793 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+      ```
+      python tools/docs_verify.py --audit
+      docs_verify --audit: 0 finding(s)
+      ```
+      ```
+      python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 49 document(s)
+      ```
 - [ ] 28. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
