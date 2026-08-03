@@ -240,19 +240,38 @@ identity against an otherwise-ordinary `Config` addition — not a widened
 validator, not a changed schema shape, not new manifest semantics. It is
 NOT flipping any default or authority value (R3 remains untouched).
 
-Fix: in `_versioned_source_config_data`, add
-`data.pop("ENGAGED_CRITICISM_AUTHORITY", None)` under the existing
-`if schema_version < 3:` block only if that satisfies all three failing
-cases; if schema_version 3 itself still fails (measured: it does, per
-the observed failures spanning versions 1-3), widen the guard to
-`schema_version < 4` — chosen because no schema version above 3 has any
-pinned-hash test today (only `test_v1_v2_v3_...` exists; `LATEST_SCHEMA_
-VERSION == 6` and v4/v5/v6 are the actively-evolving family, not the
-frozen-forever one), so scrubbing stops exactly where the actual test
-coverage stops, matching the scratch/bridge precedent's own scope
-(popped only for the versions the pinned test actually covers).
+Fix, first attempt (superseded — see below): pop the key only for
+`schema_version < 4`, on the assumption that "no schema version above 3
+has any pinned-hash test today." **That assumption was wrong.** The
+first full-gate run (step 10) surfaced TWO further failures the
+`schema_version < 4` guard did not cover:
+`tests/test_run_manifest_v5_inquiry.py::test_v5_canonical_bytes_match_incident_head_golden`
+(a schema-v5 canonical-bytes-length-and-hash golden, docstring: "V6
+installation must not change the last active-inquiry wire bytes") and
+`tests/test_incident_wave_a_v2_fixtures.py::test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic`
+(schema-v5 incident-fixture root digests, pinned in
+`tests/fixtures/incidents/DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A/PROVENANCE.json`
+against `repository_commit: 056af85e4c6018bcdf44e73c2ada78fabccb4a81`).
+Both are v5, both assert byte-for-byte stability against exactly this
+kind of addition, and neither is named anything like "v1_v2_v3" — so
+"no test above v3" was a false inference from an incomplete grep, not a
+verified fact.
 
-accept: `python -m pytest tests/test_run_manifest_v4.py -q -k test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical` 0 failed (3 passed) AND `python -m pytest tests/ -q -n 4` 0 failed (full gate, S6/R4).
+Fix, corrected: pop `ENGAGED_CRITICISM_AUTHORITY` from
+`_versioned_source_config_data`'s output UNCONDITIONALLY (every schema
+version, not just `< 3` or `< 4`). This is safe and loses no
+information: the field's actual runtime effect is already visible in
+the compiled manifest's own first-class `criticism_policy.authority`
+field (present since schema v4, where `criticism_policy` became
+manifest-bound) — the `Config` echo in `engine_config_json`/
+`source_config_hash` is a redundant reflection of raw `Config` state,
+not the authoritative record of what a run did. Scrubbing it
+unconditionally sidesteps needing to enumerate every present-and-future
+schema version's golden-test coverage, matching the more conservative
+of the two options considered rather than continuing to whack-a-mole
+one schema version at a time.
+
+accept: `python -m pytest tests/test_run_manifest_v4.py tests/test_run_manifest_v5_inquiry.py tests/test_incident_wave_a_v2_fixtures.py -q` 0 failed AND `python -m pytest tests/ -q -n 4` 0 failed (full gate, S6/R4).
 
 ## Budget
 

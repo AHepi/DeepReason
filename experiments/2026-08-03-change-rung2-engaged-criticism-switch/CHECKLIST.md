@@ -183,7 +183,7 @@ baseline — not a redundant fresh BEFORE capture.
       `src/deepreason/run_manifest.py` and
       `docs/map/SEAM-manifest-x-schools.md`, per Amendments 1 and 2).
 
-- [ ] 9. (all) [COMMIT] Commit steps 1-8 (+ Amendments 1-2) together
+- [x] 9. (all) [COMMIT] Commit steps 1-8 (+ Amendments 1-2) together
       (config field, v6_policy.py signature change, preparation.py
       threading, run_manifest.py pop-list fix, CON-authority.md +
       SEAM-manifest-x-schools.md map updates, new test) as one tranche
@@ -195,12 +195,48 @@ baseline — not a redundant fresh BEFORE capture.
       `tests/test_v6_policy_preset.py` all in the same commit;
       `git push -u origin claude/delivery-rungs-handover-m22sdy`
       succeeds (paste confirmation).
+      DONE. Commit `9607f739`, 10 files changed (config.py, v6_policy.py,
+      preparation.py, run_manifest.py, CON-authority.md,
+      SEAM-manifest-x-schools.md, test_v6_policy_preset.py, and this
+      tranche's own REQUEST.md/SPEC.md/CHECKLIST.md). Pushed cleanly:
+      `e0d4eacb..9607f739  claude/delivery-rungs-handover-m22sdy -> claude/delivery-rungs-handover-m22sdy`.
 
 - [ ] 10. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`. Rerun
       once if only the known flake
       (`test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`)
       fails, per C3.
       done-when: output ends "N passed, 0 failed" (paste it).
+      FIRST RUN (after commit `9607f739`) FAILED with 2 failures beyond
+      the known flake — a THIRD mid-flight discovery (SPEC.md Amendment 2,
+      revised): `_versioned_source_config_data`'s `schema_version < 4`
+      guard from the step-8 fix was underscoped. Two more pinned-hash
+      goldens broke:
+      `tests/test_run_manifest_v5_inquiry.py::test_v5_canonical_bytes_match_incident_head_golden`
+      and
+      `tests/test_incident_wave_a_v2_fixtures.py::test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic`
+      (both schema v5, neither named like the v1/v2/v3 test, so the
+      earlier "no test above v3" assumption was a false inference from
+      an incomplete grep). Widened the fix to pop
+      `ENGAGED_CRITICISM_AUTHORITY` UNCONDITIONALLY for every schema
+      version (see SPEC.md Amendment 2's "Fix, corrected" section) —
+      safe because the field's effect is already captured by the
+      compiled manifest's own `criticism_policy.authority` field.
+      Verified: `python -m pytest tests/test_run_manifest_v4.py
+      tests/test_run_manifest_v5_inquiry.py
+      tests/test_incident_wave_a_v2_fixtures.py -q` -> `37 passed`.
+      This fix (one line changed in `run_manifest.py`, already committed
+      in `9607f739` conceptually but the CONTENT differs from what that
+      commit actually contains) needs its own follow-up commit before
+      re-running the full gate — see step 9b below.
+
+- [ ] 9b. (S8, Amendment 2 revision) [COMMIT] Commit the widened
+      `run_manifest.py` fix (unconditional pop, replacing the
+      `schema_version < 4` guard) plus the SPEC.md/REQUEST.md/
+      CHECKLIST.md amendment narrative, as its own follow-up commit
+      (not folded into `9607f739`, which is already pushed — never
+      amend a pushed commit).
+      done-when: `git log -1 --stat` shows `src/deepreason/run_manifest.py`
+      and this tranche's ledger files; push succeeds (paste confirmation).
 
 - [ ] 11. (S6, R5) Root sweep: `python tools/root_sweep.py`, compared
       against the existing accepted baseline (42 rows, 11 ERROR

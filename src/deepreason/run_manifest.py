@@ -2142,8 +2142,13 @@ def _versioned_source_config_data(
     if schema_version < 3:
         data.pop("scratchpad", None)
         data.pop("bridge", None)
-    if schema_version < 4:
-        data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
+    # ENGAGED_CRITICISM_AUTHORITY postdates every schema version's frozen
+    # wire-byte goldens (v1-v3 canonical hashes, the v5 incident goldens);
+    # its actual effect is already visible in the compiled manifest's own
+    # criticism_policy.authority field, so the Config echo drops it
+    # unconditionally rather than tracking which versions happen to have
+    # a pinned test today.
+    data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
     return data
 
 
