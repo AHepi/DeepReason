@@ -1,5 +1,5 @@
 <!-- DR-CON-authority -->
-Verified-at: 08dcdf3c
+Verified-at: d057f306
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py
 Seams: 
@@ -23,6 +23,45 @@ the policy or call it: `run_manifest.py`, `jolts.py`, `ops.py`,
 `scheduler.py`. What makes it hard to navigate is that the *manifest* has its own
 authority vocabulary, closed and frozen, which is not the same set of words as
 the `Config` one.
+
+## The socket contract — what it promises, what it is handed, what it must never do
+
+An index into the checked claims above and below, for a reader who wants the
+socket's contract without reading the whole document. Every bullet cites a
+check already proven elsewhere in this file.
+
+**Promises:**
+- Everything defaults to `observe_only`, and the calibration receipt
+  defaults to absent — a run that configures nothing spends no judge
+  tokens on status-bearing text adjudication.
+  `check: python -c "from deepreason.config import Config; c = Config(); assert c.ARGUMENTATIVE_AUTHORITY == 'observe_only'; assert {c.TEXT_RUBRIC_AUTHORITY.value, c.PAIRWISE_AUTHORITY.value, c.INFRASTRUCTURE_REVIEW_AUTHORITY.value} == {'observe_only'}; assert c.CALIBRATION_RECEIPT is None"`
+- The `Config` vocabulary and the manifest vocabulary are two closed sets
+  that share exactly one word (`observe_only`) and neither may be handed
+  the other's value.
+  `check: python -c "import typing; from deepreason.authority import _ARGUMENTATIVE_VALUES as v; from deepreason.config import Config; assert v == set(typing.get_args(Config.model_fields['ARGUMENTATIVE_AUTHORITY'].annotation)) == {'observe_only', 'trial_required', 'single_family_trial'}, v"`
+  `check: python -c "import typing; from deepreason.rules.crit import _POLICY_AUTHORITIES as p; from deepreason.run_manifest import CriticismPolicyV1 as C; assert set(typing.get_args(C.model_fields['authority'].annotation)) == p == {'observe_only', 'defended_trial'}"`
+
+**What it is handed:** the five per-run `Config` knobs
+(`ARGUMENTATIVE_AUTHORITY`, `TEXT_RUBRIC_AUTHORITY`, `PAIRWISE_AUTHORITY`,
+`INFRASTRUCTURE_REVIEW_AUTHORITY`, `CALIBRATION_RECEIPT`), each backed by a
+real field so a surface with none would silently read the `observe_only`
+default forever; and, on a manifest-bound call, the already-frozen
+`CriticismPolicyV1.authority` value, passed explicitly rather than
+re-derived.
+`check: python -c "from deepreason.authority import _SURFACE_FIELDS, AuthoritySurface; from deepreason.config import Config; assert len(_SURFACE_FIELDS) == len(AuthoritySurface) == 3; assert set(_SURFACE_FIELDS.values()) <= set(Config.model_fields)"`
+
+**Must never do:**
+- Widen the manifest's authority vocabulary — it is a frozen `Literal`, and
+  every qualification subject digest derives from the manifest.
+  `check: grep -q 'TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH' src/deepreason/run_manifest.py && ! grep -q 'ARGUMENTATIVE_AUTHORITY' src/deepreason/run_manifest.py`
+- Let a trial read the authority knob directly — it arrives only as a
+  parameter, from a caller that has already gated.
+  `check: python -c "import inspect; from deepreason.informal import trial; assert 'authority' not in inspect.signature(trial._argument_trial_steps).parameters; assert 'authority' in inspect.signature(trial._trial_steps).parameters"`
+  `check: ! grep -qE 'ARGUMENTATIVE_AUTHORITY|argumentative_authority_mode' src/deepreason/informal/trial.py`
+- Let `calibrated_status` yield status without a verified receipt —
+  `calibration_receipt_is_verified` returns `False` unconditionally today;
+  no receipt verifier exists.
+  `check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f, calibration_receipt_is_verified as v; from deepreason.config import Config; assert not v(Config(CALIBRATION_RECEIPT='sha256:x')); assert f(Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'), 'text', S.RUBRIC) == T.OBSERVE_ONLY"`
 
 ## Where it lives
 

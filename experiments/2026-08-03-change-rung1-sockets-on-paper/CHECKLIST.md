@@ -59,14 +59,36 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       --porcelain`: empty. Already visible on `origin/claude/delivery-
       rungs-handover-m22sdy` (pushed as part of step 1).
 
-- [ ] 3. (S2) Extend `docs/map/CON-authority.md`: add the same-titled
+- [x] 3. (S2) Extend `docs/map/CON-authority.md`: add the same-titled
       socket-contract section per SPEC.md's S2 bullet content. Advance
       `Verified-at:`.
       done-when: `grep -q "The socket contract" docs/map/CON-authority.md`
       AND `python tools/docs_verify.py --ring authority` exits 0 (paste
       output).
-- [ ] 4. (S2) [COMMIT] Commit step 3, push with retry.
+      DONE — LATE, out of order. This step was genuinely skipped when R1's
+      other four sockets were executed (steps 1-2, then 5-10 directly) and
+      only caught while re-reading the checklist before starting R3
+      (step 19): steps 3-4 were still `[ ]` even though the tranche's
+      commit messages had already (wrongly) narrated "R1 complete" at step
+      10. The CHECKLIST record itself never lied — only the narration did
+      — but the work was genuinely missing and is done now, before R3.
+      `--ring authority` does not resolve for the same reason as
+      `--ring schools` at step 1 (a CON- document's `Verify:` is the whole
+      tool, not a pytest ring); substituted the full run. All 8 new check
+      lines verified individually first (all reused verbatim from
+      elsewhere in this same document, all passed standalone).
+      `grep -q "The socket contract" docs/map/CON-authority.md` -> exit 0.
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 761 checks, 761 reused
+      docs_verify: 0 failed
+      ```
+- [x] 4. (S2) [COMMIT] Commit step 3, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 3's write. This retroactively
+      completes R1 in full (all five sockets: S1-S5). The earlier "R1
+      complete" claim in step 10's commit message was accurate about
+      S3/S4/S5 but wrong about S2; this step is the correction.
 
 - [x] 5. (S3) Create `docs/map/CON-conjecture-source.md` (full SCHEMA.md
       anatomy: header incl. `Seams:`/`Seams-undocumented:`, `## What it
