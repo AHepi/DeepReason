@@ -48,3 +48,23 @@ docs_verify --links 0 dangling / --audit 0 findings at commit ce3db17e.
 ## Parked
 
 Nothing new.
+
+## Amendment R3a (2026-08-03, after delivery)
+
+Cadence revised to every 10 minutes with single-warning-then-terminate
+semantics. Mechanics: the platform cron floor is hourly, so the 10-minute
+watch runs as a self-re-arming send_later chain (each check re-arms the
+next +10min; delivery survives container restarts). The prior 2-hour
+Routine trig_01H2KsMav15TVnhyjJu4uSwn is repurposed as an HOURLY
+chain-guard: if the chain's state file is stale or missing and monitoring
+has not been terminated, it re-arms the chain; if the state says
+terminated, it deletes itself. OFF-COURSE means any of: commits touching
+frozen surfaces without an operator-approved FIX; implementation (not
+SPEC-only) activity on rungs 6-7; one tranche spanning two rungs; work
+outside the program and the carried open items without operator words in
+a REQUEST.md; history rewrites of committed evidence; committed
+credentials; continuing past a red gate. On detection: one warning
+message with the evidence pointers, state marked terminated, guard
+deleted, chain not re-armed. State file:
+<scratchpad>/executor-watch.state (session-local by design; the guard
+recreates it after a container recycle).

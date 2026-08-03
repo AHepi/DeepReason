@@ -44,3 +44,11 @@ cadence.
 ## Amendments
 
 (append-only)
+
+R3a (supersedes R3's cadence and reporting rule), operator verbatim
+2026-08-03: "Actually can you check in every 10 minutes to see if process
+has veered of course. If it does, emit a single warning, then terminate.
+I'll handle it after that." — cadence 10 minutes; on off-course detection:
+ONE warning to the operator, then ALL monitoring terminates (no further
+checks, no intervention); the operator takes over. On-course behavior
+(silent when idle, errata-feeding when results arrive) is unchanged.
