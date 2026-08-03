@@ -7,6 +7,23 @@ Seams-undocumented: adjudication x verification, amendment x verification, appli
 
 # Verification — replay validation of a run root, and the pinned mechanical verifiers
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-harness-x-verification` | documented | the harness promises everything a run knows is reconstructible from `log.jsonl` and the two content-addressed stores, and that the live session and a replay agree |
+| `DR-SEAM-periphery-x-verification` | documented | for every source bound into a run's identity, the writer's claim and the verifier's re-derivation must match |
+| adjudication x verification | undocumented | real, confirmed from the adjudication side: `invariants.py` re-derives `dep` and reruns `toposort` rather than trusting the recorded graph, and `verification/report.py` hosts the adjudication-blindness detector adjudication cannot host itself |
+| amendment x verification | undocumented, one-directional | real, confirmed from the amendment side: `invariants.py`'s `_amendment_epochs` decides whether the LEDGER honours the fences an amendment declares; `amendment/` imports nothing from `invariants.py` at all |
+| capabilities x verification | undocumented | real, confirmed from the capabilities side: this document's own claim names "the replay validator" as machinery both capability types share |
+| llm x verification | **deliberately absent** | confirmed from the llm side: `llm/`'s own check proves it never imports `verification` |
+| verification x warrants-and-attacks | undocumented, likely real | plausible: `DR-SUB-adjudication`'s Traps section already names a `verify_root` failure mode (`carry-warrant`) tied directly to `DR-CON-warrants-and-attacks`'s "no warrant, no attack edge" chain |
+| manifest x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed (consistent with `DR-SUB-manifest`'s own Seams table) |
+| application x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed (consistent with `DR-SUB-application`'s own Seams table) |
+| run-identity x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| scratch x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| verification x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 Two things share this document because they answer the same question from

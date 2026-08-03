@@ -239,14 +239,37 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 15's write.
 
-- [ ] 17. (S6) Batch D — same treatment for: `SUB-scheduler.md`,
+- [x] 17. (S6) Batch D — same treatment for: `SUB-scheduler.md`,
       `SUB-scratch.md`, `SUB-verification.md`, `SUB-workflow.md`. This
       completes all 16 files.
       done-when: `for f in docs/map/SUB-*.md; do grep -q "^## Seams" "$f"
       || exit 1; done` exits 0 (whole-set proof, all 16) AND
       `python tools/docs_verify.py --links` reports 0 dangling.
-- [ ] 18. (S6) [COMMIT] Commit step 17, push with retry.
+      DONE, with a real error caught and fixed while writing this batch:
+      `SUB-application.md`'s "application x workflow" row (batch A) had
+      conflated `DR-SUB-workflow` (singular, this batch's v6 control
+      plane) with `application`'s OWN `workflows/` (plural, the retired
+      website machine) — a near-identical directory name, wrong package.
+      Corrected on both documents (an explicit note added to
+      `SUB-workflow.md`'s Seams section warning the next reader away from
+      the same mistake). `SUB-scratch.md`'s own explicit dependency
+      ALLOWLIST resolved most of its pairs directly rather than by
+      inference. No header fixes needed in this batch — all four already
+      correctly listed their real seam docs.
+      `for f in docs/map/SUB-*.md; do grep -q "^## Seams" "$f" || exit 1;
+      done` -> exit 0 (all 16, confirmed with an explicit re-check after
+      initially missing `SUB-scheduler.md` on the first pass, caught by
+      re-running the whole-set check rather than trusting the per-batch
+      count).
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 760 checks, 760 reused
+      docs_verify: 0 failed
+      ```
+      This completes R2/R8 (all 16 SUB documents surface their seams).
+- [x] 18. (S6) [COMMIT] Commit step 17, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 17's write.
 
 - [ ] 19. (S7) Add `## Triage: is a change isolated, or does it need
       REC-change-a-seam?` to `docs/map/SCHEMA.md`, placed directly before

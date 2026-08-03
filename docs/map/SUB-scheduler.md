@@ -22,6 +22,20 @@ costs tokens is rationed, and almost every ration has a live-run postmortem
 behind it; the cheap deterministic work is deliberately not rationed.
 `check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py && grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/runtime/progress.py && grep -qE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/harness.py`
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-scheduler-x-rules` | documented | the scheduler decides what is worked on, by whom, how often; the rules decide what that work means epistemically |
+| `DR-SEAM-scheduler-x-workflow` | documented | the scheduler decides what and when; the workflow plane decides by what recorded authority any of it may touch a provider |
+| authority x scheduler | undocumented | real: `scheduler/scheduler.py` is jointly `Owns:`-listed by `DR-CON-authority` — `Scheduler._criticize`/`Scheduler.step` are named rubric/pairwise call sites for `trial_authority_for` |
+| scheduler x schools | undocumented | real, richly evidenced from the schools side (`DR-CON-schools`'s Where-it-lives table): `Scheduler._school_dict`, `_step`'s `school_leases`, `_foreign_arg_crit`, `_plan_conjecture_context` |
+| capabilities x scheduler | undocumented, asymmetric | real for simulation only (`_simulation_capability_step`); research capability is never reached by the scheduler at all — see `DR-SUB-capabilities`'s Seams table for the full asymmetry and the unrelated same-named subsystem it warns about |
+| llm x scheduler | **deliberately absent** | confirmed from the llm side: `llm/`'s own check proves it never imports `scheduler` |
+| manifest x scheduler | **deliberately absent** | confirmed from the manifest side: its own exclusion-list check names `scheduler` explicitly, matching this package's own "the `RunManifest` is injected, never imported" claim |
+| scheduler x scratch | **deliberately absent** | confirmed from the scratch side: its own dependency allowlist excludes `scheduler` explicitly |
+| harness x scheduler | undocumented | real: durable scheduler effects (the cycle heartbeat `Measure`, dropped-call records, the stop `Measure`/lifecycle `Control` event) all go through the harness as a collaborator, per this document's own "State it owns" |
+
 ## Entry points
 
 - `Scheduler` — constructed by `ops.run_scheduler` with a harness, an adapter, a

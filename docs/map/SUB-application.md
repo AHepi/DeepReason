@@ -49,7 +49,7 @@ No `Seams:` entries yet.
 | application x scratch | undocumented | real: `application.SCRATCH_QUERY_SERVICE.execute` is the whole public surface for read-only scratchpad queries |
 | application x run-identity | undocumented | likely real, unverified here: every admitted CLI verb resolves and locks a run root, which is `DR-CON-run-identity`'s charter ("deterministic run ids, roots on disk") — candidate, worth a seam document rather than an assumption |
 | application x verification | undocumented | plausible: the V6 admission gate (`_admit_v6_root`) refuses a tampered or historical root by manifest/dossier shape before any command runs — whether it calls into `verify_root` itself or only manifest-level checks is not confirmed here |
-| application x workflow | undocumented, likely near-dead | `workflows/` is the retired website state machine this package still `Owns:`, but "no public entry point reaches any more" per this document's own "What it is" — if the interaction is real today it is legacy-only, not a living agreement; worth confirming before writing a seam doc that describes it as active |
+| application x workflow | undocumented | CORRECTED (caught while writing batch D): this pair names `DR-SUB-workflow`, the singular v6 transactional control plane — NOT this package's own plural `workflows/` (the retired website machine, which is a true but irrelevant fact about a different directory of the same near-name). Likely real: `runtime.terminal_authority.ensure_terminal_commitment`/`finalize_terminal_result` (owned here) plausibly reads the typed terminal `workflow/` itself authors, but the exact call site is not confirmed in this document |
 
 ## Entry points
 

@@ -7,6 +7,31 @@ Seams-undocumented: application x workflow, bridge x workflow, capabilities x wo
 
 # The workflow control plane — process authority for every model call
 
+## Seams
+
+Note: this package is `src/deepreason/workflow/` (singular, the v6
+transactional control plane). `DR-SUB-application` separately `Owns:`
+`src/deepreason/workflows/` (plural, the retired website state machine) —
+a different directory the near-identical name invites confusing with this
+one. An earlier draft of `application x workflow` on the other document
+made exactly that mistake and was corrected before commit.
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-harness-x-workflow` | documented | the workflow layer owns process authority and holds none of it: every decision becomes durable only as one `Rule.CONTROL` event appended BY the harness |
+| `DR-SEAM-llm-x-workflow` | documented | `workflow/` decides by what recorded authority a provider may be spoken to; `llm/` is the only place that speaks to one |
+| `DR-SEAM-rules-x-workflow` | documented | `rules/` decides what may be proposed and attacked; `workflow/` decides by what recorded authority a provider may be asked |
+| `DR-SEAM-scheduler-x-workflow` | documented | the scheduler decides what and when; the workflow plane decides by what recorded authority any of it may touch a provider |
+| `DR-SEAM-scratch-x-workflow` | documented | a scratch note is never authority: every mutation is its own log entry, invisible to this plane's admission chain |
+| schools x workflow | undocumented | real: `DR-CON-schools`'s own Where-it-lives table names `workflow/criticism.py` (`plan_foreign_criticism`, `CriticismAssignmentV1`, `CoverageDebtV1`) and `workflow/profiles.py` (`resolve_conjecture_route`) directly |
+| application x workflow | undocumented | likely real, corrected on the other side: `DR-SUB-application`'s `runtime.terminal_authority` plausibly consumes the typed terminal this package authors — exact call site not confirmed here either |
+| manifest x workflow | undocumented | plausible: v6 dispatch guards and `control_plane_policy` are manifest fields read widely by transactional code, exact import direction not confirmed here |
+| bridge x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed (consistent with `DR-SUB-bridge`'s own Seams table) |
+| capabilities x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| ontology x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| packs-and-token-economy x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| verification x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 `workflow/` answers one question for every provider call the system makes:

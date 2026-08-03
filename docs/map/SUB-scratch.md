@@ -7,6 +7,30 @@ Seams-undocumented: application x scratch, bridge x scratch, harness x scratch, 
 
 # The scratchpad — the imaginative workshop, advisory and non-grounding
 
+## Seams
+
+This package's whole top-level dependency set is an explicit ALLOWLIST
+(`canonical`, `conjecture_turn`, `frozen`, `harness`, `llm`, `ontology`,
+`ops`, `run_manifest`, `runtime`, `storage`, `workflow` — never `rules`,
+`scheduler`, `adjudication`, `measures` or `informal`), which resolves
+most of the pairs below directly rather than by guesswork.
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-rules-x-scratch` | documented | the scratchpad offers `conj` a bounded, single-use view of prior thinking; criticism receives none of it, structurally |
+| `DR-SEAM-schools-x-scratch` | documented | a school gives the scratchpad exactly one thing — its bare identifier string, nothing else |
+| `DR-SEAM-scratch-x-workflow` | documented | a scratch note is never authority: every mutation is its own log entry, its formal `state_diff` is empty |
+| harness x scratch | undocumented | real: `harness` is in the allowlist, and `DR-SUB-harness`'s own Seams table names this pair too (one of the four typed process subsystems imported at module level) |
+| llm x scratch | undocumented | real: `llm` is in the allowlist, matching `DR-SUB-llm`'s own Seams table (`render_conj_pack(scratch_context=...)`, the `SCR_` alias namespace) |
+| manifest x scratch | undocumented | real: `run_manifest` is in the allowlist — `ScratchPolicy`/`attention_policy()` are manifest surfaces (`DR-SEAM-rules-x-scratch`'s own "How to change it") |
+| ontology x scratch | undocumented | real: `ontology` is in the allowlist — scratch's typed records are ontology-adjacent vocabulary |
+| periphery x scratch | undocumented | plausible: `storage` (periphery-owned) is in the allowlist, though the exact use is not confirmed here |
+| scheduler x scratch | **deliberately absent** | the allowlist excludes `scheduler` explicitly — the scheduler never reaches into the scratchpad directly |
+| packs-and-token-economy x scratch | undocumented | plausible real: `RenderedScratchPackV1` is counted against `PACK_TOKEN_BUDGET` (seen in `DR-CON-schools`'s critic-conditioning-budget checks) — `DR-CON-packs-and-token-economy`'s territory |
+| application x scratch | undocumented | real, confirmed from the application side: `application.SCRATCH_QUERY_SERVICE.execute` is the whole public read-only query surface (reaches scratch via `ops`, which is in the allowlist) |
+| bridge x scratch | undocumented | not evidenced here either way — candidate pair, not yet analyzed (consistent with `DR-SUB-bridge`'s own Seams table) |
+| scratch x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 `scratch/` is the only place in DeepReason where the model may be wrong on
