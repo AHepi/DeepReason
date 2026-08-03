@@ -124,13 +124,17 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       docs_verify --audit: 0 finding(s)
       ```
 
-- [ ] 9. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`, ISOLATED
+- [x] 9. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`, ISOLATED
       (nothing else running concurrently — tranche 2's validation pass
       hit a resource-contention false-failure when this was violated).
       Rerun once if only the known flake
       (`test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`)
       fails, per C4.
       done-when: output ends "N passed, 0 failed" (paste it).
+      DONE. Output: `3292 passed, 7 skipped in 617.12s (0:10:17)`. 0
+      failed; one more passed than tranche 2's 3291 baseline, matching
+      this tranche's one new test. The known flake did not fire; no
+      rerun needed.
 
 - [ ] 10. (S6, R5) Root sweep: `python tools/root_sweep.py`, run in
       ISOLATION (nothing else concurrent), compared against the last
