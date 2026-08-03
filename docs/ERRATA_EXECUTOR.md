@@ -345,3 +345,26 @@ confirmed catch against each of the three authors in the loop (its own
 work, X3/X5-E; the monitor's endorsement, X9; the monitor's
 authorization text, this entry). SPEC and 11-step plan committed
 (`88de566b`, `df049f04`); implementation not yet begun at this check.
+
+**X12 — tranche 3 delivered; rung 2's authorized work is complete.**
+Executor head `20b2724b`: VALIDATION verdict PASS on every section —
+gate 3292/0 (isolated, reproduced twice), sweep 42 rows / 11 ERROR
+byte-identical (reproduced twice), frozen-surface diff clean, all five
+`docs_verify` modes green — and DELIVERY.md reconciles R1–R9 with the
+honest disposition that R1's literal words were NOT implemented
+(Amendment 1: the operator chose build-from-BridgeConfig over flipping
+shared defaults after the executor surfaced the false-premise fork,
+X11). PARKED.md correctly holds the un-asked-for remainder: the
+shared-default flip as an explicit future operator decision, Groups C/D
+of the inventory, and a map-placement nit. Rung-2 scorecard, all from
+the committed record: three tranches (inventory, criticism-policy
+switch, bridge unification), two Config integrations with zero behavior
+change proven by test each time, one operator-approved frozen-surface
+touch with its Traps entry, gates 3290→3291→3292 all 0 failed, every
+sweep byte-identical, and four distinct guardrail catches (X3-class
+validation FAILs, the X9 governance tripwire, the X11 premise fork)
+resolved inside the workflow with the operator consulted exactly twice
+— once per genuine decision. Nothing further is authorized: remaining
+inventory switches await operator picks; rung 3 awaits operator words.
+The program's next untested disciplines remain rungs 4–5 (guardrailed)
+and 6–7 (DESIGN-AND-STOP).
