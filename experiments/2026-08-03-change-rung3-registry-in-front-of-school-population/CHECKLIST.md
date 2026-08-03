@@ -173,11 +173,18 @@ re-confirmed untouched by this tranche's design.
       confirmation).
       DONE. Commit `bd2151dc`, pushed cleanly: `74c577f1..bd2151dc`.
 
-- [ ] 10. (all) Map check: `python tools/docs_verify.py` (full) AND
+- [x] 10. (all) Map check: `python tools/docs_verify.py` (full) AND
       `python tools/docs_verify.py --audit` AND
       `python tools/docs_verify.py --links`.
       done-when: all three show 0 failed / 0 findings / 0 dangling
       (paste all three).
+      DONE. Output:
+      ```
+      docs_verify [full]: 50 documents, 800 checks, 4 workers
+      docs_verify: 0 failed
+      docs_verify --audit: 0 finding(s)
+      docs_verify --links: 0 dangling reference(s), 50 document(s)
+      ```
 
 - [ ] 11. (S6, R5) Full gate: `python -m pytest tests/ -q -n 4`,
       ISOLATED (nothing else running concurrently — learned the hard
