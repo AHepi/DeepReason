@@ -167,10 +167,11 @@ re-confirmed untouched by this tranche's design.
       Collection: 9 tests collected, all listed. Not committed yet —
       bundled at step 9.
 
-- [ ] 9. (all) [COMMIT] Commit step 8's new test file.
+- [x] 9. (all) [COMMIT] Commit step 8's new test file.
       done-when: `git log -1 --stat` shows
       `tests/test_school_population_registry.py`; push succeeds (paste
       confirmation).
+      DONE. Commit `bd2151dc`, pushed cleanly: `74c577f1..bd2151dc`.
 
 - [ ] 10. (all) Map check: `python tools/docs_verify.py` (full) AND
       `python tools/docs_verify.py --audit` AND
