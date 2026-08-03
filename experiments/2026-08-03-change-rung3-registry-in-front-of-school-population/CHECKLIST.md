@@ -186,13 +186,16 @@ re-confirmed untouched by this tranche's design.
       docs_verify --links: 0 dangling reference(s), 50 document(s)
       ```
 
-- [ ] 11. (S6, R5) Full gate: `python -m pytest tests/ -q -n 4`,
+- [x] 11. (S6, R5) Full gate: `python -m pytest tests/ -q -n 4`,
       ISOLATED (nothing else running concurrently — learned the hard
       way in rung 2 tranche 2's validation pass). Rerun once if only the
       known flake
       (`test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`)
       fails, per C5.
       done-when: output ends "N passed, 0 failed" (paste it).
+      DONE. Output: `3301 passed, 7 skipped in 632.73s (0:10:32)`. 0
+      failed; exactly rung 2's 3292 baseline plus this tranche's 9 new
+      tests. The known flake did not fire; no rerun needed.
 
 - [ ] 12. (S6, R6) Root sweep: `python tools/root_sweep.py`, ISOLATED,
       compared against the last accepted baseline (42 rows, 11 ERROR,
