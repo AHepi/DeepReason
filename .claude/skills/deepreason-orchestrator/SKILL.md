@@ -42,7 +42,9 @@ from grep instead of from the map is how a change misses a call site.
 2. If the work spans two things, **read the SEAM document first**. It
    says which fraction of each side is actually involved, which is
    usually small. Reading both subsystem documents first is reading ten
-   times more than you need.
+   times more than you need. The file is `docs/map/SEAM-<a>-x-<b>.md`,
+   sides in alphabetical order; the worked recipe for changing one is
+   `docs/map/REC-change-a-seam.md`.
 3. Read `docs/map/INV-frozen-surfaces.md` BEFORE designing anything.
    Discovering a frozen surface after the code is written is the
    expensive order to discover it in.
@@ -59,7 +61,9 @@ advance a `Verified-at:` stamp.
 
 ## Environment preflight (run once per session, before routing)
 
-The cloud container rolls back silently. Verify, in order:
+The full driving manual — preflight, CLI lifecycle, ladders, where to
+look — is `dr-drive-harness`; load it if this session has not run the
+harness before. The cloud container rolls back silently. Verify, in order:
 
     git log --oneline -1                # expected branch head, not stale
     git status --porcelain | head       # know what is uncommitted

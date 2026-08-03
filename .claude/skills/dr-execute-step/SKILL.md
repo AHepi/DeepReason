@@ -48,7 +48,10 @@ The map is part of the change, not a chore after it.
 - A step that changes an interaction updates the `SEAM-` document
   before the subsystem ones — the seam is what the next reader opens
   first, and a correct pair of subsystem docs with a stale seam between
-  them is worse than either being stale alone.
+  them is worse than either being stale alone. The file is
+  `docs/map/SEAM-<a>-x-<b>.md` (sides alphabetical); how to change one
+  is `docs/map/REC-change-a-seam.md`; how to write one is
+  `docs/map/SCHEMA.md`.
 - New behaviour needs a new check at column 0 that would fail if the
   behaviour regressed. Run it before you write it down.
 - Advance `Verified-at:` only if you re-ran that document's checks.

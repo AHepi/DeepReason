@@ -22,35 +22,43 @@ README-adjacent paths).
       entries.
       OUTPUT: recorded in the step-2 commit hash below (git log).
 
-- [ ] 3. (S3) Write `.claude/skills/README.md` — the organising index.
+- [x] 3. (S3) Write `.claude/skills/README.md` — the organising index.
       done-when: contains both family names, all 12 phase skills, both
       cross-cutting skills, `dr-drive-harness`; `wc -l` <= 80.
+      OUTPUT: lines: 55; all 16 skills present (no MISSING).
 
-- [ ] 4. (S2, S6) Wire the workflows: both orchestrators gain the
+- [x] 4. (S2, S6) Wire the workflows: both orchestrators gain the
       dr-drive-harness preflight sentence (S2) AND the explicit seam
       pointers in Map preflight item 2 (S6); dr-plan-steps 4b and
       dr-execute-step map obligations gain the same seam pointers (S6).
       done-when: `grep -l dr-drive-harness` lists both orchestrators;
       `grep -l REC-change-a-seam` over the four S6 files lists all four.
+      OUTPUT: S2 both orchestrators listed; S6 all four listed.
 
-- [ ] 5. (S4) CLAUDE.md: driving-skill routing line + skills README
+- [x] 5. (S4) CLAUDE.md: driving-skill routing line + skills README
       pointer in "Which workflow to use"; docs/ERRATA.md added to the
       session-start truth chain.
       done-when: `grep -c dr-drive-harness CLAUDE.md` >= 1 AND
       `grep -c "ERRATA" CLAUDE.md` >= 1.
+      OUTPUT: dr-drive-harness: 1 | ERRATA: 1.
 
-- [ ] 6. (S5) README.md: add "Operating this repository" (absorbing
+- [x] 6. (S5) README.md: add "Operating this repository" (absorbing
       "Developer-only source work"), compress "Unsupported and historical
       boundaries", no does/how cuts.
       done-when: `grep -c dr-drive-harness README.md` >= 1; `wc -l` < 363;
       grep hits remain for "Install and operate", "amend", "MCP public
       facade", "Architecture and safety".
+      OUTPUT: dr-drive-harness: 1 | lines: 357 (< 363) | all four
+      headings kept. Two repetition trims (amend lead-in; MCP amendment
+      paragraph now defers to the CLI amend section).
 
-- [ ] 7. (S2-S6) Docs regression guard.
+- [x] 7. (S2-S6) Docs regression guard.
       done-when: `python tools/docs_verify.py` -> 0 failed AND `--audit`
       -> 0 findings.
+      OUTPUT: docs_verify: 0 failed | --audit: 0 finding(s) | --links:
+      0 dangling, 46 documents.
 
-- [ ] 8. (S2-S6, S7) [COMMIT] Commit wiring + CLAUDE.md + README + skills
+- [x] 8. (S2-S6, S7) [COMMIT] Commit wiring + CLAUDE.md + README + skills
       README + PARKED.md (S7 deferred-R8 entry); push with retry.
       done-when: porcelain empty; local HEAD == origin HEAD.
 

@@ -33,12 +33,22 @@ and forgotten inputs:
 Cross-routing: a defect found mid-change is PARKED, not fixed; a change
 wished for mid-defect is PARKED, not implemented. One tranche, one goal.
 
-Cutting across both families: `dr-ask-the-right-question` — question
-discipline. Load it before acting on any ambiguous or terse operator
-message, whenever a phase says "stop and ask", and whenever evidence
-contradicts your expectation: it routes each question to the cheapest
-authority (record → framework → operator) and kills false forks before
-they spend operator attention.
+Cutting across both families, two skills:
+
+- `dr-drive-harness` — the driving manual. Load it at the start of any
+  session that runs, modifies, or diagnoses the harness: session
+  preflight, the public CLI lifecycle, live-run ladder rules, and where
+  to look before modifying (map order, frozen surfaces) or when
+  diagnosing (record first).
+- `dr-ask-the-right-question` — question discipline. Load it before
+  acting on any ambiguous or terse operator message, whenever a phase
+  says "stop and ask", and whenever evidence contradicts your
+  expectation: it routes each question to the cheapest authority
+  (record → framework → operator) and kills false forks before they
+  spend operator attention.
+
+`.claude/skills/README.md` is the index of the whole skill set — both
+families phase by phase, with the artifact each phase owns.
 
 ## Environment (cloud container — read first, every session)
 
@@ -234,4 +244,7 @@ A seam document that does not exist means the pair has not been written up —
     .claude/skills/            the two workflow families
 
 Start any session by reading the newest RESULTS.md segments — they are
-the running truth of what has been proven, broken, fixed, and parked.
+the running truth of what has been proven, broken, fixed, and parked —
+and `docs/ERRATA.md`, the append-only ledger of corrections to committed
+documents: it says which document claims have already been found wrong,
+so you do not re-trust them.

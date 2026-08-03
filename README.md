@@ -120,12 +120,9 @@ two-step form remains available for parse-once/reason-many workflows:
 
 ### Changing the question, or adding evidence, after a run has stopped
 
-Real inquiry rarely survives contact with its first question. You read the
-result, and what you actually wanted to ask is now slightly different — or a
-colleague sends you the paper you should have had on day one. Starting over
-would throw away everything the run established.
-
-`deepreason amend` adds to a stopped run instead of replacing it:
+When the result shows you the question you should have asked, or the
+evidence you should have had, `deepreason amend` adds to a stopped run
+instead of replacing it:
 
 ```bash
 # add evidence, reshape the question, or both
@@ -283,13 +280,10 @@ empty outstanding-work conditions. Cancellation is likewise operational: it
 is observed at a safe completed-cycle boundary and does not let a caller set
 epistemic status.
 
-Amendment is narrower still. `amend_run` may supersede only the question and
-the evidence, and only from a valid terminal stop: it registers the reshaped
-question as a new problem and admits new documents as their own dossier,
-leaving every earlier problem, position, status, and dossier byte-identical.
-It cannot change routing, budgets, policy, or provider profile, so the run's
-qualification remains valid and is not re-run. A caller cannot use it to set
-epistemic status, retract a refutation, or reach evidence already admitted.
+Amendment is narrower still: `amend_run` carries exactly the CLI `amend`
+authority described above — question and evidence only, from a valid
+terminal stop, everything earlier byte-identical — and cannot set epistemic
+status, retract a refutation, or reach evidence already admitted.
 
 Terminal state alone is not sufficient evidence of valid success. The current
 V6 terminal commitment must have a fresh matching replay-validation binding,
@@ -327,37 +321,37 @@ true.
 
 ## Unsupported and historical boundaries
 
-Historical RunManifest versions 1 through 5 are unsupported by installed
-public operation. Direct caller-owned run roots and manifest paths are not
-public start authority. Source files for legacy workflows may remain in the
-repository for preservation or internal migration work, but their physical
-presence does not make them supported.
+RunManifest versions 1–5, caller-owned run roots and manifest paths, the
+retired website workflows and their MCP tools, and the removed `make`,
+`prove`, `check-proof`, `code`, `simulate`, `focus`, `expand`, `attack`, and
+`step` commands are all outside installed public operation. MiniReason ships
+in the wheel solely as the engine behind `deepreason reason --shallow`.
+Historical examples elsewhere in the repository are not installed-wheel
+instructions.
 
-MiniReason ships in the wheel solely as the engine behind
-`deepreason reason --shallow`; it exposes no public entry point of its own and
-is not a separate starting workflow. Website construction and chunked website
-workflows are retired from the public surface, and website MCP tools are not
-exposed.
+## Operating this repository
 
-The removed `make`, `prove`, `check-proof`, `code`, `simulate`, `focus`,
-`expand`, `attack`, and `step` commands are not supported public operations
-(the engaged preset's bounded simulation capability is manifest-owned and is
-not a CLI command).
-Examples or reports in historical repository material must not be interpreted
-as installed-wheel instructions.
+Everything above is the installed product. Working ON the repository —
+running live experiments, modifying source, diagnosing a defect — is a
+different activity with its own law and its own manual:
 
-## Developer-only source work
+- **`CLAUDE.md`** is the operating law: environment preflight, the gate,
+  frozen surfaces, live-run rules, and the two workflow families every
+  substantive change must route through.
+- **`.claude/skills/dr-drive-harness/SKILL.md`** is the driving manual for
+  any agent (or person) new to the repo: how to run the harness properly,
+  and where to look before modifying anything or when something breaks.
+  `.claude/skills/README.md` indexes the full workflow skill set.
+- **`docs/map/INDEX.md`** navigates the 125k-line source tree; read
+  `docs/map/INV-frozen-surfaces.md` before designing any change.
 
-The repository checkout remains useful for implementation and offline tests.
-The following is explicitly a developer workflow, not installed-wheel public
-operation:
+Developer install and tests:
 
 ```bash
 python -m pip install -e ".[dev]"
-pytest
+python -m pytest tests/ -q -n 4     # the gate; 0 failed is the only pass
 ```
 
-Production code lives under `src/deepreason/`. Public behavior must be derived
-from the installed entry points, closed MCP schemas, application services,
-and V6 tests rather than from retired examples elsewhere in repository
-history.
+Production code lives under `src/deepreason/`. Public behavior derives from
+the installed entry points, closed MCP schemas, application services, and V6
+tests — not from retired examples in repository history.

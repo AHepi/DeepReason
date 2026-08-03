@@ -31,9 +31,11 @@ missing steps here means missed work later. Plan against that.
 4b. **Scope from the map before planning steps.** Open
    `docs/map/INDEX.md`, resolve the change to `DR-SUB-`/`DR-CON-`/
    `DR-SEAM-` ids, and read the seam document before the subsystem
-   ones. Name those ids in CHECKLIST.md's header so execution starts
-   from the same map the plan was built on. A change whose ids you
-   cannot name is a change you have not scoped.
+   ones — the file is `docs/map/SEAM-<a>-x-<b>.md`, sides in
+   alphabetical order, and the worked recipe for a seam change is
+   `docs/map/REC-change-a-seam.md`. Name those ids in CHECKLIST.md's
+   header so execution starts from the same map the plan was built on.
+   A change whose ids you cannot name is a change you have not scoped.
 4c. **Plan the map update as part of the step that changes behaviour**,
    never as a trailing "update docs" step. A trailing documentation
    step is the one that gets dropped when a tranche runs long. If a
