@@ -7,6 +7,19 @@ Seams-undocumented: application x periphery, capabilities x periphery, harness x
 
 # The periphery — everything no other map document owns
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-periphery-x-verification` | documented | the evidence machinery (periphery) and replay validation agree on one durable shape: for every source bound into a run's identity, the writer's claim and the verifier's re-derivation must match |
+| harness x periphery | undocumented | real, first tier: `Harness` constructs the log, object store, blob store and connectivity map by name from this package's `log/`/`storage/` — this document's own "What it is" says so directly |
+| periphery x scheduler | undocumented | real: `capture/schools.py` (roster/allocation), `capture/ladder.py` (`activate_interventions` -> `respond`), and `capture/detection.py` (convergence) are all periphery-owned and directly driven by the scheduler |
+| capabilities x periphery | undocumented, likely real | plausible: `simulation/` here is "the trusted simulation compiler" — likely what `DR-SUB-capabilities`'s simulation controller actually executes against, though the exact call site is not confirmed here. NOT to be confused with periphery's `research/` backends, which belong to the scheduler's OLDER `_research_step` subsystem, not to `capabilities/research.py`'s typed lifecycle (see `DR-SUB-capabilities`'s own "What it is" for that naming collision) |
+| llm x periphery | undocumented | plausible, unconfirmed here: this package's `packs/` is "the deterministic pack allocator" (PackIR, section allocation — `DR-CON-packs-and-token-economy`'s territory), a different module from `llm/packs.py`'s pack RENDERING; whether one calls the other is not verified in this document |
+| application x periphery | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| manifest x periphery | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| periphery x scratch | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 This is the residue of the map: the packages a run depends on that no other

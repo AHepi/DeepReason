@@ -2,8 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
-Seams: DR-SEAM-bridge-x-manifest
-Seams-undocumented: authority x manifest, capabilities x manifest, harness x manifest, llm x manifest, manifest x packs-and-token-economy, manifest x rules, manifest x run-identity, manifest x scheduler, manifest x schools, manifest x scratch, manifest x verification, manifest x workflow
+Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-schools
+Seams-undocumented: authority x manifest, capabilities x manifest, harness x manifest, manifest x packs-and-token-economy, manifest x rules, manifest x run-identity, manifest x scheduler, manifest x scratch, manifest x verification, manifest x workflow
 
 # Manifest — the frozen plan a run may execute, and the evidence its routes can execute it
 
@@ -27,6 +27,24 @@ it imports nothing from the harness, the ontology or the adjudication graph.
 Manifest schemas, their validators, and anything entering a qualification
 subject digest are a **frozen surface** — see `DR-INV-frozen-surfaces` before
 scoping any change here.
+
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-bridge-x-manifest` | documented | the manifest promises the bridge one immutable, already-validated authority document (whether `grounded_two_stage` mode is in effect) |
+| `DR-SEAM-llm-x-manifest` | documented | the manifest promises one thing permanently: a closed set of exact provider routes, one `Route` per role seat, secret-free |
+| `DR-SEAM-manifest-x-schools` | documented | a school promises the manifest one thing — an identifier of the form `school-<n>` — and nothing else: no stance, no weight, no lineage |
+| manifest x rules | **deliberately absent** | this document's own check proves it: the exclusion list (`harness\|adjudication\|ontology\|scheduler\|rules\|informal`) names `rules` explicitly — the manifest imports nothing from it |
+| manifest x scheduler | **deliberately absent** | same check, same exclusion list — matches `DR-SUB-scheduler`'s own claim that `RunManifest` is injected, never imported |
+| harness x manifest | **deliberately absent** | same check again — `manifest` is process metadata the harness never reaches for directly |
+| authority x manifest | undocumented | real: `run_manifest.py` is jointly `Owns:`-listed by `DR-CON-authority` — `CriticismPolicyV1.authority` is the frozen manifest vocabulary half of that concept |
+| manifest x scratch | undocumented | real: `DR-SEAM-rules-x-scratch`'s own "How to change it" names `ScratchPolicy`/`attention_policy()` as manifest surfaces — any change to pack size, channels or roles moves the qualification subject digest |
+| manifest x run-identity | undocumented | plausible, unconfirmed here: the qualification cache keys on a subject digest derived from the manifest, and a run root binds one manifest for its life — `DR-CON-run-identity`'s territory, worth a real check before writing the doc |
+| manifest x workflow | undocumented | plausible, unconfirmed here: v6 dispatch guards and `control_plane_policy` are read widely by transactional workflow code, but the exact import direction is not verified in this document |
+| manifest x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| manifest x packs-and-token-economy | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| capabilities x manifest | undocumented | not evidenced here either way — candidate pair, not yet analyzed (matches `DR-SUB-capabilities`'s own Seams table, same verdict from its side) |
 
 ## Entry points
 

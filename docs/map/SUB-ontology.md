@@ -2,7 +2,7 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
-Seams: DR-SEAM-ontology-x-rules
+Seams: DR-SEAM-ontology-x-rules, DR-SEAM-evaluation-x-ontology
 Seams-undocumented: adjudication x ontology, bridge x ontology, capabilities x ontology, harness x ontology, ontology x scratch, ontology x workflow
 
 # Ontology — the one schema every other subsystem speaks
@@ -19,6 +19,19 @@ by design, which is what keeps adjudication blind to authorship. Every record is
 a frozen pydantic model with immutable sequences and mappings, because the log is
 append-only and a mutable in-memory record would let a later reader disagree with
 the bytes on disk.
+
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-ontology-x-rules` | documented | the ontology lends the rules a vocabulary and keeps the right to define it — a rule may bring seven of the ontology's models into existence, never redefine them |
+| `DR-SEAM-evaluation-x-ontology` | documented | the ontology hands evaluation an `Artifact` whose identity is `sha256(canonical(content_ref, codec, interface))` and one guarantee about it |
+| adjudication x ontology | undocumented | real, already confirmed from the adjudication side: `DR-SUB-adjudication`'s entire import surface is `deepreason.ontology` plus itself |
+| harness x ontology | undocumented | real, already confirmed from the harness side: `harness.py` imports `deepreason.ontology` at module level — `Event`/`Artifact`/`Status` are materialized here from ontology's types |
+| bridge x ontology | undocumented, unusually directed | real: `ontology/event.py` imports the BRIDGE event envelope (not the reverse) — confirmed from `DR-SUB-bridge`'s own Seams table, which is why `bridge/`'s top-level `__init__.py` stays import-light to avoid closing the cycle |
+| capabilities x ontology | undocumented, unusually directed | real, same shape as bridge: `ontology/event.py` loads the capability event envelope — confirmed from `DR-SUB-capabilities`'s own Seams table |
+| ontology x scratch | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| ontology x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
 
 ## Entry points
 - `Artifact` — the untyped content object; `Artifact.compute_id(content_ref, codec, interface)` is the content address.

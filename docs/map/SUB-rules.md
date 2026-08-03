@@ -34,6 +34,22 @@ trial, and never against a target that formal evaluation already backs.
 `Config.ARGUMENTATIVE_AUTHORITY` selects which — the manifest may not, because
 that would move every qualification subject digest (`DR-INV-frozen-surfaces`).
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-adjudication-x-rules` | documented | the rules construct attackable objects; adjudication alone decides what they do to the graph |
+| `DR-SEAM-capabilities-x-rules` | documented | a capability proposal is filed only from inside a conjecture turn, only as semantic intent the model authored |
+| `DR-SEAM-evaluation-x-rules` | documented | evaluation answers exactly one question for the rules — can a machine settle this commitment, and what does it say |
+| `DR-SEAM-llm-x-rules` | documented | a rule decides what to ask and what the answer means; `llm/` decides how it is asked and refuses anything the answer may not contain |
+| `DR-SEAM-ontology-x-rules` | documented | the ontology lends the rules a vocabulary and keeps the right to define it |
+| `DR-SEAM-rules-x-scratch` | documented | the scratchpad offers `conj` a bounded, single-use view of the model's own prior thinking; criticism receives none of it, structurally |
+| `DR-SEAM-rules-x-workflow` | documented | `rules/` decides what may be proposed and attacked; `workflow/` decides by what recorded authority a provider may be asked |
+| `DR-SEAM-scheduler-x-rules` | documented | the scheduler decides what is worked on, by whom, how often; the rules decide what that work means epistemically |
+| authority x rules | undocumented | real: `rules/crit.py` is jointly `Owns:`-listed by `DR-CON-authority` — the manifest-word-to-Config-word translation (`_resolve_authority`) lives here |
+| harness x rules | **deliberately absent** | this document's own top-level check proves it: `rules/` never imports `harness` (or `adjudication`) — the package is duck-typed on the harness rather than importing it, so the dependency arrow points one way |
+| manifest x rules | **deliberately absent** | confirmed from the manifest side too: `DR-SUB-manifest`'s own exclusion-list check names `rules` explicitly among what it never imports |
+
 ## Entry points
 
 - `conj.conj` — the conjecture rule. Gated on a registered problem, renders the

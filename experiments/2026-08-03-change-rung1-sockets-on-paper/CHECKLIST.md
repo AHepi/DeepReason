@@ -215,13 +215,29 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 13's write.
 
-- [ ] 15. (S6) Batch C — same treatment for: `SUB-manifest.md`,
+- [x] 15. (S6) Batch C — same treatment for: `SUB-manifest.md`,
       `SUB-ontology.md`, `SUB-periphery.md`, `SUB-rules.md`.
       done-when: `for f in manifest ontology periphery rules; do grep -q
       "^## Seams" docs/map/SUB-$f.md || exit 1; done` exits 0 AND
       `python tools/docs_verify.py --links` reports 0 dangling.
-- [ ] 16. (S6) [COMMIT] Commit step 15, push with retry.
+      DONE. Per the E9 audit: `SUB-manifest.md`'s header fixed
+      (`DR-SEAM-llm-x-manifest` and `DR-SEAM-manifest-x-schools` moved
+      from undocumented) and `SUB-ontology.md`'s (`DR-SEAM-evaluation-x-
+      ontology` added). `SUB-rules.md`'s header was already fully correct
+      (all 8 of its seam docs matched real files) — only the prose table
+      was new. `manifest x rules` and `harness x rules` both confirmed
+      deliberately absent from BOTH sides independently (manifest's own
+      exclusion check names `rules`; rules' own check names `harness`).
+      `for f in manifest ontology periphery rules; do grep -q "^## Seams"
+      docs/map/SUB-$f.md || exit 1; done` -> exit 0.
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 760 checks, 759 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 16. (S6) [COMMIT] Commit step 15, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 15's write.
 
 - [ ] 17. (S6) Batch D — same treatment for: `SUB-scheduler.md`,
       `SUB-scratch.md`, `SUB-verification.md`, `SUB-workflow.md`. This
