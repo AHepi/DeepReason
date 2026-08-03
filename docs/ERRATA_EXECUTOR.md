@@ -315,3 +315,33 @@ entry → PASS → delivered. Every layer that should have fired did, in
 order, and nothing was self-blessed. Rung 2 status: inventory + first
 switch delivered; authorized next is tranche 3 (BridgeConfig
 unification), then rung 2 closes pending the operator's further picks.
+
+**X11 — the question discipline caught a false premise in the
+MONITOR'S own authorization, before a line of code was written
+(load-bearing-and-correct, against the infrastructure's author this
+time).** Rung 2 tranche 3
+(`experiments/2026-08-03-change-rung2-bridge-unification/`), capture
+phase. The monitor-drafted, operator-relayed instruction asserted
+"BridgeConfig's current defaults are the dead ones" and ordered them
+changed to match `engaged_bridge_source()`'s running values. The record
+says otherwise: `test_config_scratch_bridge.py::test_safe_defaults_are_
+bounded_and_features_remain_opt_in` pins bare `Config().bridge ==
+BridgeConfig()` as a deliberate safe-defaults contract, and the
+`deepreason config compile` CLI path consumes those defaults without
+ever passing through `engaged_bridge_source()` — flipping the shared
+class defaults would have changed behavior codebase-wide and broken a
+pinned test. The executor did NOT implement the literal instruction and
+did NOT silently deviate from it either: it ran
+`dr-ask-the-right-question`, presented the operator a genuine two-option
+fork with the evidence and a recommendation, and ledgered the answer
+verbatim (REQUEST.md Amendment 1, commit `fae61ab9`): build
+`engaged_bridge_source()` FROM `BridgeConfig` via an explicit-override
+instance, shared defaults untouched, zero net behavior change proven by
+test. The premise error originated in the monitor's inference ("differs
+from the class defaults" was read as "the class defaults are dead") —
+recorded here against the monitor's own output, which is exactly the
+symmetry this ledger owes: the executor's guardrails now have a
+confirmed catch against each of the three authors in the loop (its own
+work, X3/X5-E; the monitor's endorsement, X9; the monitor's
+authorization text, this entry). SPEC and 11-step plan committed
+(`88de566b`, `df049f04`); implementation not yet begun at this check.
