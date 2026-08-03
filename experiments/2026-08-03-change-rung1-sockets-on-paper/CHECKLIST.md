@@ -60,7 +60,7 @@ READER, guard, or authority rule under `src/`; this tranche touches no
 - [ ] 4. (S2) [COMMIT] Commit step 3, push with retry.
       done-when: new commit on branch AND clean tree.
 
-- [ ] 5. (S3) Create `docs/map/CON-conjecture-source.md` (full SCHEMA.md
+- [x] 5. (S3) Create `docs/map/CON-conjecture-source.md` (full SCHEMA.md
       anatomy: header incl. `Seams:`/`Seams-undocumented:`, `## What it
       is`, the socket-contract section, `## Where it lives`, `## Where to
       change what`, `## Traps` — may be brief). Add its row to `INDEX.md`'s
@@ -71,8 +71,25 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       `python tools/docs_verify.py --ring conjecture-source` or the
       equivalent full-run filter if `--ring` does not resolve a same-day
       new id).
-- [ ] 6. (S3) [COMMIT] Commit step 5, push with retry.
+      DONE. Note on tooling: from this step on, per-step proof uses
+      `python tools/docs_verify.py --fast` (reuses cached results for
+      unchanged files, ~2s) instead of the ~5min unflagged run; the full
+      unflagged run is reserved for step 22 (S9/R5's explicit gate). All 7
+      of this file's new checks verified individually first (grep/python
+      one-liners + `pytest tests/test_scratch_contracts.py -k
+      a_self_link_is_dropped -q` all passed), then:
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 47 documents, 759 checks, 756 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+      `grep -q "DR-CON-conjecture-source" docs/map/INDEX.md` -> exit 0.
+      0 dangling links (implied by the 0-failed fast run, which includes
+      the file's own checks plus everything cached).
+- [x] 6. (S3) [COMMIT] Commit step 5, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 5's write (dr-execute-step
+      procedure #6 commits on any file-changing step).
 
 - [ ] 7. (S4) Create `docs/map/CON-criticism-source.md` (same anatomy).
       Add its row to `INDEX.md`'s Concepts table.

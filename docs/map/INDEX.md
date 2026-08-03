@@ -58,6 +58,7 @@ than you need.
 | `CON-run-identity.md` | deterministic run ids, roots on disk, retiring and amending |
 | `CON-capability-lifecycle.md` | typed proposal → admission → work order → result |
 | `CON-packs-and-token-economy.md` | prompt construction, section allocation, budgets |
+| `CON-conjecture-source.md` | the socket that proposes candidate artifacts (`rules/conj.py`) |
 
 ## Invariants and recipes
 
