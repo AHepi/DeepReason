@@ -112,7 +112,7 @@ re-confirmed untouched by this tranche's design.
       done-when: `python -c "from deepreason.capture.schools import SCHOOL_POPULATION; assert SCHOOL_POPULATION.ids() == ('default',)"` exits 0.
       DONE. Output: `CHECK_OK`. Not committed yet — bundled at step 7.
 
-- [ ] 7. (all) [COMMIT] Commit steps 1-6 together (new seam document,
+- [x] 7. (all) [COMMIT] Commit steps 1-6 together (new seam document,
       header updates, protocol, default backend, singleton) as one
       tranche commit — code and map in the SAME commit per R6.
       done-when: `git log -1 --stat` shows
@@ -121,6 +121,10 @@ re-confirmed untouched by this tranche's design.
       `src/deepreason/capture/schools.py` all in the same commit;
       `git push -u origin claude/delivery-rungs-handover-m22sdy`
       succeeds (paste confirmation).
+      DONE. Commit `697a551a`, 8 files (also includes
+      `SEAM-manifest-x-schools.md`'s Amendment 1 fix and this tranche's
+      own REQUEST.md/SPEC.md/CHECKLIST.md ledger updates). Pushed
+      cleanly: `5eaf4bcb..697a551a`.
 
 - [x] 6a. (S7, amendment 1) Fix `docs/map/SEAM-manifest-x-schools.md:179`'s
       now-stale closed-world import-set check, broken by step 3's new
