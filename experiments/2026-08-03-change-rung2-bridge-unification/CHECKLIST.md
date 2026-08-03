@@ -151,6 +151,8 @@ tranche 2) — confirmed not touched by this tranche's design (SPEC.md's
       tranche 2's second validation pass) — empty diff, byte-identical.
       No committed root's verdict moved.
 
-- [ ] 11. (all) [COMMIT] Final push and cleanliness check.
+- [x] 11. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head is
       on `origin/claude/delivery-rungs-handover-m22sdy` (paste both).
+      DONE. `git status --porcelain` empty; `git rev-parse HEAD
+      origin/...` both `0876b53f` — synced.
