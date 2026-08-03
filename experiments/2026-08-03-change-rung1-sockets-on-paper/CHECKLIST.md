@@ -40,9 +40,16 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       confirmed standalone before the full run (grep for the marker, the
       two `python -c` checks, `conditioning_only cannot carry route
       bindings` grep, and the two `pytest -k` checks — all passed).
-- [ ] 2. (S1) [COMMIT] Commit step 1, push with retry (2s/4s/8s/16s).
+- [x] 2. (S1) [COMMIT] Commit step 1, push with retry (2s/4s/8s/16s).
       done-when: `git log -1 --format=%H` on the tranche branch shows the
       new commit AND `git status --porcelain` is empty.
+      DONE. dr-execute-step's own procedure (#6) commits+pushes after ANY
+      file-changing step, not only `[COMMIT]`-tagged ones, so step 1's own
+      execution already produced this commit and pushed it — no separate
+      commit exists for step 2 itself. `git log -1`: `01898d05 step 1:
+      CON-schools.md gains the socket contract section`. `git status
+      --porcelain`: empty. Already visible on `origin/claude/delivery-
+      rungs-handover-m22sdy` (pushed as part of step 1).
 
 - [ ] 3. (S2) Extend `docs/map/CON-authority.md`: add the same-titled
       socket-contract section per SPEC.md's S2 bullet content. Advance
