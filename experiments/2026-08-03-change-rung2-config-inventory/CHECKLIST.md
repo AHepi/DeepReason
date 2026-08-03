@@ -102,9 +102,13 @@ tranche writes zero `docs/map/` content (S1's deliverable is an
       output, exit 0. R3 held for the entire tranche.
       Also noted: the push after step 5 hit a transient 503 from the git
       proxy; retried with backoff (2s) and succeeded on the first retry.
-- [ ] 7. (S3, R4) [COMMIT] Final push and cleanliness check.
+- [x] 7. (S3, R4) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
       Note for DELIVERY.md: this tranche STOPS here per R4 — present the
       inventory, do not open tranche 2 (the `engaged_criticism_policy`
       switch) or any further rung in this tranche.
+      DONE. `git status --porcelain`: empty. `git rev-parse HEAD` ==
+      `git rev-parse origin/claude/delivery-rungs-handover-m22sdy` ==
+      `f61d592d0f05edba5fe51206496b469cb5af3cf1`. All 7 checklist steps
+      complete. Routing to dr-validate-change.
