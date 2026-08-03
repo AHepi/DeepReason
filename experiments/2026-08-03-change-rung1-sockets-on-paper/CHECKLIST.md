@@ -191,13 +191,29 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       done-when: new commit on branch AND clean tree.
       DONE — committed together with step 11's write.
 
-- [ ] 13. (S6) Batch B — same treatment for: `SUB-capabilities.md`,
+- [x] 13. (S6) Batch B — same treatment for: `SUB-capabilities.md`,
       `SUB-evaluation.md`, `SUB-harness.md`, `SUB-llm.md`.
       done-when: `for f in capabilities evaluation harness llm; do grep -q
       "^## Seams" docs/map/SUB-$f.md || exit 1; done` exits 0 AND
       `python tools/docs_verify.py --links` reports 0 dangling.
-- [ ] 14. (S6) [COMMIT] Commit step 13, push with retry.
+      DONE. Also fixed per the E9 audit: `SUB-harness.md`'s header (both
+      `DR-SEAM-harness-x-verification` and `DR-SEAM-harness-x-workflow`
+      moved from `Seams-undocumented:` to `Seams:` — the header was
+      entirely empty despite two real seam documents) and `SUB-llm.md`'s
+      header (`DR-SEAM-bridge-x-llm` added). Several "deliberately absent"
+      findings surfaced directly from each file's own existing checks
+      (llm/ proven to never import verification/scheduler/harness; harness
+      proven to never import llm) rather than guessed.
+      `for f in capabilities evaluation harness llm; do grep -q "^##
+      Seams" docs/map/SUB-$f.md || exit 1; done` -> exit 0.
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 760 checks, 760 reused
+      docs_verify: 0 failed
+      ```
+- [x] 14. (S6) [COMMIT] Commit step 13, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 13's write.
 
 - [ ] 15. (S6) Batch C — same treatment for: `SUB-manifest.md`,
       `SUB-ontology.md`, `SUB-periphery.md`, `SUB-rules.md`.

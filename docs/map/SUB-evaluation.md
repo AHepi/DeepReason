@@ -7,6 +7,22 @@ Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluatio
 
 # Evaluation — how a commitment becomes a verdict, and where formal stops and informal begins
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-evaluation-x-rules` | documented | evaluation answers exactly one question for the rules — "can a machine settle this commitment against these bytes, and what does it say?" |
+| `DR-SEAM-evaluation-x-ontology` | documented | the ontology hands evaluation an `Artifact` whose identity is content-addressed and one guarantee about it |
+| evaluation x warrants-and-attacks | undocumented | real and already partly evidenced above: `rules/warrants.py` imports `oracle.EXEC_PROGRAMS` and `measures.reach._substantive` directly — the formal/informal boundary that decides what a warrant may attack lives on THIS side, read by that concept's home |
+| authority x evaluation | undocumented | real: `informal/trial.py`, this package's own file, is jointly `Owns:`-listed by `DR-CON-authority` — the trial protocol is exactly where authority's `observe_only`/`status` decision takes effect |
+| evaluation x schools | undocumented | real: `informal/trial.py` is also jointly `Owns:`-listed by `DR-CON-schools` — `critic_school_id` reaches the argument trial and the cross-school substitute guarantee is adjudicated here |
+| evaluation x scheduler | undocumented | real: `Scheduler._criticize` calls this package's `run_trial`/`run_hv_floor` directly, in a fixed cheapest-first order with `crit_program`/`crit_fuzz` |
+| evaluation x llm | undocumented | real: the rubric and argument trials in `informal/trial.py` are LLM-mediated — a trial dispatches through the adapter, not only through `programs.py`'s pure evaluator |
+| adjudication x evaluation | undocumented, likely indirect only | `DR-SUB-adjudication`'s own audited import surface is `ontology` alone (see its Seams table) — a verdict computed here reaches adjudication only via a minted warrant, i.e. through `rules/`, not directly |
+| evaluation x harness | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| evaluation x verification | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| evaluation x periphery | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 A commitment declares what would refute an artifact; this subsystem decides

@@ -2,8 +2,8 @@
 Verified-at: 546544b5
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
-Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
-Seams-undocumented: bridge x llm, capabilities x llm, harness x llm, llm x ontology, llm x scheduler, llm x schools, llm x scratch, llm x verification
+Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm
+Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x scheduler, llm x schools, llm x scratch, llm x verification
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 
@@ -25,6 +25,22 @@ bug. That asymmetry is enforced structurally: `llm/` never imports the harness,
 the scheduler, the rules or the adjudicator, and `LLMCall` is minted in exactly
 one function.
 `check: ! grep -rqE "^[[:space:]]*(from|import) +deepreason\.(harness|scheduler|rules|adjudication|capture|informal|verification|amendment)\b" src/deepreason/llm/ --include=*.py && ! grep -rqE "append_event|log\.jsonl" src/deepreason/llm/ && test "$(grep -rl "LLMCall(" src/deepreason --include=*.py | grep -v "src/deepreason/ontology/" | tr "\n" " ")" = "src/deepreason/llm/adapter.py " && python -c "import ast, pathlib; t = ast.parse(pathlib.Path('src/deepreason/llm/adapter.py').read_text()); c = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == 'call'][0]; m = [n.lineno for n in ast.walk(t) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'LLMCall']; assert m and all(c.lineno <= l <= c.end_lineno for l in m), (m, c.lineno, c.end_lineno)" && ! grep -rn "\.complete(" src/deepreason --include=*.py | grep -v "^src/deepreason/llm/" | grep -qv "^src/deepreason/cli/doctor.py:"`
+
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-llm-x-workflow` | documented | `workflow/` decides by what recorded authority a provider may be spoken to; `llm/` is the only place that speaks to one |
+| `DR-SEAM-llm-x-manifest` | documented | the manifest promises one thing permanently: a closed set of exact provider routes, one `Route` per role seat, secret-free |
+| `DR-SEAM-llm-x-rules` | documented | a rule decides what to ask and what the answer means; `llm/` decides how it is asked and refuses anything the answer may not contain |
+| `DR-SEAM-bridge-x-llm` | documented | `llm/` sells one bounded `pack -> schema-valid JSON` call on a frozen route and knows nothing about grounding; `bridge/` buys exactly that |
+| llm x ontology | undocumented | real: `LLMCall` is minted in exactly one function (`adapter.call`) but the class itself is DEFINED in `ontology/event.py` — this package's central record type is ontology's, not its own |
+| llm x schools | undocumented | real, richly evidenced from the schools side (`DR-CON-schools`'s Where-it-lives table): `llm/firewall.py::resolve_school_role_lease`, `llm/adapter.py::school_judge_bindings`, `llm/packs.py::render_conj_pack` all carry school routing/conditioning |
+| llm x scratch | undocumented | real, already partly documented from the scratch side (`DR-SEAM-rules-x-scratch`'s site table): `llm/packs.py::render_conj_pack(scratch_context=...)` and `llm/wire.py`'s `SCR_` alias namespace |
+| llm x verification | **deliberately absent** | this document's own check proves it: `llm/` never imports `verification` (the exclusion list in the "What it is" check names it explicitly, alongside harness/scheduler/rules/adjudication/capture/informal/amendment) |
+| llm x scheduler | **deliberately absent** | same check, same exclusion list — `llm/` never imports `scheduler` |
+| harness x llm | **deliberately absent** | same check; also independently confirmed from `DR-SUB-harness`'s own Seams table (`harness x llm` there too) |
+| capabilities x llm | undocumented | not evidenced here either way — candidate pair, not yet analyzed (consistent with `DR-SUB-capabilities`'s own Seams table, which marks this pair the same way from its side) |
 
 Pack construction and the cost model are documented separately in
 DR-CON-packs-and-token-economy; school-to-seat routing in DR-CON-schools; the

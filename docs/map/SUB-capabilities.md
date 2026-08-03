@@ -7,6 +7,18 @@ Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x o
 
 # Capabilities — running a program and fetching a document, under frozen authority
 
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-capabilities-x-rules` | documented | the rules side promises a capability proposal is filed only from inside a conjecture turn, only as semantic intent the model authored, never as an operational parameter |
+| capabilities x scheduler | undocumented, asymmetric | real for simulation only: `_simulation_capability_step` dispatches proposed simulations later in the cycle. Research capability is NEVER reached by the scheduler at all — it executes inside the conjecture turn itself; the scheduler's own `_research_step`/`ResearchService` is an unrelated, older subsystem of the same name, sharing no code with this package |
+| capabilities x ontology | undocumented | real: `ontology/event.py` loads the capability event envelope, which is why this package is import-light at the top level (to avoid dragging controllers into ontology's import path) |
+| capabilities x harness | undocumented | real: every capability transition is a chained, typed event through the ordinary append-only log — "a denial is a durable record rather than silence" |
+| capabilities x verification | undocumented | real: this document's own claim names "the replay validator" as shared machinery between the two capabilities — `DR-SUB-verification`'s territory |
+| capabilities x llm | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| capabilities x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
 ## What it is
 
 `capabilities/` is the run's only contact with anything outside its own

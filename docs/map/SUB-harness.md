@@ -2,8 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_replay.py tests/test_persistence_invariants.py -q
 Owns: src/deepreason/harness.py
-Seams: 
-Seams-undocumented: adjudication x harness, bridge x harness, capabilities x harness, harness x llm, harness x manifest, harness x ontology, harness x scratch, harness x verification, harness x workflow
+Seams: DR-SEAM-harness-x-verification, DR-SEAM-harness-x-workflow
+Seams-undocumented: adjudication x harness, bridge x harness, capabilities x harness, harness x llm, harness x manifest, harness x ontology, harness x scratch
 
 # The harness — append-only record, event application, materialized state
 
@@ -31,6 +31,20 @@ Event application and well-formedness here are a **frozen surface**: see
 `DR-INV-frozen-surfaces`. A change that invalidates an existing replay-valid
 root is wrong by definition — fix readers, not the record.
 `check: grep -q "harness.py. event application / well-formedness" CLAUDE.md && grep -q "harness.py. — event application and well-formedness" docs/map/INV-frozen-surfaces.md`
+
+## Seams
+
+| Side | Status | What the agreement is (one line) |
+|---|---|---|
+| `DR-SEAM-harness-x-verification` | documented | the harness promises everything a run knows is reconstructible from `log.jsonl` and the two content-addressed stores, and that the live session and a replay agree |
+| `DR-SEAM-harness-x-workflow` | documented | the workflow layer owns process authority and holds none of it: every decision becomes durable only as one `Rule.CONTROL` event appended BY the harness |
+| harness x ontology | undocumented | real, direct: `from deepreason.ontology import (...)` at module level — `Event`/`Artifact`/`Status` are ontology's vocabulary and the harness is their sole materializer |
+| adjudication x harness | undocumented | real: `harness.py` calls `final_labels(compute_label0(nodes, att), dep)` directly — `DR-SUB-adjudication`'s own Seams table names this same pair from its side |
+| bridge x harness | undocumented | real: this document's own "What it is" names `bridge` as one of the four typed process subsystems the harness imports at module level (event/model/state only, never a controller) — `DR-SUB-bridge`'s Seams table names it too |
+| capabilities x harness | undocumented | real, same shape as bridge x harness: `capabilities` is a second of the four typed process subsystems imported at module level |
+| harness x scratch | undocumented | real, same shape again: `scratch` is a third of the four — imported at module level, event/model/state only |
+| harness x llm | **deliberately absent** | this document's own check proves it: `! grep -qE "deepreason\.(rules\|schools\|scheduler\|llm)\b" src/deepreason/harness.py` — the harness imports none of its callers, `llm/` included |
+| harness x manifest | undocumented | likely absent as a direct import (no `run_manifest` import found in `harness.py`) but not confirmed as deliberate the way `harness x llm` is — worth a real check before writing a seam doc either way |
 
 ## Entry points
 
