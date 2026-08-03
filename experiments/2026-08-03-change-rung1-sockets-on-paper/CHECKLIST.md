@@ -407,7 +407,7 @@ document outside the four `SUB-*.md` batches the step-10b note scoped the
 per-file fixes to. Steps 1-24 above are untouched — their pasted outputs
 remain the audit trail for the work that did land correctly.
 
-- [ ] 25. (R2, E9 follow-up) Fix `docs/map/CON-schools.md`'s header: move
+- [x] 25. (R2, E9 follow-up) Fix `docs/map/CON-schools.md`'s header: move
       `DR-SEAM-manifest-x-schools` from `Seams-undocumented:` to `Seams:`
       (the exact same fix already correctly applied to `SUB-manifest.md`
       in commit `10549d1e`). No prose-table change needed elsewhere in
@@ -416,8 +416,16 @@ remain the audit trail for the work that did land correctly.
       done-when: `grep -q "^Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools$" docs/map/CON-schools.md`
       (or equivalent exact header line) AND
       `python tools/docs_verify.py --fast` exits 0 (paste output).
-- [ ] 26. (R2) [COMMIT] Commit step 25, push with retry.
+      DONE. `grep -n "^Seams:" docs/map/CON-schools.md` ->
+      `Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools`.
+      `python tools/docs_verify.py --fast`:
+      ```
+      docs_verify [fast]: 49 documents, 793 checks, 793 reused
+      docs_verify: 0 failed
+      ```
+- [x] 26. (R2) [COMMIT] Commit step 25, push with retry.
       done-when: new commit on branch AND clean tree.
+      DONE — committed together with step 25's write.
 - [ ] 27. (S9, R5) Re-run the full S9/R5 gate fresh, since VALIDATION.md's
       FAIL means the tranche must prove clean again before re-validating:
       `python tools/docs_verify.py` (expect 0 failed),
