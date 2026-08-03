@@ -32,6 +32,15 @@ written by whichever session holds the evidence: the executor session
 itself (per the feed-instruction in `docs/HANDOVER_2026-08-03.md`) or the
 monitoring session reviewing its record.
 
+Numbering rule (added 2026-08-03 after the X5 collision, operator-
+directed — see X6): the two writers use disjoint id spaces. The
+MONITORING session writes `X<n>` (this file's original sequence). The
+EXECUTOR session writes `XE<n>`, starting at XE1, numbered off the ledger
+tail in its OWN checkout. Neither renumbers the other's entries, ever;
+on merge, both sequences stand as written. The executor's one
+pre-rule colliding entry (commit `4e4c26e8`, "X5" in its branch) is
+cited as **X5-E** everywhere, including after merge.
+
 ## Entries
 
 **X1 — the infrastructure's own deployment raced the executor.** The
