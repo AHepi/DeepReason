@@ -14,3 +14,9 @@
   steps 1-2, INDEX.md's seam matrix.
 - A docs_verify mode for `.claude/skills/` checks — still parked from the
   dr-ask-the-right-question tranche.
+- Flaky under parallel load:
+  `tests/test_v6_nonconjecture_recovery.py::test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`
+  failed once in a `-n 4` full gate on a loaded box (761s run), passed
+  solo, with its file, and in the immediate full-gate rerun (3290/0).
+  Zero src/tests changes in the failing tranche. Defect-family candidate:
+  reproduce under load, diagnose order/timing dependence.

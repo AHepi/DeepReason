@@ -62,9 +62,17 @@ README-adjacent paths).
       README + PARKED.md (S7 deferred-R8 entry); push with retry.
       done-when: porcelain empty; local HEAD == origin HEAD.
 
-- [ ] 9. (all) Full gate.
+- [x] 9. (all) Full gate.
       done-when: `python -m pytest tests/ -q -n 4` -> 0 failed (paste).
+      OUTPUT: 3290 passed, 7 skipped in 765.17s (0:12:45) — 0 failed.
+      First attempt had 1 failure
+      (test_grounded_counterexample_recovery_does_not_invent_override_on
+      _repeat) that passed solo (4.52s) and with its whole file (21
+      passed); zero src/tests changed this tranche and the identical
+      code passed 3290/0 twice earlier today — parallel-load flake,
+      PARKED as a defect candidate.
 
-- [ ] 10. (all) [COMMIT] Tranche artifacts current, committed, pushed,
+- [x] 10. (all) [COMMIT] Tranche artifacts current, committed, pushed,
       tree clean.
       done-when: porcelain empty AND branch head on origin.
+      OUTPUT: verified in VALIDATION.md.
