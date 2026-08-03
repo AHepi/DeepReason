@@ -7,7 +7,10 @@ rewritten — if a correction itself proves wrong, that is a new entry. Evidence
 pointers only; no narrative.
 
 Scope note: this ledger is for documents (handovers, map, RESULTS, specs).
-Code defects have tranches; run roots are never edited at all.
+Code defects have tranches; run roots are never edited at all. Findings
+about the less-capable-executor infrastructure (the cross-cutting skills,
+calibration blocks, and the 2026-08-03 handover program) have their own
+ledger: `docs/ERRATA_EXECUTOR.md`.
 
 ---
 
