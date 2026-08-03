@@ -23,26 +23,33 @@ map checks).
       (first run showed 7 sections — the Exit-criterion H2; demoted to a
       bold paragraph to match the criterion as written, content unchanged)
 
-- [ ] 2. (S1) [COMMIT] Commit the new skill file alone (message cites R1,
+- [x] 2. (S1) [COMMIT] Commit the new skill file alone (message cites R1,
       R3, R4), push with retry.
       done-when: `git log --oneline -1` shows the skill commit AND
       `git status --porcelain` shows no `.claude/skills/` entries.
+      OUTPUT: b66b7f52 step 1-2: dr-ask-the-right-question, the
+      question-discipline skill | porcelain: no .claude/skills entries;
+      pushed.
 
-- [ ] 3. (S2a-c) Add the routing sentence to the three skill files:
+- [x] 3. (S2a-c) Add the routing sentence to the three skill files:
       `deepreason-orchestrator/SKILL.md` (scope-contract stop conditions),
       `dr-change-orchestrator/SKILL.md` (scope contract item 1),
       `dr-spec-change/SKILL.md` (step 2, questions-for-operator branch).
       done-when: `grep -l "dr-ask-the-right-question"` over the three
       files lists all three.
+      OUTPUT: all three listed (deepreason-orchestrator,
+      dr-change-orchestrator, dr-spec-change).
 
-- [ ] 4. (S2d) Add the one routing line to CLAUDE.md's "Which workflow to
+- [x] 4. (S2d) Add the one routing line to CLAUDE.md's "Which workflow to
       use" section, after the cross-routing paragraph.
       done-when: `grep -c "dr-ask-the-right-question" CLAUDE.md` -> 1.
+      OUTPUT: CLAUDE.md refs: 1.
 
-- [ ] 5. (S2) Docs regression guard: the wiring edits must not break any
+- [x] 5. (S2) Docs regression guard: the wiring edits must not break any
       map check that greps CLAUDE.md or the skills tree.
       done-when: `python tools/docs_verify.py` -> 0 failed AND
       `python tools/docs_verify.py --audit` -> 0 findings.
+      OUTPUT: docs_verify: 0 failed | docs_verify --audit: 0 finding(s).
 
 - [ ] 6. (S2, S3) [COMMIT] Commit the four wiring edits (message cites R5,
       C1 and notes S3's survey lives in SPEC.md), push with retry.

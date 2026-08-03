@@ -33,6 +33,13 @@ and forgotten inputs:
 Cross-routing: a defect found mid-change is PARKED, not fixed; a change
 wished for mid-defect is PARKED, not implemented. One tranche, one goal.
 
+Cutting across both families: `dr-ask-the-right-question` — question
+discipline. Load it before acting on any ambiguous or terse operator
+message, whenever a phase says "stop and ask", and whenever evidence
+contradicts your expectation: it routes each question to the cheapest
+authority (record → framework → operator) and kills false forks before
+they spend operator attention.
+
 ## Environment (cloud container — read first, every session)
 
 The container can ROLL BACK silently to a stale checkout, killing

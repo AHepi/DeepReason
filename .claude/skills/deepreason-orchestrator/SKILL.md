@@ -27,7 +27,10 @@ to select the next. You never blend phases.
    the fix requires touching frozen-record semantics (anything under
    `capabilities/state.py` digests, `harness.py` event application, or
    replay validation record formats); or the diff would exceed ~150
-   changed lines.
+   changed lines. Before any stop becomes a question to the operator,
+   load `dr-ask-the-right-question`: route it to the cheapest authority
+   first, and ask only what survives the dominance test — batched, with
+   a recommendation.
 
 ## Map preflight (do this before routing, every time)
 

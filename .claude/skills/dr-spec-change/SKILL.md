@@ -25,6 +25,10 @@ interpretation happens, and it happens in writing.
      behavior, >2x effort): put it in "Questions for operator" and
      STOP after committing SPEC.md — present the batched questions.
      Never start implementation with a material ambiguity open.
+     First load `dr-ask-the-right-question` and run each candidate
+     question through it: the record or the operator's recorded values
+     answer most of them, and only survivors of its dominance test
+     belong in the batch (each with a recommendation).
 3. Check each spec item against DeepReason's frozen surfaces (state
    digests, event application, replay record formats, qualification
    subjects, manifest schemas). If touched: flag the item, stop for
