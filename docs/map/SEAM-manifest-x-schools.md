@@ -150,7 +150,7 @@ expects to meet. `PUBLIC_SCHOOL_COUNT` and `Config().N_SCHOOLS` are two
 constants in two modules that must be equal or every public run fails at
 compile with `V4_CRITICISM_BINDING_INCOMPLETE`.
 
-`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E; assert Config().N_SCHOOLS==P; p=E('ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.role for b in p.bindings}=={'argumentative_critic'} and {b.seat for b in p.bindings}=={0}; assert p.authority=='observe_only' and p.allow_shared and p.minimum_foreign_school_coverage==1" && grep -q "criticism_policy=engaged_criticism_policy(profile.endpoint_id)" src/deepreason/preparation.py`
+`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E; assert Config().N_SCHOOLS==P; p=E('ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.role for b in p.bindings}=={'argumentative_critic'} and {b.seat for b in p.bindings}=={0}; assert p.authority=='observe_only' and p.allow_shared and p.minimum_foreign_school_coverage==1" && grep -q "criticism_policy=engaged_criticism_policy(" src/deepreason/preparation.py && grep -q "config.ENGAGED_CRITICISM_AUTHORITY" src/deepreason/preparation.py`
 
 ## What is deliberately absent
 

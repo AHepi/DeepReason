@@ -2142,6 +2142,8 @@ def _versioned_source_config_data(
     if schema_version < 3:
         data.pop("scratchpad", None)
         data.pop("bridge", None)
+    if schema_version < 4:
+        data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
     return data
 
 

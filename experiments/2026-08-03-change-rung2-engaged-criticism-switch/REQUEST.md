@@ -132,4 +132,26 @@ without settling the exact field shape.
 
 ## Amendments
 
-(none yet)
+**Amendment 1** (discovered during dr-execute-step, step 4): S3's
+preparation.py edit changed the literal call-site text a THIRD map
+document (`docs/map/SEAM-manifest-x-schools.md:153`) checks by exact
+`grep`, breaking that check without changing the property it proves.
+R7 ("map updated in the SAME commit as the code") already covers this —
+recorded as SPEC.md's S7 rather than a new requirement. See SPEC.md
+"Amendment 1" for the full account and fix.
+
+**Amendment 2** (discovered during dr-execute-step, step 8, running the
+full `docs_verify.py`): S1's `Config` field addition breaks
+`tests/test_run_manifest_v4.py::test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`
+for schema versions 1, 2, and 3 — any new top-level `Config` field
+changes `source_config_hash`/`engine_config_json`/manifest `sha256`
+unless scrubbed by `run_manifest.py::_versioned_source_config_data`,
+which exists precisely to prevent this (established precedent: commit
+`2d6c2a4c`, "config: freeze scratch and bridge policy in RunManifest
+v3"). R4 ("full gate 0 failed") already covers this — recorded as
+SPEC.md's S8 rather than a new requirement. This touches
+`DR-INV-frozen-surfaces` surface 4 (`run_manifest.py`) but as a reader
+fix preserving old-schema-version identity, per that document's own
+governing principle ("fix READERS so old roots stay valid") — not a
+widened validator or new manifest semantics, and not a flipped default
+(R3 unaffected). See SPEC.md "Amendment 2" for the full account and fix.

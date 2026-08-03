@@ -185,7 +185,9 @@ def engaged_bridge_source() -> dict:
     }
 
 
-def engaged_criticism_policy(endpoint_id: str) -> CriticismPolicyV1:
+def engaged_criticism_policy(
+    endpoint_id: str, *, authority: str = "observe_only"
+) -> CriticismPolicyV1:
     """Bind every seeded public school to the single provider critic seat.
 
     Public runs have exactly one provider endpoint carrying every frozen
@@ -209,7 +211,7 @@ def engaged_criticism_policy(endpoint_id: str) -> CriticismPolicyV1:
         ),
         max_batch_size=4,
         target_eligibility="accepted_school_artifacts",
-        authority="observe_only",
+        authority=authority,
         allow_shared=True,
     )
 

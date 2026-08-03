@@ -17,72 +17,183 @@ reader changed, the previous sweep IS the current answer." This
 tranche does not touch `tools/root_sweep.py` or any reader logic, so
 the existing accepted baseline (42 rows, 11 ERROR, per ERRATA
 E5/E6/E8) is the BEFORE answer already. Only ONE sweep run is planned
-(step 9, AFTER the code change), compared against that existing
+(step 11, AFTER the code change), compared against that existing
 baseline — not a redundant fresh BEFORE capture.
 
-- [ ] 1. (S1) Add `ENGAGED_CRITICISM_AUTHORITY: Literal["observe_only",
+- [x] 1. (S1) Add `ENGAGED_CRITICISM_AUTHORITY: Literal["observe_only",
       "defended_trial"] = "observe_only"` to `src/deepreason/config.py`,
       beside the four existing authority fields (near line 389).
       done-when: `grep -q 'ENGAGED_CRITICISM_AUTHORITY: Literal\["observe_only", "defended_trial"\] = "observe_only"' src/deepreason/config.py && python -c "from deepreason.config import Config; assert Config().ENGAGED_CRITICISM_AUTHORITY == 'observe_only'"` exits 0 with no assertion error.
+      DONE. Landed at `src/deepreason/config.py:390-392`, directly after
+      `INFRASTRUCTURE_REVIEW_AUTHORITY`, with a short comment naming the
+      distinct code path (mirroring the existing `ARGUMENTATIVE_AUTHORITY`
+      comment style). Output:
+      ```
+      GREP_OK
+      ASSERT_OK
+      ```
+      Not committed yet — bundled into step 9's commit with steps 2-3-4-6
+      per the plan (map+code same commit, R7).
 
-- [ ] 2. (S2) Change `src/deepreason/v6_policy.py::engaged_criticism_policy`'s
+- [x] 2. (S2) Change `src/deepreason/v6_policy.py::engaged_criticism_policy`'s
       signature to `(endpoint_id: str, *, authority: str = "observe_only")
       -> CriticismPolicyV1`; replace the hard-coded `authority="observe_only"`
       at line 212 with `authority=authority`.
       done-when: `python -c "from deepreason.v6_policy import engaged_criticism_policy as f; assert f('e').authority == 'observe_only'; assert f('e', authority='defended_trial').authority == 'defended_trial'"` exits 0.
+      DONE. Signature now `(endpoint_id: str, *, authority: str = "observe_only")`;
+      body's `authority="observe_only"` replaced with `authority=authority`.
+      Output: `STEP2_OK`. Not committed yet — bundled at step 9.
 
-- [ ] 3. (S2) Confirm existing callers unaffected: `engaged_policy_digest()`'s
+- [x] 3. (S2) Confirm existing callers unaffected: `engaged_policy_digest()`'s
       template call (v6_policy.py:461) passes no `authority` kwarg, and
       `preparation.py`'s current (pre-S3) call site also passes none —
       both must still bind `observe_only` before S3 changes the call site.
       done-when: `python -c "from deepreason.v6_policy import engaged_policy_digest; engaged_policy_digest()"` exits 0 (no signature error) AND `grep -n 'engaged_criticism_policy(' src/deepreason/v6_policy.py src/deepreason/preparation.py` shows only the two known call sites (line ~461 in v6_policy.py, one in preparation.py), confirming no third site was missed.
+      DONE. Output:
+      ```
+      DIGEST_OK
+      src/deepreason/v6_policy.py:188:def engaged_criticism_policy(
+      src/deepreason/v6_policy.py:463:    criticism_template = engaged_criticism_policy(_PRESET_ENDPOINT_TEMPLATE)
+      src/deepreason/preparation.py:370:        criticism_policy=engaged_criticism_policy(profile.endpoint_id),
+      ```
+      Exactly two call sites (line 463 def-line excluded from the count,
+      the third grep hit at line 188 is the function's own definition, not
+      a call). No third call site found. No file modified this step.
 
-- [ ] 4. (S3) In `src/deepreason/preparation.py::build_preparation_manifest`,
+- [x] 4. (S3) In `src/deepreason/preparation.py::build_preparation_manifest`,
       capture `_config_for_profile(profile)` in a named local `config`
       (passed unchanged as `compile_run_manifest`'s first positional
       argument) and change the criticism_policy call to
       `engaged_criticism_policy(profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY)`.
       done-when: `python -c "import inspect; from deepreason import preparation as p; src = inspect.getsource(p.build_preparation_manifest); assert 'config.ENGAGED_CRITICISM_AUTHORITY' in src"` exits 0.
+      DONE. Confirmed the pre-edit shape matched SPEC.md's assumption
+      exactly (`_config_for_profile(profile)` called inline as
+      `compile_run_manifest`'s first positional arg). Now `config =
+      _config_for_profile(profile)` is a named local, passed unchanged as
+      the first positional arg, and `criticism_policy=` threads
+      `authority=config.ENGAGED_CRITICISM_AUTHORITY`. Output: `STEP4_OK`.
+      Not committed yet — bundled at step 9.
 
-- [ ] 5. (S3) Confirm zero behavior change from step 4 alone: the two
+- [x] 5. (S3) Confirm zero behavior change from step 4 alone: the two
       existing tests that already exercise this path
       (`tests/test_v6_policy_preset.py`,
       `tests/test_v6_engaged_public_defaults.py`) still pass unchanged.
       done-when: `python -m pytest tests/test_v6_policy_preset.py tests/test_v6_engaged_public_defaults.py -q` ends "N passed, 0 failed" (paste it).
+      DONE. Output:
+      ```
+      ......................                                                   [100%]
+      22 passed in 15.20s
+      ```
+      No file modified this step.
 
-- [ ] 6. (S5) Update `docs/map/CON-authority.md`: add
+- [x] 6a. (S7, amendment 1) Fix `docs/map/SEAM-manifest-x-schools.md:153`'s
+      now-stale literal-grep check, broken by step 4's edit to
+      `preparation.py`'s call site (discovered mid-step-6; see SPEC.md
+      Amendment 1 and REQUEST.md Amendments).
+      done-when: `python tools/docs_verify.py --fast` shows
+      SEAM-manifest-x-schools.md passing (no longer in the FAIL list).
+      DONE. Changed the trailing `grep` from the exact old literal
+      `criticism_policy=engaged_criticism_policy(profile.endpoint_id)` to
+      two greps proving the same wiring survives the new call shape:
+      `grep -q "criticism_policy=engaged_criticism_policy(" ... && grep -q
+      "config.ENGAGED_CRITICISM_AUTHORITY" ...`. Output:
+      ```
+      docs_verify [fast]: 49 documents, 794 checks, 793 reused, 4 workers
+        FAIL CON-authority.md:121: python -m pytest tests/test_v6_policy_preset.py -k test_engaged_criticism_authority_config_default_preserves_prior_behavior -q
+            -> 13 deselected in 0.05s (cached)
+      docs_verify: 1 failed
+      ```
+      Only the expected, deferred CON-authority.md failure remains (its
+      test lands in step 7). Not committed yet — bundled at step 9.
+
+- [x] 6. (S5) Update `docs/map/CON-authority.md`: add
       `src/deepreason/v6_policy.py` and `src/deepreason/preparation.py`
       to `Owns:`; add `ENGAGED_CRITICISM_AUTHORITY` to the "Where it
-      lives" table as the fifth per-run authority knob; add one new
-      checked claim proving default-preservation, citing step 7's test
-      (write this step's claim text now, the check command references
-      the test added in step 7 — acceptable since docs_verify only runs
-      the check, not requiring the test to exist before the doc is
-      written, but do NOT mark this step's own done-when satisfied until
-      step 7's test exists — so this step's done-when is deferred to
-      running docs_verify after step 7 lands; for now confirm only the
-      grep and Owns/table edits landed).
+      lives" table as the sixth per-run authority knob (the doc's own
+      existing count was already five, including `CALIBRATION_RECEIPT`);
+      add one new checked claim proving default-preservation, citing
+      step 7's test (write this step's claim text now, the check command
+      references the test added in step 7 — acceptable since docs_verify
+      only runs the check, not requiring the test to exist before the doc
+      is written, but do NOT mark this step's own done-when satisfied
+      until step 7's test exists — so this step's done-when is deferred
+      to running docs_verify after step 7 lands; for now confirm only the
+      grep and Owns/table edits landed). Checked whether the "Every
+      surface knob is a real Config field" count-claim needs extending
+      (SPEC.md S5's conditional instruction): it counts `_SURFACE_FIELDS`
+      == 3, a DIFFERENT, narrower family (the three translated enum
+      knobs) that `ENGAGED_CRITICISM_AUTHORITY` — mirroring the manifest
+      directly, no translation, per A3 — does not belong to. Left
+      untouched; no PARKED.md entry needed since nothing there is stale.
       done-when: `grep -q "ENGAGED_CRITICISM_AUTHORITY" docs/map/CON-authority.md` exits 0 AND `grep -q "src/deepreason/v6_policy.py" docs/map/CON-authority.md` exits 0 AND `grep -q "src/deepreason/preparation.py" docs/map/CON-authority.md` exits 0.
+      DONE (Owns:/table/claim edits landed; full docs_verify pass deferred
+      to step 8, after step 7's test exists — only the expected
+      CON-authority.md failure remains per step 6a's output above).
+      Output:
+      ```
+      OK1
+      OK2
+      OK3
+      ```
+      Not committed yet — bundled at step 9.
 
-- [ ] 7. (S4) Add ONE new test to `tests/test_v6_policy_preset.py`
+- [x] 7. (S4) Add ONE new test to `tests/test_v6_policy_preset.py`
       proving `Config()`'s new field is `"observe_only"` AND
       `engaged_criticism_policy(endpoint, authority=Config().ENGAGED_CRITICISM_AUTHORITY)
       == engaged_criticism_policy(endpoint)` (full pydantic equality).
       done-when: `python -m pytest tests/test_v6_policy_preset.py -q` ends "N passed, 0 failed" and the new test name appears in `python -m pytest tests/test_v6_policy_preset.py --collect-only -q` output (paste both).
+      DONE. Added `test_engaged_criticism_authority_config_default_preserves_prior_behavior`
+      (name matches CON-authority.md's citing check exactly), imports `Config`.
+      Output:
+      ```
+      ..............                                                           [100%]
+      14 passed in 0.14s
+      ---COLLECT---
+      tests/test_v6_policy_preset.py::test_engaged_criticism_authority_config_default_preserves_prior_behavior
+      ```
+      Not committed yet — bundled at step 9 along with steps 1-6a (folding
+      step 7 into the same bundle since CON-authority.md's claim, added in
+      step 6, cannot pass docs_verify until this test exists — same-commit
+      requirement per R7 applies transitively).
 
-- [ ] 8. (S5) Re-run `docs_verify` now that step 7's test exists, to
+- [x] 8. (S5) Re-run `docs_verify` now that step 7's test exists, to
       close out step 6's deferred claim: confirm the new checked claim
       in `CON-authority.md` actually passes.
       done-when: `python tools/docs_verify.py` ends "0 failed" AND `python tools/docs_verify.py --audit` reports 0 findings (paste both).
+      DONE, but only after a second mid-step discovery (Amendment 2, see
+      SPEC.md/REQUEST.md): the full `docs_verify.py` run surfaced
+      `tests/test_run_manifest_v4.py::test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`
+      failing for schema versions 1-3 — S1's new `Config` field changes
+      `source_config_hash`/manifest `sha256` for those historically-frozen
+      schema versions unless scrubbed, exactly the concern
+      `_versioned_source_config_data`'s docstring names and the precedent
+      commit `2d6c2a4c` established the fix pattern for. Fixed by adding
+      one line to that function (`src/deepreason/run_manifest.py`):
+      `if schema_version < 4: data.pop("ENGAGED_CRITICISM_AUTHORITY", None)`.
+      Verified the fix against the exact failing tests, then re-ran both
+      full commands. Output:
+      ```
+      docs_verify [full]: 49 documents, 794 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+      ```
+      docs_verify --audit: 0 finding(s)
+      ```
+      Not committed yet — bundled at step 9 (now also including
+      `src/deepreason/run_manifest.py` and
+      `docs/map/SEAM-manifest-x-schools.md`, per Amendments 1 and 2).
 
-- [ ] 9. (all) [COMMIT] Commit steps 1-8 together (config field,
-      v6_policy.py signature change, preparation.py threading, map
-      update, new test) as one tranche commit — code and map in the
-      SAME commit per R7.
+- [ ] 9. (all) [COMMIT] Commit steps 1-8 (+ Amendments 1-2) together
+      (config field, v6_policy.py signature change, preparation.py
+      threading, run_manifest.py pop-list fix, CON-authority.md +
+      SEAM-manifest-x-schools.md map updates, new test) as one tranche
+      commit — code and map in the SAME commit per R7.
       done-when: `git log -1 --stat` shows `src/deepreason/config.py`,
       `src/deepreason/v6_policy.py`, `src/deepreason/preparation.py`,
-      `docs/map/CON-authority.md`, and `tests/test_v6_policy_preset.py`
-      all in the same commit; `git push -u origin claude/delivery-rungs-handover-m22sdy`
+      `src/deepreason/run_manifest.py`, `docs/map/CON-authority.md`,
+      `docs/map/SEAM-manifest-x-schools.md`, and
+      `tests/test_v6_policy_preset.py` all in the same commit;
+      `git push -u origin claude/delivery-rungs-handover-m22sdy`
       succeeds (paste confirmation).
 
 - [ ] 10. (S6, R4) Full gate: `python -m pytest tests/ -q -n 4`. Rerun

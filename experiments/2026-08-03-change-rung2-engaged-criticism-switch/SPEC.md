@@ -183,6 +183,77 @@ None.
   preset, which hard-codes no criticism policy at all today and is out
   of this switch's stated scope).
 
+## Amendment 1 (discovered executing step 4/S3, R7)
+
+S7 (R7): `docs/map/SEAM-manifest-x-schools.md`'s checked claim at line 153
+("The only in-tree author") greps the exact literal call-site text
+`criticism_policy=engaged_criticism_policy(profile.endpoint_id)` in
+`src/deepreason/preparation.py` as part of proving `engaged_criticism_policy`
+is `preparation.py`'s only in-tree caller of that shape. S3's edit
+(threading `authority=config.ENGAGED_CRITICISM_AUTHORITY` into that call)
+changes the literal text without changing the property the check exists to
+prove (the call still passes `profile.endpoint_id` positionally, still
+defaults to `observe_only`). This was not anticipated by S1-S6 — SPEC.md's
+own preflight only flagged `v6_policy.py`/`preparation.py` as un-owned by
+any document, not that a THIRD document's check depended on the literal
+call-site substring. Not new scope: `docs_verify.py` must be 0 failed
+before any commit (standing rule), and R7 requires map and code to move
+together — this is the same requirement surfacing in a second document.
+Fix: update the trailing `grep` to match the new call-site text
+(`criticism_policy=engaged_criticism_policy(\n            profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY\n        )` or an equivalent substring proving the same wiring), changing no other
+part of the check (the `E('ep')` no-kwarg assertions above it already prove
+default preservation and are untouched).
+accept: `python tools/docs_verify.py --fast` 0 failed (SEAM-manifest-x-schools.md's check specifically passing).
+
+## Amendment 2 (discovered executing step 8/S5, R4 + DR-INV-frozen-surfaces surface 4)
+
+S8 (R4, C1): the full `docs_verify.py` run surfaced a THIRD-order break:
+`tests/test_run_manifest_v4.py::test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`
+fails for schema_version 1, 2, AND 3 after S1's `Config` field addition.
+Root cause: `src/deepreason/run_manifest.py::_source_config_data` does
+`config.model_dump(mode="json")` unconditionally, so ANY new `Config`
+field appears in `source_config_hash`/`engine_config_json`/the compiled
+manifest's `sha256` for every schema version — unless scrubbed by
+`_versioned_source_config_data`, whose own docstring names exactly this
+failure mode: "`Config.model_dump` necessarily gains the typed scratch
+and bridge defaults in this tranche. Those keys did not exist when v1/v2
+source hashes... were defined, so retaining them would make the same old
+profile acquire a different identity after an upgrade." The established,
+precedented fix (commit `2d6c2a4c`, "config: freeze scratch and bridge
+policy in RunManifest v3") pops newly-added keys from
+`_versioned_source_config_data`'s output for the schema versions that
+predate them (`schema_version < 3` for scratch/bridge). Verified via git
+archaeology: the pinned v1/v2/v3 hash literals were last set by commit
+`bf4d2709` (2026-07-16), AFTER both `ARGUMENTATIVE_AUTHORITY`-family
+fields (`053a297e`, 2026-07-14) and the scratch/bridge freeze (`2d6c2a4c`,
+2026-07-15) — those fields were already part of `Config`'s dump when the
+pins were last computed, which is why they cause no drift today. This is
+the FIRST new top-level `Config` field added since `bf4d2709`, so it is
+the first to hit the un-scrubbed case.
+
+This is `DR-INV-frozen-surfaces` surface 4 territory (`run_manifest.py`),
+but the governing principle there is explicit: "a change that alters
+what a FUTURE run may do is ordinary work... fix READERS so old roots
+stay valid." Popping the new key from schema versions 1-3's echoed
+source config is exactly a reader fix, preserving v1/v2/v3's frozen
+identity against an otherwise-ordinary `Config` addition — not a widened
+validator, not a changed schema shape, not new manifest semantics. It is
+NOT flipping any default or authority value (R3 remains untouched).
+
+Fix: in `_versioned_source_config_data`, add
+`data.pop("ENGAGED_CRITICISM_AUTHORITY", None)` under the existing
+`if schema_version < 3:` block only if that satisfies all three failing
+cases; if schema_version 3 itself still fails (measured: it does, per
+the observed failures spanning versions 1-3), widen the guard to
+`schema_version < 4` — chosen because no schema version above 3 has any
+pinned-hash test today (only `test_v1_v2_v3_...` exists; `LATEST_SCHEMA_
+VERSION == 6` and v4/v5/v6 are the actively-evolving family, not the
+frozen-forever one), so scrubbing stops exactly where the actual test
+coverage stops, matching the scratch/bridge precedent's own scope
+(popped only for the versions the pinned test actually covers).
+
+accept: `python -m pytest tests/test_run_manifest_v4.py -q -k test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical` 0 failed (3 passed) AND `python -m pytest tests/ -q -n 4` 0 failed (full gate, S6/R4).
+
 ## Budget
 
 ~15 lines (`config.py` field + docstring), ~5 lines (`v6_policy.py`
@@ -190,7 +261,11 @@ signature + one-line body change), ~5 lines (`preparation.py` local
 variable + call-site change), ~20 lines (one new test), ~20-30 lines
 (`CON-authority.md` update). Total ~65-75 lines, 1-2 commits (code+map
 together per R7, then a gate-confirmation commit). Well under the
-300-line guideline. Frozen surfaces touched: none — `run_manifest.py`
-(surface 4) is read, not written; qualification subject correctness
-follows from the existing manifest-dump mechanism (A4), not new code in
-`qualification.py`.
+300-line guideline.
+
+Frozen surfaces touched, revised after Amendment 2: `run_manifest.py`
+(surface 4) IS written — one line added to `_versioned_source_config_data`
+(the existing, precedented pop-list mechanism, widened by one key), per
+Amendment 2's own reasoning (a reader-preserving fix, not a widened
+validator or changed schema shape). `qualification.py` remains untouched;
+A4's reasoning there is unaffected by Amendment 2.

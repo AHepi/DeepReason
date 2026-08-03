@@ -1,7 +1,7 @@
 <!-- DR-CON-authority -->
 Verified-at: d057f306
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py
+Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py, src/deepreason/v6_policy.py, src/deepreason/preparation.py
 Seams: 
 Seams-undocumented: adjudication x authority, authority x manifest, authority x rules, authority x scheduler
 
@@ -78,6 +78,8 @@ receipt verifier exists.
 | Prospective manifest violations | `src/deepreason/authority.py` | `text_status_authority_issues`, `AuthorityPolicyIssue` |
 | The frozen fields compared runtime-vs-manifest | `src/deepreason/authority.py` | `authority_policy_snapshot` |
 | The five per-run knobs | `src/deepreason/config.py` | `ARGUMENTATIVE_AUTHORITY`, `TEXT_RUBRIC_AUTHORITY`, `PAIRWISE_AUTHORITY`, `INFRASTRUCTURE_REVIEW_AUTHORITY`, `CALIBRATION_RECEIPT` |
+| The engaged preset's compiled criticism authority (a sixth, differently-shaped knob: mirrors the manifest's two values directly, no translation) | `src/deepreason/config.py` | `ENGAGED_CRITICISM_AUTHORITY` |
+| Where the knob is threaded into the compiled preset | `src/deepreason/v6_policy.py`, `src/deepreason/preparation.py` | `engaged_criticism_policy`, `build_preparation_manifest` |
 | Token budget for observe-only trials | `src/deepreason/config.py` | `ADVISORY_TRIALS_PER_CYCLE` |
 | Prose-criticism vocabulary (manifest side) | `src/deepreason/rules/crit.py` | `_POLICY_AUTHORITIES` |
 | Manifest word → Config word translation | `src/deepreason/rules/crit.py` | `_resolve_authority`, `_authority` |
@@ -108,6 +110,15 @@ adjudication.
 manifest-only.
 `check: python -c "import typing; from deepreason.authority import _ARGUMENTATIVE_VALUES as v; from deepreason.config import Config; assert v == set(typing.get_args(Config.model_fields['ARGUMENTATIVE_AUTHORITY'].annotation)) == {'observe_only', 'trial_required', 'single_family_trial'}, v"`
 `check: python -c "import typing; from deepreason.rules.crit import _POLICY_AUTHORITIES as p; from deepreason.run_manifest import CriticismPolicyV1 as C; assert set(typing.get_args(C.model_fields['authority'].annotation)) == p == {'observe_only', 'defended_trial'}"`
+
+**`ENGAGED_CRITICISM_AUTHORITY` mirrors the manifest directly — no second
+vocabulary.** Unlike `ARGUMENTATIVE_AUTHORITY`, this knob's value-space is
+exactly `CriticismPolicyV1.authority`'s two values, and
+`engaged_criticism_policy` passes it straight through with no translation
+step, so the knob and the manifest field can never diverge into two closed
+sets sharing one word. The knob defaults to `observe_only`, and passing it
+explicitly reproduces the pre-switch hard-coded call byte-for-byte.
+`check: python -m pytest tests/test_v6_policy_preset.py -k test_engaged_criticism_authority_config_default_preserves_prior_behavior -q`
 
 **Neither vocabulary may be handed the other's word**, but only one of the two
 refusals says which vocabulary the value belongs to. `_resolve_authority` does:

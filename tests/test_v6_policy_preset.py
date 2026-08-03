@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.config import Config
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     PUBLIC_SCHOOL_COUNT,
@@ -202,6 +203,17 @@ def test_engaged_criticism_policy_binds_every_public_school_observe_only():
         and binding.endpoint_id == "endpoint-under-test"
         for binding in policy.bindings
     )
+
+
+def test_engaged_criticism_authority_config_default_preserves_prior_behavior():
+    """Implements R3/R6 (rung 2 tranche 2): Config.ENGAGED_CRITICISM_AUTHORITY
+    defaults to observe_only, and passing it through explicitly reproduces
+    the pre-switch no-kwarg call byte-for-byte."""
+
+    assert Config().ENGAGED_CRITICISM_AUTHORITY == "observe_only"
+    assert engaged_criticism_policy(
+        "endpoint-under-test", authority=Config().ENGAGED_CRITICISM_AUTHORITY
+    ) == engaged_criticism_policy("endpoint-under-test")
 
 
 def test_conservative_baseline_remains_closed_and_stable():

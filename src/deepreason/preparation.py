@@ -360,14 +360,17 @@ def build_preparation_manifest(
     if run_input_digest is None:
         _dossier, run_input, _workload = _records_for_question(question)
         run_input_digest = run_input.run_input_digest
+    config = _config_for_profile(profile)
     return compile_run_manifest(
-        _config_for_profile(profile),
+        config,
         schema_version=6,
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=compiled_at,
         control_plane_policy=engaged_control_plane_policy_v3(),
-        criticism_policy=engaged_criticism_policy(profile.endpoint_id),
+        criticism_policy=engaged_criticism_policy(
+            profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY
+        ),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
             attached_evidence=attached_evidence
         ),

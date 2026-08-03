@@ -387,6 +387,10 @@ class Config(BaseModel):
     TEXT_RUBRIC_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
     PAIRWISE_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
     INFRASTRUCTURE_REVIEW_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
+    # Engaged preset's compiled criticism policy authority (mirrors
+    # CriticismPolicyV1.authority directly; a different code path than
+    # ARGUMENTATIVE_AUTHORITY above).
+    ENGAGED_CRITICISM_AUTHORITY: Literal["observe_only", "defended_trial"] = "observe_only"
     # Immutable reference to the calibration receipt that authorizes a
     # calibrated text-status mode. The manifest stores this source config
     # field; preflight fails closed when a status mode omits the reference.
