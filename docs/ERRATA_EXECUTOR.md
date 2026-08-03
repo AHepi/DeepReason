@@ -55,3 +55,29 @@ DELIVERY.md not yet present — tranche mid-flight, consistent with the
 workflow's phase order. The per-rung spec format held an executor to
 scope without intervention; recorded as load-bearing-and-correct so far,
 verdict deferred until the tranche delivers.
+
+**X3 — the validation gate caught a real gap and the FAIL loop ran to
+completion, unprompted (load-bearing-and-correct).** Head `c4806e74` at
+second check. The executor's own `dr-validate-change` pass returned
+verdict FAIL on a genuine, narrow defect — `CON-schools.md`'s header
+still listed `manifest x schools` under `Seams-undocumented:` although
+`SEAM-manifest-x-schools.md` exists; one of the eight header fixes its
+own E9 audit had identified was applied on only one side of the pair
+(VALIDATION.md, commit `0b133f25`). Validation did NOT fix it in passing
+(the skill forbids that) and routed back to `dr-plan-steps` exactly as
+written: re-plan appended steps 25–28 (`3dc810b9`), the one-line fix
+landed (`ebf8728d`), the full docs gate re-ran clean plus a complete
+`Sides:`-vs-`Seams:` cross-reference over all 20 seam documents — "Zero
+mismatches" (`fc347df1`), and step 28 closed with a clean-tree,
+pushed-head check before routing back to `dr-validate-change`
+(`c4806e74`). Two infrastructure claims confirmed by this record: the
+FAIL→re-plan→re-execute→re-validate loop the workflow prescribes is
+followable by a less capable executor without intervention, and
+validation-time re-derivation (not reuse of execution-time output)
+is what caught the gap at all. Bonus telemetry: the executor
+independently produced a substantial map audit (`docs/ERRATA.md` E9 —
+seven seam documents unreferenced by INDEX.md's matrix, eight missing
+`Seams:` header entries) while executing R2, confirming X1's prediction
+that its findings would land in ERRATA.md rather than this ledger.
+Tranche still mid-flight: fresh validation pass and DELIVERY.md pending;
+X2's verdict remains deferred.
