@@ -1,11 +1,29 @@
 # Validation for: rung 2, tranche 2 — the engaged_criticism_policy Config switch
-Re-read REQUEST.md, SPEC.md, CHECKLIST.md in full before running anything
-below. Every check here was re-run fresh in this validation pass, not
-copied from checklist-time output. Branch head at validation:
-`e01d4738` (fast-forward merge of the monitor's `553a13f8`, ERRATA_EXECUTOR
-X8, into this tranche's own work — no conflict, no tranche file touched).
 
-## Acceptance checks
+## Validation history (honest — the first pass is not deleted)
+
+**Pass 1** (commit `03b2d2fe`, branch head `e01d4738` at the time):
+verdict **FAIL**, solely on the frozen-surface mechanical tripwire
+(4a2) — `src/deepreason/run_manifest.py` was touched (Amendment 2's
+fix) with no operator quote in REQUEST.md approving that specific
+surface. Every other check in that pass — all S1-S8 acceptance checks,
+the full gate, the root sweep, all five `docs_verify` modes, and the
+requirement sweep — already read PASS. That pass also named one
+secondary, lower-stakes finding: a missing `Traps` entry in
+`docs/map/INV-frozen-surfaces.md` for the Config-field-addition failure
+mode this tranche discovered.
+
+**Between passes:** the monitoring session put the exact question to
+the operator directly and recorded the verbatim answer as REQUEST.md
+Amendment 3 (commit `87b2828d`) — resolving the tripwire. Separately,
+this tranche's own CHECKLIST.md gained steps 13-14 (commits `51ceaa58`,
+`74a27bb5`), adding the Traps entry Pass 1 named as outstanding.
+
+**Pass 2** (this document, re-verified fresh below, branch head
+`74a27bb5` at the start of this pass): both gaps are closed. Verdict
+**PASS**.
+
+## Acceptance checks (re-run fresh, Pass 2)
 
 S1: `grep -q 'ENGAGED_CRITICISM_AUTHORITY: Literal\["observe_only", "defended_trial"\] = "observe_only"' src/deepreason/config.py && python -c "from deepreason.config import Config; assert Config().ENGAGED_CRITICISM_AUTHORITY == 'observe_only'"`
 -> `grep: PASS` / `assert: PASS` : PASS
@@ -17,68 +35,40 @@ S3: `python -c "import inspect; from deepreason import preparation as p; src = i
 -> exits 0 : PASS
 
 S4: `python -m pytest tests/test_v6_policy_preset.py -q`
--> `14 passed in 0.11s` (new test `test_engaged_criticism_authority_config_default_preserves_prior_behavior` present and collectable) : PASS
+-> `14 passed in 0.10s` : PASS
 
 S5: `grep -q "ENGAGED_CRITICISM_AUTHORITY" docs/map/CON-authority.md`
--> PASS (also confirmed `src/deepreason/v6_policy.py` and `src/deepreason/preparation.py` added to `Owns:`)
+-> `grep: PASS` : PASS
 
 S6: full gate + root sweep — see below.
 
-S7 (Amendment 1): `docs/map/SEAM-manifest-x-schools.md`'s call-site check
-updated; re-verified as part of the full `docs_verify.py` run below : PASS
+S7 (Amendment 1): `SEAM-manifest-x-schools.md`'s corrected call-site
+check re-verified as part of the full `docs_verify.py` run below : PASS
 
-S8 (Amendment 2, revised — unconditional pop, not the superseded `< 4`
-guard): `python -m pytest tests/test_run_manifest_v4.py tests/test_run_manifest_v5_inquiry.py tests/test_incident_wave_a_v2_fixtures.py -q`
--> `37 passed` : PASS
+S8 (Amendment 2, revised — unconditional pop): `python -m pytest tests/test_run_manifest_v4.py tests/test_run_manifest_v5_inquiry.py tests/test_incident_wave_a_v2_fixtures.py -q`
+-> `37 passed in 1.23s` : PASS
 
 ## Full gate
 
-Ran THREE times during this validation pass, deliberately, because the
-second run produced an anomaly that needed resolving before trusting any
-result:
+Run ISOLATED this pass (nothing else concurrent, learning from Pass
+1's resource-contention false-failure):
 
-1. First (isolated, nothing else running): `3291 passed, 7 skipped in
-   611.55s` — clean.
-2. Second (run concurrently with a root-sweep re-run, by my own mistake):
-   `3 failed, 3288 passed, 7 skipped in 1024.51s` — failures were
-   `test_mcp_run.py::test_start_poll_result_and_progress_notifications`,
-   `test_mcp_run.py::test_typed_v6_stop_can_continue_and_append`,
-   `test_mcp_scratch_bridge.py::test_bridge_start_poll_result_claims_and_unresolved_success`.
-   None is the documented flake (C3). All three re-run individually,
-   immediately, with nothing else running: `3 passed in 21.53s`. Attributed
-   to resource contention from running `root_sweep.py` (CPU/IO-heavy)
-   concurrently with `-n 4` pytest — these MCP tests are timing-sensitive
-   (async start/poll/result). Not a regression from this tranche's code.
-3. Third (isolated again, to be certain): `3291 passed, 7 skipped in
-   670.15s` — clean, confirms run 2 was noise.
+    3291 passed, 7 skipped in 581.22s (0:09:41)
 
-**Verdict: PASS** (3291 passed, 0 failed, reproduced twice in isolation;
-the one anomalous run is explained and does not implicate this tranche's
-code — same test files pass individually with certainty).
+**Verdict: PASS.**
 
 ## Record-behavior preservation / root sweep
 
-`python tools/root_sweep.py` run twice fresh during this validation pass
-(once alongside the noisy gate run above, once alone after) — both
-produced `SWEEP COMPLETE: 42 roots`, both `11 ERROR` lines (all
-`UnsupportedRunManifestVersionError`, matching ERRATA E5/E6/E8), and the
-two runs diff byte-identical against each other and against the
-checklist-time capture (three-way empty diff).
+`python tools/root_sweep.py` run fresh this pass: `SWEEP COMPLETE: 42
+roots`, `11 ERROR` lines (all `UnsupportedRunManifestVersionError`).
+Diffed against Pass 1's own capture (`root_sweep_after.txt`): **empty
+diff** — byte-identical. This is now the THIRD independent byte-
+identical sweep for this tranche (Pass 1's own two runs, plus the
+monitoring session's X8 entry — independent worktrees at base
+`e0d4eacb` / head `50e4eb89`, "identical sha256... diff empty, 42
+rows, 11 ERROR"). No committed root's verdict has moved at any point.
 
-No committed pre-tranche snapshot exists in the repo to diff against
-directly (honestly noted in CHECKLIST.md step 11 — this is the first
-`src/`-touching tranche this session). This gap is now closed by an
-independent source: `docs/ERRATA_EXECUTOR.md` X8 (written by the
-monitoring session, merged into this branch at `e01d4738` moments before
-this validation pass) reports its OWN independent sweep, run in isolated
-worktrees at base `e0d4eacb` (before this tranche) and head `50e4eb89`
-(after) — "identical sha256 (`9c092414...e050cd2`), diff empty, 42 rows,
-11 ERROR. No committed root's verdict moved." This is a true before/after
-comparison from a second, independent reviewer with different tooling,
-and it corroborates this validation pass's own structural check exactly.
-
-**Verdict: PASS**, evidenced by both this pass's own sweep and the
-monitor's independent before/after diff.
+**Verdict: PASS.**
 
 ## Frozen-surface diff
 
@@ -90,159 +80,122 @@ monitor's independent before/after diff.
     src/deepreason/run_manifest.py | 7 +++++++
     1 file changed, 7 insertions(+)
 
-**Non-empty.** This is `DR-INV-frozen-surfaces` surface 4
-(`run_manifest.py`). Per this skill's own rule: "Non-empty output is a
-FAIL unless REQUEST.md quotes the operator approving that exact surface
-— convention guards these files at design time, but this paste is the
-one MECHANICAL tripwire on the path, so it is not optional." **REQUEST.md
-contains no operator quote approving a `run_manifest.py` touch** — R1-R8
-and the two verbatim source messages never mention `run_manifest.py`,
-`source_config_hash`, `engine_config_json`, or canonical-hash goldens at
-all. The touch was self-discovered and self-authorized mid-execution
-(Amendment 2), on sound technical grounds (a reader-preserving fix,
-following an established in-repo precedent, verified correct three times
-over — see above, plus independently by the monitor's X8 entry) — but
-soundness is not the test this rule applies. The rule exists precisely so
-a frozen-surface touch cannot be self-blessed by good reasoning alone; the
-monitor's endorsement (X8: "load-bearing-and-correct") is a second AI
-session's review, not operator sign-off, and the two are not
-interchangeable here.
+**Non-empty, as in Pass 1** — this is `DR-INV-frozen-surfaces` surface
+4. Pass 1's blocking finding was that REQUEST.md contained no operator
+quote approving this. That gap is now closed:
 
-**Verdict: FAIL** on this check specifically. See overall verdict below —
-this is the reason a full PASS is not being recorded, despite every other
-check passing cleanly.
+> Operator authorization for rung 2, TRANCHE 3 (after the
+> engaged_criticism_policy switch tranche is delivered...)
+>
+> [monitoring session's question, verbatim, per REQUEST.md Amendment 3]
+> "Approve the 7-line fix in run_manifest.py so tranche 2 can finish?"
+>
+> [operator's verbatim answer, per REQUEST.md Amendment 3]
+> "Approve it"
+
+REQUEST.md Amendment 3 (commit `87b2828d`) records this exchange in
+full, including the consequences of both options as stated to the
+operator before they answered (approve = fix stays, proven safe by the
+full gate and independent sweeps; reject = re-plan avoiding the frozen
+file). This is exactly the operator sign-off the rule requires — not
+the monitor's own technical endorsement (X8), which was evidence
+supporting the question, not a substitute for asking it.
+
+**Verdict: PASS** (non-empty diff, operator-approved per Amendment 3).
 
 ## Map
 
-`python tools/docs_verify.py`: 49 documents, 794 checks, 0 failed : PASS
+`python tools/docs_verify.py`: 49 documents, **795** checks (up from
+794 in Pass 1 — the new Traps-entry claim), 0 failed : PASS
 `python tools/docs_verify.py --audit`: 0 finding(s) : PASS
-`python tools/docs_verify.py --links`: 0 dangling reference(s), 49 documents : PASS
+`python tools/docs_verify.py --links`: 0 dangling reference(s), 49
+documents : PASS
 `python tools/docs_verify.py --coverage`: 6 seams swept, 14 without a
-`Sweep:` header, 0 findings — pre-existing condition, none of the 14 are
-seams this tranche touched (`SEAM-manifest-x-schools.md`, the one seam
-this tranche DID touch, already has a `Sweep:` header and is not in the
-list) : PASS, nothing to dismiss
+`Sweep:` header, 0 findings — same pre-existing 14 as Pass 1, none
+touched by this tranche : PASS, nothing to dismiss
 
-`python tools/docs_verify.py --stale`: 11 documents worth re-reading.
-Every one dismissed with a reason:
+`python tools/docs_verify.py --stale`: 11 documents (same list as Pass
+1, plus `REC-change-a-seam.md` now also citing this tranche's step-13
+commit `51ceaa58` since it touched a file `REC-change-a-seam.md` owns —
+re-verified clean, no content update needed, same disposition as its
+Pass-1 listing). Every entry dismissed with a reason, carried forward
+from Pass 1 with one update:
 - `CON-authority.md`, `CON-schools.md`, `SEAM-bridge-x-manifest.md`,
   `SEAM-llm-x-manifest.md`, `SEAM-manifest-x-schools.md`,
-  `SUB-manifest.md` — all flagged solely because THIS tranche's own
-  commits (`9607f739`, `f642f980`) touched their owned files; each was
-  freshly re-verified by the full `docs_verify.py` run above (0 failed).
-  Stamps intentionally left at their prior `Verified-at` value per
-  convention ("a stale stamp is honest, a false one is not") — not
-  advanced here since this is a validation pass, not the execute-step
-  phase that owns stamp advancement.
-- `CON-run-identity.md`, `REC-change-a-seam.md` — flagged because commit
-  `9607f739` touched a file they own, but neither document's OWN checked
-  claims reference `ENGAGED_CRITICISM_AUTHORITY` or anything this tranche
-  changed; re-verified clean by the full run; no content update needed.
-- `INV-frozen-surfaces.md` — flagged because this tranche's commits
-  touched `run_manifest.py`, which it owns. **This one is NOT dismissed.**
-  See "Map completeness gap" below — this is a real, unaddressed finding,
-  not explained away.
+  `SUB-manifest.md`, `CON-run-identity.md`, `REC-change-a-seam.md` —
+  flagged because this tranche's commits touched files they own;
+  re-verified clean by the full run above; no content update needed
+  beyond what already landed.
+- `INV-frozen-surfaces.md` — flagged in Pass 1 as **not dismissed**
+  (the missing Traps entry). **Now dismissed**: CHECKLIST.md steps
+  13-14 added the entry (commit `51ceaa58`), with its own new checked
+  claim (`grep -q "ENGAGED_CRITICISM_AUTHORITY" src/deepreason/run_manifest.py`),
+  confirmed passing in the full run above.
 - `SEAM-harness-x-verification.md`, `SUB-verification.md` — flagged
-  because of `2456da55`, a commit from BEFORE this tranche and unrelated
-  to it (a different fix, "attached-evidence candidates are selected by
-  import provenance, not citation"). Not this tranche's responsibility;
-  noted for whichever tranche next touches those files.
+  because of `2456da55`, a commit from before this tranche, unrelated
+  to it. Not this tranche's responsibility, same as Pass 1.
 
-New map checks added by this change: `CON-authority.md` gained one new
-checked claim (the `ENGAGED_CRITICISM_AUTHORITY` default-preservation
-property, citing S4's test) plus the `Owns:`/table additions;
-`SEAM-manifest-x-schools.md`'s existing check was corrected to match the
-new call-site shape (not a new check, a repaired one — S7).
-
-## Map completeness gap (found during validation, not fixed here)
-
-`docs/map/INV-frozen-surfaces.md`'s own convention: "Every fix earns a
-`Traps` entry naming its run id, and a `Traps` entry is never deleted."
-Surface 4's existing Traps-adjacent precedent (`route_fingerprint`) was
-itself "found by falsification" and filed after the fact — exactly this
-tranche's situation. This tranche discovered a genuinely new failure
-mode: adding ANY new top-level `Config` field can silently break pinned
-canonical-hash goldens across MULTIPLE, not-obviously-related schema
-versions (v1/v2/v3 AND v5 here) — the "no test above v3" assumption was
-disproved by the full gate, not by inspection. This is exactly the kind
-of trap `INV-frozen-surfaces.md` exists to record for the next person
-who adds a `Config` field, and no entry exists yet. Per this skill's
-exit criteria ("No file other than VALIDATION.md ... modified"), this is
-recorded here as a finding, not fixed in this phase.
+New map checks added by this change: `CON-authority.md`'s
+default-preservation claim (S4/S5), `SEAM-manifest-x-schools.md`'s
+repaired call-site check (S7), and `INV-frozen-surfaces.md`'s new Traps
+claim (step 13) pinning `ENGAGED_CRITICISM_AUTHORITY`'s presence in
+`run_manifest.py`'s pop-list.
 
 ## Requirement sweep
 
-R1 (behavior — switch preserves observe_only default): demonstrated by
-S1/S2/S4 — `Config().ENGAGED_CRITICISM_AUTHORITY == 'observe_only'`, and
-`test_engaged_criticism_authority_config_default_preserves_prior_behavior`
+R1 (behavior — preserves observe_only default): demonstrated by
+S1/S2/S4 — `Config().ENGAGED_CRITICISM_AUTHORITY == 'observe_only'`,
+and `test_engaged_criticism_authority_config_default_preserves_prior_behavior`
 proves full pydantic equality between the parameterized and no-kwarg
 calls.
 
 R2 (creating the switch is in scope): demonstrated by S1-S3 landing.
 
-R3 (flipping any default forbidden): demonstrated — the default is
-`"observe_only"` everywhere (S1, S2's own default parameter, S4's test);
-no code path was changed to produce `"defended_trial"` by default. Both
-existing call sites (`v6_policy.py:463`, `preparation.py:371`) still
-resolve to `observe_only` with no explicit override (re-confirmed this
-pass: `grep -n "engaged_criticism_policy(" src/deepreason/*.py` shows
-only these two sites, and `preparation.py`'s call reads
-`config.ENGAGED_CRITICISM_AUTHORITY`, whose own default is
-`observe_only`).
+R3 (flipping any default forbidden): demonstrated — default is
+`"observe_only"` everywhere; both existing call sites
+(`v6_policy.py:463`, `preparation.py:371`) still resolve to
+`observe_only` with no explicit override, re-confirmed this pass.
 
-R4 (full gate 0 failed): demonstrated by the full-gate section above —
-PASS, reproduced twice in isolation.
+R4 (full gate 0 failed): demonstrated above — PASS, isolated run.
 
-R5 (root sweep byte-identical): demonstrated by the root-sweep section
-above — PASS, corroborated independently by the monitor's X8 entry.
+R5 (root sweep byte-identical): demonstrated above — PASS, now a
+three-way independent confirmation (this pass, Pass 1, the monitor's
+X8).
 
-R6 (a test proving default equals prior behavior): demonstrated by S4.
+R6 (test proving default equals prior behavior): demonstrated by S4.
 
 R7 (map updated in the SAME commit as the code): demonstrated for the
-main tranche — commit `9607f739` contains `config.py`, `v6_policy.py`,
-`preparation.py`, `CON-authority.md`, and `SEAM-manifest-x-schools.md`
-together. The Amendment-2-revision follow-up (`f642f980`, the widened
-`run_manifest.py` fix) landed WITHOUT any new map-document change in the
-same commit — but none was needed: no `Owns:`/checked-claim content
-changed as a result of widening `< 4` to unconditional (the fix is
-INSIDE a function no map document quotes verbatim), so there was nothing
-for R7 to require moving alongside it. The one thing that SHOULD have
-moved alongside it — a Traps entry recording the discovery itself — did
-not, and is the "map completeness gap" above. This is a partial miss on
-R7's spirit (the map should reflect what was learned, not just what
-changed), not a miss on R7's literal text (no document's claims went
-stale).
+main tranche (commit `9607f739`: code + `CON-authority.md` +
+`SEAM-manifest-x-schools.md` together). The Amendment-2-revision
+follow-up (`f642f980`) needed no map-document content change at the
+time (no `Owns:`/checked-claim quoted the internals of the fix). The
+ONE thing that should have moved alongside the discovery — the Traps
+entry — is now in place (step 13, commit `51ceaa58`), closing what Pass
+1 correctly flagged as a partial miss on R7's spirit.
 
-R8 (do the switch tranche first): demonstrated — this tranche opened
-and is now complete; the bridge-unification "TRANCHE 3" has not been
-touched (confirmed: `git diff --stat 23df6e20..HEAD -- src/deepreason/v6_policy.py`
-shows only the `engaged_criticism_policy` signature/body change, no
-`engaged_bridge_source` lines).
+R8 (do the switch tranche first): demonstrated — this tranche is
+complete; bridge-unification "TRANCHE 3" untouched (confirmed:
+`git diff --stat 23df6e20..HEAD -- src/deepreason/v6_policy.py` shows
+only the `engaged_criticism_policy` change, no `engaged_bridge_source`
+lines).
 
 ## Assumptions carried
 
 A1: field name `ENGAGED_CRITICISM_AUTHORITY`.
-A2: new test lands in `tests/test_v6_policy_preset.py`, one new function.
+A2: new test lands in `tests/test_v6_policy_preset.py`, one new
+function.
 A3: value-space is `Literal["observe_only", "defended_trial"]`, no
 translation layer.
 A4: `qualification.py`/`engaged_policy_digest()` need no code change —
-holds; neither was touched, confirmed by this pass's frozen-surface diff
-(qualification.py has zero lines changed).
+holds; `qualification.py` has zero lines changed across the whole
+tranche.
 
-## Verdict: FAIL
+## Verdict: PASS
 
-**FAIL detail:** the frozen-surface diff (4a2) is non-empty
-(`src/deepreason/run_manifest.py`, 7 lines) and REQUEST.md contains no
-operator quote approving that specific surface being touched. Every
-other check in this document passes, including two independent
-confirmations (this pass's own re-runs, plus the monitoring session's
-X8 entry) that the fix itself is correct, necessary, and safe. The FAIL
-is a process/governance gap, not a correctness defect: the change cannot
-be delivered as "operator-authorized" without the operator's own words on
-record approving a frozen-surface touch, per this workflow's own explicit
-rule. Suspected step: none — this is not a planning or execution defect
-to route back through `dr-plan-steps`; the code is already correct and
-fully verified. What is missing is the operator's own approval,
-recorded in REQUEST.md, and (separately, lower stakes) a Traps entry in
-`docs/map/INV-frozen-surfaces.md` documenting this newly-discovered
-failure mode for the next `Config`-field addition.
+Every acceptance check (S1-S8), the full gate (3291 passed, 0 failed,
+isolated), the root sweep (42 rows / 11 ERROR, byte-identical across
+three independent captures), all five `docs_verify` modes, and all
+eight requirements (R1-R8) pass. The frozen-surface diff is non-empty
+but now carries the operator's own verbatim approval (REQUEST.md
+Amendment 3). The one map-completeness gap Pass 1 named (the missing
+Traps entry) is closed. Ready for `dr-deliver-change`.
