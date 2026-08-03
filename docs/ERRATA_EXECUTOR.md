@@ -34,8 +34,24 @@ monitoring session reviewing its record.
 
 ## Entries
 
-**Awaiting first results.** No executor session has produced a committed
-record yet (as of 2026-08-03, branch head at the delivery of the
-modularisation handover). Per the operator's instruction, no judgment is
-recorded before the record exists. The first entry will cite the first
-executor tranche's artifacts.
+**X1 — the infrastructure's own deployment raced the executor.** The
+first executor session branched (`claude/delivery-rungs-handover-m22sdy`,
+merge-base `9a319c10`) from the handover-delivery commit — BEFORE this
+ledger and the handover's feed-instruction were pushed (`ce3db17e`). The
+executor therefore cannot follow an instruction its checkout never
+carried; its findings land in `docs/ERRATA.md` instead (its E9). Not an
+executor fault and not evidence against the skills — a sequencing gap in
+the rollout of the monitoring layer itself. The monitor compensates by
+reviewing the executor's artifacts directly.
+
+**X2 — first on-course observation (rung 1, in progress).** Same branch,
+head `7d89024c` at first check: rung 1 opened through
+`dr-change-orchestrator` with the handover quoted verbatim in REQUEST.md
+(`experiments/2026-08-03-change-rung1-sockets-on-paper/`); scope held to
+`docs/map/` exactly as the rung specifies (zero `src/`/`tests/` lines
+against base); 24 checklist steps completed with a confirmatory full gate
+(3290 passed, 0 failed, per commit `88e209fb`). VALIDATION.md and
+DELIVERY.md not yet present — tranche mid-flight, consistent with the
+workflow's phase order. The per-rung spec format held an executor to
+scope without intervention; recorded as load-bearing-and-correct so far,
+verdict deferred until the tranche delivers.
