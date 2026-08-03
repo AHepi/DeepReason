@@ -387,6 +387,10 @@ READER, guard, or authority rule under `src/`; this tranche touches no
       DONE. `3290 passed, 7 skipped in 573.44s (0:09:33)`. No failures, as
       expected for a docs-only tranche; the flaky test named in the
       handover's "Environment facts" section did not fire this run.
-- [ ] 24. (all) [COMMIT] Final push and cleanliness check.
+- [x] 24. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/delivery-rungs-handover-m22sdy`.
+      DONE. `git status --porcelain`: empty. `git rev-parse HEAD` ==
+      `git rev-parse origin/claude/delivery-rungs-handover-m22sdy` ==
+      `88e209fbf9c77aaa01be932e5e7b1b60bb165fff`. All 24 checklist steps
+      complete. Routing to dr-validate-change.
