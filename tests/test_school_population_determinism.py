@@ -14,9 +14,24 @@ from deepreason.scheduler.scheduler import Scheduler
 
 # Wall-clock only. Two runs of identical work differ on these and nothing
 # else, so excluding them compares every rule, id, and content address while
-# staying independent of how long the machine took.
+# staying independent of how long the machine took. `ms` is scrubbed at every
+# depth under `llm`, not just the top level: it also appears inside each
+# `attempt_trace` entry, and missing the nested copy makes this comparison
+# flaky rather than wrong-looking.
 _WALL_CLOCK_EVENT_FIELDS = ("ts",)
-_WALL_CLOCK_LLM_FIELDS = ("ms",)
+_WALL_CLOCK_LLM_FIELD = "ms"
+
+
+def _strip_durations(value):
+    if isinstance(value, dict):
+        return {
+            k: _strip_durations(v)
+            for k, v in value.items()
+            if k != _WALL_CLOCK_LLM_FIELD
+        }
+    if isinstance(value, list):
+        return [_strip_durations(v) for v in value]
+    return value
 
 
 class _BareFunctionBackend:
@@ -84,8 +99,7 @@ def _comparable_log(harness) -> list[dict]:
         for field in _WALL_CLOCK_EVENT_FIELDS:
             data.pop(field, None)
         if isinstance(data.get("llm"), dict):
-            for field in _WALL_CLOCK_LLM_FIELDS:
-                data["llm"].pop(field, None)
+            data["llm"] = _strip_durations(data["llm"])
         events.append(data)
     return events
 
