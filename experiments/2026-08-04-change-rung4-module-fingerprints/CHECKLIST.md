@@ -594,3 +594,50 @@ prove the reader; the writer does not appear until step 9.
       origin
 
       DONE 2026-08-04 — see the commit carrying this text.
+
+---
+
+## Partial re-plan after VALIDATION.md's FAIL (2026-08-04)
+
+Appended, not rewritten: steps 1-24 keep their pasted outputs as the audit
+trail. Only the gap VALIDATION.md names is re-planned.
+
+Cause: `Event._process_payload_contract` fences every typed payload to its
+Rule and constrains its inputs — five clauses, one per payload — and
+`module_fingerprints` has none. `docs/map/SUB-ontology.md:81` states the
+requirement in its own recipe for this exact change; SPEC.md D3 never named
+it, so the plan never had a step for it.
+
+- [ ] 25. (S3, S10) Add the mutual-implication clause for
+      `module_fingerprints` to `Event._process_payload_contract` in
+      `src/deepreason/ontology/event.py`, matching the five existing
+      clauses: the payload may ride only `Rule.MEASURE`, and the event's
+      `inputs` must be exactly `[schema, digest]` — the appender's own
+      contract, now enforced by the record rather than by the appender's
+      good behaviour. **`ontology/event.py` is NOT a frozen surface**; R18
+      governs `harness.py` only, and this adds no `harness.py` hunk.
+      done-when: an `Event` pairing the payload with `Rule.CONJ` raises
+      `ValueError`, and one with mismatched `inputs` raises too
+
+- [ ] 26. (S3) Regression tests for step 25, mutation-proved: the
+      forged-rule event and the mismatched-inputs event must each be
+      refused, and the legitimate appender path must still pass.
+      done-when: `python -m pytest tests/test_module_fingerprints.py -q`
+      -> 0 failed, and removing the clause turns exactly the new tests red
+
+- [ ] 27. (S3) Confirm no committed root's verdict moved: a new
+      well-formedness rule is the one change class that can make an
+      existing root UNOPENABLE (`DR-SEAM-harness-x-verification` step 6,
+      C7), because the clause runs on every replayed event.
+      done-when: the three census roots' `verify_root` digest still equals
+      `62614bfc...16ac11f67`, and the 42-root sweep is byte-identical to
+      the 5-field baseline `6d6c3366...a74fd525`
+
+- [ ] 28. (S8, C9) FULL `docs_verify` + `--audit`.
+      done-when: 0 failed and 0 findings (paste both)
+
+- [ ] 29. (S4) FULL gate.
+      done-when: "N passed, 0 failed" (paste it)
+
+- [ ] 30. (all) [COMMIT] Commit and push; re-run `dr-validate-change`.
+      done-when: `git status --porcelain` empty AND branch head on origin
