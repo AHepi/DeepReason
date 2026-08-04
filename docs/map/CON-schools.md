@@ -91,6 +91,8 @@ conditioning record is read as either.
 | Single-model trial substitute | `informal/trial.py` | `_argument_trial_steps` (`critic_school_id`) |
 | Route receipt on the recorded call | `ontology/event.py` | `SchoolRouteReceiptV1` |
 | Which population backend built the run | `module_events.py`, `scheduler/scheduler.py` | `ModuleFingerprintsEventPayloadV1`, `Scheduler._record_module_fingerprints` |
+| The deliberately dumb alternative (rung 5) | `capture/schools.py` | `RoundRobinSchoolPopulationBackend`, registered `"round-robin"` |
+| Selecting a backend for one run | `capture/schools.py` | `population_backend(name)` — scoped, restores on exit, never a `Config` field |
 
 The registry pins a backend's fingerprint at registration and re-checks it on
 every resolve, but that pinning lives only in the process. The stamp is what

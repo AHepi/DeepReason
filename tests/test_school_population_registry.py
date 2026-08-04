@@ -104,10 +104,19 @@ def test_default_backend_reseed_matches_bare_function(tmp_path):
     assert reseeded1 == reseeded2
 
 
-def test_module_singleton_holds_exactly_one_default_backend():
-    from deepreason.capture.schools import SCHOOL_POPULATION
+def test_module_singleton_holds_the_default_backend_under_its_own_name():
+    """Rung 3 pinned this registry at exactly one entry; rung 5 added the
+    deliberately dumb `"round-robin"` alternative, which is what the socket
+    was built for. The claim that survives is the one rung 3 actually needed:
+    `"default"` is still registered, still the default implementation, and
+    still what an unscoped `active_backend()` resolves to — an alternative
+    joins the registry, it does not displace the default.
+    """
 
-    assert SCHOOL_POPULATION.ids() == ("default",)
+    from deepreason.capture.schools import SCHOOL_POPULATION, active_backend
+
+    assert "default" in SCHOOL_POPULATION.ids()
     assert isinstance(
         SCHOOL_POPULATION.get("default").backend, DefaultSchoolPopulationBackend
     )
+    assert isinstance(active_backend(), DefaultSchoolPopulationBackend)
