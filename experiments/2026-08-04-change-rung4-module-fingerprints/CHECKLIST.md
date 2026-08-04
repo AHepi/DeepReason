@@ -19,12 +19,34 @@ items D1-D9 and S10-S13. **Reader before writer is the ordering
 constraint this list exists to enforce** (R8, C12): steps 2-5 land and
 prove the reader; the writer does not appear until step 9.
 
-- [ ] 1. (S5) Capture the sweep BASELINE on the pristine tree, before
+- [x] 1. (S5) Capture the sweep BASELINE on the pristine tree, before
       any `src/` edit. This is the "accepted capture" S5 diffs against;
       it cannot be taken after the change.
       done-when: `python tools/root_sweep.py <scratch>/sweep-before.txt`
       -> "SWEEP COMPLETE: 42 roots", and the file contains exactly 11
       `ERROR` lines (paste the count command's output)
+
+      DONE 2026-08-04, on a tree `git status --porcelain` reported
+      clean at head `35a74b46` (no `src/` edit had been made):
+
+          SWEEP COMPLETE: 42 roots -> .../sweep-before.txt
+          rows: 42
+          ERROR rows: 11
+          sha256: 9c092414321e12b97f631b59b98aa007e9505a289014a38c3a57b5bd9e050cd2
+          --- error kinds ---
+                2 ERROR UnsupportedRunManifestVersionError: ... schema version 1 ...
+                8 ERROR UnsupportedRunManifestVersionError: ... schema version 2 ...
+                1 ERROR UnsupportedRunManifestVersionError: ... schema version 3 ...
+
+      Matches the documented baseline exactly (`DR-INV-frozen-surfaces`:
+      42 roots, 11 ERROR, all `UnsupportedRunManifestVersionError` — not
+      a failure). The capture file itself is session-local, so the
+      **sha256 above is the durable anchor** (durable-test rule 1): if
+      the container rolls back, re-run the sweep on a pristine tree and
+      the digest must reproduce before step 19's diff means anything.
+      No sweep capture is committed to the repo — no prior tranche
+      commits one either (`git ls-files | grep sweep` finds none); the
+      pasted digest is the tranche's evidence.
 
 - [ ] 2. (S3, S10, D1) Create `src/deepreason/module_events.py`: the
       typed payload models (`ModuleFingerprintV1`,
