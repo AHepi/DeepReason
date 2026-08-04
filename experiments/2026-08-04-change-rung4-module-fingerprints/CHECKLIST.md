@@ -161,7 +161,7 @@ prove the reader; the writer does not appear until step 9.
       `test_a_different_module_produces_a_different_digest`, as
       durable-test rule 3 requires for equality tests.
 
-- [ ] 5. (S10, D3) Add the optional payload field to `Event` in
+- [x] 5. (S10, D3) Add the optional payload field to `Event` in
       `src/deepreason/ontology/event.py`:
       `module_fingerprints: ModuleFingerprintsEventPayloadV1 | None =
       Field(default=None, exclude_if=lambda value: value is None)`.
@@ -171,23 +171,72 @@ prove the reader; the writer does not appear until step 9.
       `model_dump_json(by_alias=True)` (absence is absence from the
       BYTES, not a null in them)
 
-- [ ] 6. (S3) Re-run step 3's reader tests unchanged now that the field
+      DONE 2026-08-04. An `Event` that does not set the field:
+
+          keys on an event that does not set the field:
+          ['inputs', 'llm', 'outputs', 'rule', 'seq', 'state_diff', 'ts']
+
+          module_fingerprints in serialized bytes : False
+          field exists on the model               : True
+          field is optional (not required)        : True
+          attribute reads as None                 : True
+
+      This is the whole basis of R8/C12 for this design: the field is
+      absent from the BYTES, so no existing root's serialization moves
+      and no old event becomes invalid. Import placed alphabetically in
+      the existing block; nothing else in the file touched.
+
+- [x] 6. (S3) Re-run step 3's reader tests unchanged now that the field
       exists — absence must still be valid, which is the half of R8
       that only becomes testable at this point.
       done-when: `python -m pytest tests/test_module_fingerprints.py -q`
       -> "0 failed", with no edit to the test file
 
-- [ ] 7. (S3, S10) Prove no committed root's verdict moved by the field
+      DONE 2026-08-04. `git diff --stat tests/test_module_fingerprints.py`
+      is EMPTY (the file is unedited since step 4), and:
+
+          ........                                          [100%]
+          8 passed in 54.70s
+
+      Absence stays valid now that the field exists -- the half of R8
+      that only becomes testable at this point.
+
+- [x] 7. (S3, S10) Prove no committed root's verdict moved by the field
       alone: `verify_root` on a committed root, compared to the same
       call on the pre-change tree.
       done-when: the verdict JSON (sorted keys) is byte-identical to
       the pre-change capture for at least three committed roots,
       including one v6 root and one that raises
 
-- [ ] 8. (S3) [COMMIT] Commit the `Event` field with steps 5-7 evidence.
+      DONE 2026-08-04. Three roots chosen to span all three arms of the
+      documented census (28 v6 / 14 raising / 3 no-manifest -- the
+      census reproduced exactly by the capture script):
+
+          experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752   (v6)
+          experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only            (raises)
+          experiments/bronze_flat_2026-07-13/deepseek-v4-pro                           (no manifest)
+
+      `verify_root` output, canonical JSON, sorted keys:
+
+          sha256 BEFORE field: 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+          sha256  AFTER field: 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+
+      Identical. "BEFORE" was taken by stashing ONLY `event.py` so the
+      comparison isolates the field rather than the whole tranche.
+      `DR-INV-frozen-surfaces`' governing question -- "does any
+      recorded root's `valid` or `att` move" -- answers no.
+
+- [x] 8. (S3) [COMMIT] Commit the `Event` field with steps 5-7 evidence.
       done-when: `git log --oneline -1` shows it and
       `git diff --stat HEAD~1 -- src/deepreason/` names only
       `ontology/event.py`
+
+      DONE 2026-08-04. C9's FULL `docs_verify` before this
+      `src/`-touching commit:
+
+          docs_verify [full]: 50 documents, 803 checks, 4 workers
+          docs_verify: 0 failed
+          rc=0
 
 - [ ] 9. (S11, D6) Add the TWO declared `harness.py` hunks and no
       others: (i) the `record_module_fingerprints(payload)` appender

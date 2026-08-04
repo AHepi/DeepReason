@@ -20,6 +20,7 @@ from deepreason.control_events import (
     ControlEventPayloadV2,
     ControlEventPayloadV3,
 )
+from deepreason.module_events import ModuleFingerprintsEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
 
@@ -373,6 +374,9 @@ class Event(FrozenRecord):
         default=None, exclude_if=lambda value: value is None
     )
     capability: CapabilityEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    module_fingerprints: ModuleFingerprintsEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
 
