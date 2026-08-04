@@ -127,12 +127,39 @@ prove the reader; the writer does not appear until step 9.
       `docs_verify` is owed by this step (that obligation is per
       `src/`-touching commit).
 
-- [ ] 4. (S3) [COMMIT] Mutation-prove the reader tests can fail
+- [x] 4. (S3) [COMMIT] Mutation-prove the reader tests can fail
       (durable-test rule 3): make the reader raise on a missing
       attribute, watch the absence test go red, restore, re-run green.
       Commit the reader + its tests.
       done-when: the red run's failure line and the restored green run
       are both pasted, and `git log --oneline -1` shows the commit
+
+      DONE 2026-08-04. Mutation: replace the reader's
+      `getattr(event, "module_fingerprints", None)` with a direct
+      attribute read — i.e. delete exactly the absence-tolerance R8
+      demands. RED:
+
+          E   AttributeError: 'Event' object has no attribute 'module_fingerprints'
+          FAILED ...::test_every_committed_root_reads_as_having_no_module_fingerprints
+          FAILED ...::test_the_census_of_committed_roots_is_unchanged
+          FAILED ...::test_the_reader_tolerates_an_event_with_no_fingerprint_attribute
+          3 failed, 5 passed in 5.32s
+
+      The three that died are exactly the three absence claims; the
+      five that survived are the digest/shape claims, which the
+      mutation does not touch. That split is the evidence the tests
+      are aimed at what they say they guard.
+
+      Restored (`git diff --stat` empty — byte-identical to HEAD) and
+      GREEN:
+
+          ........                                          [100%]
+          8 passed in 56.80s
+
+      The equality assertions additionally ship with a PERMANENT
+      companion mutation test in the suite,
+      `test_a_different_module_produces_a_different_digest`, as
+      durable-test rule 3 requires for equality tests.
 
 - [ ] 5. (S10, D3) Add the optional payload field to `Event` in
       `src/deepreason/ontology/event.py`:
