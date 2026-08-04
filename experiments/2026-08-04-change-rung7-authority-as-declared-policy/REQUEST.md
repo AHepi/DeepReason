@@ -154,4 +154,43 @@ frozen-surface contact — the spec phase must price each.
 
 ## Amendments
 
-(none yet)
+**Amendment 1 (2026-08-04, operator, verbatim) — SPEC.md APPROVED; 7a
+AUTHORIZED, 7b/7c DEFERRED.**
+
+> Rung 7 SPEC approved: Option D with the 7a/7b/7c split, assumptions
+> A1–A5 stand. The mint-time placement and its M5/M6 evidence are the
+> accepted design. Do NOT execute 7b or 7c — deferred until after the
+> rung program wrap-up, same as rung 6. You MAY execute 7a only (the
+> seam document, docs-only) now, then stop and confirm the program is
+> complete.
+
+R9 (process): "Rung 7 SPEC approved: Option D with the 7a/7b/7c split,
+assumptions A1–A5 stand. The mint-time placement and its M5/M6 evidence
+are the accepted design." — SPEC.md as committed at `e1e23990` is the
+approved design. A1-A5 cease to be open assumptions and become confirmed
+decisions. The mint-time placement is settled: no later phase may
+relitigate it.
+
+R10 (process): "Do NOT execute 7b or 7c — deferred until after the rung
+program wrap-up, same as rung 6." — sub-tranches 7b (the
+`DeclaredAuthorityPolicy` object, SPEC S3) and 7c (the two ungated
+argumentative mint sites, SPEC S4) are NOT executed. No `src/` file is
+touched by this tranche.
+
+R11 (behavior/artifact): "You MAY execute 7a only (the seam document,
+docs-only) now" — sub-tranche 7a as specified in SPEC.md's Budget
+section: `SEAM-adjudication-x-authority.md`, plus `INDEX.md`'s seam
+matrix row, plus both sides' `Seams:`/`Seams-undocumented:` headers
+(the ERRATA E9 lesson), carrying the M5/M6 measurements as checks.
+Accept per SPEC.md 7a: `docs_verify` full mode 0 failed, `--audit` 0,
+`--links` 0.
+
+R12 (process): "then stop and confirm the program is complete." — after
+7a is delivered, stop and report the state of the whole rung program
+(rungs 1-7), not merely this tranche.
+
+**Scope consequence:** this tranche now runs the full change workflow
+(`dr-plan-steps` → `dr-execute-step` → `dr-validate-change` →
+`dr-deliver-change`) for 7a ONLY. C1's "dr-spec-change ONLY" is
+superseded for 7a by R11 and stands unchanged for 7b/7c. C3 (P7 stays
+parked) and C4 (frozen surfaces) are unaffected and still bind.

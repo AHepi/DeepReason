@@ -1,7 +1,22 @@
 # Spec for: Rung 7 — authority as a declared policy
 Traces: every item cites R/C numbers. Untraceable items are bugs.
-DESIGN-AND-STOP: this document is the whole deliverable. No CHECKLIST.md,
-no code change, no map change, no gate run follows in this tranche.
+
+**Status (reconciled 2026-08-04 after REQUEST.md Amendment 1, R9-R12).**
+This document was written and committed (`e1e23990`) as DESIGN-AND-STOP:
+spec only, nothing built. The operator has since APPROVED it (Option D,
+the 7a/7b/7c split, A1-A5 confirmed, the mint-time placement settled)
+and authorized **sub-tranche 7a ONLY** for execution. So:
+
+- **7a — AUTHORIZED and executed in this tranche** (R11). Docs-only:
+  `SEAM-adjudication-x-authority.md`, `INDEX.md`'s matrix row, both
+  sides' `Seams:`/`Seams-undocumented:` headers.
+- **7b (S3) and 7c (S4) — DEFERRED** (R10), not cancelled. Their spec
+  items below stand as written and approved; they are simply not built
+  now. Their acceptance criteria are the ones a future tranche inherits.
+
+The original DESIGN-AND-STOP framing below is preserved rather than
+rewritten, because it is what the operator approved; this block records
+what changed around it.
 
 ## The finding that governs this spec (R6, R4, Q1, Q2)
 
@@ -53,6 +68,22 @@ tranche | after: `REQUEST.md` + `SPEC.md` only.
     → `REQUEST.md SPEC.md` at the point this tranche ends; no
     `CHECKLIST.md`, `VALIDATION.md`, or `DELIVERY.md`; `git diff --stat`
     for this tranche shows no `src/`, `tests/`, or `docs/map/` path.
+    **SUPERSEDED by R11** at Amendment 1: 7a is now authorized, so this
+    tranche does gain `CHECKLIST.md`/`VALIDATION.md`/`DELIVERY.md` and
+    does touch `docs/map/`. The `src/` and `tests/` half of the accept
+    STANDS and is the live fence (R10) — see S8.
+
+S8 (R10, R11, R12): execute sub-tranche 7a and nothing else. | before:
+`adjudication x authority` is an undocumented seam, listed as such on
+`SUB-adjudication.md` and absent from `INDEX.md`'s matrix | after: the
+seam document exists, carrying the M5/M6 asymmetry as re-runnable
+checks; `INDEX.md`'s matrix names it; both sides' headers reference it.
+    accept: (a) `python tools/docs_verify.py` 0 failed, `--audit` 0
+    findings, `--links` 0 dangling; (b) `git diff --stat` for this
+    tranche touches NO path under `src/` or `tests/` — the 7b/7c fence;
+    (c) `adjudication x authority` no longer appears in any
+    `Seams-undocumented:` header; (d) a report on the whole rung
+    program's state, per R12.
 
 S2 (R4, R7, C4, C7): the frozen-surface contact forecast, below, is
 derived from measurement (M1, M5, M6, M6c, M8, M10) rather than from
