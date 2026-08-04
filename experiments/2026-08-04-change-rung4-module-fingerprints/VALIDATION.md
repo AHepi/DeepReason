@@ -2,16 +2,21 @@
 
 Run 2026-08-04 against branch head `6b79df7f`, tranche base `75783d11`.
 
-## Verdict: **FAIL**
+## Verdict: **PASS** (round 2)
 
-Everything green except one thing, and it is not a green-able one: the
-new typed payload has **no clause in `Event._process_payload_contract`**,
-which every other typed payload has. `docs/map/SUB-ontology.md:81` states
-the requirement in its own change recipe — "attach a new typed process
-payload to events | a new optional field on `Event` with `exclude_if`,
-**plus a clause in `Event._process_payload_contract`**" — and this tranche
-did the first half only. Detail in *FAIL detail* below. Per this phase's
-contract nothing here was patched; it routes back to `dr-plan-steps`.
+Round 1 was a FAIL: the new typed payload had no clause in
+`Event._process_payload_contract`, which every other typed payload has.
+That FAIL and its evidence are kept verbatim below — a validation record
+that erases the failure it caught is not a record. Steps 25-30 closed it;
+round 2's re-run of every instrument is in *Round 2* at the end.
+
+Round 1 verdict, as recorded: **FAIL.** `docs/map/SUB-ontology.md:81`
+states the requirement in its own change recipe — "attach a new typed
+process payload to events | a new optional field on `Event` with
+`exclude_if`, **plus a clause in `Event._process_payload_contract`**" —
+and this tranche did the first half only. Detail in *FAIL detail* below.
+Per this phase's contract nothing was patched in that phase; it routed
+back to `dr-plan-steps`.
 
 ## Acceptance checks
 
@@ -284,3 +289,106 @@ contract clause because SPEC.md D3 did not name one.
 to `dr-plan-steps` for a partial re-plan: one step adding the
 mutual-implication clause plus its regression test, then re-run the gate,
 `docs_verify`, and this validation.
+
+
+---
+
+# Round 2 (2026-08-04, head `ed50d4cf`) — after steps 25-30
+
+## What changed since round 1
+
+`Event._process_payload_contract` gained the missing clause. Nothing else
+in the design moved: the payload, the reader, the appender, the writer and
+the probe are byte-identical to what round 1 validated.
+
+## Round 2 acceptance re-runs
+
+**The round-1 FAIL, re-tested:**
+
+    legitimate appender shape          ACCEPTED
+    forged rule (Conj)                 REFUSED: module fingerprints may ride only a Measure event
+    mismatched inputs                  REFUSED: module fingerprint inputs must name their schema and digest
+    carries outputs                    REFUSED: module fingerprints record identity, not work
+
+The exact event round 1 demonstrated as wrongly accepted — fingerprint
+payload on `Rule.CONJ` with empty inputs — is now refused. **CLOSED.**
+
+**S3 / record-behavior preservation (the risk this clause introduced).** A
+new well-formedness rule runs on every replayed event, and per
+`DR-SEAM-harness-x-verification` step 6 that is the change class that can
+make a stored root unopenable. It did not:
+
+    three census roots: 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67 (unchanged)
+    42-root sweep vs the 5-field baseline: EMPTY DIFF
+    sha: 6d6c3366c821d4555a8a4866c6a208c2b5d08db704e8f13c1611c7c5a74fd525
+
+The clause is guarded on payload presence, so it never fires on a root
+carrying none — every committed root. The sweep proves that rather than
+the argument asserting it. **PASS**
+
+**S4 — full gate:**
+
+    3323 passed, 7 skipped in 608.89s (0:10:08)
+    rc=0
+
++2 vs round 1's 3321: the two contract tests. **PASS**
+
+**S7 / 4a2 — frozen-surface diff, unchanged from round 1:**
+
+     src/deepreason/harness.py | 25 +++++++++++++++++++++++++
+     1 file changed, 25 insertions(+)
+
+    ADDED: ['record_module_fingerprints'] CHANGED: ['_commit']
+      _apply_event       identical: True
+      _ensure_writable   identical: True
+      _reset             identical: True
+      _adjudicate        identical: True
+
+The fix landed in `ontology/event.py`, which is NOT a frozen surface, and
+added no `harness.py` hunk — R18's authorization is exactly as narrow as
+it was. **PASS**
+
+**S10 — src footprint now 210 lines** (was 191; +19 is the clause):
+
+     src/deepreason/harness.py             |  25 ++
+     src/deepreason/module_events.py       | 105 ++++
+     src/deepreason/ontology/event.py      |  23 ++
+     src/deepreason/scheduler/scheduler.py |  57 ++++
+     4 files changed, 210 insertions(+)
+
+Still under the 300-line stop condition; still ~3.5x SPEC.md's ~40-60
+estimate. **PASS**, with the budget deviation carried forward.
+
+**Map:**
+
+    docs_verify [full]: 50 documents, 805 checks, 4 workers -> 0 failed  : PASS
+    docs_verify --audit: 0 finding(s)                                    : PASS
+    docs_verify --links: 0 dangling reference(s), 50 document(s)         : PASS
+    docs_verify --coverage: 6 seams swept, 15 without a Sweep: header,
+                            0 finding(s)                                 : PASS
+
+`--stale`: disposition unchanged from round 1, with one correction —
+`SUB-ontology.md` is no longer the outstanding entry it was, because the
+requirement it asserted is now met. Its `Verified-at:` stamp is still not
+advanced, because this tranche did not re-run that document's full check
+set.
+
+**S1, S2, S5, S6, S8, S9, S11, S12** — unaffected by the clause and
+unchanged from round 1; their round-1 outputs above stand, and S5/S6's
+sweeps were re-run above.
+
+**S13** — unchanged: the honest PARTIAL recorded in round 1 stands.
+
+## Requirement sweep, round 2
+
+Unchanged from round 1: every R1-R20 demonstrated or explicitly accounted
+for. R8's absence-tolerance is now additionally fenced — the clause makes
+a malformed stamp refusable rather than merely unwritten.
+
+## Assumptions carried
+
+Unchanged: **A1 stands unoverridden** (`SCHOOL_POPULATION` only) and is
+the one thing this tranche most wants the operator's word on. A2 and A3
+confirmed.
+
+## Verdict: **PASS**
