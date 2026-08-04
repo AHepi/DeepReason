@@ -238,7 +238,7 @@ prove the reader; the writer does not appear until step 9.
           docs_verify: 0 failed
           rc=0
 
-- [ ] 9. (S11, D6) Add the TWO declared `harness.py` hunks and no
+- [x] 9. (S11, D6) Add the TWO declared `harness.py` hunks and no
       others: (i) the `record_module_fingerprints(payload)` appender
       committing `Rule.MEASURE` — no new `Rule` member (D4); (ii) the
       `module_fingerprints` keyword on `_commit`, forwarded verbatim
@@ -249,7 +249,49 @@ prove the reader; the writer does not appear until step 9.
       those two hunks, and an AST check proves `_apply_event` and the
       well-formedness path are byte-identical to `HEAD`
 
-- [ ] 10. (S11) Assert R18's two exclusions mechanically, as a
+      DONE 2026-08-04 — **with one declared correction: the diff is
+      THREE hunks, not two.** D6/S11 predicted the appender and the
+      `_commit` parameter; `_commit`'s type annotation
+      `ModuleFingerprintsEventPayloadV1 | None` also needs a
+      module-level import, which D6 did not count. The two precedent
+      MEASURE appenders import function-locally, and doing that here
+      would have kept the count at two — but `_commit`'s annotation
+      cannot, and an unannotated parameter beside five annotated ones
+      would be worse code bought purely to make a number match. The
+      import is placed alphabetically and changes no behaviour. It is
+      recorded here rather than absorbed silently, per R18's own rule
+      that a hunk outside the declaration is not a judgement call to
+      make quietly.
+
+      AST comparison against `HEAD`, which is what R18's two exclusions
+      actually turn on:
+
+          _apply_event         byte-identical to HEAD: True
+          _ensure_writable     byte-identical to HEAD: True
+          _reset               byte-identical to HEAD: True
+          _adjudicate          byte-identical to HEAD: True
+
+          functions ADDED  : ['record_module_fingerprints']
+          functions CHANGED: ['_commit']
+
+      Exactly one function added, exactly one changed, and `_commit`'s
+      change is a parameter plus its verbatim forward into `Event(...)`
+      beside the five payloads already plumbed that way. Round trip
+      through the log alone:
+
+          event rule            : Rule.MEASURE
+          event inputs          : ['module-fingerprints.v1', 'ebe19641...4ce1825d']
+          event outputs         : []
+          reader round-trip     : 1 payload(s)
+          survives reopen       : True
+          state families empty  : True True
+          module_fingerprints in log bytes: True
+
+      No new `Rule` member (D4), so no new typed channel, so no
+      `report.py` entry is owed and R16 is satisfied by "or not exist
+      yet".
+
+- [x] 10. (S11) Assert R18's two exclusions mechanically, as a
       permanent test rather than a one-off eyeball: `_apply_event` has
       no `module_fingerprints` branch, and the payload materializes no
       state.
@@ -257,10 +299,41 @@ prove the reader; the writer does not appear until step 9.
       the appended event changes no `Harness` state family, and it
       passes
 
-- [ ] 11. (S3, S10) [COMMIT] Re-run step 7's committed-root comparison
+      DONE 2026-08-04. Three tests added:
+      `test_the_appender_round_trips_through_the_log_alone`,
+      `test_the_stamp_materializes_no_state` (state JSON identical
+      before and after the append, live and reopened), and
+      `test_apply_event_has_no_branch_for_the_payload` — the last
+      resolves `_apply_event`'s `event.<attr>` reads by AST rather than
+      by source text, so a reformat of `harness.py` cannot break it and
+      a real dispatch branch cannot hide from it (durable-test rule 2).
+      It also asserts the read-set is non-empty first, so the probe
+      cannot pass by measuring nothing.
+
+          ...........                                       [100%]
+          11 passed in 55.48s
+
+      First attempt failed on `IndentationError` — `inspect.getsource`
+      of a METHOD returns indented source that `ast.parse` refuses.
+      Fixed with `textwrap.dedent`; the failure is recorded because it
+      is the kind of probe bug that otherwise passes vacuously.
+
+- [x] 11. (S3, S10) [COMMIT] Re-run step 7's committed-root comparison
       after the appender lands; commit the harness hunks.
       done-when: the three roots' verdicts are still byte-identical to
       the pre-change capture, pasted, and the commit exists
+
+      DONE 2026-08-04, against the SAME step-7 pre-change baseline:
+
+          sha256 BEFORE (step 7 baseline): 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+          sha256 AFTER  appender         : 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+          IDENTICAL
+
+      C9's FULL `docs_verify` before this `src/`-touching commit:
+
+          docs_verify [full]: 50 documents, 803 checks, 4 workers
+          docs_verify: 0 failed
+          rc=0
 
 - [ ] 12. (S2, S10, D7) Wire the writer: `Scheduler.__init__` emits the
       stamp for `schools.active_backend()`, **unconditionally — NOT

@@ -145,6 +145,73 @@ def test_a_recorded_digest_cannot_disagree_with_its_own_fingerprint():
         )
 
 
+def _payload(**overrides) -> ModuleFingerprintsEventPayloadV1:
+    module = ModuleFingerprintV1.of(
+        overrides.get("registry", "school-population"),
+        overrides.get("module_id", "default"),
+        overrides.get("fingerprint", {"backend": "default", "stance_count": 8}),
+    )
+    return ModuleFingerprintsEventPayloadV1.of([module])
+
+
+def test_the_appender_round_trips_through_the_log_alone(tmp_path):
+    """R2: the stamp must be in the RECORD, which means a reader that has
+    only the log — not the live session — can recover it."""
+
+    harness = Harness(tmp_path / "run")
+    payload = _payload()
+    harness.record_module_fingerprints(payload)
+
+    reopened = Harness(tmp_path / "run", read_only=True)
+    got = recorded_module_fingerprints(reopened)
+    assert [p.digest for p in got] == [payload.digest]
+    assert got[0].modules[0].module_id == "default"
+
+
+def test_the_stamp_materializes_no_state(tmp_path):
+    """R18's substance: the payload carries identity, not epistemic content.
+
+    If it ever materialized state it would need an ``_apply_event`` branch and
+    a ``_reset`` attribute, and the operator's authorization explicitly
+    excludes both. This test fails the moment that stops being true.
+    """
+
+    harness = Harness(tmp_path / "run")
+    before = harness.state.model_dump_json()
+    harness.record_module_fingerprints(_payload())
+    assert harness.state.model_dump_json() == before
+
+    reopened = Harness(tmp_path / "run", read_only=True)
+    for family in ("scratch_state", "bridge_state", "workflow_state", "capability_state"):
+        assert hasattr(reopened, family), family
+    assert reopened.state.model_dump_json() == before
+
+
+def test_apply_event_has_no_branch_for_the_payload():
+    """R18 as a standing assertion rather than a one-time diff review.
+
+    Anchored to the resolved attribute name rather than to source text
+    formatting, so a reformat of ``harness.py`` cannot break it and a real
+    dispatch branch cannot hide from it.
+    """
+
+    import ast
+    import inspect
+    import textwrap
+
+    from deepreason.harness import Harness as _H
+
+    tree = ast.parse(textwrap.dedent(inspect.getsource(_H._apply_event)))
+    read = {
+        node.attr
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
+        and node.value.id == "event"
+    }
+    assert read, "no event attributes read; the probe stopped measuring"
+    assert "module_fingerprints" not in read, sorted(read)
+
+
 def test_an_empty_module_list_is_refused():
     """A stamp naming no modules answers the rung's question with silence
     while still looking like a recorded answer."""

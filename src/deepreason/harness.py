@@ -42,6 +42,7 @@ from deepreason.conjecture_turn import (
     ContextRequestV1,
 )
 from deepreason.log.event_log import EventLog
+from deepreason.module_events import ModuleFingerprintsEventPayloadV1
 from deepreason.ontology import (
     Artifact,
     Commitment,
@@ -625,6 +626,28 @@ class Harness:
             Rule.MEASURE,
             inputs=[record.schema_, record.id],
             outputs=[record.id],
+        )
+
+    def record_module_fingerprints(
+        self, payload: ModuleFingerprintsEventPayloadV1
+    ) -> Event:
+        """Append one stamp of the registered modules that built this run.
+
+        The harness records the identity its caller already resolved and
+        computes none of its own: a registry that disagrees with its own
+        record must stay visible here rather than be reconciled on the write
+        path.  The payload materializes no state, so replay applies it by
+        ignoring it and no historical root acquires a new obligation.
+        """
+
+        payload = ModuleFingerprintsEventPayloadV1.model_validate(
+            payload.model_dump(mode="python", by_alias=True)
+        )
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[payload.schema_, payload.digest],
+            outputs=[],
+            module_fingerprints=payload,
         )
 
     def record_scratch_event(
@@ -1971,6 +1994,7 @@ class Harness:
             ControlEventPayloadV1 | ControlEventPayloadV2 | ControlEventPayloadV3 | None
         ) = None,
         capability: CapabilityEventPayloadV1 | None = None,
+        module_fingerprints: ModuleFingerprintsEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -1987,6 +2011,7 @@ class Harness:
             conjecture_turn=conjecture_turn,
             control=control,
             capability=capability,
+            module_fingerprints=module_fingerprints,
         )
         try:
             state_diff = self._apply_event(event)
