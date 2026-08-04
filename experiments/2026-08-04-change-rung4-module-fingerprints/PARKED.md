@@ -59,8 +59,20 @@ full `docs_verify` reported **292 failed**, every one of them
 docs failure that has nothing to do with the documents. Cost: one
 misleading 292-failure report. Fixed by
 `python -m pip install pytest pytest-xdist --break-system-packages`.
-A one-line addition to CLAUDE.md's preflight would prevent it, but
-CLAUDE.md is not this tranche's to edit; recorded per C3.
+**CORRECTION (2026-08-04, after rung 4 was delivered): P6 and P6a below
+are largely a REDISCOVERY, not a finding.** `docs/HANDOVER_2026-08-03.md`
+already carried this under "Environment facts that bite" — naming
+`pytest`, `pytest-xdist` AND `jsonschema` by name, and warning that a
+missing `jsonschema` produces spurious `docs_verify` failures. Verified
+against the tranche base (`git show 75783d11:docs/HANDOVER_2026-08-03.md`
+matches "jsonschema" twice), so it predates this session and was not
+added in response to it. The cost was mine: I did not read the handover's
+environment-facts section before starting, and paid for it with one
+292-failure report and one 2-failure report I had to diagnose from
+scratch. What remains true and unrecorded elsewhere is narrower —
+CLAUDE.md's own preflight still omits the test dependencies, and
+`pyproject.toml`'s `dev` extra still cannot produce a runnable gate.
+Recorded per C3, with the overclaim corrected rather than left standing.
 
 P6a. **The same gap again, one layer down: `jsonschema` is imported by
 the gate and declared nowhere.** After `pytest` was installed the full

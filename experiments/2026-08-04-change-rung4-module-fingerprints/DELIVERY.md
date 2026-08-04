@@ -150,3 +150,21 @@ FAIL. The map paid for itself this tranche.
   documents.
 - **P7** — 14 of 45 committed roots refuse to open at all (pre-v6); any
   "all roots" probe must catch at open, as `root_sweep.py` does.
+
+
+---
+
+## Post-delivery: A1 resolved (2026-08-04, operator, verbatim)
+
+> A1 confirmed: SCHOOL_POPULATION only, other registries stay parked.
+
+A1 ceases to be an open assumption and becomes a confirmed decision. The
+tranche's scope was correct as delivered; `VerifierRegistry` and
+`WORKLOADS` remain PARKED (P1) rather than deferred work owed. Nothing in
+the delivered change moves as a result.
+
+Also corrected post-delivery: PARKED P6/P6a overclaimed. The missing test
+dependencies were already documented in
+`docs/HANDOVER_2026-08-03.md`'s "Environment facts that bite" at the
+tranche base; the failure was mine for not reading that section first.
+See PARKED.md's correction note.
