@@ -372,5 +372,68 @@ data the sweep never reads, so a probe must be proposed in SPEC.md, in
 its own separate commit, ordered so it never rides the `src/` change it
 judges.
 
+**Amendment 4 (2026-08-04, operator message, verbatim). The
+DESIGN-AND-STOP of SPEC.md is RESOLVED by this message.** Sent in direct
+response to SPEC.md's `Questions for operator (STOP — non-empty)`,
+which asked Q-OP1 (which of options A/B/C) and asked A1's scope to be
+confirmed in the same reply:
+
+> My decision on the spec's options: Option B approved. The record_*
+> appender in harness.py is authorized as a narrow surface-2 touch —
+> appender only, no change to _apply_event or well-formedness. Ledger
+> this quote as a REQUEST.md amendment, then plan and proceed through
+> the workflow. Include the sweep probe proposal for the new observable
+> per dr-spec-change's rule.
+
+New requirements, quoting the operator's own words:
+
+R17 (design decision, resolves Q-OP1): "Option B approved." The
+optional-payload-field-on-`Event` design of SPEC.md's "The three
+candidate designs" is the chosen one. Options A and C are hereby
+CLOSED for this tranche: no `Config` field, no `run_manifest.py` scrub
+line, no object-store-only blob.
+
+R18 (frozen-surface authorization, the narrowest reading is the binding
+one): "The record_* appender in harness.py is authorized as a narrow
+surface-2 touch — appender only, no change to _apply_event or
+well-formedness." This is the operator's words that SPEC.md's S7 named
+as its alternative accept ("OR the operator's approving words quoted in
+REQUEST.md"). It authorizes EXACTLY three things and no fourth:
+(a) a `record_*` appender method in `harness.py`;
+(b) nothing in `_apply_event`;
+(c) nothing in the well-formedness checks.
+Any diff hunk in `harness.py` outside a `record_*` appender is OUTSIDE
+this authorization and is a stop condition, not a judgement call. The
+authorization is scoped to `harness.py` alone — surfaces 1, 3, 4 and 5
+remain untouched and un-authorized, so S7's empty-diff accept still
+binds for `capabilities/state.py`, `invariants.py`, `run_manifest.py`
+and `qualification.py`.
+
+R19 (process): "Ledger this quote as a REQUEST.md amendment, then plan
+and proceed through the workflow." Order is stated: amendment first
+(this block), then `dr-plan-steps`, then the rest of the phases. Per
+the orchestrator's routing table a new requirement routes to
+`dr-spec-change` to reconcile before planning; SPEC.md's own line
+"Every item below is written against Option B, the recommendation. If
+the operator picks A or C, `dr-spec-change` re-runs before planning"
+makes that reconciliation a RESOLUTION APPENDIX rather than a rewrite,
+because B is what the items were already written against.
+
+R20 (process, re-affirmation of C13): "Include the sweep probe proposal
+for the new observable per dr-spec-change's rule." S6 already carries
+it; R20 makes it non-droppable and confirms the separate-commit
+ordering C13 requires.
+
+**A1 is NOT overridden and therefore STANDS.** SPEC.md asked the
+operator to "confirm A1's scope in the same reply: `SCHOOL_POPULATION`
+only, or all three registries?" The reply is silent on it. A1 was
+recorded under "Assumptions (operator may override)" as the smallest
+reading; per the scope contract ("Where it is silent, choose the
+smallest reasonable interpretation and RECORD the assumption"), silence
+leaves the smallest reading in force. This tranche stamps
+`SCHOOL_POPULATION` only. `VerifierRegistry` and `WORKLOADS` are a
+mechanical extension of the same design and are recorded in PARKED.md,
+not built here.
+
 (append-only; later operator messages land here as R<n+1>... or
 "R2a supersedes R2", each with its verbatim quote)
