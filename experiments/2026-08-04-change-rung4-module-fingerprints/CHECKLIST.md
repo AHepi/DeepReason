@@ -456,18 +456,71 @@ prove the reader; the writer does not appear until step 9.
       `tests/test_module_fingerprints.py`. No test was deleted or
       weakened; C5's known flake did not fire.
 
-- [ ] 19. (S5) Re-run the sweep on the changed tree and diff against
+- [x] 19. (S5) Re-run the sweep on the changed tree and diff against
       step 1's baseline. `tools/root_sweep.py` is UNCHANGED at this
       point — the probe is step 22 and must not ride this commit (C13).
       done-when: `diff <scratch>/sweep-before.txt
       <scratch>/sweep-after.txt` -> empty, 42 rows, 11 ERROR
 
-- [ ] 20. (S7, S11) Frozen-surface diff: everything except the
+      DONE 2026-08-04, `tools/root_sweep.py` UNCHANGED at this point:
+
+          SWEEP COMPLETE: 42 roots
+          === DIFF vs baseline ===
+          EMPTY DIFF - byte-identical
+          rows: 42  ERROR: 11
+          sha256 after : 9c092414321e12b97f631b59b98aa007e9505a289014a38c3a57b5bd9e050cd2
+
+      Identical to step 1's baseline digest. No recorded root's `valid`,
+      `epistemic_checks_passed`, `att` or adjudication-blindness count
+      moved — `DR-INV-frozen-surfaces`' governing question answered on
+      all 42 roots rather than on the 3 sampled at steps 7 and 11.
+
+      **This result proves less than it appears to, and C13 is why:**
+      the sweep compares four fields and none of them is the new
+      observable, so "byte-identical" here is partly trivially true.
+      Step 22's probe is what makes it non-trivial, and it is a separate
+      commit precisely so it cannot launder this one.
+
+- [x] 20. (S7, S11) Frozen-surface diff: everything except the
       authorized `harness.py` hunks must be empty.
       done-when: `git diff --stat <base>..HEAD --
       src/deepreason/capabilities/state.py src/deepreason/invariants.py
       src/deepreason/run_manifest.py src/deepreason/qualification.py`
       -> empty, and `src/deepreason/verification/report.py` untouched
+
+      DONE 2026-08-04, base `75783d11` (tranche start):
+
+          === frozen surfaces that must be EMPTY (S7) ===
+          (empty — capabilities/state.py, invariants.py,
+           run_manifest.py, qualification.py, verification/, config.py)
+
+          === the one AUTHORIZED surface (R18) ===
+           src/deepreason/harness.py | 25 +++++++++++++++++++++++++
+
+          === every src file this tranche touched ===
+           src/deepreason/harness.py             |  25 ++
+           src/deepreason/module_events.py       | 105 ++++
+           src/deepreason/ontology/event.py      |   4 ++
+           src/deepreason/scheduler/scheduler.py |  57 ++++
+           4 files changed, 191 insertions(+)
+
+          === frozen-adjacent route_fingerprint ===
+          (llm/firewall.py untouched)
+
+      Surfaces 1, 3, 4 and 5: empty, as S7 requires. Surface 2: 25
+      lines, the R18-authorized appender. `config.py` untouched, which
+      is R17 closing Option A. `verification/` untouched, which is R16
+      satisfied by "or not exist yet".
+
+      **Budget overrun, recorded rather than glossed:** SPEC.md's
+      post-amendment budget estimated "~40-60 lines of `src/`"; the
+      actual is 191 across four files, roughly 3x. The excess is
+      docstring and guard rather than logic — `module_events.py` is 105
+      lines of which the models are ~45, and `scheduler.py`'s 57
+      include a 20-line docstring recording the two placement
+      constraints D7a/D7b were paid for. Under the 300-line stop
+      condition, so no stop was triggered, but the estimate was wrong
+      and the tranche did not notice until this step.
 
 - [ ] 21. (all) [COMMIT] Commit the writer + tests + map update with
       the full-gate line in the message; push with retry.
