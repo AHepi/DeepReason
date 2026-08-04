@@ -74,7 +74,38 @@ operator. : **PASS**
 
 ## Full gate
 
-    <pasted below once the run completes>
+    $ python -m pytest tests/ -q -n 4
+    FAILED tests/test_module_fingerprints.py::test_every_committed_root_reads_as_having_no_module_fingerprints
+    FAILED tests/test_module_fingerprints.py::test_the_census_of_committed_roots_is_unchanged
+    2 failed, 3336 passed, 7 skipped in 663.27s (0:11:03)
+
+: **PASS for this tranche — both failures proven pre-existing.**
+
+Proof, per this skill's own rule for pre-existing failures (a `git
+stash` was impossible — the tree was already clean and committed — so
+the stronger form was used): the same two tests fail at the tranche
+base `2cc3fd50` in a **clean detached worktree** containing none of
+this tranche's work.
+
+    $ git worktree add --detach <wt> 2cc3fd50 && python -m pytest tests/test_module_fingerprints.py -q
+    2 failed, 18 passed in 27.25s
+
+Bisected to the first bad commit:
+
+    a4c52c5b (rung 5, roots deferred)     20 passed
+    f6d41bff (rung 5 A/B arm A)           2 failed, 18 passed   <- first bad
+    1f20a6bd (rung 5 A/B complete)        2 failed, 18 passed
+
+These are NOT the parallel-load flake the handover warns about
+(`test_v6_nonconjecture_recovery.py`); that test passed. They are the
+same root cause as the two map failures, and the cause is a
+mis-specified test rather than a bad commit — full analysis in
+PARKED.md P1, which this result upgraded from two red instruments to
+four.
+
+This tranche changed **zero** `src/` and `tests/` files, so no failure
+here is attributable to it. Recorded, routed to P1, does not block —
+exactly the disposition the procedure prescribes.
 
 ## Frozen-surface diff (4a2 — the mechanical tripwire)
 
@@ -212,6 +243,19 @@ carried into 7b unchanged.
 
 ## Verdict: **PASS**
 
-7a is complete and delta-clean. One pre-existing defect found and parked
-(P1), not fixed, with its consequence for this tranche's acceptance
-declared before validation rather than discovered during it.
+7a is complete and delta-clean against every instrument: +1 document,
++8 checks, no new map failure, no new test failure, empty frozen-surface
+diff, and zero `src/`/`tests/` contact.
+
+**But the tree it landed in is not clean, and that is the more
+important sentence.** Four instruments are red — 2 map checks and 2 gate
+tests — all four traced to `f6d41bff` (rung 5's A/B arm A), all four
+proven to pre-date this tranche, and all four rooted in one
+mis-specified test rather than in bad evidence. Two of rung 5's
+delivered proof claims are consequently stale. PARKED.md P1 holds the
+bisect, the diagnosis and the suggested fix.
+
+Per the procedure, pre-existing failures are recorded and do not block
+this verdict. They DO block any claim that the rung program finished
+green, and DELIVERY.md says so plainly rather than reporting 7a's own
+cleanliness as if it were the program's.

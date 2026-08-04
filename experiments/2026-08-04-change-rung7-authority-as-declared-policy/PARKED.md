@@ -1,6 +1,91 @@
 # Parked — noticed during rung 7, not done
 
-## P1 — the map has been carrying two FAILING checks since rung 5, and a delivered DELIVERY.md claim is now stale
+## P1 — FOUR instruments have been red since rung 5, and TWO delivered DELIVERY.md claims are stale
+
+**Upgraded 2026-08-04, after the full gate ran.** This entry originally
+recorded two failing map checks. The full gate then found two failing
+TESTS with the same cause, and the cause turns out to be a
+mis-specified test rather than a bad commit. The original analysis is
+kept below the upgrade; nothing in it was wrong, it was incomplete.
+
+### The four red instruments
+
+    docs_verify: 51 documents, 815 checks, 2 failed
+      FAIL SEAM-harness-x-verification.md:253  (pins 45/28/14/3, is 47/30/14/3)
+      FAIL SEAM-manifest-x-schools.md:271      (pins 42 under experiments/, is 44)
+
+    pytest tests/ -q -n 4: 2 failed, 3336 passed, 7 skipped in 663.27s
+      FAILED tests/test_module_fingerprints.py::test_every_committed_root_reads_as_having_no_module_fingerprints
+      FAILED tests/test_module_fingerprints.py::test_the_census_of_committed_roots_is_unchanged
+
+### First bad commit, bisected
+
+    a4c52c5b rung 5: full-tier qualification recorded; run roots deferred   20 passed
+    f6d41bff rung 5 A/B arm A: default backend, completed and replay-valid   2 failed, 18 passed
+    1f20a6bd rung 5 A/B complete: both arms recorded                        2 failed, 18 passed
+
+`f6d41bff` is the first bad commit. Proven pre-existing independently of
+this tranche: the same two tests fail at rung 7's tranche base
+`2cc3fd50` in a clean detached worktree containing none of this
+tranche's work.
+
+### The actual defect: the TEST is wrong, not the roots
+
+`tests/test_module_fingerprints.py::_sweep_committed_roots` asserts
+
+    assert recorded_module_fingerprints(harness) == (), root
+
+for EVERY committed root. Its own docstring states the intended claim:
+
+    "R8: absence is the VALID answer on every root written **before this
+     feature**, not an error and not an empty-because-unreadable."
+
+Those are different claims. The intended one is that the READER
+TOLERATES ABSENCE — an invariant. The implemented one is that NO
+COMMITTED ROOT CARRIES A STAMP — a fact with an expiry date, true only
+until someone commits a run performed after rung 4's writer landed.
+Rung 4 shipped the writer and this test in the same tranche, so the
+first live run committed thereafter was guaranteed to break it. Rung 5's
+A/B arms were that run, and they are correct evidence, correctly
+committed.
+
+So the fix is almost certainly in the test, not in the roots and not in
+the two map checks' numerals: assert that roots written before the
+feature read as absent AND that roots written after read as present,
+rather than that every root reads as absent. Note that
+`_committed_roots()` uses exactly the instrument this tranche's SPEC.md
+M6c used (`git ls-files` + `/log.jsonl` → 47), so the two agree about
+the world and disagree only about what should be asserted of it.
+
+### The two stale claims
+
+`experiments/2026-08-04-change-rung5-dumb-alternative-backend/DELIVERY.md`
+states:
+
+> **Proof:** full gate 3338 passed / 0 failed; `docs_verify` 0 failed,
+> `--audit` 0, `--links` 0, `--coverage` 0; 42-root sweep byte-identical
+
+Both the gate claim and the `docs_verify` claim were TRUE when measured
+at the offline-work commit `7fdff121`, and both went false at
+`f6d41bff` — inside the same tranche, in its post-delivery segments.
+The arithmetic corroborates it exactly: 3338 = 3336 passed + 2 failed,
+the same test population, two of which now fail. Neither claim is
+dishonest; neither says which commit it was measured at, and the
+tranche kept committing evidence after its final measurement.
+
+**The generalizable lesson, which is the part worth keeping:** a
+delivered tranche that continues to commit artifacts after its final
+measurement invalidates its own proof line, and nothing in the workflow
+currently re-measures at that point. `dr-deliver-change` runs before the
+live-evidence commits it enables. This is a workflow gap, not an
+individual mistake, and it is the second time the record has been
+bitten by a measurement whose commit was not stated (ERRATA E3, E5, E8
+are the earlier family).
+
+### Original entry (2026-08-04, before the gate ran)
+
+**Found:** capturing rung 7a's `docs_verify` baseline at tranche base
+`27e088cb`, before this tranche changed anything.
 
 **Found:** 2026-08-04, capturing rung 7a's `docs_verify` baseline at
 tranche base `27e088cb`, before this tranche changed anything.
