@@ -17,14 +17,19 @@ does `schools.active_backend().allocate(...)`; the response ladder and the
 CLI do the same for `roster`/`reseed`. The registry is
 `SchoolPopulationRegistry` in `capture/schools.py`, mirroring
 `verification/registry.py`'s proven shape (named registration, fingerprint
-pinned at registration, re-checked on resolve), and it holds exactly one
+pinned at registration, re-checked on resolve). Rung 3 left it holding one
 entry, `"default"`, whose backend delegates to the same module-level
-functions the callers used before — so the migration is behaviour-preserving
-by construction, not by inspection.
+functions the callers used before — so that migration was behaviour-preserving
+by construction, not by inspection. Rung 5 added a second, `"round-robin"`;
+`"default"` is still what `active_backend()` resolves to unless a scope says
+otherwise.
 
 The point of the indirection is rung 5: "one deliberately dumb alternative,
 swapped in." An alternative population strategy registers under a SECOND
-name, and no caller changes — only which name is resolved. That is why the
+name, and no caller changes — only which name is resolved. **Rung 5 landed
+and the prediction held exactly: `"round-robin"` registered, ten call sites
+untouched, and the only production change was giving `_ACTIVE_BACKEND_ID` a
+scoped source.** That is why the
 name lives in exactly one place (`_ACTIVE_BACKEND_ID`) rather than being
 spelled at each of the ten call sites: rung 5 changes one constant's source,
 not ten files.
@@ -43,15 +48,15 @@ migrated the callers and added the determinism proof.
 | Default backend | `capture/schools.py` | `DefaultSchoolPopulationBackend` | delegates unchanged to the existing module-level `init_schools`/`roster`/`allocate`/`reseed` functions; today's behavior, made resolvable by name rather than removed |
 | Registry mechanics | `capture/schools.py` | `SchoolPopulationRegistry` | `register`/`get`/`resolve`/`ids`/`fingerprint`/`fingerprint_is_pinned`, mirroring `verification/registry.py` field-for-field; a backend's fingerprint is pinned at `register` time and re-checked before every `get`, so a backend that mutates after registration is refused rather than silently trusted |
 | Resolution point | `capture/schools.py` | `SCHOOL_POPULATION` (module singleton) | one pre-populated registry with `"default"` registered — mirrors `workloads/registry.py`'s `WORKLOADS` singleton precedent |
-| The one place the NAME lives | `capture/schools.py` | `_ACTIVE_BACKEND_ID`, `active_backend()` | every caller goes through `active_backend()`; no call site spells a backend name, so rung 5 changes one constant's source rather than ten files |
+| The one place the NAME lives | `capture/schools.py` | `_ACTIVE_BACKEND_ID`, `active_backend()`, `population_backend()` | every caller goes through `active_backend()`; no call site spells a backend name, so rung 5 changes one constant's source rather than ten files |
 | Population at construction | `scheduler/scheduler.py` | `Scheduler.__init__` | `schools.active_backend().init_schools(harness, config)`, guarded by `config.N_SCHOOLS > 0` |
 | Allocation per cycle | `scheduler/scheduler.py` | `Scheduler.step` | `schools.active_backend().allocate(harness, problem, self.schools, config)` — which schools work a problem |
 | Ladder interventions | `capture/ladder.py` | `respond` | four sites: `roster` then `reseed` on the school-convergence branch, and again on the attractor-orbiting branch |
 | Operator commands | `cli/main.py` | the `schools` and `reseed` subcommands | three sites (`roster` twice, `reseed` once) |
 | Report assembly | `report.py` | the schools section | one `roster` site |
-| Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log at construction — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend |
+| Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log once per `run` with cycles requested, after workflow recovery — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend, and NOT at construction, which must append nothing |
 
-`check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION, DefaultSchoolPopulationBackend, active_backend; assert SCHOOL_POPULATION.ids() == ('default',); assert isinstance(SCHOOL_POPULATION.get('default').backend, DefaultSchoolPopulationBackend); assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"`
+`check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION, DefaultSchoolPopulationBackend, RoundRobinSchoolPopulationBackend, active_backend; assert SCHOOL_POPULATION.ids() == ('default', 'round-robin'); assert isinstance(SCHOOL_POPULATION.get('default').backend, DefaultSchoolPopulationBackend); assert isinstance(SCHOOL_POPULATION.get('round-robin').backend, RoundRobinSchoolPopulationBackend); assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"`
 
 Each check below asserts BOTH that the migrated form is present the exact
 number of times expected AND that no bare call survives, so reverting any
@@ -77,27 +82,50 @@ would add `Owns:` overlap without adding navigational truth.
 
 ## What is deliberately absent
 
-**No second backend is registered.** Rung 3's own words: "the current
-behavior as the only, default entry." A second, deliberately-dumb backend
-(round-robin allocation or similar) is rung 5's job, not this one. Until it
-exists, every resolution returns the same backend and the indirection is
-provably behaviour-free — which is exactly what makes it safe to have landed
-across the live scheduler.
+**A second backend IS now registered — rung 5 landed it.** Rung 3 held the
+registry at "the current behavior as the only, default entry"; rung 5
+(`experiments/2026-08-04-change-rung5-dumb-alternative-backend/`) added
+`RoundRobinSchoolPopulationBackend` under the name `"round-robin"`. It
+overrides `allocate` alone and delegates the other four operations to the
+same module functions the default delegates to, so any behavioural
+difference is attributable to allocation. The registry now holds exactly
+two entries, and `register` still refuses to displace either name.
 
-`check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION; assert len(SCHOOL_POPULATION.ids()) == 1"`
+`check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION; assert SCHOOL_POPULATION.ids() == ('default', 'round-robin'), SCHOOL_POPULATION.ids()"`
 
-**No `Config` knob selects the backend, deliberately.** The obvious design —
-a `Config` field naming the active backend — was rejected on evidence, not
-taste: rung 2 tranche 2 established that ANY new top-level `Config` field
-enters `source_config_hash`/`engine_config_json` and breaks pinned
-canonical-hash goldens across several schema versions unless scrubbed inside
+The alternative is deliberately dumb — it discards the fan-out classes, the
+ownership-by-provenance lookup and the cross-examination floor — but it is
+NOT allowed to be non-deterministic. It rotates on the problem id, never on
+a call counter: `allocate` is documented "Deterministic function of (log,
+config)", and a counter-driven rotation would allocate differently on a
+reopened run than on the session that wrote it, which `verify_root` reports
+as a replay divergence.
+
+`check: python -W ignore -c "import tempfile,pathlib; from deepreason.capture import schools; from deepreason.config import Config; from deepreason.harness import Harness; from deepreason.ontology import Problem, ProblemProvenance; d=pathlib.Path(tempfile.mkdtemp())/'r'; h=Harness(d); c=Config(N_SCHOOLS=4); r=schools.init_schools(h,c); b=schools.SCHOOL_POPULATION.get('round-robin').backend; p=Problem(id='pi-x',description='x',criteria=[],provenance=ProblemProvenance.model_validate({'trigger':'seed','from':[]})); first=b.allocate(h,p,r,c); assert len(first)==1, first; assert all(b.allocate(h,p,r,c)==first for _ in range(4)); assert schools.RoundRobinSchoolPopulationBackend().allocate(h,p,r,c)==first; assert schools.SCHOOL_POPULATION.get('default').backend.allocate(h,p,r,c)==sorted(r)"`
+
+**No `Config` knob selects the backend, and rung 5 did NOT have to pay for
+one.** The obvious design — a `Config` field naming the active backend —
+was rejected on evidence, not taste: rung 2 tranche 2 established that ANY
+new top-level `Config` field enters
+`source_config_hash`/`engine_config_json` and breaks pinned canonical-hash
+goldens across several schema versions unless scrubbed inside
 `run_manifest.py::_versioned_source_config_data`, which is
-`DR-INV-frozen-surfaces` surface 4 and cost that tranche an explicit operator
-approval gate. Rung 3 asks only for "the only, default entry"; rung 5's words
-("a run configured with the alternative") are the ones that require
-configurability. So the name sits in `_ACTIVE_BACKEND_ID`, and rung 5 pays
-the frozen-surface cost then — with the operator's approval — if it decides a
-`Config` field is the right source.
+`DR-INV-frozen-surfaces` surface 4 and cost that tranche an explicit
+operator approval gate.
+
+This document previously predicted that rung 5 would pay that cost "with
+the operator's approval" if it decided a `Config` field was the right
+source. **It did not, and the prediction is corrected here rather than left
+standing.** Selection is `schools.population_backend(name)`, a scoped
+override of `_ACTIVE_BACKEND_ID` that resolves the name BEFORE moving the
+selection and restores the previous value on the way out, including when
+the body raises. Zero frozen surfaces, zero manifest fields, zero
+qualification-digest movement. What a run used stays recoverable from the
+record anyway, because rung 4's scheduler stamp writes the resolved
+backend's fingerprint into the log — so configurability did not have to buy
+observability.
+
+`check: python -c "import pathlib; s=pathlib.Path('src/deepreason/capture/schools.py').read_text(); assert 'def population_backend(' in s; assert 'deepreason.config' not in s; assert 'import os' not in s" && python -W ignore -c "from deepreason.capture import schools; import pytest; assert schools.active_backend().fingerprint()['backend']=='default'; ctx=schools.population_backend('round-robin'); ctx.__enter__(); assert schools.active_backend().fingerprint()['backend']=='round-robin'; ctx.__exit__(None,None,None); assert schools.active_backend().fingerprint()['backend']=='default'; g={'s':schools}; exec('def bad():\\n try:\\n  with s.population_backend(chr(122)*9): pass\\n except s.UnknownSchoolPopulationBackend: return True\\n return False',g); assert g['bad']()" && python -m pytest tests/test_rung5_alternative_backend.py -q`
 
 `check: python -c "import pathlib; s=pathlib.Path('src/deepreason/capture/schools.py').read_text(); assert '_ACTIVE_BACKEND_ID' in s; assert 'deepreason.config' not in s"`
 

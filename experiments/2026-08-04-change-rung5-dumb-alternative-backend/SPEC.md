@@ -78,6 +78,31 @@ design for any non-default backend. R6's readable meaning is therefore:
 proves that reading and says so, rather than quietly proving the easier
 one.
 
+## M6 — a predicted-too-late fixture update, recorded (added at step 10)
+
+SPEC.md did not forecast which existing tests the second registration would
+move. The full gate found exactly one:
+`tests/test_school_population_registry.py::
+test_module_singleton_holds_exactly_one_default_backend`, a rung 3 test
+asserting `SCHOOL_POPULATION.ids() == ("default",)`.
+
+**This is drift, not a defect, and the distinction is checkable.** The test
+pinned the state of the world rung 3 left behind — the seam document's own
+"What is deliberately absent" said so in the same words: "the current
+behavior as the only, default entry … A second, deliberately-dumb backend
+… is rung 5's job, not this one." A rung whose entire charter is to add the
+second entry cannot leave that assertion standing.
+
+Updated to the claim that SURVIVES rather than deleted: `"default"` is
+still registered, still the default implementation, and still what an
+unscoped `active_backend()` resolves to. That is strictly more than the old
+assertion checked — it now also pins that an alternative does not DISPLACE
+the default, which is the property R6 actually cares about.
+
+Rung 4 recorded the same species of miss (its D9 predicted count
+assertions and missed an allow-list). Two tranches running, the
+fixture-drift forecast has been the weakest part of both specs.
+
 ## Items
 
 S1 (R1, R11): route through `dr-change-orchestrator`, phase by phase.

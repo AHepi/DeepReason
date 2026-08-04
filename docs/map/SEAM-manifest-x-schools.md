@@ -174,14 +174,17 @@ submodule) — not the manifest, not the firewall, not `Config`'s type. The
 non-`json`/`ontology` imports (added in rung 3's school-population registry,
 `DR-SEAM-schools-x-scheduler`) are stdlib utilities and a canonical-hashing
 helper already permitted elsewhere in the codebase; none of them can reach a
-route. `roster`, `allocate`, `reseed` and `crossover_exemplars` therefore
+route. The set is pinned EXACTLY rather than by exclusion, so a
+new import is a deliberate decision that updates this list — `contextlib` was
+added by rung 5 for `population_backend`, and updating the pin here was the
+moment to re-ask whether it could reach a route. It cannot. `roster`, `allocate`, `reseed` and `crossover_exemplars` therefore
 cannot consult a binding even accidentally, and allocation cannot become
 route-aware without a new import that names the manifest, the firewall, or
 `Config` itself. The two sides share one string and its spelling;
 `school-01` and `School-0` are rejected by the binding pattern, so an id
 that the roster could not have minted cannot enter the manifest either.
 
-`check: python -c "import ast; t=ast.parse(open('src/deepreason/capture/schools.py').read()); mods={n.module for n in ast.walk(t) if isinstance(n,ast.ImportFrom)}|{a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names}; assert mods=={'json','copy','typing','collections.abc','dataclasses','deepreason.canonical','deepreason.ontology','deepreason.ontology.frozen'}, mods; assert not mods & {'deepreason.run_manifest','deepreason.llm.firewall','deepreason.config'}; import pytest; from deepreason.run_manifest import SchoolRoleBindingV1 as B; mk=lambda s: B(school_id=s,role='argumentative_critic',seat=0,endpoint_id='e'); assert [mk('school-%d'%i).school_id for i in range(4)]==['school-0','school-1','school-2','school-3']; assert all(pytest.raises(Exception,mk,s) for s in ('school-01','School-0','skeptic','school-'))" && grep -q 'school_id = f"school-{i}"' src/deepreason/capture/schools.py && sh -c '! grep -q "deepreason\.capture" src/deepreason/run_manifest.py'`
+`check: python -c "import ast; t=ast.parse(open('src/deepreason/capture/schools.py').read()); mods={n.module for n in ast.walk(t) if isinstance(n,ast.ImportFrom)}|{a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names}; assert mods=={'json','copy','typing','contextlib','collections.abc','dataclasses','deepreason.canonical','deepreason.ontology','deepreason.ontology.frozen'}, mods; assert not mods & {'deepreason.run_manifest','deepreason.llm.firewall','deepreason.config'}; import pytest; from deepreason.run_manifest import SchoolRoleBindingV1 as B; mk=lambda s: B(school_id=s,role='argumentative_critic',seat=0,endpoint_id='e'); assert [mk('school-%d'%i).school_id for i in range(4)]==['school-0','school-1','school-2','school-3']; assert all(pytest.raises(Exception,mk,s) for s in ('school-01','School-0','skeptic','school-'))" && grep -q 'school_id = f"school-{i}"' src/deepreason/capture/schools.py && sh -c '! grep -q "deepreason\.capture" src/deepreason/run_manifest.py'`
 
 **Only `N_SCHOOLS` crosses from `Config`.** `engine_config_json` is the whole
 engine config, so `XEXAM_SHARE` and `STANCE_DECAY` are physically present in the

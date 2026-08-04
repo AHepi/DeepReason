@@ -10,13 +10,14 @@ roster is a deterministic function of the log. Schools never touch att/dep,
 adjudication, or statuses.
 """
 
+from contextlib import contextmanager
 import copy
 import json
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any, Protocol
 
-from deepreason.canonical import canonical_json
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Provenance, Rule, SpawnTrigger, Status
 from deepreason.ontology.frozen import FrozenDict
 
@@ -320,8 +321,49 @@ class DefaultSchoolPopulationBackend:
         return reseed(harness, school_id, current, reason, crossover_from)
 
 
+class RoundRobinSchoolPopulationBackend:
+    """A deliberately dumb alternative: allocation by rotation.
+
+    It discards every rule ``allocate`` encodes — the fan-out classes, the
+    ownership-by-provenance lookup, and the cross-examination floor — and
+    hands each problem to exactly one school chosen by rotation. The point
+    is not that this is good; it is that the socket admits a strategy that
+    disagrees with the default, so "pluggable" is a property of the code
+    rather than a claim about it.
+
+    The rotation key is the problem id, NOT a call counter: allocation must
+    stay a function of (log, config), or a reopened run would allocate
+    differently from the session that wrote it and replay would diverge.
+    """
+
+    def fingerprint(self) -> dict[str, Any]:
+        return {"backend": "round-robin", "stance_count": len(_STANCES)}
+
+    def init_schools(self, harness, config) -> dict[str, dict]:
+        return init_schools(harness, config)
+
+    def roster(self, harness) -> dict[str, dict]:
+        return roster(harness)
+
+    def allocate(self, harness, problem, schools: dict[str, dict], config) -> list[str]:
+        if not schools:
+            return []
+        everyone = sorted(schools)
+        digest = sha256_hex(canonical_json(problem.id))
+        return [everyone[int(digest, 16) % len(everyone)]]
+
+    def reseed(
+        self, harness, school_id: str, current: dict, reason: str,
+        crossover_from: str | None = None,
+    ) -> dict:
+        return reseed(harness, school_id, current, reason, crossover_from)
+
+
 SCHOOL_POPULATION = SchoolPopulationRegistry()
 SCHOOL_POPULATION.register(DefaultSchoolPopulationBackend(), backend_id="default")
+SCHOOL_POPULATION.register(
+    RoundRobinSchoolPopulationBackend(), backend_id="round-robin"
+)
 
 # The single place the active backend's NAME lives, so no call site spells it.
 # A run-selected name (rung 5's "a run configured with the alternative") would
@@ -333,3 +375,29 @@ def active_backend() -> SchoolPopulationBackend:
     """The registered population backend every caller resolves through."""
 
     return SCHOOL_POPULATION.resolve(_ACTIVE_BACKEND_ID).backend
+
+
+@contextmanager
+def population_backend(backend_id: str):
+    """Run a scope with a chosen registered backend active.
+
+    Selection deliberately lives here rather than on ``Config``: a new
+    top-level ``Config`` field enters ``source_config_hash`` and the
+    qualification subject digest unless ``run_manifest.py`` is told to scrub
+    it per schema version, and that file is a frozen surface. Which backend
+    a run used stays recoverable from the record regardless — the scheduler
+    stamps the resolved backend's fingerprint into the log.
+
+    The name is resolved BEFORE the selection moves, so an unknown name
+    leaves the process on its previous backend rather than on a broken one.
+    """
+
+    global _ACTIVE_BACKEND_ID
+
+    SCHOOL_POPULATION.resolve(backend_id)
+    previous = _ACTIVE_BACKEND_ID
+    _ACTIVE_BACKEND_ID = backend_id
+    try:
+        yield SCHOOL_POPULATION.resolve(backend_id).backend
+    finally:
+        _ACTIVE_BACKEND_ID = previous
