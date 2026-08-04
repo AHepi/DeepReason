@@ -1,0 +1,5 @@
+ion cases: 352/360qualification cases: 353/360qualification cases: 354/360qualification cases: 355/360qualification cases: 356/360qualification cases: 357/360qualification cases: 358/360qualification cases: 359/360qualification cases: 360/360
+DOCTOR_REPORT_PAIR_UNQUALIFIED at /pairs/0/qualified: production-contract doctor report contains an unqualified pair
+Full-battery qualification failed; running the shallow-fitness battery (at most 18 provider calls).
+QUALIFICATION_SHALLOW_EXECUTION_FAILED: the shallow-fitness battery did not complete; no qualification tier was recorded
+The shallow-fitness battery did not complete, so no qualification tier was recorded. Retry: deepreason qualify

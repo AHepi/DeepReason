@@ -167,3 +167,73 @@ offline work and does not depend on the A/B.
 account, or confirmation that the subscription/credits are active. The
 `env` file is in place, so a working key is a one-line replacement and the
 ladder can launch immediately.
+
+
+---
+
+## Post-delivery 2: the live A/B was ATTEMPTED, and the typed record says why it could not run
+
+The operator overrode the decision not to launch ("Nope keep going. Cost
+doesn't matter"). It was launched. The result is now typed evidence rather
+than an argument from a curl probe, which is the right standard for this
+codebase — and getting it required spending the calls.
+
+**Sequence, including a wrong turn of mine, recorded because the record is
+the point:**
+
+1. `deepreason setup` succeeded (`setup_rc=0`).
+2. The first `qualify` was refused by a TYPED precondition, not by the
+   provider: `REASONING_MUST_BE_DISABLED: provider 'ollama' realizes the
+   reasoning knob and this profile has reasoning=None … Re-run setup with
+   --reasoning none.` Re-ran setup with `--reasoning none`.
+3. `qualify` then ran the full battery — 360 case slots, ~1140 expected
+   provider calls — and the progress counter advanced 1/300 → 360/360.
+   **I read that progress as proof the credential worked and said so. That
+   was wrong: the counter counts attempts, not successes.**
+4. The doctor report is the actual verdict:
+
+       pairs           : 15
+       cases total     : 300
+       failure codes   : {'ENDPOINT_ERROR': 300}
+       any qualified   : False
+       first_pass_valid_count: 0
+       eventual_valid_count : 0
+       repair_count         : 0
+       semantic_admission_count: 0
+
+   `experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/
+   qualification-cache/a63abe8e….unqualified-doctor.json`, committed.
+
+5. Full battery failed → the shallow-fitness battery ran → also failed:
+   `QUALIFICATION_SHALLOW_EXECUTION_FAILED: the shallow-fitness battery did
+   not complete; no qualification tier was recorded`.
+
+**Conclusion: every provider call errored at the endpoint.** 300 of 300
+cases across all 15 contract pairs, zero valid first passes, zero repairs,
+zero semantic admissions. This agrees with the pre-launch probe (401 on
+`/v1/chat/completions` for three different models and on native
+`/api/chat`, against a 200 on `/v1/models`): the key reads the catalogue
+and cannot infer.
+
+The A/B therefore did not produce two arms to compare. **No run root was
+created for either arm**, so R7's comparison remains unmade — now on typed
+evidence, which is the outcome the operator's instruction bought.
+
+**The instruments are built and committed**, so a working key needs no
+further design work:
+- `ab_run.sh` — both arms, same question, same token budget, then the audit.
+- `reason_with_backend.py` — the round-robin driver. The CLI has no backend
+  flag by design (a `Config` field would enter the qualification subject
+  digest, SPEC.md M3), so the driver wraps the in-process CLI entry inside
+  `schools.population_backend("round-robin")`.
+- `ab_audit.py` — compares TYPED outcomes only: run state, stop reason,
+  `verify_root` violations, the recorded module fingerprint, and counts of
+  events, LLM calls, artifacts, problems and attack edges.
+
+The A/B arms are designed to share qualification by copying the qualified
+home rather than re-qualifying, so the only difference between them is the
+active backend — re-qualifying would introduce a second independently
+sampled battery as a confound.
+
+**Rung 5's acceptance line is unaffected** and was met offline: full gate,
+sweep byte-identical, the alternative's offline run root replay-valid.
