@@ -56,7 +56,11 @@ invalidates the checklist's audit trail.
    silence about a stale document is how the map dies.
    Confirm too that behaviour the change ADDED is covered by at least
    one new map check. A change with no new check has documented nothing
-   falsifiable.
+   falsifiable. And if the change added a typed-record OBSERVABLE (a
+   field, record type, or finding), confirm a sweep probe for it exists
+   or is specced as its own follow-up commit — "sweep byte-identical"
+   is trivially true for data the sweep never reads, so an observable
+   with no probe and no written justification is a FAIL.
 5. Requirement sweep: for every R in REQUEST.md, one line — which
    acceptance output demonstrates it, or why it is legitimately
    deferred (operator's words required). An R with neither is a FAIL:
@@ -81,6 +85,7 @@ invalidates the checklist's audit trail.
     docs_verify --coverage: <N findings, M seams without a Sweep header> : PASS|FAIL
     docs_verify --stale: <each entry, updated or dismissed with reason>
     new checks added by this change: <ids/files, or "none - see why">
+    record observables added vs sweep probes: <none | observable -> probe/justification>
     ## Requirement sweep
     R1: demonstrated by S1 output | deferred (operator: "<quote>")
     ...

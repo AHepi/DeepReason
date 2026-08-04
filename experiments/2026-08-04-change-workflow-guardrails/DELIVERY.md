@@ -40,3 +40,20 @@ direction.
 ## Parked
 
 Nothing new.
+
+## Amendment 1 (2026-08-04, operator: "Fix it")
+
+Follow-up to the operator's question "do the workflow skills have
+instructions on how to tell when sweep and verify need new tests
+added?" Answer was: docs_verify yes (three skills carry the trigger),
+root_sweep no. Fixed, addition-triggers only (removal explicitly
+deferred by the operator): `dr-spec-change`'s reader-before-writer
+paragraph now requires a sweep probe to be PROPOSED for any new
+typed-record observable, in its own separate commit (a sweep change
+resets the byte-identity baseline — own commit, own before/after
+capture on an unchanged tree, assert-before-read probe rule);
+`dr-validate-change` step 4 now fails an observable with no probe and
+no written justification, and the template gains the "record
+observables added vs sweep probes" line. Timely: rung 4 (module
+fingerprints — exactly a new typed-record observable) is at capture
+phase; these rules reach its branch before its spec phase.

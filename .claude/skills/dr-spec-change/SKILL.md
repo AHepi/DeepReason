@@ -53,7 +53,15 @@ interpretation happens, and it happens in writing.
    READER lands before the writer emits, so every existing committed
    root stays valid with the new data absent (the rung-4 guardrail
    generalized; X8 is the precedent for keeping new fields out of frozen
-   digests entirely).
+   digests entirely). And a new typed-record OBSERVABLE (field, record
+   type, finding) needs a sweep probe proposed for it in the spec: a
+   sweep that never looks at the new data reports "byte-identical"
+   trivially while proving nothing about it. The probe change is its own
+   SEPARATE commit — extending `tools/root_sweep.py` resets the
+   byte-identity baseline, so it never rides the same commit as the
+   `src/` change it would judge, gets its own before/after capture on an
+   unchanged tree, and follows the tool's probe rule (assert the
+   attribute exists before reading it).
 4. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
    its own delivery) rather than one sprawling one.
