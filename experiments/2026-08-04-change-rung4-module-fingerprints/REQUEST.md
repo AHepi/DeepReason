@@ -260,5 +260,44 @@ tranche artifact into a standing environment fact. It binds this
 tranche's plan: any step that touches `src/` owes a FULL `docs_verify`
 before its commit, not a `--fast` one.
 
+**Amendment 2 (2026-08-04, operator message, verbatim).** Sent in
+response to the capture above, before any spec work began:
+
+> Good capture. Proceed to dr-spec-change. On Q5: verify against the real
+> write path; prefer any design with zero frozen-surface contact. If every
+> workable design needs the surface-4 scrub line, DESIGN-AND-STOP per the
+> rung and present the options — do not assume rung 2's approval carries
+> over to a new touch. C7's integrity-default trap: any new typed channel
+> must land its report.py entry in the same commit, or not exist yet.
+
+New requirements, quoting the operator's own words:
+
+R12 (process): "Proceed to dr-spec-change."
+
+R13 (process): "On Q5: verify against the real write path" — the
+buildability of a Config-free design is to be VERIFIED against the
+actual code, not reasoned about abstractly. This is the operator
+converting Q5's own caveat into an obligation.
+
+R14 (design constraint): "prefer any design with zero frozen-surface
+contact." A preference ordering over designs, not a prohibition:
+zero-contact designs win where one exists.
+
+R15 (process, a stop condition): "If every workable design needs the
+surface-4 scrub line, DESIGN-AND-STOP per the rung and present the
+options — do not assume rung 2's approval carries over to a new touch."
+Two obligations in one sentence: (a) DESIGN-AND-STOP is mandatory, not
+optional, if no zero-contact design is workable; (b) rung 2 tranche 2's
+operator approval for touching `run_manifest.py` is explicitly NOT
+transitive to this tranche. Q1 may therefore NOT be resolved by
+appealing to that precedent.
+
+R16 (process/behavior): "C7's integrity-default trap: any new typed
+channel must land its report.py entry in the same commit, or not exist
+yet." This resolves the ordering half of C7 by operator instruction: a
+partial channel is forbidden outright, not merely warned against. Note
+it also frames the alternative plainly — "or not exist yet" sanctions
+NOT building a channel at all.
+
 (append-only; later operator messages land here as R<n+1>... or
 "R2a supersedes R2", each with its verbatim quote)
