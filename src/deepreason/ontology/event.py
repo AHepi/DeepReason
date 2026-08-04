@@ -448,6 +448,25 @@ class Event(FrozenRecord):
             raise ValueError(
                 "Capability rule and typed capability payload must appear together"
             )
+        if self.module_fingerprints is not None:
+            # Identity rides the shared Measure vehicle rather than a rule of
+            # its own, so the fence is one-directional: a Measure need not
+            # carry fingerprints, but fingerprints may ride nothing else.
+            if self.rule != Rule.MEASURE:
+                raise ValueError(
+                    "module fingerprints may ride only a Measure event"
+                )
+            if list(self.inputs) != [
+                self.module_fingerprints.schema_,
+                self.module_fingerprints.digest,
+            ]:
+                raise ValueError(
+                    "module fingerprint inputs must name their schema and digest"
+                )
+            if self.outputs or self.llm is not None:
+                raise ValueError(
+                    "module fingerprints record identity, not work"
+                )
         if self.scratch is not None:
             if list(self.inputs) != list(self.scratch.inputs):
                 raise ValueError("scratch payload inputs must match Event.inputs")

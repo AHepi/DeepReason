@@ -406,6 +406,59 @@ def test_building_a_scheduler_and_running_zero_cycles_append_nothing(tmp_path):
     assert len(recorded_module_fingerprints(harness)) == 1
 
 
+def _forgeable_event(**overrides):
+    from deepreason.ontology.event import Event, Rule
+
+    payload = _payload()
+    fields = dict(
+        seq=0,
+        ts="2026-08-04T00:00:00+00:00",
+        rule=Rule.MEASURE,
+        inputs=[payload.schema_, payload.digest],
+        outputs=[],
+        module_fingerprints=payload,
+    )
+    fields.update(overrides)
+    return Event(**fields)
+
+
+def test_the_appender_shape_is_the_only_accepted_one():
+    """Regression (rung 4, VALIDATION.md FAIL): the payload is fenced by the
+    RECORD, not merely by the appender's good behaviour.
+
+    ``Event._process_payload_contract`` binds every other typed payload to
+    its Rule and constrains its inputs. Without a clause for this one, an
+    event pairing the fingerprint payload with ``Rule.CONJ`` and empty
+    inputs was accepted, and the reader reported it as a genuine stamp —
+    invisible to the gate, the map checks and the sweep alike, because no
+    test built such an event.
+    """
+
+    from deepreason.ontology.event import Rule
+
+    _forgeable_event()  # the appender's own shape still validates
+
+    with pytest.raises(ValueError, match="only a Measure event"):
+        _forgeable_event(rule=Rule.CONJ)
+
+    with pytest.raises(ValueError, match="schema and digest"):
+        _forgeable_event(inputs=[])
+
+    with pytest.raises(ValueError, match="identity, not work"):
+        _forgeable_event(outputs=["x"])
+
+
+def test_a_measure_event_without_fingerprints_is_still_ordinary(tmp_path):
+    """The fence is ONE-directional. Fingerprints may ride only a Measure,
+    but a Measure carries no obligation to hold fingerprints — the two
+    existing Measure appenders and every heartbeat depend on that.
+    """
+
+    harness = Harness(tmp_path / "run")
+    harness.record_measure(inputs=["cycle", "0", "pi-seed"])
+    assert recorded_module_fingerprints(harness) == ()
+
+
 def test_an_empty_module_list_is_refused():
     """A stamp naming no modules answers the rung's question with silence
     while still looking like a recorded answer."""
