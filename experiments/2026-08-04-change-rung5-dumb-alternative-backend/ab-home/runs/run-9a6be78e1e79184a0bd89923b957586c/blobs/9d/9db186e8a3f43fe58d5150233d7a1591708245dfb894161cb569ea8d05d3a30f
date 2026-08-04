@@ -1,0 +1,11 @@
+```json
+{
+  "repair.patch.v1": {
+    "patch": {
+      "op": "replace",
+      "path": "/candidates/0/optional_refs/2",
+      "value": "SRC_003"
+    }
+  }
+}
+```

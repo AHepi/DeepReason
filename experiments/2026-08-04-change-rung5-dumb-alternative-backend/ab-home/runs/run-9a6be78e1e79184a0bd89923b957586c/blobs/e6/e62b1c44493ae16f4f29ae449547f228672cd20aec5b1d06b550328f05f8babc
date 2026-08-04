@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "Ownership-based allocation systematically suppresses cross-cutting explanations by denying rival lineages the chance to translate problems into their own vocabularies, thereby preventing the 'reframing' that often reveals a simpler or more unifying structural pattern.",
+    "mechanism": "An owning lineage L_owner processes problem p using its own established primitives. Because rival lineage L_rival is structurally barred from attempting p, it never translates p's constraints into L_rival's vocabulary. Translation is the exact step where a cross-cutting explanation would emerge: L_rival would see that p's surface features map to a known structural pattern in L_rival's domain that L_owner lacks. By construction, L_owner's vocabulary will confirm its own primitives are sufficient (or fail), but will never detect that L_rival's grammar subsumes the problem more elegantly. The suppression is thus not a side-effect but a direct causal consequence of partitioning the problem space by provenance.",
+    "counterconditions": [
+      "If L_owner's grammar is already a 'universal grammar' that can derive all rival primitives as theorems, then L_rival's translation would add no new information and suppression is indistinguishable from efficiency.",
+      "If problems in the run are intrinsically non-cross-cutting (each belongs to one and only one structural family), then L_rival would fail to find a simpler pattern anyway and no suppression occurs.",
+      "If L_owner's own search includes an exhaustive meta-step that explicitly tests reframings of p into all known rival grammars, then the ownership barrier is harmless."
+    ],
+    "typicality": 0.72,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

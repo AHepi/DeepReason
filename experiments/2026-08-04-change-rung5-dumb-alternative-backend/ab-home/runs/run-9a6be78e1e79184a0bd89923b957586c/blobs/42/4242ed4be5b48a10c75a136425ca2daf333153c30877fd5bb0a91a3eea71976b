@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-d88a06210fd0758d035f9b86ffac8ab4) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Rival research programmes inside one reasoning system are usually allocated to problems by ownership: whichever lineage produced the parent artifact works its successors. Argue for or against the claim that ownership-based allocation systematically suppresses the discovery of cross-cutting explanations, and identify what evidence within a single run would distinguish suppression from mere efficiency. Where a claim can be tested by counting, say exactly what to count.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@787bbc8f2a15dedbbbb2d5d0: program:reasoning_observation_pending
+- reason-counter@e50688b343b22af7f0a31acc: program:reasoning_observation_pending
+- reason-counter@762ccf1301c41ec63bc50d30: program:reasoning_observation_pending
+- reason-counter@216a7f99fc015fc47f6193fe: program:reasoning_observation_pending
+- reason-counter@e1fe4d0348ddfe7281788619: program:reasoning_observation_pending
+- reason-counter@55d7d97b307ee1b31f5dcaee: program:reasoning_observation_pending
+- reason-counter@82a5b8f7c0232305618ee5fb: program:reasoning_observation_pending
+- reason-counter@beece2be0b6807e6e4e6c7b0: program:reasoning_observation_pending
+- reason-counter@896d6a8f5fbf474b3dc82847: program:reasoning_observation_pending
+- reason-counter@e324c53b14de1ec2626a2d77: program:reasoning_observation_pending
+- reason-counter@db926b805475df51e5a46f9e: program:reasoning_observation_pending
+- reason-counter@7a370d83584a5033daf0274c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Ownership-based allocation suppresses cross-cutting explanations by disabling the critical mechanism of re-framing: the ability to see a problem simultaneously through multiple theoretical lenses. By binding a problem to a single owning lineage, the system loses the epistemic diversity needed to triangulate explanations that span domains.","counterconditions":[{"case":"A single lineage's vocabulary is rich enough to express all possible structural forms, making multi-activation unnecessary.","eval":"observation"},{"case":"The system has a post-processing step that compares all lineage solutions and synthesizes structural mappings, effectively simulating simultaneous multi-activation.","eval":"observation"},{"case":"Structural analogies are not the primary source of cross-cutting explanations; instead, they arise from within-domain deep processing.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A cross-cutting explanation is often a structural analogy\u2014identifying that a problem in Domain A has the same formal structure as a solved problem in Domain B. This recognition requires simultaneous activation of both domains' frameworks. Ownership 
+commitments: reasoning-envelope-wf, reason-counter@787bbc8f2a15dedbbbb2d5d0, reason-counter@e50688b343b22af7f0a31acc, reason-counter@762ccf1301c41ec63bc50d30
+
+TARGET SRC_002
+{"analogy":null,"claim":"Suppression versus efficiency can be distinguished by examining the failure modes of the owning lineage. If it is efficiency, failures will be 'depth-limit' (local optima). If it is suppression, failures will be 'vocab-limit' (un-expressible). In a single run, suppression is evidenced by problems where the owning lineage generates no candidate at all, or only tautological ones, while a rival lineage\u2014given the same problem\u2014immediately produces a non-trivial candidate.","counterconditions":[{"case":"Vocab-limit failures are indistinguishable from extreme depth-limit failures where all non-tautological candidates are pruned.","eval":"observation"},{"case":"Rival lineages always produce non-trivial candidates for any problem, making the test trivially true and non-discriminating.","eval":"observation"},{"case":"The system never allows rival lineages to attempt the same problem, making the counterfactual unobservable in a single run.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Efficiency implies a rational trade-off: the chosen path (within-lineage) is the most cost-effective, and failure occurs when the problem is too hard for any lin
+commitments: reasoning-envelope-wf, reason-counter@216a7f99fc015fc47f6193fe, reason-counter@e1fe4d0348ddfe7281788619, reason-counter@55d7d97b307ee1b31f5dcaee
+
+TARGET SRC_003
+{"analogy":null,"claim":"Ownership-based allocation does not inherently suppress cross-cutting explanations; it acts as a heuristic local search that conserves compute, but it introduces a verifiable suppression risk if the owning lineage's vocabulary lacks the primitives required to express the shortest or most accurate solution.","counterconditions":[{"case":"The owning lineage's universal grammar is Turing-complete and contains all rival primitives as derivable theorems, making cross-lineage reference unnecessary in principle.","eval":"observation"},{"case":"Rival lineages fail to produce valid or stronger solutions to the assigned problems, indicating that ownership allocation is globally optimal rather than suppressive.","eval":"observation"},{"case":"Cross-cutting explanations are systematically generated by a separate meta-level compilation or abstraction process, rendering object-level lineage ownership irrelevant to their discovery.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Allocation by lineage descent restricts the search space to the local basin of attraction of the parent artifact. If the problem requires a primitive outside the owning lineage's univ
+commitments: reasoning-envelope-wf, reason-counter@82a5b8f7c0232305618ee5fb, reason-counter@beece2be0b6807e6e4e6c7b0, reason-counter@896d6a8f5fbf474b3dc82847
+
+TARGET SRC_004
+{"analogy":null,"claim":"To test suppression by counting: count the lineage provenance of all accepted explanatory artifacts (A) and the lineage provenance of all *referenced* primitives in those artifacts (P). Calculate the cross-lineage reference ratio C = P_cross / P_total. If C is consistently zero or near-zero, and the system exhibits a high rate of within-lineage saturation (stagnation) signals, then suppression is occurring. If C is non-zero and proportional to the diversity of active lineages, it is efficiency.","counterconditions":[{"case":"Cross-lineage reference is not the only form of cross-cutting explanation; structural analogies may not require explicit primitive references.","eval":"observation"},{"case":"Stagnation signals are not well-defined or are not recorded in the run's artifacts.","eval":"observation"},{"case":"The diversity of active lineages is low (e.g., only one), making C trivially zero.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Cross-cutting explanations require the transfer of explanatory primitives across lineage boundaries. If ownership allocation suppresses these explanations, the flow of primitives across boundaries will be chok
+commitments: reasoning-envelope-wf, reason-counter@e324c53b14de1ec2626a2d77, reason-counter@db926b805475df51e5a46f9e, reason-counter@7a370d83584a5033daf0274c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

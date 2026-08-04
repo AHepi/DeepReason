@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation does not suppress discovery but acts as a diversity-preserving heuristic. By partitioning the search space and restricting lineage interaction, it prevents all lineages from prematurely collapsing onto the same local optimum, thus maintaining the very diversity required for cross-cutting explanations to eventually form through recombination.",
+    "mechanism": "In a combinatorial search space, unrestricted inter-lineage communication (e.g., allowing any lineage to solve any problem) causes premature convergence: lineages rapidly synchronize on the most accessible local optimum, discarding outlier primitives that might later prove necessary for cross-cutting explanations. Ownership-based allocation forces lineages to explore disjoint regions of the primitive space. The 'suppression' of a rival lineage solving a problem is actually a temporary quarantine, preserving epistemic diversity.",
+    "counterconditions": [
+      "If variance in primitive vocabularies across lineages strictly decreases over time despite ownership isolation, then the diversity-preservation mechanism is failing.",
+      "If recombination events between isolated lineages are systematically rejected by the system's allocation policy, the heuristic degenerates into permanent suppression.",
+      "If a single lineage's vocabulary asymptotically covers all valid primitives without external input, ownership is redundant rather than diversity-preserving."
+    ],
+    "typicality": 0.18,
+    "optional_refs": ["SRC_001", "SRC_003"],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_003"]
+    }
+  }
+}
+```

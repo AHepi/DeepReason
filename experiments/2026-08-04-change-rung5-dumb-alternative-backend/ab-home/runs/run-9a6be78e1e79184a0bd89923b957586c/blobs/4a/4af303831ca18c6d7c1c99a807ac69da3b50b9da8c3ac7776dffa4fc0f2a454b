@@ -1,0 +1,25 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation systematically suppresses cross-cutting explanations because it deprives the system of the forced confrontation between rival primitive vocabularies, which is the specific causal mechanism required to discover that a problem's underlying structure is isomorphic to a non-native formulation.",
+    "mechanism": "A cross-cutting explanation is discovered when a problem initially formulated in lineage A's vocabulary is mapped onto lineage B's vocabulary, revealing an invariant structure that A's primitives obscured. Ownership-based allocation terminates this process at the source: because the problem is assigned to A and never routed to B, the mapping function is never invoked. The suppression is therefore not a passive byproduct of efficiency but an active disabling of the cross-vocabulary translation mechanism, guaranteeing that any primitive not derivable from A's axioms remains structurally invisible.",
+    "counterconditions": [
+      "If lineage A possesses a 'universal grammar' that can derive all rival primitives as theorems, then routing to B is computationally redundant and cannot yield structurally novel explanations.",
+      "If the system's artifact memory automatically broadcasts successful primitives to all lineages, then ownership-based allocation at the routing layer is neutralized by memory-level propagation.",
+      "If all rival lineages share a common foundational ontology and differ only in heuristic search strategies, then 'cross-cutting' explanations are merely alternative solutions, and ownership does not suppress them."
+    ],
+    "typicality": 0.55,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

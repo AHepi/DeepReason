@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-d88a06210fd0758d035f9b86ffac8ab4) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Rival research programmes inside one reasoning system are usually allocated to problems by ownership: whichever lineage produced the parent artifact works its successors. Argue for or against the claim that ownership-based allocation systematically suppresses the discovery of cross-cutting explanations, and identify what evidence within a single run would distinguish suppression from mere efficiency. Where a claim can be tested by counting, say exactly what to count.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3efd64cd988a3f3ede93cc88: program:reasoning_observation_pending
+- reason-counter@2b02740adb1a8278d00c7e32: program:reasoning_observation_pending
+- reason-counter@a4f78cb00886095468abab44: program:reasoning_observation_pending
+- reason-counter@fb1a30931aa3cefb9bba5d84: program:reasoning_observation_pending
+- reason-counter@a0accdf9ff1c50b666f338e1: program:reasoning_observation_pending
+- reason-counter@fac8ddeef16d5add008ea4f2: program:reasoning_observation_pending
+- reason-counter@69415d52de28b3cbc9cddc16: program:reasoning_observation_pending
+- reason-counter@427d378c5a653ba730e300f9: program:reasoning_observation_pending
+- reason-counter@532ae578e6068d42569e401b: program:reasoning_observation_pending
+- reason-counter@f2a886b63c03dc59e03171d1: program:reasoning_observation_pending
+- reason-counter@b7ccddc0b695bcb6910b0639: program:reasoning_observation_pending
+- reason-counter@1ede4f642e7e44b654dddab3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Ownership-based allocation is a necessary precondition for the discovery of cross-cutting explanations, rather than a suppressor of them. It creates the competitive pressure between localized theories that eventually forces the emergence of a higher-level synthesis.","counterconditions":[{"case":"If the system has no mechanism for dialectical resolution or cross-lineage communication, the clash remains unresolved, and the cross-cutting explanation is never discovered.","eval":"observation"},{"case":"If the boundary problems are never allocated to both lineages simultaneously or sequentially, the clash never occurs.","eval":"observation"},{"case":"If one lineage can eventually solve all problems recursively using its own primitives, the competitive pressure dissipates, and no higher-level synthesis is required.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Cross-cutting explanations are not found by searching a homogeneous space of primitives. They are synthesized when two incompatible, highly optimized local theories (developed in isolation via ownership) clash on a boundary problem. The allocation policy ensures these local theories become s
+commitments: reasoning-envelope-wf, reason-counter@3efd64cd988a3f3ede93cc88, reason-counter@2b02740adb1a8278d00c7e32, reason-counter@a4f78cb00886095468abab44
+
+TARGET SRC_002
+{"analogy":null,"claim":"The suppression vs. efficiency distinction can be resolved in a single run by counting the Vocabulary-Intersection Counterfactual Validity (VICV) ratio. Suppression occurs if and only if the system systematically drops valid cross-cutting solutions that require a minimal intersection of rival vocabularies.","counterconditions":[{"case":"If the run log does not record the action space or primitive inventory used for each problem, the VICV ratio cannot be computed.","eval":"observation"},{"case":"If L_rival's primitives are strictly dominated by L_owner's primitives (i.e., L_owner is a universal grammar), N_cc will be zero, indicating efficiency, not suppression.","eval":"observation"},{"case":"If the system's success metric does not penalize complex explanations constructed from weak primitives, it may prefer L_owner's solutions without suppressing cross-cutting ones, rendering the VICV ratio a measure of aesthetic preference rather than suppression.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"For a set of solved problems P, count: (1) N_cc = the number of problems where L_owner's valid solution is a strict subset of a valid solution constru
+commitments: reasoning-envelope-wf, reason-counter@fb1a30931aa3cefb9bba5d84, reason-counter@a0accdf9ff1c50b666f338e1, reason-counter@fac8ddeef16d5add008ea4f2
+
+TARGET SRC_003
+{"analogy":null,"claim":"Suppression can be identified by counting the 'Translation Overhead' (T_O) versus 'Solution Latency' (S_L). If the overhead to translate a rival solution into the owner's vocabulary consistently exceeds the latency of the owner generating a weaker native solution, the system is operating efficiently; if T_O is low but rival solutions are still rejected, it is suppressing.","counterconditions":[{"case":"If the system lacks a mechanism to attempt translation (T_O is never measured), this metric cannot be computed.","eval":"observation"},{"case":"If T_O is high but the resulting translated solution is vastly more robust than L_owner's native solution, rejecting it based on T_O > S_L may still constitute suppression of quality in favor of speed.","eval":"observation"},{"case":"If L_owner's vocabulary lacks the expressive power to host the translated cross-cutting solution, T_O is effectively infinite, which masks suppression as a technical impossibility.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"For each problem, measure the cost T_O of mapping L_rival's valid cross-cutting solution onto L_owner's vocabulary. Then measure S_L, the time L_owne
+commitments: reasoning-envelope-wf, reason-counter@69415d52de28b3cbc9cddc16, reason-counter@427d378c5a653ba730e300f9, reason-counter@532ae578e6068d42569e401b
+
+TARGET SRC_004
+{"analogy":null,"claim":"Ownership-based allocation is fundamentally a diversity-preserving heuristic that enhances system-level resilience. It does not suppress cross-cutting explanations but delays them, ensuring that primitives are deeply stress-tested within their native lineages before being considered for cross-lineage integration.","counterconditions":[{"case":"If the system terminates before the isolation phase yields to an integration phase, the delay becomes permanent suppression.","eval":"observation"},{"case":"If lineages possess orthogonal primitives that cannot be derived from one another, the isolation prevents the construction of any cross-cutting explanation, proving it is not merely delayed.","eval":"observation"},{"case":"If the cost of the isolation phase (in terms of duplicated computational effort) consistently exceeds the robustness benefit, the heuristic is an inefficient allocation strategy.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By restricting a problem to its parent lineage, the system prevents premature assimilation of rival primitives. This isolation ensures that each primitive vocabulary is pushed to its local\u6781\u9650. Without
+commitments: reasoning-envelope-wf, reason-counter@f2a886b63c03dc59e03171d1, reason-counter@b7ccddc0b695bcb6910b0639, reason-counter@1ede4f642e7e44b654dddab3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,49 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-d88a06210fd0758d035f9b86ffac8ab4) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Rival research programmes inside one reasoning system are usually allocated to problems by ownership: whichever lineage produced the parent artifact works its successors. Argue for or against the claim that ownership-based allocation systematically suppresses the discovery of cross-cutting explanations, and identify what evidence within a single run would distinguish suppression from mere efficiency. Where a claim can be tested by counting, say exactly what to count.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@1acca798ce56f74007833205: program:reasoning_observation_pending
+- reason-counter@91bc2f4ef2f1ede8f2346416: program:reasoning_observation_pending
+- reason-counter@22b884adfea209862ad12f0b: program:reasoning_observation_pending
+- reason-counter@e33de51632c041b39884183d: program:reasoning_observation_pending
+- reason-counter@359f0050e69358559b526990: program:reasoning_observation_pending
+- reason-counter@abe931e40393fe940314ddf3: program:reasoning_observation_pending
+- reason-counter@decf31369d5baa3ee569808d: program:reasoning_observation_pending
+- reason-counter@fd0e1083f3a7de30aeada6b3: program:reasoning_observation_pending
+- reason-counter@6abc030749d2d96719cc4007: program:reasoning_observation_pending
+- reason-counter@66000f198cae9eceadb50d98: program:reasoning_observation_pending
+- reason-counter@448185f893da3ddb73465545: program:reasoning_observation_pending
+- reason-counter@d03d7dc47e585aab5193e795: program:reasoning_observation_pending
+- reason-counter@bc439e328f8ce5d69cdb03a7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Ownership-based allocation systematically suppresses cross-cutting explanations by creating self-reinforcing epistemic silos: each lineage optimizes internally and never encounters the anomalies that would force it to bridge to a rival's framework.","counterconditions":[{"case":"The system possesses a meta-heuristic that periodically dissolves lineage boundaries, reassigning problems to randomly composed multi-lineage coalitions.","eval":"observation"},{"case":"The inherited commitment-neighborhood of each lineage is provably a spanning set over all possible explanatory primitives, so the required bridge is always constructible.","eval":"observation"},{"case":"A 'cross-cutting' explanation is defined so narrowly that it requires a specific type of concept that only one lineage's vocabulary can express, making the exclusion tautological rather than systematic.","eval":"observation"},{"case":"The system's evaluation function explicitly rewards explanations that reuse primitives from rival lineages, counteracting the internal optimization pressure.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A lineage that owns a problem inherits not only its
+commitments: reasoning-envelope-wf, reason-counter@1acca798ce56f74007833205, reason-counter@91bc2f4ef2f1ede8f2346416, reason-counter@22b884adfea209862ad12f0b, reason-counter@e33de51632c041b39884183d
+
+TARGET SRC_002
+{"analogy":null,"claim":"Ownership-based allocation systematically suppresses cross-cutting explanations by denying rival lineages the chance to translate problems into their own vocabularies, thereby preventing the 'reframing' that often reveals a simpler or more unifying structural pattern.","counterconditions":[{"case":"If L_owner's grammar is already a 'universal grammar' that can derive all rival primitives as theorems, then L_rival's translation would add no new information and suppression is indistinguishable from efficiency.","eval":"observation"},{"case":"If problems in the run are intrinsically non-cross-cutting (each belongs to one and only one structural family), then L_rival would fail to find a simpler pattern anyway and no suppression occurs.","eval":"observation"},{"case":"If L_owner's own search includes an exhaustive meta-step that explicitly tests reframings of p into all known rival grammars, then the ownership barrier is harmless.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"An owning lineage L_owner processes problem p using its own established primitives. Because rival lineage L_rival is structurally barred from attempting p, it never transla
+commitments: reasoning-envelope-wf, reason-counter@359f0050e69358559b526990, reason-counter@abe931e40393fe940314ddf3, reason-counter@decf31369d5baa3ee569808d
+
+TARGET SRC_003
+{"analogy":null,"claim":"Ownership-based allocation suppresses cross-cutting explanations by starving rival lineages of the computational resources needed to develop their alternative vocabularies, causing them to atrophy and become unable to generate competing explanations.","counterconditions":[{"case":"If rival lineages independently maintain their vocabularies and search capabilities via a baseline compute budget regardless of problem allocations, their capacity to generate cross-cutting explanations does not atrophy.","eval":"observation"},{"case":"If the owning lineage's vocabulary is capable of deriving all rival primitives as theorems (universal grammar), then cross-cutting explanations are not suppressed but merely re-expressed.","eval":"observation"},{"case":"If cross-cutting explanations require computational effort that exceeds the total system budget regardless of allocation strategy, the suppression is due to global resource constraints rather than ownership-based allocation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The causal mechanism is resource-based Darwinian selection within the reasoning system. When a problem is allocated to a lineage by o
+commitments: reasoning-envelope-wf, reason-counter@fd0e1083f3a7de30aeada6b3, reason-counter@6abc030749d2d96719cc4007, reason-counter@66000f198cae9eceadb50d98
+
+TARGET SRC_004
+{"analogy":null,"claim":"Ownership-based allocation suppresses cross-cutting explanations only if the owning lineage lacks a translation mechanism to derive rival primitives; if a 'universal grammar' exists, apparent suppression is mere inefficiency from redundant re-derivation.","counterconditions":[{"case":"If all rival lineages have equivalent expressive power (can derive the same primitives), then suppression is impossible by definition, and ownership allocation only affects efficiency.","eval":"observation"},{"case":"If the owning lineage can dynamically import primitives from rival lineages upon reaching a local impasse, suppression is mitigated.","eval":"observation"},{"case":"If the cost of broadcasting all problems to all lineages exceeds the value of the cross-cutting explanations found, then even if suppression occurs, it is a justified efficiency trade-off rather than a systematic flaw.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"When a problem is allocated to an owning lineage, it is solved using that lineage's search vocabulary. If the vocabulary is a strict subset of another lineage's, or lacks the primitive that makes the cross-cutting explanation 
+commitments: reasoning-envelope-wf, reason-counter@448185f893da3ddb73465545, reason-counter@d03d7dc47e585aab5193e795, reason-counter@bc439e328f8ce5d69cdb03a7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
