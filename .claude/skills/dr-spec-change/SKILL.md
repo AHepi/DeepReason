@@ -65,12 +65,50 @@ interpretation happens, and it happens in writing.
    check, and probe to `dr-execute-step`'s "Durable tests, checks, and
    probes" rules — they must survive dramatic repo changes, failing
    only when the guarded claim stops being true.
-4. Set the budget: total estimated changed lines and commits. If over
+4. Blast-radius census — mandatory, pasted, BEFORE any fixture-drift
+   prediction. For every symbol and file the spec changes, grep what
+   already asserts on it:
+
+       grep -rn "<symbol>" tests/ docs/map/
+
+   Paste the hit list (or "no hits") into SPEC.md's "Blast-radius
+   census" section and classify EVERY hit: EXPECTED TO MOVE (the
+   design predicts it) or MUST NOT MOVE. A drift forecast written
+   without this census is recall, and recall missed in two consecutive
+   specs — under the MORE capable model both times (rung-5 PARKED P6):
+   rung 4's prediction was too narrow; rung 5's spec predicted nothing
+   and missed a test pinning "exactly one backend", the exact state
+   that rung existed to change. The full gate caught both, three
+   commits later than the census would have.
+5. DESIGN-AND-STOP shape. When the deliverable IS the spec (a
+   [DESIGN-AND-STOP] request), two more sections are mandatory, and
+   their discipline is measure-don't-reason (the rung-4 M1-M5
+   precedent, the one design spec that survived contact with the
+   tree unchanged):
+   - **Measurements**: every load-bearing design claim is a pasted
+     command output. A claim with no measurement is an assumption and
+     is moved to Assumptions, where the operator can see it.
+   - **Options**: every considered option priced — files touched,
+     frozen-surface contact, estimated lines, risk — and every
+     rejection cites a measurement, not a preference.
+6. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
    its own delivery) rather than one sprawling one.
-5. Anti-invention pass: re-read SPEC.md and delete anything that does
+7. Anti-invention pass: re-read SPEC.md and delete anything that does
    not trace to an R or C number. If it felt necessary, it is either
    an assumption (record it) or scope creep (PARKED.md).
+8. Rubric pass — the last act before committing. Re-read the finished
+   SPEC.md as a REVIEWER, not the author; any "no" routes back to that
+   step before commit:
+   - every R has a spec item with a machine-decidable accept?
+   - blast-radius census pasted (or pasted-empty) and every hit
+     classified?
+   - frozen-surface contact forecast recorded?
+   - every mechanism the request names traced to code it actually
+     reaches?
+   - DESIGN-AND-STOP only: every claim measured, every option priced?
+   - nothing in the spec untraceable to an R/C number?
+   Record the outcome as one line in SPEC.md ("Rubric: n/n yes").
 
 ## SPEC.md template
 
@@ -96,13 +134,29 @@ interpretation happens, and it happens in writing.
     | <surface>: <why contact is plausible> (STOP — operator words
       required before dr-plan-steps)
 
+    ## Blast-radius census
+    <symbol/file>: <test or map check hit> -> EXPECTED TO MOVE |
+      MUST NOT MOVE
+    (every grep hit listed, none omitted; "no hits" is a valid census)
+
+    ## Measurements (DESIGN-AND-STOP only)
+    M1: <command> -> <pasted output> — supports <claim>
+
+    ## Options (DESIGN-AND-STOP only)
+    A: <files, frozen contact, ~lines, risk> | rejected: cites M<n>
+    B: ... | CHOSEN: cites M<n>
+
     ## Budget
     ~<n> lines, <n> commit(s). Frozen surfaces touched: none | <flagged>
+
+    Rubric: <n>/<n> yes
 
 ## Exit criteria
 
 - SPEC.md committed and pushed; every R number appears in some item
   (or is explicitly marked deferred with the operator's words allowing
   it).
+- The rubric pass ran and its line is in SPEC.md; a spec with no
+  "Rubric:" line was committed without its last check.
 - If "Questions for operator" is non-empty: stopped and asked.
 - Return to the orchestrator.
