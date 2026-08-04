@@ -2,8 +2,8 @@
 Verified-at: d057f306
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py, src/deepreason/v6_policy.py, src/deepreason/preparation.py
-Seams: 
-Seams-undocumented: adjudication x authority, authority x manifest, authority x rules, authority x scheduler
+Seams: DR-SEAM-adjudication-x-authority
+Seams-undocumented: authority x manifest, authority x rules, authority x scheduler
 
 # Authority — who may change a Status
 
