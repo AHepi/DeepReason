@@ -93,8 +93,20 @@ def _run(root, cycles=3):
 
 
 def _comparable_log(harness) -> list[dict]:
+    """Every event except the module-fingerprint stamp.
+
+    Rung 4 records WHICH registered backend built a run, and the two runs
+    compared here deliberately use different backends — the real registry
+    against a substitute that calls the bare module functions. Their stamps
+    are therefore expected to differ, and asserting they match would assert
+    the opposite of what rung 4 delivers. The stamps are compared separately,
+    for difference, in the test below.
+    """
+
     events = []
     for event in harness.log.read():
+        if event.module_fingerprints is not None:
+            continue
         data = json.loads(event.model_dump_json())
         for field in _WALL_CLOCK_EVENT_FIELDS:
             data.pop(field, None)
@@ -139,6 +151,19 @@ def test_registry_path_records_exactly_what_the_bare_functions_recorded(
 
     assert before_harness.state.model_dump_json() == after_harness.state.model_dump_json()
     assert _comparable_log(before_harness) == _comparable_log(after_harness)
+
+    # The one thing that SHOULD differ (rung 4): each run records the module
+    # that built it, so the substitute backend is visible in the record
+    # rather than indistinguishable from the registered one. Everything above
+    # says the indirection changed no behaviour; this says the record can
+    # still tell the two apart.
+    from deepreason.module_events import recorded_module_fingerprints
+
+    before_stamp, = recorded_module_fingerprints(before_harness)
+    after_stamp, = recorded_module_fingerprints(after_harness)
+    assert before_stamp.digest != after_stamp.digest
+    assert after_stamp.modules[0].module_id == "default"
+    assert before_stamp.modules[0].module_id == "bare-functions-under-test"
 
 
 def test_the_determinism_comparison_can_actually_fail(tmp_path, monkeypatch):

@@ -1,7 +1,7 @@
 <!-- DR-CON-schools -->
 Verified-at: e5b876ee
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py
+Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py, src/deepreason/module_events.py
 Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools, DR-SEAM-schools-x-scheduler
 Seams-undocumented: adjudication x schools, llm x schools, rules x schools, schools x workflow
 
@@ -90,6 +90,13 @@ conditioning record is read as either.
 | Durable coverage obligation and debt | `workflow/criticism.py` | `CriticismAssignmentV1`, `CriticismAttemptV1`, `CoverageDebtV1` |
 | Single-model trial substitute | `informal/trial.py` | `_argument_trial_steps` (`critic_school_id`) |
 | Route receipt on the recorded call | `ontology/event.py` | `SchoolRouteReceiptV1` |
+| Which population backend built the run | `module_events.py`, `scheduler/scheduler.py` | `ModuleFingerprintsEventPayloadV1`, `Scheduler._record_module_fingerprints` |
+
+The registry pins a backend's fingerprint at registration and re-checks it on
+every resolve, but that pinning lives only in the process. The stamp is what
+puts it in the RECORD, so two runs can be compared on which module produced
+them rather than on the assumption that both used the default.
+`check: python -W ignore -c "import json,tempfile,pathlib;from deepreason.capture import schools;from deepreason.config import Config;from deepreason.harness import Harness;from deepreason.llm.adapter import LLMAdapter;from deepreason.llm.endpoints import MockEndpoint;from deepreason.scheduler.scheduler import Scheduler;from deepreason.module_events import recorded_module_fingerprints;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);r=json.dumps({'candidates':[{'content':'x','typicality':0.5}]});Scheduler(h,LLMAdapter({'conjecturer':MockEndpoint(lambda p:r)},h.blobs),Config(N_SCHOOLS=2));g=recorded_module_fingerprints(Harness(d,read_only=True));assert len(g)==1,g;m=g[0].modules[0];assert m.registry=='school-population' and m.module_id=='default',(m.registry,m.module_id);assert dict(m.fingerprint)==schools.SCHOOL_POPULATION.fingerprint('default')"`
 
 ## The rules it obeys
 

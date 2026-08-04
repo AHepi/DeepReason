@@ -323,6 +323,55 @@ run with zero schools was still built by the registered backend.
 resolve — so the recorded value is the checked one, not a second
 computation.
 
+D7a. **CORRECTION to D7, forced at execution (step 17): the stamp must
+not fire on a READ-ONLY harness.** D7 said "unconditionally", meaning
+outside the `N_SCHOOLS > 0` gate, and that part stands. But D7 was
+written from a grep of `src/` only, which found two `Scheduler(...)`
+sites and both writable. `tests/test_amendment_epochs.py:337`
+constructs `Scheduler(Harness(root, read_only=True), None,
+Config(N_SCHOOLS=0))` to inspect continuation ranking without writing —
+a legitimate read-only use the `src/` grep could not see. An
+unconditional append there raises `ReadOnlyHarnessError` from
+`_ensure_writable` and the Scheduler cannot be built at all.
+
+This is a defect in the design, not a fixture to update, and it is
+recorded here BEFORE the code changes rather than typed in during a
+step. The correction: the stamp is skipped when the harness is
+read-only, by catching the harness's own typed
+`ReadOnlyHarnessError` rather than by reading a private attribute. No
+epistemic content is lost — a read-only view records nothing by
+definition, and `DR-SEAM-harness-x-verification`'s whole asymmetry is
+that a read-only open must never write. R2's "every run records which
+modules built it" concerns runs that write a record; a read-only
+inspection of an existing root is not such a run.
+
+D7b. **SECOND CORRECTION to D7, forced by the full gate (step 18):
+the stamp fires at RUN START, not at Scheduler CONSTRUCTION.** D7 put
+the write in `Scheduler.__init__`. The gate found two more paths that
+breaks, both legitimate:
+
+- `tests/test_v6_transaction_qualification.py`'s two restart tests hold
+  TWO live `Harness` handles on one root (a crashed handle and a
+  reopened one) and got `ConcurrentWriterError: log advanced under us`
+  — the single-writer fence doing its job. Constructing a Scheduler to
+  RECOVER from a crash must not itself append.
+- `tests/test_route_firewall_scheduler.py` builds a Scheduler purely to
+  drive a fail-closed path.
+
+The common premise is one this tranche got wrong: **`Scheduler.__init__`
+is not a write point.** It writes today only via `init_schools`, which
+is why the `N_SCHOOLS > 0` gate hid the problem — and D7's decision to
+fire OUTSIDE that gate is exactly what exposed it. D7's epistemic claim
+stands (a zero-school run was still built by the registered backend);
+its placement did not.
+
+Correction: emit from `Scheduler.run()`, once per Scheduler instance,
+before the first cycle. This is a BETTER fit for R2's own words — "every
+RUN records which modules built it" names a run, not an object — and it
+restores the property the gate was defending, that constructing a
+Scheduler to inspect or to recover appends nothing. D7a's read-only
+guard is kept: it is a different condition and still correct.
+
 D8. **The reader lands before the writer (R8, C12), and it is real
 rather than nominal.** `recorded_module_fingerprints(harness)` in
 `module_events.py` scans events with `getattr(event,

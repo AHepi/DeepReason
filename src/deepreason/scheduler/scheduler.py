@@ -274,6 +274,7 @@ class Scheduler:
             if config.N_SCHOOLS > 0
             else {}
         )
+        self._module_fingerprints_recorded = False
         self.diagnostics: list[dict] = []
         # Ladder state (§11.4) — attention only. An intervention is active for a
         # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
@@ -473,6 +474,56 @@ class Scheduler:
         meter = getattr(self.adapter, "meter", None)
         snapshot = getattr(meter, "snapshot", None)
         return snapshot() if callable(snapshot) else None
+
+    def _record_module_fingerprints(self) -> None:
+        """Stamp the registered modules that built this run into its record.
+
+        Fires from ``run`` and only when cycles are actually requested, never
+        from ``__init__``. Constructing a Scheduler, and running it for zero
+        cycles, must both append nothing: callers do that to inspect ranking
+        or to recover from a crash while a second harness handle is still
+        live, and an append there trips the single-writer fence or moves a
+        record a recovery pass promised to leave alone.
+
+        Deliberately outside the ``N_SCHOOLS`` gate that guards
+        ``init_schools``: a run that seeds no schools was still built by the
+        registered population backend, and a record that omits the stamp for
+        those runs cannot answer which modules built it.
+
+        The id is read from the fingerprint rather than from the registry's
+        private active-backend constant, because that is the same key the
+        registry itself resolves a registration by.
+
+        A read-only harness records nothing: an inspecting caller opens an
+        existing root to look at it, and a read-only open that wrote would
+        break the asymmetry every stored verdict depends on.
+        """
+
+        if self._module_fingerprints_recorded:
+            return
+        self._module_fingerprints_recorded = True
+
+        from deepreason.harness import ReadOnlyHarnessError
+        from deepreason.module_events import (
+            ModuleFingerprintV1,
+            ModuleFingerprintsEventPayloadV1,
+        )
+
+        backend = schools.active_backend()
+        fingerprint = backend.fingerprint()
+        module_id = str(fingerprint.get("backend") or type(backend).__name__)
+        try:
+            self.harness.record_module_fingerprints(
+                ModuleFingerprintsEventPayloadV1.of(
+                    [
+                        ModuleFingerprintV1.of(
+                            "school-population", module_id, fingerprint
+                        )
+                    ]
+                )
+            )
+        except ReadOnlyHarnessError:
+            return
 
     def _active_conjecture_mode(self) -> bool:
         manifest = self.run_manifest
@@ -2640,6 +2691,8 @@ class Scheduler:
         A truthy return stops the run early (staged pipelines stop a stage
         on its first survivor without rebuilding the Scheduler, which would
         wipe the attention caches)."""
+        if cycles > 0:
+            self._record_module_fingerprints()
         self._recover_workflow_prefixes()
         self._rehydrate_resumed_stop_controller()
         stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None

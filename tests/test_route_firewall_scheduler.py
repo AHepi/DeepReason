@@ -47,8 +47,13 @@ def test_scheduler_logs_prior_spend_before_route_firewall_stop(tmp_path, monkeyp
     with pytest.raises(RouteFirewallError, match="ROUTE_LEASE_MISMATCH"):
         scheduler.run(1)
 
+    # Two events: the run's module-fingerprint stamp (rung 4), then the
+    # dropped-call record this test is about. The claim guarded here is that
+    # the prior spend IS logged before the fail-closed raise, so the
+    # dropped-call event is identified by its content, not by being first.
     events = list(harness.log.read())
-    assert len(events) == 1
-    assert events[0].llm == spend
-    assert list(events[0].inputs[:2]) == ["dropped-call", "ROUTE_LEASE_MISMATCH"]
+    assert len(events) == 2
+    dropped = events[-1]
+    assert dropped.llm == spend
+    assert list(dropped.inputs[:2]) == ["dropped-call", "ROUTE_LEASE_MISMATCH"]
     assert control_trace.abandoned_with == "runtime:route_firewall_error"

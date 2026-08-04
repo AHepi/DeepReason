@@ -110,10 +110,16 @@ def test_v1_to_v3_stop_path_does_not_emit_new_control_bytes(tmp_path):
     scheduler.run(2)
 
     events = list(scheduler.harness.log.read())
-    assert [event.rule for event in events] == [Rule.MEASURE]
+    # Two Measures, no Control: the module-fingerprint stamp every Scheduler
+    # writes at construction (rung 4), then the run's own. The claim this
+    # test guards is the ABSENCE of Control bytes, asserted exactly.
+    assert [event.rule for event in events] == [Rule.MEASURE, Rule.MEASURE]
     stop = json.loads((tmp_path / "run-stop.json").read_text())
     assert stop["schema"] == "deepreason-run-stop-v1"
-    assert stop["event_seq"] == 0
+    # The stop record names the run's last recorded event. Anchored to that
+    # relation rather than to a literal seq, which any new pre-run stamp
+    # shifts without changing what the record means.
+    assert stop["event_seq"] == events[-1].seq
 
 
 def test_model_stuck_signal_cannot_directly_emit_stopped(tmp_path):

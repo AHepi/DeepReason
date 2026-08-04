@@ -113,12 +113,17 @@ def test_scheduler_heartbeat_segments_the_log(tmp_path):
     assert all(len(b.inputs) == 3 for b in beats)  # every beat names its focus
     # Every event attributes to a cycle: nothing precedes the first heartbeat
     # except the pre-run seeds (commitment Register, problem Spawn) and the
-    # run's one embedder geometry stamp.
+    # run's two provenance stamps — the embedder geometry, and the
+    # module fingerprint naming which registered backend built the run.
     first = beats[0].seq
     pre = [e for e in harness.log.read() if e.seq < first]
     assert all(
         e.rule in (Rule.REGISTER, Rule.SPAWN)
-        or (e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "embedder")
+        or (
+            e.rule == Rule.MEASURE
+            and e.inputs
+            and e.inputs[0] in ("embedder", "module-fingerprints.v1")
+        )
         for e in pre
     )
     stamps = [e for e in harness.log.read()

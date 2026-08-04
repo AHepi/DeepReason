@@ -49,6 +49,7 @@ migrated the callers and added the determinism proof.
 | Ladder interventions | `capture/ladder.py` | `respond` | four sites: `roster` then `reseed` on the school-convergence branch, and again on the attractor-orbiting branch |
 | Operator commands | `cli/main.py` | the `schools` and `reseed` subcommands | three sites (`roster` twice, `reseed` once) |
 | Report assembly | `report.py` | the schools section | one `roster` site |
+| Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log at construction — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend |
 
 `check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION, DefaultSchoolPopulationBackend, active_backend; assert SCHOOL_POPULATION.ids() == ('default',); assert isinstance(SCHOOL_POPULATION.get('default').backend, DefaultSchoolPopulationBackend); assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"`
 
@@ -56,7 +57,12 @@ Each check below asserts BOTH that the migrated form is present the exact
 number of times expected AND that no bare call survives, so reverting any
 single call site fails the check rather than passing on a leftover count.
 
-`check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text(); assert s.count('schools.active_backend()') == 2; assert not re.search(r'schools\.(init_schools|allocate)\(', s)"`
+`check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text(); assert s.count('schools.active_backend()') == 3; assert not re.search(r'schools\.(init_schools|allocate)\(', s)"`
+
+The third scheduler site is the fingerprint stamp, and it is the one call
+that must NOT sit under `N_SCHOOLS > 0`: gating it would leave zero-school
+runs unable to say which module built them.
+`check: python -c "import ast,pathlib,textwrap,inspect; from deepreason.scheduler.scheduler import Scheduler; src=textwrap.dedent(inspect.getsource(Scheduler.__init__)); T=ast.parse(src); calls=[n for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'attr',None)=='_record_module_fingerprints']; assert len(calls)==1, len(calls); gated=[n for n in ast.walk(T) if isinstance(n,ast.If) and any('_record_module_fingerprints' in ast.unparse(s) for s in n.body)]; assert not gated, [ast.unparse(g.test) for g in gated]"`
 `check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/capture/ladder.py').read_text(); assert s.count('schools.active_backend()') == 4; assert not re.search(r'schools\.(roster|reseed)\(', s)"`
 `check: python -c "import pathlib,re; c=pathlib.Path('src/deepreason/cli/main.py').read_text(); r=pathlib.Path('src/deepreason/report.py').read_text(); assert c.count('active_backend()') == 3 and r.count('active_backend()') == 1; assert not re.search(r'schools(_mod)?\.(roster|reseed)\(', c + r)"`
 
@@ -120,10 +126,12 @@ expects them behind the registry should read this line, not file a defect.
    actual implementation. Deleting them would break the default backend
    itself.
 4. **A new call site uses `active_backend()`, and this document's counts
-   move with it.** The three checks above pin exact per-file counts (2, 4,
+   move with it.** The three checks above pin exact per-file counts (3, 4,
    3+1). Adding a call site without updating them fails the map gate — by
    design: the counts are what make "every caller resolves" checkable
-   rather than aspirational.
+   rather than aspirational. Rung 4 is the worked example: adding the
+   fingerprint stamp moved the scheduler count 2 → 3, and the check caught
+   it before the commit rather than after.
 5. **Finish with the two byte-identity instruments.** The full gate and
    `python tools/root_sweep.py`; plus
    `tests/test_school_population_determinism.py`, which runs two

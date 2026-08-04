@@ -212,6 +212,200 @@ def test_apply_event_has_no_branch_for_the_payload():
     assert "module_fingerprints" not in read, sorted(read)
 
 
+def _scheduler_run(tmp_path, *, n_schools: int) -> Path:
+    """The smallest ordinary run: a mock endpoint, no capability anywhere."""
+
+    import json
+
+    from deepreason.config import Config
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.scheduler.scheduler import Scheduler
+
+    root = tmp_path / "run"
+    harness = Harness(root)
+    reply = json.dumps({"candidates": [{"content": "x", "typicality": 0.5}]})
+    adapter = LLMAdapter({"conjecturer": MockEndpoint(lambda _p: reply)}, harness.blobs)
+    # run(1), not bare construction: the stamp fires per RUN, because building
+    # a Scheduler (or running it for zero cycles) is how callers inspect and
+    # recover without touching the record. See SPEC.md D7a/D7b.
+    Scheduler(harness, adapter, Config(N_SCHOOLS=n_schools)).run(1)
+    return root
+
+
+def test_an_ordinary_run_records_the_population_backend(tmp_path):
+    """R2/S2: an ORDINARY run — mock endpoint, no capability exercised — puts
+    the registered backend's fingerprint in its own record, and the value
+    recorded is the one the registry pins rather than a second computation.
+    """
+
+    from deepreason.capture import schools
+
+    root = _scheduler_run(tmp_path, n_schools=4)
+    reopened = Harness(root, read_only=True)
+
+    assert not any(e.capability is not None for e in reopened.log.read())
+
+    got = recorded_module_fingerprints(reopened)
+    assert len(got) == 1, got
+    module = got[0].modules[0]
+    assert module.registry == "school-population"
+    assert module.module_id == "default"
+    assert dict(module.fingerprint) == schools.SCHOOL_POPULATION.fingerprint("default")
+
+
+def test_a_run_with_no_schools_still_records_which_module_built_it(tmp_path):
+    """R2 says EVERY run. ``init_schools`` is gated on ``N_SCHOOLS > 0``; the
+    stamp deliberately is not, because a zero-school run was still built by
+    the registered backend. This test is what keeps the writer outside that
+    gate when someone later tidies the constructor.
+    """
+
+    root = _scheduler_run(tmp_path, n_schools=0)
+    got = recorded_module_fingerprints(Harness(root, read_only=True))
+    assert len(got) == 1, got
+    assert got[0].modules[0].module_id == "default"
+
+
+def _scrub_wall_clock(value):
+    """Drop time-dependent fields at EVERY nesting depth.
+
+    A top-level-only scrub once left ``llm.ms`` inside ``attempt_trace`` and
+    produced a 1-in-3 flake (commit ``863a0fa3``); the exclusion set is named
+    exactly rather than widened by guess.
+    """
+
+    if isinstance(value, dict):
+        return {
+            k: _scrub_wall_clock(v)
+            for k, v in value.items()
+            if k not in {"ts", "ms", "started_at", "finished_at"}
+        }
+    if isinstance(value, list):
+        return [_scrub_wall_clock(v) for v in value]
+    return value
+
+
+def _scrubbed_log(root: Path) -> list:
+    import json
+
+    return [
+        _scrub_wall_clock(json.loads(event.model_dump_json(by_alias=True)))
+        for event in Harness(root, read_only=True).log.read()
+    ]
+
+
+def test_two_runs_built_by_the_same_modules_record_the_same_stamp(tmp_path):
+    """The property the rung exists for: cross-run comparison is honest only
+    if identical modules produce identical bytes. Compares the whole scrubbed
+    event log, not just the stamp, so a difference anywhere is visible.
+    """
+
+    a = _scheduler_run(tmp_path / "a", n_schools=2)
+    b = _scheduler_run(tmp_path / "b", n_schools=2)
+    assert _scrubbed_log(a) == _scrubbed_log(b)
+
+    digests = {recorded_module_fingerprints(Harness(r, read_only=True))[0].digest
+               for r in (a, b)}
+    assert len(digests) == 1, digests
+
+
+def test_a_stamped_run_replays_to_the_same_state(tmp_path):
+    """The stamp must not disturb replay: reopening the root twice must reach
+    one state, which is the relation ``verify_root``'s ``replay`` finding
+    checks for every recorded root.
+    """
+
+    root = _scheduler_run(tmp_path, n_schools=2)
+    first = Harness(root, read_only=True)
+    second = Harness(root, read_only=True)
+    assert first.state.model_dump_json() == second.state.model_dump_json()
+    assert _scrubbed_log(root) == _scrubbed_log(root)
+
+
+def test_a_run_built_by_a_different_backend_records_a_different_stamp(tmp_path):
+    """The companion mutation test durable-test rule 3 requires for the
+    equality above: a genuinely different module must break the comparison,
+    or the comparison is measuring nothing.
+    """
+
+    from deepreason.capture import schools
+
+    root = _scheduler_run(tmp_path, n_schools=2)
+    recorded = recorded_module_fingerprints(Harness(root, read_only=True))[0]
+
+    altered = ModuleFingerprintsEventPayloadV1.of(
+        [
+            ModuleFingerprintV1.of(
+                "school-population",
+                "default",
+                {**schools.SCHOOL_POPULATION.fingerprint("default"), "stance_count": 999},
+            )
+        ]
+    )
+    assert altered.digest != recorded.digest
+
+
+def test_a_read_only_scheduler_records_nothing(tmp_path):
+    """Regression (rung 4, SPEC.md D7a): the stamp fires outside the
+    ``N_SCHOOLS`` gate but NOT on a read-only harness.
+
+    ``tests/test_amendment_epochs.py`` builds a Scheduler over
+    ``Harness(root, read_only=True)`` to inspect ranking without writing. An
+    unconditional append there raises ``ReadOnlyHarnessError`` and the
+    Scheduler cannot be constructed at all — and a read-only open that wrote
+    would break the asymmetry every stored verdict depends on.
+    """
+
+    from deepreason.config import Config
+    from deepreason.scheduler.scheduler import Scheduler
+
+    root = _scheduler_run(tmp_path, n_schools=0)
+    before = (root / "log.jsonl").read_bytes()
+
+    Scheduler(Harness(root, read_only=True), None, Config(N_SCHOOLS=0))
+
+    assert (root / "log.jsonl").read_bytes() == before
+    assert len(recorded_module_fingerprints(Harness(root, read_only=True))) == 1
+
+
+def test_building_a_scheduler_and_running_zero_cycles_append_nothing(tmp_path):
+    """Regression (rung 4, SPEC.md D7b): the stamp is per RUN, not per object.
+
+    Two gate failures taught this. ``tests/test_v6_transaction_qualification``
+    holds two live ``Harness`` handles across a crash and recovers with
+    ``run(0)``, asserting the log is byte-identical afterwards; a stamp there
+    either trips the single-writer fence or moves a record the recovery pass
+    promised to leave alone. ``tests/test_route_firewall_scheduler`` builds a
+    Scheduler purely to drive a fail-closed path. Both mean: constructing a
+    Scheduler, and running one for zero cycles, must append nothing.
+    """
+
+    import json
+
+    from deepreason.config import Config
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.scheduler.scheduler import Scheduler
+
+    root = tmp_path / "run"
+    harness = Harness(root)
+    reply = json.dumps({"candidates": [{"content": "x", "typicality": 0.5}]})
+    adapter = LLMAdapter({"conjecturer": MockEndpoint(lambda _p: reply)}, harness.blobs)
+
+    scheduler = Scheduler(harness, adapter, Config(N_SCHOOLS=0))
+    assert list(harness.log.read()) == []          # construction appended nothing
+
+    scheduler.run(0)
+    assert list(harness.log.read()) == []          # a zero-cycle pass too
+
+    scheduler.run(1)
+    assert len(recorded_module_fingerprints(harness)) == 1
+
+    scheduler.run(1)                                # once per run, not per cycle
+    assert len(recorded_module_fingerprints(harness)) == 1
+
+
 def test_an_empty_module_list_is_refused():
     """A stamp naming no modules answers the rung's question with silence
     while still looking like a recorded answer."""
