@@ -39,6 +39,13 @@ run_arm () {
 
 {
   echo "=== rung5 A/B start $(date -u +%FT%TZ) ==="
+  # Both arms share ONE qualification: rr-home is a byte copy of the
+  # qualified default home, so the active backend is the only difference
+  # between the arms. Re-qualifying would introduce a second,
+  # independently-sampled battery as a confound.
+  rm -rf "$LIVE/rr-home"
+  cp -a "$LIVE/ab-home" "$LIVE/rr-home"
+  echo "rr-home seeded from qualified ab-home rc=$?"
   run_arm default    "$LIVE/ab-home"
   run_arm roundrobin "$LIVE/rr-home"
   echo "=== audit ==="
