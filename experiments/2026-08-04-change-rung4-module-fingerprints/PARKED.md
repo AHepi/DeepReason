@@ -62,6 +62,23 @@ misleading 292-failure report. Fixed by
 A one-line addition to CLAUDE.md's preflight would prevent it, but
 CLAUDE.md is not this tranche's to edit; recorded per C3.
 
+P6a. **The same gap again, one layer down: `jsonschema` is imported by
+the gate and declared nowhere.** After `pytest` was installed the full
+`docs_verify` fell from 292 failures to 2, and both were one test —
+`tests/test_schema_carries_every_prose_rule.py::
+test_alias_bearing_fields_name_their_legal_values_in_the_schema` —
+failing at its own `import jsonschema` line. `pyproject.toml`'s `dev`
+extra is `["pytest>=8.0", "ruff>=0.4"]`: it names neither `jsonschema`
+nor `pytest-xdist`, though the documented gate command (`-n 4`) cannot
+run without the latter and this test cannot run without the former.
+So `pip install -e ".[dev]"` does NOT produce a runnable gate. Both
+installed by hand this session; the two checks then passed (5 passed).
+Not fixed here — `pyproject.toml` is outside this tranche's scope and
+outside every S-item — but it is a real defect in the declared
+environment, and the failure it produces (a docs/test failure with no
+relation to the documents or the code under change) is expensive to
+read correctly.
+
 P7. **`recorded_module_fingerprints` is absence-tolerant; opening a
 pre-v6 root is not, and that is a harness property, not a reader one.**
 14 of the 45 git-tracked roots raise `UnsupportedRunManifestVersionError`
