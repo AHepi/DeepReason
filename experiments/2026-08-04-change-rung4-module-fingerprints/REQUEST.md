@@ -260,5 +260,117 @@ tranche artifact into a standing environment fact. It binds this
 tranche's plan: any step that touches `src/` owes a FULL `docs_verify`
 before its commit, not a `--fast` one.
 
+**Amendment 2 (2026-08-04, operator message, verbatim).** Sent in
+response to the capture above, before any spec work began:
+
+> Good capture. Proceed to dr-spec-change. On Q5: verify against the real
+> write path; prefer any design with zero frozen-surface contact. If every
+> workable design needs the surface-4 scrub line, DESIGN-AND-STOP per the
+> rung and present the options — do not assume rung 2's approval carries
+> over to a new touch. C7's integrity-default trap: any new typed channel
+> must land its report.py entry in the same commit, or not exist yet.
+
+New requirements, quoting the operator's own words:
+
+R12 (process): "Proceed to dr-spec-change."
+
+R13 (process): "On Q5: verify against the real write path" — the
+buildability of a Config-free design is to be VERIFIED against the
+actual code, not reasoned about abstractly. This is the operator
+converting Q5's own caveat into an obligation.
+
+R14 (design constraint): "prefer any design with zero frozen-surface
+contact." A preference ordering over designs, not a prohibition:
+zero-contact designs win where one exists.
+
+R15 (process, a stop condition): "If every workable design needs the
+surface-4 scrub line, DESIGN-AND-STOP per the rung and present the
+options — do not assume rung 2's approval carries over to a new touch."
+Two obligations in one sentence: (a) DESIGN-AND-STOP is mandatory, not
+optional, if no zero-contact design is workable; (b) rung 2 tranche 2's
+operator approval for touching `run_manifest.py` is explicitly NOT
+transitive to this tranche. Q1 may therefore NOT be resolved by
+appealing to that precedent.
+
+R16 (process/behavior): "C7's integrity-default trap: any new typed
+channel must land its report.py entry in the same commit, or not exist
+yet." This resolves the ordering half of C7 by operator instruction: a
+partial channel is forbidden outright, not merely warned against. Note
+it also frames the alternative plainly — "or not exist yet" sanctions
+NOT building a channel at all.
+
+**Amendment 3 (2026-08-04, operator-directed workflow changes landing
+mid-tranche).** Commits `95a3257f` / `7100567d` ("operator-directed")
+changed `dr-spec-change` and `dr-validate-change` THEMSELVES, and their
+own DELIVERY.md states the timing was deliberate: "Timely: rung 4
+(module fingerprints — exactly a new typed-record observable) is at
+capture phase; these rules reach its branch before its spec phase."
+Re-verified after rebasing: rung 4's handover text is still
+byte-identical to the Verbatim block above. Four new rules bind this
+tranche's spec phase and are ledgered here before it runs.
+
+C10 — the frozen-surface contact forecast, now mandatory and
+stop-enforcing (`dr-spec-change` step 3, verbatim):
+
+> Frozen-surface contact forecast — mandatory, in writing. Diff the
+> planned target files against `docs/map/INV-frozen-surfaces.md`'s
+> surface list and record the verdict in SPEC.md's "Frozen-surface
+> contact forecast" section; "none expected" counts, but only after
+> actually checking. ANY plausible contact stops the tranche HERE:
+> commit SPEC.md and obtain the operator's words before `dr-plan-steps`
+> runs.
+
+This is R15's DESIGN-AND-STOP generalized into the workflow itself, and
+it raises the bar: the stop now triggers on *plausible* contact, not
+only on unavoidable contact.
+
+C11 — named-mechanism reachability (`dr-spec-change` step 2, verbatim):
+
+> A mechanism the request NAMES — a fixture to reuse, a file to copy, a
+> pattern to follow — is a suggestion, not a requirement. Verify it
+> actually reaches the code this change touches (trace the call path)
+> before adopting it. If it cannot, that is a material contradiction:
+> deliver the PROPERTY the requirement wants and record the
+> contradiction in writing, or fork to the operator. Never adopt a named
+> mechanism unverified, and never deviate from it silently.
+
+Same rule as C8, now with a method attached ("trace the call path").
+Binds R3's `CONTAINED_WORKER_SHA256` precedent.
+
+C12 — reader-before-writer, generalized (`dr-spec-change` step 3,
+verbatim):
+
+> For changes that add data to the typed record, one more guardrail: the
+> absence-tolerant READER lands before the writer emits, so every
+> existing committed root stays valid with the new data absent (the
+> rung-4 guardrail generalized; X8 is the precedent for keeping new
+> fields out of frozen digests entirely).
+
+C13 — **the sweep probe, which answers Q4 directly**
+(`dr-spec-change` step 3, verbatim):
+
+> And a new typed-record OBSERVABLE (field, record type, finding) needs a
+> sweep probe proposed for it in the spec: a sweep that never looks at
+> the new data reports "byte-identical" trivially while proving nothing
+> about it. The probe change is its own SEPARATE commit — extending
+> `tools/root_sweep.py` resets the byte-identity baseline, so it never
+> rides the same commit as the `src/` change it would judge, gets its own
+> before/after capture on an unchanged tree, and follows the tool's probe
+> rule (assert the attribute exists before reading it).
+
+With `dr-validate-change` step 4's matching teeth, verbatim:
+
+> if the change added a typed-record OBSERVABLE (a field, record type, or
+> finding), confirm a sweep probe for it exists or is specced as its own
+> follow-up commit — "sweep byte-identical" is trivially true for data
+> the sweep never reads, so an observable with no probe and no written
+> justification is a FAIL.
+
+Q4 asked whether a byte-identical sweep alone proves absence-tolerance.
+These rules answer it: **no.** R10's sweep is trivially satisfiable for
+data the sweep never reads, so a probe must be proposed in SPEC.md, in
+its own separate commit, ordered so it never rides the `src/` change it
+judges.
+
 (append-only; later operator messages land here as R<n+1>... or
 "R2a supersedes R2", each with its verbatim quote)
