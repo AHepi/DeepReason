@@ -237,3 +237,39 @@ sampled battery as a confound.
 
 **Rung 5's acceptance line is unaffected** and was met offline: full gate,
 sweep byte-identical, the alternative's offline run root replay-valid.
+
+
+---
+
+## Post-delivery 3: the A/B RAN. R7 exercised.
+
+A second credential completed (`/v1/chat/completions` -> 200), qualification
+reached **`tier: full`, `qualification_state: ready`** (subject digest
+`a63abe8e…`, 1140 calls, `cache_reused: false`), and both arms ran.
+
+| metric | default | round-robin |
+|---|---|---|
+| events | 786 | 388 |
+| llm_calls | 31 | 24 |
+| artifacts | 71 | 38 |
+| problems | 120 | 66 |
+| module_backend | `default` | `round-robin` |
+| `verify_root` | no violations | `attempt-validity` |
+
+**R7 disposition changes from `not-exercised` to `done`.** The socket is
+real at live scale: the dumb backend does roughly half the work, exactly
+the volume difference the offline fixture predicted.
+
+**Two things only the live run could show:**
+- Both arms minted the SAME run id. The backend enters neither question nor
+  config, so run identity cannot tell the arms apart — only rung 4's stamp
+  does, from inside the record.
+- Arm B's root fails `verify_root` with one `attempt-validity` violation.
+  **Parked as P7, not fixed**: a defect found mid-change is parked, and
+  `invariants.py` is frozen surface 3. It is explicitly NOT attributed to
+  allocation — the disagreement is between the workflow's expected call
+  outcome and the recorded attempt validity, and one live sample cannot
+  say whether the default backend reaches the same path.
+
+No quality difference was demonstrated and none is claimed: `att_edges` is
+0 in both arms, so there were no attack edges to compare on.
