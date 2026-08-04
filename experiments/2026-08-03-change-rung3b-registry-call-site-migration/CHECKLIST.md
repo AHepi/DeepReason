@@ -18,7 +18,7 @@ lines 64-65 assert the migration has NOT happened
 and rewrites the now-false "What is deliberately absent" section, in the
 same commit.
 
-- [ ] 1. (S1) Add `_ACTIVE_BACKEND_ID = "default"` and an
+- [x] 1. (S1) Add `_ACTIVE_BACKEND_ID = "default"` and an
       `active_backend()` helper to `src/deepreason/capture/schools.py`,
       returning `SCHOOL_POPULATION.resolve(_ACTIVE_BACKEND_ID).backend`.
       done-when: `python -c "from deepreason.capture.schools import active_backend, DefaultSchoolPopulationBackend; assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"` exits 0.
@@ -28,7 +28,7 @@ same commit.
       sites). No call site migrated yet. Not committed — bundled at
       step 7.
 
-- [ ] 2. (S2) Migrate `src/deepreason/scheduler/scheduler.py`'s two call
+- [x] 2. (S2) Migrate `src/deepreason/scheduler/scheduler.py`'s two call
       sites — line 272 `schools.init_schools(harness, config)` and line
       1804 `schools.allocate(harness, problem, self.schools, config)` —
       to `schools.active_backend().init_schools(...)` / `.allocate(...)`.
@@ -44,7 +44,7 @@ same commit.
       ```
       Not committed — bundled at step 7.
 
-- [ ] 3. (S3) Migrate `src/deepreason/capture/ladder.py`'s four call
+- [x] 3. (S3) Migrate `src/deepreason/capture/ladder.py`'s four call
       sites (28, 73 `roster`; 39, 81 `reseed`) the same way.
       done-when: `test "$(grep -c 'schools.active_backend()' src/deepreason/capture/ladder.py)" = 4` exits 0 AND `python -m pytest tests/test_orbit.py tests/test_schools.py -q` ends "N passed, 0 failed" (paste it).
       DONE. All four migrated; each call's arguments preserved exactly
@@ -57,7 +57,7 @@ same commit.
       ```
       Not committed — bundled at step 7.
 
-- [ ] 4. (S4) Migrate `src/deepreason/cli/main.py`'s three call sites
+- [x] 4. (S4) Migrate `src/deepreason/cli/main.py`'s three call sites
       (906, 1064 `roster`; 1068 `reseed`) and `src/deepreason/report.py`'s
       one (402 `roster`).
       done-when: `test "$(grep -c 'active_backend()' src/deepreason/cli/main.py)" = 3` AND `test "$(grep -c 'active_backend()' src/deepreason/report.py)" = 1` both exit 0 (paste both).
@@ -71,7 +71,7 @@ same commit.
       ```
       Not committed — bundled at step 7.
 
-- [ ] 5. (S5) Verification-only: confirm no bare call site of the four
+- [x] 5. (S5) Verification-only: confirm no bare call site of the four
       named functions survives outside `capture/schools.py`, and that
       exactly one backend remains registered.
       done-when: `python -c "import pathlib,re; bad=[(p,l) for p in ('src/deepreason/scheduler/scheduler.py','src/deepreason/capture/ladder.py','src/deepreason/cli/main.py','src/deepreason/report.py') for l in pathlib.Path(p).read_text().splitlines() if re.search(r'schools(_mod)?\.(init_schools|roster|allocate|reseed)\(', l)]; assert not bad, bad; from deepreason.capture.schools import SCHOOL_POPULATION; assert SCHOOL_POPULATION.ids() == ('default',)"` exits 0.
@@ -88,7 +88,7 @@ same commit.
       ```
       No file modified this step.
 
-- [ ] 6. (S6) Update `docs/map/SEAM-schools-x-scheduler.md`: INVERT the
+- [x] 6. (S6) Update `docs/map/SEAM-schools-x-scheduler.md`: INVERT the
       two `! grep -q "SCHOOL_POPULATION"` checks (lines 64-65) into
       positive assertions that the migration landed; rewrite the "What
       is deliberately absent" section (its no-call-sites-yet paragraph
@@ -132,7 +132,7 @@ same commit.
       line against the repo's own 100-char limit.
       Not committed — bundled at step 7.
 
-- [ ] 7. (all) [COMMIT] Commit steps 1-6 together (helper, four migrated
+- [x] 7. (all) [COMMIT] Commit steps 1-6 together (helper, four migrated
       files, seam document) as one tranche commit — code and map in the
       SAME commit.
       done-when: `git log -1 --stat` shows `src/deepreason/capture/schools.py`,
@@ -145,7 +145,7 @@ same commit.
       tranche's 3 ledger files), code and map together. Pushed cleanly:
       `caac8374..c76eda34`.
 
-- [ ] 8. (S7) Add `tests/test_school_population_determinism.py`: two
+- [x] 8. (S7) Add `tests/test_school_population_determinism.py`: two
       mock-endpoint `Scheduler` runs over identically-seeded harnesses
       and identical `Config` (the `tests/test_schools.py` pattern —
       `Scheduler(harness, adapter, config)` with
@@ -188,15 +188,37 @@ same commit.
       equal when behaviour is equal, unequal when it is not.
       Not committed — step 9 commits it.
 
-- [ ] 9. (all) [COMMIT] Commit step 8's new test file.
+- [x] 9. (all) [COMMIT] Commit step 8's new test file.
       done-when: `git log -1 --stat` shows
       `tests/test_school_population_determinism.py`; push succeeds
       (paste confirmation).
 
-- [ ] 10. (all) Full map check: `python tools/docs_verify.py` AND
+- [x] 10. (all) Full map check: `python tools/docs_verify.py` AND
       `--audit` AND `--links`.
       done-when: all three report 0 failed / 0 findings / 0 dangling
       (paste all three).
+      DONE, but only after this step caught a FIFTH affected map
+      document that step 6's `--fast` run had reported clean.
+      `SEAM-scheduler-x-rules.md:147` slices `Scheduler.step`'s source
+      using `"assigned = schools.allocate("` as a boundary marker — text
+      S2 migrated — so it raised `ValueError: substring not found`.
+      Recorded as SPEC.md Amendment 2 / S10 BEFORE fixing; fixed by
+      shortening the marker to `"assigned = schools"`, which matches both
+      the pre- and post-migration forms and slices the identical segment
+      (verified against the real source first). The check's assertions
+      are unchanged.
+      **Instrument lesson, recorded because it generalises:** `--fast`
+      reuses cached results for documents whose OWN text is unchanged.
+      `SEAM-scheduler-x-rules.md` was not edited here, so its check was
+      never re-executed even though the source file it READS had changed.
+      A green `--fast` is therefore NOT evidence the map survived a
+      `src/` change; only the full run is. Final output:
+      ```
+      docs_verify [full]: 50 documents, 803 checks, 4 workers
+      docs_verify: 0 failed
+      docs_verify --audit: 0 finding(s)
+      docs_verify --links: 0 dangling reference(s), 50 document(s)
+      ```
 
 - [ ] 11. (S8, R5) Full gate: `python -m pytest tests/ -q -n 4`,
       ISOLATED (nothing else running concurrently). Rerun once if only

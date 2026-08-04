@@ -199,6 +199,34 @@ accept: `python tools/docs_verify.py --fast` 0 failed, with
 (mutation-tested before the new check is written down, per the map's
 "run it before you write it down" rule).
 
+## Amendment 2 (discovered executing step 10/S6, R4)
+
+S10 (R4, and the map's same-commit rule): `docs/map/SEAM-scheduler-x-
+rules.md:147` slices `Scheduler.step`'s source between two literal
+markers to isolate the discrimination branch, and its closing marker is
+`"assigned = schools.allocate("` — the exact text S2 migrated. The check
+died with `ValueError: substring not found`. As with Amendment 1, the
+CLAIM is untouched (that branch still runs `pairwise_discriminate` and
+neither `conj` nor `synthesize`, and still ends in `return`); only a
+source literal used as a slice boundary moved.
+
+Fix: shorten the closing marker to `"assigned = schools"`, which matches
+BOTH the pre- and post-migration call forms and slices exactly the same
+segment (verified against the real source before writing it down). The
+check's assertions are otherwise untouched, so it is made robust to
+formatting without being weakened.
+
+**The instrument lesson, which is the more valuable half of this
+finding:** step 6 ran `docs_verify --fast` and got 0 failed. `--fast`
+reuses cached results for documents whose OWN text is unchanged —
+`SEAM-scheduler-x-rules.md` was not edited by this tranche, so its check
+was never re-executed, even though the SOURCE FILE that check reads had
+changed underneath it. A check can therefore be broken by an edit to a
+file the document does not own, and `--fast` will not see it. Recorded
+so future tranches do not treat a green `--fast` as evidence the map is
+intact after a `src/` change: only the full run is that evidence.
+accept: `python tools/docs_verify.py` (FULL, not `--fast`) 0 failed.
+
 ## Assumptions (operator may override)
 
 A1 (Q2): the backend name is a module-level constant

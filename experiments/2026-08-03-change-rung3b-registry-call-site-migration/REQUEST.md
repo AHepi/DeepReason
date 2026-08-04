@@ -181,3 +181,14 @@ only its formatting moved. R4 ("map preflight... read them BEFORE the
 subsystems") and the map's same-commit rule already cover this —
 recorded as SPEC.md's S9 rather than a new requirement. See SPEC.md
 "Amendment 1" for the full account and fix.
+
+**Amendment 2** (discovered during dr-execute-step, step 10, on the FULL
+`docs_verify` run): a FIFTH map document,
+`docs/map/SEAM-scheduler-x-rules.md:147`, slices `Scheduler.step`'s
+source using `"assigned = schools.allocate("` as a boundary marker —
+text S2 migrated — so the check raised `ValueError: substring not
+found`. The claim it pins is untouched. Critically, step 6's
+`docs_verify --fast` had reported 0 failed: `--fast` reuses cached
+results for documents whose own text did not change, so a check broken
+by an edit to a file it merely READS goes unseen. R4 and the map's
+same-commit rule already cover the fix — recorded as SPEC.md's S10.
