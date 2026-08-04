@@ -48,7 +48,7 @@ prove the reader; the writer does not appear until step 9.
       commits one either (`git ls-files | grep sweep` finds none); the
       pasted digest is the tranche's evidence.
 
-- [ ] 2. (S3, S10, D1) Create `src/deepreason/module_events.py`: the
+- [x] 2. (S3, S10, D1) Create `src/deepreason/module_events.py`: the
       typed payload models (`ModuleFingerprintV1`,
       `ModuleFingerprintsEventPayloadV1`, schema literal
       `module-fingerprints.v1`) and the absence-tolerant reader
@@ -60,12 +60,7 @@ prove the reader; the writer does not appear until step 9.
       done-when: `python -c` opens a committed pre-change root
       read-only and `recorded_module_fingerprints` returns `()` on it
 
-      IN PROGRESS — the file is written and its done-criterion PASSES,
-      but the step stays UNCHECKED until C9's full `docs_verify`
-      returns; that run is still in flight. The commit carrying this
-      text is a SAFETY commit against container rollback (CLAUDE.md:
-      "commit and push the working branch at every phase boundary"),
-      not a done-marker. Reader result, over every git-tracked root:
+      DONE 2026-08-04. Reader result, over every git-tracked root:
 
           git-tracked roots            : 45
           opened, reader returned ()   : 31
@@ -84,7 +79,28 @@ prove the reader; the writer does not appear until step 9.
       `pytest` was absent from this container, so `docs_verify` reported
       **292 failed**, every one `-> No module named pytest`. Nothing to
       do with the documents. Installed `pytest`/`pytest-xdist` and
-      re-ran; that re-run is the one this step waits on. PARKED.md P6.
+      re-ran; that re-run then failed on ONE test at its own
+      `import jsonschema` — also undeclared. Installed too; both checks
+      passed (`5 passed`). PARKED.md P6/P6a.
+
+      C9's obligation for this `src/`-touching step, satisfied on the
+      FULL mode (never `--fast`):
+
+          docs_verify [full]: 50 documents, 803 checks, 4 workers
+          docs_verify: 0 failed
+          rc=0
+
+      **Pre-writer gate baseline, recorded here because D9's
+      fixture-drift prediction is measured against it.** Run with
+      `module_events.py` present but referenced by nothing, so it is
+      the count the writer must be judged against at step 18:
+
+          3303 passed, 7 skipped in 599.88s (0:09:59)
+          rc=0
+
+      0 failed, and no flake needed a re-run (C5's known flake
+      `test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`
+      passed first time).
 
 - [ ] 3. (S3, S13) Write `tests/test_module_fingerprints.py` with the
       READER tests only — absence is valid on committed roots (pin to
