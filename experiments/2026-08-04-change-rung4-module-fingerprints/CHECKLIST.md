@@ -60,6 +60,32 @@ prove the reader; the writer does not appear until step 9.
       done-when: `python -c` opens a committed pre-change root
       read-only and `recorded_module_fingerprints` returns `()` on it
 
+      IN PROGRESS — the file is written and its done-criterion PASSES,
+      but the step stays UNCHECKED until C9's full `docs_verify`
+      returns; that run is still in flight. The commit carrying this
+      text is a SAFETY commit against container rollback (CLAUDE.md:
+      "commit and push the working branch at every phase boundary"),
+      not a done-marker. Reader result, over every git-tracked root:
+
+          git-tracked roots            : 45
+          opened, reader returned ()   : 31
+          refused at open (pre-v6)     : 14
+          payload schema               : module-fingerprints.v1
+          module fingerprint_sha256    : 9a6411e64ec1a66d797ad49584ac37733dfcaba0056f459d44dbf03ca1e1e9b2
+          payload digest               : ebe196411351a47abb87716a534c7d4e3cbd7b2648c4b29d1fb3cede4ce1825d
+          key-order independent digest : True
+
+      31 + 14 = 45 reproduces the documented census exactly (28 v6 + 3
+      no-manifest open; 14 raise `UnsupportedRunManifestVersionError`).
+      The 14 refusals are the HARNESS declining to open a pre-v6 root,
+      not the reader failing on it — see PARKED.md P7.
+
+      Environment finding while running C9's full mode the first time:
+      `pytest` was absent from this container, so `docs_verify` reported
+      **292 failed**, every one `-> No module named pytest`. Nothing to
+      do with the documents. Installed `pytest`/`pytest-xdist` and
+      re-ran; that re-run is the one this step waits on. PARKED.md P6.
+
 - [ ] 3. (S3, S13) Write `tests/test_module_fingerprints.py` with the
       READER tests only — absence is valid on committed roots (pin to
       `git ls-files` roots, durable-test rule 1; name the rung in the
