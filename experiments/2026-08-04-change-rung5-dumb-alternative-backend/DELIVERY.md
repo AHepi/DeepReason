@@ -128,3 +128,42 @@ only in volume; P4 `_ACTIVE_BACKEND_ID` is process-global mutable state,
 restored by the scope but not defended against direct assignment; P5 rung
 4's parked items remain open; P6 fixture-drift forecasting was the weakest
 part of two consecutive specs.
+
+
+---
+
+## Post-delivery: the credential arrived, and the live A/B is BLOCKED
+
+The operator supplied a credential. It was written to a gitignored,
+mode-600 `env` file whose path was added to `.gitignore` and committed
+BEFORE the file existed; it appears in no committed file and in no log.
+
+**The A/B was not run, because the credential cannot complete.** Measured
+before launching anything:
+
+    /v1/models           + key -> 200   (18 models, glm-5.2 among them)
+    /v1/chat/completions + key -> 401   glm-5.2
+    /v1/chat/completions + key -> 401   gpt-oss:20b
+    /v1/chat/completions + key -> 401   deepseek-v4-flash
+    /api/chat (native)   + key -> 401
+    /v1/chat/completions, NO key -> 401  (control)
+
+The key AUTHENTICATES — the catalogue read succeeds — and is refused for
+inference on every model and both API paths. This is an account
+entitlement condition (read-scoped key, lapsed subscription, or exhausted
+credits), not a transmission fault: 56 chars, no whitespace, correct
+`<32 hex>.<23 alnum>` shape.
+
+No qualification was launched. It would have spent ~14 minutes and ~1160
+calls reaching the same 401.
+
+**R13 is discharged** (the ask was made and answered). **R7 remains
+not-exercised**, now for an external reason rather than a procedural one.
+Rung 5's acceptance line — "full gate; sweep byte-identical; the
+alternative's offline run root replay-valid" — was already met by the
+offline work and does not depend on the A/B.
+
+**What would unblock it:** a key with inference entitlement on the same
+account, or confirmation that the subscription/credits are active. The
+`env` file is in place, so a working key is a one-line replacement and the
+ladder can launch immediately.
