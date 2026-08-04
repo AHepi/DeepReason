@@ -37,6 +37,7 @@ experiments/2026-08-04-change-rung5-dumb-alternative-backend/env
 # Rung 5 A/B transient run output (the AUDIT json is the committed evidence)
 experiments/2026-08-04-change-rung5-dumb-alternative-backend/qualify.err
 experiments/2026-08-04-change-rung5-dumb-alternative-backend/*-reason.err
+experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab_driver.log
 
 
 # Subagent git worktrees. Created by Workflow isolation: 'worktree' and removed

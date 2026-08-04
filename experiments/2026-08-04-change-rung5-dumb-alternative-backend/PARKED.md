@@ -41,3 +41,14 @@ and a content test; rung 5's spec predicted nothing and missed a rung 3
 registry test. Both were caught by the full gate and handled correctly,
 but a spec-phase habit of grepping for tests that assert on the thing
 being changed would have caught both earlier and cheaper.
+
+## In-flight note (2026-08-04, during the live A/B)
+
+The two run homes (`ab-home/runs/`, `rr-home/`) are deliberately NOT
+committed while the ladder is running. The harness is appending to
+`log.jsonl` as this is written, and committing a root mid-append would
+capture a torn tail and present it as evidence — the failure mode
+`DR-SEAM-harness-x-verification` exists to prevent, where a reader repairs
+or misreads a partial record. They are committed once the ladder exits and
+`verify_root` has judged them, which is the only point at which a root is
+evidence rather than a file.
