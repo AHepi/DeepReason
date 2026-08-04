@@ -608,7 +608,7 @@ Rule and constrains its inputs — five clauses, one per payload — and
 requirement in its own recipe for this exact change; SPEC.md D3 never named
 it, so the plan never had a step for it.
 
-- [ ] 25. (S3, S10) Add the mutual-implication clause for
+- [x] 25. (S3, S10) Add the mutual-implication clause for
       `module_fingerprints` to `Event._process_payload_contract` in
       `src/deepreason/ontology/event.py`, matching the five existing
       clauses: the payload may ride only `Rule.MEASURE`, and the event's
@@ -619,13 +619,13 @@ it, so the plan never had a step for it.
       done-when: an `Event` pairing the payload with `Rule.CONJ` raises
       `ValueError`, and one with mismatched `inputs` raises too
 
-- [ ] 26. (S3) Regression tests for step 25, mutation-proved: the
+- [x] 26. (S3) Regression tests for step 25, mutation-proved: the
       forged-rule event and the mismatched-inputs event must each be
       refused, and the legitimate appender path must still pass.
       done-when: `python -m pytest tests/test_module_fingerprints.py -q`
       -> 0 failed, and removing the clause turns exactly the new tests red
 
-- [ ] 27. (S3) Confirm no committed root's verdict moved: a new
+- [x] 27. (S3) Confirm no committed root's verdict moved: a new
       well-formedness rule is the one change class that can make an
       existing root UNOPENABLE (`DR-SEAM-harness-x-verification` step 6,
       C7), because the clause runs on every replayed event.
@@ -633,11 +633,61 @@ it, so the plan never had a step for it.
       `62614bfc...16ac11f67`, and the 42-root sweep is byte-identical to
       the 5-field baseline `6d6c3366...a74fd525`
 
-- [ ] 28. (S8, C9) FULL `docs_verify` + `--audit`.
+- [x] 28. (S8, C9) FULL `docs_verify` + `--audit`.
       done-when: 0 failed and 0 findings (paste both)
 
-- [ ] 29. (S4) FULL gate.
+- [x] 29. (S4) FULL gate.
       done-when: "N passed, 0 failed" (paste it)
 
 - [ ] 30. (all) [COMMIT] Commit and push; re-run `dr-validate-change`.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+### Re-plan evidence (steps 25-30), 2026-08-04
+
+**25.** Clause added to `Event._process_payload_contract`. Forged shapes
+now refused, legitimate shape still accepted:
+
+    legitimate appender shape          ACCEPTED
+    forged rule (Conj)                 REFUSED: module fingerprints may ride only a Measure event
+    mismatched inputs                  REFUSED: module fingerprint inputs must name their schema and digest
+    carries outputs                    REFUSED: module fingerprints record identity, not work
+
+The fence is ONE-directional by design: fingerprints may ride only a
+Measure, but a Measure owes nothing to fingerprints — the two existing
+Measure appenders and every cycle heartbeat depend on that, and
+`test_a_measure_event_without_fingerprints_is_still_ordinary` pins it.
+
+**26.** `20 passed`. Mutation (delete the clause) -> `1 failed, 19
+passed`, the one failure being exactly
+`test_the_appender_shape_is_the_only_accepted_one`. Restored -> `20
+passed`. Precisely-aimed, not incidentally red.
+
+**27.** No committed root moved. Three census roots:
+
+    expected    : 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+    after clause: 62614bfcdbf494b2f3997c363a9a83ce024307ebc4718cbdea2ebeb16ac11f67
+
+42-root sweep vs the 5-field baseline:
+
+    EMPTY DIFF
+    sha: 6d6c3366c821d4555a8a4866c6a208c2b5d08db704e8f13c1611c7c5a74fd525
+
+The clause is guarded by `if self.module_fingerprints is not None`, so it
+never fires on a root that carries no such payload — which is every
+committed one. That is why a new well-formedness rule was safe here, and
+the sweep is what proves it rather than the argument.
+
+**28.**
+
+    docs_verify [full]: 50 documents, 805 checks, 4 workers
+    docs_verify: 0 failed
+    docs_verify --audit: 0 finding(s)
+
+**29.**
+
+    3323 passed, 7 skipped in 608.89s (0:10:08)
+    rc=0
+
+3323 vs 3321 before the re-plan: +2, the two new contract tests.
+
+**30.** Committed and pushed; re-validation follows.
