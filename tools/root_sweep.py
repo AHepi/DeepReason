@@ -8,6 +8,7 @@ import pathlib
 import sys
 
 from deepreason.harness import Harness
+from deepreason.module_events import recorded_module_fingerprints
 from deepreason.verification.report import verify_root_report
 
 out = pathlib.Path(sys.argv[1])
@@ -22,10 +23,20 @@ for root in sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jso
         )
         harness = Harness(root, read_only=True)
         assert hasattr(harness.state, "att"), "state has no att"
+        # Module fingerprints (rung 4). Absence is the valid answer for every
+        # root recorded before the observable existed, so this reports a count
+        # rather than demanding one; a sweep that never read the field would
+        # report "byte-identical" while proving nothing about it.
+        assert hasattr(harness, "log"), "harness has no log"
+        stamps = recorded_module_fingerprints(harness)
+        modules = sorted(
+            {m.module_id for stamp in stamps for m in stamp.modules}
+        )
         lines.append(
             f"{str(root):72} valid={str(report.valid):5} "
             f"epistemic_passed={str(report.epistemic_checks_passed):5} "
-            f"att={len(harness.state.att):3} blind={blind}"
+            f"att={len(harness.state.att):3} blind={blind} "
+            f"modules={','.join(modules) if modules else '-'}"
         )
     except Exception as error:
         lines.append(f"{str(root):72} ERROR {type(error).__name__}: {error}")

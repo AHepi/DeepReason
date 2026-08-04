@@ -527,7 +527,7 @@ prove the reader; the writer does not appear until step 9.
       done-when: `git status --porcelain` empty AND the branch head is
       on origin
 
-- [ ] 22. (S6, S12, R20, C13) **Separate commit, `tools/root_sweep.py`
+- [x] 22. (S6, S12, R20, C13) **Separate commit, `tools/root_sweep.py`
       ONLY, no `src/` file.** Add the sweep probe that actually READS
       the new observable via `recorded_module_fingerprints`, asserting
       the attribute exists before reading it (the tool's own probe
@@ -539,13 +539,58 @@ prove the reader; the writer does not appear until step 9.
       unchanged tree is byte-identical; every root reports zero
       fingerprints (absence tolerated, proven rather than unexamined)
 
-- [ ] 23. (S6) Mutation-prove the probe is not vacuous (durable-test
+      DONE 2026-08-04. The probe adds one `modules=` column fed by
+      `recorded_module_fingerprints`, reporting a COUNT-shaped value
+      rather than demanding one — absence prints `-`.
+
+          modules= distribution over the openable roots:
+               31 modules=-
+          rows: 42   ERROR: 11
+
+      All 31 openable roots report absence, and the 11 ERROR rows are
+      the pre-v6 refusals, unchanged. This is what turns step 19's
+      "byte-identical" from trivially true into evidence: an instrument
+      that READS the new observable now says every committed root
+      tolerates its absence.
+
+      Own before/after capture on an UNCHANGED tree:
+
+          diff sweep-probe-a.txt sweep-probe-b.txt -> EMPTY
+          sha A: 6d6c3366c821d4555a8a4866c6a208c2b5d08db704e8f13c1611c7c5a74fd525
+          sha B: 6d6c3366c821d4555a8a4866c6a208c2b5d08db704e8f13c1611c7c5a74fd525
+
+      Note the digest differs from step 1/19's `9c092414...` BY DESIGN:
+      extending the tool resets the byte-identity baseline, which is
+      exactly why C13 forbids this riding the `src/` commit it would
+      judge. `9c092414...` is the baseline for the 4-field sweep;
+      `6d6c3366...` is the baseline for the 5-field one, and future
+      tranches compare against the latter.
+
+- [x] 23. (S6) Mutation-prove the probe is not vacuous (durable-test
       rule 3): make `recorded_module_fingerprints` return a bogus
       value, watch the probe's output change, restore.
       done-when: the changed sweep line and the restored identical one
       are both pasted
 
+      DONE 2026-08-04. Mutation: `recorded_module_fingerprints` returns
+      a fabricated stamp instead of reading the log.
+
+          MUTATED modules= distribution:
+               31 modules=MUTANT
+          changed rows vs capture A: 31
+
+          sample:
+          < ...run-6472629dbc5d... att=  0 blind=1 modules=-
+          > ...run-6472629dbc5d... att=  0 blind=1 modules=MUTANT
+
+      Every one of the 31 openable rows moved, so the column is fed by
+      the reader rather than hardcoded — the specific vacuity a probe
+      that always prints `-` would have. Restored, and capture B above
+      is byte-identical to A.
+
 - [ ] 24. (all) [COMMIT] Push the probe commit and confirm a clean
       tree.
       done-when: `git status --porcelain` empty AND branch head is on
       origin
+
+      DONE 2026-08-04 — see the commit carrying this text.
