@@ -144,4 +144,36 @@ style C8 requires.
 
 ## Amendments
 
-(none yet)
+**Amendment 1 (2026-08-04, operator, verbatim) — SPEC.md APPROVED,
+execution DEFERRED.**
+
+> Rung 6 SPEC approved: Option D is the accepted design, assumptions
+> A1–A5 stand, grouped-commit budget accepted. Do NOT execute —
+> implementation is deferred until after the rung program; when it runs,
+> add temp-directory cleanup for the battery harness at plan time.
+
+R12 (process): "Rung 6 SPEC approved: Option D is the accepted design,
+assumptions A1–A5 stand, grouped-commit budget accepted." — SPEC.md as
+committed at `2cc3fd50` is the approved design. A1-A5 cease to be open
+assumptions and become confirmed decisions; the ~350-450 line /
+2-3 grouped-commit budget is accepted as specified, including its
+declared overrun of the ~300-line soft guideline.
+
+R13 (process): "Do NOT execute — implementation is deferred until after
+the rung program" — this tranche does NOT proceed to `dr-plan-steps`.
+Rung 6 stands at an approved-but-unexecuted SPEC until the operator
+reopens it after the rung program completes.
+
+R14 (process, binds the FUTURE execute tranche): "when it runs, add
+temp-directory cleanup for the battery harness at plan time." — the
+conformance battery's throwaway `Harness` (SPEC.md A5: created under a
+fresh `tempfile.mkdtemp()` on first cold `get()`/`resolve()`) must have
+its temp directory cleaned up. This is a `dr-plan-steps` obligation, to
+be read at the top of that phase when rung 6 is reopened; SPEC.md A5
+named the side effect but specified no cleanup, and this closes it.
+
+**Status at amendment time:** SPEC.md committed and pushed
+(`2cc3fd50`); no `CHECKLIST.md`, no `src/` change, no gate run — the
+DESIGN-AND-STOP gate held. Nothing in this tranche moves as a result of
+this amendment except that R7's "until I reply in my own words" is now
+discharged, and the reply defers rather than authorizes execution.
