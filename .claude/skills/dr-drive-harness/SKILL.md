@@ -95,7 +95,12 @@ layer, and the reading order is fixed:
 Instruments that prove you broke nothing: the full gate
 (`python -m pytest tests/ -q -n 4`, 0 failed only) and the root sweep
 (`python tools/root_sweep.py` — no committed root's verdict may move).
-`python tools/docs_verify.py` is the same gate for the map.
+`python tools/docs_verify.py` is the same gate for the map — and its
+`--fast` mode reuses cached results, so it CANNOT catch a document your
+`src/` change just broke. Iterate with `--fast`; run the FULL mode at
+least once before any commit that touches `src/` (proven at commit
+`55b16ce9`: the full run caught a fifth affected map document that
+`--fast` had passed clean).
 
 ## 5. Where to look WHEN something breaks
 
