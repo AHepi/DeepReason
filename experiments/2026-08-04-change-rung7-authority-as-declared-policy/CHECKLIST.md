@@ -31,12 +31,35 @@ precedent, and it is the honest state.
 
 ---
 
-- [ ] 1. (S8) Record the `docs_verify` BEFORE baseline for the whole map
+- [x] 1. (S8) Record the `docs_verify` BEFORE baseline for the whole map
       (full mode, not `--fast` — the E10 companion lesson), plus
       `--audit` and `--links` counts.
       done-when: baseline captured in the step record showing document
       count, check count, and `docs_verify: 0 failed`; `--audit` and
       `--links` each 0.
+
+      **DONE, but the baseline is RED — done-criterion partially
+      contradicted by the tree. Recorded, not improvised around.**
+
+          docs_verify [full]: 50 documents, 807 checks, 4 workers
+          FAIL SEAM-harness-x-verification.md:253 -> AssertionError: (47, {0: 30, 1: 14, 2: 3})
+          FAIL SEAM-manifest-x-schools.md:271     -> AssertionError: 44
+          docs_verify: 2 failed
+          docs_verify --audit: 0 finding(s)
+          docs_verify --links: 0 dangling reference(s), 50 document(s)
+
+      Two pre-existing failures, both the root-census checks, both
+      caused by rung 5's post-delivery commits `f6d41bff`/`1f20a6bd`
+      committing the two live A/B run roots. NOT caused by this tranche
+      (`find <tranche-dir> -name log.jsonl` → 0). Full analysis and
+      disposition: PARKED.md P1. Fixing it is another tranche's job
+      (operator scoped this one to "7a only"; cross-routing parks a
+      defect found mid-change).
+
+      **Consequence, declared here rather than discovered at
+      validation:** this tranche's acceptance becomes DELTA-based.
+      Step 10's criterion is amended below from "0 failed" to "exactly
+      these 2 pre-existing failures and no others."
 
 - [ ] 2. (S8) Create `docs/map/SEAM-adjudication-x-authority.md` per
       `DR-SCHEMA`: `<!-- DR-SEAM-adjudication-x-authority -->` on line 1,
@@ -96,8 +119,14 @@ precedent, and it is the honest state.
 - [ ] 10. (S8) `python tools/docs_verify.py` — FULL mode, never
       `--fast` (E10's companion lesson: `--fast` reuses cached results
       and cannot see a document newly affected).
-      done-when: `docs_verify: 0 failed`, with the check count higher
-      than step 1's by the number of checks the new document added.
+      done-when (AMENDED at step 1, see PARKED.md P1 — delta-based
+      because the baseline was already red): `docs_verify: 2 failed`,
+      and the two failures are EXACTLY
+      `SEAM-harness-x-verification.md:253` and
+      `SEAM-manifest-x-schools.md:271` — the same two, unchanged, from
+      step 1. Any third failure, or either of these two changing its
+      detail, is a failed step. Document count 51 (was 50) and check
+      count higher than 807 by the number this tranche added.
 
 - [ ] 11. (S8, R10) Prove the 7b/7c fence held: this tranche touched no
       `src/` and no `tests/` path.
