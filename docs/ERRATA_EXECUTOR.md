@@ -368,3 +368,39 @@ resolved inside the workflow with the operator consulted exactly twice
 inventory switches await operator picks; rung 3 awaits operator words.
 The program's next untested disciplines remain rungs 4–5 (guardrailed)
 and 6–7 (DESIGN-AND-STOP).
+
+**X13 — rung 3 delivered across two tranches; the first rung executed
+under the minimal-prompt regime, and the question discipline caught the
+HANDOVER's own wrong mechanism.** Executor head `98142891`; operator
+authorization verbatim in tranche A's REQUEST.md ("Continue to run 3.
+Read Claude.md first then proceed."). Tranche A built the registry
+(`SchoolPopulationRegistry`, default backend, fingerprint pinned per the
+`verification/registry.py` shape) with NO call sites migrated — the
+split itself honest, validated PASS with R2/R7 explicitly recorded as
+Tranche-A-scoped (`45bae1bf`). Tranche B migrated every call site and
+delivered the determinism proof (`98142891`). Final numbers: gates
+3301/0 then 3303/0 isolated; sweep 42/11 byte-identical against two
+independent captures; frozen-surface diff EMPTY both tranches; five map
+documents moved in the same commits as the code; 50 map documents, 0
+failed / 0 findings / 0 dangling after. Three events worth the ledger:
+(1) **The handover's R7 prescribed a fixture that provably cannot test
+this rung** — `test_attached_evidence_citation.py`'s no-provider
+pattern replaces `ops.run_scheduler`, the very function that constructs
+the `Scheduler`, so `init_schools`/`allocate` are never reached; a test
+built on it would pass while proving nothing. The executor found this
+at spec time (SPEC.md Q3), reported the contradiction in writing, and
+delivered the PROPERTY (byte-identity via a mock-endpoint Scheduler,
+plus a mutation test proving the comparison can fail) instead of the
+named fixture — recorded against the handover's author (the monitor);
+see docs/ERRATA.md E10 for the document correction. (2) **The
+determinism test itself went flaky and was diagnosed, not suppressed**:
+`llm.ms` recurs inside `attempt_trace` entries, so top-level scrubbing
+left a 1-in-3 wall-clock mismatch; reproduced serially, fixed with a
+recursive scrub, verified 0/12 serial + 0/3 parallel, and the mutation
+test still fails a reversed-allocation backend (`863a0fa3`). (3)
+**`docs_verify --fast` structurally cannot catch newly-affected
+documents** — it reuses cached results, so the full mode was what
+caught the fifth affected map document (`SEAM-scheduler-x-rules.md`,
+whose source-slice marker the migration moved; `55b16ce9`). Rung 3
+complete; single-writer ledger rule held (zero executor ledger edits
+this rung); nothing further authorized.

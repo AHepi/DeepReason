@@ -140,3 +140,25 @@ eight missing `Seams:` entries added (each document's `Seams-undocumented:`
 line correspondingly shortened). Discovered while executing R2 of rung 1
 (every `SUB-*.md` surfaces its seams in prose) — the header had to be
 accurate before it could be honestly surfaced.
+
+## 2026-08-04
+
+**E10 — the handover prescribed a fixture that cannot reach the code it
+was meant to test.** `docs/HANDOVER_2026-08-03.md`, Rung 3's accept
+line: "a determinism test proving a run's outputs are byte-identical
+before/after the registry (reuse the offline no-provider fixture pattern
+from `tests/test_attached_evidence_citation.py`)." That fixture replaces
+`deepreason.ops.run_scheduler` — the function that constructs the
+`Scheduler` — so `init_schools` and `allocate`, the exact functions rung
+3 migrates, are never executed under it; a test built on it would pass
+while proving nothing. Found at spec time by the rung-3 executor
+(`experiments/2026-08-03-change-rung3b-registry-call-site-migration/
+SPEC.md` Q3), which delivered the property R7 wanted via a mock-endpoint
+`Scheduler` plus a mutation test instead. Corrected 2026-08-04: the
+handover's rung-3 accept line now carries the correction note, and the
+lesson generalized — rung/spec text should state acceptance PROPERTIES;
+a concretely named mechanism is a suggestion the spec phase must verify
+for reachability, never a requirement. Companion tooling fact, same
+tranche (`55b16ce9`): `docs_verify --fast` reuses cached results and so
+cannot catch documents newly affected by a `src/` change — the full mode
+can and did; recorded in the handover's environment facts.
