@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_005 reduces to SRC_002: the pruning-via-efficiency claim depends on the assumption that the lineage-dependency tax is the price of high-confidence source facts, but this is exactly the suppression mechanism restated as a virtue. The reduction is REFUTED IF an ownership-allocation regime is observed to produce cross-cutting explanations at or above the rate of a random-allocation regime, since that would break the equivalence between pruning and suppression.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_005", "SRC_002"]
+    },
+    {
+      "content": "SRC_005 contradicts SRC_004 because they share the mechanism of lineage-local basin descent but reach opposite conclusions about its effect: SRC_005 claims efficiency is a precondition for cross-cutting discovery, while SRC_004 claims that same efficiency is the artifact of suppression. The contradiction is REFUTED IF the efficiency gains of ownership allocation are empirically separable from suppression—i.e., if remaining within a single basin can be shown to accelerate saddle-crossing rather than prevent it.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_005", "SRC_004"]
+    },
+    {
+      "content": "SRC_006 abstracts SRC_004: the optimization-basin saddle-crossing model is an instance of the broader institutional-constraint rational-optimization pattern, where the agent's optimization metric (loss landscape) is a concrete realization of the institutional constraint (ownership lineage). This abstraction is REFUTED IF the shared structure breaks down because research-programme landscapes are co-constructed by the frames used to search them, making the fixed-landscape assumption of gradient descent a substantive disanalogy rather than a mere implementation detail.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_006", "SRC_004"]
+    },
+    {
+      "content": "SRC_004 depends on SRC_002: the directed-suppression mechanism (over-suppression of low-energy saddle-crossing) inherits the lineage-dependency tax, because without the tax there is no cost asymmetry between within-basin descent and cross-basin exploration, and thus no directed bias. This dependence is REFUTED IF the saddle-crossing costs are intrinsic to the problem space and independent of the allocation regime—i.e., if rival lineages face identical saddle heights regardless of ownership.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_004", "SRC_002"]
+    },
+    {
+      "content": "SRC_005 inherits SRC_003: the pruning-via-efficiency defense inherits the structural necessity of ownership-based localization for fact consolidation, since without ownership the invariants that make source-programme facts high-confidence would not carry forward. This inheritance is REFUTED IF a non-ownership allocation regime (e.g., open cross-lineage borrowing) is empirically observed to produce equally or more reliable consolidated facts, which would mean the inheritance is incidental rather than structural.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_005", "SRC_003"]
+    },
+    {
+      "content": "SRC_006 contradicts SRC_003 because the shared institutional-constraint structure predicts systematic underrepresentation of best-fit cross-cutting ideas, while SRC_003 claims the pruning is net-beneficial. The contradiction is REFUTED IF the underrepresentation predicted by SRC_006 is shown to consist only of low-value crossovers, with high-value cross-cutting explanations preserved—i.e., if the constraint rationally filters rather than blindly suppresses.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_006", "SRC_003"]
+    }
+  ]
+}
+```

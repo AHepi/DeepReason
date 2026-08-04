@@ -1,0 +1,13 @@
+```json
+{
+  "patch": {
+    "op": "add",
+    "path": "/candidates/2/analogy/overturn_conditions",
+    "value": [
+      "If mandatory consultation reveals no additional cross-cutting explanations that are accepted, the baseline allocation is efficient rather than suppressive.",
+      "If the acceptance rate of cross-cutting explanations is unchanged by the consultation intervention, the suppression hypothesis is falsified for this run.",
+      "If within-run records already contain sufficient variation (e.g., informal context requests or advisory proposals), the single-run distinction may be observable without a between-run comparison."
+    ]
+  }
+}
+```

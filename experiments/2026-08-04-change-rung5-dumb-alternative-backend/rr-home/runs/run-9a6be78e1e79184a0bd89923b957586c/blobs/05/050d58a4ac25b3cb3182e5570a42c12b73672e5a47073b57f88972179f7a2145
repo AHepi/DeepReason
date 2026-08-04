@@ -1,0 +1,47 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation suppresses cross-cutting explanations because the owning lineage has a structural blind spot to abstractions that span across rival lineages, as the necessary conceptual primitives and axioms reside in foreign, unowned memory blocks.",
+    "mechanism": "The lineage that produced the parent artifact operates within a specific formal vocabulary and axiomatic basis. A cross-cutting explanation requires synthesizing primitives from multiple lineages (e.g., combining a mechanist invariant with a unifier's homomorphism). Because the owning lineage cannot natively express or admit evidence from foreign lineages, it systematically discards cross-cutting hypotheses during local generation. Suppression is distinguishable from mere efficiency within a single run by examining the 'foreign primitive utilization' rate: if suppression is occurring, the system's proposed successors will show a sharp dropoff or absence of formal primitives not native to the owning lineage.",
+    "counterconditions": [
+      "Cross-cutting primitives are successfully translated into the owning lineage's native vocabulary prior to proposal generation, making foreign primitive utilization unnecessary.",
+      "The owning lineage has already absorbed all relevant foreign primitives into its own memory blocks, rendering ownership allocation non-restrictive.",
+      "Cross-cutting explanations are mathematically impossible to form given the current artifact boundaries, making the null count of such explanations a sign of efficiency rather than suppression."
+    ],
+    "typicality": 0.7,
+    "analogy": {
+      "source_memory_refs": [
+        "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672",
+        "30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81"
+      ],
+      "shared_structure": [
+        "A system is partitioned into isolated language games or vocabularies (rival lineages / epistemic communities).",
+        "A local actor (owning lineage / specific community) can only form propositions using its local language.",
+        "A proposition that requires multiple languages is structurally impossible for the local actor to even express.",
+        "The allocation rule (ownership / localization) prevents actors with broader vocabularies from attempting the synthesis."
+      ],
+      "disanalogies": [
+        "Rival research programmes in a reasoning system may have automatic translation or bridging axioms, unlike human epistemic communities with incommensurable paradigms.",
+        "The reasoning system's global orchestrator can count primitive usage, whereas Kuhn's account of scientific revolutions lacks an objective external observer."
+      ],
+      "transfer_claims": [
+        "Just as a community with an incommensurable vocabulary cannot adopt another's theories without a revolution or translation, a lineage cannot generate cross-cutting explanations without adopting foreign primitives.",
+        "If the reasoning system exhibits translation failures (e.g., inability to map a mechanist invariant to a unifier structure), this validates the paradigm incommensurability hypothesis."
+      ],
+      "overturn_conditions": [
+        "The system produces cross-cutting explanations using only the owning lineage's native primitives.",
+        "Foreign primitives are consistently rejected by all lineages, suggesting the primitives are fundamentally flawed rather than contextually inaccessible."
+      ],
+      "adopted_commitment_refs": [
+        "program:reasoning-envelope-wf"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "need_context",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}
+```

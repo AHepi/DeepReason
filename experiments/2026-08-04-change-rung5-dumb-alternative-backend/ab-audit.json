@@ -1,0 +1,51 @@
+{
+  "comparison": {
+    "artifact_delta": -33,
+    "backends_differ": true,
+    "both_replay_valid": false,
+    "event_delta": -398,
+    "llm_call_delta": -7
+  },
+  "default": {
+    "artifacts": 71,
+    "att_edges": 0,
+    "events": 786,
+    "llm_calls": 31,
+    "module_backend": "default",
+    "problems": 120,
+    "replay_valid": true,
+    "root_exists": true,
+    "run_id": "run-9a6be78e1e79184a0bd89923b957586c",
+    "schools_with_artifacts": [
+      "school-0",
+      "school-1",
+      "school-2",
+      "school-3"
+    ],
+    "state": "completed",
+    "stop_reason": null,
+    "verify_violations": []
+  },
+  "roundrobin": {
+    "artifacts": 38,
+    "att_edges": 0,
+    "events": 388,
+    "llm_calls": 24,
+    "module_backend": "round-robin",
+    "problems": 66,
+    "replay_valid": false,
+    "root_exists": true,
+    "run_id": "run-9a6be78e1e79184a0bd89923b957586c",
+    "schools_with_artifacts": [
+      "school-0",
+      "school-1",
+      "school-2",
+      "school-3"
+    ],
+    "state": "completed",
+    "stop_reason": null,
+    "verify_violations": [
+      "attempt-validity"
+    ]
+  }
+}

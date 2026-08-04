@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The problem requires identifying what evidence within a single run would distinguish suppression from mere efficiency, and it explicitly demands: 'Where a claim can be tested by counting, say exactly what to count.' SRC_002 argues the 'against' side (ownership is net-beneficial) but provides no counting procedure whatsoever. Its counterconditions are qualitative observations ('empirically observed to block or delete references', 'outperform owner-produced explanations on external tests') with no specification of what to count, how to count it, or what threshold separates suppression from efficiency. This is a direct omission of an explicit problem requirement.",
+      "counterexample": null
+    }
+  ]
+}

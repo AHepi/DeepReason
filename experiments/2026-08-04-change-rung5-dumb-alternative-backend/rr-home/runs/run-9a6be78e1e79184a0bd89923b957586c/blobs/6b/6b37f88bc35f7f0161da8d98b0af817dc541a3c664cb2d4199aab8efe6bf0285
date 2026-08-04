@@ -1,0 +1,11 @@
+{
+  "repair.patch.v1": {
+    "pointer": "/candidates/2/analogy/overturn_conditions",
+    "operation": "add",
+    "value": [
+      "If mandatory consultation increases proposal generation but not acceptance, suppression may be at the adjudication layer rather than the allocation layer.",
+      "If the baseline run already contains informal cross-school consultation via context requests, the intervention may show no effect even though suppression existed prior to the informal practice.",
+      "If the acceptance rate of cross-cutting explanations is unchanged by mandatory consultation, the baseline allocation is efficient rather than suppressive."
+    ]
+  }
+}

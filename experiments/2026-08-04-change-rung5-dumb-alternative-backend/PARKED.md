@@ -52,3 +52,44 @@ capture a torn tail and present it as evidence — the failure mode
 or misreads a partial record. They are committed once the ladder exits and
 `verify_root` has judged them, which is the only point at which a root is
 evidence rather than a file.
+
+## P7 (DEFECT, found by the live A/B — parked, NOT fixed)
+
+**A live run under the round-robin backend produced a root that fails
+`verify_root`.** Arm B, `rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c`:
+
+    attempt-validity: event seq=17: failed call must contain no valid
+                      attempt, got [0]
+
+Characterised, not theorised (the blob-before-theory rule):
+- seq 17 is a `Rule.CONTROL` event carrying a conjecturer LLM call.
+- Its attempt trace has ONE attempt: `attempt=0`, `validation_path=''`
+  (i.e. it parsed valid), `raw_ref` present, no diagnostic ref.
+- `invariants.py:3695` classified the call's `expected_outcome` as
+  `FAILURE_REQUIRED`, and that arm forbids ANY valid attempt.
+- So the disagreement is between the workflow's expected call OUTCOME and
+  the recorded attempt VALIDITY. It is not an allocation-layer fact:
+  school allocation decides which schools work a problem, not how a
+  provider call's attempt trace is recorded.
+- Neither arm has a call with `ok=False` (`default` 31 calls, `roundrobin`
+  24 calls, 0 failed in both), so "failed" here is the verifier's derived
+  classification, not a transport failure.
+
+**What this is NOT evidence of.** It is not evidence that round-robin
+CAUSES the defect. The honest reading is that a different allocation drove
+the workflow down a path arm A did not take. Whether the same path is
+reachable under the default backend is UNKNOWN from one sample —
+CLAUDE.md's own standing fact is that capability/provider paths are
+stochastic across identical runs, and one live attempt that misses a path
+is inconclusive for that path.
+
+**Not fixed here.** A defect found mid-change is PARKED, not fixed; and
+`invariants.py` is frozen surface 3, which this tranche has no
+authorization to touch. It routes to `deepreason-orchestrator` as its own
+tranche, where diagnosis starts from the typed record — which now exists
+and is committed.
+
+**Worth noting for the rung programme:** this is the deliberately dumb
+backend earning its keep beyond its charter. Rung 5 asked it to prove the
+socket real; it also worked as a cheap fuzzer over run shapes, which is an
+argument for keeping it registered rather than deleting it after the rung.
