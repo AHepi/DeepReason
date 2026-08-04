@@ -1,7 +1,14 @@
 # Spec for: rung 4 — every run records which modules built it
 Traces: every item cites R/C numbers. Untraceable items are bugs.
 
-**VERDICT: DESIGN-AND-STOP.** No design that satisfies R2 ("into the
+**VERDICT: DESIGN-AND-STOP — RESOLVED 2026-08-04 by REQUEST.md
+Amendment 4 (R17-R20). Option B approved; the tranche proceeds.**
+The original verdict and its reasoning are kept verbatim below because
+they are the evidence the operator ruled on; the resolution is the
+appendix "Resolution of the DESIGN-AND-STOP" near the end of this file,
+which is the binding text where the two differ.
+
+Original verdict, as presented: No design that satisfies R2 ("into the
 run's TYPED RECORD") has zero frozen-surface contact. R14 asked for one;
 R13's measurements show there is none. Per R7, R15 and C10 this tranche
 stops here, at spec time, with the options priced. `dr-plan-steps` does
@@ -211,7 +218,173 @@ A3 (Q4): C13 already answered this — a byte-identical sweep does NOT by
 itself prove absence-tolerance, so S6's probe is owed. No assumption
 needed beyond adopting C13's rule as written.
 
-## Questions for operator (STOP — non-empty)
+## Resolution of the DESIGN-AND-STOP (2026-08-04, post-Amendment 4)
+
+Amendment 4 answered Q-OP1 with "Option B approved" (R17) and supplied
+S7's alternative accept in the operator's own words (R18). Everything in
+this section is new spec text written after that ruling; nothing above it
+was rewritten.
+
+### What R17/R18 close
+
+- Options A and C are CLOSED. No `Config` field, no
+  `run_manifest.py` scrub line, no object-store-only blob.
+- Surfaces 1, 3, 4 and 5 remain un-authorized. S7's empty-diff accept
+  still binds for `capabilities/state.py`, `invariants.py`,
+  `run_manifest.py` and `qualification.py`; only `harness.py` is
+  released, and only for the appender.
+- A1 stands unoverridden: `SCHOOL_POPULATION` only. `VerifierRegistry`
+  and `WORKLOADS` go to PARKED.md.
+
+### The design, traced against the real code (extends R13's method to
+### the approved option — every path below was read this turn)
+
+D1. **Payload model — new file `src/deepreason/module_events.py`.**
+Not frozen; mirrors the homes the other four payloads already use
+(`bridge/events.py`, `capabilities/events.py`, `scratch/events.py`,
+`conjecture_events.py`, `control_events.py` — verified at
+`ontology/event.py:15-24`). Holds `ModuleFingerprintV1` (one module:
+registry name, module id, its `fingerprint()` mapping, and the sha256
+over that mapping's canonical JSON) and
+`ModuleFingerprintsEventPayloadV1` (`schema:
+Literal["module-fingerprints.v1"]`, the module list, and a digest over
+it). **No wall-clock field anywhere in the payload** — rule 4 of the
+durable-test doctrine; the enclosing `Event.ts` is the only time in the
+record and tests scrub it.
+
+D2. **The shape, copied from the precedent; the location, not (M3,
+C11).** `CONTAINED_WORKER_SHA256`'s shape — a sha256 over a frozen
+identity, pinned at construction, carried on a typed record — is what
+`ModuleFingerprintV1` reproduces. Its LOCATION (a capability-attempt
+record on a stochastic path) is explicitly not copied, per M3. This is
+the "deliver the PROPERTY, record the deviation in writing" branch of
+C11, not a silent deviation.
+
+D3. **Field on `Event` — `ontology/event.py`, not frozen.**
+`module_fingerprints: ModuleFingerprintsEventPayloadV1 | None =
+Field(default=None, exclude_if=lambda value: value is None)`, exactly
+the shape the other five optional payloads carry (`event.py:361-377`).
+Absence is therefore absence from the serialized BYTES, not a null in
+them — which is why no existing root's bytes move (R8, C12).
+
+D4. **No new `Rule`, and therefore no new channel.** The event is
+`Rule.MEASURE`, the existing rule the two nearest appenders already use
+for "persist one typed process record":
+`record_dossier_pack_receipt` (`harness.py:578`) and
+`record_criticism_obligation` (`harness.py:598`) both commit
+`Rule.MEASURE` with empty `hv_set`/`reach_set`/`addr_add`. A new `Rule`
+member would be a new typed channel, which triggers C7's
+integrity-default trap and M5's surface-3 contact; R16's "or not exist
+yet" is taken. **No `report.py` entry is owed** (S9).
+
+D5. **No `_apply_event` branch (R18's own exclusion, and it is free).**
+`_apply_event` dispatches on payload PRESENCE — `if event.control is not
+None`, `if event.capability is not None`, `if event.scratch is not
+None`, `if event.bridge is not None` (`harness.py:2015-2058`). A payload
+with no branch materializes no state, so nothing is added to `_reset`
+either, and seam step 4 ("anything added to `_reset` must be
+reconstructible from the log alone") is satisfied vacuously.
+
+D6. **The two `harness.py` hunks, declared in advance so neither is a
+silent stretch of R18.** Exactly two, both inside the `record_*` seam:
+  (i) a new `record_module_fingerprints(payload)` appender;
+  (ii) one keyword parameter `module_fingerprints` on `_commit`
+       (`harness.py:1957-1990`), forwarded verbatim into the
+       `Event(...)` constructor beside the five parameters that already
+       plumb the other payloads.
+  Hunk (ii) is stated here explicitly because R18's ledgered gloss
+  ("any diff hunk in `harness.py` outside a `record_*` appender") reads
+  more tightly than the operator's own two exclusions ("no change to
+  `_apply_event` or well-formedness"). `_commit` is neither: it
+  delegates application to `_apply_event` and holds no well-formedness
+  check, and it is the only way any payload reaches an `Event` — the
+  five existing payload fields are plumbed through it identically.
+  SPEC.md's approved budget already named `harness.py` alongside
+  `ontology/env.py`'s neighbours for this option. **Declared, not
+  assumed:** if the operator reads R18 more narrowly than D6(ii), that
+  is visible here before any code lands, and the fallback is D6-alt.
+  **D6-alt (fallback, no `_commit` change at all):** drop the `Event`
+  field; the appender instead does `objects.put("module-fingerprints",
+  payload)` then `_commit(Rule.MEASURE, inputs=["module-fingerprints.v1",
+  digest], outputs=[digest])` — the exact `record_dossier_pack_receipt`
+  shape, one method and nothing else in `harness.py`, with the registry
+  entries landing in `storage/objects.py:205,216` (not frozen). It
+  delivers R2 equally and is recorded so the fallback is designed rather
+  than improvised if it is ever needed.
+
+D7. **Where the writer fires — `scheduler/scheduler.py`, not frozen.**
+`Scheduler.__init__` already resolves the registered backend at `:273`
+(`schools.active_backend().init_schools(harness, config)`), gated on
+`config.N_SCHOOLS > 0`. The stamp is emitted **unconditionally**, NOT
+under that gate: R2 says every run records which modules built it, and a
+run with zero schools was still built by the registered backend.
+`active_backend()` (`capture/schools.py:330`) resolves through
+`SCHOOL_POPULATION.get`, which re-checks the pinned fingerprint on every
+resolve — so the recorded value is the checked one, not a second
+computation.
+
+D8. **The reader lands before the writer (R8, C12), and it is real
+rather than nominal.** `recorded_module_fingerprints(harness)` in
+`module_events.py` scans events with `getattr(event,
+"module_fingerprints", None)` and returns a tuple — **empty for every
+one of the 42 existing committed roots**, which is the valid answer, not
+a failure. It is the same shape as the `attempt_trace` precedent the
+seam names (defaulted so old events validate). No `verify_root` finding
+is added, so no committed root's verdict can move.
+
+D9. **Predicted fixture updates (CLAUDE.md permits an update only when
+the design doc predicted it — this is that prediction).** D7 adds one
+event to the head of every `Scheduler`-driven run. Any gate test that
+asserts an exact event COUNT, an exact first-event `rule`, or an exact
+log length for a scheduler run will move by one and may be minimally
+updated. Tests asserting event CONTENT, replay equality, or any
+committed root are expected NOT to move; if one does, that is a defect
+in this design, not a fixture to edit. The distinction is the acceptance
+criterion for S4, not a judgement made at gate time.
+
+### Items added by the resolution
+
+S10 (R17, D1-D8): the design above is what gets built; A and C are not.
+    accept: the tranche's diff touches
+    `src/deepreason/module_events.py`, `src/deepreason/ontology/event.py`,
+    `src/deepreason/harness.py`, `src/deepreason/scheduler/scheduler.py`
+    and tests — and no `config.py`, `run_manifest.py` or
+    `qualification.py` hunk.
+
+S11 (R18, D6): the `harness.py` diff contains exactly the two declared
+hunks and nothing else.
+    accept: `git diff <base>..HEAD -- src/deepreason/harness.py` shows
+    only (i) the new `record_module_fingerprints` method and (ii) the
+    `module_fingerprints` parameter plumbed into `_commit`'s `Event(...)`
+    call; `_apply_event` and every well-formedness check byte-identical.
+
+S12 (R20, C13, D8): the sweep probe of S6 reads what
+`recorded_module_fingerprints` returns, so a root with no fingerprint is
+proven tolerated rather than merely unexamined.
+    accept: the probe asserts the attribute exists before reading it,
+    and the 42-root sweep passes with every root reporting zero
+    fingerprints (absence tolerated, in its own separate commit).
+
+S13 (D9, R9): the predicted fixture drift is bounded to counts, not
+content.
+    accept: every gate test that needed an edit is a count/position
+    assertion named in D9; any content or replay test that moved is
+    escalated, not edited.
+
+### R-by-R coverage of the new requirements
+
+- R17 → S10, D1-D8. R18 → S11, D6, and S7's operator-words branch.
+- R19 → this section IS the reconciliation; `dr-plan-steps` runs next.
+- R20 → S6 (already present) plus S12, which gives it teeth.
+
+## Questions for operator — RESOLVED, now EMPTY
+
+Q-OP1 was answered by R17 (Option B). A1's scope was not overridden and
+therefore stands at `SCHOOL_POPULATION` only, per the scope contract's
+smallest-reading rule; the other two registries are PARKED, not
+silently dropped. Nothing here blocks `dr-plan-steps`.
+
+### The questions as originally put (history, no longer open)
 
 **Q-OP1. Which design, given that none is both faithful to R4 and free
 of frozen-surface contact?**
@@ -274,6 +447,39 @@ delivers R2, and certain on Option A.** Checked against
 
 Per C10 and R15 this stops the tranche here. SPEC.md is committed; the
 operator's words are required before `dr-plan-steps` runs.
+
+**Forecast as it stands after Amendment 4 (the binding version).** The
+approved design's contact is now one surface, authorized, and bounded:
+
+- **Surface 1** (`capabilities/state.py`): no contact. Empty diff (S7).
+- **Surface 2** (`harness.py`): **contact, AUTHORIZED by R18**, bounded
+  to D6's two declared hunks and asserted by S11. `_apply_event`
+  (`harness.py:2006+`) and the well-formedness checks stay
+  byte-identical — the operator's two explicit exclusions.
+- **Surface 3** (`invariants.py`, `verification/`): no contact. D4 adds
+  no `Rule` and no finding, so no `report.py` entry is owed (M5, R16's
+  "or not exist yet"). Empty diff (S7, S9).
+- **Surface 4** (`run_manifest.py`): no contact. Option A is closed by
+  R17; nothing in the design reaches the manifest. Empty diff (S7).
+- **Surface 5** (`qualification.py`): no contact, and no cached
+  qualification is invalidated — the subject digest derives from the
+  manifest, which D1-D8 never touch. Empty diff (S7).
+
+Frozen-adjacent `route_fingerprint` (`llm/firewall.py`): no contact —
+the design adds no route and no manifest field.
+
+## Budget after Amendment 4 (the binding version)
+
+~40-60 lines of `src/` across `module_events.py` (new),
+`ontology/event.py`, `harness.py` (two hunks, D6) and
+`scheduler/scheduler.py`; plus tests; plus the map update; plus a
+SEPARATE probe commit of ~10 lines in `tools/root_sweep.py` (S6, S12).
+Ordered as three commits: **(1)** reader + payload + writer + tests +
+map, **(2)** gate and baseline sweep evidence, **(3)** the probe alone,
+never riding the `src/` change it judges (C13). Under the 300-line
+guideline.
+Frozen surfaces touched: **one — `harness.py`, authorized by R18,
+bounded by S11.** The other four: empty diff, asserted by S7.
 
 ## Budget
 
