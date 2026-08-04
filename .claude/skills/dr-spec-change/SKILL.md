@@ -29,10 +29,31 @@ interpretation happens, and it happens in writing.
      question through it: the record or the operator's recorded values
      answer most of them, and only survivors of its dominance test
      belong in the batch (each with a recommendation).
-3. Check each spec item against DeepReason's frozen surfaces (state
-   digests, event application, replay record formats, qualification
-   subjects, manifest schemas). If touched: flag the item, stop for
-   operator approval.
+   - A mechanism the request NAMES — a fixture to reuse, a file to copy,
+     a pattern to follow — is a suggestion, not a requirement. Verify it
+     actually reaches the code this change touches (trace the call path)
+     before adopting it. If it cannot, that is a material contradiction:
+     deliver the PROPERTY the requirement wants and record the
+     contradiction in writing, or fork to the operator. Never adopt a
+     named mechanism unverified, and never deviate from it silently.
+     (Recorded misses this rule generalizes: docs/ERRATA.md E10 — a
+     handover-named fixture that never executed the migrated code;
+     docs/ERRATA_EXECUTOR.md X11 — a false premise in the authorization
+     itself.)
+3. Frozen-surface contact forecast — mandatory, in writing. Diff the
+   planned target files against `docs/map/INV-frozen-surfaces.md`'s
+   surface list and record the verdict in SPEC.md's "Frozen-surface
+   contact forecast" section; "none expected" counts, but only after
+   actually checking. ANY plausible contact stops the tranche HERE:
+   commit SPEC.md and obtain the operator's words before `dr-plan-steps`
+   runs. Contact discovered at validation is three commits too late —
+   the tranche that proved it (docs/ERRATA_EXECUTOR.md X9, XE1) was
+   technically perfect and still could not deliver. For changes that add
+   data to the typed record, one more guardrail: the absence-tolerant
+   READER lands before the writer emits, so every existing committed
+   root stays valid with the new data absent (the rung-4 guardrail
+   generalized; X8 is the precedent for keeping new fields out of frozen
+   digests entirely).
 4. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
    its own delivery) rather than one sprawling one.
@@ -58,6 +79,11 @@ interpretation happens, and it happens in writing.
 
     ## Out of scope (explicit)
     <nearest tempting neighbors, each with "not requested">
+
+    ## Frozen-surface contact forecast
+    none expected — checked against INV-frozen-surfaces.md
+    | <surface>: <why contact is plausible> (STOP — operator words
+      required before dr-plan-steps)
 
     ## Budget
     ~<n> lines, <n> commit(s). Frozen surfaces touched: none | <flagged>
