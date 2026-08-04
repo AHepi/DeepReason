@@ -485,6 +485,10 @@ class Scheduler:
         live, and an append there trips the single-writer fence or moves a
         record a recovery pass promised to leave alone.
 
+        It also fires AFTER workflow recovery and stop rehydration, never
+        before: a run resumes its unfinished authority before it appends
+        anything new of its own.
+
         Deliberately outside the ``N_SCHOOLS`` gate that guards
         ``init_schools``: a run that seeds no schools was still built by the
         registered population backend, and a record that omits the stamp for
@@ -2691,10 +2695,10 @@ class Scheduler:
         A truthy return stops the run early (staged pipelines stop a stage
         on its first survivor without rebuilding the Scheduler, which would
         wipe the attention caches)."""
-        if cycles > 0:
-            self._record_module_fingerprints()
         self._recover_workflow_prefixes()
         self._rehydrate_resumed_stop_controller()
+        if cycles > 0:
+            self._record_module_fingerprints()
         stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None
         for _ in range(cycles):
             try:

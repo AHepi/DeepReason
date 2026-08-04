@@ -335,7 +335,7 @@ prove the reader; the writer does not appear until step 9.
           docs_verify: 0 failed
           rc=0
 
-- [ ] 12. (S2, S10, D7) Wire the writer: `Scheduler.__init__` emits the
+- [x] 12. (S2, S10, D7) Wire the writer: `Scheduler.__init__` emits the
       stamp for `schools.active_backend()`, **unconditionally — NOT
       under the `config.N_SCHOOLS > 0` gate** (`scheduler.py:272-276`),
       because a zero-school run was still built by the registered
@@ -343,25 +343,25 @@ prove the reader; the writer does not appear until step 9.
       done-when: a `Scheduler` built with `N_SCHOOLS=0` still records
       exactly one fingerprint event
 
-- [ ] 13. (S2) Write the writer test SPEC.md S2 names: a mock-endpoint
+- [x] 13. (S2) Write the writer test SPEC.md S2 names: a mock-endpoint
       `Scheduler` run's record carries the backend fingerprint with no
       capability exercised, and the recorded value equals
       `SCHOOL_POPULATION`'s pinned one.
       done-when: `python -m pytest tests/test_module_fingerprints.py -q`
       -> "0 failed", including the new writer test
 
-- [ ] 14. (S13, D9) Replay/determinism test: reopen the run and compare
+- [x] 14. (S13, D9) Replay/determinism test: reopen the run and compare
       applied state and the event log, scrubbing time-dependent fields
       RECURSIVELY (durable-test rule 4 — `Event.ts` and any nested
       `llm.ms`; never widen an exclusion on a guess).
       done-when: the replay-equality test passes twice in a row
 
-- [ ] 15. (S2, S13) Mutation-prove the writer and replay tests
+- [x] 15. (S2, S13) Mutation-prove the writer and replay tests
       (durable-test rule 3): perturb the recorded fingerprint, watch
       both go red, restore, green.
       done-when: the red output and the restored green run are pasted
 
-- [ ] 16. (S10, all) Map update, in the same tranche as the behaviour
+- [x] 16. (S10, all) Map update, in the same tranche as the behaviour
       it describes and NOT as a trailing docs step: give
       `src/deepreason/module_events.py` an owning document and record
       the new observable where the map already describes this seam —
@@ -374,14 +374,38 @@ prove the reader; the writer does not appear until step 9.
       done-when: every touched document's `Owns:`/`check:` lines are
       updated and `python tools/docs_verify.py --links` -> 0 failed
 
-- [ ] 17. (S8, C9) FULL `python tools/docs_verify.py` — NOT `--fast`,
+- [x] 17. (S8, C9) FULL `python tools/docs_verify.py` — NOT `--fast`,
       which reuses cached results and cannot see a map document newly
       broken by a `src/` change (rung 3 evidence: commit `55b16ce9`,
       ERRATA E10). Plus `--audit` for vacuous checks.
       done-when: full run -> 0 failed, and `--audit` -> 0 findings
       (paste both)
 
-- [ ] 18. (S4, S13, D9) FULL gate: `python -m pytest tests/ -q -n 4`
+      DONE 2026-08-04, also on the second attempt. The first full run
+      caught **4 failures, two of them PRE-EXISTING map checks** that
+      `--fast` would have missed entirely — exactly what C9 exists for:
+
+      - `SEAM-scheduler-x-workflow.md:80` and `SUB-scheduler.md:200`
+        both pin that `Scheduler.run` OPENS with
+        `_recover_workflow_prefixes()` then
+        `_rehydrate_resumed_stop_controller()`. Putting the stamp first
+        broke both. Resolved by moving the stamp AFTER recovery — a run
+        resumes its unfinished authority before appending anything new
+        — so **both pre-existing checks pass UNEDITED**. Editing them
+        would have been the wrong repair.
+      - The other two were my own new checks, stale because they were
+        written when the stamp still lived in `__init__`.
+
+          docs_verify [full]: 50 documents, 805 checks, 4 workers
+          docs_verify: 0 failed
+          rc=0
+
+          docs_verify --audit: 0 finding(s)
+          rc=0
+
+      805 checks, up from 803: the two this tranche adds.
+
+- [x] 18. (S4, S13, D9) FULL gate: `python -m pytest tests/ -q -n 4`
       (never bare `pytest`, per C5). Any fixture that moved must be a
       COUNT/position assertion predicted by D9; a content or replay
       test that moved is escalated, not edited. Known flake
@@ -389,6 +413,48 @@ prove the reader; the writer does not appear until step 9.
       may be re-run once before diagnosing (C5).
       done-when: output ends "N passed, 0 failed" (paste it), and any
       edited fixture is named against D9
+
+      DONE 2026-08-04, on the SECOND attempt. First attempt: **4 failed,
+      3316 passed**. The four split three ways, and only one was
+      ordinary drift:
+
+      **(a) Two REAL DEFECTS in the writer's placement, escalated to
+      SPEC.md as D7a/D7b before any code changed, never edited away.**
+      `tests/test_amendment_epochs.py` builds a Scheduler over a
+      READ-ONLY harness (`ReadOnlyHarnessError`); the v6 restart tests
+      hold two live `Harness` handles across a crash and recover with
+      `run(0)`, asserting byte-identity afterwards
+      (`ConcurrentWriterError: log advanced under us`). Step 12's claim
+      that "both construction sites are writable" was wrong: it grepped
+      `src/` only. Placement moved `__init__` -> `run(cycles > 0)`, and
+      BOTH tests then passed UNEDITED — which is the evidence they were
+      code defects and not fixtures.
+
+      **(b) Three D9-predicted count/position assertions**, updated
+      minimally: `test_signals`' pre-heartbeat allow-list gains the
+      stamp beside the embedder stamp it already allows;
+      `test_workflow_stop_lifecycle_c4`'s event list moves by one and
+      its `event_seq` is re-anchored to `events[-1].seq` instead of a
+      literal `0`; `test_route_firewall_scheduler` identifies the
+      dropped-call event by content rather than by being first.
+
+      **(c) One CONTENT test that moved because the change WORKS.**
+      `test_school_population_determinism` compares the real registry
+      against a substitute backend; rung 4 now records module identity,
+      so their stamps SHOULD differ. Resolved by excluding the stamp
+      from the byte-identity comparison and asserting separately that
+      the two stamps differ and name their own backends — positive
+      evidence, not a weakened assertion.
+
+      Second attempt, after a further reorder forced by two PRE-EXISTING
+      map checks (below):
+
+          3321 passed, 7 skipped in 595.18s (0:09:55)
+          rc=0
+
+      3321 vs the step-2 pre-writer baseline of 3303: +18, all in
+      `tests/test_module_fingerprints.py`. No test was deleted or
+      weakened; C5's known flake did not fire.
 
 - [ ] 19. (S5) Re-run the sweep on the changed tree and diff against
       step 1's baseline. `tools/root_sweep.py` is UNCHANGED at this

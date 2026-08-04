@@ -59,10 +59,13 @@ single call site fails the check rather than passing on a leftover count.
 
 `check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text(); assert s.count('schools.active_backend()') == 3; assert not re.search(r'schools\.(init_schools|allocate)\(', s)"`
 
-The third scheduler site is the fingerprint stamp, and it is the one call
-that must NOT sit under `N_SCHOOLS > 0`: gating it would leave zero-school
-runs unable to say which module built them.
-`check: python -c "import ast,pathlib,textwrap,inspect; from deepreason.scheduler.scheduler import Scheduler; src=textwrap.dedent(inspect.getsource(Scheduler.__init__)); T=ast.parse(src); calls=[n for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'attr',None)=='_record_module_fingerprints']; assert len(calls)==1, len(calls); gated=[n for n in ast.walk(T) if isinstance(n,ast.If) and any('_record_module_fingerprints' in ast.unparse(s) for s in n.body)]; assert not gated, [ast.unparse(g.test) for g in gated]"`
+The third scheduler site is the fingerprint stamp. It must NOT sit under
+`N_SCHOOLS > 0` — gating it would leave zero-school runs unable to say
+which module built them — and it must NOT sit in `__init__`, because
+constructing a Scheduler (to inspect ranking, or to recover from a crash
+while a second harness handle is still live) has to append nothing. It
+fires once per `run` with cycles requested, after workflow recovery.
+`check: python -c "import ast,inspect,textwrap; from deepreason.scheduler.scheduler import Scheduler as S; I=textwrap.dedent(inspect.getsource(S.__init__)); R=textwrap.dedent(inspect.getsource(S.run)); f=lambda t:[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.Call) and getattr(n.func,'attr',None)=='_record_module_fingerprints']; assert not f(I), 'stamp must not fire at construction'; assert len(f(R))==1, len(f(R)); g=[n for n in ast.walk(ast.parse(R)) if isinstance(n,ast.If) and any('_record_module_fingerprints' in ast.unparse(s) for s in n.body)]; assert len(g)==1 and ast.unparse(g[0].test)=='cycles > 0', [ast.unparse(x.test) for x in g]; assert R.index('_recover_workflow_prefixes()') < R.index('_record_module_fingerprints()')"`
 `check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/capture/ladder.py').read_text(); assert s.count('schools.active_backend()') == 4; assert not re.search(r'schools\.(roster|reseed)\(', s)"`
 `check: python -c "import pathlib,re; c=pathlib.Path('src/deepreason/cli/main.py').read_text(); r=pathlib.Path('src/deepreason/report.py').read_text(); assert c.count('active_backend()') == 3 and r.count('active_backend()') == 1; assert not re.search(r'schools(_mod)?\.(roster|reseed)\(', c + r)"`
 
