@@ -102,12 +102,30 @@ prove the reader; the writer does not appear until step 9.
       `test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`
       passed first time).
 
-- [ ] 3. (S3, S13) Write `tests/test_module_fingerprints.py` with the
+- [x] 3. (S3, S13) Write `tests/test_module_fingerprints.py` with the
       READER tests only — absence is valid on committed roots (pin to
       `git ls-files` roots, durable-test rule 1; name the rung in the
       docstring) and the reader tolerates events with no such field.
       done-when: `python -m pytest tests/test_module_fingerprints.py -q`
       -> "N passed, 0 failed"
+
+      DONE 2026-08-04:
+
+          ........                                          [100%]
+          8 passed in 57.04s
+
+      Eight tests, all reader-side; no writer exists yet. Roots are
+      taken from `git ls-files` only (durable-test rule 1) and the
+      docstring names the rung. Two claims are kept SEPARATE on purpose
+      — absence-is-valid, and the open/refuse census — so that a future
+      change making roots unopenable cannot show up as a passing
+      absence test. First run took 114s because each opened ~45
+      recorded roots; an `lru_cache`d single sweep shared by both
+      brought it to 57s without merging the two claims.
+
+      Touches no `src/` file, so no map document and no C9 full
+      `docs_verify` is owed by this step (that obligation is per
+      `src/`-touching commit).
 
 - [ ] 4. (S3) [COMMIT] Mutation-prove the reader tests can fail
       (durable-test rule 3): make the reader raise on a missing
