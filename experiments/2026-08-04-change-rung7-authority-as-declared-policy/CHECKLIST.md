@@ -189,7 +189,7 @@ precedent, and it is the honest state.
 
           docs_verify --audit: 0 finding(s)
 
-- [ ] 10. (S8) `python tools/docs_verify.py` — FULL mode, never
+- [x] 10. (S8) `python tools/docs_verify.py` — FULL mode, never
       `--fast` (E10's companion lesson: `--fast` reuses cached results
       and cannot see a document newly affected).
       done-when (AMENDED at step 1, see PARKED.md P1 — delta-based
@@ -200,6 +200,20 @@ precedent, and it is the honest state.
       step 1. Any third failure, or either of these two changing its
       detail, is a failed step. Document count 51 (was 50) and check
       count higher than 807 by the number this tranche added.
+
+          BEFORE: docs_verify [full]: 50 documents, 807 checks, 4 workers
+          AFTER:  docs_verify [full]: 51 documents, 815 checks, 4 workers
+
+          FAIL SEAM-harness-x-verification.md:253
+          FAIL SEAM-manifest-x-schools.md:271
+          docs_verify: 2 failed
+
+          $ diff <(failing doc:line BEFORE) <(failing doc:line AFTER)
+          IDENTICAL -- no new failure, none resolved
+
+      +1 document, +8 checks — exactly the 8 the new document declares
+      (step 3 counted 8). The two failures are the same two, unchanged
+      in identity and detail. Delta-clean.
 
 - [x] 11. (S8, R10) Prove the 7b/7c fence held: this tranche touched no
       `src/` and no `tests/` path.
@@ -228,8 +242,12 @@ precedent, and it is the honest state.
       The sole remaining hit is the new document's own title. No
       `Seams-undocumented:` header lists the pair anywhere.
 
-- [ ] 13. (S8) [COMMIT] Commit the map delta as ONE commit (`DR-SCHEMA`
+- [x] 13. (S8) [COMMIT] Commit the map delta as ONE commit (`DR-SCHEMA`
       rule 1: the map moves with what it documents; here the document IS
       the change), push with retry, confirm clean tree.
       done-when: `git status --porcelain` empty AND the branch head is
       on `origin/claude/delivery-rungs-handover-m22sdy`.
+
+      The map delta landed as ONE commit, `725dcab1` (the new document,
+      the INDEX row, and both sides' headers together — `DR-SCHEMA`
+      rule 1). Cleanliness proof pasted under VALIDATION.md V6.
