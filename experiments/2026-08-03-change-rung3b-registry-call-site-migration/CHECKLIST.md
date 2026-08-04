@@ -220,20 +220,46 @@ same commit.
       docs_verify --links: 0 dangling reference(s), 50 document(s)
       ```
 
-- [ ] 11. (S8, R5) Full gate: `python -m pytest tests/ -q -n 4`,
+- [x] 11. (S8, R5) Full gate: `python -m pytest tests/ -q -n 4`,
       ISOLATED (nothing else running concurrently). Rerun once if only
       the known flake
       (`test_grounded_counterexample_recovery_does_not_invent_override_on_repeat`)
       fails, per C5.
       done-when: output ends "N passed, 0 failed" (paste it).
+      DONE, after this step caught a flaky test I had just written.
+      FIRST run: `1 failed, 3302 passed` — my own
+      `test_registry_path_records_exactly_what_the_bare_functions_recorded`.
+      Not load noise: reproduced serially at 2 failures in 6 runs, then
+      diagnosed to the exact field rather than guessed — `llm.ms` is
+      repeated inside every `attempt_trace` entry, and my first version
+      stripped only the top-level copy, so ~1 run in 3 compared 2ms
+      against 1ms. Fixed by scrubbing `ms` recursively under `llm`
+      (commit `863a0fa3`); the claim is unchanged and still strong.
+      Verified 0 failures in 12 serial runs + 3 under `-n 4`, with the
+      companion mutation test still failing a reversed-allocation
+      backend, so the comparison stayed sensitive. SECOND run:
+      ```
+      3303 passed, 7 skipped in 546.26s (0:09:06)
+      ```
+      0 failed — 3301 (rung 3 tranche A's baseline) plus this tranche's
+      2 new tests. The known flake (C5) did not fire.
 
-- [ ] 12. (S8, R6) Root sweep: `python tools/root_sweep.py`, ISOLATED,
+- [x] 12. (S8, R6) Root sweep: `python tools/root_sweep.py`, ISOLATED,
       compared against the last accepted capture (42 rows, 11 ERROR, all
       `UnsupportedRunManifestVersionError`).
       done-when: sweep reports 42 roots and 11 ERROR lines, and diffs
       empty against the most recent prior capture in the scratchpad
       (paste both).
+      DONE. Output:
+      ```
+      SWEEP COMPLETE: 42 roots
+      rows: 42 ERROR: 11
+      SWEEP_DIFF_EMPTY
+      ```
+      Byte-identical to rung 3 tranche A's own accepted capture
+      (`r3v_sweep.txt`). No committed root's verdict moved.
 
-- [ ] 13. (all) [COMMIT] Final push and cleanliness check.
+- [x] 13. (all) [COMMIT] Final push and cleanliness check.
       done-when: `git status --porcelain` is empty AND branch head
       matches `origin/claude/delivery-rungs-handover-m22sdy` (paste both).
+      DONE — see below.
