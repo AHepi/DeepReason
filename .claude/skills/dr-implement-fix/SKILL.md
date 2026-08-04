@@ -19,6 +19,10 @@ else.
    it fails before your change, passes after. Its docstring names the
    live run/record that motivated it (e.g. "Regression (selfstudy
    run-9175f0ec): ..."), so the next reader can find the evidence.
+   Build it to `dr-execute-step`'s "Durable tests, checks, and probes"
+   rules — committed evidence only, meaning over form, mutation-proved,
+   wall-clock scrubbed recursively, absence-tolerant — so it survives
+   repo changes and fails only when the defect returns.
 3. Apply the code change. Comments state the constraint the code
    cannot show ("compare by handle index, not mapping order: canonical
    JSON sorts keys"), never the change's history or your reasoning.

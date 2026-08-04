@@ -61,7 +61,10 @@ interpretation happens, and it happens in writing.
    byte-identity baseline, so it never rides the same commit as the
    `src/` change it would judge, gets its own before/after capture on an
    unchanged tree, and follows the tool's probe rule (assert the
-   attribute exists before reading it).
+   attribute exists before reading it). Build every proposed test,
+   check, and probe to `dr-execute-step`'s "Durable tests, checks, and
+   probes" rules — they must survive dramatic repo changes, failing
+   only when the guarded claim stops being true.
 4. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
    its own delivery) rather than one sprawling one.

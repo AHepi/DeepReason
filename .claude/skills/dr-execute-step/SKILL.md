@@ -60,6 +60,45 @@ The map is part of the change, not a chore after it.
 - A step that only writes tests or records evidence changes no map
   document. Do not touch stamps you did not verify.
 
+## Durable tests, checks, and probes
+
+Anything you add here must survive dramatic repo changes — refactors,
+renames, reformats — failing only when the CLAIM it guards stops being
+true. Five rules, each paid for once already:
+
+1. **Pin to committed, immutable evidence.** A test or check may open
+   only roots and fixtures that `git ls-files` knows; regression tests
+   name their motivating run in the docstring. Session-local artifacts
+   die with the session and take the check's meaning with them
+   (docs/ERRATA.md E7: four checks pinned to never-committed roots
+   passed on one machine and failed on every fresh clone).
+2. **Anchor to meaning, not form.** Prefer behavior (call the function,
+   compare typed outcomes), structure (AST shape, resolved-call counts),
+   or counts over literal source text. When a textual marker is
+   unavoidable, choose the minimal substring invariant across the
+   refactors you can foresee — rung 3 shortened a boundary marker from
+   `assigned = schools.allocate(` to `assigned = schools` so it matched
+   both sides of its own migration; two other form-brittle checks broke
+   on legitimate reformatting and had to be replaced mid-tranche. Never
+   pin line numbers.
+3. **Mutation-prove it can fail, before writing it down.** Break the
+   guarded thing, watch the test/check/probe go red, restore. For
+   equality tests, keep a permanent companion mutation test in the
+   suite (rung 3's determinism test ships with a reversed-allocation
+   backend that must always fail the comparison). `docs_verify --audit`
+   catches vacuous checks; nothing catches a vacuous test but this rule.
+4. **Compare typed outcomes, and exclude wall-clock RECURSIVELY.**
+   Equality over applied state and event logs, with time-dependent
+   fields scrubbed at every nesting depth — a top-level-only scrub left
+   `llm.ms` inside `attempt_trace` and a 1-in-3 flake (commit
+   `863a0fa3`). Diagnose flakes to the exact field; never widen an
+   exclusion on a guess.
+5. **Tolerate absence in old records.** Any test or sweep probe reading
+   the typed record must accept every existing committed root, which
+   predates your feature — assert the attribute exists before reading
+   it, and treat absence as valid, never as failure (the sweep's probe
+   rule; the rung-4 reader-before-writer guardrail).
+
 ## Style discipline for code steps
 
 - Match the surrounding code's idiom, naming, and comment density.

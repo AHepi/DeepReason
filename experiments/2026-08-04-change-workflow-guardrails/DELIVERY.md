@@ -57,3 +57,19 @@ no written justification, and the template gains the "record
 observables added vs sweep probes" line. Timely: rung 4 (module
 fingerprints — exactly a new typed-record observable) is at capture
 phase; these rules reach its branch before its spec phase.
+
+## Amendment 2 (2026-08-04, operator: tests "need to survive dramatic repo changes")
+
+The prior amendments said WHEN a test/check/probe is required, not HOW
+to build one that lasts. `dr-execute-step` now carries the single
+authoritative "Durable tests, checks, and probes" doctrine — five rules,
+each citing the incident that paid for it: (1) pin only to committed
+evidence (E7); (2) anchor to meaning not form, minimal invariant
+markers, never line numbers (rung 3's marker shortening + two
+form-brittle check replacements); (3) mutation-prove failability before
+writing down, permanent companion mutation tests for equality claims
+(rung 3's reversed-allocation backend); (4) typed-outcome comparison
+with RECURSIVE wall-clock scrubbing (863a0fa3); (5) absence-tolerance
+for old roots (probe rule; rung-4 guardrail). `dr-spec-change` and
+`dr-implement-fix` point at it from their test-authoring steps. One
+doctrine, one home, two pointers.
