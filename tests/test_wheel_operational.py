@@ -1388,6 +1388,45 @@ def test_operational_smoke_requires_exact_non_resumable_rejection():
         )
 
 
+def test_operational_smoke_witnesses_an_accepted_continuation():
+    """Regression (V1, wheel_operational_smoke stage continuation_rejection):
+    commit 2d4ca2e1 made budget-exhausted runs continuable (owner decision
+    4a) and the smoke still asserted the pre-decision refusal for them. The
+    accepted body below is the verbatim payload measured over MCP against
+    run-2357b4f22d11442e7049ff8b77184be3 in the retained wheel venv.
+    """
+
+    accepted = {
+        "result_operation": "run_result",
+        "run_id": "run-2357b4f22d11442e7049ff8b77184be3",
+        "state": "running",
+        "status_operation": "run_status",
+    }
+    OPERATIONAL._assert_continuation_accepted(
+        accepted, run_id="run-2357b4f22d11442e7049ff8b77184be3"
+    )
+
+    # Each field carries a distinct claim, so each must be able to fail on
+    # its own: a handle for another run, a run that did not restart, and a
+    # body missing the operations the caller is told to poll with.
+    for mutation in (
+        {"run_id": "run-0000000000000000000000000000dead"},
+        {"state": "completed"},
+        {"status_operation": None},
+        {"result_operation": "run_status"},
+    ):
+        mutated = dict(accepted)
+        for key, value in mutation.items():
+            if value is None:
+                mutated.pop(key)
+            else:
+                mutated[key] = value
+        with pytest.raises(AssertionError, match="continuation"):
+            OPERATIONAL._assert_continuation_accepted(
+                mutated, run_id="run-2357b4f22d11442e7049ff8b77184be3"
+            )
+
+
 def test_operational_poll_waits_for_a_new_terminal_commitment():
     class FakeClient:
         def __init__(self):
@@ -4103,7 +4142,7 @@ def test_every_operational_reason_command_uses_the_diagnostic_wrapper():
 def test_every_operational_mcp_child_uses_tracked_construction():
     source = Path(OPERATIONAL.__file__).read_text(encoding="utf-8")
     assert source.count("MCPClient(") == 1
-    assert source.count("= _new_mcp_client(") == 6
+    assert source.count("= _new_mcp_client(") == 7
     assert "mcp_clients=mcp_clients" in source
 
 

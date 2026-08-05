@@ -73,6 +73,15 @@ TERMINAL_PUBLICATION_RECOVERY_SENTINEL = (
 RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
+NON_RESUMABLE_STOP_QUESTION = (
+    "Can a cancelled inquiry be resumed as if it had merely paused?"
+)
+# The cancellation subject must still hold cycles when cancel_run lands --
+# the harness observes the request only at the next completed-cycle
+# boundary, and a run that reaches its own terminal first stops on
+# budget_exhausted, which 2d4ca2e1 made continuable.
+NON_RESUMABLE_SUBJECT_CYCLES = 12
+NON_RESUMABLE_CANCEL_AFTER_CYCLE = 1
 FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v4"
 CONTINUATION_DEADLINE_SECONDS = 1200
 POLL_INTERVAL_SECONDS = 0.05
@@ -2064,6 +2073,21 @@ def _assert_non_resumable_rejection(text: str) -> None:
         raise AssertionError("completed non-resumable run was not rejected")
 
 
+def _assert_continuation_accepted(payload: dict, *, run_id: str) -> None:
+    # The two operation names are not decoration: an accepted continuation
+    # hands back no result, only the tools the caller must poll with, so a
+    # body missing either one is a handle nothing can be done with.
+    if payload.get("run_id") != run_id:
+        raise AssertionError("accepted continuation named another run")
+    if payload.get("state") != "running":
+        raise AssertionError("accepted continuation did not restart the run")
+    if (
+        payload.get("result_operation") != "run_result"
+        or payload.get("status_operation") != "run_status"
+    ):
+        raise AssertionError("accepted continuation withheld its poll operations")
+
+
 def _assert_committed_terminal(payload: dict) -> None:
     if payload.get("schema") != "deepreason-run-result-v2":
         raise AssertionError("terminal result schema is not V6")
@@ -2169,6 +2193,41 @@ def _timed_mcp_tool(
         raise
     observe(error=False, timeout=False)
     return payload
+
+
+def _await_cancellable_cycle(
+    client: MCPClient,
+    run_id: str,
+    *,
+    stage: str,
+    _clock=None,
+    _sleep=None,
+) -> dict:
+    """Wait until the subject has banked a cycle and can still be cancelled.
+
+    A subject that has already reached a terminal cannot be cancelled at
+    all, and would silently substitute a continuable stop for the
+    non-resumable one the caller asked for.
+    """
+
+    clock = _clock or time.monotonic
+    sleep = _sleep or time.sleep
+    deadline = clock() + CONTINUATION_DEADLINE_SECONDS
+    while True:
+        status = client.tool("run_status", {"run_id": run_id}, stage=stage)
+        if status.get("state") not in {"starting", "running"}:
+            raise AssertionError(
+                "cancellation subject terminated before it could be cancelled"
+            )
+        if (status.get("cycle") or 0) >= NON_RESUMABLE_CANCEL_AFTER_CYCLE:
+            return status
+        if clock() >= deadline:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_TIMEOUT,
+                timeout=True,
+            )
+        sleep(POLL_INTERVAL_SECONDS)
 
 
 def _poll_terminal(
@@ -3388,12 +3447,82 @@ def main(argv: list[str] | None = None) -> int:
             raise AssertionError("durable CLI result changed when retrieved through MCP")
         if first_status.get("state") != "completed":
             raise AssertionError("restarted process did not recover CLI run status")
-        stage = STAGE_CONTINUATION_REJECTION
-        calls_before_rejection = _provider_counts(provider_state_path)["total_calls"]
-        rejected_continuation = first_client.tool_error(
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_retrieval,
+        )
+
+        # Owner decision 4a (2d4ca2e1) split what this run used to prove in
+        # one place: a budget-exhausted stop is now typed and continuable,
+        # so only a stop carrying no typed receipt still refuses. Each half
+        # therefore needs its own subject, and asserting either one alone
+        # would leave the other unwitnessed.
+        stage = STAGE_CONTINUATION_RESUME
+        exhausted_continuation = first_client.tool(
             "continue_run",
             {
                 "run_id": first_run_id,
+                "budget": {"cycles": 1, "token_budget": 100000},
+            },
+            stage=stage,
+        )
+        _assert_continuation_accepted(
+            exhausted_continuation, run_id=first_run_id
+        )
+        _exhausted_status, exhausted_result = _poll_terminal(
+            first_client,
+            first_run_id,
+            prior_terminal_commitment_ref=first_retrieved[
+                "terminal_commitment_ref"
+            ],
+            stage=stage,
+        )
+        _assert_committed_terminal(exhausted_result)
+        transcripts.extend(first_client.transcript)
+        first_client.close(stage=stage)
+
+        stage = STAGE_CONTINUATION_REJECTION
+        cancelled_client = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
+        _assert_exact_tools(_tool_list(cancelled_client))
+        cancelled_started = cancelled_client.tool(
+            "start_run",
+            {
+                "question": NON_RESUMABLE_STOP_QUESTION,
+                "budget": {
+                    "cycles": NON_RESUMABLE_SUBJECT_CYCLES,
+                    "token_budget": 200000,
+                },
+            },
+            stage=stage,
+        )
+        cancelled_run_id = cancelled_started["run_id"]
+        _await_cancellable_cycle(
+            cancelled_client, cancelled_run_id, stage=stage
+        )
+        cancelled_client.tool(
+            "cancel_run",
+            {"run_id": cancelled_run_id},
+            stage=stage,
+        )
+        cancelled_status, cancelled_result = _poll_terminal(
+            cancelled_client,
+            cancelled_run_id,
+            stage=stage,
+        )
+        if (
+            cancelled_status.get("state") != "cancelled"
+            or cancelled_status.get("stop_reason") != "operator_cancelled"
+        ):
+            raise AssertionError(
+                "cancellation subject did not reach an operator-cancelled stop"
+            )
+        calls_before_rejection = _provider_counts(provider_state_path)["total_calls"]
+        rejected_continuation = cancelled_client.tool_error(
+            "continue_run",
+            {
+                "run_id": cancelled_run_id,
                 "budget": {"cycles": 6, "token_budget": 100000},
             },
             stage=stage,
@@ -3403,18 +3532,14 @@ def main(argv: list[str] | None = None) -> int:
             provider_state_path,
             calls_before_rejection,
         )
-        if first_client.tool(
+        if cancelled_client.tool(
             "run_result",
-            {"run_id": first_run_id},
+            {"run_id": cancelled_run_id},
             stage=stage,
-        ) != first_retrieved:
+        ) != cancelled_result:
             raise AssertionError("rejected continuation changed the terminal result")
-        transcripts.extend(first_client.transcript)
-        first_client.close(stage=stage)
-        _assert_no_incremental_provider_calls(
-            provider_state_path,
-            calls_before_retrieval,
-        )
+        transcripts.extend(cancelled_client.transcript)
+        cancelled_client.close(stage=stage)
 
         stage = STAGE_REASON
         resumable = _run_reason(

@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 461cf287
+Verified-at: 3d4f5c23
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py
 Seams: 
@@ -212,6 +212,22 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   deliberately falls back to the bare fail-closed stop record. Both branches
   exist; deleting either changes what a budget stop means for the record.
 `check: grep -q "^def _record_exhaustion_lifecycle_stop(" src/deepreason/application/text_runs.py && python -m pytest tests/test_v6_resumed_terminal_revalidation.py::test_budget_exhausted_terminal_is_a_typed_resumable_stop -q`
+- **That decision changed a property an out-of-map instrument asserted, and
+  nothing pointed at it.** `2d4ca2e1` moved `budget_exhausted` into
+  `RESUMABLE_STOP_REASONS` and updated its own test, but
+  `scripts/wheel_operational_smoke.py` had a whole stage asserting the
+  opposite for a budget-exhausted run — and `docs/map/` owns nothing under
+  `scripts/`, so no reader connected the two. The smoke only surfaced it on
+  2026-08-05 (tranche `2026-08-05-fix-continue-run-rejection`), after three
+  other defects in front of that stage were cleared. Worse, the refusal it
+  proved has NO product test anywhere in the gate: repo-wide,
+  `CONTINUE_TYPED_STOP_REQUIRED` appears at its raise site, in the smoke's
+  matcher, and in one unit test of that matcher. The smoke is the only
+  end-to-end witness for BOTH halves, so it now proves each against its own
+  subject — a cancelled run for the refusal, the budget-exhausted run for
+  the continuation. Changing what a stop reason authorizes means auditing
+  `scripts/` too; the map cannot route you there.
+`check: grep -q "^def _assert_continuation_accepted(" scripts/wheel_operational_smoke.py && grep -q "^def _await_cancellable_cycle(" scripts/wheel_operational_smoke.py && grep -q "^def _assert_non_resumable_rejection(" scripts/wheel_operational_smoke.py && python -m pytest tests/test_wheel_operational.py::test_operational_smoke_witnesses_an_accepted_continuation tests/test_wheel_operational.py::test_operational_smoke_requires_exact_non_resumable_rejection -q`
 - **An amendment epoch supersedes the question, and only from its own durable
   workload.** `_read_request` reads the newest epoch's workload for a
   continuation while leaving the root's original `run-request.json` exactly as
