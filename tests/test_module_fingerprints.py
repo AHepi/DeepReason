@@ -33,15 +33,23 @@ def _committed_roots() -> list[Path]:
 
 
 @functools.lru_cache(maxsize=1)
-def _sweep_committed_roots() -> tuple[tuple[Path, ...], tuple[Path, ...]]:
-    """Open every committed root ONCE and split it into (read, refused).
+def _sweep_committed_roots() -> tuple[tuple[Path, ...], tuple[Path, ...], tuple[Path, ...]]:
+    """Open every committed root ONCE and split it into (unstamped, stamped,
+    refused).
 
-    Two claims below are asserted over the same roots; opening ~45 recorded
+    Three claims below are asserted over the same roots; opening ~45 recorded
     roots is the expensive part of this module, so it happens once per
     session rather than once per assertion.
+
+    The split is derived from each root's OWN record rather than from a list
+    of root names: a run recorded after the writer landed carries a
+    ``module-fingerprints.v1`` payload and one recorded before it does not.
+    A census cannot be asserted here, only partitioned — see the module
+    docstring.
     """
 
-    read: list[Path] = []
+    unstamped: list[Path] = []
+    stamped: list[Path] = []
     refused: list[Path] = []
     for root in _committed_roots():
         try:
@@ -49,14 +57,21 @@ def _sweep_committed_roots() -> tuple[tuple[Path, ...], tuple[Path, ...]]:
         except UnsupportedRunManifestVersionError:
             refused.append(root)
             continue
-        assert recorded_module_fingerprints(harness) == (), root
-        read.append(root)
-    return tuple(read), tuple(refused)
+        (stamped if recorded_module_fingerprints(harness) else unstamped).append(root)
+    return tuple(unstamped), tuple(stamped), tuple(refused)
 
 
-def test_every_committed_root_reads_as_having_no_module_fingerprints():
+def test_absence_is_valid_before_the_feature_and_presence_valid_after():
     """R8: absence is the VALID answer on every root written before this
-    feature, not an error and not an empty-because-unreadable.
+    feature, not an error and not an empty-because-unreadable — and presence
+    is the valid answer on every root written after it.
+
+    Regression (rung-5 A/B roots ``run-9a6be78e``, committed f6d41bff): this
+    test previously asserted absence for EVERY committed root, which is not
+    R8's claim but the strictly stronger "no root has been committed since
+    the writer landed". Rung 4 shipped the writer and that assertion
+    together, so the first live run committed afterwards falsified it. Both
+    halves are asserted here so neither can expire.
 
     Roots that refuse to open at all are excluded here and counted in
     ``test_the_census_of_committed_roots_is_unchanged`` instead: a pre-v6
@@ -64,8 +79,18 @@ def test_every_committed_root_reads_as_having_no_module_fingerprints():
     about the reader.
     """
 
-    read, _ = _sweep_committed_roots()
-    assert len(read) > 20, len(read)
+    unstamped, stamped, _ = _sweep_committed_roots()
+
+    assert len(unstamped) > 20, len(unstamped)
+
+    # Without a witness the presence half passes vacuously, and would keep
+    # passing if every stamp vanished from the record.
+    assert stamped, "no committed root carries a stamp; the presence half has no witness"
+    for root in stamped:
+        (payload,) = recorded_module_fingerprints(Harness(root, read_only=True))
+        assert payload.schema_ == "module-fingerprints.v1", root
+        assert payload.modules, root
+        assert payload.digest, root
 
 
 def test_the_census_of_committed_roots_is_unchanged():
@@ -74,10 +99,10 @@ def test_the_census_of_committed_roots_is_unchanged():
     roots unopenable from showing up as a passing absence test.
     """
 
-    read, refused = _sweep_committed_roots()
-    assert len(read) + len(refused) == len(_committed_roots())
+    unstamped, stamped, refused = _sweep_committed_roots()
+    assert len(unstamped) + len(stamped) + len(refused) == len(_committed_roots())
     assert refused, "no root refused; the census this test guards has moved"
-    assert len(read) > 20, len(read)
+    assert len(unstamped) + len(stamped) > 20, (len(unstamped), len(stamped))
 
 
 def test_the_reader_tolerates_an_event_with_no_fingerprint_attribute(tmp_path):

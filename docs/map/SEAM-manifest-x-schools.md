@@ -263,12 +263,31 @@ is a reader, and readers may be fixed; the freeze may not.
    calls per affected home. Check whether the change moves `production_contract_pairs`
    before assuming it is free.
 6. **Finish with the root sweep.** `DR-INV-frozen-surfaces` names the
-   instrument; 11 of the 42 recorded roots are pre-v6 and raise
-   `UnsupportedRunManifestVersionError` as the expected baseline. Three more
-   carry no `run-manifest.json` at all and are not part of that 11 — counting
-   "roots older than v6" gives 14 and is the wrong baseline.
+   instrument. Under `experiments/`, some recorded roots are pre-v6 and raise
+   `UnsupportedRunManifestVersionError` as the expected baseline; a further
+   non-empty set carries no `run-manifest.json` at all and is NOT part of
+   that first set. Conflating them — counting "roots older than v6" — gives a
+   strictly larger and wrong baseline. Both sets are non-empty and the three
+   kinds partition the roots, which is what the check asserts; it pins no
+   count, because every tranche that commits a run root moves them. As a
+   dated measurement rather than a live claim, at `e6a11428` on 2026-08-05
+   the figures under `experiments/` were 44 roots — 30 v6, 11 raising, 3
+   without a manifest, so the wrong baseline would have been 14. Do not
+   re-pin them.
 
-`check: python -c "exec(\"import pathlib\nfrom deepreason.run_manifest import load_run_manifest as L, UnsupportedRunManifestVersionError as U\nroots=sorted({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')})\nassert len(roots)==42, len(roots)\nn=0\nm=0\nfor r in roots:\n    p=r/'run-manifest.json'\n    if not p.exists():\n        m+=1\n        continue\n    try: L(p)\n    except U: n+=1\n    except Exception: pass\nassert (n,m)==(11,3), (n,m)\")"`
+`check: python -c "exec(\"import pathlib\nfrom deepreason.run_manifest import load_run_manifest as L, UnsupportedRunManifestVersionError as U\nroots=sorted({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')})\nassert len(roots)>40, len(roots)\nv=0\nn=0\nm=0\nfor r in roots:\n    p=r/'run-manifest.json'\n    if not p.exists():\n        m+=1\n        continue\n    try:\n        L(p)\n        v+=1\n    except U: n+=1\n    except Exception: pass\nassert n>0 and m>0, (n,m)\nassert n+m>n\nassert v+n+m==len(roots), (v,n,m,len(roots))\")"`
+
+**Trap — this check pinned a census until 2026-08-05, and a census
+expires.** It asserted `len(roots)==42` and `(n,m)==(11,3)`, which stopped
+being true the moment rung 5 committed its live A/B arm roots (`f6d41bff`)
+— correct evidence, correctly committed. The claim the prose makes (the two
+sets are different and neither is empty) never stopped being true while the
+check was red. Fixed in
+`experiments/2026-08-05-fix-expired-census-readers/` along with three
+sibling instances: `SEAM-harness-x-verification`'s 45/28/14/3 check and the
+two `tests/test_module_fingerprints.py` tests. When you need a number in
+this document, write it as a dated measurement with its commit, never as an
+assertion.
 
 What breaks first, cheapest first: `tests/test_run_manifest_v4.py` (topology
 admissibility, sub-second) and `tests/test_foreign_criticism_policy_c3.py`
