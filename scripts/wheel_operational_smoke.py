@@ -3731,14 +3731,6 @@ def main(argv: list[str] | None = None) -> int:
         )
         succeeded = True
     except OperationalSmokeFailure as error:
-        # Typed failures are payload-free by design, so the traceback is the
-        # only thing that names WHICH check raised: without it the record
-        # gives a stage and a kind and no way to find the line.
-        _report_diagnostic(
-            f"typed failure ({error.stage}/{error.failure_kind})",
-            traceback.format_exc(),
-            repo=repo,
-        )
         failure = error
     except AssertionError as error:
         _report_diagnostic(
