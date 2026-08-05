@@ -29,23 +29,34 @@ has not run end to end in this container.
     -> PASS
 
     $ python -m pytest tests/ -q -n 4
-    PENDING at the time of this commit -- running alone, result appended
-    below when it lands.
-    Last measured at the parent commit 228b2ce6: 3 failed, 3335 passed
-    (the three the revert addresses). Directly after the revert,
-    tests/test_wheel_operational.py alone: 108 passed.
+    3338 passed, 7 skipped in 759.48s (0:12:39)
+    -> PASS (0 failed)
+    At the parent commit 228b2ce6 this was 3 failed, 3335 passed -- the
+    three the revert addresses. Nothing else moved: 3335 + 3 = 3338.
 
     $ python -u scripts/wheel_operational_smoke.py
-    PENDING at the time of this commit -- must be re-measured at
-    31480e5f rather than carried, because the revert removed the
-    channel that reported the stage.
-    Last measured at 228b2ce6: stage=continuation_rejection,
-    failure_kind=assertion_failed, rc=1 -> FAIL, blocked by V1.
+    {"schema":"deepreason-wheel-operational-failure-v4",
+     "stage":"continuation_rejection","failure_kind":"assertion_failed",
+     "timeout":false,"mcp_liveness":"alive","cleanup_completed":true, ...}
+    rc=1
+    -> FAIL, blocked by V1 (PARKED.md). Not caused by this change.
 
-Both pending lines are written as pending rather than filled in from
-the parent commit's numbers. The revert changed the failure-reporting
-path, so carrying either measurement forward would be reporting output
-this commit did not produce.
+Both were re-measured at this commit rather than carried from the
+parent, because the revert changed the failure-reporting path and
+carrying either forward would be reporting output this commit did not
+produce.
+
+Two things the re-measurement establishes beyond the verdict:
+
+1. **The qualify fix holds.** The run reaches
+   `continuation_rejection` -- four stages past `qualify` -- with
+   `mcp_liveness: alive`. Sites 1-3 pass against the live 15-pair
+   inventory without naming a numeral, and site 4's tool order is
+   accepted by the running server.
+2. **V4 is now concrete rather than argued.** The record above is the
+   ENTIRE output of the failing run. It names a stage and a kind and
+   locates no line, and with site 5 reverted there is no diagnostic
+   block beside it. That is exactly the gap V4 describes, observed.
 
 Run one instrument at a time, per U3: the two quick instruments together
 and the gate alone, because three earlier gate measurements in this
