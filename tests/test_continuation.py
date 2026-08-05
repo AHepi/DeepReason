@@ -1,4 +1,8 @@
 import json
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -7,6 +11,7 @@ from deepreason.config import Config
 from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.runtime.continuation import prepare_continuation
 from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
 
 
 def _manifest():
@@ -84,6 +89,71 @@ def test_continue_rejects_tampered_stop_digest(tmp_path, monkeypatch):
         assert str(error) == "CONTINUE_STOP_DIGEST_MISMATCH"
     else:  # pragma: no cover - assertion clarity
         raise AssertionError("tampered stop record was accepted")
+
+
+def _non_resumable_committed_roots() -> list[tuple[Path, str]]:
+    """Committed roots whose recorded stop reason cannot authorize a resume.
+
+    Selected from each root's OWN ``run-stop.json`` rather than from a list of
+    names, and against the product's own ``RESUMABLE_STOP_REASONS`` rather than
+    a literal: a change that reclassifies these stops empties the set and trips
+    the guard below instead of leaving the assertion passing over nothing.
+
+    Reading the reason is deliberately cheaper than reading the condition the
+    code under test branches on. Opening a Harness per root to inspect
+    ``terminal_lifecycle_decision`` replays every root (~63s) and asserts that
+    branch back at itself; a root that somehow carried a receipt raises a
+    DIFFERENT error below and fails loudly rather than being skipped.
+    """
+
+    tracked = subprocess.run(
+        ["git", "ls-files", "experiments", "runs"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.splitlines()
+    roots = sorted({Path(p).parent for p in tracked if p.endswith("/run-stop.json")})
+    witnesses = []
+    for root in roots:
+        reason = json.loads((root / "run-stop.json").read_text()).get("reason")
+        if reason not in RESUMABLE_STOP_REASONS:
+            witnesses.append((root, reason))
+    return witnesses
+
+
+def test_a_stop_with_no_typed_receipt_refuses_continuation():
+    """Regression (V1, tranche 2026-08-05-fix-continue-refusal-coverage):
+    ``CONTINUE_TYPED_STOP_REQUIRED`` had no test the gate ran. Its only
+    end-to-end witness was scripts/wheel_operational_smoke.py, which no pytest
+    run executes, so 2d4ca2e1 could change what a budget-exhausted stop
+    authorizes and leave the gate green for nine days.
+
+    The witnesses are committed roots that really stopped -- today five
+    operational_failure roots, e.g. failed-epoch1-run-9175f0ec -- not fixtures
+    asserting the state into existence.
+    """
+
+    witnesses = _non_resumable_committed_roots()
+    assert witnesses, (
+        "no committed root carries a non-resumable stop; "
+        "the refusal has lost its witness"
+    )
+
+    for root, reason in witnesses:
+        # A copy, never the original: prepare_continuation opens a writable
+        # Harness before it reaches the refusal, and a committed root is
+        # evidence whose contents never change.
+        with tempfile.TemporaryDirectory() as scratch:
+            copy = Path(scratch) / root.name
+            shutil.copytree(root, copy)
+            with pytest.raises(ValueError) as raised:
+                prepare_continuation(
+                    copy, cycles=1, tokens=10, check_operator_lock=False
+                )
+        assert str(raised.value) == "CONTINUE_TYPED_STOP_REQUIRED", (
+            f"{root.name} stopped on {reason!r} and was refused for the wrong "
+            f"reason: {raised.value}"
+        )
 
 
 def test_v3_continuation_requires_checkpoint(tmp_path, monkeypatch):

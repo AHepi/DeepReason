@@ -219,15 +219,23 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   opposite for a budget-exhausted run — and `docs/map/` owns nothing under
   `scripts/`, so no reader connected the two. The smoke only surfaced it on
   2026-08-05 (tranche `2026-08-05-fix-continue-run-rejection`), after three
-  other defects in front of that stage were cleared. Worse, the refusal it
-  proved has NO product test anywhere in the gate: repo-wide,
-  `CONTINUE_TYPED_STOP_REQUIRED` appears at its raise site, in the smoke's
-  matcher, and in one unit test of that matcher. The smoke is the only
-  end-to-end witness for BOTH halves, so it now proves each against its own
-  subject — a cancelled run for the refusal, the budget-exhausted run for
-  the continuation. Changing what a stop reason authorizes means auditing
-  `scripts/` too; the map cannot route you there.
-`check: grep -q "^def _assert_continuation_accepted(" scripts/wheel_operational_smoke.py && grep -q "^def _await_cancellable_cycle(" scripts/wheel_operational_smoke.py && grep -q "^def _assert_non_resumable_rejection(" scripts/wheel_operational_smoke.py && python -m pytest tests/test_wheel_operational.py::test_operational_smoke_witnesses_an_accepted_continuation tests/test_wheel_operational.py::test_operational_smoke_requires_exact_non_resumable_rejection -q`
+  other defects in front of that stage were cleared. The smoke now proves
+  each half against its own subject — a cancelled run for the refusal, the
+  budget-exhausted run for the continuation. Changing what a stop reason
+  authorizes means auditing `scripts/` too; the map cannot route you there.
+  **Half fixed 2026-08-05** (`2026-08-05-fix-continue-refusal-coverage`):
+  the refusal ALSO had no product test anywhere in the gate — repo-wide,
+  `CONTINUE_TYPED_STOP_REQUIRED` appeared at its raise site, in the smoke's
+  matcher, and in one unit test of that matcher — so the smoke, which no
+  `pytest` run executes, was its only witness. `tests/test_continuation.py`
+  now guards it against committed roots selected by the property that
+  causes the refusal: a recorded stop reason outside
+  `RESUMABLE_STOP_REASONS` (5 `operational_failure` roots today, of 28
+  carrying a `run-stop.json`). The selection reads the frozenset, so
+  reclassifying those stops empties the witness set and fails the guard
+  rather than passing over nothing. **Still true and NOT fixed**: the
+  continuation half's only end-to-end witness remains the smoke.
+`check: grep -q "^def _assert_continuation_accepted(" scripts/wheel_operational_smoke.py && grep -q "^def _await_cancellable_cycle(" scripts/wheel_operational_smoke.py && grep -q "^def _assert_non_resumable_rejection(" scripts/wheel_operational_smoke.py && python -m pytest tests/test_wheel_operational.py::test_operational_smoke_witnesses_an_accepted_continuation tests/test_wheel_operational.py::test_operational_smoke_requires_exact_non_resumable_rejection tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation -q`
 - **An amendment epoch supersedes the question, and only from its own durable
   workload.** `_read_request` reads the newest epoch's workload for a
   continuation while leaving the root's original `run-request.json` exactly as
