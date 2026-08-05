@@ -35,6 +35,8 @@ EXPECTED_MCP_TOOLS = (
     "start_run",
     "run_status",
     "run_result",
+    "run_findings",
+    "amend_run",
     "continue_run",
     "cancel_run",
     "scratch_map",
@@ -49,8 +51,6 @@ EXPECTED_MCP_TOOLS = (
     "get_capabilities",
     "get_help_topic",
     "get_request_requirements",
-    "amend_run",
-    "run_findings",
 )
 # The installed fixture's module name. Deliberately distinctive: it is
 # activated by a companion .pth rather than by winning the "sitecustomize"

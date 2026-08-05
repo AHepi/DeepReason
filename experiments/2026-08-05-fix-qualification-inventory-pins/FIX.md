@@ -82,3 +82,51 @@ file returns no such assertion. They must pass UNEDITED.
 
 Class `defect`, <=150 lines, no frozen surface, no `src/` change.
 **Proceeds to `dr-implement-fix`.**
+
+---
+
+## Amendment 1 — a fourth change site, and it is a defect I introduced
+
+`dr-implement-fix` rule 1: a site FIX.md missed is amended before the
+work continues, not typed in silently.
+
+With the qualify stage fixed, the run advanced to `STAGE_MCP_INITIALIZE`
+and failed `_assert_exact_tools` with "MCP tool inventory drifted".
+Cause: **my own careless pin update in the preceding smoke tranche.**
+
+`EXPECTED_MCP_TOOLS` is a `set` in `wheel_smoke.py` but an ordered
+`tuple` in `wheel_operational_smoke.py`, and `_assert_exact_tools`
+compares `tuple(tool["name"] for tool in tools) != EXPECTED_MCP_TOOLS`
+— order-sensitive. When I added `amend_run` and `run_findings` I
+APPENDED them in both files. That is correct for a set and wrong for a
+tuple: the live server emits them at positions 5-6, immediately after
+`run_result`.
+
+    live  : ... run_result, run_findings, amend_run, continue_run, ...
+    my pin: ... run_result, continue_run, ... get_request_requirements,
+            amend_run, run_findings
+    same members: True     ordered match: False
+
+`wheel_smoke.py` passed throughout because its set comparison cannot see
+order — which is why the error surfaced only here, one stage later, and
+only after the shadowing and qualify defects were cleared out of the
+way.
+
+Change site 4: `scripts/wheel_operational_smoke.py` `EXPECTED_MCP_TOOLS`
+— move the two names to their server-emitted positions. Verified after:
+ordered match True, schema sha match True.
+
+**Not converted to a set.** Order here is genuinely part of the pinned
+public facade — `EXPECTED_MCP_SCHEMA_SHA256` already hashes the tools
+array, which is a JSON list, so order is pinned regardless; the tuple
+comparison just reports order drift with a clearer message than a sha
+mismatch would. This pin is the same-commit pin rule working as
+intended, and unlike the 840/280 numerals it is not a fact with an
+expiry date — it is the declared surface, which is supposed to be
+updated deliberately when the surface changes.
+
+Correction to my own earlier report: when I said the two added tools
+were "verified as intended surface rather than rubber-stamped", that was
+true of their MEMBERSHIP and said nothing about their POSITION. The
+membership check was sound; the ordering was not checked at all, and one
+of the two instruments could not have caught it.
