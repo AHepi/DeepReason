@@ -27,7 +27,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "7520ea29fa8efba50c98a9ffa76adfbe0c59c66f51541dfe609dee7736bf82e1"
+    "39d73561bb355bdf42ee8f2aaa3b3bfb3df64cdafea228c7e03bd59e46ff36fc"
 )
 EXPECTED_MCP_TOOLS = (
     "get_readiness",
@@ -48,6 +48,8 @@ EXPECTED_MCP_TOOLS = (
     "get_capabilities",
     "get_help_topic",
     "get_request_requirements",
+    "amend_run",
+    "run_findings",
 )
 TEST_CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 TEST_CREDENTIAL = "loopback-credential-must-never-appear"
