@@ -1,0 +1,25 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation suppresses cross-cutting explanations only if the owning lineage lacks a translation mechanism to derive rival primitives; if a 'universal grammar' exists, apparent suppression is mere inefficiency from redundant re-derivation.",
+    "mechanism": "When a problem is allocated to an owning lineage, it is solved using that lineage's search vocabulary. If the vocabulary is a strict subset of another lineage's, or lacks the primitive that makes the cross-cutting explanation salient, the owning lineage must synthesize it from more basic components. If this synthesis is computationally tractable, the explanation is merely inefficient to reach. If it is intractable (exceeds resource bounds), the explanation is effectively suppressed.",
+    "counterconditions": [
+      "If all rival lineages have equivalent expressive power (can derive the same primitives), then suppression is impossible by definition, and ownership allocation only affects efficiency.",
+      "If the owning lineage can dynamically import primitives from rival lineages upon reaching a local impasse, suppression is mitigated.",
+      "If the cost of broadcasting all problems to all lineages exceeds the value of the cross-cutting explanations found, then even if suppression occurs, it is a justified efficiency trade-off rather than a systematic flaw."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "need_context"
+    },
+    "typicality": 0.6
+  }
+}
+```

@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-d88a06210fd0758d035f9b86ffac8ab4) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Rival research programmes inside one reasoning system are usually allocated to problems by ownership: whichever lineage produced the parent artifact works its successors. Argue for or against the claim that ownership-based allocation systematically suppresses the discovery of cross-cutting explanations, and identify what evidence within a single run would distinguish suppression from mere efficiency. Where a claim can be tested by counting, say exactly what to count.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3124fef404e15e4e15f00a2c: program:reasoning_observation_pending
+- reason-counter@d1b108eaf150466c9677793b: program:reasoning_observation_pending
+- reason-counter@7ed55f7636a085c8c38a9884: program:reasoning_observation_pending
+- reason-counter@80f7db696e11ac9dd6d5905f: program:reasoning_observation_pending
+- reason-counter@a347ec00b5d53e50c5d1b02d: program:reasoning_observation_pending
+- reason-counter@7b49c446a02962439228588c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Ownership-based allocation suppresses cross-cutting explanations, measurable by counting successful rival reframings that the owning lineage failed to produce.","counterconditions":[{"case":"Rival lineages never possess primitives outside the owner's vocabulary, making reframing impossible.","eval":"observation"},{"case":"The costs of broadcasting every problem exceed the value of the cross-cutting explanations discovered.","eval":"observation"},{"case":"Rival successes are confined to problems the owner already solves, making S=0 and E>0.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Ownership creates a local monopoly on a problem's search space. The owning lineage only applies its own primitives, ignoring rival vocabularies. Cross-cutting explanations are suppressed because the agent that discovers the solution is structurally barred from using alternative conceptual schemas. As proposed in SCR_001, suppression is distinguished from efficiency by broadcasting solved problems to rival lineages and counting positive instances (S) versus owner-only successes (E).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3124fef404e15e4e15f00a2c, reason-counter@d1b108eaf150466c9677793b, reason-counter@7ed55f7636a085c8c38a9884
+
+TARGET SRC_002
+{"analogy":null,"claim":"Ownership does not suppress discovery but delays it, and the evidence is a monotonic increase in solution latency across a sequence of similar problems.","counterconditions":[{"case":"Solution latency remains constant or decreases over time, indicating no delay cost.","eval":"observation"},{"case":"Rival lineages solve problems instantly that the owner cannot solve at all, proving structural suppression rather than delay.","eval":"observation"},{"case":"The sequence of problems is not similar enough to allow learning curve effects.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Exclusive ownership forces a lineage to re-invent concepts that rivals already possess. This is a latency penalty, not a discovery failure. The lineage will eventually find the explanation, but later than a rival would have. To distinguish suppression from efficiency, count the time-to-solution for the owning lineage. If the time-to-solution increases or fails to decrease as expected on similar problems, the system is paying an increasing efficiency penalty, which functionally suppresses timely cross-cutting explanations.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@80f7db696e11ac9dd6d5905f, reason-counter@a347ec00b5d53e50c5d1b02d, reason-counter@7b49c446a02962439228588c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

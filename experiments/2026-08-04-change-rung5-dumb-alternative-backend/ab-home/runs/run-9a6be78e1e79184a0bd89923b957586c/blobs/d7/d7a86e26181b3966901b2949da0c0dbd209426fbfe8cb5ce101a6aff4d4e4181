@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:00c2c5ea25de) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 00c2c5ea25de to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@85dac952f5df: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_003's 'forced confrontation' mechanism inherits and sharpens SRC_002's 'translation' mechanism by specifying the exact causal variable: not the act of translation itself, but the isomorphism-revealing confrontation between vocabularies that translation enables. SRC_003 depends on SRC_002 because without translation there is no confrontation, but SRC_003 is not reducible to SRC_002 since mere translation without confrontation (e.g., mechanical substitution) would not produce cross-cutting discovery. The inheritance is refuted if a lineage can achieve isomorphism-revealing confrontation without translating the problem into a rival vocabulary, severing SRC_003's dependence on SRC_002's translation step.
+commitments: hv-floor@2a45b7988522, lineage-ref@85dac952f5df, relation-form@578e42df713e
+
+TARGET SRC_002
+The universal grammar counter-conditions across the neighbourhood (SRC_001, SRC_002, SRC_004) are mutually incompatible in their eval-observation thresholds: SRC_002 requires the rival translation to yield 'simpler or more unifying' patterns, while SRC_004 requires only 'tractable synthesis', meaning a grammar can satisfy both only if tractability implies unification. This abstracts the neighbourhood's counterconditions into a single dependence: SRC_004 reduces to SRC_002 if and only if P-tractability implies Q-unification. It is refuted if a lineage's grammar can tractably synthesize a rival primitive without producing a unifying structural pattern, breaking the reduction and leaving SRC_004's efficiency trade-off independent of SRC_002's epistemic loss.
+commitments: hv-floor@2a45b7988522, lineage-ref@85dac952f5df, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_001's self-reinforcing silo mechanism abstracts the entire neighbourhood by naming the one variable the others leave implicit: the feedback loop. SRC_002 (translation denied), SRC_003 (confrontation prevented), SRC_004 (synthesis intractable), and SRC_005 (tariff imposed) each describe a single-cycle barrier, but none explains why the barrier persists over repeated problem allocations. SRC_001's claim that silos 'self-reinforce' provides the missing temporal mechanism: the more problems a lineage owns, the more its vocabulary specializes, widening the gap to rivals and making future cross-cutting explanations even harder to formulate. The abstraction is refuted if the other four mechanisms are already self-stabilizing without a feedback loop, meaning single-cycle barriers are sufficient for persistent suppression and no reinforcement is needed.
+commitments: hv-floor@2a45b7988522, lineage-ref@85dac952f5df, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

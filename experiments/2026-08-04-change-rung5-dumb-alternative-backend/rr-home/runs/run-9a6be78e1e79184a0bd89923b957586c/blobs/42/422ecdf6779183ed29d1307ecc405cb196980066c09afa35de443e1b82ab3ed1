@@ -1,0 +1,46 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation suppresses cross-cutting explanations not by censoring ideas, but by filtering them out at the proposal stage: a researcher in lineage A, encountering an anomaly best explained by lineage B's theory, will subconsciously or deliberately reformulate the explanation in A's terms (or drop it) because the institutional reward structure penalizes importing foreign frameworks. The suppression is therefore invisible in the final artifact stream—it appears only as a missing population of hybrid explanations.",
+    "mechanism": "Self-censorship via anticipated evaluation friction. If an artifact is produced under lineage A's ownership, the reviewing/crediting apparatus expects A-style mechanisms. A researcher who recognizes a B-style cross-cutting explanation faces a choice: submit the B explanation (high friction, possible rejection or credit transfer to B's owners) or translate it into A's vocabulary (lower friction, but loses cross-cutting structure). The rational strategy is translation or abandonment, so cross-cutting explanations are systematically underproduced, not merely underrepresented in output.",
+    "counterconditions": [
+      "If researchers are risk-seeking or indifferent to evaluation friction, they would submit B-style explanations despite ownership norms, and the suppression effect would vanish.",
+      "If translation into A's vocabulary preserves cross-cutting structure (i.e., the structure is invariant under vocabulary change), then no suppression occurs—only relabeling.",
+      "If the anomaly space is densely populated with A-style explanations by chance, cross-cutting explanations are unnecessary, and their absence is efficiency, not suppression.",
+      "If ownership is routinely reassigned to the lineage with the best-fitting theory rather than the producing lineage, the mechanism fails and allocation becomes merit-based."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3"
+      ],
+      "shared_structure": [
+        "An agent must produce an artifact under an institutional constraint (ownership lineage vs. publication venue).",
+        "A better-fitting idea exists outside the constraint's preferred vocabulary (cross-cutting explanation vs. higher-impact framework).",
+        "The agent rationally optimizes for acceptance/credit rather than for maximum explanatory fit.",
+        "The result is that the best-fit ideas are systematically underrepresented in the observable output stream."
+      ],
+      "disanalogies": [
+        "Publication choice is a one-time decision per artifact; ownership allocation may bind an entire lineage of successor artifacts, compounding the suppression.",
+        "In publication, the author retains credit regardless of venue; in ownership allocation, credit may transfer to the owning lineage, raising the stakes.",
+        "Cross-cutting explanations may be intrinsically harder to formulate than single-framework explanations, unlike choice of theoretical lens in a mature field."
+      ],
+      "transfer_claims": [
+        "Just as home bias suppresses non-home theories in publication output, ownership allocation suppresses non-owning-lineage explanations in artifact output.",
+        "The suppression is best measured not by counting accepted cross-cutting explanations but by counting proposed ones (or proxy signals of proposal)."
+      ],
+      "overturn_conditions": [
+        "If counting proposed cross-cutting explanations shows no deficit relative to single-framework explanations, the suppression claim is false.",
+        "If evaluation friction for foreign-framework explanations is measurably zero, the mechanism lacks teeth."
+      ]
+    },
+    "typicality": 0.35,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

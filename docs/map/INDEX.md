@@ -103,15 +103,19 @@ traffic at all.
 | 10 | llm × scratch | — not yet written |
 | — | schools × scratch | `SEAM-schools-x-scratch.md` |
 | — | manifest × schools | `SEAM-manifest-x-schools.md` |
+| — | adjudication × authority | `SEAM-adjudication-x-authority.md` |
 | — | adjudication × rules | `SEAM-adjudication-x-rules.md` |
 | — | capabilities × rules | `SEAM-capabilities-x-rules.md` |
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
 
-The last six carry no import-count because at least one side is a concept
+The last seven carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification case — every import between the sides is
-function-local, which the coupling metric cannot see.
+function-local, which the coupling metric cannot see. The adjudication ×
+authority case is the strongest form of that: the agreement IS the absence of
+traffic, and the measured consequence of breaking it is that committed roots
+change meaning.
 **That is exactly why they need documents**: coupling metrics cannot see them,
 so nothing but a written seam will tell the next reader they exist.
 

@@ -1,0 +1,15 @@
+```json
+{
+  "repair": "repair.patch.v1",
+  "patch": {
+    "op": "add",
+    "path": "/candidates/2/analogy/overturn_conditions",
+    "value": [
+      "If mandatory consultation yields no increase in accepted cross-cutting explanations, the baseline was efficient rather than suppressive.",
+      "If the adjudication log already contains a substantial rate of rejected cross-school proposals, suppression is at adjudication rather than allocation, and the A/B framing of generation is misdirected.",
+      "If informal context requests already trigger cross-school visibility in the baseline run, the intervention is redundant and cannot reveal a suppressive gap.",
+      "If the cost of mandatory consultation in processing time or delayed convergence outweighs the value of any additional cross-cutting explanations discovered, the suppression–efficiency distinction is practically immaterial for policy."
+    ]
+  }
+}
+```

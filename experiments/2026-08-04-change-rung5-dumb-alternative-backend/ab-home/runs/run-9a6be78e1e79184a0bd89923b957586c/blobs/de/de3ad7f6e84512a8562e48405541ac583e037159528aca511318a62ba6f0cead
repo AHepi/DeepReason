@@ -1,0 +1,121 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Ownership-based allocation systematically suppresses cross-cutting explanations, because it acts as an epistemic tariff: it protects the incumbent lineage's primitive vocabulary from being invalidated by rival primitives, causing the system to optimize for lineage-autarky rather than explanatory coverage.",
+      "mechanism": "The reasoning system evaluates primitives using a local cost function bounded by the owning lineage's available vocabulary. When a problem is allocated to L_owner, rival primitives from L_rival are artificially excluded from the action space. This forces L_owner to construct an explanation using combinations of its own weaker primitives. Consequently, the search space is pruned of cross-cutting explanations (those requiring L_rival's primitives) not because they are suboptimal, but because they are unrepresentable in the allocated subspace.",
+      "counterconditions": [
+        "If rival lineages universally converge on a complete universal grammar where all primitives are inter-derivable, then exclusion of L_rival primitives results in zero loss of representational power.",
+        "If the cost of translating or importing cross-cutting explanations across lineages exceeds the computational savings of ownership-based allocation, then the allocation is a net efficiency gain rather than suppression.",
+        "If cross-cutting explanations are systematically less robust than lineage-native explanations, their absence reflects a valid selection pressure rather than artificial suppression."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_005"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Ownership-based allocation is fundamentally a diversity-preserving heuristic that enhances system-level resilience. It does not suppress cross-cutting explanations but delays them, ensuring that primitives are deeply stress-tested within their native lineages before being considered for cross-lineage integration.",
+      "mechanism": "By restricting a problem to its parent lineage, the system prevents premature assimilation of rival primitives. This isolation ensures that each primitive vocabulary is pushed to its local极限. Without this phase of isolation, the system would collapse towards a homogeneous average, losing the tension between rival research programmes that is necessary to eventually formulate robust, high-level cross-cutting explanations.",
+      "counterconditions": [
+        "If the system terminates before the isolation phase yields to an integration phase, the delay becomes permanent suppression.",
+        "If lineages possess orthogonal primitives that cannot be derived from one another, the isolation prevents the construction of any cross-cutting explanation, proving it is not merely delayed.",
+        "If the cost of the isolation phase (in terms of duplicated computational effort) consistently exceeds the robustness benefit, the heuristic is an inefficient allocation strategy."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_003"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The suppression vs. efficiency distinction can be resolved in a single run by counting the Vocabulary-Intersection Counterfactual Validity (VICV) ratio. Suppression occurs if and only if the system systematically drops valid cross-cutting solutions that require a minimal intersection of rival vocabularies.",
+      "mechanism": "For a set of solved problems P, count: (1) N_cc = the number of problems where L_owner's valid solution is a strict subset of a valid solution constructed using primitives from L_owner ∪ L_rival. (2) N_iso = the number of problems where L_owner's valid solution cannot be extended or improved by any primitive from L_rival. If the ratio N_cc / (N_cc + N_iso) exceeds a predefined threshold (e.g., 0.3), the allocation mechanism is suppressing cross-cutting explanations rather than merely efficiently solving the problem in isolation.",
+      "counterconditions": [
+        "If the run log does not record the action space or primitive inventory used for each problem, the VICV ratio cannot be computed.",
+        "If L_rival's primitives are strictly dominated by L_owner's primitives (i.e., L_owner is a universal grammar), N_cc will be zero, indicating efficiency, not suppression.",
+        "If the system's success metric does not penalize complex explanations constructed from weak primitives, it may prefer L_owner's solutions without suppressing cross-cutting ones, rendering the VICV ratio a measure of aesthetic preference rather than suppression."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_004"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Suppression is not an artifact of the allocation policy, but an inevitable consequence of the system's reward function. If the system rewards only problem-solving success and not explanatory elegance, ownership-based allocation efficiently ignores cross-cutting explanations because they are computationally expensive to construct and offer no marginal reward.",
+      "mechanism": "The reasoning system is a utility-maximizer. Constructing a cross-cutting explanation requires the system to bridge disparate primitive vocabularies, which incurs a high computational cost. If the system's reward function only provides a binary signal for solving the problem, the ownership-based allocation acts as a satisficing heuristic: it uses the cheapest available primitives (L_owner's) to achieve the reward. Thus, cross-cutting explanations are suppressed not by the allocation rule, but by the indifference of the reward function to the quality of the explanation.",
+      "counterconditions": [
+        "If the system's reward function includes a term for explanatory parsimony or robustness that can only be maximized by cross-cutting explanations, the utility-maximizer would seek them out despite the cost, proving suppression is not inevitable.",
+        "If ownership-based allocation actively penalizes the use of L_rival primitives even when they yield a higher reward, the suppression is a property of the allocation rule, not the reward function.",
+        "If L_owner's primitives are strictly insufficient to solve certain problems, the system would be forced to use L_rival primitives to achieve the binary reward, contradicting the claim that L_owner is always the cheapest option."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_002"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Suppression can be identified by counting the 'Translation Overhead' (T_O) versus 'Solution Latency' (S_L). If the overhead to translate a rival solution into the owner's vocabulary consistently exceeds the latency of the owner generating a weaker native solution, the system is operating efficiently; if T_O is low but rival solutions are still rejected, it is suppressing.",
+      "mechanism": "For each problem, measure the cost T_O of mapping L_rival's valid cross-cutting solution onto L_owner's vocabulary. Then measure S_L, the time L_owner takes to produce its own valid solution. If T_O < S_L and the system still fails to adopt the cross-cutting solution, this is a positive instance of suppression. Count the frequency of this event. Efficiency is indicated when T_O > S_L, justifying the rejection of the rival solution on computational grounds.",
+      "counterconditions": [
+        "If the system lacks a mechanism to attempt translation (T_O is never measured), this metric cannot be computed.",
+        "If T_O is high but the resulting translated solution is vastly more robust than L_owner's native solution, rejecting it based on T_O > S_L may still constitute suppression of quality in favor of speed.",
+        "If L_owner's vocabulary lacks the expressive power to host the translated cross-cutting solution, T_O is effectively infinite, which masks suppression as a technical impossibility."
+      ],
+      "typicality": 0.40,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Ownership-based allocation is a necessary precondition for the discovery of cross-cutting explanations, rather than a suppressor of them. It creates the competitive pressure between localized theories that eventually forces the emergence of a higher-level synthesis.",
+      "mechanism": "Cross-cutting explanations are not found by searching a homogeneous space of primitives. They are synthesized when two incompatible, highly optimized local theories (developed in isolation via ownership) clash on a boundary problem. The allocation policy ensures these local theories become sufficiently rigid and distinct. The cross-cutting explanation is then the dialectical resolution of this clash. Without ownership-based allocation, the system would converge prematurely to a shallow consensus, suppressing the discovery of deep cross-cutting explanations.",
+      "counterconditions": [
+        "If the system has no mechanism for dialectical resolution or cross-lineage communication, the clash remains unresolved, and the cross-cutting explanation is never discovered.",
+        "If the boundary problems are never allocated to both lineages simultaneously or sequentially, the clash never occurs.",
+        "If one lineage can eventually solve all problems recursively using its own primitives, the competitive pressure dissipates, and no higher-level synthesis is required."
+      ],
+      "typicality": 0.20,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

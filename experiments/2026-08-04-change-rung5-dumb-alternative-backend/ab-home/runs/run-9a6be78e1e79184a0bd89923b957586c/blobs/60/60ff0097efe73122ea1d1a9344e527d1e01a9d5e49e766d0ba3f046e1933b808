@@ -1,0 +1,42 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The universal grammar counter-conditions across the neighbourhood (SRC_001, SRC_002, SRC_004) are mutually incompatible in their eval-observation thresholds: SRC_002 requires the rival translation to yield 'simpler or more unifying' patterns, while SRC_004 requires only 'tractable synthesis', meaning a grammar can satisfy both only if tractability implies unification. This abstracts the neighbourhood's counterconditions into a single dependence: SRC_004 reduces to SRC_002 if and only if P-tractability implies Q-unification. It is refuted if a lineage's grammar can tractably synthesize a rival primitive without producing a unifying structural pattern, breaking the reduction and leaving SRC_004's efficiency trade-off independent of SRC_002's epistemic loss.",
+      "evidence_refs": [
+        {
+          "block": "000000000000000000000000000000000000",
+          "quote": "universal grammar"
+        }
+      ],
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "typicality": 0.85
+    },
+    {
+      "content": "SRC_005's 'epistemic tariff' mechanism contradicts SRC_001's 'self-reinforcing silo' mechanism on the direction of causal force: SRC_005 claims the tariff protects incumbent vocabulary from invalidation (outward defensive pressure), while SRC_001 claims silos never encounter anomalies forcing a bridge (inward isolation pressure). These are not the same mechanism: protection implies the rival primitive exists and is warded off, whereas siloing implies the rival primitive is never encountered at all. The contradiction holds when a lineage actively excludes known rivals (tariff) versus passively missing unknown rivals (silo). It is refuted if 'protection' and 'isolation' are formally identical operations in the allocation function, making the directional distinction a framing artifact rather than a mechanistic divergence.",
+      "neighbours": ["SRC_001", "SRC_005"],
+      "typicality": 0.60
+    },
+    {
+      "content": "SRC_003's 'forced confrontation' mechanism inherits and sharpens SRC_002's 'translation' mechanism by specifying the exact causal variable: not the act of translation itself, but the isomorphism-revealing confrontation between vocabularies that translation enables. SRC_003 depends on SRC_002 because without translation there is no confrontation, but SRC_003 is not reducible to SRC_002 since mere translation without confrontation (e.g., mechanical substitution) would not produce cross-cutting discovery. The inheritance is refuted if a lineage can achieve isomorphism-revealing confrontation without translating the problem into a rival vocabulary, severing SRC_003's dependence on SRC_002's translation step.",
+      "neighbours": ["SRC_002", "SRC_003"],
+      "typicality": 0.72
+    },
+    {
+      "content": "SCR_001's suppression ratio S/(S+E) is structurally incompatible with the neighbourhood's counter-conditions because it is a population-level frequency metric, whereas every counter-condition (universal grammar, non-cross-cutting problems, spanning sets) is a per-problem structural property. A lineage can have a high suppression ratio yet zero genuine suppression if its problems are intrinsically non-cross-cutting (SRC_002's counter-condition), inflating S with false positives. The metric contradicts the foundation's causal requirements unless the denominator includes a structural-eligibility filter. It is refuted if there exists no problem class where L_rival produces a valid non-native solution but the problem is still provably non-cross-cutting under SRC_002's definition, which would mean S is always a clean signal.",
+      "neighbours": ["SRC_001", "SRC_002", "SRC_003"],
+      "typicality": 0.30
+    },
+    {
+      "content": "SRC_004's efficiency trade-off integrates with SRC_005's epistemic tariff to produce a compound mechanism: suppression occurs only when the tariff cost (excluded rival primitives) exceeds the efficiency savings (avoided re-derivation), making suppression a threshold phenomenon rather than a systematic outcome. The integration depends on both: SRC_004 supplies the efficiency credit, SRC_005 supplies the epistemic debit, and net suppression = debit − credit. This is refuted if the efficiency savings and epistemic losses are not commensurable (cannot be compared on a common scale), because then no threshold exists and the two mechanisms operate independently rather than integrating into a compound trade-off.",
+      "neighbours": ["SRC_004", "SRC_005"],
+      "typicality": 0.45
+    },
+    {
+      "content": "SRC_001's self-reinforcing silo mechanism abstracts the entire neighbourhood by naming the one variable the others leave implicit: the feedback loop. SRC_002 (translation denied), SRC_003 (confrontation prevented), SRC_004 (synthesis intractable), and SRC_005 (tariff imposed) each describe a single-cycle barrier, but none explains why the barrier persists over repeated problem allocations. SRC_001's claim that silos 'self-reinforce' provides the missing temporal mechanism: the more problems a lineage owns, the more its vocabulary specializes, widening the gap to rivals and making future cross-cutting explanations even harder to formulate. The abstraction is refuted if the other four mechanisms are already self-stabilizing without a feedback loop, meaning single-cycle barriers are sufficient for persistent suppression and no reinforcement is needed.",
+      "neighbours": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005"],
+      "typicality": 0.55
+    }
+  ]
+}
+```

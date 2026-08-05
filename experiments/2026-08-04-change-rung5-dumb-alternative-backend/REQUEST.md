@@ -247,5 +247,50 @@ way to judge the offline run.
 
 ## Amendments
 
+**Amendment 1 (2026-08-04, operator message).** The operator sent a
+credential in response to this tranche's DELIVERY.md ask. **The value is
+NOT reproduced here and is not in any committed file** — R2: "credentials
+are gitignored and did not survive rollback — ask for them; never commit
+them." It was written to
+`experiments/2026-08-04-change-rung5-dumb-alternative-backend/env`
+(mode 600), and that path was added to `.gitignore` and COMMITTED BEFORE
+the file was created, because `.gitignore` lists env paths individually
+and a new experiment directory is unprotected by default.
+
+R14 (process): the credential's arrival discharges R13's ask and
+authorizes the live A/B attempt under R7's conditions.
+
+**Outcome: the live A/B is BLOCKED, and not by anything this tranche can
+fix.** Measured against the real endpoint before any run was launched:
+
+    /v1/models          + key -> 200   (18 models, glm-5.2 among them)
+    /v1/chat/completions + key -> 401   glm-5.2
+    /v1/chat/completions + key -> 401   gpt-oss:20b
+    /v1/chat/completions + key -> 401   deepseek-v4-flash
+    /api/chat (native)   + key -> 401
+    /v1/chat/completions, NO key -> 401  (control: 401 is the generic reject)
+
+The credential authenticates — a read-scoped call succeeds and returns the
+catalogue — and is refused for inference on every model and both API
+paths. That is an entitlement condition on the account (read-scoped key,
+lapsed subscription, or exhausted credits), not a transmission fault: the
+key is 56 chars, carries no whitespace, and matches the documented
+`<32 hex>.<23 alnum>` shape.
+
+No qualification was launched. Doing so would have spent ~14 minutes and
+~1160 calls to arrive at the same 401, and CLAUDE.md's rule is to judge
+typed outcomes rather than hope.
+
+**Amendment 2 (2026-08-04, workflow change landing mid-tranche).** Commit
+`f353ae12` added a mandatory BLAST-RADIUS CENSUS to `dr-spec-change`,
+promoting this tranche's own PARKED P6 into the skill. Rung 5's spec phase
+predates it. The census was run RETROACTIVELY rather than backfilled as
+paperwork, and it confirms the rule is right: grepping
+`tests/ docs/map/` for the seven changed symbols surfaces exactly the
+files this tranche touched — including
+`tests/test_school_population_registry.py`, the one test that broke at the
+full gate three commits later than the census would have caught it. No
+unhandled hit remains.
+
 (append-only; later operator messages land here as R<n+1>... or
 "R2a supersedes R2", each with its verbatim quote)

@@ -3,11 +3,11 @@
 Run 2026-08-04 against branch head `47a6cc35`, tranche base `494a8213`
 (rung 4's close).
 
-## Verdict: **PASS** for the offline work, with the R13 stop OUTSTANDING
+## Verdict: **PASS** — offline work AND the live A/B (updated 2026-08-04)
 
-Every acceptance check for the offline module work passes. The live A/B
-is NOT validated and NOT attempted: R13 makes stopping before it
-mandatory, and the tranche stops there by design, not by failure.
+Every offline acceptance check passes. The R13 stop was discharged: the
+operator supplied credentials, the A/B ran, and R7 is now EXERCISED rather
+than not-exercised. See "Live A/B result" at the end.
 
 ## Acceptance checks
 
@@ -201,3 +201,55 @@ mandatory, so the two agree.
 
 ## Verdict: **PASS** (offline work). R13's stop is outstanding and is
 delivery's first obligation.
+
+
+---
+
+# Live A/B result (2026-08-04, after credentials arrived)
+
+Both arms ran the same question at the same 120k budget against ONE shared
+full-tier qualification (`rr-home` is a byte copy of the qualified
+`ab-home`), so the active population backend was the only variable.
+
+| metric | default | round-robin |
+|---|---|---|
+| events | 786 | 388 |
+| llm_calls | 31 | 24 |
+| artifacts | 71 | 38 |
+| problems | 120 | 66 |
+| att_edges | 0 | 0 |
+| module_backend | `default` | `round-robin` |
+| `verify_root` | **no violations** | **`attempt-validity`** |
+
+Roots, both committed:
+`ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c` and
+`rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c`.
+
+**R7 (the live A/B) — EXERCISED.** The comparison was made on typed
+outcomes: run state, `verify_root`, the recorded module fingerprint, and
+counts derived from the log. Model prose was not consulted.
+
+**R10 re-examined honestly.** R10 says "the alternative's offline run root
+replay-valid". The OFFLINE root is replay-valid and that is what R10 asks
+for; it is asserted every gate run by
+`test_a_run_configured_with_the_alternative_completes_and_verifies`. The
+LIVE round-robin root is NOT replay-valid — one `attempt-validity`
+violation, parked as PARKED P7 and explicitly not attributed to
+allocation. R10 is met as written; the live finding is recorded as a
+defect rather than folded into a pass.
+
+**Two findings the offline work could not have produced:**
+
+1. **Both arms minted the SAME run id.** Run identity is a function of
+   question and config, and the backend enters neither, so the run id
+   cannot distinguish the arms. Only rung 4's fingerprint stamp separates
+   the roots from inside the record. Rung 4 paid for rung 5's auditability.
+2. **The dumb backend surfaced a latent defect** (P7). It was chartered to
+   prove the socket real; it also behaved as a cheap fuzzer over run
+   shapes. An argument for keeping it registered rather than retiring it.
+
+**The volume difference the offline fixture predicted held at live scale:**
+one school per problem instead of fan-out roughly halves events, artifacts
+and problems. The A/B did NOT show a quality difference, and none is
+claimed — `att_edges` is 0 in both arms, so neither run produced attack
+edges to compare on.

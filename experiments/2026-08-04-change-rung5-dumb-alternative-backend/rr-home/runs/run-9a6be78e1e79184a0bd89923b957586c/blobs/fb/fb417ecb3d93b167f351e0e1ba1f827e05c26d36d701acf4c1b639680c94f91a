@@ -1,0 +1,25 @@
+```json
+{
+  "candidate": {
+    "claim": "Ownership-based allocation suppresses cross-cutting explanations by imposing a lineage-level information bottleneck: a successor artifact inherits the source code and problem statement of its parent, but not the discarded failure traces or counterfactual mappings explored by rival lineages, so explanations that would require reconciling mutually exclusive dead-ends remain unconstructable.",
+    "mechanism": "When allocation is by ownership, each programme operates in a strict lineage silo. The successor inherits the parent's finalized commitments, but the rival programmes' negative results (hypotheses that failed, analogies that broke) are not carried forward as structured data. A cross-cutting explanation often requires synthesizing *why* two different approaches failed for *different* reasons to infer a third covering principle. Because ownership-based allocation makes this negative knowledge non-portable across lineages, the synthesis is mechanically blocked—not by active censorship, but by an information architecture that treats rival dead-ends as disposable rather than as constraints on the covering space.",
+    "counterconditions": [
+      "Rival lineages maintain a shared, structured negative-result registry accessible to all successors, neutralizing the bottleneck.",
+      "Cross-cutting explanations emerge spontaneously from single-lineage induction without requiring cross-lineage synthesis, making the bottleneck irrelevant.",
+      "The reasoning system's problem space is sufficiently orthogonal that no two lineages ever produce dead-ends whose reconciliation would yield a covering principle."
+    ],
+    "typicality": 0.25,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

@@ -1,0 +1,11 @@
+=== rung5 A/B start 2026-08-04T15:48:22Z ===
+rr-home seeded from qualified ab-home rc=0
+=== arm=default start 2026-08-04T15:48:22Z ===
+arm=default reason_rc=0 seconds=489
+arm=default run_id=run-9a6be78e1e79184a0bd89923b957586c state=completed
+=== arm=roundrobin start 2026-08-04T15:56:31Z ===
+arm=roundrobin reason_rc=5 seconds=466
+arm=roundrobin run_id=run-9a6be78e1e79184a0bd89923b957586c state=completed
+=== audit ===
+audit_rc=0
+=== rung5 A/B end 2026-08-04T16:05:01Z ===

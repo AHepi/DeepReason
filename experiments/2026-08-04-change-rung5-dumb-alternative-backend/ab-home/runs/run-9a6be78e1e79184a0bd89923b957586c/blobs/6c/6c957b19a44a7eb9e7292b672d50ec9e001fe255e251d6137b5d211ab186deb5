@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "Ownership-based allocation suppresses cross-cutting explanations by starving rival lineages of the computational resources needed to develop their alternative vocabularies, causing them to atrophy and become unable to generate competing explanations.",
+    "mechanism": "The causal mechanism is resource-based Darwinian selection within the reasoning system. When a problem is allocated to a lineage by ownership, that lineage receives a continuation budget to solve it. Rival lineages receive zero budget for that problem. If a rival lineage contains a primitive or perspective capable of yielding a superior cross-cutting explanation, it lacks the compute to execute the search and derive the solution. Over time, the lack of resource allocation to rival lineages for parent-owned problems causes their generative capacities to atrophy, systematically suppressing alternative explanations.",
+    "counterconditions": [
+      "If rival lineages independently maintain their vocabularies and search capabilities via a baseline compute budget regardless of problem allocations, their capacity to generate cross-cutting explanations does not atrophy.",
+      "If the owning lineage's vocabulary is capable of deriving all rival primitives as theorems (universal grammar), then cross-cutting explanations are not suppressed but merely re-expressed.",
+      "If cross-cutting explanations require computational effort that exceeds the total system budget regardless of allocation strategy, the suppression is due to global resource constraints rather than ownership-based allocation."
+    ],
+    "typicality": 0.55,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    }
+  }
+}

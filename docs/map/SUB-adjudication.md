@@ -2,8 +2,8 @@
 Verified-at: 08dcdf3c
 Verify: python -m pytest tests/test_adjudication.py -q
 Owns: src/deepreason/adjudication/
-Seams: DR-SEAM-adjudication-x-rules
-Seams-undocumented: adjudication x authority, adjudication x harness, adjudication x ontology, adjudication x schools, adjudication x verification
+Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-adjudication-x-authority
+Seams-undocumented: adjudication x harness, adjudication x ontology, adjudication x schools, adjudication x verification
 
 # Adjudication — the two passes that turn a graph into a verdict
 
@@ -82,7 +82,7 @@ The two passes have different output types, and the boundary is load-bearing:
 | adjudication x harness | undocumented | real and load-bearing (not merely unanalyzed): `harness.py` is the ONLY caller of `build_att`/`build_dep`/`toposort` (`Harness._adjudicate`, the sole writer of `state.status`) — a genuine candidate seam, just not yet written up |
 | adjudication x ontology | undocumented | the one package adjudication imports at all (its whole import surface is `deepreason.ontology` plus itself) — likely foundational vocabulary rather than a two-way agreement, but not shown uninteresting merely because it's one-directional |
 | adjudication x verification | undocumented | real: `invariants.py`'s `verify_root` re-derives `dep` and reruns `toposort` independently rather than trusting the recorded graph, and `verification/report.py` hosts the adjudication-blindness detector this package structurally cannot host itself |
-| adjudication x authority | undocumented | indirect, not absent: `DR-CON-authority` gates whether an LLM-mediated judgement may mint a warrant AT ALL, upstream in `rules/crit.py`/`informal/trial.py` — by the time a warrant reaches `build_att`, authority's decision is already baked in; adjudication itself never imports `authority.py` |
+| `DR-SEAM-adjudication-x-authority` | documented | indirect, not absent: `DR-CON-authority` gates whether an LLM-mediated judgement may mint a warrant AT ALL, upstream in `rules/crit.py`/`informal/trial.py` — by the time a warrant reaches `build_att`, authority's decision is already baked in; adjudication itself never imports `authority.py`. The seam document measures why that indirection is load-bearing: a policy consulted at label time moves a committed root's verdict, one consulted at mint time cannot |
 | adjudication x schools | **deliberately absent** | this package's own check proves it: no `provenance`, `school`, or ranking word appears anywhere in the three logic modules. A school's self-criticism refusal is enforced upstream, in criticism planning — not here, and should not be |
 
 ## Where to change what

@@ -1,0 +1,71 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated block depends on the suppression mechanism in SRC_004: because lineage-continuity imposes a translational tax on foreign ontologies, the block's apparent isolation is not intrinsic but an artifact of an allocation rule that rationally disincentivises borrowing. This dependence is refuted if the block's content can be shown to be fully expressible and integrable within the local owning lineage's ontology at zero translational cost.",
+      "evidence_refs": [
+        {
+          "block": "099c8bad1779",
+          "quote": null
+        }
+      ],
+      "neighbours": [
+        "SRC_004",
+        "SRC_008",
+        "SRC_001"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The block shares mechanism with SRC_006's basin-of-attraction framing: the isolated block sits in an unexplored alternative basin separated from its neighbourhood by a high-cost structural saddle, and ownership-based allocation never supplies the energy to cross that saddle. This shared mechanism is refuted if the block can be reached from its neighbourhood by a monotonic, saddle-free descent under the current lineage's local optimization frame.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_006",
+        "SRC_001",
+        "SRC_004"
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "The isolated block contradicts SRC_005's defence of ownership-based pruning: the block's persistent, unrepaired isolation is direct evidence that the combinatorial pruning SRC_005 calls net-beneficial has over-pruned and become a barrier, removing a structurally necessary source-memory connection. This contradiction is refuted if the block's isolation is later shown to be efficient (e.g., the block is genuinely incoherent or its connection to the neighbourhood has negative expected value).",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "The block depends on SRC_007's language-game incommensurability: the block is isolated because it requires primitives from a foreign language game that the owning lineage cannot even express, making the isolation a structural impossibility rather than a contingent oversight. This dependence is refuted if the reasoning system demonstrates automatic translation or bridging axioms that allow the owning lineage to express the block's foreign primitives without revolution.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_007",
+        "SRC_002",
+        "SRC_004"
+      ],
+      "typicality": 0.72
+    },
+    {
+      "content": "The block reduces to SRC_008's home-bias mechanism: the isolated block's content was rationally suppressed by the owning lineage because producing a cross-cutting link to its neighbourhood would sacrifice credit within the home framework, exactly mirroring how home bias suppresses non-home theories in publication output. This reduction is refuted if the block's isolation is better explained by a lack of authorial capability rather than a rationally optimized credit constraint.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_008",
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The isolated block abstracts from both SRC_004 and SRC_006 by representing a measurable 'saddle event': a concrete instance where the lineage-dependency tax and the basin-saddle barrier coincide, making it an empirical test case for whether ownership-based allocation suppresses (SRC_004) or efficiently prunes (SRC_005). This abstraction is refuted if the block lacks sufficient formal structure to test the rival predictions of the suppression and pruning hypotheses.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_004",
+        "SRC_006",
+        "SRC_005"
+      ],
+      "typicality": 0.35
+    }
+  ]
+}
+```

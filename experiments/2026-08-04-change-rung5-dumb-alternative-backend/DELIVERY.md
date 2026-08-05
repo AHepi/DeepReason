@@ -128,3 +128,148 @@ only in volume; P4 `_ACTIVE_BACKEND_ID` is process-global mutable state,
 restored by the scope but not defended against direct assignment; P5 rung
 4's parked items remain open; P6 fixture-drift forecasting was the weakest
 part of two consecutive specs.
+
+
+---
+
+## Post-delivery: the credential arrived, and the live A/B is BLOCKED
+
+The operator supplied a credential. It was written to a gitignored,
+mode-600 `env` file whose path was added to `.gitignore` and committed
+BEFORE the file existed; it appears in no committed file and in no log.
+
+**The A/B was not run, because the credential cannot complete.** Measured
+before launching anything:
+
+    /v1/models           + key -> 200   (18 models, glm-5.2 among them)
+    /v1/chat/completions + key -> 401   glm-5.2
+    /v1/chat/completions + key -> 401   gpt-oss:20b
+    /v1/chat/completions + key -> 401   deepseek-v4-flash
+    /api/chat (native)   + key -> 401
+    /v1/chat/completions, NO key -> 401  (control)
+
+The key AUTHENTICATES — the catalogue read succeeds — and is refused for
+inference on every model and both API paths. This is an account
+entitlement condition (read-scoped key, lapsed subscription, or exhausted
+credits), not a transmission fault: 56 chars, no whitespace, correct
+`<32 hex>.<23 alnum>` shape.
+
+No qualification was launched. It would have spent ~14 minutes and ~1160
+calls reaching the same 401.
+
+**R13 is discharged** (the ask was made and answered). **R7 remains
+not-exercised**, now for an external reason rather than a procedural one.
+Rung 5's acceptance line — "full gate; sweep byte-identical; the
+alternative's offline run root replay-valid" — was already met by the
+offline work and does not depend on the A/B.
+
+**What would unblock it:** a key with inference entitlement on the same
+account, or confirmation that the subscription/credits are active. The
+`env` file is in place, so a working key is a one-line replacement and the
+ladder can launch immediately.
+
+
+---
+
+## Post-delivery 2: the live A/B was ATTEMPTED, and the typed record says why it could not run
+
+The operator overrode the decision not to launch ("Nope keep going. Cost
+doesn't matter"). It was launched. The result is now typed evidence rather
+than an argument from a curl probe, which is the right standard for this
+codebase — and getting it required spending the calls.
+
+**Sequence, including a wrong turn of mine, recorded because the record is
+the point:**
+
+1. `deepreason setup` succeeded (`setup_rc=0`).
+2. The first `qualify` was refused by a TYPED precondition, not by the
+   provider: `REASONING_MUST_BE_DISABLED: provider 'ollama' realizes the
+   reasoning knob and this profile has reasoning=None … Re-run setup with
+   --reasoning none.` Re-ran setup with `--reasoning none`.
+3. `qualify` then ran the full battery — 360 case slots, ~1140 expected
+   provider calls — and the progress counter advanced 1/300 → 360/360.
+   **I read that progress as proof the credential worked and said so. That
+   was wrong: the counter counts attempts, not successes.**
+4. The doctor report is the actual verdict:
+
+       pairs           : 15
+       cases total     : 300
+       failure codes   : {'ENDPOINT_ERROR': 300}
+       any qualified   : False
+       first_pass_valid_count: 0
+       eventual_valid_count : 0
+       repair_count         : 0
+       semantic_admission_count: 0
+
+   `experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/
+   qualification-cache/a63abe8e….unqualified-doctor.json`, committed.
+
+5. Full battery failed → the shallow-fitness battery ran → also failed:
+   `QUALIFICATION_SHALLOW_EXECUTION_FAILED: the shallow-fitness battery did
+   not complete; no qualification tier was recorded`.
+
+**Conclusion: every provider call errored at the endpoint.** 300 of 300
+cases across all 15 contract pairs, zero valid first passes, zero repairs,
+zero semantic admissions. This agrees with the pre-launch probe (401 on
+`/v1/chat/completions` for three different models and on native
+`/api/chat`, against a 200 on `/v1/models`): the key reads the catalogue
+and cannot infer.
+
+The A/B therefore did not produce two arms to compare. **No run root was
+created for either arm**, so R7's comparison remains unmade — now on typed
+evidence, which is the outcome the operator's instruction bought.
+
+**The instruments are built and committed**, so a working key needs no
+further design work:
+- `ab_run.sh` — both arms, same question, same token budget, then the audit.
+- `reason_with_backend.py` — the round-robin driver. The CLI has no backend
+  flag by design (a `Config` field would enter the qualification subject
+  digest, SPEC.md M3), so the driver wraps the in-process CLI entry inside
+  `schools.population_backend("round-robin")`.
+- `ab_audit.py` — compares TYPED outcomes only: run state, stop reason,
+  `verify_root` violations, the recorded module fingerprint, and counts of
+  events, LLM calls, artifacts, problems and attack edges.
+
+The A/B arms are designed to share qualification by copying the qualified
+home rather than re-qualifying, so the only difference between them is the
+active backend — re-qualifying would introduce a second independently
+sampled battery as a confound.
+
+**Rung 5's acceptance line is unaffected** and was met offline: full gate,
+sweep byte-identical, the alternative's offline run root replay-valid.
+
+
+---
+
+## Post-delivery 3: the A/B RAN. R7 exercised.
+
+A second credential completed (`/v1/chat/completions` -> 200), qualification
+reached **`tier: full`, `qualification_state: ready`** (subject digest
+`a63abe8e…`, 1140 calls, `cache_reused: false`), and both arms ran.
+
+| metric | default | round-robin |
+|---|---|---|
+| events | 786 | 388 |
+| llm_calls | 31 | 24 |
+| artifacts | 71 | 38 |
+| problems | 120 | 66 |
+| module_backend | `default` | `round-robin` |
+| `verify_root` | no violations | `attempt-validity` |
+
+**R7 disposition changes from `not-exercised` to `done`.** The socket is
+real at live scale: the dumb backend does roughly half the work, exactly
+the volume difference the offline fixture predicted.
+
+**Two things only the live run could show:**
+- Both arms minted the SAME run id. The backend enters neither question nor
+  config, so run identity cannot tell the arms apart — only rung 4's stamp
+  does, from inside the record.
+- Arm B's root fails `verify_root` with one `attempt-validity` violation.
+  **Parked as P7, not fixed**: a defect found mid-change is parked, and
+  `invariants.py` is frozen surface 3. It is explicitly NOT attributed to
+  allocation — the disagreement is between the workflow's expected call
+  outcome and the recorded attempt validity, and one live sample cannot
+  say whether the default backend reaches the same path.
+
+No quality difference was demonstrated and none is claimed: `att_edges` is
+0 in both arms, so there were no attack edges to compare on.

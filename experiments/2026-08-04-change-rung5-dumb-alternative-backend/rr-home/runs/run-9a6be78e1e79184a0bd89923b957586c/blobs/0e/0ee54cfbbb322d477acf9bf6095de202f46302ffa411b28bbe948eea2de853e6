@@ -1,0 +1,11 @@
+{
+  "repair_patch": {
+    "op": "add",
+    "path": "/candidates/2/analogy/overturn_conditions",
+    "value": [
+      "If within-run variation in mandatory consultation frequency exists and correlates with cross-cutting acceptance, the single-run distinction is measurable without between-run comparison.",
+      "If the adjudication log reveals zero cross-school proposals even when consultation is mandated, the efficiency interpretation is favored over suppression.",
+      "If mandatory consultation reveals cross-cutting proposals that are subsequently accepted, the baseline absence was suppressive rather than efficient."
+    ]
+  }
+}
