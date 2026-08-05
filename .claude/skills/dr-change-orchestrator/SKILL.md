@@ -37,15 +37,22 @@ operator's suggestion VERBATIM, split into numbered requirements
    Before asking, load `dr-ask-the-right-question`: derive the answer
    from the record and the operator's recorded values first; a fork
    the dominance test kills is decided and noted, not asked.
-2. Anything you notice that is broken but not requested: one line in
+2. Anything you notice that is broken but not requested: into
    `PARKED.md` (a defect goes to the `deepreason-orchestrator`
-   workflow later). Never fix it now.
+   workflow later). Never fix it now. Write the entry for its future
+   runner, at park time: one line of WHAT, then a ready-to-send prompt
+   (route, one-goal statement, evidence pointers, end state) — the
+   follow-up should cost the operator a paste, not an authoring
+   session.
 3. Stop conditions: a step fails twice the same way; the spec turns
    out to require touching frozen-record semantics (state digests,
    event application, replay formats, qualification subjects); the
    estimated diff exceeds SPEC.md's budget; or a requirement
    contradicts the record/codebase (report the contradiction, do not
-   pick a side silently).
+   pick a side silently). Every stop presented to the operator leads
+   with the decision needed in ONE sentence, the options priced, and a
+   recommendation with its reason — a stop the operator must
+   interrogate is half a stop.
 
 ## Map preflight (do this before routing, every time)
 
