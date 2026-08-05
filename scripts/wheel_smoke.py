@@ -22,8 +22,22 @@ import zipfile
 
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "7520ea29fa8efba50c98a9ffa76adfbe0c59c66f51541dfe609dee7736bf82e1"
+    "39d73561bb355bdf42ee8f2aaa3b3bfb3df64cdafea228c7e03bd59e46ff36fc"
 )
+# Every entry-point group the wheel is expected to ship, and its exact
+# contents. Pinning the GROUP SET as well as each group's entries is what
+# makes a newly declared group visible: a group nobody pinned is a public
+# surface nobody reviewed.
+REQUIRED_ENTRY_POINT_GROUPS = {
+    "console_scripts": {
+        "deepreason = deepreason.cli.main:main",
+        "deepreason-mcp = deepreason.mcp_server:main",
+    },
+    "deepreason.admission.adapters": {
+        "epub = deepreason.admission.adapters_epub:MANIFEST",
+        "pdf = deepreason.admission.adapters_pdf:MANIFEST",
+    },
+}
 EXPECTED_MCP_TOOLS = {
     "get_readiness",
     "start_run",
@@ -43,6 +57,8 @@ EXPECTED_MCP_TOOLS = {
     "get_capabilities",
     "get_help_topic",
     "get_request_requirements",
+    "amend_run",
+    "run_findings",
 }
 REQUIRED_MODULES = {
     "deepreason/__main__.py",
@@ -133,17 +149,33 @@ def inspect_wheel(wheel: Path) -> None:
         if "Summary: DeepReason V6-only deterministic reasoning harness" not in metadata:
             raise AssertionError("wheel metadata does not truthfully identify V6-only mode")
         entry_points = archive.read(entry_names[0]).decode("utf-8")
-        required_entries = {
-            "deepreason = deepreason.cli.main:main",
-            "deepreason-mcp = deepreason.mcp_server:main",
-        }
-        observed = {
-            line.strip()
-            for line in entry_points.splitlines()
-            if line.strip() and not line.startswith("[")
-        }
-        if observed != required_entries:
-            raise AssertionError(f"unexpected console entry points: {sorted(observed)}")
+        # entry_points.txt is INI, and an entry means nothing apart from the
+        # group it was declared under: the same "name = target" line is a
+        # console script or a plugin depending only on the header above it.
+        # The headers are therefore parser state, never skippable noise.
+        groups: dict[str, set[str]] = {}
+        current: str | None = None
+        for line in entry_points.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("[") and stripped.endswith("]"):
+                current = stripped[1:-1]
+                groups.setdefault(current, set())
+                continue
+            if current is None:
+                raise AssertionError(
+                    f"entry point declared outside any group: {stripped}"
+                )
+            groups[current].add(stripped)
+
+        if set(groups) != set(REQUIRED_ENTRY_POINT_GROUPS):
+            raise AssertionError(f"unexpected entry point groups: {sorted(groups)}")
+        for group, required in REQUIRED_ENTRY_POINT_GROUPS.items():
+            if groups[group] != required:
+                raise AssertionError(
+                    f"unexpected entry points in [{group}]: {sorted(groups[group])}"
+                )
 
 
 def _check_mcp(executable: Path, work: Path, env: dict[str, str]) -> None:

@@ -239,18 +239,39 @@ other headerless seams.
   experiment that mutates only the first group will report, correctly and
   uselessly, that nothing happened. The read-back set is pinned by the check
   under *The agreement*.
-- **Pre-v6 roots are expected to refuse.** Of the 45 recorded roots, 14 raise
-  `UnsupportedRunManifestVersionError` on open, 3 predate run manifests entirely
-  and open fine, and 28 load a v6 manifest. That is the census baseline, not a
-  regression to be fixed by widening the manifest loader —
-  see `DR-INV-frozen-surfaces`, surface 4. This count is by DIRECT manifest
-  load over every git-tracked root, `runs/jolt_positive_headroom_v3_1/`
-  included; `tools/root_sweep.py` scans `experiments/` only and reports 11
-  ERROR rows — two instruments, two true numbers, cite the instrument with the
-  number. (This check itself went stale-false for one day when the
-  stress-triplet roots were committed without re-running it: 42/25 → 45/28 on
-  2026-08-02, corrected 2026-08-03 — see `docs/ERRATA.md`.)
-`check: python -W ignore -c "import pathlib,subprocess,collections;from deepreason.run_manifest import load_run_manifest as L,UnsupportedRunManifestVersionError as U;R=[pathlib.Path(p).parent for p in subprocess.run(['git','ls-files'],capture_output=True,text=True).stdout.splitlines() if p.endswith('/log.jsonl')];g={'L':L,'U':U,'N':'run-manifest.json'};exec(chr(10).join(['def k(r):','    m=r/N','    if not m.exists(): return 2','    try:','        L(m)','        return 0','    except U:','        return 1']),g);c=collections.Counter(g['k'](r) for r in R);assert len(R)==45 and c[0]==28 and c[1]==14 and c[2]==3,(len(R),dict(c))"`
+- **Pre-v6 roots are expected to refuse.** Committed roots fall into three
+  kinds — a v6 manifest that loads, a pre-v6 manifest that raises
+  `UnsupportedRunManifestVersionError`, and no `run-manifest.json` at all,
+  which opens fine. All three kinds are non-empty, and every tracked root is
+  exactly one of them. Refusal is the expected baseline, not a regression to
+  be fixed by widening the manifest loader — see `DR-INV-frozen-surfaces`,
+  surface 4. The classification is by DIRECT manifest load over every
+  git-tracked root, `runs/jolt_positive_headroom_v3_1/` included;
+  `tools/root_sweep.py` scans `experiments/` only — two instruments, two true
+  numbers, cite the instrument with the number.
+
+  **The check below deliberately pins no count.** It asserts the partition
+  and the non-emptiness, because the counts are not a property of the system:
+  every tranche that commits a run root moves them. As a dated measurement
+  rather than a live claim, at `e6a11428` on 2026-08-05 the git-tracked
+  figures were 47 roots — 30 v6, 14 raising, 3 without a manifest. Do not
+  re-pin them.
+`check: python -W ignore -c "import pathlib,subprocess,collections;from deepreason.run_manifest import load_run_manifest as L,UnsupportedRunManifestVersionError as U;R=[pathlib.Path(p).parent for p in subprocess.run(['git','ls-files'],capture_output=True,text=True).stdout.splitlines() if p.endswith('/log.jsonl')];g={'L':L,'U':U,'N':'run-manifest.json'};exec(chr(10).join(['def k(r):','    m=r/N','    if not m.exists(): return 2','    try:','        L(m)','        return 0','    except U:','        return 1']),g);c=collections.Counter(g['k'](r) for r in R);assert len(R)>40 and c[0] and c[1] and c[2] and c[0]+c[1]+c[2]==len(R),(len(R),dict(c))"`
+
+- **A census check expires; a partition check does not.** This exact check
+  went stale-false TWICE, both times because a tranche committed a run root
+  and nothing re-ran it: 42/25 → 45/28 when the stress-triplet roots landed
+  (2026-08-02, corrected 2026-08-03 by updating the numerals — `docs/ERRATA.md`
+  E3), and 45/28/14/3 → 47/30/14/3 when rung 5's live A/B arms landed
+  (`f6d41bff`, 2026-08-04). The first correction updated the numbers, which is
+  precisely what guaranteed the second occurrence. Fixed 2026-08-05 in
+  `experiments/2026-08-05-fix-expired-census-readers/` by asserting the claim
+  the prose actually makes — three non-empty kinds partitioning the tracked
+  roots — instead of the census that stood in for it. The same defect had
+  two more instances at the same moment: `SEAM-manifest-x-schools`'s
+  42/11/3 check, and `tests/test_module_fingerprints.py`, which asserted that
+  NO committed root carries a module-fingerprint stamp — true only until the
+  first run recorded after rung 4's writer was committed.
 - **A verify_root predicate must select by the writer's discriminator, never
   by citation shape.** The `attached-evidence` check keyed its candidate set
   on `mention` refs alone and was tripped by the first live conjecture that

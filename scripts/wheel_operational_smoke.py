@@ -20,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import traceback
 import time
 import venv
 import zipfile
@@ -27,13 +28,15 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "7520ea29fa8efba50c98a9ffa76adfbe0c59c66f51541dfe609dee7736bf82e1"
+    "39d73561bb355bdf42ee8f2aaa3b3bfb3df64cdafea228c7e03bd59e46ff36fc"
 )
 EXPECTED_MCP_TOOLS = (
     "get_readiness",
     "start_run",
     "run_status",
     "run_result",
+    "run_findings",
+    "amend_run",
     "continue_run",
     "cancel_run",
     "scratch_map",
@@ -49,6 +52,10 @@ EXPECTED_MCP_TOOLS = (
     "get_help_topic",
     "get_request_requirements",
 )
+# The installed fixture's module name. Deliberately distinctive: it is
+# activated by a companion .pth rather than by winning the "sitecustomize"
+# name, which the host Python may already have claimed.
+LOOPBACK_FIXTURE_MODULE = "_deepreason_wheel_loopback"
 TEST_CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 TEST_CREDENTIAL = "loopback-credential-must-never-appear"
 LOOPBACK_READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
@@ -1275,6 +1282,54 @@ def _unused_loopback_port() -> int:
         return int(listener.getsockname()[1])
 
 
+def _provider_errors(path: Path) -> list:
+    """Errors the loopback fixture recorded, if it recorded any."""
+
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return list(payload.get("errors") or ())
+
+
+def _qualified_inventory(
+    *, home: Path, python: Path, work: Path, env: dict[str, str], stage: str
+) -> tuple[int, int]:
+    """Return (qualified pair count, cases per pair), both read at run time.
+
+    Derived rather than pinned: the pair count comes from the bundle the run
+    just wrote, and the per-pair case count from the INSTALLED wheel's own
+    constant. A numeral written here would be a fact with an expiry date --
+    the inventory grows whenever a contract family is enabled -- and this
+    stage has already been broken twice that way.
+    """
+
+    bundles = sorted((home / ".deepreason" / "qualification-cache").glob("*.json"))
+    if len(bundles) != 1:
+        raise AssertionError(
+            f"expected exactly one qualification bundle, found {len(bundles)}"
+        )
+    payload = json.loads(bundles[0].read_text(encoding="utf-8"))
+    pairs = payload.get("pairs") or ()
+    if not pairs:
+        raise AssertionError("the qualification bundle recorded no contract pairs")
+    cases_per_pair = int(
+        _run(
+            [
+                str(python),
+                "-c",
+                "from deepreason.cli.doctor import PRODUCTION_CASES_PER_PAIR as c;"
+                " print(c)",
+            ],
+            cwd=work,
+            env=env,
+            stage=stage,
+        ).stdout.strip()
+    )
+    if cases_per_pair <= 0:
+        raise AssertionError("the installed wheel reports a non-positive case count")
+    return len(pairs), cases_per_pair
+
+
 def _provider_counts(path: Path) -> dict[str, int]:
     if not path.exists():
         return {"qualification_calls": 0, "total_calls": 0}
@@ -1310,9 +1365,51 @@ def _install_loopback_fixture(
             stage=stage,
         ).stdout.strip()
     )
-    target = purelib / "sitecustomize.py"
+    # NOT installed as sitecustomize.py: that name admits exactly one winner
+    # across the whole of sys.path, and Debian-family images ship their own
+    # /usr/lib/pythonX.Y/sitecustomize.py on a path entry that precedes the
+    # venv's purelib -- so the fixture would be silently shadowed and never
+    # imported, leaving no listener and no error. A .pth is immune: site
+    # executes every .pth in every site directory.
+    target = purelib / f"{LOOPBACK_FIXTURE_MODULE}.py"
     shutil.copyfile(repo / "scripts" / "wheel_loopback_sitecustomize.py", target)
+    activation = purelib / f"{LOOPBACK_FIXTURE_MODULE}.pth"
+    activation.write_text(f"import {LOOPBACK_FIXTURE_MODULE}\n", encoding="utf-8")
     return target
+
+
+DIAGNOSTIC_REDACTION = "<redacted>"
+
+
+def _redact(text: str, *, repo: Path | None = None) -> str:
+    """Remove the two values `_assert_no_disclosure` forbids.
+
+    The human-facing diagnostic channel below must not become the very
+    disclosure the smoke exists to disprove, so it is scrubbed with the same
+    forbidden values that assertion enforces.
+    """
+
+    root = repo if repo is not None else Path(__file__).resolve().parents[1]
+    for value in (str(root.resolve()), TEST_CREDENTIAL):
+        if value:
+            text = text.replace(value, DIAGNOSTIC_REDACTION)
+    return text
+
+
+def _report_diagnostic(title: str, body: str, *, repo: Path | None = None) -> None:
+    """Write failure evidence to stderr, beside the typed record.
+
+    Deliberately NOT part of the v4 record: that record is closed and
+    payload-free, and its field set is pinned. This channel is for a human
+    reading a failed run; nothing parses it.
+    """
+
+    cleaned = _redact(body, repo=repo).strip()
+    if not cleaned:
+        return
+    print(f"--- {title} ---", file=sys.stderr)
+    print(cleaned, file=sys.stderr)
+    print(f"--- end {title} ---", file=sys.stderr)
 
 
 def _venv_executable(root: Path, name: str) -> Path:
@@ -1470,7 +1567,19 @@ def _run(
             check=False,
             timeout=timeout,
         )
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as error:
+        _report_diagnostic(
+            f"child stdout before timeout ({stage})",
+            error.stdout.decode(errors="replace")
+            if isinstance(error.stdout, bytes)
+            else (error.stdout or ""),
+        )
+        _report_diagnostic(
+            f"child stderr before timeout ({stage})",
+            error.stderr.decode(errors="replace")
+            if isinstance(error.stderr, bytes)
+            else (error.stderr or ""),
+        )
         if _reason_context is not None:
             home, ready_marker, roots_before = _reason_context
             raise _reason_failure(
@@ -2903,6 +3012,7 @@ def _finalize_operational_smoke(
     temp_root: Path | None,
     mcp_clients: list[MCPClient] | None = None,
     diagnostic_context: ContinuationDiagnosticContext | None = None,
+    keep: bool = False,
 ) -> int:
     clients = list(mcp_clients or ())
     diagnostic: dict[str, object] | None = None
@@ -2933,7 +3043,16 @@ def _finalize_operational_smoke(
         failure = shutdown_failure
         if diagnostic is not None:
             failure.attach_continuation_diagnostic(diagnostic)
-    root_cleanup_completed = _cleanup_temp_root(temp_root)
+    if keep and failure is not None and temp_root is not None:
+        # Retention is a deliberate choice, not a failed cleanup: a run that
+        # failed is exactly the run whose artifacts someone needs to read.
+        _report_diagnostic(
+            "retained artifacts",
+            f"temp root kept for inspection: {temp_root}",
+        )
+        root_cleanup_completed = True
+    else:
+        root_cleanup_completed = _cleanup_temp_root(temp_root)
     cleanup_completed = (
         mcp_cleanup_completed and root_cleanup_completed
     )
@@ -3135,24 +3254,44 @@ def main(argv: list[str] | None = None) -> int:
         notice = re.search(
             r"maximum expected provider calls: ([0-9]+)", qualified.stderr
         )
-        # The engaged public preset qualifies 14 route/contract pairs (the
-        # frozen conjecture/criticism four, six scratch contracts, and the
-        # four grounded-bridge contracts): the frozen maximum is 2 conjecture
-        # pairs x 20 cases x 5 provider calls (the conjecture family grants
-        # four single-pointer repairs for multi-pointer failures) plus
-        # 8 pairs x 20 cases x 3 provider calls plus 4 bridge pairs x
-        # 20 cases x 2 provider calls (the bridge grants one schema repair),
-        # and one clean pass makes exactly 14 x 20 = 280 loopback calls.  The
-        # scratch- and bridge-pair probes carry their own bounded task text,
-        # so only the original four pairs match the "Qualification case"
-        # marker.
-        if notice is None or int(notice.group(1)) != 840:
-            raise AssertionError("qualification did not announce the frozen maximum")
+        # No numeral is pinned here. Both of the counts this stage used to
+        # assert -- the announced maximum and the clean-pass total -- are
+        # functions of the engaged preset's contract-pair INVENTORY, and the
+        # inventory is meant to change: enabling the grounded two-stage
+        # bridge took it from 14 pairs to 15, and granting stochastic
+        # providers a bounded re-draw added an allowance on top of the
+        # per-pair blocks. Both pins were correct the day they were written
+        # (2026-07-27) and stale by that evening. What is asserted instead is
+        # the property they stood in for: qualification completes, spends no
+        # more than it announced, and makes exactly one clean pass over
+        # whatever the inventory currently holds.
+        if notice is None:
+            raise AssertionError("qualification did not announce a maximum at all")
+        announced_maximum = int(notice.group(1))
+        if announced_maximum <= 0:
+            raise AssertionError("qualification announced a non-positive maximum")
+
+        qualified_pairs, cases_per_pair = _qualified_inventory(
+            home=home, python=python, work=work, env=clean_env, stage=stage
+        )
+        expected_clean_pass = qualified_pairs * cases_per_pair
+
         counts = _provider_counts(provider_state_path)
-        if counts != {"qualification_calls": 80, "total_calls": 280}:
+        if counts["total_calls"] != expected_clean_pass:
             raise AssertionError(
-                "qualification did not make exactly 280 loopback calls"
+                "qualification did not make one clean pass over the inventory: "
+                f"{counts['total_calls']} calls for {qualified_pairs} pairs x "
+                f"{cases_per_pair} cases (expected {expected_clean_pass})"
             )
+        if counts["total_calls"] > announced_maximum:
+            raise AssertionError(
+                f"qualification spent {counts['total_calls']} calls against an "
+                f"announced maximum of {announced_maximum}"
+            )
+        if counts["qualification_calls"] <= 0:
+            raise AssertionError("no call carried the qualification-case marker")
+        if _provider_errors(provider_state_path):
+            raise AssertionError("the loopback fixture recorded provider errors")
 
         stage = STAGE_READINESS
         calls_before_status = counts["total_calls"]
@@ -3592,8 +3731,21 @@ def main(argv: list[str] | None = None) -> int:
         )
         succeeded = True
     except OperationalSmokeFailure as error:
+        # Typed failures are payload-free by design, so the traceback is the
+        # only thing that names WHICH check raised: without it the record
+        # gives a stage and a kind and no way to find the line.
+        _report_diagnostic(
+            f"typed failure ({error.stage}/{error.failure_kind})",
+            traceback.format_exc(),
+            repo=repo,
+        )
         failure = error
-    except AssertionError:
+    except AssertionError as error:
+        _report_diagnostic(
+            f"assertion failed ({stage})",
+            f"{error}\n\n{traceback.format_exc()}",
+            repo=repo,
+        )
         failure = OperationalSmokeFailure(
             stage=stage,
             failure_kind=FAILURE_ASSERTION,
@@ -3613,6 +3765,7 @@ def main(argv: list[str] | None = None) -> int:
         temp_root=temp_root,
         mcp_clients=mcp_clients,
         diagnostic_context=diagnostic_context,
+        keep=args.keep,
     )
 
 

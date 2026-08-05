@@ -64,3 +64,85 @@ The `round-robin` A/B arm root still carries one `attempt-validity`
 `verify_root` violation. Confirmed still present while ruling out the
 "bad evidence" hypothesis in DIAGNOSIS.md. Not this tranche's goal, not
 investigated, not fixed.
+
+## P1d — QUEUED, not parked: the smoke-instrument tranche
+
+Operator instruction received mid-tranche (2026-08-05), recorded here so
+it is not lost and NOT absorbed into this goal:
+
+> Defect tranche via deepreason-orchestrator: scripts/wheel_smoke.py is
+> red, bisectable to 4940b5f7 (2026-07-28). The pyproject packaging is
+> correct — the smoke's entry-point reader wrongly treats the custom
+> deepreason.admission.adapters group as console scripts. Fix the
+> reader; then run BOTH smokes to completion (wheel_smoke and
+> wheel_operational_smoke) and update any other stale pins they surface
+> — the MCP tool set and schema sha haven't been verified since
+> 2026-07-26. Evidence and analysis in
+> experiments/2026-08-05-change-smoke-instrument-visibility/.
+
+Its own tranche, started after this one reaches VERIFY.md. Two things
+checked on receipt:
+
+- `4940b5f7` exists and matches the description ("Ship the first-party
+  EPUB adapter under the identical §3a contract"); both
+  `scripts/wheel_smoke.py` and `scripts/wheel_operational_smoke.py`
+  exist.
+- **`experiments/2026-08-05-change-smoke-instrument-visibility/` did not
+  exist when the instruction arrived — CORRECTED: it does now.** It was
+  absent at `7e0a2ea5` and arrived via `20f2c8d1`, pushed by the
+  monitoring session (`claude/handover-defect-audit-33pv3d`) and merged
+  into this branch at the reproduce-phase boundary. It holds
+  `REQUEST.md`, `SPEC.md`, `DELIVERY.md`. Nothing was wrong with the
+  operator's pointer; this session simply read the tree before the push
+  landed. Recorded rather than silently deleted, because "the evidence
+  is missing" and "the evidence arrived late" lead to different next
+  actions and the difference is worth one sentence.
+
+The same merge changed the rules this session operates under, mid-
+tranche: `20f2c8d1` adds the wheel smokes to `CLAUDE.md` as a THIRD
+instrument that no gate runs, and adds a step to `dr-implement-fix`
+requiring `python scripts/wheel_smoke.py` when a fix's change sites
+touch the packaging surface (pyproject entry points, CLI commands, MCP
+tools/schema, wheel layout). **Checked against this tranche: it does
+not apply.** FIX.md's change sites are `tests/test_module_fingerprints.py`
+and two `docs/map/` documents — no packaging surface — so the smoke ring
+is not owed here. It IS owed by the queued P1d tranche, which is
+entirely about that surface.
+
+Sequencing note, not a preference: it is worth finishing this tranche
+first because the smoke tranche must measure against a tree whose gate
+is green. While the four P1 instruments are red, any new breakage the
+smokes surface cannot be distinguished from the inherited kind — the
+exact cost recorded in
+`experiments/2026-08-04-change-rung7-authority-as-declared-policy/DELIVERY.md`.
+
+## P1e — a `src/` mutation inside a git worktree is never loaded
+
+Found while mutation-proving this tranche's own test. The editable
+install (`pip install -e .`) resolves `deepreason` to
+`/home/user/DeepReason/src` no matter which worktree pytest runs from:
+
+    $ cd <worktree> && python -c "import deepreason.module_events as m; print(m.__file__)"
+    /home/user/DeepReason/src/deepreason/module_events.py
+
+So a falsification pass that mutates `src/` in a worktree, runs the
+test, and sees it PASS has proven nothing — the mutant was never
+imported. The first mutation proof in this tranche did exactly that and
+reported a false green; it was caught only because the result was
+implausible, not because any instrument objected. Redone in the main
+tree with `git checkout --` revert, the same mutation correctly went
+red.
+
+Mutating `tests/` in a worktree IS valid — pytest collects from the
+worktree's rootdir — which is why the reproduce-phase prediction test in
+this tranche was sound. The hazard is specific to `src/`.
+
+This matters because `DR-SCHEMA`'s own guidance actively recommends
+worktrees for falsification ("give the agents `isolation: 'worktree'` so
+their mutations land in a private copy"), without noting that `src/`
+mutations there are inert under an editable install. Nothing in the map
+or the skills records this.
+
+Suggested disposition: one paragraph in `DR-SCHEMA`'s "Do not measure
+the tree while a falsification pass is running" section, and/or a line
+in `dr-execute-step`'s durable-checks rules. Cheap, docs-only.
