@@ -91,6 +91,12 @@ The 42-root sweep obeys the same rule for the same reason. A committed root
 is immutable, so its verdict can only move if the READER moved; when no
 reader changed, the previous sweep IS the current answer.
 
+The wheel smokes (`python scripts/wheel_smoke.py`; `python -u
+scripts/wheel_operational_smoke.py`) are the third instrument, and NO
+gate runs them. They pin the public surface — console entry points, MCP
+tool set + schema sha, wheel layout — so any commit changing that
+surface updates the pins and re-runs the smoke in the same commit.
+
 Gate discipline: 0 failed is the only acceptable result. Never weaken an
 assertion to get green. A fixture that depended on defective behavior may
 be minimally updated only when the fix's design doc predicted it.

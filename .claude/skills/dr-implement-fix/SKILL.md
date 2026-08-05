@@ -34,6 +34,10 @@ else.
 
    The full gate must report **0 failed**. A pre-existing failure you
    did not cause: stop, report, do not "fix it while you're there."
+   If FIX.md's change sites touch the packaging surface (pyproject
+   entry points, CLI commands, MCP tools/schema, wheel layout), one
+   more ring the gate does not run: `python scripts/wheel_smoke.py`,
+   with its pinned expectations updated in this same commit.
 5. A gate failure caused by your change is information: if a fixture
    depended on the defective behavior (FIX.md predicted it), update
    the fixture minimally so it exercises what the test actually
