@@ -95,6 +95,14 @@ layer, and the reading order is fixed:
 Instruments that prove you broke nothing: the full gate
 (`python -m pytest tests/ -q -n 4`, 0 failed only) and the root sweep
 (`python tools/root_sweep.py` — no committed root's verdict may move).
+Third instrument, which NO gate runs for you: the wheel smokes
+(`python scripts/wheel_smoke.py`; `python -u
+scripts/wheel_operational_smoke.py`) — build-and-operate checks over
+the INSTALLED package. They pin the public surface (console entry
+points, MCP tool set + schema sha, wheel layout), so any change to that
+surface updates the pins and re-runs the smoke in the SAME commit — or
+the instrument rots silently (found 2026-08-05: red for a week after an
+entry-point addition, unnoticed, because nothing named it).
 `python tools/docs_verify.py` is the same gate for the map — and its
 `--fast` mode reuses cached results, so it CANNOT catch a document your
 `src/` change just broke. Iterate with `--fast`; run the FULL mode at

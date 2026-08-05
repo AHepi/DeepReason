@@ -30,7 +30,11 @@ what keeps a long change from drifting.
    one line on the mismatch, and return to the orchestrator. Two
    failures of the same step = stop condition.
 5. **If this step changed behaviour, update the map in the SAME
-   commit** — see "Map obligations" below.
+   commit** — see "Map obligations" below. If it changed the packaging
+   surface (pyproject entry points, CLI commands, MCP tools/schema,
+   wheel layout), update `scripts/wheel_smoke.py`'s pinned expectations
+   and re-run the smoke in the same commit too — no gate runs it for
+   you.
 6. Mark the box, update CHECKLIST.md, and if the step is tagged
    [COMMIT] (or changed any file): commit and push now.
 

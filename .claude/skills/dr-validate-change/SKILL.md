@@ -40,6 +40,16 @@ invalidates the checklist's audit trail.
    exact surface — convention guards these files at design time, but this
    paste is the one MECHANICAL tripwire on the path, so it is not optional.
 
+4a3. **Packaging-surface check.** If the change touched pyproject.toml,
+   CLI entry points, the MCP server surface, or the wheel layout: run
+   `python scripts/wheel_smoke.py` (plus `python -u
+   scripts/wheel_operational_smoke.py` when the operational
+   provider-facing surface moved) and paste the last lines. The smokes
+   pin expected sets and hashes; a surface change whose commit did not
+   update those pins is a FAIL. If the surface did not move, write
+   "packaging surface untouched — smoke not owed": the skip must be a
+   recorded decision, not an omission.
+
 4b. **Map validation — the documentation half of the gate:**
 
         python tools/docs_verify.py          # must report 0 failed
@@ -86,6 +96,7 @@ invalidates the checklist's audit trail.
     docs_verify --stale: <each entry, updated or dismissed with reason>
     new checks added by this change: <ids/files, or "none - see why">
     record observables added vs sweep probes: <none | observable -> probe/justification>
+    wheel smoke: <pasted tail | "packaging surface untouched — smoke not owed">
     ## Requirement sweep
     R1: demonstrated by S1 output | deferred (operator: "<quote>")
     ...
