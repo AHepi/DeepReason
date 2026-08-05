@@ -115,3 +115,34 @@ is green. While the four P1 instruments are red, any new breakage the
 smokes surface cannot be distinguished from the inherited kind — the
 exact cost recorded in
 `experiments/2026-08-04-change-rung7-authority-as-declared-policy/DELIVERY.md`.
+
+## P1e — a `src/` mutation inside a git worktree is never loaded
+
+Found while mutation-proving this tranche's own test. The editable
+install (`pip install -e .`) resolves `deepreason` to
+`/home/user/DeepReason/src` no matter which worktree pytest runs from:
+
+    $ cd <worktree> && python -c "import deepreason.module_events as m; print(m.__file__)"
+    /home/user/DeepReason/src/deepreason/module_events.py
+
+So a falsification pass that mutates `src/` in a worktree, runs the
+test, and sees it PASS has proven nothing — the mutant was never
+imported. The first mutation proof in this tranche did exactly that and
+reported a false green; it was caught only because the result was
+implausible, not because any instrument objected. Redone in the main
+tree with `git checkout --` revert, the same mutation correctly went
+red.
+
+Mutating `tests/` in a worktree IS valid — pytest collects from the
+worktree's rootdir — which is why the reproduce-phase prediction test in
+this tranche was sound. The hazard is specific to `src/`.
+
+This matters because `DR-SCHEMA`'s own guidance actively recommends
+worktrees for falsification ("give the agents `isolation: 'worktree'` so
+their mutations land in a private copy"), without noting that `src/`
+mutations there are inert under an editable install. Nothing in the map
+or the skills records this.
+
+Suggested disposition: one paragraph in `DR-SCHEMA`'s "Do not measure
+the tree while a falsification pass is running" section, and/or a line
+in `dr-execute-step`'s durable-checks rules. Cheap, docs-only.
