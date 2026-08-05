@@ -45,9 +45,88 @@ the instrument throws that exception away. Obtaining it requires
 re-running the child by hand against a `--keep` venv, which is the next
 step and is where the real primary cause will be named.
 
-**Status: cause NOT yet named.** The mechanism of concealment is
-established; the failure itself is not. No fix may be proposed until
-the child's stderr is in hand.
+## Primary cause, NAMED (2026-08-05)
+
+**The fixture's `sitecustomize.py` is shadowed by the distribution's
+own, so it is never imported and its server never starts.**
+
+`_install_loopback_fixture` copies the fixture to the venv's purelib as
+`sitecustomize.py` and relies on `site` importing it at interpreter
+start. Debian/Ubuntu images ship their own
+`/usr/lib/python3.11/sitecustomize.py` (here a symlink to
+`/etc/python3.11/sitecustomize.py`), and in the venv's `sys.path` that
+directory sits AHEAD of purelib. `import sitecustomize` therefore
+resolves to the distribution's file; the fixture's copy is never
+executed, `_start_if_enabled()` never runs, no listener binds, every
+provider call is refused at TCP, the qualification workers back off, and
+the stage exhausts its 600-second timeout.
+
+Measured in the `--keep` venv:
+
+    $ ls -la /usr/lib/python3.11/sitecustomize.py
+    lrwxrwxrwx ... -> /etc/python3.11/sitecustomize.py
+
+    sys.path in the venv:
+      [2] /usr/lib/python3.11        <-- distro sitecustomize
+      [4] .../site-packages          <-- venv purelib (fixture copied here)
+
+    $ python -c "import sitecustomize; print(sitecustomize.__file__)"
+    /usr/lib/python3.11/sitecustomize.py          # the distro's, not ours
+
+    in-process, with the full fixture env set:
+      sitecustomize imported : True
+      ENABLE env in-process  : '1'
+      PORT env in-process    : '54173'
+      _ACTIVE_SERVER present : False
+      _start_if_enabled      : AttributeError -- module has no such attribute
+      listener               : DOWN -> [Errno 111] Connection refused
+
+The `AttributeError` is the decisive line: the module that got imported
+under the name `sitecustomize` is not the fixture, and has none of its
+symbols.
+
+**No exception is raised anywhere**, which is why stderr was empty at
+every level and why the concealment described above mattered so much.
+Nothing failed; the wrong file simply won a name collision.
+
+Implicated code (1 site):
+
+- `scripts/wheel_operational_smoke.py`, `_install_loopback_fixture`
+  (~line 1296) — `target = purelib / "sitecustomize.py"`, an activation
+  mechanism that assumes the name is unclaimed.
+
+Falsifiable prediction (what `dr-reproduce` must show):
+
+    # Installing the same fixture body under a mechanism that cannot be
+    # shadowed -- a .pth file, which `site` executes for EVERY site
+    # directory rather than importing one winner by name -- must bring
+    # the listener up in the venv on this same container:
+    import sitecustomize -> still the distro's file (unchanged)
+    listener on the profile port -> UP, answers /v1/chat/completions
+
+Ruled out, in order:
+
+1. **The operator's suspect window** — "the fixture may be choking on a
+   request shape it predates". No request shape is involved: the
+   connection is refused at TCP before any protocol is exchanged, and
+   the fixture body serves a realistic schema-bearing request correctly
+   when reached (REPRO.md). Nothing the rung program changed is
+   implicated.
+2. **This document's own first answer** — that `_provider_server` being
+   dead code was the cause. It IS dead code, but it is not the fixture
+   in use; see the Correction above.
+3. **The container cannot serve loopback HTTP** — a control server binds
+   and answers immediately.
+
+**Correction to the previous tranche and to this document's original
+corollary:** I wrote that "the operational smoke has never passed". That
+is wrong, and the shadowing explains why. The failure is
+environment-dependent: it appears on Debian-family images that ship a
+distro `sitecustomize`, and NOT on runners whose Python has none — which
+includes GitHub Actions' `setup-python`, macOS and Windows. So the smoke
+can very well have run clean on 2026-07-27 elsewhere, exactly as the
+operator recalled, while being unable to pass in this container. The
+operator's memory was right and my corollary was wrong.
 
 ---
 
