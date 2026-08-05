@@ -51,6 +51,10 @@ EXPECTED_MCP_TOOLS = (
     "amend_run",
     "run_findings",
 )
+# The installed fixture's module name. Deliberately distinctive: it is
+# activated by a companion .pth rather than by winning the "sitecustomize"
+# name, which the host Python may already have claimed.
+LOOPBACK_FIXTURE_MODULE = "_deepreason_wheel_loopback"
 TEST_CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 TEST_CREDENTIAL = "loopback-credential-must-never-appear"
 LOOPBACK_READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
@@ -1312,8 +1316,16 @@ def _install_loopback_fixture(
             stage=stage,
         ).stdout.strip()
     )
-    target = purelib / "sitecustomize.py"
+    # NOT installed as sitecustomize.py: that name admits exactly one winner
+    # across the whole of sys.path, and Debian-family images ship their own
+    # /usr/lib/pythonX.Y/sitecustomize.py on a path entry that precedes the
+    # venv's purelib -- so the fixture would be silently shadowed and never
+    # imported, leaving no listener and no error. A .pth is immune: site
+    # executes every .pth in every site directory.
+    target = purelib / f"{LOOPBACK_FIXTURE_MODULE}.py"
     shutil.copyfile(repo / "scripts" / "wheel_loopback_sitecustomize.py", target)
+    activation = purelib / f"{LOOPBACK_FIXTURE_MODULE}.pth"
+    activation.write_text(f"import {LOOPBACK_FIXTURE_MODULE}\n", encoding="utf-8")
     return target
 
 
