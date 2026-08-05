@@ -87,10 +87,27 @@ checked on receipt:
   EPUB adapter under the identical §3a contract"); both
   `scripts/wheel_smoke.py` and `scripts/wheel_operational_smoke.py`
   exist.
-- **`experiments/2026-08-05-change-smoke-instrument-visibility/` does
-  NOT exist on this branch.** The named evidence is not in the tree, so
-  that tranche's diagnosis will be derived from the record directly and
-  the missing directory reported rather than assumed.
+- **`experiments/2026-08-05-change-smoke-instrument-visibility/` did not
+  exist when the instruction arrived — CORRECTED: it does now.** It was
+  absent at `7e0a2ea5` and arrived via `20f2c8d1`, pushed by the
+  monitoring session (`claude/handover-defect-audit-33pv3d`) and merged
+  into this branch at the reproduce-phase boundary. It holds
+  `REQUEST.md`, `SPEC.md`, `DELIVERY.md`. Nothing was wrong with the
+  operator's pointer; this session simply read the tree before the push
+  landed. Recorded rather than silently deleted, because "the evidence
+  is missing" and "the evidence arrived late" lead to different next
+  actions and the difference is worth one sentence.
+
+The same merge changed the rules this session operates under, mid-
+tranche: `20f2c8d1` adds the wheel smokes to `CLAUDE.md` as a THIRD
+instrument that no gate runs, and adds a step to `dr-implement-fix`
+requiring `python scripts/wheel_smoke.py` when a fix's change sites
+touch the packaging surface (pyproject entry points, CLI commands, MCP
+tools/schema, wheel layout). **Checked against this tranche: it does
+not apply.** FIX.md's change sites are `tests/test_module_fingerprints.py`
+and two `docs/map/` documents — no packaging surface — so the smoke ring
+is not owed here. It IS owed by the queued P1d tranche, which is
+entirely about that surface.
 
 Sequencing note, not a preference: it is worth finishing this tranche
 first because the smoke tranche must measure against a tree whose gate
