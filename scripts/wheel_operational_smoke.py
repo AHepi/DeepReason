@@ -20,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import traceback
 import time
 import venv
 import zipfile
@@ -1329,6 +1330,40 @@ def _install_loopback_fixture(
     return target
 
 
+DIAGNOSTIC_REDACTION = "<redacted>"
+
+
+def _redact(text: str, *, repo: Path | None = None) -> str:
+    """Remove the two values `_assert_no_disclosure` forbids.
+
+    The human-facing diagnostic channel below must not become the very
+    disclosure the smoke exists to disprove, so it is scrubbed with the same
+    forbidden values that assertion enforces.
+    """
+
+    root = repo if repo is not None else Path(__file__).resolve().parents[1]
+    for value in (str(root.resolve()), TEST_CREDENTIAL):
+        if value:
+            text = text.replace(value, DIAGNOSTIC_REDACTION)
+    return text
+
+
+def _report_diagnostic(title: str, body: str, *, repo: Path | None = None) -> None:
+    """Write failure evidence to stderr, beside the typed record.
+
+    Deliberately NOT part of the v4 record: that record is closed and
+    payload-free, and its field set is pinned. This channel is for a human
+    reading a failed run; nothing parses it.
+    """
+
+    cleaned = _redact(body, repo=repo).strip()
+    if not cleaned:
+        return
+    print(f"--- {title} ---", file=sys.stderr)
+    print(cleaned, file=sys.stderr)
+    print(f"--- end {title} ---", file=sys.stderr)
+
+
 def _venv_executable(root: Path, name: str) -> Path:
     directory = root / ("Scripts" if os.name == "nt" else "bin")
     suffix = ".exe" if os.name == "nt" else ""
@@ -1484,7 +1519,19 @@ def _run(
             check=False,
             timeout=timeout,
         )
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as error:
+        _report_diagnostic(
+            f"child stdout before timeout ({stage})",
+            error.stdout.decode(errors="replace")
+            if isinstance(error.stdout, bytes)
+            else (error.stdout or ""),
+        )
+        _report_diagnostic(
+            f"child stderr before timeout ({stage})",
+            error.stderr.decode(errors="replace")
+            if isinstance(error.stderr, bytes)
+            else (error.stderr or ""),
+        )
         if _reason_context is not None:
             home, ready_marker, roots_before = _reason_context
             raise _reason_failure(
@@ -2917,6 +2964,7 @@ def _finalize_operational_smoke(
     temp_root: Path | None,
     mcp_clients: list[MCPClient] | None = None,
     diagnostic_context: ContinuationDiagnosticContext | None = None,
+    keep: bool = False,
 ) -> int:
     clients = list(mcp_clients or ())
     diagnostic: dict[str, object] | None = None
@@ -2947,7 +2995,16 @@ def _finalize_operational_smoke(
         failure = shutdown_failure
         if diagnostic is not None:
             failure.attach_continuation_diagnostic(diagnostic)
-    root_cleanup_completed = _cleanup_temp_root(temp_root)
+    if keep and failure is not None and temp_root is not None:
+        # Retention is a deliberate choice, not a failed cleanup: a run that
+        # failed is exactly the run whose artifacts someone needs to read.
+        _report_diagnostic(
+            "retained artifacts",
+            f"temp root kept for inspection: {temp_root}",
+        )
+        root_cleanup_completed = True
+    else:
+        root_cleanup_completed = _cleanup_temp_root(temp_root)
     cleanup_completed = (
         mcp_cleanup_completed and root_cleanup_completed
     )
@@ -3607,7 +3664,12 @@ def main(argv: list[str] | None = None) -> int:
         succeeded = True
     except OperationalSmokeFailure as error:
         failure = error
-    except AssertionError:
+    except AssertionError as error:
+        _report_diagnostic(
+            f"assertion failed ({stage})",
+            f"{error}\n\n{traceback.format_exc()}",
+            repo=repo,
+        )
         failure = OperationalSmokeFailure(
             stage=stage,
             failure_kind=FAILURE_ASSERTION,
@@ -3627,6 +3689,7 @@ def main(argv: list[str] | None = None) -> int:
         temp_root=temp_root,
         mcp_clients=mcp_clients,
         diagnostic_context=diagnostic_context,
+        keep=args.keep,
     )
 
 

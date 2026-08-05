@@ -69,14 +69,28 @@ else:
 # --- 3. --keep on failure --------------------------------------------------
 print()
 print("3. --keep preserving the temp directory on failure")
-src = SMOKE.read_text()
-keep_only_on_success = "if succeeded and args.keep:" in src
-print("   guard `if succeeded and args.keep:` present: %s" % keep_only_on_success)
-if keep_only_on_success:
+# Behavioural, not a source grep: the success-path guard legitimately
+# remains, so its presence proves nothing. What matters is whether a FAILED
+# run under --keep still has its artifacts afterwards.
+import tempfile
+temp_root = pathlib.Path(tempfile.mkdtemp(prefix="t2-keep-probe-"))
+(temp_root / "evidence.txt").write_text("the artifact a diagnosis would need")
+failure = smoke.OperationalSmokeFailure(
+    stage=smoke.STAGE_QUALIFY, failure_kind=smoke.FAILURE_ASSERTION,
+)
+with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+    try:
+        smoke._finalize_operational_smoke(failure, temp_root=temp_root, keep=True)
+    except TypeError:
+        pass  # pre-fix signature has no keep parameter
+survived = temp_root.exists()
+print("   failed run under --keep, temp root survives: %s" % survived)
+if not survived:
     print("   -> CONCEALED: the artifacts are deleted exactly when a failure needs them")
     fails += 1
 else:
     print("   -> reported")
+    import shutil; shutil.rmtree(temp_root, ignore_errors=True)
 
 print()
 print("VERDICT: %d of 3 concealments present" % fails)
