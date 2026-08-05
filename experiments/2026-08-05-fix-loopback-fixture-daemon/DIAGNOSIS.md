@@ -1,3 +1,58 @@
+# Diagnosis: SUPERSEDED — see "Correction" below
+
+**This document named the wrong primary cause and is corrected in place
+rather than rewritten, because the wrong turn is itself evidence about
+how this defect hides.** The original text is preserved unchanged below
+the correction.
+
+## Correction (2026-08-05, same tranche, before any fix)
+
+`_provider_server` and `ProviderState` in
+`scripts/wheel_operational_smoke.py` ARE dead code — that finding
+stands, and every measurement supporting it is reproducible. But they
+are **not the fixture the smoke actually uses**, so their deadness is
+not the defect.
+
+The live mechanism is `_install_loopback_fixture` (called at line 3039),
+which copies `scripts/wheel_loopback_sitecustomize.py` into the
+installed venv's `purelib` as `sitecustomize.py`. Python imports that on
+every interpreter start in the venv, and its `_start_if_enabled()`
+(line 1224) binds `DEEPREASON_WHEEL_LOOPBACK_PORT` and starts a
+`serve_forever` daemon **inside the `deepreason` child process** — not
+inside the smoke process. So the smoke process legitimately has one
+thread and no sockets; that observation never implied a dead fixture.
+
+Verified directly: with the fixture env set and the sitecustomize on the
+path, a bare `python -c` binds the port and the listener answers —
+`listener UP inside the process: sitecustomize started it`. The
+sitecustomize is sound in isolation.
+
+**What that leaves, and why the exception was invisible.** The provider
+runs in the child, so the only place its failure can surface is the
+child's stderr — and `_run` discards exactly that. On
+`subprocess.TimeoutExpired` (line 1475) it raises
+`OperationalSmokeFailure(stage=..., failure_kind=FAILURE_TIMEOUT,
+timeout=True) from None`, never reading `TimeoutExpired.stdout` or
+`.stderr`, which carry the partial child output. A `sitecustomize.py`
+that raises prints its traceback to that stderr and lets the
+interpreter continue — producing precisely the observed shape: no
+listener, connection refused, retry backoff, 600s timeout, and a typed
+record that names the stage and nothing else.
+
+So the operator's instruction — "capture the thread's actual exception
+first" — could not be satisfied from the smoke's own output, because
+the instrument throws that exception away. Obtaining it requires
+re-running the child by hand against a `--keep` venv, which is the next
+step and is where the real primary cause will be named.
+
+**Status: cause NOT yet named.** The mechanism of concealment is
+established; the failure itself is not. No fix may be proposed until
+the child's stderr is in hand.
+
+---
+
+# ORIGINAL (superseded) — preserved as written
+
 # Diagnosis: the loopback provider is dead code — `_provider_server` has never been called, in any commit
 
 Primary cause: `scripts/wheel_operational_smoke.py` defines the entire
