@@ -130,3 +130,31 @@ were "verified as intended surface rather than rubber-stamped", that was
 true of their MEMBERSHIP and said nothing about their POSITION. The
 membership check was sound; the ordering was not checked at all, and one
 of the two instruments could not have caught it.
+
+## Amendment 2 — a fifth site: T2's residue coming true
+
+T2's VERIFY recorded, as honest residue: "Not proven: that these three
+were the ONLY places the smoke drops evidence. Three were found by
+needing them; a systematic audit of every `except` in the file was not
+done." That residue has now cashed out.
+
+With the tool order fixed, the run advanced to
+`STAGE_CONTINUATION_REJECTION` and failed with
+`failure_kind: assertion_failed` and **no diagnostic block at all**.
+Cause: **ten** sites raise `OperationalSmokeFailure(...,
+failure_kind=FAILURE_ASSERTION)` DIRECTLY — a typed failure, not a bare
+`AssertionError` — plus the `_MCPToolResponseError` subclass. They are
+caught by `except OperationalSmokeFailure as error: failure = error`,
+which T2 left silent because T2 fixed the `except AssertionError` path
+beside it.
+
+Change site 5: report a traceback for typed failures too. The exception
+is payload-free by design and carries no message, so the traceback is
+the only thing that can name WHICH check raised — the record already
+holds the stage and kind, and neither locates a line.
+
+This is completing T2's stated goal ("fix all three so the instrument
+reports what happened when it fails") on a path T2's enumeration missed,
+not new scope for T1. It is declared here rather than typed in silently
+because it is a change to a file this tranche was already editing for a
+different reason, and `dr-implement-fix` rule 1 applies.
