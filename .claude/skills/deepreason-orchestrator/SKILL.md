@@ -13,7 +13,11 @@ to select the next. You never blend phases.
 
 1. **One tranche = one goal.** A tranche works exactly one GOAL.md
    (produced by `dr-set-goal`). Anything else you notice goes into
-   `PARKED.md` as one line — never into your work.
+   `PARKED.md` — never into your work. Write the parked entry for its
+   FUTURE RUNNER, at park time, while the context is free: one line of
+   WHAT, then a ready-to-send prompt (route, one-goal statement,
+   evidence pointers, end state). Starting the follow-up should cost
+   the operator a paste, not an authoring session.
 2. **Evidence over prose.** Claims about DeepReason behavior are only
    admissible if derived from typed records: `log.jsonl`, `objects/`,
    `progress.jsonl`, `run-status.json`, `REPLAY_VALIDATION.json`,

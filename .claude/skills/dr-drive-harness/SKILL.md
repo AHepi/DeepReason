@@ -30,6 +30,13 @@ push at every phase boundary — work between pushes is work at risk. Then
 read, in order: CLAUDE.md, the newest `experiments/*/RESULTS.md` segments,
 `docs/ERRATA.md`.
 
+Re-entering mid-tranche needs no conversation history: every tranche is
+resumable from its committed artifacts alone. Read the tranche dir's
+CHECKLIST.md `State:` line, then REQUEST.md/SPEC.md, and continue. The
+whole fresh-window prompt is one line — "Resume tranche <dir> from its
+artifacts." If a session cannot resume from the artifacts, the previous
+session under-committed; record that gap, reconstruct, and commit.
+
 ## 2. Running it — the public lifecycle
 
 The supported product surface (authority: `README.md`):
@@ -127,6 +134,22 @@ Two instruments can disagree and both be right (`verify_root` vs
 `verify_root_report` vs the sweep) — always cite the instrument with the
 number. When the cause is located, do not fix it inline: route it.
 
+## 5b. Process hygiene (each rule paid for in the record)
+
+- **Kill by PID, never by pattern.** `pkill -f`/`pgrep -f` match your
+  own shell's command line — the 2026-08-05 smoke tranche killed its
+  own session twice this way.
+- **Never run the full gate concurrently with `docs_verify`** (or any
+  other worker-spawning instrument): both fan out processes, and the
+  contention manufactures failures — three corrupted gate measurements
+  across two tranches (P1 verify; T2's U3), each costing a re-run and
+  a re-diagnosis. One instrument at a time, on an otherwise idle box.
+- **A surprising measurement taken under load is not a measurement.**
+  Re-run idle before recording it, and say which run you recorded.
+- **Long work launches detached** (`setsid nohup ... & disown`, §3) —
+  a foreground process dies with the session.
+- Scratch and temp files go to the session scratchpad, never the repo.
+
 ## 6. Routing to the workflows
 
 All substantive work goes through a workflow family — that is repo law
@@ -160,7 +183,10 @@ multi-step program (a handover, a checklist, a ladder) runs one step per
 tranche — finishing a step early is never a reason to start the next in
 the same tranche. Stop conditions and DESIGN-AND-STOP gates are hard
 stops: the deliverable at a gate is a committed document and an ended
-turn, not an implementation.
+turn, not an implementation. And every stop presented to the operator
+leads with the decision needed in ONE sentence, the options priced, and
+a recommendation with its reason — the operator should be able to
+answer with a word.
 
 **Exit criterion.** You know you are driving properly when every claim
 you make about a run ends in a typed artifact, every modification you

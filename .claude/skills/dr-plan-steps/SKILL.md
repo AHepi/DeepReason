@@ -49,6 +49,8 @@ missing steps here means missed work later. Plan against that.
 ## CHECKLIST.md template
 
     # Checklist for: <request headline>
+    State: next=<step n> blockers=<none | one line>   <- refreshed at
+    every commit; a fresh session resumes from this line alone
     Re-read REQUEST.md + SPEC.md before every step. Execute strictly
     in order. One step per dr-execute-step invocation.
 

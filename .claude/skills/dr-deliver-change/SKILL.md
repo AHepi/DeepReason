@@ -24,7 +24,10 @@ what was asked and what was done impossible to miss.
    - `not-done` — forbidden here; that is a FAIL, go back
 3. Surface the assumptions (from VALIDATION.md) and PARKED.md
    contents as explicit lists. Parked items are offered as candidate
-   next tranches, never silently promised.
+   next tranches, never silently promised — each with its
+   ready-to-send prompt (the park-with-prompt rule), and the close
+   RECOMMENDS one next item from the queue, so the operator answers
+   go/no-go rather than authoring the follow-up.
 3b. **Report the map delta.** One short section: which `docs/map/`
    documents this tranche changed or created, how many checks it added,
    and any document `--stale` still lists with the reason it was left.
@@ -62,7 +65,8 @@ what was asked and what was done impossible to miss.
     left stale: <file: reason, or "none">
 
     ## Parked (not done, not promised)
-    <PARKED.md lines, or "none">
+    <PARKED.md entries with their ready-to-send prompts, or "none">
+    recommended next: <entry id + one-line reason, or "none">
 
 ## Exit criteria
 
