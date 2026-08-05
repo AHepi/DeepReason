@@ -49,7 +49,12 @@ else.
    <failed|completed>-epochN-run-<id>`), commit the rename FIRST as
    its own commit, then proceed.
 7. **Update the map in THIS commit** — see "Map obligations" below.
-8. Commit once, push with retry:
+8. Before committing: compare the ACTUAL changed lines
+   (`git diff --stat`) against FIX.md's budget ceiling. Exceeding it is
+   a STOP in the standard format (decision, priced options,
+   recommendation), not a footnote — an estimate-only ceiling trips on
+   nothing (recorded miss: 193 insertions against ≤150, V1 tranche
+   2026-08-05). Then commit once, push with retry:
 
         git add <exact files> <map files> && git commit -m "<what and
           why, with the live evidence and 'Full gate: N passed, 0
