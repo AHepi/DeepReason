@@ -64,3 +64,37 @@ The `round-robin` A/B arm root still carries one `attempt-validity`
 `verify_root` violation. Confirmed still present while ruling out the
 "bad evidence" hypothesis in DIAGNOSIS.md. Not this tranche's goal, not
 investigated, not fixed.
+
+## P1d — QUEUED, not parked: the smoke-instrument tranche
+
+Operator instruction received mid-tranche (2026-08-05), recorded here so
+it is not lost and NOT absorbed into this goal:
+
+> Defect tranche via deepreason-orchestrator: scripts/wheel_smoke.py is
+> red, bisectable to 4940b5f7 (2026-07-28). The pyproject packaging is
+> correct — the smoke's entry-point reader wrongly treats the custom
+> deepreason.admission.adapters group as console scripts. Fix the
+> reader; then run BOTH smokes to completion (wheel_smoke and
+> wheel_operational_smoke) and update any other stale pins they surface
+> — the MCP tool set and schema sha haven't been verified since
+> 2026-07-26. Evidence and analysis in
+> experiments/2026-08-05-change-smoke-instrument-visibility/.
+
+Its own tranche, started after this one reaches VERIFY.md. Two things
+checked on receipt:
+
+- `4940b5f7` exists and matches the description ("Ship the first-party
+  EPUB adapter under the identical §3a contract"); both
+  `scripts/wheel_smoke.py` and `scripts/wheel_operational_smoke.py`
+  exist.
+- **`experiments/2026-08-05-change-smoke-instrument-visibility/` does
+  NOT exist on this branch.** The named evidence is not in the tree, so
+  that tranche's diagnosis will be derived from the record directly and
+  the missing directory reported rather than assumed.
+
+Sequencing note, not a preference: it is worth finishing this tranche
+first because the smoke tranche must measure against a tree whose gate
+is green. While the four P1 instruments are red, any new breakage the
+smokes surface cannot be distinguished from the inherited kind — the
+exact cost recorded in
+`experiments/2026-08-04-change-rung7-authority-as-declared-policy/DELIVERY.md`.
