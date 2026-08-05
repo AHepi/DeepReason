@@ -1282,6 +1282,54 @@ def _unused_loopback_port() -> int:
         return int(listener.getsockname()[1])
 
 
+def _provider_errors(path: Path) -> list:
+    """Errors the loopback fixture recorded, if it recorded any."""
+
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return list(payload.get("errors") or ())
+
+
+def _qualified_inventory(
+    *, home: Path, python: Path, work: Path, env: dict[str, str], stage: str
+) -> tuple[int, int]:
+    """Return (qualified pair count, cases per pair), both read at run time.
+
+    Derived rather than pinned: the pair count comes from the bundle the run
+    just wrote, and the per-pair case count from the INSTALLED wheel's own
+    constant. A numeral written here would be a fact with an expiry date --
+    the inventory grows whenever a contract family is enabled -- and this
+    stage has already been broken twice that way.
+    """
+
+    bundles = sorted((home / ".deepreason" / "qualification-cache").glob("*.json"))
+    if len(bundles) != 1:
+        raise AssertionError(
+            f"expected exactly one qualification bundle, found {len(bundles)}"
+        )
+    payload = json.loads(bundles[0].read_text(encoding="utf-8"))
+    pairs = payload.get("pairs") or ()
+    if not pairs:
+        raise AssertionError("the qualification bundle recorded no contract pairs")
+    cases_per_pair = int(
+        _run(
+            [
+                str(python),
+                "-c",
+                "from deepreason.cli.doctor import PRODUCTION_CASES_PER_PAIR as c;"
+                " print(c)",
+            ],
+            cwd=work,
+            env=env,
+            stage=stage,
+        ).stdout.strip()
+    )
+    if cases_per_pair <= 0:
+        raise AssertionError("the installed wheel reports a non-positive case count")
+    return len(pairs), cases_per_pair
+
+
 def _provider_counts(path: Path) -> dict[str, int]:
     if not path.exists():
         return {"qualification_calls": 0, "total_calls": 0}
@@ -3206,24 +3254,44 @@ def main(argv: list[str] | None = None) -> int:
         notice = re.search(
             r"maximum expected provider calls: ([0-9]+)", qualified.stderr
         )
-        # The engaged public preset qualifies 14 route/contract pairs (the
-        # frozen conjecture/criticism four, six scratch contracts, and the
-        # four grounded-bridge contracts): the frozen maximum is 2 conjecture
-        # pairs x 20 cases x 5 provider calls (the conjecture family grants
-        # four single-pointer repairs for multi-pointer failures) plus
-        # 8 pairs x 20 cases x 3 provider calls plus 4 bridge pairs x
-        # 20 cases x 2 provider calls (the bridge grants one schema repair),
-        # and one clean pass makes exactly 14 x 20 = 280 loopback calls.  The
-        # scratch- and bridge-pair probes carry their own bounded task text,
-        # so only the original four pairs match the "Qualification case"
-        # marker.
-        if notice is None or int(notice.group(1)) != 840:
-            raise AssertionError("qualification did not announce the frozen maximum")
+        # No numeral is pinned here. Both of the counts this stage used to
+        # assert -- the announced maximum and the clean-pass total -- are
+        # functions of the engaged preset's contract-pair INVENTORY, and the
+        # inventory is meant to change: enabling the grounded two-stage
+        # bridge took it from 14 pairs to 15, and granting stochastic
+        # providers a bounded re-draw added an allowance on top of the
+        # per-pair blocks. Both pins were correct the day they were written
+        # (2026-07-27) and stale by that evening. What is asserted instead is
+        # the property they stood in for: qualification completes, spends no
+        # more than it announced, and makes exactly one clean pass over
+        # whatever the inventory currently holds.
+        if notice is None:
+            raise AssertionError("qualification did not announce a maximum at all")
+        announced_maximum = int(notice.group(1))
+        if announced_maximum <= 0:
+            raise AssertionError("qualification announced a non-positive maximum")
+
+        qualified_pairs, cases_per_pair = _qualified_inventory(
+            home=home, python=python, work=work, env=clean_env, stage=stage
+        )
+        expected_clean_pass = qualified_pairs * cases_per_pair
+
         counts = _provider_counts(provider_state_path)
-        if counts != {"qualification_calls": 80, "total_calls": 280}:
+        if counts["total_calls"] != expected_clean_pass:
             raise AssertionError(
-                "qualification did not make exactly 280 loopback calls"
+                "qualification did not make one clean pass over the inventory: "
+                f"{counts['total_calls']} calls for {qualified_pairs} pairs x "
+                f"{cases_per_pair} cases (expected {expected_clean_pass})"
             )
+        if counts["total_calls"] > announced_maximum:
+            raise AssertionError(
+                f"qualification spent {counts['total_calls']} calls against an "
+                f"announced maximum of {announced_maximum}"
+            )
+        if counts["qualification_calls"] <= 0:
+            raise AssertionError("no call carried the qualification-case marker")
+        if _provider_errors(provider_state_path):
+            raise AssertionError("the loopback fixture recorded provider errors")
 
         stage = STAGE_READINESS
         calls_before_status = counts["total_calls"]
