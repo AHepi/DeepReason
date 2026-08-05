@@ -76,6 +76,51 @@ Recorded, not fixed — S2 (duplicate MCP pins across both smokes) already
 proposes de-duplicating them into one shared definition, which would
 dissolve this too.
 
+## V4 — T2's human diagnostic channel has no destination on a failing run
+
+T2 delivered three concealment fixes by writing evidence to stderr
+beside the typed record. Two of them (timeout, assertion) are committed
+and green; the third — typed `OperationalSmokeFailure`, added in
+`228b2ce6` — is reverted at `31480e5f`, because stderr on a failing run
+is not free space.
+
+`tests/test_wheel_operational.py` enforces the reservation in three
+tests: `_annotation_record` does
+`json.loads(stderr.strip().removeprefix(prefix))`, which only parses if
+stderr is EXACTLY the annotation, and each test asserts
+`captured.out == ""`. Prepending a diagnostic block produced
+`json.decoder.JSONDecodeError` in all three. `FIX.md` did not predict
+those tests moving, so the fix was wrong as implemented; weakening the
+assertions was not available.
+
+**Why the two surviving diagnostics are green and this one is not.** No
+test drives `main()` into the timeout or assertion handler on a run
+whose stderr is then parsed, so they sit in the same reserved stream
+untested rather than proven safe. That asymmetry is luck, not design.
+
+**A hazard measured, and it did NOT fire.** `_redact` scrubs exactly two
+values — the repo path and `TEST_CREDENTIAL` — so a traceback channel
+can only be as clean as the source lines it renders, and it cannot scrub
+payload it cannot name. Probed on 3.11: `format_exc` emits only the
+RAISING line of each frame, so the sentinel literals in the three tests
+(which sit on non-raising lines, or on continuation lines of a
+multi-line call that renders as its first line only) never appeared.
+Recorded as unproven-against-payload, not as a demonstrated leak.
+
+**What the next tranche must decide**: where a human-facing channel
+belongs when both public streams are reserved. The candidate that costs
+nothing on the contract is a file under `temp_root`, which the `--keep`
+fix already retains on failure — the record stays payload-free on the
+wire, and the evidence is on disk for whoever reads the run. That is a
+proposal, not a decision; it revises T2's delivered design and is the
+operator's call.
+
+**Consequence for V1 above**: its traceback evidence was captured while
+`228b2ce6` was in the tree and is a real measurement, but the mechanism
+that produced it no longer exists. Re-deriving it after the revert needs
+either this channel restored somewhere legal, or a direct
+`python -c` reproduction against a `--keep` run.
+
 ## V3 — carried, still parked
 
 U1 (the second parallel-load flake — the operator kept it parked

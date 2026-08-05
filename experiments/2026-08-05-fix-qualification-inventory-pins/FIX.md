@@ -158,3 +158,41 @@ reports what happened when it fails") on a path T2's enumeration missed,
 not new scope for T1. It is declared here rather than typed in silently
 because it is a change to a file this tranche was already editing for a
 different reason, and `dr-implement-fix` rule 1 applies.
+
+## Amendment 3 — site 5 is REVERTED; it was wrong as implemented
+
+Site 5 shipped as `228b2ce6` and the full gate came back **3 failed,
+3335 passed**:
+
+    tests/test_wheel_operational.py
+      ::test_command_failure_is_structured_payload_free_and_preserves_exit_status
+      ::test_mcp_child_exit_is_payload_free_and_preserves_process_status
+      ::test_mcp_response_failures_never_enter_public_diagnostics
+
+All three with `json.decoder.JSONDecodeError: Expecting value: line 1
+column 1`. The contract they enforce is that on a failing run **stderr
+is EXACTLY the annotation record** — `_annotation_record` does
+`json.loads(stderr.strip().removeprefix(prefix))` after asserting the
+prefix appears exactly once — and **stdout is empty**
+(`assert captured.out == ""`). Both public streams are reserved. There
+is no room beside the record for a human channel.
+
+This section's own "Existing tests at risk" said those 108 tests must
+pass UNEDITED, and predicted no movement in them. `dr-implement-fix`
+rule 5: a fix whose test breakage FIX.md did not predict is wrong as
+implemented. Weakening `_annotation_record` to tolerate a preamble was
+not available — it is the assertion that proves the record is
+payload-free on the wire, which is the property the whole v4 schema
+exists for.
+
+Reverted at `31480e5f`; `tests/test_wheel_operational.py` back to
+**108 passed**. The reasoning that motivated site 5 is unchanged and
+correct — a payload-free record names a stage and a kind and cannot name
+a line — so the need survives the revert and is parked as **V4** with a
+proposed destination (a file under `temp_root`, which the `--keep` fix
+already retains on failure). Choosing that destination revises T2's
+delivered design and is the operator's call, not this tranche's.
+
+Sites 1-4 stand and are unaffected: they are the qualify-stage
+derivations and the tool-order correction, none of which touch the
+failure-reporting path.
