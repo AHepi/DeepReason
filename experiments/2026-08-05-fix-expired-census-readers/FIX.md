@@ -72,13 +72,34 @@ reproduction:
 
 ## Existing tests at risk
 
-From `grep -rn "_sweep_committed_roots\|recorded_module_fingerprints" tests/`:
+Two greps, reported separately — an earlier draft of this section
+collapsed them into one sentence and read as if only one file used
+either symbol, which is not true.
 
-- `tests/test_module_fingerprints.py` — the only file using the helper.
-  Its other 18 tests do not call it and must keep passing UNCHANGED.
-- No other test file references `_sweep_committed_roots`. The
-  `recorded_module_fingerprints` reader itself is not modified, so
-  every test of the reader's behaviour is untouched.
+`grep -rn "_sweep_committed_roots" tests/ --include=*.py` — the helper
+this fix changes:
+
+    tests/test_module_fingerprints.py:36   def _sweep_committed_roots(...)
+    tests/test_module_fingerprints.py:67   read, _ = _sweep_committed_roots()
+    tests/test_module_fingerprints.py:77   read, refused = _sweep_committed_roots()
+
+Three sites, all in one file. The helper's return shape changes, so both
+call sites are updated; the file's other 18 tests do not call it and
+must keep passing UNCHANGED.
+
+`grep -rn "recorded_module_fingerprints" tests/ --include=*.py` — the
+production reader, which this fix does NOT modify. Two further files use
+it:
+
+    tests/test_school_population_determinism.py:160-163
+    tests/test_rung5_alternative_backend.py:238-247
+
+**Neither is at risk.** Both read roots they build themselves under
+`tmp_path` (`_offline_run(alt_root, ...)`,
+`before_harness`/`after_harness`), not the committed census, and both
+assert on `module_id`/`digest` of a stamp they just produced. They never
+touch `_sweep_committed_roots` and the reader they call is unchanged, so
+both must keep passing untouched — which the full gate will confirm.
 
 No fixture is being updated to accommodate defective behaviour: the
 production reader (`src/deepreason/module_events.py`) does not change at
