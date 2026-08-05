@@ -165,6 +165,50 @@ once, at `31480e5f`.
 `tests/test_wheel_operational.py` ~20, `docs/map/SUB-application.md`
 ~8). Under the 150-line budget.
 
+---
+
+## Amendment 1 — a seventh change site, and a helper FIX.md described but did not name
+
+`dr-implement-fix` rule 1: a site FIX.md missed is amended before the
+work continues, not typed in silently. Two items, both found by running
+the ring.
+
+### 7. `tests/test_wheel_operational.py:4145` — the tracked-client census
+
+    assert source.count("= _new_mcp_client(") == 6
+
+The rejection stage's cancelled subject needs its own MCP client, which
+makes it 7. The full gate ring returned
+`1 failed, 108 passed` on `test_every_operational_mcp_child_uses_tracked_construction`
+— a failure **FIX.md's "Existing tests at risk" table did not predict**,
+because that table was built by grepping
+`non_resumable|ALLOWED_FAILURE_STAGES|CONTINUE_TYPED` and source-census
+pins match none of those.
+
+**Updated to 7, not rewritten.** This is deliberately NOT treated as the
+expiring-form-pin class this session fixed twice (the root censuses, the
+MCP tool pins). The distinction: a root census counts committed evidence
+that accumulates on its own, so the number expires without anyone
+touching it. This counts constructions in ONE file that only change when
+someone edits that file — the same shape as `EXPECTED_MCP_TOOLS`, a
+declared surface under the same-commit pin rule. The guard it enforces —
+no MCP child escapes `_new_mcp_client` and therefore the shutdown list —
+is preserved exactly by 6 → 7, and would be weakened by loosening it to
+an inequality. The sibling pins at :4132 (`= _run_reason(` == 3) and
+:4144 (`MCPClient(` == 1) are unaffected and stay as they are: this
+change adds no reason command and no direct construction.
+
+### A helper implementing site 1's described behaviour
+
+Site 1 specified "poll `run_status` until `cycle >= 1`, then
+`cancel_run`". That is implemented as a named helper,
+`_await_cancellable_cycle`, beside `_poll_terminal`, rather than inline
+in `main()`. Recorded here because it is a new location in the file even
+though it is the same change site's logic; it adds no behaviour site 1
+did not specify. It raises rather than proceeds if the subject has
+already left `starting`/`running`, so a lost cancel race fails the stage
+instead of silently substituting a continuable stop.
+
 ## Approval gate
 
 Class `defect` (GOAL.md), estimate <=150 lines, no frozen surface, no
