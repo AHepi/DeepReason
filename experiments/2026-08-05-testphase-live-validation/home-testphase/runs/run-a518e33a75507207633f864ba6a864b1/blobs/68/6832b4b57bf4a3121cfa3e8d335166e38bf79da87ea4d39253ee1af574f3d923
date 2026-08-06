@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-441f38d294bb1e4c90cb6e5394b68c12) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A regression test that pins an exact count of committed artifacts fails the first time legitimate new evidence arrives. What general property should such a test assert instead, and which published testing principles support that choice?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3697c86defdba4778218f12f: program:reasoning_observation_pending
+- reason-counter@c8eca120c1a6cd2eaddb7fd8: program:reasoning_observation_pending
+- reason-counter@91bdfc7fa985cd79d590e9fa: program:reasoning_observation_pending
+- reason-counter@e02adfb968ccedb363c082f1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The test should assert bounded monotonicity with an explicit exception for legitimate revocation events, modeling the count as monotonically non-decreasing except during garbage collection cycles.","counterconditions":[{"case":"If revocation events are not formally signaled or are ambiguous, the test cannot distinguish legitimate decreases from bugs.","eval":"observation"},{"case":"If the domain has no concept of revocation, this reduces to the simpler monotonicity test and adds complexity for no benefit.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Addressing the tension raised by SRC_007, this atypical candidate proposes a more nuanced invariant: the count is monotonically non-decreasing (SRC_006) except when a documented, legitimate revocation event occurs. The test verifies both the monotonic growth and that any decrease is accompanied by a valid revocation signal. This seeks a covering principle (school stance) that unifies the growth and pruning behaviors under a single, testable contract.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3697c86defdba4778218f12f, reason-counter@c8eca120c1a6cd2eaddb7fd8
+
+TARGET SRC_002
+{"analogy":null,"claim":"The test should assert that the artifact count is bounded by upper and lower domain constraints, verifying the admission process respects these limits rather than pinning an exact value.","counterconditions":[{"case":"If domain constraints are not formally defined or are unknown, this test cannot be written.","eval":"observation"},{"case":"If the admission process allows temporary bound violations that are corrected later, this assertion may produce false negatives.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Correctness is fundamentally a property of the admission process, not the admitted set (SRC_005). By verifying the count remains within domain-defined bounds (e.g., [baseline, max_capacity]), the test validates the process invariant without being brittle to legitimate growth. This shifts the focus from state to process, aligning with the empiric school stance (SRC_004) which values observable process adherence over static snapshots.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@91bdfc7fa985cd79d590e9fa, reason-counter@e02adfb968ccedb363c082f1
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

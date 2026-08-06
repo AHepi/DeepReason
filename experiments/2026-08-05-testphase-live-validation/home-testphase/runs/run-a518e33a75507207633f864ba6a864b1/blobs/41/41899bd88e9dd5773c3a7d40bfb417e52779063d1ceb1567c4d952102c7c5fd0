@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts Dijkstra's maxim 'tests can show the presence of bugs, not their absence' as support for replacing exact-count assertions with invariant property checks. But this causal mechanism is mismatched: Dijkstra's principle is an epistemic limitation about what testing can prove (it cannot prove absence of bugs), not a directive about avoiding cardinality assertions or preferring property-based tests. A test that pins an exact count of committed artifacts is itself a way of showing the PRESENCE of a bug when the count changes unexpectedly — exactly what Dijkstra says tests can do. The principle provides no causal reason to switch from cardinality to invariants.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 invokes 'Beizer's testing principle that tests should verify behavioral contracts, not incidental implementation counts,' but this is not a recognizable published principle of Beizer. Beizer's well-known principles (from 'Software Testing Techniques' and 'Black-Box Testing') concern test-design rigor, exhaustive input-space coverage ideals, and the distinction between testing and debugging — not a prohibition on count-based assertions. Because the problem demands support from *published testing principles*, the misattribution undermines the evidentiary chain: the causal link from 'behavioral contracts over counts' to Beizer is fabricated rather than grounded in his actual published work.",
+      "counterexample": null
+    }
+  ]
+}
+```

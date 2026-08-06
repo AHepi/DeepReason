@@ -1,0 +1,3 @@
+```json
+{"cases":[{"attack":true,"case":"The countercondition 'If the test's purpose is specifically to detect duplication or over-commitment, monotonicity alone would not catch an unwanted increase' concedes that monotonicity fails to catch a whole class of regressions the original exact-count test was plausibly there to catch. The problem asks what general property such a test 'should assert instead'; an invariant that, by the target's own admission, cannot detect duplication or over-commitment is not a faithful general replacement for an exact-count regression test. This is a substantive content defect, not a machine-checked commitment violation.","counterexample":null,"target_alias":"SRC_001"}]}
+```
