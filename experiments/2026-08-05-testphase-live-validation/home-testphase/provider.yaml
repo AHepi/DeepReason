@@ -9,9 +9,9 @@ model_profile: standard
 model_revision: glm-5.2
 output_mechanism: json_text
 output_mode: json_object
-profile_digest: 2b0b8d5e80f8ceaf2bdb626e0912d2a1f5f092eeeab728b08acd0b82fb3864b9
+profile_digest: 680afd1bda375c557204cc9944ce92381e449c5f89df9923a480666e097ebf2e
 provider: ollama
-reasoning: null
+reasoning: none
 schema: deepreason-provider-profile.v1
 temperature: null
 timeout_s: 120
