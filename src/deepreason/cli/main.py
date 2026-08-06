@@ -1534,6 +1534,7 @@ def _cmd_qualify(args) -> int:
         run_shallow_fitness_battery,
         shallow_fitness_maximum_provider_calls,
     )
+    from deepreason.seat_bindings import resolve_seat_bindings
 
     tier_states = {
         "full": "ready",
@@ -1561,6 +1562,7 @@ def _cmd_qualify(args) -> int:
         manifest = qualification_subject_manifest(
             profile,
             attached_evidence=bool(getattr(args, "attached_evidence", False)),
+            seat_bindings=resolve_seat_bindings() or None,
         )
         cache_dir = provider_state_dir() / "qualification-cache"
         subject = qualification_subject_digest(manifest, profile)

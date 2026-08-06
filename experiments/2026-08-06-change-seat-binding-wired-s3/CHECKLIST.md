@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=12 blockers=none
+State: next=15 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -129,12 +129,13 @@ order. One step per dr-execute-step invocation.
       `_config_for_profile`) passes, output pasted.
       DONE: `2 passed, 31 deselected in 0.19s`.
 
-- [ ] 12. (S4, S9) [COMMIT] Commit the `_config_for_profile`
+- [x] 12. (S4, S9) [COMMIT] Commit the `_config_for_profile`
       generalization, its test, and the `docs/map/CON-seats.md`
       update together.
       done-when: `git log -1 --stat` shows all three, pushed.
+      DONE: commit `a4e93037`, pushed.
 
-- [ ] 13. (S5) Thread the optional `seat_bindings` parameter through
+- [x] 13. (S5) Thread the optional `seat_bindings` parameter through
       `build_preparation_manifest`, `qualification_subject_manifest`
       (and its caller `_cmd_qualify` in `cli/main.py`, resolving via
       `resolve_seat_bindings()`), and `RunPreparationService.prepare`
@@ -142,8 +143,16 @@ order. One step per dr-execute-step invocation.
       home=self._home)`).
       done-when: `grep -n "seat_bindings" src/deepreason/preparation.py src/deepreason/cli/main.py`
       shows the new parameter/call sites (pasted).
+      DONE: 13 hits across both files (pasted in the transcript).
+      Caught and fixed a self-inflicted import-block corruption while
+      adding the `resolve_seat_bindings` import to `preparation.py`
+      (accidentally duplicated/truncated the existing
+      `qualification`/`run_manifest` import blocks) — caught
+      immediately via `python -c "import deepreason.preparation"`
+      before it could reach a commit; fixed and reverified (33/33
+      tests in `test_reusable_qualification.py` pass).
 
-- [ ] 14. (S5) Add a test proving `RunPreparationService.prepare`
+- [x] 14. (S5) Add a test proving `RunPreparationService.prepare`
       with a seat-bindings file present on disk produces a compiled
       `RunManifest.roles` reflecting the bound profiles on their roles
       and the default profile everywhere else; with no file present,
@@ -151,6 +160,15 @@ order. One step per dr-execute-step invocation.
       before-this-tranche golden for a fixed question+profile.
       done-when: `python -m pytest tests/test_v6_engaged_public_defaults.py -q -k seat`
       (or a new test file, named exactly) passes, output pasted.
+      DONE: added to `tests/test_run_preparation_service.py` instead
+      (that file already has the `_profile`/`_request`/`_service`
+      fixtures this needs). `2 passed, 9 deselected in 8.59s`; full
+      file `11 passed in 35.69s`. Caught and fixed a real test bug
+      (not implementation bug): `provider_state_dir` resolves
+      `DEEPREASON_HOME` differently depending on whether it arrives
+      via `environ` (used directly) or `home` (gets `.deepreason`
+      appended) -- the write and the service's internal read must use
+      the identical resolution path.
 
 - [ ] 15. (S5) [COMMIT] Commit the threading and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.

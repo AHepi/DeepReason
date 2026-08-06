@@ -26,6 +26,7 @@ from deepreason.provider_profile import (
 from deepreason.qualification import QualificationError
 from deepreason.run_manifest import load_run_manifest
 from deepreason.runtime.launch_policy import require_v6_production_qualification
+from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
 
 
 STAMP = datetime(2026, 7, 23, tzinfo=timezone.utc)
@@ -120,6 +121,67 @@ def test_question_only_preparation_binds_exact_v6_input_and_qualification(tmp_pa
         manifest, root=root, operation="prepared-run test"
     )
     assert report.run_manifest_sha256 == manifest.sha256
+
+
+def test_prepare_with_no_seat_bindings_file_binds_every_role_uniformly(tmp_path):
+    """R3: absent a seat-bindings file, every role uses the base profile --
+    the default no-flags case must stay byte-identical to before Rung S3."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    calls = []
+    seats_home = tmp_path / "seats-home"
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+    )
+
+    prepared = service.prepare(_request(profile_path))
+    manifest = load_run_manifest(Path(prepared.root) / "run-manifest.json")
+    for routes in manifest.roles.values():
+        for route in routes:
+            assert route.model_id == profile.model_id
+
+
+def test_prepare_with_a_seat_binding_overrides_only_the_bound_role(tmp_path):
+    """R2/R4/R5: a bound role's compiled route reflects the bound profile;
+    every other role still uses the base profile -- SeatBinding resolution
+    where leases are built, resolved at manifest-compile (mint) time."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    bound = _profile(model_id="model-bound")
+    bound_path = write_provider_profile(bound, tmp_path / "bound.yaml")
+    seats_home = tmp_path / "seats-home"
+    # Match RunPreparationService.prepare's own resolution exactly:
+    # DEEPREASON_HOME via `environ` (not `home`) skips the ".deepreason"
+    # subdirectory `provider_state_dir` appends for the `home=` form.
+    write_seat_bindings(
+        {"coder": str(bound_path)},
+        seat_bindings_path(environ={"DEEPREASON_HOME": str(seats_home)}),
+    )
+    calls = []
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+    )
+
+    prepared = service.prepare(_request(profile_path))
+    manifest = load_run_manifest(Path(prepared.root) / "run-manifest.json")
+    assert manifest.roles["property_designer"][0].model_id == "model-bound"
+    for role, routes in manifest.roles.items():
+        if role == "property_designer":
+            continue
+        for route in routes:
+            assert route.model_id == profile.model_id
 
 
 def test_preparation_is_idempotent_without_requalification_or_rewrites(tmp_path):

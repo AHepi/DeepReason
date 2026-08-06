@@ -57,6 +57,7 @@ from deepreason.run_manifest import (
     compile_run_manifest,
     load_run_manifest,
 )
+from deepreason.seat_bindings import resolve_seat_bindings
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     engaged_bridge_source,
@@ -363,19 +364,22 @@ def build_preparation_manifest(
     compiled_at: str,
     run_input_digest: str | None = None,
     attached_evidence: bool = False,
+    seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
 ):
     """Build the in-memory V6 manifest used by qualification and preparation.
 
     ``attached_evidence`` opts the manifest into the fixed finite
     attached-evidence envelope; question-only preparation (and the
     question-neutral qualification subject) keeps the historical disabled
-    policy byte-identical.
+    policy byte-identical. ``seat_bindings`` overrides specific roles onto
+    a different profile (Rung S3); omitted, every role uses ``profile``,
+    byte-identical to before seat bindings existed.
     """
 
     if run_input_digest is None:
         _dossier, run_input, _workload = _records_for_question(question)
         run_input_digest = run_input.run_input_digest
-    config = _config_for_profile(profile)
+    config = _config_for_profile(profile, seat_bindings=seat_bindings)
     return compile_run_manifest(
         config,
         schema_version=6,
@@ -400,13 +404,17 @@ def build_preparation_manifest(
 
 
 def qualification_subject_manifest(
-    profile: ProviderProfileV1, *, attached_evidence: bool = False
+    profile: ProviderProfileV1,
+    *,
+    attached_evidence: bool = False,
+    seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
 ):
     """Return a stable per-profile manifest whose reusable subject is question-neutral.
 
     ``attached_evidence`` warms the subject that ``reason --attach`` runs
     bind (the fixed attached-evidence envelope); the default subject stays
-    byte-identical to the historical question-only preset.
+    byte-identical to the historical question-only preset. ``seat_bindings``
+    is threaded straight through (Rung S3); omitted, unchanged.
     """
 
     return build_preparation_manifest(
@@ -414,6 +422,7 @@ def qualification_subject_manifest(
         question=_QUALIFICATION_QUESTION,
         compiled_at=_QUALIFICATION_COMPILED_AT,
         attached_evidence=attached_evidence,
+        seat_bindings=seat_bindings,
     )
 
 
@@ -603,12 +612,14 @@ class RunPreparationService:
             )
         else:
             dossier, run_input, workload = _records_for_question(request.question)
+        seat_bindings = resolve_seat_bindings(environ=self._environ, home=self._home)
         manifest = build_preparation_manifest(
             profile,
             question=request.question,
             compiled_at=_compiled_at(self._clock),
             run_input_digest=run_input.run_input_digest,
             attached_evidence=request.dossier_digest is not None,
+            seat_bindings=seat_bindings or None,
         )
         try:
             bundle = resolve_completed_qualification(
