@@ -1,0 +1,1 @@
+REASONING_MUST_BE_DISABLED: provider 'ollama' realizes the reasoning knob and this profile has reasoning=None, which does not switch thinking off (unset sends no reasoning field, so the model thinks by default). Re-run setup with --reasoning none.
