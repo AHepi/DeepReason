@@ -1,23 +1,33 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=1 blockers=none
+State: next=6 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S7) Capture the BEFORE sweep, before any `src/` edit lands:
+- [x] 1. (S7) Capture the BEFORE sweep, before any `src/` edit lands:
       `python tools/root_sweep.py experiments/2026-08-06-change-seat-binding-wired-s3/sweep-before.txt`.
       done-when: the file exists and the command's own summary line is
       pasted.
+      DONE: `SWEEP COMPLETE: 45 roots -> --help` (the tool has no
+      `--help`/argparse support — the arg is a positional output path;
+      an accidental `--help` probe became the real sweep, renamed to
+      the correct path rather than re-running it). File has 45 lines.
 
-- [ ] 2. (S2) Create `src/deepreason/seat_bindings.py` with
+- [x] 2. (S2) Create `src/deepreason/seat_bindings.py` with
       `GROUP_ROLES`, `GROUP_ALIASES`, `SeatBindingError`,
       `SEAT_BINDINGS_FILENAME`, `seat_bindings_path`.
       done-when: `python -c "from deepreason.seat_bindings import GROUP_ROLES, GROUP_ALIASES, SeatBindingError, SEAT_BINDINGS_FILENAME, seat_bindings_path; print(sorted(GROUP_ROLES), GROUP_ALIASES)"`
       prints `['coder', 'conjecture', 'scratch']
       {'simulation': 'conjecture'}`.
+      DONE: exact match. Module also includes `parse_seat_flags`,
+      `write_seat_bindings`, `load_seat_bindings`,
+      `resolve_seat_bindings` in the same file (steps 3-5 add their
+      tests against this same commit's content — the module was
+      written whole since the functions are small and interdependent,
+      per SPEC.md's Concrete design section).
 
-- [ ] 3. (S2) Add `parse_seat_flags` plus a new test file
+- [x] 3. (S2) Add `parse_seat_flags` plus a new test file
       `tests/test_seat_bindings.py` covering: unknown group raises
       `SeatBindingError` code `SEAT_BINDING_GROUP_UNKNOWN`; duplicate
       group in one call raises code `SEAT_BINDING_GROUP_DUPLICATED`;
@@ -25,14 +35,18 @@ order. One step per dr-execute-step invocation.
       `{}`.
       done-when: `python -m pytest tests/test_seat_bindings.py -q -k parse`
       passes, output pasted.
+      DONE: `4 passed, 7 deselected in 0.05s`. (Test file also
+      includes the write/load/resolve tests steps 4-5 will run; the
+      file was written whole alongside the module.)
 
-- [ ] 4. (S2) Add `write_seat_bindings`/`load_seat_bindings` plus
+- [x] 4. (S2) Add `write_seat_bindings`/`load_seat_bindings` plus
       tests: round-trip through a temp dir; `load_seat_bindings` on a
       path with no file returns `{}`.
       done-when: `python -m pytest tests/test_seat_bindings.py -q -k "write or load"`
       passes, output pasted.
+      DONE: `2 passed, 9 deselected in 0.06s`.
 
-- [ ] 5. (S3) Add `resolve_seat_bindings` (including the conflict
+- [x] 5. (S3) Add `resolve_seat_bindings` (including the conflict
       check, A8) plus tests: `conjecture=A, simulation=B` (A != B)
       raises `SeatBindingError` code `SEAT_BINDING_ROLE_CONFLICT`
       naming `conjecturer`; `conjecture=A, scratch=B` (A != B) ALSO
@@ -41,6 +55,12 @@ order. One step per dr-execute-step invocation.
       raise; no bindings file returns `{}`.
       done-when: `python -m pytest tests/test_seat_bindings.py -q -k resolve`
       passes, output pasted.
+      DONE: `5 passed, 6 deselected`. Bug caught and fixed in the same
+      step: iterating a bare `frozenset` in `resolve_seat_bindings`
+      made which role's name appeared in a conflict message
+      non-deterministic across runs (Python string hash randomization);
+      changed to `sorted(GROUP_ROLES[canonical])` so conflict naming
+      is reproducible.
 
 - [ ] 6. (S2, S3) [COMMIT] Commit `seat_bindings.py` and
       `tests/test_seat_bindings.py`.
