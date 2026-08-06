@@ -2,15 +2,18 @@
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S1) Run the full-tree call-site sweep and paste raw output
+- [x] 1. (S1) Run the full-tree call-site sweep and paste raw output
       into a new `experiments/2026-08-06-change-seat-census-s1/CENSUS.md`
       under a "Raw sweep" section: `grep -rn "\.call(" src/deepreason
       --include="*.py"` and `grep -n
       "render_role_prompt\|EndpointLease(\|select_lease" src/deepreason/cli/doctor.py`.
       done-when: CENSUS.md exists with a "## M0 — raw sweep" section
       containing both pasted command blocks verbatim.
+      DONE: CENSUS.md created with "## M0 — raw sweep" containing both
+      commands' full pasted output (43 lines from the `.call(` sweep,
+      4 lines from the doctor.py sweep).
 
-- [ ] 2. (S1) Triage every hit from the raw sweep: mark each as an
+- [x] 2. (S1) Triage every hit from the raw sweep: mark each as an
       LLMAdapter-family call site (promoted) or excluded (`.call(` on a
       non-adapter object, e.g. a pydantic method), one line per hit with
       the reason for exclusions.
@@ -18,8 +21,13 @@ order. One step per dr-execute-step invocation.
       entries plus the promoted-site count together equal the total
       line count of the raw sweep (paste the arithmetic: total lines =
       excluded + promoted).
+      DONE: 0 excluded, 44 promoted (43 `adapter.call`-family +
+      1 `doctor.py` `render_role_prompt` dispatch), 3 non-dispatch
+      evidence lines (2 `EndpointLease(` construction, 1 import) folded
+      into the doctor.py row's evidence, not double-counted as sites.
+      Arithmetic pasted in CENSUS.md's "Excluded hits" section.
 
-- [ ] 3. (S3) Paste `select_lease`, `EndpointLease`,
+- [x] 3. (S3) Paste `select_lease`, `EndpointLease`,
       `leases_from_endpoints`, `leases_from_manifest` source from
       `src/deepreason/llm/firewall.py` and state, in one paragraph
       grounded only in that pasted text, what `select_lease` can vary
@@ -27,8 +35,12 @@ order. One step per dr-execute-step invocation.
       `(role, seat)`).
       done-when: CENSUS.md has a "## select_lease degrees of freedom"
       section with the pasted source and the derived-variance paragraph.
+      DONE: section added with `Route`/`EndpointLease`/
+      `leases_from_endpoints`/`leases_from_manifest`/`select_lease`
+      source (line ranges verified against fresh `sed -n` output) and
+      the derived-variance paragraph.
 
-- [ ] 4. (S2) Build the M-numbered table: one row per promoted call site
+- [x] 4. (S2) Build the M-numbered table: one row per promoted call site
       from step 2, columns = M#, file:line, role rendered,
       template_role (if any), lease selection path (`select_lease` via
       `_render_request` vs. doctor.py's direct `EndpointLease`
@@ -36,8 +48,16 @@ order. One step per dr-execute-step invocation.
       step 3's finding or a site-specific deviation if found).
       done-when: `grep -c "^| M" experiments/2026-08-06-change-seat-census-s1/CENSUS.md`
       equals the promoted-site count recorded in step 2.
+      DONE: `grep "^| M" CENSUS.md | grep -v "^| M#" | wc -l` = 44,
+      matching the 44 promoted sites. Table also cites a new,
+      more-direct piece of evidence found while building it
+      (`preparation.py:276`, `roles={role: dict(endpoint) for role in
+      V3_CANONICAL_ROLES}`) for the frozen-per-role column, plus the
+      genuine v6 per-seat PRESENTATION nuance
+      (`resolve_route_seat_base_profile`) reached by M42/M44 — recorded,
+      not glossed over.
 
-- [ ] 5. (S10, A1) For every plan-named module confirmed to hold zero
+- [x] 5. (S10, A1) For every plan-named module confirmed to hold zero
       call sites of its own (workloads/website.py, workloads/code.py,
       workloads/formal.py, workloads/text.py, workloads/simulation.py,
       qualification.py, capabilities/simulation.py,
@@ -49,8 +69,11 @@ order. One step per dr-execute-step invocation.
       row per module listed above, each backed by a pasted command
       showing zero `.call(`/`select_lease`/`render_role_prompt` hits in
       that module.
+      DONE: 10/10 modules confirmed zero-hit (fresh grep loop pasted)
+      with a delegation target and evidence pointer each (module
+      docstrings, import lists, and constructor dependency shapes).
 
-- [ ] 6. (S1,S2,S3,S10) [COMMIT] Commit CENSUS.md.
+- [x] 6. (S1,S2,S3,S10) [COMMIT] Commit CENSUS.md.
       done-when: `git log -1 --stat` shows CENSUS.md added, pushed to
       `origin/claude/seat-census-rung-s1-7gphj9`.
 
