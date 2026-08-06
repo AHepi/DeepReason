@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=7 blockers=none
+State: next=9 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -68,7 +68,7 @@ order. One step per dr-execute-step invocation.
       DONE: commit `f8b3dc6b`, 4 files changed (module, tests,
       sweep-before.txt, CHECKLIST.md), pushed.
 
-- [ ] 7. (S1) Add `--seat` (`action="append"`, `metavar="GROUP=PATH"`)
+- [x] 7. (S1) Add `--seat` (`action="append"`, `metavar="GROUP=PATH"`)
       to the `setup` subcommand's argparse registration in
       `cli/main.py`, and the dispatch block calling
       `parse_seat_flags`/`write_seat_bindings` after
@@ -76,8 +76,14 @@ order. One step per dr-execute-step invocation.
       `None`.
       done-when: `deepreason setup --help` output contains `--seat`
       (paste the relevant line).
+      DONE: `--seat GROUP=PATH   bind an existing provider profile
+      file to a role group (conjecture, coder, scratch, simulation);
+      repeatable, default (no --seat) leaves every role on the
+      profile above`. `SeatBindingError` needed no separate except
+      clause -- it subclasses `ValueError`, already caught by the
+      existing handler.
 
-- [ ] 8. (S1) Add a `tests/test_cli_setup_seats.py` (or extend
+- [x] 8. (S1) Add a `tests/test_cli_setup_seats.py` (or extend
       `tests/test_easy.py`/an existing CLI test file) proving: a
       scripted non-interactive `setup` call with `--seat
       conjecture=<path>` writes `seat-bindings.yaml` containing
@@ -85,6 +91,9 @@ order. One step per dr-execute-step invocation.
       a call with NO `--seat` writes no such file.
       done-when: `python -m pytest tests/test_cli_setup_seats.py -q`
       (or the extended file, named exactly) passes, output pasted.
+      DONE: `2 passed in 0.24s`. Drives `_main(["setup", ...])` end to
+      end (argparse + dispatch), not just `easy.setup_wizard`
+      directly, so it actually exercises step 7's new wiring.
 
 - [ ] 9. (S1) [COMMIT] Commit the CLI wiring and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
