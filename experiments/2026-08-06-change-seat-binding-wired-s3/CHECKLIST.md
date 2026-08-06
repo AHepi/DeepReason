@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=17 blockers=none
+State: next=22 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -190,25 +190,51 @@ order. One step per dr-execute-step invocation.
       (first attempt used "route" not "routing" in the name, missing
       the `-k routing` filter; renamed).
 
-- [ ] 17. (S8) [COMMIT] Commit the routing-proof test.
+- [x] 17. (S8) [COMMIT] Commit the routing-proof test.
       done-when: `git log -1 --stat` shows the file, pushed.
+      DONE: commit `abac0eaa`, pushed.
 
-- [ ] 18. (S7) Capture the AFTER sweep and diff against step 1's
+- [x] 18. (S7) Capture the AFTER sweep and diff against step 1's
       before file:
       `python tools/root_sweep.py experiments/2026-08-06-change-seat-binding-wired-s3/sweep-after.txt`
       then `diff experiments/2026-08-06-change-seat-binding-wired-s3/sweep-before.txt experiments/2026-08-06-change-seat-binding-wired-s3/sweep-after.txt`.
       done-when: the diff is empty (pasted).
+      DONE: `SWEEP COMPLETE: 45 roots -> sweep-after.txt`; `diff
+      sweep-before.txt sweep-after.txt` exit 0, no output — byte-
+      identical.
 
-- [ ] 19. (all) Map gate: `python tools/docs_verify.py` (full mode).
+- [x] 19. (all) Map gate: `python tools/docs_verify.py` (full mode).
       done-when: output ends with a summary line containing "0 failed".
+      DONE: `docs_verify [full]: 52 documents, 824 checks, 4 workers` /
+      `docs_verify: 0 failed`.
 
-- [ ] 20. (all) Full gate: `pytest tests/ -q -n 4`.
+- [x] 20. (all) Full gate: `pytest tests/ -q -n 4`.
       done-when: output ends "N passed, 0 failed" (pasted in full).
+      RESULT: `1 failed, 3357 passed, 7 skipped in 473.17s (0:07:53)`
+      -- the failure is
+      `tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`,
+      the IDENTICAL pre-existing defect already diagnosed and parked
+      as P3 in `experiments/2026-08-06-change-seat-census-s1/PARKED.md`
+      (a continued root now carries 2 module-fingerprint stamps where
+      the test expects 1). Confirmed unrelated to this tranche: `git
+      log --oneline b4327cc6..HEAD -- src/deepreason/harness.py
+      src/deepreason/module_events.py tests/test_module_fingerprints.py`
+      is empty -- this tranche never touched any file that test
+      depends on. 3357 passed (up from S1's 3339, matching the ~18
+      new tests this tranche added). Per dr-execute-step's own rule
+      ("a pre-existing failure you can prove pre-dates the change...
+      goes to PARKED.md, does not block"), NOT re-fixed here; noted
+      again in this tranche's own PARKED.md at step 21 pointing back
+      to the existing P3 entry rather than duplicating its diagnosis.
 
-- [ ] 21. (S10) Write or confirm `PARKED.md`: any defect noticed while
+- [x] 21. (S10) Write or confirm `PARKED.md`: any defect noticed while
       implementing this rung (e.g. anything found beyond A4's already-
       recorded `experimenter`-template gap) that was not fixed here.
       done-when: `PARKED.md` exists in the tranche dir.
+      DONE: P1 (step 20's pre-existing failure, pointing back to S1's
+      P3 rather than re-diagnosing) + a note that this tranche's own
+      3 implementation bugs were all caught and fixed within the same
+      step, none left open.
 
 - [ ] 22. (all) [COMMIT] Final commit of any remaining tranche
       changes, push with retry, confirm clean tree.
