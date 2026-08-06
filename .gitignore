@@ -45,3 +45,4 @@ experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab_driver.log
 # repository into itself.
 .claude/worktrees/
 .docs_verify_cache.json
+experiments/*/env
