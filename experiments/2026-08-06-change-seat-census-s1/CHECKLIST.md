@@ -77,7 +77,7 @@ order. One step per dr-execute-step invocation.
       done-when: `git log -1 --stat` shows CENSUS.md added, pushed to
       `origin/claude/seat-census-rung-s1-7gphj9`.
 
-- [ ] 7. (S6) Author `docs/map/CON-seats.md` following
+- [x] 7. (S6) Author `docs/map/CON-seats.md` following
       `docs/map/SCHEMA.md`'s convention (doc-id comment, `Verified-at`/
       `Verify`/`Owns`/`Seams` headers, prose "What it is"/"Where it
       lives"/"The rules it obeys" sections, `` `check:` `` lines at
@@ -86,21 +86,40 @@ order. One step per dr-execute-step invocation.
       `llm/adapter.py`, and `cli/doctor.py`'s bypass of `select_lease`.
       done-when: `python tools/docs_verify.py --self-test` exits 0 and
       the file contains at least one `` `check:` `` line at column 0.
+      DONE: `docs_verify --self-test: ok`. File has 6 `check:` lines,
+      an "## Traps" section, and reuses existing `DR-SEAM-llm-x-manifest`/
+      `DR-SEAM-llm-x-rules` (both already exist) rather than inventing
+      new seam documents (out of scope per S8/R9).
 
-- [ ] 8. (S6, A3) Add a `docs/map/INDEX.md` row linking to
+- [x] 8. (S6, A3) Add a `docs/map/INDEX.md` row linking to
       `CON-seats.md` in the concept table.
       done-when: `grep -n "CON-seats" docs/map/INDEX.md` shows the new
       row.
+      DONE: `64:| \`CON-seats.md\` | how a role becomes a provider
+      request: \`select_lease\`, \`EndpointLease\`, and today's
+      one-profile-per-run mint |`
 
-- [ ] 9. (S7) Run `python tools/docs_verify.py` (full mode, no
+- [x] 9. (S7) Run `python tools/docs_verify.py` (full mode, no
       `--fast`) and paste the complete output; fix `CON-seats.md` and
       re-run until the summary line reads 0 failed. Also run
       `python tools/docs_verify.py --links` as a non-blocking bonus
       check (A3) and paste its result too.
       done-when: the full-mode run's pasted output ends with a summary
       line containing "0 failed".
+      DONE (with an environment-preflight detour, no src/ or CON-
+      seats.md fix needed): first full run found `pytest`/`jsonschema`
+      missing from this container (declared `dev` extra + one
+      undeclared test import) -- 295 then 2 failures, both purely
+      "ModuleNotFoundError", zero relation to CON-seats.md's own 6
+      checks (all green on the first run already). Installed
+      `pip install -e ".[dev]" --break-system-packages` and
+      `pip install jsonschema --break-system-packages` (environment
+      completion, not a src/ or doc change) and re-ran:
+      `docs_verify [full]: 52 documents, 823 checks, 4 workers` /
+      `docs_verify: 0 failed`. `--links`: `docs_verify --links: 0
+      dangling reference(s), 52 document(s)`.
 
-- [ ] 10. (S6,S7) [COMMIT] Commit `docs/map/CON-seats.md` and the
+- [x] 10. (S6,S7) [COMMIT] Commit `docs/map/CON-seats.md` and the
       `INDEX.md` row together.
       done-when: `git log -1 --stat` shows both files, pushed.
 
