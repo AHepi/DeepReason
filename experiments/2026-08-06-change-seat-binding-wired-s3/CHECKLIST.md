@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=9 blockers=none
+State: next=12 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -95,10 +95,11 @@ order. One step per dr-execute-step invocation.
       end (argparse + dispatch), not just `easy.setup_wizard`
       directly, so it actually exercises step 7's new wiring.
 
-- [ ] 9. (S1) [COMMIT] Commit the CLI wiring and its test.
+- [x] 9. (S1) [COMMIT] Commit the CLI wiring and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
+      DONE: commit `e9007ad1`, pushed.
 
-- [ ] 10. (S4, S9) Generalize `_config_for_profile` (optional
+- [x] 10. (S4, S9) Generalize `_config_for_profile` (optional
       `seat_bindings` parameter, default `None`, per SPEC.md's
       Concrete design section) in `preparation.py`, AND in the SAME
       commit update `docs/map/CON-seats.md`'s row 44 and its
@@ -108,8 +109,16 @@ order. One step per dr-execute-step invocation.
       done-when: `python tools/docs_verify.py --self-test` exits 0 and
       `grep -n "_config_for_profile" docs/map/CON-seats.md` shows the
       updated check line.
+      DONE: self-test ok; full `docs_verify` also re-run:
+      `docs_verify [full]: 52 documents, 824 checks, 4 workers` /
+      `docs_verify: 0 failed` (824, up from 823 -- the new
+      SEAT_BINDING_ROLE_CONFLICT check landed and passed). Also
+      verified: `_config_for_profile(profile)` (no seat_bindings)
+      produces roles identical to before; with an override, only the
+      named role changes. `tests/test_reusable_qualification.py`:
+      31/31 still passing (MUST NOT MOVE, confirmed).
 
-- [ ] 11. (S4) Add a test proving: `_config_for_profile(profile)` (no
+- [x] 11. (S4) Add a test proving: `_config_for_profile(profile)` (no
       `seat_bindings`) produces a `roles` dict identical to today's
       `{role: dict(endpoint) for role in V3_CANONICAL_ROLES}`; with
       `seat_bindings={"conjecturer": other_profile}`,
@@ -118,6 +127,7 @@ order. One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_reusable_qualification.py -q -k config_for_profile`
       (extending that existing file, since it already imports
       `_config_for_profile`) passes, output pasted.
+      DONE: `2 passed, 31 deselected in 0.19s`.
 
 - [ ] 12. (S4, S9) [COMMIT] Commit the `_config_for_profile`
       generalization, its test, and the `docs/map/CON-seats.md`

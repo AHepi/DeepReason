@@ -1,7 +1,7 @@
 <!-- DR-CON-seats -->
-Verified-at: 43a485a9
+Verified-at: e9007ad1
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py
+Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
 Seams-undocumented: capabilities x seats, scratch x seats, workloads x seats, doctor x seats
 
@@ -20,16 +20,21 @@ identity. Nothing in this mechanism forces two roles, or two seats of
 one role's ensemble, to share a model — the routing seam already
 supports per-seat model assignment.
 
-What every ordinary run does today, instead, is mint ONE
-`ProviderProfileV1` at `deepreason setup` (one provider/endpoint/
-model/model_profile bundle) and copy its `endpoint_spec()` into every
+What every run does BY DEFAULT (no `--seat` flags at `deepreason
+setup`) is mint ONE `ProviderProfileV1` (one provider/endpoint/model/
+model_profile bundle) and copy its `endpoint_spec()` into every
 canonical role identically. So "which model answers role X" is
 uniform across a run not because the mechanism can't vary it, but
-because nothing upstream of `select_lease` ever populates the table
-with more than one distinct `Route`. This is measured, not designed,
-territory — see `docs/proposals/ROLE_SEAT_SEPARATION_PLAN.md` for the
-program that would spend this slack; this document describes only
-what exists.
+because nothing upstream of `select_lease` populated the table with
+more than one distinct `Route` — until Rung S3 (role-seat separation)
+gave `deepreason setup` an OPT-IN way to do exactly that: `--seat
+<group>=<path>` binds an existing profile file to a role group
+(`conjecture`, `coder`, `scratch`, `simulation`, the last an alias of
+the first), persisted separately from the default profile and
+resolved into per-role `Route`s at manifest-compile time — never a new
+`Config`/`RunManifest` field (see `seat_bindings.py`). Absent any
+`--seat` flag, behavior is exactly the historical uniform broadcast,
+byte-identical.
 
 ## Where it lives
 
@@ -41,8 +46,9 @@ what exists.
 | Building the frozen table once per adapter | `llm/firewall.py` | `leases_from_endpoints` (legacy `config.roles`), `leases_from_manifest` (v6 `RunManifest.roles`) |
 | Ordinary dispatch: render, resolve seat, call the provider | `llm/adapter.py` | `LLMAdapter.call`, `LLMAdapter._render_request` |
 | Presentation profile (compact/standard/frontier) — per-run today; per-`(role, seat, endpoint_id)` already possible in v6 | `llm/adapter.py`, `run_manifest.py` | `LLMAdapter.profile_for`/`base_profile_for` (legacy, one `self.base_model_profile`); `resolve_route_seat_base_profile` (v6, already seat-scoped) |
-| The one place every canonical role gets its route today | `preparation.py` | `_config_for_profile` |
+| Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
 | The setup-time provider/model/transport bundle | `provider_profile.py` | `ProviderProfileV1` |
+| Role-group -> role-name expansion, binding persistence, and the never-last-wins conflict refusal | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
 | The ONE call site that bypasses `LLMAdapter.call` entirely | `cli/doctor.py` | qualification battery: `render_role_prompt` + inline `EndpointLease` construction, dispatched via `endpoint.complete` directly |
 
 ## The rules it obeys
@@ -59,10 +65,19 @@ battery, which renders and dispatches on its own.** No third path
 exists.
 `check: ! grep -rn "render_role_prompt(" src/deepreason --include="*.py" | grep -qv "src/deepreason/llm/roles.py\|src/deepreason/llm/adapter.py\|src/deepreason/cli/doctor.py"`
 
-**Every canonical role is populated from the SAME single endpoint at
-setup time.** This, not a limitation in `select_lease`, is why no
-call site's presentation is frozen per-role today.
-`check: grep -q "roles={role: dict(endpoint) for role in V3_CANONICAL_ROLES}" src/deepreason/preparation.py`
+**Every canonical role is populated from the SAME single endpoint by
+default; `seat_bindings` overrides specific roles onto a different
+endpoint when bound.** The uniform default, not a limitation in
+`select_lease`, is why presentation was frozen per-role before Rung S3
+— and the override is resolved entirely before `Config` is built, so
+`RunManifest.roles`/`compile_run_manifest` need no schema change to
+carry it (already-heterogeneous-capable, per this document's own
+"one role-seat bound to one immutable route" row).
+`check: grep -q "seat_bindings and role in seat_bindings" src/deepreason/preparation.py`
+
+**A role bound by two different `--seat` groups with two different
+profiles refuses typed; it never silently picks the last one parsed.**
+`check: grep -q "SEAT_BINDING_ROLE_CONFLICT" src/deepreason/seat_bindings.py`
 
 **The qualification battery never calls `select_lease`; it builds its
 own `EndpointLease` straight from the manifest's per-`(role, seat)`

@@ -260,8 +260,23 @@ def _request_digest(
     return sha256_hex(_REQUEST_DOMAIN + canonical_json(payload))
 
 
-def _config_for_profile(profile: ProviderProfileV1) -> Config:
+def _config_for_profile(
+    profile: ProviderProfileV1,
+    *,
+    seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
+) -> Config:
     endpoint = profile.endpoint_spec()
+    # seat_bindings overrides specific roles onto a DIFFERENT profile's
+    # endpoint (Rung S3, role-seat separation); every other role keeps the
+    # one broadcast endpoint, exactly as before seat bindings existed.
+    roles = {
+        role: dict(
+            seat_bindings[role].endpoint_spec()
+            if seat_bindings and role in seat_bindings
+            else endpoint
+        )
+        for role in V3_CANONICAL_ROLES
+    }
     return Config(
         engine_profile="full",
         model_profile=profile.model_profile,
@@ -273,7 +288,7 @@ def _config_for_profile(profile: ProviderProfileV1) -> Config:
         # deterministic hashing embedder: no optional neural dependency may
         # decide public manifest identity.
         EMBEDDER_MODEL=None,
-        roles={role: dict(endpoint) for role in V3_CANONICAL_ROLES},
+        roles=roles,
     )
 
 

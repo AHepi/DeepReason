@@ -82,6 +82,29 @@ def _qualified_report(manifest):
     )
 
 
+def test_config_for_profile_no_seat_bindings_is_byte_identical_to_before_s3():
+    """R3: default (no seat_bindings) reproduces the historical uniform
+    broadcast exactly — the whole gate must not notice Rung S3 landed."""
+
+    profile = _profile()
+    config = _config_for_profile(profile)
+    endpoint = profile.endpoint_spec()
+    assert config.roles == {role: dict(endpoint) for role in config.roles}
+
+
+def test_config_for_profile_seat_bindings_overrides_only_the_named_role():
+    """R2/R4: seat_bindings overrides one role's route; every other role
+    keeps the base profile's endpoint (SM1/SM2, S2's approved design)."""
+
+    profile = _profile()
+    other = _profile(model_id="model-b")
+    config = _config_for_profile(profile, seat_bindings={"conjecturer": other})
+    assert config.roles["conjecturer"]["model"] == "model-b"
+    untouched = {r: c for r, c in config.roles.items() if r != "conjecturer"}
+    endpoint = profile.endpoint_spec()
+    assert untouched == {role: dict(endpoint) for role in untouched}
+
+
 @pytest.mark.parametrize(
     "updates",
     [
