@@ -1,3 +1,22 @@
+# Goal: REFUTED — the guard was already covered; see FIX.md
+
+**This goal's Observed line is WRONG and is corrected here rather than
+rewritten, because the wrong turn is itself the finding.**
+`tests/test_workflow_resume_lifecycle_c4.py:353`
+`test_completed_typed_terminal_is_not_continuation_authority` already
+guards `lifecycle.py:273`, using the same construction this goal
+specified, and it kills both meaningful mutations. No test was written.
+
+The error: W1's census proved no committed ROOT can witness the guard,
+and I extended that to "therefore nothing tests it". A constructed test
+needs no committed root — which is what this goal then went on to
+specify in detail. `grep -rn "NOT_AUTHORIZED" tests/` would have found
+it in one command. Full account in FIX.md.
+
+The original text is preserved unchanged below.
+
+---
+
 # Goal: give the resumable-reason guard a regression the gate runs, on a subject no committed root can supply
 Class: regression-risk
 Observed: `src/deepreason/workflow/lifecycle.py:273` refuses a

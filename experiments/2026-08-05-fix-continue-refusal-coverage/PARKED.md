@@ -1,6 +1,31 @@
 # Parked — noticed during the W1 tranche, not done
 
-## X1 — the receipt-present, reason-non-resumable path has no witness at all
+## X1 — WITHDRAWN, the claim was false; the path IS covered
+
+**Corrected 2026-08-05 by tranche
+`2026-08-05-fix-resumable-reason-guard-coverage`. Do not send the
+ready-to-send prompt below.**
+`tests/test_workflow_resume_lifecycle_c4.py:353`
+`test_completed_typed_terminal_is_not_continuation_authority` already
+guards `lifecycle.py:273` with the same construction this entry
+specified, and it kills both meaningful mutations (adding `completed` to
+`RESUMABLE_STOP_REASONS`, and deleting the raise).
+
+The error was an invalid extension of a true fact: the census proved no
+committed ROOT can witness the guard, and I read that as "nothing tests
+it". A constructed test needs no committed root.
+`grep -rn "NOT_AUTHORIZED" tests/` finds it in one command — that is the
+wrapped code, and the guard's own message appears nowhere in `tests/`,
+so only the code finds it.
+
+What survives is **Y1**, recorded in the correcting tranche's PARKED.md:
+the INNER twin at `workflow/replay.py:2251` is genuinely unwitnessed on
+its own. Apply this entry's own lesson before running it — check for an
+existing test first.
+
+The original entry is preserved unchanged below.
+
+### ORIGINAL (withdrawn) — the receipt-present, reason-non-resumable path has no witness at all
 
 This tranche guarded `CONTINUE_TYPED_STOP_REQUIRED`
 (`runtime/continuation.py:352`), which fires when a run holds NEITHER a

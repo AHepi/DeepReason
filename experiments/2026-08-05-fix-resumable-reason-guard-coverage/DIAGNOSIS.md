@@ -1,3 +1,23 @@
+# Diagnosis: SUPERSEDED on its coverage claim — the mechanism is right, the gap is not
+
+**The mechanism below is correct and was confirmed by REPRO.md: the
+StopController emits `completed`/`converged`/`stuck`, the scheduler
+writes all three into a typed receipt, and only `converged` is
+resumable. What is WRONG is the implied conclusion that the guard is
+therefore uncovered.** It is covered, by
+`tests/test_workflow_resume_lifecycle_c4.py::test_completed_typed_terminal_is_not_continuation_authority`,
+which builds the same subject the same way and kills both meaningful
+mutations. See FIX.md.
+
+Note the specific miss: this document read `SUB-workflow`'s Traps
+section (correctly surfacing `test_bridge_after_typed_stop.py`) but not
+the test index of the file `SUB-workflow`'s own `Verify:` line runs,
+where the covering test's NAME states the finding outright.
+
+The original text is preserved unchanged below.
+
+---
+
 # Diagnosis: the guard's real subject is a run that FINISHED — `completed` is a production stop reason, is written into a typed receipt by the production writer, and is not resumable
 
 Primary cause: `RESUMABLE_STOP_REASONS` holds `{converged,

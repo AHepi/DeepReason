@@ -1,5 +1,5 @@
 <!-- DR-SUB-workflow -->
-Verified-at: 08dcdf3c
+Verified-at: a65e8578
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
 Seams: DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-scratch-x-workflow
@@ -186,6 +186,27 @@ model or the reducer — it materializes only what the records already say.
   requires typed RESUMED authority — and so does composition after a
   non-resumable stop.
 `check: grep -q 'RESUMABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})' src/deepreason/workflow/lifecycle.py && python -m pytest tests/test_bridge_after_typed_stop.py::test_terminal_bound_composition_call_survives_a_resumable_stop tests/test_bridge_after_typed_stop.py::test_ordinary_work_after_a_typed_stop_stays_forbidden tests/test_bridge_after_typed_stop.py::test_composition_after_a_non_resumable_stop_stays_forbidden -q`
+- **A census over committed roots cannot tell you what the TESTS cover.**
+  `RESUMABLE_STOP_REASONS` is enforced twice — `lifecycle.py:273` while
+  BUILDING a resume decision (surfaced by `prepare_continuation` as
+  `CONTINUE_NOT_AUTHORIZED`) and `replay.py:2251` while APPLYING the
+  RESUMED transition (`WellFormednessError`, which IS a `ValueError`
+  subclass, so `pytest.raises(ValueError)` alone cannot tell them
+  apart — match the message). Tranche
+  `2026-08-05-fix-resumable-reason-guard-coverage` opened to add a
+  missing test for the first and found one already there:
+  `test_completed_typed_terminal_is_not_continuation_authority`, in the
+  very file this document's `Verify:` line runs. The false premise came
+  from a true census — no committed root carries a receipt whose reason
+  is non-resumable, since all 16 stopped on `budget_exhausted` — read as
+  "therefore nothing tests it". A CONSTRUCTED test needs no committed
+  root. Grep the wrapped error code, not the guard's message: the
+  message string appears nowhere in `tests/`.
+  The subject is not exotic — `StopController` emits
+  `completed`/`converged`/`stuck` and the scheduler writes all three
+  into a typed receipt, so the guard's commonest real subject is a run
+  that FINISHED.
+`check: python -m pytest tests/test_workflow_resume_lifecycle_c4.py::test_completed_typed_terminal_is_not_continuation_authority -q && grep -q 'raise ValueError("terminal stop reason does not authorize RESUMED")' src/deepreason/workflow/replay.py && ! grep -rq "does not authorize continuation" tests/`
 - **The replay digest is append-only in a subtler sense than the log is.**
   Transaction, compact-recovery, insufficient-capability, decomposition and
   classification sections appear in `WorkflowReplayState.digest` only when
