@@ -149,4 +149,30 @@ Questions sections per that skill's procedure, not backfilled here.)
 
 ## Amendments
 
-(none yet)
+R11 (process): operator approval, verbatim, closing this tranche's
+open questions:
+
+> S2 SPEC approved: Option A, sub-choice 2a. Q1: (a) — simulation
+> aliases conjecture for S3, and conflicting --seat values for the
+> shared role set get a typed refusal, never last-one-wins. Q2: 2a
+> confirmed. A1–A3 stand. Proceed to Rung S3 via
+> dr-change-orchestrator: implement the approved binding — setup
+> accepts per-role-group profile paths, _config_for_profile
+> generalized per SM1/SM2, default no-flags behavior byte-identical
+> to today. Full gate 0 failed; sweep byte-identical; two-MockEndpoint
+> routing proof asserted from the typed attempt records. One rung
+> only.
+
+Resolves SPEC.md's Q1 and Q2: Option A (Item S1) with sub-choice 2a
+(Item S2) approved as written; Q1 resolved as reading (a) with an
+ADDITIONAL clause this tranche's SPEC.md did not itself decide — a
+`--seat` conflict on the aliased conjecture/simulation role set is a
+TYPED REFUSAL, never silent last-one-wins. A1-A3 (SPEC.md's
+Assumptions) stand, confirmed, not overridden.
+
+This tranche is closed by this amendment: SPEC.md (design) is the
+sole deliverable R1 scoped, and it is now approved. Implementation is
+Rung S3, a new tranche
+(`experiments/2026-08-06-change-seat-binding-wired-s3/`), not a
+continuation of this one — per this program's own convention (Rung S1
+and Rung S2 each got separate tranche directories).
