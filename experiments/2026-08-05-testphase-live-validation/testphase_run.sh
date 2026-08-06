@@ -33,7 +33,7 @@ mkdir -p "$DEEPREASON_HOME"
 
   run_id=$(python3 -c "import json;print(json.load(open('$LIVE/testphase-reason.json'))['run_id'])" 2>/dev/null)
   echo "run_id=$run_id"
-  root="$DEEPREASON_HOME/runs/run-$run_id"
+  root="$DEEPREASON_HOME/runs/$run_id"   # run_id from reason.json already carries the run- prefix
 
   if [ -n "$run_id" ] && [ -d "$root" ]; then
     python3 - "$root" > "$LIVE/testphase-audit1.json" 2> "$LIVE/testphase-audit1.err" <<'EOF'
