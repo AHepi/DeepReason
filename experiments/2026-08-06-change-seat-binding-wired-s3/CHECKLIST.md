@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=6 blockers=none
+State: next=7 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -62,9 +62,11 @@ order. One step per dr-execute-step invocation.
       changed to `sorted(GROUP_ROLES[canonical])` so conflict naming
       is reproducible.
 
-- [ ] 6. (S2, S3) [COMMIT] Commit `seat_bindings.py` and
+- [x] 6. (S2, S3) [COMMIT] Commit `seat_bindings.py` and
       `tests/test_seat_bindings.py`.
       done-when: `git log -1 --stat` shows both files, pushed.
+      DONE: commit `f8b3dc6b`, 4 files changed (module, tests,
+      sweep-before.txt, CHECKLIST.md), pushed.
 
 - [ ] 7. (S1) Add `--seat` (`action="append"`, `metavar="GROUP=PATH"`)
       to the `setup` subcommand's argparse registration in
