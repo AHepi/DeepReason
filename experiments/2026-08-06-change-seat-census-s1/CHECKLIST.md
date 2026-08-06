@@ -123,32 +123,54 @@ order. One step per dr-execute-step invocation.
       `INDEX.md` row together.
       done-when: `git log -1 --stat` shows both files, pushed.
 
-- [ ] 11. (S9) Write `PARKED.md` in the tranche dir: every defect
+- [x] 11. (S9) Write `PARKED.md` in the tranche dir: every defect
       noticed while reading call sites this rung (file:line,
       description, which step/grep surfaced it), formatted so
       `deepreason-orchestrator`/`dr-set-goal` can start directly from an
       entry; if none surfaced, one line saying so.
       done-when: `PARKED.md` exists in the tranche dir.
+      DONE: P1 (jsonschema undeclared dev dependency, reproduce steps +
+      ready-to-run fix shape) + a note that the v6 per-seat presentation
+      nuance is a measured fact for S2, not a defect.
 
-- [ ] 12. (S5) Spot-check: re-run 3 pasted commands from CENSUS.md
+- [x] 12. (S5) Spot-check: re-run 3 pasted commands from CENSUS.md
       (chosen across steps 1, 3, and 4/5) and diff their fresh output
       against what is pasted in the file.
       done-when: all 3 diffs are empty (paste `diff` invocations and
       their empty results).
+      DONE: 3/3 exact-match confirmed (M0 raw sweep, `select_lease`
+      source, `preparation.py:263-277` mint-time fact) — first attempt
+      used a faulty sed-extraction script that produced false
+      mismatches; redone with direct `grep -F` containment against
+      fresh command output, all 3 pass.
 
-- [ ] 13. (S8) Re-read CENSUS.md and CON-seats.md in full; confirm no
+- [x] 13. (S8) Re-read CENSUS.md and CON-seats.md in full; confirm no
       sentence recommends or decides any Rung S2 question (SeatBinding
       shape, manifest/qualification-contact choice, priced options).
       done-when: `grep -inE "should bind|recommend|SeatBinding|propose
       (a|the) (design|binding)"` over both files returns nothing, or any
       hit is confirmed to be explicitly labeled "not decided here, S2
       territory."
+      DONE: zero hits. Manual re-read confirms both documents describe
+      only present-tense mechanism (what exists), with the one
+      forward-looking sentence in CON-seats.md ("this is measured, not
+      designed, territory... this document describes only what
+      exists") explicitly disclaiming S2 scope.
 
-- [ ] 14. (S4) Confirm no `src/` file was touched by this tranche.
+- [x] 14. (S4) Confirm no `src/` file was touched by this tranche.
       done-when: `git diff --stat 4fa0ce6d..HEAD -- src/` produces no
       output.
+      DONE, but corrected the base commit first: `4fa0ce6d` is the OLD
+      designated branch tip from before this session restarted the
+      branch onto `origin/claude/delivery-rungs-handover-m22sdy`
+      (REQUEST.md's "Standing constraints" explains why) — diffing
+      against it also shows that upstream branch's own prior `src/`
+      work, not this tranche's. The correct base is `7a6d1cdb`, this
+      tranche's actual starting commit (REQUEST.md's first commit
+      parent). `git diff --stat 7a6d1cdb..HEAD -- src/` produces no
+      output: confirmed clean.
 
-- [ ] 15. (all) [COMMIT] Final commit of any remaining tranche
+- [x] 15. (all) [COMMIT] Final commit of any remaining tranche
       changes, push with retry, confirm clean tree.
       done-when: `git status --porcelain` is empty and
       `git rev-parse HEAD` equals
