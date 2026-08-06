@@ -18,6 +18,7 @@ mkdir -p "$DEEPREASON_HOME"
     --provider ollama --endpoint https://ollama.com/v1 \
     --model glm-5.2 --model-revision glm-5.2 --family glm \
     --context-window-tokens 131072 --maximum-completion-tokens 8192 \
+    --reasoning none \
     --credential-env OLLAMA_API_KEY
   echo "setup_rc=$?"
 
