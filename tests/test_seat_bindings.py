@@ -1,5 +1,11 @@
+import json
+
 import pytest
 
+from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.contracts import ConjecturerOutput, JudgeRuling
+from deepreason.llm.endpoints import MockEndpoint
+from deepreason.preparation import _config_for_profile
 from deepreason.provider_profile import ProviderProfileV1, write_provider_profile
 from deepreason.seat_bindings import (
     GROUP_ALIASES,
@@ -11,6 +17,7 @@ from deepreason.seat_bindings import (
     seat_bindings_path,
     write_seat_bindings,
 )
+from deepreason.storage.blobs import BlobStore
 
 
 def _profile(**updates):
@@ -119,6 +126,44 @@ def test_resolve_seat_bindings_same_profile_is_not_a_conflict(tmp_path):
     resolved = resolve_seat_bindings(home=str(tmp_path))
     assert resolved["conjecturer"].model_id == "model-a"
     assert resolved["variator"].model_id == "model-a"
+
+
+def test_seat_bindings_routing_lands_each_role_on_its_own_mock_endpoint(tmp_path):
+    """R7 (plan's own Rung S3 acceptance): a unit run with two
+    MockEndpoint-backed seats shows role-correct routing, asserted from
+    the typed attempt records (LLMCall), not internal state."""
+
+    profile = _profile(model_id="model-default")
+    conjecture_profile = _profile(model_id="model-a")
+    judge_profile = _profile(model_id="model-b")
+
+    config = _config_for_profile(
+        profile,
+        seat_bindings={
+            "conjecturer": conjecture_profile,
+            "judge": judge_profile,
+        },
+    )
+    assert config.roles["conjecturer"]["model"] == "model-a"
+    assert config.roles["judge"]["model"] == "model-b"
+
+    conjecture_good = json.dumps(
+        {"candidates": [{"content": "tides", "typicality": 0.5}]}
+    )
+    judge_good = json.dumps({"verdict": "pass", "decisive_point": "the exchange"})
+    adapter = LLMAdapter(
+        {
+            "conjecturer": MockEndpoint([conjecture_good], name="A", model="model-a"),
+            "judge": MockEndpoint([judge_good], name="B", model="model-b"),
+        },
+        BlobStore(tmp_path / "blobs"),
+    )
+
+    _output_a, call_a = adapter.call("conjecturer", "PACK", ConjecturerOutput)
+    _output_b, call_b = adapter.call("judge", "PACK", JudgeRuling)
+
+    assert call_a.model == "model-a"
+    assert call_b.model == "model-b"
 
 
 def test_resolve_seat_bindings_expands_group_to_its_role_set(tmp_path):

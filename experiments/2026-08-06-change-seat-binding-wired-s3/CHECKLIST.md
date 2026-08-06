@@ -1,5 +1,5 @@
 # Checklist for: the binding, wired — Rung S3 of role-seat separation
-State: next=15 blockers=none
+State: next=17 blockers=none
 Map ids: DR-CON-seats (updated by step 10), DR-SUB-manifest, DR-SUB-llm,
 DR-SUB-application (read-only reference points, per SPEC.md's preflight).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -170,10 +170,11 @@ order. One step per dr-execute-step invocation.
       appended) -- the write and the service's internal read must use
       the identical resolution path.
 
-- [ ] 15. (S5) [COMMIT] Commit the threading and its test.
+- [x] 15. (S5) [COMMIT] Commit the threading and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
+      DONE: commit `9d28d47a`, pushed.
 
-- [ ] 16. (S8) Write the two-`MockEndpoint` routing proof: build
+- [x] 16. (S8) Write the two-`MockEndpoint` routing proof: build
       `seat_bindings={"conjecturer": profile_a, "judge": profile_b}`,
       assert `_config_for_profile`'s resulting `Config.roles` per
       SPEC.md Item S8; separately build an `LLMAdapter` from
@@ -184,6 +185,10 @@ order. One step per dr-execute-step invocation.
       `LLMCall.model` is `"model-a"` / `"model-b"` respectively.
       done-when: `python -m pytest tests/test_seat_bindings.py -q -k routing`
       (or a new test file) passes, output pasted.
+      DONE: `1 passed, 11 deselected`; full file `12 passed in 0.22s`.
+      Test named `test_seat_bindings_routing_lands_each_role_on_its_own_mock_endpoint`
+      (first attempt used "route" not "routing" in the name, missing
+      the `-k routing` filter; renamed).
 
 - [ ] 17. (S8) [COMMIT] Commit the routing-proof test.
       done-when: `git log -1 --stat` shows the file, pushed.
