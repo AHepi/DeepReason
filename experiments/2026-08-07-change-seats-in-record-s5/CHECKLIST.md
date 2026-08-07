@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=2 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -62,6 +62,16 @@ words and the operator's Amendment 1.
       done-when: `python -c "from deepreason.seat_events import
       SeatBindingV1, SeatBindingsEventPayloadV1, recorded_seat_bindings"`
       succeeds.
+
+      DONE 2026-08-07. New file `src/deepreason/seat_events.py`
+      (91 lines), structurally mirroring `module_events.py`:
+
+          OK
+
+      `recorded_seat_bindings` uses `getattr(event, "seat_bindings",
+      None)`, correct before `Event.seat_bindings` exists (step 7).
+      `seat_bindings_for_run` (S3) is NOT in this file yet -- that is
+      step 5's own item, not this one's.
 
 - [ ] 3. (S2, C5) Write `tests/test_seat_bindings_record.py` with the
       READER ABSENCE tests only, pinned to `git ls-files`-tracked roots
