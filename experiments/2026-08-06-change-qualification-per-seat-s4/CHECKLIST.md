@@ -279,7 +279,7 @@ actual behaviour (`_qualify_one_profile`'s per-profile loop,
 `_cmd_status`'s per-seat section). Documentation only — no code
 changes below.
 
-- [ ] 24. (S2, S3, S4) Add `src/deepreason/readiness.py` to
+- [x] 24. (S2, S3, S4) Add `src/deepreason/readiness.py` to
       `CON-seats.md`'s `Owns:` list (seat readiness is genuinely a
       seats-concept function, and `CON-seats.md` is one of SPEC.md's
       three named map documents); add a new "Where it lives" row for
@@ -288,8 +288,18 @@ changes below.
       (return type, `group` field).
       done-when: the new `check:` command, run standalone, exits 0
       (pasted).
+      DONE: `exit=0`. Added `readiness.py` to `Owns:`, a new
+      "## Rung S4" prose section explaining `get_seat_readiness`
+      answers a DIFFERENT question than launch readiness (per-seat
+      "is this profile provably capable" vs M6's combination-subject
+      launch gate) and that the per-profile qualify loop is additive
+      to, never a replacement for, combination-qualify. Check asserts
+      `get_seat_readiness`/`SeatReadinessV1`/`group: str`/
+      `_readiness_fields` all exist AND that both `get_readiness` and
+      `get_seat_readiness` actually call the shared helper (count=2),
+      proving the extraction, not just co-existence.
 
-- [ ] 25. (S2, S4) Add a new row (or short subsection) to
+- [x] 25. (S2, S4) Add a new row (or short subsection) to
       `SUB-application.md` (which already owns `src/deepreason/cli/`)
       documenting `_cmd_qualify`'s additive per-profile loop
       (`_qualify_one_profile`) and `_cmd_status`'s per-seat section in
@@ -298,8 +308,15 @@ changes below.
       documented signature/behaviour.
       done-when: the new `check:` command, run standalone, exits 0
       (pasted).
+      DONE: `52 passed in 12.36s` then `exit=0`. Added a new
+      "Where to change what" row and extended that section's existing
+      aggregated `check:` line (matching the document's own
+      convention: one shared check per table) with the 3 new S2/S4
+      tests plus grep assertions for `_qualify_one_profile`/
+      `_print_qualify_headline`/`_print_qualify_failure`/
+      `get_seat_readiness()`'s call site.
 
-- [ ] 26. (all) Advance `CON-seats.md`'s and `SUB-application.md`'s
+- [x] 26. (all) Advance `CON-seats.md`'s and `SUB-application.md`'s
       `Verified-at:` stamps to `98a5bc8f` (current HEAD at re-planning
       time; step 31's own commit touches no `Owns:` file of either
       document, so this stays accurate after it lands) — honest per
@@ -307,6 +324,9 @@ changes below.
       both documents' checks, including the two new ones, in full.
       done-when: both documents' `Verified-at:` lines read `98a5bc8f`
       (pasted `grep`).
+      DONE:
+      `docs/map/CON-seats.md:2:Verified-at: 98a5bc8f`
+      `docs/map/SUB-application.md:2:Verified-at: 98a5bc8f`
 
 - [ ] 27. (all) Map gate: `python tools/docs_verify.py` (full mode).
       done-when: summary line contains "0 failed".

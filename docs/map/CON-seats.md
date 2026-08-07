@@ -1,7 +1,7 @@
 <!-- DR-CON-seats -->
-Verified-at: e9007ad1
+Verified-at: 98a5bc8f
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py
+Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
 Seams-undocumented: capabilities x seats, scratch x seats, workloads x seats, doctor x seats
 
@@ -35,6 +35,33 @@ resolved into per-role `Route`s at manifest-compile time — never a new
 `Config`/`RunManifest` field (see `seat_bindings.py`). Absent any
 `--seat` flag, behavior is exactly the historical uniform broadcast,
 byte-identical.
+
+Rung S4 (qualification per seat) added the readiness half of the same
+story: `readiness.py::get_seat_readiness` answers, per bound seat
+group, "is THIS seat's own profile provably capable" — independent of
+whether the run's actual COMBINATION (default + every bound profile,
+qualified as one subject per M5/M6 of `experiments/
+2026-08-06-change-qualification-per-seat-s4/SPEC.md`) has itself been
+qualified. It is a pure readiness PROJECTION, computed via the exact
+same per-profile uniform-subject logic `get_readiness` already uses
+(shared helper `_readiness_fields`) — it answers a DIFFERENT question
+than launch readiness, not a finer-grained version of the same one.
+
+## Rung S4 — a per-profile qualify loop is additive to combination-qualify, never a replacement for it
+
+`cli/main.py::_cmd_qualify` runs the EXISTING combination-qualify pass
+(one subject for the whole bound manifest — S3's mechanism, unchanged,
+M5-measured dispatch-pure) and, when seat bindings exist, ADDITIONALLY
+loops over each distinct bound profile (deduped by `profile_digest`)
+qualifying it UNIFORMLY (no seat_bindings — `_qualify_one_profile`,
+the extracted single-profile body). The per-profile loop exists for
+`status`/readiness granularity only; a run's actual launch depends
+solely on the combination subject (M6: `RunPreparationService.prepare`
+already refuses typed for an unqualified combination, unmodified).
+A single-profile home (no `--seat`) has exactly one loop iteration —
+the combination call IS that iteration — so output stays byte-
+identical to pre-S4.
+`check: grep -q "^def get_seat_readiness(" src/deepreason/readiness.py && grep -q "^class SeatReadinessV1" src/deepreason/readiness.py && grep -q "    group: str$" src/deepreason/readiness.py && grep -q "^def _readiness_fields(" src/deepreason/readiness.py && test "$(grep -c "fields = _readiness_fields(" src/deepreason/readiness.py)" = 2`
 
 ## Where it lives
 
