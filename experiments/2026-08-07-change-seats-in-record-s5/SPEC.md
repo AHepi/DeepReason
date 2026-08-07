@@ -413,23 +413,32 @@ not silently assumed.** Checked against
   `seat_bindings` keyword on `_commit`, forwarded verbatim into
   `Event(...)`. `_apply_event` and every well-formedness check stay
   byte-identical (M6, re-verified fresh this phase against the CURRENT
-  tree, not against rung 4's historical diff). **Authorization:**
-  R3/R8's own words, quoted verbatim in REQUEST.md — "follow the rung-4
-  template exactly" — name the mechanism this rung is told to copy, and
-  the rung-4 template, AS ACTUALLY BUILT (M6, verified fresh), IS
-  exactly this narrow appender-plus-keyword shape; nothing broader.
-  This mirrors how the rung-4 tranche's OWN Item S7 accept criterion
-  allowed "the operator's approving words quoted in REQUEST.md" as an
-  alternative to an empty diff — the words are already on the record
-  here, naming the specific template to copy, not merely gesturing at
-  "something like it." Per `INV-frozen-surfaces.md`'s own standing rule
-  (explicit operator approval required for contact) this is treated as
-  sufficient, but it is the single most judgment-laden call in this
-  spec and is flagged here plainly rather than folded silently into an
-  assumption: if the operator reads "follow the template exactly" more
-  narrowly than Item S5's harness.py hunks, that is visible here before
-  any code lands, and the correction is cheap — say so at delivery and
-  the two hunks are reverted to a design-and-stop.
+  tree, not against rung 4's historical diff). **Authorization —
+  RESOLVED, no longer inferred.** REQUEST.md Amendment 1 (R19, R20),
+  the operator's own words sent directly after this SPEC.md was first
+  presented: "Explicit authorization for Rung S5 only: you may add the
+  record_seat_bindings appender plus one _commit keyword to harness.py
+  — zero change to _apply_event or well-formedness. This grant is not
+  transitive to any later rung." This is a VERBATIM match to this
+  item's own already-declared shape (M6) — the earlier reading below
+  (kept for the record, since it is what the operator was ratifying)
+  turned out correct, but the binding authorization is now R19's
+  explicit words, not an inference from R3/R8. R20 additionally records
+  that this grant does NOT extend to Rung S4b or to any future rung's
+  own `harness.py` touch — each needs its own words, exactly as this
+  forecast argued before R19 arrived.
+
+  *Superseded reasoning, kept for the record:* R3/R8's own words,
+  quoted verbatim in REQUEST.md — "follow the rung-4 template exactly"
+  — named the mechanism this rung was told to copy, and the rung-4
+  template, AS ACTUALLY BUILT (M6, verified fresh), IS exactly this
+  narrow appender-plus-keyword shape; nothing broader. This mirrored
+  how the rung-4 tranche's OWN Item S7 accept criterion allowed "the
+  operator's approving words quoted in REQUEST.md" as an alternative to
+  an empty diff. This was flagged as the single most judgment-laden
+  call in the spec rather than folded silently into an assumption —
+  R19 is that flag being answered directly, not a case where the
+  reading turned out wrong.
 - **Surface 3** (`invariants.py`, `verification/`): no contact. No new
   `Rule`, no new `verify_root` finding (S4's fence design), so no
   `report.py` entry is owed — mirrors M5/R16 from the rung-4 precedent

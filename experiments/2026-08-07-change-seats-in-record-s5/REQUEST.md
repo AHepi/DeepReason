@@ -417,5 +417,36 @@ failure mode is squarely this rung's own design responsibility.
 
 ## Amendments
 
-(append-only; later operator messages land here as R<n+1>... or
-"R2a supersedes R2", each with its verbatim quote)
+**Amendment 1 (2026-08-07, operator message, verbatim).** Sent after
+SPEC.md was committed and presented, directly ratifying the frozen-
+surface authorization SPEC.md flagged as its single most judgment-laden
+call:
+
+> Explicit authorization for Rung S5 only: you may add the record_seat_
+> bindings appender plus one _commit keyword to harness.py — zero
+> change to _apply_event or well-formedness. This grant is not
+> transitive to any later rung.
+
+New requirement, quoting the operator's own words:
+
+R19 (frozen-surface authorization, the narrowest reading is the binding
+one, mirroring how R18 bound the rung-4 precedent this rung copies):
+"you may add the record_seat_bindings appender plus one _commit keyword
+to harness.py — zero change to _apply_event or well-formedness." This
+authorizes EXACTLY two things and no third: (a) a `record_seat_bindings`
+appender method in `harness.py`; (b) one `seat_bindings` keyword
+parameter on `_commit`, forwarded into `Event(...)`. Nothing in
+`_apply_event`; nothing in any well-formedness check. Any diff hunk in
+`harness.py` outside these two is OUTSIDE this authorization and is a
+stop condition, not a judgement call — matches exactly SPEC.md Item S5's
+own already-declared shape (M6, re-verified against the current tree),
+so this ratifies SPEC.md's reading rather than changing it.
+
+R20 (process, non-transitivity, explicit): "This grant is not
+transitive to any later rung." Binding precedent for the future: Rung
+S5's own harness.py authorization does NOT carry forward to Rung S4b
+(parked, its own frozen-surface-5 gate already recorded a fresh
+authorization is owed) or to any future rung touching `harness.py`
+again — each such rung's own `dr-spec-change` must obtain its own
+words, exactly as SPEC.md's own forecast already argued when reasoning
+about why rung 4's R18 did not automatically extend to this rung.
