@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=3 blockers=none
+State: next=4 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -73,7 +73,7 @@ words and the operator's Amendment 1.
       `seat_bindings_for_run` (S3) is NOT in this file yet -- that is
       step 5's own item, not this one's.
 
-- [ ] 3. (S2, C5) Write `tests/test_seat_bindings_record.py` with the
+- [x] 3. (S2, C5) Write `tests/test_seat_bindings_record.py` with the
       READER ABSENCE tests only, pinned to `git ls-files`-tracked roots
       (never a hardcoded count — C5's trap: a census check expires, a
       partition check does not): `recorded_seat_bindings` returns `()`
@@ -82,6 +82,20 @@ words and the operator's Amendment 1.
       writer exists yet.
       done-when: `python -m pytest tests/test_seat_bindings_record.py -q`
       -> "N passed, 0 failed".
+
+      DONE 2026-08-07. `pytest`/`pytest-xdist`/`jsonschema` were absent
+      from this container (same environment finding as rung 4's
+      PARKED.md P6); installed via
+      `pip install pytest pytest-xdist jsonschema --break-system-packages`.
+      Four tests, all reader-side; no writer exists yet. Roots pinned
+      to `git ls-files` only. The committed-root test asserts the
+      reader never raises and returns a tuple for every openable root
+      -- deliberately NOT "every root shows absence", which would be
+      exactly C5's expiring-census shape the moment a future run stamps
+      one:
+
+          ....                                                     [100%]
+          4 passed in 84.60s (0:01:24)
 
 - [ ] 4. (S2) [COMMIT] Mutation-prove the absence reader can fail:
       replace `recorded_seat_bindings`'s `getattr(event, "seat_bindings",
