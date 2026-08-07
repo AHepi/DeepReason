@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=23 blockers=none
+State: next=24 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -255,7 +255,78 @@ order. One step per dr-execute-step invocation.
       P3 / S3's P1, re-confirmed unrelated for this tranche's own
       commit range).
 
-- [ ] 23. (all) [COMMIT] Final commit of any remaining tranche
+- [x] 23. (all) [COMMIT] Final commit of any remaining tranche
       changes, push with retry, confirm clean tree.
+      done-when: `git status --porcelain` empty; `git rev-parse HEAD`
+      equals `git rev-parse origin/claude/seat-census-rung-s1-7gphj9`.
+      DONE: commit `2905c12e`, pushed
+      (`4957e267..2905c12e claude/seat-census-rung-s1-7gphj9 ->
+      claude/seat-census-rung-s1-7gphj9`); `git status --porcelain`
+      empty; `local == remote` confirmed (checkbox missed at the time,
+      caught and back-filled during re-planning after VALIDATION.md's
+      FAIL — see steps 24+ below for the map-coverage gap that FAIL
+      found).
+
+## Re-planning after VALIDATION.md's FAIL (commit `98a5bc8f`)
+
+`docs_verify --stale` showed `SUB-application.md` stale due to THIS
+tranche's own commits (`68b5b69b`, `1da24da7`) touching `cli/main.py`'s
+owned surface, and none of the three map documents SPEC.md's own Map
+preflight named (`SUB-application.md`, `CON-seats.md`,
+`SUB-manifest.md`) gained any prose or `check:` line for S2/S3/S4's
+actual behaviour (`_qualify_one_profile`'s per-profile loop,
+`get_seat_readiness`/`SeatReadinessV1` in `readiness.py`,
+`_cmd_status`'s per-seat section). Documentation only — no code
+changes below.
+
+- [ ] 24. (S2, S3, S4) Add `src/deepreason/readiness.py` to
+      `CON-seats.md`'s `Owns:` list (seat readiness is genuinely a
+      seats-concept function, and `CON-seats.md` is one of SPEC.md's
+      three named map documents); add a new "Where it lives" row for
+      `get_seat_readiness`/`SeatReadinessV1` plus a new `check:` line
+      asserting the function/model exist with the correct shape
+      (return type, `group` field).
+      done-when: the new `check:` command, run standalone, exits 0
+      (pasted).
+
+- [ ] 25. (S2, S4) Add a new row (or short subsection) to
+      `SUB-application.md` (which already owns `src/deepreason/cli/`)
+      documenting `_cmd_qualify`'s additive per-profile loop
+      (`_qualify_one_profile`) and `_cmd_status`'s per-seat section in
+      `cli/main.py`, with a new `check:` line asserting
+      `_qualify_one_profile`/`_print_qualify_headline` exist with the
+      documented signature/behaviour.
+      done-when: the new `check:` command, run standalone, exits 0
+      (pasted).
+
+- [ ] 26. (all) Advance `CON-seats.md`'s and `SUB-application.md`'s
+      `Verified-at:` stamps to `98a5bc8f` (current HEAD at re-planning
+      time; step 31's own commit touches no `Owns:` file of either
+      document, so this stays accurate after it lands) — honest per
+      `docs/map/SCHEMA.md`'s rule, since step 27 re-runs every one of
+      both documents' checks, including the two new ones, in full.
+      done-when: both documents' `Verified-at:` lines read `98a5bc8f`
+      (pasted `grep`).
+
+- [ ] 27. (all) Map gate: `python tools/docs_verify.py` (full mode).
+      done-when: summary line contains "0 failed".
+
+- [ ] 28. (all) `python tools/docs_verify.py --audit`.
+      done-when: "0 finding(s)".
+
+- [ ] 29. (all) `python tools/docs_verify.py --links`.
+      done-when: "0 dangling reference(s)".
+
+- [ ] 30. (all) `python tools/docs_verify.py --stale`, confirm
+      `SUB-application.md` and `CON-seats.md` no longer list
+      `68b5b69b`/`1da24da7`/this step's own commit as causing
+      staleness (any OTHER document's pre-existing staleness from
+      unrelated tranches is out of scope, unaffected).
+      done-when: neither document appears in the output, or if either
+      appears it lists zero commits from this tranche's range
+      (pasted).
+
+- [ ] 31. (all) [COMMIT] Commit the map updates, push with retry,
+      confirm clean tree.
       done-when: `git status --porcelain` empty; `git rev-parse HEAD`
       equals `git rev-parse origin/claude/seat-census-rung-s1-7gphj9`.
