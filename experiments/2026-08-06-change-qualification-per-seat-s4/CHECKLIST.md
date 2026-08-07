@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=20 blockers=none
+State: next=21 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -215,8 +215,10 @@ order. One step per dr-execute-step invocation.
       DONE: `SWEEP COMPLETE: 45 roots -> sweep-after.txt`;
       `diff sweep-before.txt sweep-after.txt` -> `SWEEP_DIFF_EMPTY`.
 
-- [ ] 20. (all) Map gate: `python tools/docs_verify.py` (full mode).
+- [x] 20. (all) Map gate: `python tools/docs_verify.py` (full mode).
       done-when: summary line contains "0 failed".
+      DONE: `docs_verify [full]: 52 documents, 824 checks, 4 workers`;
+      `docs_verify: 0 failed`.
 
 - [ ] 21. (all) Full gate: `pytest tests/ -q -n 4`.
       done-when: output pasted in full; net of the already-diagnosed
