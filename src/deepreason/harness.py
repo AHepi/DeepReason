@@ -650,6 +650,25 @@ class Harness:
             module_fingerprints=payload,
         )
 
+    def record_seat_bindings(self, payload: "SeatBindingsEventPayloadV1") -> Event:
+        """Append one stamp of which provider/model sat in which seat.
+
+        Mirrors ``record_module_fingerprints`` exactly: the harness records
+        the identity its caller already resolved, computing none of its own,
+        and the payload materializes no state, so replay applies it by
+        ignoring it and no historical root acquires a new obligation.
+        """
+
+        payload = payload.__class__.model_validate(
+            payload.model_dump(mode="python", by_alias=True)
+        )
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[payload.schema_, payload.digest],
+            outputs=[],
+            seat_bindings=payload,
+        )
+
     def record_scratch_event(
         self,
         payload: ScratchEventPayloadV1,
@@ -1995,6 +2014,7 @@ class Harness:
         ) = None,
         capability: CapabilityEventPayloadV1 | None = None,
         module_fingerprints: ModuleFingerprintsEventPayloadV1 | None = None,
+        seat_bindings: "SeatBindingsEventPayloadV1 | None" = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -2012,6 +2032,7 @@ class Harness:
             control=control,
             capability=capability,
             module_fingerprints=module_fingerprints,
+            seat_bindings=seat_bindings,
         )
         try:
             state_diff = self._apply_event(event)

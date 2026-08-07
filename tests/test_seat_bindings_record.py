@@ -210,3 +210,41 @@ def test_a_measure_event_without_seat_bindings_is_still_ordinary(tmp_path):
     harness = Harness(tmp_path / "run")
     harness.record_measure(inputs=["cycle", "0", "pi-seed"])
     assert recorded_seat_bindings(harness) == ()
+
+
+def test_the_appender_round_trips_through_the_log_alone(tmp_path):
+    """R2: the stamp must be in the RECORD, which means a reader that has
+    only the log -- not the live session -- can recover it."""
+
+    harness = Harness(tmp_path / "run")
+    payload = _seat_payload()
+    harness.record_seat_bindings(payload)
+
+    reopened = Harness(tmp_path / "run", read_only=True)
+    got = recorded_seat_bindings(reopened)
+    assert [p.digest for p in got] == [payload.digest]
+    assert got[0].bindings[0].group == "coder"
+
+
+def test_recorded_seat_bindings_is_a_partition_claim_never_a_single_unpack(tmp_path):
+    """Q5/A5: two stamps on ONE run's log -- the shape a continuation
+    could legitimately produce -- must both come back, in append order,
+    never assumed down to one.
+
+    Regression discipline (P1/P3, this program's own recorded pre-
+    existing defect in ``tests/test_module_fingerprints.py``): that
+    reader's own test used ``(payload,) = recorded_module_fingerprints(
+    ...)``, which broke the moment a continued root carried two stamps.
+    This rung's own reader test is written as a partition claim from the
+    start, so it manufactures no new instance of that failure mode.
+    """
+
+    harness = Harness(tmp_path / "run")
+    first = _seat_payload(group="coder")
+    second = _seat_payload(group="scratch")
+    harness.record_seat_bindings(first)
+    harness.record_seat_bindings(second)
+
+    got = recorded_seat_bindings(harness)
+    assert len(got) == 2
+    assert [p.digest for p in got] == [first.digest, second.digest]
