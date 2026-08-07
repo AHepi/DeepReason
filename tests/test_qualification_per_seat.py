@@ -257,3 +257,58 @@ def test_two_profile_home_qualifies_each_seat_plus_the_combination(
         payload["seats"]["coder"]["qualification_subject_digest"],
     }
     assert len(digests) == 2
+
+
+def test_seat_readiness_two_bound_groups_independent_of_combination(
+    tmp_path, monkeypatch
+):
+    """S3 (SPEC.md Item S3): two bound seat groups produce 2
+    SeatReadinessV1 entries with correct per-profile qualification_state
+    -- independent of whether the COMBINATION itself has ever been
+    qualified (it is never qualified in this test)."""
+
+    from deepreason.preparation import qualification_subject_manifest
+    from deepreason.provider_profile import provider_state_dir
+    from deepreason.qualification import resolve_completed_qualification
+    from deepreason.readiness import SeatReadinessV1, get_seat_readiness
+    from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_S4_CAPTURE_KEY", "not-a-real-secret")
+
+    default_profile = _capture_test_profile()
+    write_provider_profile(
+        default_profile, setup_provider_profile_path(environ=os.environ)
+    )
+
+    ready_profile = _capture_test_profile(model_id="capture-ready-model")
+    ready_path = tmp_path / "ready-profile.yaml"
+    write_provider_profile(ready_profile, ready_path)
+
+    unqualified_profile = _capture_test_profile(model_id="capture-unqualified-model")
+    unqualified_path = tmp_path / "unqualified-profile.yaml"
+    write_provider_profile(unqualified_profile, unqualified_path)
+
+    write_seat_bindings(
+        {"coder": str(ready_path), "scratch": str(unqualified_path)},
+        seat_bindings_path(environ=os.environ),
+    )
+
+    cache_dir = provider_state_dir(environ=os.environ) / "qualification-cache"
+    ready_manifest = qualification_subject_manifest(ready_profile)
+    resolve_completed_qualification(
+        ready_manifest, ready_profile, cache_dir=cache_dir, executor=_qualified_report
+    )
+    # unqualified_profile's own uniform subject is deliberately never
+    # qualified; neither is the (default + coder + scratch) combination.
+
+    entries = get_seat_readiness(environ=os.environ)
+    assert len(entries) == 2
+    assert all(isinstance(entry, SeatReadinessV1) for entry in entries)
+    by_group = {entry.group: entry for entry in entries}
+    assert set(by_group) == {"coder", "scratch"}
+    assert by_group["coder"].qualification_state == "ready"
+    assert by_group["coder"].ready is True
+    assert by_group["scratch"].qualification_state == "unqualified"
+    assert by_group["scratch"].ready is False

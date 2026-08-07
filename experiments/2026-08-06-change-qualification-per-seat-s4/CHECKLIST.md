@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=9 blockers=none
+State: next=12 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -116,24 +116,45 @@ order. One step per dr-execute-step invocation.
       `"seats"` entries carry distinct `qualification_subject_digest`
       values -- the three outcomes are not conflated.
 
-- [ ] 11. (S2) [COMMIT] Commit `_cmd_qualify`'s per-profile loop and
+- [x] 11. (S2) [COMMIT] Commit `_cmd_qualify`'s per-profile loop and
       its tests.
       done-when: `git log -1 --stat` shows the changed files, pushed.
+      DONE: commit `68b5b69b`, pushed
+      (`f33ffa3d..68b5b69b claude/seat-census-rung-s1-7gphj9 ->
+      claude/seat-census-rung-s1-7gphj9`).
 
-- [ ] 12. (S3) Add `readiness.py::get_seat_readiness` and
+- [x] 12. (S3) Add `readiness.py::get_seat_readiness` and
       `SeatReadinessV1` — default + each raw `{group: path}` entry,
       readiness computed via the per-profile uniform subject (shared
       helper extracted from `get_readiness`); `ReadinessV1`/
       `get_readiness`/the MCP tool untouched.
       done-when: `python -c "import deepreason.readiness"` succeeds;
       a quick no-bindings call returns `()` (pasted).
+      DONE: `()`. Extracted `_readiness_fields(explicit_profile_path,
+      *, environ, home, qualification_cache_dir) -> dict` (the shared
+      per-profile logic, previously `get_readiness`'s entire body);
+      `get_readiness` now just wraps it in `ReadinessV1` -- confirmed
+      byte-identical since it's the same code, only relocated.
+      `get_seat_readiness` returns one `SeatReadinessV1(group=...)`
+      per RAW bound `{group: path}` entry (sorted), each via the same
+      helper with `qualification_subject_manifest(profile)` (no
+      seat_bindings). `grep` confirms `get_readiness`/`ReadinessV1`/
+      the MCP `get_readiness` tool (`mcp_server.py`) reference nothing
+      changed. `tests/test_cli_readiness.py`: `3 passed`.
 
-- [ ] 13. (S3) Add a test: two bound groups produce 2
+- [x] 13. (S3) Add a test: two bound groups produce 2
       `SeatReadinessV1` entries with correct per-profile
       `qualification_state`, independent of combination-qualify
       status.
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k seat_readiness`
       passes, output pasted.
+      DONE: `1 passed, 4 deselected in 3.80s`.
+      `test_seat_readiness_two_bound_groups_independent_of_combination`
+      seeds ONLY the "coder" seat's own uniform subject as completed
+      (`resolve_completed_qualification` directly), leaves "scratch"
+      unqualified, and never qualifies the combination at all --
+      `get_seat_readiness` still correctly reports coder=ready,
+      scratch=unqualified.
 
 - [ ] 14. (S3) [COMMIT] Commit `get_seat_readiness`/`SeatReadinessV1`
       and their test.
