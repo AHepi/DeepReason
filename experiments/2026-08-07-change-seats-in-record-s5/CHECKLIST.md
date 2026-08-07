@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=4 blockers=none
+State: next=5 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -97,13 +97,40 @@ words and the operator's Amendment 1.
           ....                                                     [100%]
           4 passed in 84.60s (0:01:24)
 
-- [ ] 4. (S2) [COMMIT] Mutation-prove the absence reader can fail:
+- [x] 4. (S2) [COMMIT] Mutation-prove the absence reader can fail:
       replace `recorded_seat_bindings`'s `getattr(event, "seat_bindings",
       None)` with a direct attribute read, confirm the absence tests go
       RED, restore, confirm GREEN. Commit `seat_events.py` +
       `tests/test_seat_bindings_record.py`.
       done-when: the RED failure output and the restored GREEN run are
       both pasted, and `git log --oneline -1` shows the commit.
+
+      DONE 2026-08-07. Mutation: replaced
+      `getattr(event, "seat_bindings", None)` with a direct
+      `event.seat_bindings` read. RED:
+
+          AttributeError: 'Event' object has no attribute 'seat_bindings'
+          FAILED ...::test_recorded_seat_bindings_is_absent_on_a_fresh_harness
+          FAILED ...::test_the_reader_tolerates_every_currently_committed_root
+          FAILED ...::test_the_reader_tolerates_an_event_with_no_seat_bindings_attribute
+          3 failed, 1 passed in 3.71s
+
+      The three that died are exactly the three absence-tolerance
+      claims; `test_the_reader_extracts_a_stamp_the_event_already_carries`
+      survived because its fake event genuinely HAS the attribute --
+      the split is the evidence the tests are aimed at what they say
+      they guard.
+
+      Restored (`git diff --stat -- src/deepreason/seat_events.py` ->
+      empty, byte-identical to HEAD) and GREEN:
+
+          ....                                                     [100%]
+          4 passed in 73.56s (0:01:13)
+
+      `seat_events.py` and `tests/test_seat_bindings_record.py` were
+      already committed at steps 2/3 respectively; nothing new to
+      commit for those files (the mutation was reverted, not landed).
+      This step's own commit carries only the CHECKLIST.md evidence.
 
 - [ ] 5. (S3, R5, R14) Add `seat_bindings_for_run(harness, manifest) ->
       tuple[SeatBindingV1, ...]` to `seat_events.py`: returns
