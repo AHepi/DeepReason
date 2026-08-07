@@ -1509,14 +1509,56 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
 
 
 def _cmd_status(args) -> int:
-    from deepreason.readiness import get_readiness, readiness_json, readiness_text
+    from deepreason.readiness import (
+        get_readiness,
+        get_seat_readiness,
+        readiness_json,
+        readiness_text,
+    )
 
     readiness = get_readiness(getattr(args, "provider_profile", None))
-    print(readiness_json(readiness) if getattr(args, "json", False) else readiness_text(readiness))
+    seats = get_seat_readiness()
+    if not seats:
+        # No seat bindings: byte-identical to pre-S4 (R6) -- this branch
+        # is never taken once bindings exist.
+        print(
+            readiness_json(readiness)
+            if getattr(args, "json", False)
+            else readiness_text(readiness)
+        )
+        return 0 if readiness.ready else 1
+
+    if getattr(args, "json", False):
+        payload = json.loads(readiness_json(readiness))
+        payload["seats"] = [
+            json.loads(seat.model_dump_json(by_alias=True, exclude_none=False))
+            for seat in seats
+        ]
+        print(json.dumps(payload, sort_keys=True, separators=(",", ":")))
+    else:
+        print(readiness_text(readiness))
+        print("Per-seat readiness:")
+        for seat in seats:
+            route = seat.route_identity or {}
+            print(f"  {seat.group}:")
+            print(
+                "    Route: "
+                + (f"{route.get('provider')}/{route.get('model_id')}" if route else "none")
+            )
+            print(f"    Credential present: {str(seat.credential_present).lower()}")
+            print(f"    Qualification: {seat.qualification_state}")
+            print(f"    Next action: {seat.next_action}")
     return 0 if readiness.ready else 1
 
 
-def _cmd_qualify(args) -> int:
+def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | None:
+    """Run one full qualify pass for the profile ``profile_path`` resolves
+    to (``None`` resolves the default profile). Returns the result payload
+    on success, or ``None`` if a refusal/cancellation was already printed
+    to stderr (caller returns 1 without further printing). Raises
+    ``ValueError`` exactly as pre-S4 ``_cmd_qualify`` did, for the
+    caller's shared error printing."""
+
     from deepreason.preparation import qualification_subject_manifest
     from deepreason.provider_profile import credential_present, provider_state_dir, resolve_provider_profile
     from deepreason.qualification import (
@@ -1534,7 +1576,6 @@ def _cmd_qualify(args) -> int:
         run_shallow_fitness_battery,
         shallow_fitness_maximum_provider_calls,
     )
-    from deepreason.seat_bindings import resolve_seat_bindings
 
     tier_states = {
         "full": "ready",
@@ -1546,172 +1587,233 @@ def _cmd_qualify(args) -> int:
         "shallow": SHALLOW_NEXT_ACTION,
         "unqualified": "deepreason qualify",
     }
-    try:
-        resolved = resolve_provider_profile(args.provider_profile)
-        profile = resolved.profile
-        if not credential_present(profile):
-            raise QualificationError(
-                "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
-            )
-        # The battery spends provider calls, so it is a launch too: qualifying
-        # a thinking-on profile would certify behavior the run may not use.
-        refusal = _reasoning_disabled_refusal(args.provider_profile)
-        if refusal is not None:
-            print(refusal, file=sys.stderr)
-            return 1
-        manifest = qualification_subject_manifest(
-            profile,
-            attached_evidence=bool(getattr(args, "attached_evidence", False)),
-            seat_bindings=resolve_seat_bindings() or None,
+    resolved = resolve_provider_profile(profile_path)
+    profile = resolved.profile
+    if not credential_present(profile):
+        raise QualificationError(
+            "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
         )
-        cache_dir = provider_state_dir() / "qualification-cache"
-        subject = qualification_subject_digest(manifest, profile)
+    # The battery spends provider calls, so it is a launch too: qualifying
+    # a thinking-on profile would certify behavior the run may not use.
+    refusal = _reasoning_disabled_refusal(profile_path)
+    if refusal is not None:
+        print(refusal, file=sys.stderr)
+        return None
+    manifest = qualification_subject_manifest(
+        profile,
+        attached_evidence=bool(getattr(args, "attached_evidence", False)),
+        seat_bindings=seat_bindings,
+    )
+    cache_dir = provider_state_dir() / "qualification-cache"
+    subject = qualification_subject_digest(manifest, profile)
+    try:
+        load_completed_qualification(cache_dir, subject)
+        maximum_calls = 0
+        tier = "full"
+        reused = True
+    except QualificationError as error:
+        if error.code != "QUALIFICATION_NOT_CONFIGURED":
+            raise
+        record = None
         try:
-            load_completed_qualification(cache_dir, subject)
-            maximum_calls = 0
-            tier = "full"
-            reused = True
-        except QualificationError as error:
-            if error.code != "QUALIFICATION_NOT_CONFIGURED":
+            record = load_qualification_tier(cache_dir, subject)
+        except QualificationError as tier_error:
+            if tier_error.code != "QUALIFICATION_TIER_NOT_RECORDED":
                 raise
-            record = None
-            try:
-                record = load_qualification_tier(cache_dir, subject)
-            except QualificationError as tier_error:
-                if tier_error.code != "QUALIFICATION_TIER_NOT_RECORDED":
-                    raise
-            if record is not None and record.tier == "shallow":
-                # A durable shallow conclusion is reused exactly like full
-                # evidence: same subject identity, zero provider calls.
-                maximum_calls = 0
-                tier = "shallow"
-                reused = True
-            else:
-                # No durable conclusion, or a durable "unqualified" floor:
-                # an explicit qualify rerun retries the ladder from the top.
-                maximum_calls = production_qualification_maximum_provider_calls(manifest)
-                shallow_maximum = shallow_fitness_maximum_provider_calls()
-                notice = (
-                    f"Qualification will test {profile.provider}/{profile.model_id}; "
-                    f"maximum expected provider calls: {maximum_calls}. "
-                    "If the full battery fails, a shallow-fitness battery of "
-                    f"at most {shallow_maximum} further calls decides the "
-                    "shallow tier."
-                )
-                print(notice, file=sys.stderr, flush=True)
-                if not args.yes:
-                    if not sys.stdin.isatty():
-                        print(
-                            "QUALIFICATION_CONFIRMATION_REQUIRED: qualification "
-                            "spends provider calls; rerun with --yes to confirm "
-                            "noninteractively. No provider calls were made.",
-                            file=sys.stderr,
-                        )
-                        return 1
-                    confirmed = input("Proceed with qualification? [y/N]: ").strip().casefold()
-                    if confirmed not in {"y", "yes"}:
-                        print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)
-                        return 1
-                try:
-                    # Route through the deepreason.qualification module
-                    # attribute so offline harnesses that monkeypatch
-                    # default_qualification_executor keep intercepting
-                    # dispatch; the options only affect the live executor.
-                    from deepreason import qualification as qualification_module
-
-                    def report_progress(completed, total):
-                        print(
-                            f"\rqualification cases: {completed}/{total}",
-                            end="",
-                            file=sys.stderr,
-                            flush=True,
-                        )
-
-                    def _battery_executor(manifest_value):
-                        try:
-                            return qualification_module.default_qualification_executor(
-                                manifest_value
-                            )
-                        finally:
-                            print(file=sys.stderr, flush=True)
-
-                    with qualification_module.qualification_executor_options(
-                        concurrency=getattr(args, "concurrency", None),
-                        progress_callback=report_progress,
-                    ):
-                        resolve_completed_qualification(
-                            manifest,
-                            profile,
-                            cache_dir=cache_dir,
-                            executor=_battery_executor,
-                        )
-                    tier = "full"
-                    reused = False
-                except ValueError as full_error:
-                    if not str(full_error).startswith(
-                        ("QUALIFICATION_EXECUTION_FAILED", "QUALIFICATION_EXECUTION_INVALID", "DOCTOR_")
-                    ):
-                        raise
-                    print(str(full_error), file=sys.stderr)
+        if record is not None and record.tier == "shallow":
+            # A durable shallow conclusion is reused exactly like full
+            # evidence: same subject identity, zero provider calls.
+            maximum_calls = 0
+            tier = "shallow"
+            reused = True
+        else:
+            # No durable conclusion, or a durable "unqualified" floor:
+            # an explicit qualify rerun retries the ladder from the top.
+            maximum_calls = production_qualification_maximum_provider_calls(manifest)
+            shallow_maximum = shallow_fitness_maximum_provider_calls()
+            notice = (
+                f"Qualification will test {profile.provider}/{profile.model_id}; "
+                f"maximum expected provider calls: {maximum_calls}. "
+                "If the full battery fails, a shallow-fitness battery of "
+                f"at most {shallow_maximum} further calls decides the "
+                "shallow tier."
+            )
+            print(notice, file=sys.stderr, flush=True)
+            if not args.yes:
+                if not sys.stdin.isatty():
                     print(
-                        "Full-battery qualification failed; running the "
-                        f"shallow-fitness battery (at most {shallow_maximum} "
-                        "provider calls).",
+                        "QUALIFICATION_CONFIRMATION_REQUIRED: qualification "
+                        "spends provider calls; rerun with --yes to confirm "
+                        "noninteractively. No provider calls were made.",
+                        file=sys.stderr,
+                    )
+                    return None
+                confirmed = input("Proceed with qualification? [y/N]: ").strip().casefold()
+                if confirmed not in {"y", "yes"}:
+                    print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)
+                    return None
+            try:
+                # Route through the deepreason.qualification module
+                # attribute so offline harnesses that monkeypatch
+                # default_qualification_executor keep intercepting
+                # dispatch; the options only affect the live executor.
+                from deepreason import qualification as qualification_module
+
+                def report_progress(completed, total):
+                    print(
+                        f"\rqualification cases: {completed}/{total}",
+                        end="",
                         file=sys.stderr,
                         flush=True,
                     )
-                    cases = run_shallow_fitness_battery(profile)
-                    record = shallow_tier_record_from_cases(
-                        cases, subject_digest=subject, profile=profile
+
+                def _battery_executor(manifest_value):
+                    try:
+                        return qualification_module.default_qualification_executor(
+                            manifest_value
+                        )
+                    finally:
+                        print(file=sys.stderr, flush=True)
+
+                with qualification_module.qualification_executor_options(
+                    concurrency=getattr(args, "concurrency", None),
+                    progress_callback=report_progress,
+                ):
+                    resolve_completed_qualification(
+                        manifest,
+                        profile,
+                        cache_dir=cache_dir,
+                        executor=_battery_executor,
                     )
-                    write_qualification_tier(record, cache_dir)
-                    tier = record.tier
-                    reused = False
-        payload = {
-            "schema": "deepreason-qualification-result.v1",
-            "provider": profile.provider,
-            "model_id": profile.model_id,
-            "profile_source": resolved.source,
-            "tier": tier,
-            "qualification_state": tier_states[tier],
-            "cache_reused": reused,
-            "maximum_expected_provider_calls": maximum_calls,
-            "qualification_subject_digest": subject,
-            "next_action": tier_actions[tier],
-        }
+                tier = "full"
+                reused = False
+            except ValueError as full_error:
+                if not str(full_error).startswith(
+                    ("QUALIFICATION_EXECUTION_FAILED", "QUALIFICATION_EXECUTION_INVALID", "DOCTOR_")
+                ):
+                    raise
+                print(str(full_error), file=sys.stderr)
+                print(
+                    "Full-battery qualification failed; running the "
+                    f"shallow-fitness battery (at most {shallow_maximum} "
+                    "provider calls).",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                cases = run_shallow_fitness_battery(profile)
+                record = shallow_tier_record_from_cases(
+                    cases, subject_digest=subject, profile=profile
+                )
+                write_qualification_tier(record, cache_dir)
+                tier = record.tier
+                reused = False
+    return {
+        "schema": "deepreason-qualification-result.v1",
+        "provider": profile.provider,
+        "model_id": profile.model_id,
+        "profile_source": resolved.source,
+        "tier": tier,
+        "qualification_state": tier_states[tier],
+        "cache_reused": reused,
+        "maximum_expected_provider_calls": maximum_calls,
+        "qualification_subject_digest": subject,
+        "next_action": tier_actions[tier],
+    }
+
+
+def _print_qualify_failure(error: ValueError) -> None:
+    print(str(error), file=sys.stderr)
+    if str(error).startswith(("QUALIFICATION_EXECUTION_FAILED", "DOCTOR_")):
+        print(
+            "This model did not complete production qualification. The "
+            'reduced engine remains available: deepreason reason --shallow '
+            '"YOUR QUESTION"',
+            file=sys.stderr,
+        )
+    if str(error).startswith("QUALIFICATION_SHALLOW_EXECUTION_FAILED"):
+        print(
+            "The shallow-fitness battery did not complete, so no "
+            "qualification tier was recorded. Retry: deepreason qualify",
+            file=sys.stderr,
+        )
+
+
+def _print_qualify_headline(payload: dict, *, indent: str = "") -> None:
+    tier = payload["tier"]
+    headline = {
+        "full": f"Qualified: {payload['provider']}/{payload['model_id']}",
+        "shallow": (
+            f"Qualified (shallow tier): {payload['provider']}/{payload['model_id']}"
+        ),
+        "unqualified": (
+            f"Unqualified: {payload['provider']}/{payload['model_id']}"
+        ),
+    }[tier]
+    print(f"{indent}{headline}")
+    print(f"{indent}Qualification tier: {payload['tier']}")
+    print(f"{indent}Qualification state: {payload['qualification_state']}")
+    print(f"{indent}Next action: {payload['next_action']}")
+
+
+def _cmd_qualify(args) -> int:
+    from deepreason.provider_profile import resolve_provider_profile
+    from deepreason.seat_bindings import load_seat_bindings, resolve_seat_bindings, seat_bindings_path
+
+    seat_bindings = resolve_seat_bindings() or None
+    try:
+        combination_payload = _qualify_one_profile(
+            args.provider_profile, args=args, seat_bindings=seat_bindings
+        )
     except ValueError as error:
-        print(str(error), file=sys.stderr)
-        if str(error).startswith(("QUALIFICATION_EXECUTION_FAILED", "DOCTOR_")):
-            print(
-                "This model did not complete production qualification. The "
-                'reduced engine remains available: deepreason reason --shallow '
-                '"YOUR QUESTION"',
-                file=sys.stderr,
-            )
-        if str(error).startswith("QUALIFICATION_SHALLOW_EXECUTION_FAILED"):
-            print(
-                "The shallow-fitness battery did not complete, so no "
-                "qualification tier was recorded. Retry: deepreason qualify",
-                file=sys.stderr,
-            )
+        _print_qualify_failure(error)
         return 1
+    if combination_payload is None:
+        return 1
+
+    if not seat_bindings:
+        # Single-profile home: identical to pre-S4 -- the combination call
+        # above already used seat_bindings=None, so this IS the per-profile
+        # loop's one and only iteration (R6 byte-identity).
+        if args.json:
+            print(json.dumps(combination_payload, sort_keys=True, separators=(",", ":")))
+        else:
+            _print_qualify_headline(combination_payload)
+        return 0 if combination_payload["tier"] in {"full", "shallow"} else 1
+
+    default_digest = resolve_provider_profile(args.provider_profile).profile.profile_digest
+    raw = load_seat_bindings(seat_bindings_path())
+    seen_digests = {default_digest}
+    seat_payloads: dict[str, dict] = {}
+    for group in sorted(raw):
+        bound_digest = resolve_provider_profile(raw[group]).profile.profile_digest
+        if bound_digest in seen_digests:
+            continue
+        seen_digests.add(bound_digest)
+        try:
+            bound_payload = _qualify_one_profile(raw[group], args=args, seat_bindings=None)
+        except ValueError as error:
+            _print_qualify_failure(error)
+            return 1
+        if bound_payload is None:
+            return 1
+        seat_payloads[group] = bound_payload
+
+    payload = {
+        "schema": "deepreason-qualification-result-per-seat.v1",
+        "combination": combination_payload,
+        "seats": seat_payloads,
+    }
     if args.json:
         print(json.dumps(payload, sort_keys=True, separators=(",", ":")))
     else:
-        headline = {
-            "full": f"Qualified: {payload['provider']}/{payload['model_id']}",
-            "shallow": (
-                f"Qualified (shallow tier): {payload['provider']}/{payload['model_id']}"
-            ),
-            "unqualified": (
-                f"Unqualified: {payload['provider']}/{payload['model_id']}"
-            ),
-        }[tier]
-        print(headline)
-        print(f"Qualification tier: {payload['tier']}")
-        print(f"Qualification state: {payload['qualification_state']}")
-        print(f"Next action: {payload['next_action']}")
-    return 0 if tier in {"full", "shallow"} else 1
+        print("Combination:")
+        _print_qualify_headline(combination_payload, indent="  ")
+        print("Per-seat qualification:")
+        for group in sorted(seat_payloads):
+            print(f"  {group}:")
+            _print_qualify_headline(seat_payloads[group], indent="    ")
+    tiers = [combination_payload["tier"]] + [entry["tier"] for entry in seat_payloads.values()]
+    return 0 if all(tier in {"full", "shallow"} for tier in tiers) else 1
 
 
 def _cmd_reason_shallow(args) -> int:

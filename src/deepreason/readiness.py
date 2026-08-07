@@ -51,6 +51,34 @@ class ReadinessV1(BaseModel):
     next_action: str
 
 
+class SeatReadinessV1(BaseModel):
+    """One seat group's own readiness: whether ITS bound profile is
+    provably capable, independent of any other seat or the run's
+    combination-subject qualification (S3, docs/proposals/
+    ROLE_SEAT_SEPARATION_PLAN.md)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_: Literal["deepreason-seat-readiness.v1"] = Field(
+        "deepreason-seat-readiness.v1", alias="schema"
+    )
+    group: str
+    package_version: str
+    ready: bool
+    profile_source: Literal["explicit", "environment", "setup"] | None
+    route_identity: dict[str, str | None] | None
+    credential_present: bool
+    qualification_state: Literal[
+        "profile_missing",
+        "profile_invalid",
+        "credential_missing",
+        "unqualified",
+        "ready_shallow",
+        "ready",
+    ]
+    next_action: str
+
+
 def package_version() -> str:
     try:
         return version("deepreason")
@@ -60,14 +88,17 @@ def package_version() -> str:
         return "0.1.0"
 
 
-def get_readiness(
-    explicit_profile_path: Path | str | None = None,
+def _readiness_fields(
+    explicit_profile_path: Path | str | None,
     *,
-    environ: Mapping[str, str] | None = None,
-    home: Path | str | None = None,
-    qualification_cache_dir: Path | str | None = None,
-) -> ReadinessV1:
-    """Inspect profile, credential, and completed cache without provider work."""
+    environ: Mapping[str, str] | None,
+    home: Path | str | None,
+    qualification_cache_dir: Path | str | None,
+) -> dict:
+    """Inspect profile, credential, and completed cache without provider
+    work; shared by `get_readiness` (the default profile) and
+    `get_seat_readiness` (each bound seat's own profile) -- one profile,
+    uniformly, per call."""
 
     try:
         resolved = resolve_provider_profile(
@@ -86,15 +117,14 @@ def get_readiness(
             if error.code == "PROVIDER_PROFILE_MISSING"
             else "profile_invalid"
         )
-        return ReadinessV1(
-            package_version=package_version(),
-            ready=False,
-            profile_source=selected_source,
-            route_identity=None,
-            credential_present=False,
-            qualification_state=state,
-            next_action="deepreason setup",
-        )
+        return {
+            "ready": False,
+            "profile_source": selected_source,
+            "route_identity": None,
+            "credential_present": False,
+            "qualification_state": state,
+            "next_action": "deepreason setup",
+        }
 
     profile = resolved.profile
     route = {
@@ -105,15 +135,14 @@ def get_readiness(
     }
     present = credential_present(profile, environ=environ)
     if not present:
-        return ReadinessV1(
-            package_version=package_version(),
-            ready=False,
-            profile_source=resolved.source,
-            route_identity=route,
-            credential_present=False,
-            qualification_state="credential_missing",
-            next_action="deepreason setup",
-        )
+        return {
+            "ready": False,
+            "profile_source": resolved.source,
+            "route_identity": route,
+            "credential_present": False,
+            "qualification_state": "credential_missing",
+            "next_action": "deepreason setup",
+        }
 
     manifest = qualification_subject_manifest(profile)
     subject = qualification_subject_digest(manifest, profile)
@@ -135,33 +164,78 @@ def get_readiness(
         except QualificationError:
             tier = None
         if tier == "shallow":
-            return ReadinessV1(
-                package_version=package_version(),
-                ready=False,
-                profile_source=resolved.source,
-                route_identity=route,
-                credential_present=True,
-                qualification_state="ready_shallow",
-                next_action=SHALLOW_NEXT_ACTION,
-            )
-        return ReadinessV1(
-            package_version=package_version(),
-            ready=False,
-            profile_source=resolved.source,
-            route_identity=route,
-            credential_present=True,
-            qualification_state="unqualified",
-            next_action="deepreason qualify",
-        )
-    return ReadinessV1(
-        package_version=package_version(),
-        ready=True,
-        profile_source=resolved.source,
-        route_identity=route,
-        credential_present=True,
-        qualification_state="ready",
-        next_action='deepreason reason "YOUR QUESTION"',
+            return {
+                "ready": False,
+                "profile_source": resolved.source,
+                "route_identity": route,
+                "credential_present": True,
+                "qualification_state": "ready_shallow",
+                "next_action": SHALLOW_NEXT_ACTION,
+            }
+        return {
+            "ready": False,
+            "profile_source": resolved.source,
+            "route_identity": route,
+            "credential_present": True,
+            "qualification_state": "unqualified",
+            "next_action": "deepreason qualify",
+        }
+    return {
+        "ready": True,
+        "profile_source": resolved.source,
+        "route_identity": route,
+        "credential_present": True,
+        "qualification_state": "ready",
+        "next_action": 'deepreason reason "YOUR QUESTION"',
+    }
+
+
+def get_readiness(
+    explicit_profile_path: Path | str | None = None,
+    *,
+    environ: Mapping[str, str] | None = None,
+    home: Path | str | None = None,
+    qualification_cache_dir: Path | str | None = None,
+) -> ReadinessV1:
+    """Inspect profile, credential, and completed cache without provider work."""
+
+    fields = _readiness_fields(
+        explicit_profile_path,
+        environ=environ,
+        home=home,
+        qualification_cache_dir=qualification_cache_dir,
     )
+    return ReadinessV1(package_version=package_version(), **fields)
+
+
+def get_seat_readiness(
+    *,
+    environ: Mapping[str, str] | None = None,
+    home: Path | str | None = None,
+    qualification_cache_dir: Path | str | None = None,
+) -> tuple["SeatReadinessV1", ...]:
+    """One `SeatReadinessV1` per bound seat group's OWN profile (S3):
+    "is THIS seat's own profile provably capable," independent of any
+    other seat or the run's combination-subject qualification. No
+    bindings -> `()`; `ReadinessV1`/`get_readiness` are untouched."""
+
+    from deepreason.seat_bindings import load_seat_bindings, seat_bindings_path
+
+    raw = load_seat_bindings(seat_bindings_path(home=home, environ=environ))
+    if not raw:
+        return ()
+    entries = []
+    for group in sorted(raw):
+        fields = _readiness_fields(
+            raw[group],
+            environ=environ,
+            home=home,
+            qualification_cache_dir=qualification_cache_dir,
+        )
+        entries.append(
+            SeatReadinessV1(group=group, package_version=package_version(), **fields)
+        )
+    return tuple(entries)
 
 
 def readiness_json(readiness: ReadinessV1) -> str:
@@ -189,7 +263,9 @@ def readiness_text(readiness: ReadinessV1) -> str:
 
 __all__ = [
     "ReadinessV1",
+    "SeatReadinessV1",
     "get_readiness",
+    "get_seat_readiness",
     "package_version",
     "readiness_json",
     "readiness_text",

@@ -184,6 +184,69 @@ def test_prepare_with_a_seat_binding_overrides_only_the_bound_role(tmp_path):
             assert route.model_id == profile.model_id
 
 
+def test_prepare_refuses_typed_when_the_combination_is_unqualified(tmp_path):
+    """R4 (Rung S4), measured not built (SPEC.md M6): this is EXISTING
+    S3 behavior with zero new production code -- resolve_completed_qualification
+    already refuses typed for an unqualified heterogeneous combination."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    bound = _profile(model_id="model-bound")
+    bound_path = write_provider_profile(bound, tmp_path / "bound.yaml")
+    seats_home = tmp_path / "seats-home"
+    write_seat_bindings(
+        {"coder": str(bound_path)},
+        seat_bindings_path(environ={"DEEPREASON_HOME": str(seats_home)}),
+    )
+    calls = []
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+        executor=False,
+    )
+
+    with pytest.raises(QualificationError) as excinfo:
+        service.prepare(_request(profile_path))
+    assert excinfo.value.code == "QUALIFICATION_NOT_CONFIGURED"
+
+
+def test_prepare_succeeds_once_the_combination_is_qualified(tmp_path):
+    """R4/R7 (Rung S4), measured not built (SPEC.md M6): once the
+    EXACT combination subject is cached, prepare() succeeds and the
+    committed run manifest reflects both profiles -- again, zero new
+    production code, only this pinning test is new."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    bound = _profile(model_id="model-bound")
+    bound_path = write_provider_profile(bound, tmp_path / "bound.yaml")
+    seats_home = tmp_path / "seats-home"
+    write_seat_bindings(
+        {"coder": str(bound_path)},
+        seat_bindings_path(environ={"DEEPREASON_HOME": str(seats_home)}),
+    )
+    calls = []
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+        executor=True,
+    )
+
+    prepared = service.prepare(_request(profile_path))
+    manifest = load_run_manifest(Path(prepared.root) / "run-manifest.json")
+    assert manifest.roles["property_designer"][0].model_id == "model-bound"
+    assert manifest.roles["judge"][0].model_id == profile.model_id
+    assert len(calls) == 1  # the combination battery ran exactly once
+
+
 def test_preparation_is_idempotent_without_requalification_or_rewrites(tmp_path):
     profile_path = write_provider_profile(_profile(), tmp_path / "profile.yaml")
     calls = []
