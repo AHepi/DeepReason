@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=26 blockers=none. Full gate: 3382 passed, 0 failed net of
+State: next=27 blockers=none. Full gate: 3382 passed, 0 failed net of
 the pre-existing, independently-reconfirmed P1/P3 failure (unrelated
 to this rung). Actual src+tests+map now 792 (R21).
 Final total (incl. probe) to be recorded plainly in
@@ -663,7 +663,7 @@ words and the operator's Amendment 1.
       No fixture edited. Net of P1/P3: **0 failed** (3382 passed, 7
       skipped), satisfying R10's own named exception.
 
-- [ ] 26. (S5, R19, R20) Frozen-surface diff: confirm the ONLY
+- [x] 26. (S5, R19, R20) Frozen-surface diff: confirm the ONLY
       authorized surface touch is `harness.py`'s two S5 hunks; the
       other four frozen surfaces are empty diff.
       done-when: `git diff --stat <tranche-base>..HEAD --
@@ -672,6 +672,26 @@ words and the operator's Amendment 1.
       -> empty; `src/deepreason/verification/report.py` untouched;
       `git diff --stat <tranche-base>..HEAD -- src/deepreason/harness.py`
       shows only the two hunks named at step 11.
+
+      DONE 2026-08-07, base `54feb5cc` (setup-verified R19/R20
+      commit):
+
+          === frozen surfaces that must be EMPTY ===
+          (empty -- capabilities/state.py, invariants.py,
+           run_manifest.py, qualification.py)
+          (empty -- verification/)
+
+          === the one AUTHORIZED surface ===
+           src/deepreason/harness.py | 21 +++++++++++++++++++++
+
+           @@ -650,6 +650,25 @@ class Harness:      <- appender
+           @@ -1995,6 +2014,7 @@ class Harness:      <- _commit signature
+           @@ -2012,6 +2032,7 @@ class Harness:      <- Event() forwarding
+
+      Surfaces 1, 3, 4, 5: empty, as required. Surface 2: the two R19
+      units (three git-level regions, mapped and explained at step 11
+      -- an appender plus one keyword-plus-forwarding, zero import
+      needed). No third semantic unit anywhere.
 
 - [ ] 27. (S9, R9, R11) Re-run the sweep on the changed tree (with
       `tools/root_sweep.py` still UNCHANGED at this point — the probe
