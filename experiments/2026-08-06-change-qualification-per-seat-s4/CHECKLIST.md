@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=5 blockers=none
+State: next=7 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -46,10 +46,11 @@ order. One step per dr-execute-step invocation.
       (first attempt's name lacked "mutation", missing the filter;
       renamed).
 
-- [ ] 5. (S1) [COMMIT] Commit `tests/test_qualification_per_seat.py`.
+- [x] 5. (S1) [COMMIT] Commit `tests/test_qualification_per_seat.py`.
       done-when: `git log -1 --stat` shows the file, pushed.
+      DONE: commit `0d86b5c5`, pushed.
 
-- [ ] 6. (S5) Add the R4 pinning test to
+- [x] 6. (S5) Add the R4 pinning test to
       `tests/test_run_preparation_service.py`: a two-profile home
       where the COMBINATION is unqualified — `prepare()` raises the
       EXACT typed error M6 measured (`QualificationError` code
@@ -60,6 +61,8 @@ order. One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_run_preparation_service.py -q -k combination`
       passes, output pasted. Confirms ZERO `src/` changes were needed
       for this to pass (git status shows only the test file changed).
+      DONE: `2 passed, 11 deselected in 5.74s`; `git status --porcelain -- src/`
+      empty, confirming M6's claim (R4 needs zero new production code).
 
 - [ ] 7. (S5) [COMMIT] Commit the combination pinning test.
       done-when: `git log -1 --stat` shows the file, pushed.
