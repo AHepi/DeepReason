@@ -1,9 +1,7 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=22 blockers=none. Actual src+tests now 729, past R21's
-500-650 ceiling -- operator ruled "continue, report at delivery"
-(second overrun, same disposition as the first). Final total (incl.
-map + probe) to be recorded plainly in VALIDATION.md/DELIVERY.md. R21
-(REQUEST.md Amendment 2) originally set the
+State: next=23 blockers=none. Actual src+tests+map now 792 (R21).
+Final total (incl. probe) to be recorded plainly in
+VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
 src/+tests/+docs/map/+tools/root_sweep.py, superseding SPEC.md's own
 "220-300" headline for overrun checks. harness.py writer lands with
@@ -564,7 +562,7 @@ words and the operator's Amendment 1.
       declared set. Will be recorded plainly in VALIDATION.md/
       DELIVERY.md at delivery, not glossed.
 
-- [ ] 22. (S11, all) Map update, in the same tranche as the behaviour
+- [x] 22. (S11, all) Map update, in the same tranche as the behaviour
       it describes and NOT as a trailing docs step:
       `docs/map/CON-seats.md` gains the reader/payload/writer/
       emission-site prose and a new `check:` line (mirroring how Rung
@@ -576,6 +574,36 @@ words and the operator's Amendment 1.
       new conditional `seat-bindings.json` sibling of
       `run-preparation.json`.
       done-when: `python tools/docs_verify.py --links` -> 0 failed.
+
+      DONE 2026-08-07. Four documents updated:
+      - `CON-seats.md`: `Owns:` gains `seat_events.py`; a new "## Rung
+        S5 -- seats in the typed record" section names the reader/
+        payload/fence/writer/mint-time-carrier/emission-site design;
+        two new "Where it lives" rows (`resolve_seat_bindings_by_group`,
+        the seat-events/harness/scheduler trio); one new `check:`.
+      - `SEAM-schools-x-scheduler.md`: a neighboring "Where it is
+        expressed" row plus a new AST `check:` pinning
+        `_record_seat_bindings`'s placement/gating identically to the
+        existing fingerprint check -- confirmed it makes NO
+        `active_backend()` call, so the document's own per-file call
+        counts do not move.
+      - `CON-schools.md`: a neighboring table row plus a new `check:`
+        (write a snapshot into a fresh root, run one mock-endpoint
+        cycle, confirm exactly one stamp).
+      - `CON-run-identity.md`: a new row naming the conditional
+        `seat-bindings.json` sibling plus a new `check:` (a real
+        `prepare()` call with no bindings leaves the snapshot absent).
+
+      All four new checks hand-verified individually before landing,
+      then the whole map:
+
+          docs_verify [fast]: 52 documents, 829 checks, 4 workers
+          docs_verify: 0 failed
+
+          docs_verify --links: 0 dangling reference(s), 52 document(s)
+
+      `Verified-at:` advanced to `bdc476e8` (current HEAD) on all four,
+      re-run confirmed clean after the bump.
 
 - [ ] 23. (S1, S10, R1, R15) Out-of-scope guard: confirm this tranche's
       diff touches nothing under Rung S4b's per-role-provenance surface

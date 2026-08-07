@@ -1,5 +1,5 @@
 <!-- DR-SEAM-schools-x-scheduler -->
-Verified-at: 5eaf4bcb
+Verified-at: bdc476e8
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/scheduler/scheduler.py, src/deepreason/capture/ladder.py
 Sides: DR-CON-schools, DR-SUB-scheduler
@@ -55,6 +55,7 @@ migrated the callers and added the determinism proof.
 | Operator commands | `cli/main.py` | the `schools` and `reseed` subcommands | three sites (`roster` twice, `reseed` once) |
 | Report assembly | `report.py` | the schools section | one `roster` site |
 | Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log once per `run` with cycles requested, after workflow recovery — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend, and NOT at construction, which must append nothing |
+| Which provider/model sat in which seat (Rung S5) | `scheduler/scheduler.py` | `Scheduler._record_seat_bindings` | fires from `run` at the identical point as `_record_module_fingerprints` (right after it, same `cycles > 0` guard, never at construction) — but reads a mint-time snapshot file (`preparation.py`'s `seat-bindings.json`) rather than a registry, so it makes NO `active_backend()` call and does not move this document's own call-count checks |
 
 `check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION, DefaultSchoolPopulationBackend, RoundRobinSchoolPopulationBackend, active_backend; assert SCHOOL_POPULATION.ids() == ('default', 'round-robin'); assert isinstance(SCHOOL_POPULATION.get('default').backend, DefaultSchoolPopulationBackend); assert isinstance(SCHOOL_POPULATION.get('round-robin').backend, RoundRobinSchoolPopulationBackend); assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"`
 
@@ -71,6 +72,11 @@ constructing a Scheduler (to inspect ranking, or to recover from a crash
 while a second harness handle is still live) has to append nothing. It
 fires once per `run` with cycles requested, after workflow recovery.
 `check: python -c "import ast,inspect,textwrap; from deepreason.scheduler.scheduler import Scheduler as S; I=textwrap.dedent(inspect.getsource(S.__init__)); R=textwrap.dedent(inspect.getsource(S.run)); f=lambda t:[n for n in ast.walk(ast.parse(t)) if isinstance(n,ast.Call) and getattr(n.func,'attr',None)=='_record_module_fingerprints']; assert not f(I), 'stamp must not fire at construction'; assert len(f(R))==1, len(f(R)); g=[n for n in ast.walk(ast.parse(R)) if isinstance(n,ast.If) and any('_record_module_fingerprints' in ast.unparse(s) for s in n.body)]; assert len(g)==1 and ast.unparse(g[0].test)=='cycles > 0', [ast.unparse(x.test) for x in g]; assert R.index('_recover_workflow_prefixes()') < R.index('_record_module_fingerprints()')"`
+
+Rung S5's own seat-bindings stamp is placed and gated identically, right
+after the fingerprint stamp, and reaches no `active_backend()` call of its
+own.
+`check: python -c "import ast,inspect,textwrap; from deepreason.scheduler.scheduler import Scheduler as S; I=textwrap.dedent(inspect.getsource(S.__init__)); R=textwrap.dedent(inspect.getsource(S.run)); f=lambda t,n:[x for x in ast.walk(ast.parse(t)) if isinstance(x,ast.Call) and getattr(x.func,'attr',None)==n]; assert not f(I,'_record_seat_bindings'), 'stamp must not fire at construction'; assert len(f(R,'_record_seat_bindings'))==1; g=[x for x in ast.walk(ast.parse(R)) if isinstance(x,ast.If) and any('_record_seat_bindings' in ast.unparse(s) for s in x.body)]; assert len(g)==1 and ast.unparse(g[0].test)=='cycles > 0'; assert R.index('_record_module_fingerprints()') < R.index('_record_seat_bindings()') < R.index('for _ in range(cycles):')"`
 `check: python -c "import pathlib,re; s=pathlib.Path('src/deepreason/capture/ladder.py').read_text(); assert s.count('schools.active_backend()') == 4; assert not re.search(r'schools\.(roster|reseed)\(', s)"`
 `check: python -c "import pathlib,re; c=pathlib.Path('src/deepreason/cli/main.py').read_text(); r=pathlib.Path('src/deepreason/report.py').read_text(); assert c.count('active_backend()') == 3 and r.count('active_backend()') == 1; assert not re.search(r'schools(_mod)?\.(roster|reseed)\(', c + r)"`
 
