@@ -1,5 +1,6 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=14 blockers=none. R21 (REQUEST.md Amendment 2) sets the
+State: next=17 blockers=none. Actual src+tests now 577/650 (R21) --
+watch closely at steps 18-21's checkpoints. R21 (REQUEST.md Amendment 2) sets the
 binding budget ceiling to 500-650 insertions across
 src/+tests/+docs/map/+tools/root_sweep.py, superseding SPEC.md's own
 "220-300" headline for overrun checks. harness.py writer lands with
@@ -349,7 +350,7 @@ words and the operator's Amendment 1.
       6ddec4d1 -- src/ tests/` -> 420 insertions total, inside the
       corrected 500-650 range.
 
-- [ ] 14. (S6, M1-M4, Q3, A3) Add
+- [x] 14. (S6, M1-M4, Q3, A3) Add
       `resolve_seat_bindings_by_group(*, home=None, environ=None) ->
       dict[str, ProviderProfileV1]` to `seat_bindings.py`, factoring
       `resolve_seat_bindings`'s own existing outer loop (`for group in
@@ -363,7 +364,28 @@ words and the operator's Amendment 1.
       correctly resolved `ProviderProfileV1` (SPEC.md Item S6's own
       accept criterion, first half).
 
-- [ ] 15. (S6, Q3) Wire `RunPreparationService.prepare()` to build a
+      DONE 2026-08-07. `resolve_seat_bindings` refactored to CALL the
+      new helper (its own outer loop's `resolve_provider_profile` call
+      is no longer duplicated) -- same iteration order (`sorted`), same
+      per-group resolution, same first-failing-group error, so this is
+      behavior-preserving, not a new code path beside the old one.
+      Three tests added to `tests/test_seat_bindings.py` (two-group
+      keying, no-file absence, and M4's own alias-preservation finding
+      -- "simulation" stays "simulation", never canonicalized to
+      "conjecture" here):
+
+          ...                                                       [100%]
+          3 passed, 12 deselected in 0.35s
+
+      Full file (refactor did not move anything):
+
+          ...............                                           [100%]
+          15 passed in 0.79s
+
+      Adjacent callers unaffected: `test_cli_setup_seats.py` +
+      `test_qualification_per_seat.py` -> 9 passed in 19.94s.
+
+- [x] 15. (S6, Q3) Wire `RunPreparationService.prepare()` to build a
       `SeatBindingsEventPayloadV1` from `resolve_seat_bindings_by_group(...)`
       (called alongside the existing `resolve_seat_bindings()` call)
       and write it as `seat-bindings.json`
@@ -379,9 +401,39 @@ words and the operator's Amendment 1.
       with one bound group writes it (SPEC.md Item S6's own accept
       criterion, second half).
 
-- [ ] 16. (S6) [COMMIT] Commit the mint-time carrier
+      DONE 2026-08-07. New constant `SEAT_BINDINGS_SNAPSHOT_NAME =
+      "seat-bindings.json"` beside `PREPARATION_RECORD_NAME`.
+      `prepare()` resolves `resolve_seat_bindings_by_group(...)`
+      alongside its existing `resolve_seat_bindings()` call, builds a
+      `SeatBindingsEventPayloadV1` only `if seat_bindings_by_group`
+      (mirroring the existing `seat_bindings or None` conditional at
+      the manifest-build call), and writes it into `temporary` right
+      before `temporary.rename(root)` -- so a failed prepare leaves no
+      partial snapshot (the same `except: rmtree(temporary)` path
+      already covers it). `preparation.py` has `from __future__ import
+      annotations`, so no third-hunk risk here (unlike `harness.py`,
+      the new import is ordinary). Two tests added to
+      `tests/test_run_preparation_service.py`:
+
+          ..                                                       [100%]
+          2 passed, 13 deselected in 11.90s
+
+      Full file: 15 passed in 70.23s. Adjacent seat-binding consumers
+      unaffected: `test_seat_bindings.py` +
+      `test_cli_setup_seats.py` + `test_qualification_per_seat.py` +
+      `test_schema_v3_consumers.py` -> 28 passed in 20.68s.
+
+- [x] 16. (S6) [COMMIT] Commit the mint-time carrier
       (`seat_bindings.py` helper + `preparation.py` write + tests).
       done-when: `git log --oneline -1` shows the commit.
+
+      DONE 2026-08-07. Budget checkpoint (R21): `git diff --stat
+      6ddec4d1 -- src/ tests/` -> 577 insertions total, inside the
+      corrected 500-650 range but trending toward its upper bound with
+      S7's emission site + its own tests, the map update, and the
+      probe still to land -- flagged here for the NEXT checkpoint to
+      re-verify, not yet a stop (actual, not projected, is what the
+      rule checks).
 
 - [ ] 17. (S7, R2, R3, R8, M3, M5, Q3, Q5, C6, A5) Add
       `Scheduler._record_seat_bindings(self) -> None` in

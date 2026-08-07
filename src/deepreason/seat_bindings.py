@@ -129,6 +129,27 @@ def load_seat_bindings(path) -> dict[str, str]:
     return {str(k): str(v) for k, v in decoded.items()}
 
 
+def resolve_seat_bindings_by_group(
+    *,
+    home: str | None = None,
+    environ: Mapping[str, str] | None = None,
+) -> dict[str, ProviderProfileV1]:
+    """Return ``{group: ProviderProfileV1}`` for every explicitly bound
+    group, keyed by the literal group name an operator used at ``--seat``
+    time -- not expanded through role sets and not canonicalized through
+    ``GROUP_ALIASES``. A group-keyed view has no role-level ambiguity to
+    detect (unlike ``resolve_seat_bindings``, whose role-keyed view must
+    canonicalize "simulation" onto "conjecture" to catch a genuine
+    conflict), so this needs no conflict-detection pass of its own.
+    """
+
+    raw = load_seat_bindings(seat_bindings_path(home=home, environ=environ))
+    return {
+        group: resolve_provider_profile(raw[group], environ=environ, home=home).profile
+        for group in sorted(raw)
+    }
+
+
 def resolve_seat_bindings(
     *,
     home: str | None = None,
@@ -143,16 +164,14 @@ def resolve_seat_bindings(
     failure shape).
     """
 
-    raw = load_seat_bindings(seat_bindings_path(home=home, environ=environ))
-    if not raw:
+    by_group = resolve_seat_bindings_by_group(home=home, environ=environ)
+    if not by_group:
         return {}
     role_profile: dict[str, ProviderProfileV1] = {}
     role_group: dict[str, str] = {}
-    for group in sorted(raw):
+    for group in sorted(by_group):
         canonical = GROUP_ALIASES.get(group, group)
-        profile = resolve_provider_profile(
-            raw[group], environ=environ, home=home
-        ).profile
+        profile = by_group[group]
         for role in sorted(GROUP_ROLES[canonical]):
             if role in role_profile:
                 if role_profile[role].profile_digest != profile.profile_digest:
