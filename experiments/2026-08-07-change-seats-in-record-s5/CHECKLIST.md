@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=1 blockers=none
+State: next=2 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -27,12 +27,26 @@ diff both re-check this; a third hunk anywhere in that file is a STOP
 CONDITION for `dr-execute-step`, not a judgment call, per R19's own
 words and the operator's Amendment 1.
 
-- [ ] 1. (S9, R9, R11) Capture the sweep BASELINE on the pristine tree,
+- [x] 1. (S9, R9, R11) Capture the sweep BASELINE on the pristine tree,
       before any `src/` edit. This is the "accepted capture" step 27
       diffs against, and it cannot be taken after the change lands.
       done-when: `python tools/root_sweep.py <scratch>/sweep-before.txt`
       -> "SWEEP COMPLETE: N roots" (paste N, the ERROR-line count, and
       a sha256 of the output file).
+
+      DONE 2026-08-07, on tree `git status --porcelain` clean at head
+      `6ddec4d1` (no `src/` edit made):
+
+          SWEEP COMPLETE: 45 roots -> sweep-before.txt
+          rows: 45
+          ERROR rows: 11
+          sha256: 8b928c08b10bd4c1d2ab223a160d0ea7d6c9262db7c84bf02c3c64d206a5feb4
+
+      45 rows (34 openable + 11 refusing), matching
+      `DR-SEAM-harness-x-verification`'s own dated partition figures
+      (47 git-tracked roots total per that document's Traps section;
+      the sweep instrument scans `experiments/` only, so 45 here is
+      consistent with that seam's own two-instrument distinction).
 
 - [ ] 2. (S2, R4, R5, R6, R16, A1) Create `src/deepreason/seat_events.py`:
       `SeatBindingV1` (`group: str`, `provider: str`, `model_id: str`,
