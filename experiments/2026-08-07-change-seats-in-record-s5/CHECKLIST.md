@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=24 blockers=none (step 23 landed uncommitted; batches into
+State: next=25 blockers=none (step 24 landed uncommitted; batches into
 step 28's [COMMIT]). Actual src+tests+map now 792 (R21).
 Final total (incl. probe) to be recorded plainly in
 VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
@@ -622,11 +622,18 @@ words and the operator's Amendment 1.
       confirmed by grep returning no match (exit 1) and by the full
       name-status list itself.
 
-- [ ] 24. (all, C7) FULL `python tools/docs_verify.py` — NOT `--fast`,
+- [x] 24. (all, C7) FULL `python tools/docs_verify.py` — NOT `--fast`,
       which reuses cached results and cannot see a map document newly
       broken by a `src/` change — plus `--audit` for vacuous checks.
       done-when: the full run -> 0 failed, and `--audit` -> 0 findings
       (paste both).
+
+      DONE 2026-08-07:
+
+          docs_verify [full]: 52 documents, 829 checks, 4 workers
+          docs_verify: 0 failed
+
+          docs_verify --audit: 0 finding(s)
 
 - [ ] 25. (S8, R10) FULL gate: `python -m pytest tests/ -q -n 4` (never
       bare `pytest`). Any fixture that moved must be a count/position
