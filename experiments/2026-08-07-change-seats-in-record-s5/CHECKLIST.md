@@ -1,7 +1,11 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=27 blockers=none. Full gate: 3382 passed, 0 failed net of
-the pre-existing, independently-reconfirmed P1/P3 failure (unrelated
-to this rung). Actual src+tests+map now 792 (R21).
+State: next=29 blockers=none. MAIN PHASE (steps 1-28) COMPLETE --
+stopping here for review per the operator's own instruction, before
+the probe commits (29-32). Full gate: 3382 passed, 0 failed net of the
+pre-existing, independently-reconfirmed P1/P3 failure (unrelated to
+this rung). Actual src+tests+map: 792 lines, past R21's corrected
+500-650 ceiling (second overrun, operator-accepted, to be reported
+plainly at delivery).
 Final total (incl. probe) to be recorded plainly in
 VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
@@ -693,7 +697,7 @@ words and the operator's Amendment 1.
       -- an appender plus one keyword-plus-forwarding, zero import
       needed). No third semantic unit anywhere.
 
-- [ ] 27. (S9, R9, R11) Re-run the sweep on the changed tree (with
+- [x] 27. (S9, R9, R11) Re-run the sweep on the changed tree (with
       `tools/root_sweep.py` still UNCHANGED at this point — the probe
       is step 29, a separate commit, and must not ride this one) and
       diff against step 1's baseline.
@@ -701,11 +705,59 @@ words and the operator's Amendment 1.
       <scratch>/sweep-after.txt` -> empty, with the same row count and
       ERROR-line count as step 1.
 
-- [ ] 28. (all) [COMMIT] Commit the map update (step 22) and the
+      DONE 2026-08-07. `tools/root_sweep.py` confirmed unchanged since
+      `54feb5cc` before running:
+
+          SWEEP COMPLETE: 45 roots
+          EMPTY DIFF - byte-identical
+          rows: 45   ERROR: 11
+          sha256 before: 8b928c08b1... == sha256 after: 8b928c08b1...
+
+      Identical to step 1's baseline digest. No recorded root's
+      `valid`, `epistemic_checks_passed`, `att` or adjudication-
+      blindness count moved -- `DR-INV-frozen-surfaces`' governing
+      question answered on all 45 roots.
+
+- [x] 28. (all) [COMMIT] Commit the map update (step 22) and the
       docs_verify/gate/frozen-surface/sweep evidence (steps 23-27) into
       the tranche log; push with retry (2s/4s/8s/16s backoff).
       done-when: `git status --porcelain` empty AND branch head is on
       origin.
+
+      DONE 2026-08-07. Steps 22-26 were each committed and pushed
+      individually as they landed (the environment's own stop-hook
+      flagged uncommitted work between steps, so evidence was committed
+      incrementally rather than batched into one large commit here) --
+      commits `d02a27c6` (step 22), `f6ce2243` (step 23), `f6778e99`
+      (step 24), `23c717c4` (step 25), `97a644be` (step 26). This step
+      commits step 27's own evidence and closes the main phase (steps
+      1-27) before the probe commits (29-32), per the operator's
+      instruction to stop here for review.
+
+      **Phase summary (steps 1-27, main phase complete):**
+      - Reader (`seat_events.py`), projection reader, contract fence,
+        writer (`harness.py`, R19-bounded), mint-time carrier
+        (`seat_bindings.py` + `preparation.py`), emission site
+        (`scheduler.py`) all landed, each with its own tests and
+        mutation-proofs.
+      - Map updated in the same tranche (`CON-seats.md`,
+        `SEAM-schools-x-scheduler.md`, `CON-schools.md`,
+        `CON-run-identity.md`), `docs_verify` full mode + `--audit`: 0
+        failed / 0 findings.
+      - Full gate: 3382 passed, 0 failed net of the pre-existing,
+        independently-reconfirmed P1/P3 failure (unrelated to this
+        rung).
+      - Frozen-surface diff: only `harness.py`'s R19-authorized two
+        units; the other four surfaces empty.
+      - Sweep: byte-identical before/after (sha256
+        `8b928c08b1...`), 45 rows, 11 ERROR, on both captures.
+      - **Two budget overruns, both raised via AskUserQuestion and
+        resolved by explicit operator instruction, neither absorbed
+        silently:** REQUEST.md Amendment 2 (R21) corrected SPEC.md's
+        own understated "220-300" headline to 500-650; actual final
+        total (src+tests+map) is 792 lines, past even the corrected
+        ceiling, with the operator's standing instruction to report
+        the true total plainly at delivery rather than gloss it.
 
 - [ ] 29. (S9, R9, R11, R12) **SEPARATE commit, `tools/root_sweep.py`
       ONLY, no `src/` file.** Extend the probe to read
