@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=6 blockers=none
+State: next=7 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -164,8 +164,12 @@ words and the operator's Amendment 1.
           .....                                                    [100%]
           5 passed in 75.66s (0:01:15)
 
-- [ ] 6. (S3) [COMMIT] Commit the projection reader + its test.
+- [x] 6. (S3) [COMMIT] Commit the projection reader + its test.
       done-when: `git log --oneline -1` shows the commit.
+
+      DONE 2026-08-07, commit `ca34dc49` (combined with step 5's own
+      work, since both landed in the tree together with nothing else
+      to separate).
 
 - [ ] 7. (S4, R7, C3, C4) Add `Event.seat_bindings:
       SeatBindingsEventPayloadV1 | None = Field(default=None,
