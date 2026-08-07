@@ -328,16 +328,21 @@ changes below.
       `docs/map/CON-seats.md:2:Verified-at: 98a5bc8f`
       `docs/map/SUB-application.md:2:Verified-at: 98a5bc8f`
 
-- [ ] 27. (all) Map gate: `python tools/docs_verify.py` (full mode).
+- [x] 27. (all) Map gate: `python tools/docs_verify.py` (full mode).
       done-when: summary line contains "0 failed".
+      DONE: `docs_verify [full]: 52 documents, 825 checks, 4 workers`;
+      `docs_verify: 0 failed` (825, up from 824 pre-tranche — the two
+      new checks landed and pass).
 
-- [ ] 28. (all) `python tools/docs_verify.py --audit`.
+- [x] 28. (all) `python tools/docs_verify.py --audit`.
       done-when: "0 finding(s)".
+      DONE: `docs_verify --audit: 0 finding(s)`.
 
-- [ ] 29. (all) `python tools/docs_verify.py --links`.
+- [x] 29. (all) `python tools/docs_verify.py --links`.
       done-when: "0 dangling reference(s)".
+      DONE: `docs_verify --links: 0 dangling reference(s), 52 document(s)`.
 
-- [ ] 30. (all) `python tools/docs_verify.py --stale`, confirm
+- [x] 30. (all) `python tools/docs_verify.py --stale`, confirm
       `SUB-application.md` and `CON-seats.md` no longer list
       `68b5b69b`/`1da24da7`/this step's own commit as causing
       staleness (any OTHER document's pre-existing staleness from
@@ -345,6 +350,25 @@ changes below.
       done-when: neither document appears in the output, or if either
       appears it lists zero commits from this tranche's range
       (pasted).
+      DONE: `docs_verify --stale: 22 document(s) worth re-reading`
+      (down from 24 pre-fix) — `SUB-application.md` and `CON-seats.md`
+      are ABSENT from the output entirely; VALIDATION.md's specific
+      FAIL is closed. One NEW entry appears,
+      `REC-change-a-seam.md: 52 commit(s) to owned files since
+      08dcdf3c`, listing this tranche's own `42d32ae1` among its 52 --
+      DISMISSED: `REC-change-a-seam.md`'s `Owns:` is literally
+      `docs/map/`, the whole directory, so ANY commit that ever
+      touches ANY map document (including this fix itself) always
+      counts against it; it was already 51 commits stale before this
+      tranche started and is a pre-existing, structural condition of
+      that document's own overly-broad `Owns:` scope, not a gap this
+      re-plan was scoped to close (VALIDATION.md's FAIL named
+      `SUB-application.md` specifically). All 21 other entries are
+      pre-existing, from unrelated tranches (`CON-authority.md`,
+      `CON-run-identity.md`, `CON-scheduler-ranking.md`,
+      `CON-schools.md`, `INV-frozen-surfaces.md`, 9
+      `SEAM-*`/`SUB-*` documents) -- none list a commit from this
+      tranche's own range (`d6b8dea9~1..HEAD`).
 
 - [ ] 31. (all) [COMMIT] Commit the map updates, push with retry,
       confirm clean tree.
