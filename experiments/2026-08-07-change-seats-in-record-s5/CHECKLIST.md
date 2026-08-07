@@ -1,5 +1,6 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=23 blockers=none. Actual src+tests+map now 792 (R21).
+State: next=24 blockers=none (step 23 landed uncommitted; batches into
+step 28's [COMMIT]). Actual src+tests+map now 792 (R21).
 Final total (incl. probe) to be recorded plainly in
 VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
@@ -605,12 +606,21 @@ words and the operator's Amendment 1.
       `Verified-at:` advanced to `bdc476e8` (current HEAD) on all four,
       re-run confirmed clean after the bump.
 
-- [ ] 23. (S1, S10, R1, R15) Out-of-scope guard: confirm this tranche's
+- [x] 23. (S1, S10, R1, R15) Out-of-scope guard: confirm this tranche's
       diff touches nothing under Rung S4b's per-role-provenance surface
       and adds no new live ladder script.
       done-when: `git diff --stat <tranche-base>..HEAD` names no file
       matching `qualification.py` and no new file under a live-ladder
       path (e.g. `experiments/*/**_run.sh`).
+
+      DONE 2026-08-07. `git diff --name-status 54feb5cc..HEAD` (base =
+      the setup-verified R19/R20 amendment commit) lists exactly 14
+      files: 4 map documents, this tranche's own REQUEST.md/
+      CHECKLIST.md, and 8 `src/`+`tests/` files, all already accounted
+      for by S2-S7/S11's own items. No `qualification.py`, no file
+      under a live-ladder path (`experiments/*/**_run.sh` or similar) —
+      confirmed by grep returning no match (exit 1) and by the full
+      name-status list itself.
 
 - [ ] 24. (all, C7) FULL `python tools/docs_verify.py` — NOT `--fast`,
       which reuses cached results and cannot see a map document newly
