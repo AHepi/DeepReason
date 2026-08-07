@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=15 blockers=none
+State: next=19 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -193,13 +193,21 @@ order. One step per dr-execute-step invocation.
       `test_status_two_seat_home_names_both_seats` asserts the
       `"seats"` key names both bound groups with correct model ids.
 
-- [ ] 17. (S4) [COMMIT] Commit `_cmd_status`'s extension and its test.
+- [x] 17. (S4) [COMMIT] Commit `_cmd_status`'s extension and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
+      DONE: commit `1da24da7`, pushed
+      (`7ef63b01..1da24da7 claude/seat-census-rung-s1-7gphj9 ->
+      claude/seat-census-rung-s1-7gphj9`).
 
-- [ ] 18. (S6) Capture AFTER output for `deepreason qualify --json`/
+- [x] 18. (S6) Capture AFTER output for `deepreason qualify --json`/
       `deepreason status --json` against the SAME single-profile test
       home as step 2, and diff both against the before-files.
       done-when: both diffs empty (pasted).
+      DONE: `python capture_qualify_status.py after` (same script as
+      step 2), then `diff before-qualify.json after-qualify.json` ->
+      `QUALIFY_DIFF_EMPTY`; `diff before-status.json after-status.json`
+      -> `STATUS_DIFF_EMPTY`. `after-qualify.json`/`after-status.json`
+      committed alongside the before-files as durable evidence.
 
 - [ ] 19. (S8) Capture the AFTER sweep and diff against step 1's
       before file.
