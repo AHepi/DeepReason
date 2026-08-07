@@ -10,17 +10,58 @@ endpoint" as untested. This module tests it for real.
 
 from __future__ import annotations
 
+import json
+import os
 from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
 from deepreason.cli.doctor import (
+    ProductionContractCaseResultV1,
     exercise_production_contract_case,
     production_contract_pairs,
+    run_production_contract_doctor,
 )
+from deepreason.cli.main import main
 from deepreason.preparation import build_preparation_manifest
-from deepreason.provider_profile import ProviderProfileV1
+from deepreason.provider_profile import (
+    ProviderProfileV1,
+    setup_provider_profile_path,
+    write_provider_profile,
+)
 import deepreason.llm.adapter as adapter_mod
+
+TRANCHE_DIR = Path(__file__).parent.parent / "experiments" / "2026-08-06-change-qualification-per-seat-s4"
+
+
+def _qualified_report(manifest):
+    return run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: ProductionContractCaseResultV1(
+            case_id=f"case-{index + 1:03d}",
+            first_pass_valid=True,
+            eventual_valid=True,
+            repair_count=0,
+            semantic_admission=True,
+        ),
+    )
+
+
+def _capture_test_profile(**updates):
+    values = {
+        "provider": "generic",
+        "endpoint": "https://example.invalid/v1",
+        "model_id": "capture-test-model",
+        "family": "fixture",
+        "context_window_tokens": 65536,
+        "maximum_completion_tokens": 4096,
+        "credential_env": "DEEPREASON_S4_CAPTURE_KEY",
+        "output_mechanism": "native_json_schema",
+    }
+    values.update(updates)
+    return ProviderProfileV1.create(**values)
 
 
 def _profile(**updates):
@@ -141,3 +182,78 @@ def test_dispatch_purity_mutation_companion_can_actually_fail(monkeypatch):
     assert dispatch_log
     with pytest.raises(AssertionError):
         assert all(m == pair.model_id for m in dispatch_log)
+
+
+def test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4(
+    tmp_path, monkeypatch, capsys
+):
+    """S2/R6 (SPEC.md Item S6): with no `--seat` bindings, the per-profile
+    loop's combination call (seat_bindings=None) IS its one and only
+    iteration -- the printed payload must be byte-identical in shape (and,
+    given the same fixture inputs as the tranche's before-capture, in
+    content) to `before-qualify.json`, captured before this rung's src/
+    edits landed."""
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_S4_CAPTURE_KEY", "not-a-real-secret")
+    write_provider_profile(
+        _capture_test_profile(), setup_provider_profile_path(environ=os.environ)
+    )
+
+    with patch(
+        "deepreason.qualification.default_qualification_executor",
+        _qualified_report,
+    ):
+        main(["qualify", "--yes", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    before_payload = json.loads((TRANCHE_DIR / "before-qualify.json").read_text())
+    assert set(payload) == set(before_payload)
+    assert payload["schema"] == "deepreason-qualification-result.v1"
+    assert payload == before_payload
+
+
+def test_two_profile_home_qualifies_each_seat_plus_the_combination(
+    tmp_path, monkeypatch, capsys
+):
+    """S2 (SPEC.md Item S2): a two-distinct-profile home -- the per-profile
+    loop qualifies the default AND the one distinct bound profile, AND the
+    existing combination call still qualifies the heterogeneous
+    combination -- output names all three outcomes distinctly, none
+    conflated."""
+
+    from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_S4_CAPTURE_KEY", "not-a-real-secret")
+    default_profile = _capture_test_profile()
+    write_provider_profile(
+        default_profile, setup_provider_profile_path(environ=os.environ)
+    )
+    bound_profile = _capture_test_profile(model_id="capture-bound-model")
+    bound_path = tmp_path / "bound-profile.yaml"
+    write_provider_profile(bound_profile, bound_path)
+    write_seat_bindings(
+        {"coder": str(bound_path)}, seat_bindings_path(environ=os.environ)
+    )
+
+    with patch(
+        "deepreason.qualification.default_qualification_executor",
+        _qualified_report,
+    ):
+        main(["qualify", "--yes", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert payload["schema"] == "deepreason-qualification-result-per-seat.v1"
+    assert set(payload) == {"schema", "combination", "seats"}
+    assert payload["combination"]["model_id"] == default_profile.model_id
+    assert set(payload["seats"]) == {"coder"}
+    assert payload["seats"]["coder"]["model_id"] == bound_profile.model_id
+    # None of the three outcomes are conflated: distinct subject digests.
+    digests = {
+        payload["combination"]["qualification_subject_digest"],
+        payload["seats"]["coder"]["qualification_subject_digest"],
+    }
+    assert len(digests) == 2

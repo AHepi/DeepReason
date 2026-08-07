@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=7 blockers=none
+State: next=9 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -64,10 +64,11 @@ order. One step per dr-execute-step invocation.
       DONE: `2 passed, 11 deselected in 5.74s`; `git status --porcelain -- src/`
       empty, confirming M6's claim (R4 needs zero new production code).
 
-- [ ] 7. (S5) [COMMIT] Commit the combination pinning test.
+- [x] 7. (S5) [COMMIT] Commit the combination pinning test.
       done-when: `git log -1 --stat` shows the file, pushed.
+      DONE: commit `f33ffa3d`, pushed.
 
-- [ ] 8. (S2) Add `_cmd_qualify`'s additive per-profile loop in
+- [x] 8. (S2) Add `_cmd_qualify`'s additive per-profile loop in
       `cli/main.py`: default + every distinct bound profile (deduped
       by `profile_digest`, excluding ones equal to default), each
       qualified via the extracted per-profile body with NO
@@ -75,19 +76,45 @@ order. One step per dr-execute-step invocation.
       (unmodified) still runs too when seat bindings exist.
       done-when: `python -c "import deepreason.cli.main"` succeeds
       (import smoke check, learned from Rung S3's step 13 mishap).
+      DONE: `IMPORT_OK`. Extracted `_qualify_one_profile(profile_path,
+      *, args, seat_bindings=None) -> dict | None` (per-profile body,
+      unmodified logic, `None` return means a refusal/cancellation was
+      already printed). `_cmd_qualify` now: calls it once for the
+      combination (`seat_bindings=resolve_seat_bindings() or None`,
+      byte-identical call to pre-S4 when no bindings exist -- this IS
+      the loop's one iteration for R6); when bindings exist, loops
+      `sorted(load_seat_bindings(...))`, dedupes by `profile_digest`
+      against the default's digest, and calls the same helper with
+      `seat_bindings=None` for each distinct bound profile. Existing
+      qualify/qualification_per_seat tests: `8 passed, 2 skipped`.
 
-- [ ] 9. (S2, R6) Add a test proving the single-profile case (no
+- [x] 9. (S2, R6) Add a test proving the single-profile case (no
       `--seat`) produces a payload byte-identical in shape to pre-S4
       (loop has exactly one iteration, no new keys).
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k single_profile`
       passes, output pasted.
+      DONE: `1 passed, 3 deselected in 3.80s`.
+      `test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4`
+      runs `deepreason qualify --yes --json` against a fresh home built
+      from the exact fixture `capture_qualify_status.py` used, and
+      asserts the printed payload equals `before-qualify.json` exactly
+      (not just same keys) -- the combination call IS the loop's only
+      iteration when no `--seat` bindings exist.
 
-- [ ] 10. (S2) Add a test proving a two-distinct-profile home: the
+- [x] 10. (S2) Add a test proving a two-distinct-profile home: the
       per-profile loop qualifies both, AND the existing combination
       call still qualifies the combination — output names all three
       outcomes distinctly.
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k two_profile`
       passes, output pasted.
+      DONE: `1 passed, 3 deselected in 7.72s`. Test named
+      `test_two_profile_home_qualifies_each_seat_plus_the_combination`
+      (first attempt lacked the exact "two_profile" substring --
+      "two_distinct_profile" doesn't match the `-k two_profile` filter;
+      renamed, same lesson as Rungs S3/S4's earlier filter-name
+      mishaps). Asserts the top-level payload's `"combination"` and
+      `"seats"` entries carry distinct `qualification_subject_digest`
+      values -- the three outcomes are not conflated.
 
 - [ ] 11. (S2) [COMMIT] Commit `_cmd_qualify`'s per-profile loop and
       its tests.
