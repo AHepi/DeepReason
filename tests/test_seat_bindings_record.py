@@ -18,16 +18,31 @@ and tolerates an event with no attribute -- never to "no root has ever
 been stamped", which this rung's own future live runs will falsify.
 """
 
+import json
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
 
+from deepreason.application.models import RunBudgetIntentV1
+from deepreason.cli.doctor import (
+    ProductionContractCaseResultV1,
+    run_production_contract_doctor,
+)
+from deepreason.config import Config
 from deepreason.harness import Harness
-from deepreason.preparation import build_preparation_manifest
-from deepreason.provider_profile import ProviderProfileV1
+from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.endpoints import MockEndpoint
+from deepreason.preparation import (
+    RunPreparationRequestV1,
+    RunPreparationService,
+    build_preparation_manifest,
+)
+from deepreason.provider_profile import ProviderProfileV1, write_provider_profile
 from deepreason.run_manifest import UnsupportedRunManifestVersionError
+from deepreason.scheduler.scheduler import Scheduler
+from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
 from deepreason.seat_events import (
     SeatBindingsEventPayloadV1,
     SeatBindingV1,
@@ -248,3 +263,98 @@ def test_recorded_seat_bindings_is_a_partition_claim_never_a_single_unpack(tmp_p
     got = recorded_seat_bindings(harness)
     assert len(got) == 2
     assert [p.digest for p in got] == [first.digest, second.digest]
+
+
+def _qualified_report(manifest):
+    return run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: ProductionContractCaseResultV1(
+            case_id=f"case-{index + 1:03d}",
+            first_pass_valid=True,
+            eventual_valid=True,
+            repair_count=0,
+            semantic_admission=True,
+        ),
+    )
+
+
+def _prepared_root(tmp_path, *, seat_bindings=None) -> Path:
+    """A `prepare()`d root -- the smallest ordinary preparation, matching
+    Rung S4's own `MockEndpoint`/fake-manifest pattern. `seat_bindings`,
+    when given, is `{group: ProviderProfileV1}` to bind before preparing.
+    """
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    environ = {
+        "DEEPREASON_TEST_KEY": "not-a-real-secret",
+        "DEEPREASON_HOME": str(tmp_path / "seats-home"),
+    }
+    if seat_bindings:
+        write_seat_bindings(
+            {group: str(write_provider_profile(p, tmp_path / f"{group}.yaml"))
+             for group, p in seat_bindings.items()},
+            seat_bindings_path(environ=environ),
+        )
+    service = RunPreparationService(
+        runs_dir=tmp_path / "runs",
+        qualification_cache_dir=tmp_path / "qualification-cache",
+        environ=environ,
+        qualification_executor=_qualified_report,
+    )
+    request = RunPreparationRequestV1(
+        question="Why is the sky blue?",
+        budget=RunBudgetIntentV1(cycles=1, token_budget=2000),
+        profile_path=str(profile_path),
+    )
+    prepared = service.prepare(request)
+    return Path(prepared.root)
+
+
+def _run_one_cycle(root: Path) -> None:
+    """The smallest ordinary run over an already-prepared root: a mock
+    endpoint, no capability anywhere, mirroring
+    ``tests/test_module_fingerprints.py``'s own ``_scheduler_run``."""
+
+    harness = Harness(root)
+    reply = json.dumps({"candidates": [{"content": "x", "typicality": 0.5}]})
+    adapter = LLMAdapter({"conjecturer": MockEndpoint(lambda _p: reply)}, harness.blobs)
+    Scheduler(harness, adapter, Config(N_SCHOOLS=0)).run(1)
+
+
+def test_a_two_profile_home_stamps_both_bound_groups_in_one_run(tmp_path):
+    """SPEC.md Item S7's own accept criterion (R13): a two-profile home's
+    run shows the stamp naming both bindings -- exactly one
+    ``seat-bindings.v1`` event, one entry per bound group."""
+
+    bound_coder = _profile(model_id="model-coder")
+    bound_scratch = _profile(model_id="model-scratch")
+    root = _prepared_root(
+        tmp_path, seat_bindings={"coder": bound_coder, "scratch": bound_scratch}
+    )
+
+    _run_one_cycle(root)
+
+    got = recorded_seat_bindings(Harness(root, read_only=True))
+    assert len(got) == 1, got
+    assert {b.group for b in got[0].bindings} == {"coder", "scratch"}
+
+
+def test_a_default_home_stamps_nothing_and_projects_the_single_seat(tmp_path):
+    """SPEC.md Item S7's own accept criterion (R14): a default home's run
+    shows the single-seat stamp -- no stored event, and
+    ``seat_bindings_for_run`` projects exactly one "default" entry."""
+
+    root = _prepared_root(tmp_path)
+
+    _run_one_cycle(root)
+
+    harness = Harness(root, read_only=True)
+    assert recorded_seat_bindings(harness) == ()
+
+    from deepreason.run_manifest import load_run_manifest
+
+    manifest = load_run_manifest(root / "run-manifest.json")
+    projected = seat_bindings_for_run(harness, manifest)
+    assert len(projected) == 1
+    assert projected[0].group == "default"

@@ -1,6 +1,9 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=17 blockers=none. Actual src+tests now 577/650 (R21) --
-watch closely at steps 18-21's checkpoints. R21 (REQUEST.md Amendment 2) sets the
+State: next=22 blockers=none. Actual src+tests now 729, past R21's
+500-650 ceiling -- operator ruled "continue, report at delivery"
+(second overrun, same disposition as the first). Final total (incl.
+map + probe) to be recorded plainly in VALIDATION.md/DELIVERY.md. R21
+(REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
 src/+tests/+docs/map/+tools/root_sweep.py, superseding SPEC.md's own
 "220-300" headline for overrun checks. harness.py writer lands with
@@ -435,7 +438,7 @@ words and the operator's Amendment 1.
       re-verify, not yet a stop (actual, not projected, is what the
       rule checks).
 
-- [ ] 17. (S7, R2, R3, R8, M3, M5, Q3, Q5, C6, A5) Add
+- [x] 17. (S7, R2, R3, R8, M3, M5, Q3, Q5, C6, A5) Add
       `Scheduler._record_seat_bindings(self) -> None` in
       `scheduler.py`, placed immediately beside
       `_record_module_fingerprints`: reads `self.harness.root /
@@ -458,7 +461,21 @@ words and the operator's Amendment 1.
       `_record_seat_bindings` does not appear anywhere in
       `Scheduler.__init__`.
 
-- [ ] 18. (S7, R13, Q4, A4) Write the two-profile regression test: a
+      DONE 2026-08-07. `_record_seat_bindings` placed immediately after
+      `_record_module_fingerprints`; reads `self.harness.root /
+      SEAT_BINDINGS_SNAPSHOT_NAME` (S6's snapshot), returns
+      immediately if absent, else parses and calls
+      `self.harness.record_seat_bindings(...)` under the same
+      per-instance gate + `ReadOnlyHarnessError` catch shape. Call site
+      wired right after `self._record_module_fingerprints()` under the
+      identical `if cycles > 0:` guard; `self._seat_bindings_recorded =
+      False` added beside `self._module_fingerprints_recorded = False`
+      in `__init__`.
+
+          run() ordering OK
+          __init__ has no call to _record_seat_bindings: OK
+
+- [x] 18. (S7, R13, Q4, A4) Write the two-profile regression test: a
       mock-endpoint `Scheduler` run (matching Rung S4's own
       `MockEndpoint`/fake-manifest pattern from
       `tests/test_qualification_per_seat.py`) over a `prepare()`d root
@@ -471,7 +488,20 @@ words and the operator's Amendment 1.
       done-when: `python -m pytest tests/test_seat_bindings_record.py -q
       -k two_profile` passes.
 
-- [ ] 19. (S7, R14, Q4, A4) Write the default-home regression test: a
+      DONE 2026-08-07. Added shared helpers `_qualified_report`,
+      `_prepared_root`, `_run_one_cycle` (needed by both this test and
+      step 19's, written together since they share the same
+      prepare-then-run scaffolding) plus
+      `test_a_two_profile_home_stamps_both_bound_groups_in_one_run`.
+      `_run_one_cycle` uses a minimal `Config(N_SCHOOLS=0)` and a mock
+      endpoint -- the seat-bindings stamping mechanism reads only the
+      mint-time snapshot file, not the Scheduler's own routing, so no
+      real per-role dispatch is needed to exercise it:
+
+          .                                                        [100%]
+          1 passed, 10 deselected in ~6s (measured together with step 19)
+
+- [x] 19. (S7, R14, Q4, A4) Write the default-home regression test: a
       zero-binding `prepare()`d root's `Scheduler` run asserts
       `recorded_seat_bindings` returns `()` AND `seat_bindings_for_run`
       projects the single "default" entry. Offline regression
@@ -479,7 +509,15 @@ words and the operator's Amendment 1.
       done-when: `python -m pytest tests/test_seat_bindings_record.py -q
       -k default_home` passes.
 
-- [ ] 20. (S7) Mutation-prove the writer+emission tests (durable-test
+      DONE 2026-08-07. `test_a_default_home_stamps_nothing_and_projects_
+      the_single_seat` was written in the same pass as step 18 (shared
+      `_prepared_root`/`_run_one_cycle` scaffolding, disclosed there);
+      re-verified standalone this step:
+
+          .                                                        [100%]
+          1 passed, 10 deselected in 6.33s
+
+- [x] 20. (S7) Mutation-prove the writer+emission tests (durable-test
       rule 3): perturb the recorded seat-bindings snapshot before the
       stamp is built (e.g. corrupt one bound provider name), watch
       steps 18 and 19's new tests go RED where applicable, restore,
@@ -487,8 +525,44 @@ words and the operator's Amendment 1.
       done-when: the RED output and the restored GREEN run are both
       pasted.
 
-- [ ] 21. (S7) [COMMIT] Commit the emission site + its tests.
+      DONE 2026-08-07. Mutation: `_record_seat_bindings` made to
+      `return` unconditionally before checking the snapshot, i.e. never
+      stamp regardless of what `prepare()` wrote. RED:
+
+          F.                                                       [100%]
+          FAILED ...::test_a_two_profile_home_stamps_both_bound_groups_in_one_run
+          AssertionError: () ; assert 0 == 1
+          1 failed, 1 passed in 12.58s
+
+      Exactly the split the durable-test doctrine wants: the two-profile
+      test (expects a stamp) died; the default-home test (expects NO
+      stamp) survived unaffected -- evidence both tests are aimed at
+      what they say they guard, not vacuously green either way.
+      Restored (`git diff -- src/deepreason/scheduler/scheduler.py` ->
+      42 insertions, 0 deletions, no leftover mutation text) and GREEN:
+
+          ..                                                       [100%]
+          2 passed, 9 deselected in 12.37s
+
+      Full file: 11 passed in 95.01s.
+
+- [x] 21. (S7) [COMMIT] Commit the emission site + its tests.
       done-when: `git log --oneline -1` shows the commit.
+
+      DONE 2026-08-07. **Second budget STOP, resolved by operator
+      answer.** `git diff --stat 6ddec4d1 -- src/ tests/` -> 729
+      insertions, already past R21's corrected 500-650 ceiling, with
+      the map update (step 22) and the probe commit still to land
+      (projected final ~785-810). Raised via AskUserQuestion; operator
+      chose "continue, report final total at delivery" -- same
+      reasoning as the first overrun: excess is test/docstring density
+      matching this program's own established style
+      (`tests/test_seat_bindings_record.py` alone is 360 lines, the
+      single largest contributor, covering S2-S7 in one file the way
+      `test_module_fingerprints.py` covered its own rung in one
+      493-line file), not a new symbol or requirement beyond SPEC.md's
+      declared set. Will be recorded plainly in VALIDATION.md/
+      DELIVERY.md at delivery, not glossed.
 
 - [ ] 22. (S11, all) Map update, in the same tranche as the behaviour
       it describes and NOT as a trailing docs step:
