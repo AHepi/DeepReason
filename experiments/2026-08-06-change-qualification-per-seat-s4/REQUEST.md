@@ -140,4 +140,37 @@ path before deciding.
 
 ## Amendments
 
-(none yet)
+R11 (process/behavior): operator's Q4 answer, verbatim, superseding
+SPEC.md's "Option 2 recommended" pending a measurement:
+
+> Q4 amended — multi-model launch is the program's point, not a
+> deferrable. R5 is relaxed: qualifying the heterogeneous manifest as
+> its own single subject is PERMITTED if and only if you first
+> MEASURE that its battery cases dispatch to each role's bound
+> endpoint per the manifest's routes (SM9's untested combination, now
+> tested). If that measurement passes: deliver Option 2b — per-seat
+> qualify and status as specced, heterogeneous launch proceeds via
+> combination-subject qualification (each distinct combination is its
+> own cached battery), typed refusal only when the combination's
+> battery is absent. Park Option 1 as rung S4b, the optimization that
+> makes combinations cheap (qualify each model once, mix freely) —
+> its frozen-surface-5 design still comes to me at its own gate. If
+> the measurement FAILS: fall back to Option 2 exactly as specced and
+> say so — S4b then becomes required for launch, not optional. Either
+> way, S3's mixed-qualify defect analysis stands recorded.
+
+R12 (process): "S3's mixed-qualify defect analysis stands recorded"
+— SPEC.md's M1/M2 findings (S3 shipped SM9-forbidden mixed-manifest
+qualification by accident, inconsistent with S2's non-goal as
+originally stated) remain part of the record regardless of which
+branch (2b or 2-fallback) this tranche delivers; not to be
+retroactively softened.
+
+This amendment SUPERSEDES SPEC.md's Q4 stop and its "Option 2
+recommended" framing: `dr-spec-change` must (a) design and RUN the
+dispatch-correctness measurement R11 requires BEFORE finalizing scope,
+(b) branch SPEC.md's actual delivered scope on that measurement's
+real, pasted outcome — Option 2b if it passes, Option 2-as-originally-
+specced if it fails — never assume the outcome, (c) record Option 1
+as a parked Rung S4b regardless of branch, with its own
+frozen-surface-5 gate preserved for a future tranche.
