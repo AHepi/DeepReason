@@ -52,6 +52,17 @@ def build_parser() -> argparse.ArgumentParser:
             "(e.g. none, low, medium, high, or a numeric effort)"
         ),
     )
+    setup_cmd.add_argument(
+        "--seat",
+        action="append",
+        default=None,
+        metavar="GROUP=PATH",
+        help=(
+            "bind an existing provider profile file to a role group "
+            "(conjecture, coder, scratch, simulation); repeatable, "
+            "default (no --seat) leaves every role on the profile above"
+        ),
+    )
     qualify_cmd = sub.add_parser(
         "qualify", help="explicitly qualify the configured V6 provider contract"
     )
@@ -585,6 +596,16 @@ def _main(argv: list[str] | None = None) -> int:
                     else args.reasoning
                 ),
             )
+            if getattr(args, "seat", None) is not None:
+                from deepreason.seat_bindings import (
+                    parse_seat_flags,
+                    seat_bindings_path,
+                    write_seat_bindings,
+                )
+
+                write_seat_bindings(
+                    parse_seat_flags(args.seat), seat_bindings_path()
+                )
         except ValueError as error:
             print(str(error), file=sys.stderr)
             return 1
@@ -1513,6 +1534,7 @@ def _cmd_qualify(args) -> int:
         run_shallow_fitness_battery,
         shallow_fitness_maximum_provider_calls,
     )
+    from deepreason.seat_bindings import resolve_seat_bindings
 
     tier_states = {
         "full": "ready",
@@ -1540,6 +1562,7 @@ def _cmd_qualify(args) -> int:
         manifest = qualification_subject_manifest(
             profile,
             attached_evidence=bool(getattr(args, "attached_evidence", False)),
+            seat_bindings=resolve_seat_bindings() or None,
         )
         cache_dir = provider_state_dir() / "qualification-cache"
         subject = qualification_subject_digest(manifest, profile)

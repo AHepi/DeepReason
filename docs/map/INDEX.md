@@ -61,6 +61,7 @@ than you need.
 | `CON-conjecture-source.md` | the socket that proposes candidate artifacts (`rules/conj.py`) |
 | `CON-criticism-source.md` | the socket that attacks or scrutinises a target (`rules/crit.py`) |
 | `CON-scheduler-ranking.md` | which problem a cycle works on (`Scheduler._select_problem`) |
+| `CON-seats.md` | how a role becomes a provider request: `select_lease`, `EndpointLease`, and today's one-profile-per-run mint |
 
 ## Invariants and recipes
 
