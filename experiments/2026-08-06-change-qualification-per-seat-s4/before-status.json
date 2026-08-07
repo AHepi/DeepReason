@@ -1,0 +1,1 @@
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"generic","model_id":"capture-test-model","model_revision":null,"route_id":"provider-profile-ef21dba44ea835b207006d8c"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}

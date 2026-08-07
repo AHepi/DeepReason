@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=1 blockers=none
+State: next=5 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -8,11 +8,12 @@ underlying mechanism — read there if anything below contradicts it.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S8) Capture the BEFORE sweep, before any `src/` edit:
+- [x] 1. (S8) Capture the BEFORE sweep, before any `src/` edit:
       `python tools/root_sweep.py experiments/2026-08-06-change-qualification-per-seat-s4/sweep-before.txt`.
       done-when: file exists, summary line pasted.
+      DONE: `SWEEP COMPLETE: 45 roots -> sweep-before.txt`.
 
-- [ ] 2. (S6) Capture BEFORE output for `deepreason qualify --json`
+- [x] 2. (S6) Capture BEFORE output for `deepreason qualify --json`
       and `deepreason status --json` against a single-profile (no
       `--seat`) test home, before any `src/` edit:
       write both outputs to
@@ -20,21 +21,30 @@ order. One step per dr-execute-step invocation.
       and `.../before-status.json` (using an injected/mocked executor
       so no real provider call is needed).
       done-when: both files exist, non-empty.
+      DONE: canonical capture script committed as
+      `capture_qualify_status.py` (reused identically for the AFTER
+      capture at step 18); `before-qualify.json`/`before-status.json`
+      both populated (pasted content above).
 
-- [ ] 3. (S1) Promote the dispatch-purity measurement
+- [x] 3. (S1) Promote the dispatch-purity measurement
       (`measure_dispatch.py`) into a committed regression test,
       `tests/test_qualification_per_seat.py::test_heterogeneous_manifest_dispatches_with_zero_cross_contamination`
       — 3 roles (2 explicitly bound to different profiles, 1 default),
       asserting `ALL ROLES DISPATCH-PURE` per M5's own shape.
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k dispatch_purity`
       passes, output pasted.
+      DONE: `1 passed, 1 deselected in 0.45s`.
 
-- [ ] 4. (S1) Add the mutation-companion test proving step 3's test
+- [x] 4. (S1) Add the mutation-companion test proving step 3's test
       CAN fail: temporarily wire a SHARED fake endpoint across roles
       (simulating a hypothetical regression where role identity is
       lost) and confirm the purity assertion catches it, then restore.
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k mutation`
       passes, output pasted.
+      DONE: `1 passed, 1 deselected in 0.28s`. Test named
+      `test_dispatch_purity_mutation_companion_can_actually_fail`
+      (first attempt's name lacked "mutation", missing the filter;
+      renamed).
 
 - [ ] 5. (S1) [COMMIT] Commit `tests/test_qualification_per_seat.py`.
       done-when: `git log -1 --stat` shows the file, pushed.
