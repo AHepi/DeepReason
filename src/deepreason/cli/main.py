@@ -1509,10 +1509,45 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
 
 
 def _cmd_status(args) -> int:
-    from deepreason.readiness import get_readiness, readiness_json, readiness_text
+    from deepreason.readiness import (
+        get_readiness,
+        get_seat_readiness,
+        readiness_json,
+        readiness_text,
+    )
 
     readiness = get_readiness(getattr(args, "provider_profile", None))
-    print(readiness_json(readiness) if getattr(args, "json", False) else readiness_text(readiness))
+    seats = get_seat_readiness()
+    if not seats:
+        # No seat bindings: byte-identical to pre-S4 (R6) -- this branch
+        # is never taken once bindings exist.
+        print(
+            readiness_json(readiness)
+            if getattr(args, "json", False)
+            else readiness_text(readiness)
+        )
+        return 0 if readiness.ready else 1
+
+    if getattr(args, "json", False):
+        payload = json.loads(readiness_json(readiness))
+        payload["seats"] = [
+            json.loads(seat.model_dump_json(by_alias=True, exclude_none=False))
+            for seat in seats
+        ]
+        print(json.dumps(payload, sort_keys=True, separators=(",", ":")))
+    else:
+        print(readiness_text(readiness))
+        print("Per-seat readiness:")
+        for seat in seats:
+            route = seat.route_identity or {}
+            print(f"  {seat.group}:")
+            print(
+                "    Route: "
+                + (f"{route.get('provider')}/{route.get('model_id')}" if route else "none")
+            )
+            print(f"    Credential present: {str(seat.credential_present).lower()}")
+            print(f"    Qualification: {seat.qualification_state}")
+            print(f"    Next action: {seat.next_action}")
     return 0 if readiness.ready else 1
 
 

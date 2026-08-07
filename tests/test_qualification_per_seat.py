@@ -312,3 +312,64 @@ def test_seat_readiness_two_bound_groups_independent_of_combination(
     assert by_group["coder"].ready is True
     assert by_group["scratch"].qualification_state == "unqualified"
     assert by_group["scratch"].ready is False
+
+
+def test_status_single_profile_home_output_is_byte_identical_to_pre_s4(
+    tmp_path, monkeypatch, capsys
+):
+    """S4/R6 (SPEC.md Item S6): with no seat bindings, get_seat_readiness()
+    returns () so `_cmd_status`'s new per-seat branch is never taken --
+    output must be byte-identical to before-status.json, captured before
+    this rung's src/ edits landed."""
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_S4_CAPTURE_KEY", "not-a-real-secret")
+    write_provider_profile(
+        _capture_test_profile(), setup_provider_profile_path(environ=os.environ)
+    )
+
+    with patch(
+        "deepreason.qualification.default_qualification_executor",
+        _qualified_report,
+    ):
+        main(["qualify", "--yes", "--json"])
+        capsys.readouterr()  # discard qualify's own stdout
+        main(["status", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    before_payload = json.loads((TRANCHE_DIR / "before-status.json").read_text())
+    assert payload == before_payload
+
+
+def test_status_two_seat_home_names_both_seats(tmp_path, monkeypatch, capsys):
+    """S4 (SPEC.md Item S4): a two-seat home's `deepreason status --json`
+    additionally names both bound groups in a "seats" key."""
+
+    from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_S4_CAPTURE_KEY", "not-a-real-secret")
+    write_provider_profile(
+        _capture_test_profile(), setup_provider_profile_path(environ=os.environ)
+    )
+    bound_a = _capture_test_profile(model_id="capture-seat-a")
+    bound_a_path = tmp_path / "seat-a.yaml"
+    write_provider_profile(bound_a, bound_a_path)
+    bound_b = _capture_test_profile(model_id="capture-seat-b")
+    bound_b_path = tmp_path / "seat-b.yaml"
+    write_provider_profile(bound_b, bound_b_path)
+    write_seat_bindings(
+        {"coder": str(bound_a_path), "scratch": str(bound_b_path)},
+        seat_bindings_path(environ=os.environ),
+    )
+
+    main(["status", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert "seats" in payload
+    groups = {entry["group"] for entry in payload["seats"]}
+    assert groups == {"coder", "scratch"}
+    models = {entry["route_identity"]["model_id"] for entry in payload["seats"]}
+    assert models == {"capture-seat-a", "capture-seat-b"}

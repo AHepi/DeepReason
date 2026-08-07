@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=12 blockers=none
+State: next=15 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -156,23 +156,42 @@ order. One step per dr-execute-step invocation.
       `get_seat_readiness` still correctly reports coder=ready,
       scratch=unqualified.
 
-- [ ] 14. (S3) [COMMIT] Commit `get_seat_readiness`/`SeatReadinessV1`
+- [x] 14. (S3) [COMMIT] Commit `get_seat_readiness`/`SeatReadinessV1`
       and their test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
+      DONE: commit `7ef63b01`, pushed
+      (`68b5b69b..7ef63b01 claude/seat-census-rung-s1-7gphj9 ->
+      claude/seat-census-rung-s1-7gphj9`).
 
-- [ ] 15. (S4) Extend `_cmd_status` in `cli/main.py`: when
+- [x] 15. (S4) Extend `_cmd_status` in `cli/main.py`: when
       `get_seat_readiness()` is non-empty, print an additional
       "Per-seat readiness" section (text) / add a `"seats"` key to a
       new wrapping JSON object (`--json`); empty case untouched.
       done-when: `python -c "import deepreason.cli.main"` succeeds.
+      DONE: `IMPORT_OK`. Empty-seats branch prints exactly
+      `readiness_json(readiness)`/`readiness_text(readiness)` as
+      before (untouched code path, R6). Non-empty: JSON case parses
+      `readiness_json`'s own output and adds a `"seats"` list; text
+      case prints `readiness_text` then an indented "Per-seat
+      readiness:" block per seat group. Return code stays keyed to
+      the default profile's own `readiness.ready` (unchanged
+      semantics -- launch capability is a combination-qualify
+      question per M6, not a status-command concern).
 
-- [ ] 16. (S4) Add a test: two-seat home's `deepreason status --json`
+- [x] 16. (S4) Add a test: two-seat home's `deepreason status --json`
       names both seats; single-profile home's output is BYTE-IDENTICAL
       to step 2's captured before-file.
       done-when: `python -m pytest tests/test_qualification_per_seat.py -q -k status`
       passes, output pasted; `diff` against
       `before-status.json` for the single-profile case is empty
       (pasted).
+      DONE: `2 passed, 5 deselected in 3.79s`.
+      `test_status_single_profile_home_output_is_byte_identical_to_pre_s4`
+      asserts `payload == before_payload` directly; independently
+      re-verified with a standalone `diff` of a fresh capture against
+      `before-status.json`: `DIFF_EMPTY` (no output lines).
+      `test_status_two_seat_home_names_both_seats` asserts the
+      `"seats"` key names both bound groups with correct model ids.
 
 - [ ] 17. (S4) [COMMIT] Commit `_cmd_status`'s extension and its test.
       done-when: `git log -1 --stat` shows the changed files, pushed.
