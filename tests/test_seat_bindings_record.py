@@ -22,6 +22,8 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pytest
+
 from deepreason.harness import Harness
 from deepreason.preparation import build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
@@ -155,4 +157,56 @@ def test_seat_bindings_for_run_projects_default_when_no_binding_exists(tmp_path)
     assert projected[0].group == "default"
     assert projected[0].provider == profile.provider
     assert projected[0].model_id == profile.model_id
+    assert recorded_seat_bindings(harness) == ()
+
+
+def _seat_payload(**overrides) -> SeatBindingsEventPayloadV1:
+    binding = SeatBindingV1.of(
+        overrides.get("group", "coder"), _profile(model_id="model-bound")
+    )
+    return SeatBindingsEventPayloadV1.of([binding])
+
+
+def _forgeable_event(**overrides):
+    from deepreason.ontology.event import Event, Rule
+
+    payload = _seat_payload()
+    fields = dict(
+        seq=0,
+        ts="2026-08-07T00:00:00+00:00",
+        rule=Rule.MEASURE,
+        inputs=[payload.schema_, payload.digest],
+        outputs=[],
+        seat_bindings=payload,
+    )
+    fields.update(overrides)
+    return Event(**fields)
+
+
+def test_the_seat_bindings_contract_fence_is_the_only_accepted_shape():
+    """SPEC.md Item S4: the payload is fenced by the RECORD, not merely
+    by the appender's good behaviour, mirroring
+    ``module_fingerprints``'s own already-tested fence exactly.
+    """
+
+    from deepreason.ontology.event import Rule
+
+    _forgeable_event()  # the appender's own shape still validates
+
+    with pytest.raises(ValueError, match="only a Measure event"):
+        _forgeable_event(rule=Rule.CONJ)
+
+    with pytest.raises(ValueError, match="schema and digest"):
+        _forgeable_event(inputs=[])
+
+    with pytest.raises(ValueError, match="identity, not work"):
+        _forgeable_event(outputs=["x"])
+
+
+def test_a_measure_event_without_seat_bindings_is_still_ordinary(tmp_path):
+    """The fence is ONE-directional: seat bindings may ride only a
+    Measure event, but a Measure carries no obligation to hold one."""
+
+    harness = Harness(tmp_path / "run")
+    harness.record_measure(inputs=["cycle", "0", "pi-seed"])
     assert recorded_seat_bindings(harness) == ()

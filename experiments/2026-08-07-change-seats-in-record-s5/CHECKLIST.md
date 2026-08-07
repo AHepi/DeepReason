@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=7 blockers=none
+State: next=10 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -171,7 +171,7 @@ words and the operator's Amendment 1.
       work, since both landed in the tree together with nothing else
       to separate).
 
-- [ ] 7. (S4, R7, C3, C4) Add `Event.seat_bindings:
+- [x] 7. (S4, R7, C3, C4) Add `Event.seat_bindings:
       SeatBindingsEventPayloadV1 | None = Field(default=None,
       exclude_if=lambda value: value is None)` to `ontology/event.py`,
       plus the `_process_payload_contract` fencing clause mirroring
@@ -183,7 +183,21 @@ words and the operator's Amendment 1.
       field has NO `seat_bindings` key in `model_dump_json(by_alias=True)`
       (absence is absence from the BYTES, not a null in them).
 
-- [ ] 8. (S4) Write the contract-fence tests in
+      DONE 2026-08-07. Import added alphabetically
+      (`deepreason.seat_events` after `deepreason.scratch.events`);
+      field and fence clause mirror `module_fingerprints`'s own exactly.
+      An `Event` that does not set the field:
+
+          keys: ['inputs', 'llm', 'outputs', 'rule', 'seq', 'state_diff', 'ts']
+          seat_bindings in bytes: False
+          field exists on model: True
+          field optional: True
+          attribute reads as None: True
+
+      No existing event's serialized bytes move; nothing else in the
+      file changed.
+
+- [x] 8. (S4) Write the contract-fence tests in
       `tests/test_seat_bindings_record.py`: an `Event` with
       `rule=Rule.MEASURE`, correct `inputs`, and a `seat_bindings`
       payload validates; the same construction with `rule=Rule.CONTROL`
@@ -193,13 +207,36 @@ words and the operator's Amendment 1.
       -k contract` passes, covering one positive and at least two
       distinct negative cases.
 
-- [ ] 9. (S2) Re-run step 3's reader-absence tests unchanged now that
+      DONE 2026-08-07. `test_the_seat_bindings_contract_fence_is_the_
+      only_accepted_shape` covers one positive construction plus three
+      negative cases (wrong rule, wrong inputs, nonempty outputs);
+      `test_a_measure_event_without_seat_bindings_is_still_ordinary`
+      proves the fence is one-directional:
+
+          .                                                        [100%]
+          1 passed, 6 deselected in 0.28s
+
+      Full file:
+
+          .......                                                  [100%]
+          7 passed in 77.63s (0:01:17)
+
+- [x] 9. (S2) Re-run step 3's reader-absence tests unchanged now that
       the field exists — absence must still be valid, the half of
       R4/R5 that only becomes testable at this point.
       done-when: the absence test functions added at step 3 are
       byte-unedited since step 4's commit (`git diff` on those
       functions is empty) and `python -m pytest
       tests/test_seat_bindings_record.py -q` -> "0 failed".
+
+      DONE 2026-08-07. `git diff 290a1ed0 --
+      tests/test_seat_bindings_record.py` shows ONLY additions (no `-`
+      line touching an existing line, confirmed by grep) -- steps 5/8
+      appended new functions and imports, the four original absence
+      tests are untouched:
+
+          .......                                                  [100%]
+          7 passed in 81.12s (0:01:21)
 
 - [ ] 10. (S4) [COMMIT] Commit the `Event.seat_bindings` field, its
       fence, and the fence tests.
