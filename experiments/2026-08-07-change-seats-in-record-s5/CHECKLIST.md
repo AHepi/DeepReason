@@ -1,5 +1,8 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=10 blockers=none
+State: next=11 blockers=none. R21 (REQUEST.md Amendment 2) sets the
+binding budget ceiling to 500-650 insertions across
+src/+tests/+docs/map/+tools/root_sweep.py, superseding SPEC.md's own
+"220-300" headline for overrun checks. Actual so far: 361.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -238,11 +241,16 @@ words and the operator's Amendment 1.
           .......                                                  [100%]
           7 passed in 81.12s (0:01:21)
 
-- [ ] 10. (S4) [COMMIT] Commit the `Event.seat_bindings` field, its
+- [x] 10. (S4) [COMMIT] Commit the `Event.seat_bindings` field, its
       fence, and the fence tests.
       done-when: `git log --oneline -1` shows the commit, and `git diff
       --stat <step-8-commit>..HEAD -- src/deepreason/ontology/event.py`
       shows only the new field and fence clause.
+
+      DONE 2026-08-07, commit `b0813f59`. Budget checkpoint (R21):
+      `git diff --stat 6ddec4d1 -- src/ tests/` -> 361 insertions total
+      (event.py 23, seat_events.py 126, tests 212), inside the
+      corrected 500-650 range.
 
 - [ ] 11. (S5, R3, R8, R17, R19, C1, M6) Add the writer:
       `Harness.record_seat_bindings(self, payload) -> Event` in
