@@ -1,6 +1,7 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=25 blockers=none (step 24 landed uncommitted; batches into
-step 28's [COMMIT]). Actual src+tests+map now 792 (R21).
+State: next=26 blockers=none. Full gate: 3382 passed, 0 failed net of
+the pre-existing, independently-reconfirmed P1/P3 failure (unrelated
+to this rung). Actual src+tests+map now 792 (R21).
 Final total (incl. probe) to be recorded plainly in
 VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
@@ -635,7 +636,7 @@ words and the operator's Amendment 1.
 
           docs_verify --audit: 0 finding(s)
 
-- [ ] 25. (S8, R10) FULL gate: `python -m pytest tests/ -q -n 4` (never
+- [x] 25. (S8, R10) FULL gate: `python -m pytest tests/ -q -n 4` (never
       bare `pytest`). Any fixture that moved must be a count/position
       assertion this design predicted in advance; a content or replay
       test that moved is escalated, not edited.
@@ -645,6 +646,22 @@ words and the operator's Amendment 1.
       test_absence_is_valid_before_the_feature_and_presence_valid_after`),
       named explicitly in the pasted output (R10's own exception,
       named).
+
+      DONE 2026-08-07:
+
+          FAILED tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after
+          ValueError: too many values to unpack (expected 1)
+          1 failed, 3382 passed, 7 skipped in 741.57s (0:12:21)
+
+      The one failure is exactly P1/P3 -- the continuation double-stamp
+      defect tracked since Rungs S1-S4 (REQUEST.md C6), same test name,
+      same error shape (`(payload,) = recorded_module_fingerprints(...)`
+      unpacking two stamps on a continued root). Unrelated to this
+      rung's own diff: nothing in Items S2-S7 touches
+      `Scheduler._module_fingerprints_recorded`,
+      `deepreason continue`, or `test_module_fingerprints.py` itself.
+      No fixture edited. Net of P1/P3: **0 failed** (3382 passed, 7
+      skipped), satisfying R10's own named exception.
 
 - [ ] 26. (S5, R19, R20) Frozen-surface diff: confirm the ONLY
       authorized surface touch is `harness.py`'s two S5 hunks; the
