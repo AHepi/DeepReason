@@ -1,5 +1,5 @@
 # Checklist for: qualification per seat — Rung S4 of role-seat separation
-State: next=21 blockers=none
+State: next=23 blockers=none
 Map ids: DR-SUB-manifest (qualification subject digests), DR-SUB-application
 (cli/main.py, readiness.py, preparation.py), DR-CON-seats. No SEAM
 document exists naming seats x manifest specifically; DR-CON-seats'
@@ -220,20 +220,40 @@ order. One step per dr-execute-step invocation.
       DONE: `docs_verify [full]: 52 documents, 824 checks, 4 workers`;
       `docs_verify: 0 failed`.
 
-- [ ] 21. (all) Full gate: `pytest tests/ -q -n 4`.
+- [x] 21. (all) Full gate: `pytest tests/ -q -n 4`.
       done-when: output pasted in full; net of the already-diagnosed
       pre-existing failure (Rungs S1/S3's PARKED.md P1/P3),
       independently re-confirmed unrelated via
       `git log --oneline <tranche-base>..HEAD -- src/deepreason/harness.py src/deepreason/module_events.py tests/test_module_fingerprints.py`
       being empty.
+      DONE: `1 failed, 3366 passed, 7 skipped in 631.89s (0:10:31)`.
+      The 1 failure is
+      `tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+      -- `ValueError: too many values to unpack (expected 1)` on root
+      `run-a518e33a75507207633f864ba6a864b1`, the SAME pre-existing P1/P3
+      failure recorded by Rungs S1/S3's PARKED.md.
+      `git log --oneline d6b8dea9~1..HEAD -- src/deepreason/harness.py
+      src/deepreason/module_events.py tests/test_module_fingerprints.py`
+      (`d6b8dea9` = this tranche's first commit): empty, confirming
+      unrelated fresh for this tranche's own commit range. (First
+      attempt at this step hit a transient `ModuleNotFoundError:
+      No module named 'deepreason'` in the background shell -- retried
+      once and the editable install was present; not re-run a third
+      time.)
 
-- [ ] 22. (S9) Write `PARKED.md`: record Rung S4b (Option 1 from
+- [x] 22. (S9) Write `PARKED.md`: record Rung S4b (Option 1 from
       SPEC.md revision 1 — per-role provenance so N models mix freely
       without a fresh combination battery per new combination) as a
       ready-to-run future tranche with its own frozen-surface-5 gate,
       plus the already-known P1 (Rungs S1/S3's pre-existing test
       failure) pointer.
       done-when: `PARKED.md` exists.
+      DONE: `experiments/2026-08-06-change-qualification-per-seat-s4/PARKED.md`
+      created — S4b entry (why it's cost not correctness per M5/M6,
+      why it's real frozen-surface-5 contact, ready-to-run
+      `dr-change-orchestrator` entry point) plus P1 (pointing to S1's
+      P3 / S3's P1, re-confirmed unrelated for this tranche's own
+      commit range).
 
 - [ ] 23. (all) [COMMIT] Final commit of any remaining tranche
       changes, push with retry, confirm clean tree.
