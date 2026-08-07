@@ -19,15 +19,33 @@ been stamped", which this rung's own future live runs will falsify.
 """
 
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
 from deepreason.harness import Harness
+from deepreason.preparation import build_preparation_manifest
+from deepreason.provider_profile import ProviderProfileV1
 from deepreason.run_manifest import UnsupportedRunManifestVersionError
 from deepreason.seat_events import (
     SeatBindingsEventPayloadV1,
     SeatBindingV1,
     recorded_seat_bindings,
+    seat_bindings_for_run,
 )
+
+
+def _profile(**updates):
+    values = {
+        "provider": "openai",
+        "endpoint": "https://api.example.com/v1",
+        "model_id": "model-default",
+        "family": "family-a",
+        "context_window_tokens": 262144,
+        "maximum_completion_tokens": 4096,
+        "credential_env": "DEEPREASON_TEST_KEY",
+    }
+    values.update(updates)
+    return ProviderProfileV1.create(**values)
 
 
 def _committed_roots() -> list[Path]:
@@ -114,3 +132,27 @@ def test_the_reader_extracts_a_stamp_the_event_already_carries():
         log = _FakeLog()
 
     assert recorded_seat_bindings(_FakeHarness()) == (payload,)
+
+
+def test_seat_bindings_for_run_projects_default_when_no_binding_exists(tmp_path):
+    """SPEC.md Item S3's own accept criterion: a manifest with no seat
+    bindings (every role shares one uniform route -- Rung S1's own
+    census) projects exactly one synthesized "default" entry naming the
+    manifest's own provider/model_id, with no stored event required.
+    """
+
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Why is the sky blue?",
+        compiled_at=datetime(2026, 8, 7, tzinfo=timezone.utc).isoformat(),
+    )
+    harness = Harness(tmp_path / "run")
+
+    projected = seat_bindings_for_run(harness, manifest)
+
+    assert len(projected) == 1
+    assert projected[0].group == "default"
+    assert projected[0].provider == profile.provider
+    assert projected[0].model_id == profile.model_id
+    assert recorded_seat_bindings(harness) == ()

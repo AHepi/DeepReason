@@ -96,3 +96,31 @@ def recorded_seat_bindings(harness) -> tuple[SeatBindingsEventPayloadV1, ...]:
         for event in harness.log.read()
         if (payload := getattr(event, "seat_bindings", None)) is not None
     )
+
+
+def seat_bindings_for_run(harness, manifest) -> tuple[SeatBindingV1, ...]:
+    """Every seat currently in effect for a run, as a reader asking "what
+    does this run use" would answer it.
+
+    Returns the LAST recorded stamp's bindings if any exist. Otherwise no
+    ``--seat`` flag was ever bound, so every role shares one uniform route
+    (Rung S1's own census proved this) and this PROJECTS a single
+    "default" entry from that route instead of reading a stored event -- a
+    default home never gets a ``seat-bindings.v1`` event at all.
+    """
+
+    stamps = recorded_seat_bindings(harness)
+    if stamps:
+        return stamps[-1].bindings
+    role = next(iter(sorted(manifest.roles)))
+    route = manifest.roles[role][0]
+    return (
+        SeatBindingV1(
+            group="default",
+            provider=route.provider,
+            model_id=route.model_id,
+            profile_digest=sha256_hex(
+                canonical_json(route.model_dump(mode="json"))
+            ),
+        ),
+    )

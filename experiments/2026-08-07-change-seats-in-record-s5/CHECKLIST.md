@@ -1,5 +1,5 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=5 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -132,7 +132,7 @@ words and the operator's Amendment 1.
       commit for those files (the mutation was reverted, not landed).
       This step's own commit carries only the CHECKLIST.md evidence.
 
-- [ ] 5. (S3, R5, R14) Add `seat_bindings_for_run(harness, manifest) ->
+- [x] 5. (S3, R5, R14) Add `seat_bindings_for_run(harness, manifest) ->
       tuple[SeatBindingV1, ...]` to `seat_events.py`: returns
       `recorded_seat_bindings(harness)`'s LAST stamp's `bindings` if
       any exist, else synthesizes one `SeatBindingV1(group="default",
@@ -144,6 +144,25 @@ words and the operator's Amendment 1.
       asserts `seat_bindings_for_run` returns exactly one entry with
       `group == "default"` and the manifest's own provider/model_id
       (SPEC.md Item S3's own accept criterion, verbatim).
+
+      DONE 2026-08-07. `seat_bindings_for_run(harness, manifest)` added
+      to `seat_events.py`: returns the last recorded stamp's bindings
+      if any exist, else synthesizes one `SeatBindingV1(group="default",
+      ...)` from `manifest.roles[<sorted-first role>][0]` (a `Route`,
+      which has no `profile_digest` field of its own -- the projection
+      synthesizes one via `sha256_hex(canonical_json(route.model_dump(...)))`,
+      since SPEC.md's own Item S3 text and accept criterion only pin
+      `group`/`provider`/`model_id`, not this value). Test asserts
+      exactly SPEC's own accept criterion, plus that no event was
+      stored:
+
+          .                                                        [100%]
+          1 passed, 4 deselected in 0.30s
+
+      Full file, unaffected:
+
+          .....                                                    [100%]
+          5 passed in 75.66s (0:01:15)
 
 - [ ] 6. (S3) [COMMIT] Commit the projection reader + its test.
       done-when: `git log --oneline -1` shows the commit.
