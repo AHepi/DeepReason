@@ -171,6 +171,17 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   Detail goes in the experiment's RESULTS.md, not the reply. Do not restate
   the reasoning that produced a finding once the finding is stated. Say
   corrections plainly and move on.
+- The operator's preferred explanation style (recorded 2026-08-06, at
+  their request): answer their actual worry in the FIRST sentence, before
+  any mechanism. When a finding sounds like bad news, state what it does
+  NOT mean for their intent before what it does. Present forks as
+  real-world roads priced in their terms (what they can do, when, at what
+  cost), with a recommendation. Own your part plainly when a prior
+  instruction or workflow rule caused the confusion. Close a hard
+  explanation with ONE short, accurate everyday analogy ("the fire
+  marshal certifies the room as arranged, or each chair individually").
+  Internal artifacts keep full precision; anything shown to the operator
+  carries its plain-language meaning alongside.
 - Commits: one defect or one change per commit; message states what,
   why, the live evidence (run ids), and "Full gate: N passed, 0
   failed" when code changed. Push with retry (2s/4s/8s/16s backoff).

@@ -186,7 +186,11 @@ stops: the deliverable at a gate is a committed document and an ended
 turn, not an implementation. And every stop presented to the operator
 leads with the decision needed in ONE sentence, the options priced, and
 a recommendation with its reason — the operator should be able to
-answer with a word.
+answer with a word. Style, per the operator's recorded preference
+(CLAUDE.md, Conventions): answer their actual worry first; say what a
+scary finding does NOT mean before what it does; own the workflow's own
+contribution to any confusion; and close hard explanations with one
+short, accurate everyday analogy.
 
 **Exit criterion.** You know you are driving properly when every claim
 you make about a run ends in a typed artifact, every modification you
