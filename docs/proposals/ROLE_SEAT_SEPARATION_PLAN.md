@@ -106,6 +106,27 @@ selection, not at registration). Accept: two-profile home qualifies
 both and refuses when one battery is absent; single-profile homes hit
 the existing cache exactly as today.
 
+### Rung S4b — per-role provenance qualification  [DESIGN-AND-STOP, PARKED]
+Inserted 2026-08-07 by the monitor session, formalizing the parking
+recorded at Rung S4's delivery (experiments/2026-08-06-change-
+qualification-per-seat-s4/PARKED.md, its S4b entry — the authoritative
+statement; this rung summarizes it). S4 shipped Option 2b:
+combination-subject qualification — every distinct
+(default + bound-profile-set) combination pays its own full battery,
+proven correct by M5 (dispatch purity) and M6 (typed refusal for an
+unqualified combination). S4b is the OPTIMIZATION on top: per-role
+provenance records so each distinct profile qualifies once and any
+manifest mixing already-qualified profiles launches without a fresh
+combination battery (N batteries instead of M combinations — the thing
+that makes model-swapping cheap). It touches frozen surface 5
+(qualification subject digests) by construction, so it is a
+DESIGN-AND-STOP rung: `dr-capture-request` starts from the PARKED.md
+entry plus S4 SPEC.md revision 1's "Option 1" sketch; explicit operator
+words are required before any code lands, and no prior rung's
+frozen-surface grant carries over (non-transitivity — see S5's R20
+precedent). Not on the ladder's critical path: S5-S7 neither need it
+nor touch its surface. Estimated ~400-700 lines when picked up.
+
 ### Rung S5 — seats in the typed record  [EXECUTE, rung-4 template]
 Extend the module-fingerprint stamp (or a sibling
 `seat-bindings.v1` payload — S2 decides) so every run records
@@ -146,6 +167,9 @@ S1 (half a day, pure measurement) → S2 (a day of measured design, one
 operator decision) → S3-S5 (one tranche each, the rung-3/4/5 shapes
 rehearsed twice already) → S6 (one live A/B + its qualification
 batteries) → S7 (its own program, scoped by then-current needs).
+S4b sits OFF the critical path: an operator-priced optimization rung,
+picked up whenever combination-battery cost starts to bite, without
+blocking or being blocked by S5-S7.
 Frozen contact is confined to S2's decision; everything else is
 reader-tolerant addition. Rungs are independently deliverable; the
 ladder stops safely after any.
