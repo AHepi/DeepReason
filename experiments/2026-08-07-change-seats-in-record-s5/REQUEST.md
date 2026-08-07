@@ -450,3 +450,48 @@ authorization is owed) or to any future rung touching `harness.py`
 again — each such rung's own `dr-spec-change` must obtain its own
 words, exactly as SPEC.md's own forecast already argued when reasoning
 about why rung 4's R18 did not automatically extend to this rung.
+
+**Amendment 2 (2026-08-07, operator message, verbatim).** Sent
+mid-`dr-execute-step`, in response to a budget-overrun STOP raised
+before step 10's commit: actual `src/` + `tests/` lines already at 361
+(seat_events.py 126, ontology/event.py 23, tests/test_seat_bindings_
+record.py 212) against SPEC.md's own Budget headline of "Estimated
+220-300 lines" for the whole tranche, with the harness.py writer,
+scheduler.py emission site, preparation.py/seat_bindings.py mint-time
+carrier, remaining S5-S7 tests, the map update and the probe commit
+still unlanded:
+
+> Budget overrun accepted for Rung S5 — operator words, ledger this
+> verbatim as a REQUEST.md amendment. The SPEC.md headline (220–300
+> lines) understated its own component itemization; re-derive the
+> budget from the itemized list plus the module_events.py mirror
+> (~500–650 insertions including tests and map) and record the
+> corrected number in the amendment. Scope unchanged: no symbol beyond
+> the spec's declared set, all stop conditions unchanged. Continue
+> from the next unchecked step through step 28, then stop for review
+> as before.
+
+New requirement, quoting the operator's own words:
+
+R21 (process, budget correction): "the SPEC.md headline (220–300
+lines) understated its own component itemization" — verified fresh:
+summing SPEC.md's own per-file estimates at their upper bounds
+(`seat_events.py` 80 + `event.py` 20 + `harness.py` 30 +
+`scheduler.py` 50 + `preparation.py` 20 + `seat_bindings.py` helper 15
++ tests 140 + map 60 + probe 20) already totals 435, and rung 4's own
+precedent (this program's own closest mirror: `module_events.py`
+landed at 105 lines against a smaller per-item estimate, its test file
+`test_module_fingerprints.py` at 493 lines, and its own tranche
+recorded a ~3-4x per-item overrun that was NOT a stop because no
+separate, higher ceiling was crossed) predicts every one of this
+rung's own components running similarly over its own per-item
+estimate. **The corrected, binding budget for this tranche is
+500-650 insertions across `src/` + `tests/` + `docs/map/` +
+`tools/root_sweep.py` combined, superseding SPEC.md's own "220-300"
+headline for the purpose of any future overrun check in this
+tranche** (SPEC.md's own text is not edited — R21 is the ledgered
+correction of record). No symbol, file, or requirement beyond
+SPEC.md's already-declared Items S1-S11 is authorized by this
+amendment; every stop condition already recorded (R19/R20's harness.py
+bound, the four other frozen surfaces empty, no content/replay test
+moving) is unchanged and unrelated to this correction.
