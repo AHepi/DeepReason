@@ -261,7 +261,7 @@ words and the operator's Amendment 1.
       matching `qualification.py` and no new file under a live-ladder
       path (e.g. `experiments/*/**_run.sh`).
 
-- [ ] 24. (all, C9) FULL `python tools/docs_verify.py` — NOT `--fast`,
+- [ ] 24. (all, C7) FULL `python tools/docs_verify.py` — NOT `--fast`,
       which reuses cached results and cannot see a map document newly
       broken by a `src/` change — plus `--audit` for vacuous checks.
       done-when: the full run -> 0 failed, and `--audit` -> 0 findings
