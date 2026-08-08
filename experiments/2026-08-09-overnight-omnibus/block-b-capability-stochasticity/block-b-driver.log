@@ -12,3 +12,5 @@ qualify_rc=0 qualify_seconds=1192
 reason_rc=4 reason_seconds=318 tag=s1
 run_id=run-649323b4f264ac6b69fb87736d40fb27 tag=s1
 audit_rc=0 tag=s1
+reason_rc=0 reason_seconds=384 tag=s2
+run_id=run-b212590cf2957821796b560163e1941e tag=s2
