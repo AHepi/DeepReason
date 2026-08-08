@@ -110,6 +110,14 @@ def skeleton_wf_program(text: str, budget) -> tuple[str, dict]:
         return "fail", {"error": "content does not parse as a skeleton"}
     if not skeleton.forbidden:
         return "fail", {"error": "forbids nothing: empty attack surface (§6)"}
+    # D2 Amendment 4 (R20/R54): a conjecture can never be full code --
+    # mechanical, kind-blind, same well-formedness position as the
+    # forbidden-cases check above, not a new admission gate.
+    from deepreason.programs import is_pure_code
+
+    for field in ("claim", "mechanism"):
+        if is_pure_code(getattr(skeleton, field)):
+            return "fail", {"error": f"{field} is full code: no accompanying explanation (R20/R54)"}
     return "pass", {"forbidden_cases": len(skeleton.forbidden)}
 
 

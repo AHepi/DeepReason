@@ -14,6 +14,7 @@ from deepreason.informal.skeleton import (
     compile_forbidden_commitments,
     parse_skeleton,
     skeleton_wf_commitment,
+    skeleton_wf_program,
 )
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
@@ -52,6 +53,58 @@ def test_forbid_nothing_fails_skeleton_wf_refuted_by_program(harness):
     assert warrant.commitment == "skeleton-wf"
     trace = json.loads(harness.blobs.get(warrant.trace_ref))
     assert "forbids nothing" in trace["error"]
+
+
+def test_pure_code_claim_fails_skeleton_wf_refuted_by_program(harness):
+    """D2 Amendment 4 (R20/R54): a claim that is entirely code fails the
+    mandatory, opt-in-per-problem skeleton well-formedness check the
+    same way a forbid-nothing skeleton already does."""
+    harness.register_commitment(skeleton_wf_commitment())
+    pure_code = harness.create_artifact(
+        _skeleton("def solve(x):\n    return x * 2", "the gods decree it",
+                  forbidden_cases=["a violation"]),
+        codec="json",
+        interface=Interface(commitments=["skeleton-wf"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    crit_program(harness, pure_code.id)
+    assert harness.state.status[pure_code.id] == Status.REFUTED
+    warrant = next(w for w in harness.warrants.values() if w.target == pure_code.id)
+    assert warrant.commitment == "skeleton-wf"
+    trace = json.loads(harness.blobs.get(warrant.trace_ref))
+    assert "claim" in trace["error"]
+
+
+def test_pure_code_mechanism_fails_skeleton_wf():
+    """Both free-text fields are checked independently, not only claim."""
+    verdict, trace = skeleton_wf_program(
+        _skeleton("winter happens", "class Solver:\n    def solve(self, x):\n        return x * 2",
+                  forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "fail"
+    assert "mechanism" in trace["error"]
+
+
+def test_prose_quoting_code_inline_passes_skeleton_wf():
+    """R57(a)'s protected case: mixed prose and code is not valid Python
+    syntax as a whole, so it never trips the pure-code check."""
+    verdict, _ = skeleton_wf_program(
+        _skeleton("The mechanism is: def solve(x): return x*2. This shows doubling.",
+                  "differential gravity", forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "pass"
+
+
+def test_bare_docstring_claim_passes_skeleton_wf():
+    """A lone string literal is prose-as-a-string, not code."""
+    verdict, _ = skeleton_wf_program(
+        _skeleton('"""Doubling composes with addition."""', "differential gravity",
+                  forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "pass"
 
 
 def test_forbidden_cases_compile_to_commitments(harness):
