@@ -1,0 +1,111 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following a checklist is more reliable than a single expert when the task's failure modes are 'additive' (missing a known check) rather than 'integrative' (misinterpreting a complex signal).",
+      "mechanism": "The checklist transforms the task from a high-precision synthesis problem (expert intuition) into a high-recall verification problem. Reliability is gained through 'error-canceling diversity' where the panel's aggregate adherence to the checklist prevents the 'single-point-of-failure' inherent in an expert's idiosyncratic blind spot.",
+      "counterconditions": [
+        "The task requires synthesizing contradictory signals that cannot be decomposed into a checklist.",
+        "The checklist is poorly authored, introducing systemic biases that the panel cannot override without domain expertise."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The panel is less reliable because the 'checklist paradox' shifts the source of reliability from the agents to the tool, rendering the 'panel' aspect redundant or detrimental via 'groupthink compliance'.",
+      "mechanism": "If the checklist is sufficient for the outcome, the panel acts as a 'biological CPU'. However, unlike a digital CPU, humans introduce 'fragmentation loss'—where the lack of an integrative mental model leads to a failure to recognize when a checklist item is being applied in a context where it is logically inapplicable.",
+      "counterconditions": [
+        "The checklist items are designed with enough ambiguity that panel diversity actually improves the stability of the interpretation threshold.",
+        "The task is purely binary and additive."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the panel's ability to perform 'Negative Constraint Validation'—rejecting a correct outcome because a mandatory checklist item was not met.",
+      "mechanism": "Mere compliance tracks the 'right answer' by checking boxes that lead there. Genuine reliability is evidenced when the panel follows the process even when it contradicts the intuitive 'correct' outcome, proving the process is the driver of the judgment, not a post-hoc justification for a guessed result.",
+      "counterconditions": [
+        "The checklist is so perfectly aligned with the outcome that no 'correct outcome/failed check' scenarios exist in the test set.",
+        "The panel is incentivized to prioritize the outcome over the process."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The panel's reliability is superior only if the 'diversity of interpretation' acts as a low-pass filter for individual idiosyncratic errors in checklist application.",
+      "mechanism": "Single experts have 'intuition drift' where they skip steps they deem obvious. Non-experts, lacking this confidence, adhere more strictly to the explicit checklist. The panel's aggregate judgment averages out the 'noise' of individual misinterpretations of the checklist items, creating a more stable and reproducible result than a single expert's volatile intuition.",
+      "counterconditions": [
+        "The checklist is so explicit that no interpretation is required, making the panel redundant.",
+        "The panel suffers from a shared systemic misinterpretation of a key checklist item."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Reliability gain is evidenced by 'Inter-Rater Variance Stability' across different subsets of the panel, rather than the final aggregate accuracy.",
+      "mechanism": "If the reliability is a property of the checklist, any random subset of the panel should produce the same result. If the reliability is a property of the 'panel' (the collective), we should see a specific convergence pattern where the 'wisdom of the crowd' resolves ambiguities in the checklist that a single expert would resolve inconsistently.",
+      "counterconditions": [
+        "The task is too simple to produce variance among non-experts.",
+        "The checklist is so rigid that it suppresses all meaningful variance."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the 'Decoy Item' hypothesis: To truly distinguish reliability from compliance, the evaluation must include 'Negative Checks'—items that, if checked 'Yes', should invalidate the outcome even if the outcome looks correct. If the panel flags these, they are operating the checklist as a logic gate. If they ignore them to reach the 'right' answer, they are just tracking the outcome.",
+          "why_keep_this": "Provides a concrete experimental design for the second part of the problem."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the requirement for 'objectively verifiable outcomes' inherently favor the checklist by limiting the problem space to tasks that can be decomposed into discrete, verifiable markers?",
+        "related_refs": [
+          "SRC_001",
+          "SRC_005"
+        ]
+      }
+    ]
+  }
+}
+```

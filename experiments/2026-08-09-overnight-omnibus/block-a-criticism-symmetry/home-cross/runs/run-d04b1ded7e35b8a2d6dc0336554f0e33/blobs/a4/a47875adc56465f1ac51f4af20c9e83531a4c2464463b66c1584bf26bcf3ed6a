@@ -1,0 +1,111 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The panel's superiority is not a product of aggregated knowledge, but of 'cognitive variance cancellation' where the checklist transforms a high-variance intuitive process into a low-variance procedural one.",
+      "mechanism": "The domain expert's intuition is a compressed heuristic that is highly efficient but prone to 'blind-spot' systematic errors. The panel of non-experts, constrained by a checklist, operates as a distributed sensor array. Because their individual errors are stochastic (uncorrelated) rather than systematic (correlated), the averaging effect of the panel cancels out noise, while the checklist ensures the signal (the verifiable markers) is captured.",
+      "counterconditions": [
+        "The task requires the synthesis of interdependent variables that the checklist decomposes into independent items (fragmentation loss).",
+        "The checklist is poorly calibrated, meaning it tracks a proxy of the outcome rather than the outcome itself."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by 'Counter-Intuitive Correctness'—the panel's ability to reach the correct verifiable outcome despite the presence of strong 'expert-style' intuitive decoys.",
+      "mechanism": "If a case is designed to trigger a common intuitive error (a 'trap' that a single expert might fall into), and the panel reaches the correct answer specifically because the checklist forced them to ignore the intuitive lure in favor of the verifiable markers, the reliability gain is genuine. Mere compliance would show the panel following the checklist but still being swayed by the decoy if the checklist were ambiguous.",
+      "counterconditions": [
+        "The checklist is so prescriptive that it precludes any intuitive interference.",
+        "The outcome is so obvious that neither intuition nor the checklist is challenged."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The domain expert remains more reliable because 'objectively verifiable outcomes' often depend on 'threshold-sensing' that checklists cannot capture without becoming infinitely long.",
+      "mechanism": "Verifiable outcomes are often the result of a 'gestalt' trigger—a subtle combination of factors that an expert recognizes as a pattern. A checklist decomposes this pattern into discrete binary checks. This 'fragmentation loss' means the panel can check every box and still miss the emergent property that the expert's intuition identifies instantly.",
+      "counterconditions": [
+        "The task is purely additive (e.g., a safety pre-flight check) rather than synthetic.",
+        "The 'gestalt' can be fully mapped into a finite set of Boolean logic gates."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The reliability gain is a function of 'inter-rater friction,' where the necessity of panel consensus forces a pseudo-expert level of scrutiny through the 'explanation effect.'",
+      "mechanism": "The reliability doesn't come from the checklist or the non-experts individually, but from the act of justifying checklist marks to peers. This forced verbalization converts 'System 1' checklist-ticking into 'System 2' analytical reasoning, effectively simulating a higher level of expertise through social validation.",
+      "counterconditions": [
+        "The panel suffers from 'groupthink' or high social deference to a dominant non-expert.",
+        "The checklist is so simple that no justification is required for any item."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Reliability is only genuine if the panel exhibits 'Sensitivity to Negative Constraints'—the ability to reject a correct outcome when a mandatory checklist 'stop-condition' is met.",
+      "mechanism": "To distinguish reliability from 'tracking the right answer,' one must introduce a scenario where the 'right' answer (the verifiable outcome) is present, but a specific checklist constraint is violated. A compliant-but-unreliable panel will ignore the constraint to hit the right answer; a genuinely reliable panel will prioritize the checklist's logic over the outcome's apparent correctness.",
+      "counterconditions": [
+        "The checklist contains no negative constraints (only additive checks).",
+        "The outcome is defined solely by the completion of the checklist."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Consider the 'Checklist Paradox': if a checklist is perfect, the non-experts are just biological CPUs executing a program. In that case, 'reliability' is a property of the checklist, not the panel. To argue for the *panel's* reliability, we must identify where the human element (the non-experts) adds value over a simple automated script. This likely happens in the 'interpretation' of whether a checklist item is 'met'—the panel's diversity helps standardize the interpretation of ambiguous criteria.",
+          "why_keep_this": "Challenges the premise of whether the 'gain' belongs to the people or the tool."
+        }
+      }
+    ]
+  }
+}
+```

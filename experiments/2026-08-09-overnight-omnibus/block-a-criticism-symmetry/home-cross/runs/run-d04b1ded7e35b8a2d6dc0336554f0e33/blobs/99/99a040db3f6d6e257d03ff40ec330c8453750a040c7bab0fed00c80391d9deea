@@ -1,0 +1,97 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable because checklist-based panels suffer from 'semantic blindness,' where the lack of domain intuition prevents the panel from recognizing when a checklist is inapplicable or misleading in a specific edge case.",
+      "mechanism": "The expert uses a high-dimensional mental model that allows for 'exception handling' (recognizing when a rule doesn't apply), whereas the panel is bound by the literal interpretation of the checklist, leading to systematic failures in non-standard but verifiable cases.",
+      "counterconditions": [
+        "The task is highly routine with zero edge-case variance.",
+        "The checklist is dynamically updated by experts to include all known edge cases."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The panel is more reliable only if the task's complexity is additive rather than multiplicative, meaning the total error is the sum of independent checklist failures rather than a single failure of systemic intuition.",
+      "mechanism": "By decomposing the judgment into binary, independent checks (as suggested in SRC_008), the panel reduces the variance of each individual step. Reliability increases because the probability of the majority failing on a simple binary check is lower than the probability of a single expert having a blind spot for the entire system.",
+      "counterconditions": [
+        "The checklist items are highly interdependent (failure in step 1 cascades into step 2).",
+        "The expert's intuition is based on a superior synthesis of the same binary checks."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from 'outcome tracking' by the presence of 'Negative Constraint Validation'—the panel's ability to correctly reject a result when a checklist 'decoy' or 'negative trigger' is present, even if the final answer seems plausible.",
+      "mechanism": "If the panel correctly marks 'No' on a check for a condition that *should not* be present (per SCR_001), it proves they are executing the logical constraints of the checklist rather than simply checking boxes to reach a known or guessed correct outcome.",
+      "counterconditions": [
+        "The 'decoy' is so obvious it doesn't test the actual cognitive process.",
+        "The panel is coached on the specific nature of the decoy."
+      ],
+      "typicality": 0.85,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001"
+        ]
+      },
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "General Software Testing"
+        ],
+        "shared_structure": [
+          "Positive tests verify the system works as intended.",
+          "Negative tests verify the system doesn't work when it shouldn't."
+        ],
+        "disanalogies": [
+          "Software is deterministic; human panels are stochastic."
+        ],
+        "transfer_claims": [
+          "Just as a suite of passing positive tests doesn't prove code correctness (it could be a hardcoded return), a panel reaching the right answer doesn't prove reliability without negative tests."
+        ],
+        "overturn_conditions": [
+          "If negative tests are found to be logically inconsistent with the positive ones."
+        ]
+      }
+    },
+    {
+      "claim": "Expert intuition is fundamentally a compressed checklist; therefore, the panel is merely a slower, distributed version of the expert, providing no reliability gain but increasing the cost of judgment.",
+      "mechanism": "The expert's 'intuition' is actually the rapid execution of a highly optimized internal checklist. The panel's explicit checklist is a low-resolution version of this. Unless the explicit checklist contains information the expert lacks, the expert's speed and synthesis lead to higher reliability in time-sensitive or complex verifiable tasks.",
+      "counterconditions": [
+        "The expert's 'internal checklist' is corrupted by cognitive biases (e.g., confirmation bias) that the explicit checklist explicitly forbids."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    }
+  ]
+}
+```

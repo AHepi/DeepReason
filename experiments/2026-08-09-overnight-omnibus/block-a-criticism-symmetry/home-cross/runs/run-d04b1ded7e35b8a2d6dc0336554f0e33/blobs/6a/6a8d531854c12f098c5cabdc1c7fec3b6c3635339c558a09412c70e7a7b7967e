@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a3f840ec5b15283e5cf057bd: program:reasoning_observation_pending
+- reason-counter@ec6942dc6355780db9332951: program:reasoning_observation_pending
+- reason-counter@e118f938520952e8a8904ae1: program:reasoning_observation_pending
+- reason-counter@5b093256fadf681accb96bdc: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A single domain expert remains more reliable because the 'reliability' of a checklist is an illusion of consistency (precision) rather than accuracy (truth), as experts possess the latent causal model required to identify when a checklist is inapplicable.","counterconditions":[{"case":"The task is highly algorithmic and lacks significant edge-case variance.","checker_spec":null,"eval":"observation"},{"case":"The expert is subject to strong cognitive biases (e.g., confirmation bias) that the checklist specifically mitigates.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal model superiority: The expert operates on a high-dimensional representation of the problem space, allowing them to detect 'black swan' variables that are not captured in a static checklist, which the non-experts are structurally blind to.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a3f840ec5b15283e5cf057bd, reason-counter@ec6942dc6355780db9332951
+
+TARGET SRC_002
+{"analogy":null,"claim":"A panel of non-experts using a checklist is more reliable because the checklist decomposes a complex heuristic into a series of independent, low-variance binary checks, neutralizing the 'expert blind spot' (over-reliance on pattern recognition that fails in edge cases).","counterconditions":[{"case":"The task involves non-linear dependencies where the order of checks fundamentally alters the outcome.","checker_spec":null,"eval":"observation"},{"case":"The checklist is underspecified, requiring domain expertise to interpret the 'checks' themselves.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Error-cancellation through additive verification: the checklist forces the explicit evaluation of necessary conditions that an expert's intuition might skip via 'fast' System 1 processing, while the panel structure averages out individual non-expert misinterpretations of the checklist items.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e118f938520952e8a8904ae1, reason-counter@5b093256fadf681accb96bdc
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
