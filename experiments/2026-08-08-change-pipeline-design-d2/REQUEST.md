@@ -609,3 +609,148 @@ call" (R50) — if executing step 27 turns out to require touching
 (e.g. a validator, a default-value cascade, a second contract field),
 that is a STOP even though the file itself is partially authorized;
 the grant is for ONE registration, not "reasonable work in this file."
+
+### Amendment 4 (operator, after VALIDATION.md's PASS verdict — quoted verbatim)
+
+Message 1 (design correction, sent after the tranche had already
+reached `dr-validate-change` PASS and stopped before delivery):
+
+> pure code explanations shouldn't be available at all. It shouldn't
+> exist or be an option. Code in explanation cannot be criticized, but
+> code in commitments can. Code commitments need to be able to refute
+> the conjecture artifact they exist in. Otherwise the commitments
+> stop being an attack surface. explanations with prose and code need
+> not have code in its commitments; those can be added with an attack
+> edge.
+>
+> Verify that all of the above hold before moving on.
+
+Message 2 (the operator's own resolution, chosen via a direct question
+about enforcement shape after independent verification found R59 did
+NOT hold in the delivered tree — the two options presented were "Add a
+new, ordinary commitment (like the existing skeleton well-formedness
+check) that mechanically fails if the explanation parses as pure code
+with no prose signal at all. It's criticized and refuted like anything
+else, not a special gatekeeper deciding content quality — stays inside
+your 'commitments are the attack surface' rule and avoids a referee,
+since it's a fixed, non-judgmental structural test, not a taste call."
+versus "Reject the submission outright before it ever becomes an
+artifact, using a structural test... closer to the referee shape your
+Amendment 1 words rejected"):
+
+> "Mechanical commitment check" — Add a new, ordinary commitment (like
+> the existing skeleton well-formedness check) that mechanically fails
+> if the explanation parses as pure code with no prose signal at all.
+> It's criticized and refuted like anything else, not a special
+> gatekeeper deciding content quality — stays inside your "commitments
+> are the attack surface" rule and avoids a referee, since it's a
+> fixed, non-judgmental structural test, not a taste call.
+
+Split into new atomic requirements, numbered onward from R52:
+
+R53 (process): "Verify that all of the above hold before moving on."
+— executed via independent codebase investigation before any code
+change; findings recorded in C13 below.
+
+R54 (behavior): "pure code explanations shouldn't be available at
+all. It shouldn't exist or be an option." — VERIFIED NOT TO HOLD in
+the delivered D2 tree (C13); this is the one requirement this
+amendment adds new work for.
+
+R55 (behavior, confirmatory — already verified TRUE, no new work):
+"Code in explanation cannot be criticized, but code in commitments
+can."
+
+R56 (behavior, confirmatory — already verified TRUE, no new work):
+"Code commitments need to be able to refute the conjecture artifact
+they exist in. Otherwise the commitments stop being an attack
+surface."
+
+R57 (behavior, confirmatory — already verified TRUE for its (a) half,
+partially true for its (b) half, no new work required unless the
+operator says otherwise): "explanations with prose and code need not
+have code in its commitments; those can be added with an attack
+edge."
+
+R58 (process/behavior): the operator's own chosen enforcement shape
+for R54 — "Add a new, ordinary commitment (like the existing skeleton
+well-formedness check) that mechanically fails if the explanation
+parses as pure code with no prose signal at all. It's criticized and
+refuted like anything else, not a special gatekeeper deciding content
+quality."
+
+## Standing constraints (Amendment 4)
+
+C13: Independent verification (a read-only codebase investigation,
+executed before any code change per R53) found: R55 HOLDS (`crit_program`
+only ever runs registered commitments, never the artifact's raw
+content); R56 HOLDS (a failing `candidate_checker` commitment already
+refutes the SAME artifact that carries it, confirmed by two existing
+tests); R57(a) HOLDS (registering code as a commitment is already
+optional, confirmed by field defaults); R57(b) PARTIALLY HOLDS (a
+separate-artifact-plus-attack-edge mechanism already exists — the
+proposed-property source-artifact closure in `edges.py`/`crit.py`/
+`oracle.py` — but it presupposes the target already carries a
+`property_oracle` commitment, not a fully commitment-free attack path
+onto an arbitrary prose-only conjecture); R54 DOES NOT HOLD (no
+mechanism anywhere — wire schema, admission path, or otherwise —
+currently rejects a conjecture whose entire explanation is bare code
+with zero prose; every relevant field (`ConjectureCandidate.content`,
+`ReasoningEnvelopeV1`/`ReasoningCandidateProposal.claim`/`mechanism`,
+`Skeleton.claim`/`mechanism`) enforces only non-emptiness, never
+prose-shape).
+
+C14: R54's fix is SCOPED to R58's own chosen shape — a new, ordinary,
+mechanically-evaluated commitment (mirroring `skeleton_wf_commitment`'s
+existing "pass iff parses as X AND Y" pattern), refuted through the
+EXISTING `crit_program` path like any other commitment. The operator
+explicitly REJECTED the alternative "admission-time hard gate" option
+(rejecting a submission before it becomes an artifact) as "closer to
+the referee shape your Amendment 1 words rejected" — no new admission
+gate, no new arbiter deciding content quality before criticism runs.
+
+C15: R55-R57 require NO code change — this amendment's only new
+implementation work is R54/R58's mechanical prose-required check.
+
+## Open questions (for dr-spec-change, Amendment 4)
+
+Q6: What exactly counts as "parses as pure code with no prose signal
+at all" — needs a precise, measurable, mechanical test (mirroring
+`skeleton_wf_program`'s own "pass iff parses AND forbidden != []"
+shape), not a subjective judgment. Candidate approach: the content (or
+`claim`+`mechanism`) is REJECTED if it parses as valid Python source
+consisting ONLY of definitions/statements with no natural-language
+sentence outside of them (e.g., zero non-code lines, or AST-parseable
+end-to-end with no accompanying prose) — needs measurement against
+what the codebase can actually check deterministically before being
+decided.
+
+Q7: Should this new mechanical check be MANDATORY on every conjecture
+artifact (matching R20's original "can never be" language, which this
+amendment reinforces) or attached only under some condition? If
+mandatory, where does it plug into admission — a harness-owned battery
+addition (`POPPER_BATTERY`-style, `harness.py`'s own criteria-extension
+mechanism, D1 census's own finding "the criteria a rule passes are
+extended by the harness; a rule cannot decline the battery") or a
+per-workload addition (`workloads/models.py::compile_interface_draft`,
+`seed_reasoning_workload`)? This needs measurement before deciding,
+particularly because `harness.py` is a FROZEN surface (surface 2) —
+if the only implementation shape is a harness-owned battery addition
+requiring a `harness.py` edit, that is a NEW frozen-surface contact
+this amendment must name explicitly and get authorized, not assume.
+
+Q8: Does this apply uniformly to BOTH candidate contracts (the
+skeleton/`ConjectureCandidate` path AND the `ReasoningCandidateProposal`
+path), matching Amendment 1's F2 Road B precedent ("the formal channel
+lives on both candidate contracts")?
+
+Q9: Is a NEW program/commitment kind needed (e.g. `program:prose_wf`,
+mirroring `program:skeleton_wf`'s own naming), or can the existing
+`skeleton_wf_program`/`skeleton_wf_commitment` be EXTENDED in place to
+also check this (since it already runs a mechanical "pass iff X"
+check on the same artifact)? Extending an existing mechanism is
+smaller and more consistent with this tranche's own established
+preference (M23/M26's own precedent: reuse the proven engine, do not
+build a new one) — but the skeleton path and the reasoning path
+(`ReasoningEnvelopeV1`) are different types with no shared base today;
+needs measurement.
