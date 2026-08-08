@@ -1,0 +1,123 @@
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services has strictly worse correlated-failure resilience than one large redundant service if the small services independently converge on the same third-party dependencies, creating a hidden monoculture that masks a single point of failure.",
+      "mechanism": "Independence in governance does not guarantee independence in failure causes. Small operators optimizing independently under identical market pressures will converge on identical technology stacks (e.g., the same cloud provider, the same CDN, the same TLS library). This creates a hidden shared dependency: a vulnerability in that common layer triggers simultaneous, catastrophic failures across the 'decentralized' network. Because the convergence is emergent rather than planned, the correlation is invisible until the triggering event, making the system strictly harder to reason about than a monolith which at least knows it relies on a single stack.",
+      "counterconditions": [
+        "The large service actually utilizes its internal redundancy by running heterogeneous implementations of the same function (N-version programming).",
+        "The decentralized operators actively coordinate to enforce diversity (e.g., via dependency quotas or mandates), which undermines the premise of independent operation."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_007", "SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_002"],
+        "shared_structure": [
+          "Independent actors managing individual nodes versus a central authority managing redundant components.",
+          "Optimization under constraints leading to unexpected systemic convergence."
+        ],
+        "disanalogies": [
+          "Software services can be patched and updated; financial assets cannot be 'repaired' after a market shock.",
+          "Decentralized software operators have more latitude to diversify dependencies than financial portfolio managers constrained by market alpha."
+        ],
+        "transfer_claims": [
+          "Just as independent financial managers converge on market correlations during stress, independent software operators converge on shared infrastructure dependencies.",
+          "The appearance of uncorrelated risks in normal operation masks deep correlation during systemic shocks."
+        ],
+        "overturn_conditions": [
+          "Empirical evidence shows that independent operators naturally maintain high diversity in critical dependencies without top-down mandates.",
+          "The large service is proven to suffer from internal homogeneity that makes its redundancy merely apparent."
+        ]
+      }
+    },
+    {
+      "claim": "A decentralized network is more resilient to correlated failure solely if it exhibits validated architectural diversity, but this resilience is purchased at the cost of high baseline failure rates from uncorrelated causes.",
+      "mechanism": "Decentralization succeeds in resisting correlated failure only when the independent services are architecturally heterogeneous (different languages, libraries, infrastructure). This heterogeneity ensures that a single bug or vulnerability cannot propagate across the entire network. However, smaller services lack the resources to implement the comprehensive internal redundancy and exhaustive testing of a large service. Consequently, while the decentralized network eliminates the single point of failure (correlated risk), it dramatically increases the constant rate of independent node failures (uncorrelated risk).",
+      "counterconditions": [
+        "The small services are homogeneous in architecture, meaning a single bug affects them all simultaneously.",
+        "The large service successfully implements internal architectural diversity rather than mere component replication."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_006"],
+        "shared_structure": [
+          "A network of independent components designed to prevent common-mode failure.",
+          "Diversity as the primary defense against correlated triggers."
+        ],
+        "disanalogies": [
+          "Safety-critical systems are designed under unified governance, so diversity can be mandated; decentralized networks rely on spontaneous or market-driven diversity.",
+          "Safety-critical systems prioritize zero failures; decentralized networks often tolerate higher baseline failure rates."
+        ],
+        "transfer_claims": [
+          "Without enforced diversity, decentralized networks are vulnerable to the same common-mode failures as monolithic systems.",
+          "If diversity is present, the network trades correlated failure risk for higher uncorrelated failure risk."
+        ],
+        "overturn_conditions": [
+          "It is demonstrated that small services can maintain both architectural diversity and internal redundancy without trade-offs.",
+          "Evidence shows that decentralized networks without mandated diversity still avoid correlated failures."
+        ]
+      }
+    },
+    {
+      "claim": "The claim is strictly false: a large service with strictly more total internal redundancy is always more resilient because it can internalize the management of correlated risks through explicit resource isolation, a capability structurally unavailable to independent operators.",
+      "mechanism": "Internal redundancy within a single large service can be subjected to a unified risk-management policy. The large service can deliberately partition its redundant components using different hardware, power grids, and codebases, explicitly eliminating shared causes. A decentralized network of independent services cannot enforce this; each operator independently optimizes for local cost, inevitably leading to shared dependencies (e.g., AWS us-east-1). Therefore, the large service has the structural capacity to guarantee independence, whereas the decentralized network can only hope for it.",
+      "counterconditions": [
+        "The large service fails to enforce internal isolation, leaving its redundant components vulnerable to the same shared cause (e.g., a bad configuration pushed globally).",
+        "The decentralized network adopts protocols that mathematically enforce diversity at the consensus level."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_005"],
+        "shared_structure": [
+          "Comparing a unified system with redundant parts to a fragmented system of independent actors.",
+          "The goal of surviving systemic shocks via redundancy."
+        ],
+        "disanalogies": [
+          "Biological ecosystems evolve diversity through random mutation and immense selective pressure; software systems are designed with specific, limited constraints.",
+          "Ecosystem resilience often comes at the cost of individual organism mortality, a tradeoff unacceptable in critical software."
+        ],
+        "transfer_claims": [
+          "Like a biological monoculture, a software monoculture—whether in a monolith or decentralized network—is vulnerable to a single pathogen.",
+          "Unlike biology, software architecture allows for deliberate design of internal isolation, favoring the unified system."
+        ],
+        "overturn_conditions": [
+          "The large service cannot practically maintain the operational complexity of internally diverse redundant systems.",
+          "The decentralized network demonstrates higher actual resilience due to emergent diversity."
+        ]
+      }
+    },
+    {
+      "claim": "The distinction between 'truly independent' and 'merely uncorrelated' failures is epistemologically unstable; evidence can only shift our credence in independence but never verify it, meaning the resilience of decentralization is a matter of inductive luck rather than structural guarantee.",
+      "mechanism": "Any set of observed failures can be modeled as independent draws from a distribution. However, the existence of a shared cause (a hidden variable) that has not yet triggered reveals that the events are conditionally dependent. Since we cannot exhaustively observe all possible hidden causes (e.g., a zero-day vulnerability in a ubiquitous cryptographic library), we can never prove true independence. We can only fail to find a correlation. Thus, decentralization's resilience is based on an assumption of independence that is always vulnerable to being overturned by the discovery of a shared cause.",
+      "counterconditions": [
+        "A formal proof of independence is possible for the specific network architecture.",
+        "The operational definition of 'resilience' does not require proof of independence, only high probability of survival."
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Can we construct a metric for 'dependency surface overlap' that quantifies the hidden correlation risk in a decentralized network by analyzing the transitive closure of third-party libraries used by each node?"
+      },
+      {
+        "question": "If a large service perfectly mimics a decentralized network by running internally isolated microservices with heterogeneous stacks, does it strictly dominate the decentralized network on all resilience metrics?"
+      }
+    ]
+  }
+}

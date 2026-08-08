@@ -1,0 +1,24 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 6 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-622df0a08dd44792063159b38a80be9c
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## school-stance
+SCHOOL STANCE (weight 1.00): demand a causal mechanism
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
