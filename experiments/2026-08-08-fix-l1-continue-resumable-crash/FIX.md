@@ -202,3 +202,35 @@ still-open typed refusal, and the real fixture replayed end-to-end)
 and the map documentation this fix owes. Per this tranche's own task
 instruction, execution stops here regardless — `dr-implement-fix`
 does not run until this design is reviewed and approved.
+
+## Amendment 1 (2026-08-08, operator message, verbatim)
+
+Sent after `dr-implement-fix` landed the change (commit `a05c3d44`)
+and measured the ACTUAL diff at 352 lines across the same 4 files —
+meaningfully above this document's own pre-implementation estimate of
+~190-220 — because the new regression test file
+(`tests/test_l1_continue_resumable_crash.py`) came in at 290 lines
+against an estimated 150-180, entirely in the real
+`activate_contract_decomposition`-backed setup the harness's own
+write-time validator required (an earlier, simpler draft that skipped
+it was correctly refused — see `REPRO.md`'s own "finding surfaced
+while building this artifact"). Three options were priced: (A) accept
+as-is; (B) drop the real-fixture replay test (saves ~60-80 lines, loses
+the strongest single proof); (C) merge the two synthetic tests into one
+parameterized test (saves ~20-30 lines, adds indirection).
+Recommendation was (A).
+
+> A — accepted, operator words: the overrun is thorough test setup
+> within FIX.md's declared scope; ledger this as an amendment with the
+> corrected ceiling and continue to completion.
+
+The operator authorizes the corrected, binding ceiling for this
+tranche: **352 lines across the 4 files this commit already touched**
+(`src/deepreason/workflow/nonconjecture_recovery.py`,
+`tests/test_continuation.py`, `docs/map/SUB-workflow.md`,
+`tests/test_l1_continue_resumable_crash.py`), superseding this
+document's own "~190-220" estimate for the purpose of any future
+overrun check in this tranche. No symbol, file, or requirement beyond
+this document's already-declared change sites is authorized by this
+amendment — the diff commit itself (`a05c3d44`) is unchanged; this
+amendment only ledgers its own already-measured size as approved.
