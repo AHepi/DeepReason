@@ -1,0 +1,48 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+PROBLEM CONTEXT (conn:091742a8f728) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 091742a8f728 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@2ee4608b1d43: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@569871f63410ee5658d936c6: program:reasoning_observation_pending
+- reason-counter@67ab987a8848c0dfe7a4dfee: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The problem 091742a8f728 integrates with SRC_005 by extending the 'verification substrate' concept; it proposes that independent verification is achieved not by the identity of the agent, but by the deterministic nature of the environment. This is refuted if the execution environment is found to be a simulation controlled by the model's own latent space, thereby collapsing the substrate back into the authoring engine.
+commitments: hv-floor@2a45b7988522, lineage-ref@2ee4608b1d43, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":null,"claim":"Independent verification is achieved within a single engine if the record demonstrates the 'discovery of a counter-example' that the engine then uses to refine or overturn its own initial claim.","counterconditions":[{"case":"The 'counter-example' is a hallucination that is then 'resolved' by another hallucination.","eval":"observation"},{"case":"The engine simply simulates the appearance of a struggle without actually testing the logic.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Falsification Loop: Restatement is characterized by the absence of conflict. Genuine verification is characterized by the active search for and discovery of a counter-example. If the checker's log shows a successful attempt to break the claim, followed by a correction, the process is independently verified via the scientific method of falsification.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@569871f63410ee5658d936c6, reason-counter@67ab987a8848c0dfe7a4dfee
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

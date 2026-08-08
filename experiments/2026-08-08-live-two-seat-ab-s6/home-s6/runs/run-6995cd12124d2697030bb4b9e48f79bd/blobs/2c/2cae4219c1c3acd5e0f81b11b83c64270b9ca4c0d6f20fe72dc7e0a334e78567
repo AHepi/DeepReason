@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@50316f683f0d5b0466338ee9: program:reasoning_observation_pending
+- reason-counter@d14e6caac037cda52ae39560: program:reasoning_observation_pending
+- reason-counter@3cfcc3e697f324f6486f8a3f: program:reasoning_observation_pending
+- reason-counter@573633f9aff967a83c9bc4ef: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Lexical divergence does not guarantee logical divergence; a model can paraphrase an error."],"overturn_conditions":["Evidence that the model can produce low-overlap text that still relies on the same flawed internal heuristic."],"shared_structure":["Lexical overlap as a proxy for cognitive independence","Pattern matching vs. reconstruction"],"source_memory_refs":["SCR_001"],"transfer_claims":["The 'Echo Chamber' effect can be measured via string similarity metrics."]},"claim":"Genuine independent verification in a single-engine run is distinguished from restatement by the presence of 'divergent reconstruction'\u2014where the checker arrives at the same conclusion using a different logical path or terminology.","counterconditions":[{"case":"The engine is simply paraphrasing the author's claim without re-evaluating the underlying logic.","eval":"observation"},{"case":"The domain is so constrained (e.g., a simple identity) that only one way of stating the truth exists.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Lexical Divergence' metric: Restatement is characterized by high lexical overlap (>0.8) and mirroring of the author's phrasing. Independent verification is characterized by the reconstruction of the proof from first principles, resulting in low lexical overlap but high semantic alignment.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@50316f683f0d5b0466338ee9, reason-counter@d14e6caac037cda52ae39560
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separation is not strictly necessary if the verification process is grounded in an external, objective execution environment (e.g., a Python interpreter), as the 'truth' is provided by the environment, not the engine's internal weights.","counterconditions":[{"case":"The engine authors both the claim and the test in a way that the test is designed to pass regardless of the claim's validity (circular testing).","eval":"observation"},{"case":"The verification is purely linguistic/argumentative rather than executable.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Symbolic Anchor' mechanism: The engine's role shifts from 'author of a claim' to 'author of a test'. If the test is executed by a third-party deterministic system, the verification is independent of the engine's training history because the result is a product of the execution, not the model's prediction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3cfcc3e697f324f6486f8a3f, reason-counter@573633f9aff967a83c9bc4ef
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

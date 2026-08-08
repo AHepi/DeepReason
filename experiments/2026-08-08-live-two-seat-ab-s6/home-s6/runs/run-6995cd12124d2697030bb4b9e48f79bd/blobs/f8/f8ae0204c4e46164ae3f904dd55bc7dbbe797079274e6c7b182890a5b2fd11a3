@@ -1,0 +1,52 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The claim that persona-shifting simulates independence depends on the assumption that latent path diversification (SRC_001) can override cognitive covariance (SRC_003); this relation is refuted if a model's internal coherence drive causes it to synthesize the 'critic' persona's findings back into the author's original bias, resulting in a self-consistent but false loop.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "Stateless isolation (SRC_002) integrates with the 'blind spot correlation' theory (SRC_005) by attempting to remove the authoring trace, but this integration is refuted if the final claim contains implicit fingerprints that trigger the same latent path in the checker regardless of the context wipe.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_005"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The adversarial persona approach (SRC_004) contradicts the necessity of separate engines (SRC_003) by proposing that prior distributions can be shifted via prompting; this contradiction is refuted if the 'critic' persona is found to be a superficial stylistic layer that does not alter the underlying logical trajectory of the weights.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_003"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The necessity of separate engines (SRC_005) abstracts the problem of 'blind spot correlation' into a structural requirement; this abstraction is refuted if deterministic symbolic execution (e.g., code) allows a single engine to bypass probabilistic failure modes entirely.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The 'Latent Path Diversification' mechanism (SRC_001) reduces to a form of 'Entropy Injection' where the prompt acts as a noise source to break covariance; this reduction is refuted if 'deep' hallucinations are consistent across all latent paths of the model architecture, rendering the shift in prompt irrelevant.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The claim that separation is unnecessary (SRC_001) is compatible with the 'blind spot' theory (SRC_005) only if the adversarial mode activates paths that are statistically orthogonal to the authoring paths; this compatibility is refuted if the model's self-correction mechanism is biased toward confirming its own previous outputs (sycophancy).",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
+```

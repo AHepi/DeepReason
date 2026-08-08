@@ -1,0 +1,87 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is not necessary for independent verification, provided the checker operates on a 'blind' information-theoretic boundary where it is denied access to the author's intermediate reasoning chain.",
+      "mechanism": "Independence is a property of the information flow (the 'interface') rather than the weights. If the checker only sees the final claim and must reconstruct the proof from first principles (SRC_###) without seeing the author's path, it creates a functional separation that mimics different engines by forcing the model to traverse a different latent state-space.",
+      "counterconditions": [
+        "The checker is provided with the author's 'Chain of Thought' or internal reasoning blocks.",
+        "The author's claim is so specific that it contains the implicit proof, leaving no room for independent reconstruction."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Independent verification within a single run is distinguished from restatement by the 'Evidence Orthogonality' of the grounding paths: verification is genuine if and only if the checker's path to the claim utilizes a disjoint set of evidence artifacts compared to the author.",
+      "mechanism": "By counting the intersection of SRC_### references used by the author and the checker, we can quantify independence. If the intersection is empty or minimal, the checker has found a different 'witness' for the truth of the claim, which constitutes independent verification regardless of whether the engine is the same.",
+      "counterconditions": [
+        "The problem domain has a 'canonical' single piece of evidence that any correct proof must cite.",
+        "The checker merely re-orders the author's evidence without adding new grounding."
+      ],
+      "typicality": 0.85,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Separation of engines is necessary because a single engine's 'checking' phase is likely to be a pattern-match against its own prior activations (an 'Echo Chamber' effect) rather than a critical evaluation.",
+      "mechanism": "A single model has perfectly correlated error terms with itself. The 'checking' prompt does not reset the weights; it merely shifts the persona. Therefore, the model is more likely to recognize its own logic as 'familiar' (and thus correct) than to find a subtle flaw it was blind to during the authoring phase.",
+      "counterconditions": [
+        "The model is switched from a probabilistic generation mode to a deterministic symbolic mode (e.g., executing code to verify a math claim).",
+        "The 'critic' prompt is sufficiently strong to force the model into a divergent latent state."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Genuine independent verification is evidenced by 'Corrective Divergence': the checker must identify a flaw in the author's reasoning and propose a correction that is subsequently validated by execution.",
+      "mechanism": "The most robust evidence of independence is not agreement, but the ability to disagree and be right. We count the instances where the checker's 'Correction' (C) differs from the author's 'Claim' (A), and the execution of C results in a success where A would have failed.",
+      "counterconditions": [
+        "The author's claim was already perfect, leaving no room for corrective divergence.",
+        "The checker introduces 'noise' corrections that are irrelevant to the core claim."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Independence is a spectrum of 'Entropy Injection' where the use of different system prompts (e.g., Optimist vs. Skeptic) constitutes a separate 'engine' for the purposes of verification.",
+      "mechanism": "If the 'checking' engine is the same model but with a prompt that forces a different activation pattern, the resulting 'latent state' is functionally a different engine. Independence is verified by measuring the lexical overlap of the reasoning chains; a low overlap (< 0.3) indicates the model has 're-thought' the problem from a different angle.",
+      "counterconditions": [
+        "The model's training is so heavily biased toward a specific reasoning style that different prompts produce identical logic.",
+        "Lexical diversity is achieved through paraphrasing rather than logical divergence."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "What if we define 'Independence' as 'The probability that the checker finds the same error as a third, unseen model'? If Model A (Author) and Model A (Checker) both miss the error, they are dependent. If Model A (Checker) finds the error that Model A (Author) missed, they have achieved internal independence. This suggests we should count 'Error Detection Rate' as the primary metric.",
+          "why_keep_this": "Shifts the focus from 'Agreement' to 'Error Detection' as the mark of independence."
+        }
+      }
+    ]
+  }
+}
+```

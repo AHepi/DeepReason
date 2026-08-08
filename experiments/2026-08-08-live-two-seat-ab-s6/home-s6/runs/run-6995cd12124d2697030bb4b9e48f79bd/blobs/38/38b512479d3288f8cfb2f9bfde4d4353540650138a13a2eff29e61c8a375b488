@@ -1,0 +1,87 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is necessary for independent verification because identical training priors create a 'blind spot' correlation that prevents the detection of systematic errors.",
+      "mechanism": "The 'Blind Spot Correlation' mechanism: if two agents share the same weights (or training history), they share the same probabilistic failure modes. A checker from the same engine is likely to accept a hallucination as a fact if that hallucination is a high-probability path in the model's latent space, regardless of its truth value.",
+      "counterconditions": [
+        "The verification process is shifted from probabilistic reasoning to deterministic symbolic execution (e.g., running code).",
+        "The checker is forced into a 'adversarial' persona that specifically rewards the discovery of errors over the confirmation of claims."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Independent verification is not defined by the identity of the engine, but by the 'orthogonality of the derivation path' recorded in the run's trace.",
+      "mechanism": "The 'Divergent Path' mechanism: verification is genuine if the checker arrives at the same conclusion using a different set of axioms, different intermediate lemmas, or a different logical structure than the author. If the checker merely validates the author's steps, it is restatement; if it reconstructs the proof from first principles, it is verification.",
+      "counterconditions": [
+        "The problem domain has only one possible valid derivation path, making any correct verification look like a restatement.",
+        "The checker's 'divergent path' is actually a mirrored error path derived from the same underlying bias."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification within a single run can be distinguished from restatement by measuring the 'Lexical Divergence' and 'Correction Rate' of the checker.",
+      "mechanism": "The 'Metric-Based Distinction' mechanism: quantify the overlap of key technical phrases between the author's claim and the checker's reasoning. Low lexical overlap (e.g., < 0.3) combined with a non-zero rate of 'minor correction' (where the checker corrects a typo or a trivial phrasing error in the author's claim while upholding the core logic) indicates an active, independent review process rather than a passive echo.",
+      "counterconditions": [
+        "The checker is programmed to use the author's terminology for the sake of clarity/efficiency.",
+        "The author's claim is so precise that any deviation in terminology would introduce ambiguity."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The only form of verification within a single run that counts as 'independent' is the execution of a deterministic test (code/math) that is decoupled from the model's linguistic priors.",
+      "mechanism": "The 'Symbolic Decoupling' mechanism: The model authors a claim and then authors a test (e.g., a Python script) to verify that claim. The verification is not the model's *opinion* of the code's result, but the *actual output* of the execution environment. The 'independence' is provided by the external runtime, not the engine.",
+      "counterconditions": [
+        "The model authors a flawed test that specifically confirms the flawed claim (circularity).",
+        "The claim is non-computable and cannot be translated into a deterministic execution."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: 'Independence' in a single-engine run is a function of 'entropy injection'. If the checker is prompted with a 'Devil's Advocate' persona, does it shift the latent space enough to break the correlation of errors? If so, the 'necessity' of separate engines is a matter of degree (reliability) rather than a binary requirement.",
+          "possible_next_move": "Compare the error-correction rates of 'Persona-shifted' single engines vs. 'Dual-engine' setups."
+        }
+      }
+    ]
+  }
+}
+```

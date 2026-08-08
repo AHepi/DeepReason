@@ -1,0 +1,125 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is not necessary for independent verification, provided the verification is conducted via a 'blind' reconstruction of the proof from first principles.",
+      "mechanism": "Independence is a property of the information flow, not the weight distribution. By withholding the author's reasoning chain (the 'how') and providing only the claim (the 'what'), the engine is forced to navigate the latent space independently to reach the same conclusion, effectively simulating a separate engine.",
+      "counterconditions": [
+        "The engine possesses a 'shortcut' memory of the specific problem-solution pair that bypasses the need for reconstruction.",
+        "The prompt for the checker implicitly leaks the author's reasoning path via framing."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Separation is necessary because single-engine verification is fundamentally a measure of self-consistency, which is a proxy for confidence, not correctness.",
+      "mechanism": "A single model's error terms are perfectly correlated with itself. Verification by the same engine merely confirms that the model's internal logic is consistent with its own biases; it cannot 'step outside' its own training distribution to find the blind spots that caused the original error.",
+      "counterconditions": [
+        "The verification process involves executing code in an external sandbox, shifting the truth-source from latent weights to symbolic execution.",
+        "The engine is prompted with a persona that successfully decorrelates latent activations (entropy injection)."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by a 'Novel Evidence Ratio' > 1, where the checker introduces more unique grounding references than it repeats from the author.",
+      "mechanism": "Restatement is characterized by high lexical and referential overlap. Independent verification requires the discovery of a parallel or orthogonal path to the truth. By counting the distinct SRC_### references used by the checker that were absent in the author's turn, we quantify the 'independence' of the search.",
+      "counterconditions": [
+        "The author was exhaustive in their evidence, leaving no novel references for the checker to find despite an independent path.",
+        "The checker uses synonyms or paraphrases for the same evidence blocks, masking the overlap."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_009"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Separation may actually decrease verification reliability if the checking engine is less capable than the authoring engine, as it may 'verify' a complex error it lacks the capacity to detect.",
+      "mechanism": "If Engine B is weaker than Engine A, it may fail to find a counter-example not because none exists, but because its search space is smaller. Engine A, checking itself, may retain the specific internal 'trace' of the error's origin, making it more likely to catch its own sophisticated mistakes.",
+      "counterconditions": [
+        "The error is a result of a systemic bias shared by both models regardless of general capability.",
+        "The authoring engine is in a 'hallucination loop' that it is incapable of breaking regardless of its capacity."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_005"
+        ]
+      }
+    },
+    {
+      "claim": "Verification is independent if and only if the checker's record contains a 'successful attempt to falsify' the claim before ultimately confirming it.",
+      "mechanism": "Restatement proceeds directly from claim to confirmation. Independent verification is a process of attempted destruction. The evidence of independence is the record of a 'divergent path'—the checker proposing a counter-example, testing it, and then rejecting it based on evidence.",
+      "counterconditions": [
+        "The checker simulates a 'fake' attempt at falsification (performative skepticism) without actually exploring the state space.",
+        "The claim is so trivial that no plausible counter-examples exist to be tested."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Independence is a spectrum of 'entropy injection' rather than a binary of 'different weights', meaning a single engine can be 'independently' verifying if the prompt-induced latent shift exceeds a specific threshold.",
+      "mechanism": "By adopting a 'Skeptic' or 'Auditor' persona, the engine shifts its activation patterns. If this shift is sufficient to move the model into a different region of the latent space where the original error-inducing bias is not active, the verification is functionally independent.",
+      "counterconditions": [
+        "The bias is 'global' across the model's weights and persists regardless of the persona adopted.",
+        "The persona shift is purely lexical and does not alter the underlying logical path."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_006",
+          "SCR_007",
+          "SCR_010"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we want to 'count' independence, we should look at the 'Graph of Evidence'. Author's path: SRC_A -> SRC_B -> Claim. Checker's path: SRC_C -> SRC_D -> Claim. If the intersection of {SRC_A, SRC_B} and {SRC_C, SRC_D} is empty, the verification is structurally independent regardless of the engine.",
+          "why_keep_this": "Refines the counting metric from SCR_009 into a graph-theoretic approach."
+        }
+      }
+    ]
+  }
+}
+```

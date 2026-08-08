@@ -1,0 +1,119 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separation of authoring and checking engines is not necessary for independent verification, provided the verification is grounded in an objective, external execution environment (e.g., a code interpreter) that operates independently of the model's weights.",
+      "mechanism": "The 'independence' is shifted from the cognitive agent (the engine) to the verification substrate (the execution environment). If a claim is verified by executing code that produces a deterministic result, the identity of the engine that wrote the code and the engine that read the output is irrelevant because the truth-value is anchored in the execution trace, not the model's latent space.",
+      "counterconditions": [
+        "The execution environment is a simulation controlled by the same model.",
+        "The verification relies on the model interpreting ambiguous output rather than a binary pass/fail signal."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Separation of engines is strictly necessary because a single engine's 'verification' is an exercise in self-consistency rather than truth-seeking, driven by the probabilistic tendency to follow the established latent trajectory of the conversation.",
+      "mechanism": "Self-consistency bias: once a model has committed to a claim, the most probable next tokens in a 'verification' phase are those that align with the previously generated context. This creates a 'confirmation loop' where the model validates its own internal logic regardless of its external accuracy.",
+      "counterconditions": [
+        "The checker is provided with a 'blind' prompt that removes the author's reasoning chain.",
+        "The model is forced into a symbolic mode that overrides probabilistic token prediction."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification within a single run is distinguished from restatement by a 'divergent evidence path': the checker must utilize distinct source artifacts (SRC_###) or evidence blocks that were not cited by the author to reach the same conclusion.",
+      "mechanism": "Structural independence: if the author uses set A of evidence and the checker uses set B, and A ∩ B = ∅, the verification is structurally independent. This can be tested by counting the unique source references in the checker's turn that are absent from the author's turn; a ratio of (New Evidence / Repeated Evidence) > 1 indicates verification over restatement.",
+      "counterconditions": [
+        "The checker simply finds a different way to describe the same single piece of evidence.",
+        "The 'new' evidence is irrelevant to the core logic of the claim."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_014",
+          "SCR_009"
+        ],
+        "shared_structure": [
+          "Graph-theoretic approach to evidence",
+          "Quantifiable intersection of source sets"
+        ],
+        "disanalogies": [
+          "Does not account for the quality of the evidence, only the identity of the source"
+        ],
+        "transfer_claims": [
+          "Independence can be measured as the cardinality of the symmetric difference between author and checker evidence sets."
+        ],
+        "overturn_conditions": [
+          "Discovery that models frequently cite different sources to support the same flawed internal logic."
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Separation of engines may actually decrease reliability if the checking engine is less capable than the authoring engine, as it may fail to detect subtle errors that the authoring engine 'remembers' making.",
+      "mechanism": "Capability Asymmetry: In cases of high-complexity claims, a weaker 'independent' engine may provide a false positive verification simply due to an inability to parse the error, whereas a stronger single engine acting as a critic can leverage its higher-order reasoning to pinpoint its own failure mode.",
+      "counterconditions": [
+        "The checking engine is of equal or greater capability than the authoring engine.",
+        "The error is a 'blind spot' shared by all models of that architecture."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Independent verification is achieved within a single engine if the record demonstrates the 'discovery of a counter-example' that the engine then uses to refine or overturn its own initial claim.",
+      "mechanism": "Falsification Loop: Restatement is characterized by the absence of conflict. Genuine verification is characterized by the active search for and discovery of a counter-example. If the checker's log shows a successful attempt to break the claim, followed by a correction, the process is independently verified via the scientific method of falsification.",
+      "counterconditions": [
+        "The 'counter-example' is a hallucination that is then 'resolved' by another hallucination.",
+        "The engine simply simulates the appearance of a struggle without actually testing the logic."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Separation of engines is a red herring; 'independence' is actually a function of 'information-theoretic separation' (denying the checker access to the author's internal reasoning chain).",
+      "mechanism": "Contextual Isolation: If the checker is only given the final claim and not the intermediate 'hidden' thoughts or scratchpad of the author, it must reconstruct the logic from first principles. This forces the engine to re-traverse the latent space, breaking the linear token-dependency of the author's path.",
+      "counterconditions": [
+        "The model's weights contain a strong prior that leads it to the same reasoning path regardless of the prompt.",
+        "The claim itself contains enough information to implicitly leak the author's reasoning chain."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    }
+  ]
+}
+```

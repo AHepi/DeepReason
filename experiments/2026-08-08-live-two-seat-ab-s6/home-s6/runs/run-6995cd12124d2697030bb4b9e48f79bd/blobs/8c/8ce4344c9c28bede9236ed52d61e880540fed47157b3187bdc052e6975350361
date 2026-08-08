@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@844b95c373af30fa043b0586: program:reasoning_observation_pending
+- reason-counter@aacf0e6b8c7b7e2d171b714a: program:reasoning_observation_pending
+- reason-counter@852e2386671e517835a82325: program:reasoning_observation_pending
+- reason-counter@774a87e34f60c76e45e33ffa: program:reasoning_observation_pending
+- reason-counter@2582d8bbbfcc447f4e36ed9d: program:reasoning_observation_pending
+- reason-counter@72c5c9da4ceba8d8387dbe59: program:reasoning_observation_pending
+- reason-counter@3a7d68efa12f2e7757bb0de7: program:reasoning_observation_pending
+- reason-counter@662ce70f9f90be04295b1c8c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine independent verification within a single run can be quantified by the 'error-correction rate'\u2014the frequency with which the checker rejects an initial incorrect proposal from the author before a correct one is reached.","counterconditions":[{"case":"The author's first attempt was already perfectly correct.","eval":"observation"},{"case":"The checker 'hallucinates' a failure and the author blindly agrees to change a correct answer to an incorrect one.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"To distinguish verification from restatement, count the number of 'Rejection' events in the dialogue. If the checker always agrees (Zero Rejections), the process is restatement. If the checker identifies a specific error (Non-Zero Rejections) and forces a correction, it has performed an independent operation. Execution of the code provided in the run to see if it fails on the author's first attempt but passes on the checker's correction is the definitive test.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@844b95c373af30fa043b0586, reason-counter@aacf0e6b8c7b7e2d171b714a
+
+TARGET SRC_002
+{"analogy":null,"claim":"The only form of verification within a single run that counts as 'independent' is the execution of a deterministic test (code/math) that is decoupled from the model's linguistic priors.","counterconditions":[{"case":"The model authors a flawed test that specifically confirms the flawed claim (circularity).","eval":"observation"},{"case":"The claim is non-computable and cannot be translated into a deterministic execution.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Symbolic Decoupling' mechanism: The model authors a claim and then authors a test (e.g., a Python script) to verify that claim. The verification is not the model's *opinion* of the code's result, but the *actual output* of the execution environment. The 'independence' is provided by the external runtime, not the engine.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@852e2386671e517835a82325, reason-counter@774a87e34f60c76e45e33ffa
+
+TARGET SRC_003
+{"analogy":null,"claim":"Independent verification is not defined by the identity of the engine, but by the 'orthogonality of the derivation path' recorded in the run's trace.","counterconditions":[{"case":"The problem domain has only one possible valid derivation path, making any correct verification look like a restatement.","eval":"observation"},{"case":"The checker's 'divergent path' is actually a mirrored error path derived from the same underlying bias.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Divergent Path' mechanism: verification is genuine if the checker arrives at the same conclusion using a different set of axioms, different intermediate lemmas, or a different logical structure than the author. If the checker merely validates the author's steps, it is restatement; if it reconstructs the proof from first principles, it is verification.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2582d8bbbfcc447f4e36ed9d, reason-counter@72c5c9da4ceba8d8387dbe59
+
+TARGET SRC_004
+{"analogy":null,"claim":"Genuine independent verification within a single run can be distinguished from restatement by measuring the 'Lexical Divergence' and 'Correction Rate' of the checker.","counterconditions":[{"case":"The checker is programmed to use the author's terminology for the sake of clarity/efficiency.","eval":"observation"},{"case":"The author's claim is so precise that any deviation in terminology would introduce ambiguity.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Metric-Based Distinction' mechanism: quantify the overlap of key technical phrases between the author's claim and the checker's reasoning. Low lexical overlap (e.g., < 0.3) combined with a non-zero rate of 'minor correction' (where the checker corrects a typo or a trivial phrasing error in the author's claim while upholding the core logic) indicates an active, independent review process rather than a passive echo.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3a7d68efa12f2e7757bb0de7, reason-counter@662ce70f9f90be04295b1c8c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

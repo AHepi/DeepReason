@@ -1,0 +1,29 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed 'reduces to' relation conflates a trigger-level reduction with a mechanism-level reduction. For SRC_004 to genuinely 'reduce to' SRC_001, the hostile-critic persona must be a proper instance of Latent Path Diversification, meaning the core diversification mechanism is identical and the persona is merely a parameter. But the refutation condition (a non-persona prompt achieving the same error-detection rate) tests behavioral equivalence, not mechanistic reduction: a different trigger that happens to reach the same detection rate does not establish that SRC_004 is an instance of SRC_001 — it could operate via an entirely unrelated mechanism (e.g., explicit instruction, few-shot priming) that merely converges on the same output metric. The relation and its refutation are mismatched.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The 'depends on' relation is underspecified in a way that leaves the proposal unfalsifiable by its own refutation condition. The claim is that statelessness-simulates-independence depends on the authoring process (not the weights) being the primary self-confirmation driver. But the refutation — a checker reproducing the hallucination via a different intermediate path — does not cleanly distinguish the two drivers: if the checker reproduces the error via weights alone, that refutes dependence on the process; yet if it reproduces via a different path, the weights could still be the primary driver and the 'different path' merely shows weights produce the error through multiple routes. The refutation condition fails to isolate the process-vs-weights distinction the relation depends on.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The 'contradicts' relation is internally inconsistent with its own refutation condition. The claim states that the shared-priors argument (SRC_003) CONTRADICTS stateless simulation (SRC_002) because context wipes remove process traces but not weight-level covariance. A genuine contradiction requires the two positions to be incompatible. But the refutation — 'a stateless checker consistently arrives at the same error despite no process trace' — does not resolve a contradiction; it merely provides evidence for one side. If SRC_003 and SRC_002 truly contradict each other, no single empirical outcome refutes the contradiction itself; it would refute one of the endpoints, not the contradiction relation. The target mistakes 'evidence supporting one side of a tension' for 'refutation of the contradiction.'",
+      "counterexample": null
+    }
+  ]
+}
+```

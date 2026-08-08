@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7eba7bb4bd6aff362f534ed8: program:reasoning_observation_pending
+- reason-counter@b629cb5139144c795b891c46: program:reasoning_observation_pending
+- reason-counter@354dec657692435b8dbb2af6: program:reasoning_observation_pending
+- reason-counter@f78f58055dc8a0501dda7b03: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Separation is unnecessary provided the checking engine is forced into a 'adversarial' or 'critique' mode that activates different latent paths than the authoring mode.","counterconditions":[{"case":"The error is a 'deep' hallucination that is consistent across all latent paths of that specific model architecture.","eval":"observation"},{"case":"The model's self-correction mechanism is biased toward confirming its own previous outputs (sycophancy).","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Latent Path Diversification: By shifting the prompt from 'generate' to 'find the flaw', the model navigates a different region of its probability distribution. If the error is logically inconsistent with the global constraints of the task, the adversarial path can trigger a contradiction that the generative path ignored.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7eba7bb4bd6aff362f534ed8, reason-counter@b629cb5139144c795b891c46
+
+TARGET SRC_002
+{"analogy":null,"claim":"Independent verification is achieved through 'Execution-Based Grounding' where the checker transforms the claim into a testable program; the identity of the engine is irrelevant compared to the objectivity of the execution environment.","counterconditions":[{"case":"The checker writes a flawed test that accidentally confirms a flawed claim (correlated error in test generation).","eval":"observation"},{"case":"The claim is non-computable and cannot be translated into a program.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"External Arbitrage: The checker acts not as a judge of truth, but as a translator of claims into executable code. The 'verification' happens in the Python interpreter or the compiler, which serves as a third-party, non-neural arbiter. The engine's role is merely to facilitate the interface with this objective reality.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@354dec657692435b8dbb2af6, reason-counter@f78f58055dc8a0501dda7b03
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,42 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+PROBLEM CONTEXT (conn:091742a8f728) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 091742a8f728 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7676fb6c2bada32f7ee3e192: program:reasoning_observation_pending
+- reason-counter@14ec40ef2760c3539f993221: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@2ee4608b1d43: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reason-counter@638ef0208acd49298395124a: program:reasoning_observation_pending
+- reason-counter@22659c1b2e3fbb6b8d3e05a2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Independence is measured by the 'Lexical Divergence' of the verification path: if the checker uses an entirely different set of axioms or evidence blocks to reach the same conclusion, it is independent.","counterconditions":[{"case":"There is only one possible set of evidence that could support the claim","eval":"observation"},{"case":"The checker is merely using synonyms for the same evidence","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Counting the overlap of 'evidence refs' between the author and checker. If the intersection of cited evidence blocks is small but the conclusion is identical, the verification is independent (convergent evolution of the result).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7676fb6c2bada32f7ee3e192, reason-counter@14ec40ef2760c3539f993221
+
+TARGET SRC_002
+The problem 091742a8f728 contradicts the traditional requirement for separate model weights by sharing a mechanism with SRC_001, where independence is shifted to the execution environment. This is refuted if the checking process is purely semantic/linguistic and does not involve a binary outcome from a deterministic execution environment.
+commitments: hv-floor@2a45b7988522, lineage-ref@2ee4608b1d43, relation-form@578e42df713e
+
+TARGET SRC_003
+{"analogy":null,"claim":"Separation is necessary because single-engine verification is fundamentally a measure of self-consistency, which is a proxy for confidence, not correctness.","counterconditions":[{"case":"The verification process involves executing code in an external sandbox, shifting the truth-source from latent weights to symbolic execution.","eval":"observation"},{"case":"The engine is prompted with a persona that successfully decorrelates latent activations (entropy injection).","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A single model's error terms are perfectly correlated with itself. Verification by the same engine merely confirms that the model's internal logic is consistent with its own biases; it cannot 'step outside' its own training distribution to find the blind spots that caused the original error.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@638ef0208acd49298395124a, reason-counter@22659c1b2e3fbb6b8d3e05a2
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

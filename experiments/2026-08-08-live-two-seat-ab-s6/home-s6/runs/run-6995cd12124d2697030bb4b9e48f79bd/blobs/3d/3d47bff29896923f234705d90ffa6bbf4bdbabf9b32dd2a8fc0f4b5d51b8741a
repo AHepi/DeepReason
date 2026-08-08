@@ -1,0 +1,128 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separation of engines is not necessary for independent verification, provided the verification is grounded in an 'execution-oracle' (e.g., a compiler or interpreter) that is external to the engine's weights.",
+      "mechanism": "The engine's role shifts from 'truth-generator' to 'hypothesis-tester'. Independent verification occurs when the engine generates a test case that is executed by a third-party system, and the result of that execution contradicts or confirms the claim based on external state rather than internal probability.",
+      "counterconditions": [
+        "The execution environment is simulated by the same engine",
+        "The test case is designed to confirm the bias of the original claim rather than stress-test it"
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Separation is necessary because a single engine cannot escape its own 'latent manifold'—the same weights that produced the error will likely fail to recognize the error as an anomaly.",
+      "mechanism": "The 'self-consistency bias' (as noted in SRC_004) ensures that the engine's internal probability distribution for the claim is already peaked; checking is merely a traversal of the same peak, resulting in a 'confirmation loop' rather than a critical audit.",
+      "counterconditions": [
+        "The engine uses a temperature setting high enough to force a jump to a different latent region",
+        "The prompt forces a 'Devil's Advocate' persona that shifts the activation pattern significantly"
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by the 'Discovery of Novel Disproof'—specifically, the checker identifying a counter-example the author failed to consider.",
+      "mechanism": "Verification is 'independent' if the record shows the checker generating a specific, falsifiable condition (a 'counter-example') that the author's reasoning chain did not anticipate, and then resolving that condition.",
+      "counterconditions": [
+        "The checker simply re-phrases the author's existing constraints",
+        "The checker finds a flaw but the author 'explains it away' without changing the claim"
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The necessity of separate engines is a fallacy; 'independence' is actually a function of 'information-theoretic isolation' (context window scrubbing) rather than weight separation.",
+      "mechanism": "If the checker is presented only with the final claim and denied access to the author's 'chain-of-thought' (hidden reasoning), it must reconstruct the logic from scratch. If the reconstructed logic matches the claim without seeing the original path, the verification is functionally independent.",
+      "counterconditions": [
+        "The claim itself contains enough 'leakage' of the author's logic to guide the checker",
+        "The engine has a long-term memory or state that persists across turns"
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Separation of engines may actually decrease verification reliability if the checking engine is less capable than the authoring engine, leading to 'blind approval'.",
+      "mechanism": "A highly capable Engine A may make a subtle, high-level error that only Engine A's specific internal representations could catch. A separate Engine B, lacking those representations, may verify the claim simply because it cannot perceive the error.",
+      "counterconditions": [
+        "The checking engine is strictly more capable or specialized in auditing than the authoring engine",
+        "The error is a basic logic flaw accessible to any competent engine"
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Independence is measured by the 'Lexical Divergence' of the verification path: if the checker uses an entirely different set of axioms or evidence blocks to reach the same conclusion, it is independent.",
+      "mechanism": "Counting the overlap of 'evidence refs' between the author and checker. If the intersection of cited evidence blocks is small but the conclusion is identical, the verification is independent (convergent evolution of the result).",
+      "counterconditions": [
+        "There is only one possible set of evidence that could support the claim",
+        "The checker is merely using synonyms for the same evidence"
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: The 'Independence' of a check can be quantified as the ratio of (New Evidence Introduced by Checker) / (Evidence Repeated from Author). A ratio > 1 suggests independent verification; a ratio near 0 suggests restatement. This transforms a philosophical question into a counting problem: count the distinct SRC_### refs in the checker's turn that were absent in the author's turn.",
+          "why_keep_this": "Provides a concrete, countable metric for the 'evidence within a single run' requirement."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the use of a 'persona' (e.g., 'You are a skeptical auditor') actually shift the latent space enough to count as a 'different engine' for the purposes of independent verification?",
+        "related_refs": [
+          "SCR_006",
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```
