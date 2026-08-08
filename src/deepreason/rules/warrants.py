@@ -83,9 +83,19 @@ def formally_backed(harness, target_id: str) -> bool:
     The all-currently-pass clause is ``execution_backed``'s and is kept for its
     reason: a failing formal commitment is already refuted mechanically, and
     protecting it would protect a claim that is already defeated.
+
+    Dual-mode conjecture (D2 rev 2, R43): a ``program:candidate_checker``
+    commitment (the sole kind that can carry a relatedness claim, oracle.py)
+    additionally requires ``relatedness_claim_holds`` — a sustained
+    relatedness challenge strips it from this set even while it still
+    passes, so the shield falls without touching the target's own
+    ``Status``. Every other kind is unaffected: no linked claim is possible
+    for them, so the check is a no-op (F6's opt-out default, R-a).
     """
     from deepreason import programs
     from deepreason.measures.reach import _substantive
+    from deepreason.oracle import CANDIDATE_CHECKER_PROGRAM
+    from deepreason.rules.relatedness import relatedness_claim_holds
 
     target = harness.state.artifacts.get(target_id)
     if target is None:
@@ -94,6 +104,10 @@ def formally_backed(harness, target_id: str) -> bool:
     for cid in target.interface.commitments:
         kappa = harness.commitments.get(cid)
         if kappa is None or not _substantive(kappa):
+            continue
+        if kappa.eval == f"program:{CANDIDATE_CHECKER_PROGRAM}" and not relatedness_claim_holds(
+            harness, target_id, cid
+        ):
             continue
         saw = True
         verdict, _ = programs.evaluate(kappa, target, harness.blobs)

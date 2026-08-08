@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=12 blockers=none
+State: next=16 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -272,21 +272,67 @@ order. One step per dr-execute-step invocation.
       MUST NOT touch: the five frozen surfaces (rules/warrants.py is
       none of them — it is frozen-ADJACENT per SPEC.md's own forecast,
       not literally on the list).
-- [ ] 13. (R44) Confirm (do not modify) that `crit_program`
+      DONE — added the check gated on `kappa.eval ==
+      f"program:{CANDIDATE_CHECKER_PROGRAM}"` (so every other kind is a
+      no-op, R-a), reading `rules.relatedness.relatedness_claim_holds`
+      (new reader function in that same sibling module, step 9's first
+      real caller). New test
+      `test_a_challenged_relatedness_claim_strips_only_its_own_commitment`:
+      no claim -> protects (opt-out default); claim minted, ACCEPTED ->
+      still protects; claim challenged via the SAME ARGUMENTATIVE-warrant
+      shape `relevance_trial` already uses (target=claim artifact, not
+      the conjecture) -> claim's own Status flips to REFUTED,
+      `formally_backed` now False for the conjecture, but the
+      CONJECTURE's own Status stays ACCEPTED (R43's "shield falls,
+      artifact doesn't", proven literally). Mutation-proved: reverted
+      `rules/warrants.py` alone, re-ran the new test -> failed exactly at
+      the `formally_backed(...) is False` assertion (`True is False`, the
+      shield not falling), confirming the test can fail; restored.
+      `python -m pytest tests/test_prose_refutation_boundaries.py -q` ->
+      45 passed (44 pre-existing byte-identical + 1 new). One isolated,
+      non-reproducing failure was observed mid-edit on an EARLIER,
+      unrelated test (`test_formal_backing_covers_the_whole_formal_set...`,
+      inside `execution_backed`, a function this step never touches);
+      stashing/restoring the exact same diff and re-running 5x plus the
+      isolated case all passed — recorded as a one-off environmental
+      flake (not reproduced), not a regression, since the diff never
+      touches `execution_backed`. Ring re-run
+      (prose_refutation_boundaries + oracle + adjudication + properties):
+      131 passed, 0 failed.
+- [x] 13. (R44) Confirm (do not modify) that `crit_program`
       (rules/crit.py:895-919) already re-evaluates every commitment on
       every cycle it runs — R44 needs zero new code; this step is a
       read-and-cite, not a write.
       done-when: `grep -n "def crit_program" -A 3 src/deepreason/rules/crit.py` output matches D1 census M10's own quote.
-- [ ] 14. (R45) Confirm (do not modify) that `execution_backed`'s
+      DONE — matches D1 census M10 byte-for-byte (same signature,
+      docstring, and first two body lines at the same line number, 895).
+- [x] 14. (R45) Confirm (do not modify) that `execution_backed`'s
       `EXEC_PROGRAMS` set (rules/warrants.py, D1 census M9) is NOT
       extended with the new kind — this step is a NEGATIVE check: prove
       the set still has exactly 3 members.
       done-when: `python -c "from deepreason.oracle import EXEC_PROGRAMS; assert EXEC_PROGRAMS == frozenset({'exec_oracle','property_oracle','dataset_oracle'})"` -> exit 0.
-- [ ] 15. (R44, R45) [COMMIT] Commit steps 13-14's own recorded evidence
+      DONE — exit 0, still exactly `{exec_oracle, property_oracle,
+      dataset_oracle}`; `candidate_checker` confirmed NOT a member
+      (R45, matches oracle.py's own comment at the constant's
+      definition).
+- [x] 15. (R44, R45) [COMMIT] Commit steps 13-14's own recorded evidence
       (no code change expected; if either check fails, that is a STOP,
       not a step to force green).
+      ADAPTED: this checklist entry's own text omits step 12's code
+      change (rules/warrants.py + rules/relatedness.py +
+      test_prose_refutation_boundaries.py) from its commit scope — a
+      planning-time gap, not a tree contradiction (steps 13/14 truly
+      added no code, exactly as written). No commit boundary exists
+      between step 11 and here, so this step's ACTUAL scope is steps
+      12-14 together; committing that way rather than stopping to
+      re-plan over a checklist wording gap, per this tranche's own
+      precedent for small adaptations (steps 1, 2, 5).
       done-when: diff-budget running total <= 1150 (expect no increase
       from steps 13-14); frozen-surface diff empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 10 files changed, 446 insertions(+), 5
+      deletions(-) -> running total 441 of 1150 (steps 13-14 added 0, as
+      expected — read-only). Frozen-surface diff: empty. Pushed.
 
 ## Item 5 — relatedness challenge call site (R24, R35, F6/R42)
 

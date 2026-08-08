@@ -16,7 +16,7 @@ that `Status`; nothing here adjudicates it.
 
 import json
 
-from deepreason.ontology import Interface, Provenance, Ref
+from deepreason.ontology import Interface, Provenance, Ref, Status
 from deepreason.ontology.artifact import RefRole
 
 RELATEDNESS_CLAIM_CODEC = "prose:relatedness-claim"
@@ -47,3 +47,33 @@ def mint_relatedness_claim(
         provenance=Provenance(role=provenance_role),
     )
     return artifact.id
+
+
+def relatedness_claim_holds(harness, conjecture_id: str, commitment_id: str) -> bool:
+    """True unless a relatedness claim minted for THIS (conjecture,
+    commitment) pair exists and a sustained challenge (Item 5) has
+    flipped its own ``Status`` away from ``ACCEPTED`` (R43). No linked
+    claim at all is the F6 opt-out default — protection stays intact,
+    exactly as for a commitment that never had its relatedness
+    questioned. `formally_backed`'s only caller reads this per
+    commitment of the new kind; it never touches the CONJECTURE's own
+    `Status` (R43: "the shield falls, the artifact doesn't")."""
+    from deepreason import programs
+
+    for artifact in harness.state.artifacts.values():
+        if artifact.codec != RELATEDNESS_CLAIM_CODEC:
+            continue
+        if not any(
+            r.role == RefRole.MENTION and r.target == conjecture_id
+            for r in artifact.interface.refs
+        ):
+            continue
+        text = programs.content_text(artifact, harness.blobs)
+        try:
+            data = json.loads(text)
+        except ValueError:
+            continue
+        if data.get("commitment") != commitment_id:
+            continue
+        return harness.state.status.get(artifact.id) == Status.ACCEPTED
+    return True
