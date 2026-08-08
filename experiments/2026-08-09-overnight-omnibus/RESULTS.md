@@ -213,7 +213,64 @@ raised) before code reading."
 
 ## Block D — qualification battery re-sampling
 
-(pending — runs in flight as of this segment's drafting)
+8/8 samples complete (4 at cap 8192, 4 at cap 16384, each a fresh
++0/+1/+2/+3-token-perturbed subject per PREREG.yaml's documented
+deviation), PREREG.yaml frozen before the first call.
+
+| cap point | samples clean | samples with scope violations | which pair(s) |
+|---|---|---|---|
+| 8192 | 4/4 | 0/4 | — |
+| 16384 | 1/4 | **3/4** | 3 DIFFERENT pairs, one per violating sample |
+
+**Headline finding — inverts the prereg's own stated expectation.**
+PREREG.yaml's `hit_criteria.16384_as_control` said: "16384 point
+samples are expected clean per S6's own remedy having worked; a
+violation there would be a NEW finding, not confirmation of the known
+one." That expectation is falsified: 16384 showed violations in 3/4
+samples, a HIGHER rate than 8192's 0/4 in this same block. This is the
+new finding, stated plainly rather than smoothed into the prereg's
+prior expectation.
+
+**Cross-validated against Block C's own independent batteries at the
+exact (unperturbed) cap values**, which ran the identical qualify step
+for a different purpose and give two more independent draws: cap=8192
+showed 1 violation (Block C's own battery, same pair
+`sha256:96c8238f...` as S6's original historical observation); cap
+16384 showed 0 (Block C's battery was clean). Combining Block D's 4
+perturbed samples with Block C's 1 exact-value battery at each point:
+**8192: 1/5 batteries violated (all four times on the same underlying
+pair when it happens, S6's `sha256:96c8238f...`/`scratch.cluster-guide.compact.v1`)
+vs 16384: 3/5 batteries violated (a different pair each time)**.
+
+**Is it stochastic ~1-in-N or deterministic?** Neither, cleanly.
+- At 8192: stochastic, low rate (~1/5 across this tranche's 5
+  independent draws), and when it fires it is the SAME pair every
+  time — the "trigger-happy on a known-fragile pair" reading from
+  PREREG's `deterministic_at_8192` criterion is close but not exact:
+  it is not 4/4 (not deterministic), but it is concentrated (100% of
+  its failures land on one pair), consistent with `stochastic_at_8192`.
+- At 16384: stochastic and MORE frequent (3/5), diffuse across
+  different pairs each time — this pattern is not one this block's
+  prereg anticipated at all, and is the block's real headline: the
+  zero-tolerance scope-violation gate is not calibrated to get safer
+  as the completion-token cap rises. If anything, tonight's small
+  sample points the other way.
+
+**Residue.** n=4-5 per cap point is a calibration pilot, not a
+powered study — a rate moving from 1/5 to 3/5 is consistent with
+real signal but also with small-sample noise; this needs a larger
+resample (the same method, more samples per point) before "16384 is
+riskier than 8192" is asserted as established rather than observed
+tonight. What IS established, typed, and not in question: the
+zero-tolerance gate (`sum(scope_violations) == 0` regardless of
+eventual-valid count, `cli/doctor.py:139`) demoted 4 of this block's
+8 batteries to shallow tier, at both cap points, on fresh subjects
+each time — S4b's "M full batteries, not N" pricing model
+(experiments/2026-08-06-change-qualification-per-seat-s4/PARKED.md)
+means every one of those 8 batteries was paid for in full regardless
+of outcome, and this rate (`4/8 = 50%` demoted across both points
+combined) is itself a cost number worth carrying into any future
+qualification-repair-scope design discussion.
 
 ## Block E — end-of-night overlay sweep
 
