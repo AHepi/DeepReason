@@ -145,7 +145,71 @@ alarmed by it.
 
 ## Block C — reasoning-token completion-cap curve
 
-(pending — runs in flight as of this segment's drafting)
+6/6 runs complete (3 caps × 2 seeds), PREREG.yaml frozen before the
+first call. Each cap paid its own fresh qualification battery (fresh
+profile digest), as predicted.
+
+| cap | qualification tier | s1 | s2 |
+|---|---|---|---|
+| 4096 | full | failed: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` (typed seat failure, 2 truncated calls, empty_emission_rate 18%) | failed: `ROUTE_LEASE_MISMATCH` (see below) |
+| 8192 | **shallow** (`ready_shallow`) | refused before any call: `QUALIFICATION_TIER_SHALLOW` | same |
+| 16384 | full | completed cleanly (0 typed seat failures, 0 truncated calls, replay_valid=true) | completed cleanly |
+
+**Not a smooth curve — three DIFFERENT typed failure mechanisms, one
+per cap, not a graded "more failures at lower cap" shape.** PREREG.yaml
+said a non-monotonic result would be reported as-is, not smoothed; it
+was more than non-monotonic, it was mechanism-different at each
+lower point:
+
+1. **cap=4096, seed 1:** `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` — the
+   CLAUDE.md-documented "hard question burns the whole completion cap
+   on hidden reasoning and emits nothing" failure. This is the
+   mechanism the operator's framing anticipated.
+2. **cap=4096, seed 2:** a DIFFERENT typed error, never seen
+   elsewhere in this tranche: `ROUTE_LEASE_MISMATCH role='conjecturer'
+   seat=0 field=max_tokens expected=4096 actual=2560 RouteFirewallError`.
+   The leased route's actual max_tokens (2560) does not match the cap
+   that was set (4096) for the conjecturer role's seat. This looks
+   like a genuine internal inconsistency (something downstream derives
+   2560 from a 4096 cap and a firewall check catches the mismatch)
+   rather than a provider-side capacity failure — PARKED below with a
+   ready diagnose prompt, not fixed in this tranche.
+3. **cap=8192:** qualification itself demoted to `shallow` tier
+   (`ready_shallow`), so `reason` (full) was refused BEFORE any
+   provider call — the third and fourth independent 2026-08-09
+   observation of the REPAIR_SCOPE_VIOLATION pattern Block D is
+   dedicated to (see Block D's segment; same pair,
+   `sha256:96c8238f...`, both times).
+4. **cap=16384:** clean on both seeds — 0 typed seat failures, 0
+   truncated calls, `replay_valid=true` both times.
+
+**typed_seat_failure_rate and empty_emission_rate, per cap (of the
+runs that actually reached `reason`):** 4096: 1/2 typed seat failure
+(50%), empty-emission 18%/0% across its 2 runs; 8192: N/A, no `reason`
+call ever ran; 16384: 0/2 (0%), 0% both. The curve DOES fall as cap
+rises from 4096 to 16384 on the metric CLAUDE.md's guidance targets
+(typed seat failure), consistent with "raise
+`--maximum-completion-tokens`" being real, useful advice — but the
+8192 midpoint's failure is a QUALIFICATION-time gate, not a
+`reason`-time one, so it does not fit on the same axis at all. A
+reader who only plots "did reason succeed" would see 0/2, 0/2, 2/2 and
+wrongly read 8192 as equal-worst to 4096; the mechanisms are unrelated.
+
+**Parked candidate defect: `ROUTE_LEASE_MISMATCH` at cap=4096.**
+Evidence: `block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598`,
+error `ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens
+expected=4096 actual=2560 RouteFirewallError` (from
+`block-c-4096-s2.json`'s `error` field). Ready prompt for a future
+tranche: "Diagnose why the conjecturer seat's leased route computed
+max_tokens=2560 when the profile's maximum_completion_tokens was set
+to 4096 -- is 2560 a fixed floor/reservation subtracted somewhere in
+the route-leasing path, and if so is it supposed to scale with the
+profile's cap or is it a hardcoded value that only breaks at low
+caps? Route through `deepreason-orchestrator` (dr-set-goal ->
+dr-diagnose), diagnosis from the typed record first (this run's
+`run-manifest.json` and the route-leasing code path in
+`src/deepreason/llm/adapter.py` / wherever `RouteFirewallError` is
+raised) before code reading."
 
 ## Block D — qualification battery re-sampling
 
