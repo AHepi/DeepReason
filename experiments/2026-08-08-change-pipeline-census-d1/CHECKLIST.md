@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=6 blockers=none
+State: next=8 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -34,15 +34,18 @@ order. One step per dr-execute-step invocation.
 - [x] 5. (S5) [COMMIT] Commit and push CENSUS.md's first section.
       done-when: `git log --oneline -1` message names this step; push
       confirmed (retry 2s/4s/8s/16s on failure). DONE.
-- [ ] 6. (S6) Gather and write "Criticism dispatch per kind": the
+- [x] 6. (S6) Gather and write "Criticism dispatch per kind": the
       crit_program vs crit_argumentative/crit_argumentative_batch
       selection caller, pack-rendering kind-conditionals,
       ARGUMENTATIVE_AUTHORITY read+enforcement sites, and
       execution_backed/formally_backed semantics in rules/warrants.py.
       done-when: CENSUS.md's "Criticism dispatch per kind" section has
       >=4 M-numbered rows with pasted commands.
-- [ ] 7. (S6) [COMMIT] Commit and push.
-      done-when: pushed, confirmed on origin.
+      DONE — M6-M9 written; M6 found a genuine kind-conditional
+      scheduling term (_standing_recrit_pool ordering) flagged forward
+      to the R-g audit section (S8) rather than judged here.
+- [x] 7. (S6) [COMMIT] Commit and push.
+      done-when: pushed, confirmed on origin. DONE.
 - [ ] 8. (S7) Gather and write "Refutation semantics per kind": the
       DEMONSTRATIVE path (rules/crit.py:805), what a trial-guarded prose
       refutation can/cannot do, and suspended_unsupported dependent
