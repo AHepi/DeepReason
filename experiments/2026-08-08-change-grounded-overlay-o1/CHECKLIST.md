@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=16 blockers=none
+State: next=18 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -140,7 +140,7 @@ order. One step per dr-execute-step invocation.
       enumeration against the existing instrument.
 - [x] 15. (S10) [COMMIT] Commit and push `overlay_results.jsonl`.
       done-when: pushed, confirmed on origin.
-- [ ] 16. (S11) Write `REPORT.md`: per-root, per-overlay M-numbered rows
+- [x] 16. (S11) Write `REPORT.md`: per-root, per-overlay M-numbered rows
       with pasted commands reading back `overlay_results.jsonl` (or
       re-running the relevant script on one root), naming every
       artifact/warrant/commitment id the report's own prose claims
@@ -148,7 +148,17 @@ order. One step per dr-execute-step invocation.
       done-when: `test -f experiments/2026-08-08-change-grounded-overlay-o1/REPORT.md`
       -> exit 0; every one of the four overlay sections has >=1
       M-numbered row with a fenced command+output block.
-- [ ] 17. (S11) [COMMIT] Commit and push `REPORT.md`.
+      DONE — REPORT.md has a full 48-row per-root table plus 7
+      M-numbered claims (M1-M7), each with a pasted command + real
+      output. Headline findings: O1a/O1d both zero-divergence across
+      the whole corpus (0 controversy SCCs, 0 skeptical-not-grounded,
+      0 single-warrant flips); O1b's machine-comparable-gate excludes
+      100% of the corpus's 265 formally-backed pairs (predicate:/
+      property_oracle:-class, not exec_oracle:-class); O1c found the
+      corpus's one genuine positive catch — 14 multi-node floating
+      chains (up to 28 artifacts) across 12 roots, spot-checkable by
+      root + member id.
+- [x] 17. (S11) [COMMIT] Commit and push `REPORT.md`.
       done-when: pushed, confirmed on origin.
 - [ ] 18. (S12) Write `RESULTS.md`: honest-ledger segment naming what
       each overlay found (including a genuine zero/negative result
