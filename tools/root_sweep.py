@@ -9,6 +9,7 @@ import sys
 
 from deepreason.harness import Harness
 from deepreason.module_events import recorded_module_fingerprints
+from deepreason.seat_events import recorded_seat_bindings
 from deepreason.verification.report import verify_root_report
 
 out = pathlib.Path(sys.argv[1])
@@ -32,11 +33,21 @@ for root in sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jso
         modules = sorted(
             {m.module_id for stamp in stamps for m in stamp.modules}
         )
+        # Seat bindings (Rung S5). Same absence-tolerant shape as modules=
+        # above: no committed root under experiments/ carries this stamp
+        # yet, so every row reads "-" today, but the column is fed by the
+        # reader rather than hardcoded (mutation-proved at step 31).
+        assert hasattr(harness, "log"), "harness has no log"
+        seat_stamps = recorded_seat_bindings(harness)
+        seats = sorted(
+            {b.group for stamp in seat_stamps for b in stamp.bindings}
+        )
         lines.append(
             f"{str(root):72} valid={str(report.valid):5} "
             f"epistemic_passed={str(report.epistemic_checks_passed):5} "
             f"att={len(harness.state.att):3} blind={blind} "
-            f"modules={','.join(modules) if modules else '-'}"
+            f"modules={','.join(modules) if modules else '-'} "
+            f"seats={','.join(seats) if seats else '-'}"
         )
     except Exception as error:
         lines.append(f"{str(root):72} ERROR {type(error).__name__}: {error}")

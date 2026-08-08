@@ -1,11 +1,11 @@
 # Checklist for: seats in the typed record — Rung S5 of role-seat separation
-State: next=29 blockers=none. MAIN PHASE (steps 1-28) COMPLETE --
-stopping here for review per the operator's own instruction, before
-the probe commits (29-32). Full gate: 3382 passed, 0 failed net of the
-pre-existing, independently-reconfirmed P1/P3 failure (unrelated to
-this rung). Actual src+tests+map: 792 lines, past R21's corrected
-500-650 ceiling (second overrun, operator-accepted, to be reported
-plainly at delivery).
+State: ALL 32 STEPS COMPLETE. Full gate: 3382 passed, 0 failed net of
+the pre-existing, independently-reconfirmed P1/P3 failure (unrelated
+to this rung). Actual src+tests+map+probe: 792+13=805 lines, past
+R21's corrected 500-650 ceiling (two overruns, both operator-accepted
+via AskUserQuestion, ledgered as REQUEST.md Amendments 2/3 (R21/R22) --
+to be reported plainly in VALIDATION.md/DELIVERY.md). Next:
+dr-validate-change.
 Final total (incl. probe) to be recorded plainly in
 VALIDATION.md/DELIVERY.md. R21 (REQUEST.md Amendment 2) originally set the
 binding budget ceiling to 500-650 insertions across
@@ -759,7 +759,7 @@ words and the operator's Amendment 1.
         ceiling, with the operator's standing instruction to report
         the true total plainly at delivery rather than gloss it.
 
-- [ ] 29. (S9, R9, R11, R12) **SEPARATE commit, `tools/root_sweep.py`
+- [x] 29. (S9, R9, R11, R12) **SEPARATE commit, `tools/root_sweep.py`
       ONLY, no `src/` file.** Extend the probe to read
       `seat_bindings_for_run` (or `recorded_seat_bindings`, whichever
       the probe rule prefers — asserting the attribute exists before
@@ -768,7 +768,13 @@ words and the operator's Amendment 1.
       existing `modules=...` column.
       done-when: `git show --stat HEAD` lists only `tools/root_sweep.py`.
 
-- [ ] 30. (S9) Capture the probe's OWN before/after on an unchanged
+      DONE 2026-08-07. Added a `seats=` column fed by
+      `recorded_seat_bindings`, identical absence-tolerant shape to
+      the existing `modules=` column (asserts `hasattr(harness, "log")`
+      first, per the probe rule). `git status --porcelain` before
+      committing shows only `tools/root_sweep.py` touched.
+
+- [x] 30. (S9) Capture the probe's OWN before/after on an unchanged
       tree: run the extended sweep twice back-to-back with nothing else
       changed in between, confirm byte-identical (a new baseline digest
       — different from step 1/27's, because extending the tool resets
@@ -776,14 +782,56 @@ words and the operator's Amendment 1.
       done-when: `diff <scratch>/sweep-probe-a.txt
       <scratch>/sweep-probe-b.txt` -> empty, matching sha256.
 
-- [ ] 31. (S9, R12) Mutation-prove the probe is not vacuous: make
+      DONE 2026-08-07:
+
+          SWEEP COMPLETE: 45 roots (both captures)
+          EMPTY DIFF - byte-identical
+          sha A: 76e7970c0ea21247930fd027edf5fbd5cbd5d450c79b267d4f587f25e19a3f28
+          sha B: 76e7970c0ea21247930fd027edf5fbd5cbd5d450c79b267d4f587f25e19a3f28
+
+      Digest differs from step 1/27's `8b928c08b1...` BY DESIGN --
+      extending the tool resets the byte-identity baseline (mirrors
+      rung 4's own precedent exactly). 34 openable rows, every one
+      `seats=-`: no committed root under `experiments/` carries this
+      stamp yet, absence tolerated. No file besides `tools/root_sweep.py`
+      touched between the two captures (`git status --porcelain`
+      checked before each run).
+
+- [x] 31. (S9, R12) Mutation-prove the probe is not vacuous: make
       `seat_bindings_for_run`/`recorded_seat_bindings` return a bogus
       value, watch the `seats=` column change for every openable root,
       restore.
       done-when: the mutated distribution and the restored,
       byte-identical-to-step-30 rerun are both pasted.
 
-- [ ] 32. (all) [COMMIT] Push the probe commit and confirm a clean
+      DONE 2026-08-07. Mutation: `recorded_seat_bindings` made to
+      return a fabricated `SeatBindingV1(group="MUTANT", ...)` stamp
+      instead of reading the log.
+
+          MUTATED seats= distribution:
+               34 seats=MUTANT
+          changed rows vs capture A: 34
+
+          sample:
+          < ...run-6472629dbc5d... att=  0 blind=1 modules=- seats=-
+          > ...run-6472629dbc5d... att=  0 blind=1 modules=- seats=MUTANT
+
+      Every one of the 34 openable rows moved, so the column is fed by
+      the reader rather than hardcoded. Restored
+      (`git diff --stat -- src/deepreason/seat_events.py` -> empty,
+      byte-identical to HEAD; `pytest tests/test_seat_bindings_record.py`
+      -> 11 passed) and a third sweep capture confirms byte-identity to
+      captures A/B:
+
+          EMPTY DIFF - byte-identical, restore confirmed
+          sha: 76e7970c0ea21247930fd027edf5fbd5cbd5d450c79b267d4f587f25e19a3f28
+          (matches capture A and capture B exactly)
+
+- [x] 32. (all) [COMMIT] Push the probe commit and confirm a clean
       tree.
       done-when: `git status --porcelain` empty AND branch head is on
       origin.
+
+      DONE 2026-08-07. Probe commit contains only `tools/root_sweep.py`
+      plus this tranche's own `CHECKLIST.md`; pushed with retry.
+      **All 32 steps complete.**
