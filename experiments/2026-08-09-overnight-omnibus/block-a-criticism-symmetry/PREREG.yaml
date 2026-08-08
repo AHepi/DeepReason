@@ -1,0 +1,93 @@
+schema: deepreason-omnibus-prereg.v1
+block: A
+title: criticism-symmetry pilot cells (SELF vs CROSS)
+serves: docs/proposals/CRITICISM_SYMMETRY_RESEARCH_PREPLAN.md P1, P2
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this block
+status: FROZEN
+
+design:
+  cells:
+    SELF:
+      description: >
+        default home; glm-5.2 fills every role (conjecturer, variator,
+        argumentative_critic, etc.) via the default/broadcast provider
+        profile -- no --seat override. The critic examines its own
+        model family's conjectures.
+      home: home-self
+      setup_flags:
+        - "--provider ollama --endpoint https://ollama.com/v1"
+        - "--model glm-5.2 --model-revision glm-5.2 --family glm"
+        - "--context-window-tokens 131072 --maximum-completion-tokens 16384"
+        - "--reasoning none --credential-env OLLAMA_API_KEY"
+      qualification: one full battery on first reason call in this cell; cached thereafter (same home, same profile digest).
+    CROSS:
+      description: >
+        conjecture role group (conjecturer, variator) bound via
+        --seat conjecture=<gemma4:31b profile>, per the S6 v2 pattern;
+        every other role (including argumentative_critic) stays on the
+        default glm-5.2 profile. The critic always examines a
+        FOREIGN model's conjectures.
+      home: home-cross
+      setup_flags:
+        - "--provider ollama --endpoint https://ollama.com/v1"
+        - "--model glm-5.2 --model-revision glm-5.2 --family glm"
+        - "--context-window-tokens 131072 --maximum-completion-tokens 16384"
+        - "--reasoning none --credential-env OLLAMA_API_KEY"
+        - "--seat conjecture=<LIVE>/coder-profile.yaml  (gemma4:31b, same file shape as S6's write_coder_profile.py)"
+      qualification: one full battery on first reason call in this cell; cached thereafter (same home, same profile-set digest).
+
+  questions: [Q1, Q2]  # both fixed hard argumentative claims, text frozen in block_a_questions.py
+  seeds: [S1, S2, S3]  # distinguishing leading sentence only; claim substance identical across seeds (S6 pattern; run identity = preparation.py::_request_digest hashes question text verbatim, seat bindings are not an input -- PARKED.md P2)
+  cells_x_questions_x_seeds: 2 x 2 x 3 = 12 runs
+
+  budget_per_run:
+    cycles: 6
+    token_budget: 90000
+    flags: "--allow-partial"
+    rationale: >
+      bounded below S6's 10/195000 to keep 12 runs tractable in one
+      night while still reaching multiple criticism cycles; natural
+      stop (not continuation) is what Block A measures, so no
+      `continue` step is scheduled for this block.
+
+metrics: [refutation_rate, criticism_calls_per_accepted_artifact,
+          criticism_tokens_per_accepted_artifact, survival_distribution
+          (stop_reason histogram), foreign_criticism_debt_at_natural_stop
+          (CoverageDebtV1 outstanding_school_ids at terminal state; in
+          CROSS every criticism obligation is definitionally foreign
+          since conjecture is seat-bound off the critic's model, so
+          Block A reports CROSS cell's coverage-debt distribution as
+          the "foreign" arm and SELF cell's as the "self" arm and
+          compares them)]
+
+hit_criteria:
+  P1_survives: "no significant difference in refutation rate between SELF and CROSS cells across the 2x3 matched question/seed pairs"
+  P1_refuted: "measured criticism asymmetry between SELF and CROSS refutation rates"
+  reporting_floor: "n=6 runs per cell is a pilot, not C2's full pre-registered program (>=3 seeds/cell minimum met, but this is NOT a substitute for Rung C2's full design -- explicitly a pilot informing it, per the operator's own Block A framing"
+
+parked:
+  - id: block-a-P1
+    title: reverse arm (glm conjectures / gemma criticizes) is structurally impossible today
+    evidence: >
+      GROUP_ROLES (src/deepreason/seat_bindings.py:34-38) defines only
+      {conjecture, coder, scratch} (+ simulation alias of conjecture).
+      No "critic" group exists, and argumentative_critic is not a
+      member of any GROUP_ROLES set, so `--seat critic=...` and
+      `--seat argumentative_critic=...` are both rejected by
+      valid_group_names() (seat_bindings.py:55) before any provider
+      call is made. There is no seat-bindable path today to force the
+      critic role onto a specific model independent of the default
+      profile.
+    ready_prompt: >
+      "Add a `critic` entry to GROUP_ROLES (seat_bindings.py) mapping
+      to {argumentative_critic}, so `--seat critic=PATH` binds the
+      critic role independently of the conjecture role group. This
+      unblocks Rung C2's full self/cross design matrix, which today
+      can only vary the CONJECTURE side (this block's CROSS cell) and
+      not the CRITIC side. Route through dr-change-orchestrator:
+      dr-capture-request should ledger this exact ask verbatim; the
+      spec must confirm whether frozen surfaces are touched (seat
+      digest computation lives in seat_bindings.py, NOT in the frozen
+      state.py/harness.py list per docs/map/INV-frozen-surfaces.md, so
+      this should be a normal, unrestricted change -- confirm during
+      dr-spec-change, do not assume)."

@@ -1,0 +1,12 @@
+=== block-a-self start 2026-08-08T22:32:24Z head=54c652ec ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 1140. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/300qualification cases: 2/300qualification cases: 3/300qualification cases: 4/300qualification cases: 5/300qualification cases: 6/300qualification cases: 7/300qualification cases: 8/300qualification cases: 9/300qualification cases: 10/300qualification cases: 11/300qualification cases: 12/300qualification cases: 13/300qualification cases: 14/300qualification cases: 15/300qualification cases: 16/300qualification cases: 17/300qualification cases: 18/300qualification cases: 19/300qualification cases: 20/300qualification cases: 21/300qualification cases: 22/300qualification cases: 23/300qualification cases: 24/300qualification cases: 25/300qualification cases: 26/300qualification cases: 27/300qualification cases: 28/300qualification cases: 29/300qualification cases: 30/300qualification cases: 31/300qualification cases: 32/300qualification cases: 33/300qualification cases: 34/300qualification cases: 35/300qualification cases: 36/300qualification cases: 37/300qualification cases: 38/300qualification cases: 39/300
