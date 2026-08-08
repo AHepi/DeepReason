@@ -184,4 +184,23 @@ run before any change) rather than assume a specific count or name.
 
 ## Amendments
 
-(none yet)
+**Amendment 1 (2026-08-08, operator message, verbatim).** Sent in
+response to a budget-overrun STOP raised before step 8's commit: the
+gate's own first real use, checking its own creator's work, reported
+453 actual insertions against SPEC.md's 450 ceiling (`tools/` 228,
+`tests/` 192, `.claude/skills/` 16, `docs/map/` 17), after the
+`dr-execute-step` amendment's wording was already trimmed once. Two
+options were priced: (A) bump the ceiling 450 -> 460; (B) trim the
+amendment further, at a real cost to the clarity of instructions that
+govern exactly this kind of check. Recommendation was (A).
+
+> Bump please
+
+New requirement, quoting the operator's own words:
+
+R18 (process, budget correction): "Bump please" — the operator
+authorizes raising SPEC.md's ceiling for this tranche from 450 to 460
+insertions across the gate's own enforced scope (`tools/`+`tests/`+
+`.claude/skills/`+`docs/map/`), per the priced Option A. No symbol,
+file, or requirement beyond SPEC.md's already-declared Items S1-S11 is
+authorized by this amendment; scope (C1: "G1 alone") is unchanged.

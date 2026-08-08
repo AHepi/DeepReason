@@ -244,11 +244,21 @@ FIXTURE-repo tests in S2 give the same verdict logic permanent,
 durable coverage; S3 additionally proves it against the real recorded
 overrun, once, on the record.
 
+S12 (R18): SPEC.md's own `## Budget` section, ceiling value.
+before: ceiling 450, computed sum 318-437, actual (through step 7)
+446-453.
+after: ceiling 460, per the operator's Amendment 1 authorization
+("Bump please" against priced Option A). No item's line estimate, no
+scope, no requirement beyond S1-S11 changes.
+accept: `## Budget` reads ceiling 460; the gate re-run at step 8 shows
+`verdict: WITHIN`.
+
 ## Questions for operator (STOP if non-empty)
 
 (none — both open questions from REQUEST.md resolved as Assumptions
 above; neither forks the implementation by file, behavior, or >2x
-effort)
+effort; R18 (this amendment) is a direct operator authorization, not a
+question)
 
 ## Out of scope (explicit)
 
@@ -314,7 +324,7 @@ S7 `PARKED.md`: 8-12
 Computed sum (`python3 -c "print(sum([130,140,15,15,10,8]),
 sum([170,190,25,25,15,12]))"` -> `318 437`):
 
-**Headline: 318-437 insertions, ceiling 450, across
+**Headline: 318-437 insertions, ceiling 460 (R18), across
 `tools/`+`tests/`+`.claude/skills/`+`docs/map/` — the gate's own
 enforced `--paths`, matching S5's own precedent (REQUEST.md Amendment
 2's "500-650 insertions across `src/` + `tests/` + `docs/map/` +
@@ -333,12 +343,22 @@ itemization above (which never counted REQUEST.md/SPEC.md/
 CHECKLIST.md, already 638 lines together) — exactly the headline-vs-
 itemization mismatch this rung exists to catch. Fixed here, before any
 gate check ran against it; S1/S2's own line counts, the ceiling value,
-and every other item are unchanged.
+and every other item were unchanged at that time.
+
+Correction 2 (caught executing CHECKLIST step 8, via the gate's own
+first real use against its own creator's work): actual insertions
+(453, after the S1/S2 fix under step 6 and the S4/S5 skill amendments)
+exceeded the 450 ceiling by 3 — `tools/` (228) and `tests/` (192) each
+landed above their itemized high bound (170, 190), driven by the
+self-test scaffolding, exit-class coverage, and the step-6 bug fix,
+while `.claude/skills/` (16) landed under its 30-50 estimate. Per
+R18 (REQUEST.md Amendment 1, "Bump please" against priced Option A),
+ceiling raised 450 -> 460. No item's line estimate or scope changed.
 
 Rubric: 6/6 yes
 - every R has a spec item with a machine-decidable accept: yes (R1-R17
-  all appear in S1-S11 above; R15-R17 marked already-discharged with
-  their own accept evidence)
+  appear in S1-S11 above, R15-R17 marked already-discharged with their
+  own accept evidence; R18 appears in S12, added by this amendment)
 - blast-radius census pasted (or pasted-empty) and every hit
   classified: yes
 - frozen-surface contact forecast recorded: yes (none expected)
