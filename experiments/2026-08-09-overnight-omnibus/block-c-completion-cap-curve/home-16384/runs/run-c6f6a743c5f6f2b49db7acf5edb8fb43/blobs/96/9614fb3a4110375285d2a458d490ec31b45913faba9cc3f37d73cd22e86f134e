@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 offers a process-level rationales test as the single-evaluation evidence distinguishing genuine reliability from mere checklist compliance, but its own countercondition concedes that for purely perceptual tasks (e.g., identifying a tumor in an MRI) there may be no decomposable rationale to verify. The problem asks broadly about 'tasks with objectively verifiable outcomes,' which plainly includes perceptual verification tasks. Thus the proposed if-and-only-if criterion fails: a single evaluation can distinguish genuine gain on tasks with decomposable rationales, but on perceptual tasks the criterion admits it has no applicable mechanism, so the claimed iff test is not actually general to the class of objectively verifiable tasks the problem concerns.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 rejects the distinction between genuine reliability gain and mere compliance as a false dichotomy, arguing that for objectively verifiable tasks any compliance that tracks the right answer is a genuine gain by definition. But the problem explicitly asks 'what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer,' so SRC_002 refuses the question rather than answering it. Its counterconditions only cover generalizability and overfitting; they do not handle the within-evaluation, same-distribution case the prompt asks about, namely that the checklist happens to track the right answer for reasons unrelated to the panel's underlying reliability.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_03 argues against the panel using a 'dense adversarial edge cases' task space and an infinite-dimensional expert intuition vs. a finite checklist, but it never addresses the half of the problem that asks for evidence within a single evaluation distinguishing genuine reliability gain from mere checklist compliance. Its mechanism only establishes that a finite checklist can be incomplete; it offers no single-evaluation evidence criterion, nor any way to tell whether the panel's advantage (if any) reflects genuine reliability rather than compliance that happens to track the right answer. Thus it answers only the for/against side and ignores the distinguishing-evidence requirement.",
+      "counterexample": null
+    }
+  ]
+}
+```

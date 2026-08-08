@@ -1,0 +1,18 @@
+{
+  "artifact_total": 55,
+  "cap": "16384",
+  "empty_emission_rate": 0.0,
+  "events_total": 592,
+  "insufficient_capability_by_route_seat": [],
+  "llm_call_count": 19,
+  "qualification_state": "ready",
+  "replay_valid": true,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+  "seed_idx": "2",
+  "state": "completed",
+  "stop_reason": "budget_exhausted",
+  "truncated_call_count": 0,
+  "truncated_calls_by_role": [],
+  "typed_seat_failure": false,
+  "verify_violations": []
+}

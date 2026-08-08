@@ -1,0 +1,52 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9fa6fb43f205084b78c70600: program:reasoning_observation_pending
+- reason-counter@8c7c9ee6c905a33d04374134: program:reasoning_observation_pending
+- reason-counter@933ccc1705f24f65c82a093b: program:reasoning_observation_pending
+- reason-counter@3130bf3d246d51e9442ffeed: program:reasoning_observation_pending
+- reason-counter@45bf819ecbcdd2b62d701a16: program:reasoning_observation_pending
+- reason-counter@6b76dd6fa60d6ac3e01298c7: program:reasoning_observation_pending
+- reason-counter@4d0dc21b5ada946fe9ae922a: program:reasoning_observation_pending
+- reason-counter@00171cabfc1db7440ddc3645: program:reasoning_observation_pending
+- reason-counter@68c116b3488fe40e12be89b4: program:reasoning_observation_pending
+- reason-counter@b8cf0a7583d29143cb096e8d: program:reasoning_observation_pending
+- reason-counter@968ed5755d5b8184cc79965f: program:reasoning_observation_pending
+- reason-counter@fd61ba8e08c5a4b860b26a0f: program:reasoning_observation_pending
+- reason-counter@cd56b2dc21c80827ed59471c: program:reasoning_observation_pending
+- reason-counter@00dbb9ea150b1215c03f443c: program:reasoning_observation_pending
+- reason-counter@699086ccf3befafb213224ea: program:reasoning_observation_pending
+- reason-counter@c2dbf4e56c2495beda4d39f8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The claim that non-expert panels are more reliable than single experts is false for tasks with objectively verifiable outcomes, because objectivity means the ground truth is checkable; in such domains, the checklist is a lossy compression of the verification procedure itself, and a single expert who has internalized the verification logic will outperform non-experts who follow the compressed version.","counterconditions":[{"case":"If the expert's internalized verification is subject to systematic biases that the checklist's explicit steps prevent, the panel can outperform despite the lossy compression.","checker_spec":null,"eval":"observation"},{"case":"If the checklist is not a lossy compression but a complete decision procedure that non-experts can apply perfectly, then the panel matches or beats the expert by eliminating individual noise through aggregation.","checker_spec":null,"eval":"observation"},{"case":"If the task's verification is computationally intractable to internalize (e.g., multi-factor probabilistic reasoning), the expert's intuition is no higher-fidelity than the checklist and the panel's aggregation advantage dominates.","checker_spec":null,"eval":"observation"},{"case
+commitments: reasoning-envelope-wf, reason-counter@9fa6fb43f205084b78c70600, reason-counter@8c7c9ee6c905a33d04374134, reason-counter@933ccc1705f24f65c82a093b, reason-counter@3130bf3d246d51e9442ffeed
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel-versus-expert reliability comparison is empirically undecidable in a single evaluation because any observed superior accuracy of the panel can be attributed to either genuine reasoning or mere compliance, and these hypotheses make identical point predictions for aggregate accuracy; only the structure of errors can partially separate them, but even error structure is confounded by checklist quality.","counterconditions":[{"case":"If the evaluation includes held-out cases deliberately constructed to probe known checklist blind spots, error structure becomes diagnostic and the two hypotheses can be separated.","checker_spec":null,"eval":"observation"},{"case":"If the panel's error pattern is random even on cases outside the checklist's coverage, this is evidence of genuine reasoning beyond mere compliance and the undecidability claim fails.","checker_spec":null,"eval":"observation"},{"case":"If the expert's errors are also structured (by systematic bias), then comparing error structures between panel and expert can distinguish genuine reliability from both compliance and expert bias.","checker_spec":null,"eval":"observation"},{"case":"If a within-evaluation proxy for reasoning\u201
+commitments: reasoning-envelope-wf, reason-counter@45bf819ecbcdd2b62d701a16, reason-counter@6b76dd6fa60d6ac3e01298c7, reason-counter@4d0dc21b5ada946fe9ae922a, reason-counter@00171cabfc1db7440ddc3645
+
+TARGET SRC_003
+{"analogy":null,"claim":"The distinguishing signature is not in the panel's errors at all but in the expert's errors: if the expert's intuition produces errors that are systematically biased in a consistent direction (e.g., overconfidence, anchoring) while the panel's errors are not, the panel's reliability gain is genuine relative to the expert even if it is partly compliance-driven; the relevant comparison is not panel-compliance vs panel-reasoning but panel vs expert, and the expert's error structure is the discriminator.","counterconditions":[{"case":"If the expert's errors are randomly distributed (no systematic bias), the panel's compliance-based gain is merely tracking the checklist and offers no genuine reliability improvement over an unbiased expert.","checker_spec":null,"eval":"observation"},{"case":"If the panel's errors are also systematically biased but in a different direction, the comparison requires weighing which bias is worse, and no clean 'genuine gain' signature exists.","checker_spec":null,"eval":"observation"},{"case":"If the evaluation has too few cases to estimate the expert's error bias vector reliably, the signature is not detectable in a single evaluation.","checker_spec":null,"eval":"o
+commitments: reasoning-envelope-wf, reason-counter@68c116b3488fe40e12be89b4, reason-counter@b8cf0a7583d29143cb096e8d, reason-counter@968ed5755d5b8184cc79965f, reason-counter@fd61ba8e08c5a4b860b26a0f
+
+TARGET SRC_004
+{"analogy":null,"claim":"A panel of trained non-experts using a checklist will be more reliable on average than a single expert using intuition because aggregated independent judgment cancels individual noise, but the single-evaluation signature distinguishing genuine reliability from mere compliance is error decorrelation: genuine reasoning yields errors uncorrelated with the checklist's blind spots, while mere compliance yields errors clustered exactly where the checklist is silent or wrong.","counterconditions":[{"case":"If panel members' errors are correlated (e.g., they share the same checklist blind spot), aggregation fails to cancel noise and the panel offers no reliability advantage over the expert.","checker_spec":null,"eval":"observation"},{"case":"If the task domain is so holistic that checklist decomposition is infeasible, non-experts cannot apply the checklist meaningfully and the expert's intuition dominates.","checker_spec":null,"eval":"observation"},{"case":"If the single expert's intuition already internalizes the checklist's verifiable steps, the comparison collapses and the panel adds no marginal reliability.","checker_spec":null,"eval":"observation"},{"case":"If the evaluation only measures fi
+commitments: reasoning-envelope-wf, reason-counter@cd56b2dc21c80827ed59471c, reason-counter@00dbb9ea150b1215c03f443c, reason-counter@699086ccf3befafb213224ea, reason-counter@c2dbf4e56c2495beda4d39f8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
