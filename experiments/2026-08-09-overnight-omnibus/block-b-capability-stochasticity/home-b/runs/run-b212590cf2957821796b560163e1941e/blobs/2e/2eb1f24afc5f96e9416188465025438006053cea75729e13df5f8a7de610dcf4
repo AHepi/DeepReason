@@ -1,0 +1,33 @@
+{
+  "candidate": {
+    "claim": "The simulation program should be a single def simulate(inputs, rng) returning a tuple of the first ten (X_n, die_n) pairs plus the six final counts (count_1..count_6) and total, ignoring the rng argument since the recurrence is fully deterministic.",
+    "mechanism": "The function computes X_(n+1) = (1103515245 * X_n + 12345) mod 2^31 starting from X_0=42, maps each X_n to 1 + (X_n mod 6), and iterates exactly 10000 times while collecting calibration and tallying face counts.",
+    "counterconditions": [
+      "If the program is not a single def simulate(inputs, rng) with nothing else, reject.",
+      "If the program does not return (calibration, count_1..count_6, total) as flat observables, reject.",
+      "If the recurrence uses X_(n+1) for die_n instead of X_n, reject.",
+      "If the implementation modifies X_0 from 42 or alters constants, reject."
+    ],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "evidence_refs": [
+      {
+        "block": "1c2d18924a3064bc"
+      },
+      {
+        "block": "ff5f75b13b928302"
+      },
+      {
+        "block": "c6c31b919b1cd091"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.8
+  }
+}

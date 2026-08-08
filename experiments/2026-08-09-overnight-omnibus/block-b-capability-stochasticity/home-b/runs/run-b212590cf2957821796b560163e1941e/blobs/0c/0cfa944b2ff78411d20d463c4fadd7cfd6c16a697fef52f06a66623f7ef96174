@@ -1,0 +1,49 @@
+{
+  "candidate": {
+    "claim": "The simulation must be implemented exactly as specified to empirically determine the six face counts, because the exact distribution of the specified LCG at horizon n=10000 has no closed-form shortcut, and any assertive verdict lacking the discriminating observables is weight rather than evidence.",
+    "mechanism": "Implement the exact recurrence X_0 = 42; X_(n+1) = (1103515245 * X_n + 12345) mod 2^31 for n=0..9999, map die_n = 1 + (X_n mod 6), tally counts for faces 1-6, and return the first ten (X_n, die_n) pairs plus the six final counts.",
+    "counterconditions": [
+      "The simulation returns a verdict without returning the six face counts as flat observables.",
+      "The implementation alters the recurrence constants, modulus, or initial seed X_0 = 42.",
+      "The program is not a deterministic, self-contained def simulate(inputs, rng) source.",
+      "The implementation is not calibrated by returning the first ten (X_n, die_n) pairs for hand-checking."
+    ],
+    "typicality": 0.95,
+    "evidence_refs": [
+      {
+        "block": "c6c31b919b1cd091",
+        "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"
+      },
+      {
+        "block": "a3db120ba929af11",
+        "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself -- the six counts, the calibration trace -- never a"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      },
+      {
+        "block": "1c2d18924a3064bc",
+        "quote": "The program's shape is fixed and the schema states it: the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS"
+      },
+      {
+        "block": "6415222753a4ceb9",
+        "quote": "Contained Python: scratch working directory, scrubbed environment, hard resource limits, no network. The program must be deterministic and self-contained -- the"
+      }
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

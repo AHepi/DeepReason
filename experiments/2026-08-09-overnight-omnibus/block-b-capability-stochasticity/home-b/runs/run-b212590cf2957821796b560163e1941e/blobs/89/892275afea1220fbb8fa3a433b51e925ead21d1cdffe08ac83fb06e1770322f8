@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The program's shape is fixed and the schema states it: the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS must use a flat dict of count_1 through count_6 and total; calibration is available via rng.calibration or similar.",
+    "mechanism": "The sandboxed simulation (simulation_mode sandboxed_python_v1) interface requires a single function that receives `inputs` and `rng`; all observables must be returned as a flat JSON-compatible dict so counts and calibration traces are single-segment.",
+    "counterconditions": [
+      "The source program defines more than a single top-level `def simulate(inputs, rng)`.",
+      "The source program calls a forbidden library or performs network I/O.",
+      "The returned mapping omits `count_1` through `count_6` or the calibration trace."
+    ],
+    "typicality": 0.72,
+    "evidence_refs": [
+      {
+        "block": "1c2d18924a3064bc",
+        "quote": "The program's shape is fixed and the schema states it: the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS"
+      },
+      {
+        "block": "a3db120ba929af11",
+        "quote": "Return the discriminating quantity itself -- the six counts, the calibration trace -- never a"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      },
+      {
+        "block": "6415222753a4ceb9",
+        "quote": "Contained Python: scratch working directory, scrubbed environment, hard resource limits, no network. The program must be deterministic and self-contained -- the"
+      }
+    ]
+  }
+}

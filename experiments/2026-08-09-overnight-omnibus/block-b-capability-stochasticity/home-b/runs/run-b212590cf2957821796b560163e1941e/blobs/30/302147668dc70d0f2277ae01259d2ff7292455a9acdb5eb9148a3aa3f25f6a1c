@@ -1,0 +1,26 @@
+def simulate(inputs, rng):
+    x = 42
+    m = 2 ** 31
+    a = 1103515245
+    c = 12345
+    counts = [0, 0, 0, 0, 0, 0]
+    trace = []
+    for i in range(1, 10001):
+        x = (a * x + c) % m
+        face = 1 + (x % 6)
+        counts[face - 1] += 1
+        if i <= 10:
+            trace.append((x, face))
+    result = {
+        'count_1': counts[0],
+        'count_2': counts[1],
+        'count_3': counts[2],
+        'count_4': counts[3],
+        'count_5': counts[4],
+        'count_6': counts[5],
+        'total': sum(counts),
+    }
+    for i, (x_val, face_val) in enumerate(trace, start=1):
+        result['x_' + str(i)] = x_val
+        result['die_' + str(i)] = face_val
+    return result

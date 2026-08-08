@@ -1,0 +1,11 @@
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/values",
+      "value": {
+        "default": "{}"
+      }
+    }
+  ]
+}
