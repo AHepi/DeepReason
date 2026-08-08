@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=4 blockers=none
+State: next=6 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -20,7 +20,7 @@ order. One step per dr-execute-step invocation.
       R-g audit, Load-knob inventory, Historical encoding-failure
       evidence, plus a Summary), M-numbering starting at M1.
       done-when: `test -f experiments/2026-08-08-change-pipeline-census-d1/CENSUS.md` -> exit 0. DONE.
-- [ ] 4. (S5) Gather and write "Executable-commitment paths": pasted
+- [x] 4. (S5) Gather and write "Executable-commitment paths": pasted
       commands for the four named paths (simulation/research proposal
       channels, `lambda_run`, the dead property-oracle path, safe-skeleton
       forbidden-case compilation) plus the bounded grep for any path
@@ -28,9 +28,12 @@ order. One step per dr-execute-step invocation.
       each hit classified.
       done-when: CENSUS.md's "Executable-commitment paths" section has
       >=5 M-numbered rows, each followed by a fenced command+output block.
-- [ ] 5. (S5) [COMMIT] Commit and push CENSUS.md's first section.
+      DONE — M1-M5 written; M5's bounded grep found one adjacent
+      surface (admission/adapters.py) reported as out-of-scope, not a
+      new commitment path.
+- [x] 5. (S5) [COMMIT] Commit and push CENSUS.md's first section.
       done-when: `git log --oneline -1` message names this step; push
-      confirmed (retry 2s/4s/8s/16s on failure).
+      confirmed (retry 2s/4s/8s/16s on failure). DONE.
 - [ ] 6. (S6) Gather and write "Criticism dispatch per kind": the
       crit_program vs crit_argumentative/crit_argumentative_batch
       selection caller, pack-rendering kind-conditionals,
