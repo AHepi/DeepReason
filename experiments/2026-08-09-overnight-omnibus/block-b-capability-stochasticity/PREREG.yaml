@@ -1,0 +1,61 @@
+schema: deepreason-omnibus-prereg.v1
+block: B
+title: capability-channel stochasticity, quantified
+serves: turns CLAUDE.md's "capability-channel use is stochastic across identical runs" folklore into a measured rate
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this block
+status: FROZEN
+
+design:
+  question: one fixed simulation-friendly question (block_b_question.py) -- a pseudorandom-generator fairness claim requiring an exact 10000-step recurrence tally, no closed form available.
+  seeds: 10  # distinguishing leading sentence only; claim substance identical across seeds
+  home: home-b  # single home; qualification cached after run 1
+  setup_flags:
+    - "--provider ollama --endpoint https://ollama.com/v1"
+    - "--model glm-5.2 --model-revision glm-5.2 --family glm"
+    - "--context-window-tokens 131072 --maximum-completion-tokens 24576  (turmite's proven value for hard questions; kept generous here too)"
+    - "--reasoning none --credential-env OLLAMA_API_KEY"
+  env: {DEEPREASON_SIMULATION_RUNNER: contained, DEEPREASON_CONFIG_REFEREE: "2"}  # turmite/jolt's proven simulation-enabling env, reused verbatim
+  attach: dossier/CAPABILITY_CONTRACT.md  # this block's own dossier (adapted from turmite's, generic sandboxed_python_v1 sections kept, challenge-specific sections replaced)
+  budget_per_run: {cycles: 6, token_budget: 90000, flags: "--allow-partial"}
+
+deviation_from_operator_prompt:
+  what: >
+    the operator's prompt named "the turmite/jolt family" as the
+    source for Block B's question. This block does NOT reuse
+    turmite/jolt's question verbatim; it uses a new, deliberately
+    SIMPLER simulation-requiring question in the same genre (parse a
+    formal spec, implement exact semantics, run it -- CLAUDE.md's own
+    definition of what makes a question simulation-friendly).
+  why: >
+    a 2026-08-09 research pass (this tranche, before any live call)
+    found NO simulation proposal has ever reached COMPILED in this
+    repo's committed history -- only PROPOSED -> VALIDATED ->
+    (GRANTED | DENIED) across every root that ever recorded a
+    capability-transition object (grep across
+    experiments/*/**/objects/capability-transition/*.json). Reusing
+    turmite/jolt's hard, multi-requirement question would very likely
+    reproduce that same ceiling (a structural/capacity limit, not the
+    stochastic funnel spread this block exists to measure) rather
+    than test it. A flat, <=6-observable, single-recurrence task
+    maximizes the chance of observing genuine later-stage funnel
+    behavior (COMPILED/DISPATCHED/SUCCEEDED) for the first time in
+    this repo, which is the more informative measurement either way:
+    if it STILL never compiles, that is itself the finding (a
+    structural gap, not folklore-grade stochasticity).
+  also_note: >
+    turmite's specific two cycle-0 killers (`_not_a_self_link`,
+    observable-name pattern) were BOTH already fixed before this
+    tranche started (2026-08-01 and the same day as jolt's run,
+    respectively -- see this block's RESULTS.md segment for the
+    citation chain). CLAUDE.md's own "Hard-won invariants" entry
+    describing them as currently-live blockers is therefore STALE as
+    of 2026-08-09 and should be corrected in a dated RESULTS.md
+    segment, not silently relied upon.
+
+metrics:
+  - funnel_per_run: for each of PROPOSED, VALIDATED, GRANTED, DENIED, COMPILED, DISPATCHED, SUCCEEDED, FAILED, RESULT_PACKAGED, CONSUMED (full CapabilityLifecycle enum, not just the operator's requested 6 -- DENIED/FAILED are exactly the terminal-failure branches that explain a funnel's attrition), count of proposals whose transition chain (walked via previous_transition_ref from current_transition_by_request) ever reached that stage
+  - distribution_across_10_runs: for the primary requested funnel (PROPOSED->VALIDATED->GRANTED->COMPILED->DISPATCHED->SUCCEEDED), the count of runs reaching each stage at least once
+  - attempts_per_live_capability_hit: 10 / (count of runs with >=1 proposal reaching SUCCEEDED), reported as "undefined (0 hits in 10 attempts)" if zero, not divided-by-zero
+
+hit_criteria:
+  reporting_floor: "n=10 runs, one home, one question -- a pilot funnel measurement, not a statistically powered study. A single run reaching COMPILED for the first time in this repo's history is independently reportable regardless of the overall rate."

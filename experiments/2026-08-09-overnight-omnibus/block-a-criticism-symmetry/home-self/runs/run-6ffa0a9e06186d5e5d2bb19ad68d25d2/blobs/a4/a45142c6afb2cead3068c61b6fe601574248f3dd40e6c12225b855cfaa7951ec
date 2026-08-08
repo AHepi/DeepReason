@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8112d0877283337a6ce8e650: program:reasoning_observation_pending
+- reason-counter@6490e781b7a69c0b5f2a194a: program:reasoning_observation_pending
+- reason-counter@b2c4eef46fe39c36c9e2ade9: program:reasoning_observation_pending
+- reason-counter@da261b6eed87af82289ba487: program:reasoning_observation_pending
+- reason-counter@c2f90f732c0e1437bd32e69e: program:reasoning_observation_pending
+- reason-counter@afc18d989a77c4c7f8c9cfc5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The panel's advantage is not from the checklist but from aggregation: a panel of trained non-experts without a checklist still outperforms a single expert on verifiable tasks because independent errors cancel, and the checklist merely standardizes cue access to reduce correlated errors.","counterconditions":[{"case":"If errors are correlated (e.g. all panelists share a misconception), aggregation does not help and the checklist can worsen correlation.","checker_spec":null,"eval":"observation"},{"case":"If the expert's accuracy is very high (>0.9) and the panelists are barely above chance, a small panel may not outperform the expert.","checker_spec":null,"eval":"observation"},{"case":"If the task has a strong configural component, independent cue-sampling may produce systematic majority errors.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By the Condorcet jury theorem, if each panelist has accuracy > 0.5 and errors are independent, the majority accuracy approaches 1 as panel size grows. The expert is a single draw with no cancellation. The checklist's causal role is secondary: it reduces correlated error by ensuring all panelists sample the same cues, thereby making the independence assumption more likely to hold.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8112d0877283337a6ce8e650, reason-counter@6490e781b7a69c0b5f2a194a, reason-counter@b2c4eef46fe39c36c9e2ade9
+
+TARGET SRC_002
+{"analogy":null,"claim":"Trained non-expert panels using explicit checklists outperform single experts on verifiable tasks only when the checklist encodes the diagnostic cues the expert would use implicitly; the reliability gain is mechanistic, driven by preventing cue-omission under cognitive load.","counterconditions":[{"case":"If the checklist omits a cue the expert uses tacitly (e.g. configural cue interaction), panel mean accuracy can fall below expert accuracy.","checker_spec":null,"eval":"observation"},{"case":"If the task is perceptual rather than propositional (e.g. radiology, wine tasting), checklist compliance may degrade signal by forcing verbal proxies.","checker_spec":null,"eval":"observation"},{"case":"If non-experts are untrained on cue definitions, checklist items are interpreted idiosyncratically, inflating variance.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition operates as a fast pattern-matcher that typically recapitulates a cue-list, but under noise, fatigue, or base-rate pressures it omits cues. The checklist forces sequential, accountable cue sampling; aggregating across non-experts then cancels individual cue-sampling errors, yielding lower variance than a single expert whose cue omission is systematic within that one trial.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@da261b6eed87af82289ba487, reason-counter@c2f90f732c0e1437bd32e69e, reason-counter@afc18d989a77c4c7f8c9cfc5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,45 @@
+schema: deepreason-omnibus-prereg.v1
+block: D
+title: qualification battery re-sampling
+serves: parked repair-scope question from S6 Failure #1; S4b pricing (experiments/2026-08-06-change-qualification-per-seat-s4/PARKED.md)
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this block
+status: FROZEN
+
+design:
+  cap_points: [8192, 16384]
+  samples_per_cap_point: 4
+  fresh_subject_method: >
+    minimal profile perturbation, cap +0/+1/+2/+3 tokens around each
+    cap point (8192 -> {8192,8193,8194,8195}; 16384 ->
+    {16384,16385,16386,16387}). This is a DEVIATION from literally
+    identical profiles: qualification caches by subject digest
+    (CLAUDE.md "Live runs"), so 4 literally-identical profiles at the
+    same home would cache-hit after the first and only pay one real
+    battery. The +1/+2/+3 token deltas are small enough that they are
+    not expected to change qualification behavior in themselves (no
+    known mechanism ties scope-violation likelihood to the exact
+    completion-cap value at single-token granularity), so each
+    sample's battery is treated as an independent draw AT the
+    8192/16384 point, not a fifth curve point. If this assumption is
+    wrong (a token-count-sensitive effect appears), it will be visible
+    directly in the per-sample results and reported as a residue, not
+    smoothed over.
+  homes: [home-8192-0, home-8192-1, home-8192-2, home-8192-3, home-16384-0, home-16384-1, home-16384-2, home-16384-3]  # one home per sample -- keeps each sample's qualification-cache file unambiguous, avoids cross-sample glob contamination
+  setup_flags:
+    - "--provider ollama --endpoint https://ollama.com/v1"
+    - "--model glm-5.2 --model-revision glm-5.2 --family glm"
+    - "--context-window-tokens 131072 --maximum-completion-tokens <perturbed cap>"
+    - "--reasoning none --credential-env OLLAMA_API_KEY"
+  no_reason_call: true  # Block D measures qualification only; each sample is setup + qualify --yes --json, no `reason` call
+
+metrics:
+  - per_pair_eventual_valid_count_and_scope_violations: read from qualification-cache/<digest>.unqualified-doctor.json (failure/degraded path, ready-made aggregates) or reconstructed from qualification-cache/<digest>.json's pairs[*].cases[*] (success path) -- both code paths implemented in block_d_audit.py per the 2026-08-09 research pass into cli/doctor.py + qualification.py
+  - overall_qualification_state_per_sample: full / ready_shallow / unqualified, from qualify --json's top-level qualification_state
+  - eventual_valid_rate_per_cap_point: aggregated across the 4 samples at each cap point
+  - scope_violation_rate_per_cap_point: fraction of samples with >=1 pair carrying scope_violations > 0, at each cap point -- this is the direct answer to "stochastic ~1-in-N or deterministic at 8192"
+
+hit_criteria:
+  deterministic_at_8192: "4/4 samples at the 8192 point show >=1 scope violation on the SAME pair (summarizer/scratch.cluster-guide.compact.v1/glm-5.2, S6's observed pair) -- the gate is trigger-happy on a known-fragile pair regardless of draw"
+  stochastic_at_8192: "0 < scope-violating samples < 4 at the 8192 point -- rate is genuinely a per-draw ~1-in-N phenomenon, calibrated by this block's own n=4"
+  clean_at_8192: "0/4 samples show any scope violation -- S6's Failure #1 was itself a low-probability draw, not a property of the cap value"
+  16384_as_control: "16384 point samples are expected clean (0/4) per S6's own remedy having worked; a violation there would be a NEW finding, not confirmation of the known one"
