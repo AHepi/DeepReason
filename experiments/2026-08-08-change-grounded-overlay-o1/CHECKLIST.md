@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=12 blockers=none
+State: next=14 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -95,14 +95,15 @@ order. One step per dr-execute-step invocation.
       DONE — syntax OK, module imports cleanly.
 - [x] 11. (S9) [COMMIT] Commit and push `o1d_warrant_sensitivity.py`.
       done-when: pushed, confirmed on origin.
-- [ ] 12. (S10) Write `scripts/run_all_overlays.py`: enumerate the
+- [x] 12. (S10) Write `scripts/run_all_overlays.py`: enumerate the
       corpus once via `overlay_common.corpus()`, run all four overlay
       modules per root, write `overlay_results.jsonl` (one JSON line per
       root) capturing every number named in SPEC.md S5/S7/S8/S9's own
       accept criteria.
       done-when: `python3 -c "import ast; ast.parse(open('experiments/2026-08-08-change-grounded-overlay-o1/scripts/run_all_overlays.py').read())"`
       -> exit 0.
-- [ ] 13. (S10) [COMMIT] Commit and push `run_all_overlays.py`.
+      DONE — syntax OK.
+- [x] 13. (S10) [COMMIT] Commit and push `run_all_overlays.py`.
       done-when: pushed, confirmed on origin.
 - [ ] 14. (S5, S7, S8, S9, S10) Run the driver over the full corpus;
       paste the per-root node/edge counts (O1a's own ordering
