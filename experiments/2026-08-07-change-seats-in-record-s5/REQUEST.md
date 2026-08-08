@@ -495,3 +495,32 @@ SPEC.md's already-declared Items S1-S11 is authorized by this
 amendment; every stop condition already recorded (R19/R20's harness.py
 bound, the four other frozen surfaces empty, no content/replay test
 moving) is unchanged and unrelated to this correction.
+
+**Amendment 3 (2026-08-07, operator answer via AskUserQuestion,
+verbatim).** Sent mid-`dr-execute-step`, in response to a SECOND
+budget-overrun STOP raised before step 21's commit: actual `src/` +
+`tests/` lines already at 729 (before the map update and the probe
+commit), past R21's own corrected 500-650 ceiling, with the map
+(~40-60 est.) and the probe (~15-20 est.) still to land — the STOP
+report priced three options (continue and report at delivery; pause
+for a further amendment; trim the test file first) and recommended the
+first:
+
+> Continue, report final total at delivery (Recommended)
+
+New requirement, quoting the operator's own selected words:
+
+R22 (process, second budget authorization): "Continue, report final
+total at delivery" — the operator's selection of the recommended
+option in a priced AskUserQuestion STOP, not a further numeric
+revision of R21's own 500-650 figure. This authorizes CONTINUING
+execution through step 28 with the actual total already past R21's
+ceiling (729 lines before the map landed; 792 after), on the single
+binding condition that the FINAL total — including the probe commit
+(steps 29-32) — is recorded PLAINLY in `VALIDATION.md`/`DELIVERY.md`,
+never glossed or absorbed silently. R22 does not authorize a THIRD
+overrun past whatever the final total turns out to be; it disposes of
+the overrun already measured at the time it was raised. No symbol,
+file, or requirement beyond SPEC.md's already-declared Items S1-S11 is
+authorized by this amendment; R19/R20's harness.py bound and every
+other stop condition are unchanged and unrelated to this correction.
