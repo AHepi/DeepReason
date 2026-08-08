@@ -2,6 +2,21 @@
 Traces: every item cites R/C numbers. Untraceable items are bugs.
 DESIGN-AND-STOP: no code, no checklist, no execution this window (R1).
 
+## Revision history
+
+**Rev 1** (this document's original content, below): the twin-artifact
+design (Item 1) and Fork F1. **SUPERSEDED by Amendment 1** (operator,
+REQUEST.md) — kept verbatim for the record, never deleted, per house
+convention (R31/C7). Do not build against Item 1 (rev 1) or either
+road of Fork F1 (rev 1) — both are explicitly rejected (C8).
+
+**Rev 2** (`## Revision 2 (Amendment 1)`, appended near the end of this
+document): the corrected, single-artifact design. This is the
+authoritative design as of this document's current state. Items 2-6
+(rev 1) that Amendment 1 did NOT supersede are re-confirmed, simplified,
+or left unchanged in rev 2's own items — rev 2 restates each one so a
+reader never has to reconcile two documents.
+
 ## Map preflight
 
 Resolved ids from `docs/map/INDEX.md`, seam-before-subsystem:
@@ -249,7 +264,7 @@ written).
 
 ## Design decisions
 
-### Item 1 (R7): the twin-artifact shape
+### Item 1 (R7, rev 1 — SUPERSEDED BY AMENDMENT 1, kept for the record, do not build against this)
 
 **The link.** A dual submission is two `Artifact`s: the CLAIM
 (`provenance.role="conjecturer"`, content is prose, `Interface.commitments`
@@ -809,7 +824,8 @@ Rubric: 6/6 yes
 
 ## Decision sheet (R14) — every open fork, priced as roads, with a recommendation
 
-**Fork F1 — does refuting an encoding ever transfer to refuting its
+**Fork F1 (rev 1 — REJECTED, both roads, by Amendment 1/C8; kept for the
+record) — does refuting an encoding ever transfer to refuting its
 claim's substance?**
 - Road A: yes, via a new "faithfulness dispute" sub-protocol. Cost: an
   entirely new trial shape must be designed and measured before D3 can
@@ -825,8 +841,9 @@ claim's substance?**
   is fully satisfied by Road B alone — Road A adds a mechanism the
   seed's own R-e justification does not actually require.
 
-**Fork F2 — where does the optional formal-encoding channel live,
-given the live provider does not use `ConjectureCandidate` (M15)?**
+**Fork F2 (RESOLVED — Road B APPROVED by the operator, R28) — where
+does the optional formal-encoding channel live, given the live
+provider does not use `ConjectureCandidate` (M15)?**
 - Road A: `ConjectureCandidate` only, as literally named. Cost:
   smallest diff, but the live glm-5.2 path can never use it — R-b
   remains unsatisfied in practice.
@@ -838,7 +855,8 @@ given the live provider does not use `ConjectureCandidate` (M15)?**
   exercise is not an option in any sense CLAUDE.md's own design law
   cares about.
 
-**Fork F3 — coder-seat delegation: new role, or repurpose the dead
+**Fork F3 (RESOLVED — Road A APPROVED by the operator, R29) —
+coder-seat delegation: new role, or repurpose the dead
 `property_designer`?**
 - Road A: add a new role `"encoder"`, leave `property_designer`
   untouched (and its own S6 PARKED P1 defect unresolved). Cost:
@@ -851,8 +869,11 @@ given the live provider does not use `ConjectureCandidate` (M15)?**
   cross-routing rule); `property_designer`'s fate is a legitimate
   separate tranche, not this one's to decide.
 
-**Fork F4 (implicit, surfaced by the forecast) — authorize D3 to touch
-`harness.py` (Surface 2) for the new `twin_repair` event payload?**
+**Fork F4 (MOOT — the operator's own words, R30: with no twin artifact
+there is no `twin_repair` event payload; rev 2's own forecast is
+re-derived from scratch below and assumes no grant) — authorize D3 to
+touch `harness.py` (Surface 2) for the new `twin_repair` event
+payload?**
 - Road A: authorize it now, so D3 is not blocked on a second
   operator round-trip. Cost: this tranche's own SPEC ONLY discipline
   (R1) technically permits naming the need but not consuming the
@@ -868,3 +889,596 @@ given the live provider does not use `ConjectureCandidate` (M15)?**
 
 Every road above awaits the operator's words before `dr-plan-steps`
 (D3) runs, per R16.
+
+---
+
+## Revision 2 (Amendment 1) — the corrected, single-artifact design
+
+This section is authoritative over everything above it. Rev 1's Item 1
+and Fork F1 are kept above, marked superseded/rejected, never deleted
+(R31/C7).
+
+### New measurements (M21-M26)
+
+### M21 — the referee-free relatedness precedent already exists: `relevance_trial`
+
+```
+$ grep -n "^def relevance_trial" src/deepreason/rules/experiment.py
+313:def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config) -> bool:
+```
+```
+$ sed -n '313,321p' src/deepreason/rules/experiment.py
+def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config) -> bool:
+    """The §3 sanctioned path for an informal claim: does this property follow
+    from the problem statement? Judged by BOTH ensemble seats (different
+    families, §9) on the narrow question only. Guards: referential integrity
+    (each decisive_point must quote the pack) and unanimity — the property
+    activates only if both seats rule pass; otherwise a fail warrant registers
+    against the PROPERTY (argumentative, attackable nu: criticize-the-critic
+    reinstates it, N1). Judges never touch a candidate's status here — they
+    rule on the property artifact alone."""
+```
+This is EXACTLY what R35 asked me to check for: a working, already-
+shipped, cross-family JUDGE-ENSEMBLE mechanism ("BOTH ensemble seats,
+different families") that decides a narrow relatedness question
+("does this property follow from the problem statement") with NO
+special arbiter role — it reuses the ORDINARY `"judge"` role
+(`adapter.call("judge", ...)`, same role every defended trial already
+uses, D1 census M11) and the SAME referential-integrity/unanimity guard
+shape D1's own M11 found in `informal/trial.py`. **This is the
+"criticism, not a referee" mechanism R25-R27 describe, already proven
+in the tree.** It exists today for property PROPOSALS specifically
+(`rules/experiment.py::propose_properties`); its SHAPE — not its
+call site — is what rev 2's Item 5 (relatedness) reuses.
+
+### M22 — prose is already a REQUIRED, non-empty wire field on both candidate contracts (structural, not a new gate)
+
+```
+$ grep -n "content:\s*str\s*=\s*Field(min_length=1)" src/deepreason/llm/wire.py
+998:    content: str = Field(min_length=1)
+1202:    content: str = Field(min_length=1)
+2606:    content: str = Field(min_length=1)
+```
+```
+$ sed -n '126,131p' src/deepreason/workloads/text.py
+    claim: str = Field(min_length=1)
+    mechanism: str = Field(min_length=1)
+```
+Both wire shapes already REQUIRE non-empty prose (`content` on the
+`ConjectureCandidate` path; `claim`+`mechanism` on the
+`ReasoningCandidateProposal` path) — a candidate with an EMPTY
+explanation is already, today, wire-schema-invalid on both paths. This
+does NOT prove the non-empty string is actually PROSE rather than
+code-shaped text (a model could still write `content = "def f(x):
+return x"`), but it does prove R20's literal claim ("can never be
+FULL code" in the sense of "code with nothing else") has no gap to
+close at the REQUIRED-FIELD level — the gap, if any, is in CONTENT
+SHAPE, addressed below (M25).
+
+### M23 — today's two "attach a commitment to your own prose" mechanisms both restrict `program:` to a PRE-REGISTERED catalog, never model-authored source
+
+```
+$ grep -n "class ForbiddenCase" -A 20 src/deepreason/informal/skeleton.py
+25:class ForbiddenCase(BaseModel):
+26:    case: str = Field(min_length=1)
+27:    eval: str  # "rubric:<spec-id>" | "program:<ref>"
+28:    observation_valued: bool = False
+34:    def _eval_kind_is_safe(cls, v: str) -> str:
+        ...
+40:        if not (v.startswith("rubric:") or v.startswith("program:")):
+41:            raise ValueError(...)
+```
+```
+$ grep -n "def evaluate" -A 27 src/deepreason/programs.py | sed -n '20,27p'
+362:    elif kind == "program":
+363:        fn = PROGRAMS.get(arg)
+364:        if fn is None:
+365:            raise NotEvaluable(f"unknown program: {arg}")
+```
+`program:<ref>` ALWAYS resolves `<ref>` against a FIXED, harness-
+authored Python dict (`PROGRAMS`) — `NotEvaluable` if the name is
+unknown. A model cannot inject NEW code via this path; it can only
+NAME an existing, pre-registered, harness-authored checker. This is
+the ConjectureCandidate-path mechanism (via the skeleton JSON
+convention already reachable from any conjecturer's own `content`,
+D1 census M4's own finding, re-confirmed: `compile_interface_draft` is
+called from `rules/conj.py`).
+
+### M24 — the reasoning-path's `counterconditions` field has the SAME restriction, and its model-facing shape doesn't even expose an eval-kind choice today
+
+```
+$ sed -n '172,187p' src/deepreason/workloads/text.py
+def draft_countercondition_commitments(envelope: ReasoningEnvelopeV1) -> list[Commitment]:
+    ...
+    for countercondition in envelope.counterconditions:
+        evaluation = countercondition.eval
+        observation_valued = evaluation == "observation"
+        if observation_valued:
+            evaluation = "program:reasoning_observation_pending"
+        elif evaluation.startswith("program:"):
+            program = evaluation.partition(":")[2]
+            if program not in programs.PROGRAMS:
+                raise ValueError(f"countercondition uses unknown program: {program}")
+```
+```
+$ sed -n '152,159p' src/deepreason/workloads/text.py
+def proposal_envelope(candidate: ReasoningCandidateProposal) -> ReasoningEnvelopeV1:
+    return ReasoningEnvelopeV1(
+        claim=candidate.claim,
+        mechanism=candidate.mechanism,
+        counterconditions=tuple(
+            Countercondition(case=case, eval="observation") for case in candidate.counterconditions
+        ),
+```
+The COMPILE-TIME machinery (`draft_countercondition_commitments`)
+already understands a `program:<name>` eval kind (same PRE-REGISTERED-
+catalog restriction as M23) — but the WIRE-FACING model (`candidate.
+counterconditions: tuple[str, ...]`, plain strings) gives the model NO
+way to CHOOSE an eval kind at all: `proposal_envelope` hardcodes every
+countercondition to `eval="observation"`. **The reasoning path (the
+live path) has LESS capability exposed to the model today than the
+compile-time code already supports.** This is the precise, narrow gap
+F2-B/R33 needs to close on the reasoning side: expose an eval-kind
+choice on the wire, not invent new compile-time machinery.
+
+### M25 — the harness's own governing law: emission is unconstrained, only survival is
+
+```
+$ grep -n "D2 intact" docs/harness-spec-v1.3.md
+366:`skeleton-wf` passes iff the skeleton parses AND `forbidden ≠ ∅`. ... D2 intact: this constrains what survives, not what γ may emit.
+```
+```
+$ grep -n "generator-agnostic\|provenance is never a warrant" docs/harness-spec-v1.3.md
+18:...(epistemically inert by D2 — provenance is never a warrant...)
+29:...Justified by D2 (generator-agnostic).
+```
+**Disambiguation, stated once, load-bearing for the rest of this
+section:** this "D2" is the HARNESS SPEC's own pre-existing invariant
+label (`docs/harness-spec-v1.3.md`, "generator-agnostic" — the LLM is a
+bounded pure function, never an adjudicator), UNRELATED to this
+program's "Rung D2" naming — a coincidence of labels this document
+disambiguates explicitly so a future reader does not conflate them.
+The invariant itself is directly load-bearing for R32/R20: the harness
+NEVER rejects content at EMISSION (what γ, the conjecturer, may say) —
+only SURVIVAL (whether it gets refuted) is constrained. An admission-
+time "is this code-shaped?" detector would VIOLATE this governing law
+— and would ALSO be exactly the kind of extra arbiter R25/R26 reject
+("if a referee is needed, the artifact surface needs a redesign"). Rev
+2's Item 1 (below) is designed around this law, not against it.
+
+### M26 — the proven, sandboxed model-authored-code execution engine already exists (D1 census M3/M5), separate from the PROGRAMS-catalog mechanism
+
+```
+$ grep -n "^def _compile" src/deepreason/oracle.py
+115:def _compile(source: str, entry: str):
+```
+D1's own census (M3, M5) already traced this: `oracle.py::_compile`
+(guarded `ast.parse` + `exec(compile(...))` in a restricted namespace)
+is the PROVEN engine that runs MODEL-AUTHORED SOURCE TEXT safely —
+distinct from `programs.PROGRAMS`' fixed-catalog lookup (M23/M24). Its
+CALLERS (`property_oracle_commitment`/`admit_counterexample`) are dead
+(D1 census M3, S6 PARKED P1) because of a BOOTSTRAP CIRCULARITY specific
+to THOSE functions' own precondition chain — the EXECUTION ENGINE
+itself (`_compile`, `oracle_sandbox.py`'s process isolation) has no
+such circularity; it is a pure function of source text. Rev 2's Item 2
+reuses the ENGINE, never the dead minting functions, avoiding
+inheriting S6 PARKED P1's own defect (Fork F5 below).
+
+### Item 1 (rev 2, R20-R22, R25-R27, R32): one artifact, prose is required, no admission-time code detector
+
+**The artifact.** ONE `Artifact` per conjecture, always (no twin).
+`content` (`ConjectureCandidate` path) or `claim`+`mechanism`
+(`ReasoningCandidateProposal` path) remain REQUIRED, non-empty fields
+(M22) — unchanged, already true today. `Interface.commitments` MAY
+carry zero or more commitments (unchanged mechanism, M9).
+
+**Enforcement of "never full code" (R20, R32) — NOT an admission
+gate.** M25's own governing law ("this constrains what survives, not
+what γ may emit") forecloses building a content-shape detector at
+admission: doing so would be a NEW arbiter deciding "is this prose or
+code" BEFORE criticism ever runs — precisely the "referee" R25/R26
+reject. The actual enforcement is TWO-FOLD, both already-existing
+mechanisms, zero new code:
+1. **Structural**: the wire schema already requires non-empty prose
+   fields (M22) — there is no wire-valid way to submit a candidate with
+   NO prose field populated at all.
+2. **Criticism, not detection**: if a model nonetheless writes
+   code-shaped text INTO the prose field, `crit_argumentative`
+   (unchanged, D1 census M6-M7) already lets any critic argue "this
+   offers no explanation" as an ordinary case — exactly R25's "that's
+   what criticism is for." No new contract field, no new guard, no new
+   role.
+
+**R-g argument.** Nothing here reads a candidate's content SHAPE to
+rank, admit, or gate it — the wire's own required-field structure and
+ordinary argumentative criticism are both KIND-BLIND mechanisms
+(neither one branches on "is this formal or informal"), satisfying the
+corrected, prose-only-protected direction of R-g (R19/R36) trivially:
+there is no new mechanism here that could disfavor prose, because
+there is no new mechanism here at all.
+
+### Item 2 (rev 2, R23, R24, R33, R34): the optional code-commitment channel
+
+**Shape.** A new optional wire field on BOTH candidate contracts (F2
+Road B, approved, R28):
+- `ConjectureCandidate` path: extend the EXISTING skeleton/
+  `ForbiddenCase` mechanism's `eval` vocabulary (M23) with a new kind
+  (proposed `program:candidate-checker`, name TBD at D3) whose `<ref>`
+  is a content-addressed pointer into `harness.blobs` (mirroring how
+  `oracle.py`'s own checker/property sources are already stored, D1
+  census M3) rather than a `PROGRAMS`-dict name. This is an EXTENSION
+  of an existing, already-reachable mechanism, not a new field.
+- `ReasoningCandidateProposal` path: expose the eval-kind CHOICE M24
+  found missing — `Countercondition`-shaped entries gain a way to
+  declare `program:candidate-checker` (mirroring the SAME new kind
+  above) instead of `proposal_envelope`'s current hardcoded
+  `eval="observation"`.
+
+**Execution.** Reuses `oracle.py::_compile`/`oracle_sandbox.py`'s
+PROVEN sandboxed engine (M26) as the evaluator for the new kind — NOT
+`property_oracle_commitment`/`admit_counterexample` (M3's own dead,
+circular functions) and NOT a new sandbox implementation. Guarded by
+the SAME safety discipline `ForbiddenCase` already enforces for
+untrusted content (M23's own docstring: never an inline `predicate:`
+for model-authored text; the new kind is a `program:` variant, keeping
+that same discipline).
+
+**Where it lives, and what refuting it does (R23, R34) — the whole
+point of this correction.** The commitment lives DIRECTLY on the SAME
+artifact's `Interface.commitments` — exactly like today's skeleton/
+countercondition commitments (M23/M24), never a separate artifact.
+`crit_program` (D1 census M10, UNCHANGED, zero new code) evaluates it
+on the artifact's own cycle; a FAILING commitment registers a
+DEMONSTRATIVE fail warrant with `target_id = this same artifact`,
+refuting the WHOLE conjecture — **and this is CORRECT, not a problem
+to bound or soften** (R34's own words: "failing ones refute
+demonstratively, exactly as criticism should"). `execution_backed`/
+`formally_backed` (D1 census M9, UNCHANGED, zero new code, no wrapper
+function) already grant PROTECTION while the commitment passes, read
+directly from `Interface.commitments` exactly as they do today for any
+other commitment kind — the "incentive story" R34 asks for is fully
+supplied by the EXISTING mechanism, unmodified.
+
+**R-a (byte-identical absence).** The field is optional
+(`default=None`/empty), mirroring `simulation_proposals`' own
+`default_factory=list` precedent (D1 census M1) — a candidate that
+never populates it behaves byte-identically to today on every existing
+path (`_compile`/`crit_program`/`execution_backed` all already handle
+"zero commitments" as their baseline case).
+
+**R-g argument.** The new `eval` kind is READ by the exact same
+functions that read every other kind today (`programs.evaluate`,
+`execution_backed`, `formally_backed`, `crit_program`) — none of them
+branch on WHICH kind a commitment is when deciding rank, admission, or
+acceptance; they only ever ask "does this pass." Prose-only candidates
+(no commitment at all) are UNCHANGED and UNTOUCHED by this item's own
+code, satisfying R19's corrected, one-directional guardrail.
+
+### Item 3 (rev 2, R9 — largely unchanged from rev 1, simplified): the verifiable kind signal
+
+D1's census (M6-M9) already found kind is DATA
+(`Interface.commitments` non-empty+evaluable = formal). Rev 2's
+single-artifact model needs NOTHING new here — unlike rev 1's twin
+(which needed a NEW `linked_encoding` reader for a cross-artifact
+signal), a rev-2 candidate's kind is fully legible from ITS OWN
+`Interface.commitments`, exactly as D1 measured. **R-c is satisfied by
+the pre-existing mechanism, unextended.**
+
+### Item 4 (rev 2, R10 — unchanged from rev 1's own finding, no twin-specific addition needed): kind-matched criticism forms
+
+D1's census M8 found ONE shared pack template
+(`render_crit_pack`), signaling kind via DATA
+(`TARGET COMMITMENTS`/`_MACHINE_EVAL_NOTE`) already generic over ANY
+commitment kind — a candidate carrying the new `program:candidate-
+checker` commitment (Item 2) is shown to the critic by the EXISTING
+rendering code with ZERO changes (the loop over
+`target.interface.commitments` in `render_crit_pack`, D1 census M8,
+does not special-case `eval` values). **R-d is satisfied by the
+pre-existing pack mechanism.** No pack change, no contract change —
+rev 2 needs none of rev 1's Item 4 pack addition (that addition existed
+only to signal a CROSS-ARTIFACT twin link, which no longer exists).
+
+### Item 5 (rev 2, R24, R35): relatedness, without a referee
+
+"Directly related to the explanation" (R24) is enforced by REUSING
+`relevance_trial`'s own shape (M21) — a cross-family JUDGE ENSEMBLE
+ruling the narrow question "does this commitment's case follow from
+the claim's own explanation," referential-integrity- and unanimity-
+guarded, exactly as `rules/experiment.py::relevance_trial` already does
+for property proposals. This is triggered the SAME way `relevance_trial`
+is today: as a CRITICIZABLE CHALLENGE (a critic or the harness's own
+relevance check may invoke it), never as a MANDATORY pre-admission gate
+— consistent with M25's own law (nothing new constrains EMISSION) and
+R25-R27 (ordinary criticism, no referee). A commitment whose relatedness
+is never challenged simply stands, exactly as an unrefuted claim stands
+today.
+
+**R-g argument.** `relevance_trial`'s own docstring: "Judges never
+touch a candidate's STATUS here — they rule on the property artifact
+alone" (M21) — reused verbatim in spirit: a relatedness ruling affects
+whether THIS SPECIFIC COMMITMENT counts as substantive, never a
+rank/admission/scheduling term. Kind-blind by the same construction
+D1's own R-g audit already validated for the underlying mechanism.
+
+### Item 6 (rev 2, R36): R-g re-anchored to prose, `_standing_recrit_pool` re-decided
+
+**R-g's corrected, one-directional guardrail (R19):** the ONLY
+protected party is prose/informal — nothing protects FORMAL artifacts
+from receiving MORE scrutiny than informal ones; that was never the
+worry.
+
+**`_standing_recrit_pool` (D1 census M6/M9(a)): STAYS AS-IS — decision
+unchanged from rev 1, R-g argument now cleaner.** Under the corrected,
+one-directional R-g, a mechanism that gives EXECUTION-BACKED artifacts
+MORE re-criticism scrutiny (D1's own finding) is not even a candidate
+violation — R-g never protected formal artifacts from extra scrutiny,
+only prose from being disfavored. D1's own exhaustive attempt to find
+a penalty against PROSE from this function (D1 census section 4(a))
+found none; that finding is untouched by this amendment and is
+RE-CONFIRMED, not merely carried over.
+
+**Acceptance checks D3 must pass (re-derived from rev 1's own list,
+R36; R1 forbids writing them as code this window):**
+1. An informal-only run (no candidate ever populates the new
+   commitment field) is BYTE-IDENTICAL to today — trivially true here
+   since Item 1/Item 2 add nothing to the zero-commitment path (unlike
+   rev 1, no new absence-tolerant Event field needs proving — there
+   isn't one, R30).
+2. A candidate whose new-kind commitment FAILS is refuted exactly like
+   any other `crit_program` failure today — SAME test shape as
+   `tests/test_oracle.py::test_crit_program_refutes_wrong_code_by_running_it`
+   (D1 census M10's own citation), extended to the new `eval` kind.
+3. A candidate whose new-kind commitment PASSES gains
+   `execution_backed`/`formally_backed` protection exactly like any
+   other passing commitment today — SAME test shape as
+   `tests/test_oracle.py::test_execution_backed_true_only_when_passing`.
+4. Neither `Scheduler._select_problem` nor `_standing_recrit_pool`
+   gains a new term reading the new `eval` kind specifically (grep-
+   provable, D1's own M9(a) method).
+5. A relatedness challenge via the reused `relevance_trial` shape
+   (Item 5) never mutates a candidate's `Status` directly — only
+   whether ITS COMMITMENT counts as substantive.
+
+### Test implications (R37)
+
+**Existing tests that MOVE (new cases/assertions owed, not new files
+necessarily):**
+- `tests/test_wire_contracts.py`, `tests/test_conjecturer_turn_v4.py`,
+  `tests/test_v6_patch_repair_and_wire.py`,
+  `tests/test_schema_carries_every_prose_rule.py` — the new optional
+  field on `ConjectureCandidate`'s wire shape (D1's own SCHEMA.md rule:
+  "pin signatures whole").
+- `tests/test_skills_models.py`, `tests/test_live_smoke_regressions.py`,
+  `tests/test_semantic_freedom_constitution.py` — the new eval-kind
+  choice on `ReasoningCandidateProposal`'s `counterconditions`.
+- `tests/test_workload_formal.py` — the extended `ForbiddenCase`/
+  skeleton eval vocabulary (new `program:candidate-checker` kind).
+
+**Existing tests that MUST NOT MOVE (regression proof the correction
+didn't leak anywhere):**
+- `tests/test_oracle.py`, `tests/test_prose_refutation_boundaries.py`
+  — `execution_backed`/`formally_backed`'s own body/signature, per D1's
+  rev-1 blast-radius census, UNCHANGED (rev 2 needs this even more
+  strongly than rev 1 did, since there is no wrapper function at all
+  now — these functions are reused completely as-is).
+- `tests/test_adjudication.py` — Pass 1/Pass 2 (D1 census M9(c)/M12),
+  untouched by rev 2 exactly as by rev 1 (no new `RefRole`, no new
+  cascade interaction — rev 2 doesn't even need M17's `RefRole` finding
+  anymore, since there is no cross-artifact link to make invisible to
+  it).
+
+**New tests owed (none exist yet, named per item 6's five acceptance
+checks above):** a `program:candidate-checker`-kind commitment refuting
+its own artifact on failure; the same kind granting protection on
+success; the R-g grep-provable absence of a new scheduling term; a
+relatedness-challenge test proving it never touches `Status` directly.
+
+### Item 7 (rev 2, R38): encoder-role delegation, corrected meaning
+
+F3 Road A (approved, R29): new role `"encoder"`, `property_designer`
+untouched. Corrected meaning (R38): **the coder seat authors commitment
+CODE for the conjecturer's ALREADY-ADMITTED prose** — not a separate
+encoding artifact (rev 1's own framing). Two-phase, mirroring the SAME
+draft-then-register shape M23/M24 already use: (1) the conjecturer's
+own turn is admitted first, prose-only or with a commitment it authored
+itself, exactly as today; (2) if the `"coder"` seat is bound (M16,
+mint-time, per `docs/map/CON-seats.md`), a follow-up call to the
+`"encoder"` role, given the ADMITTED artifact's own prose as input,
+drafts commitment source text, which is then attached to the SAME
+artifact via the SAME two-phase draft/register compilation path
+(`compile_interface_draft`, unchanged) — never a new artifact, never a
+new event. When NOT bound: the conjecturer's own turn embeds the
+commitment inline (Item 2's own fallback, mirroring M1's existing
+capability-channel pattern).
+
+**R-g argument (CLAUDE.md's second design law, REQUEST.md C4).** The
+encoder's output is criticized by the EXACT SAME `crit_program`/
+`execution_backed` mechanism as a conjecturer-authored commitment (Item
+2) — delegating AUTHORSHIP never changes what counts as EVIDENCE.
+
+### Frozen-surface contact forecast, re-derived from scratch (R30 — assumes NO grant)
+
+- **Surface 1 (`capabilities/state.py`): NONE.** Unchanged from rev 1's
+  own finding — this design never touches capability-channel state.
+- **Surface 2 (`harness.py` event application): NONE EXPECTED —
+  IMPROVED FROM REV 1.** Rev 1 needed a new `twin_repair` Event payload
+  (plausible contact). Rev 2 needs NO new Event payload at all: the new
+  commitment attaches via the EXISTING two-phase draft/register
+  compilation path at ordinary artifact-admission time (M23/M24's own
+  precedent), the same way skeleton/countercondition commitments
+  already do today. `harness.py`'s event-application logic sees nothing
+  new to apply.
+- **Surface 3 (replay-validation formats): NONE EXPECTED — IMPROVED
+  FROM REV 1.** No new record TYPE; the new commitment is an ordinary
+  `Commitment` (already a first-class, existing type) with a new `eval`
+  KIND STRING, not a new schema shape.
+- **Surface 4 (manifest schemas + validators): CONTACT EXPECTED,
+  narrower than rev 1.** A new wire-contract version (the optional
+  field + new eval-kind vocabulary entry on both candidate contracts)
+  is a new `ContractVersionPolicyV3` entry, mirroring every prior
+  version bump; a new role (`"encoder"`) needs a route/role binding
+  entry. No twin-related manifest field is needed (rev 1's own
+  speculative addition is gone).
+- **Surface 5 (qualification subject digests): CONTACT CONFIRMED
+  (M20, unchanged reasoning).** Same mechanism as rev 1 — a new
+  contract version or role changes `qualification_subject_payload`'s
+  hashed manifest dump. Old cached qualifications for unchanged
+  manifests remain valid.
+- **Frozen-adjacent `route_fingerprint`: CONTACT EXPECTED,** for the
+  new `"encoder"` role's route entry — unchanged reasoning from rev 1.
+- **`oracle.py`/`oracle_sandbox.py` (not a frozen surface, but load-
+  bearing infrastructure being REUSED, not modified):** rev 2 proposes
+  reusing `_compile`'s existing guarded-exec engine as-is (M26) — no
+  change to its own body is proposed; only a NEW CALLER (the new `eval`
+  kind's dispatch in `programs.evaluate`) is named, which touches
+  `programs.py` (not itself one of the five frozen surfaces, but
+  central enough to name explicitly).
+
+**Net effect versus rev 1: two of five surfaces (2 and 3) drop from
+"plausible contact" to "none expected" — the single-artifact
+correction is measurably smaller in frozen-surface footprint, not only
+simpler in shape.**
+
+### Blast-radius census (rev 2 additions to rev 1's own census)
+
+```
+$ grep -rl "programs\.evaluate\|programs\.py" tests/ docs/map/ 2>/dev/null | grep -v pycache | grep "docs/map"
+docs/map/SEAM-evaluation-x-ontology.md
+docs/map/SUB-evaluation.md
+docs/map/SUB-periphery.md
+docs/map/SEAM-evaluation-x-rules.md
+```
+`programs.py::evaluate`'s own dispatch (`if kind == "predicate"... elif
+kind == "program"...`) gains one new `elif` branch for the new kind —
+all 4 map documents above EXPECTED TO MOVE (new dispatch branch is new
+behavior, needs a new check per SCHEMA.md's own rule "new behaviour
+needs a new check that would fail if the behaviour regressed").
+`SUB-periphery.md`'s own hit is incidental (a `programs.py` mention
+unrelated to `evaluate`'s dispatch) — D3 must confirm this at execution
+time before assuming it moves too.
+
+```
+$ grep -rln "oracle\._compile\|from deepreason.oracle import _compile" tests/ 2>/dev/null
+(no output — exit 1, zero hits)
+```
+`oracle.py::_compile` is a PRIVATE function, never imported or tested
+by name directly — it is exercised only indirectly through
+`programs.evaluate`'s public dispatch (`tests/test_oracle.py`'s own
+property/checker execution tests). MUST NOT MOVE for `_compile`'s OWN
+body (rev 2 proposes a NEW CALLER via a new `programs.evaluate` dispatch
+branch, never a change to the guarded-exec function itself) — D3's own
+regression is therefore an ADDITION to `test_oracle.py`'s existing
+coverage pattern, not a change to any existing assertion.
+
+```
+$ grep -rl "relevance_trial" tests/ docs/map/ 2>/dev/null | grep -v pycache
+tests/test_judge_ensemble_boundary.py
+tests/test_properties.py
+docs/map/SEAM-llm-x-rules.md
+docs/map/CON-warrants-and-attacks.md
+docs/map/SEAM-adjudication-x-authority.md
+docs/map/SUB-rules.md
+```
+MUST NOT MOVE for all 6 — Item 5 proposes reusing `relevance_trial`'s
+own SHAPE at a NEW call site (candidate-commitment relatedness), never
+modifying the function itself or its existing property-relevance call
+site.
+
+### Options (forks) — rev 2
+
+**F5 — how does the new commitment's execution engine get wired in
+without inheriting S6 PARKED P1's circularity (M26)?**
+- Option A: reuse `property_oracle_commitment`/`admit_counterexample`
+  directly (M3's own dead functions). REJECTED — inherits the exact
+  bootstrap circularity D1 diagnosed (minting the first commitment of
+  this shape requires an existing one).
+- Option B: reuse ONLY `oracle.py::_compile`/`oracle_sandbox.py`'s
+  EXECUTION ENGINE via a NEW dispatch branch in `programs.evaluate`,
+  never touching the dead minting functions. RECOMMENDED — no
+  precondition chain to bootstrap; the new kind is minted directly by
+  `compile_interface_draft` (already reachable, M23/M24), same as
+  every other commitment kind.
+
+**F6 — is the relatedness check (Item 5) mandatory pre-admission or
+purely reactive?**
+- Option A: mandatory pre-check before a commitment is accepted at all.
+  REJECTED-leaning — this IS the referee shape R25/R26 warn against: a
+  gate deciding relatedness BEFORE ordinary criticism ever runs.
+- Option B: purely reactive — a relatedness challenge is available
+  (reusing `relevance_trial`'s shape) but never required; an
+  unchallenged commitment simply stands. RECOMMENDED — matches M25's
+  own governing law (emission unconstrained) and R25-R27 exactly.
+
+**F7 — does the new `eval` kind join `execution_backed`'s NARROW
+`EXEC_PROGRAMS` set, or only `formally_backed`'s wider substantive
+set?**
+- Option A: add it to `EXEC_PROGRAMS` (D1 census M9's own set:
+  `exec_oracle`/`property_oracle`/`dataset_oracle`). REJECTED-leaning —
+  that set's own semantics include counterexample admission
+  (`admit_counterexample`, M3), machinery this design does not build or
+  need; adding to it silently promises behavior not designed here.
+- Option B: the new kind counts toward `formally_backed`'s wider
+  substantive-and-evaluable test (M9) ONLY, not `execution_backed`'s
+  narrower counterexample-eligible set. RECOMMENDED — grants the
+  PROTECTION incentive (R34's own "shield") without silently extending
+  counterexample machinery this tranche never measured or specced.
+
+## Budget (rev 2)
+
+**Headline: ~950 lines of D3 implementation, forecast by item —
+computed as the sum below (rev 1's ~1450-line forecast is superseded;
+kept above for the record):**
+
+| Item | Forecast (lines) | Basis |
+|---|---|---|
+| Item 1 (no admission gate — zero new code, documentation of existing behavior only) | 0 | M25: nothing is built |
+| Item 2 (new eval kind + wire field on both candidate contracts + `programs.evaluate` dispatch branch) | 280 | mirrors M23/M24's own existing mechanism size, extended |
+| Item 3 (kind signal) | 0 | M9: pre-existing, unextended |
+| Item 4 (pack rendering) | 0 | M8: pre-existing, unextended |
+| Item 5 (relatedness, reusing `relevance_trial`'s shape at a new call site) | 120 | a new call site wiring an EXISTING function's shape, smaller than authoring a new mechanism |
+| Item 6 (R-g acceptance checks, 5 named) | 200 | same basis as rev 1: ~40 lines/regression test |
+| Item 7 (encoder role registration) | 250 | unchanged from rev 1's own F3 estimate |
+| Map document update (`CON-conjecture-kinds.md` v2) | 100 | smaller than rev 1's 230-line estimate — no twin/RefRole/Event sections needed |
+| **Sum** | **950** | 0+280+0+0+120+200+250+100 = 950 |
+
+This SPEC.md's own rev-2 addition size: this appended section. Total
+tranche commits: REQUEST.md (2, capture + amendment), SPEC.md rev 1
+(1), SPEC.md rev 2 (this commit) — 4 total. Frozen surfaces touched by
+THIS tranche itself: NONE (SPEC ONLY, R1) — the forecast above is for
+D3's own future work.
+
+Rubric (rev 2): 6/6 yes
+- every new R (R19-R40) has a spec item or is explicitly resolved
+  (R28-R30 resolved directly by operator approval, not re-derived):
+  yes.
+- blast-radius census pasted and classified: yes (rev 2 additions
+  above; rev 1's own census entries for `execution_backed`/
+  `formally_backed`/adjudication apply unchanged and are cited, not
+  repeated).
+- frozen-surface contact forecast re-derived from scratch, assuming no
+  grant: yes (R30's own instruction followed literally).
+- every mechanism the amendment names traced to code before being
+  adopted: yes (M21's `relevance_trial`, M23/M24's existing commitment-
+  attachment mechanisms, M26's execution engine — all verified to exist
+  and reach the relevant call sites before being designed around).
+- DESIGN-AND-STOP: yes — six new measurements (M21-M26), three new
+  forks (F5-F7) each priced with a recommendation citing a measurement.
+- nothing untraceable to an R/C/M number: yes (re-read pass performed).
+
+## Decision sheet (rev 2) — remaining forks
+
+**F5 — execution engine wiring.** Recommendation: Option B (reuse
+`_compile`/`oracle_sandbox.py` directly via a new `programs.evaluate`
+dispatch branch, never the dead minting functions). See F5 above for
+the full pricing.
+
+**F6 — relatedness check timing.** Recommendation: Option B (purely
+reactive, no mandatory pre-admission gate). See F6 above.
+
+**F7 — which protection set the new kind joins.** Recommendation:
+Option B (`formally_backed` only, not `EXEC_PROGRAMS`). See F7 above.
+
+Every road above (F5-F7) awaits the operator's words before
+`dr-plan-steps` (D3) runs, per R16/R40. REQUEST.md and this SPEC.md
+(rev 2) are committed and pushed; this tranche STOPS here again, per
+R40.
