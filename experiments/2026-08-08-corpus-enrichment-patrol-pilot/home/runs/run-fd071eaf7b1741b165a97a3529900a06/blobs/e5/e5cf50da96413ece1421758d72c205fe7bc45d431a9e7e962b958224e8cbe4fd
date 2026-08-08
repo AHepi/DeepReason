@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@b9b4657df3f1f21f0de5ec33: program:reasoning_observation_pending
+- reason-counter@436a46e0dc58ed7bb9fc91e1: program:reasoning_observation_pending
+- reason-counter@291f0952357bd7aa321e58c8: program:reasoning_observation_pending
+- reason-counter@5ac297c1594049374fbffa9b: program:reasoning_observation_pending
+- reason-counter@380813a5bc4172ce75ba83f0: program:reasoning_observation_pending
+- reason-counter@623813f03e325052e0b8ab64: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via fraction reduction: 15/100 \u00d7 80 = 3/20 \u00d7 80 = 240/20 = 12.","counterconditions":[{"case":"The fraction 15/100 is reduced incorrectly (e.g., to 1/5)","checker_spec":null,"eval":"observation"},{"case":"The multiplication 3 \u00d7 80 is miscalculated","checker_spec":null,"eval":"observation"},{"case":"The division 240 / 20 is performed incorrectly","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"15% is the fraction 15/100. Reducing by 5 yields 3/20. Multiplying by 80 gives (3 \u00d7 80) / 20 = 240 / 20. Dividing by 20 yields 12. This is a linear scaling via exact rational arithmetic.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b9b4657df3f1f21f0de5ec33, reason-counter@436a46e0dc58ed7bb9fc91e1, reason-counter@291f0952357bd7aa321e58c8
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by transposing the operands and computing 80% of 15.","counterconditions":[{"case":"The commutative property does not hold for the operation","checker_spec":null,"eval":"observation"},{"case":"The transposed calculation (80% of 15) is computed incorrectly","checker_spec":null,"eval":"observation"},{"case":"The operands are not interchangeable due to contextual constraints","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Multiplication is commutative: a \u00d7 b = b \u00d7 a. The expression 0.15 \u00d7 80 equals 0.80 \u00d7 15. Finding 80% of 15 involves taking 8/10 of 15, which simplifies to 4/5 \u00d7 15 = 4 \u00d7 3 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5ac297c1594049374fbffa9b, reason-counter@380813a5bc4172ce75ba83f0, reason-counter@623813f03e325052e0b8ab64
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

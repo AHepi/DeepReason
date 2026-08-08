@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ac51cd681ca348e81360f1cf: program:reasoning_observation_pending
+- reason-counter@66b9c8add8a8f179233c29b8: program:reasoning_observation_pending
+- reason-counter@b156f4b60d3bec73cad54f4f: program:reasoning_observation_pending
+- reason-counter@35a9aef2986d27f863d71ddd: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, via a unit-rate scaling mechanism.","counterconditions":[{"case":"The rate of scaling is non-linear (e.g., compound percentage growth over discrete intervals).","checker_spec":null,"eval":"observation"},{"case":"The base quantity of 80 does not represent a uniformly divisible whole.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Determine the value of 1% of the base by dividing by 100 (80 / 100 = 0.8). Then scale this unit-rate by the target percentage (0.8 * 15 = 12). This establishes a proportional ratio mapping between the whole and the requested fraction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ac51cd681ca348e81360f1cf, reason-counter@66b9c8add8a8f179233c29b8
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 0.001875, derived by misapplying the percentage as a recursive division operator.","counterconditions":[{"case":"The operator 'of' is correctly defined as multiplication rather than division.","checker_spec":null,"eval":"observation"},{"case":"The linguistic syntax of the problem maps to standard algebraic notation (0.15 * 80).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Interpret '15% of 80' as a sequential operator: 15 / (100 * 80). This assumes '%' acts as a division by 100, and 'of' acts as a subsequent division by the base, rather than multiplication. 15 / 8000 = 0.001875.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b156f4b60d3bec73cad54f4f, reason-counter@35a9aef2986d27f863d71ddd
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

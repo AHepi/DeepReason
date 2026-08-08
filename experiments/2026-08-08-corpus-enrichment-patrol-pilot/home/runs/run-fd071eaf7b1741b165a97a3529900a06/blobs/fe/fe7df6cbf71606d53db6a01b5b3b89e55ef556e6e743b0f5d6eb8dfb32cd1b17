@@ -1,0 +1,35 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c70a27076a86b6fc3955ee73: program:reasoning_observation_pending
+- reason-counter@6a67b17ae0519ddeea4d1bac: program:reasoning_observation_pending
+- reason-counter@1e7e82dad19046b525fb9374: program:reasoning_observation_pending
+- reason-counter@95b99a8cd15b93231602574a: program:reasoning_observation_pending
+- reason-counter@761b2e790a131fb4fdf8fddb: program:reasoning_observation_pending
+- reason-counter@60506588f266a30bae30d72d: program:reasoning_observation_pending
+- reason-counter@9e20d70315e1f01a7086835d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12 because the problem implicitly requires a single linear application of a percentage as a scalar multiplication (0.15 \u00d7 80), and any non-linear interpretation is admissible only if a time or iteration dimension is specified.","counterconditions":[{"case":"The problem text or context specifies a multi-period, iterative, or compounded application of the percentage, making a non-linear model admissible and overturning the single-step result 12.","checker_spec":null,"eval":"observation"},{"case":"The standard definition of percentage as a single-step linear scalar is suspended or redefined, allowing alternative operators (e.g., recursive division) to apply.","checker_spec":null,"eval":"observation"},{"case":"The base 80 is not a scalar quantity but a structure (e.g., vector or matrix) for which scalar percentage scaling is undefined without further specification.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Model the percentage operation as a linear, single-step scaling factor. The scalar 0.15 multiplies the base 80 exactly once, yielding 12. The mechanism depends on the absence of any stated compounding, iteration, or temporal dimension, which would otherwise make a non-linear model admissible.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c70a27076a86b6fc3955ee73, reason-counter@6a67b17ae0519ddeea4d1bac, reason-counter@1e7e82dad19046b525fb9374
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by computing 15% of 100 (which is 15) and then scaling that result down by the factor 80/100, yielding 15 \u00d7 0.8 = 12.","counterconditions":[{"case":"The percentage is interpreted as a recursive or compound rate rather than a single linear scaling operation.","checker_spec":null,"eval":"observation"},{"case":"The base 80 is not a scalar quantity but a vector, matrix, or other object for which scalar percentage scaling is undefined or non-standard.","checker_spec":null,"eval":"observation"},{"case":"The canonical base of 100 is not admissible as an intermediate normalization point for this problem's domain.","checker_spec":null,"eval":"observation"},{"case":"The scaling factor 80/100 is applied in a non-linear domain such as logarithmic space, changing the result.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The percentage operator is interpreted as applying to a canonical base of 100 first. 15% of 100 gives an intermediate amount of 15. Because the actual base 80 is 80% of the canonical base 100, the intermediate result must be scaled by 0.8 to correct for the actual base. This yields 15 \u00d7 0.8 = 12. This mechanism effectively reduces to evaluating the product 0.15 \u00d7 80, but it factors the computation through a normalization step anchored at 100.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@95b99a8cd15b93231602574a, reason-counter@761b2e790a131fb4fdf8fddb, reason-counter@60506588f266a30bae30d72d, reason-counter@9e20d70315e1f01a7086835d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

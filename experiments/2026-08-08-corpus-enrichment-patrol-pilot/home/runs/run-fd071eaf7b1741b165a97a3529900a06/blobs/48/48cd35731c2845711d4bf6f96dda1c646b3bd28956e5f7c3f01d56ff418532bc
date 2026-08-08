@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3df7c1fe043da9fc39182908: program:reasoning_observation_pending
+- reason-counter@7f5cc2a8f9b2b1fee81b8248: program:reasoning_observation_pending
+- reason-counter@0ef9a81a0b373c6338b129b6: program:reasoning_observation_pending
+- reason-counter@a25eb7d3cf952379c5adcc01: program:reasoning_observation_pending
+- reason-counter@86c8bf676d055539fee4f5bc: program:reasoning_observation_pending
+- reason-counter@0a56d3296e9e2a3f9c71297c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via decomposition into 10% and 5%.","counterconditions":[{"case":"If the division to find 5% from 10% is incorrect (e.g., dividing by 2 but multiplying by 10).","checker_spec":null,"eval":"observation"},{"case":"If the addition of the parts (8 + 4) is miscalculated as 84.","checker_spec":null,"eval":"observation"},{"case":"If the base value for the 10% split is taken from something other than 80.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"10% of 80 is 8 (move decimal one place left). 5% is half of 10%, so 5% of 80 is 4. Adding them together: 8 + 4 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3df7c1fe043da9fc39182908, reason-counter@7f5cc2a8f9b2b1fee81b8248, reason-counter@0ef9a81a0b373c6338b129b6
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by computing 15% of 100 and scaling down by a factor of 5.","counterconditions":[{"case":"If the ratio 80/100 is not correctly reduced to 4/5.","checker_spec":null,"eval":"observation"},{"case":"If the scaling factor is applied to the percentage instead of the result (e.g., 4/5 * 15% = 12%).","checker_spec":null,"eval":"observation"},{"case":"If the base calculation 15% of 100 is performed incorrectly.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"15% of 100 is 15. Since 80 is 4/5 of 100, the result scales by 4/5. Thus, 15 * (4/5) = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a25eb7d3cf952379c5adcc01, reason-counter@86c8bf676d055539fee4f5bc, reason-counter@0a56d3296e9e2a3f9c71297c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

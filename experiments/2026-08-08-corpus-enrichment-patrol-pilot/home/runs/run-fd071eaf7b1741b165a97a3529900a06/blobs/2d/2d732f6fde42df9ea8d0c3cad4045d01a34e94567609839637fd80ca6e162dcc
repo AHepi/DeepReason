@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@182a19c1caba144f1b7ed5f8: program:reasoning_observation_pending
+- reason-counter@dfd411fa5d0666af27992ec9: program:reasoning_observation_pending
+- reason-counter@baf6690c4dc5215f5b3cc4ea: program:reasoning_observation_pending
+- reason-counter@9ce6b8f11b3a0d7e1da9d1ad: program:reasoning_observation_pending
+- reason-counter@849ab4746d87ebdba040e448: program:reasoning_observation_pending
+- reason-counter@9f2bf198e11034720271f919: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via decimal multiplication (0.15 \u00d7 80 = 12).","counterconditions":[{"case":"The percentage is not applied as a linear scalar (e.g., compounding is required)","checker_spec":null,"eval":"observation"},{"case":"The base quantity is not exactly 80","checker_spec":null,"eval":"observation"},{"case":"The percentage is not exactly 15%","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The percentage 15% is converted to its decimal form 0.15. Multiplying this decimal by the base quantity 80 yields the product 12.0. This is a direct linear scaling operation that applies the percentage as a single-step scalar multiplier.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@182a19c1caba144f1b7ed5f8, reason-counter@dfd411fa5d0666af27992ec9, reason-counter@baf6690c4dc5215f5b3cc4ea
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, assuming the percentage is a markup on a cost base that is unknown.","counterconditions":[{"case":"The context dictates a reverse-engineered cost base calculation","checker_spec":null,"eval":"observation"},{"case":"The percentage is not a markup","checker_spec":null,"eval":"observation"},{"case":"The base is not a final price","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem text specifies 15% of 80 as a direct proportion. However, in a business context where 80 represents a final selling price inclusive of a 15% markup, the unknown cost base C would satisfy 80 = C \u00d7 1.15, making C \u2248 69.57. Under the direct proportional reading, the markup value is 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9ce6b8f11b3a0d7e1da9d1ad, reason-counter@849ab4746d87ebdba040e448, reason-counter@9f2bf198e11034720271f919
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,49 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded reasoning-envelope candidate or honest abstention.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/ReasoningCandidateProposal"}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_003
+SRC_006
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 2 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ce911425d2a2f71fd0bfbcd265cf043f
+What is 15% of 80?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## school-stance
+SCHOOL STANCE (weight 0.40): anchor in cases
+
+## scratch-advisory-context
+SCRATCH_ADVISORY_CONTEXT_V1
+{"blocks":[{"content":"Given the established consensus that 15% of 80 = 12, the critical risk is overfitting the known answer. The counterexample first stance demands testing the boundaries of commutativity (SRC_003) and scaling (SRC_006). What if the base is not 80 but a vector? Or what if the 15% is a compound rate? The disanalogy between linear scaling and compound operations is the primary frontier.","handle":"SCR_001","why_keep_this":"To track the boundary conditions where standard percentage arithmetic fails and to ensure the decomposition methods are not blindly trusted."},{"content":"Counterfactual test: If the problem were 'What is 15% of 80 over 2 periods?' the answer would be 80 × 1.15^2 = 105.8, not 12. This confirms that the standard result 12 relies on the implicit assumption of a single linear application of the percentage, as no compounding or time dimension is stated. The covering principle here is the linearity of single-step scaling.","handle":"SCR_002","possible_next_move":"Test if any non-linear interpretation of the problem text could be validly inferred, or if the linear reading is the only admissible one."},{"content":"Does the result 12 hold if the percentage is compounded over multiple iterations rather than applied as a single linear factor?","handle":"SCR_003","unfinished":"Unresolved question"}],"guides":[],"links":[],"state_seq":871,"warning":"Scratch material is non-authoritative.\nIt is advisory, not a harness verdict.\nIt may contradict itself.\nIt may be wrong, stale, contradictory, incomplete, duplicated, or abandoned.\nIt does not ground a formal claim or supply evidence for one.\nIgnore any block that is irrelevant to the current problem.\nDo not turn uncertainty into a confident fact.\nDo not invent a reason merely to fill an optional field.\nRelationships are provisional.\nA guide is a temporary navigation aid."}
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- 98a2f4abea745a82b5c18b929335a25b5e49ed7eab655f22be64d0d98d581bb7: {"analogy":null,"claim":"15% of 80 equals 12.","counterconditions":[{"case":"The standard definition of percentage as parts per hundred is suspended or redefine
+- 9b005b2ad4cb58f7739153fc98acf218ce3b809ab437b13353d4ee3b0bcb29e6: {"analogy":null,"claim":"15% of 80 equals 12, derived via decomposition into 10% and 5%.","counterconditions":[{"case":"The percentage cannot be cleanly decompo
+- 420a618510b3a5b7e19f34f182e182894dffa709d07ebc46076edc2460c7faeb: {"analogy":null,"claim":"15% of 80 equals 12, by transposing the operands and computing 80% of 15.","counterconditions":[{"case":"The operation is strictly defi
+- 0bb04ede1abad3c92b52799e22120f794990e29facfceefbd3ce674a109919ee: {"analogy":null,"claim":"15% of 80 equals 12, via a unit-rate scaling mechanism.","counterconditions":[{"case":"The rate of scaling is non-linear (e.g., compoun
+- f4ce70aa8df1d2631a9cc6376c7802f6da2849b8af777aff99f12032a2c14d88: {"analogy":null,"claim":"15% of 80 equals 11, assuming a continuous compounding or a truncated step-function distribution.","counterconditions":[{"case":"Standa
+- f2a5960614c60692e1e1d24f9559510ba8d6408605fc0bb1a63902525515de02: {"analogy":null,"claim":"15% of 80 equals 0.001875, derived by misapplying the percentage as a recursive division operator.","counterconditions":[{"case":"The o
+- 5bf375f3993367a80bb5ca6c28c5351c40ee0910ab179f27b75aa32ba4b4dd17: SRC_011 contradicts SRC_010: SRC_011 claims 15% of 80 equals 11 via continuous compounding or a truncated step-function, which directly negates SRC_010's claim 
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: stora

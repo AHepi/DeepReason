@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4b14583d88599a40dfedf5e6: program:reasoning_observation_pending
+- reason-counter@254e609df00c2b99af8f4363: program:reasoning_observation_pending
+- reason-counter@bd7653e54bc08b15819b64d4: program:reasoning_observation_pending
+- reason-counter@b4867c968f45151fec07d082: program:reasoning_observation_pending
+- reason-counter@b66b056b8bd37f93e85cc6f8: program:reasoning_observation_pending
+- reason-counter@522fc1487ffea5fec16bda22: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via fraction reduction and multiplication.","counterconditions":[{"case":"The fraction 15/100 is not reduced correctly","checker_spec":null,"eval":"observation"},{"case":"The fraction multiplication is performed incorrectly","checker_spec":null,"eval":"observation"},{"case":"The fraction is not applied multiplicatively","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"15% is expressed as the fraction 15/100. Reducing 15/100 by dividing by the common factor of 5 gives 3/20. Multiplying the base 80 by 3/20 gives (80 \u00d7 3) / 20 = 240 / 20 = 12. This converts the percentage to a simplified rational fraction before scaling.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4b14583d88599a40dfedf5e6, reason-counter@254e609df00c2b99af8f4363, reason-counter@bd7653e54bc08b15819b64d4
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, via a unit-rate scaling mechanism.","counterconditions":[{"case":"The rate scaling is non-linear (e.g., compound percentage)","checker_spec":null,"eval":"observation"},{"case":"The unit rate is not 0.8","checker_spec":null,"eval":"observation"},{"case":"The relationship between percentage and value is not proportional","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If 100% of the quantity 80 corresponds to the value 80, then 1% corresponds to the unit rate 0.8 (by linear scaling). To find 15%, scale the unit rate by a factor of 15: 0.8 \u00d7 15 = 12. This is a proportional scaling based on the unit rate per 1%.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b4867c968f45151fec07d082, reason-counter@b66b056b8bd37f93e85cc6f8, reason-counter@522fc1487ffea5fec16bda22
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "15% of 80 equals 12, derived via a base-ten shift and unit-scaling mechanism: 15% is defined as 15 per 100, establishing a scalar ratio of 15/100 = 0.15, which scales the base 80 by linear multiplication.",
+    "mechanism": "The percentage 15% is a syntactic notation for the dimensionless scalar 15/100 = 0.15. Single-step linear scaling applies this scalar to the magnitude 80: 80 × 0.15 = 12. The base-ten structure of 100 allows decomposition into (10/100 + 5/100), providing an arithmetic fallback of 8 + 4 = 12.",
+    "counterconditions": [
+      "The standard definition of percentage as parts per hundred is suspended or redefined.",
+      "The operation is compounded over multiple time periods or iterations.",
+      "The operands are vector or tensor quantities for which scalar multiplication is not defined.",
+      "The problem context mandates a non-linear or truncated step-function interpretation of the percentage.",
+      "The operation is misapplied as a recursive division operator rather than a linear scalar."
+    ],
+    "typicality": 1.0,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_006"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```
