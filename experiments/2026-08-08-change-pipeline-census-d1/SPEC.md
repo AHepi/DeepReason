@@ -294,6 +294,19 @@ DELIVERY/PARKED). Estimated 6-10 commits (one per phase boundary plus
 incremental CENSUS.md commits per CHECKLIST step). Frozen surfaces
 touched: none.
 
+**Revised 2026-08-08, mid-execution:** actual tranche size reached
+~1921 lines after CENSUS.md's six measurement sections (step 15),
+roughly double the original estimate — driven entirely by pasted
+command+output evidence per claim (the task's own "no claim without
+evidence" requirement), not scope creep; `src/`, `tests/`, `tools/`
+remained byte-untouched throughout. Per `dr-execute-step`'s ceiling
+rule, this was raised as a STOP (options: continue vs. trim already-
+committed evidence) rather than absorbed silently. Operator decision:
+continue as planned — no code risk either way, and trimming would
+weaken the evidence trail for no safety benefit. Revised budget: no
+new ceiling set; the remaining two sections (map document, gates) are
+expected to add a few hundred more lines, accepted explicitly.
+
 Rubric: 6/6 yes
 - every R has a spec item with a machine-decidable accept: yes (S1-S16
   cover R1-R17; R17 covered by S2).
