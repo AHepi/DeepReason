@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim asserts the panel's reliability gain comes 'from averaging independent errors rather than from the checklist per se.' But this creates a confound the target never resolves: it cannot distinguish genuine reliability gain (independent errors averaged out) from mere checklist compliance that tracks the right answer (correlated errors that happen to hit the target). Averaging independent errors is a statistical mechanism; checklist-compliance that tracks the right answer is a correlated-error mechanism. The problem demands evidence that distinguishes the two within a single evaluation, but the target's framework—stressing error-averaging while relegating the checklist to a cue-encoding boundary condition—provides no single-evaluation operationalization to separate them. An evaluation showing the panel outperforming the expert would be equally consistent with both mechanisms under this framing.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target's central identifying criterion—'low base-rate outcome'—is a population-level property of the task, not a within-evaluation diagnostic that separates genuine reliability gain from mere checklist compliance. The problem asks what evidence within a single evaluation would distinguish a genuine gain from compliance that happens to track the right answer. But knowing the task has a low base rate does not, by itself, distinguish a panel that genuinely encodes rare-event cue-weightings from one that merely defaults to the base rate (and thus tracks the right answer by being systematically conservative). The ideal-observer analogy the target relies on actually undercuts its ability to make this discrimination: both 'genuine diagnostic encoding' and 'regression to the mean' predict correct answers on common events and failures on rare events, so the target's variance-vs-bias framing cannot operationally separate the two within one evaluation.",
+      "counterexample": null
+    }
+  ]
+}
+```
