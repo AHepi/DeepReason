@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=29 blockers=none
+State: next=31 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -764,8 +764,15 @@ order. One step per dr-execute-step invocation.
         tranche touched. Recorded as `PARKED.md` P-D2-3.
       Re-run after the ONE real fix (full gate, not a partial ring, to
       honor the same discipline as the first run):
-      [pending — see re-run entry below before this step is treated as
-      closed]
+      `3 failed, 3399 passed, 7 skipped in 757.94s (0:12:37)` — exactly
+      the 3 confirmed-pre-existing failures
+      (`test_bronze_report.py::test_census_totals_internally_consistent`,
+      `test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`,
+      `test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+      — PARKED.md P-D2-3/P-D2-1/P-D2-2), zero new. This tranche's own
+      net contribution: 3398 -> 3399 passed (the one real fix), 4
+      failed -> 3 failed (that same fix), same 3 pre-existing failures
+      before and after.
 - [ ] 31. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/pipeline-design-d2` matches
