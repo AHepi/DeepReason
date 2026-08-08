@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: df0fd0fd
+Verified-at: 6a033fa2
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -102,7 +102,7 @@ governing the proposing side only.
 A `Config` value costs nothing to add and is invisible to replay. A manifest
 field is permanent.
 
-## The two instruments that prove you did not break anything
+## The instruments that prove you did not break anything
 
 ### The full gate
 
@@ -147,6 +147,21 @@ the number.
 A worked example of both instruments, including the sweep script and its output
 before and after a change that widened what prose may refute, is in
 `experiments/2026-08-01-change-prose-can-refute/CHECKLIST.md` steps 1, 15 and 24.
+
+### The diff budget gate (Rung G1)
+
+Actual cumulative insertions against a ledgered ceiling, computed from the
+real `git diff --numstat`, never a plan-time estimate — the gap Rung S5 fell
+through twice (REQUEST.md Amendments 2 and 3): its SPEC's own headline
+(220–300 lines) contradicted its own itemization (~325–435), and nothing
+checked the ceiling against the ACTUAL diff until an executor noticed by
+hand. `dr-execute-step` runs this gate at every `[COMMIT]` step; EXCEEDED is
+a stop, decided by the calling skill, never by this tool's exit code.
+
+    python tools/diff_budget.py <base> [--against REF] [--ceiling N] [--paths PATH ...]
+
+`check: python -c "import ast; ast.parse(open('tools/diff_budget.py').read())"`
+`check: grep -q "DIFF_BUDGET_RESULT_V1" tools/diff_budget.py`
 
 ## Traps
 

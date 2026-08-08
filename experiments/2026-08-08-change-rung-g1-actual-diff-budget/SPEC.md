@@ -315,9 +315,25 @@ Computed sum (`python3 -c "print(sum([130,140,15,15,10,8]),
 sum([170,190,25,25,15,12]))"` -> `318 437`):
 
 **Headline: 318-437 insertions, ceiling 450, across
-`tools/`+`tests/`+`.claude/skills/`+`docs/map/`+this tranche's own
-experiments dir, ~6-8 commits (one per phase boundary plus one per
-CHECKLIST step group).** Frozen surfaces touched: none.
+`tools/`+`tests/`+`.claude/skills/`+`docs/map/` — the gate's own
+enforced `--paths`, matching S5's own precedent (REQUEST.md Amendment
+2's "500-650 insertions across `src/` + `tests/` + `docs/map/` +
+`tools/root_sweep.py`") of excluding REQUEST.md/SPEC.md/CHECKLIST.md
+from the ceiling: those are this workflow's own ledger documents, not
+the deliverable. S7's `PARKED.md` (itemized above as ledger overhead,
+8-12 lines) is likewise outside the enforced `--paths`, same as every
+other tranche's own PARKED.md/REQUEST.md/SPEC.md/CHECKLIST.md/
+VALIDATION.md/DELIVERY.md. ~6-8 commits (one per phase boundary plus
+one per CHECKLIST step group).** Frozen surfaces touched: none.
+
+Correction (caught executing CHECKLIST step 1, before any code
+committed): the headline originally also named "this tranche's own
+experiments dir" in the enforced scope, which contradicted its own
+itemization above (which never counted REQUEST.md/SPEC.md/
+CHECKLIST.md, already 638 lines together) — exactly the headline-vs-
+itemization mismatch this rung exists to catch. Fixed here, before any
+gate check ran against it; S1/S2's own line counts, the ceiling value,
+and every other item are unchanged.
 
 Rubric: 6/6 yes
 - every R has a spec item with a machine-decidable accept: yes (R1-R17
