@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=10 blockers=none
+State: next=12 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -85,14 +85,15 @@ order. One step per dr-execute-step invocation.
       a 3-node/1-edge graph, correctly split into `{a,b}` and `{c}`.
 - [x] 9. (S8) [COMMIT] Commit and push `o1c_floating_foundations.py`.
       done-when: pushed, confirmed on origin.
-- [ ] 10. (S9) Write `scripts/o1d_warrant_sensitivity.py`: per-warrant
+- [x] 10. (S9) Write `scripts/o1d_warrant_sensitivity.py`: per-warrant
       `build_att`/`label0`/`final_labels` recomputation with that
       warrant's carriage removed (both `Artifact.warrants` union and
       explicit `state.carries`), the single-warrant-flip detection per
       accepted artifact, and the flip-count histogram.
       done-when: `python3 -c "import ast; ast.parse(open('experiments/2026-08-08-change-grounded-overlay-o1/scripts/o1d_warrant_sensitivity.py').read())"`
       -> exit 0.
-- [ ] 11. (S9) [COMMIT] Commit and push `o1d_warrant_sensitivity.py`.
+      DONE — syntax OK, module imports cleanly.
+- [x] 11. (S9) [COMMIT] Commit and push `o1d_warrant_sensitivity.py`.
       done-when: pushed, confirmed on origin.
 - [ ] 12. (S10) Write `scripts/run_all_overlays.py`: enumerate the
       corpus once via `overlay_common.corpus()`, run all four overlay
