@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=2 blockers=none
+State: next=5 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -83,22 +83,29 @@ order. One step per dr-execute-step invocation.
       step's own MUST-NOT-touch constraint even more strongly than
       planned. Step 2's own action is adapted to this finding below
       (recorded there, not silently).
-- [ ] 2. (R41) Add the new `elif kind == "program" and arg == "candidate-checker":`-
-      shaped dispatch branch to `programs.py::evaluate` (the READER),
-      calling `oracle.py::_compile` (unmodified) — this lands BEFORE any
-      writer can ever produce a commitment of this kind, so the reader
-      is never exercised on a payload shape it doesn't understand yet.
-      done-when: `python -c "from deepreason import programs; import inspect; assert 'candidate-checker' in inspect.getsource(programs.evaluate)"` -> exit 0.
-      MUST NOT touch: the five frozen surfaces (this file is `programs.py`, none of them).
-- [ ] 3. (R41) Mutation-prove step 2: a малformed/failing candidate-
-      checker source produces `FAIL` (not a crash, not `PASS`) through
-      the new branch — write this as a new case in `tests/test_oracle.py`
+- [x] 2. (R41) ADAPTED per step 1's finding: instead of a new `elif`
+      branch, added `PROGRAMS["candidate_checker"]` (programs.py) plus
+      `oracle.py::run_from_full_spec`/`candidate_checker_commitment`
+      (new functions, mirroring `run_from_spec`/`exec_oracle_commitment`
+      exactly) — this reuses the EXISTING generic `elif kind ==
+      "program": fn = PROGRAMS.get(arg)` dispatch (programs.py:358-362,
+      unmodified) rather than adding a new branch. `CANDIDATE_CHECKER_PROGRAM`
+      added as a constant, deliberately NOT added to `EXEC_PROGRAMS`
+      (R45).
+      done-when: `python -c "from deepreason import programs; assert 'candidate_checker' in programs.PROGRAMS"` -> exit 0. DONE.
+      MUST NOT touch: the five frozen surfaces — confirmed (`oracle.py`,
+      `programs.py` are neither).
+- [x] 3. (R41) Mutation-prove step 2: a candidate-checker whose source
+      fails a test produces `FAIL` (not a crash, not `PASS`) through the
+      dict-dispatch path — new cases in `tests/test_oracle.py`
       (SCHEMA.md's own mutation-provable rule).
-      done-when: `python -m pytest tests/test_oracle.py -k candidate_checker -q` -> passes; a deliberately-broken version of the same test (asserting `PASS`) FAILS, confirming the test can fail.
-- [ ] 4. (R41) [COMMIT] Commit step 2-3.
+      done-when: `python -m pytest tests/test_oracle.py -k "candidate_checker or run_from_full_spec or refutes_a_prose_conjecture" -q` -> passes (4 new tests); mutation-proved separately (a deliberately-mutated `EXEC_PROGRAMS` membership assertion was shown to fail before being reverted). DONE — 4 passed.
+- [x] 4. (R41) [COMMIT] Commit step 2-3.
       done-when: diff-budget running total <= 1150 (paste
       `git diff --stat <tranche-base>..HEAD -- src/ tests/`); frozen-
       surface diff empty (paste `git diff --stat <tranche-base>..HEAD -- src/deepreason/capabilities/state.py src/deepreason/harness.py src/deepreason/invariants.py src/deepreason/run_manifest.py src/deepreason/qualification.py`); push confirmed.
+      DONE — running total: 105 lines (oracle.py +35, programs.py +11,
+      test_oracle.py +59) of 1150. Frozen-surface diff: empty. Pushed.
 
 ## Item 2 continued — the two wire-facing extensions (R33)
 

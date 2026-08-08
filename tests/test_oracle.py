@@ -9,6 +9,7 @@ from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.ontology import Interface, Provenance, Status, WarrantType
 from deepreason.oracle import (
+    candidate_checker_commitment,
     counterexample_commitment,
     exec_oracle_commitment,
     property_oracle_commitment,
@@ -184,6 +185,64 @@ def test_crit_program_refutes_wrong_code_by_running_it(harness):
 
     assert harness.state.status[good.id] == Status.ACCEPTED  # survived EXECUTION
     assert harness.state.status[bad.id] == Status.REFUTED    # refuted by reality, not a judge
+
+
+# ---- dual-mode conjecture: candidate-checker (D2 rev 2, Amendment 1/2) ----
+# Unlike exec_oracle, the carrying artifact's own content is PROSE (a
+# conjecture can never be full code, Amendment 1) — the checker source lives
+# in the commitment's own budget instead of the artifact's content.
+
+def test_candidate_checker_reads_source_from_budget_not_content(harness):
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    prose = harness.create_artifact(
+        "The output is always double the input because doubling composes "
+        "with addition the way multiplication by two always does."
+    )
+    verdict, _ = programs.evaluate(c, prose, harness.blobs)
+    assert verdict == "pass"
+    assert programs.evaluable(c)
+
+
+def test_crit_program_refutes_a_prose_conjecture_by_running_its_checker(harness):
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    harness.register_commitment(c)
+    good = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    bad_checker = candidate_checker_commitment("def solve(x):\n    return x + 999", "solve", DOUBLE)
+    harness.register_commitment(bad_checker)
+    bad = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[bad_checker.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[good.id] == Status.ACCEPTED
+    assert harness.state.status[bad.id] == Status.ACCEPTED  # before criticism
+
+    crit_program(harness, good.id)  # runs the checker — passes, no warrant
+    crit_program(harness, bad.id)   # runs the checker — fails -> demonstrative warrant
+
+    assert harness.state.status[good.id] == Status.ACCEPTED  # prose survives
+    assert harness.state.status[bad.id] == Status.REFUTED    # refuted by execution, not argument
+    # Both carried the SAME prose — the checker refuted, not the words.
+    assert programs.content_text(good, harness.blobs) == programs.content_text(bad, harness.blobs)
+
+
+def test_candidate_checker_never_joins_exec_programs():
+    from deepreason.oracle import EXEC_PROGRAMS, CANDIDATE_CHECKER_PROGRAM
+
+    # R45: supremacy is earned by attack surface, never granted with the shield.
+    assert CANDIDATE_CHECKER_PROGRAM not in EXEC_PROGRAMS
+
+
+def test_run_from_full_spec_overruns_on_malformed_spec():
+    from deepreason.ontology.commitment import Budget
+    from deepreason.oracle import run_from_full_spec
+
+    verdict, _ = run_from_full_spec(Budget(extra={}))
+    assert verdict == "overrun"  # missing source/entry/tests, not a wall-clock condition
 
 
 def test_run_from_spec_overruns_on_malformed_spec():

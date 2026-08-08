@@ -134,6 +134,16 @@ def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
     return run_from_spec(text, budget)
 
 
+def _candidate_checker(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Dual-mode conjecture's code-commitment channel (Rung D3): unlike
+    exec_oracle, the artifact's own content (``text``) is prose, never the
+    candidate under test (Amendment 1) — the checker source lives in the
+    commitment's own budget instead."""
+    from deepreason.oracle import run_from_full_spec
+
+    return run_from_full_spec(budget)
+
+
 def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
     """Reference-free acting evaluator (oracle.py): RUN the candidate on fixed
     inputs and check each output with the spec's `def check(inp, out)` — no
@@ -244,6 +254,7 @@ PROGRAMS: dict[str, ProgramSpec] = {
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
     "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
+    "candidate_checker": ProgramSpec("candidate_checker", _candidate_checker, "execution"),
     "generator_wf": ProgramSpec("generator_wf", _generator_wf, "structural"),
     "checker_wf": ProgramSpec("checker_wf", _checker_wf, "structural"),
     # Chunked website builds (manifest.py): the design's component manifest,
