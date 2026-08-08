@@ -1,0 +1,52 @@
+{
+  "argumentative_critic_calls_on_glm": true,
+  "artifacts": 95,
+  "att_edges": 0,
+  "attribution_clean": true,
+  "attribution_mismatches": [],
+  "conjecturer_calls_on_gemma": true,
+  "events": 1179,
+  "llm_call_count": 41,
+  "llm_calls_by_role": {
+    "argumentative_critic": [
+      "glm-5.2"
+    ],
+    "conjecturer": [
+      "gemma4:31b"
+    ]
+  },
+  "replay_valid": false,
+  "seat_bindings_for_run": [
+    {
+      "group": "conjecture",
+      "model_id": "gemma4:31b",
+      "provider": "ollama"
+    }
+  ],
+  "seat_bindings_stamp_count": 1,
+  "seat_bindings_stamps": [
+    {
+      "bindings": [
+        {
+          "group": "conjecture",
+          "model_id": "gemma4:31b",
+          "provider": "ollama"
+        }
+      ],
+      "digest": "f00553dfcf4dea5160b78366e897f2ab9fc85aaf513a71eca1365a84c72329bb"
+    }
+  ],
+  "state": "failed",
+  "stop_reason": "operational_failure",
+  "verify_violations": [
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism"
+  ]
+}
