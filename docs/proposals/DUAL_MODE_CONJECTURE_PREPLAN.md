@@ -39,6 +39,22 @@ Requirements, numbered from those words:
 - R-f: a load-dial mechanism — operator-settable priority and share
   for conjecture vs criticism load, scratchpad load, simulation load,
   and coding load.
+- R-g (BINDING GUARDRAIL, operator's words 2026-08-08, "something
+  I've repeated endlessly": "as long as the existing infrastructure
+  does not force formalism and penalize conjectures that are not
+  formal"): no mechanism in this program — nor anywhere in the
+  harness — may require formal encoding for a conjecture to enter,
+  rank, survive, or be accepted; may weight ranking, scheduling, or
+  acceptance on a conjecture's KIND; or may escalate the
+  formal-channel option into pressure (the "when it implies"
+  surfacing is a one-time option rendering, never a repeated nudge,
+  never a penalty for declining). Formal backing may confer
+  PROTECTION (prose-immunity, as today); its absence confers no
+  disadvantage. D3's and D4's regressions must prove kind-blindness:
+  an informal conjecture's rank, criticism exposure, and acceptance
+  path are byte-identical whether or not the formal channel exists in
+  the build, and D5's formal-submission-rate metric is a MEASUREMENT,
+  never a target any mechanism optimizes toward.
 
 ## What exists today (verified against the tree, 2026-08-08)
 

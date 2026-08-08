@@ -202,6 +202,23 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   recorded as one.
 - Scratch/temp files go in the session scratchpad, never the repo.
 
+## Operator design laws (stated by the operator, standing, not
+## derived from defects)
+
+- **Formalism is an option, never an obligation** (2026-08-08,
+  repeated by the operator "endlessly" — do not make them repeat it
+  again): nothing may force a conjecture to be formal, and nothing may
+  penalize a conjecture for being informal — not admission, not rank,
+  not criticism exposure, not acceptance. Formal backing may grant
+  protection (prose-immunity); its absence grants no disadvantage.
+  Any design that weights outcomes on conjecture KIND violates this
+  law. See DUAL_MODE_CONJECTURE_PREPLAN.md R-g for the full binding
+  form.
+- **Seats change how content is GENERATED, never what counts as
+  EVIDENCE** (the modes/packages guardrail, BEHAVIOR_MODES_PREPLAN /
+  ROLE_SEAT_SEPARATION_PLAN S7): no seat, mode, or package may let a
+  generation seat's prose skip criticism.
+
 ## The map — `docs/map/` (read this before scoping any change)
 
 125 000 lines across 34 packages. Do not scope a change by grepping; scope it
