@@ -92,7 +92,7 @@ order. One step per dr-execute-step invocation.
       diff-budget check per current (pre-amendment) step 6 prose.
       done-when: `git log -1 --stat` shows the file; push succeeds.
 
-- [ ] 5. (S1, S2) Mutation-prove the gate: perturb
+- [x] 5. (S1, S2) Mutation-prove the gate: perturb
       `tools/diff_budget.py`'s WITHIN/EXCEEDED comparison operator
       (`<=` -> `<`), re-run `tests/test_diff_budget.py -q` and confirm
       the boundary companion test goes RED; `git checkout --
@@ -102,6 +102,25 @@ order. One step per dr-execute-step invocation.
       named); `git diff --stat tools/diff_budget.py` empty after
       restore; restored run ends `N passed, 0 failed` again — all three
       pasted.
+
+      DONE. Perturbed run (`elif total_insertions <= ceiling:` ->
+      `elif total_insertions < ceiling:`):
+      ```
+      FAILED tests/test_diff_budget.py::test_within_verdict_when_actual_at_or_under_ceiling
+      FAILED tests/test_diff_budget.py::test_boundary_equality_is_within_not_exceeded
+      FAILED tests/test_diff_budget.py::test_against_a_specific_commit_not_the_working_tree
+      FAILED tests/test_diff_budget.py::test_self_test_mode_passes - AssertionError...
+      4 failed, 8 passed in 2.41s
+      ```
+      Killed 4 tests, not just the dedicated boundary-equality
+      companion (three other tests happen to also land exactly on the
+      total==ceiling boundary) -- confirms the mutation is caught, not
+      narrowly. Restore: `git checkout -- tools/diff_budget.py`;
+      `git diff --stat tools/diff_budget.py` empty. Restored run:
+      ```
+      ............                                                             [100%]
+      12 passed in 2.46s
+      ```
 
 - [ ] 6. (S3) [COMMIT] Retrodiction: `git fetch origin
       claude/s5-dr-plan-steps-q5utlc`; run `python tools/diff_budget.py
