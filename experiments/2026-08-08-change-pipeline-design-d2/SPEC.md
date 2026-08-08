@@ -1123,36 +1123,153 @@ untrusted content (M23's own docstring: never an inline `predicate:`
 for model-authored text; the new kind is a `program:` variant, keeping
 that same discipline).
 
-**Where it lives, and what refuting it does (R23, R34) — the whole
-point of this correction.** The commitment lives DIRECTLY on the SAME
-artifact's `Interface.commitments` — exactly like today's skeleton/
-countercondition commitments (M23/M24), never a separate artifact.
-`crit_program` (D1 census M10, UNCHANGED, zero new code) evaluates it
-on the artifact's own cycle; a FAILING commitment registers a
-DEMONSTRATIVE fail warrant with `target_id = this same artifact`,
-refuting the WHOLE conjecture — **and this is CORRECT, not a problem
-to bound or soften** (R34's own words: "failing ones refute
-demonstratively, exactly as criticism should"). `execution_backed`/
-`formally_backed` (D1 census M9, UNCHANGED, zero new code, no wrapper
-function) already grant PROTECTION while the commitment passes, read
-directly from `Interface.commitments` exactly as they do today for any
-other commitment kind — the "incentive story" R34 asks for is fully
-supplied by the EXISTING mechanism, unmodified.
+**Where it lives, and what refuting it does (R23, R34).** The
+commitment lives DIRECTLY on the SAME artifact's
+`Interface.commitments` — exactly like today's skeleton/countercondition
+commitments (M23/M24), never a separate artifact (Amendment 1's own
+law: one artifact per conjecture, unchanged by Amendment 2). `crit_program`
+(D1 census M10, UNCHANGED, zero new code) evaluates it on the
+artifact's own cycle; a FAILING commitment registers a DEMONSTRATIVE
+fail warrant with `target_id = this same artifact`, refuting the WHOLE
+conjecture — **and this is CORRECT, not a problem to bound or soften**
+(R34's own words: "failing ones refute demonstratively, exactly as
+criticism should"). This part is unaffected by Amendment 2 and needs
+no correction.
 
-**R-a (byte-identical absence).** The field is optional
-(`default=None`/empty), mirroring `simulation_proposals`' own
-`default_factory=list` precedent (D1 census M1) — a candidate that
-never populates it behaves byte-identically to today on every existing
-path (`_compile`/`crit_program`/`execution_backed` all already handle
-"zero commitments" as their baseline case).
+### Protection semantics (rev 2, CORRECTED by Amendment 2 — R43-R45)
 
-**R-g argument.** The new `eval` kind is READ by the exact same
-functions that read every other kind today (`programs.evaluate`,
-`execution_backed`, `formally_backed`, `crit_program`) — none of them
-branch on WHICH kind a commitment is when deciding rank, admission, or
-acceptance; they only ever ask "does this pass." Prose-only candidates
-(no commitment at all) are UNCHANGED and UNTOUCHED by this item's own
-code, satisfying R19's corrected, one-directional guardrail.
+**Self-correction, stated plainly before the design.** The paragraph
+this replaces (in this document's own prior commit) claimed
+`execution_backed`/`formally_backed` stay "UNCHANGED, zero new code, no
+wrapper function." Measuring R43's exact requirement against the tree
+shows that claim was WRONG for `formally_backed` specifically, and the
+correction is recorded here rather than silently fixed: R43 requires a
+sustained relatedness challenge to strip ONE commitment from the
+backing set while the ARTIFACT itself stays whatever `Status` it would
+otherwise have. `formally_backed`'s own body (`rules/warrants.py:61-100`,
+D1 census M9) reads only `target.interface.commitments` — a FROZEN
+list on an immutable `Interface` — and consults NO warrant/attack
+state at all. There is no way to "strip" a member of a frozen list at
+read time without a NEW check, and `formally_backed` is the ONLY
+function that decides whether a commitment counts toward the
+"backing set" R43 names. **This section corrects that claim: `formally_backed`
+gains ONE new check, described below, measured against an EXISTING
+precedent rather than invented.**
+
+**The measured precedent (M27): `active_properties`' own
+ACCEPTED-status gate is EXACTLY the "strip from the set on a sustained
+challenge" mechanism R43 describes, already proven in the tree — for a
+DIFFERENT kind of claim (property proposals), not yet generalized.**
+
+```
+$ grep -n "^def active_properties" -A 8 src/deepreason/rules/experiment.py
+188:def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, str]]:
+189:    """ACCEPTED proposed properties targeting the given oracle, as
+190:    (artifact_id, claim, checker_source) in insertion order. ACCEPTED is the
+191:    entire activation gate: a property is refuted on arrival by checker_wf
+192:    (mechanical) or the relevance trial, and can be refuted later by ordinary
+193:    criticism — at which point it drops out of this list AND (edges.py
+194:    source-artifact closure) every verdict it ever minted collapses. If its
+195:    critic is itself refuted, it reinstates and reactivates: N1 throughout."""
+```
+```
+$ sed -n '206,212p' src/deepreason/rules/experiment.py
+        if harness.state.status.get(aid) != Status.ACCEPTED:
+            continue
+        if not any(
+            r.role == RefRole.MENTION and r.target == base_commitment_id
+            for r in artifact.interface.refs
+        ):
+            continue
+```
+A property PROPOSAL is its OWN small `Artifact`, linked to the base
+commitment via `RefRole.MENTION` (M17's own finding: `MENTION` is
+INERT to the support cascade — confirmed again here — it is consulted
+only by readers that explicitly look for it, exactly the shape needed).
+`active_properties` filters strictly on `Status.ACCEPTED` — a
+successfully-challenged proposal's `Status` flips to `REFUTED` (Pass 1,
+kind-blind, D1 census M9(c)) and it DROPS OUT of the list "AND every
+verdict it ever minted collapses" (the module's own docstring). The
+relevance-trial challenge itself (M21) registers its fail warrant with
+`target=prop_artifact.id` — the PROPOSAL artifact, never the base
+commitment or whatever the proposal is about — which is exactly how a
+challenge can defeat ONE claim without touching anything else's
+`Status`.
+
+**The generalization (new, this tranche's own design — not yet in the
+tree, priced here).** A "relatedness claim" — a small `Artifact`,
+`provenance.role="conjecturer"` (or `"encoder"` when coder-seat-
+authored, item 7), content stating what makes the attached commitment
+relevant to the conjecture's own explanation — linked to the
+CONJECTURE artifact via `Ref(target=conjecture.id, role=RefRole.MENTION)`
+(same role, same cascade-inertness, M17). `formally_backed` gains ONE
+new per-commitment check, mirroring `active_properties`' own filter
+shape: for the NEW kind specifically, a commitment counts toward the
+substantive/backing set UNLESS a linked relatedness-claim artifact
+EXISTS and its `Status` is NOT `Status.ACCEPTED` (i.e. it was
+challenged and lost). No linked claim at all (the default — F6 Road B,
+purely reactive, R42) means backing is INTACT — the check is
+OPT-OUT, not OPT-IN, unlike `active_properties`' own OPT-IN shape
+(which requires proposal+admission before a property counts at all).
+This asymmetry is deliberate: a conjecturer's own attached commitment
+already carries an IMPLICIT relatedness claim by construction (R24: "it
+functions solely as a criticizable surface... directly related to the
+explanation" is what the conjecturer asserted by attaching it at all);
+requiring a SEPARATE proactive admission step before it counts at all
+would be exactly the mandatory pre-check F6/Road B rejects.
+
+**Why this is not the rejected twin (stated explicitly, so it is never
+mistaken for one).** Amendment 1 rejected splitting a conjecture's OWN
+CODE from its OWN PROSE into two artifacts (C7/C8) — that rejection is
+untouched here: the commitment (the code) still lives on the SAME
+artifact as the prose, exactly as Item 2's own first paragraph
+describes. The relatedness-claim artifact is not a twin of the
+conjecture and does not carry the commitment — it is a small,
+auxiliary, ALREADY-PRECEDENTED tracking artifact for ONE JUDGMENT
+(is this commitment related), the same shape the DEMONSTRATIVE path's
+own `nu` validity-node artifact already is for a DIFFERENT judgment
+(was this test sound) — D1 census M10's own citation of `register_fail_warrant`
+already mints exactly this kind of small auxiliary artifact today, for
+every single DEMONSTRATIVE warrant in the tree.
+
+**R44 — mechanical re-execution every cycle.** Already true, zero new
+code: `crit_program` (D1 census M10) iterates `target.interface.commitments`
+EVERY time it runs on an artifact, for every cycle that artifact is
+still in play — there is no "run once" shortcut for any commitment
+kind today, and the new kind inherits this for free.
+
+**R45 — execution-supremacy is earned by attack surface, not granted
+with the shield.** `execution_backed`'s own narrow set (D1 census M9:
+`EXEC_PROGRAMS = {exec_oracle, property_oracle, dataset_oracle}`) is
+NOT extended to include the new kind (confirms F7's amended framing,
+supersedes the original F7's own Option B wording, C9). The new kind
+joins `formally_backed`'s wider substantive set (protection/shield)
+via the relatedness-gated check above, but `execution_backed`'s own
+narrower "this specific kind of challenge cannot override a passing
+verdict" guard stays SCOPED to kinds that also carry a counterexample-
+admission path (`try_counterexample`/`admit_counterexample`, D1 census
+M10-M11) and fuzz-probe participation (`crit_fuzz`, config.FUZZ_N) —
+neither is designed or built for the new kind in this tranche. This is
+a DOCUMENTED RULE, not new code: **if a future tranche wires
+counterexample admission and fuzz participation for this kind, IT
+THEN JOINS `EXEC_PROGRAMS`** — supremacy is earned by building that
+machinery, never granted merely by having a passing check today.
+
+**R-a (byte-identical absence/non-use).** Old committed roots have no
+relatedness-claim artifacts and no commitments of the new kind —
+`formally_backed`'s new check is a no-op for them (no linked claim
+found -> backing intact, the SAME answer the unmodified function would
+have given). A candidate that never populates the new field is
+untouched on every path, exactly as before this correction.
+
+**R-g argument.** The relatedness-claim mechanism reads only
+`Status`/`RefRole` — the SAME kind-blind primitives D1's own R-g audit
+(census section 4) already validated for `active_properties` and Pass
+1/2 generally. Nothing here ranks, schedules, or admits based on a
+commitment's KIND — it only ever asks "is THIS SPECIFIC relatedness
+claim, if one was made and challenged, still standing." An informal
+candidate (no commitment at all) never enters this check's domain,
+satisfying R19's one-directional guardrail exactly as Item 1 does.
 
 ### Item 3 (rev 2, R9 — largely unchanged from rev 1, simplified): the verifiable kind signal
 
@@ -1254,24 +1371,54 @@ necessarily):**
 - `tests/test_workload_formal.py` — the extended `ForbiddenCase`/
   skeleton eval vocabulary (new `program:candidate-checker` kind).
 
+**Existing tests that EXPECTED TO MOVE (corrected by Amendment 2 — this
+supersedes this document's own earlier "MUST NOT MOVE" claim for
+`formally_backed`, stated plainly rather than silently fixed):**
+- `tests/test_prose_refutation_boundaries.py` — `formally_backed` gains
+  ONE new per-commitment check (the relatedness-claim gate, protection
+  semantics section above); every EXISTING test in this file must keep
+  passing with BYTE-IDENTICAL verdicts (no linked relatedness claim ->
+  no behavior change), but the file is EXPECTED TO MOVE in the sense
+  that D3 owes it new cases for the new check, not that its existing
+  assertions change.
+
 **Existing tests that MUST NOT MOVE (regression proof the correction
 didn't leak anywhere):**
-- `tests/test_oracle.py`, `tests/test_prose_refutation_boundaries.py`
-  — `execution_backed`/`formally_backed`'s own body/signature, per D1's
-  rev-1 blast-radius census, UNCHANGED (rev 2 needs this even more
-  strongly than rev 1 did, since there is no wrapper function at all
-  now — these functions are reused completely as-is).
-- `tests/test_adjudication.py` — Pass 1/Pass 2 (D1 census M9(c)/M12),
-  untouched by rev 2 exactly as by rev 1 (no new `RefRole`, no new
-  cascade interaction — rev 2 doesn't even need M17's `RefRole` finding
-  anymore, since there is no cross-artifact link to make invisible to
-  it).
+- `tests/test_oracle.py` — `execution_backed`'s own body/signature
+  stays byte-identical (R45: the new kind never joins `EXEC_PROGRAMS`
+  in this tranche) — this file's own existing assertions are untouched.
+- `tests/test_adjudication.py` — Pass 1/Pass 2 (D1 census M9(c)/M12)
+  themselves are untouched: the relatedness-claim artifact's `Status`
+  is computed by the EXISTING, unmodified grounded-extension machinery
+  (M9(c)) exactly like any other artifact's — only `formally_backed`'s
+  own READ of that `Status` is new, not the computation itself.
+- `tests/test_properties.py` — `active_properties`/`RefRole.MENTION`'s
+  OWN existing behavior for property proposals is untouched; the
+  relatedness-claim mechanism reuses the SAME `RefRole` value at a NEW
+  call site (`formally_backed`), never modifying `active_properties`
+  itself.
+
+**Correction to this document's own earlier claim (M17's `RefRole`
+finding), stated plainly:** an earlier passage in this section claimed
+"rev 2 doesn't even need M17's `RefRole` finding anymore, since there
+is no cross-artifact link." That claim is WRONG as of this correction
+— the relatedness-claim artifact IS a cross-artifact link
+(conjecture -> relatedness-claim, via `RefRole.MENTION`), and M17's own
+finding (`MENTION` is inert to `dep_edges`, unlike `DEPENDENCE`) is
+exactly why this link is SAFE to add: it cannot trigger M12's support
+cascade, the same property that made the (rejected) twin's `ENCODES`
+role safe in rev 1. M17 is reused, not avoided.
 
 **New tests owed (none exist yet, named per item 6's five acceptance
-checks above):** a `program:candidate-checker`-kind commitment refuting
-its own artifact on failure; the same kind granting protection on
-success; the R-g grep-provable absence of a new scheduling term; a
-relatedness-challenge test proving it never touches `Status` directly.
+checks above, plus the protection-semantics correction):** a
+`program:candidate-checker`-kind commitment refuting its own artifact
+on failure; the same kind granting protection on success; the R-g
+grep-provable absence of a new scheduling term; a sustained relatedness
+challenge flipping the relatedness-claim artifact's OWN `Status` to
+`REFUTED` while the CONJECTURE artifact's `Status` stays whatever it
+was (proving R43's "shield falls, artifact doesn't" literally); a
+commitment with NO relatedness-claim artifact at all still counting
+toward `formally_backed` (proving F6's opt-out default).
 
 ### Item 7 (rev 2, R38): encoder-role delegation, corrected meaning
 
@@ -1409,9 +1556,10 @@ purely reactive?**
   unchallenged commitment simply stands. RECOMMENDED — matches M25's
   own governing law (emission unconstrained) and R25-R27 exactly.
 
-**F7 — does the new `eval` kind join `execution_backed`'s NARROW
-`EXEC_PROGRAMS` set, or only `formally_backed`'s wider substantive
-set?**
+**F7 (RESOLVED — amended by the operator, R43-R45, not the original
+two-option choice below; kept for the record) — does the new `eval`
+kind join `execution_backed`'s NARROW `EXEC_PROGRAMS` set, or only
+`formally_backed`'s wider substantive set?**
 - Option A: add it to `EXEC_PROGRAMS` (D1 census M9's own set:
   `exec_oracle`/`property_oracle`/`dataset_oracle`). REJECTED-leaning —
   that set's own semantics include counterexample admission
@@ -1419,27 +1567,35 @@ set?**
   need; adding to it silently promises behavior not designed here.
 - Option B: the new kind counts toward `formally_backed`'s wider
   substantive-and-evaluable test (M9) ONLY, not `execution_backed`'s
-  narrower counterexample-eligible set. RECOMMENDED — grants the
-  PROTECTION incentive (R34's own "shield") without silently extending
-  counterexample machinery this tranche never measured or specced.
+  narrower counterexample-eligible set. This was rev 2's own original
+  recommendation and SURVIVES in the amended design (`formally_backed`,
+  relatedness-gated, above) — but the amendment adds a THIRD element
+  neither original option stated: supremacy (`EXEC_PROGRAMS`
+  membership) is EARNABLE later, conditionally, by building
+  counterexample+fuzz support for the kind (R45) — superseding both
+  options' own framing of this as a one-time, permanent choice.
 
 ## Budget (rev 2)
 
-**Headline: ~950 lines of D3 implementation, forecast by item —
-computed as the sum below (rev 1's ~1450-line forecast is superseded;
-kept above for the record):**
+**Headline: ~1150 lines of D3 implementation, forecast by item —
+computed as the sum below (rev 1's ~1450-line forecast and this
+document's own pre-Amendment-2 ~950-line forecast are both superseded;
+kept above for the record — the Amendment 2 correction ADDS scope, it
+does not shrink it, since a real mechanism now exists where "zero new
+code" was first claimed):**
 
 | Item | Forecast (lines) | Basis |
 |---|---|---|
 | Item 1 (no admission gate — zero new code, documentation of existing behavior only) | 0 | M25: nothing is built |
 | Item 2 (new eval kind + wire field on both candidate contracts + `programs.evaluate` dispatch branch) | 280 | mirrors M23/M24's own existing mechanism size, extended |
+| Protection semantics correction (Amendment 2): relatedness-claim artifact minting + `formally_backed`'s new per-commitment check + `execution_backed`'s documented (uncoded) supremacy rule | 150 | mirrors `register_fail_warrant`'s own small-auxiliary-artifact size (D1 census M10) plus one new conditional branch in `formally_backed` |
 | Item 3 (kind signal) | 0 | M9: pre-existing, unextended |
 | Item 4 (pack rendering) | 0 | M8: pre-existing, unextended |
 | Item 5 (relatedness, reusing `relevance_trial`'s shape at a new call site) | 120 | a new call site wiring an EXISTING function's shape, smaller than authoring a new mechanism |
-| Item 6 (R-g acceptance checks, 5 named) | 200 | same basis as rev 1: ~40 lines/regression test |
+| Item 6 (R-g acceptance checks, 5 named + 2 new from the correction) | 250 | same basis as rev 1: ~40 lines/regression test, 2 more added by Amendment 2's own new-tests-owed list |
 | Item 7 (encoder role registration) | 250 | unchanged from rev 1's own F3 estimate |
-| Map document update (`CON-conjecture-kinds.md` v2) | 100 | smaller than rev 1's 230-line estimate — no twin/RefRole/Event sections needed |
-| **Sum** | **950** | 0+280+0+0+120+200+250+100 = 950 |
+| Map document update (`CON-conjecture-kinds.md` v2) | 100 | includes one new `RefRole.MENTION`-reuse section (the relatedness-claim link) — no twin/`ENCODES`/Event sections needed, per rev 1's own comparison |
+| **Sum** | **1150** | 0+280+150+0+0+120+250+250+100 = 1150 |
 
 This SPEC.md's own rev-2 addition size: this appended section. Total
 tranche commits: REQUEST.md (2, capture + amendment), SPEC.md rev 1
@@ -1465,20 +1621,27 @@ Rubric (rev 2): 6/6 yes
   forks (F5-F7) each priced with a recommendation citing a measurement.
 - nothing untraceable to an R/C/M number: yes (re-read pass performed).
 
-## Decision sheet (rev 2) — remaining forks
+## Decision sheet (rev 2) — RESOLVED by Amendment 2 (R41-R45)
 
-**F5 — execution engine wiring.** Recommendation: Option B (reuse
-`_compile`/`oracle_sandbox.py` directly via a new `programs.evaluate`
-dispatch branch, never the dead minting functions). See F5 above for
-the full pricing.
+**F5 — execution engine wiring. RESOLVED: Road/Option B approved
+(R41).** Reuse `_compile`/`oracle_sandbox.py` directly via a new
+`programs.evaluate` dispatch branch, never the dead minting functions.
 
-**F6 — relatedness check timing.** Recommendation: Option B (purely
-reactive, no mandatory pre-admission gate). See F6 above.
+**F6 — relatedness check timing. RESOLVED: Road/Option B approved
+(R42).** Purely reactive, no mandatory pre-admission gate.
 
-**F7 — which protection set the new kind joins.** Recommendation:
-Option B (`formally_backed` only, not `EXEC_PROGRAMS`). See F7 above.
+**F7 — which protection set the new kind joins. RESOLVED, AMENDED
+(R43-R45), not either original option as originally framed.** The new
+kind joins `formally_backed`'s wider set via the relatedness-gated
+check (protection semantics section above); it does NOT join
+`EXEC_PROGRAMS` in this tranche, but MAY in a future one that builds
+matching counterexample+fuzz machinery for it — supremacy earned by
+attack surface, never granted with the shield.
 
-Every road above (F5-F7) awaits the operator's words before
-`dr-plan-steps` (D3) runs, per R16/R40. REQUEST.md and this SPEC.md
-(rev 2) are committed and pushed; this tranche STOPS here again, per
-R40.
+No forks remain open in this document. Per R47/R48 (superseding R40's
+own "stop again for operator words" now that the operator has supplied
+them for F5-F7), this tranche proceeds directly to `dr-plan-steps` —
+see `CHECKLIST.md` in this same tranche directory. This SPEC.md (rev 2,
+corrected) is committed and pushed alongside it; the tranche stops
+again only after `CHECKLIST.md` is committed, per R48, before any
+`dr-execute-step`.
