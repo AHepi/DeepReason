@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=32 blockers=none
+State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=34 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -820,9 +820,20 @@ on the five surfaces is a STOP.
       choice (assignments alone do NOT trip it).
       done-when: `python -m pytest tests/test_programs.py -k is_pure_code -q` -> all new cases pass, 0 failed. MUST NOT touch: the
       five frozen surfaces (this file is `programs.py`, none of them).
-- [ ] 33. (Item 8) [COMMIT] Commit step 32.
+      DONE — new `tests/test_programs.py` (no prior file existed) with
+      8 cases (M30's own 6 plus the bare-assignment case from A6, plus
+      an empty-content case). `python -m pytest tests/test_programs.py
+      -k is_pure_code -q` -> 8 passed. Mutation-proved: replaced the
+      final `return all(...)` with `return False` -> 3 of 8 tests
+      correctly failed (the three TRUE-positive rejection cases);
+      reverted, re-verified 8 passed. Ring re-run (test_programs +
+      test_oracle + test_informal): 75 passed, 0 failed.
+- [x] 33. (Item 8) [COMMIT] Commit step 32.
       done-when: diff-budget running total <= 175; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat b84b69e4 -- src/ tests/`: 2 files
+      changed, 80 insertions(+) -> running total 80 of 175. Frozen-
+      surface diff: empty. Pushed.
 - [ ] 34. (Item 8, M28) Extend `workloads/text.py::reasoning_wf_program`
       to call `is_pure_code` against `envelope.claim` and
       `envelope.mechanism`, failing (with a clear error message naming

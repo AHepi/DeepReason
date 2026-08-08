@@ -93,6 +93,36 @@ def content_text(artifact: Artifact, blobs) -> str:
         return ""
 
 
+_CODE_ONLY_NODES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Import, ast.ImportFrom)
+
+
+def is_pure_code(text: str) -> bool:
+    """True iff ``text`` is ENTIRELY code with no explanatory prose (D2
+    Amendment 4, R20/R54): a conjecture can never be full code, but this
+    is deliberately narrow — only a submission consisting SOLELY of
+    function/class/import statements trips it. Real prose is essentially
+    never syntactically valid Python, so this mechanical, kind-blind test
+    catches the unambiguous case (a bare function or class definition)
+    without risking a false positive on a worked-example-style
+    explanation that happens to parse (e.g. bare assignments), or on a
+    prose string quoting code inline (which is not valid Python syntax as
+    a whole, so it never reaches this branch at all)."""
+    try:
+        tree = ast.parse(text)
+    except (SyntaxError, ValueError):
+        return False
+    if not tree.body:
+        return False
+    if (
+        len(tree.body) == 1
+        and isinstance(tree.body[0], ast.Expr)
+        and isinstance(tree.body[0].value, ast.Constant)
+        and isinstance(tree.body[0].value.value, str)
+    ):
+        return False  # a bare string literal (e.g. a docstring-only submission) IS prose
+    return all(isinstance(node, _CODE_ONLY_NODES) for node in tree.body)
+
+
 _SAFE_NAMES = {
     "len": len, "any": any, "all": all, "min": min, "max": max, "abs": abs,
     "sum": sum, "str": str, "int": int, "float": float, "sorted": sorted,
