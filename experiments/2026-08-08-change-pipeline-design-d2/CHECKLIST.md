@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=40 blockers=none
+State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 (steps 32-43) complete; next=dr-validate-change (re-run for Amendment 4), then STOP before delivery
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -974,13 +974,29 @@ on the five surfaces is a STOP.
       pre-existing PARKED failures P-D2-1, zero new). `--audit ->
       0 finding(s)`. `--links -> 0 dangling reference(s), 53
       document(s)`.
-- [ ] 42. (all) Full gate: `python -m pytest tests/ -q -n 4`.
+- [x] 42. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends "N passed, M failed" (paste it verbatim);
       any failure read against PARKED.md's existing P-D2-1/2/3 ledger
       before being called a regression — expect exactly those 3 and no
       more.
-- [ ] 43. (all) [COMMIT] Final push and clean-tree confirmation.
+      DONE — `3 failed, 3415 passed, 7 skipped in 797.84s (0:13:17)`.
+      The 3 failures are exactly
+      `test_bronze_report.py::test_census_totals_internally_consistent`,
+      `test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`,
+      `test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+      — PARKED.md P-D2-3/P-D2-1/P-D2-2, already confirmed pre-existing
+      at the tranche's own base commit, zero new. 3415 vs the main
+      tranche's own 3399 = +16, exactly this amendment's own new test
+      count (8 `is_pure_code` + 4 `reasoning_wf_program` + 4
+      `skeleton_wf`).
+- [x] 43. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND `git log
       --oneline -1 origin/claude/pipeline-design-d2` matches local
       HEAD; total diff-budget for this amendment pasted one final time
       against the 175-line ceiling.
+      DONE — final `git diff --stat b84b69e4 -- src/ tests/`: 6 files
+      changed, 198 insertions(+) -> 198 of 175 (23 over, accepted and
+      recorded at step 37). Frozen-surface diff: empty across the
+      whole amendment. Local HEAD and remote
+      `origin/claude/pipeline-design-d2` HEAD match after this
+      commit's own push (pasted below).
