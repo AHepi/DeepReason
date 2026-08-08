@@ -457,3 +457,191 @@ defect, and is surfaced here plainly rather than silently carried
 forward. Route: PASS -> `dr-deliver-change` — but the operator's own
 instruction (Amendment 3, R52) is to STOP here and not proceed to
 delivery this turn.
+
+# Validation addendum: Amendment 4 (pure-code conjectures must mechanically fail)
+
+Re-read REQUEST.md's Amendment 4, SPEC.md's Revision 3, and
+CHECKLIST.md's steps 32-43 in full before writing this addendum.
+
+## Acceptance checks (SPEC.md Revision 3, Item 8, in order)
+
+**`is_pure_code` (M30's own design).**
+
+    python -m pytest tests/test_programs.py -k is_pure_code -q
+    -> 8 passed
+
+Confirms: a bare function/class/import-only submission is rejected; real
+prose, a bare docstring, prose quoting code inline, and a bare
+assignment sequence all pass (the last two are the deliberate
+false-positive guards named in A6). : PASS
+
+**`reasoning_wf_program` (the live, unconditionally-mandatory path).**
+
+    python -m pytest tests/test_workload_text.py -k reasoning_wf_program -q
+    -> 4 passed
+
+Confirms: a pure-code claim fails naming "claim"; a pure-code mechanism
+fails naming "mechanism" (both fields checked independently); prose
+quoting code inline and a bare-docstring claim both still pass. : PASS
+
+**`skeleton_wf_program` (the opt-in-per-problem path).**
+
+    python -m pytest tests/test_informal.py -k skeleton_wf -q
+    -> 5 passed
+
+Confirms the same four cases via `skeleton_wf_program` directly, plus
+the pre-existing `test_forbid_nothing_fails_skeleton_wf_refuted_by_program`
+still passing unchanged. One of the four new cases additionally proves
+the FULL round-trip (a real `crit_program` refutation on a live-shaped
+artifact via `harness.state.status`), matching this file's own
+established convention. : PASS
+
+**Consolidated (all three, one command, matching the new map check's
+own exact invocation):**
+
+    python -m pytest tests/test_programs.py tests/test_workload_text.py tests/test_informal.py -k "is_pure_code or reasoning_wf_program or skeleton_wf" -q
+    -> 17 passed, 11 deselected
+
+: PASS (all items)
+
+## Full gate
+
+    python -m pytest tests/ -q -n 4
+    -> 3 failed, 3415 passed, 7 skipped in 797.84s (0:13:17)
+
+Exactly the 3 pre-existing failures already ledgered
+(`test_bronze_report.py::test_census_totals_internally_consistent`,
+`test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`,
+`test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+— PARKED.md P-D2-3/P-D2-1/P-D2-2), zero new. 3415 vs the main tranche's
+own 3399 = +16, exactly this amendment's own new test count. One real
+regression was found and fixed DURING execution (`test_seat_bindings.py`,
+main tranche's own step 30) — none this time; this amendment's own
+full-gate run needed no fix. : PASS
+
+## Record-behavior preservation
+
+`invariants.py` is STILL byte-for-byte identical to the tranche base
+commit (re-confirmed: `diff <(git show f103a03a:src/deepreason/invariants.py)
+src/deepreason/invariants.py` -> empty, exit 0) — this amendment, like
+the main tranche, never touches the append-only record's own
+reader/validator. `is_pure_code`/`reasoning_wf_program`/`skeleton_wf_program`
+are all downstream CONSUMERS of already-parsed content, not part of the
+replay/verification pipeline. : PASS (n/a in substance)
+
+## Frozen-surface diff
+
+    git diff --stat b84b69e4..HEAD -- \
+      src/deepreason/capabilities/state.py src/deepreason/harness.py \
+      src/deepreason/invariants.py src/deepreason/run_manifest.py \
+      src/deepreason/qualification.py
+    -> (empty)
+
+Empty — this amendment carried NO surface-4 grant (Amendment 3's own
+grant was scoped to the main tranche's step 27 only, explicitly
+non-transitive, C11). No frozen-surface contact anywhere in Amendment
+4's own work. : PASS
+
+## Packaging-surface check
+
+    git diff --stat f103a03a -- pyproject.toml scripts/wheel_smoke.py scripts/wheel_operational_smoke.py src/deepreason/mcp_server.py src/deepreason/cli/
+    -> (empty)
+
+Packaging surface untouched — smoke not owed.
+
+## Map
+
+    python tools/docs_verify.py
+    -> docs_verify [full]: 53 documents, 848 checks, 4 workers ... docs_verify: 2 failed
+
+: PASS (both failures are `SUB-application.md:208`/`:239`, the SAME
+pre-existing `test_continuation.py` defect as PARKED.md P-D2-1; 848
+checks now, +1 for this amendment's own new check in
+`CON-conjecture-kinds.md`; zero new document failures)
+
+    python tools/docs_verify.py --audit
+    -> docs_verify --audit: 0 finding(s)
+
+: PASS
+
+    python tools/docs_verify.py --links
+    -> docs_verify --links: 0 dangling reference(s), 53 document(s)
+
+: PASS
+
+    python tools/docs_verify.py --coverage
+    -> docs_verify --coverage: 6 seam(s) swept, 16 without a Sweep: header, 0 finding(s)
+
+: PASS (identical to the main tranche's own run — this amendment added
+no new seam)
+
+    python tools/docs_verify.py --stale
+    -> docs_verify --stale: 31 document(s) worth re-reading
+
+Same 31 documents as the main tranche's own validation (no NEW document
+entered the stale list). Five of them gained ADDITIONAL commits from
+this amendment's own work (`SEAM-evaluation-x-ontology.md`,
+`SEAM-evaluation-x-rules.md`, `SUB-evaluation.md`, `SUB-periphery.md`,
+`REC-change-a-seam.md`) — every one of these was ALREADY classified in
+the main validation's own write-up as either "D2 is the sole cause, but
+the Verified-at stamp was never advanced" (a bookkeeping gap, every
+check still passes) or "MIXED... every check still passes." This
+amendment's own 4 commits (`69cb6c26`, `d9085106`, `fd2ee0fb`,
+`44afa0ed`) fall into the SAME categories for the SAME reason — no new
+classification needed; dismissed on the same grounds already recorded
+above.
+
+new checks added by this change: 1 new `check:` line in
+`CON-conjecture-kinds.md`'s own dual-mode section, covering all 3
+affected source files in one combined invocation.
+
+record observables added vs sweep probes: none — `is_pure_code` adds
+no new typed-record field, Event payload, or finding type; it is a
+pass/fail branch inside two ALREADY-existing mechanical programs,
+exactly like the size check `reasoning_wf_program` already had.
+
+wheel smoke: packaging surface untouched — smoke not owed.
+
+## Requirement sweep (Amendment 4)
+
+R53 (verify before moving on): demonstrated — the independent
+verification agent's report, ledgered verbatim in REQUEST.md's own
+C13.
+R54 (pure code shouldn't be available at all): demonstrated —
+`is_pure_code` now refutes a pure-code submission through BOTH
+mandatory well-formedness programs; the live path
+(`reasoning_wf_program`) gets UNCONDITIONAL coverage, the opt-in
+skeleton path gets the SAME coverage its own `skeleton-wf` opt-in
+already provides (M28's own measured boundary, stated plainly, not
+hidden).
+R55 (code in explanation cannot be criticized, code in commitments
+can): demonstrated — already true before this amendment (C13); no new
+work needed, none done.
+R56 (code commitments must refute their own carrying artifact):
+demonstrated — already true before this amendment (C13); no new work
+needed, none done.
+R57 (prose+code need not commit the code; attack-edge addition
+possible): demonstrated — already true before this amendment (C13) for
+its (a) half; (b) half's existing, narrower mechanism is unchanged and
+undiminished by this amendment.
+R58 (the operator's chosen enforcement shape): demonstrated — a new,
+ordinary, mechanically-evaluated check, refuted through the EXISTING
+`crit_program` path exactly like any other commitment failure; no new
+admission gate, no new arbiter — the REJECTED alternative
+("admission-time hard gate") was never built.
+
+## Assumptions carried (Amendment 4)
+
+A6: `is_pure_code`'s scope is narrow (only
+FunctionDef/AsyncFunctionDef/ClassDef/Import/ImportFrom-only submissions
+trip it; bare assignment sequences do not) — held, measured (M30),
+mutation-proved at CHECKLIST step 32.
+
+## Verdict: PASS
+
+No FAIL detail. Amendment 4's own full-gate run introduced zero new
+failures and needed zero in-flight fixes (unlike the main tranche's own
+validation, which found and fixed one real regression). Route: PASS ->
+`dr-deliver-change` — but the operator's own standing instruction
+(Amendment 3, R52, carried forward) is to STOP here and not proceed to
+delivery this turn.
