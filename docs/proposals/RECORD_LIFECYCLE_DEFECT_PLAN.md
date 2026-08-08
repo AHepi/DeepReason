@@ -1,5 +1,15 @@
 # Defect program: the log — a run's record can end invalid, and the repair path can crash
 
+Status: PARTIALLY SUPERSEDED (2026-08-08, same day, by the operator's
+own reframe — see `CODER_AS_TOOL_PREPLAN.md`, which ledgers the words).
+What survives of this plan: **L1 stands unchanged** (the continue-crash
+fix, committed fixture) and **L3 stands** (seat bindings in run
+identity). **L2 is reclassified** — the operator: "Actually no. This
+could be a feature. It tells us something minor about what models fit
+best in which roles." The throughput imbalance is a model-role fit
+SIGNAL, recorded as research input, not scheduler work. **L4 is
+absorbed** into the coder-as-tool plan's T1/T2.
+
 Status: PROPOSED. Written 2026-08-08 by the monitor session on the
 operator's instruction ("there's a big problem that needs fixing. The
 log. Come up with the plan"), from Rung S6's live evidence
