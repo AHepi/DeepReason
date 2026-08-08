@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=11 blockers=none
+State: next=12 blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -264,12 +264,22 @@ order. One step per dr-execute-step invocation.
       docs_verify: 0 failed
       ```
 
-- [ ] 11. (all) Full gate: `python -m pytest tests/ -q -n 4`.
+- [x] 11. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends `N passed, M failed` with the only
       failure(s) being the named pre-existing P1/P3
       (`tests/test_module_fingerprints.py::
       test_absence_is_valid_before_the_feature_and_presence_valid_after`),
       pasted.
+
+      DONE.
+      ```
+      FAILED tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after
+      1 failed, 3395 passed, 7 skipped in 738.25s (0:12:18)
+      ```
+      Same test id as the pristine-base baseline (A2, `1 failed, 3382
+      passed, 7 skipped` before this tranche touched anything); 3395 =
+      3382 + 13 new tests in `tests/test_diff_budget.py`. Net of P1/P3:
+      **3395 passed, 0 failed.**
 
 - [ ] 12. (all) [COMMIT] Final CHECKLIST.md update (all boxes checked,
       State: line advanced to `next=none`); push and confirm clean
