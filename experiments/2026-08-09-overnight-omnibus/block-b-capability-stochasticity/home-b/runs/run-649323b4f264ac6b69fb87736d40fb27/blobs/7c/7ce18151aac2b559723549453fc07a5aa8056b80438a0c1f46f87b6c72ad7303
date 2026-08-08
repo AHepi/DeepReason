@@ -1,0 +1,10 @@
+```json
+{
+  "pointers": ["/candidate/checker_specs/0/role"],
+  "operations": [
+    {
+      "op": "remove"
+    }
+  ]
+}
+```

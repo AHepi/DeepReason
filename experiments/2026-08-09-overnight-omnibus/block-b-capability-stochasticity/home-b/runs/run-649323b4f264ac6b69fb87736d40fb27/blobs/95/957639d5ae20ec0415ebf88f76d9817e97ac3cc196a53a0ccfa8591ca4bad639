@@ -1,0 +1,25 @@
+```json
+{
+  "repair_type": "repair.patch.v1",
+  "authorized_pointer": "/candidates/0/evidence_refs",
+  "operation": "replace",
+  "value": [
+    {
+      "block": "1c2d18924a3064bc",
+      "quote": "the whole source is exactly one `def simulate(inputs, rng)` and nothing else"
+    },
+    {
+      "block": "a3db120ba929af11",
+      "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself"
+    },
+    {
+      "block": "c6c31b919b1cd091",
+      "quote": "The only way to learn the actual counts is to run the exact recurrence, in code, and tally the results."
+    },
+    {
+      "block": "ff5f75b13b928302",
+      "quote": "RETURN the six face counts as flat observables (`count_1` .. `count_6`) plus `total`"
+    }
+  ]
+}
+```

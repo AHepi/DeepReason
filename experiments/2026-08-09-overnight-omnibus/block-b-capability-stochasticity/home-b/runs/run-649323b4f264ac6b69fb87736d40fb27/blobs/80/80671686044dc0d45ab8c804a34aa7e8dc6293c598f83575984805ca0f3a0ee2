@@ -1,0 +1,39 @@
+{
+  "candidate": {
+    "claim": "A single typed sandboxed Python program is required to determine whether the generator is fair: the program must implement the exact recurrence X_{n+1} = (1103515245 * X_n + 12345) mod 2^31 starting from X_0 = 42, map each state to die_n = 1 + (X_n mod 6), run n = 1..10000 deterministically and self-contained, and return first the first ten (X_n, die_n) pairs as a calibration trace, then the six flat face-count observables (count_1..count_6) and total.",
+    "mechanism": "The exact face-count distribution of this specific pseudorandom sequence has no closed form to evaluate by hand at n=10000. Because the verdict depends entirely on whether every count falls within two standard deviations of the uniform expectation (10000/6, with SD sqrt(10000*(1/6)*(5/6))), the discriminating quantity is the six counts themselves plus the calibration trace. A self-contained, deterministic Python function `simulate(inputs, rng)` can carry the fixed recurrence and return the flat observables.",
+    "counterconditions": [
+      "The candidate is refuted if any closed-form shortcut is demonstrated that yields the exact counts without running the full recurrence.",
+      "The candidate is refuted if the specified generator's fairness can be certified or falsified from theory without the empirical tally at n=10000.",
+      "The candidate is refuted if the calibration trace (first ten X_n, die_n pairs) does not match the specification, because then the tally cannot be trusted as evidence.",
+      "The candidate is refuted if the program is not exactly one `def simulate(inputs, rng)` returning the mapping, per the fixed program shape."
+    ],
+    "evidence_refs": [
+      {
+        "block": "c6c31b919b1cd091",
+        "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"
+      },
+      {
+        "block": "1c2d18924a3064bc",
+        "quote": "The program's shape is fixed and the schema states it: the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS "
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      },
+      {
+        "block": "a3db120ba929af11",
+        "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself -- the six counts, the calibration trace -- never a "
+      },
+      {
+        "block": "6415222753a4ceb9",
+        "quote": "Contained Python: scratch working directory, scrubbed environment, hard resource limits, no network. The program must be deterministic and self-contained -- the"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.98
+  }
+}

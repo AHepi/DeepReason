@@ -1,0 +1,10 @@
+```json
+{
+  "patch": [
+    {
+      "op": "remove",
+      "path": "/candidate/checker_specs/0/role"
+    }
+  ]
+}
+```

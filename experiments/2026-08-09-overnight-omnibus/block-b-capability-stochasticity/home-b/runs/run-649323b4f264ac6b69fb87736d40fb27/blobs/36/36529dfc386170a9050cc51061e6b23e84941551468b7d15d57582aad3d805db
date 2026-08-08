@@ -1,0 +1,14 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/values",
+    "operation": "replace",
+    "value": [
+      {
+        "name": "dummy",
+        "values_json": "{}"
+      }
+    ]
+  }
+}
+```
