@@ -17,6 +17,7 @@ EXCLUDED and counted with its reason, never guessed into a verdict.
 import itertools
 import pathlib
 import sys
+import time
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from overlay_common import corpus, open_root  # noqa: E402
@@ -28,6 +29,11 @@ from deepreason.programs import content_text  # noqa: E402
 from deepreason.rules.warrants import formally_backed  # noqa: E402
 
 MAX_FUZZ_SAMPLES = 32
+# Root-level bounds (SPEC.md S7's own "bounded budget, typed
+# INCONCLUSIVE when it dies"): a root with many comparable pairs must
+# not turn into an unbounded subprocess fan-out.
+MAX_DYNAMIC_PROBES_PER_ROOT = 15
+ROOT_WALLCLOCK_BUDGET_S = 60
 _SENTINEL = "__O1B_NEVER_MATCHES_SENTINEL__"
 
 
@@ -141,6 +147,8 @@ def analyze_root(root: pathlib.Path) -> dict:
         comparable_pairs.append((a, b, matched[0]))
 
     probe_results = []
+    root_deadline = time.monotonic() + ROOT_WALLCLOCK_BUDGET_S
+    dynamic_probes_run = 0
     for a, b, (cid_a, spec_a, cid_b, spec_b) in comparable_pairs:
         contradiction = _literal_overlap_contradiction(spec_a, spec_b)
         if contradiction is not None:
@@ -154,6 +162,24 @@ def analyze_root(root: pathlib.Path) -> dict:
                 }
             )
             continue
+
+        # Root-level bounded budget (SPEC.md S7's own "bounded budget,
+        # typed INCONCLUSIVE when it dies" — a single root with many
+        # comparable pairs must not turn into an unbounded subprocess
+        # fan-out): once the wall-clock or pair-count budget is spent,
+        # every REMAINING comparable pair is reported INCONCLUSIVE
+        # rather than silently skipped or run to a hang.
+        if dynamic_probes_run >= MAX_DYNAMIC_PROBES_PER_ROOT or time.monotonic() > root_deadline:
+            probe_results.append(
+                {
+                    "pair": (a, b),
+                    "commitments": (cid_a, cid_b),
+                    "verdict": "INCONCLUSIVE",
+                    "evidence": {"reason": "root-level dynamic-probe budget exhausted"},
+                }
+            )
+            continue
+        dynamic_probes_run += 1
 
         candidates = _candidate_inputs(spec_a["tests"], spec_b["tests"])
         if not candidates:

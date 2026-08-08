@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=14 blockers=none
+State: next=16 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -105,14 +105,40 @@ order. One step per dr-execute-step invocation.
       DONE — syntax OK.
 - [x] 13. (S10) [COMMIT] Commit and push `run_all_overlays.py`.
       done-when: pushed, confirmed on origin.
-- [ ] 14. (S5, S7, S8, S9, S10) Run the driver over the full corpus;
+- [x] 14. (S5, S7, S8, S9, S10) Run the driver over the full corpus;
       paste the per-root node/edge counts (O1a's own ordering
       requirement: pasted BEFORE any TOO_LARGE-gated computation is
       trusted) and the wall-clock total.
       done-when: `python3 experiments/2026-08-08-change-grounded-overlay-o1/scripts/run_all_overlays.py`
       exits 0; `wc -l experiments/2026-08-08-change-grounded-overlay-o1/overlay_results.jsonl`
       matches the corpus count from step 2 (paste both numbers).
-- [ ] 15. (S10) [COMMIT] Commit and push `overlay_results.jsonl`.
+      DONE — 48/48 roots processed, `overlay_results.jsonl` has 48
+      lines (matches step 2's corpus count exactly); wall-clock
+      4m6.408s. Before this run, each overlay module was independently
+      timed standalone on the full corpus to de-risk the sweep (o1a
+      ~fast/bounded by the 16-node cap; o1c fast; o1d fast — every
+      accepted artifact's flip-histogram bucket landed at 0 across
+      every root, a genuine measured finding, not a script bug; o1b
+      fast because `comparable_pairs=0` on every root — spot-checked
+      on the largest formally-backed root
+      (`live_research_2026-07-29/selfstudy/.../completed-epoch3-...`,
+      48 formally-backed artifacts, 1128 excluded pairs) and confirmed
+      the exclusion reason is 100% `"not both exec-oracle-class"` —
+      this corpus's formally-backed artifacts are predicate:/
+      property_oracle:-class, not exec_oracle:-class, so O1b's own
+      machine-comparable-gate restriction (SPEC.md A4) excludes the
+      whole corpus honestly rather than a bug silently zeroing it).
+      A defensive per-root wall-clock/pair-count budget
+      (`ROOT_WALLCLOCK_BUDGET_S=60`, `MAX_DYNAMIC_PROBES_PER_ROOT=15`)
+      was added to `o1b_joint_execution_probe.py` before this run,
+      discovered as a genuine gap while de-risking (SPEC.md S7's own
+      "bounded budget" requirement was under-specified in the first
+      draft) — a mid-step correction, not scope creep. Confirmed the
+      known 11-ERROR baseline (`UnsupportedRunManifestVersionError`)
+      matches `docs/map/INV-frozen-surfaces.md`'s own documented sweep
+      baseline exactly, cross-validating this tranche's own corpus
+      enumeration against the existing instrument.
+- [x] 15. (S10) [COMMIT] Commit and push `overlay_results.jsonl`.
       done-when: pushed, confirmed on origin.
 - [ ] 16. (S11) Write `REPORT.md`: per-root, per-overlay M-numbered rows
       with pasted commands reading back `overlay_results.jsonl` (or
