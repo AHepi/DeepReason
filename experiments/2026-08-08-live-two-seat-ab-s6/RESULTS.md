@@ -426,3 +426,26 @@ single `reason` invocation (never needing a mid-decomposition
 point the way run1's did.
 
 Failure budget: 4/10 spent.
+
+## 2026-08-08 — Failure #5 (config error): 220000 exceeded the V6 policy's fixed token-budget ceiling
+
+The relaunch with `--cycles 10 --token-budget 220000` refused typed in
+1 second, before qualification even had a chance to matter:
+
+```
+1 validation error for RunPreparationRequestV1
+  Value error, public budget must be finite and within the fixed V6
+  policy ceiling: cycles <= 12 and token budget 1..200000 (requested
+  cycles=10, token_budget=220000)
+```
+
+A straightforward knob mistake: I raised the budget to reduce the
+chance of a repeat of Failure #4 without checking the V6 policy's own
+fixed ceiling first. `s6_run_v2.sh` corrected to `--cycles 10
+--token-budget 195000` — within the 200000 ceiling, keeping as much of
+the intended headroom as the policy allows. No interaction with
+qualification or the run's identity (the request never got far enough
+to compute one); the already-qualified caches remain valid and reused
+on relaunch.
+
+Failure budget: 5/10 spent.
