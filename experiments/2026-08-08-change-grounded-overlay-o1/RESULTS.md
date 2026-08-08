@@ -151,13 +151,15 @@ this tranche.
 
 ## Not fixed here
 
-No defect was found in `src/`, `tests/`, or `tools/` during this
-tranche — see PARKED.md's "no defects found this tranche" line. The
-`_candidate_inputs`/`_literal_overlap_contradiction` bytes-key bug and
-the O1b per-root wall-clock/pair-count budget gap were both caught and
-fixed WITHIN this tranche's own scripts (`scripts/`, not `src/`) before
-being run over the corpus — normal script-development iteration, not a
-defect against the harness.
+**No defects found this tranche.** No defect was found in `src/`,
+`tests/`, or `tools/` during this tranche, so no `PARKED.md` is
+created (per this program's own convention: an empty `PARKED.md` is
+not written when nothing was found). The `_candidate_inputs`/
+`_literal_overlap_contradiction` bytes-key bug and the O1b per-root
+wall-clock/pair-count budget gap were both caught and fixed WITHIN
+this tranche's own scripts (`scripts/`, not `src/`) before being run
+over the corpus — normal script-development iteration, not a defect
+against the harness.
 
 ## Verdict
 

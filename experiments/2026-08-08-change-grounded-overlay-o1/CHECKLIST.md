@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=21 blockers=none
+State: next=22 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -190,13 +190,16 @@ order. One step per dr-execute-step invocation.
 - [x] 20. (S16) [COMMIT] Commit and push `RESULTS.md` (and the map
       document + `INDEX.md` edit, if step 19 created one).
       done-when: pushed, confirmed on origin.
-- [ ] 21. (S14) Record any defect noticed during steps 3-20 in
+- [x] 21. (S14) Record any defect noticed during steps 3-20 in
       PARKED.md with a ready-to-send `dr-set-goal` prompt. If none
       found, state that explicitly in RESULTS.md instead of creating an
       empty PARKED.md.
       done-when: either `test -f experiments/2026-08-08-change-grounded-overlay-o1/PARKED.md`
       -> exit 0 with >=1 entry, or RESULTS.md states "no defects found
       this tranche" (mutually exclusive, one must hold).
+      DONE — no `src/`/`tests/`/`tools/` defect found; RESULTS.md's
+      "Not fixed here" section states "No defects found this tranche."
+      verbatim; no PARKED.md created.
 - [ ] 22. (S13) Zero-diff tripwire, re-pasted at the boundary (not
       trusted from step 1 alone — the whole tranche ran since then).
       done-when: `git diff --stat origin/claude/monitor-session-handover-63ajqv...HEAD -- src/ tests/ tools/`
