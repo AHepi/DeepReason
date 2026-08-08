@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=18 blockers=none
+State: next=21 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -160,7 +160,7 @@ order. One step per dr-execute-step invocation.
       root + member id.
 - [x] 17. (S11) [COMMIT] Commit and push `REPORT.md`.
       done-when: pushed, confirmed on origin.
-- [ ] 18. (S12) Write `RESULTS.md`: honest-ledger segment naming what
+- [x] 18. (S12) Write `RESULTS.md`: honest-ledger segment naming what
       each overlay found (including a genuine zero/negative result
       where that is what the corpus shows), and the residue section
       naming the LLM-consistency-patrol blind spot verbatim plus each
@@ -168,7 +168,9 @@ order. One step per dr-execute-step invocation.
       residue items).
       done-when: `grep -q "consistency patrol" experiments/2026-08-08-change-grounded-overlay-o1/RESULTS.md`
       -> exit 0.
-- [ ] 19. (S16) Decide, from REPORT.md/RESULTS.md's actual findings,
+      DONE — grep found the phrase; RESULTS.md also names each
+      overlay's own narrower residue.
+- [x] 19. (S16) Decide, from REPORT.md/RESULTS.md's actual findings,
       whether a new map document `docs/map/CON-grounded-overlays.md` is
       warranted (SPEC.md's own triage: a durable, reusable concept, not
       a null result). If yes: write it per `docs/map/SCHEMA.md`'s
@@ -178,7 +180,14 @@ order. One step per dr-execute-step invocation.
       done-when: either `test -f docs/map/CON-grounded-overlays.md` ->
       exit 0 with its checks individually verified passing, or
       RESULTS.md contains a one-line "no new map document" rationale.
-- [ ] 20. (S16) [COMMIT] Commit and push `RESULTS.md` (and the map
+      DONE — decided NO new map document: `docs/map/INDEX.md`'s own
+      "Coverage, stated honestly" section states the map describes
+      `src/deepreason/` only, and `experiments/` tranches are
+      "navigated by convention" instead. This rung's scripts own no
+      `src/` file and add no `src/` symbol, so a `SCHEMA.md`-anatomy
+      `Owns:` header would have nothing real to point at. RESULTS.md's
+      own "No new map document" section states the full reasoning.
+- [x] 20. (S16) [COMMIT] Commit and push `RESULTS.md` (and the map
       document + `INDEX.md` edit, if step 19 created one).
       done-when: pushed, confirmed on origin.
 - [ ] 21. (S14) Record any defect noticed during steps 3-20 in
