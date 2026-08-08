@@ -535,7 +535,151 @@ informal target must meet.
 
 ## 3. Refutation semantics per kind (R8, SPEC.md S7)
 
-(filled in step 8)
+### M10 — the DEMONSTRATIVE path: what dies
+
+```
+$ sed -n '895,919p' src/deepreason/rules/crit.py
+def crit_program(harness, target_id: str) -> list[Artifact]:
+    """Evaluate the target's commitments; register a critic per failure."""
+    target = harness.state.artifacts[target_id]
+    critics: list[Artifact] = []
+    for cid in target.interface.commitments:
+        kappa = harness.commitments.get(cid)
+        if kappa is None or not programs.evaluable(kappa):
+            continue
+        if verdict_on_record(harness, cid, target_id):
+            continue
+        verdict, trace = programs.evaluate(kappa, target, harness.blobs)
+        pending_key = (cid, target_id)
+        if trace.get("sandbox_abort"):
+            harness._oracle_pending.add(pending_key)
+            continue
+        harness._oracle_pending.discard(pending_key)
+        if verdict != programs.FAIL:
+            continue
+        critics.append(register_fail_warrant(harness, ...))
+    return critics
+```
+```
+$ grep -n "class Status" -A 7 src/deepreason/ontology/state.py
+16:class Status(str, Enum):
+17:    ACCEPTED = "accepted"
+18:    REFUTED = "refuted"
+19:    SUSPENDED = "suspended"
+20:    SUSPENDED_UNSUPPORTED = "suspended_unsupported"
+```
+A DEMONSTRATIVE fail warrant registers a critic artifact carrying
+`WarrantType.DEMONSTRATIVE`, `commitment=<the failed kappa's id>`,
+`verdict="fail"`, and an attackable `validity_node` (nu, asserting the
+test was sound and relevant) — the `Warrant` model's own field comment
+marks `commitment`/`verdict` "Demonstrative-only fields"
+(`ontology/warrant.py:24-26`). The adjudication pass (Pass 1, attack
+edges from warrants) turns this into a `Status.REFUTED` label on the
+TARGET ARTIFACT ITSELF — today's system has no separate "encoding"
+object distinct from the conjectured artifact (that split is D2/D3
+territory, not built yet), so what "dies" is the one artifact that
+carried the failing commitment. The nu node remains independently
+attackable (N1: "execution can still refute" — `warrants.py`'s own
+`execution_backed` docstring) — a critic can contest whether the test
+itself was sound/relevant, which is the recourse against a wrong or
+unsound oracle, distinct from contesting the target's content.
+
+### M11 — what a trial-guarded prose refutation can and cannot do
+
+```
+$ grep -n "def run_argument_trial_from_case\|def _argument_trial_steps" src/deepreason/informal/trial.py
+553:def run_argument_trial_from_case(
+601:def _argument_trial_steps(
+```
+```
+$ sed -n '559,571p' src/deepreason/informal/trial.py
+    """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
+    New calls are advisory by default. Explicit canonical ``status``
+    authority is required to enter the defended court path. ... The defender
+    answers, the frozen cross-family judge ensemble rules, and the existing
+    guard checks screen the ruling (referential integrity, ensemble
+    unanimity, paraphrase invariance). Only a guard-accepted sustained (fail)
+    ruling mints the ARGUMENTATIVE warrant; every other outcome records a
+    ["trial-declined", target, reason] Measure and registers no warrant."""
+```
+```
+$ sed -n '688,706p' src/deepreason/informal/trial.py
+    trace_ref = transcript_blob(...)
+    nu = harness.create_artifact(
+        f"nu: the defended trial sustaining case {case_hash} against "
+        f"{target_id} is sound", ...
+    )
+    warrant = Warrant(
+        id=f"w:argtrial:{case_hash}:{target_id}",
+        target=target_id,
+        type=WarrantType.ARGUMENTATIVE,
+        trace_ref=trace_ref,
+        validity_node=nu.id,
+    )
+```
+**CAN**: after passing FOUR guards in sequence — (1) a defender answers
+the critic's case, (2) a judge ensemble from a DIFFERENT model family
+than the critic rules the case sustained, (3) referential-integrity
+check, (4) ensemble-unanimity and paraphrase-invariance screens (the
+same screens the rubric trial uses) — mint a real `WarrantType.ARGUMENTATIVE`
+fail warrant with its own attackable `validity_node`, carrying the full
+transcript as `trace_ref`. This feeds the SAME adjudication pipeline as
+a DEMONSTRATIVE warrant and can move the target to `Status.REFUTED`.
+
+**CANNOT**: (a) override a target that is `execution_backed`
+(M9 above) — the guard is checked before the trial is ever entered,
+so a purely argumentative case against an execution-backed target
+never reaches this far; (b) carry `commitment`/`verdict` fields — the
+`Warrant` model reserves those for DEMONSTRATIVE only, so an
+ARGUMENTATIVE warrant is never tied to a specific machine-checked
+commitment, only to the judge's ruling text; (c) fire on anything less
+than a guard-accepted UNANIMOUS sustained ruling — any decline at any
+of the four gates registers no warrant at all, only an observational
+Measure (`["trial-declined", target, reason]`).
+
+### M12 — `suspended_unsupported`: what happens to dependents
+
+```
+$ grep -n "^def \|SUSPENDED_UNSUPPORTED" src/deepreason/adjudication/support.py
+15:def final_labels(
+30:            final[a] = Status.SUSPENDED_UNSUPPORTED
+```
+```
+$ sed -n '1,32p' src/deepreason/adjudication/support.py
+"""Pass 2 — support cascade over the dep DAG (spec §4).
+Process in topological order (dependencies before dependents). Refuting a
+premise makes dependents ``suspended_unsupported``, NOT refuted — orphaned
+!= false. Attacking a relation artifact refutes the relation while its
+endpoints may stay accepted.
+"""
+def final_labels(label0, dep_edges):
+    ...
+    for a in toposort(nodes, dep_edges):
+        supported = all(final[b] == Status.ACCEPTED for b in deps[a])
+        if label0[a] == "accepted" and supported:
+            final[a] = Status.ACCEPTED
+        elif label0[a] == "accepted":
+            final[a] = Status.SUSPENDED_UNSUPPORTED
+        elif label0[a] == "refuted":
+            final[a] = Status.REFUTED
+        else:
+            final[a] = Status.SUSPENDED
+    return final
+```
+This is Pass 2 of adjudication, run over the whole dependency DAG
+(`dep_edges`), AFTER Pass 1 assigns each artifact's own `label0` from
+its own warrants (REFUTED if directly attacked and sustained, else
+whatever Pass-1 attack-edge semantics gave it — `label0[a] in
+{"accepted", "refuted"}` is the only input this pass reads). An
+artifact that was itself never attacked (`label0[a] == "accepted"`) but
+depends on something that ended up NOT `Status.ACCEPTED` (refuted or
+itself unsupported) becomes `SUSPENDED_UNSUPPORTED` — "orphaned != false"
+per the module's own docstring: it is not judged wrong, only left
+without a standing premise. This cascade is KIND-BLIND by construction
+— `final_labels` takes only `label0` (a string) and `dep_edges` (id
+pairs); it has no access to any artifact's commitments, so a formal
+dependent and an informal dependent of a refuted premise are orphaned
+by the exact same code path, with the exact same status.
 
 ## 4. R-g audit (R9, SPEC.md S8)
 

@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=8 blockers=none
+State: next=10 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -46,14 +46,14 @@ order. One step per dr-execute-step invocation.
       to the R-g audit section (S8) rather than judged here.
 - [x] 7. (S6) [COMMIT] Commit and push.
       done-when: pushed, confirmed on origin. DONE.
-- [ ] 8. (S7) Gather and write "Refutation semantics per kind": the
+- [x] 8. (S7) Gather and write "Refutation semantics per kind": the
       DEMONSTRATIVE path (rules/crit.py:805), what a trial-guarded prose
       refutation can/cannot do, and suspended_unsupported dependent
       mechanics.
       done-when: CENSUS.md's "Refutation semantics per kind" section has
-      >=3 M-numbered rows with pasted commands.
-- [ ] 9. (S7) [COMMIT] Commit and push.
-      done-when: pushed, confirmed on origin.
+      >=3 M-numbered rows with pasted commands. DONE — M10-M12 written.
+- [x] 9. (S7) [COMMIT] Commit and push.
+      done-when: pushed, confirmed on origin. DONE.
 - [ ] 10. (S8) Run the R-g audit's three bounded greps (scheduler
       ranking terms; crit.py kind-conditional rendering; workflow/
       scheduler acceptance branches), read every hit, and record an
