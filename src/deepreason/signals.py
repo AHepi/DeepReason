@@ -254,6 +254,14 @@ SIGNALS: dict[str, str] = {
     "synth-noregister": "synthesizer call that registered no relation",
     "property-relevance-trial": "judge-ensemble call ruling whether a proposed "
                                 "property follows from the problem statement",
+    "relatedness-trial": "judge-ensemble call ruling whether a candidate_checker "
+                         "commitment is directly related to its conjecture's "
+                         "own explanation (D2 rev 2, R35); registers nothing "
+                         "itself, but is spent even on a losing ruling",
+    "encoder-delegation": "coder-seat call authoring commitment code for an "
+                          "already-admitted conjecture's own prose (D2 rev 2, "
+                          "R38); registers nothing itself — the caller attaches "
+                          "the returned spec via the ordinary draft/register path",
     "hv-nomeasure": "variator call for an HV estimate that produced no measure",
     "conj-noregister": "conjecturer call whose candidates all failed admission",
     "conjecture-turn-call": "one active v4 conjecturer turn completed; the exact "

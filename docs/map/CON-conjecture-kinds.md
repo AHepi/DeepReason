@@ -1,7 +1,7 @@
 <!-- DR-CON-conjecture-kinds -->
 Verified-at: f2339ade
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/rules/crit.py, src/deepreason/rules/warrants.py, src/deepreason/scheduler/scheduler.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/llm/contracts.py, src/deepreason/llm/packs.py
+Owns: src/deepreason/rules/crit.py, src/deepreason/rules/warrants.py, src/deepreason/rules/relatedness.py, src/deepreason/rules/encoding.py, src/deepreason/scheduler/scheduler.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/llm/contracts.py, src/deepreason/llm/packs.py
 Seams:
 Seams-undocumented: conjecture-kinds x capabilities, conjecture-kinds x evaluation, conjecture-kinds x scheduler-ranking, conjecture-kinds x warrants-and-attacks
 
@@ -85,6 +85,74 @@ own ranking key never reads a commitment or an `eval` string — it ranks
 have no kind to read.
 `check: ! grep -n "execution_backed\|formally_backed" src/deepreason/scheduler/scheduler.py`
 
+## Dual-mode conjecture (D2 rev 2) — one artifact, prose plus an optional attack surface
+
+Operator Amendment 1 (`experiments/2026-08-08-change-pipeline-design-d2/REQUEST.md`)
+rejected a twin-artifact design and re-anchored this document's own R-g
+guardrail to a single direction: nothing may prioritize a FORMAL conjecture
+over an informal one, but nothing stops a formal one from carrying MORE
+scrutiny than a prose-only one either. The result is a THIRD `program:` kind
+(`candidate_checker`, `oracle.py`) with one property none of the four
+existing executable-commitment paths have: the carrying artifact's own
+CONTENT is prose, never the code under test — the checker source lives in
+the commitment's `Budget.extra["spec"]` instead
+(`oracle.py::run_from_full_spec`, reusing `_compile`'s existing guarded-exec
+engine unchanged). Dispatch needed no new branch in `programs.evaluate`: the
+generic `PROGRAMS` registry (`programs.py`) already dispatches any
+registered name, so `candidate_checker` joins it exactly the way
+`exec_oracle`/`property_oracle` already do.
+`check: python -m pytest tests/test_oracle.py::test_crit_program_refutes_a_prose_conjecture_by_running_its_checker tests/test_oracle.py::test_candidate_checker_pass_grants_formally_backed_protection -q`
+
+Two candidate contracts can attach this commitment to their OWN prose,
+never a new artifact: `informal/skeleton.py::ForbiddenCase.checker_spec`
+and `workloads/text.py::Countercondition.checker_spec` (paired, additively,
+via `ReasoningCandidateProposal.checker_specs` — the wire TYPE of
+`counterconditions` itself never changes, so this needed no contract-version
+bump). Both enforce the SAME coupling with a `model_validator`, not a
+`field_validator` — Pydantic silently skips a `field_validator` on a field
+left at its default, so a `field_validator`-only guard on `checker_spec`
+never fires when the field is omitted (found live while writing the first
+of the two, fixed before the second repeated it).
+`check: python -m pytest tests/test_informal.py::test_candidate_checker_forbidden_case_requires_checker_spec tests/test_semantic_freedom_constitution.py::test_checker_specs_must_pair_one_to_one_with_counterconditions -q`
+
+**Relatedness without a referee (Amendment 1's own words: "the referee
+should be irrelevant... if a referee is needed, the artifact surface needs a
+redesign").** A `candidate_checker` commitment must be "directly related to
+the explanation," but nothing may adjudicate that by fiat. `rules/relatedness.py`
+mints a small auxiliary artifact per (conjecture, commitment) pair
+(`mint_relatedness_claim`) linked via `Ref(role=RefRole.MENTION)` — the SAME
+role `active_properties` already reads for a structurally identical
+"is-this-linked-thing-still-standing" question (M17: `MENTION` is inert to
+the support cascade). A challenge reuses `rules/experiment.py::relevance_trial`'s
+own SHAPE (`relatedness_trial`: cross-family judge ensemble, referential-
+integrity + unanimity guards) rather than a new referee, and registers its
+ARGUMENTATIVE fail warrant against the CLAIM artifact, never the conjecture.
+`formally_backed` (`rules/warrants.py`) reads the claim's own `Status` via
+`relatedness_claim_holds` and excludes the commitment from its substantive
+set only while a claim exists and is not `Status.ACCEPTED` — no claim at
+all (the default) leaves protection exactly as it was before this tranche.
+`check: python -m pytest tests/test_relatedness.py tests/test_prose_refutation_boundaries.py::test_a_challenged_relatedness_claim_strips_only_its_own_commitment -q`
+
+`candidate_checker` deliberately does NOT join `execution_backed`'s narrow
+`EXEC_PROGRAMS` set in this tranche — that supremacy is reserved for kinds
+that also carry counterexample-admission and fuzz-probe attack channels
+(neither is built for this kind here); a future tranche that builds them
+is what would earn the join, never the shield alone.
+`check: python -c "from deepreason.oracle import EXEC_PROGRAMS, CANDIDATE_CHECKER_PROGRAM; assert CANDIDATE_CHECKER_PROGRAM not in EXEC_PROGRAMS"`
+
+**Encoder delegation without a new manifest role.** `rules/encoding.py::draft_encoded_commitment`
+lets the `"coder"` seat author a `candidate_checker`'s source for an
+ALREADY-ADMITTED conjecture's prose. Registering `"encoder"` as an
+independently-routable role would mean editing `run_manifest.py`'s frozen
+`LEGACY_CANONICAL_ROLES` tuple — outside this tranche's own scoped grant
+(`REQUEST.md` Amendment 3, C11/C12). Instead `"encoder"` reuses
+`property_designer`'s already-configured endpoint via `adapter.call(...,
+template_role="encoder")` — the SAME auxiliary-role pattern `experimenter`
+already uses to reuse `"conjecturer"`'s endpoint (`llm/adapter.py:898-900`'s
+own documented convention; `rules/experiment.py`'s own `propose_properties`
+is the live precedent for `experimenter`). Zero `run_manifest.py` contact.
+`check: grep -q "property_designer" src/deepreason/run_manifest.py && ! grep -q '"encoder"' src/deepreason/run_manifest.py`
+
 ## Where it lives
 
 | Aspect | File | Symbol |
@@ -99,16 +167,22 @@ have no kind to read.
 | Foundational kind-blind acceptance | `adjudication/grounded.py`, `adjudication/support.py` | `label0`, `final_labels` |
 | The one kind-conditional SCHEDULING term found | `scheduler/scheduler.py` | `Scheduler._standing_recrit_pool` |
 | Four executable-commitment paths | `capabilities/simulation.py`, `capabilities/research.py`, `experiments/lambda_run.py`, `oracle.py`, `informal/skeleton.py` | `SimulationController.propose`, `ResearchController.propose`, `run_arm`, `property_oracle_commitment`/`admit_counterexample`, `draft_forbidden_commitments` |
+| The dual-mode conjecture's own code-commitment kind (D2 rev 2) | `oracle.py`, `programs.py` | `candidate_checker_commitment`, `run_from_full_spec`, `PROGRAMS["candidate_checker"]` |
+| Referee-free relatedness for that kind | `rules/relatedness.py` | `mint_relatedness_claim`, `relatedness_claim_holds`, `relatedness_trial` |
+| Encoder-role delegation for that kind | `rules/encoding.py` | `draft_encoded_commitment` |
 
 ## Where to change what
 
 | To change... | Edit | Test |
 |---|---|---|
-| Whether the conjecturer can submit a formal encoding as an explicit option (R-b, currently absent) | `llm/contracts.py::ConjectureCandidate` — Rung D2/D3 territory, not this document's authority to design | (none yet — R-b is unimplemented) |
+| Whether the conjecturer can submit a formal encoding as an explicit option (R-b) — PARTIALLY ANSWERED as of D2 rev 2: `ForbiddenCase.checker_spec`/`Countercondition.checker_spec` let EITHER candidate contract attach `program:candidate_checker` code to its OWN prose; `ConjectureCandidate` itself still carries no dedicated formal-encoding field | `informal/skeleton.py::ForbiddenCase`, `workloads/text.py::Countercondition`/`ReasoningCandidateProposal.checker_specs` | `tests/test_informal.py -k candidate_checker`, `tests/test_semantic_freedom_constitution.py -k checker_specs` |
 | Whether execution supremacy protects a target from prose | `rules/warrants.py::execution_backed`/`formally_backed` — narrow vs wide guard, do not conflate (`DR-CON-criticism-source`'s own Traps entry on this) | `tests/test_oracle.py -k execution_backed`, `tests/test_prose_refutation_boundaries.py -k formal` |
+| Whether one `candidate_checker` commitment specifically keeps `formally_backed`'s protection | `rules/warrants.py::formally_backed`'s relatedness-gated branch, reading `rules/relatedness.py::relatedness_claim_holds` — do NOT extend this to any other kind without re-deriving R43's three couplings (`REQUEST.md` Amendment 2) | `tests/test_prose_refutation_boundaries.py -k challenged_relatedness` |
 | Which artifacts get re-criticized first when standing capacity is left over | `scheduler/scheduler.py::_standing_recrit_pool` — the one place today's system already orders on kind; changing this is D4/R-g territory, price it against the finding in CENSUS.md section 4 first | (none yet — no dedicated test found for this ordering specifically) |
 | What the critic pack shows about a target's declared commitments | `llm/packs.py::render_crit_pack`, `_MACHINE_EVAL_NOTE` | `tests/test_prose_refutation_boundaries.py -k formal_target` |
 | What happens to a target's dependents when it is refuted | `adjudication/support.py::final_labels` — do not special-case by kind; the cascade's kind-blindness is load-bearing (R-g) | `tests/test_adjudication.py::test_support_cascade_orphaned_not_false` |
+| Whether a challenge to a commitment's relatedness needs a referee | `rules/relatedness.py::relatedness_trial` — reuses `rules/experiment.py::relevance_trial`'s own cross-family judge-ensemble shape rather than inventing one; registers against the relatedness-CLAIM artifact, never the conjecture | `tests/test_relatedness.py` |
+| Which seat authors a `candidate_checker` commitment's source when the conjecturer doesn't inline it | `rules/encoding.py::draft_encoded_commitment` — reuses `property_designer`'s configured endpoint via `template_role="encoder"` (`llm/roles.py`); does NOT register `"encoder"` in `run_manifest.py`'s frozen `LEGACY_CANONICAL_ROLES` | `tests/test_encoding.py` |
 
 ## Traps
 
@@ -144,3 +218,34 @@ have no kind to read.
   on a `min_length` schema violation — encoding, not content. Do not
   over-generalize a rate from this; report it as the small sample it is
   (CENSUS.md section 6, M13/M14).
+- **The wire-contract firewall rejects a bare `dict` field outright.**
+  `llm/wire.py::_reject_unknown_fields` treats an untyped `dict`'s empty
+  `"properties": {}` as "no key is ever valid" and raises `extra field at
+  <path>/<key>` for every key an LLM-facing structured output actually
+  sends. `ForbiddenCase.checker_spec`/`Countercondition.checker_spec` (plain
+  `dict`) work only because nothing routes them through `adapter.call`
+  directly; the moment a role's OWN output needs this shape
+  (`llm/contracts.py::EncoderOutput.tests`), it needs an explicit nested
+  model (`EncoderTestCase`) instead. Found live authoring the encoder
+  contract (D2 rev 2 step 21); check before reusing `dict` on any new
+  LLM-facing field.
+`check: python -m pytest tests/test_encoding.py::test_bound_coder_seat_delegates_to_the_encoder_template -q`
+- **Registering a genuinely new, independently-routable role touches a
+  frozen surface.** `run_manifest.py::LEGACY_CANONICAL_ROLES` is where a
+  role like `property_designer` becomes independently routable in the
+  manifest — editing that tuple is surface-4 contact, gated the same as any
+  other frozen-surface change. The module's OWN comment (line ~52) already
+  names the escape hatch: an AUXILIARY role (`experimenter`, now also
+  `encoder`) that reuses an existing canonical role's endpoint via
+  `adapter.call(..., template_role=...)` never touches this tuple at all.
+  Read that comment before assuming a new role needs a manifest entry.
+`check: grep -q "independently routable roles" src/deepreason/run_manifest.py`
+- **A `field_validator` on a field left at its default never fires.**
+  Pydantic v2 skips `field_validator`s for fields the caller omitted
+  (unless `validate_default=True`); a `field_validator("checker_spec")`
+  alone let `ForbiddenCase(case="x", eval="program:candidate_checker")`
+  construct successfully with no checker source at all. Fixed with
+  `model_validator(mode="after")`, which inspects `self` regardless of
+  which fields were explicitly set; applied proactively (no repeat bug) to
+  the second, structurally identical field on `Countercondition`.
+`check: python -m pytest tests/test_informal.py::test_candidate_checker_forbidden_case_requires_checker_spec -q`

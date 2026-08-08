@@ -159,14 +159,19 @@ never changes which model/endpoint answers.**
 `check: grep -n "^def resolve_route_seat_base_profile" -A 8 src/deepreason/run_manifest.py | grep -q "seat: int"`
 
 **Every provider dispatch in the tree resolves through one of exactly
-44 call sites (43 through `LLMAdapter.call`/subclass `.call`, 1 through
+46 call sites (45 through `LLMAdapter.call`/subclass `.call`, 1 through
 `cli/doctor.py`'s direct render).** A full enumeration, classification
 by role/template_role/lease-path, and the select_lease degrees-of-
 freedom measurement live in
 `experiments/2026-08-06-change-seat-census-s1/CENSUS.md` (Rung S1 of
 the role-seat separation plan) — this document names the mechanism;
-that tranche is the measured evidence trail.
-`check: test "$(grep -rn '\.call(' src/deepreason --include='*.py' | wc -l)" = "43"`
+that tranche is the measured evidence trail. Two of the 45 were added
+by D2 rev 2 (`experiments/2026-08-08-change-pipeline-design-d2/`):
+`rules/encoding.py::draft_encoded_commitment` and
+`rules/relatedness.py::relatedness_trial`, both reusing an EXISTING
+role's endpoint (`property_designer`/`judge`) rather than adding a new
+one — no new manifest role, no change to the degrees-of-freedom count.
+`check: test "$(grep -rn '\.call(' src/deepreason --include='*.py' | wc -l)" = "45"`
 
 ## Traps
 

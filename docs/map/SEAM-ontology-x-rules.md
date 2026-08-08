@@ -62,10 +62,14 @@ vocabulary.
 | Read side | `ontology/state.py` | `harness.state` (`EpistemicState`, `Status`) | rules import `Status` and read the materialized view; they import `EpistemicState` nowhere and construct one at no site |
 
 What a rule may build against what it may only register: two direct `Artifact`
-constructions in `rules/`, both content-addressed, twelve more artifacts through
+constructions in `rules/`, both content-addressed, fifteen more artifacts through
 the harness door that owns the address and exposes no `id` parameter — and ten
-commitment registrations against zero commitment constructions.
-`check: python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Artifact']; assert len(C)==2, len(C); assert all(any(k.arg=='id' and isinstance(k.value,ast.Call) and ast.unparse(k.value.func)=='Artifact.compute_id' for k in c.keywords) for c in C), [ast.unparse(c) for c in C]" && test "$(grep -rn "harness.create_artifact(" --include=*.py src/deepreason/rules/ | wc -l)" -eq 12 && grep -q "id=Artifact.compute_id(content_ref, codec, interface)," src/deepreason/harness.py && ! grep -rq "harness.register_artifact(" --include=*.py src/deepreason/rules/ && test "$(grep -rn "harness.register_commitment(" --include=*.py src/deepreason/rules/ | wc -l)" -eq 10 && ! grep -rqE "Commitment\(|Budget\(" --include=*.py src/deepreason/rules/ && grep -q "return Commitment(" src/deepreason/oracle.py && grep -q "Commitment(" src/deepreason/measures/hv.py && grep -q "Commitment(" src/deepreason/unification/isolation.py && grep -q "Commitment(" src/deepreason/informal/skeleton.py && grep -q "Commitment(" src/deepreason/workloads/text.py && grep -q "for commitment in draft_forbidden_commitments(skeleton):" src/deepreason/workloads/models.py && grep -q "compiled = tuple(draft_countercondition_commitments(envelope))" src/deepreason/rules/conj.py`
+commitment registrations against zero commitment constructions. D2 rev 2 added
+three of the fifteen (`rules/relatedness.py`: one in `mint_relatedness_claim`,
+two in `relatedness_trial`'s ν+critic pair) but zero commitment registrations —
+`candidate_checker` commitments register through `oracle.py`/`programs.py`
+(evaluation side), never through a new `rules/` site.
+`check: python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Artifact']; assert len(C)==2, len(C); assert all(any(k.arg=='id' and isinstance(k.value,ast.Call) and ast.unparse(k.value.func)=='Artifact.compute_id' for k in c.keywords) for c in C), [ast.unparse(c) for c in C]" && test "$(grep -rn "harness.create_artifact(" --include=*.py src/deepreason/rules/ | wc -l)" -eq 15 && grep -q "id=Artifact.compute_id(content_ref, codec, interface)," src/deepreason/harness.py && ! grep -rq "harness.register_artifact(" --include=*.py src/deepreason/rules/ && test "$(grep -rn "harness.register_commitment(" --include=*.py src/deepreason/rules/ | wc -l)" -eq 10 && ! grep -rqE "Commitment\(|Budget\(" --include=*.py src/deepreason/rules/ && grep -q "return Commitment(" src/deepreason/oracle.py && grep -q "Commitment(" src/deepreason/measures/hv.py && grep -q "Commitment(" src/deepreason/unification/isolation.py && grep -q "Commitment(" src/deepreason/informal/skeleton.py && grep -q "Commitment(" src/deepreason/workloads/text.py && grep -q "for commitment in draft_forbidden_commitments(skeleton):" src/deepreason/workloads/models.py && grep -q "compiled = tuple(draft_countercondition_commitments(envelope))" src/deepreason/rules/conj.py`
 
 Seven of the fifteen `Rule` tags are reachable from `rules/`; two of those seven
 are chosen by name and five follow from the harness method.
@@ -126,9 +130,12 @@ loop cannot manufacture more of.
 `check: python -c "import ast,pathlib; R=[ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')]; roles={k.value.value for t in R for n in ast.walk(t) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Provenance' for k in n.keywords if k.arg=='role' and isinstance(k.value,ast.Constant)}; from deepreason.ontology.artifact import ProvenanceRole as P; assert roles=={'conjecturer','critic','experimenter','import','synthesizer'}, sorted(roles); assert {r.value for r in P}-roles=={'seed','user','controller','variator'}, sorted({r.value for r in P}-roles)" && grep -q 'Provenance(role="seed")' src/deepreason/easy.py && grep -q 'Provenance(role="controller")' src/deepreason/controller.py && grep -q 'Provenance(role="variator")' src/deepreason/measures/hv.py`
 
 **`Provenance.school` is write-only from the rules' side, and only five of the
-fourteen rules-side mints write it at all.** `conj`, `synth`, `crit`'s scrutiny
+seventeen rules-side mints write it at all.** `conj`, `synth`, `crit`'s scrutiny
 artifact and `register_fail_warrant`'s ν and critic stamp the conditioning
-school; the vision critic's pair, all four `experiment` mints and all three
+school; the vision critic's pair, all four `experiment` mints, D2 rev 2's three
+`relatedness` mints (the claim, and `relatedness_trial`'s own ν+critic pair,
+role `"conjecturer"`/`"critic"` only — never a school, the SAME shape
+`relevance_trial`'s own mints already use) and all three
 `act` evidence artifacts leave it `None`. No rule reads `provenance.school` back
 under any circumstance. Routing, pack assembly, the trial's same-school guard and the
 jolt signals all read it — the rules stamp it and forget it, which is what keeps
@@ -136,7 +143,7 @@ school membership out of every decision a rule makes about what to propose or
 attack (`DR-CON-schools`). The `None`s are consequential rather than cosmetic:
 `informal/trial.py` compares `critic_school_id` against the target's school, so
 a school-less mint is never same-school.
-`check: ! grep -rq "provenance\.school" --include=*.py src/deepreason/rules/ && python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Provenance']; w=[c for c in C if any(k.arg=='school' for k in c.keywords)]; assert (len(w), len(C))==(5,14), (len(w), len(C))" && grep -q 'provenance.school == school\["id"\]' src/deepreason/llm/packs.py && grep -q "critic_school_id == target.provenance.school" src/deepreason/informal/trial.py`
+`check: ! grep -rq "provenance\.school" --include=*.py src/deepreason/rules/ && python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Provenance']; w=[c for c in C if any(k.arg=='school' for k in c.keywords)]; assert (len(w), len(C))==(5,17), (len(w), len(C))" && grep -q 'provenance.school == school\["id"\]' src/deepreason/llm/packs.py && grep -q "critic_school_id == target.provenance.school" src/deepreason/informal/trial.py`
 
 **No rule builds a `FrozenList` or a `FrozenDict`, and none imports
 `deepreason.frozen`.** Freezing is a field validator's job on the ontology side,

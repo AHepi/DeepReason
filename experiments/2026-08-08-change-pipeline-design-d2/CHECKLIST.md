@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=25 blockers=none
+State: next=27 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -530,7 +530,7 @@ order. One step per dr-execute-step invocation.
 
 ## Map document (CON-conjecture-kinds.md v2)
 
-- [ ] 25. (all) Update `docs/map/CON-conjecture-kinds.md` in the SAME
+- [x] 25. (all) Update `docs/map/CON-conjecture-kinds.md` in the SAME
       commit as the behavior it now describes would normally land (per
       CLAUDE.md's own rule) — since this checklist batches the map
       update as its own late step by necessity (dr-plan-steps plans,
@@ -540,9 +540,59 @@ order. One step per dr-execute-step invocation.
       precedent.
       done-when: `python tools/docs_verify.py` reports 0 failed
       including every new check in this document.
-- [ ] 26. (all) [COMMIT] Commit step 25.
+      DONE, with a real blast radius found and fixed, not just
+      CON-conjecture-kinds.md v2: updated it (new Owns: entries for
+      `rules/relatedness.py`/`rules/encoding.py`, a new prose section
+      naming the kind/relatedness/encoder mechanisms with 5 new checks,
+      2 new "Where it lives" rows, 3 new "Where to change what" rows,
+      3 new Traps entries — wire-firewall dict rejection,
+      run_manifest.py CANONICAL_ROLES-is-frozen precedent, the
+      field_validator-skip-on-default bug). Running the FULL sweep
+      surfaced that this tranche's own code (2 new `rules/` modules, a
+      3rd/4th import on `formally_backed`, 3 new `Warrant()`/`Provenance()`
+      mints, 2 new `adapter.call` sites) broke 12 OTHER map documents'
+      numeric/set assertions that were counting exactly what changed —
+      re-derived and fixed every one, each verified individually before
+      the next full sweep: `CON-seats.md` (.call( count 43->45),
+      `SEAM-adjudication-x-rules.md` (Warrant() count 2->3;
+      state.status readers +relatedness.py), `SEAM-evaluation-x-ontology.md`
+      (oracle.py sha256_hex count 6->7, "eight mint sites"->"nine"),
+      `SEAM-evaluation-x-rules.md` (formally_backed's import set +2;
+      WarrantType.ARGUMENTATIVE count 5->6; register_fail_warrant FILE
+      count check tightened to anchor on the call, not a bare docstring
+      mention, since `relatedness.py`'s own prose citing the name had
+      inflated the loose count from 8 to 9 while true callers stayed 8),
+      `SEAM-llm-x-rules.md` (rules<->llm coupling counts +2 files/+2
+      call sites), `SEAM-ontology-x-rules.md` (create_artifact count
+      12->15; Provenance() count (5,14)->(5,17)),
+      `SEAM-rules-x-workflow.md` (rules/ submodule count 12->14;
+      adapter.call unbound-site set +2, documented as DORMANT —
+      confirmed zero callers anywhere in `src/` for either new
+      function, a stronger property than the existing 4 sites'
+      "deferred under v6" story). Also found (via the full sweep, NOT
+      anticipated by the checklist): `tests/test_signals.py`'s AST scan
+      caught two unregistered `record_llm_calls` tags this tranche
+      introduced (`"encoder-delegation"`, `"relatedness-trial"`) —
+      registered both in `src/deepreason/signals.py` with real
+      documentation, a genuine gap this tranche caused, not merely a
+      stale count. Residual: 2 failures
+      (`SUB-application.md:208`/`:239`), both tracing to the SAME
+      pre-existing `test_continuation.py` defect — confirmed
+      byte-identically reproducing on a fresh worktree at this
+      tranche's own base commit `f103a03a`, with an empty diff for
+      every file that test's own machinery touches; recorded as
+      `PARKED.md` P-D2-1, matching CLAUDE.md's own "S6 PARKED P1/P3"
+      shorthand for this recurring defect class. Final
+      `python tools/docs_verify.py`: `docs_verify: 2 failed` (both
+      PARKED, zero new).
+- [x] 26. (all) [COMMIT] Commit step 25.
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 18 files changed, 823 insertions(+), 7
+      deletions(-) -> running total 816 of 1150 (docs/ and PARKED.md
+      not counted against the code budget, per this tranche's own
+      convention). Frozen-surface diff: empty. Pushed.
 
 ## STOP gate — the contract-version question (frozen surface 4, C10)
 
