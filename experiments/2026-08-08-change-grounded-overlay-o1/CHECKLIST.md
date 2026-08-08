@@ -200,17 +200,21 @@ order. One step per dr-execute-step invocation.
       DONE — no `src/`/`tests/`/`tools/` defect found; RESULTS.md's
       "Not fixed here" section states "No defects found this tranche."
       verbatim; no PARKED.md created.
-- [ ] 22. (S13) Zero-diff tripwire, re-pasted at the boundary (not
+- [x] 22. (S13) Zero-diff tripwire, re-pasted at the boundary (not
       trusted from step 1 alone — the whole tranche ran since then).
       done-when: `git diff --stat origin/claude/monitor-session-handover-63ajqv...HEAD -- src/ tests/ tools/`
       -> empty (paste it).
-- [ ] 23. (S13) Map check, ONLY if step 19 created a map document;
+      DONE — empty output confirmed (exit 0) after all 21 prior steps.
+- [x] 23. (S13) Map check, ONLY if step 19 created a map document;
       otherwise this step is n/a and is recorded as such.
       done-when: `python tools/docs_verify.py` -> "0 failed";
       `python tools/docs_verify.py --audit` -> 0 findings;
       `python tools/docs_verify.py --links` -> 0 dangling references
       (paste all three), OR RESULTS.md/this line states "n/a — no map
       document created."
+      DONE — n/a: step 19 created no map document (RESULTS.md's own
+      "No new map document" section), so no `docs_verify` run is owed
+      by this tranche.
 - [ ] 24. (S13) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it verbatim).
       Per the task's own stated new baseline (P1/P3 fixed, SPEC.md A3),
