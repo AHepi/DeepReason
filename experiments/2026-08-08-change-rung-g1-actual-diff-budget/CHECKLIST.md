@@ -205,6 +205,28 @@ order. One step per dr-execute-step invocation.
       --ceiling 450 --paths tools/ tests/ .claude/skills/ docs/map/`
       pasted, verdict `WITHIN`; push succeeds.
 
+      STOP (2026-08-08, self-raised, gate's first real use): after the
+      wording was written and trimmed as far as reasonably readable,
+      the gate itself reports:
+      ```
+      {"areas": {"tools/": 228, "tests/": 192, ".claude/skills/": 16, "docs/map/": 17}, "total_insertions": 453, "ceiling": 450, "verdict": "EXCEEDED"}
+      ```
+      3 insertions over the 450 ceiling (0.7%). Not a defect — every
+      test still passes and the retrodiction proof (step 6) still
+      holds; the plan-time itemization simply undershot `tools/`
+      (228 actual vs 130-170 estimated) and `tests/` (192 vs 140-190),
+      the two areas the tool's own self-test scaffolding and exit-class
+      coverage landed in, while `.claude/skills/` (16) landed UNDER its
+      own 30-50 estimate. Raised to the operator per this project's own
+      rule (ceiling corrections need the operator's words, not
+      self-authorization — S5's own Amendment 2 precedent). Awaiting
+      the operator's choice between: (A) bump the ceiling 450 -> 460,
+      or (B) trim the amendment further. Working edit to
+      `.claude/skills/dr-execute-step/SKILL.md` committed separately,
+      below, as unfinished/uncommitted-work-at-risk, NOT as this step's
+      completion -- the box above stays unchecked until the decision
+      lands.
+
 - [ ] 9. (S7) [COMMIT] Write `PARKED.md`: the `.claude/skills/
       README.md` discrepancy (Q1) — WHAT, plus a ready-to-send
       follow-up prompt for a future session (route: doc fix, not

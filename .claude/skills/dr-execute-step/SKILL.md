@@ -41,14 +41,13 @@ what keeps a long change from drifting.
 6. Mark the box, update CHECKLIST.md — including its header State:
    line (next step, blockers), which is what a fresh session resumes
    from — and if the step is tagged [COMMIT] (or changed any file):
-   before committing, compare the tranche's ACTUAL changed lines
-   (`git diff --stat <tranche-base>..HEAD` plus the working tree)
-   against SPEC.md's budget ceiling. Exceeding the ceiling is a STOP
-   in the standard format (decision, priced options, recommendation),
-   not a footnote — a ceiling checked only against the plan-time
-   estimate trips on nothing (recorded miss: 193 insertions landed
-   against a ≤150 ceiling with no stop, V1 tranche 2026-08-05). Then
-   commit and push now.
+   `git add` this step's files, then run `python tools/diff_budget.py
+   <tranche-base> --ceiling <SPEC.md's ceiling> --paths <SPEC.md's
+   declared areas>` and read its `DIFF_BUDGET_RESULT_V1.verdict`.
+   WITHIN/NO_CEILING: continue. EXCEEDED is a STOP in the standard
+   format (decision, priced options, recommendation), not a footnote
+   (recorded miss: 193 insertions landed against a ≤150 ceiling with
+   no stop, V1 tranche 2026-08-05). Then commit and push now.
 
         git add <files this step touched> <map files> <tranche-dir>
         git commit -m "step <n>: <checklist line>"
