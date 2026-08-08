@@ -275,6 +275,7 @@ class Scheduler:
             else {}
         )
         self._module_fingerprints_recorded = False
+        self._seat_bindings_recorded = False
         self.diagnostics: list[dict] = []
         # Ladder state (§11.4) — attention only. An intervention is active for a
         # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
@@ -526,6 +527,46 @@ class Scheduler:
                     ]
                 )
             )
+        except ReadOnlyHarnessError:
+            return
+
+    def _record_seat_bindings(self) -> None:
+        """Stamp which provider/model sat in which seat into this run's
+        record.
+
+        Fires from ``run`` beside ``_record_module_fingerprints``, under
+        the identical guards: never from ``__init__``, only when cycles
+        are actually requested, after workflow recovery and stop
+        rehydration.
+
+        Reads the mint-time snapshot ``RunPreparationService.prepare``
+        already wrote (Rung S5, Item S6) rather than re-resolving
+        ``seat-bindings.yaml`` live, which would be a label-time read of
+        information the manifest already froze at mint time. A root with
+        no snapshot -- a default home, or one prepared before this rung
+        landed -- gets no event at all; ``seat_bindings_for_run`` projects
+        the single-seat default instead of a stored stamp for that case.
+
+        A read-only harness records nothing, matching
+        ``_record_module_fingerprints``'s own asymmetry.
+        """
+
+        if self._seat_bindings_recorded:
+            return
+        self._seat_bindings_recorded = True
+
+        from deepreason.harness import ReadOnlyHarnessError
+        from deepreason.preparation import SEAT_BINDINGS_SNAPSHOT_NAME
+        from deepreason.seat_events import SeatBindingsEventPayloadV1
+
+        snapshot = self.harness.root / SEAT_BINDINGS_SNAPSHOT_NAME
+        if not snapshot.exists():
+            return
+        payload = SeatBindingsEventPayloadV1.model_validate_json(
+            snapshot.read_text()
+        )
+        try:
+            self.harness.record_seat_bindings(payload)
         except ReadOnlyHarnessError:
             return
 
@@ -2699,6 +2740,7 @@ class Scheduler:
         self._rehydrate_resumed_stop_controller()
         if cycles > 0:
             self._record_module_fingerprints()
+            self._record_seat_bindings()
         stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None
         for _ in range(cycles):
             try:

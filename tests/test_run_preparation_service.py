@@ -13,6 +13,7 @@ from deepreason.cli.doctor import (
 from deepreason.evidence.models import RunInputManifestV2
 from deepreason.evidence.state import load_evidence_dossier, load_run_input
 from deepreason.preparation import (
+    SEAT_BINDINGS_SNAPSHOT_NAME,
     RunPreparationError,
     RunPreparationRequestV1,
     RunPreparationService,
@@ -27,6 +28,7 @@ from deepreason.qualification import QualificationError
 from deepreason.run_manifest import load_run_manifest
 from deepreason.runtime.launch_policy import require_v6_production_qualification
 from deepreason.seat_bindings import seat_bindings_path, write_seat_bindings
+from deepreason.seat_events import SeatBindingsEventPayloadV1
 
 
 STAMP = datetime(2026, 7, 23, tzinfo=timezone.utc)
@@ -182,6 +184,64 @@ def test_prepare_with_a_seat_binding_overrides_only_the_bound_role(tmp_path):
             continue
         for route in routes:
             assert route.model_id == profile.model_id
+
+
+def test_prepare_with_no_seat_bindings_writes_no_snapshot_file(tmp_path):
+    """SPEC.md Item S6: a default home (no `--seat` flag) never gets the
+    conditional `seat-bindings.json` sibling -- byte-for-byte absent,
+    not an empty file."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    calls = []
+    seats_home = tmp_path / "seats-home"
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+    )
+
+    prepared = service.prepare(_request(profile_path))
+    assert not (Path(prepared.root) / SEAT_BINDINGS_SNAPSHOT_NAME).exists()
+
+
+def test_prepare_with_a_seat_binding_writes_the_snapshot_file(tmp_path):
+    """SPEC.md Item S6: one bound group writes a typed
+    `seat-bindings.json` naming the LITERAL group and the bound
+    profile's own provider/model_id -- the mint-time snapshot Rung S5's
+    Scheduler emission site (S7) reads at run time."""
+
+    profile = _profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    bound = _profile(model_id="model-bound")
+    bound_path = write_provider_profile(bound, tmp_path / "bound.yaml")
+    seats_home = tmp_path / "seats-home"
+    write_seat_bindings(
+        {"coder": str(bound_path)},
+        seat_bindings_path(environ={"DEEPREASON_HOME": str(seats_home)}),
+    )
+    calls = []
+    service = _service(
+        tmp_path,
+        calls,
+        environ={
+            "DEEPREASON_TEST_KEY": "super-secret-value",
+            "DEEPREASON_HOME": str(seats_home),
+        },
+    )
+
+    prepared = service.prepare(_request(profile_path))
+    snapshot_path = Path(prepared.root) / SEAT_BINDINGS_SNAPSHOT_NAME
+    assert snapshot_path.exists()
+    payload = SeatBindingsEventPayloadV1.model_validate_json(
+        snapshot_path.read_text()
+    )
+    assert [b.group for b in payload.bindings] == ["coder"]
+    assert payload.bindings[0].provider == bound.provider
+    assert payload.bindings[0].model_id == "model-bound"
 
 
 def test_prepare_refuses_typed_when_the_combination_is_unqualified(tmp_path):

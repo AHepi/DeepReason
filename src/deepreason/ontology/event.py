@@ -23,6 +23,7 @@ from deepreason.control_events import (
 from deepreason.module_events import ModuleFingerprintsEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
+from deepreason.seat_events import SeatBindingsEventPayloadV1
 
 
 class Rule(str, Enum):
@@ -379,6 +380,9 @@ class Event(FrozenRecord):
     module_fingerprints: ModuleFingerprintsEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    seat_bindings: SeatBindingsEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("llm", mode="before")
     @classmethod
@@ -466,6 +470,25 @@ class Event(FrozenRecord):
             if self.outputs or self.llm is not None:
                 raise ValueError(
                     "module fingerprints record identity, not work"
+                )
+        if self.seat_bindings is not None:
+            # Identity rides the shared Measure vehicle rather than a rule of
+            # its own, so the fence is one-directional: a Measure need not
+            # carry seat bindings, but seat bindings may ride nothing else.
+            if self.rule != Rule.MEASURE:
+                raise ValueError(
+                    "seat bindings may ride only a Measure event"
+                )
+            if list(self.inputs) != [
+                self.seat_bindings.schema_,
+                self.seat_bindings.digest,
+            ]:
+                raise ValueError(
+                    "seat bindings inputs must name their schema and digest"
+                )
+            if self.outputs or self.llm is not None:
+                raise ValueError(
+                    "seat bindings record identity, not work"
                 )
         if self.scratch is not None:
             if list(self.inputs) != list(self.scratch.inputs):

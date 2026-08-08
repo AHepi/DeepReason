@@ -57,7 +57,8 @@ from deepreason.run_manifest import (
     compile_run_manifest,
     load_run_manifest,
 )
-from deepreason.seat_bindings import resolve_seat_bindings
+from deepreason.seat_bindings import resolve_seat_bindings, resolve_seat_bindings_by_group
+from deepreason.seat_events import SeatBindingsEventPayloadV1, SeatBindingV1
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     engaged_bridge_source,
@@ -72,6 +73,9 @@ from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
 
 PREPARATION_RECORD_NAME = "run-preparation.json"
+# Written only when at least one --seat group is bound (Rung S5); a
+# default home's prepared root never gets this file at all.
+SEAT_BINDINGS_SNAPSHOT_NAME = "seat-bindings.json"
 PREPARATION_SCHEMA = "deepreason-run-preparation.v1"
 _REQUEST_DOMAIN = b"deepreason.run-preparation-request.v1\x00"
 _RECORD_DOMAIN = b"deepreason.run-preparation-record.v1\x00"
@@ -613,6 +617,19 @@ class RunPreparationService:
         else:
             dossier, run_input, workload = _records_for_question(request.question)
         seat_bindings = resolve_seat_bindings(environ=self._environ, home=self._home)
+        seat_bindings_by_group = resolve_seat_bindings_by_group(
+            environ=self._environ, home=self._home
+        )
+        seat_bindings_payload = (
+            SeatBindingsEventPayloadV1.of(
+                [
+                    SeatBindingV1.of(group, seat_bindings_by_group[group])
+                    for group in sorted(seat_bindings_by_group)
+                ]
+            )
+            if seat_bindings_by_group
+            else None
+        )
         manifest = build_preparation_manifest(
             profile,
             question=request.question,
@@ -701,6 +718,13 @@ class RunPreparationService:
                     report, temporary / policy.report_filename
                 )
                 _write_preparation_record(record, temporary)
+                if seat_bindings_payload is not None:
+                    (temporary / SEAT_BINDINGS_SNAPSHOT_NAME).write_bytes(
+                        seat_bindings_payload.model_dump_json(by_alias=True).encode(
+                            "utf-8"
+                        )
+                        + b"\n"
+                    )
                 temporary.rename(root)
             except Exception:
                 if temporary.exists():
@@ -845,6 +869,7 @@ __all__ = [
     "PUBLIC_DEFAULT_TOKEN_BUDGET",
     "PUBLIC_MAX_CYCLES",
     "PUBLIC_MAX_TOKEN_BUDGET",
+    "SEAT_BINDINGS_SNAPSHOT_NAME",
     "PreparedRunV1",
     "RunPreparationError",
     "RunPreparationRecordV1",

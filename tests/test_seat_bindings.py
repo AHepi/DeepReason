@@ -14,6 +14,7 @@ from deepreason.seat_bindings import (
     load_seat_bindings,
     parse_seat_flags,
     resolve_seat_bindings,
+    resolve_seat_bindings_by_group,
     seat_bindings_path,
     write_seat_bindings,
 )
@@ -175,3 +176,48 @@ def test_resolve_seat_bindings_expands_group_to_its_role_set(tmp_path):
     resolved = resolve_seat_bindings(home=str(tmp_path))
     assert set(resolved) == {"property_designer"}
     assert resolved["property_designer"].model_id == "model-a"
+
+
+def test_resolve_seat_bindings_by_group_keys_by_literal_group_name(tmp_path):
+    """Rung S5 (SPEC.md Item S6): a group-keyed view, not a role-keyed
+    one -- two distinct bound groups resolve to two distinct entries
+    keyed by the literal group name an operator used, unexpanded through
+    role sets and uncanonicalized through ``GROUP_ALIASES``.
+    """
+
+    profile_coder = tmp_path / "coder.yaml"
+    profile_scratch = tmp_path / "scratch.yaml"
+    write_provider_profile(_profile(model_id="model-coder"), profile_coder)
+    write_provider_profile(_profile(model_id="model-scratch"), profile_scratch)
+    write_seat_bindings(
+        {"coder": str(profile_coder), "scratch": str(profile_scratch)},
+        seat_bindings_path(home=str(tmp_path)),
+    )
+
+    by_group = resolve_seat_bindings_by_group(home=str(tmp_path))
+
+    assert set(by_group) == {"coder", "scratch"}
+    assert by_group["coder"].model_id == "model-coder"
+    assert by_group["scratch"].model_id == "model-scratch"
+
+
+def test_resolve_seat_bindings_by_group_no_file_is_no_bindings(tmp_path):
+    assert resolve_seat_bindings_by_group(home=str(tmp_path)) == {}
+
+
+def test_resolve_seat_bindings_by_group_preserves_the_simulation_alias_name(tmp_path):
+    """M4's own finding: the raw group name must survive here, because
+    ``RunManifest.roles`` cannot losslessly recover whether an operator
+    wrote ``--seat simulation=X`` or ``--seat conjecture=X`` -- both
+    expand to the identical role set. This is the one point the literal
+    name still exists.
+    """
+
+    profile_a = tmp_path / "a.yaml"
+    write_provider_profile(_profile(model_id="model-a"), profile_a)
+    write_seat_bindings(
+        {"simulation": str(profile_a)}, seat_bindings_path(home=str(tmp_path))
+    )
+
+    by_group = resolve_seat_bindings_by_group(home=str(tmp_path))
+    assert set(by_group) == {"simulation"}

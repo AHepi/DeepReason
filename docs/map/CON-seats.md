@@ -1,7 +1,7 @@
 <!-- DR-CON-seats -->
-Verified-at: 98a5bc8f
+Verified-at: bdc476e8
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py
+Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
 Seams-undocumented: capabilities x seats, scratch x seats, workloads x seats, doctor x seats
 
@@ -63,6 +63,44 @@ the combination call IS that iteration — so output stays byte-
 identical to pre-S4.
 `check: grep -q "^def get_seat_readiness(" src/deepreason/readiness.py && grep -q "^class SeatReadinessV1" src/deepreason/readiness.py && grep -q "    group: str$" src/deepreason/readiness.py && grep -q "^def _readiness_fields(" src/deepreason/readiness.py && test "$(grep -c "fields = _readiness_fields(" src/deepreason/readiness.py)" = 2`
 
+## Rung S5 — seats in the typed record
+
+Every run's own record now permanently says which model sat in which
+seat, following the rung-4 module-fingerprint template exactly: a new
+sibling payload (`seat_events.py`'s `SeatBindingV1`/
+`SeatBindingsEventPayloadV1`, schema `seat-bindings.v1` — a sibling of
+`module-fingerprints.v1`, not an extension of it, since a role-group ->
+profile mapping is a LIST of typed entries, not one opaque mapping
+dict), an absence-tolerant reader (`recorded_seat_bindings`, returning
+EVERY stamp found, never a single-unpack, so a continuation carrying
+more than one is read correctly rather than crashing a test), a
+contract-fencing clause on `Event` (rides only `Rule.MEASURE`, exactly
+mirroring `module_fingerprints`'s own fence), and the writer
+(`Harness.record_seat_bindings`, R19-authorized to exactly an appender
+plus one `_commit` keyword — zero `_apply_event` contact).
+
+A default home (no `--seat` binding at `setup`) never gets a stored
+event at all: `seat_bindings_for_run(harness, manifest)` instead
+PROJECTS a single synthesized `group="default"` entry from the
+manifest's own uniform route, which is what "every existing committed
+root reads as single seat, the manifest's provider" (R5) actually means
+in code — a reader-side projection, not a writer backfilling old roots.
+
+The stamp cannot be resolved live at label time the way readiness is:
+`RunManifest.roles` cannot losslessly recover whether an operator wrote
+`--seat simulation=X` or `--seat conjecture=X` (both are the identical
+alias, expanding to the same role set), so the literal group name is
+captured once, at MINT time, by `RunPreparationService.prepare` into a
+conditional sibling file (`preparation.py`'s
+`SEAT_BINDINGS_SNAPSHOT_NAME`, absent for a default home) via a new
+group-keyed helper, `resolve_seat_bindings_by_group`.
+`Scheduler._record_seat_bindings` reads that snapshot at run time — RIGHT
+beside `_record_module_fingerprints`, same placement, same per-instance
+idempotency gate, same `ReadOnlyHarnessError` catch — rather than
+re-resolving `seat-bindings.yaml` live, which would be a label-time read
+of information the manifest already froze at mint time.
+`check: python -c "from deepreason.seat_events import SeatBindingV1, SeatBindingsEventPayloadV1, recorded_seat_bindings, seat_bindings_for_run; from deepreason.seat_bindings import resolve_seat_bindings_by_group; from deepreason.preparation import SEAT_BINDINGS_SNAPSHOT_NAME; from deepreason.harness import Harness; assert hasattr(Harness, 'record_seat_bindings')" && grep -q "def _record_seat_bindings" src/deepreason/scheduler/scheduler.py`
+
 ## Where it lives
 
 | Aspect | File | Symbol |
@@ -76,6 +114,8 @@ identical to pre-S4.
 | Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
 | The setup-time provider/model/transport bundle | `provider_profile.py` | `ProviderProfileV1` |
 | Role-group -> role-name expansion, binding persistence, and the never-last-wins conflict refusal | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
+| Group-keyed binding view, no role expansion (Rung S5's mint-time carrier) | `seat_bindings.py` | `resolve_seat_bindings_by_group` |
+| Which provider/model sat in which seat, in the append-only record (Rung S5) | `seat_events.py`, `harness.py`, `scheduler/scheduler.py` | `SeatBindingV1`, `SeatBindingsEventPayloadV1`, `recorded_seat_bindings`, `seat_bindings_for_run`, `Harness.record_seat_bindings`, `Scheduler._record_seat_bindings` |
 | The ONE call site that bypasses `LLMAdapter.call` entirely | `cli/doctor.py` | qualification battery: `render_role_prompt` + inline `EndpointLease` construction, dispatched via `endpoint.complete` directly |
 
 ## The rules it obeys

@@ -1,5 +1,5 @@
 <!-- DR-CON-run-identity -->
-Verified-at: 69f89d21
+Verified-at: bdc476e8
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/preparation.py, src/deepreason/application/text_runs.py, src/deepreason/runtime/continuation.py, src/deepreason/runtime/progress.py, src/deepreason/amendment/apply.py, src/deepreason/amendment/models.py, src/deepreason/amendment/state.py, src/deepreason/ui/status.py
 Seams: 
@@ -31,6 +31,7 @@ enforced in another, extended in a third, and operated from a fourth.
 | What the identity digest covers | `preparation.py` | `_request_digest` payload, `_REQUEST_DOMAIN` |
 | The question digest — a DIFFERENT digest, not part of run identity | `preparation.py` | `_question_digest`, `_QUESTION_DOMAIN` |
 | The durable identity record in the root | `preparation.py` | `RunPreparationRecordV1`, `PREPARATION_RECORD_NAME` |
+| A conditional sibling snapshot: which seat groups were bound at mint time (Rung S5) | `preparation.py` | `SEAT_BINDINGS_SNAPSHOT_NAME` — written into the prepared root only when at least one `--seat` group is bound; absent, not empty, for a default home |
 | Re-opening an existing identity without rewriting it | `preparation.py` | `RunPreparationService._load_existing` |
 | Id → root, resolved from the record and never from a path | `preparation.py` | `resolve_managed_run_root` |
 | Legal id charset | `preparation.py` | `_RUN_ID` |
@@ -65,6 +66,12 @@ MANIFEST digest is the opposite: it carries `compiled_at`, so it moves between
 preparations that the run id does not distinguish.
 
 `check: python -c "import inspect,deepreason.preparation as p;from deepreason.run_manifest import RunManifest;s=inspect.getsource(p._request_digest);assert not any(t in s for t in ('compiled_at','uuid','clock','_QUESTION_DOMAIN')) and '_REQUEST_DOMAIN' in s and 'compiled_at' in RunManifest.model_fields"`
+
+**The seat-bindings snapshot is conditional, never a bare empty file** (Rung
+S5): absent when no `--seat` group is bound, so a default home's prepared
+root is byte-for-byte unchanged from before this rung.
+
+`check: python -c "import tempfile,pathlib;from deepreason.application.models import RunBudgetIntentV1;from deepreason.cli.doctor import ProductionContractCaseResultV1,run_production_contract_doctor;from deepreason.preparation import SEAT_BINDINGS_SNAPSHOT_NAME,RunPreparationRequestV1,RunPreparationService;from deepreason.provider_profile import ProviderProfileV1,write_provider_profile;d=pathlib.Path(tempfile.mkdtemp());profile=ProviderProfileV1.create(provider='openai',endpoint='https://api.example.com/v1',model_id='m',family='f',context_window_tokens=262144,maximum_completion_tokens=4096,credential_env='DEEPREASON_CRI_KEY');path=write_provider_profile(profile,d/'profile.yaml');executor=lambda manifest:run_production_contract_doctor(manifest,case_executor=lambda m,p,i:ProductionContractCaseResultV1(case_id=f'case-{i+1:03d}',first_pass_valid=True,eventual_valid=True,repair_count=0,semantic_admission=True));service=RunPreparationService(runs_dir=d/'runs',qualification_cache_dir=d/'qc',environ={'DEEPREASON_CRI_KEY':'x'},qualification_executor=executor);req=RunPreparationRequestV1(question='q',budget=RunBudgetIntentV1(cycles=1,token_budget=100),profile_path=str(path));prepared=service.prepare(req);assert not (pathlib.Path(prepared.root)/SEAT_BINDINGS_SNAPSHOT_NAME).exists()"`
 
 **Budget is part of identity.** `--cycles` and `--token-budget` enter
 `_request_digest` through `request.budget`, so the same question at a different
