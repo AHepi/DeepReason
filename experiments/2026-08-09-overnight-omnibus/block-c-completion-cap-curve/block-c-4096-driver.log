@@ -1,0 +1,10 @@
+=== block-c-4096 start 2026-08-08T22:37:15Z head=b4f4c52e ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
