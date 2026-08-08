@@ -1,0 +1,95 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small, independently operated services is more resilient to correlated failure than a large redundant service, provided there is substrate diversity.",
+      "mechanism": "Decentralization breaks the 'fate-sharing' inherent in a single administrative and technical domain. While a monolith has internal redundancy, that redundancy is typically homogeneous (same OS, same config, same orchestration). A decentralized network leverages 'heterogeneous redundancy'—different operators use different versions of software, different cloud providers, and different update cycles—preventing a single latent bug or configuration error from acting as a global kill-switch.",
+      "counterconditions": [
+        "The 'Shadow Monolith' effect: independent operators all utilize the same underlying managed substrate (e.g., AWS us-east-1), concentrating risk.",
+        "Economic Homogeneity: market pressures drive all independent operators toward the same 'industry standard' stack, recreating the monolith's homogeneity."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "A large service with high internal redundancy is more resilient because it avoids the 'Coordination Complexity Trap' and 'Human-Error Correlation' found in decentralized networks.",
+      "mechanism": "Decentralized networks often require complex inter-service coordination or discovery protocols to maintain a cohesive user experience. As the network grows, the complexity of this coordination logic becomes a primary failure vector. Conversely, a single large service can implement strict, centralized versioning and canary deployments that eliminate the 'version mismatch' failures common in fragmented networks.",
+      "counterconditions": [
+        "The 'Redundancy Paradox': internal redundancy in a monolith increases the likelihood that a latent coordination bug (e.g., in Paxos/Raft) triggers a simultaneous global crash.",
+        "Single Point of Administrative Failure: a single privileged account or global config push can destroy the entire service regardless of internal redundancy."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_005",
+          "SCR_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The distinction between 'decentralized' and 'monolithic' is a red herring; resilience is determined solely by the 'Diversity Index' of the execution substrate.",
+      "mechanism": "Resilience to correlated failure is a function of the variance in the failure-triggering surface. A 'decentralized' network of 100 services all running the same Docker image on the same K8s version is functionally a monolith. A 'monolith' that employs multi-cloud, multi-OS, and multi-language implementation of its redundant nodes is functionally decentralized. The organizational boundary is irrelevant; only technical heterogeneity prevents correlated crashes.",
+      "counterconditions": [
+        "Administrative diversity provides a non-technical hedge (e.g., different operators react differently to the same external stimulus, preventing simultaneous manual errors).",
+        "High diversity increases the 'Long Tail' of unique bugs, increasing the frequency of isolated failures even if correlated failures decrease."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_004",
+          "SCR_006"
+        ]
+      }
+    },
+    {
+      "claim": "True independence of failure can be distinguished from pseudo-uncorrelated failure by analyzing the temporal distribution and trigger-correlation of outages.",
+      "mechanism": "Truly independent failures follow a Poisson distribution (stochastic, unrelated in time). Pseudo-uncorrelated failures exhibit 'burstiness' or 'clustering'—they appear random until mapped against a shared external event (e.g., a leap second, a specific BGP update, or a shared library update). Evidence of a shared cause is found when the 'inter-arrival time' of failures across diverse services collapses toward zero during specific external environmental shifts.",
+      "counterconditions": [
+        "The shared trigger is so rare or subtle that the clustering is statistically indistinguishable from noise over available observation windows.",
+        "The failures are caused by a 'cascading' effect where one independent failure triggers others, mimicking a shared cause without a shared root."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Operator Psychology' variable: In a monolith, a single SRE team might over-correct a problem, causing a global outage. In a decentralized network, 100 different operators will make 100 different mistakes in response to the same incident. This 'Cognitive Diversity' might be the strongest argument for decentralization, as it prevents the 'singular brilliant mistake' from taking down the whole system.",
+          "why_keep_this": "Adds a human-centric layer to the technical resilience argument."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we define a mathematical threshold where the cost of coordination in a decentralized network outweighs the risk of correlated failure in a monolith?",
+        "related_refs": [
+          "SCR_005",
+          "SCR_008"
+        ]
+      }
+    ]
+  }
+}
+```

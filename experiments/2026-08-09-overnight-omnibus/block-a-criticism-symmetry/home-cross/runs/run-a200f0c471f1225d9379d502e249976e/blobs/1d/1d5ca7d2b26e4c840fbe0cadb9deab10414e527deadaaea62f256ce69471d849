@@ -1,0 +1,85 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is less resilient to correlated failure than a redundant monolith when the failure vector is a shared upstream dependency (e.g., a common library, DNS provider, or cloud region).",
+      "mechanism": "While the services are independently operated, they often converge on a 'de facto' standard stack to minimize costs and maximize interoperability. This creates a hidden monolithic dependency layer where a single vulnerability or outage in a shared component triggers a simultaneous collapse across the network, whereas a monolith with strict internal redundancy can implement diversified internal fail-overs (e.g., multi-region, multi-stack) more cohesively.",
+      "counterconditions": [
+        "The decentralized network maintains strict implementation heterogeneity (different languages, OS, and providers).",
+        "The monolith's redundancy is implemented using identical copies of the same software version (homogeneous redundancy)."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The 'Complexity Trap' of a large service's internal redundancy makes it more prone to catastrophic correlated failure than a decentralized network.",
+      "mechanism": "Adding redundancy to a monolith increases the complexity of the coordination logic (e.g., consensus algorithms, load balancing). As the system grows, the probability of a 'black swan' event—where the coordination logic itself fails under specific network conditions (like a partition)—increases. In a decentralized network, the failure of one service's coordination logic is isolated to that service, preventing a systemic crash.",
+      "counterconditions": [
+        "The coordination logic is formally verified and proven to be partition-tolerant.",
+        "The decentralized network requires a global coordination layer to function, effectively recreating the monolith's failure mode."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Failure modes that appear uncorrelated but share a hidden cause can be distinguished from truly independent failures by analyzing the temporal distribution and 'burstiness' of the events.",
+      "mechanism": "Truly independent failures follow a Poisson distribution, occurring randomly over time. Pseudo-uncorrelated failures exhibit 'clustering' or 'burstiness' because they are triggered by an external synchronizing event (e.g., a leap second, a specific API update, or a global network spike) that affects multiple services simultaneously despite their apparent independence.",
+      "counterconditions": [
+        "The external trigger occurs at a frequency that mimics a Poisson process.",
+        "The services have such high variance in their reaction times to the trigger that the burstiness is smoothed out."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Decentralized networks are more resilient because they eliminate 'administrative' correlated failures—human errors in configuration or deployment that affect a whole monolith.",
+      "mechanism": "A single misconfiguration in a monolith's global deployment pipeline can take down all redundant instances instantly. In a decentralized network, independent operators use different deployment schedules, tools, and verification processes, ensuring that a 'fat-finger' error by one operator cannot propagate to others.",
+      "counterconditions": [
+        "The decentralized operators all use a shared 'managed service' or automated deployment platform that contains a global bug.",
+        "The network relies on a shared configuration file or central registry."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the 'Economic Homogeneity' hypothesis: Do market pressures force small, independent operators to adopt the same 'best-of-breed' tools, thereby creating an accidental monolith at the infrastructure layer? If so, 'independence' is an organizational illusion that doesn't translate to technical resilience.",
+          "why_keep_this": "Connects the economic reality of service operation to the technical failure modes."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we define a mathematical 'Correlation Horizon' where the cost of maintaining diversity in a decentralized network exceeds the benefit of the resulting resilience?",
+        "related_refs": [
+          "SCR_001",
+          "SCR_004"
+        ]
+      }
+    ]
+  }
+}
+```

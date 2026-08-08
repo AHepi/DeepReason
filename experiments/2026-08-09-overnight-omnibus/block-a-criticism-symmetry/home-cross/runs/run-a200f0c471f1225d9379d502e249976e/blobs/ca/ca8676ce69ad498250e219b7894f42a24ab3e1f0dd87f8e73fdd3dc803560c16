@@ -1,0 +1,37 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a7a3d1b64dd2a02775dd59a7: program:reasoning_observation_pending
+- reason-counter@9fe836aad2888ef51e747bde: program:reasoning_observation_pending
+- reason-counter@c1f0fc930dd05da6225e8197: program:reasoning_observation_pending
+- reason-counter@e2ba6819eedb839c1e8cbd33: program:reasoning_observation_pending
+- reason-counter@e0f2decd41a612db63365a6f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between truly independent and pseudo-uncorrelated failures is revealed by the 'Trigger-Response Distribution'\u2014specifically, the delta between a Poisson-distributed failure rate and a bursty, event-synced distribution.","counterconditions":[{"case":"The shared trigger occurs at an interval that mimics a Poisson distribution.","checker_spec":null,"eval":"observation"},{"case":"The sample size of failures is too small to statistically distinguish between a cluster and a random occurrence.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Truly independent failures occur as a stochastic process (Poisson), where the timing of one failure provides no information about the next. Pseudo-uncorrelated failures, driven by a hidden shared cause (e.g., a leap second or a specific API update), manifest as temporal clusters or 'bursts' that correlate with external systemic events, even if the services appear unrelated.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a7a3d1b64dd2a02775dd59a7, reason-counter@9fe836aad2888ef51e747bde
+
+TARGET SRC_002
+{"analogy":null,"claim":"Decentralized networks are inherently more resilient because they operate below the 'Correlation Horizon' of complexity, where the cost of coordinating redundancy in a monolith eventually becomes a source of failure itself.","counterconditions":[{"case":"The decentralized network requires a high-level coordination layer to function, effectively recreating the monolith's complexity problem at the network level.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"As a single service scales its internal redundancy, the complexity of the consensus and synchronization layers grows non-linearly. This creates a 'Correlation Horizon' where the very mechanisms intended to provide resilience (e.g., complex failover logic) become the most likely source of correlated crashes. Small, independent services avoid this by keeping their coordination domains minimal.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c1f0fc930dd05da6225e8197
+
+TARGET SRC_003
+{"analogy":null,"claim":"Decentralized networks are more resilient to correlated failure only if they exhibit 'Substrate Diversity'; otherwise, they are 'Shadow Monoliths' that trade explicit redundancy for implicit, hidden fragility.","counterconditions":[{"case":"Operators intentionally diversify their substrates (e.g., multi-cloud, multi-kernel).","checker_spec":null,"eval":"observation"},{"case":"The monolith's internal redundancy is so high that it can withstand the failure of any single shared substrate.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The resilience of a decentralized network depends not on the organizational independence of operators, but on the diversity of the underlying technical stack (OS, cloud provider, hardware). If independent operators converge on a 'best-of-breed' toolset (Infrastructure Mimicry), they create a shared failure domain that lacks the managed redundancy of a monolith, making them more vulnerable to systemic triggers.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e2ba6819eedb839c1e8cbd33, reason-counter@e0f2decd41a612db63365a6f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

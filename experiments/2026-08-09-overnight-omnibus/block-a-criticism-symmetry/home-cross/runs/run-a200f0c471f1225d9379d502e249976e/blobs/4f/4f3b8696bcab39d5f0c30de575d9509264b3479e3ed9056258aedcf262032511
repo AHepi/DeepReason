@@ -1,0 +1,95 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a large redundant service because it leverages 'Cognitive and Substrate Diversity' to break the homogeneity required for systemic collapse.",
+      "mechanism": "While a large service increases redundancy (more nodes), it typically does so through homogeneity (identical software/config), creating a massive attack surface for a single latent bug. A decentralized network introduces variance in operator psychology (SCR_009), software versions, and underlying infrastructure (SCR_002), ensuring that a trigger affecting one service is unlikely to be compatible with the specific state of all others.",
+      "counterconditions": [
+        "The decentralized services converge on a 'Shadow Monolith' by using the same managed cloud substrate (e.g., all on AWS us-east-1), rendering organizational independence irrelevant.",
+        "The services are coupled via a critical shared dependency (e.g., a single global DNS provider or Auth0) that introduces a hidden single point of failure."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_003",
+          "SCR_009"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The large service is more resilient because the 'Coordination Overhead' of a decentralized network creates new, more volatile correlation vectors that outweigh the benefits of independence.",
+      "mechanism": "Decentralized networks often rely on emergent coordination or fragile API contracts. As the network grows, the complexity of managing these interactions creates 'interdependency cascades' where a failure in one small service triggers a retry-storm or timeout-cascade across the others, mimicking a correlated failure more severely than a controlled internal failure in a monolith.",
+      "counterconditions": [
+        "The decentralized services are truly loosely coupled with asynchronous communication and robust circuit breakers.",
+        "The internal redundancy of the large service is managed by a coordination logic (e.g., Raft/Paxos) that has reached a 'Correlation Horizon' (SCR_005) where it becomes the primary failure vector."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_005",
+          "SCR_008",
+          "SCR_012"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The distinction between 'independent' and 'pseudo-uncorrelated' failures is distinguishable via the statistical signature of 'Burstiness vs. Poisson Distribution'.",
+      "mechanism": "Truly independent failures follow a Poisson process, appearing randomly and steadily over time. Pseudo-uncorrelated failures—those driven by a hidden shared cause—exhibit 'clustering' or 'burstiness' (SCR_001). When an external trigger (e.g., a leap second or a specific kernel update) occurs, services that appeared independent suddenly fail in a tight temporal window, revealing the hidden correlation.",
+      "counterconditions": [
+        "The hidden shared trigger occurs at a frequency or distribution that perfectly mimics a Poisson process, making it mathematically indistinguishable from random noise.",
+        "The sample size of failures is too small to establish a statistically significant distribution."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Neither architecture is inherently more resilient; resilience is a function of 'Stack Diversity' rather than 'Organizational Structure'.",
+      "mechanism": "The 'Monolith vs. Decentralized' binary is a red herring (SCR_004). A large service with N-version programming (different teams writing the same logic in different languages) is more resilient than a decentralized network of 100 services all running the same 'best-of-breed' Docker image on the same Kubernetes version (SCR_003). The critical variable is the lack of common-mode failure vectors in the technical stack.",
+      "counterconditions": [
+        "The cost of maintaining N-version programming in a monolith is so high that it introduces human-error correlations (bugs in the integration layer) that exceed the risks of homogeneity.",
+        "Substrate diversity is impossible due to market dominance of a single cloud provider."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_004",
+          "SCR_006"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: 'The API Gravity Well'. In decentralized networks, the tendency to standardize on a few 'industry standard' APIs creates a semantic correlation. Even if the code is different, the way they handle a specific malformed request (the 'poison pill') might be identical because they all follow the same RFC interpretation, leading to correlated crashes.",
+          "why_keep_this": "Explores a new type of correlation: semantic/standardization correlation, which is distinct from infrastructure correlation."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we develop a 'Diversity Metric' (e.g., using Shannon entropy on the software bill of materials) that quantifies the probability of correlated failure across a network?",
+        "related_refs": [
+          "SCR_006",
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@bb5d58bc72ece1069942d0b6: program:reasoning_observation_pending
+- reason-counter@642d6dfd47c32050d6f3c3ea: program:reasoning_observation_pending
+- reason-counter@1a602f0bbacfcf267af63865: program:reasoning_observation_pending
+- reason-counter@03b391bc034490db67a6cd0b: program:reasoning_observation_pending
+- reason-counter@3c423a33c5a3c09ea1cbd055: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Decentralized networks of small services are more resilient to correlated failure because they decouple the blast radius of systemic software bugs and operational errors.","counterconditions":[{"case":"The services share a common critical dependency (e.g., a single DNS provider or a single cloud region).","checker_spec":null,"eval":"observation"},{"case":"The services utilize a standardized, mandated software framework that contains a latent vulnerability.","checker_spec":null,"eval":"observation"},{"case":"The failure is triggered by a global external event (e.g., a protocol-level attack) that affects all implementations regardless of scale.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The failure mechanism is the 'homogeneity of the stack'. In a large service, a single bug in a shared library or a misconfiguration in a global deployment pipeline propagates to all redundant nodes simultaneously (correlated failure). In a decentralized network, diverse implementations, varied deployment schedules, and heterogeneous infrastructure create 'circuit breakers' that prevent a single cause from triggering a global outage.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bb5d58bc72ece1069942d0b6, reason-counter@642d6dfd47c32050d6f3c3ea, reason-counter@1a602f0bbacfcf267af63865
+
+TARGET SRC_002
+{"analogy":null,"claim":"Decentralized networks are actually more prone to correlated failure due to 'Economic Convergence'.","counterconditions":[{"case":"There is a high degree of intentional diversity in the choice of tooling among operators.","checker_spec":null,"eval":"observation"},{"case":"The services operate in highly regulated environments that mandate diverse redundancy.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The failure mechanism is 'market-driven homogeneity'. Small, independent operators tend to adopt the same 'industry standard' tools (e.g., Kubernetes, AWS, specific open-source libraries) to minimize cost and complexity. This creates a hidden layer of strict correlation. While they appear independent, they are functionally clones of one another, meaning a vulnerability in the standard toolset acts as a global kill-switch.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@03b391bc034490db67a6cd0b, reason-counter@3c423a33c5a3c09ea1cbd055
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
