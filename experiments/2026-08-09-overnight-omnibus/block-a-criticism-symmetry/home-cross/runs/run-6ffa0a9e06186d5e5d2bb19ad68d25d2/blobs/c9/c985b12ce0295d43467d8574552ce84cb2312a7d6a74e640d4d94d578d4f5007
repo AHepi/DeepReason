@@ -1,0 +1,71 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist will be more reliable than a single expert because the checklist decomposes complex intuition into a series of independent binary verifications, eliminating single-point cognitive failure.",
+      "mechanism": "The 'Error-Cancellation Mechanism': While a single expert's intuition is a monolithic heuristic susceptible to 'blind spots' or confirmation bias, a checklist forces the decomposition of the problem into discrete, verifiable sub-tasks. By distributing these tasks across a panel, the probability of a systemic oversight is reduced to the joint probability of all panel members missing the same specific checklist item, which is significantly lower than the probability of a single expert's intuition failing.",
+      "counterconditions": [
+        "The checklist is poorly designed and omits critical variables that the expert's intuition would have captured.",
+        "The panel exhibits 'groupthink' or social contagion, leading them to collectively ignore a checklist item.",
+        "The task requires holistic synthesis that cannot be decomposed into a checklist without losing essential context."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The single domain expert will remain more reliable because the checklist creates a 'false ceiling' of reliability, where non-experts achieve high accuracy on common cases but fail catastrophically on edge cases that only intuition can detect.",
+      "mechanism": "The 'Heuristic Depth Mechanism': Domain expertise is not just a collection of rules, but a high-dimensional pattern recognition system. A checklist represents a low-dimensional projection of this expertise. Non-experts following a checklist are limited to the 'average' case encoded in the list; the expert's intuition allows for the detection of 'anomalous signals' that fall outside the checklist's scope but are critical for the correct outcome.",
+      "counterconditions": [
+        "The task is highly algorithmic and lacks significant 'edge case' complexity.",
+        "The expert is suffering from severe overconfidence or cognitive fatigue.",
+        "The checklist is dynamically updated to include known edge cases."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Reliability gain is distinguished from mere compliance by the presence of 'Corrective Divergence' within the panel's internal deliberations.",
+      "mechanism": "The 'Conflict-Resolution Mechanism': Mere compliance is characterized by uniform agreement with the checklist. A genuine reliability gain is evidenced when panel members disagree on a checklist item, engage in evidence-based deliberation, and arrive at the correct answer through the correction of an individual's error. If the panel arrives at the right answer without any internal conflict or correction, they are merely tracking the checklist; if they arrive at the right answer by correcting a member who was blindly following the checklist, the reliability gain is systemic.",
+      "counterconditions": [
+        "The checklist is so explicit that no ambiguity exists to trigger divergence.",
+        "The panel is too intimidated to disagree, suppressing corrective divergence."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The panel is more reliable only if the checklist acts as a 'Cognitive Scaffold' that enables non-experts to perform a specific type of systematic search that experts bypass via 'Fast-Thinking' shortcuts.",
+      "mechanism": "The 'System 2 Forcing Mechanism': Experts often rely on System 1 (intuitive, fast) processing, which is efficient but prone to availability heuristics. A checklist forces the panel into System 2 (analytical, slow) processing. The reliability gain comes from the mandatory execution of a comprehensive search space, ensuring that no 'obvious' step is skipped—a common failure mode for experts who 'see' the answer and skip the verification of the premises.",
+      "counterconditions": [
+        "The time cost of System 2 processing leads to fatigue and increased error rates in the panel.",
+        "The expert consciously employs a personal verification checklist."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'distinguishing evidence' part of the problem: if a panel follows a checklist and gets it right, is that 'reliability' or just 'luck' (tracking)? If we introduce a 'decoy' item into the checklist—a step that is logically irrelevant but looks plausible—compliance-driven panels will mark it as 'done' regardless of the facts. A reliability-driven panel would question the decoy. This could be a way to distinguish genuine judgment from blind adherence.",
+          "why_keep_this": "Provides a concrete experimental design for the second part of the prompt."
+        }
+      }
+    ]
+  }
+}
+```
