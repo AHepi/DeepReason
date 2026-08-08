@@ -20,10 +20,13 @@ mkdir -p "$DEEPREASON_HOME"
   python3 "$LIVE/write_coder_profile.py" "$LIVE/coder-profile.yaml"
   echo "write_coder_profile_rc=$?"
 
+  # maximum-completion-tokens raised 8192 -> 16384 after Failure #1
+  # (a REPAIR_SCOPE_VIOLATION on the summarizer/compact contract at
+  # 8192); see RESULTS.md.
   timeout 300 deepreason setup \
     --provider ollama --endpoint https://ollama.com/v1 \
     --model glm-5.2 --model-revision glm-5.2 --family glm \
-    --context-window-tokens 131072 --maximum-completion-tokens 8192 \
+    --context-window-tokens 131072 --maximum-completion-tokens 16384 \
     --reasoning none \
     --credential-env OLLAMA_API_KEY \
     --seat "coder=$LIVE/coder-profile.yaml"

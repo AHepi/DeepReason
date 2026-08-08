@@ -33,13 +33,34 @@ scope — a content-shape/discipline issue on this one representative
 case, not a config error or a run death.
 
 **Remedy (knob, not code):** raised `--maximum-completion-tokens` from
-8192 to 16384 and re-ran `setup` + `qualify`. This changes the
-profile's own digest, forcing a FRESH, independently-sampled battery
-(qualification caches by subject digest; re-running the SAME profile
-would have replayed the identical cached failure) — the standard
-adaptation for a stochastic single-case miss, not a certainty of fixing
-the specific repair-scope behavior, but the cheapest knob available
-that plausibly gives the model more room during a repair attempt.
+8192 to 16384 and re-ran `setup` + `qualify` MANUALLY (outside the
+ladder script) to confirm the fix before touching the ladder. This
+changes the profile's own digest, forcing a FRESH, independently-
+sampled battery (qualification caches by subject digest; re-running the
+SAME profile would have replayed the identical cached failure) — the
+standard adaptation for a stochastic single-case miss, not a certainty
+of fixing the specific repair-scope behavior, but the cheapest knob
+available that plausibly gives the model more room during a repair
+attempt. Confirmed: the fresh battery reached `qualification_state:
+"ready"`, `tier: "full"` for the combination (digest
+`2c507ede9c...`), coder seat unaffected (`cache_reused: true`, still
+`ready`/`full`).
+
+**Failure #2 — self-inflicted ladder bug, logged honestly.**
+Re-launched `s6_run.sh` to resume the ladder from `setup` onward,
+expecting `setup` to be a harmless no-op re-affirming the already-fixed
+profile. It was not: `s6_run.sh`'s own `setup` invocation still had
+`--maximum-completion-tokens 8192` HARD-CODED, so re-running it
+silently overwrote the manually-fixed `16384` profile back to the
+failing one. `qualify` then cache-hit the STALE shallow-tier subject
+digest (`f9295c2b...`, the same one Failure #1 diagnosed), and `reason`
+refused typed with the identical `QUALIFICATION_TIER_SHALLOW` error.
+This is a ladder bug, not a new model/qualification finding -- caused
+by fixing the LIVE environment manually without updating the SCRIPT
+that reproduces it, then blindly re-running the script. **Remedy:**
+`s6_run.sh` corrected in place (the hardcoded value now reads `16384`,
+with a one-line comment naming Failure #1 as the reason), verified by
+re-reading the file before the next launch.
 
 ## 2026-08-08 — launch
 
