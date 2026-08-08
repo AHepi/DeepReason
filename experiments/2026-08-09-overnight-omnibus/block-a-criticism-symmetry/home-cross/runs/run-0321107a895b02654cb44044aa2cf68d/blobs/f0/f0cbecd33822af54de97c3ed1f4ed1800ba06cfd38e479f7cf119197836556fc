@@ -1,0 +1,117 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is fundamentally less resilient to correlated failure than a highly redundant centralized service when the 'independence' of services is a facade masking common-mode dependencies (e.g., shared libraries or cloud providers).",
+      "mechanism": "The 'Dependency Illusion' mechanism: decentralized networks often optimize for operational independence but rely on a homogeneous substrate of industry-standard dependencies (e.g., OpenSSL, AWS, Linux kernel). A vulnerability in this shared substrate triggers a simultaneous failure across all 'independent' nodes, whereas a centralized service with internal redundancy can implement heterogeneous stacks (multi-cloud/multi-OS) under a single coordination authority to mitigate such risks.",
+      "counterconditions": [
+        "The decentralized network maintains true heterogeneity in its underlying software and hardware stacks.",
+        "The centralized service lacks the administrative capacity to implement diverse redundancy."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002"
+        ],
+        "shared_structure": [
+          "Many separate entities relying on a single hidden common point of failure"
+        ],
+        "disanalogies": [
+          "The analogy in SCR_002 focuses on libraries; the claim extends this to infrastructure and operational paradigms."
+        ],
+        "transfer_claims": [
+          "The vulnerability of a monoculture applies regardless of the organizational boundary of the services."
+        ],
+        "overturn_conditions": [
+          "Proof that decentralized networks are significantly more heterogeneous than centralized ones."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "Decentralized networks are more resilient to 'black swan' failures but more vulnerable to 'slow-burn' systemic shifts than centralized services.",
+      "mechanism": "The 'Immune System vs. Colony' mechanism: A centralized service's redundancy acts as a powerful, singular immune system capable of rapid, global rollback (high recovery speed), but a single failure in the coordination logic can lead to an instantaneous 'Flash Crash'. A decentralized network acts as a colony; it lacks a global kill-switch (slower propagation of some failures), but it is susceptible to environmental shifts (e.g., a change in a global protocol) that a centralized entity could have buffered or regulated internally.",
+      "counterconditions": [
+        "The decentralized network implements a robust, automated consensus-based recovery mechanism.",
+        "The centralized service's coordination logic is the primary source of its correlated failures."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001"
+        ],
+        "shared_structure": [
+          "Organism (centralized) vs. Colony (decentralized)"
+        ],
+        "disanalogies": [
+          "Biological systems have evolved mechanisms for both; digital systems are designed."
+        ],
+        "transfer_claims": [
+          "The trade-off between specialized internal regulation and diverse external survival applies to network architecture."
+        ],
+        "overturn_conditions": [
+          "Empirical data showing that decentralized networks propagate failures faster than centralized ones."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "The distinction between independent and correlated failures can be identified by the 'Latency-Correlation Signature' of the failure event.",
+      "mechanism": "The 'Temporal-Spatial Signature' mechanism: Truly independent failures occur as a Poisson process—stochastically distributed across time and space. Correlated failures, even those appearing independent, exhibit 'latent synchronization': they cluster around a specific trigger event (e.g., a leap second, a specific API update, or a solar flare) with a characteristic propagation delay that mirrors the network's topology rather than random chance.",
+      "counterconditions": [
+        "The 'shared cause' is so subtle that its trigger is indistinguishable from background noise.",
+        "Independent operators react to the same external event in identical ways, mimicking a shared internal cause."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    },
+    {
+      "claim": "Decentralized networks are more resilient to correlated failure only if the 'diversity index' of their implementations exceeds the 'redundancy coefficient' of the centralized alternative.",
+      "mechanism": "The 'Heterogeneity Threshold' mechanism: Redundancy in a centralized system is often just duplication (same code, different server). Resilience in a decentralized system comes from diversity (different code, different server). If the decentralized network is merely a collection of clones, it is less resilient. Only when the variety of failure modes (entropy) is high enough to ensure that no single trigger can affect a majority of nodes does the decentralized model win.",
+      "counterconditions": [
+        "Centralized services implement 'N-version programming' (multiple independent implementations of the same spec).",
+        "The cost of maintaining high heterogeneity in a decentralized network creates new, unique failure modes (e.g., interoperability collapse)."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Can we formally define the 'Diversity Index' mentioned in SCR_005 to create a mathematical proof for the resilience threshold?",
+        "related_refs": [
+          "SCR_005",
+          "SCR_006"
+        ]
+      },
+      {
+        "question": "Is the 'Flash Crash' of a centralized system actually a form of 'hyper-resilience' if the recovery is truly instantaneous?",
+        "related_refs": [
+          "SCR_003"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,91 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure than a large redundant service because it disrupts 'monoculture-driven' common mode failures through heterogeneous operational environments.",
+      "mechanism": "Heterogeneity in deployment (different OS, kernels, hardware, and configurations) across independent operators prevents a single exploit or bug from triggering a global outage, whereas a large service—despite internal redundancy—typically employs a standardized 'golden image' or unified CI/CD pipeline that propagates failures instantly to all redundant nodes.",
+      "counterconditions": [
+        "The decentralized services all rely on a single shared dependency (e.g., a common cloud provider's DNS or a ubiquitous library like OpenSSL as suggested in SCR_003).",
+        "The cost of coordination in the decentralized network leads to a systemic consensus collapse (SCR_002)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "A large service with high internal redundancy is more resilient because it can isolate failures through precise, centralized telemetry and rapid global reconfiguration that decentralized networks cannot coordinate.",
+      "mechanism": "The 'single pane of glass' visibility allows for the immediate identification of a correlated failure pattern and the execution of a global 'kill switch' or traffic reroute. In a decentralized network, the lack of a shared control plane means failure signals are fragmented, leading to 'cascading blindness' where operators cannot distinguish a local failure from a systemic one until it is too late.",
+      "counterconditions": [
+        "The centralized control plane itself becomes the single point of failure (SPOF).",
+        "The internal redundancy is logically coupled (e.g., shared database state) rather than physically and logically isolated."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The distinction between independent and seemingly uncorrelated failures is identified by the 'temporal-spatial signature' of the outage relative to shared dependency updates.",
+      "mechanism": "Truly independent failures occur randomly across time and space. Seemingly uncorrelated failures exhibit a 'latent synchronization' where they trigger simultaneously or in a tight sequence following a shared external event (e.g., a leap second, a BGP update, or a library patch), revealing a hidden shared cause despite the appearance of operational independence.",
+      "counterconditions": [
+        "The shared cause is a 'black swan' event with a trigger so ubiquitous (e.g., global power failure) that it mimics independent failure in a small sample.",
+        "The temporal signature is masked by staggered update schedules across the decentralized network."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Decentralized networks are fundamentally more fragile to 'metabolic' correlated failures—failures of the ecosystem's supporting infrastructure—than a single large service.",
+      "mechanism": "A large service can vertically integrate its dependencies (e.g., building its own data centers, fiber, and hardware). A decentralized network of small services is forced to rely on a few 'hyper-scale' providers for basic primitives (AWS, Cloudflare, GCP). This creates a 'hidden centralization' where the independence of the services is an illusion, and the actual failure mode is a correlated collapse of the shared underlying substrate.",
+      "counterconditions": [
+        "The decentralized network is intentionally multi-cloud/multi-substrate.",
+        "The large service's internal redundancy is built atop the same hyper-scale providers."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Consider the 'immune system' analogy: A large service is like a highly specialized organism with a powerful but singular immune system. A decentralized network is like a colony of different species. The colony survives a plague that kills the organism, but the colony is vulnerable to an environmental shift (e.g., temperature change) that the organism could have regulated internally.",
+          "why_keep_this": "Provides a conceptual framework for comparing systemic vs. specific resilience."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we quantify the 'degree of heterogeneity' required in a decentralized network to actually offset the loss of centralized coordination?",
+        "related_refs": [
+          "SCR_001"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,111 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure only if its 'Diversity Index' exceeds the 'Coupling Coefficient' of the centralized service's control plane.",
+      "mechanism": "Resilience is not a function of scale or redundancy, but of the overlap in the dependency trees (OS, kernel, libraries, cloud providers) across the system. A decentralized network reduces correlation by distributing these dependencies across different operators, whereas a large service—even with high redundancy—often shares a singular, monolithic control plane or a standardized internal library set that creates a single point of failure (Common Mode Failure).",
+      "counterconditions": [
+        "The decentralized services converge on a single industry-standard dependency (e.g., a specific version of OpenSSL) that introduces a shared vulnerability.",
+        "The cost of coordination in the decentralized network leads to a consensus collapse during a crisis, creating a systemic failure absent in centralized systems."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001"
+        ],
+        "shared_structure": [
+          "Comparison between a specialized organism (centralized) and a multi-species colony (decentralized).",
+          "Trade-off between internal regulation and environmental robustness."
+        ],
+        "disanalogies": [
+          "Biological species evolve naturally via mutation; software stacks are chosen via procurement and standardization."
+        ],
+        "transfer_claims": [
+          "Systemic resilience is derived from heterogeneity rather than the volume of redundancy."
+        ],
+        "overturn_conditions": [
+          "If the 'colony' shares a single critical biological vulnerability (e.g., a specific receptor), the analogy fails."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "The distinction between truly independent failures and appearing uncorrelated failures is revealed by the 'Temporal Signature' of the outage across the dependency graph.",
+      "mechanism": "Truly independent failures occur stochastically across the network with no temporal clustering. Failures that appear uncorrelated but share a cause exhibit a 'latent trigger' pattern: they may occur at different times, but are all traceable back to a shared state change (e.g., a leap second, a specific API update, or a shared cloud region outage) that activates a hidden common dependency.",
+      "counterconditions": [
+        "The shared cause is a 'slow-burn' trigger that activates dependencies at widely varying intervals, masking the temporal correlation.",
+        "The system is so highly coupled that independent failures immediately trigger cascading effects, making them look correlated."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A large service with strictly more internal redundancy is more resilient because it can implement 'Global State Awareness' to preempt failures that would cascade in a decentralized network.",
+      "mechanism": "Centralized telemetry allows for instantaneous global reconfiguration (e.g., shedding load, rerouting traffic, or rolling back a deployment) across all redundant nodes. A decentralized network suffers from 'Distributed Discovery Lag,' where each small service must independently detect and react to a failure, leading to thundering-herd effects and cascading timeouts.",
+      "counterconditions": [
+        "The global control plane itself fails or propagates a corrupted configuration to all redundant nodes simultaneously (the 'Flash Crash' scenario).",
+        "The complexity of managing the internal redundancy creates a management-layer failure that outweighs the benefits of global awareness."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The resilience advantage of decentralized networks is an illusion created by administrative boundaries; the true variable is the 'Coupling of the Control Plane'.",
+      "mechanism": "If a large service implements multi-cloud, multi-OS, and multi-stack redundancy under a decoupled control plane, it is functionally a decentralized network with a shared billing department. Conversely, if a decentralized network of services all rely on the same cloud provider's identity service, they are functionally a single large service. Resilience is determined by the technical overlap of the critical path, not the organizational structure.",
+      "counterconditions": [
+        "Administrative boundaries impose constraints (e.g., security audits, diverse SLAs) that force technical heterogeneity in ways a single company never would.",
+        "The lack of a central authority in a decentralized network prevents the implementation of a 'global kill-switch' necessary for certain catastrophic failure modes."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the 'Fragility of Standardization': If we assume that 'best practices' in DevOps (e.g., using Kubernetes, Terraform, Prometheus) are adopted by both the large service and the small independent services, does the 'decentralized' network actually inherit a massive, invisible correlated failure mode? The 'industry standard' becomes the shared control plane.",
+          "why_keep_this": "Challenges the assumption that independent operators choose independent stacks."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we mathematically define the 'Resilience Crossover Point' where the overhead of managing heterogeneity in a centralized system becomes more risky than the coordination cost of a decentralized one?",
+        "related_refs": [
+          "SCR_013"
+        ]
+      }
+    ]
+  }
+}
+```

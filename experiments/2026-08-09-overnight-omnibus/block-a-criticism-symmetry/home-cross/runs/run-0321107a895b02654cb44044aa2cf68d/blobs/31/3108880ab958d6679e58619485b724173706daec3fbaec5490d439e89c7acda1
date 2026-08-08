@@ -1,0 +1,125 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a large service, provided the decentralization extends to the underlying technical stack (implementation diversity), rather than just administrative boundaries.",
+      "mechanism": "By diversifying the 'implementation monoculture' (e.g., varying OS, languages, and cloud providers), the network eliminates the single 'poison pill' vulnerability that would instantly compromise a large service's redundant but identical nodes. Resilience is derived from the lack of a shared failure domain in the software supply chain.",
+      "counterconditions": [
+        "The 'industry standard' paradox: widespread adoption of a single orchestration layer (e.g., Kubernetes) creates a hidden centralized control plane.",
+        "The services share a critical common dependency (e.g., a single DNS provider or root CA) that creates a latent correlated failure mode."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001"
+        ],
+        "shared_structure": [
+          "Biological diversity vs. specialized organism",
+          "Species variety preventing total extinction from a single pathogen"
+        ],
+        "transfer_claims": [
+          "Software diversity acts as a systemic 'immune system' against common-mode failures."
+        ],
+        "disanalogies": [
+          "Environmental shifts (e.g., global API changes) may affect all species regardless of internal variety."
+        ],
+        "overturn_conditions": [
+          "Discovery that 'diversity' is superficial (e.g., different wrappers around the same core library)."
+        ]
+      }
+    },
+    {
+      "claim": "A large service with high internal redundancy is more resilient because it can mitigate 'metabolic' correlated failures through centralized coordination and rapid global recovery.",
+      "mechanism": "Centralized control allows for instantaneous global rollbacks and unified traffic shedding during a crisis. In contrast, a decentralized network suffers from 'consensus collapse' or slow propagation of fixes, allowing a failure to cascade through the network without a central kill-switch.",
+      "counterconditions": [
+        "The failure is a 'Flash Crash' caused by the very coordination mechanism intended to protect the system.",
+        "The internal redundancy is 'shallow' (identical copies) rather than 'deep' (heterogeneous redundancy)."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_006"
+        ],
+        "shared_structure": [
+          "Centralized kill-switch vs. slow propagation",
+          "Global rollback vs. individual service recovery"
+        ],
+        "transfer_claims": [
+          "Coordination speed is a primary driver of resilience in high-velocity failure modes."
+        ],
+        "disanalogies": [
+          "Does not account for the 'single point of failure' in the coordination logic itself."
+        ],
+        "overturn_conditions": [
+          "Evidence that decentralized networks can achieve near-instantaneous emergent coordination."
+        ]
+      }
+    },
+    {
+      "claim": "The distinction between 'independent' and 'correlated' failures is evidenced by the 'Correlation Coefficient of Infrastructure' (CCI)—specifically, the overlap of dependency trees.",
+      "mechanism": "Failures that appear uncorrelated are revealed as correlated when the dependency trees (OS, Kernel, Libraries, Cloud Provider) of the 'independent' services are mapped. A shared leaf in the dependency graph (e.g., a specific version of OpenSSL) serves as the hidden shared cause.",
+      "counterconditions": [
+        "The shared dependency is not a failure vector (e.g., a shared utility library that is functionally inert during the crash).",
+        "The failure is truly stochastic and independent across nodes despite shared infrastructure."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004"
+        ]
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_003",
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "Dependency tree overlap",
+          "Common-mode failure in standardized libraries"
+        ],
+        "transfer_claims": [
+          "Structural overlap in the supply chain is the definitive evidence of latent correlation."
+        ],
+        "disanalogies": [
+          "Correlation can also emerge from behavioral patterns (e.g., all services reacting to the same external market signal) without shared code."
+        ],
+        "overturn_conditions": [
+          "Proof that diverse stacks still fail synchronously due to external environmental triggers."
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculating on 'Behavioral Correlation': Even if the stacks are 100% diverse (different languages, different clouds), if all services use the same 'Auto-Scaling' logic or 'Circuit Breaker' thresholds, they might all trip at the same time in response to a global traffic spike. This is a 'correlation of logic' rather than a 'correlation of infrastructure'.",
+          "why_keep_this": "Adds a layer to the 'evidence' part of the problem beyond just dependency trees."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a threshold of 'diversity' beyond which the cost of coordination in a decentralized network outweighs the resilience gains?",
+        "related_refs": [
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```

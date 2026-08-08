@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7fa629ae0bad60940c31c13b: program:reasoning_observation_pending
+- reason-counter@25cd6baa11cf2ada28670b6f: program:reasoning_observation_pending
+- reason-counter@47f6e045aaa2c202c1e33d3c: program:reasoning_observation_pending
+- reason-counter@6a32b7c7946b7c69e8055968: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between truly independent failures and appearing uncorrelated failures is found in the 'temporal signature' and 'dependency graph' of the outages.","counterconditions":[{"case":"The 'shared cause' is so rare that it is statistically indistinguishable from independent failures over the observed timeframe.","checker_spec":null,"eval":"observation"},{"case":"Failures are triggered by an external adversary who targets nodes independently but sequentially.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Truly independent failures occur stochastically across the network without temporal clustering. Appearing uncorrelated failures (hidden common-mode) exhibit a 'latent trigger'\u2014they may appear sporadic until a specific global state change (e.g., a leap second, a certificate expiration, or a BGP route leak) activates the shared vulnerability across diverse nodes simultaneously.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7fa629ae0bad60940c31c13b, reason-counter@25cd6baa11cf2ada28670b6f
+
+TARGET SRC_002
+{"analogy":null,"claim":"A large service with strictly more internal redundancy is more resilient because it can implement 'Global State Awareness' to preempt failures that would cascade in a decentralized network.","counterconditions":[{"case":"The global control plane itself fails or propagates a corrupted configuration to all redundant nodes simultaneously (the 'Flash Crash' scenario).","checker_spec":null,"eval":"observation"},{"case":"The complexity of managing the internal redundancy creates a management-layer failure that outweighs the benefits of global awareness.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Centralized telemetry allows for instantaneous global reconfiguration (e.g., shedding load, rerouting traffic, or rolling back a deployment) across all redundant nodes. A decentralized network suffers from 'Distributed Discovery Lag,' where each small service must independently detect and react to a failure, leading to thundering-herd effects and cascading timeouts.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@47f6e045aaa2c202c1e33d3c, reason-counter@6a32b7c7946b7c69e8055968
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
