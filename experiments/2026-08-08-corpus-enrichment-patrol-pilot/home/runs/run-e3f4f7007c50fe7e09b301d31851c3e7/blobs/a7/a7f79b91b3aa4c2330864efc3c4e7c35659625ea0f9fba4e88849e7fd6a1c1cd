@@ -1,0 +1,131 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_002 and SRC_004 share the mechanism of underdetermination: both isolate a logical gap between the single data point (7 for $2) and the answer ($6), attributing that gap to an unstated convention of uniform linear pricing. They differ only in emphasis: SRC_002 frames the gap as missing explicit constraint, SRC_004 frames it as a contingent bundle-pricing convention that must be adopted to license the computation. This relation is refuted if a re-description of the two artifacts as 'both question the linear scaling premise' or 'both identify a gap' fails to state a predicate beyond mere co-occurrence of topic — a summary of the endpoints is not a relation.",
+      "typicality": 0.55,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "the problem statement does not explicitly constrain the cost of 21 pencils to scale linearly from the 7-for-$2 rate."
+        },
+        {
+          "block": "000000000000",
+          "quote": "The statement '7 for $2' is a convention. The computation $21 * ($2/7) = $6 is logically valid only if we adopt the convention that the bundle establishes a strict proportional contract."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_001 and SRC_005 are compatible with each other and jointly compatible with SRC_003's empiricist stance under the integration that all three treat the proportionality/covering principle as a real, defeasible assumption rather than an axiom. SRC_003 supplies the epistemic modality (expectation, not entailment), while SRC_001 and SRC_005 supply the pedagogical mechanism that renders the assumption invisible by construction. The integration is refuted if any one of the three instead treats linear pricing as a logical necessity from the problem text, or if their mechanisms are merely topically similar without a shared commitment to the defeasibility of the covering principle — a summary of the endpoints is not a relation.",
+      "typicality": 0.7,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "The $6 answer is merely the artifact of the exercise's construction, while the underlying reasoning skill being tested is the recognition of proportional invariance."
+        },
+        {
+          "block": "000000000000",
+          "quote": "The problem is constructed so that 21 = 3×7, making the answer mechanically $6. This meta-mechanism recognizes the problem as a pedagogical artifact encoding a proportionality assumption."
+        },
+        {
+          "block": "000000000000",
+          "quote": "From an empiricist stance, the problem text provides a single data point (7 for $2). The expectation of uniform pricing is an empirical prior, not a logical necessity."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_003 depends on SRC_002: the empiricist's defeasible expectation of uniform pricing is coherent only against a background where logical entailment is absent; SRC_002 establishes that absence by noting the problem does not explicitly constrain cost to scale linearly. Without SRC_002's gap, SRC_003's claim that $6 is expectation rather than entailment collapses — it would have nothing to be defeasible about. This relation is refuted if SRC_003 can stand independently of any claim about underdetermination (e.g., if empiricist defeasibility requires no skeptical premise), or if 'SRC_003 notes a gap and SRC_002 notes a gap' is the entire content of the claim — a summary of the endpoints is not a relation.",
+      "typicality": 0.45,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "Without an explicit covering principle (e.g., 'pencils are sold at a constant per-unit rate'), the cost of 21 pencils is not uniquely determined."
+        },
+        {
+          "block": "000000000000",
+          "quote": "the expectation of uniform pricing is an empirical prior, not a logical necessity. Under that prior, 21 pencils cost $6, but observation could overturn this."
+        }
+      ],
+      "neighbours": [
+        "SRC_002",
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_005 and SRC_001 are compatible via shared mechanism: both frame the $6 answer as the artifact of a constructed pedagogical exercise that hides a proportional axiom. SRC_005 identifies the hidden axiom as a covering principle (uniform pricing) tested as a reasoning skill; SRC_001 identifies it as strict linearity stipulated away by construction. Their shared mechanism is pedagogical concealment of an axiom, and they are compatible because one emphasizes skill-recognition while the other emphasizes assumption-stipulation, with no contradiction. This relation is refuted if the two artifacts' mechanisms are merely described side-by-side without naming the shared predicate (concealment of an axiom by construction), or if they actually contradict on whether the axiom is a reasoning skill versus a stipulation — a summary of the endpoints is not a relation.",
+      "typicality": 0.75,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "the 'real' question is whether the student can identify the implicit covering principle rather than just compute 3 × $2."
+        },
+        {
+          "block": "000000000000",
+          "quote": "The problem is constructed so that 21 = 3×7, making the answer mechanically $6. This meta-mechanism recognizes the problem as a pedagogical artifact encoding a proportionality assumption."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "SRC_005 and SRC_001 inherit a common abstraction from SRC_002: all three concern whether the problem text logically entails $6 or requires an unstated axiom. SRC_005 and SRC_001 occupy the 'pedagogical artifact with hidden axiom' branch of this abstraction; SRC_002 occupies the 'logical underdetermination' branch. The shared abstraction is 'the text underdetermines the answer unless an axiom is supplied'. SRC_005 and SRC_001 inherit it by treating the axiom as deliberately concealed by the exercise design; SRC_002 treats it as a logical gap awaiting explicit constraint. This relation is refuted if the inheritance claim reduces to 'all three talk about the same problem', or if SRC_005/SRC_001 can be fully described without any notion of an unstated or hidden axiom — a summary of the endpoints is not a relation.",
+      "typicality": 0.35,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "the problem statement does not explicitly constrain the cost of 21 pencils to scale linearly from the 7-for-$2 rate."
+        },
+        {
+          "block": "000000000000",
+          "quote": "the 'real' question is whether the student can identify the implicit covering principle"
+        },
+        {
+          "block": "000000000000",
+          "quote": "the 'real' question is whether the store's pricing is actually proportional, which the problem stipulates away."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_004 contradicts SRC_001: SRC_004 holds that the proportional convention is a contingent adoption (the computation is logically valid only if we adopt the convention), while SRC_001 holds that proportionality is stipulated away by the problem's own design (the problem encodes the assumption, so the answer is mechanically determined within the exercise). Under SRC_004, there is genuine logical underdetermination resolved only by convention choice; under SRC_001, the problem itself supplies the axiom, so there is no gap to bridge. This relation is refuted if the two positions do not actually conflict — e.g., if SRC_001's 'stipulated away' is compatible with SRC_004's 'adopt the convention' because both yield $6 — or if the claim merely says 'SRC_004 is skeptical and SRC_001 is not' without naming the predicate of contradiction (logical entailment vs. contingent convention) — a summary of the endpoints is not a relation.",
+      "typicality": 0.4,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "The computation $21 * ($2/7) = $6 is logically valid only if we adopt the convention that the bundle establishes a strict proportional contract."
+        },
+        {
+          "block": "000000000000",
+          "quote": "The problem is constructed so that 21 = 3×7, making the answer mechanically $6."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003",
+        "SRC_004",
+        "SRC_005"
+      ]
+    }
+  ]
+}
+```

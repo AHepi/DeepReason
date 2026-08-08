@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@15d7f1f568e37949f6cd7791: program:reasoning_observation_pending
+- reason-counter@6cf03c96bb193f3a6e347df0: program:reasoning_observation_pending
+- reason-counter@d840bdeb21c65fca209c3883: program:reasoning_observation_pending
+- reason-counter@5342f813d2df820c9d949337: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $0 if '7 for $2' is a promotional 'Buy 7, Get 14 Free' offer, or another non-linear volume discount schema, meaning the cost scales sub-linearly or reaches a cap.","counterconditions":[{"case":"The problem statement uses standard mathematical phrasing implying a direct unit rate rather than a promotional retail exception.","checker_spec":null,"eval":"observation"},{"case":"The problem is treated as a continuous proportionality exercise.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"To generate a divergent counterexample, we interpret '7 for $2' as a promotional bulk rate where buying the first 7 pencils triggers a massive discount on additional pencils. This violates the standard linear assumption and demonstrates that without explicit constraints on the pricing function, the total cost for 21 could be drastically lower than $6.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@15d7f1f568e37949f6cd7791, reason-counter@6cf03c96bb193f3a6e347df0
+
+TARGET SRC_002
+{"analogy":null,"claim":"The cost of 21 pencils is mathematically underdetermined. The natural answer is $6 via linear proportionality, but the problem statement '7 for $2' lacks an explicit rule guaranteeing that 14 pencils cost $4 or 21 pencils cost $6, allowing for non-linear pricing models that satisfy the base constraint but yield a different total for 21.","counterconditions":[{"case":"The problem domain assumes linear uniform pricing by convention, which would invalidate the strict underdetermination claim.","checker_spec":null,"eval":"observation"},{"case":"A meta-level instruction restricts valid interpretations to continuous unit-rate models.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Following the counterexample-first stance, the constraint '7 pencils cost $2' only strictly pins down the price at exactly n=7. A store could theoretically charge $2 for 7, $3.50 for 14, and $5.25 for 21. Without an explicit covering principle or proportional pricing axiom, $6 is an expected but not logically forced outcome.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d840bdeb21c65fca209c3883, reason-counter@5342f813d2df820c9d949337
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

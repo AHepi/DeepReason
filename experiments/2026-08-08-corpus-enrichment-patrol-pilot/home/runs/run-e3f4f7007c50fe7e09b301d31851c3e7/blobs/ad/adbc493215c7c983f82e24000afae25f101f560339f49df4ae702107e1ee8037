@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 claims a relation of COMPATIBLE WITH between continuous pro-rata and discrete bundle-only models, but its own refutation test exposes this as analytically incoherent: if a non-multiple quantity (10 pencils) forces the models apart, the relation is not compatibility but mere intersection at a degenerate point. The artifact fails to name the actual substantive relation — which is *contradiction partially masked by coincidental agreement* — and instead labels a special-case coincidence as a structural relation. The problem requires a substantive connection naming its kind, but what is described is not a genuine compatibilty relation: it is the absence of one everywhere except where arithmetic accident suppresses it.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's proposed relation is CONTRADICTS, but its refutation test demands a CAUSAL mechanism — 'establish uniform linear pricing as a DEFAULT CONVENTION' — which the target itself admits it cannot demonstrate, calling it merely an empirical expectation rather than a logical entailment. This collapses the entire claim: the contradiction is asserted against the consensus, yet the refutation condition (that underdetermination is spurious if linear pricing is a logical default) is exactly what the pack-consensus evidence cannot establish. The target thus presents a contradiction whose refutation is not a hypothetical edge-case but the unmet burden of its own argument, making the relation claim circular and substantively unsupported.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_003 claims integer-factor scaling REDUCES TO uniform unit-rate pricing, but its own refutation test exposes the reduction as false: 21×($2/7) = $6 and 3×$2 = $6 are arithmetically equivalent BY IDENTITY (they are the same computation differently grouped), so no possible 'reassociation' can make them diverge without pathologically redefining multiplication. If A reduces to B, B must explain something A cannot — but SRC_003's test asks whether B can diverge from A, and the answer is provably no under standard arithmetic. This means the target is not a genuine reduction but a tautological restatement, and the refutation condition is unachievable by construction rather than substantive.",
+      "counterexample": null
+    }
+  ]
+}

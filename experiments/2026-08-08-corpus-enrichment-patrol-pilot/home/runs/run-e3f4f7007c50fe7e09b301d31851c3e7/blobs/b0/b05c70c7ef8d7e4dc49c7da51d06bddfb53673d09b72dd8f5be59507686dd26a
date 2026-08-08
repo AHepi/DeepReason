@@ -1,0 +1,35 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2e84394e0b646195c4008e21: program:reasoning_observation_pending
+- reason-counter@c0abf5bc526ca3c9cab92995: program:reasoning_observation_pending
+- reason-counter@e5758fb4171c8f10beed97fc: program:reasoning_observation_pending
+- reason-counter@091a6ab9c37b97caa2fe9bd3: program:reasoning_observation_pending
+- reason-counter@861d2b1962964e8c0696e870: program:reasoning_observation_pending
+- reason-counter@236033572434e72a9c3a09ee: program:reasoning_observation_pending
+- reason-counter@6758b2e57a307522bca193d0: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, but this is an empirical projection rather than a logical entailment: the price depends on whether the store actually upholds uniform linear pricing for the target quantity.","counterconditions":[{"case":"If the store imposes a bulk discount for larger quantities (e.g., lower marginal price above 7 pencils), the cost is less than $6.","checker_spec":null,"eval":"observation"},{"case":"If the store imposes a bulk surcharge or quantity limit (e.g., maximum one bundle per customer, or higher marginal price above 7 pencils), the cost exceeds $6 or the transaction is refused.","checker_spec":null,"eval":"observation"},{"case":"If the store's '7 for $2' is a loss-leader or promotional price that does not generalize to 21 pencils, the uniform-rate assumption fails.","checker_spec":null,"eval":"observation"},{"case":"If the store refuses to sell pencils individually or in multiples beyond the advertised bundle, the linear projection is invalid.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The causal mechanism is the store's maintained pricing policy: a constant marginal unit price of $2/7 is applied to each pencil, yielding $2/7 \u00d7 21 = $6. The mechanism is not arithmetic itself but the empirically-grounded expectation that the store's posted rate generalizes uniformly from the observed 7-pencil bundle to the requested 21-pencil quantity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2e84394e0b646195c4008e21, reason-counter@c0abf5bc526ca3c9cab92995, reason-counter@e5758fb4171c8f10beed97fc, reason-counter@091a6ab9c37b97caa2fe9bd3
+
+TARGET SRC_002
+{"analogy":null,"claim":"The linear scaling prediction of $6 is only defeasible, not deductively guaranteed: it could be overturned if the store imposes a minimum-order fee, a nonlinear bulk discount, or a strict one-bundle-per-customer limit, which would respectively raise, lower, or prevent the $6 outcome.","counterconditions":[{"case":"If the store offers a bulk discount for 21 pencils (e.g., $5 for 20+), the linear $6 prediction is false.","checker_spec":null,"eval":"observation"},{"case":"If the store charges a flat transaction fee, 21 pencils cost more than $6.","checker_spec":null,"eval":"observation"},{"case":"If the store enforces a limit of one bundle per customer, the question 'how much do 21 pencils cost' has no determinate answer for a single customer.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The '7 for $2' datum is treated as a defeasible empirical generalization. It establishes an expected unit rate, but the prediction is hedged: the mechanism is that any additional pricing rule (surcharge, tiered pricing, purchase limit) could causally intervene and yield a different total for 21 pencils.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@861d2b1962964e8c0696e870, reason-counter@236033572434e72a9c3a09ee, reason-counter@6758b2e57a307522bca193d0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

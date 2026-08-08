@@ -1,0 +1,10 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed relation is ABSTRACTION, but the stated unifying principle — 'cost is a monotone increasing function of quantity with f(7)=$2' — fails as a genuine covering abstraction because it does not actually unify the neighbourhood it names. SRC_003 is described as 'denying that f is uniquely determined'; under the proposed abstraction that very denial is supposed to be a *restriction* of the same monotone f with f(7)=$2, yet the only constraint named (monotonicity plus a single point value) is already compatible with infinitely many f's, so 'f is not uniquely determined' is not a restriction of the function class — it is a meta-level observation about underdetermination that lives one type-level above the object-level function class the other artifacts restrict. The result is a category error: two artifacts (SRC_001, SRC_002, SRC_004) restrict a function class, while SRC_003 makes a claim about that class's cardinality; pretending both are 'restrictions of a single monotone f' conflates object- and meta-level, so the abstraction does not cover what it lists.",
+      "counterexample": null
+    }
+  ]
+}

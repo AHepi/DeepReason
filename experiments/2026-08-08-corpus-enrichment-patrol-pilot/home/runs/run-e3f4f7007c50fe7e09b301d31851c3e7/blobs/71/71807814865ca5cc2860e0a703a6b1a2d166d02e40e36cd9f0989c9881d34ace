@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@0a1fa3f9caaf498491df0a05: program:reasoning_observation_pending
+- reason-counter@bcc8483e6636354304cf0491: program:reasoning_observation_pending
+- reason-counter@d86fe3ec6f9b213eaedf6870: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, derived by recognizing 21 = 3 \u00d7 7, so three groups of 7 pencils at $2 each cost 3 \u00d7 $2 = $6.","counterconditions":[{"case":"The problem is non-standard and involves a nonlinear pricing scheme where buying more changes the per-unit price (e.g., bulk discounts).","checker_spec":null,"eval":"observation"},{"case":"Pencils cannot be purchased in groups other than exactly 7, and 21 is not a valid purchasable quantity.","checker_spec":null,"eval":"observation"},{"case":"The $2 price is per pencil, not per group of 7, meaning 21 pencils cost $42.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem states a unit rate: 7 pencils cost $2. The total quantity 21 pencils is an exact integer multiple of the bundle size 7 (21 = 3 \u00d7 7). The cost scales linearly with the number of bundles, yielding 3 \u00d7 $2 = $6.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0a1fa3f9caaf498491df0a05, reason-counter@bcc8483e6636354304cf0491, reason-counter@d86fe3ec6f9b213eaedf6870
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

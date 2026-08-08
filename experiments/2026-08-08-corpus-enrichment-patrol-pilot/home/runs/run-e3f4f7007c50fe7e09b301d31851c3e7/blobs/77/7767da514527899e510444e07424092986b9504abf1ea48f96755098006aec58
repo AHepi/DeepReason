@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2c945d5f5dccfffe54ab82ef: program:reasoning_observation_pending
+- reason-counter@7f9868a357308ead575703eb: program:reasoning_observation_pending
+- reason-counter@795bbfc4011873e5c7d1fff0: program:reasoning_observation_pending
+- reason-counter@b71d672adc683758620f074f: program:reasoning_observation_pending
+- reason-counter@e8006e46e6b8fc78842d49ca: program:reasoning_observation_pending
+- reason-counter@9d8bb0a794749df54b274d15: program:reasoning_observation_pending
+- reason-counter@a7340560a829da339ef00a31: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6.","counterconditions":[{"case":"The requested quantity is not an integer multiple of the bundle size, requiring an assumption about pro-rating the remainder.","checker_spec":null,"eval":"observation"},{"case":"The store restricts the offer to one bundle per customer, preventing the purchase of three bundles.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The total quantity (21) is an exact integer multiple of the bundle size (7). The problem can be solved purely additively: 21 = 7 + 7 + 7. If 7 pencils cost $2, then three groups of 7 pencils cost $2 + $2 + $2 = $6. This avoids fractional unit prices and relies only on the bundle's observed price.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2c945d5f5dccfffe54ab82ef, reason-counter@7f9868a357308ead575703eb
+
+TARGET SRC_002
+{"analogy":null,"claim":"The cost of 21 pencils is underdetermined by the problem statement alone.","counterconditions":[{"case":"The problem's domain conventions explicitly mandate linear uniform pricing, closing the underdetermination.","checker_spec":null,"eval":"observation"},{"case":"An additional premise is supplied stating that the unit price is constant for all quantities.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Strictly logically, the statement '7 for $2' only constrains the price of exactly 7 pencils. It does not mathematically entail the price of 21. $6 is the expected answer under the implicit assumption of uniform linear pricing, but alternative pricing models (e.g., tiered, bundle-only) are logically compatible with the premise and yield different answers or make the question unanswerable.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@795bbfc4011873e5c7d1fff0, reason-counter@b71d672adc683758620f074f
+
+TARGET SRC_003
+{"analogy":null,"claim":"21 pencils cost $6.","counterconditions":[{"case":"The store applies non-linear pricing (e.g., bulk discounts or surcharges for non-bundle quantities), violating the uniform-rate assumption.","checker_spec":null,"eval":"observation"},{"case":"The bundle is a strict atomic lot: 7 pencils are sold only as a sealed set for $2, and individual or differently grouped quantities are not available for purchase at a pro-rated price.","checker_spec":null,"eval":"observation"},{"case":"The problem is a trick question where the stated rate is a marketing advertisement, not a mathematical contract.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The price follows a linear, proportional pricing model: unit price = $2/7 per pencil. Multiplying the unit price by 21 yields $6. This is the standard interpretation in the problem's domain, where '7 for $2' establishes a uniform rate intended to be scaled multiplicatively.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e8006e46e6b8fc78842d49ca, reason-counter@9d8bb0a794749df54b274d15, reason-counter@a7340560a829da339ef00a31
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
