@@ -67,7 +67,12 @@ advance a `Verified-at:` stamp.
 
 The full driving manual — preflight, CLI lifecycle, ladders, where to
 look — is `dr-drive-harness`; load it if this session has not run the
-harness before. The cloud container rolls back silently. Verify, in order:
+harness before. Also load `dr-explain-to-operator` once per session,
+BEFORE your first message the operator will see: it binds every
+operator-facing message (intermediary status reports included, not
+just the final one) — worry first, technical terms glossed in plain
+language as you go, one closing analogy on the final output. The
+cloud container rolls back silently. Verify, in order:
 
     git log --oneline -1                # expected branch head, not stale
     git status --porcelain | head       # know what is uncommitted

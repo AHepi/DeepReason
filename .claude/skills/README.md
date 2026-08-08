@@ -37,6 +37,7 @@ verbatim words, ledgered in REQUEST.md; every artifact cites R-numbers.
 |---|---|
 | `dr-drive-harness` | starting any session that runs, modifies, or diagnoses the harness — the driving manual: preflight, CLI lifecycle, ladders, and where to look (map order, frozen surfaces, record-first diagnosis) |
 | `dr-ask-the-right-question` | an operator message is ambiguous or terse; any phase says "stop and ask"; evidence contradicts expectation — routes questions to the cheapest authority (record → framework → operator) |
+| `dr-explain-to-operator` | at session start, before the first message the operator will see — binding communication discipline for EVERY operator-facing message: worry first; technical terms glossed conservatively in-line on every intermediary message; exactly one closing analogy on every final output |
 
 ## The rules that hold it together
 
