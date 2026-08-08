@@ -93,7 +93,15 @@ interpretation happens, and it happens in writing.
      rejection cites a measurement, not a preference.
 6. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
-   its own delivery) rather than one sprawling one.
+   its own delivery) rather than one sprawling one. The Budget
+   section's headline number(s) MUST equal the computed sum of the
+   itemized per-item estimates above — paste the arithmetic (e.g.
+   `python3 -c "print(sum([...]))"`), never restated by hand. This is
+   the number `tools/diff_budget.py`'s `DIFF_BUDGET_RESULT_V1.verdict`
+   is checked against at every `[COMMIT]` step (`dr-execute-step`); a
+   headline that contradicts its own itemization defeats the ceiling
+   before the first commit (Rung S5, REQUEST.md Amendments 2/3: its
+   headline said 220-300, its own itemization summed to 435).
 7. Anti-invention pass: re-read SPEC.md and delete anything that does
    not trace to an R or C number. If it felt necessary, it is either
    an assumption (record it) or scope creep (PARKED.md).
