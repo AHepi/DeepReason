@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 conflates 'independent verification' with 'error correction.' The problem explicitly asks what evidence distinguishes genuine independent verification from mere restatement. Under the covering principle that independence means the verification result is not entailed by the author's own reasoning process, a checker could independently derive the same result via a separate chain of reasoning and confirm 'Correct' without finding any error. Restatement means repeating the author's chain; independent verification means reaching the verdict through a separate chain. SRC_001 falsely treats the absence of 'meaningful edits' as restatement, excluding legitimate independent verification via independent derivation. Test to execute: run two separate derivations (A and B) for the same claim; if B confirms A's result via independent logic and produces no 'meaningful edits,' measure whether B's reasoning trace is informationally independent from A's — e.g., compare reference graph or embedding overlap. Independence is established by derivation independence, not edit count.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 correctly addresses both parts of the problem: it argues separation is not necessary, and it identifies concrete evidence (external code execution / objective oracle) that distinguishes independent verification from restatement. It provides an executable test: write a program proving X and run it on a neutral interpreter; execution success is the verifying evidence. It also counters the 'same engine' objection with the neutral-interpreter requirement, and its counterconditions (parroting, oracle bias) cover failure modes. Under the covering principle that independence is established by an epistemic bridge to an objective standard, execution-based verification survives even when the same model authored both the claim and the test.",
+      "counterexample": null
+    }
+  ]
+}
+```

@@ -1,0 +1,9 @@
+{
+  "authorized_pointer": "/cases/0/counterexample",
+  "operation": "replace",
+  "value": [
+    "Author engine claims a dataset contains 417 matching rows.",
+    "Checker engine re-executes the same query on the same dataset, confirms 417, and cites the same dataset/code.",
+    "Citation delta = 0 under SRC_001's rule, so it is classified as restatement, but this re-execution is genuine independent verification."
+  ]
+}

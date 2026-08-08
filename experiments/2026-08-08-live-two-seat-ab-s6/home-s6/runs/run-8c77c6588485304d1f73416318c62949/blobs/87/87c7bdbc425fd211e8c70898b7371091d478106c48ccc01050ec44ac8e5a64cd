@@ -1,0 +1,45 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@cb05023a11222dbc2e4759cf: program:reasoning_observation_pending
+- reason-counter@b346c7faaf297b279b984b35: program:reasoning_observation_pending
+- reason-counter@f2d60eca698aded6d5550100: program:reasoning_observation_pending
+- reason-counter@0aa4ff8b5014521ae878de63: program:reasoning_observation_pending
+- reason-counter@ee4fc97e52b88a98e562a256: program:reasoning_observation_pending
+- reason-counter@b5af8011eb92f945679e03a3: program:reasoning_observation_pending
+- reason-counter@9200d2dfff6ab618a8f9918b: program:reasoning_observation_pending
+- reason-counter@4e42ca639615c83125863702: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Separating engines is necessary for independent verification because identical models share 'blind spots' (systemic biases) that result in mirrored failures.","counterconditions":[{"case":"The error is a simple calculation mistake rather than a systemic bias.","eval":"observation"},{"case":"The checker is prompted with an adversarial 'Devil's Advocate' persona that overrides latent biases.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Verification is only 'independent' if it can fail where the author succeeded, or succeed where the author failed, based on different underlying heuristics. Identical engines share the same latent manifold of errors; if an authoring engine makes a subtle category error based on a training bias, a checking engine with the same weights is statistically likely to perceive that error as a valid premise. Independent verification requires a diversity of 'failure modes' that only different training histories can provide.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cb05023a11222dbc2e4759cf, reason-counter@b346c7faaf297b279b984b35
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separating engines is necessary because identical models share 'blind spots' (systemic biases) that make internal verification a mere restatement of the same error.","counterconditions":[{"case":"The error is a stochastic 'glitch' (sampling variance) rather than a systemic bias.","eval":"observation"},{"case":"The checker is prompted with a high-temperature adversarial role that forces it out of its typical heuristic path.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Models trained on the same corpus develop identical heuristic shortcuts and failure modes. A checker using the same weights as the author is likely to accept a hallucination if that hallucination is a product of the model's core training bias, as the checker's 'intuition' for what looks correct is identical to the author's. Only a different training history (a different engine) provides the divergent perspective required to catch these systemic errors.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[]

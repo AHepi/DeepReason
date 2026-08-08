@@ -1,0 +1,48 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3fddeb8ca069685a1cdec348: program:reasoning_observation_pending
+- reason-counter@21c66392ff736d9f3646997a: program:reasoning_observation_pending
+- reason-counter@b1158960ee1cf689814ab961: program:reasoning_observation_pending
+- reason-counter@550a6618b7d6b7aa35689d6f: program:reasoning_observation_pending
+- reason-counter@e0ef64822630ce70d16fc973: program:reasoning_observation_pending
+- reason-counter@b1f0fe39384f24c6ab63efc9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The only definitive evidence of independent verification within a single run is the 'Correction Delta': the checker identifies a flaw in the author's reasoning and corrects it to reach the correct result, or identifies a flaw in a correct result reached via flawed reasoning.","counterconditions":[{"case":"The author's reasoning was already perfect, leaving the checker nothing to correct.","eval":"observation"},{"case":"The checker 'hallucinates' a flaw and 'corrects' a correct answer into a wrong one.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Restatement is a positive correlation of errors. Independent verification is evidenced by the checker's ability to falsify the author's intermediate steps. One should count the number of 'critique tokens' (tokens that negate a previous claim) that lead to a revised, stable conclusion. If the checker merely agrees without identifying potential failure points, it is restatement.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3fddeb8ca069685a1cdec348, reason-counter@21c66392ff736d9f3646997a
+
+TARGET SRC_002
+{"analogy":null,"claim":"Independent verification is distinguished from restatement by 'structural divergence' in the record: the checker must utilize a different set of axioms, lemmas, or execution paths to reach the same conclusion.","counterconditions":[{"case":"The most efficient path is the only viable path, forcing structural overlap.","eval":"observation"},{"case":"The checker's 'divergence' is superficial (synonym replacement) rather than structural.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"To distinguish verification from restatement, one must count the overlap of 'primitive logical units' (e.g., specific API calls, mathematical identities, or cited rules) between the author's and checker's logs. Genuine verification is evidenced by a low Jaccard similarity coefficient between the set of intermediate steps used by the author and those used by the checker, despite identical final outputs.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b1158960ee1cf689814ab961, reason-counter@550a6618b7d6b7aa35689d6f
+
+TARGET SRC_003
+{"analogy":null,"claim":"Genuine independent verification is distinguished from mere 

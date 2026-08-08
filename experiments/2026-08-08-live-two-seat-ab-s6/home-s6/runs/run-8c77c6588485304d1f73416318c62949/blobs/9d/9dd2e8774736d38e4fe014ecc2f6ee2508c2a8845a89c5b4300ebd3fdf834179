@@ -1,0 +1,99 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring and checking engines is unnecessary if the verification process is 'contextually isolated,' meaning the checker is denied access to the author's reasoning chain (the 'how') and only receives the result (the 'what').",
+      "mechanism": "Verification is an operation on the result, not the process. By stripping the author's internal monologue, the checker must reconstruct the logic from first principles. If the shared weights of the engine lead to the same result via a different path, the verification is independent because the 'semantic blind spot' (referenced in SRC_006) is bypassed by the lack of priming from the author's specific error-path.",
+      "counterconditions": [
+        "The result itself contains implicit hints about the author's reasoning path that prime the checker.",
+        "The problem domain is so narrow that there is only one possible logical path to the result."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_001",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Independent verification is distinguished from restatement by 'structural divergence' in the record: the checker must utilize a different set of axioms, lemmas, or execution paths to reach the same conclusion.",
+      "mechanism": "To distinguish verification from restatement, one must count the overlap of 'primitive logical units' (e.g., specific API calls, mathematical identities, or cited rules) between the author's and checker's logs. Genuine verification is evidenced by a low Jaccard similarity coefficient between the set of intermediate steps used by the author and those used by the checker, despite identical final outputs.",
+      "counterconditions": [
+        "The most efficient path is the only viable path, forcing structural overlap.",
+        "The checker's 'divergence' is superficial (synonym replacement) rather than structural."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Separation of engines is strictly necessary because shared weights create a 'cognitive echo' that renders the checker incapable of perceiving the author's systemic biases.",
+      "mechanism": "LLM weights are not just knowledge bases but 'probabilistic lenses.' If the author and checker share a lens, they share the same 'blind spots.' The evidence of restatement in the record is the 'mirroring' of the author's specific phrasing and logical leaps, which can be quantified by calculating the token-level cross-entropy between the author's reasoning and the checker's reasoning.",
+      "counterconditions": [
+        "The checker is prompted with a 'devil's advocate' persona that successfully shifts the probabilistic lens.",
+        "The claim is verified via execution (e.g., code) where the environment provides the ground truth, making the engine's bias irrelevant."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The only definitive evidence of independent verification within a single run is the 'Correction Delta': the checker identifies a flaw in the author's reasoning and corrects it to reach the correct result, or identifies a flaw in a correct result reached via flawed reasoning.",
+      "mechanism": "Restatement is a positive correlation of errors. Independent verification is evidenced by the checker's ability to falsify the author's intermediate steps. One should count the number of 'critique tokens' (tokens that negate a previous claim) that lead to a revised, stable conclusion. If the checker merely agrees without identifying potential failure points, it is restatement.",
+      "counterconditions": [
+        "The author's reasoning was already perfect, leaving the checker nothing to correct.",
+        "The checker 'hallucinates' a flaw and 'corrects' a correct answer into a wrong one."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Verification is independent if it is 'execution-grounded,' meaning the checker produces a test suite or a formal proof that can be executed by an external, non-LLM kernel.",
+      "mechanism": "The engine identity is irrelevant if the 'verification' is the production of a witness (e.g., a Python script or a Lean proof) that is then executed. The evidence in the record is the existence of an executable artifact that returns a boolean 'True' for the author's claim. The 'counting' metric is the number of independent test cases generated by the checker that the author's result satisfies.",
+      "counterconditions": [
+        "The checker generates a test suite that is logically flawed and thus accepts a wrong answer.",
+        "The author's claim is non-computable."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "What if we define 'restatement' as a function of token-overlap? If the author says 'A implies B because of X' and the checker says 'A implies B because of X', that is restatement. If the checker says 'A implies B because of Y', that is independent verification. The 'evidence' is the delta in the set of supporting arguments {X} vs {Y}.",
+          "possible_next_move": "Develop a formal metric for 'Argumentative Overlap' to be used as the counting evidence."
+        }
+      }
+    ]
+  }
+}
+```
