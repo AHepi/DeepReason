@@ -96,16 +96,24 @@ order. One step per dr-execute-step invocation.
       honestly as non-statistical).
 - [x] 15. (S10) [COMMIT] Commit and push.
       done-when: pushed, confirmed on origin. DONE.
-- [ ] 16. (S11) Write `docs/map/CON-conjecture-kinds.md` per SCHEMA.md's
+- [x] 16. (S11) Write `docs/map/CON-conjecture-kinds.md` per SCHEMA.md's
       anatomy, with a `check:` line for every load-bearing claim, using
       S6-S8's CENSUS.md findings as its body.
       done-when: `test -f docs/map/CON-conjecture-kinds.md` -> exit 0;
-      first line is `<!-- DR-CON-conjecture-kinds -->`.
-- [ ] 17. (S11) Add `docs/map/CON-conjecture-kinds.md` to INDEX.md's
+      first line is `<!-- DR-CON-conjecture-kinds -->`. DONE — every
+      check: line individually verified to pass BEFORE committing
+      (discovered along the way: bare `pytest` resolves to a uv-tool
+      shim that cannot see the editable deepreason install, exactly
+      the failure mode SCHEMA.md warns about; fixed the environment
+      with `pip install -e ".[dev]" --break-system-packages`, not by
+      weakening any check).
+- [x] 17. (S11) Add `docs/map/CON-conjecture-kinds.md` to INDEX.md's
       concept table so `docs_verify --links` can resolve references to
       it.
       done-when: `grep -q "CON-conjecture-kinds.md" docs/map/INDEX.md`
-      -> exit 0.
+      -> exit 0. DONE — `docs_verify --links` reports 0 dangling
+      references, 53 documents; INDEX.md's own Verified-at advanced
+      since its check was re-run.
 - [ ] 18. (S11) Run `python tools/docs_verify.py` and
       `python tools/docs_verify.py --audit` and
       `python tools/docs_verify.py --links`; fix any failing check IN

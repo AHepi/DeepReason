@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: df0fd0fd
+Verified-at: f2339ade
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -62,6 +62,7 @@ than you need.
 | `CON-criticism-source.md` | the socket that attacks or scrutinises a target (`rules/crit.py`) |
 | `CON-scheduler-ranking.md` | which problem a cycle works on (`Scheduler._select_problem`) |
 | `CON-seats.md` | how a role becomes a provider request: `select_lease`, `EndpointLease`, and today's one-profile-per-run mint |
+| `CON-conjecture-kinds.md` | formal vs informal, where kind is signaled, and the R-g guardrail against ranking/admission/acceptance on kind |
 
 ## Invariants and recipes
 
