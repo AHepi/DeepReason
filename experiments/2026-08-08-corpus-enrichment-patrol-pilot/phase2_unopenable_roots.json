@@ -1,0 +1,46 @@
+[
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_pilot_2026-07-14"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/gemma4_dna_unattended_2026-07-12"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/gemma4_dna_unattended_3_2026-07-12"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/glm_judge_2026-07-14"
+  },
+  {
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted",
+    "root": "/home/user/DeepReason/experiments/jolt_architecture_2026-07-16/run"
+  }
+]
