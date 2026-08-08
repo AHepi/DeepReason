@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:084384ac0b1e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 084384ac0b1e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@cab5e4d1c8ab: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated artifact contradicts the foundational assumption shared across the neighbourhood — that decorrelation is achievable through a deterministic oracle (SRC_001, SRC_005) — by arguing that any single engine mediating access to even a deterministic oracle introduces an epistemic bottleneck: the engine must interpret, format, and report the oracle's output through its generative prior, meaning the verifier's verdict is never causally decorrelated from the engine's claim-generation process regardless of the oracle's determinism. Weight freezing (SCR_001) does not solve this because the generative prior still mediates the query and the response interpretation. This contradicts SRC_001's claim that a self-executed test yields an external observable distinct from the claim text, because the distinctness of the observable does not guarantee the distinctness of its interpretation. The covering principle fails at the interpretation layer even when it holds at the execution layer. This is REFUTED IF an ablation test (SCR_002) demonstrates that the checker's verdict systematically flips when the oracle's reported output is perturbed — because that would prove the verdict is causally sensitive to the oracle result and not merely to the engine's interpretation of it.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact inherits the covering principle from SRC_005 but extends it from a binary decorrelation criterion to a graduated spectrum: causal decorrelation is not a threshold property but admits degrees measured by the verdict's sensitivity to perturbations of increasing semantic distance from the original claim. A perturbation of count±1 (SCR_002) tests shallow decorrelation; an injected false claim with a different semantic structure (SRC_003) tests deeper decorrelation; a cross-engine check with independent training (SRC_004) tests the deepest level. The covering principle thus abstracts to a family of perturbation tests indexed by semantic distance, and genuine independence is the limit as semantic distance approaches zero while verdict sensitivity remains nonzero. This inherits SRC_005's core insight but contradicts SRC_003's claim that single-run procedural evidence is insufficient — because on this spectrum, a single high-sensitivity perturbation at shallow semantic distance can match the diagnostic power of a population of trials at greater distances. This is REFUTED IF the perturbation-sensitivity curve is shown to be flat — i.e., verdict sensitivity does not increase with semantic perturbation distance — which would collapse the spectrum into a binary property and eliminate the graduated structure.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

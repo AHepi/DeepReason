@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:084384ac0b1e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 084384ac0b1e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@cab5e4d1c8ab: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated artifact 084384ac0b1e integrates the neighbourhood's fragmented verification tests into a layered protocol that depends on SRC_002's execution-trace criterion at the base layer, SRC_003's injected-false-claim controls at the statistical layer, and SRC_005's decorrelation invariant at the principled layer, ordered by ascending inferential strength. Integration is necessary because each layer's criterion is individually insufficient: SRC_002 detects restatement within a run but not systematic bias across runs; SRC_003 detects bias across runs but cannot adjudicate any single run; SRC_005 unifies both but lacks operational traction without the lower layers. The layers are ordered such that failure at a lower layer blocks ascent to the next: a run that fails SRC_002's execution-trace check cannot be validated by SRC_003's population controls or SRC_005's decorrelation principle. It is refuted if any single layer is shown to be individually sufficient for genuine verification — making the integration redundant — or if the layers are shown to be jointly inconsistent (a run passes at one layer and is rejected at another for reasons that cannot be reconciled by the ordering).
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact 084384ac0b1e abstracts from the neighbourhood's concrete verification procedures (execution matching, counting queries, false-claim injection) by extracting their common logical form: every genuine verification is a function f(claim, world_state) -> {accept, reject} where the accept-or-reject output is not a function of the claim alone. The abstraction is grounded in SRC_002's information-theoretic criterion (the check output's information content must exceed the claim's) and SRC_003's discrimination requirement (the verifier must produce negatives, not just agreement), but generalizes beyond execution and counting to any domain where a world-state oracle exists. It is refuted if there exists a domain in which verification is genuine (accepted by the case-level criteria of SRC_001 or SRC_002) but no world-state oracle can be defined — making f(claim, world_state) unconstructible — or if the information-theoretic abstraction of SRC_002 is shown to be neither necessary nor sufficient, undercutting the abstraction's foundation.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+TARGET SRC_003
+The isolated artifact 084384ac0b1e abstracts the neighbourhood's case-level verification criteria (execution traces, counting queries, injected-false-claim controls) into a single invariant: causal decorrelation of the verifier's verdict from the producer's claim. All concrete operational-independence tests from SRC_002, SRC_003, and SCR_002 are instances of this invariant — they perturb the producer's output and check whether the verdict responds — so the case-level machinery reduces to one covering principle. It is refuted if a concrete case-level test (e.g., the ablation test of SCR_002, or the injected-false-claim controls of SRC_003) provably detects genuine verification while the decorrelation invariant simultaneously declares it restatement, or vice versa, under any well-defined operationalization.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

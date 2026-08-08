@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:084384ac0b1e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 084384ac0b1e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@cab5e4d1c8ab: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated artifact (conn:084384ac0b1e) abstracts from the neighbourhood's source-vs-operational independence distinction by proposing a unifying diagnostic hierarchy: each level of independence evidence (training-history separation, execution-trace presence, injected-false-claim controls) is a strictly increasing test of causal decorrelation, where the covering principle from SRC_005 — that independence is a property of the evidential channel, not the engine boundary — reduces to concrete ablation tests at the run level. The isolated point is that this hierarchy is not a set of alternatives but a cascade: a decorrelated signal (SRC_005) is verified by an operation capable of refutation (SRC_002), which in turn is validated by perturbation sensitivity (SCR_002), and finally confirmed by population statistics with negative controls (SRC_003). The covering principle thus integrates all four positions as progressively stricter levels of the same causal-decorrelation test. This is REFUTED IF any lower-level diagnostic (e.g., single-run perturbation sensitivity without population statistics) can be shown to provide sufficient genuine verification without requiring the higher-level checks — which would mean the levels are alternatives, not a cascade.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact shares mechanism with SRC_003's injected-false-claim methodology but relocates it from a population-level statistical test to a single-run causal-graph test: instead of injecting many false claims to measure rejection rate, inject a single false claim and trace whether the verdict's causal dependency graph (constructed from the run record's intermediate states) reroutes through the injected signal. The shared mechanism is causal sensitivity to falsification, but the operationalization differs: SRC_003 requires statistical power across trials, while the isolated artifact requires causal-path coverage within one trial. This integrates SRC_003's skepticism with SRC_002's single-run diagnostics by showing that a single injected false claim can serve as a sufficient negative control if the run record is rich enough to trace the causal path from injection to verdict. This is REFUTED IF the causal-path trace cannot distinguish rerouting through the injected signal from rerouting through a confounding intermediate state — i.e., if the single-run causal graph is underdetermined and multiple injection paths are compatible with the same run record.
+commitments: hv-floor@2a45b7988522, lineage-ref@cab5e4d1c8ab, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
