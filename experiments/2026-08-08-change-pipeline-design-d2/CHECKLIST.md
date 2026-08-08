@@ -710,10 +710,20 @@ order. One step per dr-execute-step invocation.
 
 ## Full gate and final cleanliness
 
-- [ ] 29. (all) Map check: `python tools/docs_verify.py` and
+- [x] 29. (all) Map check: `python tools/docs_verify.py` and
       `python tools/docs_verify.py --audit` and
       `python tools/docs_verify.py --links`.
       done-when: 0 failed, 0 findings, 0 dangling (paste all three).
+      DONE —
+      `python tools/docs_verify.py` -> `docs_verify: 2 failed`, both
+      `SUB-application.md:208`/`:239`, both `test_continuation.py`'s
+      SAME pre-existing defect (PARKED.md P-D2-1, confirmed reproducing
+      at this tranche's own base commit `f103a03a`) — zero NEW
+      failures from this tranche's own 26 prior steps' worth of code.
+      `python tools/docs_verify.py --audit` ->
+      `docs_verify --audit: 0 finding(s)`.
+      `python tools/docs_verify.py --links` ->
+      `docs_verify --links: 0 dangling reference(s), 53 document(s)`.
 - [ ] 30. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends "N passed, M failed" (paste it verbatim);
       any failure is read against this tranche's own PARKED.md
