@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-verification -->
-Verified-at: df0fd0fd
+Verified-at: 5d848e09
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/log/event_log.py, src/deepreason/storage/blobs.py
 Sides: DR-SUB-harness, DR-SUB-verification
@@ -272,6 +272,21 @@ other headerless seams.
   42/11/3 check, and `tests/test_module_fingerprints.py`, which asserted that
   NO committed root carries a module-fingerprint stamp — true only until the
   first run recorded after rung 4's writer was committed.
+
+  **Second chapter, same file, same pattern (2026-08-08).** The same test's
+  presence-half check then asserted a different but still census-shaped
+  claim — exactly ONE stamp per stamped root
+  (`(payload,) = recorded_module_fingerprints(...)`) — which broke the
+  moment `deepreason continue` legitimately re-stamped a resumed run: the
+  writer's idempotency guard (`Scheduler._module_fingerprints_recorded`) is
+  per-instance and resets on every `Scheduler` construction, so a
+  continuation appends a second, byte-identical stamp by design (the
+  sibling `seat-bindings.v1` payload, Rung S5, copies the identical shape
+  deliberately and Rung S6's live A/B run confirmed it replay-valid).
+  Fixed 2026-08-08 in `experiments/
+  2026-08-08-fix-module-fingerprints-double-stamp/` by asserting the
+  partition the record actually makes — at least one well-formed payload
+  per stamped root — never a fixed count.
 - **A verify_root predicate must select by the writer's discriminator, never
   by citation shape.** The `attached-evidence` check keyed its candidate set
   on `mention` refs alone and was tripped by the first live conjecture that

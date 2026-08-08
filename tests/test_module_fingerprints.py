@@ -73,6 +73,17 @@ def test_absence_is_valid_before_the_feature_and_presence_valid_after():
     together, so the first live run committed afterwards falsified it. Both
     halves are asserted here so neither can expire.
 
+    Regression (P1/P3, root ``run-a518e33a75507207633f864ba6a864b1``,
+    continued 2026-08-06): the presence half previously asserted "exactly
+    one" stamp per stamped root (``(payload,) = recorded_module_fingerprints
+    (...)``), which is not R8's claim either — the writer's per-instance
+    idempotency guard (``Scheduler._module_fingerprints_recorded``) resets on
+    every ``Scheduler`` construction, so ``deepreason continue`` legitimately
+    appends a second, byte-identical stamp. Fixed 2026-08-08 in
+    ``experiments/2026-08-08-fix-module-fingerprints-double-stamp/`` by
+    asserting the partition the record actually makes: at least one
+    well-formed payload per stamped root, never a fixed count.
+
     Roots that refuse to open at all are excluded here and counted in
     ``test_the_census_of_committed_roots_is_unchanged`` instead: a pre-v6
     manifest is the harness declining to open the root, which says nothing
@@ -87,10 +98,12 @@ def test_absence_is_valid_before_the_feature_and_presence_valid_after():
     # passing if every stamp vanished from the record.
     assert stamped, "no committed root carries a stamp; the presence half has no witness"
     for root in stamped:
-        (payload,) = recorded_module_fingerprints(Harness(root, read_only=True))
-        assert payload.schema_ == "module-fingerprints.v1", root
-        assert payload.modules, root
-        assert payload.digest, root
+        payloads = recorded_module_fingerprints(Harness(root, read_only=True))
+        assert payloads, root
+        for payload in payloads:
+            assert payload.schema_ == "module-fingerprints.v1", root
+            assert payload.modules, root
+            assert payload.digest, root
 
 
 def test_the_census_of_committed_roots_is_unchanged():
@@ -191,6 +204,27 @@ def test_the_appender_round_trips_through_the_log_alone(tmp_path):
     got = recorded_module_fingerprints(reopened)
     assert [p.digest for p in got] == [payload.digest]
     assert got[0].modules[0].module_id == "default"
+
+
+def test_recorded_module_fingerprints_is_a_partition_claim_never_a_single_unpack(tmp_path):
+    """Regression (P1/P3, root ``run-a518e33a75507207633f864ba6a864b1``):
+    two stamps on ONE run's log — the shape a continuation legitimately
+    produces — must both come back, in append order, never assumed down to
+    one. Mirrors ``tests/test_seat_bindings_record.py::
+    test_recorded_seat_bindings_is_a_partition_claim_never_a_single_unpack``,
+    the sibling payload's own test, written as a partition claim from the
+    start specifically to avoid this exact failure mode.
+    """
+
+    harness = Harness(tmp_path / "run")
+    first = _payload(module_id="default")
+    second = _payload(module_id="alt")
+    harness.record_module_fingerprints(first)
+    harness.record_module_fingerprints(second)
+
+    got = recorded_module_fingerprints(harness)
+    assert len(got) == 2
+    assert [p.digest for p in got] == [first.digest, second.digest]
 
 
 def test_the_stamp_materializes_no_state(tmp_path):
