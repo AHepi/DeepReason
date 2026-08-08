@@ -553,3 +553,59 @@ work that does not edit `capabilities/state.py`, `harness.py`,
 `invariants.py`/`verification/` replay formats, `run_manifest.py`, or
 `qualification.py`; if any planned step is found to require such an
 edit, that is a STOP, not a step to plan around silently.
+
+### Amendment 3 (operator, 2026-08-08 — quoted verbatim)
+
+> CHECKLIST.md approved — begin dr-execute-step from step 1, one step
+> per invocation, all stop conditions live. Additionally, ledger as
+> REQUEST.md Amendment 3, operator words verbatim: "Surface-4 grant
+> for this tranche only: at step 27 you may make in run_manifest.py
+> exactly the contract-version registration change the v5→v6
+> precedent shape required — the conjecturer turn contract Literal
+> and only what that registration itself entails; zero change to
+> manifest identity or digest functions beyond it; any additional
+> run_manifest.py hunk is a stop, not a judgment call; this grant is
+> not transitive to any later tranche." Step 27's done-when is
+> satisfied by this amendment; step 28's old-digest-unchanged /
+> new-digest-differs measurement is mandatory evidence, pasted.
+> Continue through step 31, then dr-validate-change and STOP before
+> delivery.
+
+Split into new requirements, numbered onward from R48:
+
+R49 (process): "begin dr-execute-step from step 1, one step per
+invocation, all stop conditions live."
+
+R50 (process): "Surface-4 grant for this tranche only: at step 27 you
+may make in run_manifest.py exactly the contract-version registration
+change the v5→v6 precedent shape required — the conjecturer turn
+contract Literal and only what that registration itself entails; zero
+change to manifest identity or digest functions beyond it; any
+additional run_manifest.py hunk is a stop, not a judgment call; this
+grant is not transitive to any later tranche."
+
+R51 (process): "Step 27's done-when is satisfied by this amendment;
+step 28's old-digest-unchanged / new-digest-differs measurement is
+mandatory evidence, pasted."
+
+R52 (process): "Continue through step 31, then dr-validate-change and
+STOP before delivery."
+
+## Standing constraints (Amendment 3)
+
+C11: R50's grant is SCOPED and NON-TRANSITIVE — it authorizes exactly
+one `run_manifest.py` edit (the `ContractVersionPolicyV3`-shaped
+Literal registration for the new conjecturer-turn contract version,
+mirroring the v5->v6 precedent's own shape) and nothing else in that
+file; it does not authorize touching `capabilities/state.py`,
+`harness.py`, `invariants.py`/`verification/`, or `qualification.py`
+at all (those remain fully un-granted); and it does not carry forward
+to any tranche after this one — a future rung needing further
+`run_manifest.py` contact must obtain its own grant.
+
+C12: "any additional run_manifest.py hunk is a stop, not a judgment
+call" (R50) — if executing step 27 turns out to require touching
+`run_manifest.py` in a SECOND place beyond the one Literal registration
+(e.g. a validator, a default-value cascade, a second contract field),
+that is a STOP even though the file itself is partially authorized;
+the grant is for ONE registration, not "reasonable work in this file."
