@@ -477,3 +477,79 @@ C8: Fork F1 (both roads) is REJECTED — no "faithfulness dispute"
 sub-protocol of any shape is designed; refuting a commitment
 demonstratively refutes the artifact it lives on directly, and that IS
 correct criticism, not a problem to solve around (R34).
+
+### Amendment 2 (operator, 2026-08-08 — quoted verbatim)
+
+> F5 Road B approved. F6 Road B approved. F7 amended: the new kind may
+> gain prose-immunity, but immunity never covers the relatedness
+> claim — a sustained relatedness challenge strips that commitment
+> from the backing set and the shield falls with it; the kind's checks
+> remain mechanically re-executed every cycle; and it joins the narrow
+> execution-supremacy set only if and when it carries the matching
+> counterexample/fuzz attack channels — supremacy is earned by attack
+> surface, never granted with the shield. Update SPEC.md rev 2's Item
+> on protection semantics to encode these three couplings (including
+> the exact mechanism by which a defeated relatedness challenge
+> removes the commitment from formally_backed's substantive set —
+> measured against the tree, not assumed), then proceed to
+> dr-plan-steps exactly as previously instructed: CHECKLIST.md from
+> the authoritative Revision 2, diff_budget at every [COMMIT],
+> reader-before-writer, qualification-digest consequences as their own
+> step, zero frozen-surface diff expected (any hunk on the five
+> surfaces is a STOP). Commit and push the spec update and
+> CHECKLIST.md, then STOP for review before any dr-execute-step.
+
+Split into new requirements, numbered onward from R40:
+
+R41 (process): "F5 Road B approved." — resolves Fork F5: the new
+commitment kind's execution engine is `oracle.py::_compile`/
+`oracle_sandbox.py`'s existing sandboxed engine, reused via a new
+`programs.evaluate` dispatch branch, never the dead
+`property_oracle_commitment`/`admit_counterexample` minting functions.
+
+R42 (process): "F6 Road B approved." — resolves Fork F6: the
+relatedness check (item 5) is purely reactive — a challenge any critic
+may raise, never a mandatory pre-admission gate.
+
+R43 (behavior): "F7 amended: the new kind may gain prose-immunity, but
+immunity never covers the relatedness claim — a sustained relatedness
+challenge strips that commitment from the backing set and the shield
+falls with it."
+
+R44 (behavior): "the kind's checks remain mechanically re-executed
+every cycle."
+
+R45 (behavior): "it joins the narrow execution-supremacy set only if
+and when it carries the matching counterexample/fuzz attack
+channels — supremacy is earned by attack surface, never granted with
+the shield."
+
+R46 (artifact): "Update SPEC.md rev 2's Item on protection semantics
+to encode these three couplings (including the exact mechanism by
+which a defeated relatedness challenge removes the commitment from
+formally_backed's substantive set — measured against the tree, not
+assumed)."
+
+R47 (process): "proceed to dr-plan-steps exactly as previously
+instructed: CHECKLIST.md from the authoritative Revision 2,
+diff_budget at every [COMMIT], reader-before-writer,
+qualification-digest consequences as their own step, zero
+frozen-surface diff expected (any hunk on the five surfaces is a
+STOP)."
+
+R48 (process): "Commit and push the spec update and CHECKLIST.md,
+then STOP for review before any dr-execute-step."
+
+## Standing constraints (Amendment 2)
+
+C9: F7's original two options (join `EXEC_PROGRAMS` fully, or stay in
+`formally_backed`'s wider set only) are both superseded by the amended
+three-coupling design (R43-R45) — neither original Option A nor B
+survives as stated; the amended shape governs.
+
+C10: "zero frozen-surface diff expected (any hunk on the five surfaces
+is a STOP)" (R47) — the CHECKLIST.md this phase produces must plan
+work that does not edit `capabilities/state.py`, `harness.py`,
+`invariants.py`/`verification/` replay formats, `run_manifest.py`, or
+`qualification.py`; if any planned step is found to require such an
+edit, that is a STOP, not a step to plan around silently.
