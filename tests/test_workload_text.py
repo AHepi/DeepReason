@@ -14,6 +14,7 @@ from deepreason.workloads.text import (
     WorkloadProblem,
     compile_countercondition_commitments,
     envelope_json,
+    reasoning_wf_program,
     seed_reasoning_workload,
 )
 
@@ -29,6 +30,54 @@ def test_reasoning_envelope_checks_form_not_truth():
     assert trace["counterconditions"] == 1
     with pytest.raises(ValueError, match="attack surface"):
         ReasoningEnvelopeV1(claim="bare assertion")
+
+
+def test_reasoning_wf_program_refutes_a_pure_code_claim():
+    """D2 Amendment 4 (R20/R54): a claim that is entirely code fails the
+    mandatory, always-present reasoning-envelope well-formedness check."""
+    envelope = ReasoningEnvelopeV1(
+        claim="def solve(x):\n    return x * 2",
+        mechanism="multiplication distributes over repeated addition",
+        counterconditions=(Countercondition(case="observation differs", eval="observation"),),
+    )
+    verdict, trace = reasoning_wf_program(envelope_json(envelope), type("B", (), {"extra": {}})())
+    assert verdict == "fail"
+    assert "claim" in trace["error"]
+
+
+def test_reasoning_wf_program_refutes_a_pure_code_mechanism():
+    """Both free-text fields are checked independently, not only claim."""
+    envelope = ReasoningEnvelopeV1(
+        claim="doubling composes with addition",
+        mechanism="class Solver:\n    def solve(self, x):\n        return x * 2",
+        counterconditions=(Countercondition(case="observation differs", eval="observation"),),
+    )
+    verdict, trace = reasoning_wf_program(envelope_json(envelope), type("B", (), {"extra": {}})())
+    assert verdict == "fail"
+    assert "mechanism" in trace["error"]
+
+
+def test_reasoning_wf_program_passes_prose_quoting_code_inline():
+    """R57(a)'s protected case: mixed prose and code is not valid Python
+    syntax as a whole, so it never trips the pure-code check."""
+    envelope = ReasoningEnvelopeV1(
+        claim="The mechanism is: def solve(x): return x*2. This shows doubling.",
+        mechanism="multiplication distributes over repeated addition",
+        counterconditions=(Countercondition(case="observation differs", eval="observation"),),
+    )
+    verdict, _ = reasoning_wf_program(envelope_json(envelope), type("B", (), {"extra": {}})())
+    assert verdict == "pass"
+
+
+def test_reasoning_wf_program_passes_a_bare_docstring_claim():
+    """A lone string literal is prose-as-a-string, not code."""
+    envelope = ReasoningEnvelopeV1(
+        claim='"""Doubling composes with addition."""',
+        mechanism="multiplication distributes over repeated addition",
+        counterconditions=(Countercondition(case="observation differs", eval="observation"),),
+    )
+    verdict, _ = reasoning_wf_program(envelope_json(envelope), type("B", (), {"extra": {}})())
+    assert verdict == "pass"
 
 
 def test_counterconditions_compile_before_candidate_identity(harness):

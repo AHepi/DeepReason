@@ -266,6 +266,14 @@ def reasoning_wf_program(text: str, budget, artifact=None) -> tuple[str, dict]:
         envelope = ReasoningEnvelopeV1.model_validate_json(text)
     except ValueError as error:
         return "fail", {"error": str(error)[:500]}
+    # D2 Amendment 4 (R20/R54): a conjecture can never be full code --
+    # mechanical, kind-blind, same well-formedness position as the size
+    # check below, not a new admission gate.
+    from deepreason.programs import is_pure_code
+
+    for field in ("claim", "mechanism"):
+        if is_pure_code(getattr(envelope, field)):
+            return "fail", {"error": f"{field} is full code: no accompanying explanation (R20/R54)"}
     encoded = envelope_json(envelope)
     max_chars = int(budget.extra.get("max_chars", 64_000))
     if len(encoded) > max_chars:

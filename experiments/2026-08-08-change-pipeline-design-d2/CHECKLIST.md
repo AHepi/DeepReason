@@ -848,9 +848,31 @@ on the five surfaces is a STOP.
       confirming the new tests fail).
       done-when: `python -m pytest tests/test_workload_text.py tests/test_semantic_freedom_constitution.py -q` -> 0 failed, 4 new cases visible in the collected list. MUST NOT touch: the five
       frozen surfaces (this file is `workloads/text.py`).
-- [ ] 35. (Item 8) [COMMIT] Commit step 34.
+      DONE — checklist's own "4 tests... a pure-code claim is refuted
+      when run through crit_program" wording adapted at execution
+      time: called `reasoning_wf_program` directly (the same function
+      `programs.evaluate`/`crit_program` dispatch to) rather than
+      building a full harness+artifact+crit_program round-trip,
+      matching this file's OWN existing test style
+      (`test_reasoning_envelope_checks_form_not_truth` already tests
+      the sibling `_reasoning_envelope_wf` the same direct way). 4
+      cases: pure-code CLAIM fails naming "claim" in the error;
+      pure-code MECHANISM fails naming "mechanism" (proving both
+      fields checked independently, not just claim); prose quoting
+      code inline still passes (R57(a)); a bare-docstring claim still
+      passes. `python -m pytest tests/test_workload_text.py
+      tests/test_semantic_freedom_constitution.py -q` -> 24 passed (4
+      new + 20 existing, 0 regressions). Mutation-proved: replaced the
+      field-loop range with `()` (no-op) -> the 2 true-positive tests
+      failed correctly; reverted, confirmed the pre-existing map check
+      on `reasoning_wf_program`'s own signature/attribute-access shape
+      (`SEAM-evaluation-x-ontology.md:54`) still passes unchanged.
+- [x] 35. (Item 8) [COMMIT] Commit step 34.
       done-when: diff-budget running total <= 175; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat b84b69e4 -- src/ tests/`: 4 files
+      changed, 137 insertions(+) -> running total 137 of 175. Frozen-
+      surface diff: empty. Pushed.
 - [ ] 36. (Item 8, M28) Extend `informal/skeleton.py::skeleton_wf_program`
       to call `is_pure_code` against `skeleton.claim` and
       `skeleton.mechanism`, mirroring step 34's exact shape and error-
