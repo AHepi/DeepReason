@@ -1009,7 +1009,161 @@ with)" design note.
 
 ## 6. Historical encoding-failure evidence (R11, SPEC.md S10)
 
-(filled in step 14)
+Corpus: every root under `experiments/**/log.jsonl` already committed to
+this repository — the same glob `tools/root_sweep.py` walks. The
+turmite/jolt roots themselves are NOT in this corpus (their raw
+`log.jsonl`/`blobs/` are gitignored per the ladder convention — only the
+audit/qual/reason JSON summaries and `RESULTS.md` are committed), so they
+are reported separately from their own `RESULTS.md` prose, quoted
+verbatim.
+
+### M13 — the committed-root corpus: classification method and result
+
+```
+$ python3 -c "import pathlib; roots = sorted({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')}); print(len(roots))"
+48
+```
+Method: for every `conjecturer`-role `LLMAttempt` in every committed
+root's `log.jsonl`, an attempt whose `validation_path` contains
+`simulation_proposals` or `research_proposals` is an EXECUTABLE-AUTHORING
+attempt (R11's own phrase) — the conjecturer was mid-encoding a
+capability-channel proposal when this attempt was validated. This is
+exact, not heuristic: `validation_path` is the JSON pointer into the
+wire-contract output the validator rejected, so it names the field
+touched directly, unlike inferring intent from free-text error messages.
+
+```
+$ python3 -c "
+import json, pathlib
+roots = sorted({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')})
+total = invalid = exec_attempts = exec_invalid = 0
+hits = []
+for root in roots:
+    r_exec = r_exec_invalid = 0
+    with (root / 'log.jsonl').open() as fh:
+        for line in fh:
+            event = json.loads(line)
+            llm = event.get('llm')
+            if not llm or llm.get('role') != 'conjecturer':
+                continue
+            for a in llm.get('attempt_trace') or []:
+                total += 1
+                vpath = a.get('validation_path') or ''
+                is_exec = 'simulation_proposals' in vpath or 'research_proposals' in vpath
+                if is_exec:
+                    exec_attempts += 1
+                    r_exec += 1
+                if not a.get('valid'):
+                    invalid += 1
+                    if is_exec:
+                        exec_invalid += 1
+                        r_exec_invalid += 1
+    if r_exec:
+        hits.append((str(root), r_exec, r_exec_invalid))
+print(f'roots_scanned={len(roots)}')
+print(f'conjecturer_attempts_total={total} invalid_total={invalid}')
+print(f'attempts_touching_simulation_or_research_proposals={exec_attempts} invalid_among_those={exec_invalid}')
+for name, e, ei in hits:
+    print(f'{name}: exec_attempts={e} invalid={ei}')
+"
+roots_scanned=48
+conjecturer_attempts_total=941 invalid_total=180
+attempts_touching_simulation_or_research_proposals=1 invalid_among_those=1
+experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a: exec_attempts=1 invalid=1
+```
+Across 941 total conjecturer wire-validation attempts in 48 committed
+roots, exactly ONE ever touched a simulation/research proposal field at
+all — and it was invalid. This is itself a finding independent of the
+encoding-vs-content question: **the live capability channel is used so
+rarely that its entire committed-corpus footprint is a single attempt**,
+consistent with the preplan's own "S1 census... confirms all executable
+authoring on the live path is the conjecturer's own prose-channel output
+via the stochastic capability channel" and with M1's finding that the
+channel exists but is exercised almost never.
+
+Reading that one attempt's diagnostic blob directly:
+
+```
+$ python3 -c "
+import json, pathlib
+root = pathlib.Path('experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a')
+with (root/'log.jsonl').open() as fh:
+    for line in fh:
+        event = json.loads(line)
+        llm = event.get('llm')
+        if not llm or llm.get('role') != 'conjecturer':
+            continue
+        for attempt in llm.get('attempt_trace') or []:
+            vpath = attempt.get('validation_path') or ''
+            if 'simulation_proposals' in vpath or 'research_proposals' in vpath:
+                print(attempt['validation_path'], attempt['diagnostic_ref'])
+"
+/simulation_proposals/0/parameter_definitions/1/values_json fe05158eac224ed5dd13b109997126933bc9d982314b251c6fcce1d3e96815c1
+```
+```
+$ cat experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/blobs/fe/fe05158eac224ed5dd13b109997126933bc9d982314b251c6fcce1d3e96815c1
+{"contract":"conjecturer.turn.v6","path":"/simulation_proposals/0/parameter_definitions/1/values_json","error":"String should have at least 2 characters","received":"5","allowed":"type='string'","repair_scope":"/simulation_proposals/0/parameter_definitions/1/values_json","skeleton":"x", ...}
+```
+The model emitted `"5"` (one character) for a field requiring a
+minimum length of 2 (a JSON-encoded values string). This is a pure
+STRUCTURAL/schema violation — `min_length`, exactly the shape JSON
+Schema expresses without difficulty — not a judgment about whether the
+simulation's content was sound. **Classification: ENCODING.**
+
+**M13 result: 1/1 (100%) of the committed corpus's executable-authoring
+attempts failed on encoding, 0/1 on content.** The sample is n=1; this
+audit does not inflate that into a general rate, but it is the entire
+evidence the committed record currently holds, and it points the same
+direction as M14 below.
+
+### M14 — turmite and jolt: the two named cycle-0 diagnostic blobs, quoted verbatim
+
+Neither root is in the committed corpus (raw `log.jsonl`/`blobs/`
+gitignored); both are reported from their own tranche `RESULTS.md`,
+quoted exactly.
+
+**Turmite** (`experiments/live_turmite_2026-07-31/RESULTS.md`):
+
+> **The first is a self-link.** `_not_a_self_link`
+> (`scratch/proposals.py:59`) forbids it. That rule is one of the nine
+> this tranche's SWEEP.md listed as NOT EXPRESSIBLE in JSON Schema — it
+> is equality between two sibling field values, which the standard
+> cannot state without `$data`. It is also, on this evidence, the rule
+> that killed the run.
+
+Classification: **ENCODING** — a structural cross-field constraint (self-
+reference forbidden) rejected the model's output; nothing about the
+turmite rule's SUBSTANCE was judged.
+
+**Jolt** (`experiments/live_jolt_2026-07-31/RESULTS.md`):
+
+> The diagnostic blob (`blobs/a9/a91ae25a…`) names the refusal exactly:
+>
+>     "path":  "/requested_observables"
+>     "error": "Value error, simulation observables must be plain identifiers"
+>
+> That is `_observable_syntax` in `capabilities/models.py`, enforcing
+> `^[A-Za-z][A-Za-z0-9_]{0,63}$`. The proposal never reached the runtime
+> key-agreement check; it was refused at admission on NAME SYNTAX.
+
+Classification: **ENCODING** — a `pattern`-shaped syntax constraint
+(dotted names like `animal.baseline.distinct` rejected in favor of plain
+identifiers), and per the same `RESULTS.md`'s own correction: "The
+killer was a `pattern`. **JSON Schema expresses it perfectly.**" — this
+one was even MORE clearly encoding than first thought, not less.
+
+### M13+M14 combined
+
+Three executable-authoring failures are evidenced across this entire
+repository's committed record and named diagnostic history (the one
+committed-corpus attempt, plus turmite and jolt) — **all three failed on
+encoding, zero on content.** This is a small, non-statistical sample
+(n=3), reported honestly as exactly that: it corroborates
+DUAL_MODE_CONJECTURE_PREPLAN.md's own "The disincentive is concrete
+(R-e fails today)... going formal buys refutation-by-typo risk with no
+offsetting mechanism" without proving a population-level rate, because
+the population of live executable-authoring attempts this repository has
+ever recorded is this small.
 
 ## Summary (SPEC.md S16, filled in step 21)
 

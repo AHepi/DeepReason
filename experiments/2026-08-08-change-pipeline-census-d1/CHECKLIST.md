@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=14 blockers=none
+State: next=16 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -81,7 +81,7 @@ order. One step per dr-execute-step invocation.
       (live) rows + 17 manifest-embedded (mint-time) rows, 43 total.
 - [x] 13. (S9) [COMMIT] Commit and push.
       done-when: pushed, confirmed on origin. DONE.
-- [ ] 14. (S10) Write the classification script/command for the
+- [x] 14. (S10) Write the classification script/command for the
       historical encoding-failure evidence corpus (every
       experiments/**/log.jsonl root plus the named turmite/jolt roots),
       run it, and paste the fraction with numerator/denominator and
@@ -90,8 +90,12 @@ order. One step per dr-execute-step invocation.
       done-when: CENSUS.md's "Historical encoding-failure evidence"
       section has the pasted classification command, its output, and
       both named blobs quoted.
-- [ ] 15. (S10) [COMMIT] Commit and push.
-      done-when: pushed, confirmed on origin.
+      DONE — M13 (committed corpus, n=1, 100% encoding) + M14
+      (turmite/jolt quoted verbatim from their own RESULTS.md, both
+      encoding) + combined summary (n=3, 100% encoding, reported
+      honestly as non-statistical).
+- [x] 15. (S10) [COMMIT] Commit and push.
+      done-when: pushed, confirmed on origin. DONE.
 - [ ] 16. (S11) Write `docs/map/CON-conjecture-kinds.md` per SCHEMA.md's
       anatomy, with a `check:` line for every load-bearing claim, using
       S6-S8's CENSUS.md findings as its body.
