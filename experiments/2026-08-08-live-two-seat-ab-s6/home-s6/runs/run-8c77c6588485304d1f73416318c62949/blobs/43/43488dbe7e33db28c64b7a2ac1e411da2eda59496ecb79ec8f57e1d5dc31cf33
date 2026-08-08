@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims separation is unnecessary if the same engine uses 'Adversarial Friction', but it conflates the author's knowledge of general failure modes with knowledge of the specific claim's seams. The problem asks what distinguishes genuine independent verification from restatement; a single engine cannot independently verify its own claim because its internal representation of the claim biases its check. The target's mechanism ('the model knows its own failure modes') demonstrates this dependence: if the checker relies on the author's self-knowledge, it lacks the independence required to count as independent verification.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target reduces independent verification to execution of a formal verifier agnostic to author identity, but the problem asks about ANY claim, including qualitative or philosophical arguments. The target's countercondition admits non-formalizable claims exist but the main claim asserts independence ONLY if reducible to execution. For a qualitative claim (e.g., 'X is a fair policy'), an execution count cannot verify it, so per the target's own claim, it could never be independently verified, contradicting the problem's request to identify evidence distinguishing verification from restatement across claim types.",
+      "counterexample": null
+    }
+  ]
+}
+```
