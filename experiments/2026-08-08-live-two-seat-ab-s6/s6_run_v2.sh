@@ -12,7 +12,12 @@ LIVE="$(cd "$(dirname "$0")" && pwd)"
 set -a; . "$LIVE/env"; set +a
 REPO="$(cd "$LIVE/../.." && pwd)"
 
-QUESTION='When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run'"'"'s own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.'
+# Distinguished from the first run's identical question by one leading
+# sentence: run identity (_request_digest) hashes the question verbatim
+# and does NOT include seat bindings (PARKED.md P2, Failure #3), so an
+# unchanged question here would collide with the already-committed
+# coder-seat run root instead of minting a fresh one.
+QUESTION='This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run'"'"'s own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.'
 
 export DEEPREASON_HOME="$LIVE/home-s6"
 mkdir -p "$DEEPREASON_HOME"

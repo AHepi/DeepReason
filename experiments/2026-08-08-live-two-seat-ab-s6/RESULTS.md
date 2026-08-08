@@ -245,3 +245,71 @@ exercised through any public path today. Rung S6's own accept criteria
 are satisfied more convincingly by re-running the demonstration on a
 seat proven to do real work (below) than by continuing to lean on a
 channel now known to be structurally dead.
+
+## 2026-08-08 — Failure #3 (config error): re-run refused typed, `PREPARATION_QUALIFICATION_BUNDLE_MISMATCH`; my own PARKED.md assumption was wrong
+
+**What happened:** `s6_run_v2.sh` set up the second combination
+(`--seat "conjecture=$LIVE/coder-profile.yaml"`, same base
+glm-5.2 profile, same `home-s6` DEEPREASON_HOME), qualified cleanly
+(`qualify_rc=0`, both the base `ollama/glm-5.2` combination and the
+`conjecture` seat reaching `qualification_state: "ready"`, `tier:
+"full"`, in 207s — this combination's battery hit a warm cache for the
+`conjecture` seat's own subject, since `gemma4:31b` had already
+qualified for the `coder` seat in the first run), then `reason` refused
+typed 3 seconds later with no `run_id` emitted:
+
+```
+PREPARATION_QUALIFICATION_BUNDLE_MISMATCH: managed run qualification differs from the completed cache
+```
+
+**Diagnosis, from the code (`src/deepreason/preparation.py`), not
+theorised:** `_load_existing` (line 741) raises this exact code+message
+at line 776-780 when a run root already exists at the computed
+`managed_run_id` and its stored `qualification_bundle_digest` does not
+match the freshly-recomputed `expected_bundle_digest`. `ls
+home-s6/runs/` showed only ONE root: `run-79900e7847544b09bfb266518e2d8484`
+— the FIRST (coder-seat) run, already committed as evidence. Its own
+`run-preparation.json` records `managed_run_id =
+run-79900e7847544b09bfb266518e2d8484` and `request_digest =
+79900e7847544b09bfb266518e2d8484f827dddde9a488cc892f73bbffe3afe3` — the
+run id IS (a prefix of) the request digest. `_request_digest`
+(`preparation.py:249-265`) hashes exactly `{schema, question, budget,
+provider_profile_digest, policy_preset_id, policy_preset_digest}` (plus
+`dossier_digest` when present) — **seat bindings are not an input to
+it at all.** Seat-binding overrides are folded in later, only inside
+`_config_for_profile` (line 268) when actually building the run's
+provider config, and the seat-bindings snapshot is written to the run
+root as a sibling file (`SEAT_BINDINGS_SNAPSHOT_NAME`), never hashed
+into the identity. Since v2's question text and base profile were
+byte-identical to the first run's, its request digest collided with
+the already-committed root, and `_load_existing` correctly refused: the
+existing root's qualification bundle was frozen at the coder-seat
+combination's digest, not the fresh conjecture-seat one.
+
+**This refutes my own PARKED.md "In-flight note"** (written before
+this attempt), which assumed "a fresh run identity since the seat
+group changes the compiled manifest's roles table and therefore the
+request digest." That assumption was never checked against
+`_request_digest`'s actual field list before being written down — the
+same class of mistake as the `property_designer` correction above
+(reasoning from what seemed plausible instead of reading the one
+function that decides it). Recorded as its own PARKED item (P2) below,
+since it is a second, independent, load-bearing finding about the
+harness's live behavior, not a restatement of P1.
+
+**Work-around used (no code changed):** the tranche's own rule is
+work around operationally if a no-code road exists, otherwise park.
+One exists here: `_request_digest` includes `question` verbatim, so
+giving the second demonstration a question that differs from the
+first by more than whitespace mints an unrelated `managed_run_id`,
+with no interaction with the already-committed `coder`-seat root at
+all — no rename, no retirement, nothing touched. `s6_run_v2.sh`'s
+`QUESTION` was edited (still committed as this rung's own artifact, not
+`src/`/`tests/`/`tools/`/`docs/map/`) to add one distinguishing
+sentence identifying it as the second-seat variant of the same
+underlying question, keeping the demonstration's content comparable
+while forcing a fresh identity. Re-launched immediately after; see the
+next segment for its outcome.
+
+Failure budget: 3/10 spent (2 carried in from the coder-seat run, this
+is the third).
