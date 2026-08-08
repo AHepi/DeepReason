@@ -70,3 +70,6 @@ setup_rc=0
 qualify_rc=0 qualify_seconds=1
 reason_rc=0 reason_seconds=943
 run_id=run-6995cd12124d2697030bb4b9e48f79bd
+audit1_rc=0
+stop_reason=budget_exhausted
+resumable=yes
