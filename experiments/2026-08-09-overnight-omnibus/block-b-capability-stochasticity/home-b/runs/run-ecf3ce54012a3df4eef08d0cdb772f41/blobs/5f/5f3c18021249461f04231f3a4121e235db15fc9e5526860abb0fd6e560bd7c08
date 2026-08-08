@@ -1,0 +1,108 @@
+{
+  "candidates": [
+    {
+      "claim": "The exact counts and calibration trace must be produced via a typed sandboxed simulation; the observed distribution is concentrated within the specified two-sigma bound, supporting the fairness claim (simulation proposal filed).",
+      "mechanism": "The LCG X_{n+1} = (1103515245 * X_n + 12345) mod 2^31 with X_0 = 42 produces a fully deterministic orbit. Mapping to die faces via X_n mod 6 yields six counts after 10000 steps. Analytically, since the modulus 2^31 is not divisible by 6, a modular bias exists, but the theoretical bias ratio is bounded by 2/2^31 per cycle, making it vanishingly small. For N=10000 draws, the expected binomial standard deviation sqrt(10000 * (1/6) * (5/6)) ≈ 37.27 dominates this tiny theoretical bias. A simulation filing the exact recurrence produces the discriminating observables; if the resulting counts fall within [1666.67 ± 74.54], the fairness claim is supported.",
+      "counterconditions": [
+        "If the exact simulation yields any count outside the interval [1592, 1741], the fairness claim is refuted.",
+        "If the calibration trace of the first ten pairs does not match hand-computed recurrence values, the implementation is invalid and the evidence is discarded.",
+        "If the returned 'total' observable does not equal exactly 10000, the simulation is malformed."
+      ],
+      "typicality": 0.90,
+      "evidence_refs": [
+        {"block": "c6c31b919b1cd091", "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"},
+        {"block": "ff5f75b13b928302", "quote": "Establishing the exact counts. Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`count_1` .. `count_6`) plus `total`, not a"},
+        {"block": "a3db120ba929af11", "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself -- the six counts, the calibration trace -- never a boolean summarizing them."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The exact counts and calibration trace must be produced via a typed sandboxed simulation; the observed distribution is concentrated outside the specified two-sigma bound, refuting the fairness claim (simulation proposal filed).",
+      "mechanism": "The LCG X_{n+1} = (1103515245 * X_n + 12345) mod 2^31 has a period of 2^31 and cycles through all states. Because 2^31 is not divisible by 6, mapping via X_n mod 6 exhibits a severe structural modular bias over the full period. While 10000 draws sample only 0.00046% of the period, the specific arithmetic progression of the multiplier and the fixed seed X_0 = 42 may interact to create resonant frequencies in the low-order bits. This deterministic clustering could easily push one or more face counts beyond the 2-sigma tolerance of 37.27, violating the fairness criterion. A simulation filing the exact recurrence resolves this definitively.",
+      "counterconditions": [
+        "If the exact simulation yields all counts within the interval [1592, 1741], the refutation claim is falsified.",
+        "If the calibration trace of the first ten pairs does not match hand-computed recurrence values, the implementation is invalid and the evidence is discarded.",
+        "If the returned 'total' observable does not equal exactly 10000, the simulation is malformed."
+      ],
+      "typicality": 0.30,
+      "evidence_refs": [
+        {"block": "c6c31b919b1cd091", "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"},
+        {"block": "ff5f75b13b928302", "quote": "Establishing the exact counts. Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`count_1` .. `count_6`) plus `total`, not a"}
+      ],
+      "optional_refs": ["SRC_009", "SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The simulation must be filed to produce the exact counts and calibration trace; however, the 2-sigma criterion corresponds to a 95% confidence interval, meaning a truly fair generator has a ~5% chance of failing it, so the outcome must be interpreted as a continuous statistical measurement rather than a strict deterministic verdict (simulation proposal filed).",
+      "mechanism": "The problem specifies a two-standard-deviation bound, which in normal approximation corresponds to a 95% interval. If the generator is perfectly fair, there is an inherent ~4.56% probability that at least one of the six face counts falls outside this bound purely due to binomial variance. Therefore, observing a count outside the bound does not strictly prove the generator is unfair; it simply rejects the null hypothesis at the 5% level. The simulation provides the exact counts, but the epistemic interpretation of the fairness claim depends on whether we treat the 2-sigma rule as a strict pass/fail criterion or a probabilistic measure.",
+      "counterconditions": [
+        "If the simulation and calibration trace are not successfully filed, the epistemic argument lacks the necessary empirical grounding.",
+        "If the problem's definition of 'fair' is interpreted strictly as a binary pass/fail rule, the statistical nuance of this candidate is overridden."
+      ],
+      "typicality": 0.10,
+      "evidence_refs": [
+        {"block": "ff5f75b13b928302", "quote": "Testing fairness as a decision procedure. A claim that the generator is \"fair\" over this horizon is refutable by the actual counts falling outside the stated tolerance around the uniform expectation; return the counts and let the criticism cycle apply the tolerance, not a boolean verdict baked into the proposal."},
+        {"block": "a3db120ba929af11", "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself -- the six counts, the calibration trace -- never a boolean summarizing them."}
+      ],
+      "optional_refs": ["SRC_009"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "lcg_exact_tally_and_trace_001",
+      "hypothesis": "The LCG X_{n+1} = (1103515245 * X_n + 12345) mod 2^31 with X_0 = 42, mapped via die_n = 1 + (X_n mod 6), produces a distribution over 10000 draws where all face counts fall within two standard deviations of the uniform expectation (1666.67 ± 74.54).",
+      "rival_predictions": [
+        "All six face counts fall within the interval [1592, 1741], supporting the fairness claim.",
+        "One or more face counts fall outside the interval [1592, 1741], refuting the fairness claim.",
+        "The 'total' observable does not equal exactly 10000, indicating a malformed simulation."
+      ],
+      "discriminating_purpose": "Establish the exact face counts for the specified LCG over 10000 draws, provide a calibration trace of the first ten pairs, and measure the distribution against the 2-sigma fairness criterion.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def simulate(inputs, rng):\n    x = 42\n    counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}\n    trace = []\n    for n in range(1, 11):\n        x = (1103515245 * x + 12345) % (2 ** 31)\n        die = 1 + (x % 6)\n        trace.append((x, die))\n    for n in range(11, 10001):\n        x = (1103515245 * x + 12345) % (2 ** 31)\n        die = 1 + (x % 6)\n        counts[die] += 1\n    for i in range(1, 11):\n        die_i = trace[i-1][1]\n        counts[die_i] += 1\n    result = {\n        'count_1': counts[1],\n        'count_2': counts[2],\n        'count_3': counts[3],\n        'count_4': counts[4],\n        'count_5': counts[5],\n        'count_6': counts[6],\n        'total': sum(counts.values()),\n        'x_1': trace[0][0],\n        'die_1': trace[0][1],\n        'x_2': trace[1][0],\n        'die_2': trace[1][1],\n        'x_3': trace[2][0],\n        'die_3': trace[2][1],\n        'x_4': trace[3][0],\n        'die_4': trace[3][1],\n        'x_5': trace[4][0],\n        'die_5': trace[4][1],\n        'x_6': trace[5][0],\n        'die_6': trace[5][1],\n        'x_7': trace[6][0],\n        'die_7': trace[6][1],\n        'x_8': trace[7][0],\n        'die_8': trace[7][1],\n        'x_9': trace[8][0],\n        'die_9': trace[8][1],\n        'x_10': trace[9][0],\n        'die_10': trace[9][1]\n    }\n    return result",
+      "requested_observables": [
+        "count_1",
+        "count_2",
+        "count_3",
+        "count_4",
+        "count_5",
+        "count_6",
+        "total",
+        "x_1",
+        "die_1",
+        "x_2",
+        "die_2",
+        "x_3",
+        "die_3",
+        "x_4",
+        "die_4",
+        "x_5",
+        "die_5",
+        "x_6",
+        "die_6",
+        "x_7",
+        "die_7",
+        "x_8",
+        "die_8",
+        "x_9",
+        "die_9",
+        "x_10",
+        "die_10"
+      ],
+      "interpretation_conditions": [
+        "The simulation must run exactly 10000 steps, yielding a total of 10000.",
+        "The first ten (X_n, die_n) pairs must match hand-computed values from the specification for the implementation to be considered valid.",
+        "The 2-sigma fairness bound is [1666.67 - 74.54, 1666.67 + 74.54] = [1592.13, 1741.21]; integer counts must fall within [1593, 1741]."
+      ],
+      "parameter_definitions": [],
+      "requested_seed_set": [1]
+    }
+  ]
+}
