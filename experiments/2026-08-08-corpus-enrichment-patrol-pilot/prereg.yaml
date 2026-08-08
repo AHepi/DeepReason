@@ -32,16 +32,31 @@ phase_1_enrichment:
   deepreason_home: experiments/2026-08-08-corpus-enrichment-patrol-pilot/home
   contract: conjecturer.turn.v6 (harness default; see deviation note above)
   encoder_seat:
-    role_group: encoder
+    # CORRECTION during setup (recorded, not silently fixed): "encoder"
+    # is a ROLE, not a seat GROUP. seat_bindings.py's GROUP_ROLES maps
+    # group "coder" -> frozenset({"property_designer", "encoder"}) --
+    # the only CLI-addressable group that reaches the encoder role is
+    # `--seat coder=PATH`. There is no independent `--seat encoder=...`.
+    role_group: coder
+    roles_covered: [property_designer, encoder]
     model: gemma4:31b
     profile_pattern: S6's write_coder_profile.py (ProviderProfileV1.create,
       provider=ollama, family=gemma, context_window_tokens=131072,
       maximum_completion_tokens=8192, credential_env=OLLAMA_API_KEY,
-      reasoning=none, temperature=0.7) -- same settings, new role group
-      (encoder, not coder/property_designer -- S6's P1 found that seat dead)
+      reasoning=none, temperature=0.7) -- same settings, same group name
+      S6 used (S6's own P1 already found property_designer has no public
+      dispatch path; this pilot binds it anyway for parity with the task
+      instruction and reports the same expected-dead outcome)
     qualification: one fresh battery for this exact combination (new
       profile digest under a fresh DEEPREASON_HOME forces the full
       ~14-minute/~1160-call battery once; cached thereafter for this home)
+    additional_finding: `rules/encoding.py::draft_encoded_commitment` (the
+      function that would dispatch to the encoder role) has ZERO callers
+      anywhere in src/ -- grep-confirmed. Encoder delegation is dead code
+      independent of the v7 blocker (P-CEPP-1): binding this seat cannot
+      produce a live encoder dispatch even if v7 validated. Both facts are
+      reported together in RESULTS.md; the encoder seat is qualified but
+      structurally unreachable this tranche, not merely gated.
   primary_seat: default profile, provider ollama, model glm-5.2,
     family glm, context-window-tokens 131072, maximum-completion-tokens
     16384, reasoning none, credential-env OLLAMA_API_KEY (S6 precedent:
