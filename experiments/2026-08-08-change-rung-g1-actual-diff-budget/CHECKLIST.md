@@ -170,7 +170,7 @@ order. One step per dr-execute-step invocation.
       at every step indiscriminately -- the retrodiction acceptance
       criterion (R10).
 
-- [ ] 7. (S4) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`
+- [x] 7. (S4) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`
       step 6 ("Set the budget") per SPEC.md S4: headline must equal the
       computed sum of the itemization, naming `tools/diff_budget.py`
       and `DIFF_BUDGET_RESULT_V1` exactly. Run the diff-budget check
@@ -179,6 +179,16 @@ order. One step per dr-execute-step invocation.
       .claude/skills/dr-spec-change/SKILL.md` and `grep -n
       "DIFF_BUDGET_RESULT_V1" .claude/skills/dr-spec-change/SKILL.md`
       both match; push succeeds.
+
+      DONE. Both greps match (line 100, same line names both). Ran the
+      gate itself (now that it exists) rather than manual
+      `git diff --stat`, tranche-base `d4f63007`, ceiling 450, paths
+      `tools/ tests/ .claude/skills/ docs/map/`:
+      ```
+      {"total_insertions": 446, "ceiling": 450, "verdict": "WITHIN"}
+      ```
+      WITHIN, but only 4 lines of headroom before the ledgered ceiling,
+      with step 8's amendment still ahead -- flagged for step 8.
 
 - [ ] 8. (S5) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
       step 6 per SPEC.md S5: invoke `tools/diff_budget.py` against the
