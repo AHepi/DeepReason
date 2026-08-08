@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=3 blockers=none
+State: next=4 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -14,12 +14,12 @@ order. One step per dr-execute-step invocation.
       done-when: `git show fbb5608c --stat` shows REQUEST.md created. DONE.
 - [x] 2. (S4) SPEC.md committed and pushed.
       done-when: `git show 1144c283 --stat` shows SPEC.md created. DONE.
-- [ ] 3. (S5) Create CENSUS.md with its header and an empty section
+- [x] 3. (S5) Create CENSUS.md with its header and an empty section
       skeleton for all seven measurement sections (Executable-commitment
       paths, Criticism dispatch per kind, Refutation semantics per kind,
       R-g audit, Load-knob inventory, Historical encoding-failure
       evidence, plus a Summary), M-numbering starting at M1.
-      done-when: `test -f experiments/2026-08-08-change-pipeline-census-d1/CENSUS.md` -> exit 0.
+      done-when: `test -f experiments/2026-08-08-change-pipeline-census-d1/CENSUS.md` -> exit 0. DONE.
 - [ ] 4. (S5) Gather and write "Executable-commitment paths": pasted
       commands for the four named paths (simulation/research proposal
       channels, `lambda_run`, the dead property-oracle path, safe-skeleton
