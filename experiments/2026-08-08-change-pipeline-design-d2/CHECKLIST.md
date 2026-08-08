@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: all 31 steps complete; next=dr-validate-change, then STOP before delivery (operator instruction)
+State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=32 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -793,5 +793,97 @@ order. One step per dr-execute-step invocation.
       tranche.
 
 ## Amendments
-(none yet — re-planning after a validation failure or a frozen-surface
-STOP appends here, never rewrites checked steps above)
+
+### Amendment 4 (post-validation operator correction: pure-code conjectures must mechanically fail)
+
+Steps 32+ below implement SPEC.md's Revision 3 (REQUEST.md's Amendment
+4). Map ids: DR-SEAM-evaluation-x-ontology (programs.py,
+informal/skeleton.py), DR-SUB-evaluation (programs.py, informal/),
+DR-SUB-periphery (workloads/text.py), DR-CON-conjecture-kinds. Diff-
+budget ceiling for this amendment: 175 lines (SPEC.md Revision 3's own
+computed sum), tracked against `git diff --stat b84b69e4..HEAD -- src/
+tests/` (b84b69e4 = Revision 3's own SPEC.md commit, the base for this
+amendment's own budget — separate from, and additional to, the main
+tranche's 1150-line ceiling already closed at step 31). Frozen-surface
+diff MUST stay EMPTY for this amendment — no grant this time, any hunk
+on the five surfaces is a STOP.
+
+- [ ] 32. (Item 8, M30) Add `is_pure_code(text: str) -> bool` to
+      `programs.py`, implementing exactly M30's measured design (AST
+      parse; empty/unparseable -> False; single bare string-literal
+      expression -> False; every top-level statement one of
+      FunctionDef/AsyncFunctionDef/ClassDef/Import/ImportFrom -> True;
+      anything else -> False). Add direct unit tests covering all 6 of
+      M30's own prototyped cases (pure function, real prose, bare
+      docstring, mixed prose+code, import+def, bare class) plus the
+      bare-assignment-sequence case proving A6's own narrow-scope
+      choice (assignments alone do NOT trip it).
+      done-when: `python -m pytest tests/test_programs.py -k is_pure_code -q` -> all new cases pass, 0 failed. MUST NOT touch: the
+      five frozen surfaces (this file is `programs.py`, none of them).
+- [ ] 33. (Item 8) [COMMIT] Commit step 32.
+      done-when: diff-budget running total <= 175; frozen-surface diff
+      empty; push confirmed.
+- [ ] 34. (Item 8, M28) Extend `workloads/text.py::reasoning_wf_program`
+      to call `is_pure_code` against `envelope.claim` and
+      `envelope.mechanism`, failing (with a clear error message naming
+      which field) if either trips it. Add 4 tests to
+      `tests/test_workload_text.py`: a pure-code claim is refuted when
+      run through `crit_program` on a live-shaped artifact; a
+      prose-with-code-fragment claim still passes (R57(a)'s protected
+      case); a docstring-only claim still passes; an existing
+      reasoning-workload fixture (any one already in the suite) is
+      confirmed unaffected (byte-identical pass verdict before and
+      after this step, mutation-checked by temporarily reverting and
+      confirming the new tests fail).
+      done-when: `python -m pytest tests/test_workload_text.py tests/test_semantic_freedom_constitution.py -q` -> 0 failed, 4 new cases visible in the collected list. MUST NOT touch: the five
+      frozen surfaces (this file is `workloads/text.py`).
+- [ ] 35. (Item 8) [COMMIT] Commit step 34.
+      done-when: diff-budget running total <= 175; frozen-surface diff
+      empty; push confirmed.
+- [ ] 36. (Item 8, M28) Extend `informal/skeleton.py::skeleton_wf_program`
+      to call `is_pure_code` against `skeleton.claim` and
+      `skeleton.mechanism`, mirroring step 34's exact shape and error-
+      message convention. Add the same 4 test cases (adapted to the
+      skeleton shape) to `tests/test_informal.py`.
+      done-when: `python -m pytest tests/test_informal.py -q` -> 0
+      failed, 4 new cases visible in the collected list. MUST NOT
+      touch: the five frozen surfaces (this file is
+      `informal/skeleton.py`).
+- [ ] 37. (Item 8) [COMMIT] Commit step 36.
+      done-when: diff-budget running total <= 175; frozen-surface diff
+      empty; push confirmed.
+- [ ] 38. (Item 8, map) Update `docs/map/CON-conjecture-kinds.md`'s own
+      dual-mode section (added earlier in this same tranche) to name
+      this new mechanical check — one new sentence/paragraph plus one
+      new `check:` line proving a pure-code claim is refuted through
+      each of the two extended programs. Re-run `python
+      tools/docs_verify.py` before committing (every new check verified
+      individually first, per this tranche's own established
+      discipline).
+      done-when: `python tools/docs_verify.py` reports 0 failed
+      including the new check in this document.
+- [ ] 39. (Item 8) [COMMIT] Commit step 38.
+      done-when: diff-budget running total <= 175; frozen-surface diff
+      empty; push confirmed.
+- [ ] 40. (all) Blast-radius ring: run every file SPEC.md Revision 3's
+      own census named as EXPECTED TO MOVE ONLY IF / MUST NOT MOVE:
+      `python -m pytest tests/test_workload_text.py tests/test_replay_reasoning.py
+      tests/test_runtime_workload_integration.py tests/test_verify_workload_roots.py
+      tests/test_v6_three_root_concurrency.py tests/test_semantic_freedom_constitution.py
+      tests/test_workflow_shadow_c0.py tests/test_informal.py tests/test_security.py
+      tests/test_trial_accounting.py tests/test_candidate_compilation.py tests/test_guards.py -q`.
+      done-when: 0 failed — every MUST-NOT-MOVE prediction confirmed
+      true in practice, not just in the census's own forecast.
+- [ ] 41. (all) Map check: `python tools/docs_verify.py` and `python
+      tools/docs_verify.py --audit` and `python tools/docs_verify.py --links`.
+      done-when: 0 failed, 0 findings, 0 dangling (paste all three).
+- [ ] 42. (all) Full gate: `python -m pytest tests/ -q -n 4`.
+      done-when: output ends "N passed, M failed" (paste it verbatim);
+      any failure read against PARKED.md's existing P-D2-1/2/3 ledger
+      before being called a regression — expect exactly those 3 and no
+      more.
+- [ ] 43. (all) [COMMIT] Final push and clean-tree confirmation.
+      done-when: `git status --porcelain` is empty AND `git log
+      --oneline -1 origin/claude/pipeline-design-d2` matches local
+      HEAD; total diff-budget for this amendment pasted one final time
+      against the 175-line ceiling.
