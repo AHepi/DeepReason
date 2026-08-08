@@ -67,7 +67,7 @@ order. One step per dr-execute-step invocation.
       450 ceiling (SPEC.md's own headline low bound alone is 318, so
       239 is under even that). Pushed.
 
-- [ ] 3. (S2) Write `tests/test_diff_budget.py`: fixture-repo pytest
+- [x] 3. (S2) Write `tests/test_diff_budget.py`: fixture-repo pytest
       tests (subprocess-invoking the real CLI) for WITHIN, EXCEEDED,
       NO_CEILING, multi-`--paths` area breakdown, `total_insertions`
       independent of `--paths` overlap, exit class 2 (missing `<base>`),
@@ -77,7 +77,18 @@ order. One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_diff_budget.py -q` ->
       ends `N passed, 0 failed`.
 
-- [ ] 4. (S2) [COMMIT] Commit `tests/test_diff_budget.py`; run the
+      DONE.
+      ```
+      ............                                                             [100%]
+      12 passed in 2.42s
+      ```
+      12 tests, not the originally-planned ~7: also added
+      `--against REF` coverage (needed by S3's retrodiction demo),
+      `--ceiling -1` invalid-invocation coverage, a not-a-git-repo
+      evidence-unavailable case, and a `--self-test` passthrough check
+      -- all traceable to S1/S2's own spec text, not new scope.
+
+- [x] 4. (S2) [COMMIT] Commit `tests/test_diff_budget.py`; run the
       diff-budget check per current (pre-amendment) step 6 prose.
       done-when: `git log -1 --stat` shows the file; push succeeds.
 
