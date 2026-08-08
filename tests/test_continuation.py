@@ -116,8 +116,18 @@ def _non_resumable_committed_roots() -> list[tuple[Path, str]]:
     witnesses = []
     for root in roots:
         reason = json.loads((root / "run-stop.json").read_text()).get("reason")
-        if reason not in RESUMABLE_STOP_REASONS:
-            witnesses.append((root, reason))
+        if reason in RESUMABLE_STOP_REASONS:
+            continue
+        continuations = root / "continuations.jsonl"
+        if continuations.exists() and continuations.stat().st_size > 0:
+            # Already resumed once: prepare_continuation takes its
+            # "already resumed" branch for this root
+            # (CONTINUE_RESUME_RECOVERY_MISMATCH / re-authorization), not
+            # the CONTINUE_TYPED_STOP_REQUIRED branch this test targets.
+            # Rung L1 (2026-08-08): S6's own crash-reproduction fixture
+            # is exactly this case.
+            continue
+        witnesses.append((root, reason))
     return witnesses
 
 

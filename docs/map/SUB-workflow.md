@@ -1,5 +1,5 @@
 <!-- DR-SUB-workflow -->
-Verified-at: a65e8578
+Verified-at: 7347d8fe
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
 Seams: DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-scratch-x-workflow
@@ -244,3 +244,28 @@ model or the reducer — it materializes only what the records already say.
   irrelevant; a planner change that starts counting routes would silently
   weaken the manifest's coverage requirement while still reporting it satisfied.
 `check: grep -q "is always counted by critic school" src/deepreason/workflow/criticism.py && python -m pytest tests/test_foreign_criticism_policy_c3.py::test_shared_models_count_school_coverage_without_claiming_route_diversity -q`
+- **Crash-recovery re-checking "admitted" work must not assume every
+  CRITICISM item is batch-shaped.** `Scheduler._recover_workflow_
+  prefixes` re-sweeps every admitted `CRITICISM`/`SCRATCH_AUTHORING`
+  item to close a crash window between admission and the caller-owned
+  effect, and dispatches anything not `CONJECTURE` to
+  `recover_nonconjecture_admission`. An atomic child of a criticism
+  decomposition (`rules/crit.py`'s `execute_atomic_transition`,
+  payload schema `"contract-decomposition-child.v1"`) is still
+  `task_kind == CRITICISM`, so it reached
+  `_criticism_contract` — a handler built only for the BATCH shape
+  (`"criticism.semantic-task.v1"`) — and crashed
+  `NonConjectureRecoveryAuthorityError("unknown critic task")` on
+  `deepreason continue`, even when the child was already fully
+  resolved (Rung L1, 2026-08-08: S6 `PARKED.md` P3, reproduced against
+  fixture `experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/
+  failed-epoch1-run-8c77c6588485304d1f73416318c62949`; connected
+  failure D1 `PARKED.md` P2, `tests/test_continuation.py::
+  test_a_stop_with_no_typed_receipt_refuses_continuation`). Fixed:
+  `recover_nonconjecture_admission` now recognizes the atomic-child
+  payload shape before ever reaching `_criticism_contract` — an
+  already-terminal child is a no-op (nothing to recover), a
+  still-open one refuses with one consistent typed reason. Any new
+  atomic-decomposed task family needs the same recognition before its
+  own batch-shaped recovery handler, not after.
+`check: grep -q 'contract-decomposition-child.v1"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q "atomic criticism decomposition child recovery is not" src/deepreason/workflow/nonconjecture_recovery.py && python -m pytest tests/test_l1_continue_resumable_crash.py -q`

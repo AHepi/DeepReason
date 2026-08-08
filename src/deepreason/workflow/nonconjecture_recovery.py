@@ -999,6 +999,30 @@ def recover_nonconjecture_admission(
     _authority(provider.outcome == "provider_result", "unknown provider outcome")
     if existing_admission is not None and existing_admission.outcome != "admitted":
         return existing_admission
+    if (
+        preparation.task_kind == WorkflowTaskKind.CRITICISM
+        and hasattr(payload, "get")
+        and payload.get("schema") == "contract-decomposition-child.v1"
+    ):
+        # An atomic child of a criticism decomposition
+        # (rules/crit.py's execute_atomic_transition). _criticism_contract
+        # below is built only for the BATCH payload shape
+        # ("criticism.semantic-task.v1") and misroutes this. An
+        # already-terminal child needs no recovery action; a still-open
+        # one has no supported resume path here, so it refuses typed
+        # instead of crashing on the wrong authority check.
+        # (Rung L1: S6 PARKED P3, D1 PARKED P2.)
+        if item.terminal is not None:
+            _authority(
+                existing_admission is not None,
+                "atomic child has no durable admission",
+            )
+            return existing_admission
+        raise NonConjectureRecoveryAuthorityError(
+            "atomic criticism decomposition child recovery is not "
+            "supported by this dispatch; retire this root and "
+            "re-attempt the criticism batch fresh"
+        )
     raw_bytes = _raw_bytes(harness, provider)
     task = preparation.task_kind.value
     try:
