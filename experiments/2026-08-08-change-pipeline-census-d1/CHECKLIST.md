@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=26 blockers=none
+State: all 26 steps complete; next=dr-validate-change blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -173,10 +173,10 @@ order. One step per dr-execute-step invocation.
       connected to S6 PARKED P3 here — recorded as this tranche's own
       PARKED P2. Net of both named pre-existing failures: 0 regressions
       from this tranche.
-- [ ] 26. (all) [COMMIT] push and confirm clean tree.
+- [x] 26. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/pipeline-census-d1-c9h41d`
-      matches local HEAD.
+      matches local HEAD. DONE — both `85e3c8f1`, tree clean.
 
 ## Amendments
 (none yet — re-planning after a validation failure appends here,
