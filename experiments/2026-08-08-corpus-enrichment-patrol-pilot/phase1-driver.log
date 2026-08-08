@@ -17,3 +17,8 @@ Qualification will test ollama/gemma4:31b; maximum expected provider calls: 1140
 {"combination":{"cache_reused":false,"maximum_expected_provider_calls":1140,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"2c507ede9cb01aac9c7ca0a2151d78b82df1f9998349b6307a87f89c5e55297f","schema":"deepreason-qualification-result.v1","tier":"full"},"schema":"deepreason-qualification-result-per-seat.v1","seats":{"coder":{"cache_reused":false,"maximum_expected_provider_calls":1140,"model_id":"gemma4:31b","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"explicit","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"7dc04dc2a1dc15d6290e57be34cfe288b0f109e037874f4d272f858929bc9251","schema":"deepreason-qualification-result.v1","tier":"full"}}}
 qualify_rc=0 qualify_seconds=227
 --- run base-q01 (experiments/validation_questions.json:q01) start 2026-08-08T22:11:01Z ---
+reason_rc=0 reason_seconds=518 rid=base-q01
+run_id=run-e3f4f7007c50fe7e09b301d31851c3e7 rid=base-q01
+audit1_rc=0 rid=base-q01
+stop_reason=budget_exhausted rid=base-q01
+resumable=yes rid=base-q01
