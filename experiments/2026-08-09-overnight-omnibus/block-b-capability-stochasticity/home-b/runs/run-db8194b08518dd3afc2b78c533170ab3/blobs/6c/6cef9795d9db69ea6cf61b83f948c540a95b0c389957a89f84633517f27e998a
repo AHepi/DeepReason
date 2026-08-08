@@ -1,0 +1,30 @@
+def simulate(inputs, rng):
+    X = 42
+    counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+    trace = []
+    for n in range(1, 10001):
+        X = (1103515245 * X + 12345) % (2**31)
+        die = 1 + (X % 6)
+        counts[die] += 1
+        if n <= 10:
+            trace.append((X, die))
+    result = {
+        'count_1': counts[1],
+        'count_2': counts[2],
+        'count_3': counts[3],
+        'count_4': counts[4],
+        'count_5': counts[5],
+        'count_6': counts[6],
+        'total': sum(counts.values()),
+        'calibration_1_X': trace[0][0], 'calibration_1_die': trace[0][1],
+        'calibration_2_X': trace[1][0], 'calibration_2_die': trace[1][1],
+        'calibration_3_X': trace[2][0], 'calibration_3_die': trace[2][1],
+        'calibration_4_X': trace[3][0], 'calibration_4_die': trace[3][1],
+        'calibration_5_X': trace[4][0], 'calibration_5_die': trace[4][1],
+        'calibration_6_X': trace[5][0], 'calibration_6_die': trace[5][1],
+        'calibration_7_X': trace[6][0], 'calibration_7_die': trace[6][1],
+        'calibration_8_X': trace[7][0], 'calibration_8_die': trace[7][1],
+        'calibration_9_X': trace[8][0], 'calibration_9_die': trace[8][1],
+        'calibration_10_X': trace[9][0], 'calibration_10_die': trace[9][1],
+    }
+    return result

@@ -1,0 +1,13 @@
+{
+  "repair": [
+    {
+      "op": "replace",
+      "path": "/values",
+      "value": {
+        "default": {
+          "seed": 42
+        }
+      }
+    }
+  ]
+}
