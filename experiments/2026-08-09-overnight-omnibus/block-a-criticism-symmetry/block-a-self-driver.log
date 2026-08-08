@@ -18,3 +18,5 @@ audit_rc=0 tag=q1s1
 reason_rc=0 reason_seconds=538 tag=q1s2
 run_id=run-c6f6a743c5f6f2b49db7acf5edb8fb43 tag=q1s2
 audit_rc=0 tag=q1s2
+reason_rc=0 reason_seconds=609 tag=q1s3
+run_id=run-d04b1ded7e35b8a2d6dc0336554f0e33 tag=q1s3
