@@ -144,6 +144,84 @@ Start from `dr-set-goal` with this PARKED.md's P2 entry as the starting
 diagnosis; this is a design question (should reseating mint a new run
 identity) before it is an implementation question."
 
+## P3 (DEFECT, found by the live run — parked, NOT fixed): `continue` can crash resuming an in-flight criticism-recovery decomposition, `NonConjectureRecoveryAuthorityError("unknown critic task")`
+
+**What's broken:** when an `argumentative_critic` batch call
+(`batch-critic.v2`) repeatedly returns malformed JSON, the harness's own
+recovery machinery (`src/deepreason/workflow/nonconjecture_recovery.py`)
+declares `schema_exhausted` and decomposes the batch into individual
+`critic.atomic-target.v1` children, switching that route to a "compact"
+recovery profile (`route_seat_compact_recovery`). This is a
+pre-existing, seat-independent self-healing path for ordinary model
+flakiness (CLAUDE.md's own documented failure mode: a reasoning model
+can burn its output on malformed structure). If a run stops
+(`budget_exhausted`) with one of these decompositions still in flight
+(some atomic children completed, others not yet attempted), a later
+`deepreason --root <run> continue` can crash trying to resume it:
+
+```
+error: "unknown critic task"
+error_type: "NonConjectureRecoveryAuthorityError"
+state: "failed"
+stop_reason: "operational_failure"
+```
+
+**Traced to** `src/deepreason/workflow/nonconjecture_recovery.py:644`:
+
+```python
+def _criticism_contract(harness, manifest, item, preparation, payload):
+    _authority(payload.get("schema") == "criticism.semantic-task.v1", "unknown critic task")
+```
+
+The recovered `run-result.json` (`model_execution.contract_decompositions`)
+shows the pending item at resume time was an ATOMIC child of the
+original `batch-critic.v2` call (`atomic_contract_id:
+"critic.atomic-target.v1"`, two sibling children already
+`terminal_status: "completed"`). `_criticism_contract` is written for
+the top-level batch contract's own payload shape
+(`criticism.semantic-task.v1`); the most likely explanation, from
+reading the surrounding dispatch code, is that resuming a
+partially-decomposed batch routes the atomic child's own (different)
+payload schema through the handler built for the batch, which then
+correctly refuses it as unrecognized — the resume path does not know
+how to hand a mid-decomposition item back to the right handler.
+
+**Not a `--seat` interaction:** nothing in the failing function
+branches on seat bindings; the crash is on `argumentative_critic`,
+which is bound to the same default endpoint regardless of which group
+(`coder` or `conjecture`) the operator's `--seat` flag targets in this
+tranche's runs. This is a general harness defect in the
+compact-recovery resume path, found incidentally by this tranche's live
+run, not a consequence of role-seat separation.
+
+**Consequence:** a `continue` on a run stopped mid-decomposition is not
+safe to assume will succeed just because `stop_reason` says
+`budget_exhausted`/resumable — it can instead crash the run into a
+terminal `failed` state, losing the chance to reach a clean stop or
+gather further seat-bindings evidence on that root. The affected root
+must be retired (never edited) and re-attempted from a fresh identity.
+
+**Not fixed here, on purpose:** `src/` stays byte-untouched this
+tranche (live-run rule). The right fix belongs to whoever owns
+`nonconjecture_recovery.py`'s dispatch-by-contract logic, and needs to
+decide the right resume semantics for a partially-decomposed batch
+(re-derive the correct child handler? refuse resume and require a fresh
+attempt of the whole batch? something else) — a design question, not
+just a bug-swat.
+
+**Ready-to-send prompt:** "`deepreason --root <run> continue` can raise
+`NonConjectureRecoveryAuthorityError('unknown critic task')`
+(`src/deepreason/workflow/nonconjecture_recovery.py:644`,
+`_criticism_contract`) when resuming a run that stopped with an
+in-flight `route_seat_compact_recovery` decomposition of a
+`schema_exhausted` `argumentative_critic` batch — two atomic children
+completed, more pending, when `continue` tried to resume. Diagnose the
+correct resume semantics starting from `dr-set-goal` with this
+PARKED.md's P3 entry (full repro context: run
+`experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949`,
+retired but not deleted, as a live reproduction fixture) as the
+starting diagnosis."
+
 ## In-flight note
 
 The re-run reuses `home-s6/` (same `DEEPREASON_HOME`). It does NOT get

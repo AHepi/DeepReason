@@ -313,3 +313,116 @@ next segment for its outcome.
 
 Failure budget: 3/10 spent (2 carried in from the coder-seat run, this
 is the third).
+
+## 2026-08-08 — the retried v2 run: clean attribution, but two more findings (Failure #4, and a snapshot-loop process deviation)
+
+The relaunch (`s6_run_v2.sh`, distinguished question, minted
+`run-8c77c6588485304d1f73416318c62949`) got much further:
+
+- `setup_rc=0`, `qualify_rc=0` (1 second — both the base combination and
+  the `conjecture` seat hit warm caches from the earlier attempts).
+- `reason_rc=0` after 611s, 6 cycles, `stop_reason=budget_exhausted`,
+  140461/150000 tokens spent.
+- `audit1` (`s6_audit_v2.py`) showed **criteria (a) and (b) fully met**:
+  `attribution_clean: true`, `conjecturer_calls_on_gemma: true`,
+  `argumentative_critic_calls_on_glm: true`, one seat-bindings stamp
+  recorded with `group: "conjecture"`, `model_id: "gemma4:31b"`, matching
+  what `setup --seat conjecture=...` bound. But `replay_valid: false`,
+  with 9 `foreign-criticism` violations.
+
+**Diagnosing the foreign-criticism violations, from the code
+(`src/deepreason/invariants.py`), not theorised:** the terminal check at
+line 4003-4009 requires every ACCEPTED artifact authored by a
+`conjecturer`/`synthesizer` to have accumulated foreign-school criticism
+(criticism from a DIFFERENT "school" — an independent line of critique,
+a concept this program keeps distinct from "seat"; see below) meeting
+`criticism_policy.minimum_foreign_school_coverage` (1, here). All 9
+flagged targets had 0. This is NOT a seat-binding interaction: both
+runs' compiled `criticism_policy` (`run-manifest.json`) are byte-for-byte
+identical (4 schools, all `argumentative_critic` bound to the same
+default `provider-profile-a3e...` endpoint in both runs — seat overrides
+never touch that role in either the `coder` or `conjecture` group). It
+reads instead as ordinary resource pressure: run2's `conjecturer` role
+(now on `gemma4:31b`) produced more raw candidate conjectures per cycle
+than run1's did (16 calls vs. run1's 11, comparably-sized budgets),
+outrunning the scheduler's ability to also dispatch enough
+`argumentative_critic` batches (25 calls vs. run1's 27) before the
+150000-token ceiling hit — leaving 9 newly-accepted artifacts still
+waiting for their mandatory second opinion when the run stopped.
+
+**Failure #4 — a genuine harness defect, found live, NOT caused by
+`--seat`:** the ladder's own `resumable` check (using `stop_reason`)
+said this was safe to resume, so it ran `deepreason --root <run>
+continue --budget cycles=2` to close the gap. That continuation crashed
+4 events in: `state: "failed"`, `stop_reason: "operational_failure"`,
+`error: "unknown critic task"`, `error_type:
+"NonConjectureRecoveryAuthorityError"`. Traced to
+`src/deepreason/workflow/nonconjecture_recovery.py:644`:
+
+```python
+def _criticism_contract(harness, manifest, item, preparation, payload):
+    _authority(payload.get("schema") == "criticism.semantic-task.v1", "unknown critic task")
+```
+
+The captured `run-result.json` shows why: before the first `reason`
+call stopped, one `argumentative_critic` batch (`batch-critic.v2`) had
+already hit `schema_exhausted` (repeated malformed JSON from the model)
+and the harness's own recovery machinery had begun decomposing it into
+individual `critic.atomic-target.v1` children and switching that route
+to a "compact" recovery profile (`mode:
+"route_seat_compact_recovery"`) — a pre-existing, seat-independent
+self-healing path for exactly this kind of model flakiness (glm-5.2
+producing malformed batch JSON under load; CLAUDE.md's own documented
+failure mode for reasoning models). Two of those atomic children had
+already completed. `continue`'s attempt to RESUME that in-flight
+decomposition is what hit `_criticism_contract` with a payload whose
+`schema` field was not `"criticism.semantic-task.v1"` — almost
+certainly the *atomic* child's own payload shape being routed through
+the handler written for the *batch* contract. This is a resume-path
+bug in the compact-recovery/decomposition machinery, not a `--seat`
+interaction: nothing in the failing code path branches on seat
+bindings, and the crash happened on the `argumentative_critic` role,
+which is bound to the same default endpoint in every configuration this
+tranche has run. Parked in full as P3 below (not fixed: `src/` stays
+byte-untouched this tranche).
+
+The run root (`run-8c77c6588485304d1f73416318c62949`) is now dead —
+`state: "failed"` is terminal, and it never got a second seat-bindings
+stamp (`seat_bindings_stamp_count` stayed 1), so it cannot demonstrate
+criterion (d) either. Retired per this program's own convention:
+`git mv run-8c77c6588485304d1f73416318c62949
+failed-epoch1-run-8c77c6588485304d1f73416318c62949`, committed as its
+own commit (`35df6616`) before anything else, contents otherwise
+untouched.
+
+**A process deviation worth naming plainly, not hiding:** the driver
+script itself does not gate `audit2`/further steps on `continue_rc`, so
+it ran `s6_audit_v2.py` again against the now-failed root regardless
+(harmless — it just captured the failure state as `s6-audit2-v2.json`,
+consistent with `s6-audit1-v2.json` plus the crash). More seriously,
+`snapshot_loop.sh`'s 5-minute `git add -A "$LIVE_REL"` swept up this run
+root TWICE while `continue` was still actively appending to it
+(commits `4d527599` at 04:45:14Z, mid-`continue`, and `ae12fd3f` at
+04:50:17Z, capturing its final failed state) — a direct violation of
+this program's own "never commit mid-append" rule, caused by my own
+snapshot tooling being less careful than the ladder's explicit
+end-of-step commits. No harm resulted (the root was dead anyway and is
+now retired, its mid-append commit superseded by the final one before
+retirement), but the tooling gap is real and is now fixed:
+`snapshot_loop.sh` was edited to exclude `home-s6/runs/` from its
+sweep, so only the ladder's own deliberate, post-judgment commits will
+ever include a run root going forward.
+
+**Adaptation for the next attempt:** raising `--token-budget` will not
+by itself prevent `schema_exhausted` (that trigger is about the model's
+per-call output reliability, not the run's total budget), but a more
+generous budget DOES reduce the chance of stopping mid-decomposition —
+which is the specific state that exposed the `continue`-resume bug.
+`s6_run_v2.sh`'s `--cycles 6 --token-budget 150000` is raised to
+`--cycles 10 --token-budget 220000` for the retry, aiming for a run
+that either fully resolves any schema-exhausted recovery within its own
+single `reason` invocation (never needing a mid-decomposition
+`continue`) or, if it still needs `continue`, does so from a clean stop
+point the way run1's did.
+
+Failure budget: 4/10 spent.

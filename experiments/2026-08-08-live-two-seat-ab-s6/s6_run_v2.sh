@@ -53,8 +53,14 @@ mkdir -p "$DEEPREASON_HOME"
   timeout 14400 deepreason qualify --yes --json --concurrency 3
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
 
+  # Cycles/budget raised 6/150000 -> 10/220000 after Failure #4: the
+  # first attempt stopped budget_exhausted mid a schema-exhausted
+  # critic-batch recovery decomposition, and `continue` crashed trying
+  # to resume it (PARKED.md P3). More headroom does not prevent
+  # schema_exhausted (a model-reliability trigger, not a budget one)
+  # but does make it far less likely the run stops mid-decomposition.
   r0=$SECONDS
-  timeout 14400 deepreason reason "$QUESTION" --cycles 6 --token-budget 150000 --allow-partial \
+  timeout 14400 deepreason reason "$QUESTION" --cycles 10 --token-budget 220000 --allow-partial \
     > "$LIVE/s6-reason-v2.json" 2> "$LIVE/s6-reason-v2.err"
   echo "reason_rc=$? reason_seconds=$((SECONDS-r0))"
 
