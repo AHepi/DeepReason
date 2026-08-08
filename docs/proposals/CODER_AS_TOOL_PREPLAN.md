@@ -1,5 +1,14 @@
 # Pre-plan: the coder seat as a tool — delegated executable authoring
 
+Status: ABSORBED (2026-08-08, same day) into
+`DUAL_MODE_CONJECTURE_PREPLAN.md`, which takes priority per the
+operator's follow-up words (ledgered there): the live conjecturer
+cannot submit a formal encoding at all today, and a formal encoding's
+refutation kills the whole artifact — both must be fixed for the
+coder-as-tool seam to be worth using. T1 → D1, T2 → D2 (the
+delegation seam is D2's encoding-author mechanism), T3 → D3, T4 → D5.
+This document remains the record of the design intent and evidence.
+
 Status: PROPOSED. Written 2026-08-08 by the monitor session. Authority
 is the operator's own words (verbatim, the design intent this plan
 serves):
