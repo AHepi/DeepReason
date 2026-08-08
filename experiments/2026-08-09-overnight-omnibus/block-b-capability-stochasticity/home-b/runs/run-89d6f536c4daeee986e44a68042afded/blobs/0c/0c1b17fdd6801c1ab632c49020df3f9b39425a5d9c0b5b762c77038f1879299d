@@ -1,0 +1,18 @@
+def simulate(inputs, rng):
+    x = 42
+    counts = [0, 0, 0, 0, 0, 0]
+    cal = []
+    for n in range(1, 10001):
+        x = (1103515245 * x + 12345) % (2**31)
+        die = 1 + (x % 6)
+        counts[die - 1] += 1
+        if n <= 10:
+            cal.append((x, die))
+    out = {}
+    out['total'] = sum(counts)
+    for i in range(6):
+        out['count_%d' % (i + 1)] = counts[i]
+    for i in range(10):
+        out['cal_x_%d' % (i + 1)] = cal[i][0]
+        out['cal_die_%d' % (i + 1)] = cal[i][1]
+    return out

@@ -23,3 +23,4 @@ run_id=run-d63e92d295084b9d303eec6f76e1a34e tag=s4
 audit_rc=0 tag=s4
 reason_rc=0 reason_seconds=286 tag=s5
 run_id=run-89d6f536c4daeee986e44a68042afded tag=s5
+audit_rc=0 tag=s5
