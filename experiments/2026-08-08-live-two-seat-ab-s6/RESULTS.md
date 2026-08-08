@@ -164,3 +164,84 @@ both diagnosed from the typed record before any remedy, both logged as
 they happened. Rung S6 is DELIVERED. No dead root to retire — the one
 run root this tranche produced (`run-79900e7847544b09bfb266518e2d8484`)
 is the evidence, kept as committed.
+
+## 2026-08-08 — correction: "stochastic miss" was wrong; the path is structurally dead
+
+**This corrects, not edits, the "Residue" and "Verdict" segments
+above** — those stand as written, with this segment naming exactly
+what was wrong in them. The characterization of `property_designer`
+never firing as a "pre-registered stochastic miss" (PLAN.md,
+`s6-audit1.json`/`s6-audit2.json` analysis above) is REFUTED by the
+tree. Probability of the `coder` seat actually dispatching a live call
+was **0, not low** — this is a structural dead path, not a
+capability-channel-style stochastic one, and PLAN.md's own citation of
+CLAUDE.md's stochasticity doctrine to excuse it was a misapplication of
+that doctrine to a mechanism the doctrine does not cover.
+
+**The evidence chain, read fresh from the tree, not from memory:**
+
+1. `GROUP_ROLES["coder"] = frozenset({"property_designer"})`
+   (`seat_bindings.py`) — the `coder` group's ONLY role.
+2. `property_designer` is dispatched from exactly one call site,
+   `rules/experiment.py::propose_properties`, which early-returns `[]`
+   unless `oracle.py::checker_wf_commitment(base)` returns non-`None`.
+3. `checker_wf_commitment(base)` (`oracle.py:776`) itself early-returns
+   `None` unless `base.eval == f"program:{PROPERTY_PROGRAM}"` — i.e.
+   unless an ACTIVE property-oracle commitment already exists in the
+   run's own graph.
+4. The only function anywhere in `src/deepreason/` that constructs a
+   NEW `Commitment` with `eval == "program:property_oracle"` is
+   `oracle.py::property_oracle_commitment` (line 335).
+5. `property_oracle_commitment`'s only caller in the entire tree is
+   `oracle.py::admit_counterexample` (line 431,
+   `grep -n "property_oracle_commitment(" src/deepreason/**/*.py`
+   returns exactly this one call site outside the function's own
+   definition).
+6. `admit_counterexample` (`oracle.py:386`) itself REQUIRES `base.eval
+   == f"program:{PROPERTY_PROGRAM}"` as its own precondition (line
+   397: `if base.eval != f"program:{PROPERTY_PROGRAM}": return None,
+   "target commitment is not a property oracle..."`) — it mints a
+   counterexample-derived oracle INHERITING an existing base oracle's
+   own spec, it does not mint the first one.
+7. Every other reference to `PROPERTY_PROGRAM` in the tree
+   (`run_manifest.py:3830`, `rules/crit.py:779,813,942`,
+   `scheduler/scheduler.py:2201,2246,2288`) READS `commitment.eval ==
+   f"program:{PROPERTY_PROGRAM}"` to gate some OTHER behavior; none of
+   them constructs one.
+
+**The circularity, stated plainly:** minting a property-oracle
+commitment requires an existing property-oracle commitment as input.
+No public path (the CLI, the seed-problem admission path, or any rule
+this tranche's live run actually exercised) constructs the FIRST one.
+`property_designer` therefore has no way to ever fire on ANY run
+launched through the public surface — not "rarely," not
+"stochastically across identical runs" (CLAUDE.md's own doctrine, which
+governs capability/simulation-channel proposals that genuinely DO
+authored by a live model call with a live probability of firing) —
+**structurally never**, independent of the question asked, the cycle
+budget given, or which models are bound to which seats. This explains,
+retroactively, the OTHER finding already on record and unchanged since
+it was first measured: no `log.jsonl` under `experiments/` or `runs/`
+in this repository's entire history has ever carried a
+`"role": "property_designer"` LLM-call record (checked at PLAN.md's own
+writing, before this rung's live run, and still true after it).
+
+**Why this was missed the first time:** PLAN.md reasoned by ANALOGY to
+CLAUDE.md's documented capability-channel stochasticity doctrine
+without tracing `property_oracle_commitment`'s own caller graph to its
+end — the same kind of "reading a model and not its validator" pattern
+`docs/map/INV-frozen-surfaces.md` names as this program's own recorded
+trap for surface 4, applied here to a different mechanism. The fix
+executor read three call sites deep and stopped one hop short of the
+actual root cause.
+
+**Consequence for THIS tranche's own accept criteria:** unchanged in
+substance. Criterion (a) ("which seat produced every attempt") never
+depended on `property_designer` firing — it was always "for whatever
+attempts occurred, attribution is correct," and that stood then and
+stands now. What changes is only the CHARACTERIZATION of why the
+`coder` seat produced none: not an unlucky roll, a seat that cannot be
+exercised through any public path today. Rung S6's own accept criteria
+are satisfied more convincingly by re-running the demonstration on a
+seat proven to do real work (below) than by continuing to lean on a
+channel now known to be structurally dead.
