@@ -1,0 +1,9 @@
+```json
+{
+  "path": "/values",
+  "op": "replace",
+  "value": {
+    "default": "{}"
+  }
+}
+```

@@ -1,0 +1,51 @@
+```json
+{
+  "candidate": {
+    "claim": "The only epistemically admissible procedure to resolve the fairness claim at horizon n=10000 is to execute a sandboxed simulation of the exact recurrence and tally the empirical face counts; any verdict derived from a priori statistical reasoning, LCG lattice heuristics, or modular equidistribution arguments is speculative and must be discarded unless corroborated by the actual observables.",
+    "mechanism": "The Linear Congruential Generator f(x) = (1103515245 * x + 12345) mod 2^31 followed by die_n = 1 + (X_n mod 6) is a deterministic finite-state trajectory over 2^31 states. At n=10000, the exact face-count vector is a fixed realization of that trajectory, but the chaotic propagation of modular multiplicative factors and the non-periodic truncation at 10000 preclude any closed-form expression, symbolic summation, or hand-verifiable probabilistic surrogate. Therefore, the evidence-resolving procedure is strictly operational: implement the recurrence exactly, assert the first ten pairs as a calibration trace to detect implementation drift in the modulo and mapping, execute the full iteration, and return the six tallied counts as flat observables.",
+    "counterconditions": [
+      "If an independent code audit of the submitted program reveals any divergence in the multiplier, increment, modulus, or the 1+(X mod 6) face mapping from the problem specification, the returned counts are invalidated.",
+      "If the calibration trace (first ten X_n, die_n pairs) deviates from the hand-computed specification values, the implementation contains a defect and the subsequent counts must not be admitted as evidence.",
+      "If the returned observables omit or alter any of the six flat count fields required by the schema, the evidence is incomplete.",
+      "If a sandboxed execution capability is unavailable and the run is constrained to prose analysis, the fairness claim must be abstained on, not guessed.",
+      "If the program contains any source other than the specified def simulate(inputs, rng) function, the submission violates the capability contract and is rejected."
+    ],
+    "typicality": 0.95,
+    "evidence_refs": [
+      {
+        "block": "153ef84da9246f5f"
+      },
+      {
+        "block": "1c2d18924a3064bc"
+      },
+      {
+        "block": "6415222753a4ceb9"
+      },
+      {
+        "block": "805ef5d89684cb77"
+      },
+      {
+        "block": "a3db120ba929af11"
+      },
+      {
+        "block": "c6c31b919b1cd091"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      }
+    ],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": [],
+    "analogy": null
+  }
+}
+```

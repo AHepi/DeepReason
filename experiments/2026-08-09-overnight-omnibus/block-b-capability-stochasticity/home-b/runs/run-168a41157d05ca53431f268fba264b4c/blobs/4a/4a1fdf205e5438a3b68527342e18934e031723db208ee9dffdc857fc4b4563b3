@@ -1,0 +1,12 @@
+```json
+{
+  "path": "/simulation_proposals/0/parameter_definitions/0",
+  "op": "replace",
+  "value": {
+    "name": "default",
+    "values": [
+      "{}"
+    ]
+  }
+}
+```
