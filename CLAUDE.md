@@ -280,9 +280,13 @@ A seam document that does not exist means the pair has not been written up —
     tests/                     the gate; helpers worth reusing:
                                _prepare_run, controller fixtures
     experiments/               live evidence; RESULTS.md = narrative
-    docs/                      specs (harness v1.3 + v1.5 amendment,
+    docs/                      specs (harness v1.3 + v1.4/v1.5/v1.6
+                               amendments — read ALL amendments; note
+                               "V6" elsewhere names the RunManifest/
+                               policy generation and the wire-contract
+                               series, NOT this spec document series),
                                STATE_OF_THE_THEORY, TOKEN_ECONOMY,
-                               BASIN_REPORT)
+                               BASIN_REPORT
     .claude/skills/            the two workflow families
 
 Start any session by reading the newest RESULTS.md segments — they are
