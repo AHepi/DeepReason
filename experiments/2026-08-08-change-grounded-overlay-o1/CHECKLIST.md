@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=22 blockers=none
+State: next=26 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -215,13 +215,22 @@ order. One step per dr-execute-step invocation.
       DONE — n/a: step 19 created no map document (RESULTS.md's own
       "No new map document" section), so no `docs_verify` run is owed
       by this tranche.
-- [ ] 24. (S13) Full gate: `python -m pytest tests/ -q -n 4`
+- [x] 24. (S13) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it verbatim).
       Per the task's own stated new baseline (P1/P3 fixed, SPEC.md A3),
       anything red is a STOP: report it plainly in RESULTS.md rather
       than reconciling it into a pre-existing-failure narrative that
       does not actually apply on this branch.
-- [ ] 25. (S13) [COMMIT] Commit and push the gate result (folded into
+      DONE — `3400 passed, 7 skipped in 666.16s (0:11:06)`. ZERO
+      failures — confirms SPEC.md A3's prediction (P1/P3 fixed on this
+      branch) exactly; no STOP needed. Environment note (not a
+      defect): bare `python -m pytest` initially reported "No module
+      named pytest" — `pip install -e ".[dev]" --break-system-packages`
+      plus `pip install jsonschema pytest-xdist --break-system-packages`
+      (both uncommitted, environment-only, matching D1's own precedent
+      for this repo's known undeclared dev-extra gap) were needed
+      before the gate could run at all.
+- [x] 25. (S13) [COMMIT] Commit and push the gate result (folded into
       RESULTS.md if not already captured there).
       done-when: pushed, confirmed on origin.
 - [ ] 26. (S15, all) [COMMIT] push and confirm clean tree — the last

@@ -161,6 +161,20 @@ this tranche's own scripts (`scripts/`, not `src/`) before being run
 over the corpus — normal script-development iteration, not a defect
 against the harness.
 
+## Full gate at the boundary
+
+```
+$ python -m pytest tests/ -q -n 4
+3400 passed, 7 skipped in 666.16s (0:11:06)
+```
+Zero failures — the program's new baseline (P1/P3 fixed, SPEC.md A3)
+confirmed directly, not assumed. `pytest`/`jsonschema`/`pytest-xdist`
+were installed locally to run this (uncommitted, environment-only,
+matching the same gap `experiments/2026-08-08-change-pipeline-census-d1/PARKED.md`
+already names as a pre-existing, undeclared dev-extra — not
+re-diagnosed here, `pyproject.toml` untouched, outside this tranche's
+`src/`/`tests/`/`tools/` boundary regardless).
+
 ## Verdict
 
 O1 complete: four overlays built, run over the full committed-root
