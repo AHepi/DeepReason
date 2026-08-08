@@ -963,9 +963,17 @@ on the five surfaces is a STOP.
       tests/test_trial_accounting.py tests/test_candidate_compilation.py tests/test_guards.py -q`.
       done-when: 0 failed — every MUST-NOT-MOVE prediction confirmed
       true in practice, not just in the census's own forecast.
-- [ ] 41. (all) Map check: `python tools/docs_verify.py` and `python
+      DONE — `91 passed` (0 failed), every MUST-NOT-MOVE prediction
+      from SPEC.md Revision 3's own blast-radius census confirmed in
+      practice, not just forecast.
+- [x] 41. (all) Map check: `python tools/docs_verify.py` and `python
       tools/docs_verify.py --audit` and `python tools/docs_verify.py --links`.
       done-when: 0 failed, 0 findings, 0 dangling (paste all three).
+      DONE — `docs_verify [full]: 53 documents, 848 checks, 4
+      workers` -> `docs_verify: 2 failed` (both `SUB-application.md`'s
+      pre-existing PARKED failures P-D2-1, zero new). `--audit ->
+      0 finding(s)`. `--links -> 0 dangling reference(s), 53
+      document(s)`.
 - [ ] 42. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends "N passed, M failed" (paste it verbatim);
       any failure read against PARKED.md's existing P-D2-1/2/3 ledger
