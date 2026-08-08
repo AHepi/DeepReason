@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=1 blockers=none
+State: next=6 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -9,12 +9,13 @@ step 19 below.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S1, S2, S3) SPEC.md committed and pushed; confirm zero `src/`/
+- [x] 1. (S1, S2, S3) SPEC.md committed and pushed; confirm zero `src/`/
       `tests/`/`tools/` diff exists BEFORE any script is written (the
       tripwire's own starting baseline).
       done-when: `git diff --stat origin/claude/monitor-session-handover-63ajqv...HEAD -- src/ tests/ tools/`
       -> empty.
-- [ ] 2. (S4) Create `experiments/2026-08-08-change-grounded-overlay-o1/scripts/`
+      DONE — empty output confirmed (exit 0, no diff lines).
+- [x] 2. (S4) Create `experiments/2026-08-08-change-grounded-overlay-o1/scripts/`
       and a shared `overlay_common.py` module: root-corpus enumeration
       (`sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jsonl")})`,
       matching `tools/root_sweep.py`'s own convention per SPEC.md A7),
@@ -24,7 +25,8 @@ order. One step per dr-execute-step invocation.
       done-when: `grep -n "read_only=True" experiments/2026-08-08-change-grounded-overlay-o1/scripts/overlay_common.py`
       -> exit 0, and `python3 -c "import sys; sys.path.insert(0,'experiments/2026-08-08-change-grounded-overlay-o1/scripts'); import overlay_common; print(len(overlay_common.corpus()))"`
       prints a positive integer (paste it).
-- [ ] 3. (S5) Write `scripts/o1a_semantics_diff.py`: per-root node/edge
+      DONE — 48 committed roots found under experiments/.
+- [x] 3. (S5) Write `scripts/o1a_semantics_diff.py`: per-root node/edge
       count paste, SCC controversy inventory (Tarjan over `att`, filtered
       to SCCs containing a `label0=="suspended"` member), the
       undecided-subgraph reduction, weakly-connected component split,
@@ -34,14 +36,23 @@ order. One step per dr-execute-step invocation.
       skeptical-accepted-not-grounded id list.
       done-when: `python3 -c "import ast; ast.parse(open('experiments/2026-08-08-change-grounded-overlay-o1/scripts/o1a_semantics_diff.py').read())"`
       -> exit 0 (syntactically valid).
-- [ ] 4. (S6) Synthetic TOO_LARGE guardrail check: a standalone snippet
+      DONE — syntax OK; additionally sanity-tested `tarjan_scc`,
+      `weakly_connected_components`, and `admissible_and_preferred`
+      against two known Dung-semantics textbook cases (odd 3-cycle:
+      single SCC, one preferred extension = empty set, matching theory
+      exactly; even 2-cycle/mutual attack: two singleton SCCs post-WCC-
+      split, two preferred extensions {a} and {b}, matching theory
+      exactly) — all assertions passed.
+- [x] 4. (S6) Synthetic TOO_LARGE guardrail check: a standalone snippet
       (run directly, not via `pytest`) that builds a 20-node odd-attack
       structure and asserts the component-sizing function reports
       TOO_LARGE without attempting brute force, wall-clock bounded
       (paste the elapsed time).
       done-when: the snippet's own printed output includes `TOO_LARGE`
       and an elapsed time under 5 seconds (paste both).
-- [ ] 5. (S3, S5, S6) [COMMIT] Commit and push `overlay_common.py` and
+      DONE — `scripts/check_o1a_too_large_guardrail.py` printed
+      `TOO_LARGE reported for component size 20 in 0.0002s`.
+- [x] 5. (S3, S5, S6) [COMMIT] Commit and push `overlay_common.py` and
       `o1a_semantics_diff.py` plus its guardrail check.
       done-when: pushed, confirmed on origin (retry 2s/4s/8s/16s on
       failure).
