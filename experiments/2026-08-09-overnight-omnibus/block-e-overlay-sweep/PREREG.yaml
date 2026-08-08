@@ -1,0 +1,46 @@
+schema: deepreason-omnibus-prereg.v1
+block: E
+title: end-of-night overlay sweep
+serves: experiments/2026-08-08-change-grounded-overlay-o1 (re-run over an expanded corpus)
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this block -- this block itself makes no live provider calls, only reads committed roots
+status: FROZEN
+
+design:
+  method: >
+    re-run experiments/2026-08-08-change-grounded-overlay-o1/scripts/run_all_overlays.py
+    UNMODIFIED, invoked bare (`python3 run_all_overlays.py`) with cwd =
+    repo root, exactly as O1 itself specifies. The script rglobs
+    experiments/ for log.jsonl and needs no argument to cover
+    "everything" -- historical corpus plus every root this tranche's
+    Blocks A-D produced, plus (if it exists by the time this block
+    runs) the sibling corpus-enrichment window's committed roots,
+    fetched read-only.
+  baseline_preserved: >
+    the script's OUTPUT PATH is hardcoded to
+    experiments/2026-08-08-change-grounded-overlay-o1/overlay_results.jsonl
+    (O1's own committed artifact) -- re-running it overwrites that
+    file in place with results reflecting the expanded corpus. The
+    pre-tonight state (48 roots, as of 2026-08-08) was copied to this
+    block's own directory BEFORE any of tonight's other blocks ran, as
+    overlay_results_baseline_2026-08-08.jsonl, so the old-vs-new
+    comparison this block reports is against a preserved snapshot, not
+    a guess. O1's overlay_results.jsonl will show as a git
+    MODIFICATION when this tranche commits -- that is the script doing
+    its normal job (re-measuring against more data), not a hand-edit,
+    and is noted here rather than left to look like drift.
+  enrichment_branch: >
+    a 2026-08-09 research pass (this tranche, before Block A's first
+    call) found NO branch, commit, or RESULTS.md reference anywhere in
+    this repo to a "corpus-enrichment + patrol pilot" sibling window
+    (git branch -a and git log --all --grep both came up empty). This
+    block re-checks `git branch -a` at RUN TIME (the sibling window
+    may have pushed since) before deciding whether there is anything
+    to fetch; if still absent, that absence is reported plainly, not
+    silently skipped.
+
+metrics:
+  four_overlay_counts_per_root: "O1's own established columns (REPORT.md): O1a ctrl_sccs + skeptical (controversy SCCs, skeptically-accepted-not-grounded); O1b fb (accepted+formally-backed count); O1c floating (floating-component count) and chains (non-vacuous multi-node floating chains); O1d flips (single/multi-warrant-flip count, sum of flip_histogram excluding the '0' bucket)"
+  attack_edge_density: "sum(att_edge_count) / sum(node_count) across all roots, old (baseline) vs new (post-sweep) -- O1a's own two fields, aggregated rather than per-root, since Block E's ask is a single before/after table, not a per-root diff"
+
+hit_criteria:
+  reporting_floor: "a straight old-vs-new aggregate table over whatever the corpus actually is at run time -- this block does not judge WHETHER the density moved, only reports it, since a corpus that grew by construction (more roots, mostly from questions unrelated to argumentation-structure stress) is not expected a priori to move density in either direction"
