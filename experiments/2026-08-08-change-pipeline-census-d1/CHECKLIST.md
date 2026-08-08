@@ -78,7 +78,10 @@ order. One step per dr-execute-step invocation.
       backed by a pasted command showing the actual read site.
       done-when: CENSUS.md's "Load-knob inventory" table has >=10 rows,
       each with a location cell that is a file:line. DONE — 26 Config
-      (live) rows + 17 manifest-embedded (mint-time) rows, 43 total.
+      (live) rows + 28 manifest-embedded (mint-time) rows, 54 total
+      (recount corrected during validation: first draft undercounted
+      the manifest family as 17, missing CriticismPolicyV1's 2 and
+      AttentionPolicyV1's 9).
 - [x] 13. (S9) [COMMIT] Commit and push.
       done-when: pushed, confirmed on origin. DONE.
 - [x] 14. (S10) Write the classification script/command for the

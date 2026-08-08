@@ -1206,14 +1206,14 @@ ever recorded is this small.
   present. **Overall verdict: CONFIRMS "protection-only, no penalty,"
   with that one scheduling term named explicitly rather than absorbed
   silently.**
-- **R10 (the load-knob inventory):** section 5. 43 knobs across two
+- **R10 (the load-knob inventory):** section 5. 54 knobs across two
   structurally distinct families: 26 `Config` knobs (read live,
-  never digested into the manifest) and 17 manifest-embedded knobs
-  (capability policies, `CriticismPolicyV1`, scratch `AttentionPolicyV1`
-  — frozen at mint time). The Config family is where a future D4 load
-  dial can act without minting a new run identity; the manifest family
-  requires a new manifest per mix, consistent with D4's own rung-7
-  placement law.
+  never digested into the manifest) and 28 manifest-embedded knobs
+  (17 capability-policy fields, 2 `CriticismPolicyV1` fields, 9
+  scratch `AttentionPolicyV1` fields — all frozen at mint time). The
+  Config family is where a future D4 load dial can act without minting
+  a new run identity; the manifest family requires a new manifest per
+  mix, consistent with D4's own rung-7 placement law.
 - **R11 (historical encoding-failure evidence):** section 6 (M13-M14).
   The committed-root corpus (48 roots, 941 conjecturer wire-validation
   attempts) contains exactly ONE attempt that ever touched a
