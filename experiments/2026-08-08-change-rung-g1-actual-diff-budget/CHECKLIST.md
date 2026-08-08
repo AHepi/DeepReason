@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=9 blockers=none
+State: next=10 blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -233,12 +233,27 @@ order. One step per dr-execute-step invocation.
       completion -- the box above stays unchecked until the decision
       lands.
 
-- [ ] 9. (S7) [COMMIT] Write `PARKED.md`: the `.claude/skills/
+- [x] 9. (S7) [COMMIT] Write `PARKED.md`: the `.claude/skills/
       README.md` discrepancy (Q1) — WHAT, plus a ready-to-send
       follow-up prompt for a future session (route: doc fix, not
       routed through either orchestrator skill family since it is a
       one-line stale-reference correction).
       done-when: `PARKED.md` exists, contains the entry; push succeeds.
+
+      DONE, with a mid-step correction: the first draft guessed
+      `README.md` was simply missing from the project. Checked again
+      before finalizing (`git ls-tree
+      origin/claude/monitor-session-handover-63ajqv --
+      .claude/skills/`): the file exists on that branch's CURRENT tip
+      (`2c9a2023`), along with three skills this tranche's branch does
+      not carry (`dr-ask-the-right-question`, `dr-drive-harness`,
+      `dr-explain-to-operator`). This tranche's branch was deliberately
+      reset to `d4f63007`, an earlier point on that same branch, per
+      this tranche's own task instructions -- so this is expected
+      branch divergence, not a missing artifact. `PARKED.md` rewritten
+      to say so plainly; no follow-up prompt needed, since the
+      discrepancy resolves itself on the next rebase/merge.
+      `PARKED.md` exists, contains the (corrected) entry.
 
 - [ ] 10. (all) Full docs_verify: `python tools/docs_verify.py`.
       done-when: output ends `0 failed`, pasted.
