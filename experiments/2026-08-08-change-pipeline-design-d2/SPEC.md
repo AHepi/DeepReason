@@ -1645,3 +1645,285 @@ see `CHECKLIST.md` in this same tranche directory. This SPEC.md (rev 2,
 corrected) is committed and pushed alongside it; the tranche stops
 again only after `CHECKLIST.md` is committed, per R48, before any
 `dr-execute-step`.
+
+## Revision 3 (Amendment 4) — pure-code conjectures must mechanically fail, not merely be criticizable
+
+Traces: R54 (new work), R58 (chosen enforcement shape); R55-R57
+confirmed already true, no new item needed for them (C13-C15).
+
+### M27 — neither candidate contract's free-text fields enforce prose shape today; only non-emptiness
+
+    $ python -c "from deepreason.llm.contracts import ConjectureCandidate; print(ConjectureCandidate.model_fields['content'])"
+    content=FieldInfo(annotation=str, required=True)
+    $ python -c "from deepreason.workloads.text import ReasoningEnvelopeV1; print(ReasoningEnvelopeV1.model_fields['claim'], ReasoningEnvelopeV1.model_fields['mechanism'])"
+    claim=FieldInfo(annotation=str, required=True, metadata=[MinLen(min_length=1), MaxLen(max_length=8000)]) mechanism=FieldInfo(annotation=str, required=False, default='', metadata=[MaxLen(max_length=8000)])
+    $ python -c "from deepreason.informal.skeleton import Skeleton; print(Skeleton.model_fields['claim'], Skeleton.model_fields['mechanism'])"
+    claim=FieldInfo(annotation=str, required=True) mechanism=FieldInfo(annotation=str, required=True)
+
+None of these fields carry a shape constraint beyond non-emptiness (or
+no constraint at all, for `Skeleton`/`ConjectureCandidate.content`). A
+value of `"def solve(x):\n    return x * 2"` satisfies every one of
+them. This is the independent-verification finding already ledgered as
+C13/R54 — restated here with the exact field-level measurement.
+
+### M28 — `reasoning-envelope-wf` is UNCONDITIONALLY mandatory for every reasoning-workload artifact; `skeleton-wf` is OPT-IN per problem
+
+    $ sed -n '250,264p' src/deepreason/workloads/text.py
+    def seed_reasoning_workload(harness, spec: ReasoningWorkloadSpec) -> Problem:
+        ...
+        wf = Commitment(
+            id="reasoning-envelope-wf",
+            eval="program:reasoning-envelope-wf",
+            budget=Budget(steps=10_000, time_ms=2_000, extra={"max_chars": 64_000}),
+        )
+        harness.register_commitment(wf)
+        criteria = list(dict.fromkeys([wf.id, *(item.id for item in spec.criteria)]))
+        return harness.register_problem(...)
+
+`wf.id` is unconditionally the first criterion of every problem this
+function seeds — `compile_interface_draft` (`workloads/models.py:101`)
+merges `problem.criteria` into every submitted artifact's own
+`Interface.commitments`, so every reasoning-workload artifact carries
+`reasoning-envelope-wf` regardless of what the model itself requests.
+By contrast:
+
+    $ sed -n '75,98p' src/deepreason/ops.py
+    def seed_problem_payload(harness, data: dict) -> Problem:
+        ...
+        if "skeleton-wf" in criteria and "skeleton-wf" not in harness.commitments:
+            from deepreason.informal.skeleton import skeleton_wf_commitment
+            harness.register_commitment(skeleton_wf_commitment())
+
+`skeleton-wf` is registered ONLY when a problem's own JSON spec already
+names it in `criteria` — an existing, pre-this-tranche, per-problem
+opt-in, unrelated to anything this tranche is asked to change.
+
+### M29 — `POPPER_BATTERY` (the one truly universal, harness-wide auto-pin point) is empty by explicit, documented design, not dormant-by-accident
+
+    $ python -c "from deepreason.ontology.problem import POPPER_BATTERY; assert POPPER_BATTERY == ()"
+    $ grep -n "POPPER_BATTERY. is empty" docs/map/SUB-ontology.md
+    128:**`POPPER_BATTERY` is empty.** The auto-pinning mechanism in
+
+`docs/map/SUB-ontology.md:128-131` states this plainly: "The
+auto-pinning mechanism in `Harness.register_problem` is structural and
+live, but it currently pins nothing; a test asserting battery contents
+would be asserting aspiration, not behaviour" — confirming the
+mechanism is not FORBIDDEN from being populated, but also confirming
+there is NO existing precedent anywhere in the tree for how a battery
+commitment gets bootstrapped (registered) before the first problem
+needing it is created; `harness.py::register_problem` itself only
+APPENDS battery id strings to criteria, it does not register the
+matching `Commitment` object. Activating it for the first time would
+be new, unprecedented territory, not an extension of an existing
+pattern — unlike M28's two wf checks, which already ARE the pattern
+this fix needs.
+
+### M30 — a narrow, mechanical "is this pure code" test, prototyped and tested against 8 cases including the false-positive risks
+
+Prototyped and run directly (not measured against the tree — this is
+new logic this item proposes):
+
+    is_pure_code(text) := ast.parse(text) succeeds AND tree.body is
+    non-empty AND NOT (single bare string-literal expression, i.e. a
+    docstring-only submission) AND every top-level statement is one of
+    {FunctionDef, AsyncFunctionDef, ClassDef, Import, ImportFrom}.
+
+    Tested: 'def solve(x): return x*2' -> True (pure function, REJECTED)
+            'Doubling composes with addition...' -> False (real prose, PASSES)
+            '"""Doubling composes with addition."""' -> False (bare docstring, PASSES — R57(a)'s own case: prose-as-a-string is still prose)
+            'The mechanism is: def solve(x): return x*2. This shows doubling.' -> False (mixed prose+code is NOT valid Python syntax at all, so ast.parse raises SyntaxError -> PASSES, exactly R57(a)'s protected case)
+            'import math\ndef solve(x): ...' -> True (import+def only, REJECTED)
+            'class Solver: ...' -> True (bare class def, REJECTED)
+
+Deliberately NARROW: only `FunctionDef`/`AsyncFunctionDef`/`ClassDef`/
+`Import`/`ImportFrom` count as "code" — a bare sequence of assignment
+statements (`x = 5\ny = 10`) does NOT trip this test (tested, returns
+False). This is a conscious scope choice (recorded as Assumption A6):
+catching the unambiguous case (a submission that is JUST a function or
+class definition, nothing else) without risking false positives on a
+worked-example-style explanation that happens to be syntactically
+valid Python. Real prose essentially never happens to be syntactically
+valid Python (natural-language punctuation is not valid Python syntax
+outside of a bare string literal, which this test explicitly excludes
+via the docstring-only carve-out) — so this test has no realistic
+false-positive path against the existing test suite's own fixture
+claims (all natural-language sentences, none syntactically valid
+Python).
+
+### Item 8 (R54, R58): mechanical prose-required check, extending the two EXISTING mandatory well-formedness programs
+
+**Shape.** Add `is_pure_code(text: str) -> bool` as a small shared
+utility (home: `programs.py`, since it is not workload-specific and
+`programs.py` already houses generic content-evaluation logic used by
+both workload modules). Extend BOTH existing mandatory well-formedness
+programs to fail when it returns True:
+- `workloads/text.py::reasoning_wf_program` — checks `envelope.claim`
+  and `envelope.mechanism` (the two free-text fields); UNIVERSALLY
+  mandatory today (M28), so this closes the gap for the LIVE path
+  completely, with ZERO new registration/wiring — the function is
+  already in the mandatory position.
+- `informal/skeleton.py::skeleton_wf_program` — checks `skeleton.claim`
+  and `skeleton.mechanism`; mandatory ONLY for problems that already
+  opt into `skeleton-wf` (M28, pre-existing and unrelated to this
+  fix — not something this tranche is asked to change).
+
+**Refutation, not rejection (R58, C14).** Both programs are already
+`crit_program`-evaluated mechanical commitments (D1 census M10,
+unchanged dispatch) — a `fail` verdict here refutes the carrying
+artifact the SAME way an empty-`forbidden` skeleton or an oversized
+reasoning envelope already does today. No new admission gate, no new
+arbiter: this is one more branch in an ALREADY-mechanical,
+ALREADY-mandatory check, exactly the shape the operator chose.
+
+**Coverage boundary, stated plainly (not hidden).** A `ConjectureCandidate`
+submission whose content is bare code and which is NOT parsed as a
+skeleton at all (content that doesn't even attempt the skeleton JSON
+convention) and whose problem does not require `skeleton-wf`, is NOT
+caught by this fix — there is no universal, harness-wide hook for that
+case without activating `POPPER_BATTERY` for the first time ever
+(M29), which is unprecedented, larger-scoped work this item does NOT
+propose. M15 (D2 rev 2's own prior measurement) already found the live
+provider does not use `ConjectureCandidate` at all — the LIVE path
+(`ReasoningCandidateProposal`/`reasoning-envelope-wf`) gets full,
+universal coverage from this fix; the rarely-reached, already-opt-in
+skeleton path gets the same coverage `skeleton-wf` itself already has
+today, no better and no worse.
+
+**R-g argument.** `is_pure_code` reads only the free-text fields'
+SHAPE (a fixed, deterministic AST test), never a candidate's KIND —
+every candidate submitted through either mandatory check faces the
+identical test, formal or informal, R-b-using or not. Nothing here
+ranks, schedules, or admits based on kind; it is a criterion like any
+other well-formedness criterion these two programs already enforce
+(non-empty skeleton `forbidden`, envelope size), satisfying R19/R36's
+prose-only-protected direction exactly: it PROTECTS prose (by refusing
+its absence), never penalizes it.
+
+### Frozen-surface contact forecast (Revision 3)
+
+- Surface 1 (`capabilities/state.py`): NONE. Not touched.
+- Surface 2 (`harness.py`): NONE. `register_problem`'s existing
+  generic `POPPER_BATTERY` consumption is not used by this design;
+  `compile_interface_draft` (workloads/models.py, not frozen) is
+  unchanged in shape, only the two mandatory programs' own BODIES gain
+  a branch.
+- Surface 3 (replay-validation formats): NONE. No new record type, no
+  new Event payload — a `fail` verdict from an existing mechanical
+  program is byte-identical in SHAPE to any other fail verdict from
+  the same program.
+- Surface 4 (`run_manifest.py`): NONE. No new contract version — the
+  wire TYPE of `ConjectureCandidate`/`ReasoningEnvelopeV1`/`Skeleton`
+  is unchanged; only the mandatory programs' pass/fail LOGIC gains a
+  branch, same as Item 2's own `program:candidate_checker` addition
+  needed no version bump for wire-unrelated logic changes.
+- Surface 5 (`qualification.py`): NONE. No manifest/contract change to
+  hash.
+
+**None expected — checked against `docs/map/INV-frozen-surfaces.md`,
+confirmed by measurement (M27-M29), not assumed.**
+
+### Blast-radius census (Revision 3)
+
+    $ grep -rn "reasoning_wf_program" tests/ docs/map/
+    docs/map/SEAM-evaluation-x-ontology.md:54 (signature-shape check on
+      reasoning_wf_program's 3rd param name and its artifact-attribute-
+      access pattern — MUST NOT MOVE: this fix adds no new parameter and
+      reads no new `artifact.*` attribute, only local `envelope.claim`/
+      `.mechanism` already in scope)
+    tests/test_workload_text.py, tests/test_replay_reasoning.py,
+    tests/test_runtime_workload_integration.py,
+    tests/test_verify_workload_roots.py, tests/test_v6_three_root_concurrency.py,
+    tests/test_semantic_freedom_constitution.py,
+    tests/test_workflow_shadow_c0.py (all exercise `reasoning-envelope-wf`
+      indirectly via `seed_reasoning_workload`/live-shaped fixtures —
+      EXPECTED TO MOVE ONLY IF any existing fixture's `claim`/`mechanism`
+      text is itself bare code; none is, per M30's own false-positive
+      analysis — MUST NOT MOVE in practice, verified at execution time)
+
+    $ grep -rn "skeleton_wf_program" tests/ docs/map/
+    docs/map/SUB-evaluation.md:114,126 (symbol-existence-only check,
+      `def skeleton_wf_program(` must still exist — MUST NOT MOVE, this
+      fix does not rename or remove it)
+    tests/test_informal.py, tests/test_security.py,
+    tests/test_trial_accounting.py, tests/test_candidate_compilation.py,
+    tests/test_guards.py (all exercise `skeleton_wf_commitment`/
+      `skeleton_wf_program` via existing fixtures — EXPECTED TO MOVE
+      ONLY IF any existing fixture's `claim`/`mechanism` is bare code;
+      the Persephone-style and forbid-nothing fixtures are all natural-
+      language sentences — MUST NOT MOVE in practice, verified at
+      execution time)
+
+    $ grep -rn "\bis_pure_code\b" src/ tests/ docs/map/
+    (no hits — new symbol, nothing to classify yet)
+
+### Options (forks) — Revision 3
+
+**F8 — universal-coverage mechanism.**
+- Option A (extend the two existing mandatory wf programs, M28's own
+  pattern): smallest diff (~40-60 lines), zero frozen-surface risk,
+  reuses an ALREADY-MANDATORY position for the LIVE path with no new
+  registration/bootstrap design; leaves the SAME pre-existing coverage
+  boundary `skeleton-wf` itself already has (opt-in) for the rarely-
+  reached non-live path (M15). DECIDED (not asked): dominant under the
+  operator's own recorded values (smallest correct change; no frozen
+  surface without approval) — Option B's "universal" advantage is
+  largely theoretical since M15 already found the alternate path
+  unreachable by the live provider, while Option B requires
+  unprecedented bootstrap design (M29) for a real, if smaller,
+  regression/complexity risk.
+- Option B (activate `POPPER_BATTERY` for the first time): true
+  harness-wide universality, but requires designing a NEW bootstrap
+  mechanism (M29: no existing precedent for how a battery commitment
+  gets registered before first use) and updating a map-asserted
+  invariant (`SUB-ontology.md:131`'s own `assert POPPER_BATTERY == ()`)
+  — larger, riskier, unprecedented. NOT chosen; may be revisited by a
+  future tranche if the non-live `ConjectureCandidate` path ever
+  becomes reachable.
+
+### Budget (Revision 3)
+
+| Item | Forecast (lines) | Basis |
+|---|---|---|
+| `is_pure_code` (programs.py) + 2 call sites (reasoning_wf_program, skeleton_wf_program) | 45 | a single AST-walk predicate plus one `if` branch in each of two existing functions |
+| Tests (mutation-proved: at least one true-positive rejection per path, one prose-passes case per path, one docstring-only-passes case, one mixed-prose-and-code-passes case) | 90 | ~4 cases x 2 paths x ~11 lines/case, matching this tranche's own established test density |
+| Map document update (`CON-conjecture-kinds.md`, new check for the new mechanical program branch) | 40 | one new "Where it lives" row + one new check, smaller than D2's own rev-2 map update since no new mechanism class is introduced, only a new branch in two existing ones |
+| **Sum** | **175** | 45+90+40 = 175 |
+
+## Assumptions (Revision 3, operator may override)
+
+A6: `is_pure_code`'s scope is NARROW — only a submission consisting
+ENTIRELY of `FunctionDef`/`AsyncFunctionDef`/`ClassDef`/`Import`/
+`ImportFrom` statements counts as "pure code"; a bare sequence of
+assignment statements does NOT trip it (measured, M30) — chosen to
+catch the unambiguous case cleanly while avoiding false positives on
+a worked-example-style explanation that happens to parse as valid
+Python. Operator may override to widen this if a bare-assignment-only
+submission should also be rejected.
+
+## Questions for operator (Revision 3)
+
+(empty — F8's fork passed the dominance test under the operator's own
+recorded values and was decided in writing above, not asked; A6 is
+recorded as an assumption, not a blocking question.)
+
+Rubric: 6/6 yes
+- every R has a spec item with a machine-decidable accept: yes (R54/R58
+  -> Item 8's own two extended programs, each with a pasted mutation-
+  provable test plan; R55-R57 already demonstrated true in C13, no new
+  item needed).
+- blast-radius census pasted (or pasted-empty) and every hit
+  classified: yes.
+- frozen-surface contact forecast recorded: yes (none expected,
+  measured against M27-M29, not assumed).
+- every mechanism the request names traced to code it actually
+  reaches: yes — "mirror the existing skeleton well-formedness check"
+  (the operator's own words) was traced to `skeleton_wf_program`'s
+  actual mandatory-position mechanics (M28) before being extended,
+  not adopted as a label.
+- DESIGN-AND-STOP sections: n/a — this is an approved, scoped
+  implementation item (the operator already chose the enforcement
+  shape via a direct question), not a design-and-stop request; Options
+  (F8) and Measurements (M27-M30) are both present anyway, per this
+  tranche's own established discipline.
+- nothing in the spec untraceable to an R/C number: yes (re-read pass
+  performed).
