@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -48,7 +48,7 @@ order. One step per dr-execute-step invocation.
 
 ## Item 2 — the new eval kind: reader before writer (R23, R33, R41)
 
-- [ ] 1. (R41, M26) Read `oracle.py::_compile` and `oracle_sandbox.py`'s
+- [x] 1. (R41, M26) Read `oracle.py::_compile` and `oracle_sandbox.py`'s
       own process-isolation call path in full; confirm which function(s)
       `programs.evaluate` would need to call to dispatch a new
       `program:candidate-checker` kind to this engine, without touching
@@ -56,6 +56,33 @@ order. One step per dr-execute-step invocation.
       done-when: a one-paragraph note in this step's own execution
       record names the exact call signature `programs.evaluate`'s new
       branch will use. MUST NOT touch: oracle.py (read-only step).
+      DONE — CORRECTION to the checklist's own assumption, found by
+      doing this read: `programs.evaluate` does NOT need a new `elif`
+      branch at all. `program:exec_oracle` (the closest existing
+      precedent for "run model-authored code against fixed tests") is
+      dispatched through the EXISTING generic branch
+      (`elif kind == "program": fn = PROGRAMS.get(arg)`,
+      `programs.py:358-362`) — `_exec_oracle` is simply ANOTHER entry in
+      the `PROGRAMS` dict (`programs.py:245`). The new kind only needs
+      a NEW `PROGRAMS` dict entry (e.g. `PROGRAMS["candidate_checker"]`),
+      never a new `elif`. One shape difference from `_exec_oracle`
+      itself: `run_from_spec(source, budget)` treats the ARTIFACT'S OWN
+      CONTENT as `source` (the code to run) and stores only
+      `{entry, tests, step_limit}` in `budget.extra` (`oracle.py:192-198`,
+      `_load_spec`, `oracle.py:328-332`) — that fits `exec_oracle`'s own
+      world, where content=code. In THIS design, content=prose
+      (Amendment 1) and the CHECKER SOURCE must itself live in
+      `commitment.budget.extra` (mirroring `forbidden_commitment`'s own
+      `Budget(extra={"case": ...})` pattern, D1 census M4), so the new
+      program function reads `{source, entry, tests, step_limit}` ALL
+      from budget via the SAME `oracle.py::_load_spec` helper
+      (unmodified, already exported) and calls `oracle.py::run(source,
+      entry, tests, step_limit)` (`oracle.py:180-189`, unmodified) —
+      ignoring the artifact's own `text` argument entirely. Net effect:
+      ZERO changes to `oracle.py`/`oracle_sandbox.py`, confirming this
+      step's own MUST-NOT-touch constraint even more strongly than
+      planned. Step 2's own action is adapted to this finding below
+      (recorded there, not silently).
 - [ ] 2. (R41) Add the new `elif kind == "program" and arg == "candidate-checker":`-
       shaped dispatch branch to `programs.py::evaluate` (the READER),
       calling `oracle.py::_compile` (unmodified) — this lands BEFORE any
