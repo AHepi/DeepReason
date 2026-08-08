@@ -1,0 +1,33 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+## problem-context
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a6b3e138a51d63ce8aaddf76: program:reasoning_observation_pending
+- reason-counter@e25d5f47b3c133d32f6480f0: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 6a0bc253158d50cbd0ff948d1b4bd71a26403e84a1616acdd5d8d27dff4ce110
+{"analogy":null,"claim":"The perceived reliability of the checklist panel is a statistical artifact of variance reduction (noise cancellation) that masks a systemic loss of precision compared to the expert.","counterconditions":[{"case":"The expert's intuition is dominated by systemic bias rather than high-precision pattern recognition.","checker_spec":null,"eval":"observation"},{"case":"The checklist covers 100% of the critical failure modes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The Law of Large Numbers applied to binary checks cancels out individual non-expert errors, creating a stable 'average' result. However, this stability is not 'reliability' in the sense of accuracy; it is simply the removal of idiosyncratic noise. The expert may have higher variance but a higher mean accuracy because they can detect 'black swan' edge cases that the checklist is not programmed to see.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 06e4647650c38e72e7433aec26f52584c3bbdd19f9eb5b9b102c9cfb90cf8d5b [mention]
+- 905d6b107d5cc086679f053e7125e23d2d5d9652521da1e83c00a2864881ced5 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 06e4647650c38e72e7433aec26f52584c3bbdd19f9eb5b9b102c9cfb90cf8d5b: SRC_002's variance-reduction mechanism presupposes independent binary verifications and invokes the Law of Large Numbers to cancel idiosyncratic noise, but its 
+- 905d6b107d5cc086679f053e7125e23d2d5d9652521da1e83c00a2864881ced5: {"analogy":null,"claim":"The panel's reliability gain is an illusion of variance reduction that masks a systemic loss of precision compared to the expert.","cou
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

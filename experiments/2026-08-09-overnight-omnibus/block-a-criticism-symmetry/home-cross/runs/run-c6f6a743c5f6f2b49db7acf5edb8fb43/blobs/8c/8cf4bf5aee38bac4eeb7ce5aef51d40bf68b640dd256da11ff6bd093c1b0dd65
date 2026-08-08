@@ -1,0 +1,23 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+## problem-context
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6e8bb24a0d5623d993681a1a: program:reasoning_observation_pending
+- reason-counter@a085883ba474288d69969621: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 99ac70a71c060318775c9c10fd56deeb124b47958814d4893f331db1c2bdb750
+{"analogy":null,"claim":"For tasks with objectively verifiable outcomes, a panel of non-experts is more reliable if and only if the task structure is 'decomposable' into independent binary verifications, allowing the Law of Large Numbers to cancel out individual non-expert errors.","counterconditions":[{"case":"The task requires synthesis of multiple checks into a single judgment.","checker_spec":null,"eval":"observation"},{"case":"The panel suffers from groupthink or social contagion, breaking the independence of their checks.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independent Error Cancellation: If the task is a series of independent checks (e.g., 'Is the valve closed?'), the probability of a panel failing to notice a 'No' is exponentially lower than a single expert missing it. The reliability gain is an aggregate of independent binary probabilities, which outperforms the single-point-of-failure risk of one expert's intuition.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

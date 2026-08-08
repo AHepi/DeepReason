@@ -1,0 +1,247 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts using an explicit checklist will outperform a single expert on average, but only when the checklist encodes the *diagnostic structure* that causes the correct outcome—i.e., it decomposes the judgment into conditionally independent sub-judgments whose weighted aggregation cancels individual noise.",
+      "mechanism": "Checklists work not by ritual compliance but by forcing the cognitive task into a representation where the independence assumptions of the Condorcet jury theorem are approximated: each item corresponds to a verifiable sub-question, aggregate performance tracks the sub-question signal-to-noise ratio, and non-expert independence is protected because none of the panel members can supply the expert's coherent prior. The expert's intuition, by contrast, is a single noisy draw from a high-variance posterior. The reliability gain is thus a structural fact about representation plus aggregation, not about checklist format per se.",
+      "counterconditions": [
+        "If the correct answer depends on synthesizing features in a way not decomposable by the checklist, expert intuition dominates because aggregation cannot manufacture cross-cutting structure.",
+        "If non-experts share a systematic bias (e.g., cultural priors), the panel's independence assumption fails and aggregation amplifies rather than cancels the error.",
+        "If the checklist items are not diagnostic—correlated with the answer only in the training distribution but not in the evaluation distribution—compliance tracks the right answer by coincidence and fails under distribution shift."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_003"
+        ],
+        "shared_structure": [
+          "Both checklist-judgment and ensemble-of-weak-learners face a bias-variance tradeoff: aggregation reduces variance if errors are conditionally independent; systematic bias is preserved or amplified.",
+          "Both require that the 'weak learners' (non-experts / base models) have error rates below chance on the *decomposed sub-problems*, not necessarily on the whole problem."
+        ],
+        "disanalogies": [
+          "Ensemble base learners are drawn from a known model class; non-experts bring unknown and heterogeneous biases from life experience.",
+          "Checklist structure is hand-engineered and potentially brittle, whereas boosting can adaptively reweight; this makes the checklist's out-of-distribution failure modes harder to predict."
+        ],
+        "transfer_claims": [
+          "The reliability gain should be bounded above by the theoretical ceiling of the best possible decomposition, and empirically observed gains close to that ceiling indicate genuine signal rather than compliance noise.",
+          "If we see items on the checklist where non-expert answers are *worse* than chance, removing those items should improve aggregate performance—a testable structural prediction."
+        ],
+        "overturn_conditions": [
+          "Empirical studies showing panel accuracy is flat or decreasing as checklist granularity increases beyond a small set, indicating the decomposition is not extracting independent signal.",
+          "Evidence that experts and non-experts share the same systematic biases, invalidating the independence assumption."
+        ],
+        "adopted_commitment_refs": [
+          "SRC_001"
+        ]
+      }
+    },
+    {
+      "claim": "Within a single evaluation, genuine reliability gain is distinguished from mere compliance-by-tracking by examining whether the checklist causes *different* judgments on items where intuition alone would err: if the checklist shifts the panel's answer on hard cases where the expert is wrong, the mechanism is causal; if it only ratifies easy answers both would get right, it is compliance tracking the answer, not producing it.",
+      "mechanism": "Mere compliance that tracks the answer is observationally equivalent to genuine reliability gain when the evaluation is dominated by easy items. The discriminating evidence is the *treatment effect* of the checklist on specific cases: a genuine mechanism produces a pattern of overturning the prior intuition in the direction of the truth; compliance-tracking produces no such pattern because the checklist items are not the operative cause of the answer. Concretely, run the panel with and without the checklist on the same items: the delta is the causal contribution.",
+      "counterconditions": [
+        "If the evaluation is dominated by easy items, the delta may be unobservable even when the causal mechanism is present, because intuition already suffices.",
+        "If the expert and panel without checklist perform identically, the checklist's contribution is null regardless of its structure, falsifying the reliability-gain claim."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_002"
+        ],
+        "shared_structure": [
+          "Both contexts ask whether an observed correlation between process adherence and correct outcome is causal or spurious.",
+          "Both require a contrast between a treated and untreated condition to identify the mechanism; mere correlation cannot distinguish."
+        ],
+        "disanalogies": [
+          "Medical RCTs can randomize; the checklist-vs-intuition comparison is inherently about different agents (panel vs expert), making the treatment and the agent confounded unless the same panel is tested with and without checklist."
+        ],
+        "transfer_claims": [
+          "The key evidence is the interaction term: checklist × item-difficulty. If the checklist helps more on hard items, it is extracting signal; if it helps uniformly or only on easy items, it is compliance-tracking.",
+          "Item-response-theory (IRT) analysis of the panel's judgments should show the checklist increases discrimination (a-parameter) rather than merely shifting difficulty (b-parameter)."
+        ],
+        "overturn_conditions": [
+          "Panel-with-checklist and panel-without-checklist perform identically across difficulty levels, indicating the checklist adds no causal power.",
+          "The checklist's effect is entirely on easy items, suggesting it is a recognition cue rather than a diagnostic tool."
+        ]
+      }
+    },
+    {
+      "claim": "The panel will fail to outperform the expert on average because the checklist is inevitably constructed by expert knowledge that encodes the same biases as the expert's intuition; the panel's compliance is therefore a filtered echo of expert bias, not an independent source of reliability.",
+      "mechanism": "Checklists are not neutral instruments; they are designed by domain experts who select the features they believe are diagnostic. If the expert's intuition errs because of a systematic blind spot, the checklist encodes that same blind spot. The non-expert panel adds independence across individuals but not independence from the expert-constructed frame. Thus, the panel's apparent reliability gain is either (a) real but attributable to aggregation of easy sub-problems, in which case the expert using the same checklist would do even better, or (b) illusory, because the checklist tracks the answer on the training distribution but not in general.",
+      "counterconditions": [
+        "If the checklist is empirically derived (e.g., by statistical feature selection on past outcomes) rather than by expert intuition, it may escape expert bias and genuinely outperform the expert.",
+        "If the expert's errors are high-variance (noise) rather than systematic (bias), then even a biased checklist can help by reducing variance through aggregation."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_001"
+        ],
+        "shared_structure": [
+          "Both the checklisted panel and a labeled training set derive their 'knowledge' from an expert source; the question is whether that source's structure can exceed the source's own performance.",
+          "Both raise the question of whether a lossy compression of expert knowledge (checklist items) can outperform the uncompressed expert (intuition) by virtue of a different aggregation procedure."
+        ],
+        "disanalogies": [
+          "A training set is passive; a panel actively applies judgment to checklist items, potentially catching inconsistencies the expert would glide over. This active use may add value the training set cannot."
+        ],
+        "transfer_claims": [
+          "If the expert using the checklist outperforms the panel using the checklist, the checklist is a tool, not a substitute for expertise, and the panel's gain is a cost-saving proxy, not a reliability improvement.",
+          "The panel's gain should be largest when the checklist is empirically derived and smallest when it is purely expert-authored, because the latter inherits expert bias."
+        ],
+        "overturn_conditions": [
+          "Panel-with-expert-checklist outperforms expert-with-same-checklist, which would be paradoxical under the bias-inheritance view and would require a different mechanism (e.g., independence).",
+          "Empirically derived checklists show no advantage over expert-authored ones, suggesting the source of bias is not the design process but something else."
+        ]
+      }
+    },
+    {
+      "claim": "Within a single evaluation, genuine reliability is identified by a specific internal pattern: the variance of sub-item responses within each panelist should be *informative* about correctness. If panelists who show inconsistent or uncertain sub-item responses are also more likely to be wrong, the checklist is doing diagnostic work; if response variance is uncorrelated with correctness, the checklist is a ritual.",
+      "mechanism": "Genuine reliability gain requires the checklist to convert an implicit judgment into explicit sub-judgments that carry signal. If the sub-item responses contain information about the final outcome, the mechanism is operative. If sub-item responses are either uniform (mindless compliance) or random (noise), the checklist's correlation with the answer is externally driven, not internally produced. The within-panelist, within-item variance structure is thus a fingerprint of genuine signal extraction.",
+      "counterconditions": [
+        "If the checklist items are redundant with each other, variance will be low even when the checklist is working, so the test requires non-redundant items.",
+        "If the outcome is genuinely unpredictable from the available features, no variance pattern will discriminate genuine from spurious, because there is no signal to extract."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_003"
+        ],
+        "shared_structure": [
+          "Both the checklist-judgment process and a Bayesian network with latent state produce observable sub-item responses whose covariance structure reveals whether a latent cause (genuine signal) is present.",
+          "Both require conditional independence of observations given the latent state; if violated, the structure is spurious."
+        ],
+        "disanalogies": [
+          "Bayesian networks model probabilistic dependencies; checklist responses are discrete judgments subject to strategic or social-loafing effects, which can induce covariance unrelated to the latent signal."
+        ],
+        "transfer_claims": [
+          "The covariance matrix of sub-item responses should have a low-rank structure if a genuine latent signal is present, and be full-rank (noise) if it is absent.",
+          "Panelists who are more accurate should show higher inter-item consistency on diagnostic items, which is a testable prediction."
+        ],
+        "overturn_conditions": [
+          "The covariance structure is uninformative even when aggregate panel accuracy exceeds expert accuracy, suggesting the gain is from aggregation alone, not from the checklist's diagnostic structure.",
+          "Social dynamics (e.g., herding) dominate the covariance, making it impossible to isolate the signal."
+        ]
+      }
+    },
+    {
+      "claim": "The panel will outperform the expert not because of the checklist's content but because the checklist forces *metacognitive unpacking*: it obligates the panelist to consider features they would otherwise overlook, and this metacognitive effect—not the checklist's diagnostic validity—drives the gain. The discriminating evidence within a single evaluation is whether panelists report having considered features they would not have considered unaided.",
+      "mechanism": "The checklist's causal power is not in the specific items but in the *process* of explicit consideration. The expert's intuition is a gestalt; the panelist forced through a checklist is doing serial, attention-limited processing that catches omissions. The reliability gain is a side effect of cognitive offloading, not of the checklist's correspondence to the world's structure. Therefore, even a randomly ordered checklist of relevant features could help, and the discriminating evidence is whether the panelist's process is altered in a way correlated with accuracy.",
+      "counterconditions": [
+        "If the expert is also trained to explicitly consider all features, the metacognitive advantage vanishes and the panel's independence-based advantage is the only remaining mechanism.",
+        "If the checklist includes irrelevant items, the metacognitive load may harm performance by diluting attention."
+      ],
+      "typicality": 0.35,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_002"
+        ],
+        "shared_structure": [
+          "Both a checklist and a thought prompt serve as external scaffolds that alter the cognitive process rather than supplying new information.",
+          "Both can improve performance on tasks where the bottleneck is attention allocation, not knowledge."
+        ],
+        "disanalogies": [
+          "Checklists in aviation and medicine are validated against external outcomes; metacognitive prompts are validated against self-report or behavioral changes, making the causal chain to outcome harder to establish."
+        ],
+        "transfer_claims": [
+          "If the metacognitive mechanism is operative, then a panel using a *shuffled* or *incomplete* checklist should still outperform the expert, because the process effect, not the content, drives the gain.",
+          "Process-tracing measures (e.g., eye-tracking, response times) should show panelists attending to features they would otherwise skip."
+        ],
+        "overturn_conditions": [
+          "Shuffled or incomplete checklists perform no better than no checklist, falsifying the metacognitive-unpacking mechanism and supporting the content-diagnosticity mechanism.",
+          "Experts trained in metacognitive unpacking perform as well as the panel, eliminating the panel's advantage."
+        ]
+      }
+    },
+    {
+      "claim": "Neither the panel nor the expert is reliably superior in general; the outcome depends on whether the task is structured such that the ground truth is recoverable from a linear combination of explicitly checkable features. The within-evaluation discriminating evidence is the gap between the panel's confidence and the panel's accuracy: genuine reliability gain produces calibrated confidence, while mere compliance produces overconfidence regardless of correctness.",
+      "mechanism": "The reliability comparison is fundamentally about representational fit. The expert's intuition is a nonlinear, gestalt recognizer; the checklist is a linear, decomposed recognizer. When the ground truth is well-approximated by a linear threshold over checkable features, the panel wins by variance reduction. When the ground truth requires nonlinear integration, the expert wins. The discriminating signal within an evaluation is calibration: the panel using a genuine checklist should be calibrated because its confidence is derived from the summed evidence; a panel merely complying should show miscalibration because compliance does not track epistemic uncertainty.",
+      "counterconditions": [
+        "If the panel is uncalibrated even when accurate, the mechanism is not genuine signal extraction but some other process (e.g., social conformity).",
+        "If the expert is also well-calibrated, the calibration advantage of the panel vanishes."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_001",
+          "SRC_003"
+        ],
+        "shared_structure": [
+          "Both the linear-vs-gestalt judgment problem and the linear-vs-nonlinear model capacity problem face a tradeoff: linear models are more robust when the true function is near-linear and data is limited; nonlinear models fit more structure but overfit when data is scarce.",
+          "Both produce distinct calibration signatures: linear models with correct specification are calibrated; misspecified nonlinear models show systematic miscalibration in the tails."
+        ],
+        "disanalogies": [
+          "Human non-experts are not pure linear models; they can apply simple nonlinear rules (e.g., conjunctions), so the panel's effective model class is larger than a linear model and the analogy is imperfect."
+        ],
+        "transfer_claims": [
+          "If the task's ground truth is generated by a process that is approximately linear in checkable features, the panel will outperform; if it requires higher-order interactions, the expert will dominate.",
+          "Calibration curves for the panel should be tighter than for the expert if the checklist is genuinely diagnostic, and loose or absent if the panel is merely complying."
+        ],
+        "overturn_conditions": [
+          "The panel is well-calibrated but no more accurate than the expert, suggesting the checklist improves metacognition but not discrimination.",
+          "The expert is better calibrated than the panel, undermining the claim that the panel's structured process produces superior epistemic hygiene."
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative refinement: The reliability gain claim may be underpinned by a 'local-global' decomposition. Expert intuition is a global recognizer; the checklist is a local recognizer. For tasks where the ground-truth function is a conjunction of local predicates (each checkable), the panel wins. For tasks where it's a disjunction or XOR-like interaction, the expert wins. This predicts a sharp phase transition in relative performance based on the Boolean structure of the task. Unresolved: can we empirically classify real-world tasks by this Boolean structure without already knowing the answer?",
+          "why_keep_this": "This connects the mechanist demand (SRC_001) to a formal, testable prediction about task structure, which could be the basis for a discriminating simulation.",
+          "possible_next_move": "Design a simulation with tasks drawn from linear, conjunctive, and XOR-like ground truth functions, comparing panel-checklist vs expert-intuition (modeled as a noisy global recognizer) on each.",
+          "bears_on_refs": ["SRC_001", "SRC_003"]
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: What if the checklist is adversarially constructed—designed to track the right answer in the training set but to fail

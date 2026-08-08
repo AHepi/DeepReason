@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated artifact 120dd644125e REDUCES TO the bias-variance decomposition formalized in SRC_004: the panel-vs-expert superiority question is an instance of comparing a high-variance/low-bias estimator (expert intuition) to a low-variance/bias-bounded estimator (checklist-anchored panel), where panel>expert iff checklist_bias < expert_variance. The reduction is REFUTED IF the expert's intuition is itself a fixed rule-set with both low bias and low variance, making the two estimators structurally identical and the bias-variance frame vacuous; or if checklist bias and expert variance cannot be empirically separated without oracle access to the true model, rendering the decomposition untestable within a single evaluation. This is a reduction because it maps the domain-specific comparison onto a general statistical framework, inheriting its winner-conditional logic.",
+      "typicality": 0.95,
+      "neighbours": ["SRC_004", "SRC_003", "SRC_001"]
+    },
+    {
+      "content": "The isolated artifact 120dd644125e SHARES MECHANISM with SRC_003's Condorcet-based aggregation account: both identify error cancellation through independent sampling as the causal driver of panel advantage, and both treat the checklist's role as standardizing cue access to make errors more independent. The shared mechanism is the jury-theorem dynamic: majority accuracy → 1 as panel size grows when per-member accuracy > 0.5 and errors are uncorrelated. This is REFUTED IF the checklist systematically introduces correlated errors (e.g., by anchoring all panelists on the same wrong frame as in SRC_002), violating the independence condition and making the Condorcet mechanism inapplicable; or if the task requires configural cue integration such that independent cue-sampling produces systematic majority errors rather than cancellable noise.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_002", "SRC_001"]
+    },
+    {
+      "content": "The isolated artifact 120dd644125e CONTRADICTS SRC_002's anchoring-artifact claim: where SRC_002 holds that checklist-driven agreement is a compositional artifact of shared anchoring rather than truth-tracking, the isolated artifact's causal-mechanism stance predicts that checklist-driven aggregation genuinely cancels cue-omission errors and thus tracks truth — provided the checklist encodes the diagnostic cues the expert would use. The contradiction is REFUTED IF it can be shown that the checklist encodes a wrong model, in which case high inter-rater agreement coexists with systematically wrong majority verdicts and the 'genuine gain' claim collapses into the anchoring artifact; or if the checklist's cue-set is demonstrably a lossy compression of the expert's tacit knowledge, making checklist-anchored panel accuracy an upper-bounded shadow of expert accuracy rather than an independent truth-tracking process.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_002", "SRC_001", "SRC_003"]
+    },
+    {
+      "content": "The isolated artifact 120dd644125e DEPENDS ON SRC_005's OOD-probe requirement: any claim of panel+checklist superiority within a single evaluation inherits the requirement for out-of-distribution probes to distinguish genuine comprehension from checklist overfit. The dependence holds because the causal mechanism (cue-omission prevention + error cancellation) predicts robust performance on OOD items, while the competing anchoring-artifact hypothesis predicts a sharp drop. The dependence is REFUTED IF the task class is closed (all cases covered by the checklist, making OOD probes impossible) and the panel still fails on held-out in-distribution items, which would make the OOD probe unnecessary and the dependence spurious; or if the expert also fails on OOD probes, making the divergence uninformative as a discriminator between the two mechanisms.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_005", "SRC_004", "SRC_002"]
+    },
+    {
+      "content": "The isolated artifact 120dd644125e ABSTRACTS from SRC_001's specific cue-omission-under-cognitive-load mechanism to a general estimator-selection principle: the panel-vs-expert comparison is an instance of choosing between a rule-bound, low-variance estimator and an intuition-bound, high-variance estimator, where the winner is task-conditional. The abstraction REFUTED IF the expert's intuition operates by a fundamentally different cognitive process than cue-list traversal (e.g., gestalt pattern-matching with no decomposable cue structure), making the 'estimator' analogy a category error; or if the configural-interaction counterexample from SRC_001 generalizes to all non-trivial verifiable tasks, meaning no flat checklist can encode the necessary interactions and the abstraction collapses into a trivial 'sometimes panels win, sometimes experts win' with no predictive content.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001", "SRC_004", "SRC_003"]
+    },
+    {
+      "content": "The isolated artifact 120dd644125e INTEGRATES SRC_003's aggregation mechanism with SRC_002's anchoring critique via a conditional synthesis: the checklist produces genuine accuracy gains through error cancellation when it encodes the correct cue-set (SRC_003), but produces only illusory agreement when it encodes a wrong model (SRC_002); the integrative claim is that both are correct within their respective regimes and the boundary is the checklist's bias relative to expert variance. The integration is REFUTED IF there exists no empirical procedure that can locate which regime a given evaluation is in without oracle access to ground truth, making the integration theoretically coherent but practically unfalsifiable; or if the two mechanisms are not separable — i.e., if error cancellation and shared anchoring operate simultaneously and non-additively, so the boundary condition cannot be cleanly stated as a bias threshold.",
+      "typicality": 0.40,
+      "neighbours": ["SRC_003", "SRC_002", "SRC_005"]
+    }
+  ]
+}
+```

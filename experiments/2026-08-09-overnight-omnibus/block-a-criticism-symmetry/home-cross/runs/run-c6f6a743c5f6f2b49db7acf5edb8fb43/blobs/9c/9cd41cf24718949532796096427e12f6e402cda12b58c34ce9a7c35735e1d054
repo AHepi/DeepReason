@@ -1,0 +1,99 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following a checklist is fundamentally less reliable than a single expert for tasks requiring synthetic reasoning, as checklists decompose non-linear problems into additive steps, losing the critical interactions only an expert's intuition can synthesize.",
+      "mechanism": "The 'Synthesis Gap': Expert intuition functions as a high-dimensional pattern matcher that identifies emergent properties (non-linear interactions) across variables. A checklist, by definition, is a linear sequence of binary or categorical checks. For tasks where the outcome is a product of interactions (A*B) rather than a sum (A+B), the checklist forces a projection of the problem into a lower-dimensional space, creating systemic blind spots that no amount of panel-averaging can correct.",
+      "counterconditions": [
+        "The task is purely additive (e.g., a safety pre-flight check).",
+        "The checklist is dynamically adaptive to the findings of previous steps.",
+        "The 'expert' is operating in a state of high cognitive load or fatigue."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_005",
+          "SRC_008"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The perceived reliability of checklist-driven panels is often a 'variance-reduction illusion' that improves consistency (precision) without improving accuracy (truth), whereas the expert's intuition is more reliable because it tracks the actual causal mechanism of the outcome.",
+      "mechanism": "The 'Precision-Accuracy Trade-off': Non-experts using a checklist will converge on the same answer because they are constrained by the same rigid script, reducing variance. However, if the script is slightly misaligned with the ground truth, they consistently arrive at the same wrong answer. The expert's intuition, while potentially more variable across different cases, is anchored in a deeper causal model of the domain, leading to a higher mean accuracy.",
+      "counterconditions": [
+        "The checklist is derived from the codified intuition of multiple top-tier experts.",
+        "The task has a very low complexity threshold where intuition is prone to 'over-fitting' or idiosyncratic bias."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_006"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gains in checklist panels can be distinguished from mere compliance by the presence of 'discrepancy-driven corrections' in the evaluation log—where the panel identifies a checklist item as 'failed' despite it appearing 'passed' to a superficial observer, thereby correcting a potential expert blind spot.",
+      "mechanism": "The 'Blind Spot Detection' mechanism: Reliability gains are genuine if the checklist forces the panel to attend to 'low-salience' variables that experts habitually ignore due to cognitive heuristics (availability bias). Evidence of a genuine gain is found when the checklist item that triggers the correct outcome is one that is statistically ignored by experts in the same task context.",
+      "counterconditions": [
+        "The panel marks items as 'True' simply to satisfy the checklist requirements (compliance).",
+        "The checklist items have low mutual information with the actual verifiable outcome."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_007"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "For tasks with objectively verifiable outcomes, a panel of non-experts is more reliable if and only if the task structure is 'decomposable' into independent binary verifications, allowing the Law of Large Numbers to cancel out individual non-expert errors.",
+      "mechanism": "Independent Error Cancellation: If the task is a series of independent checks (e.g., 'Is the valve closed?'), the probability of a panel failing to notice a 'No' is exponentially lower than a single expert missing it. The reliability gain is an aggregate of independent binary probabilities, which outperforms the single-point-of-failure risk of one expert's intuition.",
+      "counterconditions": [
+        "The task requires synthesis of multiple checks into a single judgment.",
+        "The panel suffers from groupthink or social contagion, breaking the independence of their checks."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "requested_context_aliases": [
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "To distinguish compliance from reliability in a single evaluation: Look for 'Internal Friction'. If the panel arrives at the correct answer but the checklist items are inconsistently filled (some missed, some wrong, yet the final call is right), that is 'lucky compliance'. If the panel arrives at the correct answer and the checklist items show a tight, logical chain of causality leading to that answer, that is 'genuine reliability'.",
+          "bears_on_refs": [
+            "SRC_007"
+          ],
+          "why_keep_this": "Proposes a concrete metric for the 'evidence within a single evaluation' part of the prompt."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "How do we quantify 'Internal Friction' or 'Causal Tightness' in a checklist log for a single case?",
+        "related_refs": [
+          "SCR_003"
+        ]
+      }
+    ]
+  }
+}
+```

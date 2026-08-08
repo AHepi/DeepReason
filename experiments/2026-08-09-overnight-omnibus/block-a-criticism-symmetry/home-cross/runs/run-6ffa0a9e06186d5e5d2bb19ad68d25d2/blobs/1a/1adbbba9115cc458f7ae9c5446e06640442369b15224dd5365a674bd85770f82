@@ -1,0 +1,11 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/counterexample",
+    "operation": "replace",
+    "value": [
+      "A panel of non-experts follows a checklist that forces thorough System 2 search, but the checklist items are incomplete or biased relative to the task’s objective verification criteria; the expert’s intuition, though System 1, happens to embody domain knowledge that the checklist omits. In that single evaluation, the panel’s System 2 compliance produces less reliable judgments than the expert, showing that forcing systematic search is not equivalent to a genuine reliability gain. This satisfies the target’s stated mechanism while contradicting its implied reliability superiority, and it is exactly the kind of evidence the problem asks to distinguish from genuine reliability."
+    ]
+  }
+}
+```

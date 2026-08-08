@@ -1,0 +1,12 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem demands identifying what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer. SRC_001 articulates a general principle (error-profile vs. noise-profile alignment) and a mechanism (omission errors favor the panel, misinterpretation errors favor the expert) but never specifies any within-evaluation evidential signal that would separate true reliability gain from coincidental checklist compliance. The omission is substantive: under its own framework, a panel following a checklist on an omission-heavy task could still be merely tracking the answer because the checklist items happen to correlate with correct outcomes, without the checklist's redundancy mechanism being the actual cause. SRC_001 offers no diagnostic—no error decomposition, no item-level contingency, no counterfactual or held-out probe—that would let an evaluator in a single study tell these apart. It thus answers the comparative-reliability half of the question but leaves the explicit evidence-discrimination requirement unaddressed.",
+      "counterexample": null
+    }
+  ]
+}
+```
