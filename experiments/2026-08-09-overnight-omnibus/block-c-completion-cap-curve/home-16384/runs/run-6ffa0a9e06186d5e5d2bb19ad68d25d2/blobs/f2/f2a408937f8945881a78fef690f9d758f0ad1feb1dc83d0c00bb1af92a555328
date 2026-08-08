@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1": {"baseline_sha256": "c6035dda2ca78f8c1ab42cab66ea8e8aaf26188ae48055f34b83d14eaa1b3652", "contract": "conjecturer.turn.v6", "op": "replace", "path": "/candidates/1/optional_refs/1", "value": "SRC_008"}}
+```
