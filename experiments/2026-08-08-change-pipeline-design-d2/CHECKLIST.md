@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=8 blockers=none
+State: next=9 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -195,7 +195,7 @@ order. One step per dr-execute-step invocation.
 
 ## Protection semantics — the relatedness-claim mechanism (R43-R45, M27)
 
-- [ ] 8. (R43, M27, M21) Read `rules/experiment.py::active_properties`
+- [x] 8. (R43, M27, M21) Read `rules/experiment.py::active_properties`
       (the READER whose pattern this mirrors) and `relevance_trial` (the
       challenge shape being reused) once more in full against the
       CURRENT tree, confirming line numbers/behavior are unchanged since
@@ -204,6 +204,12 @@ order. One step per dr-execute-step invocation.
       output matches SPEC.md's own quoted text byte-for-byte (paste
       both side by side). MUST NOT touch: rules/experiment.py (read-only
       step).
+      DONE — `sed -n '188,220p'` reproduced byte-for-byte SPEC.md's M27
+      quotes (docstring lines 189-195, filter block lines 206-212, both
+      unchanged at the SAME line numbers) and confirmed `relevance_trial`
+      still at line 313 (M21). No drift since SPEC.md was written. No
+      file touched other than this checklist; no commit needed for a
+      read-only step.
 - [ ] 9. (R43, M27) Write the small "relatedness claim" artifact-minting
       helper (mirrors `register_fail_warrant`'s own small-nu-artifact
       pattern, D1 census M10) — proposed home: `rules/warrants.py`
