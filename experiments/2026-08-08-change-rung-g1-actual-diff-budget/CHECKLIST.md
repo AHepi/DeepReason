@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=10 blockers=none
+State: next=11 blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -255,8 +255,14 @@ order. One step per dr-execute-step invocation.
       discrepancy resolves itself on the next rebase/merge.
       `PARKED.md` exists, contains the (corrected) entry.
 
-- [ ] 10. (all) Full docs_verify: `python tools/docs_verify.py`.
+- [x] 10. (all) Full docs_verify: `python tools/docs_verify.py`.
       done-when: output ends `0 failed`, pasted.
+
+      DONE.
+      ```
+      docs_verify [full]: 52 documents, 831 checks, 4 workers
+      docs_verify: 0 failed
+      ```
 
 - [ ] 11. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends `N passed, M failed` with the only
