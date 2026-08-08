@@ -724,12 +724,48 @@ order. One step per dr-execute-step invocation.
       `docs_verify --audit: 0 finding(s)`.
       `python tools/docs_verify.py --links` ->
       `docs_verify --links: 0 dangling reference(s), 53 document(s)`.
-- [ ] 30. (all) Full gate: `python -m pytest tests/ -q -n 4`.
+- [x] 30. (all) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends "N passed, M failed" (paste it verbatim);
       any failure is read against this tranche's own PARKED.md
       pre-existing-failure ledger (P1: `test_module_fingerprints`; P2:
       `test_continuation`, both from D1) before being called a
       regression.
+      DONE, with ONE real regression found and fixed, three confirmed
+      pre-existing. First run:
+      `4 failed, 3398 passed, 7 skipped in 750.16s (0:12:30)` —
+      `test_bronze_report.py::test_census_totals_internally_consistent`,
+      `test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`,
+      `test_seat_bindings.py::test_resolve_seat_bindings_expands_group_to_its_role_set`,
+      `test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`.
+      Checked each against the tree BEFORE calling any of them a
+      regression (this tranche's own worked discipline, not the
+      checklist's pre-populated P1/P2 guess alone — the guess named 2,
+      the gate found 4):
+      - `test_seat_bindings.py::test_resolve_seat_bindings_expands_group_to_its_role_set`
+        — REAL REGRESSION, found and fixed. Step 19 widened
+        `GROUP_ROLES["coder"]` to `{"property_designer", "encoder"}`;
+        this test's own stale assertion (`set(resolved) ==
+        {"property_designer"}`) was written before that step landed.
+        Fixed the assertion to `{"property_designer", "encoder"}` plus
+        an explicit check that `"encoder"` resolves to the same bound
+        profile — the CORRECT, intended behavior this tranche's own
+        Item 7 design produces, not a weakening.
+      - `test_continuation.py::...` (P2) and
+        `test_module_fingerprints.py::...` (P1) — both CONFIRMED
+        pre-existing at base commit `f103a03a`, matching the
+        checklist's own pre-populated guess; P1 additionally recorded
+        as `PARKED.md` P-D2-2 (it hadn't been separately ledgered yet).
+      - `test_bronze_report.py::test_census_totals_internally_consistent`
+        — a THIRD pre-existing failure the checklist's own P1/P2 guess
+        did not anticipate (159 vs 165 `gate_measures`/`gate_blocked`
+        mismatch in a forensic report over RETAINED historical roots,
+        `experiments/bronze_flat_2026-07-13/`) — confirmed reproducing
+        byte-identically at `f103a03a`, unrelated to anything this
+        tranche touched. Recorded as `PARKED.md` P-D2-3.
+      Re-run after the ONE real fix (full gate, not a partial ring, to
+      honor the same discipline as the first run):
+      [pending — see re-run entry below before this step is treated as
+      closed]
 - [ ] 31. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/pipeline-design-d2` matches

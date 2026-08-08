@@ -35,3 +35,43 @@ document's own claim is wrong; the test itself is.
 
 **Not fixed here.** Left for whichever tranche owns continuation/recovery
 typing.
+
+## P-D2-2 — `test_module_fingerprints.py`'s double-stamp defect (CLAUDE.md's own "P1")
+
+Discovered: step 30 (`python -m pytest tests/ -q -n 4`, full gate).
+
+`tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+fails:
+
+    ValueError: too many values to unpack (expected 1)
+        (payload,) = recorded_module_fingerprints(Harness(root, read_only=True))
+
+Confirmed pre-existing: reproduces byte-identically on a fresh worktree at
+this tranche's own base commit `f103a03a`, and matches CLAUDE.md's own
+established shorthand for this defect ("the S6 PARKED P3 continuation
+test" and, separately, "P1: `test_module_fingerprints`" — this tranche's
+own CHECKLIST.md step 30 already named it in advance as a known,
+already-tracked pre-existing failure). Nothing this tranche touched is
+anywhere near `module_fingerprints`'s own recording/reading machinery.
+
+**Not fixed here.**
+
+## P-D2-3 — `test_bronze_report.py`'s gate_measures/gate_blocked mismatch
+
+Discovered: step 30 (`python -m pytest tests/ -q -n 4`, full gate).
+
+`tests/test_bronze_report.py::test_census_totals_internally_consistent`
+fails:
+
+    assert counts["gate_blocked"] == census["streams"][stream]["gate_measures"]
+    AssertionError: assert 159 == 165
+
+Confirmed pre-existing and unrelated: this test's own `census` fixture
+(`scripts/bronze_census.py::build_census`) reconciles internal counts over
+the RETAINED, committed `experiments/bronze_flat_2026-07-13/` roots — a
+forensic report over historical logs this tranche never touched. Reproduces
+byte-identically (159 == 165) on a fresh worktree at this tranche's own
+base commit `f103a03a`; `git diff --stat f103a03a -- scripts/bronze_census.py
+tests/test_bronze_report.py` is empty for the whole D2 tranche.
+
+**Not fixed here.**
