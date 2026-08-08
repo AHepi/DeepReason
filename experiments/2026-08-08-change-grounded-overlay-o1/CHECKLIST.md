@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=6 blockers=none
+State: next=8 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -56,7 +56,7 @@ order. One step per dr-execute-step invocation.
       `o1a_semantics_diff.py` plus its guardrail check.
       done-when: pushed, confirmed on origin (retry 2s/4s/8s/16s on
       failure).
-- [ ] 6. (S7) Write `scripts/o1b_joint_execution_probe.py`: accepted +
+- [x] 6. (S7) Write `scripts/o1b_joint_execution_probe.py`: accepted +
       `formally_backed` population, same-problem + exec-oracle +
       identical-entry pairing (the machine-comparable-gate filter),
       excluded-pair counting with reasons, the exact literal-overlap
@@ -67,7 +67,12 @@ order. One step per dr-execute-step invocation.
       fallback.
       done-when: `python3 -c "import ast; ast.parse(open('experiments/2026-08-08-change-grounded-overlay-o1/scripts/o1b_joint_execution_probe.py').read())"`
       -> exit 0.
-- [ ] 7. (S7) [COMMIT] Commit and push `o1b_joint_execution_probe.py`.
+      DONE — syntax OK; import-time sanity check passed
+      (`_candidate_inputs`, `_literal_overlap_contradiction` both
+      produce correct, JSON-serializable results on hand-built cases;
+      a bytes-key bug in the contradiction evidence was caught and
+      fixed during this same step, before committing).
+- [x] 7. (S7) [COMMIT] Commit and push `o1b_joint_execution_probe.py`.
       done-when: pushed, confirmed on origin.
 - [ ] 8. (S8) Write `scripts/o1c_floating_foundations.py`: the
       `ground()` predicate (SEED/IMPORT/USER roles), the accepted-only
