@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=16 blockers=none
+State: next=19 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -336,7 +336,7 @@ order. One step per dr-execute-step invocation.
 
 ## Item 5 — relatedness challenge call site (R24, R35, F6/R42)
 
-- [ ] 16. (R35, M21) Write the new call site reusing `relevance_trial`'s
+- [x] 16. (R35, M21) Write the new call site reusing `relevance_trial`'s
       own SHAPE (cross-family judge ensemble, referential-integrity +
       unanimity guards) for the narrow question "does this commitment's
       case follow from the claim's own explanation" — targets the NEW
@@ -346,16 +346,45 @@ order. One step per dr-execute-step invocation.
       done-when: a new function exists in `rules/experiment.py` (or a
       sibling module if that file's own scope note argues against it,
       decided at execution time) whose docstring names R24/R35/M21.
-- [ ] 17. (R42, F6) Confirm (do not add machinery for) this call site
+      DONE — `rules/experiment.py`'s own scope note ("the system designs
+      its own experiments": generators/property proposals) argued
+      against it, consistent with step 9's same finding for
+      `warrants.py`'s docstring; built `relatedness_trial` in the SAME
+      sibling module as steps 9-10/12 (`rules/relatedness.py`), all
+      three now co-located as one concern. Docstring names R24/R35/M21
+      (verified: `'R24' in doc and 'R35' in doc and 'M21' in doc` ->
+      True). Registers an ARGUMENTATIVE fail warrant with
+      `target=claim_artifact.id` on anything short of unanimous located
+      passes, mirroring `relevance_trial` exactly — never the conjecture
+      or the commitment. New file `tests/test_relatedness.py` (4 cases):
+      mint+MENTION-link+content shape, opt-out default (no linked
+      claim), unanimous pass leaves the claim ACCEPTED with no warrant,
+      a losing trial refutes ONLY the claim while the conjecture's own
+      Status stays ACCEPTED. Mutation-proved the challenge test: forced
+      `relatedness_trial` to always return True without registering a
+      warrant -> `test_relatedness_trial_sustained_challenge_refutes_only_the_claim`
+      failed exactly at `assert result is False` (`True is False`);
+      reverted, re-verified passing.
+- [x] 17. (R42, F6) Confirm (do not add machinery for) this call site
       is REACTIVE only — no caller invokes it as a precondition to
       admitting a new commitment; it is invoked only when a critic
       RAISES a relatedness challenge.
       done-when: `grep -rn "<new-function-name>" src/deepreason/` shows
       NO call site inside any admission/compile path
       (`compile_interface_draft`, `rules/conj.py`'s own turn-processing).
-- [ ] 18. (R35) [COMMIT] Commit steps 16-17.
+      DONE — `grep -rn "relatedness_trial" src/deepreason/` shows
+      exactly one hit: the function's own definition
+      (`rules/relatedness.py`). No caller anywhere yet (reactive-only
+      by construction — nothing invokes it as a precondition; the
+      critic-side invocation belongs to a later tranche or the
+      operator's own future instruction, not this one).
+- [x] 18. (R35) [COMMIT] Commit steps 16-17.
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 11 files changed, 618 insertions(+), 5
+      deletions(-) -> running total 613 of 1150. Frozen-surface diff:
+      empty. Pushed.
 
 ## Item 7 — encoder-role delegation (R38, F3-A/R29)
 

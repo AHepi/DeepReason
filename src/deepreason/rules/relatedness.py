@@ -77,3 +77,85 @@ def relatedness_claim_holds(harness, conjecture_id: str, commitment_id: str) -> 
             continue
         return harness.state.status.get(artifact.id) == Status.ACCEPTED
     return True
+
+
+def relatedness_trial(harness, claim_artifact, conjecture_text: str, adapter, config) -> bool:
+    """The referee-free relatedness check (Amendment 1, R24/R35, M21): does
+    the challenged commitment "directly relate to the explanation,
+    functioning solely as a criticizable surface" for it — judged by BOTH
+    cross-family ensemble seats on the narrow question only, reusing
+    `relevance_trial`'s own SHAPE (`rules/experiment.py`: referential-
+    integrity + unanimity guards) rather than inventing a new referee
+    (Amendment 1: "the referee should be irrelevant... if a referee is
+    needed, the artifact surface needs a redesign"). On anything short of
+    unanimous located passes, registers an ARGUMENTATIVE fail warrant
+    against the RELATEDNESS-CLAIM artifact itself — never the conjecture or
+    the commitment — mirroring `relevance_trial`'s own
+    `target=prop_artifact.id` pattern exactly, so a sustained challenge can
+    defeat ONE claim without touching anything else's `Status`. Reactive
+    only (R42/F6): nothing calls this as a precondition to admission; it
+    runs only when a critic raises a relatedness challenge."""
+    from deepreason.canonical import sha256_hex
+    from deepreason.llm.contracts import JudgeRuling
+    from deepreason.llm.packs import aliases_for_values
+    from deepreason.ontology import Provenance, Rule, Warrant, WarrantType
+    from deepreason.programs import content_text
+
+    judge_seats = adapter.require_cross_family_judges()
+    claim_text = content_text(claim_artifact, harness.blobs)
+    pack = "\n".join([
+        "NARROW QUESTION: is the attached commitment directly related to "
+        "the conjecture's own explanation, functioning solely as a "
+        "criticizable surface for it (rule pass), or is it unrelated "
+        "filler code (rule fail)?",
+        "",
+        f"CONJECTURE'S OWN EXPLANATION:\n{conjecture_text}",
+        "",
+        f"RELATEDNESS CLAIM:\n{claim_text}",
+        "",
+        "decisive_point MUST quote a span of the explanation or the claim.",
+    ])
+    calls: list = []
+    rulings: list = []
+    try:
+        for seat in range(len(judge_seats)):
+            ruling, llm_call = adapter.call(
+                "judge",
+                pack,
+                JudgeRuling,
+                endpoint_index=seat,
+                aliases=aliases_for_values([conjecture_text, claim_text], prefix="K"),
+            )
+            calls.append(llm_call)
+            if ruling.decisive_point and ruling.decisive_point not in pack:
+                # Unlocatable grounds: invalid ruling, blocked (relevance_trial's
+                # own guard against unanchored judge assertions).
+                rulings.append(None)
+                continue
+            rulings.append(ruling)
+    finally:
+        harness.record_llm_calls(calls, "relatedness-trial")
+
+    if all(r is not None and r.verdict == "pass" for r in rulings):
+        return True
+    failed = [r for r in rulings if r is not None and r.verdict == "fail"]
+    if failed:
+        case = failed[0].decisive_point
+        case_hash = sha256_hex(case.encode())[:16]
+        nu = harness.create_artifact(
+            f"nu: relatedness ruling {case_hash} against {claim_artifact.id} is sound",
+            provenance=Provenance(role="critic"),
+        )
+        harness.create_artifact(
+            f"critic: commitment does not directly relate to the conjecture's "
+            f"own explanation — {case}",
+            provenance=Provenance(role="critic"),
+            warrants=[Warrant(
+                id=f"w:relatedness-trial:{case_hash}:{claim_artifact.id}",
+                type=WarrantType.ARGUMENTATIVE,
+                target=claim_artifact.id,
+                validity_node=nu.id,
+            )],
+            rule=Rule.CRIT,
+        )
+    return False
