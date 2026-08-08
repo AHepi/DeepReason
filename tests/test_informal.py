@@ -4,12 +4,17 @@ hv-floor under mu_struct with the substitution trace logged."""
 
 import json
 
+import pytest
+from pydantic import ValidationError
+
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.informal.skeleton import (
+    ForbiddenCase,
     compile_forbidden_commitments,
     parse_skeleton,
     skeleton_wf_commitment,
+    skeleton_wf_program,
 )
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
@@ -50,6 +55,58 @@ def test_forbid_nothing_fails_skeleton_wf_refuted_by_program(harness):
     assert "forbids nothing" in trace["error"]
 
 
+def test_pure_code_claim_fails_skeleton_wf_refuted_by_program(harness):
+    """D2 Amendment 4 (R20/R54): a claim that is entirely code fails the
+    mandatory, opt-in-per-problem skeleton well-formedness check the
+    same way a forbid-nothing skeleton already does."""
+    harness.register_commitment(skeleton_wf_commitment())
+    pure_code = harness.create_artifact(
+        _skeleton("def solve(x):\n    return x * 2", "the gods decree it",
+                  forbidden_cases=["a violation"]),
+        codec="json",
+        interface=Interface(commitments=["skeleton-wf"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    crit_program(harness, pure_code.id)
+    assert harness.state.status[pure_code.id] == Status.REFUTED
+    warrant = next(w for w in harness.warrants.values() if w.target == pure_code.id)
+    assert warrant.commitment == "skeleton-wf"
+    trace = json.loads(harness.blobs.get(warrant.trace_ref))
+    assert "claim" in trace["error"]
+
+
+def test_pure_code_mechanism_fails_skeleton_wf():
+    """Both free-text fields are checked independently, not only claim."""
+    verdict, trace = skeleton_wf_program(
+        _skeleton("winter happens", "class Solver:\n    def solve(self, x):\n        return x * 2",
+                  forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "fail"
+    assert "mechanism" in trace["error"]
+
+
+def test_prose_quoting_code_inline_passes_skeleton_wf():
+    """R57(a)'s protected case: mixed prose and code is not valid Python
+    syntax as a whole, so it never trips the pure-code check."""
+    verdict, _ = skeleton_wf_program(
+        _skeleton("The mechanism is: def solve(x): return x*2. This shows doubling.",
+                  "differential gravity", forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "pass"
+
+
+def test_bare_docstring_claim_passes_skeleton_wf():
+    """A lone string literal is prose-as-a-string, not code."""
+    verdict, _ = skeleton_wf_program(
+        _skeleton('"""Doubling composes with addition."""', "differential gravity",
+                  forbidden_cases=["a violation"]),
+        budget=None,
+    )
+    assert verdict == "pass"
+
+
 def test_forbidden_cases_compile_to_commitments(harness):
     skeleton = parse_skeleton(
         _skeleton("tides follow the moon", "differential gravity",
@@ -61,6 +118,67 @@ def test_forbidden_cases_compile_to_commitments(harness):
     assert harness.commitments[ids[0]].budget.extra["case"]
     # Deterministic: recompiling yields the same ids.
     assert compile_forbidden_commitments(harness, skeleton) == ids
+
+
+def test_candidate_checker_forbidden_case_compiles_and_refutes(harness):
+    """Dual-mode conjecture (D2 rev 2, R33): a forbidden case may carry a
+    model-authored checker (program:candidate_checker) instead of naming a
+    pre-registered rubric/program — the source lives in the case's own
+    checker_spec, never the skeleton's prose."""
+    skeleton_text = json.dumps(
+        {
+            "claim": "doubling composes with addition",
+            "mechanism": "multiplication distributes over repeated addition",
+            "forbidden": [
+                {
+                    "case": "solve(x) does not equal 2*x for a sampled input",
+                    "eval": "program:candidate_checker",
+                    "checker_spec": {
+                        "source": "def solve(x):\n    return x + 999",
+                        "entry": "solve",
+                        "tests": [{"in": [1], "out": 2}],
+                    },
+                }
+            ],
+        },
+        sort_keys=True,
+    )
+    skeleton = parse_skeleton(skeleton_text)
+    ids = compile_forbidden_commitments(harness, skeleton)
+    assert len(ids) == 1
+    commitment = harness.commitments[ids[0]]
+    assert commitment.eval == "program:candidate_checker"
+    assert json.loads(commitment.budget.extra["spec"])["entry"] == "solve"
+
+    art = harness.create_artifact(
+        skeleton_text,
+        codec="json",
+        interface=Interface(commitments=ids),
+        provenance=Provenance(role="conjecturer"),
+    )
+    crit_program(harness, art.id)
+    # The checker source (x + 999) fails the fixed test (1 -> 2) — refuted by
+    # EXECUTION, even though the artifact's own content is the skeleton's
+    # prose/JSON, never the failing code itself.
+    assert harness.state.status[art.id] == Status.REFUTED
+
+
+def test_candidate_checker_forbidden_case_requires_checker_spec():
+    """Regression: a field_validator on checker_spec alone silently never
+    fired for an OMITTED (default-valued) field — Pydantic skips validators
+    for unset fields unless validate_default=True. Caught while writing D2
+    rev 2's own test for this coupling; fixed with model_validator instead."""
+    with pytest.raises(ValidationError):
+        ForbiddenCase(case="x", eval="program:candidate_checker")
+
+
+def test_checker_spec_forbidden_outside_candidate_checker():
+    with pytest.raises(ValidationError):
+        ForbiddenCase(
+            case="x",
+            eval="rubric:std-1",
+            checker_spec={"source": "s", "entry": "e", "tests": []},
+        )
 
 
 def test_persephone_skeleton_fails_hv_floor_under_mu_struct(tmp_path):

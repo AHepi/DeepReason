@@ -539,6 +539,60 @@ def test_a_structural_program_confers_no_formal_backing(harness):
     assert formally_backed(harness, structural.id) is False
 
 
+def test_a_challenged_relatedness_claim_strips_only_its_own_commitment(harness):
+    """Implements R43 (D2 rev 2 protection-semantics correction): a
+    ``program:candidate_checker`` commitment with no linked relatedness
+    claim protects by default (F6's opt-out shape); once a relatedness
+    claim is minted for it, an unchallenged (ACCEPTED) claim still
+    protects; a sustained challenge -- the claim's own Status flipping
+    away from ACCEPTED -- strips exactly that commitment from
+    `formally_backed`'s substantive set, even though the checker itself
+    still passes, and does so WITHOUT touching the carrying conjecture's
+    own Status (R43: "the shield falls, the artifact doesn't")."""
+
+    from deepreason.ontology import Status
+    from deepreason.oracle import candidate_checker_commitment
+    from deepreason.rules.relatedness import mint_relatedness_claim
+    from deepreason.rules.warrants import formally_backed
+
+    checker = candidate_checker_commitment(
+        source="def solve(x):\n    return x * 2", entry="solve", tests=_DOUBLE,
+    )
+    conjecture = _target_with(harness, checker, "doubling composes with addition")
+    assert formally_backed(harness, conjecture.id) is True
+
+    claim_id = mint_relatedness_claim(
+        harness, conjecture.id, checker.id,
+        "the checker directly tests the claimed doubling behavior",
+    )
+    assert harness.state.status[claim_id] == Status.ACCEPTED
+    assert formally_backed(harness, conjecture.id) is True
+
+    # Sustained relatedness challenge (Item 5's own mechanism, step 16, is
+    # not built yet -- this mints the SAME shape relevance_trial already
+    # uses for a losing challenge: an ARGUMENTATIVE warrant against the
+    # challenged artifact itself, not a DEMONSTRATIVE one).
+    from deepreason.ontology import Provenance, Warrant, WarrantType
+
+    nu = harness.create_artifact(
+        "nu: the challenge that this checker tests halving, not doubling, is sound",
+        provenance=Provenance(role="critic"),
+    )
+    harness.create_artifact(
+        "critic: this commitment does not directly relate to the conjecture's own explanation",
+        provenance=Provenance(role="critic"),
+        warrants=[Warrant(
+            id=f"w:relatedness:{claim_id}",
+            target=claim_id,
+            type=WarrantType.ARGUMENTATIVE,
+            validity_node=nu.id,
+        )],
+    )
+    assert harness.state.status[claim_id] == Status.REFUTED
+    assert formally_backed(harness, conjecture.id) is False
+    assert harness.state.status[conjecture.id] == Status.ACCEPTED
+
+
 def test_a_failing_formal_commitment_earns_no_protection(harness):
     """Implements Q12's answer: the all-currently-pass clause survives.
 

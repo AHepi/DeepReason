@@ -40,10 +40,12 @@ recovers into a different graph than it wrote.
 A naive grep over-reports this seam and under-reports it at once. 37 files match
 `deepreason.workflow`; three of them match only `deepreason.workflows`, a
 different package (workload definitions, not the control plane). Two of the
-twelve modules below `deepreason.rules` name the control plane — `conj.py` and
-`crit.py`; the other ten never do. And `workflow/atomic_recovery.py` names no
-rule at all yet exists solely for those two, which are its only callers in
-`src/`.
+fourteen modules below `deepreason.rules` name the control plane — `conj.py` and
+`crit.py`; the other twelve never do — including D2 rev 2's own
+`relatedness.py`/`encoding.py`, both v6-runtime-agnostic by construction (they
+take a bare `harness`/`adapter`, never a `RunManifest`). And
+`workflow/atomic_recovery.py` names no rule at all yet exists solely for those
+two, which are its only callers in `src/`.
 `check: test "$(grep -rl 'deepreason\.workflow' --include=*.py src/deepreason | wc -l)" -gt "$(grep -rlE 'deepreason\.workflow\b' --include=*.py src/deepreason | wc -l)" && grep -q "deepreason\.workflows\." src/deepreason/workflows/website.py && ! grep -qE "deepreason\.workflow\b" src/deepreason/workflows/website.py && test "$(grep -rlE 'deepreason\.workflow\b' --include=*.py src/deepreason/rules | sort | paste -sd,)" = "src/deepreason/rules/conj.py,src/deepreason/rules/crit.py" && test "$(grep -rln 'recover_atomic_child_output' --include=*.py src/deepreason | grep -vc '^src/deepreason/workflow/atomic_recovery.py')" -eq 2 && grep -q "^def recover_atomic_child_output(" src/deepreason/workflow/atomic_recovery.py`
 
 The dependency arrow is asymmetric by construction. All 32 of the rules' imports
@@ -52,7 +54,7 @@ every module under `rules/` loads no `deepreason.workflow.*` at all, and the
 rules stay testable against a fake harness with no v6 runtime present. The
 reverse arrow is three imports in two files, one of them at module scope
 (`anti_relapse`), because recovery cannot defer the gate it re-runs.
-`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==12, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 32 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
+`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==14, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 32 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
 
 ## Where it is expressed
 
@@ -161,19 +163,27 @@ path with no gate at all.
 **The deterministic rules have no transaction because they have no provider.**
 `crit_program`, `crit_fuzz`, `try_counterexample`, `spawn`, `scan_spawns`,
 `register_fail_warrant` and the anti-relapse gate reach no model, so bracketing
-them would be process authority over nothing. The four modules that still call a
-provider unbracketed are a generational fact rather than a designed absence —
+them would be process authority over nothing. Four of the six modules that call
+a provider unbracketed are a generational fact rather than a designed absence —
 `rules/experiment.py` (three sites), `rules/synth.py`, `rules/vision.py`, and
 `crit.py`'s pre-v6 paths, all of which v4/v5 roots still need. Under v6 they are
 unreachable rather than authorized:
 `synthesize` is excluded by an explicit `schema_version == 6` branch in the
 scheduler, and vision, experiment authoring, property design and local
 argumentative criticism become typed completion debt through
-`_defer_untransactional_v6_phase`. Re-enabling any of them under v6 without a
-transaction does not degrade — the adapter's global guard fails the whole root
+`_defer_untransactional_v6_phase`. The other two, D2 rev 2's
+`rules/relatedness.py::relatedness_trial` and
+`rules/encoding.py::draft_encoded_commitment`, are unbracketed for a DIFFERENT
+reason — not deferred, DORMANT: neither has any caller anywhere in `src/`
+yet (step 17/21 of that tranche's own CHECKLIST.md recorded this as reactive-
+only / no wiring, deliberately), so both are unreachable from every scheduler
+path, v6 or not, until a future tranche wires a call site — at which point that
+tranche must decide bracketing the same way `conj.py`/`crit.py` already did.
+Re-enabling any of the four generational sites under v6 without a transaction
+does not degrade — the adapter's global guard fails the whole root
 (`DR-SEAM-llm-x-workflow`). `conj.py` is already clean: it has no `adapter.call`
 that omits the bundle argument.
-`check: python -c "import ast, pathlib; sites=[(p.name, n, any(k.arg=='dispatch_authorization' for k in n.keywords)) for p in sorted(pathlib.Path('src/deepreason/rules').rglob('*.py')) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr=='call' and isinstance(n.func.value, ast.Name) and n.func.value.id=='adapter']; bound=[s for s in sites if s[2]]; unbound=[s for s in sites if not s[2]]; assert len(bound)==4 and {f for f,_n,_b in bound}=={'conj.py','crit.py'}, bound; assert {f for f,_n,_b in unbound}=={'crit.py','experiment.py','synth.py','vision.py'}, sorted(f for f,_n,_b in unbound)" && python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; T=ast.parse(textwrap.dedent(inspect.getsource(S.step))); g=[n for n in ast.walk(T) if isinstance(n, ast.If) and any('relation = synthesize(' in ast.unparse(s) for s in n.body)]; assert len(g)==1, len(g); t=ast.unparse(g[0].test); assert 'not (self.run_manifest is not None and self.run_manifest.schema_version == 6)' in t, t; W=ast.parse(textwrap.dedent(inspect.getsource(S))); phases={(c.args[0].value if c.args else [k.value for k in c.keywords if k.arg=='phase'][0].value) for c in ast.walk(W) if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr=='_defer_untransactional_v6_phase'}; assert {'vision-criticism','experiment-generator-authoring','property-design','argumentative-criticism'} <= phases, sorted(phases)" && grep -q "def _defer_untransactional_v6_phase(" src/deepreason/scheduler/scheduler.py`
+`check: python -c "import ast, pathlib; sites=[(p.name, n, any(k.arg=='dispatch_authorization' for k in n.keywords)) for p in sorted(pathlib.Path('src/deepreason/rules').rglob('*.py')) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr=='call' and isinstance(n.func.value, ast.Name) and n.func.value.id=='adapter']; bound=[s for s in sites if s[2]]; unbound=[s for s in sites if not s[2]]; assert len(bound)==4 and {f for f,_n,_b in bound}=={'conj.py','crit.py'}, bound; assert {f for f,_n,_b in unbound}=={'crit.py','experiment.py','synth.py','vision.py','encoding.py','relatedness.py'}, sorted(f for f,_n,_b in unbound)" && ! grep -rq "draft_encoded_commitment\|relatedness_trial" --include=*.py src/deepreason/scheduler src/deepreason/rules/conj.py && python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; T=ast.parse(textwrap.dedent(inspect.getsource(S.step))); g=[n for n in ast.walk(T) if isinstance(n, ast.If) and any('relation = synthesize(' in ast.unparse(s) for s in n.body)]; assert len(g)==1, len(g); t=ast.unparse(g[0].test); assert 'not (self.run_manifest is not None and self.run_manifest.schema_version == 6)' in t, t; W=ast.parse(textwrap.dedent(inspect.getsource(S))); phases={(c.args[0].value if c.args else [k.value for k in c.keywords if k.arg=='phase'][0].value) for c in ast.walk(W) if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr=='_defer_untransactional_v6_phase'}; assert {'vision-criticism','experiment-generator-authoring','property-design','argumentative-criticism'} <= phases, sorted(phases)" && grep -q "def _defer_untransactional_v6_phase(" src/deepreason/scheduler/scheduler.py`
 
 **Planning context is not exposing context, and recovery has no adapter.**
 `InquiryTransactionService.context_plan` is a `staticmethod` that appends

@@ -49,6 +49,11 @@ PROPERTY_PROGRAM = "property_oracle"
 # execution_backed treats a passing verdict from any of these as a warrant
 # from reality that mere argument cannot override.
 EXEC_PROGRAMS = frozenset({EXEC_PROGRAM, PROPERTY_PROGRAM, "dataset_oracle"})
+# Deliberately NOT a member of EXEC_PROGRAMS (dual-mode conjecture R45):
+# execution supremacy is earned by carrying a matching counterexample/fuzz
+# attack channel, which this kind does not have yet. It DOES count toward
+# formally_backed's wider substantive set (rules/warrants.py).
+CANDIDATE_CHECKER_PROGRAM = "candidate_checker"
 _STEP_LIMIT_DEFAULT = 100_000
 _INT_LITERAL_CAP = 1_000_000  # forbid range()/collection bombs the step bound can't see
 
@@ -198,6 +203,19 @@ def run_from_spec(source: str, budget) -> tuple:
     return run(source, spec["entry"], spec["tests"], int(spec.get("step_limit", _STEP_LIMIT_DEFAULT)))
 
 
+def run_from_full_spec(budget) -> tuple:
+    """Like ``run_from_spec``, except ``source`` also comes from the frozen
+    {source, entry, tests, step_limit} spec rather than the artifact's own
+    content — for commitments attached to a conjecture whose content is prose,
+    never the candidate under test (dual-mode conjecture, Rung D3)."""
+    spec = _load_spec(budget)
+    if not spec.get("source") or not spec.get("tests") or not spec.get("entry"):
+        return OVERRUN, {"error": "candidate-checker spec missing source/entry/tests"}
+    return run(
+        spec["source"], spec["entry"], spec["tests"], int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
+    )
+
+
 def exec_oracle_commitment(entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT) -> Commitment:
     """Build a content-addressed exec-oracle commitment (like hv-floor/lineage-ref):
     the entry point + fixed test cases are frozen into the id, so verdicts are
@@ -209,6 +227,23 @@ def exec_oracle_commitment(entry: str, tests: list, step_limit: int = _STEP_LIMI
     return Commitment(
         id=f"exec-oracle@{digest}",
         eval=f"program:{EXEC_PROGRAM}",
+        budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
+    )
+
+
+def candidate_checker_commitment(
+    source: str, entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT
+) -> Commitment:
+    """Build a content-addressed candidate-checker commitment: unlike
+    exec_oracle (candidate=content, tests=budget), the CHECKER SOURCE also
+    lives in the budget, since the carrying artifact's own content is prose
+    (dual-mode conjecture, Amendment 1 — a conjecture can never be full
+    code). Attaches to the SAME artifact as the prose it checks."""
+    spec = {"source": source, "entry": entry, "tests": tests, "step_limit": step_limit}
+    digest = sha256_hex(canonical_json(spec))[:12]
+    return Commitment(
+        id=f"candidate-checker@{digest}",
+        eval=f"program:{CANDIDATE_CHECKER_PROGRAM}",
         budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
     )
 

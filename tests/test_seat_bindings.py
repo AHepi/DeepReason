@@ -174,8 +174,9 @@ def test_resolve_seat_bindings_expands_group_to_its_role_set(tmp_path):
         {"coder": str(profile_a)}, seat_bindings_path(home=str(tmp_path))
     )
     resolved = resolve_seat_bindings(home=str(tmp_path))
-    assert set(resolved) == {"property_designer"}
+    assert set(resolved) == {"property_designer", "encoder"}
     assert resolved["property_designer"].model_id == "model-a"
+    assert resolved["encoder"].model_id == "model-a"
 
 
 def test_resolve_seat_bindings_by_group_keys_by_literal_group_name(tmp_path):

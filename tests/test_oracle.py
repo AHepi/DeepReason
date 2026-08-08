@@ -9,6 +9,7 @@ from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.ontology import Interface, Provenance, Status, WarrantType
 from deepreason.oracle import (
+    candidate_checker_commitment,
     counterexample_commitment,
     exec_oracle_commitment,
     property_oracle_commitment,
@@ -184,6 +185,101 @@ def test_crit_program_refutes_wrong_code_by_running_it(harness):
 
     assert harness.state.status[good.id] == Status.ACCEPTED  # survived EXECUTION
     assert harness.state.status[bad.id] == Status.REFUTED    # refuted by reality, not a judge
+
+
+# ---- dual-mode conjecture: candidate-checker (D2 rev 2, Amendment 1/2) ----
+# Unlike exec_oracle, the carrying artifact's own content is PROSE (a
+# conjecture can never be full code, Amendment 1) — the checker source lives
+# in the commitment's own budget instead of the artifact's content.
+
+def test_candidate_checker_reads_source_from_budget_not_content(harness):
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    prose = harness.create_artifact(
+        "The output is always double the input because doubling composes "
+        "with addition the way multiplication by two always does."
+    )
+    verdict, _ = programs.evaluate(c, prose, harness.blobs)
+    assert verdict == "pass"
+    assert programs.evaluable(c)
+
+
+def test_crit_program_refutes_a_prose_conjecture_by_running_its_checker(harness):
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    harness.register_commitment(c)
+    good = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    bad_checker = candidate_checker_commitment("def solve(x):\n    return x + 999", "solve", DOUBLE)
+    harness.register_commitment(bad_checker)
+    bad = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[bad_checker.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[good.id] == Status.ACCEPTED
+    assert harness.state.status[bad.id] == Status.ACCEPTED  # before criticism
+
+    crit_program(harness, good.id)  # runs the checker — passes, no warrant
+    crit_program(harness, bad.id)   # runs the checker — fails -> demonstrative warrant
+
+    assert harness.state.status[good.id] == Status.ACCEPTED  # prose survives
+    assert harness.state.status[bad.id] == Status.REFUTED    # refuted by execution, not argument
+    # Both carried the SAME prose — the checker refuted, not the words.
+    assert programs.content_text(good, harness.blobs) == programs.content_text(bad, harness.blobs)
+
+
+def test_candidate_checker_never_joins_exec_programs():
+    from deepreason.oracle import EXEC_PROGRAMS, CANDIDATE_CHECKER_PROGRAM
+
+    # R45: supremacy is earned by attack surface, never granted with the shield.
+    assert CANDIDATE_CHECKER_PROGRAM not in EXEC_PROGRAMS
+
+
+def test_candidate_checker_pass_grants_formally_backed_protection(harness):
+    """D2 rev 2 Item 6 acceptance check 3: a candidate whose new-kind
+    commitment PASSES gains formally_backed protection exactly like any
+    other passing commitment today (same shape as
+    test_execution_backed_true_only_when_passing, extended to the new
+    eval kind)."""
+    from deepreason.rules.warrants import formally_backed
+
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    harness.register_commitment(c)
+    good = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert formally_backed(harness, good.id) is True
+    # Never joins EXEC_PROGRAMS (R45), so execution_backed stays False for it.
+    assert execution_backed(harness, good.id) is False
+
+
+def test_R_g_no_scheduling_term_reads_the_candidate_checker_kind():
+    """D2 rev 2 Item 6 acceptance check 4: neither Scheduler._select_problem
+    nor _standing_recrit_pool gains a NEW term reading the new eval kind
+    specifically -- grep-provable, D1 census M9(a)'s own method repeated
+    against the new symbol. execution_evals (the set _standing_recrit_pool
+    re-derives inline, D1 M6) is built from EXEC_PROGRAMS alone (step 14's
+    own R45 confirmation: still exactly 3 members, candidate_checker never
+    joins it), so this is a zero-hits check, not merely an absence of the
+    literal string."""
+    from pathlib import Path
+
+    scheduler_source = (
+        Path(__file__).resolve().parents[1] / "src" / "deepreason" / "scheduler" / "scheduler.py"
+    ).read_text()
+    assert "candidate_checker" not in scheduler_source
+
+
+def test_run_from_full_spec_overruns_on_malformed_spec():
+    from deepreason.ontology.commitment import Budget
+    from deepreason.oracle import run_from_full_spec
+
+    verdict, _ = run_from_full_spec(Budget(extra={}))
+    assert verdict == "overrun"  # missing source/entry/tests, not a wall-clock condition
 
 
 def test_run_from_spec_overruns_on_malformed_spec():

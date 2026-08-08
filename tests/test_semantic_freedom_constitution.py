@@ -51,6 +51,8 @@ from deepreason.workloads.text import (
     ReasoningEnvelopeV1,
     ReasoningWorkloadSpec,
     WorkloadProblem,
+    draft_countercondition_commitments,
+    proposal_envelope,
     seed_reasoning_workload,
 )
 
@@ -181,6 +183,43 @@ def test_reasoning_shape_keeps_optional_semantic_fields_optional():
     assert envelope.scope.covers == ()
     assert envelope.scope.excludes == ()
     assert envelope.uncertainties == ()
+
+
+def test_checker_specs_pair_by_index_without_changing_counterconditions_type():
+    """Dual-mode conjecture (D2 rev 2, step 6): the reasoning path's own
+    code-commitment channel is additive (checker_specs) so
+    counterconditions keeps its wire TYPE (tuple[str, ...]) — no contract
+    version bump for this piece of the design."""
+    spec = {"source": "def solve(x):\n    return x + 1", "entry": "solve", "tests": [{"in": [1], "out": 2}]}
+    proposal = ReasoningCandidateProposal(
+        claim="doubling composes with addition",
+        mechanism="multiplication distributes over repeated addition",
+        counterconditions=("solve(x) does not equal x + 1 for a sampled input", "an unrelated observed case"),
+        checker_specs=(spec, None),
+        typicality=0.5,
+    )
+    envelope = proposal_envelope(proposal)
+    assert envelope.counterconditions[0].eval == "program:candidate_checker"
+    assert envelope.counterconditions[0].checker_spec == spec
+    assert envelope.counterconditions[1].eval == "observation"
+    assert envelope.counterconditions[1].checker_spec is None
+
+    drafts = draft_countercondition_commitments(envelope)
+    assert drafts[0].eval == "program:candidate_checker"
+    assert json.loads(drafts[0].budget.extra["spec"])["entry"] == "solve"
+    assert drafts[1].eval == "program:reasoning_observation_pending"
+    assert drafts[1].budget.extra == {}
+
+
+def test_checker_specs_must_pair_one_to_one_with_counterconditions():
+    with pytest.raises(ValidationError):
+        ReasoningCandidateProposal(
+            claim="x",
+            mechanism="y",
+            counterconditions=("only one case",),
+            checker_specs=({"source": "s", "entry": "e", "tests": []}, None),
+            typicality=0.5,
+        )
 
 
 def test_scratch_block_optional_fields_remain_optional():

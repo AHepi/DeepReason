@@ -30,8 +30,13 @@ criteria can ground reach, without touching either predicate. The dependency
 arrow runs both ways on purpose — rules read evaluation's classification, and
 evaluation calls back into `rules/warrants.py` to package any fail it produces —
 which is why there is exactly one warrant constructor in the tree and evaluation
-never has to know what a warrant means.
-`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/rules/warrants.py').read_text()); f={n.name:{i.module for i in ast.walk(n) if isinstance(i,ast.ImportFrom)} for n in ast.walk(t) if isinstance(n,ast.FunctionDef)}; assert f['execution_backed']=={'deepreason','deepreason.oracle'}; assert f['formally_backed']=={'deepreason','deepreason.measures.reach'}; assert {i.module for i in t.body if isinstance(i,ast.ImportFrom)}=={'deepreason.ontology'}" && test "$(grep -rl "EXEC_PROGRAMS\|_STRUCTURAL_PROGRAMS" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && python -c "from deepreason.ontology import Commitment; assert set(Commitment.model_fields)=={'id','eval','budget','observation_valued'}"`
+never has to know what a warrant means. D2 rev 2 (Amendment 2, R43) added a
+third import to `formally_backed` specifically: `rules/relatedness.py` (a
+same-package, rules-side sibling, not a new evaluation-side dependency) for
+the one per-commitment check that can strip a `candidate_checker`
+commitment's protection on a sustained relatedness challenge — see
+`DR-CON-conjecture-kinds`'s own section on this.
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/rules/warrants.py').read_text()); f={n.name:{i.module for i in ast.walk(n) if isinstance(i,ast.ImportFrom)} for n in ast.walk(t) if isinstance(n,ast.FunctionDef)}; assert f['execution_backed']=={'deepreason','deepreason.oracle'}; assert f['formally_backed']=={'deepreason','deepreason.measures.reach','deepreason.oracle','deepreason.rules.relatedness'}; assert {i.module for i in t.body if isinstance(i,ast.ImportFrom)}=={'deepreason.ontology'}" && test "$(grep -rl "EXEC_PROGRAMS\|_STRUCTURAL_PROGRAMS" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && python -c "from deepreason.ontology import Commitment; assert set(Commitment.model_fields)=={'id','eval','budget','observation_valued'}"`
 
 `formally_backed` is a superset of `execution_backed` **by construction, not by
 convention**: the two sets are disjoint, every `EXEC_PROGRAMS` member is
@@ -160,17 +165,19 @@ too: either would make the arrow silently unbounded.
 **Prose never mints a DEMONSTRATIVE warrant, and `crit.py` mints no
 ARGUMENTATIVE one.** `WarrantType.DEMONSTRATIVE` is constructed exactly once in
 the whole tree, inside `register_fail_warrant`, so "the verdict came from a
-program" cannot be asserted by a module that did not run one. There are five
+program" cannot be asserted by a module that did not run one. There are six
 ARGUMENTATIVE constructors and none is in the criticism rule: two in
 `informal/trial.py` (the defended trial and the pairwise loser), one in
 `rules/vision.py` behind the narrow guard, one in `rules/experiment.py` against
-a proposed PROPERTY rather than a candidate, and one in `imports.py` for an
-imported design. `crit.py` routes to the trial instead of packaging. The
+a proposed PROPERTY rather than a candidate, one in `rules/relatedness.py`
+(D2 rev 2, `relatedness_trial`, against a relatedness-CLAIM artifact rather
+than a candidate or property), and one in `imports.py` for an imported
+design. `crit.py` routes to the trial instead of packaging. The
 `crit_argumentative` grep is there to pay for the negative next to it: measured,
 renaming or deleting `rules/crit.py` made the bare `! grep` pass while proving
 nothing, and the ARGUMENTATIVE count does not notice because the file
 contributes none.
-`check: test "$(grep -rn "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason | wc -l)" -eq 1 && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && test "$(grep -rn "WarrantType.ARGUMENTATIVE" --include=*.py src/deepreason | wc -l)" -eq 5 && grep -q "^def crit_argumentative(" src/deepreason/rules/crit.py && ! grep -q "WarrantType.ARGUMENTATIVE" src/deepreason/rules/crit.py && grep -q "execution_backed" src/deepreason/rules/vision.py`
+`check: test "$(grep -rn "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason | wc -l)" -eq 1 && grep -q "type=WarrantType.DEMONSTRATIVE," src/deepreason/rules/warrants.py && test "$(grep -rn "WarrantType.ARGUMENTATIVE" --include=*.py src/deepreason | wc -l)" -eq 6 && grep -q "^def crit_argumentative(" src/deepreason/rules/crit.py && ! grep -q "WarrantType.ARGUMENTATIVE" src/deepreason/rules/crit.py && grep -q "execution_backed" src/deepreason/rules/vision.py`
 
 **There is no cache of "is this target formal", and the guards do not read the
 one cache that exists.** Both predicates call `programs.evaluate` live on every
@@ -281,4 +288,4 @@ out.
   `informal/audits.py`). A change to the ν wording, the `w:<κ>:<target>` id
   scheme or the critic provenance is not local to `rules/`; it moves the HV
   floor's warrants and the judge audits' findings too.
-`check: test "$(grep -rl register_fail_warrant --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 8 && test "$(grep -rl register_fail_warrant --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
+`check: test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 8 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`

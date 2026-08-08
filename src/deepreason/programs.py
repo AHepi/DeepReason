@@ -93,6 +93,36 @@ def content_text(artifact: Artifact, blobs) -> str:
         return ""
 
 
+_CODE_ONLY_NODES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Import, ast.ImportFrom)
+
+
+def is_pure_code(text: str) -> bool:
+    """True iff ``text`` is ENTIRELY code with no explanatory prose (D2
+    Amendment 4, R20/R54): a conjecture can never be full code, but this
+    is deliberately narrow — only a submission consisting SOLELY of
+    function/class/import statements trips it. Real prose is essentially
+    never syntactically valid Python, so this mechanical, kind-blind test
+    catches the unambiguous case (a bare function or class definition)
+    without risking a false positive on a worked-example-style
+    explanation that happens to parse (e.g. bare assignments), or on a
+    prose string quoting code inline (which is not valid Python syntax as
+    a whole, so it never reaches this branch at all)."""
+    try:
+        tree = ast.parse(text)
+    except (SyntaxError, ValueError):
+        return False
+    if not tree.body:
+        return False
+    if (
+        len(tree.body) == 1
+        and isinstance(tree.body[0], ast.Expr)
+        and isinstance(tree.body[0].value, ast.Constant)
+        and isinstance(tree.body[0].value.value, str)
+    ):
+        return False  # a bare string literal (e.g. a docstring-only submission) IS prose
+    return all(isinstance(node, _CODE_ONLY_NODES) for node in tree.body)
+
+
 _SAFE_NAMES = {
     "len": len, "any": any, "all": all, "min": min, "max": max, "abs": abs,
     "sum": sum, "str": str, "int": int, "float": float, "sorted": sorted,
@@ -132,6 +162,16 @@ def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.oracle import run_from_spec
 
     return run_from_spec(text, budget)
+
+
+def _candidate_checker(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Dual-mode conjecture's code-commitment channel (Rung D3): unlike
+    exec_oracle, the artifact's own content (``text``) is prose, never the
+    candidate under test (Amendment 1) — the checker source lives in the
+    commitment's own budget instead."""
+    from deepreason.oracle import run_from_full_spec
+
+    return run_from_full_spec(budget)
 
 
 def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
@@ -244,6 +284,7 @@ PROGRAMS: dict[str, ProgramSpec] = {
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
     "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
+    "candidate_checker": ProgramSpec("candidate_checker", _candidate_checker, "execution"),
     "generator_wf": ProgramSpec("generator_wf", _generator_wf, "structural"),
     "checker_wf": ProgramSpec("checker_wf", _checker_wf, "structural"),
     # Chunked website builds (manifest.py): the design's component manifest,

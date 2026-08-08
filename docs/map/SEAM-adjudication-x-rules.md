@@ -45,7 +45,7 @@ The independence is mutual and is at the level of names, not only of imports.
 | Supremacy guards | `rules/warrants.py` | `execution_backed`, `formally_backed` | whether an edge is CREATED; adjudication never learns either exists |
 | Availability handoff | `rules/crit.py` | `harness._oracle_pending`, `QUARANTINE_TICK` | an oracle that could not run mints no warrant, which downstream is indistinguishable from one that passed |
 | Return path, edges | `rules/experiment.py`, `rules/guards/anti_relapse.py` | `harness.state.att` | the only two rules-side readers of the attack relation |
-| Return path, labels | `rules/act.py`, `rules/experiment.py`, `rules/spawn.py`, `rules/vision.py`, `rules/guards/anti_relapse.py` | `state.status` | five rules read labels to choose what to work on; no rule writes one |
+| Return path, labels | `rules/act.py`, `rules/experiment.py`, `rules/spawn.py`, `rules/vision.py`, `rules/guards/anti_relapse.py`, `rules/relatedness.py` | `state.status` | six rules read labels to choose what to work on; no rule writes one |
 | Recompute point | `harness.py` | `Harness._adjudicate` | the ONLY caller of `build_att` anywhere in `src/`; `invariants.verify_root` does not call it, it reopens the root as a `Harness` and so recomputes through this same method |
 
 There is one recompute point, not two. `invariants.verify_root` never names
@@ -54,9 +54,11 @@ labels through the same `_adjudicate` the write path uses, and no second
 implementation of the fixpoint can drift from the first.
 `check: test "$(grep -rn "build_att(" --include=*.py src/deepreason | grep -vc "def build_att(")" -eq 1 && ! grep -q "build_att" src/deepreason/invariants.py && grep -q "h = Harness(root, read_only=True)" src/deepreason/invariants.py && python -c "import ast,inspect;from deepreason import harness as H;t=ast.parse(inspect.getsource(H));f=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='_adjudicate'];assert len(f)==1;assert sum(1 for c in ast.walk(f[0]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='build_att')==1"`
 
-One constructor, twelve call sites, and exactly two hand-built warrants inside
-`rules/` — both `ARGUMENTATIVE`, because `DEMONSTRATIVE` is written in one file.
-`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 12 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 8 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 2 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
+One constructor, twelve call sites, and exactly three hand-built warrants
+inside `rules/` — all `ARGUMENTATIVE` (D2 rev 2 added
+`rules/relatedness.py::relatedness_trial`'s own, reusing `relevance_trial`'s
+shape), because `DEMONSTRATIVE` is written in one file.
+`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 12 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 8 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 3 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
 
 `nu_interface` is a single optional parameter and the whole propagation surface a
 rule has; four sites in the tree pass it.
@@ -157,14 +159,18 @@ on every call and only ever adds; there is no retraction, no `discard`, no
 D8 (nothing is deleted) expressed as an absence of code rather than as a rule.
 `check: ! grep -qE "\.discard\(|\.remove\(|^ *del " src/deepreason/adjudication/edges.py && grep -q "att: set\[tuple\[str, str\]\] = set()" src/deepreason/adjudication/edges.py && test "$(grep -c "att.add(" src/deepreason/adjudication/edges.py)" -eq 5`
 
-**No rule computes, asserts or mutates a label; five read labels and only two
+**No rule computes, asserts or mutates a label; six read labels and only two
 read the attack relation.** Reading is deliberately allowed and is the seam's
 return path:
 `promoted_properties` uses `state.att` for "was this property ever attacked and
 did it survive", and the anti-relapse gate uses it to find a prior's refuters.
+D2 rev 2 added a sixth label-reader,
+`rules/relatedness.py::relatedness_claim_holds` — reads `state.status` for
+one relatedness-claim artifact's own verdict (R43), same read-only shape as
+every existing reader here.
 Both go through `EpistemicState`, so what they see is whatever the last
 `_adjudicate` produced — never a graph they computed themselves.
-`check: test "$(grep -rl "harness\.state\.att" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py " && test "$(grep -rl "state\.status" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/act.py src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py src/deepreason/rules/spawn.py src/deepreason/rules/vision.py " && ! grep -rqE "state\.(att|dep|status|conn)\s*(=[^=]|\.(add|update|discard|pop|clear)\()" --include=*.py src/deepreason/rules/ && grep -q "self.state.status = " src/deepreason/harness.py`
+`check: test "$(grep -rl "harness\.state\.att" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py " && test "$(grep -rl "state\.status" --include=*.py src/deepreason/rules | sort | tr "\n" " ")" = "src/deepreason/rules/act.py src/deepreason/rules/experiment.py src/deepreason/rules/guards/anti_relapse.py src/deepreason/rules/relatedness.py src/deepreason/rules/spawn.py src/deepreason/rules/vision.py " && ! grep -rqE "state\.(att|dep|status|conn)\s*(=[^=]|\.(add|update|discard|pop|clear)\()" --include=*.py src/deepreason/rules/ && grep -q "self.state.status = " src/deepreason/harness.py`
 
 ## How to change it
 

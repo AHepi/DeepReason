@@ -27,11 +27,16 @@ the adapter is duck-typed: `rules/` never imports `LLMAdapter`, only its typed
 failures and its data, so every rule is testable against a fake adapter exactly
 as it is against a fake harness.
 
-More than two dozen files under `src/deepreason` mention both words. Six modules
-in `rules/` actually import `llm/`; five of those dispatch; two — `conj.py` and
+More than two dozen files under `src/deepreason` mention both words. Eight modules
+in `rules/` actually import `llm/`; seven of those dispatch; two — `conj.py` and
 `crit.py` — carry the route, contract and transaction agreement and hold eight of
-the thirteen `adapter.call` sites in the package.
-`check: ! grep -rq "deepreason\.rules" --include=*.py src/deepreason/llm && test "$(for f in $(grep -rl llm --include=*.py src/deepreason); do grep -ql rules "$f" && echo x; done | wc -l)" -ge 25 && test "$(grep -rl "deepreason\.llm" --include=*.py src/deepreason/rules | wc -l)" -eq 6 && test "$(grep -rl "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 5 && test "$(grep -rh "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 13 && test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py | grep -c "adapter\.call(")" -eq 8`
+the fifteen `adapter.call` sites in the package. D2 rev 2 added two of the seven
+dispatchers, `rules/relatedness.py` (`relatedness_trial`, reusing the `judge`
+role) and `rules/encoding.py` (`draft_encoded_commitment`, reusing
+`property_designer` via `template_role`) — neither carries a route/contract/
+transaction agreement, so `conj.py`/`crit.py`'s own eight-site share is
+unchanged.
+`check: ! grep -rq "deepreason\.rules" --include=*.py src/deepreason/llm && test "$(for f in $(grep -rl llm --include=*.py src/deepreason); do grep -ql rules "$f" && echo x; done | wc -l)" -ge 25 && test "$(grep -rl "deepreason\.llm" --include=*.py src/deepreason/rules | wc -l)" -eq 8 && test "$(grep -rl "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 7 && test "$(grep -rh "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 15 && test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py | grep -c "adapter\.call(")" -eq 8`
 
 Thirty-nine names cross the boundary, and every one of them is data or a refusal:
 five exception types, eleven canonical output models, six pack renderers with two
