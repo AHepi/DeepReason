@@ -1,0 +1,42 @@
+{
+  "funnel_all_stages": {
+    "compiled": 0,
+    "consumed": 0,
+    "denied": 0,
+    "dispatched": 0,
+    "failed": 0,
+    "granted": 0,
+    "proposed": 1,
+    "result_packaged": 0,
+    "succeeded": 0,
+    "validated": 0
+  },
+  "funnel_primary": {
+    "compiled": 0,
+    "dispatched": 0,
+    "granted": 0,
+    "proposed": 1,
+    "succeeded": 0,
+    "validated": 0
+  },
+  "proposal_count": 1,
+  "proposal_types": [
+    "SimulationProposalV1"
+  ],
+  "proposals_detail": [
+    {
+      "proposal_id": "sha256:101950108968cc1671245d3808e53aa211fc072f1f281085eea2146ee9e11166",
+      "stages_reached": [
+        "proposed"
+      ]
+    }
+  ],
+  "reached_compiled_ever": false,
+  "reached_succeeded": false,
+  "replay_valid": true,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+  "seed_idx": "4",
+  "state": "failed",
+  "stop_reason": "operational_failure",
+  "verify_violations": []
+}

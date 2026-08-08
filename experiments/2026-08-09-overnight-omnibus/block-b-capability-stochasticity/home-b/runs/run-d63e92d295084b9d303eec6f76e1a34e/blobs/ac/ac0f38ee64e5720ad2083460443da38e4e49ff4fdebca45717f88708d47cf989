@@ -1,0 +1,52 @@
+{
+  "candidate": {
+    "claim": "The problem cannot be resolved by reasoning alone; it mandates executing the exact recurrence to tally the counts. The generator's fairness must be evaluated by returning the six face counts plus total as flat observables, after emitting a 10-pair calibration trace.",
+    "mechanism": "A simulation proposal files a typed `sandboxed_python_v1` program that exactly matches the specification's recurrence and face-mapping, runs it, and outputs the observed counts. The calibration trace enables independent byte-level verification of the first ten pairs, after which the final flat observables can be checked against the two-standard-deviation fairness window.",
+    "counterconditions": [
+      "The simulated counts do not fall within two standard deviations of the uniform expectation.",
+      "The calibration trace does not match the hand-calculable specification.",
+      "The simulation program includes elements outside the single `def simulate(inputs, rng)` structure.",
+      "The simulation fails to return the six face counts and total as flat observables."
+    ],
+    "typicality": 0.95,
+    "evidence_refs": [
+      {
+        "block": "c6c31b919b1cd091",
+        "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      },
+      {
+        "block": "1c2d18924a3064bc",
+        "quote": "The program's shape is fixed and the schema states it: the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS "
+      },
+      {
+        "block": "a3db120ba929af11",
+        "quote": "A simulation that only asserts a verdict is weight, not evidence. Return the discriminating quantity itself -- the six counts, the calibration trace -- never a "
+      }
+    ],
+    "checker_specs": [
+      {
+        "name": "calibration_trace_check",
+        "args": {
+          "first_pair": "X_1=12345, die_1=1"
+        }
+      }
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003",
+      "SRC_009"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_009"
+      ]
+    }
+  }
+}

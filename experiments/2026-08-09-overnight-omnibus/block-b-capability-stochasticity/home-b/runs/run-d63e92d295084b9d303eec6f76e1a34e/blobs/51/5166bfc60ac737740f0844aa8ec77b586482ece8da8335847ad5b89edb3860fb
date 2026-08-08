@@ -1,0 +1,11 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/values",
+    "operation": "replace",
+    "value": {
+      "baseline": {}
+    }
+  }
+}
+```
