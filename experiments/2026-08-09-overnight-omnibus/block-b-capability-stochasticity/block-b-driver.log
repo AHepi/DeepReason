@@ -1,0 +1,10 @@
+=== block-b start 2026-08-08T22:49:46Z head=975f763a ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
