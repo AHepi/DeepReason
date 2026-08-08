@@ -449,3 +449,131 @@ to compute one); the already-qualified caches remain valid and reused
 on relaunch.
 
 Failure budget: 5/10 spent.
+
+## 2026-08-08 — the corrected demonstration lands: `run-6995cd12124d2697030bb4b9e48f79bd`
+
+Relaunched with the corrected `--cycles 10 --token-budget 195000`.
+`setup_rc=0`; `qualify_rc=0` in 1 second (both the base combination and
+the `conjecture` seat hit warm caches carried over from every earlier
+attempt on this same `DEEPREASON_HOME` — the underlying model/role
+qualification never changed across Failures #3-#5, only the run-level
+budget knobs did). `reason_rc=0` after 943 seconds, 10 cycles,
+`stop_reason=budget_exhausted`.
+
+**audit1** (before continuation):
+
+```json
+{
+  "attribution_clean": true,
+  "conjecturer_calls_on_gemma": true,
+  "argumentative_critic_calls_on_glm": true,
+  "llm_calls_by_role": {"argumentative_critic": ["glm-5.2"], "conjecturer": ["gemma4:31b"]},
+  "seat_bindings_stamp_count": 1,
+  "seat_bindings_stamps": [{"bindings": [{"group": "conjecture", "model_id": "gemma4:31b", "provider": "ollama"}], "digest": "f00553dfcf4dea5160b78366e897f2ab9fc85aaf513a71eca1365a84c72329bb"}],
+  "state": "completed", "stop_reason": "budget_exhausted",
+  "replay_valid": false,
+  "verify_violations": ["foreign-criticism", /* x15 */]
+}
+```
+
+Attribution and the stamp were already exactly right — 10 cycles of
+`gemma4:31b` producing conjectures and `glm-5.2` producing criticism, in
+one shared typed record. But `replay_valid` was still `false`: 15
+targets short of foreign-school criticism this time (up from 9 at 6
+cycles), confirming the diagnosis from the Failure #4 segment —
+`gemma4:31b`'s `conjecturer` throughput outpaces `glm-5.2`'s
+`argumentative_critic` dispatch under this run's shape, and MORE cycles
+widened the gap rather than closing it (154 accepted school-owned
+artifacts at 10 cycles vs. 95 at 6). More budget was the wrong lever
+for this specific gap; it happened to still leave the run resumable.
+
+This run's `log.jsonl` was checked for `schema_exhausted` (the trigger
+that put the retired `failed-epoch1` root into the recovery path that
+crashed `continue` under Failure #4): zero occurrences. So the specific
+crash condition from P3 did not apply here, and `continue --budget
+cycles=2` was safe to run — it completed cleanly, `continue_rc=0` in
+698 seconds, no `NonConjectureRecoveryAuthorityError`, no operational
+failure.
+
+**audit2** (after continuation) — the tranche's accept criteria, all
+four, from the typed record:
+
+```json
+{
+  "attribution_clean": true,
+  "conjecturer_calls_on_gemma": true,
+  "argumentative_critic_calls_on_glm": true,
+  "llm_calls_by_role": {"argumentative_critic": ["glm-5.2"], "conjecturer": ["gemma4:31b"]},
+  "llm_call_count": 57,
+  "seat_bindings_stamp_count": 2,
+  "seat_bindings_stamps": [
+    {"bindings": [{"group": "conjecture", "model_id": "gemma4:31b", "provider": "ollama"}], "digest": "f00553dfcf4dea5160b78366e897f2ab9fc85aaf513a71eca1365a84c72329bb"},
+    {"bindings": [{"group": "conjecture", "model_id": "gemma4:31b", "provider": "ollama"}], "digest": "f00553dfcf4dea5160b78366e897f2ab9fc85aaf513a71eca1365a84c72329bb"}
+  ],
+  "state": "completed", "stop_reason": "budget_exhausted",
+  "replay_valid": true,
+  "verify_violations": [],
+  "events": 1979, "artifacts": 177
+}
+```
+
+- **(a) work attribution** — every `conjecturer` call in the record
+  went to `gemma4:31b`; every `argumentative_critic` call went to
+  `glm-5.2`. No mixing, no exceptions, across 57 total LLM calls.
+- **(b) stamp matches what setup bound** — `deepreason setup --seat
+  "conjecture=$LIVE/coder-profile.yaml"` bound the `conjecture` group
+  (`conjecturer`, `variator`) to `gemma4:31b`; the typed record's own
+  seat-bindings stamp says exactly that, `group: "conjecture",
+  model_id: "gemma4:31b"` — read from the record, not asserted from the
+  command line.
+- **(c) verify_root green** — `replay_valid: true`, zero violations of
+  any kind. It took two attempts to reach (the 6-cycle and 10-cycle
+  shapes both left foreign-criticism debt at their own natural stop
+  point; the +2-cycle continuation is what finally closed it), and that
+  itself is now-documented evidence about this harness's own behavior,
+  not swept aside.
+- **(d) continuation preserves bindings** — two seat-bindings stamps,
+  byte-identical `digest` and `bindings` content. The second stamp is
+  Rung S5's own documented design (`Scheduler._record_seat_bindings`
+  re-stamps on resume, by design, so a continued run's record still
+  says explicitly who is bound where without relying on the first
+  stamp reaching across a process boundary) — not a bug, and proven
+  here to actually hold under a real two-model continuation, not just
+  the offline regression.
+
+## Verdict (corrected)
+
+Rung S6 is DELIVERED on `run-6995cd12124d2697030bb4b9e48f79bd`: a live,
+two-model run whose typed record alone (not model prose) proves which
+model produced every attempt, that the record's own stamp of who-was-
+bound-where matches what the operator's CLI actually bound, that the
+whole run replays clean, and that a continuation preserves that
+attribution byte-for-byte. This supersedes the first live run's
+verdict, whose own attribution proof was correct but whose grounds
+(`coder`/`property_designer`) were later shown structurally incapable
+of ever exercising the seat it demonstrated (PARKED.md P1) — the
+`conjecture` seat exercised here is the one that does the run's actual
+conjecture-authoring work on every ordinary cycle, with no bootstrap
+circularity standing between it and firing.
+
+Three defects were found live and parked, not fixed, per this
+tranche's own no-code rule (`src/`, `tests/`, `tools/`, `docs/map/`
+byte-untouched throughout — verified: `git diff
+origin/claude/s5-dr-plan-steps-q5utlc...HEAD --stat -- src tests tools
+docs/map` is empty):
+
+- **P1** — `property_designer` (the `coder` group's only role) has no
+  public dispatch path at all; a bootstrap circularity, not a
+  probability.
+- **P2** — run identity (`_request_digest`) excludes seat bindings
+  entirely, so the same question run twice under two different `--seat`
+  configurations collides on identity.
+- **P3** — `deepreason continue` can crash
+  (`NonConjectureRecoveryAuthorityError`) resuming a run stopped
+  mid-decomposition of a `schema_exhausted` criticism batch; general,
+  not seat-specific, reproducible on the retired
+  `failed-epoch1-run-8c77c6588485304d1f73416318c62949` fixture.
+
+Failure budget: 5/10 spent, rung delivered before exhaustion. Per the
+operator's explicit instruction, this tranche stops here — no
+DELIVERY.md close-out unless separately requested.
