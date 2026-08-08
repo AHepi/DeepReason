@@ -1,0 +1,11 @@
+```json
+{
+  "repair": [
+    {
+      "op": "replace",
+      "path": "/candidates/5/optional_refs/1",
+      "value": "SRC_007"
+    }
+  ]
+}
+```
