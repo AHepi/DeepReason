@@ -97,12 +97,18 @@ def _insertions(base: str, against: str | None, paths: list[str]) -> int:
 
 
 def compute(base: str, against: str | None, ceiling: int | None, paths: list[str]) -> dict:
-    areas = (
-        {path: _insertions(base, against, [path]) for path in paths}
-        if paths
-        else {"total": _insertions(base, against, [])}
-    )
-    total_insertions = _insertions(base, against, [])
+    if paths:
+        areas = {path: _insertions(base, against, [path]) for path in paths}
+        # One combined call over every declared path, not sum(areas.values()):
+        # git dedupes a file matched by more than one pathspec, so overlapping
+        # --paths never double-count. A file outside every declared path is
+        # excluded, same as it is from `areas` -- the ceiling covers what was
+        # named, not the whole diff (S5's own precedent: REQUEST.md/SPEC.md/
+        # CHECKLIST.md were never counted toward its ceiling).
+        total_insertions = _insertions(base, against, paths)
+    else:
+        areas = {"total": _insertions(base, against, [])}
+        total_insertions = areas["total"]
     if ceiling is None:
         verdict = "NO_CEILING"
     elif total_insertions <= ceiling:

@@ -122,7 +122,7 @@ order. One step per dr-execute-step invocation.
       12 passed in 2.46s
       ```
 
-- [ ] 6. (S3) [COMMIT] Retrodiction: `git fetch origin
+- [x] 6. (S3) [COMMIT] Retrodiction: `git fetch origin
       claude/s5-dr-plan-steps-q5utlc`; run `python tools/diff_budget.py
       54feb5cc --against ca34dc49 --ceiling 300 --paths src/ tests/
       docs/map/ tools/root_sweep.py` and the same command with
@@ -133,6 +133,42 @@ order. One step per dr-execute-step invocation.
       (`total_insertions` 361) — the commit ("step 7-10", `b0813f59`)
       REQUEST.md Amendment 2 names as where the overrun was caught by
       hand; push succeeds.
+
+      Mid-step discovery, fixed before commit (touches only S1/S2's own
+      files, no new scope): the FIRST run of this step's commands
+      returned `total_insertions: 700` (WITH/EXCEEDED at BOTH commits),
+      not 284/361. Cause: `compute()` computed `total_insertions` from
+      an UNRESTRICTED diff regardless of `--paths`, so S5's own
+      REQUEST.md/SPEC.md/CHECKLIST.md -- outside the declared
+      src/+tests/+docs/map/+tools/root_sweep.py scope -- leaked into
+      the number the ceiling was checked against. This is the same
+      class of mistake as the SPEC.md Budget-scope correction under
+      step 1 above, now caught in the tool's own logic instead of a
+      planning document. Fixed in `tools/diff_budget.py`'s `compute()`:
+      when `--paths` is given, `total_insertions` is now one combined
+      `git diff --numstat` call over every declared path (git dedupes
+      a file matched by more than one pathspec, so overlapping
+      `--paths` still cannot double-count), never the whole diff.
+      Added two tests: `test_total_insertions_excludes_files_outside_
+      declared_paths` (a file outside every `--paths` entry must not
+      leak into the total) and `test_total_insertions_no_double_count_
+      on_overlapping_paths` (a directory pathspec and a file inside it
+      must count once). Full suite after the fix:
+      ```
+      .............                                                            [100%]
+      13 passed in 2.65s
+      ```
+      Retrodiction re-run, now correct:
+      ```
+      BEFORE (ca34dc49): {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "54feb5cc", "against": "ca34dc49", "areas": {"src/": 126, "tests/": 158, "docs/map/": 0, "tools/root_sweep.py": 0}, "total_insertions": 284, "ceiling": 300, "verdict": "WITHIN"}
+      AT (b0813f59):     {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "54feb5cc", "against": "b0813f59", "areas": {"src/": 149, "tests/": 212, "docs/map/": 0, "tools/root_sweep.py": 0}, "total_insertions": 361, "ceiling": 300, "verdict": "EXCEEDED"}
+      ```
+      284 and 361 match REQUEST.md Amendment 2's own numbers exactly
+      ("actual `src/` + `tests/` lines already at 361 ... before step
+      10's commit"). The gate flags the overrun at `b0813f59` ("step
+      7-10"), not at `ca34dc49` ("step 5-6") one step earlier and not
+      at every step indiscriminately -- the retrodiction acceptance
+      criterion (R10).
 
 - [ ] 7. (S4) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`
       step 6 ("Set the budget") per SPEC.md S4: headline must equal the
