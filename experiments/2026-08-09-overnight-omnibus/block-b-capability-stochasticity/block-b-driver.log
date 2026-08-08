@@ -20,3 +20,4 @@ run_id=run-168a41157d05ca53431f268fba264b4c tag=s3
 audit_rc=0 tag=s3
 reason_rc=4 reason_seconds=326 tag=s4
 run_id=run-d63e92d295084b9d303eec6f76e1a34e tag=s4
+audit_rc=0 tag=s4
