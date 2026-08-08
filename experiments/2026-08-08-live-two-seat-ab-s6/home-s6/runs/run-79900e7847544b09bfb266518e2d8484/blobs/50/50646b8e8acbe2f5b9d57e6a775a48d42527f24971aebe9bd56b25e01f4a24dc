@@ -1,0 +1,8 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/scratch_proposal/links_meta",
+    "op": "remove"
+  }
+}
+```

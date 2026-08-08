@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 demands representational separation (different tokenizers/geometries) as necessary for independence, but this is stronger than the problem requires and is self-undermined by its own analogy. SRC_001 notes that a formal proof checker can verify a human's proof without sharing representation — yet a proof checker shares the same formal system (inference rules, axioms, definitions) as the proof author. If shared formal system does not defeat independence there, then SRC_001 never identifies why shared tokenization/attention specifically defeats it, other than asserting 'systematic errors transfer.' But its own perturbation test (feed the checker a notation variant the generator mishandled) is a within-single-engine, within-single-run test that could demonstrate independence — directly contradicting SRC_001's own necessity claim for engine separation. The target thus supplies the very counterexample its stated position must rule out.",
+      "counterexample": [
+        {
+          "scenario": "Same engine, frozen verifier module",
+          "perturbation_test": "Feed the frozen verifier a notation variant the generative module mishandled; if the verifier flags the error, representational independence is demonstrated without engine separation, falsifying SRC_001's necessity claim using SRC_001's own proposed test."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 concedes that for executable claims the raw execution output is a sufficient single-run oracle witness and that deterministic oracles inject a known independence assumption substituting for population evidence. But the problem explicitly asks, 'Where a claim can be tested by counting or by execution, say exactly what to count or execute.' By SRC_002's own logic, for those claims the single-run record is NOT insufficient — the oracle output is the independence evidence. Yet SRC_002's headline claim states the evidence is 'always insufficient' for any single run. The executable-claim exemption is not a footnote; it is the problem's central test case, and SRC_002's own concession refutes its universal 'always' quantifier.",
+      "counterexample": [
+        {
+          "claim_type": "Counting claim",
+          "single_run_record": "Raw counter output: 7",
+          "independence_evidence": "The deterministic counter's output is produced by a procedure whose correctness is a theorem, so its errors are uncorrelated with the author by construction — no population statistics needed.",
+          "defeats": "SRC_002's claim that single-run evidence is 'always insufficient' for independent verification."
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false
+    }
+  ]
+}

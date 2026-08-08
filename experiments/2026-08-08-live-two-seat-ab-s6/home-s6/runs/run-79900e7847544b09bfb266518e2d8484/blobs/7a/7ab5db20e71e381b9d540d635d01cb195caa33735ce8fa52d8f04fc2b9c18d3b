@@ -1,0 +1,40 @@
+{
+  "candidates": [
+    {
+      "content": "The isolated node abstracts to SRC_003: both reduce to the 'single trajectory' problem — one run-record is one sample from the joint distribution P(claim, verdict), so it cannot support a population-level claim about verification independence. REFUTED IF: a single run-record is shown to carry population-level information (e.g., via an internal execution trace with n independent deterministic sub-checks, making one record many samples) — then the trajectory is not n=1 and the reduction to SRC_003's single-data-point critique fails.",
+      "typicality": 0.95,
+      "evidence_refs": [],
+      "neighbours": ["SRC_003", "SRC_002", "SRC_004"]
+    },
+    {
+      "content": "The isolated node depends on SRC_005: the causal decorrelation criterion subsumes the architectural split. If the isolated verifier's verdict is causally decorrelated from the producer's claim (by consulting an oracle), engine separation is not necessary. The isolated node is a downstream instance of SRC_005's covering principle. REFUTED IF: causal decorrelation is demonstrably unachievable without architectural engine separation, making the isolated single-engine case categorically different from the cross-engine case and breaking the dependence.",
+      "typicality": 0.85,
+      "evidence_refs": [],
+      "neighbours": ["SRC_005", "SRC_001", "SRC_003"]
+    },
+    {
+      "content": "The isolated node contradicts SRC_003: SRC_003 argues that no single-run procedural criterion suffices for genuine verification, while the isolated node posits that a perturbation-sensitivity ablation (SCR_002) within a single run yields a causal-mechanism sufficient to distinguish genuine verification from restatement. The contradiction is at the level of what single-run evidence is enough. REFUTED IF: the ablation test's verdict-sensitivity is itself a single sample with insufficient statistical power, vindicating SRC_003's demand for population statistics and negating the contradiction.",
+      "typicality": 0.65,
+      "evidence_refs": [],
+      "neighbours": ["SRC_003", "SRC_002", "SRC_005"]
+    },
+    {
+      "content": "The isolated node shares mechanism with SRC_004: both invoke source independence and operational independence as distinct dimensions of verification. The isolated node's question (whether single-engine verification can be independent) operationalizes SRC_004's two-dimensional audit protocol. REFUTED IF: source and operational independence are shown to be perfectly correlated in practice (e.g., same training history always produces identical run records, or vice versa), collapsing the two dimensions into one and eliminating the shared mechanism.",
+      "typicality": 0.6,
+      "evidence_refs": [],
+      "neighbours": ["SRC_004", "SRC_001", "SRC_005"]
+    },
+    {
+      "content": "The isolated node is compatible with SRC_001: SRC_001 proposes that separation of authoring and checking is not strictly necessary — a self-executed test yields an external observable distinct from the claim text. The isolated node applies this to the single-engine case: a deterministic execution check within one engine is genuinely independent if it produces a result that could contradict the claim. REFUTED IF: a self-executed check by an LLM is shown to be systematically biased toward confirming the engine's own claims (implementation alignment), such that the 'external observable' is actually a restatement dressed as execution — the compatibility breaks and the isolated node becomes a non-example.",
+      "typicality": 0.45,
+      "evidence_refs": [],
+      "neighbours": ["SRC_001", "SRC_004", "SRC_002"]
+    },
+    {
+      "content": "The isolated node integrates SRC_002 with SRC_005: it takes SRC_002's discriminating-operation criterion (execution, count, transformation whose output is not derivable from the claim) and SRC_005's causal-decorrelation principle, uniting them in a perturbation-sensitivity test. The integrated criterion is: the verdict must be causally sensitive to a decorrelated input (SRC_005), operationalized as a concrete execution ablation (SRC_002). REFUTED IF: the perturbation test is gameable by a restater — e.g., the verdict flips for irrelevant perturbations while ignoring the execution-relevant ones, so the test does not actually measure the claimed integration of discriminating operation and causal decorrelation.",
+      "typicality": 0.2,
+      "evidence_refs": [],
+      "neighbours": ["SRC_002", "SRC_005", "SRC_001"]
+    }
+  ]
+}
