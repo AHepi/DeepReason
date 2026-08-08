@@ -852,7 +852,160 @@ named explicitly so D2/D4 do not have to re-discover it.
 
 ## 5. Load-knob inventory (R10, SPEC.md S9)
 
-(filled in step 12)
+Two families, structurally distinct: `Config` (`config.py`) knobs are
+read LIVE from a mutable per-run-instance object the `Scheduler` holds a
+reference to — never digested into the manifest (`INV-frozen-surfaces.md`:
+"When a change needs a new per-run mode, put it on `Config`... never on
+the manifest... `ARGUMENTATIVE_AUTHORITY` is a `Config` field"). Every
+other family below (capability policies, `v6_policy.py` presets,
+`CriticismPolicyV1`, scratch `AttentionPolicyV1`) is a field on
+`RunManifest` or a manifest-embedded sub-model, hashed into the manifest
+digest at mint time — a value in these families cannot change mid-run
+without minting a different run identity.
+
+```
+$ sed -n '10,13p' src/deepreason/config.py
+Knobs whose spec start value is "tune" default to ``None`` and must be set
+before the phases that consume them.
+"""
+```
+```
+$ grep -n "class Config(BaseModel)" src/deepreason/config.py
+247:class Config(BaseModel):
+```
+`Config` is instantiated once per run and passed by reference into
+`Scheduler.__init__`; nothing re-reads it from a frozen digest — this is
+the "read live" family for every row below marked Config.
+
+| Knob | Location | Unit | Default | Mint-time vs live |
+|---|---|---|---|---|
+| `INTEGRATION_BUDGET_SHARE` | `config.py:263` | fraction of cycles | `0.30` | Live (`Config`) |
+| `TRIAL_PARAPHRASE_N` | `config.py:268` | count | `2` | Live (`Config`) |
+| `AUDIT_PERIOD` | `config.py:270` | cycles | `30` | Live (`Config`) |
+| `USER_RULINGS_BUDGET` | `config.py:271` | count | `2` | Live (`Config`) |
+| `HOLDOUT_SHARE` | `config.py:272` | fraction | `0.2` | Live (`Config`) |
+| `XEXAM_SHARE` | `config.py:276` | fraction | `0.15` | Live (`Config`) |
+| `RESEED_RATIO_MAX` | `config.py:288` | fraction | `0.3` | Live (`Config`) |
+| `NEIGHBOURHOOD_N` | `config.py:299` | count (exemplars/pack) | `8` | Live (`Config`) |
+| `CAPTURE_W` | `config.py:318` | count | `20` | Live (`Config`) |
+| `CRIT_DEBT_CEILING` | `config.py:321` | fraction | `0.5` | Live (`Config`) |
+| `RESEARCH_PERIOD` | `config.py:332` | cycles | `5` | Live (`Config`) |
+| `RESEARCH_ATTEMPTS_MAX` | `config.py:356` | count | `5` | Live (`Config`) |
+| `CX_RETRY_MAX` | `config.py:407` | count | `1` | Live (`Config`) |
+| `FUZZ_N` | `config.py:418` | count | `64` | Live (`Config`) |
+| `GEN_PROPOSE_PERIOD` | `config.py:424` | cycles | `5` | Live (`Config`) |
+| `GEN_MAX` | `config.py:425` | count | `3` | Live (`Config`) |
+| `PROP_PROPOSE_PERIOD` | `config.py:433` | cycles | `7` | Live (`Config`) |
+| `PROP_MAX` | `config.py:434` | count | `3` | Live (`Config`) |
+| `DISC_ATTEMPTS_MAX` | `config.py:441` | count | `3` | Live (`Config`) |
+| `HV_CONTENT_MAX_CHARS` | `config.py:450` | chars | `8000` | Live (`Config`) |
+| `CHUNK_MAX_CHARS` | `config.py:521` | chars | `4000` | Live (`Config`) |
+| `PACK_TOKEN_BUDGET` | `config.py:528` | tokens | `2500` | Live (`Config`) |
+| `RETRY_MAX` | `config.py:529` | count | `2` | Live (`Config`) |
+| `ARG_CRIT_PER_CYCLE` | `config.py:358` | targets/cycle | `None` (uncapped) | Live (`Config`) |
+| `CRIT_BATCH_K` | `config.py:363` | targets/call | `None` (1) | Live (`Config`) |
+| `RECRIT_STANDING` | `config.py:413` | bool (feature gate) | `True` | Live (`Config`) |
+
+```
+$ grep -n "^class " src/deepreason/capabilities/policy.py
+16:class _PolicyModel(BaseModel):
+40:class SimulationInputBindingV1(_PolicyModel):
+59:class SimulationCapabilityPolicyV1(_PolicyModel):
+172:class FrozenEvidenceItemV1(_PolicyModel):
+196:class FrozenEvidencePolicyV1(_PolicyModel):
+250:class AttachedEvidencePolicyV1(_PolicyModel):
+286:class FormalizationCapabilityPolicyV1(_PolicyModel):
+304:class ResearchCapabilityPolicyV1(_PolicyModel):
+380:class ConfigRefereePolicyV1(_PolicyModel):
+417:class InquiryCapabilityPolicyV1(_PolicyModel):
+```
+```
+$ grep -n "simulation_capability_policy: SimulationCapabilityPolicyV1" src/deepreason/run_manifest.py
+1195:    simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None
+```
+Confirms `SimulationCapabilityPolicyV1` is a `RunManifest` field — every
+knob inside it is hashed into the manifest and therefore mint-time
+frozen:
+
+| Knob | Location | Unit | Default | Mint-time vs live |
+|---|---|---|---|---|
+| `maximum_simulation_requests` | `capabilities/policy.py:79` | requests/run | `0` | Mint-time (`RunManifest.simulation_capability_policy`) |
+| `maximum_simulation_executions` | `capabilities/policy.py:80` | executions/run | `0` | Mint-time (manifest) |
+| `maximum_proposals_per_turn` | `capabilities/policy.py:81` | proposals/turn | `0` | Mint-time (manifest) |
+| `maximum_generated_code_bytes` | `capabilities/policy.py:82` | bytes | `0` | Mint-time (manifest) |
+| `maximum_input_bytes` | `capabilities/policy.py:83` | bytes | `0` | Mint-time (manifest) |
+| `maximum_output_bytes` | `capabilities/policy.py:84` | bytes | `0` | Mint-time (manifest) |
+| `maximum_wall_ms` | `capabilities/policy.py:85` | milliseconds | `0` | Mint-time (manifest) |
+| `maximum_memory_bytes` | `capabilities/policy.py:86` | bytes | `0` | Mint-time (manifest) |
+| `maximum_steps` | `capabilities/policy.py:87` | steps | `0` | Mint-time (manifest) |
+| `maximum_samples` | `capabilities/policy.py:88` | samples | `0` | Mint-time (manifest) |
+| `maximum_follow_up_reasoning_turns` | `capabilities/policy.py:93` | turns/run | `0` | Mint-time (manifest) |
+| `maximum_sources` (research) | `capabilities/policy.py:201` | sources/run | `0` | Mint-time (manifest) |
+| `maximum_excerpt_bytes_per_source` | `capabilities/policy.py:202` | bytes | `0` | Mint-time (manifest) |
+| `maximum_total_excerpt_bytes` | `capabilities/policy.py:203` | bytes | `0` | Mint-time (manifest) |
+| `maximum_requests` (inquiry) | `capabilities/policy.py:320` | requests/run | `0` | Mint-time (manifest) |
+| `cadence_cycles` | `capabilities/policy.py:394` | cycles | `0` | Mint-time (manifest) |
+| `window_events` | `capabilities/policy.py:395` | events | `0` | Mint-time (manifest) |
+
+```
+$ grep -n "class CriticismPolicyV1" -A 8 src/deepreason/run_manifest.py
+522:class CriticismPolicyV1(BaseModel):
+...
+531:    minimum_foreign_school_coverage: int = Field(ge=1, le=1_023)
+533:    max_batch_size: int = Field(ge=1, le=256)
+```
+
+| Knob | Location | Unit | Default | Mint-time vs live |
+|---|---|---|---|---|
+| `minimum_foreign_school_coverage` | `run_manifest.py:531` | schools | none (required, 1-1023) | Mint-time (manifest, `frozen=True` model) |
+| `max_batch_size` | `run_manifest.py:533` | targets/call | none (required, 1-256) | Mint-time (manifest, `frozen=True` model) |
+
+```
+$ grep -n "class AttentionPolicyV1" -A 20 src/deepreason/scratch/attention.py
+33:class AttentionPolicyV1(ScratchRecord):
+34:    """Immutable policy seam later compiled into RunManifest v3."""
+39:    max_blocks_per_pack: int = Field(gt=0, le=1_000)
+40:    max_guides_per_pack: int = Field(ge=0, le=100)
+44:    coverage_slot_every_n_packs: int = Field(gt=0)
+45:    exploratory_fraction: float = Field(ge=0.0, le=1.0)
+46:    underexposed_fraction: float = Field(ge=0.0, le=1.0)
+47:    dormant_after_events: int = Field(ge=0)
+48:    similarity_top_k: int = Field(gt=0, le=10_000)
+50:    guide_max_open_threads: int = Field(ge=0, le=256)
+51:    guide_max_entry_points: int = Field(ge=0, le=256)
+```
+The class's own docstring states it: "Immutable policy seam later
+compiled into RunManifest v3" — mint-time by the type's own design intent.
+
+| Knob | Location | Unit | Default | Mint-time vs live |
+|---|---|---|---|---|
+| `max_blocks_per_pack` | `scratch/attention.py:39` | blocks/pack | none (required, 1-1000) | Mint-time (compiled into `RunManifest` v3) |
+| `max_guides_per_pack` | `scratch/attention.py:40` | guides/pack | none (required, 0-100) | Mint-time (manifest) |
+| `coverage_slot_every_n_packs` | `scratch/attention.py:44` | packs | none (required, >0) | Mint-time (manifest) |
+| `exploratory_fraction` | `scratch/attention.py:45` | fraction | none (required, 0-1) | Mint-time (manifest) |
+| `underexposed_fraction` | `scratch/attention.py:46` | fraction | none (required, 0-1) | Mint-time (manifest) |
+| `dormant_after_events` | `scratch/attention.py:47` | events | none (required, >=0) | Mint-time (manifest) |
+| `similarity_top_k` | `scratch/attention.py:48` | count | none (required, 1-10000) | Mint-time (manifest) |
+| `guide_max_open_threads` | `scratch/attention.py:50` | threads | none (required, 0-256) | Mint-time (manifest) |
+| `guide_max_entry_points` | `scratch/attention.py:51` | entry points | none (required, 0-256) | Mint-time (manifest) |
+
+`v6_policy.py`'s "engaged" preset is a fixed COMPILATION of the manifest
+fields above (`PUBLIC_SCHOOL_COUNT = 4`, `v6_policy.py:53`, and the "fixed
+public 6-cycle/100k-token envelope" the module's own docstring names) —
+not a separate knob family, a specific set of frozen VALUES for the
+mint-time fields already tabled. No additional live-read knob lives in
+this module.
+
+**Summary for D4:** the Config family (26 knobs tabled) is where a
+future load-dial mechanism would act WITHOUT minting a new run —
+D4's own accept criterion ("a no-mix-specified run is byte-identical to
+today") is easiest to satisfy here, since these are already read live
+and already have no manifest-digest interaction. Every manifest-embedded
+family (17 knobs tabled across capability policies, criticism policy, and
+scratch attention) would require a NEW MANIFEST per mix — consistent
+with D4's own "Frozen at mint time into the manifest (the rung-7
+placement law: a continuation continues under the mix it was minted
+with)" design note.
 
 ## 6. Historical encoding-failure evidence (R11, SPEC.md S10)
 
