@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=3 blockers=none
+State: next=9 blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -190,7 +190,7 @@ order. One step per dr-execute-step invocation.
       WITHIN, but only 4 lines of headroom before the ledgered ceiling,
       with step 8's amendment still ahead -- flagged for step 8.
 
-- [ ] 8. (S5) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
+- [x] 8. (S5) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
       step 6 per SPEC.md S5: invoke `tools/diff_budget.py` against the
       tranche-base and SPEC.md's ceiling/paths, read
       `DIFF_BUDGET_RESULT_V1.verdict`; EXCEEDED remains the STOP in the
@@ -205,7 +205,13 @@ order. One step per dr-execute-step invocation.
       --ceiling 450 --paths tools/ tests/ .claude/skills/ docs/map/`
       pasted, verdict `WITHIN`; push succeeds.
 
-      STOP (2026-08-08, self-raised, gate's first real use): after the
+      RESOLVED (R18, REQUEST.md Amendment 1 -- ceiling 450 -> 460):
+      ```
+      {"areas": {"tools/": 228, "tests/": 192, ".claude/skills/": 16, "docs/map/": 17}, "total_insertions": 453, "ceiling": 460, "verdict": "WITHIN"}
+      ```
+      Box checked below; done-criterion satisfied.
+
+      Prior STOP (2026-08-08, self-raised, gate's first real use): after the
       wording was written and trimmed as far as reasonably readable,
       the gate itself reports:
       ```
