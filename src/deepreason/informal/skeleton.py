@@ -13,7 +13,7 @@ bytes parse; the discipline enters through problem criteria.
 
 import json
 
-from pydantic import BaseModel, Field, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Commitment
@@ -26,6 +26,13 @@ class ForbiddenCase(BaseModel):
     case: str = Field(min_length=1)
     eval: str  # "rubric:<spec-id>" | "program:<ref>"
     observation_valued: bool = False
+    # Dual-mode conjecture (D2 rev 2, R33): the model-authored checker
+    # source + fixed tests for eval == "program:candidate_checker", the
+    # ONE program: kind whose verdict is not a pre-registered, harness-
+    # authored check but candidate code the model itself supplies —
+    # required exactly there, forbidden everywhere else (see the
+    # cross-field validator below).
+    checker_spec: dict | None = None
 
     @field_validator("eval")
     @classmethod
@@ -46,6 +53,28 @@ class ForbiddenCase(BaseModel):
                 "'program:<ref>' (untrusted content may not carry an "
                 f"inline predicate): {v[:40]!r}")
         return v
+
+    @model_validator(mode="after")
+    def _checker_spec_matches_kind(self):
+        """checker_spec is meaningful for exactly one program kind — the
+        one whose SOURCE is model-authored rather than a pre-registered,
+        harness-authored name (programs.PROGRAMS' own catalog). Present
+        anywhere else, it would be silently ignored data at best and a
+        confusing surface at worst. A field_validator on checker_spec
+        alone would not fire when the field is left at its default
+        (Pydantic skips validators for unset, defaulted fields) — a
+        model_validator sees every field regardless."""
+        is_candidate_checker = self.eval == "program:candidate_checker"
+        v = self.checker_spec
+        if is_candidate_checker and not (v and v.get("source") and v.get("entry") and v.get("tests")):
+            raise ValueError(
+                "program:candidate_checker forbidden cases require "
+                "checker_spec = {source, entry, tests}")
+        if not is_candidate_checker and v is not None:
+            raise ValueError(
+                "checker_spec is only meaningful for "
+                "eval == 'program:candidate_checker'")
+        return self
 
 
 class Scope(BaseModel):
@@ -95,16 +124,23 @@ def forbidden_commitment(case: ForbiddenCase) -> Commitment:
     budget, and observation semantics here lets both engine profiles consume
     the same commitment without maintaining a reduced-engine copy.
     """
+    extra: dict[str, str] = {"case": case.case}
+    if case.checker_spec is not None:
+        # candidate_checker's own budget shape (oracle.py::run_from_full_spec):
+        # {source, entry, tests, step_limit} JSON-encoded under "spec", same
+        # convention exec_oracle_commitment already uses for its own spec.
+        extra["spec"] = json.dumps(case.checker_spec, sort_keys=True)
     cid = "fc:" + sha256_hex(canonical_json({
         "case": case.case,
         "eval": case.eval,
         "observation_valued": case.observation_valued,
+        "checker_spec": case.checker_spec,
     }))[:12]
     return Commitment(
         id=cid,
         eval=case.eval,
         observation_valued=case.observation_valued,
-        budget=Budget(extra={"case": case.case}),
+        budget=Budget(extra=extra),
     )
 
 

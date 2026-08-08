@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=5 blockers=none
+State: next=6 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -109,7 +109,7 @@ order. One step per dr-execute-step invocation.
 
 ## Item 2 continued — the two wire-facing extensions (R33)
 
-- [ ] 5. (R33, M23) Extend `informal/skeleton.py::ForbiddenCase`'s
+- [x] 5. (R33, M23) Extend `informal/skeleton.py::ForbiddenCase`'s
       `_eval_kind_is_safe` validator to accept `program:candidate-checker`
       in addition to `rubric:`/`program:<PROGRAMS-name>`, with the SAME
       RCE-safety comment discipline the existing validator already
@@ -118,6 +118,36 @@ order. One step per dr-execute-step invocation.
       0 failed, plus a new case asserting the new kind parses.
       MUST NOT touch: the five frozen surfaces (this file is
       `informal/skeleton.py`).
+      DONE, with two corrections found while executing:
+      (1) `test_workload_formal.py` does not cover `informal/skeleton.py`
+      at all (it covers a DIFFERENT, Lean-based "formal" workload) — the
+      real coverage lives in `tests/test_informal.py`,
+      `tests/test_review_fixes.py`, `tests/test_prose_refutation_boundaries.py`;
+      used `test_informal.py` instead, all three files re-run to confirm
+      no regression (131 passed total).
+      (2) `_eval_kind_is_safe` ALREADY accepted `program:candidate_checker`
+      unconditionally (it only checks the `rubric:`/`program:` PREFIX,
+      never the specific name) — the real gap was `forbidden_commitment`
+      having nowhere to put a model-authored CHECKER SOURCE (its budget
+      only ever stored `case` text). Added `ForbiddenCase.checker_spec:
+      dict | None` (required exactly for `program:candidate_checker`,
+      forbidden otherwise, enforced by a NEW cross-field check) and
+      threaded it into `forbidden_commitment`'s own budget
+      (`extra["spec"]`, same JSON-encoding convention `exec_oracle_commitment`
+      already uses). Self-caught bug: a `field_validator` on `checker_spec`
+      alone never fired for the OMITTED-field case (Pydantic skips
+      validators for defaulted, unset fields) — verified failing, fixed
+      by switching to `model_validator(mode="after")`, re-verified passing,
+      with a permanent regression test for exactly this
+      (`test_candidate_checker_forbidden_case_requires_checker_spec`).
+- [x] 5b. (R33) [COMMIT] Commit step 5 on its own (split from the
+      original combined step-7 commit, since step 6 is separate,
+      not-yet-done work — one step per invocation, per dr-execute-step).
+      done-when: diff-budget running total <= 1150; frozen-surface diff
+      empty; push confirmed.
+      DONE — running total: 208 lines (105 + skeleton.py +40 +
+      test_informal.py +65 - 2 removed) of 1150. Frozen-surface diff:
+      empty. Pushed.
 - [ ] 6. (R33, M24) Expose the eval-kind CHOICE on
       `ReasoningCandidateProposal`'s wire-facing `counterconditions` (today
       hardcoded to `eval="observation"` in `proposal_envelope`,
@@ -129,7 +159,7 @@ order. One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_semantic_freedom_constitution.py -q` -> 0 failed, plus a new case.
       MUST NOT touch: the five frozen surfaces (this file is
       `workloads/text.py`).
-- [ ] 7. (R33) [COMMIT] Commit steps 5-6.
+- [ ] 7. (R33) [COMMIT] Commit step 6 (step 5 already committed at 5b).
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty (same paste as step 4); push confirmed.
 

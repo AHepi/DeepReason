@@ -4,9 +4,13 @@ hv-floor under mu_struct with the substitution trace logged."""
 
 import json
 
+import pytest
+from pydantic import ValidationError
+
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.informal.skeleton import (
+    ForbiddenCase,
     compile_forbidden_commitments,
     parse_skeleton,
     skeleton_wf_commitment,
@@ -61,6 +65,67 @@ def test_forbidden_cases_compile_to_commitments(harness):
     assert harness.commitments[ids[0]].budget.extra["case"]
     # Deterministic: recompiling yields the same ids.
     assert compile_forbidden_commitments(harness, skeleton) == ids
+
+
+def test_candidate_checker_forbidden_case_compiles_and_refutes(harness):
+    """Dual-mode conjecture (D2 rev 2, R33): a forbidden case may carry a
+    model-authored checker (program:candidate_checker) instead of naming a
+    pre-registered rubric/program — the source lives in the case's own
+    checker_spec, never the skeleton's prose."""
+    skeleton_text = json.dumps(
+        {
+            "claim": "doubling composes with addition",
+            "mechanism": "multiplication distributes over repeated addition",
+            "forbidden": [
+                {
+                    "case": "solve(x) does not equal 2*x for a sampled input",
+                    "eval": "program:candidate_checker",
+                    "checker_spec": {
+                        "source": "def solve(x):\n    return x + 999",
+                        "entry": "solve",
+                        "tests": [{"in": [1], "out": 2}],
+                    },
+                }
+            ],
+        },
+        sort_keys=True,
+    )
+    skeleton = parse_skeleton(skeleton_text)
+    ids = compile_forbidden_commitments(harness, skeleton)
+    assert len(ids) == 1
+    commitment = harness.commitments[ids[0]]
+    assert commitment.eval == "program:candidate_checker"
+    assert json.loads(commitment.budget.extra["spec"])["entry"] == "solve"
+
+    art = harness.create_artifact(
+        skeleton_text,
+        codec="json",
+        interface=Interface(commitments=ids),
+        provenance=Provenance(role="conjecturer"),
+    )
+    crit_program(harness, art.id)
+    # The checker source (x + 999) fails the fixed test (1 -> 2) — refuted by
+    # EXECUTION, even though the artifact's own content is the skeleton's
+    # prose/JSON, never the failing code itself.
+    assert harness.state.status[art.id] == Status.REFUTED
+
+
+def test_candidate_checker_forbidden_case_requires_checker_spec():
+    """Regression: a field_validator on checker_spec alone silently never
+    fired for an OMITTED (default-valued) field — Pydantic skips validators
+    for unset fields unless validate_default=True. Caught while writing D2
+    rev 2's own test for this coupling; fixed with model_validator instead."""
+    with pytest.raises(ValidationError):
+        ForbiddenCase(case="x", eval="program:candidate_checker")
+
+
+def test_checker_spec_forbidden_outside_candidate_checker():
+    with pytest.raises(ValidationError):
+        ForbiddenCase(
+            case="x",
+            eval="rubric:std-1",
+            checker_spec={"source": "s", "entry": "e", "tests": []},
+        )
 
 
 def test_persephone_skeleton_fails_hv_floor_under_mu_struct(tmp_path):
