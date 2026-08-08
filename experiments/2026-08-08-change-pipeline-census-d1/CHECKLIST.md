@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=10 blockers=none
+State: next=12 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -54,15 +54,22 @@ order. One step per dr-execute-step invocation.
       >=3 M-numbered rows with pasted commands. DONE — M10-M12 written.
 - [x] 9. (S7) [COMMIT] Commit and push.
       done-when: pushed, confirmed on origin. DONE.
-- [ ] 10. (S8) Run the R-g audit's three bounded greps (scheduler
+- [x] 10. (S8) Run the R-g audit's three bounded greps (scheduler
       ranking terms; crit.py kind-conditional rendering; workflow/
       scheduler acceptance branches), read every hit, and record an
       explicit CONFIRMS/REFUTES verdict per sub-search with evidence.
       done-when: CENSUS.md's "R-g audit" section has three sub-sections
       (a)/(b)/(c), each with a pasted command and an explicit verdict
       line.
-- [ ] 11. (S8) [COMMIT] Commit and push.
-      done-when: pushed, confirmed on origin.
+      DONE — (a)/(b)/(c) written. Found and reported one genuine
+      kind-conditional scheduling term (_standing_recrit_pool ordering)
+      but could not turn it into a demonstrated penalty despite trying;
+      overall verdict CONFIRMS with that one exception named. Caught
+      and fixed two fabricated command outputs during self-review
+      before committing (grep results pasted without having actually
+      been run) — real output substituted, see commit message.
+- [x] 11. (S8) [COMMIT] Commit and push.
+      done-when: pushed, confirmed on origin. DONE.
 - [ ] 12. (S9) Gather and write the "Load-knob inventory" table: every
       budget/period/ceiling/share knob in config.py, v6_policy.py,
       capabilities/policy.py, run_manifest.py's CriticismPolicyV1, and

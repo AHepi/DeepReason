@@ -80,7 +80,9 @@ becomes part of the conjectured artifact's own criticized commitment set.
 
 ```
 $ grep -rln "lambda_run" src/deepreason/
-(no hits outside lambda_run.py's own definition file)
+(no output — exit 1, zero hits: the literal string "lambda_run" does
+not appear anywhere under src/deepreason/, including inside the module
+itself, which never self-references its own filename)
 $ grep -n "lambda_run\|lambda-run" pyproject.toml
 (no hits)
 $ python -c "import tomllib,pathlib; d=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); print(d['project']['scripts'])"
@@ -683,7 +685,170 @@ by the exact same code path, with the exact same status.
 
 ## 4. R-g audit (R9, SPEC.md S8)
 
-(filled in step 10)
+R-g: "no mechanism... may weight ranking, scheduling, or acceptance on a
+conjecture's KIND... Formal backing may confer PROTECTION..., its absence
+confers no disadvantage." This audit's job is to try to REFUTE
+"protection-only, no penalty" — not assume it. Three sub-searches, per
+R-g's own text ("scheduler ranking terms, pack rendering differences,
+acceptance criteria").
+
+### (a) Scheduler ranking terms
+
+```
+$ grep -n "execution_backed\|formally_backed" src/deepreason/scheduler/scheduler.py
+(no output — exit 1, zero hits)
+```
+Neither guard FUNCTION is ever called from `scheduler.py`. Widening to
+the underlying concept both guards test (an execution-oracle-evaluable
+commitment) finds `_standing_recrit_pool`'s own inline re-derivation of
+it instead of a call to either guard:
+
+```
+$ grep -n "execution_evals\|EXEC_PROGRAMS" src/deepreason/scheduler/scheduler.py
+1161:        from deepreason.oracle import EXEC_PROGRAMS
+1164:        execution_evals = {f"program:{p}" for p in EXEC_PROGRAMS}
+1181:                and kappa.eval in execution_evals
+```
+(M6's `carries = any(...)` block sits at lines 1176-1184, using this
+`execution_evals` set built at line 1164 — the same concept as
+`execution_backed`, computed locally rather than by calling the shared
+helper, but the same underlying kind-signal.)
+
+```
+$ grep -n "def rank(p):" -A 8 src/deepreason/scheduler/scheduler.py
+1023:            def rank(p):
+1024:                age = self._cycles - self._problem_worked.get(p.id, -1)
+1025:                weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
+1026:                return (
+1027:                    -(age * weight),
+1028:                    p.provenance.trigger != SpawnTrigger.SEED,
+1029:                    p.id in reflexive,
+1030:                    p.id,
+1031:                )
+```
+`_select_problem`'s own ranking key (`docs/map/CON-scheduler-ranking.md`'s
+"single tie-break authority") — age, whether the PROBLEM already has a
+survivor, `SEED` trigger, reflexive-lineage membership, and problem id.
+Zero kind terms; the key cannot even SEE a conjecture's commitments (it
+ranks `Problem` objects, not artifacts). **Verdict: CONFIRMS** for
+top-level problem selection.
+
+`_standing_recrit_pool` DOES branch on kind (quoted in M6): execution-
+backed artifacts are queued FIRST for leftover-capacity re-criticism.
+Read against R-g's own wording — "may weight ranking, scheduling... on a
+conjecture's KIND" — this IS a kind-conditional scheduling term, and this
+audit reports it plainly rather than reasoning it away. Whether it is a
+PENALTY: attempting to refute the informal-favoring reading —
+
+- An informal target in the leftover-capacity pool gets criticized
+  SOONER whenever the backed queue is short (fewer or no execution-backed
+  survivors exist), and LATER (or not at all this cycle) whenever the
+  backed queue is long — so a formal target's presence in the pool can
+  only ever DELAY an informal target's re-criticism turn, never bring it
+  forward. That is a scheduling effect ON INFORMAL TARGETS caused by the
+  presence of formal ones, running in the direction of LESS scrutiny for
+  informal, not more.
+- For the formal targets themselves: being queued first for RE-criticism
+  is not a bar to acceptance (they are already `Status.ACCEPTED`,
+  `_standing_recrit_pool`'s own filter `harness.state.status.get(aid) !=
+  Status.ACCEPTED: continue`), and an ordinary argumentative attack
+  against them is guarded to register nothing while `execution_backed`
+  holds (M9) — so the "attack" they receive first is mechanically
+  toothless while their oracle passes. The docstring's own justification
+  — catching a Goodhart survivor that "can hide nowhere else" — is a
+  search for TRUE POSITIVES (a checker that is wrong in general despite
+  passing frozen inputs), not an extra bar the target must clear beyond
+  what its own commitments already require.
+- **This audit could not construct a scenario where this ordering makes
+  a formal conjecture LESS LIKELY to survive than an informal one would
+  under the same content.** It changes WHEN a (mechanically-neutralized)
+  attack attempt happens, never WHETHER a target can be admitted, rank
+  for problem selection, or reach `Status.ACCEPTED`.
+
+**Verdict: CONFIRMS "no penalty," with one genuine kind-conditional
+scheduling term on the record** — `_standing_recrit_pool`'s ordering IS a
+scheduling decision that reads kind, which is worth D2/D4 knowing about
+explicitly (it is the one place today's system already "weights
+scheduling... on a conjecture's KIND" in the letter of R-g, even though
+this audit could not find it to weight OUTCOMES against formal
+conjectures). This is the load-bearing finding this audit was asked to
+surface plainly if found; it is reported here rather than silently
+absorbed into a clean CONFIRMS.
+
+### (b) Pack rendering differences
+
+Already traced in full in M8: one template (`render_crit_pack`), no
+`if`/`else` branch on kind anywhere in `llm/packs.py`.
+
+```
+$ grep -n "def render_crit_pack\|def render_batch_crit_pack\|def render_cx_retry_pack" src/deepreason/llm/packs.py
+```
+```
+$ grep -c "is_formal\|target.kind\|\.kind ==" src/deepreason/llm/packs.py
+0
+```
+No pack-rendering function branches on any "kind" attribute (none
+exists to branch on — confirmed by the `ConjectureCandidate` field list
+in M8). The one content difference — `_MACHINE_EVAL_NOTE` appearing
+meaningfully only when `TARGET COMMITMENTS` is non-empty — is R-d's
+"criticism arrives on the form matched to the kind" working as intended
+(steering the critic away from re-litigating a machine-decided
+question), not a demand placed on informal targets. **Verdict: CONFIRMS.**
+
+### (c) Acceptance criteria
+
+```
+$ grep -rn "execution_backed\|formally_backed" src/deepreason/workflow/*.py src/deepreason/scheduler/*.py
+(no output — exit 1, zero hits)
+```
+Neither `workflow/` nor `scheduler/` calls either guard at all — the v6
+transactional work lifecycle's admission/acceptance machinery never
+reads them (`_standing_recrit_pool`'s inline re-derivation, (a) above,
+is the only place in either package that tests the same underlying
+concept, and it is a scheduling term, not an acceptance one).
+
+```
+$ grep -n "def label0" -A 12 src/deepreason/adjudication/grounded.py
+def label0(nodes: set[str], att: Iterable[tuple[str, str]]) -> dict[str, str]:
+    """accepted if in G; refuted if attacked from G; else suspended."""
+    att = set(att)
+    g = grounded_extension(nodes, att)
+    labels: dict[str, str] = {}
+    for a in nodes:
+        if a in g:
+            labels[a] = "accepted"
+        elif any((b, a) in att for b in g):
+            labels[a] = "refuted"
+        else:
+            labels[a] = "suspended"
+    return labels
+```
+The foundational acceptance computation (Pass 1, Dung grounded
+extension) takes only `nodes: set[str]` (bare ids) and
+`att: Iterable[tuple[str, str]]` (attack-edge id pairs) — it has no
+parameter through which a commitment, an `eval` string, or any kind
+signal could reach it even if someone wanted it to. An artifact with no
+attacker is accepted VACUOUSLY, regardless of whether it carries zero
+commitments (pure prose) or ten `program:`-eval'd ones. Pass 2
+(`final_labels`, M12) is the same shape: `label0` (strings) and
+`dep_edges` (id pairs) only. **Verdict: CONFIRMS** — acceptance is
+structurally kind-blind two layers deep (Pass 1 and Pass 2 both), not
+merely kind-blind by absence of an `if` statement that could be added
+later without changing the function signature.
+
+### R-g audit summary
+
+Two of three sub-searches (pack rendering, acceptance criteria) found
+NO kind-conditional term at all, at any layer checked. The third
+(scheduler ranking/scheduling) found ONE genuine kind-conditional
+scheduling term (`_standing_recrit_pool`'s queue ordering) that this
+audit could not turn into a demonstrated penalty despite deliberately
+trying — its effect runs, if anything, toward LESS re-criticism pressure
+on informal targets when formal ones are present, and it touches
+neither rank (problem selection), admission, nor acceptance. The
+preplan's own expected finding — "protection-only asymmetry, no
+penalty" — SURVIVES this audit, with the one scheduling-term exception
+named explicitly so D2/D4 do not have to re-discover it.
 
 ## 5. Load-knob inventory (R10, SPEC.md S9)
 
