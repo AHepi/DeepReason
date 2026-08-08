@@ -1,0 +1,37 @@
+```json
+{
+  "candidate": {
+    "claim": "The implemented Python simulation must exactly reproduce the specified linear congruential generator (X_0 = 42; X_(n+1) = (1103515245 * X_n + 12345) mod 2^31) and the face mapping (die_n = 1 + (X_n mod 6)) for n = 1..10000, returning the first ten (X_n, die_n) pairs for calibration followed by the final six face counts as flat observables.",
+    "mechanism": "In the sandboxed environment, the program initializes X_0 = 42. It iterates 10000 times, computing X_(n+1) using 32-bit signed or unsigned integer arithmetic to exactly match the mathematical recurrence. For each n, it maps X_n to die_n = 1 + (X_n mod 6) and increments the corresponding count. The program must output the first ten (X_n, die_n) pairs to verify the recurrence, and then output the final tallies for count_1 through count_6 and the total.",
+    "counterconditions": [
+      "The simulation program fails to execute in the sandboxed_python_v1 environment.",
+      "The first ten (X_n, die_n) pairs produced by the simulation do not match hand-calculated values from the specification.",
+      "The simulation does not return the six face counts as flat, single-segment observables.",
+      "The total of the six face counts is not exactly 10000."
+    ],
+    "evidence_refs": [
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables"
+      },
+      {
+        "block": "1c2d18924a3064bc",
+        "quote": "the whole source is exactly one `def simulate(inputs, rng)` and nothing else, and the mapping it RETURNS"
+      },
+      {
+        "block": "a3db120ba929af11",
+        "quote": "Return the discriminating quantity itself -- the six counts, the calibration trace -- never a"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.9
+  }
+}
+```

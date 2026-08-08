@@ -1,0 +1,46 @@
+```json
+{
+  "candidate": {
+    "claim": "A sandboxed Python simulation implementing the exact specified recurrence X_(n+1) = (1103515245 * X_n + 12345) mod 2^31 with X_0 = 42 and die_n = 1 + (X_n mod 6) must be executed for n=1..10000 to derive the six face counts, which cannot be obtained via a closed-form shortcut.",
+    "mechanism": "The linear congruential generator (LCG) recurrence is deterministically iterated 10000 times. A tally dictionary tracks the occurrences of faces 1 through 6 based on the modulo 6 mapping. The first 10 (X_n, die_n) pairs are recorded as a calibration trace to validate the implementation against the mathematical specification before tallying the full 10000 draws.",
+    "counterconditions": [
+      "A closed-form analytical solution for the face counts at n=10000 is unexpectedly discovered and verified",
+      "The simulation code fails to execute or times out before reaching n=10000",
+      "The first 10 (X_n, die_n) calibration pairs do not match manual calculation of the specified recurrence, indicating an implementation error",
+      "The resulting face counts fall outside two standard deviations of the uniform expectation, challenging the 'fair' claim"
+    ],
+    "evidence_refs": [
+      {
+        "block": "c6c31b919b1cd091",
+        "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      },
+      {
+        "block": "1c2d18924a3064bc"
+      },
+      {
+        "block": "a3db120ba929af11"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003",
+        "SRC_004",
+        "SRC_005",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008",
+        "SRC_009"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.95
+  }
+}
+```
