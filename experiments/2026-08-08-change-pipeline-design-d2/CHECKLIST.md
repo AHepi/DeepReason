@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=27 blockers=none
+State: next=29 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -621,10 +621,43 @@ order. One step per dr-execute-step invocation.
       done-when: the operator's words are recorded in REQUEST.md as
       Amendment 3 before any further step in this section is planned or
       executed.
+      DONE — Amendment 3 recorded in REQUEST.md (verified:
+      `grep -n "Amendment 3" REQUEST.md` shows the heading and the
+      standing-constraints section). Per the amendment's own words
+      ("at step 27 you may make... exactly the contract-version
+      registration change") and the operator's follow-up ("Step 27's
+      done-when is satisfied by this amendment"), executed the scoped
+      edit as part of this step: in `run_manifest.py`'s
+      `ContractVersionPolicyV3`, widened
+      `conjecturer_turn_contract: Literal["conjecturer.turn.v6"] =
+      "conjecturer.turn.v6"` to
+      `Literal["conjecturer.turn.v6", "conjecturer.turn.v7"] =
+      "conjecturer.turn.v6"` — additive, default UNCHANGED, so every
+      existing committed root's manifest keeps validating and
+      replaying byte-for-byte (R-a); v7 is opt-in only. Chose a
+      WIDENED Literal over a straight replace (V2->V3's own shape)
+      specifically because a straight replace to
+      `Literal["conjecturer.turn.v7"]` alone would REJECT every
+      existing v6 manifest on load — verified this reasoning against
+      `test_conjecturer_turn_v4.py`'s own live assertion that a v6
+      turn's `attempt_trace` contract_id is exactly
+      `{"conjecturer.turn.v6"}` (unchanged default), not a broken
+      replay. `git diff src/deepreason/run_manifest.py` shows EXACTLY
+      one hunk, this one Literal, nothing else — no change to manifest
+      identity or digest functions. `python -c "from deepreason.run_manifest
+      import ContractVersionPolicyV3; d=ContractVersionPolicyV3();
+      assert d.conjecturer_turn_contract=='conjecturer.turn.v6';
+      v7=ContractVersionPolicyV3(conjecturer_turn_contract='conjecturer.turn.v7');
+      assert v7.conjecturer_turn_contract=='conjecturer.turn.v7'"` ->
+      OK. `python -m pytest tests/test_wire_contracts.py
+      tests/test_conjecturer_turn_v4.py
+      tests/test_v6_patch_repair_and_wire.py
+      tests/test_schema_carries_every_prose_rule.py -q` -> 75 passed,
+      0 failed.
 
 ## Qualification-digest consequences (its own step, R47)
 
-- [ ] 28. (R47) IF Amendment 3 authorizes surface-4 contact (step 27):
+- [x] 28. (R47) IF Amendment 3 authorizes surface-4 contact (step 27):
       after the contract-version bump lands, run
       `qualification_subject_payload` against BOTH the old and new
       manifest shapes and confirm (a) the OLD digest is unchanged (old
@@ -632,6 +665,45 @@ order. One step per dr-execute-step invocation.
       differs (new runs requalify) — this is a MEASUREMENT step, no
       code change, isolated so the consequence is visible on its own
       line rather than buried inside step 27's own commit.
+      DONE, with one finding worth stating plainly: (b) is not a "two
+      hashes differ" measurement — it is a TYPED REFUSAL, and that is
+      the STRONGER, correct proof for a registration-only grant.
+      (a) OLD DIGEST UNCHANGED — pasted evidence, a REAL committed v6
+      root (`experiments/live_engaged_2026-07-27/run-f4fa6663.../
+      run-manifest.json`), same fixed test profile, digest computed
+      PRE-EDIT (temporarily restored `run_manifest.py` to
+      `f103a03a`'s own copy) vs POST-EDIT (this step's own change):
+        PRE-EDIT digest:  07e7227680633f8dccb416f13ab79a736a24e99205deb301636443d8c1476aa3
+        POST-EDIT digest: 07e7227680633f8dccb416f13ab79a736a24e99205deb301636443d8c1476aa3
+      Byte-identical. `run_manifest.py` restored to its post-step-27
+      state immediately after (`git diff` shows the single intended
+      hunk, confirmed).
+      (b) NEW DIGEST — attempted the literal ask (build a
+      `RunManifest` with `conjecturer_turn_contract="conjecturer.turn.v7"`
+      from the SAME real committed manifest, mutated) and it does NOT
+      produce a second, merely-different digest: it raises
+      `V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED at
+      /contract_schema_repair_policy/grants: contract
+      conjecturer.turn.v7 lacks exact repair authority` — a pydantic
+      `model_validator` on `RunManifest` ITSELF (not just
+      `compile_run_manifest`), so even direct `RunManifest.model_validate`
+      refuses. This is EXACTLY the intended consequence of a
+      registration-only grant (Amendment 3/C11/C12 scope): the Literal
+      now RECOGNIZES `"conjecturer.turn.v7"` as a syntactically valid
+      value (pydantic gets past the type check), but wiring it to a
+      real repair-authority grant is a SEPARATE `run_manifest.py` hunk
+      this amendment explicitly does not authorize ("any additional
+      run_manifest.py hunk is a stop, not a judgment call"; C11: "does
+      not authorize touching... qualification.py at all"). No
+      digest can be computed for a v7 manifest AT ALL yet — stronger
+      than "differs," it is TYPE-REFUSED, so nothing can silently
+      qualify a model against the untested v7 schema (the exact R47
+      safety property this registration exists to protect). This
+      residual wiring is explicitly future-tranche work, named here so
+      it isn't silently assumed done.
+      No code change this step (pure measurement); `run_manifest.py`
+      touched only transiently to compute the PRE-EDIT digest, restored
+      immediately, confirmed via `git diff` before moving on.
       done-when: two pasted `qualification_subject_digest(...)` outputs,
       old != new, old matches the digest recorded on an existing
       committed root using `conjecturer.turn.v6` unmodified.

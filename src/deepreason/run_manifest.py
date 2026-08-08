@@ -650,7 +650,14 @@ class ContractVersionPolicyV3(BaseModel):
     bridge_composition_contract: Literal["bridge.composition.v2"] = (
         "bridge.composition.v2"
     )
-    conjecturer_turn_contract: Literal["conjecturer.turn.v6"] = "conjecturer.turn.v6"
+    # D2 rev 2 (dual-mode conjecture, Amendment 3 scoped grant): v7 adds the
+    # program:candidate_checker eval-kind vocabulary entry to the skeleton/
+    # reasoning candidate conventions. Additive to the Literal, default
+    # UNCHANGED at v6 -- every existing committed root's manifest keeps
+    # validating and replaying byte-for-byte; v7 is opt-in only.
+    conjecturer_turn_contract: Literal["conjecturer.turn.v6", "conjecturer.turn.v7"] = (
+        "conjecturer.turn.v6"
+    )
     batch_critic_contract: Literal["batch-critic.v2"] = "batch-critic.v2"
     control_event_schema: Literal["control.event.v3"] = "control.event.v3"
     simulation_request_contract: Literal["simulation.request.v1"] = (
