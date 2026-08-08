@@ -1,0 +1,94 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure because it replaces 'redundancy of components' with 'diversity of failure domains'.",
+      "mechanism": "In a large service, internal redundancy typically consists of identical replicas managed by a unified control plane; a single logic error in that plane or a 'poison pill' request triggers a simultaneous failure across all replicas. In a decentralized network, variance in implementation (different OS, languages, config) and operational silos ensures that a specific trigger only affects a subset of nodes, limiting the blast radius.",
+      "counterconditions": [
+        "The decentralized services all rely on a single, shared upstream dependency (e.g., a common DNS provider or cloud hypervisor).",
+        "The failure trigger is a protocol-level vulnerability that affects all compliant implementations regardless of their specific language or OS."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "A large service with high internal redundancy is more resilient because it can dynamically isolate and evacuate traffic from failing segments faster than a decentralized network can adapt.",
+      "mechanism": "Unified observability and a global control plane allow for near-instantaneous traffic shifting (evacuation) away from a detected failure. A decentralized network lacks this global coordination, meaning clients must individually discover and route around failures, leading to higher latency in recovery and potential cascading timeouts.",
+      "counterconditions": [
+        "The failure is caused by the control plane itself, making the 'evacuation' mechanism the primary vector of collapse.",
+        "The 'poison pill' is passed along with the traffic, causing every segment the traffic is shifted to also fail immediately."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The distinction between 'truly independent' and 'apparently uncorrelated' failures is revealed by the temporal and spatial distribution of recovery times.",
+      "mechanism": "Truly independent failures occur randomly across the network and recover at rates proportional to the individual operator's capacity. Failures with a hidden shared cause (correlated) will exhibit a 'pulse' pattern: they trigger near-simultaneously across diverse nodes and, crucially, often recover in a synchronized wave once the shared cause (e.g., a BGP leak or a leap-second bug) is resolved globally.",
+      "counterconditions": [
+        "The shared cause triggers failures in a staggered sequence that mimics random distribution.",
+        "Recovery is gated by a shared external dependency, making independent failures appear synchronized during the recovery phase."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Decentralized networks are fundamentally less resilient because they suffer from 'fragmented fragility', where the lack of total redundancy at any single node increases the frequency of partial outages.",
+      "mechanism": "While a large service avoids frequent small outages through massive over-provisioning, a decentralized network of small services operates closer to their capacity limits. This creates a state of 'constant low-level churn' where the system is always partially failed, reducing the overall quality of service compared to a robust, unified entity.",
+      "counterconditions": [
+        "The 'fragmented fragility' is offset by the fact that no single outage ever reaches the scale of a total system collapse.",
+        "Small services are significantly easier to restart and recover than a monolithic large service."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Recovery Wave' hypothesis: If we see 100 independent services fail at different times but all recover within the same 5-minute window, this is a strong signal of a shared underlying cause (e.g., a global network event) rather than independent failures. The 'recovery signature' is a more reliable detector of correlation than the 'failure signature'.",
+          "why_keep_this": "Proposes a specific evidence-based method to distinguish failure modes as requested by the problem."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a formal mathematical way to define the 'diversity threshold' where adding a different implementation is more valuable than adding another redundant copy of the same implementation?",
+        "related_refs": [
+          "SCR_003",
+          "SCR_004"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@de9e73f1771ff5888e67b364: program:reasoning_observation_pending
+- reason-counter@da174a4db61996b29b4b961a: program:reasoning_observation_pending
+- reason-counter@d15661b72f74c560ed63639e: program:reasoning_observation_pending
+- reason-counter@5721e0891b41af0298df6e0f: program:reasoning_observation_pending
+- reason-counter@a54d3a46dcf2420db35f14c9: program:reasoning_observation_pending
+- reason-counter@48bfd12a0e17034b7612a7b0: program:reasoning_observation_pending
+- reason-counter@02e002e2e80369552bc3aa88: program:reasoning_observation_pending
+- reason-counter@71c373c11be901e1e893ee75: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Neither architecture is inherently more resilient; resilience is a function of the ratio between redundancy and shared-fate dependencies.","counterconditions":[{"case":"One architecture can be proven to have a lower mathematical floor for shared-fate dependencies regardless of scale.","checker_spec":null,"eval":"observation"},{"case":"Operational diversity can be implemented within a large service without increasing orchestration complexity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Adding redundancy (more nodes) in a large service increases the complexity of the orchestration layer, creating new shared-fate dependencies. Similarly, decentralization reduces control but may introduce dependencies on shared public infrastructure. The 'breaking point' occurs when the complexity of managing the resilience mechanism becomes the most likely cause of failure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@de9e73f1771ff5888e67b364, reason-counter@da174a4db61996b29b4b961a
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure because it replaces 'redundancy of components' with 'diversity of failure domains'.","counterconditions":[{"case":"The decentralized services all rely on a single, shared upstream dependency (e.g., a common DNS provider or cloud hypervisor).","checker_spec":null,"eval":"observation"},{"case":"The failure trigger is a protocol-level vulnerability that affects all compliant implementations regardless of their specific language or OS.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a large service, internal redundancy typically consists of identical replicas managed by a unified control plane; a single logic error in that plane or a 'poison pill' request triggers a simultaneous failure across all replicas. In a decentralized network, variance in implementation (different OS, languages, config) and operational silos ensures that a specific trigger only affects a subset of nodes, limiting the blast radius.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d15661b72f74c560ed63639e, reason-counter@5721e0891b41af0298df6e0f
+
+TARGET SRC_003
+{"analogy":null,"claim":"Decentralized networks are more resilient specifically against 'Black Swan' systemic risks, as the lack of a unified control plane prevents the propagation of single-point-of-failure orchestration bugs.","counterconditions":[{"case":"The decentralized services all rely on a single shared cloud provider or DNS root, creating a hidden monolithic dependency.","checker_spec":null,"eval":"observation"},{"case":"The failure mode is a logic error in a widely adopted open-source library used by all small services.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By sacrificing the efficiency of a unified control plane (which SRC_008 argues for), the decentralized network ensures that no single administrative command or software bug can affect 100% of the capacity. The 'Complexity Paradox' (SCR_001) suggests that increasing redundancy in a large service actually increases the risk of a catastrophic orchestration failure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a54d3a46dcf2420db35f14c9, reason-counter@48bfd12a0e17034b7612a7b0
+
+TARGET SRC_004
+{"analogy":null,"claim":"Neither architecture is inherently more resilient; resilience is determined by the ratio of 'redundancy' to 'shared-fate dependencies'.","counterconditions":[{"case":"The decentralized services are clones of the same image, meaning they share the same software-level fate.","checker_spec":null,"eval":"observation"},{"case":"The large service implements 'air-gapped' redundancy with diverse software stacks for each redundant cell.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Resilience is a function of the diversity of the failure domain. A large service with 'strictly more redundancy' but a single shared kernel or orchestration layer (SCR_001) has a higher correlated failure risk than a small network of services running on diverse OSs and hardware, regardless of total capacity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@02e002e2e80369552bc3aa88, reason-counter@71c373c11be901e1e893ee75
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

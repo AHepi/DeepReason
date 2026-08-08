@@ -1,0 +1,42 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c0c5a4ba7cee444728ec1ea4: program:reasoning_observation_pending
+- reason-counter@9c653d9d2d27564e754dd6b0: program:reasoning_observation_pending
+- reason-counter@5380edeaa0fbef723884ea22: program:reasoning_observation_pending
+- reason-counter@c0c842122f1447b07d60df5c: program:reasoning_observation_pending
+- reason-counter@0edc98cff825371906c758d6: program:reasoning_observation_pending
+- reason-counter@bc825175cc880bc7191b96a8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A large service with high internal redundancy is more resilient than a decentralized network because its unified control plane allows for rapid, global traffic evacuation and systemic mitigation.","counterconditions":[{"case":"The global control plane itself suffers a 'poison pill' configuration error, causing the very mechanism intended for evacuation to trigger a global shutdown.","checker_spec":null,"eval":"observation"},{"case":"The orchestration layer's complexity exceeds the human capacity to manage it during a crisis, leading to cascading failures.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Centralized orchestration enables the operator to detect a failure pattern and shift load away from the affected region or version instantly. In a decentralized network, the lack of a shared control plane prevents coordinated responses, meaning failures must be mitigated locally and slowly, increasing the duration of the outage.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c0c5a4ba7cee444728ec1ea4, reason-counter@9c653d9d2d27564e754dd6b0
+
+TARGET SRC_002
+{"analogy":null,"claim":"Increasing internal redundancy in a large service eventually creates a 'Complexity Ceiling' where the orchestration layer becomes the primary failure vector.","counterconditions":[{"case":"The orchestration layer is itself decentralized or partitioned into failure domains that mirror the service's redundancy.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"As total internal redundancy increases, the complexity of the system required to manage that redundancy (load balancers, health checks, consensus algorithms) grows non-linearly. This orchestration layer introduces a new, higher-order single point of failure. Consequently, the large service reaches a point where adding more redundancy actually increases the probability of a catastrophic correlated failure (ref: SCR_003, SCR_008).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5380edeaa0fbef723884ea22
+
+TARGET SRC_003
+{"analogy":null,"claim":"The distinction between truly independent failures and failures appearing uncorrelated is uniquely identifiable through the 'Recovery Signature' (temporal and spatial distribution of recovery) rather than the 'Failure Signature'.","counterconditions":[{"case":"The recovery process itself is gated by a shared dependency (e.g., a global DNS provider), making independent failures appear correlated during the recovery phase.","checker_spec":null,"eval":"observation"},{"case":"The 'noise' of high-frequency independent failures masks the signal of the recovery wave.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independent failures occur and resolve according to local conditions; conversely, failures caused by a shared hidden trigger (e.g., a global network event or a specific BGP route leak) will exhibit a synchronized recovery wave, where disparate services return to health within a tight temporal window despite failing at staggered intervals.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c0c842122f1447b07d60df5c, reason-counter@0edc98cff825371906c758d6
+
+TARGET SRC_004
+{"analogy":null,"claim":"The distinction between independent and apparently uncorrelated failures is uniquely identifiable via the 'Recovery Signature' rather than the 'Failure Signature'.","counterconditions":[{"case":"The recovery is synchronized not by the cause, but by a shared recovery mechanism (e.g., a global automated reboot script).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Failures may appear uncorrelated if they occur at different times or in different locations (spatial/temporal jitter). However, if these services recover in a synchronized wave (a 'Recovery Wave'), it indicates they were all awaiting the resolution of a single shared external constraint (e.g., a DNS root issue or a global BGP route leak) (ref: SCR_001, SRC_006). Truly independent failures exhibit stochastic recovery times based on individual operator response, whereas correlated failures exhibit a sharp, synchronized return to health.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bc825175cc880bc7191b96a8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

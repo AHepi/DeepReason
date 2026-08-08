@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fceafee5412689c23de00b38: program:reasoning_observation_pending
+- reason-counter@b7b10d896db302be9c653309: program:reasoning_observation_pending
+- reason-counter@a169440991af90715b5fbac1: program:reasoning_observation_pending
+- reason-counter@a794d9fcf01600f66945e6b5: program:reasoning_observation_pending
+- reason-counter@123d4aa0b92996130cb394f9: program:reasoning_observation_pending
+- reason-counter@cc0d5b61d5607b8260d08923: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A large service with high internal redundancy is more resilient because it can implement 'active-active' dynamic traffic evacuation that decentralized networks cannot coordinate.","counterconditions":[{"case":"The failure originates within the unified control plane itself (the 'Complexity Paradox').","checker_spec":null,"eval":"observation"},{"case":"The traffic volume exceeds the capacity of the remaining healthy segments during evacuation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A unified control plane allows for the instantaneous rerouting of 100% of traffic away from a failing segment based on real-time telemetry, whereas decentralized services lack the global state necessary to preemptively avoid correlated failures in neighboring nodes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fceafee5412689c23de00b38, reason-counter@b7b10d896db302be9c653309
+
+TARGET SRC_002
+{"analogy":null,"claim":"The claim that decentralized networks are more resilient is a fallacy of 'averaging'; while they avoid total collapse, they suffer from 'death by a thousand cuts' that renders the network functionally unavailable.","counterconditions":[{"case":"The decentralized network has an extremely high degree of over-provisioning.","checker_spec":null,"eval":"observation"},{"case":"The service is non-critical and can tolerate partial availability without systemic collapse.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a large service, redundancy allows for 100% traffic evacuation (SRC_008). In a decentralized network, the failure of 20% of small nodes may be 'uncorrelated', but the resulting loss of connectivity and increased latency on remaining nodes creates a feedback loop of congestion collapse, mimicking a total failure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a169440991af90715b5fbac1, reason-counter@a794d9fcf01600f66945e6b5
+
+TARGET SRC_003
+{"analogy":null,"claim":"A large service with high internal redundancy is more resilient because the cost of maintaining 'true' diversity in a decentralized network creates a 'management debt' that introduces more frequent, though smaller, correlated failures.","counterconditions":[{"case":"The unified control plane suffers a 'poison pill' update that propagates to all redundant nodes simultaneously.","checker_spec":null,"eval":"observation"},{"case":"The decentralized network utilizes a strictly standardized, automated update protocol that eliminates operator drift.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The overhead of coordinating security patches and API versioning across independent operators leads to 'drift'. This drift creates a fragile ecosystem where a single upstream dependency update triggers a cascading failure across the decentralized network, whereas a unified service manages these updates atomically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@123d4aa0b92996130cb394f9, reason-counter@cc0d5b61d5607b8260d08923
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
