@@ -313,4 +313,167 @@ template describes, not a separate additional stop.
 
 ## Amendments
 
-(none yet)
+### Amendment 1 (operator, 2026-08-08, two messages — quoted verbatim, in order received)
+
+Message 1 (the correction, explicitly instructed to be ledgered
+verbatim, superseding the twin-artifact design seed and rejecting both
+roads of Fork F1):
+
+> Operator amendment to REQUEST.md — ledger these words VERBATIM as
+> Amendment 1 and derive new requirement numbers from them; they
+> supersede the twin-artifact design seed and reject BOTH roads of
+> Fork F1:
+> The penalty caution was meant for prose. I was afraid the system
+> would prioritise formality over prose, not the other way around.
+> Conjecture artifacts can never be full code. Code is not
+> explanatory, prose — words — are explanatory. If a conjecture has
+> both prose and code, neither should be critiqued directly. It's the
+> commitments that get criticized.
+> Code can function as commitments as well, provided it's directly
+> related to the explanation and functions solely as a criticizable
+> surface.
+> The referee should be irrelevant. That's what criticism is for. If
+> a referee is needed, then the artifact surface needs a redesign.
+> All code should be criticizable through its attack surface: its
+> commitments.
+
+Message 2 (sent mid-turn, ledgering explicit fork decisions and giving
+the shape of the corrected design):
+
+> Also ledgered: F2 Road B is APPROVED (the formal channel lives on
+> both candidate contracts, including the live path's). F3 Road A is
+> APPROVED (new encoder role; property_designer untouched, its own
+> tranche). F4 is MOOT pending the revision — with no twin artifact
+> there may be no twin_repair payload; the revised spec re-derives its
+> frozen-surface forecast from scratch and assumes no grant.
+> Then revise SPEC.md (rev 2, superseding rev 1 in place with the
+> superseded reasoning kept for the record, per house convention)
+> around the corrected frame: ONE artifact per conjecture; content is
+> explanatory prose, never full code (specify the enforcement: what
+> rejects a code-bodied conjecture, and how "full code" is
+> distinguished from prose-with-fragments — measure what the admission
+> path can check); the formal option is an optional CODE-COMMITMENT
+> channel on both candidate contracts (F2-B) — the conjecturer attaches
+> runnable commitments to its own prose; commitments are the sole
+> attack surface for dual conjectures — criticism RUNS them
+> (mechanical) or CONTESTS them, and the existing prose-immunity
+> semantics (formally_backed) become the incentive story: passing
+> commitments shield, failing ones refute demonstratively, exactly as
+> criticism should; the relatedness constraint from point 3 ("directly
+> related to the explanation, solely a criticizable surface") must be
+> designed WITHOUT any referee — if a design option needs a
+> faithfulness referee, that option is wrong by the operator's own
+> words; measure whether the existing relevance-trial machinery
+> (cross-family, census M-rows) already provides a referee-free
+> relatedness check. Point 1 re-anchors R-g: the guarded direction is
+> prose — no mechanism may prioritize formal conjectures over prose
+> ones in rank, scheduling, or acceptance; re-derive the R-g acceptance
+> checks accordingly, including the _standing_recrit_pool decision.
+> Expect and specify the TEST implications plainly (the operator
+> anticipates them): which existing criticism/admission tests move
+> under the corrected frame, which new ones are owed. Encoder-role
+> delegation (F3-A) now means: the coder seat authors commitment code
+> for the conjecturer's prose. Re-run the decision sheet for whatever
+> forks remain, priced, with recommendations. Commit and push
+> REQUEST.md and SPEC.md rev 2, then STOP again for operator words.
+
+Split into new atomic requirements, numbered onward from R18:
+
+R19 (process/interpretation): "The penalty caution was meant for
+prose. I was afraid the system would prioritise formality over prose,
+not the other way around." — re-anchors R-g's guarded direction: the
+ONLY protected party is prose/informal; nothing in R-g ever protected
+formal artifacts from being deprioritized relative to prose, and this
+was never a live worry.
+
+R20 (behavior/ontology): "Conjecture artifacts can never be full
+code." — a conjecture artifact's content may never be pure code with
+no explanatory prose.
+
+R21 (behavior/ontology): "Code is not explanatory, prose — words —
+are explanatory."
+
+R22 (behavior): "If a conjecture has both prose and code, neither
+should be critiqued directly."
+
+R23 (behavior): "It's the commitments that get criticized."
+
+R24 (behavior): "Code can function as commitments as well, provided
+it's directly related to the explanation and functions solely as a
+criticizable surface."
+
+R25 (behavior/process): "The referee should be irrelevant. That's
+what criticism is for."
+
+R26 (process): "If a referee is needed, then the artifact surface
+needs a redesign."
+
+R27 (behavior): "All code should be criticizable through its attack
+surface: its commitments."
+
+R28 (process): "F2 Road B is APPROVED (the formal channel lives on
+both candidate contracts, including the live path's)."
+
+R29 (process): "F3 Road A is APPROVED (new encoder role;
+property_designer untouched, its own tranche)."
+
+R30 (process): "F4 is MOOT pending the revision — with no twin
+artifact there may be no twin_repair payload; the revised spec
+re-derives its frozen-surface forecast from scratch and assumes no
+grant."
+
+R31 (artifact): "revise SPEC.md (rev 2, superseding rev 1 in place
+with the superseded reasoning kept for the record, per house
+convention)."
+
+R32 (behavior/artifact): "ONE artifact per conjecture; content is
+explanatory prose, never full code (specify the enforcement: what
+rejects a code-bodied conjecture, and how 'full code' is distinguished
+from prose-with-fragments — measure what the admission path can
+check)."
+
+R33 (behavior/artifact): "the formal option is an optional
+CODE-COMMITMENT channel on both candidate contracts (F2-B) — the
+conjecturer attaches runnable commitments to its own prose."
+
+R34 (behavior): "commitments are the sole attack surface for dual
+conjectures — criticism RUNS them (mechanical) or CONTESTS them, and
+the existing prose-immunity semantics (formally_backed) become the
+incentive story: passing commitments shield, failing ones refute
+demonstratively, exactly as criticism should."
+
+R35 (process): "the relatedness constraint from point 3... must be
+designed WITHOUT any referee — if a design option needs a faithfulness
+referee, that option is wrong by the operator's own words; measure
+whether the existing relevance-trial machinery (cross-family, census
+M-rows) already provides a referee-free relatedness check."
+
+R36 (process): "Point 1 re-anchors R-g: the guarded direction is
+prose — no mechanism may prioritize formal conjectures over prose ones
+in rank, scheduling, or acceptance; re-derive the R-g acceptance checks
+accordingly, including the _standing_recrit_pool decision."
+
+R37 (artifact): "Expect and specify the TEST implications plainly...
+which existing criticism/admission tests move under the corrected
+frame, which new ones are owed."
+
+R38 (behavior): "Encoder-role delegation (F3-A) now means: the coder
+seat authors commitment code for the conjecturer's prose."
+
+R39 (artifact): "Re-run the decision sheet for whatever forks remain,
+priced, with recommendations."
+
+R40 (process): "Commit and push REQUEST.md and SPEC.md rev 2, then
+STOP again for operator words."
+
+## Standing constraints (amendment)
+
+C7: R7's twin-artifact design (item 1 of the original SPEC) is
+SUPERSEDED in full by Amendment 1 — its reasoning is kept in SPEC.md
+for the record, marked superseded, never deleted (house convention,
+R31).
+
+C8: Fork F1 (both roads) is REJECTED — no "faithfulness dispute"
+sub-protocol of any shape is designed; refuting a commitment
+demonstratively refutes the artifact it lives on directly, and that IS
+correct criticism, not a problem to solve around (R34).
