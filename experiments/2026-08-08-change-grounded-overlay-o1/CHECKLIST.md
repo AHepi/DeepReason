@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=8 blockers=none
+State: next=10 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -74,14 +74,16 @@ order. One step per dr-execute-step invocation.
       fixed during this same step, before committing).
 - [x] 7. (S7) [COMMIT] Commit and push `o1b_joint_execution_probe.py`.
       done-when: pushed, confirmed on origin.
-- [ ] 8. (S8) Write `scripts/o1c_floating_foundations.py`: the
+- [x] 8. (S8) Write `scripts/o1c_floating_foundations.py`: the
       `ground()` predicate (SEED/IMPORT/USER roles), the accepted-only
       dependence subgraph, weakly-connected components, and the
       floating-component flag (no member's transitive closure reaches a
       ground artifact), including the vacuous isolated-artifact case.
       done-when: `python3 -c "import ast; ast.parse(open('experiments/2026-08-08-change-grounded-overlay-o1/scripts/o1c_floating_foundations.py').read())"`
       -> exit 0.
-- [ ] 9. (S8) [COMMIT] Commit and push `o1c_floating_foundations.py`.
+      DONE — syntax OK; `weakly_connected_components` sanity-checked on
+      a 3-node/1-edge graph, correctly split into `{a,b}` and `{c}`.
+- [x] 9. (S8) [COMMIT] Commit and push `o1c_floating_foundations.py`.
       done-when: pushed, confirmed on origin.
 - [ ] 10. (S9) Write `scripts/o1d_warrant_sensitivity.py`: per-warrant
       `build_att`/`label0`/`final_labels` recomputation with that
