@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=31 blockers=none
+State: all 31 steps complete; next=dr-validate-change, then STOP before delivery (operator instruction)
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -773,12 +773,24 @@ order. One step per dr-execute-step invocation.
       net contribution: 3398 -> 3399 passed (the one real fix), 4
       failed -> 3 failed (that same fix), same 3 pre-existing failures
       before and after.
-- [ ] 31. (all) [COMMIT] Final push and clean-tree confirmation.
+- [x] 31. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/pipeline-design-d2` matches
       local HEAD; total diff-budget across the whole tranche pasted
       one final time against the 1150-line ceiling (or the ceiling as
       revised by Amendment 3, if step 27 changed scope).
+      DONE — `git status --porcelain` empty (nothing pending; step 30's
+      own commit already left the tree clean, no separate commit
+      needed here). Local HEAD `a5c7bffe` == remote
+      `origin/claude/pipeline-design-d2` HEAD `a5c7bffe` (both pasted,
+      identical). Final `git diff --stat f103a03a -- src/ tests/`: 20
+      files changed, 833 insertions(+), 9 deletions(-) -> 824 net
+      lines against the 1150-line ceiling (unrevised — Amendment 3
+      scoped surface-4 contact only, never the code budget). Frozen-
+      surface diff, final: `run_manifest.py` only, 9 lines (8
+      insertions, 1 deletion) — exactly step 27's one authorized hunk,
+      nothing else on any of the five surfaces across the whole
+      tranche.
 
 ## Amendments
 (none yet — re-planning after a validation failure or a frozen-surface
