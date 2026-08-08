@@ -17,3 +17,4 @@ run_id=run-b212590cf2957821796b560163e1941e tag=s2
 audit_rc=0 tag=s2
 reason_rc=0 reason_seconds=359 tag=s3
 run_id=run-168a41157d05ca53431f268fba264b4c tag=s3
+audit_rc=0 tag=s3
