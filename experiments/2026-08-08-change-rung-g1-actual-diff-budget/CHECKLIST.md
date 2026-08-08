@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=1 blockers=none
+State: next=3 blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -7,7 +7,7 @@ additive subsection, no existing header/check moved; no `DR-SUB-`/
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S1, S6) Write `tools/diff_budget.py` (CLI: `<base> [--against
+- [x] 1. (S1, S6) Write `tools/diff_budget.py` (CLI: `<base> [--against
       REF] [--ceiling N] [--paths PATH ...]` -> `DIFF_BUDGET_RESULT_V1`
       JSON; exit 0 result-emitted / 2 invalid-invocation / 3
       evidence-unavailable; `--self-test` mode proving WITHIN/
@@ -21,13 +21,51 @@ order. One step per dr-execute-step invocation.
       prints `SELF-TEST PASS`; `python tools/docs_verify.py` -> ends
       `0 failed` (includes the two new checks).
 
-- [ ] 2. (S1, S6) [COMMIT] Commit `tools/diff_budget.py` +
+      DONE. Self-test:
+      ```
+      SELF-TEST PASS
+      ```
+      docs_verify (full run, background task bjcs9r9g3):
+      ```
+      docs_verify [full]: 52 documents, 831 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+      831 checks, up from the 829 baseline -- the two new `check:`
+      lines registered and passed.
+
+      Mid-step discovery, fixed before commit (not a separate PARKED
+      item -- it was this step's own SPEC.md scope text, caught before
+      any code landed): SPEC.md's Budget headline named this tranche's
+      own `experiments/` dir in the enforced ceiling scope, which
+      contradicted its own itemization (never counted REQUEST.md/
+      SPEC.md/CHECKLIST.md, already 638 lines together). Corrected in
+      SPEC.md (see that file's "Correction" paragraph under `## Budget`)
+      to match S5's own precedent of excluding the workflow's own
+      ledger documents from the ceiling. No item's line count, the
+      ceiling value (450), or any requirement changed.
+
+- [x] 2. (S1, S6) [COMMIT] Commit `tools/diff_budget.py` +
       `docs/map/INV-frozen-surfaces.md` together; run the diff-budget
       check per dr-execute-step step 6 (still its pre-amendment prose
       form here — the gate cannot check its own first commit into
       existence).
       done-when: `git log -1 --stat` shows both files; push succeeds
       (retry 2/4/8/16s on failure).
+
+      DONE, combined with the SPEC.md correction above (same commit,
+      since both were staged together before the discovery was made):
+      commit `1edbe1be` --
+      ```
+       docs/map/INV-frozen-surfaces.md                    |  19 +-
+       experiments/.../SPEC.md                            |  22 +-
+       tools/diff_budget.py                               | 222 ++++++
+       3 files changed, 258 insertions(+), 5 deletions(-)
+      ```
+      Pre-commit budget check (pre-amendment prose form, tranche-base
+      `d4f63007`, paths `tools/ tests/ .claude/skills/ docs/map/`):
+      222 (tool) + 17 net (map doc) = 239 insertions, well within the
+      450 ceiling (SPEC.md's own headline low bound alone is 318, so
+      239 is under even that). Pushed.
 
 - [ ] 3. (S2) Write `tests/test_diff_budget.py`: fixture-repo pytest
       tests (subprocess-invoking the real CLI) for WITHIN, EXCEEDED,
