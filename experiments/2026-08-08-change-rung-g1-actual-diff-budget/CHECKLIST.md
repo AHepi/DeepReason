@@ -1,5 +1,5 @@
 # Checklist for: Rung G1 — actual-diff budget gate
-State: next=12 blockers=none
+State: next=none blockers=none
 Map ids: `DR-INV-frozen-surfaces` (only map document touched — an
 additive subsection, no existing header/check moved; no `DR-SUB-`/
 `DR-CON-`/`DR-SEAM-` id applies, this tranche touches no
@@ -281,9 +281,13 @@ order. One step per dr-execute-step invocation.
       3382 + 13 new tests in `tests/test_diff_budget.py`. Net of P1/P3:
       **3395 passed, 0 failed.**
 
-- [ ] 12. (all) [COMMIT] Final CHECKLIST.md update (all boxes checked,
+- [x] 12. (all) [COMMIT] Final CHECKLIST.md update (all boxes checked,
       State: line advanced to `next=none`); push and confirm clean
       tree.
       done-when: `git status --porcelain` empty AND branch head is on
       origin (`git rev-parse HEAD` == `git rev-parse
       origin/claude/rung-g1-actual-diff-budget-b0jede`).
+
+      DONE. All 12 steps checked. State: line below advanced. Clean-
+      tree and push-parity check pasted after this commit lands (see
+      the commit that carries this line).
