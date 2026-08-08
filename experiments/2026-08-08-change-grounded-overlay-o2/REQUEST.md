@@ -329,3 +329,34 @@ it's out" — no candidate design in this SPEC.md may be adopted, even
 as a priced option, if its own operating definition contradicts a
 constraint the spec text actually states. Contradiction is a
 disqualifier, not a cost line.
+
+**Amendment 2** (2026-08-08, mid-tranche, operator's own words,
+verbatim):
+
+> Correction to the reading list in the evidence amendment: the current
+> harness spec is docs/harness-spec-v1.3.md as amended by all three
+> amendments — v1.4, v1.5, AND v1.6
+> (harness-spec-v1.4-amendment.md, harness-spec-v1.5-amendment.md,
+> harness-spec-v1.6-amendment.md) — read all four documents, and derive
+> the evidence/ground definition from the latest amended state, citing
+> the amendment that last touched each clause you rely on. Note the
+> version families are distinct: "V6" in v6_policy.py/RunManifest and
+> conjecturer.turn.v6 are different series from these spec documents.
+> Everything else in the amendment stands.
+
+R15a (process, Amendment 2, supersedes R15): read
+`docs/harness-spec-v1.3.md`, `docs/harness-spec-v1.4-amendment.md`,
+`docs/harness-spec-v1.5-amendment.md`, `docs/harness-spec-v1.6-
+amendment.md`, and `docs/ADMISSION_SPEC.md` — all five documents, in
+full — before any further design decision.
+
+R16a (behavior, Amendment 2, sharpens R16): every spec-derived claim
+in SPEC.md cites the specific amendment (v1.3 base text, or v1.4/v1.5/
+v1.6) that LAST TOUCHED the clause relied on — not merely "the spec"
+generically.
+
+C8 (Amendment 2, standing): the `V6`/`v6_policy.py`/`RunManifest v6`/
+`conjecturer.turn.v6` code-side version family is DISTINCT from the
+`harness-spec-v1.6-amendment.md` document series — a citation to "v6"
+in this SPEC.md must disambiguate which family it means, never
+conflate them.
