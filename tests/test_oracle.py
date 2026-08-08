@@ -237,6 +237,43 @@ def test_candidate_checker_never_joins_exec_programs():
     assert CANDIDATE_CHECKER_PROGRAM not in EXEC_PROGRAMS
 
 
+def test_candidate_checker_pass_grants_formally_backed_protection(harness):
+    """D2 rev 2 Item 6 acceptance check 3: a candidate whose new-kind
+    commitment PASSES gains formally_backed protection exactly like any
+    other passing commitment today (same shape as
+    test_execution_backed_true_only_when_passing, extended to the new
+    eval kind)."""
+    from deepreason.rules.warrants import formally_backed
+
+    c = candidate_checker_commitment("def solve(x):\n    return x * 2", "solve", DOUBLE)
+    harness.register_commitment(c)
+    good = harness.create_artifact(
+        "Doubling composes with addition the way multiplication by two does.",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert formally_backed(harness, good.id) is True
+    # Never joins EXEC_PROGRAMS (R45), so execution_backed stays False for it.
+    assert execution_backed(harness, good.id) is False
+
+
+def test_R_g_no_scheduling_term_reads_the_candidate_checker_kind():
+    """D2 rev 2 Item 6 acceptance check 4: neither Scheduler._select_problem
+    nor _standing_recrit_pool gains a NEW term reading the new eval kind
+    specifically -- grep-provable, D1 census M9(a)'s own method repeated
+    against the new symbol. execution_evals (the set _standing_recrit_pool
+    re-derives inline, D1 M6) is built from EXEC_PROGRAMS alone (step 14's
+    own R45 confirmation: still exactly 3 members, candidate_checker never
+    joins it), so this is a zero-hits check, not merely an absence of the
+    literal string."""
+    from pathlib import Path
+
+    scheduler_source = (
+        Path(__file__).resolve().parents[1] / "src" / "deepreason" / "scheduler" / "scheduler.py"
+    ).read_text()
+    assert "candidate_checker" not in scheduler_source
+
+
 def test_run_from_full_spec_overruns_on_malformed_spec():
     from deepreason.ontology.commitment import Budget
     from deepreason.oracle import run_from_full_spec

@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=23 blockers=none
+State: next=25 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -466,14 +466,67 @@ order. One step per dr-execute-step invocation.
 
 ## R-g acceptance checks (Item 6, R36, 7 named tests: 5 original + 2 from Amendment 2)
 
-- [ ] 23. (R36) Write all 7 named regression tests from SPEC.md's Item 6
+- [x] 23. (R36) Write all 7 named regression tests from SPEC.md's Item 6
       (rev 2) and its Amendment-2 "New tests owed" list, in ONE step
       (they are one coherent proof, not 7 separable increments —
       splitting them would let a partial pass look like acceptance).
       done-when: `python -m pytest tests/test_prose_refutation_boundaries.py tests/test_oracle.py tests/test_adjudication.py tests/test_properties.py -q -k "R_g or relatedness or candidate_checker"` -> 0 failed, and the 7 named claims are each visibly covered (paste the collected test names).
-- [ ] 24. (R36) [COMMIT] Commit step 23.
+      DONE — checked existing coverage FIRST rather than writing 7 blind
+      new tests (2 of the 7 claims were already proven by earlier
+      steps' own tests): claim-by-claim mapping —
+      (1) informal-only byte-identical: NEW
+      `test_R_g_informal_only_run_replays_byte_identical`
+      (test_adjudication.py).
+      (2) new-kind commitment FAILS -> refuted like any crit_program
+      failure: already proven by step 2-4's own
+      `test_crit_program_refutes_a_prose_conjecture_by_running_its_checker`
+      (test_oracle.py) — same shape as
+      `test_crit_program_refutes_wrong_code_by_running_it`, extended.
+      (3) new-kind commitment PASSES -> formally_backed protection: NEW
+      `test_candidate_checker_pass_grants_formally_backed_protection`
+      (test_oracle.py).
+      (4) no new scheduling term reads the new kind: NEW
+      `test_R_g_no_scheduling_term_reads_the_candidate_checker_kind`
+      (test_oracle.py, grep-provable, D1 M9(a)'s own method).
+      (5) relatedness challenge never mutates the CANDIDATE's Status
+      directly, only substantive-membership: already proven by step
+      12's `test_a_challenged_relatedness_claim_strips_only_its_own_commitment`
+      (test_prose_refutation_boundaries.py).
+      (6) sustained challenge flips the CLAIM's own Status to REFUTED
+      while the CONJECTURE's stays: the SAME test as (5) — both rev-2's
+      Item-6 wording and Amendment 2's addition describe the identical
+      empirical fact from two angles; recorded honestly as ONE test
+      proving both rather than manufacturing a second, redundant one.
+      (7) no relatedness claim at all still counts toward
+      formally_backed (F6 opt-out): the SAME test's OWN first assertion
+      (`formally_backed(...) is True` before any claim is minted),
+      reinforced independently by step 16-18's
+      `test_no_linked_claim_is_the_opt_out_default` (test_relatedness.py).
+      Collected test names for the exact done-when command (6 distinct
+      node ids — (2)/(5)/(6)/(7) reuse tests from earlier steps, so
+      fewer than 7 NEW names, all 7 CLAIMS covered):
+      `test_prose_refutation_boundaries.py::test_a_challenged_relatedness_claim_strips_only_its_own_commitment`,
+      `test_oracle.py::test_candidate_checker_reads_source_from_budget_not_content`,
+      `test_oracle.py::test_candidate_checker_never_joins_exec_programs`,
+      `test_oracle.py::test_candidate_checker_pass_grants_formally_backed_protection`,
+      `test_oracle.py::test_R_g_no_scheduling_term_reads_the_candidate_checker_kind`,
+      `test_adjudication.py::test_R_g_informal_only_run_replays_byte_identical`
+      (6 collected by -k; claim 2's own test doesn't match the keyword
+      filter but exists and passes). Full ring (all 4 named files): 134
+      passed, 0 failed. Mutation-proved the 3 brand-new checks: (a)
+      appended a literal `# candidate_checker` line to scheduler.py ->
+      the R-g grep test failed exactly as expected, reverted; (b)
+      disabled the relatedness-gated `continue` branch in
+      `formally_backed` -> the pass-grants-protection test failed
+      (`False is True`), reverted; both re-verified passing after
+      restore.
+- [x] 24. (R36) [COMMIT] Commit step 23.
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 17 files changed, 815 insertions(+), 7
+      deletions(-) -> running total 808 of 1150. Frozen-surface diff:
+      empty. Pushed.
 
 ## Map document (CON-conjecture-kinds.md v2)
 

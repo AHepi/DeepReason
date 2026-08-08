@@ -194,3 +194,23 @@ def test_unregistered_warrant_rejected(harness):
     )
     with pytest.raises(WellFormednessError):
         harness.register_artifact(a)
+
+
+def test_R_g_informal_only_run_replays_byte_identical(tmp_path):
+    """D2 rev 2 Item 6 acceptance check 1: an informal-only run (no
+    candidate ever populates the new commitment field, no relatedness
+    claim minted) is BYTE-IDENTICAL to today at the event-log level --
+    reader-before-writer, absence-tolerant (R30: no new absence-tolerant
+    Event field was even added this tranche, unlike rung-4's own M19
+    precedent, since the new commitment attaches via the EXISTING
+    two-phase draft/register path)."""
+    from deepreason.harness import Harness
+
+    root = tmp_path / "run"
+    harness = Harness(root)
+    a = art(harness, "plain prose, no formal commitment of any kind")
+    attacker, _ = attack(harness, a.id, "an ordinary argumentative attack")
+
+    assert harness.state.status[a.id] == Status.REFUTED
+    assert harness.state.status[attacker.id] == Status.ACCEPTED
+    assert Harness(root).state.model_dump_json() == harness.state.model_dump_json()
