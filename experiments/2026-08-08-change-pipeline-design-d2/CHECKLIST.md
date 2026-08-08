@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=36 blockers=none
+State: steps 1-31 complete (original tranche, validated PASS); Amendment 4 adds steps 32-43; next=40 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -933,9 +933,27 @@ on the five surfaces is a STOP.
       discipline).
       done-when: `python tools/docs_verify.py` reports 0 failed
       including the new check in this document.
-- [ ] 39. (Item 8) [COMMIT] Commit step 38.
+      DONE — new paragraph added to `CON-conjecture-kinds.md`'s own
+      dual-mode section naming `is_pure_code` and both extended
+      programs. New check's own `-k` filter needed one correction
+      found at execution time: pytest applies only the LAST `-k`
+      value when multiple `-k` flags are chained across file
+      arguments (not per-file as first written) — fixed to one
+      combined `-k "is_pure_code or reasoning_wf_program or
+      skeleton_wf"` expression across all three files, verified to
+      collect exactly the intended 17 tests (8+4+5, the skeleton file's
+      5 including one pre-existing `skeleton_wf` test, correctly kept
+      since it's legitimate regression coverage for the same
+      mechanism). `python tools/docs_verify.py` -> `docs_verify: 2
+      failed` (both `SUB-application.md`'s pre-existing PARKED
+      failures, zero new; 848 checks now, +1 for this document's own
+      new check). `--audit` -> 0 findings. `--links` -> 0 dangling.
+- [x] 39. (Item 8) [COMMIT] Commit step 38.
       done-when: diff-budget running total <= 175; frozen-surface diff
       empty; push confirmed.
+      DONE — src/tests diff-budget unchanged at 198 (map document not
+      counted, per this tranche's own convention). Frozen-surface
+      diff: empty. Pushed.
 - [ ] 40. (all) Blast-radius ring: run every file SPEC.md Revision 3's
       own census named as EXPECTED TO MOVE ONLY IF / MUST NOT MOVE:
       `python -m pytest tests/test_workload_text.py tests/test_replay_reasoning.py

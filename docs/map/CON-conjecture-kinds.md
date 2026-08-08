@@ -153,6 +153,24 @@ own documented convention; `rules/experiment.py`'s own `propose_properties`
 is the live precedent for `experimenter`). Zero `run_manifest.py` contact.
 `check: grep -q "property_designer" src/deepreason/run_manifest.py && ! grep -q '"encoder"' src/deepreason/run_manifest.py`
 
+**A conjecture can never be full code (Amendment 4) — a mechanical
+check, not a new admission gate.** `programs.py::is_pure_code` is a
+narrow, kind-blind AST test: a submission consisting SOLELY of
+function/class/import statements trips it; real prose, a bare
+docstring-only submission, and prose that merely quotes code inline
+(not valid Python syntax as a whole) all pass. Both mandatory
+well-formedness programs call it independently on their own two
+free-text fields: `workloads/text.py::reasoning_wf_program` (claim,
+mechanism — UNCONDITIONALLY mandatory for every reasoning-workload
+artifact, the live path) and `informal/skeleton.py::skeleton_wf_program`
+(claim, mechanism — mandatory only for problems that already opt into
+`skeleton-wf`, a pre-existing, unrelated asymmetry this fix does not
+change). A pure-code submission FAILS the same mechanical program a
+forbid-nothing skeleton or an oversized envelope already fails today —
+refuted by `crit_program`, never blocked at admission; no new arbiter
+decides "is this prose" before criticism runs.
+`check: python -m pytest tests/test_programs.py tests/test_workload_text.py tests/test_informal.py -k "is_pure_code or reasoning_wf_program or skeleton_wf" -q`
+
 ## Where it lives
 
 | Aspect | File | Symbol |
