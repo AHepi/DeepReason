@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fc19c1edcca70d5589ba0184: program:reasoning_observation_pending
+- reason-counter@83ae26c6d1397051b3cbce20: program:reasoning_observation_pending
+- reason-counter@c1b83de4c9a4faf99eb9ae56: program:reasoning_observation_pending
+- reason-counter@520eca3fd1dab9f187e4688b: program:reasoning_observation_pending
+- reason-counter@c9dfba0f86a536bfadfe451c: program:reasoning_observation_pending
+- reason-counter@6e3493b88c1f68aab46b4b4e: program:reasoning_observation_pending
+- reason-counter@09094ac505645f661e46fd6d: program:reasoning_observation_pending
+- reason-counter@1845582a65d03e2f7c50b961: program:reasoning_observation_pending
+- reason-counter@d650919d022e6159ced1309e: program:reasoning_observation_pending
+- reason-counter@62d634bb4ac949589fd5f18e: program:reasoning_observation_pending
+- reason-counter@ddfb9ca63324708809ce4c1d: program:reasoning_observation_pending
+- reason-counter@ef47c5e6879470ba20c14de7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The evidence that distinguishes 'independent' from 'merely uncorrelated' is a rigorous dependency audit proving non-overlapping supply chains, because correlation in software systems is almost always caused by shared dependencies rather than coincidental independent bugs.","counterconditions":[{"case":"A shared dependency is not the cause of a specific failure","checker_spec":null,"eval":"observation"},{"case":"Operators have proprietary, non-overlapping stacks but identical external interfaces","checker_spec":null,"eval":"observation"},{"case":"The correlation is caused by a shared external trigger rather than a shared internal component","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Software failures are rarely truly independent due to the high complexity of modern systems. Apparent independence is often due to shared third-party libraries, OS kernels, or hardware architectures. A decentralized network's claim of independence is only substantiated by a dependency audit proving the operators do not share common-mode dependencies. If the audit reveals overlapping supply chains (e.g., all use the same OS version), the fail
+commitments: reasoning-envelope-wf, reason-counter@fc19c1edcca70d5589ba0184, reason-counter@83ae26c6d1397051b3cbce20, reason-counter@c1b83de4c9a4faf99eb9ae56
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Adding redundancy has diminishing returns; removing shared dependencies may have high impact.","A large service is not actually unconstrained; organizational complexity limits its ability to add diversity."],"overturn_conditions":["If the large service's action space is actually constrained (e.g., by cost or complexity) below the decentralized network's, the asymmetry reverses.","If the decentralized network can efficiently coordinate dependency removal, the non-removability claim fails."],"shared_structure":["Additive property of redundancy vs non-removable property of shared dependencies.","Centralized control enabling iterative addition vs decentralized inertia preventing removal."],"source_memory_refs":["SCR_001"],"transfer_claims":["Just as a wealthy individual can always buy more insurance but cannot retroactively change their risk profile, a large service can always add more redundancy but a decentralized network cannot remove shared dependencies.","The asymmetry transfers: centralized systems have an action space that strictly contains the decentralized action space for resilience."]},"claim":"The claim is false because strict internal redundancy 
+commitments: reasoning-envelope-wf, reason-counter@520eca3fd1dab9f187e4688b, reason-counter@c9dfba0f86a536bfadfe451c, reason-counter@6e3493b88c1f68aab46b4b4e
+
+TARGET SRC_003
+{"analogy":null,"claim":"Decentralization is more resilient only if a demonstrable causal independence barrier exists; without such a barrier, the large service's strictly greater internal redundancy dominates.","counterconditions":[{"case":"The large service cannot achieve the same diversity due to internal standardization pressures","checker_spec":null,"eval":"observation"},{"case":"The causal barrier is not actually effective against the failure mode in question","checker_spec":null,"eval":"observation"},{"case":"The small services have less total redundancy than the large service","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Redundancy mitigates independent failures, while causal independence barriers mitigate correlated failures. A large service can always replicate independent components (strictly more redundancy). Decentralization only wins if the topological separation creates a causal barrier the large service cannot achieve (e.g., different legal jurisdictions or air-gapped networks). Without a verified barrier, the large service's redundancy is strictly superior, as it is a superset of the small services' capacity.","premises":[],"sch
+commitments: reasoning-envelope-wf, reason-counter@09094ac505645f661e46fd6d, reason-counter@1845582a65d03e2f7c50b961, reason-counter@d650919d022e6159ced1309e
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The large service's internal redundancy is centrally controlled; the decentralized network's independence is emergent.","Internal diversity in a large service is a design choice; independence in a decentralized network is a structural property."],"overturn_conditions":["If a decentralized network survives a correlated failure without a demonstrable barrier, the necessity of the barrier is refuted.","If the large service can internally replicate the barrier, the sufficiency of decentralization is weakened."],"shared_structure":["Conditional superiority: decentralized wins only if a barrier exists.","Redundancy absorption: large service can absorb component failures up to its redundancy limit."],"source_memory_refs":["SRC_003","SRC_006"],"transfer_claims":["Just as a firebreak stops fire spread only if it is clear of fuel, a causal independence barrier stops failure propagation only if it is truly independent.","The conditional claim transfers: without a firebreak, the building with more fire extinguishers (redundancy) is safer."]},"claim":"A decentralized network is more resilient to correlated failure if and only if a demonstrable causal independence barr
+commitments: reasoning-envelope-wf, reason-counter@62d634bb4ac949589fd5f18e, reason-counter@ddfb9ca63324708809ce4c1d, reason-counter@ef47c5e6879470ba20c14de7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

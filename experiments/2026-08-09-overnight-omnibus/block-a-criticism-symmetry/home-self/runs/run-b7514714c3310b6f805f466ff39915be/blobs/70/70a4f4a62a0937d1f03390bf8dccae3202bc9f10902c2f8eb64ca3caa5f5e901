@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target demands a causal mechanism but its core inference is non-causal: it asserts that distinct failure signatures under identical stress 'indicate distinct causal paths.' This conflates divergent effects with independent causes. Two services can exhibit different failure signatures under the same stressor yet still share a latent upstream cause — e.g., a shared cloud-provider control-plane degradation that manifests as timeout cascades in one service's request path and as state-cache corruption in another's, because of differing downstream buffering. Different *observable* failure signatures do not establish distinct *causal paths* for the latent shared cause; they only show distinct downstream propagation. The target provides no mechanism that makes 'distinct failure signatures' a sufficient discriminative test of true causal independence, so its evidence rule (divergence -> independent causal paths) can produce false positives for independence — the very error the problem asks to avoid.",
+      "counterexample": [
+        {
+          "setup": "Two small services (A, B) share a cloud provider's storage control plane. Stressor: inject identical latency into the network. Observed outcomes: Service A emits 504 timeouts at its HTTP ingress; Service B emits replicated-state-machine desync warnings from its local write buffer.",
+          "analysis": "Failure signatures differ (timeouts vs. desync) under identical stress, which per the target's rule indicates independent causal paths. But the shared latent cause — control-plane latency disrupting each service's storage IOPS reservation — is the same; the divergence arises from differing downstream buffering, not distinct causal paths.",
+          "implication": "Divergent failure signatures under identical stress do not suffice to distinguish independent causes from a single shared cause expressed through differing propagation. The target's proposed evidence rule yields a false positive for independence."
+        }
+      ]
+    }
+  ]
+}
+```

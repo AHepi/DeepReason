@@ -1,0 +1,50 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3160bb577b5f50b55358b029: program:reasoning_observation_pending
+- reason-counter@fb1004eba25b0d24ffa9a397: program:reasoning_observation_pending
+- reason-counter@a32149184dff8eb86afb7520: program:reasoning_observation_pending
+- reason-counter@ee846b9929479b16e60e738d: program:reasoning_observation_pending
+- reason-counter@f8373682e67a59738378f20c: program:reasoning_observation_pending
+- reason-counter@f3777c691ac95c7f3c5b2504: program:reasoning_observation_pending
+- reason-counter@d6acf127e06e213556e3fe14: program:reasoning_observation_pending
+- reason-counter@66e9446dcbb4ee3b5f8d54f1: program:reasoning_observation_pending
+- reason-counter@64df90c2646cef86e8dea78d: program:reasoning_observation_pending
+- reason-counter@c810b3b219924d412ba9c5fd: program:reasoning_observation_pending
+- reason-counter@54864d5628364513fceab49c: program:reasoning_observation_pending
+- reason-counter@c96f0361ff69431ff846d0ce: program:reasoning_observation_pending
+- reason-counter@d0893c245613dd5d931340a9: program:reasoning_observation_pending
+- reason-counter@df706e4d4184082e1c773a80: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A decentralized network is strictly more fragile than a large service with strict internal redundancy, because small services lack the economic slack to afford non-operational diversity and thus concentrate on the same minimum-cost dependencies.","counterconditions":[{"case":"The large service's internal redundancy is merely logical replication on a single physical substrate","checker_spec":null,"eval":"observation"},{"case":"Operators possess private information leading to genuine substrate divergence","checker_spec":null,"eval":"observation"},{"case":"Regulation forces operator diversity","checker_spec":null,"eval":"observation"},{"case":"The large service is cost-constrained in the same way","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independent operators facing similar market pressures converge on identical commodity infrastructure (cloud availability zones, managed databases, core CDNs) because the cost of diverging exceeds the expected loss from a correlated outage. The large service has explicit economic slack to fund internal replication across diverse substrates, whereas small operators each optimize independe
+commitments: reasoning-envelope-wf, reason-counter@3160bb577b5f50b55358b029, reason-counter@fb1004eba25b0d24ffa9a397, reason-counter@a32149184dff8eb86afb7520, reason-counter@ee846b9929479b16e60e738d
+
+TARGET SRC_002
+{"analogy":null,"claim":"Both architectures are equally vulnerable to the worst-case correlated failure; decentralized networks merely obscure the correlation until a shared cause is found, while large services make the coupling explicit and thus auditable.","counterconditions":[{"case":"Decentralized operators demonstrably use non-overlapping supply chains","checker_spec":null,"eval":"observation"},{"case":"The large service's internal coupling is not actually modeled or monitored","checker_spec":null,"eval":"observation"},{"case":"Independence is verified by active stress injection rather than assumed from topology","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If a single root cause can fail one service, it can fail all services sharing the causal dependency (e.g., a global DNS provider, TLS certificate authority, or BGP route). In a large system, the internal coupling is explicit and can be modeled (e.g., 'all replicas depend on the same configuration service'), exposing the correlated failure mode to analysis. In a decentralized network, the causal chain is hidden across organizational boundaries, making the system appear independent until t
+commitments: reasoning-envelope-wf, reason-counter@f8373682e67a59738378f20c, reason-counter@f3777c691ac95c7f3c5b2504, reason-counter@d6acf127e06e213556e3fe14
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The large service could also use multiple configuration management systems, negating the monoculture risk.","Small services might independently converge on the same managed database, creating hidden correlation."],"overturn_conditions":["If the large service's internal diversity is only nominal (same code, same config), the monoculture risk reappears.","If the decentralized network proves causal independence via stress injection, the counterexample fails."],"shared_structure":["Redundancy comparison: large service with N+M replicas vs decentralized network with N services each having at least 1 replica.","Monoculture risk: a single config management system in the large service vs fragmented management in decentralized."],"source_memory_refs":["SRC_004","SCR_001","SCR_003"],"transfer_claims":["Just as a fleet of diverse trucks might be more resilient to a single parts shortage than identical trucks, a decentralized network survives monoculture bugs; but if all trucks use the same fuel, the advantage vanishes.","The counterexample in SCR_003 transfers: if the large service uses diverse hardware and the decentralized network shares a managed database, the la
+commitments: reasoning-envelope-wf, reason-counter@66e9446dcbb4ee3b5f8d54f1, reason-counter@64df90c2646cef86e8dea78d, reason-counter@c810b3b219924d412ba9c5fd, reason-counter@54864d5628364513fceab49c
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The large service can afford redundant dependencies; small services may not.","The decentralized network's shared dependency may be less obvious, delaying detection."],"overturn_conditions":["If one architecture can demonstrably survive the failure of the shared dependency, the equivalence is broken.","If the shared dependency is not in the critical path for one architecture, the equivalence does not hold."],"shared_structure":["Shared dependency in critical path causing simultaneous failure.","Organizational separation not implying causal independence."],"source_memory_refs":["SRC_005","SCR_003"],"transfer_claims":["Just as two buildings with different architects but the same faulty foundation are equally vulnerable to an earthquake, two services with different operators but the same dependency are equally vulnerable to its failure.","The counterexample in SCR_003 transfers: the shared managed database is the faulty foundation."]},"claim":"Both architectures are equally vulnerable to the worst-case correlated failure. Decentralized networks obscure the correlation until a shared cause is found, while large services make the correlation obvious but do not
+commitments: reasoning-envelope-wf, reason-counter@c96f0361ff69431ff846d0ce, reason-counter@d0893c245613dd5d931340a9, reason-counter@df706e4d4184082e1c773a80
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

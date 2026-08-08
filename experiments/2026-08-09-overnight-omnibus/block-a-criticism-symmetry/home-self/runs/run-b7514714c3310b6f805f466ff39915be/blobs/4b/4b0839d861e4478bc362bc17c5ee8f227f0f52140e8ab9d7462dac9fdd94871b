@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's proposed evidence—a dependency audit—cannot actually distinguish 'independent' from 'merely uncorrelated' as the problem demands. The target's own counterconditions concede that failures can be driven by a shared external trigger (not a shared dependency) or by truly independent bugs. In those scenarios a rigorous supply-chain audit returns a false negative: it certifies non-overlapping dependencies (and thus 'independence') while the services remain vulnerable to a common external cause or coincidental simultaneous faults. Because the audit outcome conflates 'no shared component' with 'no shared cause,' it cannot supply the discriminating evidence the question asks to identify.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 attacks the premise via a 'strictly more internal redundancy' framing whose causal logic is under-specified: it asserts that a centralized system's action space 'strictly contains' the decentralized one because adding redundancy is additive while removing shared dependencies is hard. Yet the target's own disanalogy concedes a large service is not actually unconstrained—organizational standardization limits its diversity. With that constraint, 'strictly more' total internal redundancy need not translate into a strict superset of resilience against correlated failure: the large service may be unable to deploy heterogeneous components (different OS/stacks/jurisdictions) that independent operators already run. No causal mechanism is given for why additive redundancy dominates when diversity, not component count, is the operative protection against correlated faults. Without that mechanism, the claimed asymmetry is not established.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_003's mechanism claims a large service can 'always replicate independent components (strictly more redundancy),' treating redundancy as a strict superset of the decentralized capacity. But the target's own countercondition concedes the large service may be unable to achieve the same diversity due to internal standardization pressures. Under that condition, the large service cannot replicate the small services' causal heterogeneity even though it has more total components. The conclusion that the large service's redundancy is 'strictly superior' therefore lacks a causal mechanism: it assumes component replication implies diversity replication, which the admitted countercondition refutes. The barrier-versus-redundancy framing does not supply the missing causal link between 'more components' and 'more resilience to correlated failure' when standardization causes a common-mode dependency the small services avoid.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "SRC_004's firebreak analogy asserts a causal barrier is necessary, but its own overturn condition reveals the argument is circular: it says the necessity of the barrier is refuted only if the network survives a correlated failure without one. That is an empirical escape hatch, not a causal mechanism. More importantly, the 'if and only if' biconditional conflates two different barriers: a firebreak stops propagation between components, while the independence the problem asks about concerns shared causes of failure. A network can possess an effective causal barrier against propagation yet still suffer correlated failure from a shared external trigger that crosses the barrier (e.g., a region-wide power loss affecting air-gapped nodes alike), so the presence of a 'demonstrable barrier' is not sufficient for the claimed resilience, undermining the iff.",
+      "counterexample": null
+    }
+  ]
+}
