@@ -223,16 +223,29 @@ every LLM call ever made (only capability-channel-role calls, since R11
 asks about "executable-authoring attempts by the conjecturer"
 specifically). Assumed, operator may override.
 
-A5 (Q5): "P1/P3" in the task's acceptance line ("0 failed net of the
-named pre-existing P1/P3") is read as the S6 tranche's `PARKED.md` P1
-(property-oracle dead path) and P3 (`continue` resume crash) — both
-LIVE-RUN/design defects, neither a pytest test failure. Reading the
-gate command itself (`pytest tests/ -q -n 4`) as the authority: if it
-reports 0 failed with no reference to P1/P3-shaped tests, this
-assumption is moot and the net-out clause never triggers. If the gate
-surfaces an actual failure that traces to P1 or P3's mechanism, this
-assumption is revisited and reported honestly rather than silently
-netted out.
+A5 (Q5), CORRECTED post-gate-run (was wrong; corrected plainly rather
+than silently): "P1/P3" in the task's acceptance line does NOT refer to
+S6's `PARKED.md` P1/P3 as first assumed. Running the full gate found
+`tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`
+failing with `ValueError: too many values to unpack (expected 1)` — and
+`experiments/2026-08-07-change-seats-in-record-s5/PARKED.md` line 17
+names this EXACT failure "tracked as P1/P3 in every one of Rungs
+S1-S4's own `PARKED.md` files" (`experiments/2026-08-06-change-seat-census-s1/PARKED.md`,
+`...-seat-binding-wired-s3/PARKED.md`, `...-qualification-per-seat-s4/PARKED.md`).
+That is the actual referent: a long-standing harness/continuation-record
+defect (a continued root can carry 2 `module_fingerprints` payloads
+where this test assumes exactly 1), already queued for
+`deepreason-orchestrator`, unrelated to this tranche's own zero code
+changes. The gate also surfaced a SECOND failure,
+`tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`,
+traced to S6's own `PARKED.md` P3 (the `continue`-resume crash) leaving
+behind committed root `failed-epoch1-run-8c77c6588485304d1f73416318c62949`
+with an unexpected stop reason this test's witness scan does not
+expect — pre-existing (S6 committed that root before this session
+started; this tranche changed no code that could cause it), but NOT
+previously connected to a gate-level test failure in any prior PARKED.md.
+Recorded as a fresh PARKED entry (below) rather than folded silently
+into "the named P1/P3", since it is a distinct defect with its own cause.
 
 ## Questions for operator (STOP if non-empty)
 

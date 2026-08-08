@@ -1167,4 +1167,104 @@ ever recorded is this small.
 
 ## Summary (SPEC.md S16, filled in step 21)
 
-(filled in step 21)
+- **R6 (executable-commitment paths):** section 1 (M1-M5). Four paths
+  exist today — conjecturer-authored simulation/research proposals (the
+  only live one), `experiments/lambda_run.py` (internal, not
+  CLI-reachable), the dead property-oracle bootstrap (S6 PARKED P1,
+  reconfirmed still dead), and safe-skeleton forbidden-case compilation.
+  A bounded search found no fifth path; one adjacent-but-distinct
+  sandboxed-execution surface (evidence-adapter parsing) was found and
+  reported as out-of-scope rather than dropped.
+- **R7 (criticism dispatch per kind):** section 2 (M6-M9).
+  `crit_program`/`crit_argumentative` both run on every target
+  unconditionally — "dispatch by kind" is a data-driven OUTCOME of
+  `crit_program`'s own no-op-when-nothing-evaluable behavior, not a code
+  branch. `ARGUMENTATIVE_AUTHORITY` is read from `Config`/the frozen
+  manifest and enforced at `rules/crit.py:1303-1324`. The pack renderer
+  is one template for every target; kind is signaled by DATA
+  (`Interface.commitments`), never a branch. `execution_backed`/
+  `formally_backed` are protection-only guards, confirmed from their own
+  docstrings.
+- **R8 (refutation semantics per kind):** section 3 (M10-M12). A
+  DEMONSTRATIVE fail warrant refutes the whole artifact (today's system
+  has no separate encoding object). A trial-guarded prose refutation
+  can mint a real ARGUMENTATIVE warrant only after four guards
+  (defender, cross-family judge, referential integrity, unanimity +
+  paraphrase screens) and can never override `execution_backed`.
+  Dependents of a refuted artifact become `SUSPENDED_UNSUPPORTED`
+  ("orphaned != false") via a cascade that is kind-blind by its own
+  function signature.
+- **R9 (the R-g audit):** section 4. Three sub-searches (scheduler
+  ranking, pack rendering, acceptance criteria). Two found zero
+  kind-conditional terms at any layer, including the foundational Dung
+  grounded-extension acceptance computation, which cannot even see a
+  commitment. One genuine kind-conditional SCHEDULING term was found
+  (`_standing_recrit_pool` orders execution-backed artifacts first in
+  the standing re-criticism queue) and this audit tried, and failed, to
+  turn it into a demonstrated penalty — its effect runs toward LESS
+  re-criticism pressure on informal targets when formal ones are
+  present. **Overall verdict: CONFIRMS "protection-only, no penalty,"
+  with that one scheduling term named explicitly rather than absorbed
+  silently.**
+- **R10 (the load-knob inventory):** section 5. 43 knobs across two
+  structurally distinct families: 26 `Config` knobs (read live,
+  never digested into the manifest) and 17 manifest-embedded knobs
+  (capability policies, `CriticismPolicyV1`, scratch `AttentionPolicyV1`
+  — frozen at mint time). The Config family is where a future D4 load
+  dial can act without minting a new run identity; the manifest family
+  requires a new manifest per mix, consistent with D4's own rung-7
+  placement law.
+- **R11 (historical encoding-failure evidence):** section 6 (M13-M14).
+  The committed-root corpus (48 roots, 941 conjecturer wire-validation
+  attempts) contains exactly ONE attempt that ever touched a
+  simulation/research proposal field, and it failed on a `min_length`
+  schema violation (encoding). Turmite and jolt, quoted verbatim from
+  their own `RESULTS.md`, were also both encoding failures. Combined:
+  3/3 (100%) of every evidenced executable-authoring failure in this
+  repository's record failed on encoding, reported honestly as a
+  non-statistical sample (n=3), not inflated into a population rate.
+
+**R-g's own expected finding — "protection-only asymmetry, no
+penalty" — survives this census's attempt to refute it**, with one
+scheduling-term exception named for D2/D4 rather than glossed over, and
+the load-knob/encoding-failure evidence gives D3/D4/D5 a measured
+starting point rather than an assumed one.
+
+**Gate at the boundary (step 25):**
+```
+$ python -m pytest tests/ -q -n 4
+FAILED tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation
+FAILED tests/test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after
+2 failed, 3381 passed, 7 skipped in 645.23s (0:10:45)
+```
+Both failures are pre-existing and unrelated to this tranche's zero
+code changes: one is the operator's own named "P1/P3"
+(`test_module_fingerprints.py::test_absence_is_valid_before_the_feature_and_presence_valid_after`,
+independently tracked across four prior tranches' `PARKED.md` files);
+the other (`test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`)
+is pre-existing too but newly connected here to S6's own `PARKED.md` P3
+— recorded as this tranche's own `PARKED.md` P2, since the connection
+had not been made before. Net of both named pre-existing failures: 0
+failed regressions from this tranche.
+
+**Map checks at the boundary:**
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 53 documents, 839 checks, 4 workers
+  FAIL SUB-application.md:208: ... FAILED tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation | 1 failed, 4 passed in 4.59s
+  FAIL SUB-application.md:239: ... FAILED tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation | 1 failed, 2 passed in 4.64s
+docs_verify: 2 failed
+```
+Both `docs_verify` failures are the SAME single pre-existing root cause
+(S6 PARKED P3's committed root) surfacing through two different checks
+that both happen to call the same failing test — not two independent
+regressions, and not a failure in `CON-conjecture-kinds.md` (this
+tranche's own new document has zero failing checks).
+```
+$ python tools/docs_verify.py --audit
+docs_verify --audit: 0 finding(s)
+```
+```
+$ python tools/docs_verify.py --links
+docs_verify --links: 0 dangling reference(s), 53 document(s)
+```

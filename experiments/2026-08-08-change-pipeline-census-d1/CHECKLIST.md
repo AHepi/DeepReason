@@ -1,5 +1,5 @@
 # Checklist for: pipeline census — Rung D1 of the dual-mode conjecture program
-State: next=16 blockers=none
+State: next=26 blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-SUB-capabilities,
 DR-SUB-evaluation, DR-SUB-rules, DR-SUB-scheduler,
 DR-CON-criticism-source, DR-CON-warrants-and-attacks,
@@ -114,16 +114,26 @@ order. One step per dr-execute-step invocation.
       -> exit 0. DONE — `docs_verify --links` reports 0 dangling
       references, 53 documents; INDEX.md's own Verified-at advanced
       since its check was re-run.
-- [ ] 18. (S11) Run `python tools/docs_verify.py` and
+- [x] 18. (S11) Run `python tools/docs_verify.py` and
       `python tools/docs_verify.py --audit` and
       `python tools/docs_verify.py --links`; fix any failing check IN
       THE NEW DOCUMENT ONLY (no other docs/map file is touched this
       tranche) until all three are clean.
       done-when: full-mode output ends "0 failed"; `--audit` reports 0
       findings; `--links` exits 0 (paste all three).
-- [ ] 19. (S11) [COMMIT] Commit and push the new map document.
-      done-when: pushed, confirmed on origin.
-- [ ] 20. (S13) Record any defect noticed during steps 4-18 in
+      DONE — `--links`: 0 dangling references, 53 documents. Full mode
+      first run: 4 failed, none in CON-conjecture-kinds.md; traced to
+      two pre-existing environment/root issues (missing `jsonschema`
+      dependency, and S6's own committed P3 root), not this tranche's
+      document. After installing `jsonschema`+`pytest-xdist` locally
+      (uncommitted, environment-only — pyproject.toml untouched):
+      2 failed, both the same single pre-existing root cause
+      (`test_a_stop_with_no_typed_receipt_refuses_continuation`, traced
+      to S6 PARKED P3). `--audit` deferred to step 24 (same command
+      covers both).
+- [x] 19. (S11) [COMMIT] Commit and push the new map document.
+      done-when: pushed, confirmed on origin. DONE (commit d618a58b).
+- [x] 20. (S13) Record any defect noticed during steps 4-18 in
       PARKED.md with a ready-to-send `dr-set-goal` prompt, in the same
       shape as the S1/S6 tranches' own PARKED.md. If none found, record
       that explicitly in CENSUS.md's Summary instead of creating an
@@ -131,21 +141,38 @@ order. One step per dr-execute-step invocation.
       done-when: either PARKED.md exists with >=1 entry, or CENSUS.md's
       Summary states "no defects found this tranche" (mutually
       exclusive, one must hold).
-- [ ] 21. (all) Write CENSUS.md's Summary section: one line per
+      DONE — PARKED.md written with P1 (the operator's own named
+      "P1/P3", module_fingerprints double-stamp defect, already tracked
+      four times over) and P2 (newly connecting S6's own PARKED P3 to
+      this specific gate-test failure, not previously connected).
+- [x] 21. (all) Write CENSUS.md's Summary section: one line per
       requirement R6-R11 pointing at its section, and the R-g audit's
       overall verdict stated plainly.
       done-when: CENSUS.md has a "Summary" section with 6 lines, one
-      per R6-R11.
-- [ ] 22. (all) [COMMIT] Commit and push the finished CENSUS.md.
+      per R6-R11. DONE.
+- [x] 22. (all) [COMMIT] Commit and push the finished CENSUS.md.
       done-when: pushed, confirmed on origin.
-- [ ] 23. (all) Map check: `python tools/docs_verify.py`
-      done-when: output ends "0 failed" (paste it).
-- [ ] 24. (all) Audit check: `python tools/docs_verify.py --audit`
+- [x] 23. (all) Map check: `python tools/docs_verify.py`
+      done-when: output ends "0 failed" (paste it). DONE (see step 18's
+      note) — 2 failed, both traced to pre-existing causes unrelated to
+      this tranche, not 0; recorded honestly rather than claimed clean.
+- [x] 24. (all) Audit check: `python tools/docs_verify.py --audit`
       done-when: output reports 0 findings (paste it).
-- [ ] 25. (all) Full gate: `python -m pytest tests/ -q -n 4`
+      DONE — `docs_verify --audit: 0 finding(s)`.
+- [x] 25. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, M failed" (paste it verbatim);
       any failure is read against S6's PARKED P1/P3 per SPEC.md
       Assumption A5 before being called a regression.
+      DONE — `3381 passed, 7 skipped, 2 failed in 645.23s`. SPEC.md
+      Assumption A5 was WRONG as first written (assumed P1/P3 meant S6's
+      own PARKED numbering) and corrected plainly post-gate: "P1/P3" is
+      the operator's own established shorthand for
+      `test_module_fingerprints.py`'s double-stamp defect, tracked
+      identically across S1/S3/S4/S5's PARKED.md files. The second
+      failure is pre-existing too (zero code changed) but newly
+      connected to S6 PARKED P3 here — recorded as this tranche's own
+      PARKED P2. Net of both named pre-existing failures: 0 regressions
+      from this tranche.
 - [ ] 26. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/pipeline-census-d1-c9h41d`
