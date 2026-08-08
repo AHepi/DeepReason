@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=9 blockers=none
+State: next=12 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -210,7 +210,7 @@ order. One step per dr-execute-step invocation.
       still at line 313 (M21). No drift since SPEC.md was written. No
       file touched other than this checklist; no commit needed for a
       read-only step.
-- [ ] 9. (R43, M27) Write the small "relatedness claim" artifact-minting
+- [x] 9. (R43, M27) Write the small "relatedness claim" artifact-minting
       helper (mirrors `register_fail_warrant`'s own small-nu-artifact
       pattern, D1 census M10) — proposed home: `rules/warrants.py`
       alongside `execution_backed`/`formally_backed`, or a new sibling
@@ -222,15 +222,45 @@ order. One step per dr-execute-step invocation.
       `(harness, conjecture_id, commitment_id, claim_text)` and returns
       the new artifact's id, with a docstring naming which R/M it
       implements.
-- [ ] 10. (R43, M17, M27) Link the new artifact to the conjecture via
+      DONE — re-read `rules/warrants.py`'s own docstring at execution
+      time as instructed: it names the nu/DEMONSTRATIVE-warrant/critic
+      TRIPLE specifically ("hand-build the same triple"); a relatedness
+      claim has no warrant and no critic, only a plain MENTION-linked
+      artifact — a DIFFERENT concern per the docstring's own test, so
+      built a new sibling module `rules/relatedness.py` (next to
+      `warrants.py`/`experiment.py` in `rules/`) with
+      `mint_relatedness_claim(harness, conjecture_id, commitment_id,
+      claim_text, *, provenance_role="conjecturer") -> str`, docstring
+      naming R43/M27. Verified live:
+      `python -c "from deepreason.harness import Harness; from
+      deepreason.rules.relatedness import mint_relatedness_claim; ..."`
+      -> minted an artifact id, `art.interface.refs ==
+      [Ref(target=<conjecture id>, role=RefRole.MENTION)]`.
+- [x] 10. (R43, M17, M27) Link the new artifact to the conjecture via
       `Ref(target=conjecture.id, role=RefRole.MENTION)` — reuse the
       EXISTING `RefRole.MENTION` value (M17); do NOT add a new `RefRole`
       enum member (Amendment 1/C7 rejected the twin's own new-`RefRole`
       approach; this design deliberately reuses an existing one instead).
       done-when: `python -c "from deepreason.ontology.artifact import RefRole; assert len(RefRole) == 3"` -> exit 0 (still exactly `DEPENDENCE`/`MENTION`/`EVIDENCE`, no fourth member added).
-- [ ] 11. (R43) [COMMIT] Commit steps 9-10.
+      DONE — exit 0, `list(RefRole) ==
+      [RefRole.DEPENDENCE, RefRole.MENTION, RefRole.EVIDENCE]`, no
+      fourth member. `mint_relatedness_claim` (step 9) already wires
+      this ref at creation time, so 9 and 10 landed as one
+      implementation, verified by each step's own separate done-when.
+      No persistent pytest test added yet for `rules/relatedness.py`
+      itself — deferred to step 12, where `formally_backed`'s new
+      per-commitment check gives this module its first real caller and
+      `test_prose_refutation_boundaries.py` its first real coverage
+      (SPEC.md's own "Test implications" section owes new cases there,
+      not here).
+- [x] 11. (R43) [COMMIT] Commit steps 9-10.
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative, including new untracked
+      `rules/relatedness.py` once staged): 8 files changed, 348
+      insertions(+), 5 deletions(-) -> running total 343 of 1150.
+      Frozen-surface diff: empty. Pushed.
 - [ ] 12. (R43, M9) Add `formally_backed`'s ONE new per-commitment check
       (rules/warrants.py:61-100 today) — for a commitment of the new
       kind specifically, exclude it from the substantive/backing set
