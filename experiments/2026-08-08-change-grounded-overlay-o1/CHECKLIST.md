@@ -1,5 +1,5 @@
 # Checklist for: Rung O1 of the grounded-overlay program — offline retrodiction
-State: next=26 blockers=none
+State: all 26 steps complete; next=dr-validate-change blockers=none
 Map ids scoped (per SPEC.md's map preflight): DR-INV-frozen-surfaces,
 DR-CON-warrants-and-attacks, DR-SUB-adjudication, DR-SUB-verification,
 DR-SUB-ontology, DR-SUB-evaluation. No SEAM document names this
@@ -233,12 +233,13 @@ order. One step per dr-execute-step invocation.
 - [x] 25. (S13) [COMMIT] Commit and push the gate result (folded into
       RESULTS.md if not already captured there).
       done-when: pushed, confirmed on origin.
-- [ ] 26. (S15, all) [COMMIT] push and confirm clean tree — the last
+- [x] 26. (S15, all) [COMMIT] push and confirm clean tree — the last
       commit before handing off to `dr-validate-change`/
       `dr-deliver-change` (S17).
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/grounded-overlay-rung-o1-4hkuoo`
       matches local HEAD.
+      DONE — both `3e2e78b7`, tree clean.
 
 ## Amendments
 (none yet — re-planning after a validation failure appends here, never
