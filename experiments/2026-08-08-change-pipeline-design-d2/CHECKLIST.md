@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=19 blockers=none
+State: next=23 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -388,12 +388,13 @@ order. One step per dr-execute-step invocation.
 
 ## Item 7 — encoder-role delegation (R38, F3-A/R29)
 
-- [ ] 19. (R29, M16) Add role `"encoder"` to `GROUP_ROLES["coder"]` in
+- [x] 19. (R29, M16) Add role `"encoder"` to `GROUP_ROLES["coder"]` in
       `seat_bindings.py` (currently `frozenset({"property_designer"})`)
       — becomes `frozenset({"property_designer", "encoder"})`;
       `property_designer` stays untouched (A1's own boundary).
       done-when: `python -c "from deepreason.seat_bindings import GROUP_ROLES; assert GROUP_ROLES['coder'] == frozenset({'property_designer','encoder'})"` -> exit 0.
-- [ ] 20. (R38) Register role `"encoder"` in `llm/roles.py` (its own
+      DONE — exit 0, `GROUP_ROLES['coder'] == frozenset({'property_designer', 'encoder'})`.
+- [x] 20. (R38) Register role `"encoder"` in `llm/roles.py` (its own
       `ROLES` tuple and/or `TEMPLATES` dict, matching whichever
       registration shape `property_designer` itself already uses — read
       `llm/roles.py:125,314` first, mirror the SAME shape, do not invent
@@ -401,7 +402,16 @@ order. One step per dr-execute-step invocation.
       done-when: `grep -n '"encoder"' src/deepreason/llm/roles.py` shows
       at least one hit in the same dict(s) `property_designer` appears
       in.
-- [ ] 21. (R38) Write the two-phase delegation call: when the `"coder"`
+      DONE — `property_designer` appears ONLY in `TEMPLATES` (line 125)
+      and `COMPACT_TEMPLATES` (line 314), NOT in the top-level `ROLES`
+      tuple (that tuple is the SMALLER set of independently-routable
+      roles; `roles.py`'s own module comment names `property_designer`-
+      style entries as roles reused via `template_role`, not registered
+      there). Added `"encoder"` to the SAME two dicts, mirroring
+      `property_designer`'s exact shape, and NOT to `ROLES` — consistent
+      with reusing its seat rather than adding an independent one (see
+      step 21's design choice, which this follows from).
+- [x] 21. (R38) Write the two-phase delegation call: when the `"coder"`
       seat is bound (`resolve_seat_bindings_by_group()`, M16), a
       follow-up call to role `"encoder"` drafts commitment source text
       from the ALREADY-ADMITTED conjecture's own prose; when not bound,
@@ -410,9 +420,49 @@ order. One step per dr-execute-step invocation.
       done-when: a new function exists whose docstring names R38 and
       whose fallback path is a no-op call to nothing beyond Item 2's own
       inline mechanism.
-- [ ] 22. (R38) [COMMIT] Commit steps 19-21.
+      DONE, with one load-bearing design finding recorded before
+      writing any code: `run_manifest.py::LEGACY_CANONICAL_ROLES` (a
+      FROZEN surface 4 tuple) is where a role becomes independently
+      routable in the manifest — `property_designer` IS in that tuple,
+      but the module's OWN comment (line 52) names roles like
+      `experimenter`/`batch_critic` as "auxiliary prompt templates...
+      reuse one of these seats and are not independently routable
+      roles," via `adapter.call(<canonical-role>, ..., template_role=
+      "<auxiliary>")` (`llm/adapter.py:898-900`'s own documented
+      pattern; `rules/experiment.py:149` is the live precedent for
+      `experimenter` reusing `"conjecturer"`). Amendment 3's grant
+      (step 27) authorizes exactly ONE `run_manifest.py` Literal change
+      and nothing else there — adding `"encoder"` to
+      `LEGACY_CANONICAL_ROLES` would be a SECOND, unauthorized hunk on a
+      frozen surface. Designed `"encoder"` the SAME way as
+      `experimenter`: `rules/encoding.py::draft_encoded_commitment`
+      calls `adapter.call("property_designer", pack, EncoderOutput,
+      template_role="encoder")`, reusing `property_designer`'s own
+      configured endpoint/routing (both already share
+      `GROUP_ROLES["coder"]`, step 19) — ZERO `run_manifest.py` contact
+      for this item, better than SPEC.md's own forecast ("a new role
+      needs a route/role binding entry"). New `EncoderOutput`/
+      `EncoderTestCase` contracts in `llm/contracts.py` (a bare `dict`
+      test-case field is REJECTED by the wire firewall — found live,
+      `llm/wire.py::_reject_unknown_fields` treats an untyped `dict`'s
+      empty `properties: {}` as "no key is ever valid," raising `extra
+      field at /tests/0/in`; fixed with an explicit `EncoderTestCase`
+      model). New `tests/test_encoding.py` (2 cases: no-op when the
+      seat is unbound, delegates and returns the drafted spec when
+      bound). Mutation-proved both: forced `has_role` bound-check to
+      `if False` -> `test_no_coder_seat_bound_is_a_no_op` failed with a
+      real `KeyError` (no endpoint for `property_designer`); reverted,
+      re-verified passing. `python -c "'R38' in
+      inspect.getdoc(draft_encoded_commitment)"` -> True.
+      Ring re-run (encoding + properties + wire_contracts +
+      skills_models): 43 passed, 0 failed.
+- [x] 22. (R38) [COMMIT] Commit steps 19-21.
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty; push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 16 files changed, 758 insertions(+), 7
+      deletions(-) -> running total 751 of 1150. Frozen-surface diff
+      (all five, `run_manifest.py` included): empty. Pushed.
 
 ## R-g acceptance checks (Item 6, R36, 7 named tests: 5 original + 2 from Amendment 2)
 

@@ -33,7 +33,7 @@ SEAT_BINDINGS_FILENAME = "seat-bindings.yaml"
 # CENSUS.md M20 and this tranche's SPEC.md Assumption A4).
 GROUP_ROLES: dict[str, frozenset[str]] = {
     "conjecture": frozenset({"conjecturer", "variator"}),
-    "coder": frozenset({"property_designer"}),
+    "coder": frozenset({"property_designer", "encoder"}),
     "scratch": frozenset({"conjecturer", "synthesizer", "summarizer"}),
 }
 

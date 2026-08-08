@@ -142,6 +142,23 @@ TEMPLATES = {
         "be a PURE function. Return sources as plain strings with real "
         "newlines — no markdown fences.\n\n" + _JSON_ONLY + "{pack}"
     ),
+    "encoder": (
+        "You are the encoder: you author COMMITMENT CODE for an "
+        "ALREADY-ADMITTED conjecture's own prose — you never conjecture, you "
+        "never add a claim the prose did not make (Amendment 1: code is not "
+        "explanatory, prose is; your code exists solely as a criticizable "
+        "surface for the ADMITTED explanation given to you). Read the "
+        "CONJECTURE'S OWN EXPLANATION in the pack and write: source — the "
+        "complete source of one entry-point function that a checker can run "
+        "against fixed tests; entry — that function's name; tests — a list "
+        "of {{\"in\": [...], \"out\": ...}} cases the explanation itself "
+        "implies. A checker unrelated to the explanation will be stripped "
+        "of protection at trial, not silently accepted. HARD SANDBOX "
+        "CONSTRAINTS: builtins only — no import statements, no underscore/"
+        "dunder names, no `**`, no integer literals above 1000000; the "
+        "function must be PURE. Return the source as a plain string with "
+        "real newlines — no markdown fences.\n\n" + _JSON_ONLY + "{pack}"
+    ),
     "spec_generator": (
         "You are the diversity-specification generator: you design ORTHOGONAL "
         "outlines that later candidates must each realize. You produce "
@@ -314,6 +331,9 @@ COMPACT_TEMPLATES = {
     "property_designer": (
         "Return correctness properties required by the problem but absent from "
         "the current checker."
+    ),
+    "encoder": (
+        "Author commitment code for the already-admitted explanation; add no new claim."
     ),
     "spec_generator": "Return orthogonal candidate specifications, not candidate answers.",
     "summarizer": "Render only the supplied skeleton as prose; add no claim.",

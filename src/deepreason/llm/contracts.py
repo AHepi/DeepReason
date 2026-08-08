@@ -6,7 +6,7 @@ distribution with stated typicality estimates, never a single point.
 """
 
 import json
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -115,6 +115,29 @@ class PropertyProposal(BaseModel):
 
 class PropertyDesignerOutput(BaseModel):
     properties: list[PropertyProposal] = Field(min_length=1)
+
+
+class EncoderTestCase(BaseModel):
+    """One fixed {in, out} test pair. A bare ``dict`` cannot be an LLM-facing
+    field here: the wire-contract firewall (``llm/wire.py::_reject_unknown_fields``)
+    rejects every key inside an object whose schema declares no
+    ``properties`` — exactly what an untyped ``dict`` produces."""
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+    in_: list = Field(alias="in")
+    out: Any = None
+
+
+class EncoderOutput(BaseModel):
+    """Commitment CODE for an ALREADY-ADMITTED conjecture's own prose (Item
+    7, R38): ``source``/``entry``/``tests`` feed directly into the SAME
+    ``checker_spec`` shape ``ForbiddenCase``/``Countercondition`` already
+    carry (D2 rev 2) — the encoder never conjectures, it only authors the
+    criticizable surface for a claim someone else already made."""
+
+    source: str = Field(min_length=1)
+    entry: str = Field(min_length=1)
+    tests: list[EncoderTestCase] = Field(min_length=1)
 
 
 class VariatorEdit(BaseModel):
