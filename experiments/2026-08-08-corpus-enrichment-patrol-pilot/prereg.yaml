@@ -1,0 +1,156 @@
+# Corpus-enrichment + consistency-patrol pilot — PRE-REGISTERED (frozen
+# before any Phase 1/2/3 call). House pattern per experiments/*_prereg.yaml
+# (see lambda_preregistration_v2.yaml). Deviations from this file are
+# reported in RESULTS.md deviation-by-deviation, never silently absorbed.
+#
+# Deliverable is a decision number set, not machinery: patrol
+# candidate-contradiction rate (overall + historical-vs-enriched), the
+# four O1 overlay counts old-vs-new, attack-edge density and cycle counts
+# old-vs-new. Hits are CANDIDATE ATTACKS for future criticism, never
+# verdicts, never written into any root (framing binding, task ledger).
+
+deviation_from_task_instructions:
+  # Recorded before any run: the task text asked for "Dual-mode ON" via
+  # the D2 conjecturer.turn.v7 opt-in. Investigation (this tranche, before
+  # Phase 1) found v7 is registration-only: ANY manifest requesting it
+  # raises a typed RunManifestError("V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED")
+  # before a run can even start (src/deepreason/run_manifest.py:1999,
+  # produced because _compile_contract_schema_repair_policy at line 2491
+  # hardcodes repair grants for "conjecturer.turn.v6" only -- v7 was
+  # never wired to a real grant, per D2's own CHECKLIST.md lines 693-702
+  # naming this "future-tranche work"). Fixing this needs a src/ edit;
+  # this tranche's scope keeps src/ byte-untouched and PARKS defects
+  # rather than fixing them (see PARKED.md, P-CEPP-1).
+  # RESOLUTION: Phase 1 runs on the harness's current default contract
+  # (conjecturer.turn.v6, unconditional in engaged_control_plane_policy_v3).
+  # The encoder seat is still bound per the task's instruction (below), so
+  # its qualification is exercised, but it CANNOT receive a live dispatch
+  # under v6 -- zero candidate-checker commitments across every Phase 1
+  # root is the EXPECTED outcome, not a live-run miss to explain away.
+
+phase_1_enrichment:
+  deepreason_home: experiments/2026-08-08-corpus-enrichment-patrol-pilot/home
+  contract: conjecturer.turn.v6 (harness default; see deviation note above)
+  encoder_seat:
+    role_group: encoder
+    model: gemma4:31b
+    profile_pattern: S6's write_coder_profile.py (ProviderProfileV1.create,
+      provider=ollama, family=gemma, context_window_tokens=131072,
+      maximum_completion_tokens=8192, credential_env=OLLAMA_API_KEY,
+      reasoning=none, temperature=0.7) -- same settings, new role group
+      (encoder, not coder/property_designer -- S6's P1 found that seat dead)
+    qualification: one fresh battery for this exact combination (new
+      profile digest under a fresh DEEPREASON_HOME forces the full
+      ~14-minute/~1160-call battery once; cached thereafter for this home)
+  primary_seat: default profile, provider ollama, model glm-5.2,
+    family glm, context-window-tokens 131072, maximum-completion-tokens
+    16384, reasoning none, credential-env OLLAMA_API_KEY (S6 precedent:
+    8192 hit a REPAIR_SCOPE_VIOLATION on the summarizer/compact contract)
+  run_matrix:
+    # 10 runs, weighted toward hard/hard2 per task instruction. Each
+    # question id below is looked up verbatim in the named source file.
+    - {id: base-q01, source: experiments/validation_questions.json, question_id: q01}
+    - {id: base-q13, source: experiments/validation_questions.json, question_id: q13}
+    - {id: hard-h01, source: experiments/validation_questions_hard.json, question_id: h01}
+    - {id: hard-h05, source: experiments/validation_questions_hard.json, question_id: h05}
+    - {id: hard-h10, source: experiments/validation_questions_hard.json, question_id: h10}
+    - {id: hard-h15, source: experiments/validation_questions_hard.json, question_id: h15}
+    - {id: hard2-h2-01, source: experiments/validation_questions_hard2.json, question_id: h2-01}
+    - {id: hard2-h2-08, source: experiments/validation_questions_hard2.json, question_id: h2-08}
+    - {id: hard2-h2-15, source: experiments/validation_questions_hard2.json, question_id: h2-15}
+    - {id: hard2-h2-22, source: experiments/validation_questions_hard2.json, question_id: h2-22}
+  budget_per_run: {cycles: 10, token_budget: 180000}
+    # Within the V6 ceiling (<=12 cycles, <=200000 tokens); headroom left
+    # under the ceiling per CLAUDE.md's known fact that a hard question
+    # can burn the whole completion cap on hidden reasoning.
+  resume_policy: any run stopping budget_exhausted or converged gets
+    `deepreason --root ROOT continue --budget cycles=2` once (the L1
+    resume-crash the task instructions cite as already fixed); a second
+    budget-exhausted stop after that is accepted as final, not chased.
+  launch: detached (setsid nohup ./phase1_run.sh & disown), snapshot loop
+    excluding home/runs (S6's Failure #4 lesson: a run mid-append must
+    never be committed), monitor progress.jsonl + driver log rc= lines.
+  commit_policy: each completed root committed and pushed individually
+    (CLAUDE.md phase-boundary discipline), never batched silently into
+    the snapshot loop's own commits.
+
+phase_2_patrol:
+  corpus:
+    enriched_half: every root under phase_1_enrichment.deepreason_home
+    historical_half: every other committed root already under experiments/
+      (overlay_common.corpus()'s own discovery method: sorted set of
+      log.jsonl parents), i.e. the full pre-existing corpus minus this
+      tranche's own new roots
+  sampling_unit: an ACCEPTED-artifact PAIR drawn from a single root (no
+    cross-root pairing this pilot -- rejected as a scope increase with no
+    cheap locality signal; recorded here as a deliberate simplification,
+    not a silent omission)
+  topical_neighborhood_rule:
+    # "problem locality" chosen over "refs locality" for this pilot: it
+    # is a single lookup already materialized in state.addr, with no
+    # extra graph-distance computation. refs-based neighborhood is a
+    # documented future refinement (PARKED.md, P-CEPP-2), not attempted.
+    definition: two accepted artifacts share a neighborhood iff they
+      share at least one problem id in state.addr (an artifact's
+      neighborhood key is its lexicographically-first addressed problem
+      id; artifacts with zero addr entries are EXCLUDED from pairing and
+      counted separately as "unaddressed, not sampled")
+    grouping: within one root, group accepted artifact ids by
+      neighborhood key; enumerate all pairs within a group of size >= 2
+    combinatorial_cap: a group larger than 20 accepted members is
+      deterministically subsampled to 20 first (seed =
+      sha256(root_id + "\x00" + problem_id) truncated to an int), THEN
+      all C(20,2)=190 pairs of the subsample are used -- keeps any one
+      run's own scale finite without a second silent truncation layer
+  narrow_pair_question:
+    # Frozen verbatim; the SAME text is sent for every pair, differing
+    # only in the two claim texts substituted in.
+    prompt_template: |
+      You are given two claims (A and B), both currently accepted as
+      true within the reasoning record they come from. Judge ONLY
+      whether A and B, read together, assert something that cannot both
+      be true -- a genuine contradiction between them. Do not evaluate
+      whether either claim is correct on its own; judge mutual
+      consistency only.
+
+      Claim A: {claim_a}
+
+      Claim B: {claim_b}
+
+      Respond with EXACTLY one JSON object and nothing else:
+      {{"contradiction": true or false, "confidence": a number from 0.0
+      to 1.0, "reason": "one sentence, at most 200 characters"}}
+    model: glm-5.2 (primary provider model, ollama), reasoning=none,
+      temperature=0.0, max_tokens=300 -- one bounded, non-streaming call
+      per pair, timeout 60s
+  output_contract:
+    schema: {contradiction: bool, confidence: float in [0,1], reason: str<=200}
+    on_parse_failure: recorded as a distinct outcome ("parse_failure"),
+      counted in neither the hit nor non-hit tally, tallied on its own
+      in the decision table and charged against the failure budget if
+      it recurs beyond isolated cases
+  candidate_hit_definition:
+    # Frozen threshold, stated before any call is made.
+    rule: contradiction == true AND confidence >= 0.6
+    framing: a hit is a CANDIDATE measurement and a candidate attack for
+      FUTURE criticism -- never a verdict, never an edge, never written
+      into any root (task instruction, binding)
+  raw_preservation: every call's raw provider response text is written
+    verbatim to patrol_results.jsonl alongside the parsed fields and both
+    artifact ids, before any aggregation
+  output: candidate-contradiction rate overall and per corpus half
+    (historical vs enriched); every hit listed with both artifact ids
+    and both root paths
+
+phase_3_overlay:
+  script: experiments/2026-08-08-change-grounded-overlay-o1/scripts/run_all_overlays.py
+  invocation: unmodified, run against the SAME experiments/ tree (its own
+    corpus() call will now also see Phase 1's new roots)
+  report: the four overlay counts (O1a/b/c/d) beside O1's originals
+    (experiments/2026-08-08-change-grounded-overlay-o1/overlay_results.jsonl),
+    plus attack-edge density (att edge count / artifact count) and cycle
+    counts, old corpus vs new corpus
+
+failure_budget: 10, ledgered in RESULTS.md as spent (S6-style: diagnose
+  from the typed record and blobs before any remedy; retire dead roots
+  with a committed git mv first, never edit a committed root in place)
