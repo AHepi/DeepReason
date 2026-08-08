@@ -1,5 +1,5 @@
 # Checklist for: dual-mode conjecture — Rung D2 design, rev 2 corrected (Amendment 1 + 2)
-State: next=6 blockers=none
+State: next=8 blockers=none
 Map ids (per SPEC.md's own map preflight, re-confirmed here):
 DR-SEAM-llm-x-rules (llm/contracts.py, llm/wire.py, rules/conj.py,
 rules/crit.py — Item 2's wire field), DR-SEAM-adjudication-x-rules
@@ -148,7 +148,7 @@ order. One step per dr-execute-step invocation.
       DONE — running total: 208 lines (105 + skeleton.py +40 +
       test_informal.py +65 - 2 removed) of 1150. Frozen-surface diff:
       empty. Pushed.
-- [ ] 6. (R33, M24) Expose the eval-kind CHOICE on
+- [x] 6. (R33, M24) Expose the eval-kind CHOICE on
       `ReasoningCandidateProposal`'s wire-facing `counterconditions` (today
       hardcoded to `eval="observation"` in `proposal_envelope`,
       `workloads/text.py:152-161`) — add the narrowest change that lets
@@ -159,9 +159,39 @@ order. One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_semantic_freedom_constitution.py -q` -> 0 failed, plus a new case.
       MUST NOT touch: the five frozen surfaces (this file is
       `workloads/text.py`).
-- [ ] 7. (R33) [COMMIT] Commit step 6 (step 5 already committed at 5b).
+      DONE, checklist's own test-file citation confirmed CORRECT this
+      time (verified via grep before trusting it, per the last two
+      steps' corrections). `counterconditions` itself keeps its wire TYPE
+      unchanged (`tuple[str, ...]`) — avoidable, so no contract-version
+      bump needed for this piece: added an ADDITIVE, optional
+      `checker_specs: tuple[dict | None, ...] = ()` field to
+      `ReasoningCandidateProposal`, paired by index (empty/`None` entry
+      = `eval="observation"`, unchanged behavior), with a
+      `model_validator` enforcing the pairing length. Added the same
+      `checker_spec` field + cross-field `model_validator` coupling to
+      `Countercondition` (mirroring `ForbiddenCase.checker_spec`'s
+      pattern from step 5, using `model_validator` not `field_validator`
+      from the start this time — no repeat of that bug). Updated
+      `proposal_envelope` to consume the pairing and
+      `draft_countercondition_commitments` to thread `checker_spec` into
+      the drafted commitment's `budget.extra["spec"]` (same JSON
+      convention as `forbidden_commitment`); confirmed `Budget()`'s
+      explicit default equals `Commitment`'s own `default_factory=Budget`
+      so the no-checker_spec path is byte-for-byte unchanged.
+      `python -m pytest tests/test_semantic_freedom_constitution.py -q`
+      -> 15 passed (13 pre-existing + 2 new:
+      `test_checker_specs_pair_by_index_without_changing_counterconditions_type`,
+      `test_checker_specs_must_pair_one_to_one_with_counterconditions`).
+      Ring re-run (semantic_freedom + skills_models + live_smoke_regressions
+      + conjecturer_turn_v4 + oracle + informal): 115 passed, 0 failed.
+- [x] 7. (R33) [COMMIT] Commit step 6 (step 5 already committed at 5b).
       done-when: diff-budget running total <= 1150; frozen-surface diff
       empty (same paste as step 4); push confirmed.
+      DONE — `git diff --stat f103a03a -- src/ tests/` (base..working
+      tree, cumulative): 7 files changed, 299 insertions(+), 5
+      deletions(-) -> running total 294 of 1150. Frozen-surface diff
+      (`capabilities/state.py`, `harness.py`, `invariants.py`,
+      `run_manifest.py`, `qualification.py`): empty. Pushed.
 
 ## Protection semantics — the relatedness-claim mechanism (R43-R45, M27)
 

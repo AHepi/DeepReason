@@ -70,6 +70,25 @@ class Countercondition(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     case: str = Field(min_length=1)
     eval: str = Field(pattern=r"^(program:[A-Za-z0-9_.@-]+|rubric:[A-Za-z0-9_.@-]+|observation)$")
+    # Dual-mode conjecture (D2 rev 2, R33/M24): the model-authored checker
+    # source + fixed tests for eval == "program:candidate_checker" — the
+    # SAME coupling ForbiddenCase.checker_spec enforces on the
+    # ConjectureCandidate path (informal/skeleton.py).
+    checker_spec: dict | None = None
+
+    @model_validator(mode="after")
+    def _checker_spec_matches_kind(self):
+        is_candidate_checker = self.eval == "program:candidate_checker"
+        v = self.checker_spec
+        if is_candidate_checker and not (v and v.get("source") and v.get("entry") and v.get("tests")):
+            raise ValueError(
+                "program:candidate_checker counterconditions require "
+                "checker_spec = {source, entry, tests}")
+        if not is_candidate_checker and v is not None:
+            raise ValueError(
+                "checker_spec is only meaningful for "
+                "eval == 'program:candidate_checker'")
+        return self
 
 
 class AnalogyClaim(BaseModel):
@@ -135,6 +154,12 @@ class ReasoningCandidateProposal(BaseModel):
     counterconditions: tuple[Annotated[str, StringConstraints(min_length=1)], ...] = Field(
         min_length=1, max_length=32
     )
+    # Dual-mode conjecture (D2 rev 2, R33/step 6): additive and optional so
+    # counterconditions' own wire TYPE never changes — paired by index, empty
+    # entries mean "eval=observation" as before. A new required/typed field
+    # on counterconditions itself would be a wire-breaking change needing a
+    # contract-version bump; this is the narrower alternative that doesn't.
+    checker_specs: tuple[dict | None, ...] = ()
     typicality: float = Field(ge=0.0, le=1.0)
     optional_refs: tuple[str, ...] = ()
     # Claimed groundings in admitted evidence blocks (admission §4); checked
@@ -143,6 +168,14 @@ class ReasoningCandidateProposal(BaseModel):
     analogy: AnalogyClaim | None = None
     sidecar: OperationalSidecar = Field(default_factory=OperationalSidecar)
 
+    @model_validator(mode="after")
+    def _checker_specs_pair_with_counterconditions(self):
+        if self.checker_specs and len(self.checker_specs) != len(self.counterconditions):
+            raise ValueError(
+                "checker_specs, if given, must have one entry per "
+                "countercondition (use null for entries without a checker)")
+        return self
+
 
 class ReasoningConjecturerOutput(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -150,12 +183,15 @@ class ReasoningConjecturerOutput(BaseModel):
 
 
 def proposal_envelope(candidate: ReasoningCandidateProposal) -> ReasoningEnvelopeV1:
+    specs = candidate.checker_specs or (None,) * len(candidate.counterconditions)
     return ReasoningEnvelopeV1(
         claim=candidate.claim,
         mechanism=candidate.mechanism,
         counterconditions=tuple(
-            Countercondition(case=case, eval="observation")
-            for case in candidate.counterconditions
+            Countercondition(case=case, eval="program:candidate_checker", checker_spec=spec)
+            if spec is not None
+            else Countercondition(case=case, eval="observation")
+            for case, spec in zip(candidate.counterconditions, specs)
         ),
         analogy=candidate.analogy,
     )
@@ -175,6 +211,7 @@ def draft_countercondition_commitments(envelope: ReasoningEnvelopeV1) -> list[Co
     No registry writes: two-phase compilation (RC5) gates on these drafts
     and registers them only after admission."""
     from deepreason import programs
+    from deepreason.ontology.commitment import Budget
 
     drafts: list[Commitment] = []
     for countercondition in envelope.counterconditions:
@@ -188,16 +225,28 @@ def draft_countercondition_commitments(envelope: ReasoningEnvelopeV1) -> list[Co
                 raise ValueError(f"countercondition uses unknown program: {program}")
         digest = hashlib.sha256(
             json.dumps(
-                {"case": countercondition.case, "eval": evaluation},
+                {
+                    "case": countercondition.case,
+                    "eval": evaluation,
+                    "checker_spec": countercondition.checker_spec,
+                },
                 sort_keys=True,
                 separators=(",", ":"),
             ).encode()
         ).hexdigest()
+        budget = Budget()
+        if countercondition.checker_spec is not None:
+            # Same {source, entry, tests, step_limit} convention as
+            # ForbiddenCase.checker_spec (informal/skeleton.py) — the
+            # checker source lives in the budget since the carrying
+            # artifact's own content is the reasoning envelope's prose.
+            budget = Budget(extra={"spec": json.dumps(countercondition.checker_spec, sort_keys=True)})
         drafts.append(
             Commitment(
                 id=f"reason-counter@{digest[:24]}",
                 eval=evaluation,
                 observation_valued=observation_valued,
+                budget=budget,
             )
         )
     return drafts
