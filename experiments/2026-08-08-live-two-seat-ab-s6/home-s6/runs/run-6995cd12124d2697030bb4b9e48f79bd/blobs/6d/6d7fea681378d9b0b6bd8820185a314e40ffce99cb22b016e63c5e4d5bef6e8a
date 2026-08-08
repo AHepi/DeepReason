@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@42ee36d032a213ad233da6e9: program:reasoning_observation_pending
+- reason-counter@2726cafbe75402cb22afff2e: program:reasoning_observation_pending
+- reason-counter@a35b4d7fcd5e85c962ccda0a: program:reasoning_observation_pending
+- reason-counter@e8730d37bb23e8e4248ae451: program:reasoning_observation_pending
+- reason-counter@57488e125513db4a1452360f: program:reasoning_observation_pending
+- reason-counter@6225beddf12c2dea0942f38c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Independent verification is not dependent on engine separation but on the presence of 'divergent path' evidence in the run record: specifically, the checker identifying a flaw the author missed, or the checker deriving the result via a different logical sequence.","counterconditions":[{"case":"The checker's output is a semantic paraphrase of the author's output.","eval":"observation"},{"case":"The checker adopts the author's intermediate lemmas without independent derivation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Verification is a property of the trace, not the identity of the actor. If the record shows the checker challenging the author's premises or providing a non-overlapping proof (a 'cross-cut'), the verification is independent regardless of whether the engines are the same. The evidence is the delta between the author's reasoning chain and the checker's reasoning chain.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@42ee36d032a213ad233da6e9, reason-counter@2726cafbe75402cb22afff2e
+
+TARGET SRC_002
+{"analogy":null,"claim":"Independent verification is a property of the process (the 'divergent path'), not the identity of the engine; therefore, separation is not strictly necessary if the run record demonstrates a 'reconstruction from first principles'.","counterconditions":[{"case":"The checker's logic is a lexical or structural mirror of the author's logic (high overlap).","eval":"observation"},{"case":"The checker explicitly references the author's conclusions as premises for its own validation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Path Divergence: Verification is genuine if the checker ignores the author's intermediate steps and arrives at the same conclusion via a distinct logical chain. Evidence is found by comparing the dependency graphs of the authoring and checking phases.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a35b4d7fcd5e85c962ccda0a, reason-counter@e8730d37bb23e8e4248ae451
+
+TARGET SRC_003
+{"analogy":null,"claim":"Separation is unnecessary if the 'checker' is forced into a 'adversarial persona' that is rewarded for finding flaws, effectively simulating a different prior distribution.","counterconditions":[{"case":"The 'critic' persona is a superficial stylistic layer that doesn't change the underlying logical trajectory.","eval":"observation"},{"case":"The model's internal coherence drive overrides the adversarial prompt.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Persona-Induced Divergence: By shifting the system prompt to 'You are a hostile critic whose goal is to prove this claim wrong,' the model activates different latent pathways, reducing the probability of simple restatement.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@57488e125513db4a1452360f, reason-counter@6225beddf12c2dea0942f38c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

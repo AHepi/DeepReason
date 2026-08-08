@@ -1,0 +1,101 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separation of authoring and checking engines is necessary for independent verification because shared training priors create a 'blind spot' covariance that prevents a single model from identifying its own systemic hallucinations.",
+      "mechanism": "Cognitive Covariance: If Engine A has a specific bias or misconception rooted in its training data, any 'check' performed by Engine A will use the same biased heuristic to validate the claim, resulting in a self-consistent but false loop.",
+      "counterconditions": [
+        "The engine possesses a formal verification tool (e.g., a lean prover) that operates on rules external to its neural weights.",
+        "The engine can generate a formal counter-example that contradicts its own initial claim through deterministic execution."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      }
+    },
+    {
+      "claim": "Independent verification is a property of the process (the 'divergent path'), not the identity of the engine; therefore, separation is not strictly necessary if the run record demonstrates a 'reconstruction from first principles'.",
+      "mechanism": "Path Divergence: Verification is genuine if the checker ignores the author's intermediate steps and arrives at the same conclusion via a distinct logical chain. Evidence is found by comparing the dependency graphs of the authoring and checking phases.",
+      "counterconditions": [
+        "The checker's logic is a lexical or structural mirror of the author's logic (high overlap).",
+        "The checker explicitly references the author's conclusions as premises for its own validation."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007",
+          "SCR_002"
+        ]
+      }
+    },
+    {
+      "claim": "The distinction between verification and restatement can be quantified by the 'Error-Correction Delta': the frequency and magnitude of corrections made by the checker to the author's initial draft.",
+      "mechanism": "Correction Rate: Genuine verification must be capable of falsification. If the checker only confirms, it is restatement. If it identifies a flaw and the author corrects it, the process is independently verified.",
+      "counterconditions": [
+        "The checker only corrects trivial surface-level errors (typos) rather than logical flaws.",
+        "The checker 'corrects' a correct claim into an incorrect one, indicating a lack of grounding in both roles."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      }
+    },
+    {
+      "claim": "Genuine independent verification within a single run can be proven by executing the claim's output in a deterministic environment (e.g., a Python sandbox) where the engine's weights have no influence on the result.",
+      "mechanism": "External Grounding: By translating the claim into executable code, the 'verification' moves from the probabilistic space of the LLM to the deterministic space of the CPU. The evidence is the binary success/failure of the execution.",
+      "counterconditions": [
+        "The claim is non-computable or purely conceptual.",
+        "The code is written to 'fake' the result by hard-coding the expected answer."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      }
+    },
+    {
+      "claim": "Separation is unnecessary if the 'checker' is forced into a 'adversarial persona' that is rewarded for finding flaws, effectively simulating a different prior distribution.",
+      "mechanism": "Persona-Induced Divergence: By shifting the system prompt to 'You are a hostile critic whose goal is to prove this claim wrong,' the model activates different latent pathways, reducing the probability of simple restatement.",
+      "counterconditions": [
+        "The 'critic' persona is a superficial stylistic layer that doesn't change the underlying logical trajectory.",
+        "The model's internal coherence drive overrides the adversarial prompt."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we treat 'independence' as 'statistical orthogonality' of the error terms, then two different models (Engine A and Engine B) are likely to have uncorrelated errors. A single model has perfectly correlated errors with itself. Therefore, the only way a single model can 'verify' is if it switches from a probabilistic mode to a symbolic mode (code/logic).",
+          "why_keep_this": "Provides a formal statistical justification for the necessity of separation."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we define a specific 'lexical overlap' threshold (e.g., 0.8 as suggested in SCR_002) that universally distinguishes restatement from verification across different domains?",
+        "related_refs": [
+          "SCR_002"
+        ]
+      }
+    ]
+  }
+}
+```

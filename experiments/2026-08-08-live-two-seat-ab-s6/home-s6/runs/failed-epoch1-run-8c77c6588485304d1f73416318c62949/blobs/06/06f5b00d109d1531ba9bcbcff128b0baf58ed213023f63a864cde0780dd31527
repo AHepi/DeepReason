@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 names a relation of kind 'dependence' (engine separation is the causal prerequisite for generating {P_checker}), which is substantive and not merely a summary of endpoints. However, the stated refutation condition is logically sufficient to refute the relation as stated, yet the target asserts the relation as if it holds without defending against that refutation. The problem asks for a relation that is REFUTED IF a specific condition holds; SRC_001 provides the condition ('refuted if a single engine, through temperature scaling or prompt diversity, can consistently produce a high Argumentative Delta without external engine separation'), but the relation itself is underspecified because it does not state what the dependence consists of beyond a probabilistic claim ('probability of token-level mirroring increases'). A dependence relation requires a stated mechanism of dependence, not a probabilistic tendency. The relation is therefore incomplete as a SUBSTANTIVE dependence relation: it asserts a causal prerequisite but only supports it with a likelihood claim, which does not establish that engine separation is actually necessary rather than merely correlated with lower mirroring.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 names a relation of kind 'integration' and states a substantive causal mechanism: the 'unique evidence citations' count serves as the operational proxy for the 'Argumentative Delta', and engine separation ensures the checker does not inherit the author's citation set, ensuring the delta is non-zero. This is not merely a summary of endpoints; it specifies a shared mechanism linking SRC_001 to problem 003af3c7e41c. The refutation condition is concrete and internally consistent: if the checker arrives at the same conclusion using the exact same set of citations, the operational proxy yields zero delta, refuting the integration claim. The relation form and lineage are satisfied. No substantive fault is found.",
+      "counterexample": null
+    }
+  ]
+}
+```

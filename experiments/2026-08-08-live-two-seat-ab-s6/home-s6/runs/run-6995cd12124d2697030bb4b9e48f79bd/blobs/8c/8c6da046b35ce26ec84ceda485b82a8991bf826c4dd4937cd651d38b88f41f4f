@@ -1,0 +1,23 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3dda7f47335c7ca7411eb321: program:reasoning_observation_pending
+- reason-counter@c583d30889570b0293cd0404: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET a25b05778574efa349eef7c15dcabcbc7940b0427d9c7607a26de2df27422bbc
+{"analogy":null,"claim":"Separation of engines is necessary because a single engine's 'checking' phase is likely to be a pattern-match against its own prior activations (an 'Echo Chamber' effect) rather than a critical evaluation.","counterconditions":[{"case":"The model is switched from a probabilistic generation mode to a deterministic symbolic mode (e.g., executing code to verify a math claim).","eval":"observation"},{"case":"The 'critic' prompt is sufficiently strong to force the model into a divergent latent state.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A single model has perfectly correlated error terms with itself. The 'checking' prompt does not reset the weights; it merely shifts the persona. Therefore, the model is more likely to recognize its own logic as 'familiar' (and thus correct) than to find a subtle flaw it was blind to during the authoring phase.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

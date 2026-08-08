@@ -1,0 +1,91 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is not necessary for independent verification, provided there is strict contextual isolation of the reasoning chain.",
+      "mechanism": "Independence is a property of the information flow, not the weight-set. If the checker is provided only with the result (the 'what') and not the author's derivation (the 'how'), the engine must reconstruct a valid proof path from first principles. If this reconstructed path diverges structurally from the author's path, the verification is independent regardless of whether the underlying model weights are identical.",
+      "counterconditions": [
+        "The checker is provided with the author's step-by-step reasoning (reasoning-envelope-wf leak).",
+        "The problem domain has a unique, singular path to the solution that any competent engine must follow."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Separating engines is necessary because identical models share 'blind spots' (systemic biases) that make internal verification a mere restatement of the same error.",
+      "mechanism": "Models trained on the same corpus develop identical heuristic shortcuts and failure modes. A checker using the same weights as the author is likely to accept a hallucination if that hallucination is a product of the model's core training bias, as the checker's 'intuition' for what looks correct is identical to the author's. Only a different training history (a different engine) provides the divergent perspective required to catch these systemic errors.",
+      "counterconditions": [
+        "The error is a stochastic 'glitch' (sampling variance) rather than a systemic bias.",
+        "The checker is prompted with a high-temperature adversarial role that forces it out of its typical heuristic path."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by the presence of a 'Correction Delta' or 'Structural Divergence' in the record.",
+      "mechanism": "To distinguish verification from restatement, one must count the number of unique lemmas or axioms invoked by the checker that were absent in the author's proof. If the Jaccard similarity of the sets of supporting arguments {X_author} and {Y_checker} is low, the verification is independent. Specifically, if the checker identifies a flaw and provides a corrective path (Correction Delta), it has successfully operated independently of the author's failure mode.",
+      "counterconditions": [
+        "The checker arrives at the same conclusion using the exact same steps (high overlap), which constitutes restatement.",
+        "The checker agrees with the result but cannot articulate a different path."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Verification is independent if the checker can successfully falsify a deliberately corrupted version of the author's result using the same internal logic.",
+      "mechanism": "To prove the checker is not merely 'echoing' the author, execute a control test: provide the same engine with a slightly modified, incorrect result. If the engine identifies the error in the control but validates the original, it proves the checking mechanism is active and independent of the author's 'authority' within the context window.",
+      "counterconditions": [
+        "The engine fails to catch the corrupted result, suggesting it is simply biased toward agreement (sycophancy).",
+        "The engine rejects both the correct and corrupted results."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Independence is an asymptotic property of token distribution divergence rather than a binary state of engine separation.",
+      "mechanism": "Measure the KL-divergence between the author's token probabilities and the checker's token probabilities at critical logical junctions. If the checker arrives at the same conclusion but via a significantly different probability distribution (different 'pathing' in latent space), it is performing independent verification. Restatement is characterized by high token-level mirroring.",
+      "counterconditions": [
+        "The model is operating at temperature 0, where token paths are deterministic and collapse.",
+        "The task is so constrained that only one token sequence is logically possible."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Thinking about the 'Sycophancy' problem: If the checker is the same engine, does it have a latent 'desire' to agree with the author because the author's text is now part of its own context? This would mean that even with contextual isolation of the reasoning, the mere presence of the 'Result' might bias the checker. To test this, we could count how often the checker agrees with a correct result vs. how often it agrees with an incorrect result when presented as 'The author's finding'.",
+          "possible_next_move": "Integrate this as a 'Sycophancy Delta' metric in a future candidate."
+        }
+      }
+    ]
+  }
+}
+```

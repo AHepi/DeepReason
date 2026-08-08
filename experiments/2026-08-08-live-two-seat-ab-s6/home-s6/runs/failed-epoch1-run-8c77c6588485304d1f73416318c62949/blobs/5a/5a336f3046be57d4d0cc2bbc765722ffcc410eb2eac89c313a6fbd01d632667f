@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a514daa8fb3efeb94cad9634: program:reasoning_observation_pending
+- reason-counter@959eea26dd48c4b290be7949: program:reasoning_observation_pending
+- reason-counter@097c244615051afec37d473b: program:reasoning_observation_pending
+- reason-counter@4e931435761d23733d1b7237: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine independent verification within a single run is distinguished from mere restatement by the presence of 'corrective divergence': the checker must identify a specific error in the author's draft and propose a modification that is subsequently validated.","counterconditions":[{"case":"The checker identifies trivial typos rather than logical errors.","eval":"observation"},{"case":"The 'correction' is a random change that happens to be correct by chance.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If a checker simply says 'Correct', it is restatement. If the checker says 'Incorrect because of Y', and the author then updates the claim to Z, and Z is then verified, the process of error-detection-and-correction serves as a proxy for independence. To test this, count the number of 'meaningful edits' (changes in logic/result) made to the claim between the first authoring and final verification.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a514daa8fb3efeb94cad9634, reason-counter@959eea26dd48c4b290be7949
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separation of authoring and checking engines is NOT necessary for independent verification, provided the verification process is based on an external, objective oracle (e.g., code execution) rather than semantic agreement.","counterconditions":[{"case":"The checker simply parrots the author's reasoning chain without creating a falsifiable test.","eval":"observation"},{"case":"The 'oracle' (interpreter) is itself a product of the same model's biased output.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Verification is decoupled from the model's internal weights when the 'checker' is tasked with writing a test suite for the 'author's' claim. If the author claims 'X is true' and the checker writes a program that proves X, the execution of that program by a neutral interpreter constitutes independent verification, regardless of whether the same model wrote both the claim and the test.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@097c244615051afec37d473b, reason-counter@4e931435761d23733d1b7237
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

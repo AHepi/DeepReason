@@ -1,0 +1,94 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is not necessary for independent verification, as independence is a property of the reasoning path (process), not the weights (substrate).",
+      "mechanism": "Independent verification occurs when the checker derives the result from first principles without accessing the author's intermediate reasoning steps. If the checker is the same engine but is prompted to 're-derive from scratch' in a fresh context or a blind state, the resulting path is independent if it converges on the same result via different logical primitives or a distinct sequence of inferences.",
+      "counterconditions": [
+        "The checker has access to the author's chain-of-thought (CoT) in its context window.",
+        "The problem domain is dominated by a single 'memorized' pattern in the training data that forces all paths to be identical."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Separating engines is strictly necessary because a single engine's weight-space creates a 'semantic blind spot' that renders it incapable of detecting its own systemic hallucinations.",
+      "mechanism": "Since an engine's 'truth' is a projection of its training distribution, any error resulting from a fundamental bias in that distribution will be mirrored by the same engine acting as a checker. Only an engine with a different training corpus or architecture (a different 'world-view') can provide a truly independent check by identifying the author's bias as an anomaly rather than a norm.",
+      "counterconditions": [
+        "The error is a stochastic 'glitch' rather than a systemic bias.",
+        "The checker is operating in a 'critique' mode that specifically targets the model's known failure modes."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by 'Structural Divergence' in the supporting evidence provided by the checker.",
+      "mechanism": "To distinguish verification from restatement, one must count the number of unique supporting lemmas or citations introduced by the checker that were not present in the author's claim. If the checker provides a different set of justifications {Y} to reach the same conclusion as the author's {X}, it is verification. If {Y} is a subset or paraphrase of {X}, it is restatement.",
+      "counterconditions": [
+        "The problem has only one mathematically possible path to the solution, making divergence impossible."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The gold standard for independent verification in a single run's record is 'Execution-Based Validation' where the checker authors a testable artifact.",
+      "mechanism": "Verification is independent if the checker produces a formal specification or code (e.g., Python) that, when executed by an external interpreter, yields the author's result. To distinguish this from restatement, one must count the ratio of 'Execution-based' checks (where the code logic computes the answer) versus 'Assertion-based' checks (where the code simply prints the author's answer).",
+      "counterconditions": [
+        "The checker's code is 'hard-coded' to return the author's result without performing the actual computation."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Independence is a function of 'Information Gain' (Kullback-Leibler divergence) between the author's and checker's token distributions for the reasoning steps.",
+      "mechanism": "By analyzing the log-probabilities of the tokens generated during the verification phase compared to the authoring phase, we can measure if the checker is 'following the scent' of the author's text or navigating the probability space independently. High divergence in the 'how' (the path) combined with convergence in the 'what' (the result) constitutes independent verification.",
+      "counterconditions": [
+        "The engine is operating at temperature 0, where the path is deterministic and thus always identical."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Sycophancy Delta': If we use the same engine, there is a risk that the checker agrees simply because the author's claim is already in the context. A potential test for this: introduce a known-false claim to the engine as 'the author's finding'. If the engine agrees with the false claim more often than it would if the claim were presented without the 'author' label, we have quantified the 'restatement bias'.",
+          "possible_next_move": "Formalize this as a 'Sycophancy Metric' for candidates."
+        }
+      }
+    ]
+  }
+}
+```

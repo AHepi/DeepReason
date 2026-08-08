@@ -1,0 +1,72 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separation is not necessary for independent verification if the verification process is grounded in an external, objective execution environment that is agnostic to the authoring engine's identity.",
+      "mechanism": "The 'verification' is shifted from a semantic agreement between two LLMs to a binary outcome of a deterministic execution (e.g., a Python interpreter). If the authoring engine produces code and the checking engine executes it and verifies the output against a specification, the 'independence' is provided by the execution environment, not the engine's training history.",
+      "counterconditions": [
+        "The checking engine is only performing a semantic review of the code without execution.",
+        "The authoring engine has access to the execution environment's state or logs during the authoring phase."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Separation is necessary because a single engine's 'verification' of its own claim is typically a manifestation of 'self-consistency bias' rather than an independent audit.",
+      "mechanism": "Shared latent weights ensure that the same 'reasoning path' used to construct the claim is reused to justify it. Genuine verification requires a 'collision' of different priors; without a separate engine, the check is merely a traversal of the same high-probability manifold that generated the claim.",
+      "counterconditions": [
+        "The engine is prompted with a strong adversarial persona that explicitly penalizes agreement with the authoring state.",
+        "The engine uses a stochastic sampling method (high temperature) that forces it into low-probability latent regions."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by the presence of 'discovering a counter-example' within the run's record that the authoring engine missed.",
+      "mechanism": "Restatement is characterized by a monotonic increase in confidence. Independent verification is characterized by a non-monotonic path: Claim -> Challenge/Counter-example -> Refinement/Correction. To distinguish this, one counts the number of 'correction events' where the checker identifies a specific error in the author's logic that results in a change to the final claim.",
+      "counterconditions": [
+        "The checker identifies 'errors' that are actually stylistic or trivial and do not affect the logic of the claim.",
+        "The authoring engine anticipates the counter-example and incorporates it into the initial claim."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Independence can be simulated within a single engine by isolating the 'checking' phase from the 'authoring' phase via a complete context wipe (statelessness).",
+      "mechanism": "By removing the authoring trace from the prompt and providing only the final claim and the evidence to the checker, the engine cannot rely on the 'process' of authoring. It must reconstruct the logic from scratch. If the reconstructed logic arrives at the same conclusion via a different intermediate step, it counts as independent.",
+      "counterconditions": [
+        "The final claim contains implicit 'hints' or 'fingerprints' of the authoring engine's specific reasoning style that trigger the same latent path in the checker.",
+        "The evidence provided is so constrained that only one logical path is possible."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Verification is 'independent' if the record shows the checker utilizing a different 'source of truth' or evidence block than the author used.",
+      "mechanism": "One counts the unique artifact IDs (SRC_###) cited. If the author uses SRC_001 and SRC_002 to support a claim, and the checker verifies it using SRC_003 and SRC_004, the verification is independent because it relies on a disjoint set of evidence, regardless of whether the same engine is used.",
+      "counterconditions": [
+        "The different evidence blocks are redundant or contain the same underlying information.",
+        "The checker merely 'cherry-picks' evidence to fit the already-established claim."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

@@ -1,0 +1,71 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 003af3c7e41c integrates with SRC_001 through a causal mechanism where the 'unique evidence citations' count serves as the operational proxy for the 'Argumentative Delta'. Specifically, the separation of engines is a means to ensure that the checker does not inherit the author's citation set, thereby ensuring the 'delta' is non-zero. This relation is refuted if the checker arrives at the same conclusion using the exact same set of citations as the author.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "The problem 003af3c7e41c depends on SRC_003's 'Argumentative Delta' by proposing that engine separation is the causal prerequisite for generating a logically divergent set of supporting premises {P_checker}. Without engine separation, the probability of token-level mirroring (restatement) increases, collapsing the delta. This relation is refuted if a single engine, through temperature scaling or prompt diversity, can consistently produce a high Argumentative Delta without external engine separation.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The problem 003af3c7e41c reduces to SRC_004's 'Correction Delta' mechanism, where the necessity of engine separation is justified by the need to avoid shared 'blind spots' (inherited failure modes). Genuine verification is achieved only when the checker identifies a flaw the author missed, which requires a structural divergence in the reasoning path. This relation is refuted if the checker agrees with the author's result but fails to articulate a different logical path (zero Structural Divergence).",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The problem 003af3c7e41c contradicts SRC_005 by asserting that engine separation is a primary requirement for independence, whereas SRC_005 claims that independence is an asymptotic property of temperature and prompt diversity, rendering engine separation secondary. The causal mechanism here is the shift from 'weight-based isolation' to 'stochastic-path isolation'. This relation is refuted if high-temperature sampling on a single engine produces the same 'Information Gain' as two distinct engines.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_005",
+        "SRC_002"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "The problem 003af3c7e41c shares mechanism with SRC_002's 'Information Gain' metric, where the 'gain' is the set of unique lemmas or logical steps introduced by the checker. The engine separation acts as the catalyst for this gain by preventing the checker from simply traversing the author's established logical graph. This relation is refuted if the Jaccard similarity of the supporting arguments between the author and checker remains high despite using different engines.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.6
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: The 'Engine Separation' requirement is actually a proxy for 'Training Corpus Separation'. If two different engines (e.g., GPT-4 and Claude 3) were trained on the exact same filtered dataset, they might share the same logical blind spots, meaning the 'Structural Divergence' (SRC_004) would be low despite the engines being different. This suggests a deeper dependence on data diversity rather than weight diversity.",
+          "bears_on_refs": [
+            "SRC_004",
+            "SRC_005"
+          ]
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'Sycophancy Delta' (SCR_003) act as a confounding variable that overrides engine separation? If the checker is told 'The author found X', does the prompt bias create a dependency that no amount of engine separation can fix?",
+        "related_refs": [
+          "SRC_001",
+          "SRC_003"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,50 @@
+JSON Response
+
+```json
+{
+  "candidates": [
+    {
+      "content": "reduces to: 0c892d69028b reduces to the graded independence framework of SRC_005. The isolated artifact's demand for a categorical 'necessary or not' verdict on engine separation is an instance of the false binary SRC_005 diagnoses. It is refuted if 0c892d69028b's query cannot be reformulated as a request for graded evidence (weak vs. strong independence) without losing the original problem's discriminative intent, or if the ablation test SRC_005 specifies cannot operationalize the difference between restatement and verification for the artifact's claim type.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_005"],
+      "typicality": 0.85
+    },
+    {
+      "content": "abstracts: 0c892d69028b abstracts the adversarial-robustness analogy from SRC_001. Both the isolated artifact and SRC_001 frame verification as a counterfactual-sensitivity question: can an external arbiter's verdict be manipulated by a signal the authoring system cannot control? The artifact isolates this shared structure from engine-identity concerns. It is refuted if the isolated problem demands a population-level robustness measurement rather than a single-run causal diagnostic, since the analogy in SRC_001 transfers specifically at the single-run level.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_001"],
+      "typicality": 0.75
+    },
+    {
+      "content": "depends on: 0c892d69028b depends on the causal-bias mechanism in SRC_002. The isolated artifact's question about the necessity of engine separation is only well-posed because authoring a claim conditionally biases the same engine's probability mass toward its own output (SRC_002's mechanism). If this bias mechanism did not hold for a given engine architecture (e.g., a frozen verification module), the separation question would be vacuous. It is refuted if a single engine can provably avoid the conditional bias described in SRC_002, in which case the problem's premise that separation is even at issue is false.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_002"],
+      "typicality": 0.65
+    },
+    {
+      "content": "contradicts: 0c892d69028b contradicts SRC_003's statistical-calibration framing. The isolated artifact seeks a single-run answer about verification, whereas SRC_003 argues that independent verification is a matter of population-level Type I error rates across injected false claims. The two approaches are in tension because a single-run diagnostic cannot measure a rejection rate. It is refuted if SRC_003's population statistics can be recovered from or approximated by a single-run causal-sensitivity test, in which case the contradiction collapses into a complementarity.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_003"],
+      "typicality": 0.55
+    },
+    {
+      "content": "compatible with: 0c892d69028b is compatible with the split-brain architecture conjectured in SCR_001. The isolated artifact's question about whether separation is necessary can be answered by testing a single engine with a frozen, independently-trained verification module. If weight freezing constitutes causal independence, engine separation (as demanded by the problem's framing) is unnecessary. It is refuted if the split-brain module's shared representational structure with the author means the ablation test passes but false-acceptance bias remains systematic, showing that architectural separation, not weight freezing, is the operative factor.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_004", "SRC_001"],
+      "typicality": 0.35
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Does the split-brain architecture (frozen verification module within a single engine) pass the ablation test, and if so, does it also pass the paraphrase-invariance test for strong independence from SRC_005?",
+        "related_refs": ["SCR_001", "SCR_002"]
+      },
+      {
+        "question": "If 0c892d69028b reduces to SRC_005's graded framework, what is the minimal paraphrase transformation that would test strong independence for the artifact's specific claim type?",
+        "related_refs": ["SCR_002"]
+      }
+    ]
+  }
+}
+```

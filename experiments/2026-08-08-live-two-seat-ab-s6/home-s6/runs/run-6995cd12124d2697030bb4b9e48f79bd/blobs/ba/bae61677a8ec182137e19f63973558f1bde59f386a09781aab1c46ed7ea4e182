@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e971cb47bfdbdb5772ac609f: program:reasoning_observation_pending
+- reason-counter@0b2ce2a06d5cc4ccf064b18b: program:reasoning_observation_pending
+- reason-counter@069aa69a1e9ec104ef2cbabe: program:reasoning_observation_pending
+- reason-counter@50c2d0bca8ed8a2e884980a9: program:reasoning_observation_pending
+- reason-counter@7c065c819bff9f8ee100b74c: program:reasoning_observation_pending
+- reason-counter@93ee268580ed5eae3749a909: program:reasoning_observation_pending
+- reason-counter@ad8341388e1cdacdebc89dd1: program:reasoning_observation_pending
+- reason-counter@a8b380b5e6d2af29c591eaa4: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Separating the authoring engine from the checking engine is not necessary for independent verification, provided the checker operates on a 'blind' information-theoretic boundary where it is denied access to the author's intermediate reasoning chain.","counterconditions":[{"case":"The checker is provided with the author's 'Chain of Thought' or internal reasoning blocks.","eval":"observation"},{"case":"The author's claim is so specific that it contains the implicit proof, leaving no room for independent reconstruction.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independence is a property of the information flow (the 'interface') rather than the weights. If the checker only sees the final claim and must reconstruct the proof from first principles (SRC_###) without seeing the author's path, it creates a functional separation that mimics different engines by forcing the model to traverse a different latent state-space.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e971cb47bfdbdb5772ac609f, reason-counter@0b2ce2a06d5cc4ccf064b18b
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separation is necessary because a single engine cannot escape its own 'latent manifold'\u2014the same weights that produced the error will likely fail to recognize the error as an anomaly.","counterconditions":[{"case":"The engine uses a temperature setting high enough to force a jump to a different latent region","eval":"observation"},{"case":"The prompt forces a 'Devil's Advocate' persona that shifts the activation pattern significantly","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'self-consistency bias' (as noted in SRC_004) ensures that the engine's internal probability distribution for the claim is already peaked; checking is merely a traversal of the same peak, resulting in a 'confirmation loop' rather than a critical audit.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@069aa69a1e9ec104ef2cbabe, reason-counter@50c2d0bca8ed8a2e884980a9
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Does not account for the quality of the evidence, only the identity of the source"],"overturn_conditions":["Discovery that models frequently cite different sources to support the same flawed internal logic."],"shared_structure":["Graph-theoretic approach to evidence","Quantifiable intersection of source sets"],"source_memory_refs":["SCR_014","SCR_009"],"transfer_claims":["Independence can be measured as the cardinality of the symmetric difference between author and checker evidence sets."]},"claim":"Genuine independent verification within a single run is distinguished from restatement by a 'divergent evidence path': the checker must utilize distinct source artifacts (SRC_###) or evidence blocks that were not cited by the author to reach the same conclusion.","counterconditions":[{"case":"The checker simply finds a different way to describe the same single piece of evidence.","eval":"observation"},{"case":"The 'new' evidence is irrelevant to the core logic of the claim.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Structural independence: if the author uses set A of evidence and the checker uses set B, and A
+commitments: reasoning-envelope-wf, reason-counter@7c065c819bff9f8ee100b74c, reason-counter@93ee268580ed5eae3749a909
+
+TARGET SRC_004
+{"analogy":null,"claim":"Independent verification within a single run is distinguished from restatement by the 'Evidence Orthogonality' of the grounding paths: verification is genuine if and only if the checker's path to the claim utilizes a disjoint set of evidence artifacts compared to the author.","counterconditions":[{"case":"The problem domain has a 'canonical' single piece of evidence that any correct proof must cite.","eval":"observation"},{"case":"The checker merely re-orders the author's evidence without adding new grounding.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By counting the intersection of SRC_### references used by the author and the checker, we can quantify independence. If the intersection is empty or minimal, the checker has found a different 'witness' for the truth of the claim, which constitutes independent verification regardless of whether the engine is the same.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ad8341388e1cdacdebc89dd1, reason-counter@a8b380b5e6d2af29c591eaa4
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

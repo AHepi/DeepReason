@@ -1,0 +1,95 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is necessary for independent verification because identical model weights create a shared 'cognitive blind spot'—a systemic bias where the same failure mode that authored the error will inherently validate it.",
+      "mechanism": "The checker, utilizing the same probabilistic mappings as the author, is likely to assign high probability to the same flawed logical leaps. Independent verification requires a 'disjoint error distribution' where the checker's failure modes do not overlap with the author's. This can be measured by counting 'False Agreement' rates: the frequency with which a checker validates a known-incorrect claim produced by its own architecture versus a different architecture.",
+      "counterconditions": [
+        "The engine possesses a distinct, high-temperature 'critique mode' that shifts its probabilistic distribution enough to escape the original local minima.",
+        "The error is a simple calculation mistake rather than a systemic conceptual blind spot."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Separating the authoring engine from the checking engine is NOT necessary; independent verification is a property of information flow (contextual isolation), not agent identity.",
+      "mechanism": "If the checker is presented only with the final result and the original problem—without the author's reasoning chain—the engine must reconstruct the logic from scratch. If it arrives at the same result via a different internal path, the verification is independent. Evidence in the record is a 'Path Divergence' count: comparing the sequence of intermediate lemmas in the author's reasoning vs. the checker's reasoning. If the Jaccard similarity of the lemma sets is low while the result is identical, verification is independent.",
+      "counterconditions": [
+        "The model exhibits 'sycophancy' where the mere presence of a proposed answer biases the internal weights toward agreement regardless of the path taken.",
+        "The problem has only one possible logical path to the solution."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification within a single engine is only possible if the checker identifies a flaw and provides a corrective path that the author missed, creating a 'Correction Delta'.",
+      "mechanism": "Mere agreement (restatement) is indistinguishable from mirroring. The only empirical proof of independence is the 'Correction Delta': the checker must find an error in the author's work and execute a fix. To verify this, one should count the number of 'Correction Events' (Checker identifies Error X -> Checker proposes Fix Y -> Fix Y is verified as correct) relative to 'Agreement Events'.",
+      "counterconditions": [
+        "The author's claim was perfectly correct, leaving no errors for the checker to find (making independence invisible).",
+        "The checker identifies a 'false error' due to over-critique."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Independent verification is an asymptotic function of temperature and prompt adversariality; separating engines is a proxy for increasing this variance.",
+      "mechanism": "At low temperature, the same engine will almost always restate. At high temperature or under 'adversarial' checking prompts (e.g., 'Assume the author is wrong'), the engine is forced into different regions of its latent space. Evidence of independence is the 'Token Distribution Delta': the KL divergence between the token probability distributions of the author's reasoning and the checker's reasoning for the same logical step.",
+      "counterconditions": [
+        "High temperature introduces random noise (hallucinations) rather than genuine alternative logical paths.",
+        "The model's 'critique' persona is a superficial stylistic shift rather than a logical one."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Separating engines is unnecessary because an engine's 'self-critique' mode, trained via RLHF to recognize its own failure patterns, can be more effective than a different, less-specialized engine.",
+      "mechanism": "A model can be trained specifically to recognize 'its own' common errors (e.g., 'I often forget to carry the one in this type of problem'). This 'meta-cognitive' layer allows it to check its work more accurately than a foreign model. Evidence is a 'Self-Correction Accuracy' count: the rate at which the engine corrects its own errors vs. the rate at which a different engine corrects those same errors.",
+      "counterconditions": [
+        "The model's self-correction is merely 'guessing' based on the prompt's suggestion that an error exists (sycophancy).",
+        "The error is a fundamental limitation of the architecture shared by both the author and the checker."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Contradiction to explore: If we say separating engines is necessary because of 'blind spots', then using two different models from the same family (e.g., GPT-4 and GPT-4o) might still fail if the blind spot is inherited from the base pre-training data. This suggests the 'necessity' isn't just about the engine/weights, but the training corpus.",
+          "possible_next_move": "Propose a candidate that distinguishes between 'weight separation' and 'data separation'."
+        }
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,90 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separation of authoring and checking engines is unnecessary if the verification process is mediated by a 'stochastic perturbation' of the engine's latent state, as independence is a property of activation trajectories rather than weight distributions.",
+      "mechanism": "By injecting high-temperature noise or 'semantic jitter' into the checker's prompt/state, the system forces the model to traverse a different path through its latent space. This breaks the deterministic correlation of errors (the 'Echo Chamber' effect described in SCR_001) by shifting the activation pattern away from the author's path, effectively simulating a separate engine within the same weights.",
+      "counterconditions": [
+        "The authoring and checking paths remain within the same narrow 'attractor basin' of the latent space.",
+        "The perturbation is insufficient to overcome the model's inherent bias toward self-consistency (confirmation bias)."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from restatement by the 'Cross-Domain Isomorphism' test: the checker must translate the claim into a completely different formal language or domain before verifying it.",
+      "mechanism": "To avoid mere restatement, the checker must map the claim from Domain A (e.g., natural language logic) to Domain B (e.g., a geometric proof or a circuit diagram). Verification is independent if the logic holds across the translation. Evidence in the record would be the presence of a 'translation artifact' that lacks the lexical overlap of the original claim, which can be tested by calculating the Jaccard similarity between the author's claim and the checker's intermediate representation (threshold < 0.3).",
+      "counterconditions": [
+        "The translation is a superficial mapping that preserves the same error-prone logic.",
+        "The model uses a predefined template for translation that does not require semantic reconstruction."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Separation is necessary because a single engine's 'verification' is actually a 'consistency check' of its own internal probability distribution, which is fundamentally incapable of discovering 'unknown unknowns' present in its own training priors.",
+      "mechanism": "A single model's authoring and checking phases are both sampled from the same conditional probability distribution P(Output | Prompt). Even with different prompts, the underlying priors (the 'blind spots') are identical. Independent verification requires a second distribution Q(Output | Prompt) with different training data, ensuring that the intersection of their error sets is minimized. Evidence of restatement is a 'Zero-Correction Convergence' where the checker finds no errors in a claim that is later proven false by an external engine.",
+      "counterconditions": [
+        "The model is capable of 'self-correction' through symbolic execution (code) that bypasses probabilistic priors.",
+        "The training data is so exhaustive that the 'blind spots' are negligible for the problem domain."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Verification is independent if and only if the checker identifies a 'latent contradiction' that the author missed, which can be quantified by counting 'Corrective Pivot Points' in the record.",
+      "mechanism": "Independence is evidenced by a 'Corrective Pivot Point': a specific instance where the checker rejects a premise of the author and provides a counter-example that forces the author to rewrite the claim. If the checker only adds 'clarification' or 'agreement' (lexical overlap > 0.7), it is restatement. Genuine verification is counted by the number of times the checker's output leads to a non-trivial change in the author's subsequent output (the 'Delta-Correction' metric).",
+      "counterconditions": [
+        "The checker 'hallucinates' errors, leading to corrections that introduce new bugs (the 'False-Positive Loop').",
+        "The author is prompted to 'agree' with the checker regardless of the logic."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "What if we define 'independent verification' not as a property of the engine, but as a property of the *information flow*? If the checker is denied access to the author's internal reasoning chain (the 'hidden' thoughts) and only sees the final claim, does that create 'functional separation' even if the weights are the same? This would move the debate from 'weight separation' to 'information-theoretic separation'.",
+          "why_keep_this": "Explores a different axis of independence: access to intermediate state vs. access to weights."
+        }
+      }
+    ]
+  }
+}
+```

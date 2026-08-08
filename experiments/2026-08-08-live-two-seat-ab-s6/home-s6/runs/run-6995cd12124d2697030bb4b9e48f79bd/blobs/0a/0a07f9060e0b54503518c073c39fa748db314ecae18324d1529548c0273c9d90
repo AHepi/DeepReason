@@ -1,0 +1,23 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4f1b823db1ae75377d9e6b41: program:reasoning_observation_pending
+- reason-counter@747079cba112daabf0cad71e: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET ce9510864f47a581d59acdd766c5dac230e5570055bd1de5e0d18703d01b0b44
+{"analogy":null,"claim":"Genuine independent verification is evidenced by 'Corrective Divergence': the checker must identify a flaw in the author's reasoning and propose a correction that is subsequently validated by execution.","counterconditions":[{"case":"The author's claim was already perfect, leaving no room for corrective divergence.","eval":"observation"},{"case":"The checker introduces 'noise' corrections that are irrelevant to the core claim.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The most robust evidence of independence is not agreement, but the ability to disagree and be right. We count the instances where the checker's 'Correction' (C) differs from the author's 'Claim' (A), and the execution of C results in a success where A would have failed.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

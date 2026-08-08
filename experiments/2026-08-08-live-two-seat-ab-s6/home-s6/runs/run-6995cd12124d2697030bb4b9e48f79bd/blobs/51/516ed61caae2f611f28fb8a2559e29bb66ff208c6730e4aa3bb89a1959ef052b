@@ -1,0 +1,45 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem of isolated verification reduces to the tension between 'Cognitive Covariance' (SRC_003) and 'Latent Path Diversification' (SRC_001). Specifically, the necessity of separate engines is a proxy for the necessity of uncorrelated error terms; this relation is refuted if a single engine can demonstrate a consistent delta in error detection when shifting from generative to adversarial modes that equals or exceeds the delta between two distinct model architectures.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The claim that separation is unnecessary via 'Persona-Induced Divergence' (SRC_004) contradicts the 'Blind Spot Correlation' mechanism (SRC_005) by asserting that activation patterns (software state) can override weight-distribution biases (hardware state). This relation is refuted if the 'critic' persona consistently fails to identify hallucinations that are high-probability paths in the model's latent space, regardless of the prompt's adversarial intensity.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The simulation of independence via 'statelessness' (SRC_002) integrates with the concept of 'Cognitive Covariance' (SRC_003) by attempting to remove the 'authoring trace' while remaining susceptible to the 'training prior'. This relation is refuted if a context wipe successfully eliminates the 'fingerprints' of the authoring phase but the checker still accepts the same systemic hallucinations due to shared weights.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The proposed 'adversarial' mode (SRC_001) abstracts the requirement for separate engines into a requirement for 'divergent latent trajectories'. This relation is refuted if the divergence produced by the adversarial prompt is purely stylistic (lexical) rather than logical, failing to uncover contradictions that a separate engine with different priors would identify.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The necessity of separation (SRC_005) depends on the assumption that neural weights are the sole source of systemic bias. This relation is refuted if a single engine, when coupled with an external symbolic verifier (as mentioned in SRC_003 counterconditions), achieves the same verification reliability as two separate neural engines, thereby proving that the 'blind spot' is a property of the probabilistic method, not the engine count.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.2
+    }
+  ]
+}
+```

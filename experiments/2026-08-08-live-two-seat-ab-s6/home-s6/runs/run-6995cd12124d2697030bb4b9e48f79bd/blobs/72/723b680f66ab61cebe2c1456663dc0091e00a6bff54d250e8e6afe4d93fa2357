@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f4cfd1d3da606395314ef6b8: program:reasoning_observation_pending
+- reason-counter@1aaa403ffdb82a4cef8c87f4: program:reasoning_observation_pending
+- reason-counter@1688964bc7cda27d578e7ced: program:reasoning_observation_pending
+- reason-counter@0f12353e272e30d262aa3f25: program:reasoning_observation_pending
+- reason-counter@e17d496e11867b9e4fcf666e: program:reasoning_observation_pending
+- reason-counter@4282f77617076fcc4be236f9: program:reasoning_observation_pending
+- reason-counter@52dee379be32848fed7e2ecc: program:reasoning_observation_pending
+- reason-counter@d7bcd0f87b5ca6584f118526: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Separating the authoring engine from the checking engine is necessary for independent verification because identical training priors create a 'blind spot' correlation that makes a single engine's self-check a formal tautology rather than a verification.","counterconditions":[{"case":"The claim is a mathematical identity verifiable by a deterministic external tool (e.g., a compiler).","eval":"observation"},{"case":"The checking engine is a strictly constrained formal verifier with no generative capacity.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The verification process must break the covariance of error. If Engine A authors a claim based on a specific hallucination or logical leap rooted in its weights, Engine A's check will likely traverse the same distorted latent path. A different engine (Engine B) possesses a distinct weight-topology, meaning it must reconstruct the logic from the evidence rather than recalling the author's internal state.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f4cfd1d3da606395314ef6b8, reason-counter@1aaa403ffdb82a4cef8c87f4
+
+TARGET SRC_002
+{"analogy":null,"claim":"The distinction between verification and restatement can be quantified by the 'Error-Correction Delta': the frequency and magnitude of corrections made by the checker to the author's initial draft.","counterconditions":[{"case":"The checker only corrects trivial surface-level errors (typos) rather than logical flaws.","eval":"observation"},{"case":"The checker 'corrects' a correct claim into an incorrect one, indicating a lack of grounding in both roles.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Correction Rate: Genuine verification must be capable of falsification. If the checker only confirms, it is restatement. If it identifies a flaw and the author corrects it, the process is independently verified.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1688964bc7cda27d578e7ced, reason-counter@0f12353e272e30d262aa3f25
+
+TARGET SRC_003
+{"analogy":null,"claim":"Separation of authoring and checking engines is necessary for independent verification because shared training priors create a 'blind spot' covariance that prevents a single model from identifying its own systemic hallucinations.","counterconditions":[{"case":"The engine possesses a formal verification tool (e.g., a lean prover) that operates on rules external to its neural weights.","eval":"observation"},{"case":"The engine can generate a formal counter-example that contradicts its own initial claim through deterministic execution.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Cognitive Covariance: If Engine A has a specific bias or misconception rooted in its training data, any 'check' performed by Engine A will use the same biased heuristic to validate the claim, resulting in a self-consistent but false loop.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e17d496e11867b9e4fcf666e, reason-counter@4282f77617076fcc4be236f9
+
+TARGET SRC_004
+{"analogy":null,"claim":"Separating the authoring engine from the checking engine is necessary for independent verification because identical training priors create a 'blind spot' correlation that prevents the detection of systematic errors.","counterconditions":[{"case":"The verification process is shifted from probabilistic reasoning to deterministic symbolic execution (e.g., running code).","eval":"observation"},{"case":"The checker is forced into a 'adversarial' persona that specifically rewards the discovery of errors over the confirmation of claims.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Blind Spot Correlation' mechanism: if two agents share the same weights (or training history), they share the same probabilistic failure modes. A checker from the same engine is likely to accept a hallucination as a fact if that hallucination is a high-probability path in the model's latent space, regardless of its truth value.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@52dee379be32848fed7e2ecc, reason-counter@d7bcd0f87b5ca6584f118526
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

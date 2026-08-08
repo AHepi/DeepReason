@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes inheritance of a falsification-capacity criterion from SRC_001, mediated by SCR_002's perturbation test, and claims integration with SRC_003's population-level skepticism. But it then refutes the relation if the single-run test is 'gameable' — a restater could pass the ablation by mechanically flipping its verdict regardless of truth-relevance. This refutation condition defeats the very relation it defines: if a restater can pass the perturbation test by mechanically flipping verdicts, then the 'inherited' falsification-capacity criterion does not actually operationalize 'could have contradicted the claim' in any epistemically meaningful sense — it merely operationalizes 'produced a different output.' The inheritance claim is therefore self-undermining: the relation it names (inheritance of falsification-capacity) is refuted by a condition the target itself endorses, making the proposed relation non-substantive rather than substantive. A genuine inheritance of falsification-capacity would require that the perturbation's contradiction be truth-relevant, but the target's own refutation clause concedes this requirement is absent.",
+      "counterexample": [
+        {
+          "scenario": "A diagnostic system produces verdict V on input X. Under perturbation X', it mechanically flips to not-V regardless of whether X' differs from X in any truth-relevant way (e.g., X' differs only in whitespace). The perturbation test passes — verdict sensitivity is detected — yet no falsification capacity was inherited because the flip carries no epistemic force. The target's own refutation clause names exactly this case, meaning the proposed inheritance relation is defeated by the target's own stated condition rather than standing as a substantive relation."
+        }
+      ]
+    }
+  ]
+}
+```

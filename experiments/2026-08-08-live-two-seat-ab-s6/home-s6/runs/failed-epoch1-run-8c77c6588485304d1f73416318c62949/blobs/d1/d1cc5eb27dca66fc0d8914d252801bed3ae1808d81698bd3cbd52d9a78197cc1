@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 provides a substantive contradiction relation between 003af3c7e41c and SRC_005: it names the relation kind ('contradicts'), identifies a specific causal mechanism (shift from weight-based isolation to stochastic-path isolation), and states a concrete refutation condition (high-temperature sampling on a single engine producing the same Information Gain as two distinct engines). This satisfies the problem's requirement to connect the isolated item to its neighbourhood via a substantive relation rather than a mere summary of endpoints.", "counterexample": null}]}
+```

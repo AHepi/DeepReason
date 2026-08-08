@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 frames the relation as 'compatible with' but then immediately restricts it with 'only if the error is a shallow path failure,' which is a conditional-exception formulation rather than a substantive compatibility claim. The core relation asserted is not that the two artifacts share a mechanism or integrate, but that they are compatible only under a narrow boundary condition that excludes the very class of errors (deep architectural hallucinations) the Blind Spot Correlation mechanism is designed to address. This reduces to saying 'they are compatible except where they are not,' which is a non-substantive relation: it neither identifies a shared mechanism, a genuine integration, nor a reduction, but merely carves out an exception and labels the residue 'compatibility.'",
+      "counterexample": null
+    }
+  ]
+}
+```

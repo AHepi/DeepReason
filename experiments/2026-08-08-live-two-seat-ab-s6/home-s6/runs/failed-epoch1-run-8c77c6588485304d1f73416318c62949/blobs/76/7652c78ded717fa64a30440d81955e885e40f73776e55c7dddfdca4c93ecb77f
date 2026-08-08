@@ -1,0 +1,87 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Separating the authoring engine from the checking engine is not necessary for independent verification, provided there is complete contextual isolation between the author's reasoning path and the checker's input.",
+      "mechanism": "Verification is a function of 'path divergence' rather than 'weight divergence'. If the checker is presented only with the final claim (the 'what') and not the author's derivation (the 'how'), the engine must reconstruct the logic from first principles. If the reconstructed path differs in structure but arrives at the same conclusion, the result is independently verified regardless of the shared weights.",
+      "counterconditions": [
+        "The checker is provided with the author's chain-of-thought (CoT) as part of the prompt.",
+        "The problem space is so constrained that only one possible reasoning path exists, making any agreement a tautology."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_002"
+        ]
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "Separating the authoring engine from the checking engine is strictly necessary because shared weights create a 'semantic blind spot' where the checker inherits the author's systemic biases and hallucinations.",
+      "mechanism": "Shared training histories instill identical heuristic shortcuts. A single engine checking its own work (or a twin) is likely to trigger the same erroneous associative leap that produced the original error, treating the hallucination as a recognized truth rather than a claim to be interrogated.",
+      "counterconditions": [
+        "The claim is a formal mathematical proof where the verification is a deterministic mechanical check (e.g., a Lean kernel) rather than a probabilistic semantic check."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Genuine independent verification is distinguished from mere restatement by the presence of 'adversarial friction'—specifically, the discovery and resolution of a contradiction during the check.",
+      "mechanism": "Restatement is characterized by high semantic overlap and immediate agreement. Independent verification is evidenced by a 'divergence-convergence' pattern: the checker initially identifies a potential flaw or alternative interpretation (divergence) and then provides a novel justification for why the original claim holds despite that flaw (convergence).",
+      "counterconditions": [
+        "The checker is prompted to be 'agreeable' or 'supportive' of the author's claim.",
+        "The author's claim is so trivial that no plausible alternative interpretation exists."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The metric for distinguishing verification from restatement is the 'Information Gain' of the checker's output relative to the author's output.",
+      "mechanism": "Count the unique lemmas, citations, or logical steps in the checker's record that do not appear in the author's record. If the checker arrives at the same result using a set of premises or a logical sequence with low Jaccard similarity to the author's sequence, it is independent verification. If the similarity is high, it is restatement.",
+      "counterconditions": [
+        "The optimal path to the solution is unique and minimal, forcing any correct checker to use the same steps."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: 'Independent verification' in LLMs is an asymptotic property. As the temperature increases or the prompt becomes more adversarial, the probability of 'restatement' drops and the probability of 'independent pathing' increases. The 'evidence' in the record would be the delta between the author's token distribution and the checker's token distribution for the same logical steps.",
+          "possible_next_move": "Propose a simulation to measure token overlap between author and checker across different prompt temperatures."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the use of a 'system prompt' that explicitly commands the checker to 'find errors' constitute enough of a state-shift to simulate a different engine?",
+        "related_refs": [
+          "SCR_001"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f014e7f4e8a2061f828719c0: program:reasoning_observation_pending
+- reason-counter@485a16b607e0730e0874eebe: program:reasoning_observation_pending
+- reason-counter@0635a892195b357dc16af29a: program:reasoning_observation_pending
+- reason-counter@9dc41110e2253162238a2b35: program:reasoning_observation_pending
+- reason-counter@7511a713aebd804d05dcd659: program:reasoning_observation_pending
+- reason-counter@113c87edbb36ef05c2f3841e: program:reasoning_observation_pending
+- reason-counter@2a9e32953c66c6bf2fc6f666: program:reasoning_observation_pending
+- reason-counter@1ec08ba3af9a45acb7b81b02: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine independent verification is distinguished from restatement by the 'Discovery of Novel Disproof'\u2014specifically, the checker identifying a counter-example the author failed to consider.","counterconditions":[{"case":"The checker simply re-phrases the author's existing constraints","eval":"observation"},{"case":"The checker finds a flaw but the author 'explains it away' without changing the claim","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Verification is 'independent' if the record shows the checker generating a specific, falsifiable condition (a 'counter-example') that the author's reasoning chain did not anticipate, and then resolving that condition.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f014e7f4e8a2061f828719c0, reason-counter@485a16b607e0730e0874eebe
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separation may actually decrease verification reliability if the checking engine is less capable than the authoring engine, as it may 'verify' a complex error it lacks the capacity to detect.","counterconditions":[{"case":"The error is a result of a systemic bias shared by both models regardless of general capability.","eval":"observation"},{"case":"The authoring engine is in a 'hallucination loop' that it is incapable of breaking regardless of its capacity.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If Engine B is weaker than Engine A, it may fail to find a counter-example not because none exists, but because its search space is smaller. Engine A, checking itself, may retain the specific internal 'trace' of the error's origin, making it more likely to catch its own sophisticated mistakes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0635a892195b357dc16af29a, reason-counter@9dc41110e2253162238a2b35
+
+TARGET SRC_003
+{"analogy":null,"claim":"Separation of engines may actually decrease reliability if the checking engine is less capable than the authoring engine, as it may fail to detect subtle errors that the authoring engine 'remembers' making.","counterconditions":[{"case":"The checking engine is of equal or greater capability than the authoring engine.","eval":"observation"},{"case":"The error is a 'blind spot' shared by all models of that architecture.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Capability Asymmetry: In cases of high-complexity claims, a weaker 'independent' engine may provide a false positive verification simply due to an inability to parse the error, whereas a stronger single engine acting as a critic can leverage its higher-order reasoning to pinpoint its own failure mode.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7511a713aebd804d05dcd659, reason-counter@113c87edbb36ef05c2f3841e
+
+TARGET SRC_004
+{"analogy":null,"claim":"The necessity of separate engines is a fallacy; 'independence' is actually a function of 'information-theoretic isolation' (context window scrubbing) rather than weight separation.","counterconditions":[{"case":"The claim itself contains enough 'leakage' of the author's logic to guide the checker","eval":"observation"},{"case":"The engine has a long-term memory or state that persists across turns","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the checker is presented only with the final claim and denied access to the author's 'chain-of-thought' (hidden reasoning), it must reconstruct the logic from scratch. If the reconstructed logic matches the claim without seeing the original path, the verification is functionally independent.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2a9e32953c66c6bf2fc6f666, reason-counter@1ec08ba3af9a45acb7b81b02
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

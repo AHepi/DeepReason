@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "SRC_001 claims engine identity is 'secondary' to adversarial friction, but the problem explicitly asks for the evidence within a single run's record that would distinguish 'genuine independent verification from mere restatement.' Adversarial friction is a prompt-level steering signal; it produces no machine-checkable evidence trail separating genuine counter-search from a stylistically rewritten restatement of the author's path. To satisfy the problem's verification-by-execution clause, the target should have named a concrete executable artifact — e.g., run the author's formalization through an external symbolic checker or count the proportion of distinct failure modes the checker enumerates relative to the author's enumerated edge cases. Since it gives neither a count nor an executable procedure, it answers the meta-question (is separation necessary?) but not the evidentiary question the problem adds.",
+      "counterexample": null,
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "SRC_002 argues separation is 'necessary' because shared weights create a semantic blind spot, but its own countercondition concedes that a formal proof checked by a non-stochastic kernel defeats the blind spot. That concession is not edge-case trivia: the problem explicitly asks what to 'execute' when a claim can be tested by execution. A formal proof sent to an external deterministic kernel (e.g., Lean / SMT) is a non-restatement check available within a single run's record, and it does not require a different authoring model. Thus the 'necessity' claim is directly contradicted by a verification path the target itself admits and the problem actively requests.",
+      "counterexample": null,
+      "target_alias": "SRC_002"
+    }
+  ]
+}

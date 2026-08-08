@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7a928e30ef6912999175ac087dcd9276) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seat variant of the same question: this run binds the conjecture role group (conjecturer, variator) to the second model instead of the coder role group. When a research team splits work across two different reasoning engines with different training histories, the SAME engine that authors a claim is often trusted to also check it. Argue for or against the claim that separating the authoring engine from the checking engine is necessary for a result to count as independently verified, and identify what evidence within a single run's own record would distinguish genuine independent verification from mere restatement. Where a claim can be tested by counting or by execution, say exactly what to count or execute.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@35559296fbfa664666bd6ac3: program:reasoning_observation_pending
+- reason-counter@79335cead7f90aa89a84dce8: program:reasoning_observation_pending
+- reason-counter@edb762acb0e1cc20df1bbebc: program:reasoning_observation_pending
+- reason-counter@57dd62d005bf6d8b34dfa40d: program:reasoning_observation_pending
+- reason-counter@f9887079c845dd24b5ae7fad: program:reasoning_observation_pending
+- reason-counter@202c92c775c3610d9b285aed: program:reasoning_observation_pending
+- reason-counter@03f3220d23e5d90237597cba: program:reasoning_observation_pending
+- reason-counter@0019fbc3a7e9b3f727be65b8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Verification is distinguished from restatement by the 'Lexical Divergence Metric': the ratio of unique evidentiary citations in the check versus the authoring phase.","counterconditions":[{"case":"The problem domain has only one possible set of supporting evidence.","eval":"observation"},{"case":"The checker uses synonyms to mask restatement of the same logical path.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the checker identifies the same conclusion using a disjoint set of source artifacts or different logical axioms than the author, it has performed an independent reconstruction. Restatement is identified by a lexical overlap > 0.8 (SCR_001) in the justification phase. One must count the intersection of cited source IDs between the author's and checker's proofs.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@35559296fbfa664666bd6ac3, reason-counter@79335cead7f90aa89a84dce8
+
+TARGET SRC_002
+{"analogy":null,"claim":"Separating authoring and checking engines may actually decrease verification reliability due to 'Competence Asymmetry', where a separate checker lacks the specific internal context required to spot a nuanced error.","counterconditions":[{"case":"Model B is significantly more capable (higher parameter count/better training) than Model A.","eval":"observation"},{"case":"Model A is consistently blinded by its own biases during self-correction.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A separate engine (Model B) may be more likely to 'rubber-stamp' a complex but wrong claim from Model A because it lacks the specific 'cognitive path' Model A took to reach the error. Conversely, Model A, checking itself, can trace its own logic and find the exact point of failure. Verification is thus distinguished from restatement by the 'Depth of Trace'\u2014whether the checker identifies the specific step of failure rather than just the wrong final answer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@edb762acb0e1cc20df1bbebc, reason-counter@57dd62d005bf6d8b34dfa40d
+
+TARGET SRC_003
+{"analogy":null,"claim":"Genuine independent verification is distinguished from restatement by the 'Cross-Domain Isomorphism' test: the checker must translate the claim into a completely different formal language or domain before verifying it.","counterconditions":[{"case":"The translation is a superficial mapping that preserves the same error-prone logic.","eval":"observation"},{"case":"The model uses a predefined template for translation that does not require semantic reconstruction.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"To avoid mere restatement, the checker must map the claim from Domain A (e.g., natural language logic) to Domain B (e.g., a geometric proof or a circuit diagram). Verification is independent if the logic holds across the translation. Evidence in the record would be the presence of a 'translation artifact' that lacks the lexical overlap of the original claim, which can be tested by calculating the Jaccard similarity between the author's claim and the checker's intermediate representation (threshold < 0.3).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f9887079c845dd24b5ae7fad, reason-counter@202c92c775c3610d9b285aed
+
+TARGET SRC_004
+{"analogy":null,"claim":"Separating authoring and checking engines is necessary because 'Cognitive Mirroring' causes a single engine to treat its own previous output as a ground-truth anchor, making genuine verification impossible.","counterconditions":[{"case":"The use of a 'clean slate' context window for the checker that completely erases the author's generation history.","eval":"observation"},{"case":"The checker identifies a flaw that contradicts the author's primary premise.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The autoregressive nature of LLMs creates a causal dependency where the 'checker' phase is conditioned on the 'author' phase. This creates a 'confirmation bias loop' where the model's latent state is already shifted toward the claim's validity. Only a separate engine, lacking this specific sequence-history bias, can evaluate the claim without the 'gravity' of the author's prior tokens.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@03f3220d23e5d90237597cba, reason-counter@0019fbc3a7e9b3f727be65b8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

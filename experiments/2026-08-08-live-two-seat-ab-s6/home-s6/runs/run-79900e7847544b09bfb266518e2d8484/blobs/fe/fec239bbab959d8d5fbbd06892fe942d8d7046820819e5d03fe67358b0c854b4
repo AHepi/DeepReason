@@ -1,0 +1,177 @@
+{
+  "candidates": [
+    {
+      "claim": "Engine separation is not necessary for independent verification, but causal decorrelation of the checker's verdict from the author's prior is. Within a single run, genuine verification is distinguished from restatement by causal sensitivity: if the ground-truth signal (execution output or count) is adversarially swapped for a contradicting value, the checker's verdict must flip. If it does not, the checker is restating.",
+      "mechanism": "The author engine commits probability mass to a claim before verification. A checker sharing the same generative prior is statistically biased to confirm it (SRC_004). However, if the checker's verdict is mechanically gated by an external, deterministic signal — an execution sandbox output or a raw count that the generative process cannot see before rendering its verdict — the verdict becomes causally dependent on that signal, not the prior. The single-run diagnostic is an ablation: substitute the true signal with a false one; a genuine verifier rejects, a restater accepts.",
+      "counterconditions": [
+        "If the same engine renders its verdict before reading the execution result, no decorrelation exists.",
+        "If the checker can observe the author's prior confidence and uses it as evidence, it is not causally decorrelated.",
+        "If the execution sandbox is itself contaminated by the engine's generative output (e.g., the engine writes the test it then passes), the signal is not external.",
+        "If the ablation test (swapping the ground truth) fails to flip the verdict but the claim is nonetheless false, the test is vacuous.",
+        "If a population-level false-claim rejection rate of 50% is deemed sufficient (SRC_006), this causal-sensitivity criterion is too strict."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_005",
+          "SRC_007"
+        ],
+        "shared_structure": [
+          "A system commits to a state (author's claim) before an external arbiter renders a verdict.",
+          "The arbiter's verdict is causally dependent on a signal the system cannot manipulate.",
+          "Causal independence is operationally defined by counterfactual sensitivity: if the signal changes, the verdict changes."
+        ],
+        "disanalogies": [
+          "In the adversarial-attack analogy, the model and attacker are distinct agents; in single-engine verification, the same weights generate both claim and verdict.",
+          "Security evaluations typically measure population-level robustness, whereas the causal-sensitivity test is a single-run diagnostic.",
+          "The execution sandbox is a fixed deterministic procedure, whereas adversarial perturbations are optimized per-input."
+        ],
+        "transfer_claims": [
+          "The ablation test (substitute a contradicting ground-truth signal and observe verdict flip) transfers directly as the single-run operational test for verification vs. restatement.",
+          "The necessity of engine separation is reframed: separation is sufficient but not necessary; causal decorrelation is the necessary condition, achievable within a single engine via a sandbox whose output is inaccessible to the generative process prior to verdict."
+        ],
+        "overturn_conditions": [
+          "If a same-engine checker's verdict flips under ablation but the engine still has a systematically biased false-acceptance rate on claims it authored vs. claims it did not, causal sensitivity at the single-run level is insufficient for independence.",
+          "If a frozen-weights verification module (SCR_001) passes the ablation test but shares representational structure with the author, the analogy to adversarial robustness breaks because the 'external signal' is not truly external."
+        ]
+      },
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.9
+    },
+    {
+      "claim": "Separating the authoring engine from the checking engine is strictly necessary for independent verification because the act of authoring a claim causally biases the same engine's probability mass toward its own output. No single-run record can contain evidence of genuine verification absent this separation; it can only contain evidence of an execution that the engine has already committed to interpret as a pass.",
+      "mechanism": "The authoring process is a sampling from a probability distribution. Once a claim is sampled, that same distribution is conditionally biased to assign high probability to the claim's truth (SRC_004). The checker, drawing from the same distribution, cannot sample the 'reject' region with the frequency required for genuine verification. Any execution result in the run record is post hoc rationalization: the engine will interpret ambiguous or even contradicting outputs as confirmations due to its prior commitment. Therefore, only a second engine with a decorrelated training history can supply the necessary independent probability mass.",
+      "counterconditions": [
+        "If a deterministic execution sandbox gates the checker's verdict mechanically and the checker's text is generated only after reading a contradicting output, the single engine does exhibit counterfactual sensitivity (SRC_005).",
+        "If empirical false-claim rejection rates within a single engine are statistically indistinguishable from cross-engine rates, the necessity claim is empirically falsified.",
+        "If the ablation test (SCR_002) applied to a single engine's run record shows verdict flips on swapped ground truth, the claim that single-run records contain no genuine verification evidence is false."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ],
+      "analogy": null,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "Independent verification is a matter of statistical calibration, not engine identity. A single engine can achieve independent verification if its false-claim rejection rate meets a threshold (e.g., >50% on injected false claims). The evidence within a single run's record is not sufficient; one must count across a population of runs where false claims are injected. For countable claims, execute: inject claims with count±1 and measure the engine's acceptance rate. For execution claims, inject claims with swapped outputs and measure rejection. The population rate distinguishes genuine verification from restatement.",
+      "mechanism": "Verification is operationally defined by a Type I error rate: the probability of rejecting a false claim. A restater has a near-zero rejection rate because it re-derives truth from the author's prior. A genuine verifier has a rejection rate bounded away from zero. Engine separation is one way to decorrelate priors and achieve this rate, but it is not the only way. A single engine with a robust deterministic execution gate can also achieve a high rejection rate if the gate's output is not manipulable by the generative prior. The evidence is the population-level count of correct rejections on a probe set of false claims.",
+      "counterconditions": [
+        "If the problem demands a single-run diagnostic, population statistics are insufficient.",
+        "If the engine's generative prior contaminates the execution sandbox (e.g., the engine writes the oracle), the rejection rate on injected false claims is meaningless.",
+        "If cross-engine verification also fails to achieve a >50% rejection rate due to shared training data, the threshold is not a sufficient condition for independence.",
+        "If the injected false claims are not representative of the engine's natural error distribution, the calibration test measures robustness to adversarial probes, not verification of natural claims."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "analogy": null,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "Engine separation is neither necessary nor sufficient. What is necessary is that the verifier's verdict be a function of a causal pathway that does not route through the author's generative prior. Within a single run, the evidence is structural: the run record must show a causal chain where (1) the claim is authored, (2) an execution or count is performed by a deterministic process whose code is not generated by the author at verification time, (3) the verifier reads the result of that process, and (4) the verifier's verdict is mechanically bound to that result. To test: for execution claims, re-run the sandbox with the claim's assertion replaced by a contradiction and verify the checker's verdict flips; for counting claims, re-run the count with the input set perturbed by ±1 and verify the checker's verdict tracks the true count, not the authored claim.",
+      "mechanism": "Causal decorrelation (SRC_007) is the covering principle. Engine separation is a proxy for achieving decorrelated priors, but the proxy can fail (if engines share training data) and the proxy can be unnecessary (if a single engine uses an external deterministic gate). The single-run evidence is the presence of a causal gate and the ablation test that confirms the gate is operative. The test is executable: swap the ground truth and observe the verdict.",
+      "counterconditions": [
+        "If the verifier reads both the authored claim and the execution result and can choose to override the result based on the claim's perceived plausibility, the causal gate is not binding.",
+        "If the deterministic process is susceptible to specification gaming by the author (e.g., the author chooses which test to run), the pathway is not decorrelated.",
+        "If the execution result is ambiguous and the verifier's interpretation is mediated by its generative prior, a verdict flip on ablation is necessary but not sufficient for full independence."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_005"
+        ],
+        "shared_structure": [
+          "A claim is tested against a deterministic oracle whose output is independent of the claimant's belief.",
+          "The verdict is a function of the oracle, not the claimant.",
+          "Causal independence is verified by perturbing the oracle output."
+        ],
+        "disanalogies": [
+          "Formal verification operates on symbolic representations, whereas LLM claims are natural language requiring semantic parsing into testable form.",
+          "Formal verification is sound by construction; the single-run ablation test is an empirical check on one instance, not a proof of general independence.",
+          "The oracle in formal verification is trusted by mathematical fiat; the execution sandbox here is trusted by architectural isolation, which is contingent."
+        ],
+        "transfer_claims": [
+          "The ablation test (perturb oracle, observe verdict) is the operationalization of the single-run independence check.",
+          "The framing of 'necessary and sufficient' should target the causal pathway, not the engine identity: separation is a means to achieve a decorrelated pathway, not an end."
+        ],
+        "overturn_conditions": [
+          "If a single-engine architecture passes the ablation test but the engine's verdict on naturally occurring (non-injected) false claims is systematically more lenient than a cross-engine checker's, the single-run ablation is insufficient.",
+          "If cross-engine verification is shown to be necessary because shared training data within a single engine makes decorrelation impossible even with a sandbox, the claim that separation is unnecessary is false."
+        ]
+      },
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    },
+    {
+      "claim": "The question presupposes a false binary. 'Independent verification' admits of degrees. Engine separation is necessary for strong independence (decorrelated priors), but a single engine can achieve weak independence via deterministic execution gating. The evidence within a single run is correspondingly graded. For weak independence: the run record must show the checker's verdict was causally sensitive to an external execution output (ablation test). For strong independence: the run record must additionally show that the checker's reasoning does not rely on the author's specific semantic commitments, testable by paraphrasing the claim into a structurally equivalent form and confirming the verdict is stable. For countable claims, execute the count on the original and a paraphrased input; for execution claims, run the original and an equivalent program.",
+      "mechanism": "SRC_006 treats the issue as statistical; SRC_007 treats it as causal. Both are partial. Verification is a graded property defined by the degree of causal decorrelation between the verifier's verdict and the author's prior. Engine separation achieves high decorrelation at the prior level but may fail at the semantic level if engines share training data. Single-engine execution gating achieves decorrelation at the signal level but not the prior level. The single-run evidence must probe both: ablation tests signal-level decorrelation; paraphrase tests semantic-level decorrelation.",
+      "counterconditions": [
+        "If the problem requires a categorical answer (necessary or not), the graded framework is non-responsive.",
+        "If paraphrase invariance fails for reasons unrelated to the author's prior (e.g., the paraphrase is ambiguous), the test for strong independence is invalid.",
+        "If execution gating is considered sufficient by definition (weak independence is all that is required), the grading is unnecessary and the first candidate's claim holds.",
+        "If cross-engine verification fails the paraphrase test due to semantic mismatch, strong independence is not achieved by separation alone."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "analogy": null,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.4
+    },
+    {
+      "claim": "Engine separation is necessary because the problem is not statistical but commitment-structural: the act of authoring a claim updates the epistemic state of the engine, making it impossible for the same engine to evaluate the claim as if it had not authored it. The single-run evidence for genuine verification is not an ablation test (which tests sensitivity to a signal) but a blind protocol: the checker must not know which claim it is checking. Within a single run, this is impossible. Therefore, no single-run record can contain evidence of independent verification. To test for counting claims: the count must be performed and the result submitted before the claim is authored; to test for execution claims: the output must be recorded before the claim is stated. If the run record shows the claim preceding the execution, it is restatement, not verification.",
+      "mechanism": "The temporal ordering of claim and evidence is the structural marker. If the engine sees the claim before the evidence, its generative prior is anchored (SRC_004). If the evidence is generated before the claim and the checker is blinded to the claim's content, the verification is independent. Engine separation is the only reliable way to enforce blindness because a single engine's context window contains the claim. The single-run diagnostic is a timestamp/ordering check: does the execution precede the claim in the causal history of the run?",
+      "counterconditions": [
+        "If the engine can be instructed to ignore the claim in its context and evaluate only the execution result, blindness is achievable without engine separation.",
+        "If the execution sandbox output is deterministic and the checker's verdict is mechanically bound to it (e.g., the checker must output 'pass' iff the output matches), the prior commitment is irrelevant because the verdict is not generated but computed.",
+        "If the run record shows the execution preceding the claim but the engine's reasoning references the claim's content, temporal ordering is insufficient.",
+        "If cross-engine verification allows the checker engine to see the author's claim, the separation does not enforce blindness."
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "analogy": null,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.3
+    }
+  ]
+}

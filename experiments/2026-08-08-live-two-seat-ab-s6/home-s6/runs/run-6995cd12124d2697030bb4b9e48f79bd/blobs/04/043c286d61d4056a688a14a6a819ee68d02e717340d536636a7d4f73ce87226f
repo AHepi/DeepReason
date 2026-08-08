@@ -1,0 +1,52 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The claim that separation is unnecessary via Latent Path Diversification (SRC_001) contradicts the 'Blind Spot Correlation' mechanism (SRC_005), because a persona shift cannot purge systemic weight-based biases. This relation is refuted if a persona-shifted single engine demonstrates an error-detection rate statistically indistinguishable from two distinct model architectures on the same task.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "Statelessness as a simulation of independence (SRC_002) integrates with the 'Cognitive Covariance' theory (SRC_003) by removing the authoring trace but failing to remove the shared priors. This relation is refuted if a complete context wipe allows a single engine to identify a systemic hallucination that it previously authored without any adversarial prompting.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "Persona-Induced Divergence (SRC_004) depends on the assumption that latent paths are sufficiently orthogonal to bypass the 'Blind Spot Correlation' (SRC_005). This relation is refuted if the 'critic' persona consistently reproduces the same logical errors as the 'author' persona despite a shift in stylistic output.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "The necessity of separate engines (SRC_003) abstracts the problem of 'Cognitive Covariance' into a requirement for architectural diversity. This relation is refuted if a single engine utilizing a deterministic symbolic tool (e.g., Lean) achieves the same verification reliability as a multi-engine ensemble.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "Latent Path Diversification (SRC_001) is compatible with the 'Blind Spot Correlation' (SRC_005) only if the error is a 'shallow' path failure rather than a 'deep' architectural hallucination. This relation is refuted if an adversarial prompt successfully corrects a 'deep' hallucination that is consistent across all latent paths of that specific model architecture.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The simulation of independence via statelessness (SRC_002) reduces to a test of 'fingerprint' detection in the final claim. This relation is refuted if the checker identifies an error in a claim where the author's reasoning style is completely obscured, yet the checker shares the same systemic blind spot as the author.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.2
+    }
+  ]
+}
+```
