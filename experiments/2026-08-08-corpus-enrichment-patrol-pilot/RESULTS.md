@@ -120,8 +120,8 @@ under this new mechanism now; further progress is appended below.
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |
 |---|---|---|---|---|---|---|
 | base-q01 | base | committed | 12 (10+2 continue) | 110/113 | 0 (expected, P-CEPP-1) | recovered from failure #1, see above |
-| base-q13 | base | retrying | - | - | - | failures #2, #3; retrying under tracked-background strategy |
-| hard-h01 | hard | not started | - | - | - | |
+| base-q13 | base | committed | 10 | 93/94 | 0 (expected) | 3rd attempt succeeded under tracked-background strategy (task beb9axlw2) |
+| hard-h01 | hard | in progress | - | - | - | tracked-background task br9pg3lk8 |
 | hard-h05 | hard | not started | - | - | - | |
 | hard-h10 | hard | not started | - | - | - | |
 | hard-h15 | hard | not started | - | - | - | |
