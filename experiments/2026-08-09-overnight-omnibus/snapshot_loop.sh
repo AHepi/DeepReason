@@ -19,8 +19,8 @@ cd "$REPO" || exit 1
 while true; do
   sleep 300
   git add -A -- "$LIVE_REL" \
-    ":!$LIVE_REL/*/home-*/runs" \
-    ":!$LIVE_REL/*/*/home-*/runs" \
+    ":!$LIVE_REL/*/home-*/runs/**" \
+    ":!$LIVE_REL/*/*/home-*/runs/**" \
     >/dev/null 2>&1 || true
   if ! git diff --cached --quiet -- "$LIVE_REL" 2>/dev/null; then
     git commit -q -m "Omnibus snapshot ($(date -u +%FT%TZ))" -- "$LIVE_REL" >/dev/null 2>&1 || true
