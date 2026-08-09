@@ -244,6 +244,29 @@ compare against it), not a fluke of sample size alone.
 Committed verbatim: `s_truth_results.jsonl` (167 rows: 152 primary + 15
 stability repeats).
 
+## 2026-08-09 — S-formal: 50-hit validation pass, then full run launched
+
+Population not claimed by S-mech or S-truth: 829 pairs. Per `PREREG.md`'s
+pre-registered rule, ran the extraction call
+(`scripts/s_formal_run.py --validate-only`) on 50 hits first and read the
+raw `{object, property, value_a, value_b, clean_shape}` output side by
+side with the claim text before trusting the stratum with its full
+budget. Reviewed: object/property assignments were topically coherent
+(e.g. pair [20] extracted `object="SRC_003 and SRC_004",
+property="dependency relationship", value_a="SRC_004 inherits SRC_003",
+value_b="SRC_003 depends on SRC_004"` — a genuine, meaningful
+disagreement matching what the claim text actually says), and
+`not_clean_shape` fired correctly on pairs whose two claims were about
+different topics entirely (e.g. a "shares mechanism" claim paired
+against an unrelated "contradicts the ranking schema" claim). A second
+50-sample tally (fresh calls, same 1-key/1-model validation config):
+46/50 `confirmed_negation`, 4/50 `not_clean_shape`, 0/50 `values_agree`
+this time — the same qualitative split, though not identical counts to
+the first pass (expected, given the stability-flip-rate finding already
+established for this API: identical calls are not always
+bit-identical). Validation accepted; full 829-pair run launched as a
+harness-tracked background call.
+
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
 matched to its source question's `id` and `accept` list by seed-problem-
