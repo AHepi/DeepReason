@@ -162,3 +162,136 @@ for reachability, never a requirement. Companion tooling fact, same
 tranche (`55b16ce9`): `docs_verify --fast` reuses cached results and so
 cannot catch documents newly affected by a `src/` change — the full mode
 can and did; recorded in the handover's environment facts.
+
+## 2026-08-09 (sweep of tranches since 2026-08-04)
+
+**E11 — rung 4's fingerprint-timing prose contradicted its own check.**
+`docs/map/SEAM-schools-x-scheduler.md`'s fingerprint row said the
+module-fingerprint stamp "fires at construction" while a check two
+lines below it asserted the opposite. Rung 4
+(`experiments/2026-08-04-change-rung4-module-fingerprints/`) moved the
+stamp to `run(cycles > 0)` and added the corrective check but left the
+stale sentence in place. Found and corrected in passing by rung 5 the
+same day (`experiments/2026-08-04-change-rung5-dumb-alternative-backend/
+DELIVERY.md:113-116`: "Corrected in passing: `SEAM-schools-x-scheduler`'s
+fingerprint row said the stamp fires 'at construction' while its own
+check two lines below asserted it does not... `docs_verify` validates
+checks, not the prose around them."). The map document's current text
+is correct ("outside the `N_SCHOOLS > 0` gate... and NOT at
+construction, which must append nothing") but the correction itself was
+never ledgered until now.
+
+**E12 — this ledger's own E5 misidentified the three no-manifest
+roots.** E5 (above) states "The three no-manifest calibration roots
+under `runs/jolt_positive_headroom_v3_1/` are outside its glob."
+Measured directly at commit `8122b0e3`, by manifest load over every
+git-tracked root
+(`experiments/2026-08-05-fix-expired-census-readers/PARKED.md` P1a):
+the three `runs/jolt_positive_headroom_v3_1/calibration/2026070{1,2,3}`
+roots actually RAISE — they are not the no-manifest three. The real
+no-manifest three are `experiments/bronze_flat_2026-07-13/
+{deepseek-v4-pro,kimi-k2_6,qwen3_5_397b}`, which are INSIDE
+`root_sweep.py`'s `experiments/` glob, not outside it. E5's headline
+finding (the 45-root baseline is not reproducible from the committed
+tree) is unaffected — only this supporting sentence is wrong. Flagged
+and explicitly deferred by the fix-expired-census-readers tranche
+itself ("Not done here because `docs/ERRATA.md` is outside this
+tranche's declared scope... suggested disposition: a one-entry append
+to `docs/ERRATA.md`"), and carried forward unfixed through
+`experiments/2026-08-05-fix-loopback-fixture-daemon/PARKED.md:105`. Per
+this ledger's own rule ("if a correction itself proves wrong, that is a
+new entry"), E5 is not edited.
+
+**E13 — CLAUDE.md's directory map named only the v1.5 spec amendment.**
+The `docs/` row under "Directory map" read "specs (harness v1.3 + v1.5
+amendment, ... BASIN_REPORT)", omitting v1.4 and v1.6, which exist on
+disk and are part of the current spec. Surfaced by the operator
+questioning the O2 reading list; the stale line had already propagated
+into one executor instruction. Corrected 2026-08-08, commit `1f6c24ab`
+("CLAUDE.md: correct stale spec listing (v1.4/v1.5/v1.6 amendments
+exist)"): now reads "specs (harness v1.3 + v1.4/v1.5/v1.6 amendments —
+read ALL amendments; note 'V6' elsewhere names the RunManifest/policy
+generation and the wire-contract series, NOT this spec document
+series), ... BASIN_REPORT". Already fixed in place; never ledgered
+until now.
+
+**E14 — CLAUDE.md's turmite/jolt cycle-0 paragraph read as a current
+blocker after both were fixed.** The "Hard-won invariants" section's
+turmite (`_not_a_self_link`) and jolt (observable-naming) cycle-0
+failures carried no dating clause, so the paragraph read as describing
+live/current blockers though both were fixed 2026-08-01 (SWEEP.md/
+REPAIR_OSCILLATION.md). Flagged by the overnight-omnibus tranche's own
+preflight ("stale as of this tranche, per PREREG.yaml's own note" —
+`experiments/2026-08-09-overnight-omnibus/RESULTS.md:205-212,719-722`).
+Corrected 2026-08-09, commit `7e8f42402` ("CLAUDE.md: date the cycle-0
+examples (fixed 2026-08-01; live SUCCEEDED 2026-08-09)"): the paragraph
+now ends "(Both specific encodings were FIXED 2026-08-01 — SWEEP.md/
+REPAIR_OSCILLATION.md; live simulation SUCCEEDED events recorded
+2026-08-09, overnight-omnibus Block B — the examples are historical,
+the blob-first discipline is the enduring rule.)" Already fixed in
+place; never ledgered until now.
+
+**E15 — S6's pre-registration called `property_designer`'s non-firing a
+"stochastic miss"; the record shows a structural dead path.**
+`experiments/2026-08-08-live-two-seat-ab-s6/PLAN.md:83-89`
+(pre-registered before the live run) invoked CLAUDE.md's
+capability-channel stochasticity doctrine to excuse `property_designer`
+never firing live as "an accepted, typed, non-failure outcome," and the
+tranche's first `RESULTS.md` segment (lines 98-111) repeated this as
+"the accepted, PRE-REGISTERED stochastic miss." A dated correction
+segment in the same `RESULTS.md` (lines 168-227, "correction:
+'stochastic miss' was wrong; the path is structurally dead") shows the
+probability was 0, not low: `oracle.py::property_oracle_commitment`
+(the only minter of the triggering property-oracle commitment) has
+exactly one caller, `admit_counterexample`, which itself requires that
+commitment to already exist — a bootstrap circularity, structurally
+dead regardless of question, cycle budget, or bound model, not a case
+CLAUDE.md's stochasticity doctrine covers. Corrected 2026-08-08 by
+`RESULTS.md`'s own dated, non-destructive segment (the original segment
+is not edited) and cross-referenced in `PARKED.md` P1; `PLAN.md` itself
+stands uncorrected, per the tranche's own pre-registration convention.
+Downstream documents already cite the corrected framing
+(`docs/proposals/RECORD_LIFECYCLE_DEFECT_PLAN.md:152-153`;
+`docs/proposals/CODER_AS_TOOL_PREPLAN.md:39-41`); only this ledger
+lacked the pointer until now.
+
+**E16 — S6's `PARKED.md` misattributed the `continue`-crash to a
+pending atomic child; L1 found it fires regardless.**
+`experiments/2026-08-08-live-two-seat-ab-s6/PARKED.md` P3 described the
+crash fixture as having "one of these decompositions still in flight
+(some atomic children completed, others not yet attempted)" and "the
+pending item at resume time was an ATOMIC child... two sibling children
+already `terminal_status: 'completed'`" — read as requiring an
+incomplete child for the crash to fire.
+`experiments/2026-08-08-fix-l1-continue-resumable-crash/
+DIAGNOSIS.md:117-124` checked this directly against the fixture's own
+record and refuted it: the one recorded decomposition is FULLY
+resolved (`contract_decomposition_completed` at seq 64, both children
+`terminal_status: 'completed'`), and the crash mechanism fires anyway,
+on ANY criticism atomic child ever admitted, pending or not — a
+broader, different mechanism than P3 described. Corrected 2026-08-08 by
+the L1 tranche's diagnosis; S6's own `PARKED.md` stands as written (a
+closed tranche's parked item, not edited).
+
+**E17 — O1's "14 genuine multi-node floating chains" superseded by
+O2's spec-true re-run showing zero.**
+`experiments/2026-08-08-change-grounded-overlay-o1/
+RESULTS.md:47-53,182-183` and `DELIVERY.md:29-32` reported "14 genuine
+multi-node floating chains across 12 roots" as the rung's one positive
+catch, computed against an operationally-proxied "ground" definition
+(`Provenance.role ∈ {SEED, IMPORT, USER}`).
+`experiments/2026-08-08-change-grounded-overlay-o2/
+SPEC.md:195-255`, re-running against the spec-DERIVED ground definition
+the operator's Amendment 1 required instead (adding a §11.3
+program-check anchor the proxy structurally could not see), found the
+count collapses to zero across all 48 roots and all 14 of O1's flagged
+chains: "spec_floating=2586(chains=0) ... EVERY one of O1's own 14
+flagged 'self-supporting clusters' turns out to already rest on a
+program-check-verified member once that anchor type is honored." O2
+states the consequence explicitly: "R5's premise does not survive the
+spec-true audit... that catch is zero multi-node chains, corpus-wide."
+O1's own `RESULTS.md`/`DELIVERY.md`/`CHECKLIST.md`/`VALIDATION.md`/
+`REPORT.md` remain unmodified and still assert the 14-chain catch; O2
+itself is a DESIGN-AND-STOP tranche per its own preplan and stopped at
+`SPEC.md`, never delivering a closing note back into O1's documents.
+The correction stands only in O2's `SPEC.md` prose until this entry.
