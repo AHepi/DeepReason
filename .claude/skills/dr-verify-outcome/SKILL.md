@@ -47,6 +47,7 @@ orchestrator.
     Live attempt (if any): <run id, typed stop, tokens, one-line audit>
     Verdict: PASS | FAIL | PASS-offline/INCONCLUSIVE-live
     Residue (honest): <what remains unproven or parked, or "none">
+    Errata: <docs/ERRATA.md entry id(s) added, or "errata: none">
 
 ## Closing the tranche (on PASS)
 
@@ -54,6 +55,14 @@ orchestrator.
   observed, what was fixed, what the record now shows, and the honest
   residue. "Accepted does not mean true"; never claim more than the
   record shows.
+- **Errata check — mandatory, before VERIFY.md is committed.** Did this
+  tranche find any committed document's claim (a handover, a map
+  document, a RESULTS.md, a spec, CLAUDE.md — anything docs/ERRATA.md
+  covers) to be wrong? If yes, the `docs/ERRATA.md` entry lands in the
+  SAME commit as VERIFY.md. If no, state "errata: none" explicitly in
+  VERIFY.md's Errata line — the same state-not-silence pattern this
+  template already uses for Residue: an omitted line is ambiguous, an
+  explicit "none" is not.
 - Commit and push everything; confirm `git status` is clean and the
   branch head is on the remote.
 - Report: verdict, evidence pointers, PARKED.md contents as candidate

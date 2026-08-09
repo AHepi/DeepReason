@@ -1,5 +1,5 @@
 # Checklist for: update the Errata (sweep + automation)
-State: next=3 blockers=none
+State: next=6 blockers=none
 Map ids: none — docs/skills-only tranche (docs/map covers
 src/deepreason/ only; see REQUEST.md's Map preflight section).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -19,26 +19,29 @@ order. One step per dr-execute-step invocation.
       done-when: `grep -c "220-300\|220–300" docs/ERRATA.md` -> 0
       DONE: 0
 
-- [ ] 3. (S1-S8) [COMMIT] Commit and push docs/ERRATA.md.
+- [x] 3. (S1-S8) [COMMIT] Commit and push docs/ERRATA.md.
       done-when: `git status --porcelain docs/ERRATA.md` empty AND
       `git log --oneline -1 -- docs/ERRATA.md` shows this commit AND
       branch head is on origin
+      DONE: commit dbff393b8, pushed
 
-- [ ] 4. (S9,S10) Amend `.claude/skills/dr-deliver-change/SKILL.md`:
+- [x] 4. (S9,S10) Amend `.claude/skills/dr-deliver-change/SKILL.md`:
       add a mandatory "Errata check" step to Procedure (between
       existing step 3b "Map delta" and step 4 "Write DELIVERY.md"),
       add an "## Errata" section to the DELIVERY.md template, and add
       an errata exit-criterion line. Checkpoint wording per REQUEST.md
       R6, adapted to name DELIVERY.md per SPEC.md's A2.
       done-when: `grep -ic "errata" .claude/skills/dr-deliver-change/SKILL.md` -> N where N>=3
+      DONE: 9
 
-- [ ] 5. (S9,S11) Amend `.claude/skills/dr-verify-outcome/SKILL.md`:
+- [x] 5. (S9,S11) Amend `.claude/skills/dr-verify-outcome/SKILL.md`:
       add the same mandatory "Errata check" to the "Closing the
       tranche (on PASS)" bullet list, and an "Errata:" line to the
       VERIFY.md template next to the existing "Residue (honest):"
       line. Checkpoint wording per REQUEST.md R6, adapted to name
       VERIFY.md per SPEC.md's A2.
       done-when: `grep -ic "errata" .claude/skills/dr-verify-outcome/SKILL.md` -> N where N>=2
+      DONE: 6
 
 - [ ] 6. (S10,S11) [COMMIT] Commit and push the two skill amendments.
       done-when: `git status --porcelain .claude/skills/dr-deliver-change/SKILL.md .claude/skills/dr-verify-outcome/SKILL.md`
