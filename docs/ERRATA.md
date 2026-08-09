@@ -295,3 +295,26 @@ O1's own `RESULTS.md`/`DELIVERY.md`/`CHECKLIST.md`/`VALIDATION.md`/
 itself is a DESIGN-AND-STOP tranche per its own preplan and stopped at
 `SPEC.md`, never delivering a closing note back into O1's documents.
 The correction stands only in O2's `SPEC.md` prose until this entry.
+
+**E18 — `docs/RESEARCH_BACKEND.md`'s header Status line says v6 in-run
+research is gated; the code and the rest of the same document say it
+shipped.** Line 6 reads "V6 in-run enablement remains gated
+(`V6_RESEARCH_UNAVAILABLE`) and is tranche 2," written before tranche 2
+landed and never re-synced. `run_manifest.py:2869-2874` shows the gate is
+conditional — `V6_RESEARCH_UNAVAILABLE` fires only when research is
+enabled with a backend other than `web.contained.v1`, the one implemented
+backend — and the document's own later sections say tranche 2 (A, B, C1,
+C2) is complete and live-proven (lines 149-189). Confirmed live against
+the committed record, not just prose:
+`experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100`
+replays with `verify_root` reporting zero violations, three model-proposed
+research proposals, three grants, three receipts, and one consumption of
+research fetches into citable evidence, and a sibling root in the same
+campaign (`run-5a771259557378224bd68591483817be`) shows two of three
+proposals live-denied with the typed reason `requests_budget_exhausted`.
+Not corrected in `docs/RESEARCH_BACKEND.md` itself by this entry — that is
+Phase A's finding, recorded here per the errata checkpoint rule; the fix
+(updating the header Status line) is deferred to whoever next touches
+that document, since this tranche's own scope is the probe-apparatus
+SPEC, not a `RESEARCH_BACKEND.md` edit. Evidence:
+`experiments/2026-08-09-change-llm-probe-apparatus/AUDIT.md` §1-2.
