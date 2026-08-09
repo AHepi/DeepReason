@@ -342,7 +342,62 @@ qualification-repair-scope design discussion.
 
 ## Block E — end-of-night overlay sweep
 
-(pending — runs last, after A-D)
+Ran `experiments/2026-08-08-change-grounded-overlay-o1/scripts/run_all_overlays.py`
+UNMODIFIED, bare, cwd = repo root, exactly as O1's own script specifies
+(re-verified before running: no edits were made to any script under
+`scripts/`). Corpus grew from 48 roots (baseline, preserved as
+`overlay_results_baseline_2026-08-08.jsonl` before any other block in
+this tranche ran) to 76 roots.
+
+**The sibling "corpus-enrichment + patrol pilot" window's branch
+(`claude/corpus-enrichment-patrol-pilot-f4khnk`) appeared between
+this tranche's pre-flight check (empty) and Block E's run** — `git
+branch -a` at Block E's start found it. Its new directory
+(`experiments/2026-08-08-corpus-enrichment-patrol-pilot`, 2 run
+roots) was extracted read-only via `git archive` into a temp location,
+copied into this working tree UNTRACKED for the duration of the sweep
+only, and removed immediately after — never committed to this
+branch, never merged. This tranche made no patrol calls and ran no
+dual-mode enrichment itself, per the operator's instruction; Block E
+only READ that window's committed output, once, for the count below.
+
+**Old vs new, aggregated (O1's own established columns, REPORT.md):**
+
+| metric | old (48 roots) | new (76 roots) | delta |
+|---|---|---|---|
+| roots swept | 48 | 76 | +28 |
+| roots with an overlay error | 11 | 11 | +0 |
+| O1a node_count (sum) | 1947 | 2996 | +1049 |
+| O1a att_edge_count (sum) | 26 | 30 | +4 |
+| **attack-edge density** (att_edge_count / node_count) | **0.013354** | **0.010013** | **-0.003341** |
+| O1a controversy SCCs | 0 | 0 | +0 |
+| O1a skeptically-accepted-not-grounded | 0 | 0 | +0 |
+| O1b accepted+formally-backed | 265 | 310 | +45 |
+| O1c floating components | 2374 | 3571 | +1197 |
+| O1c floating chains (non-vacuous) | 14 | 18 | +4 |
+| O1d single/multi-warrant flips | 0 | 0 | +0 |
+
+**Reading it honestly.** Attack-edge density FELL slightly (-25%
+relative), not because attack edges disappeared (they grew, 26→30)
+but because the corpus's node count grew faster (+54%) than its
+attack-edge count (+15%) — tonight's 28 new roots are mostly
+argumentative-claim runs (Blocks A/B/C/D) whose artifact graphs are
+node-heavy relative to how many formal attack relationships they
+register, diluting the density rather than concentrating it. This is
+not a claim that argumentation quality declined; it is a claim about
+what kind of roots got added. Zero new overlay errors across 28 new
+roots is a clean result on its own (`run_all_overlays.py` catches
+exceptions per-root/per-overlay and types them into `_error` rather
+than aborting the sweep, so this is a real "nothing broke," not an
+artifact of a crashed sweep). `PREREG.yaml`'s own `reporting_floor`
+said this block would not judge whether density moving is good or
+bad, only report it, honored here.
+
+O1's `overlay_results.jsonl` is a git modification in this tranche's
+commit (the script's normal output, re-measuring the same file it
+always writes to) — not a hand-edit; `overlay_results_baseline_2026-08-08.jsonl`
+under this block's own directory preserves the pre-tonight state
+permanently for any future comparison.
 
 ## Omnibus decision table
 
