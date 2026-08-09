@@ -138,6 +138,15 @@ prereg's own resume policy (`continue --budget cycles=2` on any
 `budget_exhausted`/`converged` stop) — applied here exactly as
 pre-registered, not as an improvised workaround.
 
+**Update 2026-08-09**: by hard2-h2-15 (the 8th of 10 questions), 5 of the
+8 completed first-`reason`-call stops hit this same `replay_valid=false`
+foreign-criticism gap (base-q13, hard-h05, hard-h10 stayed clean on the
+first stop; hard-h01, hard-h15, hard2-h2-01, hard2-h2-08, hard2-h2-15 did
+not). This is the NORM for this cycles=10/token-budget=180000
+configuration, not an edge case — every instance closed cleanly with one
+`continue --budget cycles=2` top-up, consistent with the prereg's own
+resume policy, applied identically each time.
+
 ## 2026-08-08 — Phase 1 progress (running table, updated per root)
 
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |
@@ -150,5 +159,5 @@ pre-registered, not as an improvised workaround.
 | hard-h15 | hard | committed | 12 (10+2 continue) | 99/100 | 0 (expected) | second foreign-criticism-gap case, closed by continue same as hard-h01 |
 | hard2-h2-01 | hard2 | committed | 12 (10+2 continue) | 95/95 | 0 (expected) | third foreign-criticism gap case, closed by continue |
 | hard2-h2-08 | hard2 | committed | 12 (10+2 continue) | 100/100 | 0 (expected) | fourth foreign-criticism gap case, closed by continue |
-| hard2-h2-15 | hard2 | in progress | - | - | - | tracked-background task bdds2ullk |
+| hard2-h2-15 | hard2 | continuing | 10 (+2 pending) | 102/? | - | fifth foreign-criticism gap case; continue in flight (task ba6p39irk) |
 | hard2-h2-22 | hard2 | not started | - | - | - | |
