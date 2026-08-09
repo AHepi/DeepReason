@@ -1,0 +1,7 @@
+```json
+{
+  "op": "replace",
+  "path": "/cases/1/target_alias",
+  "value": "SRC_001"
+}
+```
