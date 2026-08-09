@@ -1,0 +1,17 @@
+context_window_tokens: 131072
+credential_env: OLLAMA_API_KEY
+endpoint: https://ollama.com/v1
+family: gemma
+logprobs: false
+maximum_completion_tokens: 8192
+model_id: gemma4:31b
+model_profile: standard
+model_revision: gemma4:31b
+output_mechanism: json_text
+output_mode: json_object
+profile_digest: 5746e63b9e7a51b78a2e8820048f7705e6436ed036f9836aad6ae725edd9ff34
+provider: ollama
+reasoning: none
+schema: deepreason-provider-profile.v1
+temperature: null
+timeout_s: 120
