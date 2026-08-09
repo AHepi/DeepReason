@@ -1,0 +1,13 @@
+{
+  "control_sample_seed": "sha256('cp1m-control-sample-v1')[:8] big-endian int",
+  "controls_sampled": 150,
+  "controls_unresolved_claim_text": 0,
+  "distinct_roots_in_hits": 43,
+  "hits_total": 1941,
+  "hits_unresolved_claim_text": 0,
+  "non_hit_pool_total": 7336,
+  "rule_184_family_hits": 43,
+  "rule_family_hits_reason_mentions_rule": 97,
+  "s_mech_eligible_controls_heuristic": 67,
+  "s_mech_eligible_hits_heuristic": 960
+}
