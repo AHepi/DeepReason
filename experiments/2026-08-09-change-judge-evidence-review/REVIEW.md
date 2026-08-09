@@ -523,3 +523,220 @@ design does not route through `informal/audits.py` or `informal/trial.py`.
 **Lambda contributes nothing to the judge-discrimination question either;
 its absence from the record is a real gap (untested), not a null
 result** — see §7's INSUFFICIENT EVIDENCE handling.
+
+## §6. EXPERIMENT_PROGRAM_2026-07.md's judge items (R5e)
+
+### 6.1 The judge items, quoted
+
+`docs/EXPERIMENT_PROGRAM_2026-07.md:52-55` (rule 4 of the program's six
+standing rules): *"**Certified judges.** Judge seats are certified per run
+against the planted-flaw, self-preference, and verbosity audits in
+`deepreason report`. The cross-family rule (two seats, two route
+families) is enforced."*
+
+`:63-67` (a precondition, not an experiment, flagged before any Tier 2/3
+run could proceed): *"`config/deepseek.yaml` currently seats both judges
+from the same family, violating the cross-family rule."*
+
+`:153-200` — **E0.2 "Judge and skeleton red-team"** in full. Question:
+*"Can an adversarial generator get worthless artifacts past the judges and
+the skeleton machinery, and does the planted-flaw battery detect flaw
+classes it was not built from?"* Three sub-batteries: (a) unknown-flaw
+battery via `scripts/judge_battery.py`, (b) skeleton gaming (toothless
+forbidden cases), (c) bias-at-scale (self-preference/verbosity extended to
+500 matched pairs). Predictions, quoted verbatim:
+
+- P1: "unknown-flaw catch rate >= 0.8x the known-flaw catch rate.
+  Falsifier: < 0.5x, and planted-flaw certification only certifies
+  memorized flaw classes; judge audit numbers get demoted in every
+  report."
+- P2: "toothless-forbidden-case admission <= 10%. Falsifier: > 30%,
+  skeletons are gameable."
+- P3: "cross-family seats catch >= 5 percentage points MORE adversarial
+  flaws than same-family seats. Falsifier: no difference, the cross-family
+  rule is superstition."
+
+`:257-320`, `:415-528`, `:747-789` — Tier 2/3 run designs repeatedly
+specify cross-family judge pairs (e.g. `:259-261`: frontier profile
+"judges `deepseek-v4-pro` + `qwen3-coder:480b`"; mid profile "cross-family
+judges") and a per-stage survival funnel ("candidates generated ->
+schema-valid -> gate-passed -> judge-survived", `:318`) citing
+`experiments/results/gemma4_dna_unattended_report.json`/`_3_report.json`
+(§2.9 — both report zero judge activity, so this funnel's "judge-survived"
+stage was never exercised on those two specific roots).
+
+`:789` — dependency graph line: *"E0.2 (judges) --> every Tier 2/3 run
+(seat certification + satisfiability gate)"* — Tier 2/3 runs were
+explicitly gated on E0.2 landing first.
+
+`:810-826` — action items, quoted in part: item 2 *"Countercondition-
+satisfiability checker + adversary harness on `scripts/judge_battery.py`
+(E0.2)"*; item 7 *"Config fix: cross-family judge seats in
+`config/deepseek.yaml` (precondition, not an experiment)."*
+
+### 6.2 Were P1 and P2 confirmed, falsified, or left untested?
+
+Both were RUN, and both have a directly matching result:
+
+- **P1 (unknown-flaw catch >= 0.8x known-flaw catch): FALSIFIED.**
+  `experiments/results/e02_judge_redteam_t1_report.json` `verdicts.P1`
+  measured `ratio: 0.1892` for the cross-family pair — below even the
+  falsifier line (< 0.5x), not just short of the confirm line. Per the
+  plan's own falsifier clause, judge audit numbers are to be treated as
+  demoted for memorized-vs-novel flaw detection claims wherever they
+  appear. Cross-checked independently at larger scale by
+  `e02_t3_judge_zoo_report.json` `verdicts.P1` (median ratio 0.475 across
+  11 models, same conclusion).
+- **P2 (toothless admission <= 10%): CONFIRMED, with a caveat the plan did
+  not anticipate.** `e02_judge_redteam_t1_report.json` `verdicts.P2`
+  measured `admission_rate: 0.0` (0/40) — well inside the confirm line.
+  But `M2.admission_funnel` shows `not_flagged_by_cross_family_judge: 30`
+  of 40 — the JUDGE stage alone would have let 30/40 toothless items
+  through; the argumentative CRITIC stage (§2.0's distinction) is what
+  actually caught them (`survived_criticism: 0`). The plan's P2 asked
+  about the funnel's overall admission rate, which is genuinely 0% — but
+  attributing that 0% to "the judges" would overstate what the judge
+  stage itself contributed.
+- **The E0.2 config precondition (`:63-67`) was fixed.** `config/
+  deepseek.yaml`'s current committed text (checked directly) says: *"This
+  profile's two DeepSeek judge seats are useful for non-normative probes
+  but do NOT satisfy the rubric trial requirement... rubric workloads must
+  supply and freeze a second judge family or preflight fails."* The
+  precondition action item is done.
+- **One number in `config/deepseek.yaml` could not be independently
+  verified.** Its judge-role comment cites *"pro scores 0.0 error / 0.0
+  bias with reasoning OFF... flash NEEDS reasoning (0.125 error, 0.375
+  verbosity bias without it)"* sourced to
+  `experiments/results/judge_battery_report.json` — **this file does not
+  exist in the committed tree** (checked directly, `ls` fails). It may be
+  one of the 61 pre-rebuild files retired by
+  `experiments/results/INDEX_2026-07-13.md` (recoverable at `3d839b3`) or
+  simply never committed. Either way, this specific claim is asserted in
+  a committed file but not independently checkable from the current
+  record — flagged here rather than silently repeated as verified.
+
+## §7. Three-way scoring: incorrect / undiscriminating / over-prosecuting
+
+This section introduces no new numbers — every figure below already
+appears in §2-§6 and is referenced back to its source, not re-cited in
+full.
+
+### 7a. Judges rule INCORRECTLY (planted-flaw / unknown-flaw error rates)
+
+Every measurement of a judge (or judge-gated court) against constructed
+ground truth shows real, substantial error, and the errors are lopsided
+toward MISSING genuine defects rather than inventing them:
+
+- Known-flaw catch stays high and stable (0.925-1.0) across every model in
+  the 11-seat zoo (§2.3); the certified planted-flaw taxonomy IS caught
+  reliably.
+- Unknown/novel-flaw catch collapses: 0.175 (cross-family pair, §2.3) to a
+  median of 0.475 across the full zoo (§2.3) — well below the program's
+  own 0.8x confirm bar, and the cross-family pair specifically falls below
+  even the 0.5x FALSIFIER line (§6.2).
+- The judge-mediated defended court, tested against 42 planted defects
+  with construction-time ground truth, catches only 11.9% of them overall
+  and 0% on five of six defect classes (§2.5) — a large, real error rate
+  in the direction of letting genuine defects through.
+- Error rates are highly judge-identity-dependent: `judge_liability_index`
+  measures a 4.35x spread between the most- and least-liable seat
+  configuration (§2.3) from cross-instrument contradiction alone.
+- One live counter-example exists: `glm_judge_v1`'s court sustained 2 of 32
+  refutations on crisp, quantitative claims (§2.9) — showing the court CAN
+  convict correctly when the target is formally checkable-adjacent, not
+  only that it fails to.
+
+**Verdict: SUPPORTED**, with a specific shape the flat hypothesis does not
+capture — the record shows judges (and the judge-gated court) erring
+mostly by UNDER-catching, especially on anything outside the certified
+taxonomy, not by convicting indiscriminately. "Judges rule incorrectly" is
+true; "incorrectly" here usually means "too lenient," which is a real but
+different worry than the operator's "prosecute" framing suggests.
+
+### 7b. Judges rule WITHOUT DISCRIMINATION (pass/fail insensitive to case quality)
+
+The record splits sharply by WHICH stage of the pipeline is measured
+(§2.0's critic/judge distinction is load-bearing here):
+
+- At the CRITIC's raw objection stage: `court_calibration_v1` measured
+  `critic_objection_rate` of exactly 1.0 on both clean and corrupted
+  content (§2.5) — literally content-blind. `bronze_court_cross_v1`
+  reproduced this on REAL harness output across three different critic
+  families, spread only 1.18 percentage points (§2.5). `schema_comparator_v1`
+  found the same 1.0 objection rate is invariant across four different
+  presentation forms (§2.5). At THIS stage, the operator's hypothesis is
+  **directly and repeatedly confirmed** by three independent live studies.
+- At the JUDGE-gated conviction stage (the actual status-changing
+  mechanism): the picture is different. Known-vs-unknown-flaw catch rates
+  differ by 40-75 percentage points depending on pairing (§2.3) — that IS
+  discrimination between content classes, just weighted toward the
+  familiar. `e02_t2_voting`'s vote-rule study (§2.4) found the sharpest
+  single number against "judges discriminate": loosening the aggregation
+  rule from unanimous to either-suffices bought +57.5pp more true catches
+  at the cost of +57.5pp more false convictions — a NET of exactly 0.0
+  percentage points (§2.4). A mechanism with real discriminating power
+  would show positive net signal from more data (two opinions instead of
+  one); an exact wash is consistent with the aggregation rule adding noise
+  cancellation, not added judgment.
+- The live order-swap consistency guard (§3.3) fired only 8 times against
+  1,801 live judge calls inside trials (~0.4%) — the SAME judge ensemble
+  is usually self-consistent when the same content is re-presented in
+  swapped order, which argues judges are not randomly guessing on
+  individual rulings, only that they generalize poorly ACROSS genuinely
+  different content (§7a) and vary wildly by identity on FALSE POSITIVES
+  (§7c).
+
+**Verdict: MIXED**, and the split is not noise — it is the record's most
+important structural finding. The pre-court CRITIC step is
+content-blind (near-universal objection, confirmed three independent
+ways). The JUDGE-gated conviction step that actually changes `Status`
+discriminates between content classes it recognizes and content classes it
+does not, is internally self-consistent under order-swap, but shows no net
+benefit from looser aggregation. A flat "judges never discriminate" is
+FALSE of the status-changing mechanism and TRUE of the upstream objection
+mechanism; conflating the two (as this record's own `bronze_flat_v1`
+original write-up did, §2.7) is the exact trap this review exists to
+avoid.
+
+### 7c. Judges OVER-PROSECUTE (fail-rate bias vs ground truth)
+
+Two sub-questions, scored separately because the evidence for them differs
+sharply:
+
+**Self-preference and verbosity bias specifically** (the operator's
+"discernable discrimination" phrase most literally maps to systematic
+favoritism): **INSUFFICIENT EVIDENCE.** The only numbers in the entire
+committed record are the synthetic test fixtures in `tests/test_audits.py`
+(§2.2) — a scripted mock judge, not a real model. `bias_probes` has never
+produced a live `judge-self-preference:` or `judge-verbosity-bias:` log
+entry anywhere in the committed record (§2.2, §3.3). This specific,
+literal reading of "over-prosecute due to bias" is untested, not refuted
+and not confirmed.
+
+**Over-prosecution of sound/clean work in general** (broader reading —
+does the mechanism convict good work at a high rate): **MIXED, and the
+split is configuration-dependent, not universal.** The record's own
+strictest, actually-frozen configuration (cross-family, unanimous
+`require_both`, which is what a defended rubric trial demands per
+`docs/map/CON-authority.md`'s cross-family requirement) shows the OPPOSITE
+of over-prosecution: `false_conviction: 0.0` in `court_calibration_v1`
+(§2.5) and `clean.rate: 0.025` (2.5%) in `e02_t2_voting`'s require_both
+cross-family cell (§2.4). But two adjacent, weaker configurations in the
+SAME dataset show severe over-prosecution: same-family unanimous convicts
+47.5% of clean items (§2.4), and cross-family either-suffices convicts
+60% (§2.4, confirmed not an artifact by `e02_t2b`'s independent
+re-adjudication finding zero of the top 11 flagged "clean" items actually
+defective, §2.4). The judge-zoo study shows clean-FP spanning 0% to 80%
+depending purely on which single model judges (§2.3-2.4). And upstream of
+all of this, the bare CRITIC (not judge) convicts 67.5% of verified-sound
+work before any judge is even consulted (§2.5).
+
+**Verdict: MIXED.** The specific bias-probe reading of the operator's
+worry is untested (insufficient evidence). The broader over-prosecution
+reading is FALSE of the harness's actual frozen, cross-family-unanimous
+status-changing configuration (which under-prosecutes, §7a) and TRUE of
+every looser configuration this record measured (same-family pairing, any
+form of either-suffices voting, and the pre-judge critic stage). This is a
+genuine warning about what happens if a future run relaxes those specific
+guards, not evidence that the guarded mechanism as it stands today
+over-prosecutes.

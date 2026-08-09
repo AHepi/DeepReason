@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=7 blockers=none
+State: next=9 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -56,18 +56,23 @@ check before handing off to validation, not as the gate itself.
       with its grep command, and lambda's status
       DONE: REVIEW.md §5.1 has the grep command and 0/0/0 output; §5.2
       states lambda's prereg-only status -> pass
-- [ ] 7. (S6) Read `docs/EXPERIMENT_PROGRAM_2026-07.md`'s judge sections
+- [x] 7. (S6) Read `docs/EXPERIMENT_PROGRAM_2026-07.md`'s judge sections
       (L52-67, L153-200, L257-320, L415-528, L747-826) and cross-reference
       predictions P1/P2 against the e02 results from step 2; write
       REVIEW.md §6.
       done-when: REVIEW.md §6 states P1 and P2 each as
       confirmed/falsified/untested with a cited result file
-- [ ] 8. (S7) [COMMIT] Write REVIEW.md §7's three-way scoring
+      DONE: REVIEW.md §6.2 states "P1 ... FALSIFIED" citing
+      e02_judge_redteam_t1_report.json and "P2 ... CONFIRMED" citing the
+      same file -> pass
+- [x] 8. (S7) [COMMIT] Write REVIEW.md §7's three-way scoring
       ((a) incorrect rulings, (b) discrimination-insensitivity,
       (c) over-prosecution) using only numbers already pasted in §2-§6;
       commit §6-§7 progress.
       done-when: REVIEW.md §7 has 3 subsections each ending in SUPPORTED /
       CONTRADICTED / MIXED / INSUFFICIENT EVIDENCE
+      DONE: 3 subsections (7a/7b/7c) found, each ending "Verdict: SUPPORTED"
+      / "Verdict: MIXED" / "Verdict: MIXED" -> pass
 - [ ] 9. (S8) Write REVIEW.md §8, the design-consequence section:
       program/predicate commitments, counterexample execution, and the
       trial guard's non-judge screens (referential integrity, order-swap),
