@@ -1,5 +1,5 @@
 # Checklist for: update the Errata (sweep + automation)
-State: next=6 blockers=none
+State: next=10 blockers=none
 Map ids: none — docs/skills-only tranche (docs/map covers
 src/deepreason/ only; see REQUEST.md's Map preflight section).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
@@ -43,23 +43,50 @@ order. One step per dr-execute-step invocation.
       done-when: `grep -ic "errata" .claude/skills/dr-verify-outcome/SKILL.md` -> N where N>=2
       DONE: 6
 
-- [ ] 6. (S10,S11) [COMMIT] Commit and push the two skill amendments.
+- [x] 6. (S10,S11) [COMMIT] Commit and push the two skill amendments.
       done-when: `git status --porcelain .claude/skills/dr-deliver-change/SKILL.md .claude/skills/dr-verify-outcome/SKILL.md`
       empty AND branch head is on origin
+      DONE: commit 2416c6f32, pushed
 
-- [ ] 7. (all) Map check: `python tools/docs_verify.py`
+- [x] 7. (all) Map check: `python tools/docs_verify.py`
       done-when: output ends "0 failed"
+      DONE: "docs_verify [full]: 53 documents, 851 checks, 4 workers" /
+      "docs_verify: 0 failed". Required an environment fix first
+      (unrelated to this tranche's content): the container's git clone
+      was shallow, failing 3 CON-run-identity.md checks that `git log`
+      two historical retirement commits by hash; `git fetch --unshallow
+      origin` resolved it (confirmed: those 3 checks also fail on a
+      fresh shallow origin/main checkout, pass once unshallowed).
 
-- [ ] 8. (R8, all) docs_verify full modes: `python tools/docs_verify.py --audit`
+- [x] 8. (R8, all) docs_verify full modes: `python tools/docs_verify.py --audit`
       and `python tools/docs_verify.py --links`
       done-when: `--audit` reports 0 findings AND `--links` reports 0
       dangling references (paste both)
+      DONE: "docs_verify --audit: 0 finding(s)" /
+      "docs_verify --links: 0 dangling reference(s), 53 document(s)"
 
-- [ ] 9. (R8, all) Full gate: `pytest tests/ -q -n 4`
+- [x] 9. (R8, all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it; docs-only
       tranche, so N is expected to match the pre-tranche baseline
       exactly)
+      DONE-WITH-EXCEPTION: "1 failed, 3434 passed, 7 skipped in 780.12s"
+      (via `python3 -m pytest tests/ -q -n 4` — the bare `pytest` on
+      PATH resolves to an isolated uv-tool environment missing
+      `deepreason`/`jsonschema`, an unrelated environment quirk, not a
+      test failure). The one failure,
+      `test_bronze_report.py::test_census_totals_internally_consistent`
+      (`assert 159 == 165`), is PRE-EXISTING and OUT OF SCOPE: SPEC.md's
+      Out-of-scope section already excludes it by name (it is D2's own
+      `PARKED.md` item P-D2-3, dated 2026-08-08, before this tranche
+      began); this tranche changed zero files under `tests/` or `src/`;
+      and the identical assertion (`159 == 165`) was independently
+      reproduced against a fresh, isolated `origin/main` checkout in a
+      throwaway venv (`git worktree add ... origin/main --detach`,
+      no shared install state), confirming the failure predates and is
+      unrelated to this tranche. Baseline for this docs-only tranche is
+      therefore 3434 passed / 1 pre-existing failed / 7 skipped, not a
+      regression.
 
-- [ ] 10. (all) [COMMIT] push and confirm clean tree
+- [x] 10. (all) [COMMIT] push and confirm clean tree
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/errata-update-automation-21ftwd`
