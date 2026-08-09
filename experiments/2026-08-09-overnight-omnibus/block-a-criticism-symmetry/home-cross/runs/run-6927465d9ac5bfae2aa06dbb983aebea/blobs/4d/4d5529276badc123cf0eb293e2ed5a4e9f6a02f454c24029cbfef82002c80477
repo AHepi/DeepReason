@@ -1,0 +1,45 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2a31a964f463da3a7c9bc8e2: program:reasoning_observation_pending
+- reason-counter@b6c743d4c9292f63edccfc12: program:reasoning_observation_pending
+- reason-counter@b4f934b01e1ded2613b12356: program:reasoning_observation_pending
+- reason-counter@a4d46eef1f06f0a5e8c708e9: program:reasoning_observation_pending
+- reason-counter@eb91f575358ab246348c8037: program:reasoning_observation_pending
+- reason-counter@8889be634a1e14a6b504830a: program:reasoning_observation_pending
+- reason-counter@f189945d3b7e7fb182b3c769: program:reasoning_observation_pending
+- reason-counter@55342d0b6a98766703e3b6d2: program:reasoning_observation_pending
+- reason-counter@38bfeef8b604ced8014a078d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts using a checklist is more reliable than a single expert for verifiable tasks because the checklist decomposes a complex intuitive leap into a series of low-variance binary checks, eliminating 'expert blind spots' caused by heuristic over-reliance.","counterconditions":[{"case":"The task requires 'synthesis' or 'pattern recognition' that cannot be decomposed into a discrete checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist is poorly designed and omits critical failure modes.","checker_spec":null,"eval":"observation"},{"case":"The non-experts lack the basic literacy required to execute the checklist items accurately.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist functions as a variance-reduction filter. While the expert's intuition is a high-bandwidth, single-point-of-failure process subject to cognitive biases (e.g., availability heuristic), the checklist forces the non-experts to perform a systematic sweep of the problem space, ensuring that necessary conditions for a correct outcome are explicitly verified rather than implicitly assumed.","premises":[],"sch
+commitments: reasoning-envelope-wf, reason-counter@2a31a964f463da3a7c9bc8e2, reason-counter@b6c743d4c9292f63edccfc12, reason-counter@b4f934b01e1ded2613b12356
+
+TARGET SRC_002
+{"analogy":null,"claim":"Reliability gain is genuine only if the panel identifies a 'critical failure' that the expert missed, whereas 'mere compliance' is indicated by the panel arriving at the correct answer despite marking checklist items incorrectly or inconsistently.","counterconditions":[{"case":"The checklist is so simple that incorrect execution is impossible.","checker_spec":null,"eval":"observation"},{"case":"The outcome is binary and the 'right' answer is the default state.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The distinction lies in the 'error-detection trace'. If the panel's correctness is correlated with the correct execution of the checklist (high internal consistency), the gain is structural. If the panel is correct but the checklist execution is sloppy (low internal consistency), they have simply 'stumbled' onto the right answer, and the checklist provided no causal reliability.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a4d46eef1f06f0a5e8c708e9, reason-counter@eb91f575358ab246348c8037
+
+TARGET SRC_003
+{"analogy":null,"claim":"The reliability gain of the panel is not derived from the checklist itself, but from the 'error-correction' inherent in the group's social interaction, which the checklist merely facilitates.","counterconditions":[{"case":"The panel is subject to strong groupthink or a hierarchy that suppresses dissent.","checker_spec":null,"eval":"observation"},{"case":"The panel members work in isolation without a synthesis phase.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist serves as a 'common grounding' mechanism. The reliability comes from the interpersonal friction when two non-experts disagree on a checklist item, forcing a re-examination of the evidence. The checklist is the 'anchor' that allows non-experts to challenge each other without needing deep domain knowledge, effectively simulating the expert's internal critical dialogue.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8889be634a1e14a6b504830a, reason-counter@f189945d3b7e7fb182b3c769
+
+TARGET SRC_004
+{"analogy":null,"claim":"A panel of non-experts following a checklist is more reliable than a single expert because the checklist enforces a 'search breadth' that overrides the expert's 'premature closure' bias.","counterconditions":[{"case":"The task requires synthesis of non-linear dependencies not captured in the checklist","checker_spec":null,"eval":"observation"},{"case":"The checklist is too coarse, leading to 'blind compliance' where the panel ignores obvious anomalies not on the list","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a cognitive forcing function that mandates the evaluation of low-probability but high-impact variables which an expert's intuitive heuristic (pattern matching) typically skips once a high-probability match is found.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@55342d0b6a98766703e3b6d2, reason-counter@38bfeef8b604ced8014a078d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

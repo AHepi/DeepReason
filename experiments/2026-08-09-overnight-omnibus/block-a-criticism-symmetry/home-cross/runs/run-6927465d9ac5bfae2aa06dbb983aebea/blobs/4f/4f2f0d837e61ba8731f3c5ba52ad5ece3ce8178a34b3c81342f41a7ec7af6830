@@ -1,0 +1,40 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+PROBLEM CONTEXT (conn:0353f4a32142) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0353f4a32142 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@fc372933f15a: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6b91e24003c40d93c7708739: program:reasoning_observation_pending
+- reason-counter@3de107b750461b3fe30404f0: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The claim in SRC_005 that internal state is irrelevant for verifiable outcomes contradicts the mechanism in SRC_003; it is refuted if a perturbation in input data causes a 'compliant' panel to change a correct outcome to an incorrect one while a 'reliable' panel maintains the correct outcome.
+commitments: hv-floor@2a45b7988522, lineage-ref@fc372933f15a, relation-form@578e42df713e
+
+TARGET SRC_002
+The distinction between 'reliability' and 'compliance' in SRC_001 depends on the existence of a 'critical failure' trace; it is refuted if a panel arrives at a correct outcome via a checklist but fails to identify a decoy perturbation that would have led a compliant-only agent to an incorrect state.
+commitments: hv-floor@2a45b7988522, lineage-ref@fc372933f15a, relation-form@578e42df713e
+
+TARGET SRC_003
+{"analogy":null,"claim":"Expert intuition is not a distinct cognitive mode but a 'compressed checklist'; therefore, the panel's reliability gain is actually a 'decompression' of the same logic, making the primary evidence of reliability the 'Audit Trail'.","counterconditions":[{"case":"Expert intuition relies on non-linear pattern recognition that cannot be decomposed into a discrete checklist.","checker_spec":null,"eval":"observation"},{"case":"The 'Audit Trail' is filled with post-hoc rationalizations rather than the actual decision-making path.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If intuition is just internalized procedural knowledge (SCR_003), the panel doesn't provide 'better' logic but 'transparent' logic. Reliability is evidenced by the ability to point to the exact checklist step that caught an error, whereas the expert's reliability is opaque and non-reproducible.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6b91e24003c40d93c7708739, reason-counter@3de107b750461b3fe30404f0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
