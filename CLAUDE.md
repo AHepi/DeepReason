@@ -155,6 +155,10 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   `validation_path` and `diagnostic_ref`; the blob under `blobs/` gives the
   verbatim error and the rejected value. Check SWEEP.md's not-expressible list
   only AFTER the blob rules out a rule that could have been encoded.
+  (Both specific encodings were FIXED 2026-08-01 — SWEEP.md/
+  REPAIR_OSCILLATION.md; live simulation SUCCEEDED events recorded
+  2026-08-09, overnight-omnibus Block B — the examples are historical,
+  the blob-first discipline is the enduring rule.)
 - The operator's seed question always wins scheduler rank ties;
   import-role admission records never count as "survivors".
 - Per-capability budgets meter only their own capability's records —
