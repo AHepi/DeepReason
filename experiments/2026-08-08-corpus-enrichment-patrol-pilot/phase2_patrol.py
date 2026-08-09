@@ -142,8 +142,30 @@ def parse_response(raw: str):
         return None
 
 
+def already_done_keys(out_path: pathlib.Path) -> set:
+    """(root, artifact_a, artifact_b) keys already recorded -- lets this
+    script run in bounded chunks across several invocations (the corpus
+    is large enough, at 9000+ pairs, that one continuous call risks the
+    same container instability Phase 1 hit) without re-spending a call
+    on a pair already answered."""
+    keys = set()
+    if not out_path.exists():
+        return keys
+    for line in out_path.read_text().splitlines():
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        keys.add((row["root"], row["artifact_a"], row["artifact_b"]))
+    return keys
+
+
 def main():
     dry_run = "--dry-run" in sys.argv
+    max_calls = None
+    for arg in sys.argv[1:]:
+        if arg.startswith("--max-calls="):
+            max_calls = int(arg.split("=", 1)[1])
     out_path = TRANCHE / "patrol_results.jsonl"
 
     roots = corpus()
@@ -180,13 +202,32 @@ def main():
     if dry_run:
         return
 
+    done_keys = already_done_keys(out_path)
+    if done_keys:
+        print(f"resuming: {len(done_keys)} pairs already recorded, skipping them")
+
     endpoint = make_endpoint()
     hits = 0
     parse_failures = 0
     done = 0
+    calls_this_invocation = 0
     with out_path.open("a", encoding="utf-8") as out:
         for root, half, pairs in root_plans:
             for pair in pairs:
+                key = (str(root), pair["artifact_a"], pair["artifact_b"])
+                if key in done_keys:
+                    continue
+                if max_calls is not None and calls_this_invocation >= max_calls:
+                    print(
+                        f"max-calls={max_calls} reached this invocation; "
+                        f"{calls_this_invocation} calls made, re-run to continue"
+                    )
+                    print(
+                        f"PATROL CHUNK COMPLETE: pairs_this_run={calls_this_invocation} "
+                        f"-> {out_path}"
+                    )
+                    return
+                calls_this_invocation += 1
                 prompt = PROMPT_TEMPLATE.format(
                     claim_a=pair["claim_a"], claim_b=pair["claim_b"]
                 )
