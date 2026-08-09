@@ -8,9 +8,9 @@
     "stability_flip_rate": "0/83"
   },
   "s_judgment": {
-    "confirmed": 0,
-    "not_confirmed": 0,
-    "population_pairs": 0,
+    "confirmed": 2,
+    "not_confirmed": 12,
+    "population_pairs": 14,
     "stability_flip_rate": "0/0"
   },
   "s_mech": {

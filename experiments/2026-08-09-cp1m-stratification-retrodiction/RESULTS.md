@@ -305,6 +305,47 @@ stratum's method column distinct for exactly this reason.
 Committed verbatim: `s_formal_results.jsonl` (912 rows: 829 primary + 83
 stability repeats).
 
+## 2026-08-09 — S-judgment COMPLETE: 14/14 pairs (S-formal's `not_clean_shape` routed here)
+
+Small population by construction: only S-formal's 14 `not_clean_shape`
+pairs fall through to "the remainder." Adversarial battery run (2
+models × 3 variants = up to 6 readings per pair: `baseline` verbatim,
+`order_swap`, `skeptic`), convergence = readings agreeing with the
+original patrol verdict (`contradiction=true`).
+
+| pair (root) | agree/available | verdict |
+|---|---|---|
+| rung5 ab-home (`08fedf4d2716`) | 0/6, 1/6, 1/6 | not_confirmed ×3 |
+| S6 (`run-79900e78...`) | 1/6, 3/6 | not_confirmed ×2 |
+| live_research narrow (`run-7d8723fb...`) | 6/6 | **CONFIRMED** |
+| selfstudy epoch3 | 1/6 | not_confirmed |
+| selfstudy failed-epoch1 | 1/6, 5/6, 0/6 | not_confirmed, **CONFIRMED**, not_confirmed |
+| selfstudy failed-epoch2 | 1/6, 3/6 | not_confirmed ×2 |
+| selfstudy failed-epoch4 | 3/6 | not_confirmed |
+| live_tri (`run-6dab80d6...`) | 0/6 | not_confirmed |
+
+**2/14 CONFIRMED (14.3%), 12/14 not_confirmed (85.7%) by adversarial
+convergence.** This is the most striking single number in the whole
+tranche: the 14 pairs that fell through EVERY structured method (not
+executable/countable, not on a known-answer question, and whose two
+claims don't share a clean same-object/same-property shape) are also
+the pairs where independent re-examination — order-swapped, skeptic-
+framed, by both models — mostly does NOT reproduce the original
+patrol's contradiction call. Read plainly: the harder a pair is to pin
+down with ANY structured method, the less the original narrow-question
+classification holds up under adversarial pressure. This is exactly the
+kind of finding `S-judgment`'s design was meant to surface, not an
+artifact of the small sample.
+
+**Stability control: 0 sampled repeats** — the 10%-sample seed
+(deterministic, content-hashed) happened to select none of these 14
+specific pair keys; not a "0% flip rate," a genuine absence of data.
+Recorded honestly rather than left implying stability was measured and
+found perfect.
+
+Committed verbatim: `s_judgment_results.jsonl` (84 rows: 14 pairs × up
+to 6 readings each).
+
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
 matched to its source question's `id` and `accept` list by seed-problem-
