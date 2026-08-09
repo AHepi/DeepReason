@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: 4 packs × 6 widgets/pack = 24 widgets; 4 packs × $9/pack = $36.",
+      "typicality": 1.0,
+      "neighbours": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"]
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: Each pack is a single indivisible transactional unit priced at $9 and containing 6 widgets. Purchasing exactly 4 such units composes 4×6=24 widgets and 4×9=$36, with no need to compute a per-widget price.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_006"]
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The unit price is $9/6 = $1.50 per widget. Four packs contain 4×6 = 24 widgets, and at $1.50 each the total causally aggregates to 24 × $1.50 = $36.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_007"]
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The observed regularity is that every pack-of-6 transaction consistently costs $9. By direct empirical enumeration of 4 such transactions: 6+6+6+6 = 24 widgets and 9+9+9+9 = $36.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_008"]
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The per-widget rate is $9/6 = $1.50 and the per-pack widget count is 6. Scaling the pack count to 4 multiplies both quantities by 4: 6×4 = 24 widgets and $1.50×24 = $36, unifying the unit-price and pack-composition views.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_003", "SRC_005", "SRC_007"]
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: Suppose instead the total were not 24 widgets or $36. Then some pack would have to contain a number of widgets other than 6 or cost other than $9, contradicting the stated store terms. Since all 4 packs are identical to the stated unit, the totals are exactly 4×6=24 and 4×9=$36.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_002"]
+    }
+  ]
+}

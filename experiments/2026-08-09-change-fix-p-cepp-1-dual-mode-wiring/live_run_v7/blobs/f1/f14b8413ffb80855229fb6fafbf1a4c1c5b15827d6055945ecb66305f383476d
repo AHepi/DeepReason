@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: Each pack contains 6 widgets, so 4 packs yield 4×6=24 widgets. Each pack costs $9, so 4 packs cost 4×9=$36. The arithmetic composes by straightforward multiplication of the per-pack quantities.",
+      "neighbours": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+      "typicality": 0.95
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The store's pricing rule binds 6 widgets and $9 into a single indivisible transactional unit. Purchasing exactly 4 such units scales the bundle holistically: 4×6=24 widgets and 4×9=$36, without decomposing into per-widget pricing.",
+      "neighbours": ["SRC_006"],
+      "typicality": 0.85
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The unit price is $9/6=$1.50 per widget. Four packs contain 24 widgets, and at $1.50 each the total causally aggregates to 24×$1.50=$36.",
+      "neighbours": ["SRC_007"],
+      "typicality": 0.80
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: The observed regularity is that every pack-of-6 transaction consistently costs $9. By direct empirical enumeration of 4 identical transactions, the totals aggregate to 4×6=24 widgets and 4×$9=$36.",
+      "neighbours": ["SRC_008", "SRC_004"],
+      "typicality": 0.75
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: Let P be a pack, a structured pair (w=6, c=$9). The total T = P⊕P⊕P⊕P = (4·6, 4·$9) = (24, $36), where ⊕ denotes componentwise addition over the widget-cost semiring. The result is the unique fixed point of scaling the generator P by the scalar 4.",
+      "neighbours": ["SRC_003"],
+      "typicality": 0.35
+    },
+    {
+      "content": "Total widgets: 24. Total cost: $36. Justification: One might doubt whether '4 packs' guarantees 4·6 widgets, since packs could be undersized or the price could vary. But under the problem's stipulation that the store sells packs of 6 for $9 and the customer buys exactly 4, the only defensible answer is 4×6=24 widgets and 4×$9=$36; any deviation would require evidence of irregularity not present in the problem statement.",
+      "neighbours": ["SRC_002"],
+      "typicality": 0.25
+    }
+  ]
+}
