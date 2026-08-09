@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_002 reduces to SRC_001 because the uniqueness and bracketing proof (D(299)=789, D(300)=792, D(301)=795) depends on the base-10 digit-width partition mechanism (9 + 180 + 3k = 792) defined in SRC_001. It is refuted if the cumulative digit-counting function D(n) can be derived or proven strictly monotonic without appealing to the discrete digit-width blocks that produce the 9, 180, 603 partition.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_002"]
+    },
+    {
+      "content": "SRC_005 abstracts SRC_004 because the transfer claims and shared structure (cumulative resource consumption as a piecewise-linear trajectory with structural boundaries at 9, 99, 999) generalize the specific arithmetic partition (9 + 180 + 603 = 792) into a broader cost-function inversion framework. It is refuted if the analogy's shared structure does not faithfully capture the mechanism in SRC_004—specifically, if the step-function model fails to reproduce the exact digit consumption at width transitions or introduces structural disanalogies that break the correspondence.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_004", "SRC_005"]
+    },
+    {
+      "content": "SRC_003 contradicts SRC_002 because SRC_003 asserts the result as a direct arithmetic fact (300 pages) without establishing the uniqueness of the solution, while SRC_002 explicitly depends on the strict monotonicity of D(n) to prove that 300 is the unique solution rather than merely a feasible one. It is refuted if SRC_003's derivation implicitly assumes uniqueness through the arithmetic partition without requiring a separate monotonicity argument—in that case, the contradiction collapses into a difference in explicitness rather than substance.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_002", "SRC_003"]
+    },
+    {
+      "content": "SRC_004 depends on SRC_005 because the piecewise-linear cost-function analogy (cumulative resource consumption governed by unit width, with transitions at structural boundaries) supplies the explanatory causal mechanism that justifies why the digit-budget partition into 9, 180, and 603 is the correct decomposition. It is refuted if SRC_004's partition can be fully motivated by the base-10 positional numeral system alone, without any recourse to the generalized step-function or resource-consumption framework described in SRC_005's analogy.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_004", "SRC_005"]
+    },
+    {
+      "content": "SRC_001 shares mechanism with SRC_003 because both derive the answer 300 via the identical digit-width partition (9 single-digit + 180 double-digit + 603 triple-digit = 792, yielding 99 + 201 = 300), differing only in explicitness of the base-10 logarithm formula. It is refuted if the two artifacts employ structurally different derivations—for instance, if SRC_003 arrives at 300 through an iterative or recursive digit-counting simulation rather than the closed-form block partition used by SRC_001.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "SRC_002 inherits from SRC_001 because the monotonicity-based uniqueness proof (D(299)=789 < D(300)=792 < D(301)=795) presupposes the digit-width block decomposition that SRC_001 establishes: the jump from D(299) to D(300) is exactly 3 digits only because both page numbers fall within the 3-digit block (100–999) identified by SRC_001's partition. It is refuted if the monotonicity of D(n) can be established independently of the block structure—for example, via a general argument that len(str(n)) ≥ 1 for all n ≥ 1—without any inheritance from the specific partition.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001", "SRC_002"]
+    }
+  ]
+}
+```

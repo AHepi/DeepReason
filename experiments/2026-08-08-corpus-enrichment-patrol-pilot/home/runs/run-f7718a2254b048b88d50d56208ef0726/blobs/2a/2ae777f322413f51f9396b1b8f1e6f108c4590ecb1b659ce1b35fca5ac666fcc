@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "The book has 300 pages, found by exhausting 189 digits for pages 1–99, leaving 603 digits for 3-digit page numbers, which implies 201 three-digit pages and therefore page 300.",
+    "mechanism": "Pages 1–9 consume 9×1=9 digits; pages 10–99 consume 90×2=180 digits; 9+180=189. Remaining digits: 792−189=603. Each remaining page is a 3-digit page, so 603/3=201 additional pages beyond 99, giving 99+201=300 pages.",
+    "counterconditions": [
+      "If '792 digits' counts only distinct digit symbols (0–9), the allocation would differ.",
+      "If front matter is included in the digit count despite 'starting from 1', the total would change.",
+      "If 'pages' means physical leaves (two numbered sides per leaf), the page count would be halved.",
+      "If the problem intended a different numeral system (e.g., Roman numerals), the digit-usage function would differ."
+    ],
+    "typicality": 0.98,
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": ["SRC_001", "SRC_003"],
+    "checker_specs": [],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_003"]
+    }
+  }
+}
+```

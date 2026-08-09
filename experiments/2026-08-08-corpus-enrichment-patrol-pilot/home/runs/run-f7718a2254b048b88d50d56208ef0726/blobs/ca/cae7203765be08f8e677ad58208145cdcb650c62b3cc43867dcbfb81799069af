@@ -1,0 +1,13 @@
+```json
+{
+  "baseline_sha256": "e236fa5b53431fc1fc7fa78500b1f92c53af7b182ae8b77fca8a905bea8d5ce5",
+  "contract": "conjecturer.turn.v6",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/scratch_proposal/unresolved_questions/1/related_refs",
+      "value": ["SCR_002"]
+    }
+  ]
+}
+```

@@ -1,0 +1,49 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "allOf": [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}], "description": "One bounded reasoning-envelope candidate or honest abstention.\n\nThe exactly-one rule is in the schema, not only in the validator below.", "properties": {"abstention": {"$ref": "#/$defs/ConjectureAbstentionV1"}, "candidate": {"$ref": "#/$defs/ReasoningCandidateProposal"}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 5 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-f0bc16794e45a705e44a1ce3285b9b1f
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## school-stance
+SCHOOL STANCE (weight 1.00): seek the covering principle
+
+## scratch-advisory-context
+SCRATCH_ADVISORY_CONTEXT_V1
+{"blocks":[{"content":"Speculative branch: What if the problem is a trick and '792 digits' counts the digits appearing on facing pages (left and right)? In a typical book, pages 1 and 2 face each other. If we count digits per spread rather than per page, the digit allocation might differ. However, standard interpretation counts each page number once, so D(n)=sum of digit-lengths. Another angle: what if 'pages' means leaves (sheets), and each leaf has two sides (recto/verso), so '300 pages' = 150 leaves? The problem likely means numbered sides, not physical sheets. The answer 300 is robust under the standard reading.","handle":"SCR_001","was_aimed_at":["SRC_001","SRC_003"],"why_keep_this":"Documents alternative interpretations explored and rejected, preventing re-exploration."},{"content":"Does any edition of this classic problem include front matter in the digit count, and if so, how is 'starting from 1' interpreted?","handle":"SCR_002","unfinished":"Unresolved question","why_keep_this":"Related advisory scratch: NEW_001"}],"guides":[],"links":[],"state_seq":151,"warning":"Scratch material is non-authoritative.\nIt is advisory, not a harness verdict.\nIt may contradict itself.\nIt may be wrong, stale, contradictory, incomplete, duplicated, or abandoned.\nIt does not ground a formal claim or supply evidence for one.\nIgnore any block that is irrelevant to the current problem.\nDo not turn uncertainty into a confident fact.\nDo not invent a reason merely to fill an optional field.\nRelationships are provisional.\nA guide is a temporary navigation aid."}
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- 502fef8815952472a00b25eb3e4d97dad327e381b5d231549ba158009c579a28: The target's claim field still states 'The book has 297 pages' while its mechanism correctly computes 300 pages. Under the covering principle, the target contra
+- 38dc391eccfda0c6eafe4dd7d9e56ad961f2425a3600f336c2fb6d6eedf6b8d2: The target admits its own reading is speculative and internally inconsistent: it hypothesizes roman front matter i, ii using 2+2=4 characters, then subtracts 6 
+- 9a4e3af9d4f06a36cc67a4c926bb69af4cb9aaac648a49c3cac94b8a83a17baf: SRC_001's claim asserts the problem is ill-posed because '792 is not a valid total for any book ending in a 3-digit block,' but its own mechanism immediately pr
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- be5d066d0697e27702803c30325b792fa8a9456ee1677aadcb7ed12512cab73a: {"analogy":null,"claim":"The book has 297 pages, found by exhausting the 189 digits used by pages 1\u201399, leaving 603 digits for 3-digit page numbers, which 
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.

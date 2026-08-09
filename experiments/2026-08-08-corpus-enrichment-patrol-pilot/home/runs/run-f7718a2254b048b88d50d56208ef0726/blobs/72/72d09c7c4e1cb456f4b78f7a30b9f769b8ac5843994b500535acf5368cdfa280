@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+PROBLEM CONTEXT (conn:06f6f6e24748) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 06f6f6e24748 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d5be6904bbe034f441041985: program:reasoning_observation_pending
+- reason-counter@e95b8b8fddcf28f5fbbc1ff6: program:reasoning_observation_pending
+- reason-counter@93303e1ac6dff0178f80d1e9: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@8b23e78ea360: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reason-counter@9e7528c7f868596bd367326b: program:reasoning_observation_pending
+- reason-counter@87ac53b78dc5ea6578362f83: program:reasoning_observation_pending
+- reason-counter@107af41ba621997b64fd831c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Page numbers are a passive record, not a generative process with recurrent dynamics","The 'infection' rate changes discretely at digit-width boundaries rather than continuously"],"overturn_conditions":["If the problem specifies a non-sequential numbering scheme","If pages are counted by physical sheets rather than numbered sides"],"shared_structure":["Cumulative resource consumption follows a piecewise-linear trajectory","The total cost accumulates at a rate governed by the 'width' of each unit","Transition between regimes occurs at structural boundaries (9, 99, 999)"],"source_memory_refs":["SRC_007"],"transfer_claims":["The total digit count corresponds to the cumulative area under a step function of digit-width","Finding the page count is equivalent to inverting a piecewise-linear cost function"]},"claim":"The book has exactly 300 pages, determined by recognizing that 792 = 9\u00d71 + 90\u00d72 + 201\u00d73, where 201 pages (from 100 to 300) each consume 3 digits, and verifying that D(299)=789 while D(300)=792 provides a unique bracketing.","counterconditions":[{"case":"If front matter digits (e.g., roman numerals i, ii) are included in the 792 count, t
+commitments: reasoning-envelope-wf, reason-counter@d5be6904bbe034f441041985, reason-counter@e95b8b8fddcf28f5fbbc1ff6, reason-counter@93303e1ac6dff0178f80d1e9
+
+TARGET SRC_002
+SRC_005 abstracts SRC_004 because the transfer claims and shared structure (cumulative resource consumption as a piecewise-linear trajectory with structural boundaries at 9, 99, 999) generalize the specific arithmetic partition (9 + 180 + 603 = 792) into a broader cost-function inversion framework. It is refuted if the analogy's shared structure does not faithfully capture the mechanism in SRC_004—specifically, if the step-function model fails to reproduce the exact digit consumption at width transitions or introduces structural disanalogies that break the correspondence.
+commitments: hv-floor@2a45b7988522, lineage-ref@8b23e78ea360, relation-form@578e42df713e
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Geometric construction requires continuous space, whereas page numbering is inherently discrete","The compass cannot naturally represent the piecewise cost changes at boundaries 9 and 99"],"overturn_conditions":["If a computational arithmetic approach is mandated by the problem's context","If the problem involves non-standard page numbering that defies geometric series summation"],"shared_structure":["Cumulative resource consumption is modeled as a sum of consecutive uniform segments","The unknown 'final page' is located at the boundary where the total consumed resource hits a target value","The mechanism operates by linearly interpolating within the correct segment after eliminating prior segments"],"source_memory_refs":["SRC_003"],"transfer_claims":["The page count can be found by a compass-and-straightedge style segment addition: construct a segment of length 792, subtract known blocks (9 and 180), and divide the remainder by 3","The geometric 'ruler' method confirms that the remainder 603 is exactly divisible by 3, landing on an integer page boundary"]},"claim":"The book has 363 pages, derived by solving the piecewise digit-usage function 9\u00d71 + 9
+commitments: reasoning-envelope-wf, reason-counter@9e7528c7f868596bd367326b, reason-counter@87ac53b78dc5ea6578362f83, reason-counter@107af41ba621997b64fd831c
+
+TARGET SRC_004
+SRC_004 depends on SRC_005 because the piecewise-linear cost-function analogy (cumulative resource consumption governed by unit width, with transitions at structural boundaries) supplies the explanatory causal mechanism that justifies why the digit-budget partition into 9, 180, and 603 is the correct decomposition. It is refuted if SRC_004's partition can be fully motivated by the base-10 positional numeral system alone, without any recourse to the generalized step-function or resource-consumption framework described in SRC_005's analogy.
+commitments: hv-floor@2a45b7988522, lineage-ref@8b23e78ea360, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

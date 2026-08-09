@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "claim": "The book has 300 pages, derived by partitioning the 792 digits into three blocks: 9 one-digit page numbers (pages 1–9) using 9 digits, 90 two-digit page numbers (pages 10–99) using 180 digits, and the remaining 603 digits assigned to three-digit page numbers, which exactly accommodates 201 pages (pages 100–300).",
+    "mechanism": "Total digits D(n) = sum_{k=1}^{n} len(k). Split into blocks by digit length: 9×1 = 9 digits for 1–9, 90×2 = 180 digits for 10–99. Remainder after the two-digit block: 792 − 9 − 180 = 603. Since each subsequent page number uses 3 digits, the count of three-digit pages is 603 / 3 = 201. Adding to the base of 99 gives 99 + 201 = 300 pages. The remainder after division by 3 is exactly zero, so the digit budget is exactly exhausted with no partial page.",
+    "counterconditions": [
+      "If front matter (e.g., roman numerals) consumed part of the 792-digit budget, then fewer digits remain for arabic-numbered pages and the page count falls below 300.",
+      "If 'pages' means physical leaves rather than numbered sides, the count of leaves would be 150, not 300.",
+      "If facing-page spreads are counted once per spread instead of once per page, the allocation of digits to physical sheets changes and the arithmetic no longer holds.",
+      "If the page numbering skips any numbers (e.g., blank unnumbered pages or plates counted separately), the linear digit-length sum is disrupted."
+    ],
+    "typicality": 0.98,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    }
+  }
+}

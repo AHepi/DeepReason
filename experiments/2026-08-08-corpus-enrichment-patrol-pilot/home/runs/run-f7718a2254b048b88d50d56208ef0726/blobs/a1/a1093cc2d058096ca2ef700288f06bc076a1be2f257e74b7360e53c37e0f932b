@@ -1,0 +1,14 @@
+```json
+{
+  "repair.patch.v1": {
+    "baseline_sha256": "e095f59eb48e11c2a912eb00c7f9f556451edb78a33eea3cf1b1551cadd69fa7",
+    "operations": [
+      {
+        "op": "replace",
+        "path": "/candidates/4/optional_refs/2",
+        "value": "SRC_002"
+      }
+    ]
+  }
+}
+```

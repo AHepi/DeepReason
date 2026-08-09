@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "claim": "The book has exactly 300 pages.",
+    "mechanism": "Allocate 792 digits to sequential page numbers by length. Single-digit pages (1-9) consume 9 digits, leaving 783 digits. Two-digit pages (10-99) consume 180 digits (90 pages * 2), leaving 603 digits. Dividing the remainder by 3 for the three-digit pages gives exactly 201 pages (100-300). Thus, the total number of pages is 9 + 90 + 201 = 300.",
+    "counterconditions": [
+      "The problem intends physical leaves rather than printed page sides, halving the count.",
+      "Unnumbered front matter (e.g., roman numerals i-vi) is included in the 792-digit count."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    },
+    "typicality": 1.0
+  }
+}

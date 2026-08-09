@@ -1,0 +1,24 @@
+```json
+{
+  "candidate": {
+    "claim": "The book has 300 pages, derived by segmenting the 792 digits into blocks by page-number width: 9 digits for pages 1–9, 180 digits for pages 10–99, leaving 603 digits; at 3 digits per page this accounts for exactly 201 further pages, giving 9 + 90 + 201 = 300.",
+    "mechanism": "Cumulative digit usage is piecewise linear in n. For n ≥ 100, D(n) = 9·1 + 90·2 + (n−99)·3. Setting D(n) = 792 yields n = 300. The remainder 792 − 189 = 603 is exactly divisible by 3, so no partial page is needed.",
+    "counterconditions": [
+      "If D(n) is defined differently (e.g. counting physical sheets or facing-page spreads) the equation changes and 300 no longer follows.",
+      "If front matter were included in the digit count, the starting offset would shift and the solution would differ."
+    ],
+    "typicality": 0.97,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

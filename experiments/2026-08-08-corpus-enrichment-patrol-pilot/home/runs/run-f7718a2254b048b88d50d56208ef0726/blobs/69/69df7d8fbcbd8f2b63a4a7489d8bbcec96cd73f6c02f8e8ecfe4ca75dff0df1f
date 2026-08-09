@@ -1,0 +1,46 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+## problem-context
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d5be6904bbe034f441041985: program:reasoning_observation_pending
+- reason-counter@e95b8b8fddcf28f5fbbc1ff6: program:reasoning_observation_pending
+- reason-counter@93303e1ac6dff0178f80d1e9: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 06f6f6e2474865776df9c4cb802963fe56b0289b311bc42e12d98c1e11707442
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Page numbers are a passive record, not a generative process with recurrent dynamics","The 'infection' rate changes discretely at digit-width boundaries rather than continuously"],"overturn_conditions":["If the problem specifies a non-sequential numbering scheme","If pages are counted by physical sheets rather than numbered sides"],"shared_structure":["Cumulative resource consumption follows a piecewise-linear trajectory","The total cost accumulates at a rate governed by the 'width' of each unit","Transition between regimes occurs at structural boundaries (9, 99, 999)"],"source_memory_refs":["SRC_007"],"transfer_claims":["The total digit count corresponds to the cumulative area under a step function of digit-width","Finding the page count is equivalent to inverting a piecewise-linear cost function"]},"claim":"The book has exactly 300 pages, determined by recognizing that 792 = 9\u00d71 + 90\u00d72 + 201\u00d73, where 201 pages (from 100 to 300) each consume 3 digits, and verifying that D(299)=789 while D(300)=792 provides a unique bracketing.","counterconditions":[{"case":"If front matter digits (e.g., roman numerals i, ii) are included in the 792 count, the answer would be 298 instead","checker_spec":null,"eval":"observation"},{"case":"If the total 792 is a typo and should be 789, the answer would be 299","checker_spec":null,"eval":"observation"},{"case":"If facing pages share a single composite number, the digit consumption model breaks","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The total digit count is a strictly monotonically increasing function of page count, defined by a piecewise arithmetic series. For pages 1-9, 1 digit each (9 digits). For pages 10-99, 2 digits each (180 digits). For pages 100+, 3 digits each. Solving 9 + 180 + 3\u00d7(n-99) = 792 yields n=300. The function is injective, guaranteeing a unique inverse for any valid digit total.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- fe1824ba6d4c0c188450c4012c45bab5960e4e949a5db43ced985325cb369970 [mention]
+- c03298a73af16bcd870a8753a7b8df948fd25ac40945458f257b52dcf43938f9 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- fe1824ba6d4c0c188450c4012c45bab5960e4e949a5db43ced985325cb369970: {"analogy":null,"claim":"The answer is exactly 300 pages, derived by summing digit-width blocks: 9 + 180 + 603 = 792, where 603 = 3 \u00d7 201 and 201 = 300 \u2
+- c03298a73af16bcd870a8753a7b8df948fd25ac40945458f257b52dcf43938f9: {"analogy":null,"claim":"The book has 300 pages, but a verification via simulation of the digit-counting function confirms that D(300) = 792 and D(299) = 789, D
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

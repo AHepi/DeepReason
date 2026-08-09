@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f2a93e5bc1f463ac241f2da2: program:reasoning_observation_pending
+- reason-counter@28dbac87938bb817f0bac65c: program:reasoning_observation_pending
+- reason-counter@7496de10135f7a81bb9127a3: program:reasoning_observation_pending
+- reason-counter@2c32de2b509721ada2d95c1a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The problem is ill-posed because 792 is not a valid total for any book ending in a 3-digit block, due to a modulo constraint.","counterconditions":[{"case":"If the solver remembers to add the 99 base pages to the quotient 264, the correct answer 300 is recovered.","checker_spec":null,"eval":"observation"},{"case":"The formula D(n) = 189 + 3(n-99) explicitly requires adding 99 to the result of (D-189)/3.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"For n >= 100, total digits D(n) = 189 + 3*(n-99). Modulo 3, D(n) \u2261 189 \u2261 0. Thus D(n) must be divisible by 3. Since 792 / 3 = 264 exactly, it is divisible by 3. However, if 792 were NOT divisible by 3 (e.g., 791), the problem would be ill-posed. This candidate tests the boundary of the constraint by asserting that 792 modulo 3 = 0 implies n = 264, forgetting to add the 99 base pages, yielding n = 264.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f2a93e5bc1f463ac241f2da2, reason-counter@28dbac87938bb817f0bac65c
+
+TARGET SRC_002
+{"analogy":null,"claim":"The book has exactly 300 pages.","counterconditions":[{"case":"If front matter (roman numerals) is included in the 792 digit count, the base assumption fails.","checker_spec":null,"eval":"observation"},{"case":"If 'pages' refers to physical leaves instead of numbered sides, the count changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Pages 1-9 use 9 digits. Pages 10-99 use 90*2=180 digits. Total for 1-99 is 189 digits. Subtracting from 792 leaves 603 digits for 3-digit pages. 603/3 = 201 pages. 99 + 201 = 300 pages.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7496de10135f7a81bb9127a3, reason-counter@2c32de2b509721ada2d95c1a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

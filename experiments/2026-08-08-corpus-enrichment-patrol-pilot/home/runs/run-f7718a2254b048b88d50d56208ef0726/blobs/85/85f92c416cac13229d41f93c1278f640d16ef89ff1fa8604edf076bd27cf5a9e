@@ -1,0 +1,32 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 3 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-f0bc16794e45a705e44a1ce3285b9b1f
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## school-stance
+SCHOOL STANCE (weight 1.00): anchor in cases
+
+## scratch-advisory-context
+SCRATCH_ADVISORY_CONTEXT_V1
+{"blocks":[{"content":"Speculative branch: What if the problem is a trick and '792 digits' counts the digits appearing on facing pages (left and right)? In a typical book, pages 1 and 2 face each other. If we count digits per spread rather than per page, the digit allocation might differ. However, standard interpretation counts each page number once, so D(n)=sum of digit-lengths. Another angle: what if 'pages' means leaves (sheets), and each leaf has two sides (recto/verso), so '300 pages' = 150 leaves? The problem likely means numbered sides, not physical sheets. The answer 300 is robust under the standard reading.","handle":"SCR_001","was_aimed_at":["SRC_001","SRC_003"],"why_keep_this":"Documents alternative interpretations explored and rejected, preventing re-exploration."},{"content":"Does any edition of this classic problem include front matter in the digit count, and if so, how is 'starting from 1' interpreted?","handle":"SCR_002","unfinished":"Unresolved question","why_keep_this":"Related advisory scratch: NEW_001"}],"guides":[],"links":[],"state_seq":283,"warning":"Scratch material is non-authoritative.\nIt is advisory, not a harness verdict.\nIt may contradict itself.\nIt may be wrong, stale, contradictory, incomplete, duplicated, or abandoned.\nIt does not ground a formal claim or supply evidence for one.\nIgnore any block that is irrelevant to the current problem.\nDo not turn uncertainty into a confident fact.\nDo not invent a reason merely to fill an optional field.\nRelationships are provisional.\nA guide is a temporary navigation aid."}
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- 6ec201a9e4977ea2f2862a8ad7eff396c9b7470457331e49623eb09cf473f845: The target artifact explicitly claims 'The book has exactly 363 pages' and asserts this is 'derived by mis-solving,' which directly contradicts the problem's re
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- be5d066d0697e27702803c30325b792fa8a9456ee1677aadcb7ed12512cab73a: {"analogy":null,"claim":"The book has 297 pages, found by exhausting the 189 digits used by pages 1\u201399, leaving 603 digits for 3-digit page numbers, which 
+- fc5ce240eae3a4be5cdf4d090c35a1b6b129870a0ec98043827e908ebdc0c10e: {"analogy":null,"claim":"The book has 363 pages, derived by solving the piecewise digit-usage function 9\u00d71 + 90\u00d72 + (n\u221299)\u00d73 = 792 directly 
+- fe1824ba6d4c0c188450c4012c45bab5960e4e949a5db43ced985325cb369970: {"analogy":null,"claim":"The answer is exactly 300 pages, derived by summing digit-width blocks: 9 + 180 + 603 = 792, where 603 = 3 \u00d7 201 and 201 = 300 \u2
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.

@@ -1,0 +1,46 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+PROBLEM CONTEXT (conn:06f6f6e24748) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 06f6f6e24748 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6cce068a1fa642317345f0d4: program:reasoning_observation_pending
+- reason-counter@b85ee53f53edf2b8a440f590: program:reasoning_observation_pending
+- reason-counter@e9398a26bc6bfd65a4c76d7b: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@8b23e78ea360: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Biological mutation lacks the deterministic piecewise structure of digit allocation","The 'defect' rate (extra digits) is uniform across 3-digit pages, unlike random mutation"],"overturn_conditions":["If the problem specifies standard sequential numbering without typographical errors","If front matter is confirmed to be excluded from the digit count"],"shared_structure":["A baseline system consumes a predictable number of units per item (1 unit for small items, 2 for medium, 3 for large)","A systematic 'mutation' or overhead is applied to a subset of items, increasing their unit cost","The total observed resource consumption is the sum of baseline plus mutation, and the item count is inferred by partitioning the total"],"source_memory_refs":["SRC_006"],"transfer_claims":["The 792-digit total can be decomposed into a 'wild-type' component (digits for sequentially numbered pages) and a 'mutant' component (extra digits from front matter or formatting)","Solving for the page count requires subtracting the mutant digit contribution before applying the standard piecewise inversion"]},"claim":"The book has 298 pages, obtained if the total 792 digits includes 6 digits from a 2-page roman-numeral front matter (i, ii) plus 786 arabic-numeral digits, meaning the standard formula solves 9\u00d71 + 90\u00d72 + (n\u221299)\u00d73 = 786, yielding n=298.","counterconditions":[{"case":"If front matter is excluded from the digit count, the answer is 300","checker_spec":null,"eval":"observation"},{"case":"If the front matter uses more or fewer digits, the page count shifts accordingly","checker_spec":null,"eval":"observation"},{"case":"If 'starting from 1' strictly means page 1 is the first numbered page, front matter is excluded by definition","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The total digit count of 792 is partitioned into front-matter digits (6) and body digits (786). The body digit count is then inverted using the standard piecewise formula: 9 + 180 + 3\u00d7(n-99) = 786, which simplifies to 3n - 297 + 189 = 786, giving 3n = 894 and n = 298. The mechanism introduces a contaminating offset that shifts the apparent page count.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6cce068a1fa642317345f0d4, reason-counter@b85ee53f53edf2b8a440f590, reason-counter@e9398a26bc6bfd65a4c76d7b
+
+TARGET SRC_002
+SRC_001 shares mechanism
