@@ -12,3 +12,4 @@ setup_rc=0
 qualify_rc=0 qualify_seconds=1
 converge_rc=0 converge_seconds=1361 tag=q1s1
 run_id=run-b74e71aa434dd8b09a6451d23fd83c7a tag=q1s1
+audit_rc=0 tag=q1s1
