@@ -152,16 +152,53 @@ pilot's own lesson that a raw detached `setsid`/`nohup` process does not
 reliably survive this container — CLAUDE.md's Environment section,
 confirmed again by that pilot's Failure #3). Population: 960 pairs
 (Rule-184-family's 43 first), ~1044 total tasks including the 10%
-stability-repeat sample. Real, in-progress outcome counts at the 580th
-task: `confirmed_a=150, confirmed_b=125, both_fail=193, compile_fail=53,
-authoring_failed=31, both_pass=28` — roughly half the population
-CONFIRMED so far, a genuine and non-trivial `compile_fail` rate (checker
-source rejected by the oracle sandbox's AST guard — commonly `**`
-exponentiation, flagged "int bomb" risk, or an `import` statement inside
-the checker body, both real, intentional restrictions of the SAME
-whitelist sandbox `exec_oracle`/`property_oracle` already use, not a bug
-in this tranche's own code). Final counts and rates by model land in the
-master table once the run completes.
+stability-repeat sample.
+
+## 2026-08-09 — S-mech COMPLETE: 960/960 pairs
+
+| | gemma4:31b | glm-5.2 | combined |
+|---|---|---|---|
+| n | 480 | 480 | 960 |
+| authoring-success (valid scalar JSON) | 461 (96.0%) | 452 (94.2%) | 913 (95.1%) |
+| compile-pass (sandbox AST guard accepts) | 427 (89.0%) | 407 (84.8%) | 834 (86.9%) |
+| CONFIRMED (checker sides with A or B) | 224 (46.7%) | 244 (50.8%) | 468 (48.75%) |
+
+(compile-pass and "executes to a verdict" are the SAME count in this
+design — once the oracle sandbox accepts a checker's source, `run()`
+always returns pass/fail, never an uncaught crash, so there is no
+separate "compiled but didn't execute" bucket here; noted rather than
+implied by two identical-looking columns.)
+
+**Full outcome breakdown, 960 pairs:** `confirmed_a=252 (26.3%),
+confirmed_b=216 (22.5%)` → **468/960 CONFIRMED (48.75%)**;
+`both_fail=319 (33.2%)` — the checker's own computed value matched
+NEITHER claim (discriminating-power evidence: either the checker is
+wrong, or a third value is the truth, or the checker hit a step-limit
+inside the sandbox); `both_pass=47 (4.9%)` — the checker matched both
+claims (only possible if `claim_a_value`/`claim_b_value` came back equal
+— an authoring/extraction slip, since the pair was flagged as a
+contradiction by the original patrol call); `compile_fail=79 (8.2%)` —
+rejected by the oracle sandbox's AST guard, overwhelmingly `**`
+exponentiation ("int bomb" risk) or an `import` statement inside the
+checker body, both REAL, intentional restrictions of the SAME whitelist
+sandbox `exec_oracle`/`property_oracle` already use, not a defect in
+this tranche's own code; `authoring_failed=50 (5.2%)` — the encoder
+never returned a parseable, scalar-valued JSON object even after the
+syntactic repair pass.
+
+**Stability control (10%-sampled repeat pass, 90 pairs repeated):
+17/90 flipped (18.9%)** — a call issued twice, identically, with
+temperature=0.0, produced a DIFFERENT final classification (e.g.
+confirmed_a on one call, both_fail on the repeat) roughly one time in
+five. This is a real, load-bearing finding, not a rounding artifact:
+temperature=0.0 on this hosted API is not a determinism guarantee (the
+exact concern `PREREG.md`'s stability-control section flagged before any
+call was spent). Every S-mech CONFIRMED count above should be read with
+this ~19% single-call flip rate in mind — it bounds how much weight any
+ONE checker-authoring call's verdict can bear on its own.
+
+Committed verbatim: `s_mech_results.jsonl` (1,050 rows: 960 primary + 90
+stability repeats).
 
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
