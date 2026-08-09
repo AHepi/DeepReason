@@ -85,8 +85,9 @@ order. One step per `dr-execute-step` invocation.
       done-when: pushed; the failure-budget ledger (S6-style, cap 6 for this phase) is updated in RESULTS.md-in-progress with this leg's count.
       DONE: RESULTS.md created with the failure ledger (0/6 spent -- Tier V leg had zero charged failures) and the Tier V typed-outcome summary. Run root/driver log/audit files already snapshotted incrementally through the run per CLAUDE.md's snapshot-loop convention; this commit finalizes that trail with CHECKLIST.md and RESULTS.md.
 
-- [ ] 21. (R13/R14/A5) Write `experiments/2026-08-09-change-hard-question-set/pilot_tier_o_run.sh`, same template as step 18, for the chosen Tier O representative question.
+- [x] 21. (R13/R14/A5) Write `experiments/2026-08-09-change-hard-question-set/pilot_tier_o_run.sh`, same template as step 18, for the chosen Tier O representative question.
       done-when: `bash -n` exits 0; `chmod +x` applied.
+      DONE: `syntax_check_rc=0`, executable. Representative question: to-01 (Collatz conjecture). No `--checker` passed to `pilot_audit.py` (Tier O is never scored for correctness, R10) -- the hygiene classification against PREREG.md's rule is applied by hand to the run's final accepted claims in step 22.
 
 - [ ] 22. (R13/R14/R15/R16) [COMMIT] Commit the Tier O pilot ladder script, launch detached, wait for completion, read `qualify` tier, `stop_reason`, `verify_root`, and compute the Tier O hygiene verdict per PREREG.md against the run's final state.
       done-when: driver log end marker present; typed `stop_reason` recorded; `verify_root` clean; hygiene verdict (success/junk-acceptance) recorded per PREREG.md's rule — an honest inconclusive/partial final state is a SUCCESS per R16/PREREG.md, not a failure to retry.
