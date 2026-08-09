@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed causal mechanism is inverted. The target claims that 'corrective friction' (disagreement and resolution) is the empirical signature of genuine reliability, and that a linear, silent path to the correct answer is mere 'blind-ticking.' But this conflates the noise of a deliberative process with the reliability of its output. A panel of trained non-experts may exhibit high disagreement precisely because they lack domain expertise and are uncertain; their noisy debate is a symptom of individual unreliability, not a cause of aggregate reliability. Conversely, a well-designed checklist can make the correct answer obvious to trained non-experts, yielding a silent, linear path to the right answer that is genuinely reliable, not 'blind.' The target's own countercondition concedes this: for simple tasks, absence of friction signals efficiency. But this concession undermines the core mechanism—if friction is only a proxy on some tasks, it is not a general distinguishing feature of reliability versus compliance. The actual causal mechanism for panel reliability (per Condorcet-style aggregation) is independent errors canceling out, which does not require observable disagreement at all. The target fails to identify evidence that distinguishes reliability from compliance because it selects a proxy (disagreement noise) that is neither necessary nor sufficient for reliable judgment.",
+      "counterexample": [
+        {
+          "scenario": "Two panels evaluate a set of diagnostic tasks with objectively verifiable outcomes. Panel A follows the checklist silently and linearly, each member independently arriving at the correct answer without recorded disagreement; their aggregate accuracy is 95%. Panel B exhibits extensive 'corrective friction'—recorded disagreements, debates, and corrections at nearly every checklist step—but their aggregate accuracy is only 70%, because their debates are driven by shared misconceptions that the checklist does not fully resolve. Under the target's criterion, Panel B would be classified as showing 'genuine reliability gain' while Panel A would be dismissed as 'mere compliance,' yet Panel A is objectively more reliable."
+        }
+      ]
+    }
+  ]
+}

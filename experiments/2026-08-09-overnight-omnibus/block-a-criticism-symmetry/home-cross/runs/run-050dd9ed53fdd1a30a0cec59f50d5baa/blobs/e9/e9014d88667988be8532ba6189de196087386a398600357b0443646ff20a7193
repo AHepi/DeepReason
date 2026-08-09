@@ -1,0 +1,42 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated node 0bb6167c36cf integrates with SRC_005 by proposing that 'corrective friction' is not merely a signal of reliability, but a necessary phase of cognitive calibration; it is refuted if the non-linear path [Prompt] -> [Check] -> [Discrepancy] -> [Resolution] occurs without a measurable increase in the final judgment's accuracy compared to a linear compliance path.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The isolated node 0bb6167c36cf contradicts SRC_002 by asserting that 'discrepancy-driven discovery' of unlisted variables is actually a symptom of checklist insufficiency rather than a reliability gain; this claim is refuted if the identification of unlisted variables consistently leads to the discovery of critical failure modes that the expert also missed.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The isolated node 0bb6167c36cf depends on SRC_003, proposing that 'error-correction trajectories' are the only valid evidence for reliability in non-expert panels; this is refuted if a panel achieves superior reliability (accuracy/consistency) through a purely linear compliance path without any documented discrepancy resolution.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The isolated node 0bb6167c36cf abstracts the mechanisms of SRC_001 and SRC_004 into a 'Cognitive Scaffold Theory', where the checklist's value is not in its content but in its ability to force a 'stop-and-think' state; this is refuted if the removal of the checklist but retention of the 'stop-and-think' requirement produces identical reliability gains.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_004"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The isolated node 0bb6167c36cf reduces to SRC_004, claiming that the 'corrective friction' observed is simply the distributed execution of the expert's latent intuition embedded in the checklist; this is refuted if the panel resolves a checklist-prompted discrepancy using a reasoning path that the original expert author explicitly rejects as invalid.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.6
+    }
+  ]
+}
+```

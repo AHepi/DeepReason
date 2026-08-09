@@ -1,0 +1,42 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:0ed98c9fe96a) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0ed98c9fe96a to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+PROBLEM CONTEXT (conn:194ee9db21a2) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 194ee9db21a2 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@0af693ccc863: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- lineage-ref@3a67ea0f1135: program:lineage_ref
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated node 0ed98c9fe96a contradicts the premise of SRC_004 by suggesting that the reliability of a domain expert is not based on 'out-of-distribution' recognition but on the ability to synthesize conflicting signals that a checklist decomposes; this relation is refuted if the expert's reliability is proven to stem solely from the identification of single, discrete anomalies.
+commitments: hv-floor@2a45b7988522, lineage-ref@0af693ccc863, relation-form@578e42df713e
+
+TARGET SRC_002
+The reliability of the panel shares mechanism with the 'Averaging Error' hypothesis, where the benefit is derived from the Law of Large Numbers applied to noise rather than the checklist's rigor (extending SRC_004); this is refuted if the panel's accuracy drops significantly when the checklist is removed, despite maintaining the same panel size.
+commitments: hv-floor@2a45b7988522, lineage-ref@3a67ea0f1135, relation-form@578e42df713e
+
+TARGET SRC_003
+The isolated node 0ed98c9fe96a reduces to the claim in SRC_005 that the 'shape' of a problem is invisible to those bound by a narrow attentional window, asserting that reliability is a property of holistic gaze rather than procedural adherence; this relation is refuted if the 'shape' of the problem can be fully decomposed into a series of independent, checklist-verifiable binary states.
+commitments: hv-floor@2a45b7988522, lineage-ref@0af693ccc863, relation-form@578e42df713e
+
+TARGET SRC_004
+The isolated node 0ed98c9fe96a abstracts the 'cognitive ceiling' mechanism found in SRC_001, SRC_002, SRC_004, and SRC_005 into a general theory of 'informational filtering' where any codified process reduces the observer's bandwidth for anomaly detection; this relation is refuted if a checklist is shown to expand rather than constrain the attentional window of a non-expert.
+commitments: hv-floor@2a45b7988522, lineage-ref@0af693ccc863, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
