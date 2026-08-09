@@ -176,6 +176,48 @@ Whether the 36% rate holds corpus-wide or is concentrated in a few
 noisy roots is exactly what the per-root/per-half breakdown in the
 final decision table will show; not assumed here.
 
+## 2026-08-09 — Phase 2 patrol complete: decision numbers
+
+All 9277 pre-registered pairs checked (zero skipped, zero silently
+dropped; 0 API transport errors; the resumable-chunk mechanism survived
+two more container interruptions cleanly — every chunk's partial output
+was a valid prefix, since `patrol_results.jsonl` is written one
+complete, flushed JSON line at a time, never a torn write).
+
+| | pairs | hits | rate | parse failures |
+|---|---|---|---|---|
+| **Overall** | 9277 | 1941 | **20.9%** | 143 (1.5%) |
+| Historical half | 6065 | 1133 | 18.7% | 113 |
+| Enriched half | 3212 | 808 | **25.2%** | 30 |
+
+The enriched half's candidate-contradiction rate is meaningfully higher
+than the historical half's (25.2% vs 18.7%). This pilot cannot say
+WHY on its own — plausible readings include: the hard/hard2 questions
+chosen for Phase 1 genuinely produce messier claim sets than the older
+corpus's average question, OR the newer roots simply have larger
+per-problem accepted-claim groups (more claims addressing the exact
+same problem gives the pairing rule more same-topic material to find
+tension in), OR both. Distinguishing these needs a follow-up pilot with
+matched question difficulty across old and new roots — out of this
+pilot's scope, named here as residue, not resolved.
+
+Hits are spread across the corpus, not concentrated in one degenerate
+root: 43 of 47 openable roots contributed at least one hit. The top 5
+roots by hit count account for 620/1941 (32%) — real concentration, but
+not a single-root artifact. Full hit list (root, problem, both artifact
+ids, confidence, one-line reason) committed verbatim at
+`patrol_hits.jsonl` (1941 rows) — not pasted here per the "hits are
+candidate measurements, never edges" framing; nothing in this file was
+or will be written into any root.
+
+**Framing, restated as bound**: every one of these 1941 rows is a
+CANDIDATE — a same-problem pair the model itself flagged as mutually
+inconsistent when asked directly, nothing more. No adjudication ran. No
+root was touched. Turning any of these into an actual attack edge would
+require running them back through the harness's own criticism machinery
+— that is exactly the "future criticism" this pilot's own framing
+reserves them for, not something this tranche did or should do.
+
 ## 2026-08-08 — Phase 1 progress (running table, updated per root)
 
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |
