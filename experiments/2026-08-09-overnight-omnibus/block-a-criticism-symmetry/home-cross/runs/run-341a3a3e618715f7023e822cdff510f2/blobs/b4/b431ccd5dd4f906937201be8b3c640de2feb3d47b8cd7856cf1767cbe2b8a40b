@@ -1,0 +1,47 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 37aa16746f81 integrates with SRC_005 by proposing that 'cognitive friction' is not just a qualitative experience but a measurable behavioral signal. Specifically, it proposes that genuine reliability gain is evidenced by a non-uniform distribution of effort (time-spikes) that correlates with item difficulty, rather than a flat distribution characteristic of bureaucratic compliance. This relation is refuted if a panel exhibits a uniform distribution of time spent per item yet still consistently arrives at the correct outcome in complex cases, suggesting procedural fluency or lucky compliance rather than reasoning-driven reliability.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 37aa16746f81 depends on SRC_003's 'decoy check' mechanism to operationalize the distinction between compliance and reliability. It proposes that the ability to correctly reject a logically irrelevant decoy while maintaining correctness is the primary discriminator of reliability gain. This relation is refuted if a panel correctly rejects the decoy but fails the primary task, or if a panel that blindly accepts the decoy still reaches the correct conclusion at a rate equal to or higher than the 'critical' panel.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.85,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 37aa16746f81 abstracts the concepts in SRC_002 and SRC_004 into a general theory of 'Reasoning Scaffolding,' where the checklist's value is found in its capacity to generate internal contradictions that force deliberation. It proposes that reliability gain is a function of the panel's capacity to resolve these contradictions. This relation is refuted if the most reliable panels are those that encounter the least friction (i.e., the checklist is so linear that no resolution is required), proving the 'friction' is an obstacle to rather than a driver of reliability.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 37aa16746f81 contradicts the assumption of linear checklist utility by proposing that as checklists increase in comprehensiveness, they may actually reduce reliability by inducing 'compliance errors' (bureaucratic mimicry). This integrates the 'Checklist Paradox' from SCR_004 with the reliability metrics of SRC_001. This relation is refuted if there is a monotonic increase in reliability as the checklist's granularity and length increase, regardless of the panel's perceived friction.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 37aa16746f81 shares mechanism with SRC_004 regarding the 'Conflict-Resolution Trace,' proposing that the presence of 'documented friction' (divergent internal audit trails) is the only durable evidence of reliability gain. This relation is refuted if panels with perfectly linear 'Yes' trails (no documented struggle) achieve the same or higher reliability scores than those with complex, resolved conflict traces.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": []
+    }
+  ]
+}
+```

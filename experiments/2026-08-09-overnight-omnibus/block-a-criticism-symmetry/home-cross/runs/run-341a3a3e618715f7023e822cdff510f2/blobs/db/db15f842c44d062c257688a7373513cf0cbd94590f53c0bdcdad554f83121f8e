@@ -1,0 +1,23 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-85dfd6ce38235d462fa2d5c1881eb842) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seventh-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@cfe6469e0a15f8e5fc0b204c: program:reasoning_observation_pending
+- reason-counter@d6b0fcd4c32b7ccdafb24db1: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 886e4d2d207d8eb01fea54bf979c4b9f20efe53a72539ff2e6dfe6cb66652090
+{"analogy":null,"claim":"Reliability gain is evidenced by a 'non-uniform effort distribution' where the time spent on checklist items correlates with the objective complexity of those items, rather than a constant time-per-item.","counterconditions":[{"case":"The panel is under a strict time limit that forces uniform speed.","checker_spec":null,"eval":"observation"},{"case":"The checklist items are designed to be binary and equally easy to verify.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Temporal-Complexity Correlation' mechanism (integrating SCR_001): Compliance-driven actors treat all checkboxes as equal; reliability-driven actors treat them as proxies for investigation. A single evaluation showing 'time-spikes' on critical, difficult items proves the panel is engaging with the substance of the judgment.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

@@ -1,0 +1,87 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable than a panel of trained non-experts because the checklist creates a 'competence ceiling' that prevents the detection of atypical variables that fall outside the explicit instructions.",
+      "mechanism": "Checklists formalize known-knowns but blind users to 'unknown-knowns'—nuances that experts perceive subconsciously. The panel's reliability is an illusion of precision; they are highly reliable at solving the 'checklist version' of the problem, but fail catastrophically on cases where the critical variable is not on the list, whereas the expert's intuition allows for adaptive anomaly detection.",
+      "counterconditions": [
+        "The task is highly routine with no significant variance in critical variables.",
+        "The checklist is exhaustive to the point of capturing all possible edge cases (which may trigger the Checklist Paradox per SCR_004)."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is evidenced by the panel's ability to correctly reject a 'decoy' check—an item that appears relevant but is logically irrelevant to the specific case—while still arriving at the correct outcome.",
+      "mechanism": "Mere compliance is characterized by a linear relationship between checklist completion and the final judgment. Reliability gain is evidenced by 'critical friction': the panel's capacity to override a checklist item when it contradicts the evidence of the case. If a panel checks a decoy box and gets the right answer, it is lucky compliance; if they mark the decoy as 'not applicable' or 'contradictory' and still get the right answer, it is genuine reliability.",
+      "counterconditions": [
+        "The 'trained non-experts' are trained specifically to follow the checklist without question (maximizing compliance over reliability).",
+        "The decoy is indistinguishable from a critical check to anyone below a certain expertise threshold."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A panel of trained non-experts is more reliable only when the expert's intuition is subject to 'availability bias'—where the expert over-weights recent or vivid cases—whereas the checklist forces a comprehensive scan of all necessary criteria.",
+      "mechanism": "Expert intuition is essentially a high-speed pattern matching system. When the pattern is 'noisy' or the expert is fatigued, they skip steps. The panel's reliability stems from 'additive redundancy' and the forced serial processing of the checklist, which eliminates the 'skipping' error common in experts.",
+      "counterconditions": [
+        "The task requires synthesis of contradictory data that a checklist cannot structure.",
+        "The panel's 'training' induces a groupthink bias that mimics the expert's availability bias."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Reliability is a function of 'error-type symmetry'; neither the expert nor the panel is inherently superior, but they fail in opposite directions.",
+      "mechanism": "Experts fail through 'systemic blindness' (overlooking the obvious due to over-complexity), while panels fail through 'bureaucratic blindness' (overlooking the complex due to over-simplification). The 'winner' depends on whether the task's verifiable outcomes are more often missed due to nuance or due to oversight.",
+      "counterconditions": [
+        "One party consistently outperforms the other across all error types.",
+        "The checklist is designed to specifically mitigate the expert's most common failure mode."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Consider the 'Compliance-Reliability Divergence' (CRD) metric: If we vary the difficulty of the checklist items (some easy, some requiring deep investigation), a compliance-driven panel will show a constant time-per-item. A reliability-driven panel will show a 'time-spike' on difficult items. Therefore, the evidence of genuine reliability gain in a single evaluation is a non-uniform distribution of time/effort spent per checklist item that correlates with the item's objective difficulty.",
+          "why_keep_this": "Provides a temporal/behavioral metric to distinguish compliance from reliability."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'training' of non-experts actually shift them into a 'pseudo-expert' category where they suffer from the same intuition-based biases as the domain expert, but without the corrective experience?",
+        "related_refs": [
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```

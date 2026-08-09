@@ -1,0 +1,42 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-85dfd6ce38235d462fa2d5c1881eb842) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seventh-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@23faaf807c4c6ffa44cf4727: program:reasoning_observation_pending
+- reason-counter@b13cbfc5b3bde459ae4a0d86: program:reasoning_observation_pending
+- reason-counter@3c3a6cf72d66c92506a7af2a: program:reasoning_observation_pending
+- reason-counter@020ccfe85a5b0fb697e8d253: program:reasoning_observation_pending
+- reason-counter@4530c09e6ab5839bdc9cbf2d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of trained non-experts using a checklist will produce more reliable judgments than a single expert for tasks with verifiable outcomes, provided the task's failure mode is primarily 'omission' rather than 'interpretation'.","counterconditions":[{"case":"The task requires synthesis of variables not captured by the checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist items are ambiguous, shifting the failure mode from omission to misinterpretation (commission errors).","checker_spec":null,"eval":"observation"},{"case":"The non-experts lack the basic literacy to verify the checklist items accurately.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist transforms the task from a retrieval problem (remembering all variables) to a verification problem (checking each variable). While the expert's intuition is a compressed heuristic prone to availability bias, the checklist enforces a comprehensive scan, eliminating the 'blindspot' errors typical of high-level expertise.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@23faaf807c4c6ffa44cf4727, reason-counter@b13cbfc5b3bde459ae4a0d86, reason-counter@3c3a6cf72d66c92506a7af2a
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["In some domains, 'compliance' is the primary goal regardless of outcome."],"overturn_conditions":["If a panel rejects a decoy for the wrong reasons but arrives at the right answer."],"shared_structure":["Input: A set of instructions containing noise.","Process: Filtering based on domain logic vs. filtering based on rule-following.","Output: Justification of exclusion."],"source_memory_refs":["SCR_002","SCR_008"],"transfer_claims":["The quality of the justification for rejecting a decoy is a proxy for the cognitive engagement required for reliability."]},"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'causal rejection' of irrelevant or decoy checklist items.","counterconditions":[{"case":"The panel is incentivized solely on the binary completion of the checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so lean that it contains no potentially irrelevant items.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A compliance-driven panel treats the checklist as a ritual, checking boxes regardless of relevance. A reliability-driven panel treats the checklist as a guide, actively filtering out noise. The evidence of gain is found in the panel's ability to provide a causal justification for why a specific item\u2014though present on the list\u2014does not impact the verifiable outcome of the specific

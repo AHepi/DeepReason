@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 13a564bbd3f2 integrates with SRC_001 by extending the claim that systemic, detectable failure (commission) is preferable to idiosyncratic failure (omission); specifically, it proposes that this integration is refuted if the 'detectable' nature of commission errors does not actually lead to a higher rate of correction compared to the 'silent' nature of expert omissions.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 13a564bbd3f2 depends on SRC_002's 'error-type symmetry' mechanism, asserting that the shift from omission to commission is the primary driver of reliability; this relation is refuted if the audit process for commission errors is found to be as unreliable as the expert's original intuition.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.85,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 13a564bbd3f2 abstracts the 'noisy' versus 'silent' failure modes described in SRC_003 into a general framework for systemic reliability; this abstraction is refuted if 'noisy' commission errors in non-verifiable tasks (synthesis tasks) are just as difficult to audit as silent omissions.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 13a564bbd3f2 contradicts the implicit assumption of 'non-expert' stability in SRC_004 by suggesting that the 'trained non-expert' may develop a 'pseudo-expertise' that creates new, unpredictable failure modes; this contradiction is refuted if the panel's error rate remains constant regardless of the depth of their training.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 13a564bbd3f2 shares mechanism with SRC_005 regarding the shift from 'unpredictable omission' to 'predictable commission'; this shared mechanism is refuted if the cost of a commission error (e.g., a false positive in a high-stakes audit) is significantly higher than the cost of an omission error.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.8,
+      "evidence_refs": []
+    }
+  ]
+}
+```
