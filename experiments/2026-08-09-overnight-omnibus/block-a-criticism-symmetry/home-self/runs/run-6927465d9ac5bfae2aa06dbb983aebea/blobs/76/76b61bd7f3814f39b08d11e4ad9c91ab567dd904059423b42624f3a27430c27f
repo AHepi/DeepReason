@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@62b1411e2ec5003fb4ddcaab: program:reasoning_observation_pending
+- reason-counter@93bca9f2e61c9b9bfb8a72eb: program:reasoning_observation_pending
+- reason-counter@d7a23c6018747ce70737f906: program:reasoning_observation_pending
+- reason-counter@2c5bf8a4c5edd336a8a379e8: program:reasoning_observation_pending
+- reason-counter@c1c44ea59331a8c618023d01: program:reasoning_observation_pending
+- reason-counter@23535892c6bb74f3ba74209a: program:reasoning_observation_pending
+- reason-counter@5a1c12c1d26b8747e961dd58: program:reasoning_observation_pending
+- reason-counter@45b463b81dc507d9c3f8f4ee: program:reasoning_observation_pending
+- reason-counter@5942df50e6de663291c13028: program:reasoning_observation_pending
+- reason-counter@5de5eb008d400e7cd62538bc: program:reasoning_observation_pending
+- reason-counter@c3fbcb6a83b4a7825d9840aa: program:reasoning_observation_pending
+- reason-counter@d48f341ac467d9637c3f2a62: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The Condorcet theorem assumes binary outcomes; checklist judgments may be multi-dimensional.","The Condorcet theorem assumes independence; panel deliberation or a shared checklist may introduce correlation."],"overturn_conditions":["If the panel's judgments are correlated due to the shared checklist, the Condorcet guarantee fails.","If the checklist does not raise individual competence above chance, aggregation does not help."],"shared_structure":["Both rely on aggregation of independent judgments to cancel noise.","Both require individual competence above chance for aggregation to work."],"source_memory_refs":["SRC_003"],"transfer_claims":["The independence and competence conditions transfer: without them, aggregation does not guarantee reliability."]},"claim":"The Condorcet jury theorem supports the reliability of the panel over the expert only if the non-experts' judgments are independent and each has a probability of correctness greater than chance. The checklist is a mechanism for raising individual accuracy above chance, but panel deliberation may violate independence, and a checklist that is too rigid may reduce individual accuracy to mere chance on 
+commitments: reasoning-envelope-wf, reason-counter@62b1411e2ec5003fb4ddcaab, reason-counter@93bca9f2e61c9b9bfb8a72eb, reason-counter@d7a23c6018747ce70737f906
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A compliant checklist is a fixed, rigid proxy; a genuinely reliable one is a dynamic, robust tracker.","The panel may achieve compliance without understanding; the expert may have understanding without explicit compliance."],"overturn_conditions":["If the evaluation demonstrates that the panel's accuracy is invariant under perturbations that change the cue-answer mapping, the mere-compliance hypothesis is overturned."],"shared_structure":["Both systems face a distinction between superficial and deep tracking of the target variable.","Both are vulnerable to Goodhart's law when the proxy becomes the target.","Both can be distinguished by stress-testing under distribution shift."],"source_memory_refs":["SRC_004"],"transfer_claims":["The compliance/reliability distinction transfers: it is not enough that the panel gets the right answer on the evaluation; it must get the right answer for the right reason."]},"claim":"The apparent reliability gain of checklist-driven panels is often mere compliance: the panel tracks the checklist's cues, which happen to correlate with the right answer within the evaluation, but this does not constitute a genuine reliability gain 
+commitments: reasoning-envelope-wf, reason-counter@2c5bf8a4c5edd336a8a379e8, reason-counter@c1c44ea59331a8c618023d01, reason-counter@23535892c6bb74f3ba74209a
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The panel is a group of agents who could potentially notice the decoupling; a single algorithm might not.","The checklist is an external artifact the panel can override; an expert's intuition is internal and harder to override."],"overturn_conditions":["If the panel passes the cue-decoupling test by luck rather than understanding, the diagnostic is invalid.","If the expert fails the cue-decoupling test, the panel's success does not establish superiority over the expert."],"shared_structure":["Both involve a system whose output can be driven by a proxy rather than the true target.","Both can be diagnosed by decoupling the proxy from the target and observing the system's response."],"source_memory_refs":["SRC_006"],"transfer_claims":["The cue-decoupling diagnostic transfers: it is a general method for distinguishing genuine from spurious reliability in any system that uses proxies."]},"claim":"Within a single evaluation, a genuine reliability gain is distinguished from mere checklist compliance by including adversarial items where the checklist cues are intentionally decoupled from the correct answer, and by testing whether the panel's confidence and accuracy
+commitments: reasoning-envelope-wf, reason-counter@5a1c12c1d26b8747e961dd58, reason-counter@45b463b81dc507d9c3f8f4ee, reason-counter@5942df50e6de663291c13028
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The expert's representation is continuous and high-dimensional; the checklist is discrete and low-dimensional.","The panel is a group; the expert is an individual. The group may add social dynamics that the analogy does not capture."],"overturn_conditions":["If the expert outperforms the panel on a Type I task, the claim's prediction fails.","If the panel outperforms the expert on a Type II task, the claim's prediction fails."],"shared_structure":["Both involve a contrast between discrete, decomposable processing and continuous, holistic processing.","Both predict that the effectiveness of the processing mode depends on the task type."],"source_memory_refs":["SRC_005"],"transfer_claims":["The Type I/Type II distinction transfers: it predicts when checklist-based processing will succeed and when it will fail."]},"claim":"For Type I tasks (stable, decomposable feature space), the panel-plus-checklist is more reliable than the expert because the checklist enforces systematic processing of all relevant cues. For Type II tasks (fluid, holistic feature space), the expert is more reliable because the checklist cannot capture the gestalt, and panel aggregation of f
+commitments: reasoning-envelope-wf, reason-counter@5de5eb008d400e7cd62538bc, reason-counter@c3fbcb6a83b4a7825d9840aa, reason-counter@d48f341ac467d9637c3f2a62
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

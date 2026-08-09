@@ -1,0 +1,15 @@
+```json
+{
+  "repair.patch.v1": {
+    "contract": "conjecturer.turn.v6",
+    "baseline_sha256": "8dcb8292e1ee40d4a823cdd2cb877d06686a531b46580d87f5c18b504ae8287a",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "/scratch_proposal/new_blocks/0/body/bears_on_refs/2",
+        "value": "SRC_002"
+      }
+    ]
+  }
+}
+```

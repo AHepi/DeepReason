@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3677a361eb3e5cf6c40403cf: program:reasoning_observation_pending
+- reason-counter@5f3c53032e19e07bfb4247db: program:reasoning_observation_pending
+- reason-counter@9014a2eac063f66e095a383f: program:reasoning_observation_pending
+- reason-counter@60e4f6421a834a03adf7e8c4: program:reasoning_observation_pending
+- reason-counter@5ddd6a366aa038b44f7f2ba0: program:reasoning_observation_pending
+- reason-counter@2c6994f89c12ba33464b2d12: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between independent and correlated failures is uniquely evidenced by the 'Temporal Signature' of the outage: independent failures follow a Poisson distribution, while correlated failures exhibit trigger-based synchronization.","counterconditions":[{"case":"The shared cause is a 'slow burn' (e.g., a memory leak) that triggers at different times based on local load.","checker_spec":null,"eval":"observation"},{"case":"The failure is a cascading effect where one independent failure triggers others, mimicking correlation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Temporal clustering analysis: truly independent failures occur randomly across time. Correlated failures, even if they appear staggered due to propagation delays, can be mapped back to a singular 't-zero' event (e.g., a BGP update or a Leap Second). If the variance in failure start-times is tight around a known external event, the failure is correlated.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3677a361eb3e5cf6c40403cf, reason-counter@5f3c53032e19e07bfb4247db
+
+TARGET SRC_002
+{"analogy":null,"claim":"Decentralized networks are more resilient because they prevent 'cascading synchronization'\u2014the phenomenon where a large service's internal redundancy mechanisms (like automated failover) actually accelerate failure by shifting load to healthy nodes until they also collapse.","counterconditions":[{"case":"The services are part of a tight dependency chain where the failure of one small service halts the entire pipeline.","checker_spec":null,"eval":"observation"},{"case":"The 'redundancy' in the large service is designed with sufficient headroom to absorb the failover load.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a decentralized network, the lack of tight coupling means that a failure in one service does not automatically trigger a load-shift to another service that may be susceptible to the same correlated trigger, thereby containing the blast radius.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9014a2eac063f66e095a383f, reason-counter@60e4f6421a834a03adf7e8c4
+
+TARGET SRC_003
+{"analogy":null,"claim":"A decentralized network of small services is more resilient to correlated failure than a large redundant service because heterogeneity in implementation and configuration prevents 'synchronized collapse' triggered by singular edge cases.","counterconditions":[{"case":"The decentralized services share a critical common dependency (e.g., a single DNS provider or a common upstream API).","checker_spec":null,"eval":"observation"},{"case":"The failure trigger is universal to the protocol rather than the implementation (e.g., a logic error in the core network standard).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Diversity of failure domains: in a large service, uniform configuration (e.g., identical timeout values or library versions) creates a single point of failure across all redundant nodes. Decentralized networks exhibit 'stochastic shielding' where different operators use different OS versions, hardware, and settings, ensuring that a trigger affecting one service is unlikely to affect all others simultaneously.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5ddd6a366aa038b44f7f2ba0, reason-counter@2c6994f89c12ba33464b2d12
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

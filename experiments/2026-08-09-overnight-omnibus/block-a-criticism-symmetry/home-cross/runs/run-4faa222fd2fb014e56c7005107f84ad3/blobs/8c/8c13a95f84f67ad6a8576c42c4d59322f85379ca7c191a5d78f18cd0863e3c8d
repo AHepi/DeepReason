@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target concedes the core vulnerability in its counterconditions (Diversity Debt, shared critical dependency) but its main claim asserts unqualified superiority. The problem asks to argue for or against the claim, and this target fails to weigh the large service's advantage: 'strictly more total internal redundancy' means the large service can absorb many independent failures, whereas a decentralized network of small services may lack sufficient redundancy per node, causing cascading unavailability even without correlated triggers. The target's defense ignores this asymmetry in total redundant capacity.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target conflates error signature similarity with causal correlation, a methodological flaw. A shared external cause (e.g., a network outage) can produce DIFFERENT error signatures across heterogeneous stacks (one service reports DNS resolution failure, another reports connection timeout), appearing as 'high Error Signature Diversity' and falsely classifying a correlated failure as independent. Conversely, independent failures of homogeneous components can produce identical signatures (e.g., independent OOM kills). The proposed distinguishing evidence is thus neither necessary nor sufficient for identifying shared causes.",
+      "counterexample": [
+        "A backbone routing outage causes Service A (Java) to log 'UnknownHostException' and Service B (Go) to log 'net/http: request canceled' — different signatures, but the failures are correlated by the shared network cause.",
+        "Two independent services running identical Node.js versions each hit the same V8 heap limit due to unrelated traffic spikes — identical signatures, but no shared cause."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target claims the decentralized network 'naturally introduces heterogeneity' but this is empirically unsubstantiated and contradicted by its own countercondition acknowledging convergence on an industry-standard stack. The covering principle it relies on — that independence of operators yields architectural distance — does not hold under economic pressures toward standardization. By baking 'provided the network maintains high Architectural Distance' into the claim, it effectively assumes the conclusion: resilience holds if the very property that creates resilience is present, leaving the original claim (decentralized is more resilient) without an unconditional argument.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The target argues decentralized networks are 'fundamentally less resilient' due to inevitable convergence, but 'inevitable' is too strong. Its own counterconditions concede exceptions (sovereign cloud requirements, a robust standard stack), which refutes inevitability. More substantively, the target fails to address the large service's correlated failure risk at all: even if small operators converge on shared images, the large service's homogeneous replicas are strictly more vulnerable to a single trigger propagating instantly. The target dismisses the large service's correlated failure mode without weighing it against fragmented recovery, making its comparative verdict unsupported.",
+      "counterexample": null
+    }
+  ]
+}

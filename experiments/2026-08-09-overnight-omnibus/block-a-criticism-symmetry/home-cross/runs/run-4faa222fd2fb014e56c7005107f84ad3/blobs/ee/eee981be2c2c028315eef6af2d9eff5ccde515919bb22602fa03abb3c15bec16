@@ -1,0 +1,129 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is fundamentally less resilient than a large redundant service because 'diversity' in small operations is an illusion that masks a 'Patching Monoculture' and 'Diversity Debt'.",
+      "mechanism": "Small operators gravitate toward the same cost-effective, 'industry-standard' stacks (e.g., specific cloud providers, OS distros, and open-source libraries). This creates a latent software monoculture. Because they lack the centralized coordination to push urgent patches simultaneously, they remain vulnerable to the same correlated exploit longer than a single large service could, effectively combining the vulnerability of a monoculture with the remediation latency of a fragmented network.",
+      "counterconditions": [
+        "Operators intentionally maintain high 'Architectural Distance' through diverse language/OS choices.",
+        "The failure mode is an administrative 'Global Kill-Switch' error rather than a technical vulnerability."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_006",
+          "SCR_011"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Decentralized networks are more resilient only when the failure mode is 'Administrative Logic Error', but less resilient to 'Environmental Correlation'.",
+      "mechanism": "A centralized service can deploy a catastrophic configuration error to all redundant nodes instantly (the 'Global Kill-Switch'). A decentralized network's 'Coordination Decay' prevents this instant propagation. However, because decentralized nodes often share the same underlying physical infrastructure (e.g., the same AWS region or ISP), they are more susceptible to 'External Correlated' failures that appear independent but share a physical trigger.",
+      "counterconditions": [
+        "The large service employs 'Canary' deployments and staggered rollouts to limit blast radius.",
+        "The decentralized network is geographically and infrastructure-diverse."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_009",
+          "SCR_014"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The resilience of a decentralized network is a decaying function of its own optimization; as it matures, it converges toward the failure profile of a centralized service without the benefit of centralized control.",
+      "mechanism": "Initial decentralization provides resilience through accidental diversity. Over time, economic pressure forces operators to adopt the same optimized toolchains (the 'Diversity Debt'). The network eventually reaches a 'Tipping Point' where the probability of a shared-cause failure (e.g., a bug in a common library) outweighs the benefit of fragmented administration, while the lack of a central authority prevents the rapid 'immune response' (patching) possible in a large service.",
+      "counterconditions": [
+        "Economic incentives are shifted to reward heterogeneity (e.g., subsidies for diverse stack usage).",
+        "The network maintains a decentralized but high-speed coordination protocol for security alerts."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_008",
+          "SCR_011",
+          "SCR_016"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "True independence of failure is distinguishable from apparent uncorrelation through a 2x2 matrix of Temporal Coincidence and Error Signature Similarity.",
+      "mechanism": "Failures are truly independent only when both Temporal Coincidence (timing) and Signature Similarity (stack traces/logs) are low. High Temporal/High Signature indicates an obvious correlated push; Low Temporal/High Signature indicates a 'Slow-Burn' latent correlation (e.g., a memory leak triggered by a specific payload); High Temporal/Low Signature indicates an external environmental trigger (e.g., power grid failure).",
+      "counterconditions": [
+        "The 'Telemetry Gap' prevents the collection of signatures from diverse operators.",
+        "The failure mode is 'silent' (e.g., data corruption) without a distinct error signature."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_005",
+          "SCR_010"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Large services with extreme internal redundancy eventually become less resilient than decentralized networks due to the 'Redundancy Paradox'.",
+      "mechanism": "As internal redundancy increases, the complexity of the consensus and coordination layer (e.g., Raft/Paxos) grows. This coordination layer becomes the primary source of correlated failure; a single bug in the 'redundancy manager' can bring down all redundant nodes simultaneously, whereas a decentralized network lacks this single, high-complexity point of failure.",
+      "counterconditions": [
+        "The coordination layer is formally verified or kept mathematically simple.",
+        "The decentralized network uses a shared coordination tool that introduces the same complexity risk."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_007",
+          "SCR_013"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Decentralization creates a 'False Resilience' where failures appear independent only because the evidence is siloed, masking systemic correlated risks.",
+      "mechanism": "In a decentralized network, the 'Observer's Paradox' occurs: there is no central authority to correlate logs. Failures that are actually caused by a shared vulnerability appear as independent, random events because the operators do not share their error signatures. This leads to an underestimation of systemic risk and a failure to implement the necessary diverse safeguards.",
+      "counterconditions": [
+        "The existence of an anonymous, decentralized telemetry sharing protocol.",
+        "The failures are truly random and follow a Poisson distribution across the network."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_002"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Immune System' analogy: A centralized service is like an organism with a highly efficient, centralized immune system (rapid patching). A decentralized network is like a colony of independent organisms. The colony is more resilient to a 'species-killing' pathogen if the individuals are diverse, but if they are genetically identical (monoculture), the colony has no centralized way to develop and distribute a vaccine, making it more fragile than the single organism.",
+          "why_keep_this": "Provides a biological analogy to frame the trade-off between patching speed and diversity."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a formal way to calculate the 'Architectural Distance' (SCR_015) that would allow us to predict the probability of correlated failure in a decentralized network?",
+        "related_refs": [
+          "SCR_015"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,31 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@569efbb03494323c755fb868: program:reasoning_observation_pending
+- reason-counter@e68e45c154040fb1ca1884a9: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 278f4e2383bd9815ce418d9fffbc0b544a8717cca4e4d9cec19ea799582ca63d
+{"analogy":null,"claim":"Centralized services with high redundancy are actually more resilient because they can implement 'Synthetic Diversity' and coordinated recovery, whereas decentralized networks suffer from 'stochastic synchronization' via shared external triggers.","counterconditions":[{"case":"The central control plane itself becomes the single point of failure (SPOF).","checker_spec":null,"eval":"observation"},{"case":"The 'Herding Effect' (ref: SCR_002) causes redundant nodes to synchronize their failure (e.g., retry storms) in a way that a messy, decentralized network would avoid.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Coordinated Mitigation: A large service can intentionally run diverse versions of its own software (ref: SCR_004) and use a global control plane to detect and isolate a failing version instantly. Decentralized networks lack this global visibility, meaning a correlated failure (e.g., a Leap Second bug, ref: SCR_001) propagates blindly across the network without a central mechanism to 'brake' the failure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- a9a1b683526ac50e3409cfe131f6fdcf10e1152ddfa767953647369aa7d0787e [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- a9a1b683526ac50e3409cfe131f6fdcf10e1152ddfa767953647369aa7d0787e: SRC_001 argues against decentralization by claiming large services have 'redundant, heterogeneous stacks to mitigate' low-level dependency failures, but it prov
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

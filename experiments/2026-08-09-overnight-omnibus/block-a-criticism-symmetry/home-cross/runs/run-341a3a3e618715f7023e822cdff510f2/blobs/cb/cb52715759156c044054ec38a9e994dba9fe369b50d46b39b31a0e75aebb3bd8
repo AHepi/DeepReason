@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "attack": false,
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": false,
+      "target_alias": "SRC_002"
+    },
+    {
+      "attack": true,
+      "case": "SRC_003 fails because its response is truncated mid-string, rendering it incomplete. It fails to argue for or against the panel-expert claim as required by the problem context, and its countercondition is cut off, preventing the evaluation of what evidence distinguishes a genuine reliability gain.",
+      "target_alias": "SRC_003"
+    },
+    {
+      "attack": true,
+      "case": "SRC_004 is absent from the input, failing the instruction to assess each named target independently.",
+      "target_alias": "SRC_004"
+    }
+  ]
+}
+```

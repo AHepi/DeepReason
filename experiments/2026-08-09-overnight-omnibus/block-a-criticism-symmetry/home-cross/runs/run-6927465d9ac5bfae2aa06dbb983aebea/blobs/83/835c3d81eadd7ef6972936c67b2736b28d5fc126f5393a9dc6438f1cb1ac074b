@@ -1,0 +1,84 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist is more reliable than a single expert for verifiable tasks because the checklist decomposes a complex intuitive leap into a series of low-variance binary checks, eliminating 'expert blind spots' caused by heuristic over-reliance.",
+      "mechanism": "The checklist functions as a variance-reduction filter. While the expert's intuition is a high-bandwidth, single-point-of-failure process subject to cognitive biases (e.g., availability heuristic), the checklist forces the non-experts to perform a systematic sweep of the problem space, ensuring that necessary conditions for a correct outcome are explicitly verified rather than implicitly assumed.",
+      "counterconditions": [
+        "The task requires 'synthesis' or 'pattern recognition' that cannot be decomposed into a discrete checklist.",
+        "The checklist is poorly designed and omits critical failure modes.",
+        "The non-experts lack the basic literacy required to execute the checklist items accurately."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_001"
+        ]
+      }
+    },
+    {
+      "claim": "The single domain expert remains more reliable because the 'checklist' for a complex task is often a lossy compression of the expert's intuition; non-experts will follow the letter of the checklist but miss the 'spirit' of the verification, leading to false positives.",
+      "mechanism": "Intuition in experts is actually 'compressed experience'—a high-dimensional pattern matching system. A checklist is a one-dimensional projection of that system. Reliability is lost in the projection because the non-expert cannot identify when a checklist item is 'technically met' but 'contextually irrelevant' or 'dangerously incomplete'.",
+      "counterconditions": [
+        "The task is highly algorithmic and requires zero contextual interpretation.",
+        "The expert is operating under extreme cognitive load or fatigue."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002"
+        ]
+      }
+    },
+    {
+      "claim": "Reliability gain is genuine only if the panel identifies a 'critical failure' that the expert missed, whereas 'mere compliance' is indicated by the panel arriving at the correct answer despite marking checklist items incorrectly or inconsistently.",
+      "mechanism": "The distinction lies in the 'error-detection trace'. If the panel's correctness is correlated with the correct execution of the checklist (high internal consistency), the gain is structural. If the panel is correct but the checklist execution is sloppy (low internal consistency), they have simply 'stumbled' onto the right answer, and the checklist provided no causal reliability.",
+      "counterconditions": [
+        "The checklist is so simple that incorrect execution is impossible.",
+        "The outcome is binary and the 'right' answer is the default state."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004"
+        ]
+      }
+    },
+    {
+      "claim": "The panel's reliability is a result of 'wisdom of the crowd' error-correction rather than the checklist itself; the checklist merely serves as a coordination mechanism to ensure they are all looking at the same data.",
+      "mechanism": "The checklist prevents 'divergent focus' among the panel. The actual reliability gain comes from the statistical cancellation of individual non-expert errors (noise) through averaging or consensus, while the expert's error is systemic (bias) and cannot be averaged out.",
+      "counterconditions": [
+        "The panel suffers from groupthink or strong social hierarchy.",
+        "The non-experts' errors are perfectly correlated."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Consider the 'Boeing 737 MAX' scenario: Experts (engineers) had an intuitive sense of the system, but a checklist-style failure to communicate specific sensor dependencies led to catastrophe. This supports the 'expert blind spot' theory. Conversely, in medical triage, a checklist often prevents 'premature closure'—the expert's tendency to stop searching for causes once a likely one is found.",
+          "why_keep_this": "Provides concrete analogies for the 'mechanism' of failure in both experts and non-experts."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "How do we quantify 'mere compliance' vs 'genuine reliability' in a single evaluation? Is it via a 'perturbation test' where the checklist is slightly altered to see if the panel still finds the answer?",
+        "related_refs": []
+      }
+    ]
+  }
+}
+```

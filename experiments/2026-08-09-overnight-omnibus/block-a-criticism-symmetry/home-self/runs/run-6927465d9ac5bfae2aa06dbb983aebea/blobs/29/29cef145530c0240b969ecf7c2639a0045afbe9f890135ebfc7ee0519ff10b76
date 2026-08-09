@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target demands a causal mechanism distinguishing genuine reliability from mere compliance, but its mechanism collapses under its own second countercondition. If the panel is trained to trust the checklist absolutely, the target concedes the panel cannot override even if it suspects an error, collapsing the distinction. Yet the original claim asserts that 'genuine reliability includes meta-cognition: the panel recognizes when a checklist step produces an absurd or context-inappropriate intermediate result and overrides it.' The target provides no causal mechanism for how trained non-experts — specifically defined as non-experts — could recognize when an objectively verifiable checklist step is 'absurd' or 'context-inappropriate' without domain expertise. If they lack the domain knowledge to evaluate the checklist's intermediate results, the override mechanism cannot fire; if they have such knowledge, they are no longer 'non-experts' as the problem specifies. The target fails to identify a causal pathway through which non-expert status is preserved while meta-cognitive override capability is achieved.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}
+```

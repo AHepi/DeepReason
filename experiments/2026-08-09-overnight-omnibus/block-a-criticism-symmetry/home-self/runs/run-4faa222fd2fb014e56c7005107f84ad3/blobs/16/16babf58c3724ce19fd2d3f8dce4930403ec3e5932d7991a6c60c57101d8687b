@@ -1,0 +1,1 @@
+{"repair.patch.v1":{"op":"replace","path":"/cases/0/counterexample","value":["A large service with 3 redundant modules all implementing the same design spec has strictly more redundancy than 3 small services, yet fails together on a design-spec fault; SRC_001's 'can enforce' rationale does not apply, so its comparative resilience claim fails."]}}

@@ -1,0 +1,18 @@
+```json
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/cases/1/counterexample",
+      "value": [
+        {
+          "actual_shared_cause": "all depend on the same upstream library with a slow memory leak; staggering is an artifact of differing load, not independence",
+          "distinguishing_evidence_required_by_problem": "none provided by SRC_002",
+          "inferred": "failures are independent",
+          "observed": "decentralized services fail at different times and in different ways due to noisy configs"
+        }
+      ]
+    }
+  ]
+}
+```

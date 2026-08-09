@@ -1,0 +1,6 @@
+# Capability Request Audit
+
+Manifest: `acb0d705c7c870a2b91bc53d44190a79cbb4ad10cc2e753e9315c9fe3c3f9719`
+
+Every entry below is reconstructed from typed Capability events and immutable records.
+

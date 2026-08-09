@@ -1,0 +1,118 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts following an explicit checklist will produce more reliable judgments than a single expert for verifiable tasks because the checklist eliminates 'premature closure' and cognitive tunneling.",
+      "mechanism": "The checklist acts as a cognitive forcing function that mandates a breadth-first search of the problem space. While an expert's intuition is a high-speed heuristic that prioritizes the most likely cause (leading to 'premature closure' as noted in SCR_008), the checklist ensures that low-probability but high-impact variables are explicitly checked, effectively raising the floor of reliability by preventing catastrophic omissions of basic requirements.",
+      "counterconditions": [
+        "The task complexity exceeds the checklist's coverage (checklist is 'lossy compression', per SRC_003)",
+        "The checklist contains contradictory items that the non-experts lack the domain knowledge to resolve (SCR_002)",
+        "The 'trained' non-experts suffer from groupthink that overrides the checklist's individual checkpoints (SCR_012)"
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The single domain expert remains more reliable because the 'checklist' is a static artifact that cannot capture the dynamic dependencies and edge-case interactions inherent in complex verifiable tasks.",
+      "mechanism": "Expert intuition is not 'guessing' but the application of a high-dimensional, implicit model of the system. A checklist is a one-dimensional linear sequence. In tasks where the 'right' answer depends on the interaction between variables (e.g., the sensor dependencies in the Boeing 737 MAX case in SCR_006), the checklist's failure to capture these non-linear dependencies makes it a fragile tool compared to the expert's holistic system-awareness.",
+      "counterconditions": [
+        "The task is highly routine with a finite, exhaustive set of failure modes",
+        "The expert is suffering from extreme fatigue or cognitive overload",
+        "The 'verifiable outcome' is determined by a set of binary criteria that perfectly map to the checklist"
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere checklist compliance by the panel's ability to flag 'decoy' or contradictory checklist items that are logically incompatible with the observed data.",
+      "mechanism": "If a panel is merely complying, they will mark a checklist item as 'pass' simply because the prompt instructs them to do so, regardless of whether the item is irrelevant or contradictory (the 'decoy' effect in SCR_003, SCR_005). A truly reliable panel uses the checklist as a guide but maintains a critical interface with the evidence; thus, the evidence of reliability is the 'Anomaly Flag'—the act of rejecting a checklist item that does not fit the ground truth.",
+      "counterconditions": [
+        "The panel is incentivized (socially or financially) to achieve 100% checklist completion",
+        "The 'decoy' is so subtle that it is indistinguishable from a valid requirement to a non-expert",
+        "The non-experts are trained to follow the checklist literally as a 'sacred text'"
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The reliability gain of the panel is not a product of the checklist itself, but of the 'Wisdom of the Crowd' error-correction mechanism where the checklist serves only as a common coordinate system.",
+      "mechanism": "The checklist provides a shared vocabulary and structure, but the reliability comes from the independent verification of each item by multiple non-experts. The probability of a single non-expert misreading a checklist item is high, but the probability of a panel collectively misreading it is low. The 'reliability' is therefore an emergent property of the group's redundancy, not the tool's quality.",
+      "counterconditions": [
+        "The panel is not independent (e.g., a dominant leader dictates the checks)",
+        "The checklist items are so ambiguous that they induce a systematic bias across the whole panel",
+        "The cost of coordinating the panel outweighs the marginal gain in reliability"
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Reliability gain is an illusion of 'average' performance; while the panel's mean error is lower, the expert's 'peak' reliability is higher for the most critical 1% of cases.",
+      "mechanism": "Checklists optimize for the 'median' case by ensuring no basic steps are missed. However, for 'black swan' events in verifiable tasks, the checklist is by definition incomplete. The expert's intuition allows for the synthesis of novel information to solve an unprecedented problem, whereas the checklist panel is capped by the checklist's pre-defined scope. The panel is 'more reliable' on average, but 'less capable' at the limit.",
+      "counterconditions": [
+        "The 'verifiable outcomes' are strictly limited to known failure modes",
+        "The expert's intuition is systematically biased in a way that correlates with the most critical errors"
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The distinction between 'compliance' and 'reliability' is revealed through 'Sensitivity Analysis' of the input data.",
+      "mechanism": "By slightly perturbing the input data in a way that does not change the ground truth but makes a checklist item's literal wording ambiguous (SCR_011), we can observe the panel's response. A 'compliant' panel will shift its judgment to track the literal wording of the checklist. A 'reliable' panel will maintain its judgment because it is tracking the underlying verifiable outcome, treating the checklist as a heuristic rather than a rigid algorithm.",
+      "counterconditions": [
+        "The perturbation is too large, changing the actual ground truth",
+        "The panel lacks the training to distinguish between 'literal wording' and 'intent'"
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Is there a mathematical threshold for 'checklist completeness' (e.g., % of known failure modes covered) where the panel's reliability strictly exceeds the expert's intuition?",
+        "related_refs": [
+          "SCR_006",
+          "SCR_014"
+        ]
+      },
+      {
+        "question": "Can we model 'expert intuition' as a probabilistic graph of checklist-like nodes, and if so, does the 'panel' simply represent a more transparent version of that same graph?",
+        "related_refs": [
+          "SCR_013"
+        ]
+      }
+    ]
+  }
+}
+```

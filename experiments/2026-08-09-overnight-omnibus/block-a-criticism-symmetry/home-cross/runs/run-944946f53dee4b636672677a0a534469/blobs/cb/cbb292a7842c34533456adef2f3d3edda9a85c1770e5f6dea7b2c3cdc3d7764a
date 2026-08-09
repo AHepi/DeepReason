@@ -1,0 +1,88 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a redundant monolith if and only if the entropy of its dependency graph exceeds the monolith's internal diversity coefficient.",
+      "mechanism": "The 'Shadow Monolith' mechanism: decentralization's resilience is not derived from the number of operators, but from the lack of shared systemic triggers (e.g., shared kernel versions, common upstream APIs, or identical orchestration layers). A monolith with high total redundancy but homogeneous configuration collapses under a single systemic bug, whereas a decentralized network with heterogeneous substrates acts as a set of natural firewalls.",
+      "counterconditions": [
+        "The decentralized services adopt a standardized 'industry best practice' stack (e.g., all on the same K8s version/cloud region), effectively creating a virtual monolith.",
+        "The monolith employs N-version programming or diverse hardware substrates that exceed the operational diversity of the decentralized network."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "True independence of failure is distinguished from apparent independence by the temporal synchronization of the failure-recovery cycle.",
+      "mechanism": "The 'Recovery Synchronization' discriminator: if independent services fail and recover within a tight, synchronized temporal window (e.g., 10ms), the probability of independent failure is statistically zero, indicating a latent shared trigger (like a leap second or a global DNS outage). True independence manifests as stochastic, staggered failure and recovery times across the network.",
+      "counterconditions": [
+        "The failure is a cascading event where an independent trigger in one service causes a deterministic, rapid-fire collapse of others via a dependency chain.",
+        "The recovery is gated by a shared external resource that creates an artificial synchronization point during the reboot phase."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Decentralized networks are fundamentally more fragile to correlated failures because economic pressures force small operators toward a 'free-tier' dependency convergence.",
+      "mechanism": "Economic Convergence Trap: Small operators minimize costs by using the same few popular, free-tier managed services. This creates a high-density intersection in the dependency graph. While the services are 'independently operated,' they share a critical failure point that a large, well-funded monolith would have mitigated through custom-built, proprietary, or diversified internal infrastructure.",
+      "counterconditions": [
+        "The decentralized network consists of high-resource operators with idiosyncratic, bespoke infrastructure.",
+        "The monolith's internal redundancy is strictly homogeneous (identical binaries/configs), making it more vulnerable than even a converged decentralized network."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The 'strictly more total internal redundancy' of a monolith is a vanity metric that actually increases the probability of correlated failure by expanding the systemic attack surface.",
+      "mechanism": "Homogeneity Amplification: In a monolith, redundancy usually implies replication of the same state and logic. This ensures that any bug triggering a failure in one node is present in all redundant nodes. A decentralized network's 'inefficiency' (fragmented, sub-optimal setups) provides the heterogeneity necessary to prevent a single exploit or bug from achieving 100% penetration.",
+      "counterconditions": [
+        "The monolith implements diverse redundancy (e.g., different OSes, different languages for the same logic).",
+        "The decentralized network's lack of redundancy makes it so fragile that individual failures trigger a systemic collapse via cascading load."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesizing a 'Resilience Paradox': The effort to make decentralized systems 'professional' (via standardizing on Terraform, Helm, etc.) is exactly what kills their resilience by mapping the dependency graph to a single point of failure. True resilience may require 'intentional operational chaos'—forcing operators to use different versions of tools to prevent the virtual monolith effect.",
+          "why_keep_this": "Explores the counter-intuitive idea that standardization is a risk factor for decentralized resilience."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we derive a formal 'Diversity Coefficient' that quantifies the probability of a correlated failure based on the overlap of dependency trees across a network?",
+        "related_refs": [
+          "SCR_007",
+          "SCR_014"
+        ]
+      }
+    ]
+  }
+}
+```

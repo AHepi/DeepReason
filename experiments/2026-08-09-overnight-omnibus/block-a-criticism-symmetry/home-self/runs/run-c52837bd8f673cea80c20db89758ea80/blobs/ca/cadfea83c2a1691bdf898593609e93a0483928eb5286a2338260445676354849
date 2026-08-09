@@ -1,0 +1,7 @@
+```json
+{
+  "op": "replace",
+  "path": "/candidates/2/optional_refs/3",
+  "value": "SRC_008"
+}
+```

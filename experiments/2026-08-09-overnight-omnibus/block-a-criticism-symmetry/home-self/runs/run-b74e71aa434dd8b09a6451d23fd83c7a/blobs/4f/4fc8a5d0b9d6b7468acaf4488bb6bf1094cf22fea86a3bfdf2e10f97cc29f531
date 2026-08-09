@@ -1,0 +1,45 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+PROBLEM CONTEXT (conn:015994869366) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 015994869366 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d4fe65de9a990d0a6f31d2cd: program:reasoning_observation_pending
+- reason-counter@1cde1034671f2b7158d0a016: program:reasoning_observation_pending
+- reason-counter@6f7119a740f8f06725a1bdbf: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@609a1c96c7cd: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The non-expert panel will produce more reliable judgments than the expert because the checklist externalizes the reasoning process into discrete, verifiable steps. This decomposition allows the panel to aggregate independent, low-variance judgments on each step, whereas the expert's holistic intuition is subject to higher variance and systemic biases.","counterconditions":[{"case":"The checklist steps are not conditionally independent, causing correlated errors that negate the aggregation benefit.","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is well-calibrated and the domain is sufficiently novel that the checklist is outdated.","checker_spec":null,"eval":"observation"},{"case":"The task is so complex that the correct decomposition itself requires expert intuition, rendering the checklist incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By following an explicit checklist, the panel breaks a complex judgment into a sequence of binary or categorical decisions. The Condorcet jury theorem suggests that aggregating these micro-decisions across a panel yields a high probability of correctne
+commitments: reasoning-envelope-wf, reason-counter@d4fe65de9a990d0a6f31d2cd, reason-counter@1cde1034671f2b7158d0a016, reason-counter@6f7119a740f8f06725a1bdbf
+
+TARGET SRC_002
+015994869366 inherits from SRC_001: a checklist's genuine reliability reduces to the frozen mapping's causal completeness, which an adversarial in-distribution probe (SRC_002) can only partially decouple because constructing adversarial items requires prior knowledge of the very structure the checklist is meant to encode. This is refuted if any single-evaluation method — adversarial or process-based — is shown to uniquely determine causal completeness without cross-distribution testing.
+commitments: hv-floor@2a45b7988522, lineage-ref@609a1c96c7cd, relation-form@578e42df713e
+
+TARGET SRC_003
+015994869366 reduces to a deductive limit: if the checklist is provably causally complete, single-evaluation reliability becomes trivial (panel ≥ expert by construction) and the compliance-vs-genuine-reliability distinction collapses, because compliance with a complete causal theory IS genuine reliability. This is refuted if causal completeness is shown to be necessary but not sufficient for genuine reliability — e.g., if execution noise in the panel can destroy the guarantee even when the frozen theory is complete, so that the distinction remains live even in the deductive limit.
+commitments: hv-floor@2a45b7988522, lineage-ref@609a1c96c7cd, relation-form@578e42df713e
+
+TARGET SRC_004
+015994869366 contradicts SRC_003's analogy claim that the explicit-procedure/implicit-capacity confound is symmetric between human panels and models. For a human panel, the implicit reasoning capacity is external to the frozen theory and can be independently probed; for a model, the mapping and the implicit capacity are the same substrate, so the confound is structural and cannot be decoupled by any evaluation strategy available to the panel. This asymmetry is refuted if the model's implicit capacity is shown to be modular and independently probeable in the same way a human's extra-checklist reasoning is.
+commitments: hv-floor@2a45b7988522, lineage-ref@609a1c96c7cd, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

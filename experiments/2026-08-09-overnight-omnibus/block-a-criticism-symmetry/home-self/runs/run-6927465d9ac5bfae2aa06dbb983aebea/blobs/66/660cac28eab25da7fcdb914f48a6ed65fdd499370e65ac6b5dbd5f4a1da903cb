@@ -1,0 +1,10 @@
+```json
+{
+  "repair_sequence": [
+    {
+      "operation": "remove",
+      "path": "/candidates/4/typicalality"
+    }
+  ]
+}
+```

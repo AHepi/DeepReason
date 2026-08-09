@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:0cb83f6c950a) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0cb83f6c950a to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@b3f7f4fd7d34: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_001's reliance on OOD generalization as the discriminator inherits its epistemic structure from SRC_005's process-tracing framework: OOD performance is a specific kind of process trace — one that probes whether the reasoning process is causally structured or merely correlated with surface features. The inheritance relation means SRC_001's OOD accuracy test is a domain-specific instance of SRC_005's more general process-observation principle. It is refuted if SRC_005's other process traces (intermediate judgments, verbal protocols) yield information about checklist coincidence that is not recoverable from OOD accuracy alone, which would show that OOD accuracy is not a sufficient instance of the broader process-observation category.
+commitments: hv-floor@2a45b7988522, lineage-ref@b3f7f4fd7d34, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_005's process-tracing signal (response times, intermediate judgments) and SRC_001's OOD/adversarial accuracy signal both derive from a shared mechanism for distinguishing genuine reliability from checklist coincidence: neither outcome data nor process traces alone are privileged; rather, any signal that is causally coupled to the panel's generative reasoning structure — whether an internal observable like explanation quality or an external observable like OOD accuracy — can break the outcome-equivalence that makes coincidence undetectable. The shared mechanism is generating observable divergence by probing reasoning structure rather than outcomes. It is refuted if process traces and OOD accuracy are found to dissociate, with one tracking genuine reliability while the other tracks mere compliance, which would show they do not share a single underlying mechanism.
+commitments: hv-floor@2a45b7988522, lineage-ref@b3f7f4fd7d34, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_004's impossibility claim reduces to a specific parameterization of SRC_002's correlation-structure method: SRC_002 shows that perturbing cases to decouple checklist steps from outcomes makes the distinction observable, which directly implements the escape-hatch condition SRC_004 admits — 'if the single evaluation includes adversarial or perturbation items, it may approximate access to the counterfactual distribution.' The relation is a reduction: the no-access ceiling is lifted exactly when a within-evaluation perturbation supplies the missing counterfactual signal. It is refuted if the perturbation tests that SRC_002 relies on necessarily introduce new evaluation items beyond the original single evaluation, making them additions rather than an internal reduction.
+commitments: hv-floor@2a45b7988522, lineage-ref@b3f7f4fd7d34, relation-form@578e42df713e
+
+TARGET SRC_004
+SRC_004's negative claim (single evaluations cannot distinguish genuine reliability from coincidence) is compatible with SRC_003's transfer test without collapsing into it: SRC_004 defines the epistemic ceiling of outcome-only observation, and SRC_003 exploits that ceiling's boundary condition by converting the observation from 'held-out items' to 'perturbed items,' effectively shifting from longitudinal comparison to within-evaluation structural probing. The relation is compatibility, where one claim defines a limit and the other operates at its edge. It is refuted if a single evaluation including SRC_003's perturbed items is functionally indistinguishable from a multi-evaluation longitudinal transfer test, which would make the two claims identical rather than merely compatible.
+commitments: hv-floor@2a45b7988522, lineage-ref@b3f7f4fd7d34, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

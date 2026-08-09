@@ -1,0 +1,9 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/candidates/0/optional_refs/1",
+    "op": "replace",
+    "value": "SRC_002"
+  }
+}
+```

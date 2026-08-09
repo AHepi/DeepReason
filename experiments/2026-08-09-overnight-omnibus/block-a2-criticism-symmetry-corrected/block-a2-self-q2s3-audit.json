@@ -1,0 +1,30 @@
+{
+  "artifact_status_counts": {
+    "accepted": 79
+  },
+  "artifact_total": 79,
+  "cell": "self",
+  "continuation_count": 0,
+  "converge_outcome": "replay_valid",
+  "coverage_debt_completed_total": 41,
+  "coverage_debt_outstanding_total": 0,
+  "coverage_debt_targets": 41,
+  "coverage_debt_targets_with_outstanding": 0,
+  "criticism_call_count_total": 22,
+  "criticism_calls_per_accepted_artifact_mean": 0.5189873417721519,
+  "criticism_token_total": 41641,
+  "criticism_tokens_per_accepted_artifact_mean": 1077.5189873417721,
+  "events_total": 970,
+  "foreign_criticism_debt_at_natural_stop": null,
+  "q_idx": "2",
+  "refutation_rate": 0.0,
+  "replay_valid": true,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+  "run_status_message": "",
+  "seed_idx": "3",
+  "self_criticism_debt_at_natural_stop": 0,
+  "state": "completed",
+  "stop_reason": "budget_exhausted",
+  "typed_seat_failure": false,
+  "verify_violations": []
+}

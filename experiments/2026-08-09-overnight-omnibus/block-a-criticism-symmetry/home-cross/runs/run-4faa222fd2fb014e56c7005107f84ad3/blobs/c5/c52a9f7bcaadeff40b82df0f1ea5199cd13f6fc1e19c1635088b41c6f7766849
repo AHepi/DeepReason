@@ -1,0 +1,80 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a single large service because it replaces 'homogeneous redundancy' with 'heterogeneous diversity', shifting the failure boundary from a single point of systemic collapse to a fragmented landscape of partial outages.",
+      "mechanism": "The large service relies on internal redundancy (replication), which creates a high-density target for 'common-mode failures' (e.g., a single bug in the consensus logic or a shared kernel version). In contrast, decentralized services typically utilize diverse hardware, OS versions, and implementation stacks. This 'Architectural Distance' (as hinted in SCR_007) ensures that a trigger causing a crash in one node is unlikely to be present in another, thereby converting a potential total system failure into a series of uncorrelated, localized events.",
+      "counterconditions": [
+        "The decentralized network converges on a 'standard' stack for cost efficiency (the 'Diversity Debt' described in SCR_003), erasing the heterogeneity advantage.",
+        "The failure is triggered by a universal protocol-level vulnerability (e.g., a flaw in the shared API specification) rather than an implementation-level bug.",
+        "The coordination overhead of the decentralized network introduces a new, centralized point of failure in the discovery or routing layer."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "The large service with superior internal redundancy is more resilient because the 'Complexity Tax' of managing a decentralized network introduces more frequent and severe correlated failures through human operational error.",
+      "mechanism": "While a large service has a single, well-understood failure domain, a decentralized network increases the total surface area of configuration. The lack of unified orchestration leads to 'configuration drift' and inconsistent security patching. Correlated failures emerge not from the code, but from shared human behaviors or shared tooling (e.g., a common monitoring agent failing across all nodes, as posed in SCR_006), creating a 'meta-correlation' that outweighs the benefits of implementation diversity.",
+      "counterconditions": [
+        "The large service's internal redundancy is managed by a coordination layer (e.g., Paxos/Raft) that reaches a complexity threshold where it becomes the primary failure vector (the 'Redundancy Paradox' in SCR_004).",
+        "The decentralized network employs fully automated, immutable deployment pipelines that eliminate human configuration error."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "True independence of failure modes is distinguished from apparent uncorrelation by the 'Error Signature Diversity' and 'Latent Trigger' tests.",
+      "mechanism": "To distinguish between a shared cause (correlated) and random chance (independent), one must analyze the internal state at the moment of failure. If failures exhibit identical stack traces or error codes across diverse nodes, it indicates a shared latent bug (correlated). If the error signatures are diverse (SCR_001), it suggests independent failures. Furthermore, applying the 'Latent Trigger' test (SRC_008)—observing if failures spike in response to a specific environmental shift (e.g., a leap second or a specific network packet)—reveals a shared cause that was previously invisible.",
+      "counterconditions": [
+        "The shared cause triggers different failure paths in different implementations, resulting in diverse error signatures despite a single root cause.",
+        "The telemetry gap is too wide to capture the internal state (stack traces) of the failing nodes."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    },
+    {
+      "claim": "Neither architecture is inherently more resilient; resilience is a function of the ratio between 'Redundancy Density' and 'Implementation Entropy'.",
+      "mechanism": "The large service maximizes redundancy density but minimizes entropy (high correlation risk). The decentralized network maximizes entropy but minimizes redundancy density (high individual node fragility). The covering principle is that resilience is optimized when the 'Architectural Distance' between redundant components is maximized while maintaining a minimum threshold of total system capacity. Correlated failure is simply the state where the system's entropy falls below the threshold required to mask the common-mode failure of its most frequent component.",
+      "counterconditions": [
+        "The failure is an 'External Shock' (e.g., total power grid failure) that renders both redundancy and entropy irrelevant.",
+        "The cost of maintaining entropy (diversity) grows exponentially, making the decentralized model economically non-viable before it reaches the resilience threshold."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": []
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculation: Could 'apparent uncorrelation' be a symptom of a 'Slow-Burn Correlated Failure'? For example, a memory leak that progresses at different speeds based on local traffic patterns. The failures look independent in time, but the cause is identical. This would make the 'Error Signature' test the only reliable differentiator, as the 'Latent Trigger' test requires a sharp event.",
+          "why_keep_this": "Addresses the nuance of temporal uncorrelation vs. causal correlation."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a formal way to map 'Architectural Distance' to a probability of shared failure?",
+        "related_refs": ["SCR_007"]
+      }
+    ]
+  }
+}
+```

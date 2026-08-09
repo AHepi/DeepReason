@@ -1,0 +1,40 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@83f0f3c0f3c1d87a95221f16: program:reasoning_observation_pending
+- reason-counter@9462aad500758b6909b26bdb: program:reasoning_observation_pending
+- reason-counter@6ec8175102372bbbb04577f1: program:reasoning_observation_pending
+- reason-counter@f7037f36caa49d6a3ed02ba1: program:reasoning_observation_pending
+- reason-counter@8473d8ed238dd51545593e02: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A checklist can improve panel reliability through deliberation-structuring even when its rule content is wrong, and this is a genuine but non-epistemic reliability gain that the problem's binary framing of genuine versus compliance cannot accommodate.","counterconditions":[{"case":"The task domain is such that deliberation structure has no effect on reliability (e.g., purely algorithmic tasks with no judgment component).","checker_spec":null,"eval":"observation"},{"case":"The corrupted checklist fails to structure deliberation because panel members recognize it as wrong and disregard it entirely.","checker_spec":null,"eval":"observation"},{"case":"The procedural gain from structuring is empirically indistinguishable from noise reduction, collapsing the third category back into the binary.","checker_spec":null,"eval":"observation"},{"case":"The problem's binary framing is interpreted broadly enough that procedural gain counts as genuine reliability, making the counterexample inapplicable.","checker_spec":null,"eval":"observation"},{"case":"No feasible corrupted checklist can preserve deliberation structure while corrupting rule content, because the structure and content are inseparable in the domain.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem assumes the alternative to genuine rule-mediated gain is mere compliance that happens to track the right answer. But the checklist-as-structure confound (SCR_003) introduces a third category: the checklist structures deliberation (e.g., ensures each criterion is discussed, prevents anchoring, distributes cognitive labor) and this structuring itself improves reliability, even if the rules are wrong. This is neither the checklist's rule content causing correctness (genuine epistemic gain) nor blind compliance tracking the right answer (compliance artifact). It is a procedural gain. The counterexample: a panel using a corrupted checklist that structures deliberation outperforms both the expert and an unstructured panel, but underperforms a panel with the correct checklist. The intermediate performance is real, caused by the checklist, but not by its rules. The problem's binary framing cannot classify this case, so the distinguishing-evidence question is ill-posed unless this third category is admitted.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@83f0f3c0f3c1d87a95221f16, reason-counter@9462aad500758b6909b26bdb, reason-counter@6ec8175102372bbbb04577f1, reason-counter@f7037f36caa49d6a3ed02ba1, reason-counter@8473d8ed238dd51545593e02
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

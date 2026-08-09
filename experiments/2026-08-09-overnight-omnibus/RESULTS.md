@@ -399,6 +399,225 @@ always writes to) — not a hand-edit; `overlay_results_baseline_2026-08-08.json
 under this block's own directory preserves the pre-tonight state
 permanently for any future comparison.
 
+## Block A-2 — criticism-symmetry pilot cells, corrected
+
+16/16 runs complete (2 cells × 2 questions × 3 seeds, plus 4 extra
+CROSS-Q1-only attempts), PREREG-A2.yaml frozen before the first call.
+Requested by the operator directly, because Block A's own segment
+above named its 6-cycle/90000-token budget as a confound. Reuses
+Block A's own `home-self`/`home-cross` directories (qualification
+cache-hit confirmed: both cells' `qualify` calls returned in ~1
+second). Budget corrected to S6's proven shape (10 cycles / 195000
+tokens), with an automatic convergence protocol: after each stop, if
+`verify_root` is not yet clean and the stop is resumable, run
+`continue --budget cycles=2`, up to twice, before accepting the
+result.
+
+**Blob-before-theory, read before designing the extra attempts.**
+Block A's CROSS q1s1 failure's diagnostic blob
+(`blobs/a6/a672...`) showed the FAILING role was `argumentative_critic`
+on the DEFAULT glm-5.2 profile (not the seat-bound gemma
+conjecturer) — contract `critic.atomic-target.v1` requires
+`/counterexample` to be a list, and glm-5.2 returned a full prose
+paragraph instead, three attempts running, before the route seat gave
+up. Recorded verbatim in PREREG-A2.yaml before any live call in this
+block.
+
+**Completion and replay validity — dramatic improvement over Block A.**
+
+| cell | completed | non-resumable failure | replay_valid |
+|---|---|---|---|
+| SELF | 5/6 | 1/6 | 5/6 |
+| CROSS | 9/10 | 1/10 | 9/10 |
+
+Compare to Block A's original: SELF 3/6 replay_valid, CROSS 0/6. The
+corrected budget alone took SELF from 50% to 83% clean, and CROSS from
+0% to 90% clean. This is strong, direct confirmation that Block A's
+own confound diagnosis was correct.
+
+**Foreign-criticism coverage debt is now almost entirely resolved.**
+Every one of the 14 replay-valid runs (5 SELF + 9 CROSS) shows debt =
+0. The ONLY nonzero debt in this whole block (10) is on CROSS's own
+failed run (q2s2), which never reached a clean terminal state in the
+first place. This directly confirms Block A's own residue item: the
+"foreign-criticism" violation was a budget-provisioning artifact, not
+a self/cross asymmetry — at the S6-proven budget it essentially
+disappears for both cells.
+
+**Two NEW non-resumable failures, both diagnosed from evidence, not
+assumed (see the driving-conversation record for the full trace):**
+
+1. **SELF q2s2** — `ValueError: adapter rejected a repair that
+   revalidates successfully` (`workflow/repair_transaction.py:522`).
+   Fires when a repair's compiled output is valid but the adapter
+   layer separately recorded that same attempt as an error — an
+   internal consistency check catching two subsystems disagreeing
+   about the same attempt's outcome. Unrelated to seat routing (SELF
+   has no seat override). Genuine candidate defect, parked.
+2. **CROSS q2s2** — `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`, but at
+   CYCLE 11 during a `continue` call, not cycle 0. Confirmed by direct
+   log inspection (not assumption) to be the SAME mechanism as Block
+   A's original failures: the last 30 events before the stop show 10
+   failing attempts, all on `critic.atomic-target.v1`. This refines
+   Block A's "cycle-0 death" framing — the mechanism can also strike
+   deep into an otherwise-successful run, during continuation
+   specifically.
+
+**CROSS-Q1 refusal rate, sized on n=7 (3 baseline + 4 extra) at the
+corrected budget: 0/7 (0%) typed seat failures.** Block A's original
+rate on the identical question at the old budget was 2/3 (67%). This
+is the single cleanest number in this block: the
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` refusal that dominated Block
+A's CROSS-Q1 attempts was overwhelmingly a budget-tightness artifact,
+not a structural property of cross-model seat routing on this
+question. (It did NOT vanish entirely from the dataset — CROSS's Q2
+attempt q2s2 hit a related instance of the same typed error, at cycle
+11 — so the mechanism is real and still reachable, just far rarer at
+this budget than the original 67% suggested.)
+
+**Continuation counts — a genuinely clean, well-powered finding.**
+SELF's 5 successfully-converged runs: continuation_count = [0, 0, 0,
+1, 1] (3 needed zero continuations, 2 needed one). CROSS: EVERY SINGLE
+ONE of its 10 runs (9 converged + the 1 that failed) required at least
+1 continuation — continuation_count = [1,1,1,1,1,1,1,1,1,1]. SELF
+converges immediately more than half the time; CROSS never does, in
+this sample. This is consistent, direction-clean evidence that
+heterogeneous seat routing takes measurably more rounds to reach a
+trustworthy final state than pure-default routing, independent of the
+specific question or seed.
+
+**P1 is testable this time (unlike Block A's flat 0.0).** Refutations
+occurred in both cells: SELF's 5 valid runs show refutation rates
+[0.0, 0.0, 0.0088, 0.0153, 0.0] (mean 0.0048); CROSS's 9 valid runs
+show [0.0, 0.0067, 0.0, 0.0071, 0.0, 0.0, 0.0, 0.0074, 0.0] (mean
+0.0024). SELF's mean is roughly double CROSS's, but both are small
+(under 2%) with substantial per-run variance and no seed overlap
+control — this is suggestive, not a claim that P1 is refuted or
+confirmed. It does establish that this question/budget combination CAN
+produce refutations, which Block A's design could not show at all.
+
+**P2 verdict — full distributions, not means, per PREREG-A2's own
+requirement:**
+
+| metric | SELF values (n=5 valid) | CROSS values (n=9 valid) |
+|---|---|---|
+| criticism calls / accepted artifact | 0.564, 0.538, 0.509, 0.550, 0.519 | 0.610, 0.664, 0.585, 0.564, 0.590, 0.683, 0.570, 0.612, 0.626 |
+| criticism tokens / accepted artifact | 1129.8, 1086.3, 1170.1, 1012.0, 1077.5 | 1199.0, 929.1, 1154.7, 893.9, 1088.2, 914.9, 981.6, 927.7, 978.6 |
+
+**Calls/artifact: a clean, nearly non-overlapping separation.** SELF's
+range is [0.509, 0.564]; CROSS's range is [0.564, 0.683] — the two
+distributions touch at exactly one point (SELF's max equals CROSS's
+min) and otherwise CROSS sits entirely above SELF. This DOES support
+P2's predicted direction (a critic engages more when facing a foreign
+conjecture) with much cleaner separation than Block A's noisy
+90000-token sample managed.
+
+**Tokens/artifact: still no separation, direction still ambiguous.**
+SELF's range [1012.0, 1170.1] and CROSS's range [893.9, 1199.0]
+overlap heavily, with CROSS's mean (≈1007) actually LOWER than SELF's
+mean (≈1095). This axis does NOT support P2's predicted direction, at
+this corrected budget either — matching Block A's own original
+finding on this specific metric. Explicit verdict: **P2 is partially
+supported** — the call-count axis shows a real, clean, direction-correct
+separation; the token-count axis does not, and the honest reading is
+that "criticism depth" is not a single scalar quantity here: cross
+criticism happens MORE OFTEN per surviving artifact but is not
+reliably WORDIER when it does.
+
+**What this 2-cell pilot still cannot claim (unchanged from Block
+A's own residue, restated per the operator's request):** no reverse
+arm exists. `GROUP_ROLES` still has no `critic` group
+(`block-a-criticism-symmetry/PARKED.md` P1's ready prompt is
+unchanged and not implemented in this tranche). Every finding above is
+about varying the CONJECTURE side while the CRITIC stays fixed on
+glm-5.2 in both cells — whether the asymmetry (calls/artifact,
+continuation counts) comes from the conjecturer's foreign identity or
+would also appear with a foreign CRITIC is still completely unknown.
+
+## Phase 4 + Phase 5 — adversarial hit validation and live adjudication of the consistency patrol (BLOCKED, not executed)
+
+Requested to close the three-number chain (raw hit rate → validated
+rate → live-adjudicated outcomes) that decides whether the O2-shelved
+"consistency patrol" design (`experiments/2026-08-08-change-grounded-overlay-o2/SPEC.md`
+S7) earns permanent machinery. Both phases build on Phase 1/2 of a
+SEPARATE, sibling session's work (`claude/corpus-enrichment-patrol-pilot-f4khnk`),
+read-only — this tranche made no patrol calls itself, consistent with
+the original instruction not to duplicate that window.
+
+**What was done before stopping:**
+
+- Read the sibling branch's Phase 1 (10 enrichment roots, committed,
+  replay-valid) and Phase 2 (a "consistency patrol": one bounded,
+  neutral-framed call per accepted-artifact pair within a shared
+  problem, asking only "do these two claims contradict"; a hit =
+  `contradiction == true AND confidence >= 0.6`) via `git show`/`git
+  archive` only — never checked out, never merged.
+- Found and documented an inherited (not caused) defect in Phase 2's
+  own data: 130/8872 records have a well-formed JSON response wrapped
+  in a markdown fence that its parser doesn't strip, silently
+  mis-scored as non-hits rather than tallied as parse failures.
+- Read O2's own `SPEC.md` S7 and confirmed the binding design
+  constraint both phases had to honor: "the patrol proposes, it never
+  itself adjudicates" — every candidate must pass through ORDINARY
+  criticism, never a label written by either phase.
+- Read `docs/proposals/AMENDMENT_EPOCHS.md` and confirmed, from
+  `src/deepreason/cli/main.py`, that `amend`/`continue` operate purely
+  on `--root` — no `DEEPREASON_HOME` or fresh qualification battery
+  needed, simplifying Phase 5's design considerably from what was
+  assumed going in.
+- Froze `PREREG-P4.yaml` and `PREREG-P5.yaml` before any live call,
+  per the operator's instruction.
+- Built and SMOKE-TESTED LIVE (not just compiled) the full tool chain
+  for both phases:
+  - `phase4_sample.py` — verified against the sibling's real (partial)
+    data: correctly reproduces 1767 hits / 130 excluded
+    fence-parse-failures / 6975 clean non-hits.
+  - `phase4_rejudge.py` — run live against 1 real hit: the
+    skeptic-framed check (deliberately refute-biased) found a
+    consistent reading the original neutral-framed patrol call missed,
+    so that hit correctly failed to validate — the mechanism works as
+    designed, on real data, on the first try.
+  - `phase4_analyze.py` — verified against that same mini-run's output.
+  - `phase5_check_amendable.py` — verified against a real committed
+    root; caught and fixed a real bug in the process (calling
+    `derive_terminal_authority` without first loading the epoch-aware
+    manifest silently returns `historical_read_only` for EVERY root,
+    which would have made Phase 5 wrongly skip every single candidate
+    had it not been caught here, before any real candidate was
+    evaluated).
+  - `phase5_run_case.py` — run live end-to-end against 1 real (but
+    Phase-4-unvalidated, so not a real candidate) hit: amend succeeded,
+    `continue` ran 10 genuine criticism cycles,
+    `state=completed`, `replay_valid=true`, no new attack edge minted
+    (the tension survived criticism in that demonstration) — confirms
+    the whole copy → amend → continue → audit pipeline works before
+    it would have been spent on real candidates.
+
+**Why it stopped here.** PREREG-P4.yaml's own trigger condition
+required Phase 2 to reach its pre-registered total (9277 pairs)
+before any real sample could be drawn. As of the last check before
+stopping, the sibling branch showed 8872/9277 (95.6%) and its last
+commit was **2 hours old** — a sustained stall, not a between-chunk
+pause. Per the operator's explicit choice when presented with this
+stall (wait longer / proceed with partial data / stop and report),
+this tranche stops here: no sample was drawn, no re-judgment calls
+beyond the verification smoke tests above were made, and Phase 5 never
+selected or acted on a real candidate.
+
+**Residue: what a future session needs to pick this up.** Both
+preregs are frozen and complete; every script is built, syntax-checked
+AND live-verified against real data; the one real bug found
+(`derive_terminal_authority` needing an explicit loaded manifest) is
+already fixed in the committed `phase5_check_amendable.py`. Resuming
+requires exactly two things: (1) confirm Phase 2 has reached 9277/9277
+on the sibling branch (`git fetch` + the same `git show ... | wc -l`
+check used throughout this segment), (2) run
+`phase4_sample.py` against the real, complete `patrol_results.jsonl`,
+then `phase4_rejudge.py` (hit and non-hit), `phase4_analyze.py`, then
+select Phase 5 candidates per `PREREG-P5.yaml`'s strength ranking and
+run `phase5_run_case.py` per candidate. No further design work is
+needed — only execution, once the dependency clears.
+
 ## Omnibus decision table
 
 | # | number | block | what it decides |
@@ -418,6 +637,12 @@ permanently for any future comparison.
 | 13 | scope-violation rate at cap 16384: 3/5 independent draws, a DIFFERENT pair each time | D | inverts this block's own prereg expectation; 16384 is not a safe control point — needs a larger resample before trusting the direction |
 | 14 | qualification demotion rate across all 8 Block D batteries: 4/8 (50%) | D | a concrete cost number for any future qualification-repair-scope design discussion (S4b: every battery, demoted or not, is paid for in full) |
 | 15 | overlay corpus: 48 → 76 roots; attack-edge density 0.01335 → 0.01001 (-25% relative); 0 new overlay errors | E | corpus grew cleanly; density fell because new roots are node-heavy, not because argumentation quality declined |
+| 16 | 16/16 Block A-2 runs complete; replay_valid SELF 5/6 (was 3/6), CROSS 9/10 (was 0/6) | A-2 | S6-proven budget + continue-until-valid protocol resolves Block A's own named confound directly |
+| 17 | foreign-criticism debt = 0 on all 14 replay-valid A-2 runs; the ONLY nonzero debt is on the one run that never reached a clean state | A-2 | confirms Block A's residue item: the coverage gap was a budget artifact, not a self/cross asymmetry -- now closed, not just suspected |
+| 18 | CROSS-Q1 typed seat-failure rate: 0/7 at the corrected budget vs 2/3 at Block A's original budget | A-2 | the dominant Block A CROSS failure mode was overwhelmingly budget-tightness, not a structural property of cross-model routing |
+| 19 | continuation_count: SELF [0,0,0,1,1] (3/5 need none); CROSS all-1s across all 10 runs | A-2 | heterogeneous seat routing measurably needs more rounds to reach a trustworthy final state, independent of question/seed -- clean, well-powered |
+| 20 | refutation rate now nonzero in both cells (SELF mean 0.0048, CROSS mean 0.0024, n=5/n=9) | A-2 | P1 is testable at this budget (was impossible in Block A); SELF's rate leans double CROSS's but both are small and noisy |
+| 21 | criticism calls/artifact: SELF range [0.509,0.564], CROSS range [0.564,0.683], near-zero overlap; tokens/artifact: SELF mean≈1095, CROSS mean≈1007, heavy overlap | A-2 | P2 partially supported -- call-count axis cleanly favors P2's predicted direction, token-count axis does not; "criticism depth" is not one scalar |
 
 ## Failure ledger
 
@@ -438,27 +663,47 @@ mistakes; each is marked accordingly.
 | 7 | Block C cap=8192: `QUALIFICATION_TIER_SHALLOW`, both seeds refused before any `reason` call | C (measurement) | battery-level demotion, cross-validates Block D |
 | 8 | Block D 8192-point: 0/4 samples clean-violating, but Block C's independent 8192 battery (item 7) shows the same pair violating | D (measurement) | combined 1/5 draws — reported jointly, not double-counted as two findings |
 | 9 | Block D 16384-point: 3/4 samples show scope violations, each a different pair | D (measurement) | inverts the block's own prereg expectation; the tranche's most surprising number |
+| 10 | Block A-2 SELF q2s2: `ValueError: adapter rejected a repair that revalidates successfully` (repair_transaction.py:522), non-resumable | A-2 (candidate defect) | NEW internal-consistency bug candidate, unrelated to seat routing (SELF has no seat override); parked, not fixed |
+| 11 | Block A-2 CROSS q2s2: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` at cycle 11 (during a `continue` call), confirmed via log inspection to be the same `critic.atomic-target.v1` mechanism as Block A's original failures | A-2 (measurement) | refines "cycle-0 death" framing -- the mechanism can strike deep into an otherwise-successful run too, not just at the start |
+| 12 | Phase 5 tooling: `derive_terminal_authority(root)` called without loading the epoch-aware manifest first silently returns `historical_read_only` for EVERY root, which would have made Phase 5 wrongly skip every candidate as non-amendable | process (self-caught before live use) | caught during live smoke-testing, fixed by loading `load_epoch_manifest` first (mirroring `amendment/apply.py`'s own pattern) before any real candidate was evaluated; no incorrect skip ever happened on real data |
+| 13 | Phase 4/5 stopped: sibling branch's Phase 2 stalled at 8872/9277 pairs (95.6%), last commit 2 hours old | process (external dependency, not a defect) | operator chose "stop and report" when presented the stall; no sample drawn, no real candidates adjudicated -- preregs and tooling stand ready for a future session |
 
 ## Residue
 
 What remains unproven, honestly stated — not smoothed into a
 conclusion the data does not support:
 
-- **Block A's P1/P2 are still open questions.** This pilot could not
-  generate a single refutation in 10 completed runs at its budget, so
-  P1 has no variance to test. P2's two axes (calls/artifact,
-  tokens/artifact) point in different directions at n=6/cell. Rung
-  C2's full pre-registered design (harder questions, more seeds, a
-  critic-seat rung once built) is still required before either claim
-  can be called supported or refuted.
+- **Block A's original P1/P2 questions are now partially answered by
+  Block A-2, not fully closed.** P1 is testable at the corrected
+  budget (refutations occurred in both cells) but the sample is still
+  small (n=5 SELF, n=9 CROSS) and unpowered to call a direction
+  proven. P2's calls/artifact axis now shows a clean separation
+  favoring the predicted direction; the tokens/artifact axis still
+  does not. Rung C2's full pre-registered design (harder questions,
+  more seeds, a critic-seat rung once built) is still required before
+  either claim is fully settled.
 - **The reverse arm (glm conjectures, gemma criticizes) is still
   structurally impossible.** `GROUP_ROLES` has no `critic` group;
-  PARKED.md carries a ready prompt, not yet implemented.
-- **Whether heterogeneous seat routing genuinely worsens
-  foreign-criticism coverage debt, or whether this tranche's shared
-  tight budget explains all of it, is not separated.** CROSS cell's
-  4/4-runs-with-debt vs SELF's 2/6 is suggestive, not proven; needs a
-  budget-matched follow-up.
+  PARKED.md carries a ready prompt, not yet implemented. Every A-2
+  finding is still only about varying the conjecture side.
+- **Foreign-criticism coverage debt is resolved for CONVERGED runs,
+  not proven to have never existed.** Block A-2 shows 0 debt on all 14
+  replay-valid runs -- a clean confirmation that Block A's confound
+  diagnosis was right for THIS budget. It does not establish that no
+  self/cross difference in coverage debt could ever appear under
+  budget pressure; it only shows the S6-proven budget makes it a
+  non-issue for both cells alike.
+- **Block A-2's continuation-count asymmetry (SELF often 0, CROSS
+  always 1) is a new, unreplicated finding.** n=6 vs n=10 is small; it
+  has not been checked against a third question, a third seed set, or
+  a swapped-role design, and could in principle reflect something
+  about THESE two specific questions rather than seat heterogeneity in
+  general.
+- **Two new candidate defects surfaced in Block A-2**
+  (`repair_transaction.py:522`'s internal-consistency check, and the
+  cycle-11 recurrence of the critic-shape-mismatch failure) are typed
+  and evidenced but not diagnosed to root cause or fixed -- both
+  parked for a future `dr-diagnose` tranche.
 - **Block B's "zero downstream attrition after VALIDATED" is an
   8-sample observation, not a proven rate.** A larger resample could
   still find COMPILED/DISPATCHED/SUCCEEDED failures this pilot's size
@@ -478,3 +723,13 @@ conclusion the data does not support:
 - **Block E's density comparison is a single before/after snapshot,
   not a trend.** Whether density recovers, keeps falling, or holds as
   the corpus keeps growing needs more than one data point.
+- **Phase 4/5's three-number chain (raw hit rate → validated rate →
+  live-adjudicated outcomes) is entirely unfilled.** Only the first
+  link (Phase 2's raw ~19.9% hit rate, inherited from the sibling
+  branch, itself slightly undercounted by that branch's own 130-record
+  parse-failure defect) exists. Whether the O2-shelved consistency
+  patrol earns permanent machinery is exactly as undecided as it was
+  before tonight — this tranche proved the validation/adjudication
+  MACHINERY works (both phases' scripts verified live on real data)
+  but never got to run it for real, purely because of an external
+  dependency's stall, not any flaw in the design.

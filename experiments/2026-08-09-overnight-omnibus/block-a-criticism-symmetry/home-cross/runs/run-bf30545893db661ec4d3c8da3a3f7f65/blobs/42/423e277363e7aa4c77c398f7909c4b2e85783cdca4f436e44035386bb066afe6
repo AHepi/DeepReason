@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 061ddfcce3bb integrates with SRC_005 by proposing that the 'genuine reliability' versus 'mere compliance' distinction is actually a measure of the 'Checklist-Task Fit' in open-world environments; specifically, compliance tracks the right answer in closed worlds, while genuine reliability (expert intuition) is required for open worlds. This relation is refuted if the distinction between compliance and reliability persists even in perfectly closed-world verifiable tasks.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 061ddfcce3bb contradicts SRC_003's claim that the distinction between genuine reliability and compliance is a category error; it proposes that this distinction is empirically detectable via perturbation or divergence-convergence patterns. This relation is refuted if no observable difference in outcome or process exists between a purely compliant panel and a genuinely reliable agent when faced with an edge-case perturbation.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 061ddfcce3bb depends on SRC_002's 'Resolution Dependency' to argue that 'mere compliance' is only possible when the checklist resolution is high enough to automate the outcome, whereas 'genuine reliability' emerges when the agent must resolve gaps in low-resolution checklists. This relation is refuted if a high-resolution checklist still fails to produce reliable outcomes without the agent's intuitive intervention.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 061ddfcce3bb abstracts the 'variance-reduction' mechanism of SRC_004 into a formal test for 'blind compliance', suggesting that the elimination of the expert's blind spot is only 'genuine' if the panel can also identify systemic errors in the checklist itself. This relation is refuted if the panel's reliance on the checklist prevents them from ever detecting the systemic errors the expert would have overridden.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.3,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 061ddfcce3bb reduces to SRC_001's 'transfer of intelligence' hypothesis, proposing that the difference between compliance and reliability is the difference between executing a transferred heuristic (compliance) and possessing the meta-expertise to validate that heuristic (reliability). This relation is refuted if the panel can achieve 'genuine reliability' without any transfer of intelligence from a meta-expert author.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": []
+    }
+  ]
+}
+```

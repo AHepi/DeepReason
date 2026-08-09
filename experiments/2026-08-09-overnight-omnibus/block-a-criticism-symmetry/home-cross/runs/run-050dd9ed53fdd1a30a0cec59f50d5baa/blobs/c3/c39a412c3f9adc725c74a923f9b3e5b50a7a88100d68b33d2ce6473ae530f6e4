@@ -1,0 +1,56 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The concept of 'corrective friction' in 0bb6167c36cf integrates with the 'error-correction trajectory' of SRC_004; specifically, the friction is the phenomenological experience of the non-linear path described in SRC_004. This relation is refuted if the documented 'corrective loops' occur without any corresponding increase in cognitive load or deliberation time (friction) for the panel.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": []
+    },
+    {
+      "content": "The mechanism of 'discrepancy-driven discovery' in 0bb6167c36cf contradicts the 'Compliance Trap' (SCR_007) by asserting that the checklist acts as a cognitive scaffold rather than a cognitive blindfold. This relation is refuted if the presence of a checklist systematically increases the rate of 'blind ticking' regardless of the panel's training level, thereby reducing the frequency of emergent corrections described in SRC_002.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": []
+    },
+    {
+      "content": "The 'emergent corrections' identified in 0bb6167c36cf are an abstraction of the 'hidden failure modes' mentioned in SRC_001, where the diversity of perspectives transforms a rigid script into a dynamic probe. This relation is refuted if the 'emergent corrections' are found to be logically derivable from a more granular version of the existing checklist, meaning they were latent requirements rather than emergent discoveries.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The 'reliability gain' in 0bb6167c36cf depends on the 'delta' between initial prompt and final state as defined in SRC_005, treating the magnitude of this delta as the primary metric for genuine reliability. This relation is refuted if a high 'delta' (significant correction) frequently leads to a final judgment that is less accurate than a low-delta (linear) path.",
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "typicality": 0.8,
+      "evidence_refs": []
+    },
+    {
+      "content": "The 'cognitive engagement' described in 0bb6167c36cf reduces to a shared mechanism with the 'Shadow Expert' effect (SCR_004), where the panel's reliability is actually the distributed execution of the checklist-author's intuition. This relation is refuted if the panel identifies a critical failure mode that the original expert author of the checklist explicitly dismissed as impossible or irrelevant.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.3,
+      "evidence_refs": []
+    },
+    {
+      "content": "The claim of genuine reliability in 0bb6167c36cf is compatible with the 'Checklist Paradox' (SCR_005), provided that there exists an optimal granularity threshold below which corrective friction is maximized and above which compliance takes over. This relation is refuted if reliability increases monotonically with checklist granularity, eliminating the 'paradox' of cognitive load.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    }
+  ]
+}
+```

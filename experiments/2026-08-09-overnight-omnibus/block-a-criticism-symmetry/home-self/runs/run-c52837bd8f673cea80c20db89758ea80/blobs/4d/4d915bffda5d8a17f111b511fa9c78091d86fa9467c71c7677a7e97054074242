@@ -1,0 +1,11 @@
+{
+  "repair.patch.v1": {
+    "pointer": "/cases/0/counterexample",
+    "operation": "replace",
+    "value": [
+      {
+        "description": "A single evaluation with no corrupted-checklist control but with item-level analysis showing: (1) panel accuracy is high on checklist-rule-applicable cases but degrades to chance on cases where rules do not apply, and (2) error patterns correlate with specific rule-content omissions rather than tracking procedural-engagement metrics. This evidence distinguishes genuine rule reliance from mere compliance within one evaluation, yet the target's biconditional would classify it as insufficient by definition."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts using a checklist is more reliable than a single expert's intuition because it replaces 'chunked' cognitive shortcuts with a forced-serial verification process that eliminates the 'Expert's Paradox' of blind spots.",
+      "mechanism": "The reliability gain is driven by 'cognitive friction'—the requirement to explicitly verify each item prevents the automation-induced omissions typical of expert intuition. The panel's reliability is not a result of collective intelligence, but of the checklist acting as a cognitive governor that slows the process down to the speed of explicit verification.",
+      "counterconditions": [
+        "The task requires holistic synthesis that cannot be decomposed into a checklist without losing critical context.",
+        "The checklist is sufficiently vague that 'trained non-experts' introduce more variance through semantic drift than the expert does through intuition."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002"
+        ],
+        "shared_structure": [
+          "Automation leads to efficiency but creates blind spots",
+          "Forced slowness/serial processing recovers visibility of basic steps"
+        ],
+        "transfer_claims": [
+          "The 'slow-motion' execution by non-experts mimics the error-correction of a meticulous novice, which outperforms the 'fast' intuition of a seasoned expert in verifiable tasks."
+        ],
+        "disanalogies": [
+          "A non-expert may lack the baseline knowledge to know when a checklist item is being applied incorrectly."
+        ],
+        "overturn_conditions": [
+          "Evidence that experts using the same checklist outperform non-experts using it."
+        ]
+      }
+    },
+    {
+      "claim": "The panel is less reliable than the expert because the checklist creates a 'cognitive ceiling' that filters out the expert's ability to detect 'black swan' anomalies that fall outside the explicit checklist parameters.",
+      "mechanism": "Expert intuition operates on high-dimensional pattern recognition. A checklist forces the process into a low-dimensional linear sequence. While this reduces variance for 'typical' cases, it systematically eliminates the expert's capacity to trigger an 'alarm' for rare but critical outliers that the checklist author failed to anticipate.",
+      "counterconditions": [
+        "The 'objectively verifiable outcomes' are entirely contained within the scope of the checklist's parameters.",
+        "The panel is encouraged to report 'out-of-bounds' observations in addition to checklist compliance."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The panel's reliability is an illusion of 'distributed execution' where the non-experts are merely proxies for the checklist-author's intuition, making the comparison one of 'Expert-as-Process' vs 'Expert-as-Person'.",
+      "mechanism": "If the checklist is an encoded version of expert intuition, the panel is simply a redundant execution engine. Genuine reliability gain occurs only when the panel's 'semantic drift' (divergent interpretations of the checklist) allows them to catch errors the original author—and thus the checklist—was blind to.",
+      "counterconditions": [
+        "The checklist is derived from a consensus of multiple experts rather than a single author.",
+        "The training of non-experts is so rigid that it eliminates all semantic drift, turning them into deterministic executors."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001",
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "Checklist as encoded expertise",
+          "Non-experts as distributed processors"
+        ],
+        "transfer_claims": [
+          "Reliability is a function of the 'delta' between the author's intent and the panel's interpretation."
+        ],
+        "disanalogies": [
+          "The 'author' may not be an expert, but a systems engineer optimizing for variance reduction."
+        ],
+        "overturn_conditions": [
+          "Proof that strict adherence to the author's intent always yields higher reliability than semantic drift."
+        ]
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'corrective friction' within the evaluation log: a pattern of internal disagreement and resolution.",
+      "mechanism": "Mere compliance is characterized by a linear, silent path to the correct answer (blind-ticking). Genuine reliability is evidenced by a 'noisy' path: where a checklist prompt triggers a discrepancy, which then triggers a panel debate, resulting in a correction. The 'delta' between the initial prompt and the final resolution is the empirical signature of reliability.",
+      "counterconditions": [
+        "The panel is subject to strong social pressure (groupthink) that suppresses the recording of internal disagreements.",
+        "The task is so simple that the 'correct' path is naturally linear, making the absence of friction a sign of efficiency rather than blind compliance."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_005",
+          "SCR_007"
+        ],
+        "shared_structure": [
+          "Compliance = straight line",
+          "Reliability = corrective trajectory"
+        ],
+        "transfer_claims": [
+          "The 'disagreement log' serves as a proxy for the cognitive work being performed, separating the 'lucky' compliant panel from the 'rigorous' reliable panel."
+        ],
+        "disanalogies": [
+          "A panel could disagree and still arrive at the wrong answer, meaning friction is a necessary but not sufficient condition for reliability."
+        ],
+        "overturn_conditions": [
+          "Evidence that high-performing experts also exhibit high internal 'friction' when forced to use checklists."
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Counter-intuitive hypothesis: The 'Reliability' of the panel is actually a form of 'Averaging Error'. If non-experts make random errors in opposite directions, the panel's average judgment might track the truth better than a single expert's systematic bias, even if the panel is 'less skilled'. This would mean the gain isn't from the checklist, but from the law of large numbers applied to noise.",
+          "why_keep_this": "Challenges the assumption that the checklist is the primary driver of the panel's success."
+        }
+      }
+    ]
+  }
+}
+```

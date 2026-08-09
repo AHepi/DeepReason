@@ -1,0 +1,15 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's distinguishing criterion (the 'Meta-Cognitive Flag' / Negative Signal) is neither necessary nor sufficient as the covering principle for the problem. Sufficiency failure: a panel that flags a checklist item as 'Ambiguous' or 'Not Applicable' is merely demonstrating meta-awareness of checklist quality, not reliability in producing objectively verifiable outcomes — they could flag an item for the wrong reason yet still land on the right answer by luck, which is exactly the 'mere compliance that tracks the right answer' the problem demands be distinguished. Necessity failure: for tasks with objectively verifiable outcomes, a genuine reliability gain can hold even under a perfectly comprehensive checklist (the target's own first countercondition) where there is no gap to flag, so the defining evidence of gain cannot be the presence of a flagging behavior. The target thus inverts the standard: it ties 'genuine reliability' to evidence that only exists in the gap-ridden subset of cases and is absent in exactly the case where reliability is most secure.",
+      "counterexample": [
+        "Panel A follows a fully comprehensive, gap-free checklist and produces the correct outcome every time without ever raising any 'Ambiguous'/'Not Applicable' flag. Panel B frequently flags items as ambiguous, but its flags are noise and its successes correlate with the checklist answer key, not with the flagged items. Panel B exhibits the target's distinguishing evidence; Panel A does not. Yet Panel A is the genuinely reliable one for objectively verifiable outcomes.",
+        "Panel C flags an item as 'Not Applicable' because it fails to understand it; the item was actually applicable, but the panel still reaches the correct verifiable answer via another checklist path. The flag is false/incompetent, yet it satisfies the target's 'genuine reliability' marker."
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,116 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist is more reliable than a single expert for verifiable tasks because the checklist decomposes complex intuitive leaps into a series of low-variance binary checks, reducing the 'expert blind spot' of premature closure.",
+      "mechanism": "The checklist acts as a cognitive constraint that forces the processing of all known critical variables, preventing the expert's heuristic-driven 'leap' to a conclusion that may overlook a rare but verifiable outlier. Reliability is gained through the summation of these binary checks across multiple observers, which cancels out individual stochastic errors.",
+      "counterconditions": [
+        "The checklist is a lossy compression that omits a critical variable known only to the expert.",
+        "The non-experts possess a systematic bias that causes them to misinterpret a checklist item consistently."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the panel's ability to flag 'checklist-external' anomalies that are logically necessary for the verifiable outcome, despite not being explicitly required by the checklist.",
+      "mechanism": "Compliance is characterized by a 'binary pass/fail' mentality where the panel ignores evidence not captured by the tool. Genuine reliability manifests as 'active processing,' where the panel uses the checklist as a baseline but remains sensitive to contradictions or anomalies in the data that would invalidate the checklist's premises.",
+      "counterconditions": [
+        "The task is so narrow that no external anomalies can possibly exist.",
+        "The panel is incentivized solely on checklist completion speed."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_004"
+        ]
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002",
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "Introduction of a 'decoy' or 'perturbation' to test the processor's sensitivity to noise vs. signal."
+        ],
+        "transfer_claims": [
+          "Just as a decoy item reveals a 'compliant' user who checks boxes without thinking, the failure to flag a blatant external contradiction reveals a lack of genuine reliability."
+        ],
+        "disanalogies": [
+          "The decoy is an internal checklist error; the anomaly is an external data error."
+        ],
+        "overturn_conditions": [
+          "If the panel flags the decoy but misses the external anomaly, they are 'critically compliant' but not reliable."
+        ]
+      }
+    },
+    {
+      "claim": "The expert remains more reliable because the 'checklist' is a static artifact that cannot adapt to the dynamic edge cases that the expert's intuition is specifically trained to detect.",
+      "mechanism": "Intuition in experts is not 'guessing' but high-speed pattern recognition of multi-variate dependencies. A checklist linearizes these dependencies, destroying the synergistic context required to identify 'black swan' events in verifiable tasks.",
+      "counterconditions": [
+        "The task is highly routine with zero variance in the critical path.",
+        "The expert is suffering from cognitive fatigue or extreme overconfidence."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Reliability gain in the panel is not derived from the checklist itself, but from the social error-correction (inter-rater reliability) inherent in the panel structure.",
+      "mechanism": "The checklist serves merely as a common language to facilitate communication. The actual reliability gain occurs when panel members challenge each other's interpretations of the checklist items, effectively performing a real-time peer review that a single expert lacks.",
+      "counterconditions": [
+        "The panel suffers from strong groupthink or a hierarchical power imbalance.",
+        "The checklist items are so unambiguous that no discussion is ever triggered."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we want to distinguish compliance from reliability, we should look at the 'Residual Error Profile'. A compliant panel will have zero errors on the checklist but might miss the 'obvious' answer if the checklist is slightly misaligned. A reliable panel will have a few checklist 'errors' (where they disagreed with the tool for the right reason) but will consistently hit the verifiable outcome.",
+          "why_keep_this": "Provides a quantitative way to separate the tool's success from the panel's success."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'objectively verifiable' nature of the outcome make the distinction between compliance and reliability moot? If the answer is right, does it matter if they were just following a list?",
+        "related_refs": [
+          "SRC_003",
+          "SRC_004"
+        ]
+      }
+    ]
+  }
+}
+```

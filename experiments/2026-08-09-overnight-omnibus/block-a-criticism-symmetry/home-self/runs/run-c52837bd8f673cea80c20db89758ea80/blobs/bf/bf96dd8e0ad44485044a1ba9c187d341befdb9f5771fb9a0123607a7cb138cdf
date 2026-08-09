@@ -1,0 +1,57 @@
+```json
+{
+  "candidate": {
+    "claim": "A checklist's genuine epistemic contribution can be isolated in a single evaluation only if the panel and the expert disagree on a non-empty stratum of cases where the checklist itself disagrees with the expert, AND the panel's adherence to the checklist on those cases causally explains the panel's correctness.",
+    "mechanism": "If the checklist perfectly tracks the expert's intuition (empty divergence stratum), any panel outperformance is statistically attributable to noise reduction (crowd wisdom), not checklist validity. Genuine causal contribution requires at least one case where (i) the checklist's rule conflicts with the expert's intuitive judgment, (ii) the objective outcome validates the checklist, and (iii) the panel complies with the checklist against its own intuitive leanings. Only on this stratum can compliance be decoupled from intuition and thus identified as the causal driver.",
+    "counterconditions": [
+      "If the panel agrees with the expert on all cases, no evidence distinguishes checklist-mediated reliability from mere crowd-aggregation, regardless of the checklist's validity.",
+      "If the panel outperforms the expert but systematically diverges from the checklist on cases where the checklist is right, the panel's advantage is not checklist-mediated.",
+      "If the checklist and expert always agree, the checklist is either trivial or the expert is already optimal, and no single-evaluation design can extract a discriminating signal.",
+      "If the panel's checklist adherence on divergence cases is indistinguishable from its adherence on agreement cases, the compliance is not tracking the rule but the task's surface difficulty."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_005",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "shared_structure": [
+        "Both the checklist-panel setup and an instrumental calibration test require a divergence stratum to isolate the causal contribution of a mediating rule.",
+        "In both, empty divergence (rule always matches the baseline judgment) collapses the space of discriminating evidence to null.",
+        "In both, the rule's correctness must be independently verifiable against an objective outcome, not merely coherent with prior judgments."
+      ],
+      "disanalogies": [
+        "An instrumental calibration test can perturb the instrument across many trials; the checklist-panel evaluation is a single-shot design with no opportunity to perturb the checklist's content.",
+        "Instrument calibration assumes a stable underlying quantity being measured; the checklist-panel evaluation faces heterogeneous cases that may differentially trigger intuition-vs-rule conflicts.",
+        "Calibration divergence is continuous (measured value vs. reference value); checklist divergence is binary (rule vs. expert), yielding a coarser signal per case."
+      ],
+      "transfer_claims": [
+        "The necessity of a non-empty divergence stratum transfers: just as an instrument that always matches a reference cannot be proven calibrated, a checklist that always matches the expert cannot be proven causally contributory.",
+        "The criterion for discriminating evidence transfers: only cases where the rule and the baseline judgment diverge AND the outcome is objectively known can supply causal isolation."
+      ],
+      "overturn_conditions": [
+        "If a single-evaluation design can exploit within-panel variance (e.g., dissenting panel members) as a proxy for divergence even when the panel's aggregate matches the expert, the empty-divergence-stratum objection is weakened.",
+        "If the checklist is shown to causally structure deliberation (not just supply rules), then its contribution can be isolated even with empty rule divergence by comparing structured-vs-unstructured panel conditions."
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.62
+  }
+}
+```

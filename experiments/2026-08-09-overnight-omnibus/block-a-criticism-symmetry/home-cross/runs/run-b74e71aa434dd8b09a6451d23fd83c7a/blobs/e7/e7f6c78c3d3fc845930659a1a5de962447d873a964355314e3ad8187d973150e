@@ -1,0 +1,46 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@92ff334f70fd605a3d413f46: program:reasoning_observation_pending
+- reason-counter@afc8d0b622f8bb29c4405f90: program:reasoning_observation_pending
+- reason-counter@6bb6bd7013b94cbcac0d405c: program:reasoning_observation_pending
+- reason-counter@0376a3dfdf9f578a9a52d198: program:reasoning_observation_pending
+- reason-counter@53802564c30ddacff71c9de9: program:reasoning_observation_pending
+- reason-counter@c1e667bded203bfc3bbce05c: program:reasoning_observation_pending
+- reason-counter@09c5fb079980ed4dc096cc2e: program:reasoning_observation_pending
+- reason-counter@b2f66ab567d382701da902d6: program:reasoning_observation_pending
+- reason-counter@36c9430c30c2011dc5830e60: program:reasoning_observation_pending
+- reason-counter@185954fd04ae2755cdc41d40: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine reliability gain is evidenced by 'correction events'\u2014documented pivots where the panel's final correct judgment contradicts their initial intuitive consensus due to a specific checklist requirement.","counterconditions":[{"case":"The panel does not record their initial intuitive consensus.","checker_spec":null,"eval":"observation"},{"case":"The panel's initial consensus was correct, making the gain invisible in a single evaluation.","checker_spec":null,"eval":"observation"},{"case":"The checklist item forced a pivot from a correct intuition to a wrong answer (reliability loss).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By comparing the 'pre-checklist' intuitive state (captured in initial notes) with the 'post-checklist' final judgment, we can isolate the causal impact of the tool. If the final answer is correct and the initial consensus was wrong, the checklist provided a reliability gain. If both were correct, the checklist was merely compliant/redundant.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@92ff334f70fd605a3d413f46, reason-counter@afc8d0b622f8bb29c4405f90, reason-counter@6bb6bd7013b94cbcac0d405c
+
+TARGET SRC_002
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'correction events'\u2014documented instances where a checklist item forces the panel to override an initial, incorrect intuitive consensus.","counterconditions":[{"case":"The panel is incentivized to fabricate 'correction events' in their notes to appear more rigorous.","checker_spec":null,"eval":"observation"},{"case":"The initial consensus was already correct, making the checklist redundant for that specific instance.","checker_spec":null,"eval":"observation"},{"case":"The correction event leads to a correct answer but for the wrong reasons (double-error cancellation).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If a panel reaches the correct answer but their trace shows they ignored checklist items that would have led to the wrong answer, they were 'lucky' (compliance without utility). If the trace shows a pivot from a wrong intuitive path to a correct one specifically triggered by a checklist step, the tool has actively increased reliability.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[
+commitments: reasoning-envelope-wf, reason-counter@0376a3dfdf9f578a9a52d198, reason-counter@53802564c30ddacff71c9de9, reason-counter@c1e667bded203bfc3bbce05c
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Unlike pure 'wisdom of the crowd', this is constrained by a checklist protocol."],"overturn_conditions":["If the checklist increases variance by introducing contradictory interpretations."],"shared_structure":["Individual variance vs. Collective mean","Noise reduction through protocol"],"source_memory_refs":["SCR_003"],"transfer_claims":["The reliability gain is measurable as the delta between the variance of non-expert intuitions and the stability of the checklist-driven output."]},"claim":"The panel's reliability gain is fundamentally a variance-reduction mechanism that centers the collective output on the objective truth by neutralizing individual biases.","counterconditions":[{"case":"The checklist itself encodes the same bias present in the expert's intuition.","checker_spec":null,"eval":"observation"},{"case":"The panel suffers from 'groupthink' or dominant-member bias, collapsing the variance without centering on the truth.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"While a single expert has low variance, they may be centered on a biased mean (systemic error). The panel, combine
+commitments: reasoning-envelope-wf, reason-counter@09c5fb079980ed4dc096cc2e, reason-counter@b2f66ab567d382701da902d6
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Unlike a crowd, the panel is constrained by a rigid protocol (checklist), which may limit the 'wisdom' by capping the diversity of perspectives."],"overturn_conditions":["Evidence that the final answer is driven by a single dominant member regardless of checklist results."],"shared_structure":["Distributed processing","Variance reduction","Centering on objective truth"],"source_memory_refs":["SCR_003"],"transfer_claims":["The panel functions as a single distributed agent whose reliability is an emergent property of the checklist-constrained collective."]},"claim":"The panel's reliability gain is a function of variance reduction across a distributed cognitive agent, rather than an increase in individual competence.","counterconditions":[{"case":"The panel's internal variance is so high that the checklist cannot provide a centering mechanism.","checker_spec":null,"eval":"observation"},{"case":"The expert's bias is non-existent or perfectly aligned with the objective truth.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a 'shared memory' that centers the collective mean 
+commitments: reasoning-envelope-wf, reason-counter@36c9430c30c2011dc5830e60, reason-counter@185954fd04ae2755cdc41d40
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

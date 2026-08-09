@@ -1,0 +1,41 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The claim in SRC_005 integrates with the 'Synthetic Diversity' mechanism by proposing that centralized resilience is not merely about redundancy, but about the intentional engineering of entropy; it is refuted if the 'cost of coordination' (SCR_008) scales super-linearly with the degree of synthetic diversity, making the system less resilient than a naturally diverse decentralized network.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The resilience model in SRC_002 depends on the assumption of a 'clean' control plane; it is refuted if the presence of a global control plane creates a 'meta-correlation' where the mechanism intended to isolate failures instead synchronizes them across all redundancy pools via a single configuration error.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The logic of SRC_004 contradicts the premise of 'standardized excellence' by suggesting that the 'messiness' of decentralized networks is a feature, not a bug; it is refuted if 'synthetic diversity' in centralized systems can perfectly emulate the stochastic configuration entropy of independent operators without introducing coordination overhead.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The mechanism in SRC_001 abstracts the concept of 'resilience' to a function of telemetry bandwidth; it is refuted if the latency of the global load-balancer's reaction time exceeds the propagation speed of the correlated failure vector (e.g., a rapid-fire API crash), rendering the central coordination obsolete.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The claim in SRC_003 reduces the problem of resilience to a visibility problem (global state vs. local state); it is refuted if the 'Diversity Threshold' (SCR_005) is so high that no single centralized entity can manage the required number of distinct implementation stacks without collapsing under the weight of its own complexity.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.2
+    }
+  ]
+}
+```

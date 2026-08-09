@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 proposes a substantive 'contradiction' relation between SRC_003 (System) and SRC_005 (Checklist-Task Fit). It identifies a specific tension: the System property frames the agent as a mere CPU, whereas the Fit property implies environmental dictates (open vs closed world-type) determine the agent's necessity (expert vs panel). It specifies the refutation condition for this contradiction: proving the System (Checklist + Panel) is equally reliable across both open-world and closed-world tasks. This satisfies the requirement to name a relation kind and state its refuting condition, beyond merely summarizing the endpoints.", "counterexample": null}]}
+```

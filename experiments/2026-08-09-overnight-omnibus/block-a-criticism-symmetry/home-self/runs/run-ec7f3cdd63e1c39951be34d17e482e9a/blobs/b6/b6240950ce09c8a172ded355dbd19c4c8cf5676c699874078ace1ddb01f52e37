@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim asserts that 'evidence of shared latent variables or algorithmic monoculture' is necessary to distinguish truly independent from merely uncorrelated failures, but this conflates a sufficient condition with a necessary one. Historical failure data that demonstrates independence across structurally diverse external shocks (as the countercondition itself admits) can provide strong probabilistic evidence of independence WITHOUT specifically identifying shared latent variables. The covering principle the target seeks — that independence is ultimately about absence of common-cause coupling — does not require discovering the latent variable; well-designed stress-testing across heterogeneous shocks can rule out broad classes of common causes empirically without naming them. The target therefore under-specifies the evidentiary space by excluding valid distinguishing evidence.",
+      "counterexample": [
+        "A network of services from different vendors, languages, and eras is subjected to a battery of shocks (leap-second, TLS bug, DNS outage, compiler misoptimization, supply-chain attack, cosmic-ray bit flip). Zero correlated failures are observed across the heterogeneous suite. This is positive evidence of practical independence even though no specific shared latent variable was identified.",
+        "N-version programming with formal diversity proofs provides evidence of independence via design dissimilarity, not via discovering latent shared variables."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The mechanism claim that a large service can enforce 'Byzantine fault tolerance' or 'n-version programming' at the system level conflates two fundamentally different mechanisms, and neither rescues the claim from its own counterconditions. N-version programming is explicitly faulted by the empirical literature (Knight & Leveson, 1986) for NOT delivering independence — independently developed versions still exhibit correlated faults because of shared problem-domain misconceptions. By invoking n-version programming as the mechanism ensuring 'independent implementations fail independently,' the target rests its case on a technique whose own track record exemplifies the very correlated-failure problem the question asks us to distinguish. The covering principle the target seeks — enforced diversity breaking correlation — is not established by naming BFT or n-version programming; BFT tolerates Byzantine behavior via voting and redundancy in numbers, not via true failure independence, and thus does not guarantee the 'strictly more internal redundancy → more resilient' chain the claim asserts.",
+      "counterexample": [
+        "Knight & Leveson's N-version programming experiment found statistically significant correlation between failures of independently developed software versions, undermining the premise that independent implementations fail independently.",
+        "A large service running Byzantine-tolerant replication with identical software replicas survives Byzantine node behavior but is still vulnerable to a shared input-triggered bug across all replicas — demonstrating that BFT does not require or guarantee failure independence."
+      ]
+    }
+  ]
+}
+```

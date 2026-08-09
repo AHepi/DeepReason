@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target introduces 'Entropy of Recovery' as the distinguishing evidence but this proxy is necessary, not sufficient, and the target presents it as exhaustive. The counterconditions confirm the gap: a permanent shared state change (e.g., a deprecated API) forces manual, operator-specific updates across all services, producing exactly the high-entropy, desynchronized recovery curve the target claims is the signature of independent failure. The method is incomplete for the problem's 'truly independent vs merely appear uncorrelated' distinction: many independent failures will share low recovery entropy (e.g., identical container orchestration with automated restarts across independent operators), and some correlated failures will exhibit high entropy. The target omits failure-origin correlation (whether the initiating causes share a common source) and operational/environmental independence (whether services share infrastructure, dependencies, or configuration), which the problem asks to identify as distinguishing evidence."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target's central mechanism is internally inconsistent with its own countercondition. The argument is that a decentralized network lacks a 'Global Immune Response' and therefore cannot implement coordinated mitigation, making correlated failure strictly more severe. But the target's second countercondition explicitly grants that a decentralized network can implement a gossip-based autonomous mitigation protocol that mimics a global response. When that condition holds, the core mechanism (independence prevents coordinated mitigation) is false, yet the claim ('fundamentally less resilient') is asserted unconditionally rather than conditioned on the absence of such protocols. The target conflates the architectural property of decentralization with the absence of coordination, but its own countercondition admits decentralized coordination is possible, so the argument does not establish the claim as stated."
+    }
+  ]
+}
+```

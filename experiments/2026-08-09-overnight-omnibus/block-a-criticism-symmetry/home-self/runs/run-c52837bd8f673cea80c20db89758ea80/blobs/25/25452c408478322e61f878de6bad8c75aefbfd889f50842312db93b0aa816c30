@@ -1,0 +1,107 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts using an explicit checklist will outperform a single expert, but only if the evaluation demonstrates that the panel succeeds on a non-empty divergence stratum where the checklist and expert disagree, and the panel's accuracy on these cases is driven by adherence to verifiable rules rather than expert-mimicking noise.",
+      "mechanism": "The checklist operates as a cognitive offload, distilling expert heuristics into verifiable procedural steps. This reduces variance and eliminates common biases (anchor, availability) that plague intuitive reasoning. The non-expert panel provides a noise-reduction aggregation layer, while the checklist supplies the signal. The divergence stratum isolates the causal contribution: if the panel beats the expert specifically on cases where they had to override expert intuition using the checklist, the checklist is providing genuine epistemic value.",
+      "counterconditions": [
+        "The divergence stratum is empty (checklist and expert never disagree), making it impossible to isolate checklist value from expert competence within a single evaluation.",
+        "The panel's performance on divergence cases is explained by the panel mimicking the expert's intuitive biases rather than applying the checklist rules.",
+        "The checklist is merely a proxy for task difficulty, meaning compliance correlates with correctness but does not cause it."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A panel of non-experts will not, on average, produce more reliable judgments than a single expert, because the checklist is an incomplete codification of expertise. Within a single evaluation, evidence of mere checklist compliance tracking the right answer is observed when the panel fails on out-of-distribution cases where expert intuition generalizes but checklist rules do not.",
+      "mechanism": "Expert intuition operates on a high-dimensional, non-verbalizable feature space (System 1 pattern recognition) that cannot be fully captured by a low-dimensional explicit checklist. For tasks with objectively verifiable outcomes, the expert's unformalizable tacit knowledge allows them to generalize to novel cases, while the panel is rigidly constrained by the checklist's bounded scope. Therefore, the expert will outperform on edge cases.",
+      "counterconditions": [
+        "The evaluation is restricted to in-distribution cases where the checklist is perfectly specified, hiding the expert's generalization advantage.",
+        "The panel successfully modifies or abandons the checklist when encountering out-of-distribution cases, demonstrating meta-cognitive monitoring rather than rigid compliance."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Evidence from a single evaluation distinguishes genuine reliability gain from mere compliance if and only if the evaluation includes an active corrupted-checklist control: the panel shows higher accuracy with the correct checklist than with a structurally identical but rule-corrupted checklist on the divergence stratum, proving the panel relies on rule content rather than mere procedural compliance.",
+      "mechanism": "Mere checklist compliance implies the panel outperforms because the act of following a structured procedure reduces variance, regardless of rule content. By introducing a corrupted-checklist control, we isolate the causal role of rule correctness. If the panel's accuracy drops significantly when using the corrupted checklist on divergence cases, the rules themselves are doing epistemic work, confirming genuine reliability.",
+      "counterconditions": [
+        "The corrupted checklist continues to structure deliberation effectively, allowing the panel to outperform the expert despite wrong rules, which confounds structure with content.",
+        "The expert also performs worse on the divergence stratum, making it impossible to attribute panel success to checklist correctness rather than task difficulty."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_004"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A single evaluation cannot distinguish genuine reliability gain from mere compliance if the divergence stratum is empty. If the checklist and the expert never disagree on any case, any panel outperformance is indistinguishable from compliance with a set of rules that merely happen to track the expert's intuition, rendering the problem unsatisfiable by construction.",
+      "mechanism": "To distinguish genuine gain from compliance, one must observe cases where compliance with the checklist diverges from expert intuition and leads to a better outcome. If the checklist is a perfect mirror of expert intuition (empty divergence stratum), the checklist adds no independent epistemic leverage; it is a mere transcription. Without divergence, there is no causal variable to manipulate or observe.",
+      "counterconditions": [
+        "An independent meta-evaluation (outside the single evaluation) demonstrates that the checklist encodes a more generalizable rule than the expert's intuition, even if they agree on the evaluation set.",
+        "The panel exhibits superior calibration compared to the expert, which does not require a divergence stratum to detect."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_005"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The panel's advantage is a composition effect (wisdom of crowds) independent of the checklist's rule content. A single evaluation distinguishes this from genuine checklist-mediated gain by showing that the panel's accuracy is insensitive to checklist corruption but highly sensitive to aggregation method.",
+      "mechanism": "Aggregating independent judgments cancels individual uncorrelated errors. The checklist may provide a common framing, but the reliability gain comes from the central limit theorem applied to the panel's aggregated guesses. If the panel's performance remains robust under checklist corruption, the checklist is epiphenomenal; the gain is a statistical artifact of aggregation.",
+      "counterconditions": [
+        "The panel's errors are highly correlated (e.g., they all follow the same wrong checklist rule), eliminating the wisdom-of-crowds effect.",
+        "The checklist is necessary to ensure independence of judgments, without which the aggregation fails."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "A panel of non-experts with a checklist will outperform an expert, and evidence of genuine gain is found in the panel's superior calibration on cases where checklist compliance is counterintuitive. This proves the panel is not just confident because they complied, but because the checklist rules correctly override flawed intuition.",
+      "mechanism": "If the panel is merely exhibiting compliance-driven confidence, their confidence will track the number of boxes ticked, not the correctness of counterintuitive rules. By examining the calibration curve on counterintuitive cases (where compliance is high but success is not obvious), we can distinguish genuine rule-monitoring from compliance artifacts. Genuine calibration means the panel is more confident when it gets counterintuitive cases right.",
+      "counterconditions": [
+        "Counterintuitive cases where the checklist is right also have high box-ticking, making it impossible to decouple compliance rate from correctness.",
+        "The panel exhibits overconfidence on counterintuitive cases regardless of correctness, indicating they trust the checklist blindly without meta-monitoring."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_002"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

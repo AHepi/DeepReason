@@ -1,0 +1,127 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a large redundant service, provided the network maintains high 'Architectural Distance' (heterogeneity).",
+      "mechanism": "The large service's internal redundancy typically relies on homogeneous replication (same OS, same binary, same config), creating a single failure domain where a specific trigger (e.g., a 'poison pill' request) propagates instantly. In contrast, a decentralized network of independent operators naturally introduces heterogeneity in software versions, hardware, and configuration, ensuring that a trigger crashing one node is unlikely to be present in another.",
+      "counterconditions": [
+        "Operators converge on a single 'industry standard' stack (Diversity Debt), neutralizing heterogeneity.",
+        "The network shares a critical common dependency (e.g., a single DNS provider or cloud region) that outweighs architectural diversity."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "A large service with high internal redundancy is more resilient because it eliminates the 'Coordination Gap' and 'Patch Latency' inherent in decentralized networks.",
+      "mechanism": "Decentralized networks suffer from asymmetric update speeds; a known vulnerability remains exploitable across the network for longer than in a centralized system. Furthermore, the 'Redundancy Paradox' suggests that the lack of coordination in decentralized networks leads to cascading failures (e.g., thundering herd) that a centralized orchestrator could mitigate via global rate limiting and synchronized shedding.",
+      "counterconditions": [
+        "The centralized orchestrator itself becomes a single point of failure (SPOF) or a source of correlated crashes due to complexity.",
+        "The redundancy is so high that the system can survive the loss of multiple internal zones without losing global availability."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The distinction between truly independent failures and 'apparent' uncorrelation is found in the 'Error Signature Diversity' and the presence of 'Latent Triggers'.",
+      "mechanism": "True independence is characterized by diverse error signatures (different stack traces, different exit codes) across failing nodes. Apparent uncorrelation—where failures seem random in time—is revealed as correlated if nodes share an identical error signature or if the failures can be mapped to a shared latent trigger (e.g., a specific memory leak pattern or a shared library bug) that activates at different times based on local traffic variance.",
+      "counterconditions": [
+        "Telemetry is too coarse to capture stack traces, reducing all failures to a generic 'Service Down' signal.",
+        "The failure mode is a 'Heisenbug' that manifests differently across different environments despite having a single root cause."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001",
+          "SCR_002"
+        ],
+        "shared_structure": [
+          "Temporal dispersion of symptoms masking a singular causal agent",
+          "Differentiator based on internal state (signature) rather than external timing"
+        ],
+        "disanalogies": [
+          "Biological epidemics (where timing is the primary signal) vs. software bugs (where the binary is the signal)"
+        ],
+        "transfer_claims": [
+          "The 'Slow-Burn' hypothesis from SCR_001 explains why temporal uncorrelation is an unreliable metric for independence."
+        ],
+        "overturn_conditions": [
+          "Discovery of a mechanism that produces identical failures across diverse stacks without a shared cause."
+        ]
+      }
+    },
+    {
+      "claim": "Decentralized networks are fundamentally less resilient because the 'Diversity Debt' leads to an inevitable convergence on shared failure modes.",
+      "mechanism": "Economic pressure forces small operators to adopt the same optimized, open-source 'golden images' and managed services. This creates a 'phantom' decentralized network that is actually a homogeneous system without the benefit of a centralized coordinator to manage the failures, combining the worst of both worlds: shared failure modes and fragmented recovery.",
+      "counterconditions": [
+        "Strong economic or regulatory incentives exist to maintain architectural diversity (e.g., sovereign cloud requirements).",
+        "The 'standard' stack is so robust that it is objectively superior to any diverse alternative."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The 'Redundancy Paradox' makes the decentralized network more resilient because the complexity of managing 'strictly more internal redundancy' in a large service becomes the primary driver of correlated failure.",
+      "mechanism": "As internal redundancy increases, the coordination layer (e.g., Raft/Paxos) must manage more state and more nodes. The complexity of this coordination layer grows non-linearly, introducing 'meta-failures' (e.g., consensus deadlocks, split-brain) that can take down the entire service. A decentralized network, by eschewing global consistency for local autonomy, avoids this specific class of catastrophic correlated failure.",
+      "counterconditions": [
+        "Coordination algorithms are proven to scale linearly or are replaced by simpler, eventually consistent models.",
+        "The cost of local autonomy (data inconsistency) is higher than the risk of a coordination failure."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the 'Telemetry Gap': If we argue that Error Signature Diversity is the key to distinguishing independent failures, we must address the 'Observer's Paradox'. In a decentralized network, who collects the signatures? If a centralized monitoring tool (SCR_007) is used, that tool itself becomes a correlated failure point. If monitoring is decentralized, the evidence needed to prove correlation is fragmented across operators who may not share data, making correlated failures *appear* independent simply because the evidence is siloed.",
+          "why_keep_this": "Highlights a practical contradiction in the evidentiary part of the problem."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a mathematical 'tipping point' where the benefit of heterogeneity in a decentralized network is outweighed by the cost of patch latency?",
+        "related_refs": [
+          "SRC_006",
+          "SRC_008"
+        ]
+      }
+    ]
+  }
+}
+```

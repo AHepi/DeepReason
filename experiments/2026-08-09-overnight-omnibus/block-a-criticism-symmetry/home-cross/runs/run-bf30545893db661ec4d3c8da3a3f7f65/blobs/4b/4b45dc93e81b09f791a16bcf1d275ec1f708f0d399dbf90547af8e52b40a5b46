@@ -1,0 +1,51 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+PROBLEM CONTEXT (conn:00321f6b7b18) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 00321f6b7b18 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@03b5006be028: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@326db5fefb5203ac2221ddd7: program:reasoning_observation_pending
+- reason-counter@c90e5488b6cacf0c35d0bbce: program:reasoning_observation_pending
+- reason-counter@32dd4a1a91d39035741436ea: program:reasoning_observation_pending
+- reason-counter@05615e683cf37eb9eae732c8: program:reasoning_observation_pending
+- reason-counter@0d709fa5db34c02e5707e27e: program:reasoning_observation_pending
+- reason-counter@0c313eaff88cce6b541310c3: program:reasoning_observation_pending
+- reason-counter@1f8498f624cacd5227d21a7b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The 'Variance Floor' mechanism in 00321f6b7b18 integrates with the 'Algorithmic Floor' effect in 051b3183aa966e6232f1e635aa7259bf92ad1c5ad996954879f69a27783391d3 by defining the specific failure modes (black swan failures vs. cognitive variability) that the algorithmic process is designed to eliminate; this relation is refuted if the 'Variance Floor' is found to be a purely psychological state rather than a structural outcome of algorithmic execution.
+commitments: hv-floor@2a45b7988522, lineage-ref@03b5006be028, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'Non-Linear Temporal Friction'\u2014specifically, a high-variance distribution of time spent per checklist item.","counterconditions":[{"case":"The panel is under strict time pressure, forcing a linear progression regardless of complexity.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so perfectly designed that every item requires exactly the same amount of cognitive effort.","checker_spec":null,"eval":"observation"},{"case":"The panel members are inexperienced and spend equal time on every item due to general uncertainty.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Drawing from SCR_003 and SCR_015, mere compliance manifests as a linear progression through the checklist (uniform time-per-item). Genuine reliability manifests as 'cognitive spiking,' where the panel spends disproportionate time on items that are ambiguous or critical for the specific case. This temporal trace provides evidence that the panel is exercising critical judgment (reliability) rather than just marking boxes (compliance).","premises":[],"schem
+commitments: reasoning-envelope-wf, reason-counter@326db5fefb5203ac2221ddd7, reason-counter@c90e5488b6cacf0c35d0bbce, reason-counter@32dd4a1a91d39

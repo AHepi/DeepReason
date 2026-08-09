@@ -1,0 +1,41 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3c4bbb637bce54877bfef48b: program:reasoning_observation_pending
+- reason-counter@2fcb3ff6dca395838752c4e9: program:reasoning_observation_pending
+- reason-counter@4fad251653c9ed236f73856b: program:reasoning_observation_pending
+- reason-counter@4b7c16ff94c90c9189488be9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts is inherently less reliable for verifiable outcomes because the 'checklist' creates a false sense of security that suppresses the critical skepticism necessary to verify the outcome.","counterconditions":[{"case":"The checklist includes explicit 'challenge' steps that force the panel to argue against their current conclusion.","checker_spec":null,"eval":"observation"},{"case":"The task is purely procedural with no room for interpretive ambiguity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'compliance trap': non-experts treat the checklist as a sufficient condition for correctness rather than a necessary one. This leads to 'confirmation bias' where the panel seeks evidence to satisfy the checklist item rather than evidence to challenge the conclusion. In contrast, the expert's intuition is often triggered by 'disconfirming evidence', which is the primary driver of reliability in verifiable tasks.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3c4bbb637bce54877bfef48b, reason-counter@2fcb3ff6dca395838752c4e9
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Slow processing does not always equal critical processing (could be confusion)."],"overturn_conditions":["Evidence that 'automatic' checklist application is more reliable than 'debated' application."],"shared_structure":["Temporal trace as a proxy for cognitive effort","Linear vs Non-linear progression"],"source_memory_refs":["SCR_009"],"transfer_claims":["The 'time-to-judgment' metric can distinguish between mindless adherence and critical application."]},"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'non-linear temporal spikes' in the evaluation process, representing active cognitive friction and debate over the application of the checklist.","counterconditions":[{"case":"The panel is highly experienced with the checklist, leading to 'automaticity' that mimics mere compliance.","checker_spec":null,"eval":"observation"},{"case":"The panel is inefficient, spending time on irrelevant debates that do not contribute to the outcome.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance follows a linear time-progression (Item 1 -> 2 -> 3). Genuine reliability requires the panel to negotiate the *meaning* of the checklist items in the context of the specific case. Therefore, pauses or 're-visits' to previous checklist items (backtracking) serve as behavioral evidence that the panel is exercising critical judgment to ensure the checklist actually applies, rather than just checking boxes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertaint

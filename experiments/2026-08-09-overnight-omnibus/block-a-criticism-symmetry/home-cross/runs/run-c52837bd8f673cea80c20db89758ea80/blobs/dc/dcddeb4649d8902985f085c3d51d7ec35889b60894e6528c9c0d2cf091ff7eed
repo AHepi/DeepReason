@@ -1,0 +1,109 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The panel of non-experts is more reliable because the checklist acts as a 'cognitive speed bump' that forces a transition from System 1 to System 2 processing, whereas the expert's intuition is a liability due to 'over-fitting' to common patterns.",
+      "mechanism": "The reliability gain is not a result of distributed knowledge, but of 'cognitive friction'. The checklist prevents 'premature closure'—the expert's tendency to stop searching for evidence once a familiar pattern is recognized. By forcing a serial verification of discrete markers, the panel avoids the expert's 'blind spot' for anomalous cases that fit a common profile but contain a critical disqualifier.",
+      "counterconditions": [
+        "The task requires a 'gestalt' synthesis that cannot be decomposed into discrete checklist items.",
+        "The checklist is so exhaustive that it induces 'checklist fatigue', leading to mindless ticking (compliance) rather than verification."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "A panel of non-experts is more reliable specifically for 'tail-risk' mitigation in objectively verifiable tasks, where the expert's superiority in the mean is outweighed by their catastrophic failure in edge cases.",
+      "mechanism": "Experts develop an internal heuristic that is 99% accurate, leading them to implicitly skip steps. Non-experts, lacking this confidence, adhere strictly to the checklist. In 'Black Swan' events where the outcome is verifiable but the path is counter-intuitive, the panel's lack of intuition is a feature, not a bug; they are 'blindly' correct because they cannot be 'intuitively' wrong.",
+      "counterconditions": [
+        "The 'edge cases' are so rare that the expert's higher mean accuracy provides more utility than the panel's tail-risk protection.",
+        "The checklist itself is based on the same biased heuristics as the expert's intuition."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_004"
+        ]
+      }
+    },
+    {
+      "claim": "The panel's reliability is an illusion of 'aggregate noise canceling'; they are not more reliable than the expert, but their errors are uncorrelated, whereas the expert's errors are systemic.",
+      "mechanism": "The checklist provides a common language that allows the panel to average out individual non-expert errors (stochastic noise). The expert, however, possesses a singular, high-confidence internal model; when that model is wrong, it is wrong consistently. The 'gain' is actually a reduction in variance rather than an increase in accuracy.",
+      "counterconditions": [
+        "The checklist items are ambiguous, causing the panel to share the same systemic errors as the expert.",
+        "The task requires a 'single-point-of-failure' judgment where averaging cannot correct a fundamental misunderstanding."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_007"
+        ]
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'justified negative markers'—the panel's ability to mark a checklist item as 'False' or 'N/A' despite a strong intuitive pressure to mark it 'True'.",
+      "mechanism": "To distinguish reliability from 'tracking the right answer', one must introduce 'trap items' into the checklist (items that are objectively false for the case but align with common misconceptions). Compliance-trackers will mark these 'True' to maintain a perceived pattern of correctness. Reliable judges will mark them 'False' because they are verifying the fact, not the pattern.",
+      "counterconditions": [
+        "The non-experts are incentivized to produce a 'clean' checklist, leading to social pressure to avoid 'False' markers.",
+        "The 'trap items' are so obscure that they introduce noise that obscures the reliability signal."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The panel is only more reliable if the checklist 'atomizes' the expert's gestalt into discrete, verifiable facts, effectively stealing the expert's internal model and distributing it.",
+      "mechanism": "The reliability gain is a function of 'knowledge externalization'. The checklist acts as a compiled version of expert intuition. The panel wins not because they are better, but because the checklist removes the 'human' element (including the expert's human errors) from the execution phase of the judgment.",
+      "counterconditions": [
+        "The 'gestalt' of the expert is non-reducible to discrete steps (the 'Tacit Knowledge' problem).",
+        "The process of atomization loses critical context that only an expert's intuition can synthesize."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The panel is less reliable because checklist adherence in non-experts creates a 'false sense of security' that masks a fundamental lack of understanding, leading to 'correct' answers for the wrong reasons.",
+      "mechanism": "Non-experts engage in 'pattern matching' with the checklist rather than 'verification'. They identify which boxes *usually* get checked for a 'Yes' outcome and replicate that pattern. This 'pseudo-reliability' collapses the moment a case requires a deviation from the standard pattern, whereas the expert's intuition can adapt to novelty.",
+      "counterconditions": [
+        "The task is so standardized that 'pattern matching' is functionally equivalent to 'verification'.",
+        "The expert's intuition is so prone to bias that the non-expert's pattern matching is statistically safer."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    }
+  ]
+}
+```

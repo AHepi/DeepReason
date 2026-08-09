@@ -1,0 +1,31 @@
+```json
+{
+  "cases": [
+    {
+      "attack": false,
+      "case": "SRC_001 correctly identifies the needed within-evaluation evidence: an audit trail showing the panel overriding a logically inconsistent checklist item (cognitive friction), which directly answers the problem's demand to distinguish genuine reliability gain from mere compliance within a single evaluation.",
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "SRC_002 argues for the claim but never answers the required distinguishing evidence within a single evaluation; it frames reliability as checklist coverage of the state-space, which describes mere compliance rather than identifying a within-evaluation marker that separates genuine reliability gain from correct-tracking compliance.",
+      "counterexample": [
+        "A panel could follow the checklist perfectly and reach the right answer solely because the checklist happens to cover the state-space, yet exhibit no genuine reliability gain beyond passive adherence; SRC_002 provides no within-evaluation evidence (e.g., override of a misleading item) to distinguish this from true active reliability."
+      ],
+      "target_alias": "SRC_002"
+    },
+    {
+      "attack": true,
+      "case": "SRC_003 is empty/missing and thus fails to provide any argument or identifying evidence for the stated problem.",
+      "counterexample": [],
+      "target_alias": "SRC_003"
+    },
+    {
+      "attack": true,
+      "case": "SRC_004 is empty/missing and thus fails to provide any argument or identifying evidence for the stated problem.",
+      "counterexample": [],
+      "target_alias": "SRC_004"
+    }
+  ]
+}
+```

@@ -1,0 +1,108 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following an explicit checklist is more reliable than a single expert because it replaces high-variance intuition with a low-variance, additive error-correction process.",
+      "mechanism": "The checklist decomposes a complex judgment into a series of binary, verifiable checks. While a single expert may suffer from 'cognitive tunnel vision' or heuristic bias (overlooking a basic step due to perceived familiarity), a panel creates redundant verification layers where the probability of all members overlooking a checklist item is exponentially lower than the probability of a single expert's intuitive lapse.",
+      "counterconditions": [
+        "The checklist is fundamentally incomplete or contains a systemic error that leads all non-experts to the same wrong conclusion.",
+        "The task requires synthesizing non-linear dependencies that cannot be decomposed into a checklist without losing critical information."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The reliability of a checklist panel is an illusion of 'procedural correctness' that fails in the face of 'edge-case' anomalies, making the expert more reliable for high-complexity verifiable tasks.",
+      "mechanism": "Checklists are lossy compressions of expertise. In standard cases, they track the right answer. However, in anomalous cases, the expert's intuition recognizes the 'signature' of the anomaly, whereas the non-expert panel will mark all checklist items as 'pass' (compliance) despite the outcome being wrong, because the checklist did not account for the specific anomaly.",
+      "counterconditions": [
+        "The task is highly routine with very low anomaly rates.",
+        "The checklist is exhaustive enough to cover all known failure modes of the system."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the panel's ability to flag 'checklist-outcome contradictions'—where the checklist is satisfied but the outcome is visibly incorrect.",
+      "mechanism": "If a panel is merely complying, they will report a 'success' because all boxes are checked. A genuinely reliable panel exhibits 'meta-cognitive monitoring': they recognize when the tool (the checklist) is failing to capture the reality of the verifiable outcome and flag the discrepancy. The evidence is the presence of 'exception reports' where the panel overrides the checklist to reach the correct verifiable outcome.",
+      "counterconditions": [
+        "The panel is incentivized by 'compliance metrics' over 'outcome accuracy', leading them to ignore the outcome to maintain a perfect checklist record."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002",
+          "SCR_006"
+        ],
+        "shared_structure": [
+          "Processor executing a program",
+          "Handling of runtime exceptions",
+          "Distinction between execution (compliance) and correctness (reliability)"
+        ],
+        "transfer_claims": [
+          "Reliability is the ability to halt execution when the program (checklist) leads to an inconsistent state."
+        ],
+        "disanalogies": [
+          "Human panels are not deterministic like silicon processors; social pressure may mimic 'program' execution."
+        ],
+        "overturn_conditions": [
+          "If the panel lacks the basic domain knowledge to even recognize a contradiction between the checklist and the outcome."
+        ]
+      }
+    },
+    {
+      "claim": "The 'Decoy Perturbation' is the only single-evaluation evidence that distinguishes reliability from compliance.",
+      "mechanism": "By inserting a 'decoy' item into the checklist—a requirement that is logically irrelevant or slightly contradictory to the goal but phrased as a mandatory check—one can isolate the panel's behavior. A compliant panel will mark the decoy as 'pass' to follow the list; a reliable panel will flag the decoy as an error or an anomaly. (Correct Answer + Decoy Flagged = Reliable; Correct Answer + Decoy Checked = Compliant).",
+      "counterconditions": [
+        "The decoy is too subtle to be noticed by non-experts.",
+        "The decoy is so obvious it is perceived as a 'trick' rather than a test of reliability."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SCR_004",
+        "SCR_007"
+      ]
+    },
+    {
+      "claim": "The expert is essentially a 'compressed panel', and the reliability difference is a matter of 'Audit Trail' availability rather than outcome accuracy.",
+      "mechanism": "Expert intuition is the internalized, parallel execution of a checklist. Both the expert and the panel reach the same verifiable outcome in most cases. The 'reliability gain' of the panel is not in the answer itself, but in the externalization of the reasoning process (the audit trail), which allows for the detection and correction of specific errors that are invisible in the expert's 'black box' intuition.",
+      "counterconditions": [
+        "Expert intuition utilizes non-linear pattern recognition that cannot be mapped to any sequential checklist."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SCR_003"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Boeing 737 MAX' analogy from SCR_008: the failure wasn't a lack of checklists, but a failure of the 'system' to account for a hidden dependency (MCAS). This suggests that for any verifiable task, there is a 'Complexity Threshold'. Below this threshold, the checklist panel wins due to error cancellation. Above this threshold, the expert wins because they can sense 'systemic fragility' that the checklist (a static artifact) cannot possibly encode.",
+          "why_keep_this": "Adds a nuance about 'Complexity Thresholds' to the reliability debate."
+        }
+      }
+    ]
+  }
+}
+```

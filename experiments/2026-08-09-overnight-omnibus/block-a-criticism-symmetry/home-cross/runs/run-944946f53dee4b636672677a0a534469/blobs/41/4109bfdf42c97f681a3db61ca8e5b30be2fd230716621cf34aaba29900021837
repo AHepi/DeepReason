@@ -1,0 +1,94 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is less resilient than a redundant monolith when 'industry-standard' operational homogeneity creates a 'virtual monolith' that eliminates the benefits of independent ownership.",
+      "mechanism": "The convergence on a shared substrate (e.g., identical cloud provider regions, common container orchestration tools like Kubernetes, or shared upstream libraries) transforms an ostensibly decentralized network into a single failure domain. This 'operational homogeneity' means that a single bug in a common dependency or a regional outage acts as a global trigger, bypassing the redundancy of independent operators.",
+      "counterconditions": [
+        "The services utilize diverse infrastructure providers (multi-cloud/on-prem).",
+        "The services employ heterogeneous software stacks and versions.",
+        "The failure is localized to a specific operator's internal logic rather than a shared dependency."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The decentralized network's resilience advantage is not a function of redundancy but of 'intentional inefficiency'—the presence of idiosyncratic, sub-optimal configurations that act as natural firewalls.",
+      "mechanism": "While a monolith optimizes for efficiency and consistency (which propagates failures rapidly), a decentralized network's lack of coordination leads to 'fragmented diversity'. This diversity ensures that a specific exploit or bug that crashes one service is unlikely to be compatible with the idiosyncratic setup of another, effectively isolating the failure.",
+      "counterconditions": [
+        "The network adopts a strict, unified 'best practices' configuration management policy.",
+        "The failure mode is a fundamental protocol flaw that affects all implementations regardless of configuration."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The distinction between truly independent and apparently uncorrelated failures is empirically identified by 'Recovery Synchronization'—the temporal alignment of service restoration.",
+      "mechanism": "If multiple services fail and then recover within a narrow, synchronized time window (e.g., 10ms), the probability of independent failure is statistically negligible. True independence would manifest as a stochastic distribution of recovery times based on individual operator response and local state recovery, whereas a shared cause (like a DNS resolution return) triggers a simultaneous 'thaw' across the network.",
+      "counterconditions": [
+        "The recovery is gated by a single shared external dependency that restores all at once.",
+        "The failure was a short-lived transient event that affected all services simultaneously but independently."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "A decentralized network is more susceptible to 'cascading fragility' than a monolith, where the failure of a few small services creates a positive feedback loop of load-shifting that collapses the remaining network.",
+      "mechanism": "In a monolith, internal redundancy is managed by a global scheduler that can shed load or throttle requests. In a decentralized network, the failure of one service shifts traffic to others who may not be scaled for the surge, leading to a 'thundering herd' effect that propagates through the network, making it less resilient than a monolith with total internal capacity management.",
+      "counterconditions": [
+        "The network implements strict circuit-breaking and aggressive load-shedding at the edge.",
+        "The services are sufficiently over-provisioned to absorb the failure of any N-1 peers."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: 'The Diversity Dividend'. The value of decentralization is exactly the sum of the 'delta' between the most common configuration and the least common configuration. If delta -> 0, resilience -> monolith_resilience.",
+          "why_keep_this": "Provides a potential quantitative way to measure the 'virtual monolith' effect."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a specific 'critical intersection threshold' (percentage of shared dependencies) where the resilience of a decentralized network officially collapses into a monolith?",
+        "related_refs": [
+          "SRC_003",
+          "SRC_007"
+        ]
+      }
+    ]
+  }
+}
+```

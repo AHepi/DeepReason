@@ -1,0 +1,6 @@
+{
+  "repair.patch.v1": {
+    "pointer": "/0/content",
+    "operation": "remove"
+  }
+}

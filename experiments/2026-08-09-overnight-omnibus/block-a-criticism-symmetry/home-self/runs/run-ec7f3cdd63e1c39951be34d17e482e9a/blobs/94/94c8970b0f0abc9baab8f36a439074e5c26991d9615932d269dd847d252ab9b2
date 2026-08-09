@@ -1,0 +1,135 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is NOT more resilient than one large service, because independent operators naturally converge on identical models and identical training data, creating an algorithmic monoculture that acts as a shared cause for failure.",
+      "mechanism": "Independent operators facing similar operational and economic constraints optimize using similar auto-scaling models. If they converge on identical training data and models, the decentralized network acts as a single logical system. The algorithmic convergence constitutes a shared cause of failure, nullifying the independence assumption.",
+      "counterconditions": [
+        "Operators intentionally use diverse, heterogeneous models and datasets.",
+        "The cost of diversifying models and data is lower than the economic incentives pushing towards uniformity."
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_003", "SRC_006"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "A decentralized network is more resilient than a single large service because the large service's internal redundancy is subject to a shared management hierarchy and uniform deployment process, creating a single point of failure for the whole system.",
+      "mechanism": "Even with strictly more total internal redundancy, a large service operates under unified governance. A shared deployment pipeline, uniform update rollout, or a single management decision can introduce a fatal bug or trigger correlated failure across all internal redundant components simultaneously. Decentralized services lack this unified governance, making them robust to such systemic causes.",
+      "counterconditions": [
+        "The decentralized network operators synchronize their behavior via external market signals, inducing in-phase oscillations.",
+        "The large service uses logically isolated sub-services with independent codebases and teams."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_002", "SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "The distinction between truly independent and merely uncorrelated failures is revealed by interventions on the postulated shared cause: if intervening on the shared cause changes the failure rate, the failures were merely uncorrelated until the shared cause was found.",
+      "mechanism": "Observational data alone cannot distinguish true independence from hidden correlation. If a shared cause is hypothesized, a structural intervention on that cause provides the discriminating evidence. If the intervention modifies the failure rate of the decentralized network, the independence assumption is falsified.",
+      "counterconditions": [
+        "The shared cause is epistemologically unobservable and cannot be intervened upon.",
+        "The network exhibits self-organized criticality where market-driven synchronization creates systemic risk without a central cause."
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "The distinction between independent and uncorrelated failures is epistemological, not ontological; evidence that distinguishes them is ultimately a matter of the observer's epistemic access and model of the system.",
+      "mechanism": "We can only observe a failure as 'independent' relative to our current model and observed variables. As our model expands to include shared causes (e.g., a common external signal or training data), previously independent failures become correlated. Therefore, there is no final, ontological distinction; the evidence depends entirely on the epistemic frame of the analyst.",
+      "counterconditions": [
+        "A structural intervention conclusively demonstrates a causal link, establishing an ontological fact rather than just an epistemic shift.",
+        "The system is a closed universe with no hidden variables, making observed independence true ontological independence."
+      ],
+      "typicality": 0.25,
+      "optional_refs": ["SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "A decentralized network is NOT more resilient because if all small operators monitor the same metrics for uptime and independently decide to reboot or scale based on the same threshold, they will oscillate in phase, creating a self-organized criticality where the network appears independent but fails in perfect synchrony.",
+      "mechanism": "Decentralized services often rely on similar monitoring signals. If independent operators independently optimize for the same metrics using similar thresholds, their responses to external load can synchronize. This creates self-organized criticality where the system appears independent but fails in perfect synchrony due to the shared external signal.",
+      "counterconditions": [
+        "Operators use randomized or jittered thresholds for scaling and rebooting.",
+        "The large service also monitors the same metrics and is susceptible to the same oscillations."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_001", "SRC_004"],
+      "analogy": {
+        "source_memory_refs": ["SCR_002"],
+        "shared_structure": [
+          "Independent oscillators (services) driven by a common external periodic force (market signal/metric) will synchronize.",
+          "Synchronization leads to correlated phase transitions (failures) across the population."
+        ],
+        "disanalogies": [
+          "Coupled oscillators in physics follow deterministic dynamics, whereas service operators may use stochastic or varied thresholds.",
+          "Biological flocks may avoid synchrony through local interactions, while network services synchronize through global market signals."
+        ],
+        "transfer_claims": [
+          "If a decentralized network's independent operators synchronize on external signals, it will exhibit correlated failures despite decentralization.",
+          "A large service with diverse internal policies may avoid such synchronization, making it more resilient."
+        ],
+        "overturn_conditions": [
+          "Operators introduce jitter or randomization in their monitoring and response thresholds, breaking the synchronization.",
+          "The external signal is not strong enough to entrain the operators' behavior."
+        ]
+      },
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "A decentralized network's resilience advantage depends entirely on whether it contains a 'leader' it doesn't know about; if the independent services follow the same leader signal, the network is effectively one organism and may be less resilient than a large service with multiple disagreeing 'brains'.",
+      "mechanism": "Drawing from the biological analogy, a decentralized network is like a flock of birds. If all birds follow the same leader, the flock is effectively one organism. If a large service (the organism) has multiple 'brains' that disagree, it might be more resilient. The shared cause of failure in the decentralized network is the unknown leader signal.",
+      "counterconditions": [
+        "The decentralized network provably prevents synchronization on shared external signals (a leaderless protocol).",
+        "The large service does not have multiple disagreeing brains and operates under a single unified command."
+      ],
+      "typicality": 0.4,
+      "optional_refs": ["SRC_001", "SRC_003", "SRC_008"],
+      "analogy": {
+        "source_memory_refs": ["SCR_001"],
+        "shared_structure": [
+          "A large centralized service with internal redundancy maps to a single organism with redundant organs.",
+          "A decentralized network of small services maps to a flock of birds.",
+          "A shared signal synchronizing the decentralized network maps to a leader bird that the flock follows."
+        ],
+        "disanalogies": [
+          "Biological organisms have physical constraints on information flow that digital services do not; a leader bird's influence is localized, while a digital signal can be global and instantaneous.",
+          "The 'brains' in a large service may not be independent if they share a common codebase or deployment pipeline, unlike the flock."
+        ],
+        "transfer_claims": [
+          "If a decentralized network has an unknown leader signal, it is effectively a single organism and not more resilient.",
+          "A large service with multiple independent decision-making components is more resilient than a synchronized decentralized network."
+        ],
+        "overturn_conditions": [
+          "The decentralized network uses a protocol that provably prevents synchronization on any single external signal.",
+          "The large service's internal redundancy is not truly independent and shares a single point of failure."
+        ]
+      },
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "evidence_refs": []
+    }
+  ]
+}
+```

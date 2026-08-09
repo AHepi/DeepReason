@@ -1,0 +1,150 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following a checklist is more reliable than a single expert because it replaces 'stochastic intuition' with 'deterministic verification', where reliability is a function of the checklist's coverage of the problem's state-space.",
+      "mechanism": "The mechanism is the 'decomposition of cognitive load': the expert's intuition is a compressed heuristic prone to 'availability bias' (weighting recent or vivid cases), whereas the checklist forces a serial scan of all necessary conditions. Reliability increases because the checklist acts as an external memory buffer that prevents the 'omission error' inherent in high-speed pattern matching.",
+      "counterconditions": [
+        "The task requires synthesis of non-linear variables not captureable in a discrete list.",
+        "The checklist contains a systematic error (false positive/negative) that the non-experts lack the domain knowledge to question."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_003"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "The single domain expert is more reliable because 'intuitive' judgment in verifiable tasks is actually the application of 'tacit knowledge'—complex, multi-variable dependencies that cannot be serialized into a checklist without losing the essential context of the problem.",
+      "mechanism": "The mechanism is 'holistic pattern recognition': the expert identifies 'silent failures' (anomalies that don't trigger checklist items but invalidate the result) through a subconscious comparison of the current case against a vast library of edge cases. The panel, by contrast, suffers from 'hyper-focus' on the checklist, creating a blind spot for anything not explicitly listed.",
+      "counterconditions": [
+        "The task is purely algorithmic/procedural with no hidden variables.",
+        "The expert is operating under high cognitive load or fatigue, triggering heuristic shortcuts."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'non-linear temporal spikes' in the evaluation process, representing active cognitive friction and debate over the application of the checklist.",
+      "mechanism": "Mere compliance follows a linear time-progression (Item 1 -> 2 -> 3). Genuine reliability requires the panel to negotiate the *meaning* of the checklist items in the context of the specific case. Therefore, pauses or 're-visits' to previous checklist items (backtracking) serve as behavioral evidence that the panel is exercising critical judgment to ensure the checklist actually applies, rather than just checking boxes.",
+      "counterconditions": [
+        "The panel is highly experienced with the checklist, leading to 'automaticity' that mimics mere compliance.",
+        "The panel is inefficient, spending time on irrelevant debates that do not contribute to the outcome."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_009"
+        ],
+        "shared_structure": [
+          "Temporal trace as a proxy for cognitive effort",
+          "Linear vs Non-linear progression"
+        ],
+        "transfer_claims": [
+          "The 'time-to-judgment' metric can distinguish between mindless adherence and critical application."
+        ],
+        "disanalogies": [
+          "Slow processing does not always equal critical processing (could be confusion)."
+        ],
+        "overturn_conditions": [
+          "Evidence that 'automatic' checklist application is more reliable than 'debated' application."
+        ]
+      }
+    },
+    {
+      "claim": "Reliability gains are genuine only if the panel exhibits 'divergence-convergence' patterns—where initial disagreements on checklist items are resolved through evidence-based reasoning—rather than immediate, unanimous agreement.",
+      "mechanism": "The mechanism is 'adversarial redundancy'. If a panel agrees instantly, they are likely following a 'path of least resistance' (mere compliance). If they disagree and then converge, the process has actively filtered out individual errors. The evidence of reliability is thus found in the *delta* between the initial raw responses and the final consensus.",
+      "counterconditions": [
+        "The checklist is so explicit that there is no room for legitimate disagreement.",
+        "The panel converges due to social pressure (groupthink) rather than evidence."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "Internal disagreement as a signal of error-correction",
+          "Convergence as a result of process"
+        ],
+        "transfer_claims": [
+          "The trajectory of agreement is a more reliable indicator of 'genuine' reliability than the final answer alone."
+        ],
+        "disanalogies": [
+          "Disagreement could simply be a sign of non-expert incompetence."
+        ],
+        "overturn_conditions": [
+          "Proof that unanimous 'box-checking' is statistically more accurate than debated convergence."
+        ]
+      }
+    },
+    {
+      "claim": "The distinction between 'genuine reliability' and 'mere compliance' is a category error in tasks with objectively verifiable outcomes; if the process consistently produces the correct answer, the distinction is philosophically moot.",
+      "mechanism": "The mechanism is 'functional equivalence'. In a binary outcome space (Correct/Incorrect), any process (whether 'mindless' or 'critical') that maps inputs to the correct output with high probability is, by definition, reliable. The prompt's demand to distinguish them assumes an internal cognitive state that is irrelevant to the objective verification of the outcome.",
+      "counterconditions": [
+        "The system must be robust against 'distribution shift' (new types of problems).",
+        "The process must be explainable for legal or ethical reasons."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002",
+          "SCR_003"
+        ],
+        "shared_structure": [
+          "Tension between process and outcome",
+          "Logical contradiction in the prompt's premise"
+        ],
+        "transfer_claims": [
+          "Reliability is an external property of the outcome, not an internal property of the agent's intent."
+        ],
+        "disanalogies": [
+          "Does not account for the 'fragility' of lucky compliance."
+        ],
+        "overturn_conditions": [
+          "Requirement that reliability must include 'robustness' to perturbations."
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we treat the checklist as a 'compiler' and the non-experts as 'hardware', the reliability of the panel is actually the reliability of the checklist's author. The 'genuine reliability' the prompt asks for might actually be the panel's ability to *debug* the checklist in real-time. Therefore, the evidence of 'genuine reliability' is not just getting the right answer, but the panel identifying a checklist item that is misleading for a specific case and overriding it.",
+          "why_keep_this": "Proposes a new way to view the 'compliance vs reliability' axis: as 'execution vs debugging'."
+        }
+      }
+    ]
+  }
+}
+```

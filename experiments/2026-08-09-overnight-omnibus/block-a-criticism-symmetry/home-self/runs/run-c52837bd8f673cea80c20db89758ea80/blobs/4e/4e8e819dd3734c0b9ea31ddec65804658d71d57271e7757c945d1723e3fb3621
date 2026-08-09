@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@cfb8ff5694d52f3527b08cf0: program:reasoning_observation_pending
+- reason-counter@49d646b42f17926c72962613: program:reasoning_observation_pending
+- reason-counter@3ecc9c63d93dc2eef69a4f12: program:reasoning_observation_pending
+- reason-counter@14552ffa80c50038dbc63d12: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts with a checklist will outperform an expert, and evidence of genuine gain is found in the panel's superior calibration on cases where checklist compliance is counterintuitive. This proves the panel is not just confident because they complied, but because the checklist rules correctly override flawed intuition.","counterconditions":[{"case":"Counterintuitive cases where the checklist is right also have high box-ticking, making it impossible to decouple compliance rate from correctness.","checker_spec":null,"eval":"observation"},{"case":"The panel exhibits overconfidence on counterintuitive cases regardless of correctness, indicating they trust the checklist blindly without meta-monitoring.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the panel is merely exhibiting compliance-driven confidence, their confidence will track the number of boxes ticked, not the correctness of counterintuitive rules. By examining the calibration curve on counterintuitive cases (where compliance is high but success is not obvious), we can distinguish genuine rule-monitoring from compliance artifacts. Genuine calibration means the panel is more confident when it gets counterintuitive cases right.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cfb8ff5694d52f3527b08cf0, reason-counter@49d646b42f17926c72962613
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel's advantage is a composition effect (wisdom of crowds) independent of the checklist's rule content. A single evaluation distinguishes this from genuine checklist-mediated gain by showing that the panel's accuracy is insensitive to checklist corruption but highly sensitive to aggregation method.","counterconditions":[{"case":"The panel's errors are highly correlated (e.g., they all follow the same wrong checklist rule), eliminating the wisdom-of-crowds effect.","checker_spec":null,"eval":"observation"},{"case":"The checklist is necessary to ensure independence of judgments, without which the aggregation fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Aggregating independent judgments cancels individual uncorrelated errors. The checklist may provide a common framing, but the reliability gain comes from the central limit theorem applied to the panel's aggregated guesses. If the panel's performance remains robust under checklist corruption, the checklist is epiphenomenal; the gain is a statistical artifact of aggregation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3ecc9c63d93dc2eef69a4f12, reason-counter@14552ffa80c50038dbc63d12
+
+DIRECTIVE: return exactly one entry 

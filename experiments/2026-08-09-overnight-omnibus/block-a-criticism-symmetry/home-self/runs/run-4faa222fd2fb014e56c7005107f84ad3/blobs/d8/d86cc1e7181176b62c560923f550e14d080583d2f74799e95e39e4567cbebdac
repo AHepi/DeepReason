@@ -1,0 +1,38 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9a80d4431d66c0e0ee74abbd: program:reasoning_observation_pending
+- reason-counter@10bcbd199eacde55b2eb4238: program:reasoning_observation_pending
+- reason-counter@30f0b747dcc2299129c005ba: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 5e9e529495e7f81372daeb47eb2775374d6fd03c9bcb6c7cb74c3f46f4c5ce62
+{"analogy":null,"claim":"A decentralized network of small, independently operated services can only be credibly claimed as more resilient to correlated failure than one large service if it is enforced to maintain heterogeneous external dependencies. Without such enforcement, rational economic optimization will naturally drive independent operators toward identical 'best-in-class' dependencies, creating a hidden monoculture that manifests as correlated failure during systemic shocks.","counterconditions":[{"case":"Decentralized operators intentionally adopt diverse, potentially suboptimal dependencies to ensure architectural heterogeneity.","checker_spec":null,"eval":"observation"},{"case":"The large service internalizes its dependencies via formal verification or air-gapped isolation, eliminating shared external infrastructure.","checker_spec":null,"eval":"observation"},{"case":"The 'best-in-class' dependencies utilized by decentralized operators are themselves formally verified and isolated against correlated failures.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Economic rationality forces decentralized operators to independently converge on identical, optimal infrastructure dependencies (e.g., the same cloud provider, DNS host, or TLS library) to minimize costs. This convergence creates an underlying shared dependency that is invisible during normal operations but triggers simultaneous, correlated failures across the decentralized network when the shared dependency fails.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- b541b893af0360d00b8413afc003de605643ec970a3798265e7852b357fe0cd5 [mention]
+- 286e3232567e30e109fd5626102f029c2b31c89655104a1286510b12824e4103 [mention]
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672 [mention]
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- b541b893af0360d00b8413afc003de605643ec970a3798265e7852b357fe0cd5: The problem explicitly asks the arguer to identify what evidence would distinguish failure modes that are truly independent from failures that merely appear unc
+- 286e3232567e30e109fd5626102f029c2b31c89655104a1286510b12824e4103: SRC_002 argues against decentralization by asserting that a large service can implement 'bridge-population fail-safes' isolating redundant components behind str
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

@@ -1,0 +1,50 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-85dfd6ce38235d462fa2d5c1881eb842) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seventh-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e247858fd783b129cd3b2a0e: program:reasoning_observation_pending
+- reason-counter@44baef28dab552e4c23db790: program:reasoning_observation_pending
+- reason-counter@00fe94468e23becd72a0c687: program:reasoning_observation_pending
+- reason-counter@67170d104b689de7734931ce: program:reasoning_observation_pending
+- reason-counter@d2b86898d49a88eb76471592: program:reasoning_observation_pending
+- reason-counter@10ea158043c6f954b0711daa: program:reasoning_observation_pending
+- reason-counter@b9248559b108e72b26dd29ad: program:reasoning_observation_pending
+- reason-counter@23be7e21881136bed679052b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of trained non-experts following an explicit checklist is more reliable than a single expert because it replaces the expert's 'compressed' but fragile pattern recognition with a redundant, additive verification process that eliminates single-point failure modes of omission.","counterconditions":[{"case":"The task requires 'synthesis' of contradictory data points that cannot be decomposed into a linear checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist is sufficiently complex to induce 'compliance fatigue', shifting the panel from verification to bureaucratic box-ticking.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a cognitive scaffold that forces the externalization of latent criteria. Reliability is gained through 'redundant verification': the panel's size ensures that if one member fails to perceive a condition, others likely will, whereas the expert's intuition-based 'skip' (pattern matching) is a systemic failure that cannot be self-corrected in a single pass.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simul
+commitments: reasoning-envelope-wf, reason-counter@e247858fd783b129cd3b2a0e, reason-counter@44baef28dab552e4c23db790
+
+TARGET SRC_002
+{"analogy":null,"claim":"Reliability gain is evidenced by 'error-type symmetry': the panel is more reliable if it shifts the failure mode from 'omission' (expert forgetting a step) to 'commission' (panel misinterpreting a step), provided commission errors are more easily detectable via audit.","counterconditions":[{"case":"Commission errors are more catastrophic than omission errors in the specific domain.","checker_spec":null,"eval":"observation"},{"case":"The audit process for checklist commission errors is as unreliable as the expert's intuition.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist eliminates the 'forgotten step' (omission). While the panel may still fail by misapplying a rule (commission), this failure leaves a legible trail in the checklist (SCR_002). The 'reliability' gain is not necessarily a higher raw accuracy, but a reduction in the variance of the error type, making the system as a whole more stable and auditable.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@00fe94468e23becd72a0c687, reason-counter@67170d104b689de7734931ce
+
+TARGET SRC_003
+{"analogy":null,"cla

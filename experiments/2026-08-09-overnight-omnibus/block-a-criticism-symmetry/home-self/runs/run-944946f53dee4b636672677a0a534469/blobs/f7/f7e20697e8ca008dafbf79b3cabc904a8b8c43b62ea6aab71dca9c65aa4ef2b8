@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@79409329b6dc2bd68b0cf479: program:reasoning_observation_pending
+- reason-counter@2768646f15e16db5744fb5e3: program:reasoning_observation_pending
+- reason-counter@3b83a38b550a1bab86a7cd71: program:reasoning_observation_pending
+- reason-counter@e1319e17d247bcb041863db0: program:reasoning_observation_pending
+- reason-counter@40d49cf094387723e68e9c87: program:reasoning_observation_pending
+- reason-counter@5debe679cf7a2a4d645a47e6: program:reasoning_observation_pending
+- reason-counter@9c7253c2801bed7ad72a3f57: program:reasoning_observation_pending
+- reason-counter@de10db40a1ceb3b75846fc48: program:reasoning_observation_pending
+- reason-counter@5d8e37dffe2ea2766012fc0e: program:reasoning_observation_pending
+- reason-counter@bb60d960983d4fdc21bae724: program:reasoning_observation_pending
+- reason-counter@122cf367f2fbeb18cf232c10: program:reasoning_observation_pending
+- reason-counter@f6d7e41975d63ccb55b283b6: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Evidence distinguishing truly independent failures from merely uncorrelated ones can be gathered by subjecting the system to targeted causal perturbations rather than passively observing the joint failure distribution. If deliberately severing an operator-level factor that was thought to be shared fails to alter the joint failure rate, the independence is real; if it alters it, the independence was illusory.","counterconditions":[{"case":"If the large service cannot be ethically or operationally subjected to randomization of its critical deployment philosophies.","checker_spec":null,"eval":"observation"},{"case":"If the act of randomization itself introduces new correlated failure modes (e.g., added orchestration complexity).","checker_spec":null,"eval":"observation"},{"case":"If there are unobserved operator-level factors that are not amenable to perturbation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Passive observation (as in checking the joint failure distribution against operator factors) struggles with confounding and sparse data. The empiric covering principle is active intervention: active randomization of de
+commitments: reasoning-envelope-wf, reason-counter@79409329b6dc2bd68b0cf479, reason-counter@2768646f15e16db5744fb5e3, reason-counter@3b83a38b550a1bab86a7cd71
+
+TARGET SRC_002
+{"analogy":null,"claim":"The claimed independence of failures in a decentralized network is almost always an illusion masking hidden common dependencies, because the network itself enforces tight coupling via shared protocols and routing standards. The mere fact that small services can communicate implies a shared consensus mechanism that constitutes a correlated failure point.","counterconditions":[{"case":"If the decentralized network uses multiple, mutually non-interoperable protocols that are partitioned into non-communicating subnets (reducing overall network value).","checker_spec":null,"eval":"observation"},{"case":"If the large service's internal subsystems share a single internal communication standard.","checker_spec":null,"eval":"observation"},{"case":"If the shared communication standard is formally verified to a degree that renders correlated failure probability negligible.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"All participants in a functioning decentralized network must agree on a shared communication protocol and routing logic. A bug or zero-day in the standard library implementing this protocol (e.g., OpenSSL, DNS) will s
+commitments: reasoning-envelope-wf, reason-counter@e1319e17d247bcb041863db0, reason-counter@40d49cf094387723e68e9c87, reason-counter@5debe679cf7a2a4d645a47e6
+
+TARGET SRC_003
+{"analogy":null,"claim":"A decentralized network of small, independently operated services is often *less* resilient to correlated failure than one large service with strictly more total internal redundancy, due to premature exhaustion of recovery resources under cascading loads.","counterconditions":[{"case":"If the large service's internal redundancy is concentrated in a monoculture, then the decentralized network is more resilient.","checker_spec":null,"eval":"observation"},{"case":"If there is a central, well-provisioned load-shedding circuit breaker governing the decentralized network's routing layer.","checker_spec":null,"eval":"observation"},{"case":"If the shocks are truly independent (not common-cause traffic shocks).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independently operated small services often lack backstop resources. A common-cause shock (e.g., a traffic spike or cache stampede) that a large service's redundant pools absorb can trigger simultaneous outages across many small services, meaning the observed joint failure distribution is dominated by correlated causes hidden as independent failures.","premises":[],"schema":"de
+commitments: reasoning-envelope-wf, reason-counter@9c7253c2801bed7ad72a3f57, reason-counter@de10db40a1ceb3b75846fc48, reason-counter@5d8e37dffe2ea2766012fc0e
+
+TARGET SRC_004
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure than a single large service if and only if the distribution of operator-level causal factors (deployment philosophy, personnel, infrastructure vendor, library dependencies) across the network has strictly lower entropy than the equivalent distribution within the large service.","counterconditions":[{"case":"If the large service has lower operator-level causal entropy (e.g., via internal federation of independent sub-teams) than the decentralized network.","checker_spec":null,"eval":"observation"},{"case":"If the decentralized network is built on a single open-source framework whose dominant branch constitutes a single deployment philosophy.","checker_spec":null,"eval":"observation"},{"case":"If entropy is measured at the wrong level (e.g., code-level diversity exists but data layer is monoculture).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The total quantity of redundancy is irrelevant if it is monoculture; the large service's 'strictly more total internal redundancy' is rendered fragile by a single shared deployment philosophy. Independence is a distrib
+commitments: reasoning-envelope-wf, reason-counter@bb60d960983d4fdc21bae724, reason-counter@122cf367f2fbeb18cf232c10, reason-counter@f6d7e41975d63ccb55b283b6
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

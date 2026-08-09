@@ -1,0 +1,104 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable because checklists induce 'fragmentation error,' where a panel correctly verifies individual components but fails to synthesize them into a coherent, correct judgment.",
+      "mechanism": "The checklist decomposes a complex task into discrete binary checks. While non-experts can verify these atoms, the 'connective tissue' of domain expertise—the ability to recognize how a 'pass' on item A and a 'pass' on item B actually create a failure condition C—is absent. This creates a competence ceiling (SRC_004, SRC_008) where the panel is blind to emergent failures that the expert's intuition captures holistically.",
+      "counterconditions": [
+        "The task is purely additive/algorithmic with no emergent properties.",
+        "The checklist includes explicit 'synthesis' checks that mandate cross-referencing items."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_011"
+        ]
+      }
+    },
+    {
+      "claim": "A panel of trained non-experts is more reliable because they replace the expert's systemic 'blindspots' with uncorrelated, random errors that are more likely to be caught via group consensus.",
+      "mechanism": "Experts suffer from 'calibration bias' where their intuition is optimized for the average case but systematically fails on 'weird' boundary cases (SRC_002, SRC_005). A panel following a checklist treats every case with the same algorithmic rigor. Because their errors are uncorrelated (non-systemic), the additive redundancy of the panel filters out individual mistakes, leading to a more stable and reliable mean outcome.",
+      "counterconditions": [
+        "The panel suffers from groupthink (SCR_014), correlating their errors.",
+        "The checklist is so cumbersome it leads to 'compliance errors' (SCR_006)."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_009"
+        ]
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is evidenced by 'causal justification'—the panel's ability to explain why a checklist item is irrelevant to the specific outcome, rather than simply checking the box.",
+      "mechanism": "Mere compliance is characterized by a uniform application of the checklist regardless of the case's nuance. Genuine reliability is demonstrated when the panel identifies and rejects 'decoy' or irrelevant checks (SCR_005, SCR_007) by articulating the lack of a causal link to the verifiable outcome. The evidence is found in the qualitative justification for the check, not the binary state of the box.",
+      "counterconditions": [
+        "The panel is trained to 'follow the list exactly' as a matter of protocol, penalizing the rejection of decoys.",
+        "The evaluation only records binary outputs and not the reasoning process."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_005",
+          "SCR_007"
+        ]
+      }
+    },
+    {
+      "claim": "Reliability gain is distinguished from compliance by 'temporal non-uniformity'—a correlation between the time spent on a checklist item and that item's objective difficulty.",
+      "mechanism": "A compliance-driven panel exhibits a constant 'cadence' per item, treating easy and hard checks identically. A reliability-driven panel exhibits 'time-spikes' (SCR_001) on difficult items, indicating active cognitive engagement and verification. Therefore, a non-uniform distribution of effort that tracks the task's inherent complexity is the signature of genuine reliability (SRC_006).",
+      "counterconditions": [
+        "The panel is under strict time pressure, forcing a uniform cadence.",
+        "The 'time-spike' is caused by total confusion (SCR_010) rather than rigorous verification."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_016"
+        ]
+      }
+    },
+    {
+      "claim": "The reliability of the panel is a 'pseudo-gain' caused by a shift in error-type symmetry: they trade the expert's 'omission errors' for 'commission errors' that are easier to detect but not necessarily fewer.",
+      "mechanism": "Experts fail by forgetting a step (omission). Panels fail by misinterpreting a step (commission) (SCR_003). While the total error rate may remain constant, the panel's errors are more 'visible' in the audit trail of the checklist. The 'gain' is not in the outcome's reliability, but in the auditability of the failure, which can be mistaken for a reliability gain in a single evaluation.",
+      "counterconditions": [
+        "The task is so simple that commission errors are nearly impossible.",
+        "The expert's omission errors are equally visible through other means."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_003"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "What if the 'trained non-expert' is actually a liability? If the training is superficial, they might develop 'overconfidence in the tool' (SCR_015), where they believe the checklist is exhaustive. This would lead to a catastrophic failure when the case falls outside the checklist's scope—a failure an expert would have caught instantly via intuition. This suggests a 'U-shaped' reliability curve based on training depth.",
+          "why_keep_this": "Explores the risk of 'pseudo-expertise' and tool-dependency."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we differentiate 'time-spike' (rigor) from 'time-spike' (confusion) using only the final answer and the time log?",
+        "related_refs": [
+          "SCR_001",
+          "SCR_010"
+        ]
+      }
+    ]
+  }
+}
+```

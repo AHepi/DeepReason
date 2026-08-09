@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's entire evidentiary prescription for distinguishing genuine reliability from mere checklist compliance rests on adversarial/orthogonal probes—items where surface cues and deep structure diverge. But for the class of problems the prompt specifies ('tasks with objectively verifiable outcomes'), such adversarial items are not guaranteed to exist within a single evaluation: if the checklist's features are already the causally sufficient generators of the outcome (the 'causally complete' regime SRC_002 itself acknowledges), every legitimate verification item is one where surface cues and deep structure coincide. In that regime the proposed discriminator has zero power, yet the prompt demands a discriminator that works within a single evaluation for this task class. SRC_002's overturn condition concedes collapse when the checklist is causally complete, but offers no alternative single-evaluation evidence for exactly that case.",
+      "counterexample": [
+        {
+          "task": "mortality prediction from a published clinical scoring rule",
+          "checklist_features": "the exact published scoring criteria (e.g., APACHE components)",
+          "outcome": "in-hospital mortality (objectively verifiable)",
+          "adversarial_probe_exists": false,
+          "reason": "the scoring rule is a deductive consequence of the outcome's generative model under the study population; surface cues and deep structure cannot diverge without leaving the task distribution",
+          "single_evaluation_discriminator_power": 0,
+          "prompt_requirement": "distinguish genuine reliability gain from mere checklist compliance within a single evaluation"
+        }
+      ]
+    }
+  ]
+}

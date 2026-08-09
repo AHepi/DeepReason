@@ -1,0 +1,1 @@
+{"schema":"seat-bindings.v1","bindings":[{"group":"conjecture","provider":"ollama","model_id":"gemma4:31b","profile_digest":"1acf7f07b4435443938c2ed14bade95233fea4128e8189fa8b45a1d13f44743a"}],"digest":"f00553dfcf4dea5160b78366e897f2ab9fc85aaf513a71eca1365a84c72329bb"}

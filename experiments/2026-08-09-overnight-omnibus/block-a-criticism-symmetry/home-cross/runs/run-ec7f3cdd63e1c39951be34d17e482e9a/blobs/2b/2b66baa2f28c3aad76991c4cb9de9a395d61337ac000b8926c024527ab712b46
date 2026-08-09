@@ -1,0 +1,81 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Decentralized networks are more resilient to correlated failure not because of redundancy, but because they possess 'Organic Stack Entropy' that prevents the synchronization of failure modes.",
+      "mechanism": "In a large service, redundancy is typically 'homogeneous' (identical copies of the same stack), meaning a single logic bug or configuration error is replicated across all redundant nodes. A decentralized network of independent services naturally evolves heterogeneous stacks (different languages, OS versions, and libraries). This structural diversity ensures that a trigger which crashes one service (e.g., a specific TCP window size bug) is unlikely to affect others, effectively capping the maximum possible correlated failure at the percentage of the network sharing that specific stack.",
+      "counterconditions": [
+        "The decentralized services converge on a 'hidden monoculture' (e.g., all using the same cloud provider's managed Kubernetes service).",
+        "The failure trigger is at a layer below the application stack (e.g., a global BGP routing error or a fundamental flaw in the IPv6 protocol)."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_009",
+          "SCR_011"
+        ]
+      }
+    },
+    {
+      "claim": "A large service with internal redundancy is fundamentally more fragile than a decentralized network because it creates a 'Single Point of Coordination' that enables instantaneous global failure.",
+      "mechanism": "Centralized systems rely on unified control planes for efficiency (e.g., global config pushes, synchronized updates). This coordination mechanism acts as a high-speed vector for correlated failure: a single erroneous 'global' command can disable all redundant nodes simultaneously. In contrast, a decentralized network requires asynchronous, manual, or independent updates across operators, which naturally 'staggers' the propagation of errors, transforming a potential global outage into a series of manageable, localized failures.",
+      "counterconditions": [
+        "The decentralized network uses a shared automated update mechanism or a common upstream dependency (e.g., a single NPM package used by all).",
+        "The failure is caused by an external surge in demand (DDoS) that overwhelms all services regardless of their coordination."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_008",
+          "SCR_007"
+        ]
+      }
+    },
+    {
+      "claim": "The distinction between truly independent and merely uncorrelated failures is found in the 'Temporal Distribution of Recovery' rather than the 'Temporal Distribution of Onset'.",
+      "mechanism": "While both independent and correlated failures can appear staggered (due to different trigger thresholds), truly independent failures will recover at rates proportional to the individual operators' capabilities. Correlated failures, even if they onset at different times, will exhibit 'Recovery Synchronization'—they will all recover simultaneously when the shared external cause (e.g., a DNS provider's outage) is resolved. Therefore, the 'smoking gun' for correlation is a shared recovery timestamp across diverse entities.",
+      "counterconditions": [
+        "The shared cause is a 'permanent' failure (e.g., a catastrophic hardware flaw) that does not recover.",
+        "The recovery process for independent services is gated by a shared third-party dependency."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_002",
+          "SCR_003"
+        ]
+      }
+    },
+    {
+      "claim": "Decentralization is less resilient than centralized redundancy when the failure mode is 'Resource Exhaustion' but more resilient when the failure mode is 'Logic Corruption'.",
+      "mechanism": "A large service can leverage 'Global Load Shedding' and massive shared capacity to absorb spikes that would knock out individual small services (Resource Exhaustion). However, because the large service uses a unified codebase, a logic error (e.g., a null pointer exception in a new feature) kills all redundant nodes. The decentralized network, lacking the capacity to absorb massive spikes, fails easily to load, but its diversity of codebases prevents a single logic bug from achieving a 100% failure rate.",
+      "counterconditions": [
+        "The centralized service implements 'Cellular Architecture' (strictly isolated islands of redundancy with different versions).",
+        "The decentralized services are so small they lack basic internal redundancy, making them fail to trivial local errors."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_005",
+          "SCR_014"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesize the 'Recovery Signature' as the primary differentiator for correlation. If failures are independent, the time-to-recovery (TTR) should vary wildly based on the operator's skill. If failures are correlated via a shared dependency, the TTR will be identical (or highly clustered) across all affected nodes, regardless of the operator, because they are all waiting for the same external fix. This shifts the evidence search from the 'start' of the outage to the 'end'.",
+          "why_keep_this": "Provides a novel way to answer the 'evidence' part of the prompt that differs from the temporal clustering of onset."
+        }
+      }
+    ]
+  }
+}
+```

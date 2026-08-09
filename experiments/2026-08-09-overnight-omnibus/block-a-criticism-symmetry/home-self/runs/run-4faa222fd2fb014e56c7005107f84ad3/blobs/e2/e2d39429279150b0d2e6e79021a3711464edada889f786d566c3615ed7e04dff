@@ -1,0 +1,26 @@
+```json
+{
+  "candidate": {
+    "claim": "Decentralized networks of small services tend toward hidden common-cause correlations because rational independent operators will independently converge on identical 'best-in-class' dependencies, making them more vulnerable to correlated failure than a large service that can enforce heterogeneous dependencies by fiat.",
+    "mechanism": "Independent operators optimizing for cost and reliability under similar market constraints will select the same optimal tools, libraries, and infrastructure. This rational convergence creates a shared dependency monoculture. A large service can counteract this monoculture by mandating design diversity, achieving true design independence.",
+    "counterconditions": [
+      "Independent operators intentionally adopt diverse, suboptimal dependencies to maximize architectural diversity, avoiding market-driven convergence.",
+      "The large service's internal redundancy shares a common design specification flaw, rendering its component redundancy illusory and negating its ability to enforce true design independence.",
+      "The large service faces super-linear costs for formal verification of isolation domains, preventing it from enforcing heterogeneous dependencies in practice."
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.6
+  }
+}
+```

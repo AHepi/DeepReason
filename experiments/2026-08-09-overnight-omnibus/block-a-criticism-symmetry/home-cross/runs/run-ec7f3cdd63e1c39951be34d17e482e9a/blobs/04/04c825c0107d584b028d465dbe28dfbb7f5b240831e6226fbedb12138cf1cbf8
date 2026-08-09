@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 references SRC_002 as a dependency, but the substance is flawed. The claim asserts that resilience depends on 'diversity of failure domains' to prevent synchronized collapse. However, it then states it is refuted if the network exhibits a step-function recovery pattern, because that would indicate the services share a latent common cause. A step-function recovery pattern does not logically refute independence of failure modes; a network of truly independent services could recover in a synchronized step-function if an overwhelming external stressor (like a global BGP collapse) ceases simultaneously. SRC_001 conflates a correlated recovery pattern with a shared cause, mischaracterizing the evidence that would actually distinguish independent failures from apparent uncorrelated ones.",
+      "counterexample": [
+        "Five independent services are hosted on different providers and use different codebases.",
+        "A global network outage takes all five down simultaneously.",
+        "When the outage is resolved, all five recover simultaneously in a step-function pattern.",
+        "Their failure modes were truly independent (different codebases/providers), triggered by a singular overwhelming external event, not a shared latent cause."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 successfully identifies that resilience to correlated failure is tied to the evolutionary divergence of the system's state-space rather than mere topology. It effectively provides the requested distinguishing evidence by specifying that correlated failures occur when diverse entities share a common blind spot. By pointing out that a large service with redundancy often shares a single evolutionary trajectory (monoculture of failure), it correctly argues against the claim that strictly more internal redundancy is inherently more resilient. The counterconditions it provides, such as converging on a single dominant framework or an overwhelming stressor, serve as substantive evidence that would distinguish or refute the independence of failure modes."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "SRC_003 provides a valid mechanism for the problem context by introducing 'Organic Stack Entropy' as a reason decentralized networks resist failure mode synchronization. It correctly identifies that the value lies in divergence rather than raw redundancy, which directly engages the problem's comparison between a decentralized network and one large internally redundant service. The countercondition provided, where decentralized services converge on a hidden monoculture (like a shared cloud provider's managed service), serves as the exact type of evidence requested: it distinguishes between failures that appear uncorrelated and those that share a hidden common cause, directly answering the prompt's requirement."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "SRC_004 is not present in the provided targets. Because the schema requires an independent assessment of each named target and only SRC_001, SRC_002, and SRC_003 were provided in the LOCAL REFERENCES, this entry reflects an attack on the missing target due to a failure to provide any substantive response to the problem context.",
+      "counterexample": null
+    }
+  ]
+}

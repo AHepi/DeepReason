@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts the panel's reliability 'stems from the additive probability of detection: the likelihood that at least one panelist flags a checklist item that the expert intuitively skipped.' This posits a causal mechanism (independent detection probabilities compounding across panelists) but never addresses the problem's requirement to 'identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.' The additive-detection mechanism would predict panelists independently flagging different items (high inter-rater dispersion on *which* items are flagged). If instead all panelists tick the same items in lockstep, the 'additive probability' mechanism is not operating — agreement is driven by shared checklist structure, not independent detection. SRC_001 fails to specify this distinguishing evidence, leaving the causal mechanism untestable against the compliance-vs-gain distinction the problem demands.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's causal mechanism — that expert intuition is 'compressed experience' enabling rapid pattern recognition of outliers — provides no way to distinguish genuine reliability from luck within a single evaluation. The mechanism predicts the expert catches anomalies 'outside the checklist's predefined scope,' but on a task with objectively verifiable outcomes and only one evaluation round, any correct expert judgment on an out-of-scope item is observationally indistinguishable from a lucky guess. The problem explicitly demands evidence that separates real reliability from mere compliance that happens to track the right answer; SRC_002 offers no such evidentiary criterion. Worse, its mechanism actively undermines the required distinction: if the expert's advantage lies in detecting unchecklisted anomalies, and the evaluation only records right/wrong outcomes (not whether the right answer came from checklist-following or anomaly-spotting), then a single evaluation cannot attribute the expert's success to the cited mechanism rather than chance.",
+      "counterexample": null
+    }
+  ]
+}
+```

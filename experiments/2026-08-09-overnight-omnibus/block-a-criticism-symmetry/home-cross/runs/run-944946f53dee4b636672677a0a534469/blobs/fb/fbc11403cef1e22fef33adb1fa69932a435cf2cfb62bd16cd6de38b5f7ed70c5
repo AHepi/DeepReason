@@ -1,0 +1,47 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The 'virtual monolith' failure mode described in SRC_001 contradicts the 'fragmentation firewall' effect of SRC_004 by demonstrating that logical decentralization is negated when physical dependencies intersect; this relation is refuted if a decentralized network maintains a dependency intersection below the threshold required to trigger a systemic collapse.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_004"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "The 'Redundancy-Heterogeneity Trade-off' in SRC_005 integrates the claims of SRC_002 and SRC_003 by framing resilience as a match between the failure's causal nature (stochastic vs systemic) and the structural defense (redundancy vs heterogeneity); this relation is refuted if stochastic failures can be mitigated by heterogeneity or if systemic failures can be mitigated by homogeneous redundancy.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The resilience of a decentralized network depends on the 'operational heterogeneity' defined in SRC_002 to prevent the 'latent synchronization' described in SRC_001; this relation is refuted if a network achieves resilience through high-volume redundancy despite total homogeneity of the underlying substrate.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The claim in SRC_003 that internal redundancy in a monolith is a 'vanity metric' reduces to the mechanism of 'latent synchronization' in SRC_001 when the monolith's redundancy is perfectly homogeneous; this relation is refuted if a monolith's internal redundancy is achieved via N-version programming, thereby eliminating the homogeneity that makes the metric a 'vanity'.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The 'fragmentation firewall' in SRC_004 is compatible with the 'stochastic filter' in SRC_002, as both describe the mechanism by which divergence in implementation prevents the propagation of single-point-of-failure triggers; this relation is refuted if operational heterogeneity (recovery procedures) does not provide the same protection as software stack heterogeneity (kernels/libraries).",
+      "neighbours": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
+```

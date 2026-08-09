@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 demands 'causal completeness (i.e., deductive)' as the necessary and sufficient condition for a genuine reliability gain, but this causal standard is gratuitously extreme for the problem's scope of 'objectively verifiable outcomes.' A checklist can provide a genuine, non-compliant reliability gain via a probabilistic causal mechanism (e.g., a validated clinical scoring rule that captures the true causal drivers with high, but not deductive, probability) without being deductively complete. By framing the causal requirement as all-or-nothing deductive completeness, SRC_001 fails to supply the demanded causal mechanism for the vast majority of real-world verifiable tasks that are stochastic but reliable, leaving the target unable to explain a genuine reliability gain unless the checklist is a proof.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 identifies 'configural items' as the single-evaluation discriminator but fails to provide the causal mechanism linking configural item performance to genuine reliability. The target never establishes why succeeding on configural items demonstrates that the panel is using a genuine causal reasoning process rather than having memorized a checklist rule that happens to be more complex. A sophisticated checklist can explicitly encode instructions for configural interactions (as SRC_002 even admits in its counterconditions). Because the target lacks a causal mechanism distinguishing deep 'configural processing' from mere 'compliance with a configural rule,' its proposed evidence cannot distinguish a genuine reliability gain from mere checklist compliance on those items.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}
+```

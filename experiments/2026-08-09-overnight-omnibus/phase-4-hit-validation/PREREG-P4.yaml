@@ -1,0 +1,115 @@
+schema: deepreason-omnibus-prereg.v1
+phase: 4
+title: adversarial hit validation of the corpus-enrichment-patrol-pilot's Phase 2 output
+serves: decides whether the O2-shelved "consistency patrol" (experiments/2026-08-08-change-grounded-overlay-o2/SPEC.md S7) earns permanent machinery, jointly with Phase 5
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this phase
+status: FROZEN
+
+trigger_condition:
+  must_be_true_before_sampling: >
+    Phase 2 on the sibling branch (claude/corpus-enrichment-patrol-pilot-f4khnk)
+    must show patrol_results.jsonl at its pre-registered total of 9277
+    pairs (confirmed via `git fetch` + `git show
+    origin/claude/corpus-enrichment-patrol-pilot-f4khnk:.../patrol_results.jsonl
+    | wc -l`) before ANY sample is drawn. As of this freeze, the branch
+    shows 8872/9277 (95.6%) -- NOT yet complete. This phase's tooling
+    is built and frozen now; execution is gated on that count reaching
+    9277, checked immediately before sampling, not assumed.
+
+read_only_access_to_sibling_branch:
+  method: >
+    `git show origin/claude/corpus-enrichment-patrol-pilot-f4khnk:<path>`
+    only -- never checkout, never merge, never write to that branch.
+    Same pattern Block E used for the same branch's run roots.
+
+hit_definition_reused_from_phase_2:
+  rule: "parsed.contradiction == true AND parsed.confidence >= 0.6"
+  source: phase2_patrol.py (sibling branch), CONFIDENCE_THRESHOLD = 0.6
+
+known_defect_in_phase_2s_own_data_inherited_not_caused_by_this_phase:
+  what: >
+    130/8872 records (as of the 8872-count snapshot) have
+    raw_response containing a well-formed JSON object wrapped in a
+    markdown code fence, but parsed=null, because
+    phase2_patrol.py's parse_response() calls json.loads(raw)
+    directly with no fence-stripping -- a true parse failure, silently
+    folded into is_hit=False rather than tallied separately (contrary
+    to that pilot's own prereg.yaml `output_contract.on_parse_failure`
+    promise, per this phase's pre-flight research). This is the
+    sibling tranche's own defect, not this phase's to fix.
+  handling: >
+    the fence-wrapped-but-parsed=null records are EXCLUDED from the
+    non-hit sampling frame (they are not genuine "the model judged no
+    contradiction" records, and including them would contaminate the
+    false-negative probe with a different failure mode -- a parser
+    bug, not a model judgment). Detection rule: parsed is null AND
+    raw_response, after stripping a leading/trailing ```` ``` ```` or
+    ```` ```json ```` fence, parses as valid JSON with a
+    `contradiction` key. Genuine hits (parsed != null) are never
+    affected by this exclusion, since a hit by definition parsed
+    successfully.
+  reported_separately: this exclusion count and rationale are reported plainly in Phase 4's RESULTS segment, not hidden.
+
+design:
+  hit_sample_size: 80
+  non_hit_sample_size: 40
+  sampling_seed: 20260809  # documented; python random.Random(20260809), stratification: none -- uniform sample over the full final hit/clean-non-hit population across BOTH corpus halves (historical + enriched)
+  sampling_frame: >
+    hits: all records where is_hit == true, at the FINAL 9277-pair
+    count. non-hits: all records where is_hit == false AND not a
+    known fence-parse-failure (see above).
+  three_independent_rejudgment_checks:
+    a_pair_order_swapped: >
+      SAME PROMPT_TEMPLATE as Phase 2's own phase2_patrol.py, with
+      claim_a and claim_b SWAPPED in the template's slots. Tests
+      whether the original verdict depended on presentation order.
+    b_skeptic_framed: >
+      A NEW prompt, deliberately refute-biased BY DESIGN: "argue
+      these two claims are consistent; only if no consistent reading
+      exists, say so." This stress-tests toward finding consistency
+      (the opposite direction from Phase 2's own neutral framing) --
+      a hit that survives this framing is a stronger hit.
+    c_verbatim_repeat: >
+      EXACT repeat of Phase 2's own PROMPT_TEMPLATE, unswapped --
+      a stability check: does the model even agree with its own
+      earlier judgment on a literal re-ask.
+  call_mechanism: >
+    same as Phase 2's own phase2_patrol.py: deepreason.llm.endpoints.OpenAICompatEndpoint
+    direct provider call (glm-5.2, https://ollama.com/v1, temperature=0.0,
+    max_tokens=300, timeout_s=60, reasoning=none, json_mode=True,
+    credential from OLLAMA_API_KEY) -- a fresh BOUNDED call per check,
+    NOT a full `deepreason reason` run. This phase's own parser strips
+    a leading/trailing markdown fence before json.loads (fixing, for
+    ITS OWN calls only, the defect inherited above -- Phase 2's own
+    data is read as-is, never rewritten).
+  validation_rule: >
+    a hit VALIDATES only if ALL THREE checks independently satisfy
+    the same hit_definition_reused_from_phase_2 rule (contradiction
+    == true AND confidence >= 0.6). Any one disagreeing = does not
+    validate.
+  agreement_matrix: >
+    for the 80 hits, the full 2^3 = 8-cell table of
+    (check_a_agrees, check_b_agrees, check_c_agrees) outcome counts is
+    recorded, plus each check's individual flip rate (how often that
+    ONE check alone disagreed with the original Phase-2 verdict,
+    regardless of the other two).
+  false_negative_probe: >
+    the SAME three checks run on the 40 sampled non-hits. A non-hit
+    that gets flipped to a hit-satisfying verdict by one or more
+    checks is evidence Phase 2's original judgment missed a real
+    contradiction; report the flip count and which check(s) flipped
+    it, per case.
+
+deliverable:
+  validated_contradiction_rate: count of the 80 hits that validate / 80, with the full 320 raw provider responses (80 x 4: original Phase-2 raw_response is already on the sibling branch; this phase adds 3 more per hit) preserved verbatim under this phase's own directory.
+  false_negative_rate: count of the 40 non-hits flipped by >=1 check / 40, with raw responses preserved.
+  honest_caveat: >
+    this ENTIRE phase is still model judgment stacked on model
+    judgment -- four LLM calls agreeing is stronger evidence than one,
+    but it is not adjudication. The true adjudicator, per O2's own
+    binding design constraint (SPEC.md:544-546: "the patrol proposes,
+    it never itself adjudicates"), is Phase 5's live criticism cycle,
+    not this phase's vote-counting.
+
+hit_criteria:
+  reporting_floor: "80 hits / 40 non-hits from a ~9277-pair population is a calibration sample, not a census -- rates are reported with their raw n, no confidence intervals implied beyond what n=80/n=40 actually supports"

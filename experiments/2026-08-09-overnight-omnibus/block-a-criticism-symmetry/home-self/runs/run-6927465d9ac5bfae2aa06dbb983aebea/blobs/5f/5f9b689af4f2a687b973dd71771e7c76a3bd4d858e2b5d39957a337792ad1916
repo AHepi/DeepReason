@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "A non-expert checklist panel's reliability gain over a solo expert is strictly conditional on the checklist fully specifying the optimal decision function; a single evaluation distinguishes genuine gain from mere compliance by testing for systematic underperformance on a stratified subset of 'edge cases' where the checklist's deterministic policy must trade off between explicit criteria but the expert's tacit knowledge can integrate conflicting cues.",
+    "mechanism": "For an objectively verifiable task, any explicit checklist encodes a deterministic approximation of a decision boundary. The non-expert panel's reliability is strictly upper-bounded by the correctness of this encoded policy. Systematic panel errors on edge cases—where multiple checklist items apply with conflicting weights and the panel universally applies the checklist's naive default—reveal the panel is merely executing a lossy rule, whereas a solo expert's differential preservation of accuracy on these same stratified edge cases indicates tacit integration of unformalized cues that a reliable checklist would need to explicitly capture.",
+    "counterconditions": [
+      "The evaluation edge cases are deliberately adversarial against the checklist rather than drawn from the natural distribution of trade-off scenarios.",
+      "The 'expert' is simply a more experienced checklist-follower rather than someone relying on tacit intuition.",
+      "Objectively verifiable outcomes provide insufficient coverage of high-dimensional trade-off instances in a single evaluation."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    },
+    "typicality": 0.35
+  }
+}

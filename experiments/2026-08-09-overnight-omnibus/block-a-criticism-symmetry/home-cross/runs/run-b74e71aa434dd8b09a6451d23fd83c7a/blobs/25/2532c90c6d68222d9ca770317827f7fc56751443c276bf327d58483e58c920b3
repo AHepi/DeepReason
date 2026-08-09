@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 fails the problem's evidential requirement by making the only 'genuine' gain dependent on 'corrected trajectories' visible within a single evaluation. If a panel independently verifies conflicting indicators and correctly accepts the right answer on its first pass (no preliminary wrong judgment to flip), SRC_001's mechanism labels this as mere compliance tracking the right answer, even though the independent verification is exactly what distinguishes reliability from bias. The proposed discriminator thus yields a false negative: genuinely reliable process is misclassified as non-genuine whenever it happens to be correct from the start.",
+      "counterexample": [
+        "A panel is given a checklist requiring it to test for disconfirming indicators. It tests them, finds none, and correctly concludes the suggested answer is right on its first pass. There is no 'corrected trajectory' (no flip from a wrong preliminary judgment), so by SRC_001's criterion this is not evidence of a genuine gain, yet the panel did engage in genuine independent verification."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 silently narrows the claim to 'high-entropy' tasks with 'omission' error modes, then treats the panel's advantage as explained by statistical reduction of omission errors (Swiss Cheese). But for tasks with objectively verifiable outcomes where the expert's dominant error mode is misinterpretation rather than omission (which the problem explicitly countenances by asking for reliability 'on average' across such tasks), the Swiss Cheese aggregation does not address the failure mode: many non-experts omitting fewer steps does not fix a shared misreading. By attributing the advantage only to omission reduction, SRC_002 fails to argue the claim as posed for the non-omission subset of verifiable tasks.",
+      "counterexample": [
+        "An objectively-scored radiology triage task where the expert's errors come from misinterpreting subtle image cues, not from skipping steps. A non-expert panel using a checklist that tells them what to look for but not how to interpret ambiguous findings receives no 'Swiss Cheese' benefit, since independent members can misread the same cue identically."
+      ]
+    }
+  ]
+}
+```

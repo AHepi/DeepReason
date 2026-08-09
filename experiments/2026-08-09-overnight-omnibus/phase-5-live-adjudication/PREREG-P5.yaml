@@ -1,0 +1,141 @@
+schema: deepreason-omnibus-prereg.v1
+phase: 5
+title: live, harness-native adjudication of Phase 4's strongest validated hits
+serves: decides, jointly with Phase 4, whether the O2-shelved "consistency patrol" earns permanent machinery
+frozen_at: 2026-08-09T00:00:00Z  # before the first live call of this phase
+status: FROZEN
+
+binding_design_constraint_from_O2:
+  source: experiments/2026-08-08-change-grounded-overlay-o2/SPEC.md:544-546, REQUEST.md C4
+  rule: >
+    "every minted candidate attack edge enters the ORDINARY criticism
+    loop -- the patrol proposes, it never itself adjudicates." This
+    phase writes NO status, NO verdict, NO attack edge itself. It only
+    ever (a) attaches the counterpart claim as evidence and/or
+    reshapes the question to surface the tension, then (b) lets the
+    run's own, ordinary, already-qualified critic decide via
+    `deepreason continue`. Whatever the record shows afterward is the
+    finding -- refuted, survived, or refused -- never a label this
+    phase writes in.
+
+mechanism:
+  amend_continue: >
+    docs/proposals/AMENDMENT_EPOCHS.md's `deepreason amend
+    [--attach FILE] [--reshape-question TEXT]` then `deepreason
+    continue --budget cycles=N`, per this repo's own pre-flight
+    research into that mechanism (this phase's own commit history
+    carries the citation trail).
+  amendable_check_from_the_record_not_assumed: >
+    a root is amendable only if `derive_terminal_authority(root)`
+    (src/deepreason/runtime/terminal_authority.py) reports
+    `.current_valid == True` with `terminal_status` in
+    {completed, cancelled, failed} -- this is about the run's
+    committed TERMINAL AUTHORITY state, NOT its stop_reason. Checked
+    per-candidate with a small read-only script before attempting
+    amend, never assumed from `state: completed` in run-status.json
+    alone.
+  no_deepreason_home_or_qualify_needed: >
+    confirmed from src/deepreason/cli/main.py: `_cmd_amend` and
+    `_cmd_continue` operate purely on `args.root` -- neither
+    references DEEPREASON_HOME nor re-checks qualification. A
+    candidate run is self-contained and can be acted on directly by
+    `--root <path>`, with credentials supplied via OLLAMA_API_KEY in
+    the environment.
+  copy_before_amend_not_in_place: >
+    DELIBERATE METHODOLOGICAL CHOICE, not required by the tool: each
+    selected candidate's run directory is copied byte-for-byte into
+    this phase's own directory
+    (phase-5-live-adjudication/candidate-N/) BEFORE amending, and the
+    COPY is what gets amended/continued -- never the original
+    committed root in its home experiment directory (whether
+    historical or, if selected, the sibling branch's enriched half).
+    Rationale: amend is an additive, non-destructive operation by
+    design (a NEW epoch, old dossier/positions untouched) so amending
+    in place would not corrupt anything -- but several EARLIER
+    measurements tonight (Block E's overlay sweep) already read these
+    same historical roots in their PRE-amendment state, and this
+    tranche's own convention all night has been "new work lives under
+    this tranche's own directory." Amending a copy preserves the
+    exact same evidentiary value (the resulting log is a byte-valid
+    continuation of the same typed history) while leaving zero risk
+    to shared, already-reported-on committed data.
+  enriched_half_candidates: >
+    if a selected candidate's root lives on the sibling branch (the
+    Phase-1 enriched corpus, not yet in this branch's tree), it is
+    fetched read-only via `git archive
+    origin/claude/corpus-enrichment-patrol-pilot-f4khnk <path>` into
+    the same candidate-N/ copy target -- never checked out, never
+    merged, same pattern as Block E.
+
+candidate_selection:
+  source: Phase 4's validated hits (all 3 re-judgment checks agree contradiction, PREREG-P4.yaml)
+  count: 3 to 5, whichever number of amendable candidates is found first, in strength order
+  strength_ranking: >
+    the MINIMUM confidence across all 4 independent judgments (Phase
+    2's original + Phase 4's 3 re-judgments) for each validated hit,
+    highest minimum first -- a hit where every single independent
+    look was highly confident, not just the average.
+  amendability_check_order: >
+    walk the strength-ranked validated-hit list; for each, check
+    amendability from the record (see above); take the first 3-5 that
+    pass. A root that fails the amendability check is skipped (not
+    retried), and the skip + its typed reason is recorded as data,
+    per the operator's own framing ("refusals are data").
+
+per_candidate_procedure:
+  1_construct_evidence: >
+    extract claim_a and claim_b's actual text via
+    deepreason.programs.content_text(harness.state.artifacts[aid],
+    harness.blobs) from the (copied) root's own Harness, read-only.
+    Write the COUNTERPART claim (the one NOT already in the root
+    being amended -- i.e. if amending via artifact_a's root, attach
+    claim_b's text; the patrol pairs are within a single root in
+    Phase 2's own design, so both claims already live in the SAME
+    root -- in that case, `--reshape-question` alone surfaces the
+    tension; `--attach` is used only if the counterpart claim's
+    context needs restating as fresh evidence for the reshaped
+    question to reference clearly) as a plain-text file.
+  2_reshape_question: >
+    a new question text that names both claims verbatim (quoting
+    Phase 2's own claim_a/claim_b text from patrol_results.jsonl,
+    never paraphrased) and asks the run's own critic to determine
+    whether they are jointly consistent -- phrased as a genuine open
+    question, not a leading one, so the ordinary criticism cycle does
+    the actual work.
+  3_amend: "deepreason --root <copy> amend --reshape-question '<text>' [--attach <evidence file>] --allow-partial"
+  4_continue: "deepreason --root <copy> continue --budget cycles=10"
+  # "the proven budget recipe" -- 10 cycles, matching S6's and this
+  # tranche's own Block A-2 proven shape. ONE continue call per
+  # candidate, not a convergence loop -- Phase 5 is a demonstration,
+  # not a rate (see honest_caveat below), so no retry-until-valid.
+  5_record: >
+    per-candidate audit: was a NEW attack edge minted against either
+    claim (a real refutation), or did the tension survive criticism
+    (no new attack edge, both claims still accepted)? stop_reason,
+    state, replay_valid via verify_root. If amend itself refuses
+    typed (AMEND_NOT_AT_TERMINAL, AMEND_PENDING_CONFLICT,
+    AMEND_SOURCE_ALREADY_ADMITTED, or any other typed refusal), record
+    the refusal verbatim and move to the NEXT candidate in the
+    strength-ranked list -- never retry the same one.
+
+deliverable:
+  per_case: "attack edge minted (yes/no), verdicts, replay validity, or the typed amend refusal if one occurred"
+  honest_caveat: >
+    capability/criticism routing is stochastic across identical runs
+    (CLAUDE.md, "Live runs"). ONE attempt per case is a demonstration
+    of what the mechanism CAN do, never a rate of what it WILL do.
+    This phase does not claim "X% of real contradictions get caught
+    by ordinary criticism" -- only "here is what happened, verbatim,
+    for these N specific cases."
+
+failure_budget: continues this tranche's existing ledger (started at Block A, currently at 11 entries, budget 15)
+
+hit_criteria:
+  what_the_two_phases_together_decide: >
+    the three-number chain -- raw hit rate (Phase 2, inherited) ->
+    validated rate (Phase 4) -> live-adjudicated outcomes (Phase 5,
+    this phase) -- is the operator's own framing for whether the
+    consistency-patrol machinery earns being built for real (O2's
+    shelved SPEC) or stays an experiment. This phase does not itself
+    render that verdict; it supplies the final link in the chain for
+    the closing RESULTS.md decision segment to state plainly.

@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism requires all independent operators to use 'identical thresholds' and monitor 'the same metrics,' then treats leaderless synchronization as producing 'perfectly correlated failure.' But the problem explicitly contrasts a decentralized network against a single large service with 'strictly more total internal redundancy.' If one large service can be given strictly more internal redundancy (e.g., geographically diverse replicas, heterogeneous subsystems, staged rollouts), then a single operator can deliberately diversify thresholds, metrics, and restart policies inside that one service — exactly the 'highly diverse operational goals' countercondition SRC_001 itself concedes breaks the coupling. By locating all correlation risk in decentralized operators converging on a shared signal while ignoring that a large service's internal redundancy can be made heterogeneous, the argument fails to show decentralized networks are LESS resilient; it identifies a failure mode that redundant design can also neutralize. The claim's conclusion (against decentralization) is thus not supported relative to the specific comparator in the problem.",
+      "counterexample": [
+        "A single large payment service runs five independent replicas, each on a different codebase branch with distinct load-shedding thresholds, restart backoff schedules, and metric windows, deployed across three cloud regions. A market shock that triggers synchronized restarts across homogeneous decentralized operators instead triggers staggered, decorrelated responses across the replicas. The large service retains strictly more internal redundancy AND exhibits lower correlated-failure probability than the decentralized network."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target's core claim asserts that in a decentralized network 'independent failure modes do not share common triggers,' but its own countercondition grants that operators adopting 'identical cloud infrastructure or standardized auto-scaling algorithms' produces hidden correlations that 'synchronize failures,' and a second countercondition grants a shared external dependency (cloud/CDN) causes both architectures to 'fail in correlation.' The distinguishing evidence the problem asks for is never produced: SRC_002 states that independence limits correlation as a premise but supplies no observational or statistical criterion that would separate genuinely independent failures from merely-uncorrelated-until-shared-cause ones. If the very independence the claim relies on is only apparent and is overturned by common infrastructure/dependencies — as the counterconditions admit — then the claim's premise is doing the work the problem asks to be empirically distinguished, and the argument is circular: it assumes independence to conclude independence yields resilience.",
+      "counterexample": [
+        "A decentralized network of 50 small services, each independently operated, appears uncorrelated for two years of incident data. Then a TLS certificate vendor used by 47 of them revokes a root certificate simultaneously. The 'independent failure modes do not share common triggers' premise was false all along; the observed independence was merely apparent. With no distinguishing evidence specified, the claim cannot tell this case apart from genuine independence."
+      ]
+    }
+  ]
+}
+```

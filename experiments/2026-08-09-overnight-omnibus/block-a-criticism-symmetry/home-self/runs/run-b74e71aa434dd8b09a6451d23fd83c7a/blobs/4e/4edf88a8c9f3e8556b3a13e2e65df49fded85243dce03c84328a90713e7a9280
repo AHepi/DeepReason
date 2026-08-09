@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@28bf6205fef16059193ba4d3: program:reasoning_observation_pending
+- reason-counter@4d89712d87f14831ea500c2c: program:reasoning_observation_pending
+- reason-counter@989060c85e3e3bb60570b41e: program:reasoning_observation_pending
+- reason-counter@4ad00c0b1734a18687e395d1: program:reasoning_observation_pending
+- reason-counter@a51e70e9fc97a7f0a93c92ee: program:reasoning_observation_pending
+- reason-counter@9245a7e74e38a34b9f3cc7d3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"If the checklist is provably causally complete (i.e., deductive), the panel-versus-expert question becomes trivial: the panel always performs at least as well as the expert, and the distinction between genuine reliability gain and mere compliance tracking collapses, because compliance with a causally complete checklist IS genuine reasoning.","counterconditions":[{"case":"The checklist is not provably causally complete, leaving open the possibility that it tracks surface correlations.","checker_spec":null,"eval":"observation"},{"case":"The expert has access to information or reasoning strategies not captured by the checklist, allowing them to outperform the panel on edge cases.","checker_spec":null,"eval":"observation"},{"case":"Execution fidelity is imperfect, such that the panel misapplies the checklist despite its causal completeness.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"When the checklist encodes a deductive or causally complete theory, every checklist item is a necessary or sufficient condition for the outcome. The panel's adherence to the checklist guarantees correctness, and there is no gap between 'compliance' and 'genuine reliability' because the checklist fully captures the relevant causal structure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@28bf6205fef16059193ba4d3, reason-counter@4d89712d87f14831ea500c2c, reason-counter@989060c85e3e3bb60570b41e
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel's reliability gain over the expert is primarily due to aggregation effects (e.g., Condorcet jury theorem), not checklist quality. The checklist standardizes inputs, but the panel's advantage comes from independent errors cancelling out. Distinguishing genuine gain from compliance tracking requires separating the aggregation effect from the checklist effect.","counterconditions":[{"case":"Panel members' errors are correlated (e.g., due to a shared misunderstanding of the checklist), eliminating the aggregation benefit.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so constraining that there is no variance in panel members' responses, making aggregation irrelevant.","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is as reliable as the aggregated panel, such that the panel's advantage is negligible.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If panel members independently apply the checklist and their errors are uncorrelated, majority voting will amplify the checklist's signal. The panel's reliability gain may be largely due to this statistical aggregation rather than the checklist's causal completeness. The checklist's role is to decorrelate errors and standardize inputs, not to provide the causal model.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4ad00c0b1734a18687e395d1, reason-counter@a51e70e9fc97a7f0a93c92ee, reason-counter@9245a7e74e38a34b9f3cc7d3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

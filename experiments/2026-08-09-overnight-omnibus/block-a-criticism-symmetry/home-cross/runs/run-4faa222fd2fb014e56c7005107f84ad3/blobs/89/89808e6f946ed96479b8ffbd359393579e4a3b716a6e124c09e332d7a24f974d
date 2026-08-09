@@ -1,0 +1,69 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The 'Infrastructure Correlation' described in SRC_005 contradicts the 'Diversification of the failure domain' in SRC_001; specifically, the claim that decentralized networks are more resilient is refuted if the 'Architectural Distance' at the application layer is consistently negated by 'Infrastructure Convergence' at the network layer, effectively transforming a software monoculture into a substrate monoculture.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "Decentralization is an illusion of resilience; it merely transforms 'Software Correlation' into 'Infrastructure Correlation'"
+        }
+      ]
+    },
+    {
+      "content": "The 'Coordination Decay' mechanism in SRC_004 integrates with the 'False Independence' claim in SRC_002 to form a compound failure model: the network is refuted if the vulnerability window created by decentralized patching latency overlaps with a shared substrate failure, meaning the lack of central authority prevents the very synchronization needed to migrate away from a failing shared primitive.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": []
+    },
+    {
+      "content": "The 'Cross-Domain Temporal Correlation' in SRC_003 depends on the 'Substrate Monoculture' identified in SRC_002; the ability to distinguish true independence from apparent uncorrelation is refuted if the shared external event (e.g., a BGP update) occurs at a frequency higher than the telemetry sampling rate, masking the causal link between the shared infrastructure and the simultaneous service failures.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The resilience of decentralized networks in SRC_001 abstracts the risk of 'Infrastructure Correlation' in SRC_005; this abstraction is refuted if the probability of a shared primitive failure (e.g., Root DNS) exceeds the probability of a shared runtime failure (e.g., JVM bug), implying that the 'diversity' gained is mathematically offset by the concentration of risk in the network substrate.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.2,
+      "evidence_refs": []
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Diversity Debt' (SCR_005) in relation to 'Coordination Decay' (SRC_004). If operators converge on standard stacks to save costs, they aren't just creating a software monoculture; they are creating a 'Patching Monoculture' where the same vulnerabilities exist, but the decentralized nature of the network still prevents the centralized fix. This is a worst-of-both-worlds scenario: centralized vulnerability with decentralized remediation.",
+          "bears_on_refs": [
+            "SRC_004"
+          ]
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'Infrastructure Convergence' (SRC_005) create a ceiling on the possible resilience gains of 'Diversification of the failure domain' (SRC_001) regardless of software heterogeneity?",
+        "related_refs": [
+          "SRC_001",
+          "SRC_005"
+        ]
+      }
+    ]
+  }
+}
+```

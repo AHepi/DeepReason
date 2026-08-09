@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5a2bd7baa528242b1666469b: program:reasoning_observation_pending
+- reason-counter@9fb9943daeca2cad9e902943: program:reasoning_observation_pending
+- reason-counter@a80c8d2de1c111b88b53d903: program:reasoning_observation_pending
+- reason-counter@b7a9c8b9e523d7875a7039b3: program:reasoning_observation_pending
+- reason-counter@a535b37446a984722adab88e: program:reasoning_observation_pending
+- reason-counter@2445422d8f0bb995add8570b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The panel of non-experts is more reliable because the checklist functions as a variance-reduction mechanism that eliminates the 'expert's blind spot' (over-reliance on heuristics).","counterconditions":[{"case":"The task requires the synthesis of non-linear variables not captured by the checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist contains a systemic error that the expert's intuition would have overridden.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist decomposes a complex judgment into a series of binary or discrete verifications. While the expert uses a holistic 'gestalt' (high efficiency, high variance), the panel uses a linear algorithm (lower efficiency, lower variance). In tasks with objectively verifiable outcomes, the primary source of error is typically the omission of a basic requirement rather than a failure of deep intuition, making the checklist-driven panel more consistent.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5a2bd7baa528242b1666469b, reason-counter@9fb9943daeca2cad9e902943
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Unlike simple voting, this requires a shared structured instrument (the checklist)."],"overturn_conditions":["If the friction leads to a wrong answer more often than the checklist leads to a right one."],"shared_structure":["Initial divergence","Critical interrogation","Convergence on truth"],"source_memory_refs":["SCR_003"],"transfer_claims":["The presence of documented internal conflict is a proxy for cognitive engagement over rote compliance."]},"claim":"Genuine reliability is distinguished from mere compliance by 'Corrective Friction'\u2014the documented process of the panel rejecting a checklist item's surface-level truth to investigate a deeper inconsistency.","counterconditions":[{"case":"The panel is subject to extreme groupthink, suppressing all friction.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so prescriptive that it precludes any interpretation of the evidence.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance is a linear path: Item A -> Check -> Item B -> Check. Genuine reliability manifests when the panel encounters a 'clash' between the checklist and the evidence, leading to an internal debate that corrects a potential error. Evidence of this is found in the 'divergence-convergence' pattern: initial disagreement on a checklist item followed by a reasoned consensus that tracks the verifiable outcome.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a80c8d2de1c111b88b53d903, reason-counter@b7a9c8b9e523d7875a7039b3
+
+TARGET SRC_003
+{"analogy":null,"claim":"Reliability is a property of the 'System' (Checklist + Panel) rather than the 'Agent', making the distinction between genuine reliability and compliance a category error.","counterconditions":[{"case":"The environment is dynamic, requiring the executor to adapt the checklist in real-time to new data.","checker_spec":null,"eval":"observation"},{"case":"The checklist author failed to capture the necessary expertise, rendering the 'Code' buggy.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a verifiable outcome environment, the 'intent' of the agent is irrelevant. If the checklist is designed by an expert, the non-experts are merely the 'CPU' executing the 'Code'. The reliability gain is real because the system reduces the probability of single-point failure (the expert's bad day).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a535b37446a984722adab88e, reason-counter@2445422d8f0bb995add8570b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

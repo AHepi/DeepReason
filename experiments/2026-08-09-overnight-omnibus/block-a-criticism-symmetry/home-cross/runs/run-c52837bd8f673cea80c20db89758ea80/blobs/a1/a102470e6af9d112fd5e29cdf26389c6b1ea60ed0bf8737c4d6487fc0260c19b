@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:07c99bef33a8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 07c99bef33a8 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@eb46ef486177: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The problem 07c99bef33a8 abstracts the 'Path-Coherence' mechanism in SRC_003 into a general requirement for any objectively verifiable task to have a non-linear heuristic path; it is refuted if the 'logical chain' requirement is found to be an unnecessary constraint that does not actually increase the reliability of the final judgment over a simple 'leap'.
+commitments: hv-floor@2a45b7988522, lineage-ref@eb46ef486177, relation-form@578e42df713e
+
+TARGET SRC_002
+The problem 07c99bef33a8 shares mechanism with SRC_002 in treating the checklist as a directed graph where reliability is the existence of a valid logical derivation; this relation is refuted if the 'logical mapping' is found to be purely descriptive rather than prescriptive of the outcome.
+commitments: hv-floor@2a45b7988522, lineage-ref@eb46ef486177, relation-form@578e42df713e
+
+TARGET SRC_003
+The problem 07c99bef33a8 depends on SRC_001 to establish the 'Trace-to-Outcome' gap as the only viable metric for distinguishing reliability from compliance in a single evaluation; this relation is refuted if a high correlation between intermediate marks and the final outcome can be achieved by agents who are merely 'compliance-tracking' based on a perceived pattern.
+commitments: hv-floor@2a45b7988522, lineage-ref@eb46ef486177, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

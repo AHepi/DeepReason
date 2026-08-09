@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@b4d010b5bccfe477f10ab6f2: program:reasoning_observation_pending
+- reason-counter@45306fbbb392801d1de04806: program:reasoning_observation_pending
+- reason-counter@19641bd1c1d13f0acd18c48f: program:reasoning_observation_pending
+- reason-counter@ec7e2999257aa5b09d1f675b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure than a redundant centralized service because it replaces 'Logical Monoculture' with 'Operational Heterogeneity'.","counterconditions":[{"case":"The decentralized services share a critical common dependency (e.g., a single DNS provider or a ubiquitous shared library) that exceeds the diversity coefficient.","checker_spec":null,"eval":"observation"},{"case":"The failure mode is an external environmental shock (e.g., regional power outage) that overrides operational heterogeneity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a large service, internal redundancy usually replicates the same software stack and configuration across nodes; a single logic error (e.g., a poison pill request) propagates instantly across all redundant layers. In a decentralized network, the 'Coordination Decay' (referenced in SCR_003) acts as a biological firewall: differences in OS versions, kernel patches, and local configurations prevent a single trigger from activating the same failure mode across the entire network simultaneously.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b4d010b5bccfe477f10ab6f2, reason-counter@45306fbbb392801d1de04806
+
+TARGET SRC_002
+{"analogy":null,"claim":"A single large service with high redundancy is more resilient because it eliminates the 'Dependency Density' risks inherent in decentralized coordination.","counterconditions":[{"case":"The centralized control plane itself suffers a catastrophic failure (the 'Redundancy Paradox' from SCR_006).","checker_spec":null,"eval":"observation"},{"case":"The internal redundancy is implemented as a tight cluster that shares a single fate-sharing domain.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Decentralized networks rely on inter-service communication protocols. As the network grows, the 'Dependency Density' (SRC_005) creates hidden coupling where a failure in one small service triggers a cascading timeout or retry storm in others. A centralized service with strict internal redundancy manages failure through a unified control plane, allowing for global circuit-breaking and immediate load shedding that is impossible in a fragmented network of independent operators.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@19641bd1c1d13f0acd18c48f, reason-counter@ec7e2999257aa5b09d1f675b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

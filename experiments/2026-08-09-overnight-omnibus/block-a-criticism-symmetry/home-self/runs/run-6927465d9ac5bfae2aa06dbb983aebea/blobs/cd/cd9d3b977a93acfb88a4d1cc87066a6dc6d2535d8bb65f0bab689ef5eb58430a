@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@14d4db745e5c623d1034bcd4: program:reasoning_observation_pending
+- reason-counter@b07ad42e9e4f90f528113077: program:reasoning_observation_pending
+- reason-counter@516c7c1d5ab885e846e92905: program:reasoning_observation_pending
+- reason-counter@bc34bc57bb223fe991913a66: program:reasoning_observation_pending
+- reason-counter@91d0813c6a0853aa5717564f: program:reasoning_observation_pending
+- reason-counter@d5deeb94c12a59f6b6c53ea0: program:reasoning_observation_pending
+- reason-counter@ffa3662842a732a4a05a0432: program:reasoning_observation_pending
+- reason-counter@26fe95c44dfdaf98c089279c: program:reasoning_observation_pending
+- reason-counter@981760cc5128a604e67e939c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Within a single evaluation, the panel exceeds mere compliance if and only if its error pattern on items where the checklist is silent or ambiguous diverges from chance and tracks the correct answer: silence-completion is the signature of genuine reliability.","counterconditions":[{"case":"If there are no checklist-silent items in the evaluation, the test is inapplicable.","checker_spec":null,"eval":"observation"},{"case":"If panelists guess systematically rather than randomly on silent items, better-than-chance could be bias, not competence.","checker_spec":null,"eval":"observation"},{"case":"If the expert is also at chance on silent items, silence-completion does not distinguish the panel from the expert.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance has no signal where the checklist is silent; errors there should be random. Genuine reliability, if the panel externalizes competence, should fill silences with competent inference, producing better-than-chance accuracy on checklist-silent items.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@14d4db745e5c623d1034bcd4, reason-counter@b07ad42e9e4f90f528113077, reason-counter@516c7c1d5ab885e846e92905
+
+TARGET SRC_002
+{"analogy":null,"claim":"If the panel and the checklist make identical judgments on all evaluation items, then the panel exhibits no genuine reliability beyond mere compliance; within a single evaluation, evidence of reliability requires the panel to diverge from the checklist in a direction that tracks the objectively correct outcome.","counterconditions":[{"case":"If the checklist is perfectly accurate on the evaluation items, divergence is unnecessary and identity does not indicate mere compliance.","checker_spec":null,"eval":"observation"},{"case":"If the panel diverges from the checklist but not systematically toward correctness, divergence indicates noise, not reliability.","checker_spec":null,"eval":"observation"},{"case":"If the checklist is nondeterministic or has slack, identity may not hold even under mere compliance.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance produces judgments that are a deterministic function of the checklist. If the panel's judgments are identical to the checklist's, the panel has added no information. Genuine reliability requires the panel to add information beyond the checklist, detectable as systematic divergence toward correctness on items where the checklist errs.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bc34bc57bb223fe991913a66, reason-counter@91d0813c6a0853aa5717564f, reason-counter@d5deeb94c12a59f6b6c53ea0
+
+TARGET SRC_003
+{"analogy":null,"claim":"Genuine reliability is distinguished from mere compliance within a single evaluation by comparing the panel's performance to a reference panel using a shuffled, content-invalid checklist: if the panel's accuracy degrades with a shuffled checklist, the panel depends on checklist content; if it does not degrade, it has genuine reliability independent of the checklist.","counterconditions":[{"case":"If the shuffled checklist still contains valid cues by chance, degradation is not guaranteed and the test is weak.","checker_spec":null,"eval":"observation"},{"case":"If panelists treat the shuffled checklist as obviously wrong and ignore it, the test conflates compliance with trust.","checker_spec":null,"eval":"observation"},{"case":"If the checklist is used as a memory aid rather than a decision rule, shuffling may not degrade even genuine reliability.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance tracks the checklist's content, so shuffling the checklist's items or features should destroy accuracy. Genuine reliability, if it reflects competence externalized but not dependent on the checklist's specific content, should be robust to shuffling because panelists still apply the correct underlying reasoning.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ffa3662842a732a4a05a0432, reason-counter@26fe95c44dfdaf98c089279c, reason-counter@981760cc5128a604e67e939c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

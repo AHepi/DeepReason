@@ -1,0 +1,48 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@17b0e8fe430e8035bb0f61f0: program:reasoning_observation_pending
+- reason-counter@cc5b046180def06c8ce1b08b: program:reasoning_observation_pending
+- reason-counter@6abc6c1550ac2e266804421b: program:reasoning_observation_pending
+- reason-counter@5b5a458eec02e70a56c3ad6e: program:reasoning_observation_pending
+- reason-counter@776e0ea305a8fbff4cf004a3: program:reasoning_observation_pending
+- reason-counter@3cbdd3fa7c6c690b57d288e1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Reliability gain is genuine only if the panel exhibits 'Path-Coherence'\u2014where the intermediate checklist marks logically necessitate the final judgment.","counterconditions":[{"case":"The checklist is designed as a heuristic rather than a logical proof, meaning the path is not strictly linear.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Compliance is a 'leap' from the start of the checklist to the correct final answer, regardless of the intermediate marks. Genuine reliability is a 'trace': a logical chain where the state of the checklist items (the 'workings') provides a sufficient and necessary condition for the outcome. Evidence of reliability in a single evaluation is the absence of 'logical gaps' (e.g., marking a critical 'No' on a requirement but still concluding 'Yes' for the outcome).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@17b0e8fe430e8035bb0f61f0
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Requires the checklist to be a formal logic system rather than a heuristic list."],"overturn_conditions":["If the checklist is purely descriptive, no 'logical path' exists to be measured."],"shared_structure":["Path-based verification","Distinction between endpoint correctness and process correctness"],"source_memory_refs":["SCR_002"],"transfer_claims":["Logical coherence of the internal trace is the proxy for reliability."]},"claim":"The distinction between reliability and compliance is found in the 'Trace-to-Outcome' coherence: the logical mapping between the checked items and the final judgment.","counterconditions":[{"case":"The checklist items are not logically linked to the final outcome.","checker_spec":null,"eval":"observation"},{"case":"The non-experts are capable of 'back-filling' the checklist to match a correct guess.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Compliance is characterized by a 'disconnected' result\u2014where the final judgment is correct, but the checklist items are marked inconsistently or randomly (a jump from start to sink). Reliability is characterized by
+commitments: reasoning-envelope-wf, reason-counter@cc5b046180def06c8ce1b08b, reason-counter@6abc6c1550ac2e266804421b
+
+TARGET SRC_003
+{"analogy":null,"claim":"The panel is NOT more reliable; rather, they exhibit 'pseudo-reliability' through checklist compliance, and the only way to distinguish this from genuine reliability is the 'Trap-Item Divergence' metric.","counterconditions":[{"case":"The non-experts are so rigorously trained that they cannot be lured by 'feeling' traps.","checker_spec

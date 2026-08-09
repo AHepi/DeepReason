@@ -1,0 +1,69 @@
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist outperforms a single expert because the checklist decomposes a complex heuristic into a series of low-variance binary checks, effectively trading high-ceiling intuition for a high-floor systemic process.",
+      "mechanism": "The mechanism is 'error-type shifting': the expert is prone to 'Type I' failures of intuition (cognitive biases, overconfidence, or blind spots), whereas the panel is prone to 'Type II' failures of execution (missing a checklist item). In verifiable tasks, the systemic elimination of catastrophic intuitive blind spots via the checklist outweighs the expert's superior pattern recognition.",
+      "counterconditions": [
+        "The task requires synthesis of conflicting signals that cannot be decomposed into a checklist.",
+        "The checklist is poorly calibrated to the objective outcome (low validity).",
+        "The panel exhibits high social conformity (groupthink) that overrides the checklist's objectivity."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The single domain expert remains more reliable because 'expert intuition' is actually high-speed subconscious pattern matching that captures non-linear dependencies which a linear checklist inherently ignores.",
+      "mechanism": "The mechanism is 'holistic synthesis': the expert identifies the 'gestalt' of the problem. A checklist forces a modular approach, which creates 'interstitial gaps'—critical failures that occur between the checklist items. The expert's reliability stems from the ability to perceive the relationship between variables rather than the variables in isolation.",
+      "counterconditions": [
+        "The task is purely algorithmic or procedural.",
+        "The expert is operating under high cognitive load or fatigue.",
+        "The domain is characterized by 'wicked' complexity where intuition is systematically biased."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Reliability gains are genuine only if the panel's success is driven by 'error-correction through diversity' rather than 'procedural adherence'.",
+      "mechanism": "The mechanism is 'independent verification': if the panel members complete the checklist independently and their consensus converges on the correct answer, the reliability is derived from the statistical reduction of individual random error. If they collaborate on one checklist, the gain is merely 'compliance' with a pre-existing correct path.",
+      "counterconditions": [
+        "The checklist is so prescriptive that it leaves no room for independent interpretation.",
+        "The panel members are not sufficiently diverse in their baseline cognitive biases."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The panel's superiority is an illusion of 'averaging' that only holds in low-complexity verifiable tasks, failing as the objective outcome depends on rare, high-impact insights.",
+      "mechanism": "The mechanism is 'regression to the mean': the checklist ensures a 'competent' result by eliminating outliers. However, for tasks where the 'correct' answer is an outlier (a 'black swan' insight), the checklist systematically filters out the very intuition required to reach the truth, making the expert more reliable in high-stakes, high-complexity scenarios.",
+      "counterconditions": [
+        "The task is high-volume and requires consistency over brilliance.",
+        "The 'correct' answer is the most probable one given the available data."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "To distinguish 'genuine reliability' from 'checklist compliance', we should look for 'divergence-convergence' patterns. If a panel follows a checklist and arrives at the right answer, but the internal notes show they initially disagreed on key items before converging, that suggests the process actively corrected errors. If they all just checked the boxes in unison, it's mere compliance with a pre-baked path.",
+          "why_keep_this": "Provides a concrete metric for the second part of the problem prompt."
+        }
+      }
+    ]
+  }
+}

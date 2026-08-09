@@ -1,0 +1,60 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 087625e09f53 shares mechanism with SRC_003; specifically, it posits that genuine reliability is a function of 'active processing' (the ability to flag non-applicable items) rather than passive execution. This relation is refuted if the panel's ability to identify decoys does not correlate with a higher rate of detecting expert-missed critical failures.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "Genuine reliability gain is distinguished from mere compliance by the panel's ability to identify 'negative constraints'"
+        }
+      ]
+    },
+    {
+      "content": "The problem 087625e09f53 depends on SRC_001's 'error-detection trace' to provide a causal mechanism for distinguishing reliability from compliance. It proposes that internal consistency in checklist execution is the primary marker of structural gain. This relation is refuted if the panel arrives at the correct answer with high internal consistency but fails to identify a known 'critical failure' missed by the expert.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "The distinction lies in the 'error-detection trace'. If the panel's correctness is correlated with the correct execution of the checklist (high internal consistency), the gain is structural."
+        }
+      ]
+    },
+    {
+      "content": "The problem 087625e09f53 integrates SRC_004's 'Meta-Cognitive Flag' by arguing that the identification of 'checklist-inadequacy' (ambiguity or gaps) is the only valid evidence of genuine reliability. This relation is refuted if panels that flag checklist inadequacies perform no better or worse on outcome correctness than panels that blindly comply.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "Genuine reliability is distinguished by the panel's ability to flag 'checklist-inadequacy' (the 'Negative Signal' evidence)."
+        }
+      ]
+    },
+    {
+      "content": "The problem 087625e09f53 contradicts the assumption of 'aggregate correctness' found in SRC_004, proposing instead that reliability is a discrete cognitive state (active processing) rather than a statistical emergence. This relation is refuted if the reliability gain of the panel can be fully explained by the statistical aggregation of individual non-expert errors without any 'Negative Signal' flags.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.3,
+      "evidence_refs": [
+        {
+          "block": "000000000000",
+          "quote": "The reliability gain of a panel is an illusion of 'aggregate correctness' that masks individual incompetence"
+        }
+      ]
+    }
+  ]
+}
+```

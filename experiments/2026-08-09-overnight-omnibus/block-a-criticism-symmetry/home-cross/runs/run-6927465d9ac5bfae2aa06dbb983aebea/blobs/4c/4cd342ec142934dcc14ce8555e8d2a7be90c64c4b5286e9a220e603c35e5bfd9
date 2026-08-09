@@ -1,0 +1,102 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable than a panel of non-experts because checklists cannot capture the 'latent dependencies' between variables that an expert's intuition synthesizes, making the panel prone to 'correct-item, wrong-conclusion' errors.",
+      "mechanism": "The 'Synthesis Gap': Checklists operate on additive logic (A+B+C=Result), whereas complex verifiable tasks often require multiplicative or conditional logic (If A, then B is irrelevant, but C becomes critical). Experts perceive these conditional shifts intuitively; non-experts following a checklist treat all items as independent, leading to failure in edge cases where the checklist is technically followed but logically misapplied.",
+      "counterconditions": [
+        "The task is purely procedural with zero conditional dependencies.",
+        "The checklist is dynamic (adaptive) rather than static.",
+        "The expert is suffering from high cognitive load or fatigue."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "A panel of non-experts is more reliable because they eliminate 'premature closure'—the expert's tendency to stop searching for evidence once a familiar pattern is recognized—by forcing a comprehensive scan of all verifiable markers.",
+      "mechanism": "The 'Exhaustion Constraint': Experts rely on heuristic shortcuts (pattern matching) which are fast but prone to 'blind spots' (e.g., the Boeing 737 MAX scenario in SCR_003). A checklist forces a non-expert panel to treat every data point as equally novel, ensuring that outlier evidence—which an expert might intuitively dismiss as noise—is formally recorded and considered.",
+      "counterconditions": [
+        "The checklist is poorly designed and misses the critical outlier marker.",
+        "The panel suffers from 'groupthink' where they collectively ignore an anomaly to maintain consensus (SCR_004, SCR_008).",
+        "The cost of false positives from the panel outweighs the cost of false negatives from the expert."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_003"
+        ],
+        "shared_structure": [
+          "Expert pattern matching leading to missed critical signals",
+          "Procedural rigor preventing cognitive shortcuts"
+        ],
+        "transfer_claims": [
+          "Medical triage checklists prevent premature closure similarly to how they would in the problem's verifiable tasks."
+        ],
+        "disanalogies": [
+          "Triage is often time-critical; the problem's tasks may not be."
+        ],
+        "overturn_conditions": [
+          "If the 'intuition' of the expert is actually a higher-order form of checklist processing."
+        ]
+      }
+    },
+    {
+      "claim": "The reliability gain of a panel is an illusion of 'aggregate correctness' that masks individual incompetence; genuine reliability is distinguished by the panel's ability to flag 'checklist-inadequacy' (the 'Negative Signal' evidence).",
+      "mechanism": "The 'Meta-Cognitive Flag': Mere compliance is characterized by binary check-marking (Yes/No). Genuine reliability is evidenced when the panel identifies a checklist item as 'Not Applicable' or 'Ambiguous' despite the pressure to comply. If the panel produces the right answer but cannot identify flaws in the checklist, they are merely tracking the answer via the provided path; if they identify where the checklist fails but still reach the correct outcome, they are exhibiting genuine reliability.",
+      "counterconditions": [
+        "The checklist is perfectly comprehensive (no gaps to flag).",
+        "The non-experts are so untrained that they cannot recognize ambiguity."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Neither is inherently more reliable; reliability is a function of the 'Verifiability Granularity' of the task: low-granularity tasks favor the expert's synthesis, high-granularity tasks favor the panel's checklist.",
+      "mechanism": "The 'Granularity Pivot': In tasks where the 'verifiable outcome' depends on a single, subtle, high-order synthesis (e.g., diagnosing a rare disease from conflicting symptoms), the expert wins. In tasks where the outcome is the sum of many discrete, low-complexity checks (e.g., a pre-flight safety check), the panel wins. The 'reliability' is not in the agent, but in the alignment between the agent's cognitive mode and the task's structure.",
+      "counterconditions": [
+        "The task has both high-order synthesis and low-order discrete checks."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: The 'Perturbation Test' from SCR_001 is the strongest way to distinguish compliance from reliability. If we introduce a 'decoy' item (SCR_002) that is logically irrelevant but phrased as a requirement, a 'complying' panel will check it off to be 'correct', whereas a 'reliable' panel will question its relevance. This creates a clear evidentiary trail within a single evaluation: (Correct Answer + Decoy Flagged = Reliable) vs (Correct Answer + Decoy Checked = Compliant).",
+          "bears_on_refs": [
+            "SRC_006"
+          ]
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can an expert's intuition be modeled as an implicit, high-speed checklist, making the distinction between 'intuition' and 'checklist' a matter of transparency rather than mechanism?",
+        "related_refs": []
+      }
+    ]
+  }
+}
+```

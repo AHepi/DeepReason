@@ -1,0 +1,38 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9694366ffefa768334ea5817: program:reasoning_observation_pending
+- reason-counter@e6df05401815cf6268fd20d7: program:reasoning_observation_pending
+- reason-counter@b7dd7c79329043537e694f4e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of trained non-experts using an explicit checklist is more reliable than a single expert relying on intuition because it transforms a 'synthesis' problem into a 'verification' problem, effectively neutralizing the expert's single-point-of-failure bias.","counterconditions":[{"case":"The task requires the synthesis of non-linear variables not captureable in a linear checklist.","checker_spec":null,"eval":"observation"},{"case":"The 'training' of non-experts introduces a shared systemic bias (correlated error) that mirrors the expert's blind spot.","checker_spec":null,"eval":"observation"},{"case":"The checklist is poorly designed, omitting the critical variable that the expert's intuition would have caught.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist decomposes a complex judgment into a series of binary, low-cognitive-load verifications. While an expert's intuition (System 1) performs a holistic leap that can be derailed by a single cognitive blind spot or 'heuristic trap', the panel's distributed System 2 process ensures that every required condition is checked. The reliability gain emerges from the statistical improbability of the entire panel missing a checklist item that is explicitly listed, whereas the expert may intuitively 'skip' a step they subconsciously deem irrelevant.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9694366ffefa768334ea5817, reason-counter@e6df05401815cf6268fd20d7, reason-counter@b7dd7c79329043537e694f4e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

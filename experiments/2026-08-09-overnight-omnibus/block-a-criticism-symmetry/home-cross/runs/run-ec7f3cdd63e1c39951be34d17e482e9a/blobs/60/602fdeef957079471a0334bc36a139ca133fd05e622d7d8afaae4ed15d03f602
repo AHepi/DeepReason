@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@23a46562df28e2e50614a71b: program:reasoning_observation_pending
+- reason-counter@3ca3203f182a079938266aa6: program:reasoning_observation_pending
+- reason-counter@143196dcabf12100bc2357dd: program:reasoning_observation_pending
+- reason-counter@a764ee3b90a19799a5d73aa6: program:reasoning_observation_pending
+- reason-counter@bac8997d0a66c7fd793716f5: program:reasoning_observation_pending
+- reason-counter@15e9256387adfb0a12227499: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Decentralized networks are fundamentally less resilient to correlated failures because they share 'invisible' dependencies (e.g., common upstream libraries, cloud providers, or DNS roots) that create a shared fate without the benefit of centralized mitigation.","counterconditions":[{"case":"The decentralized services are strictly heterogeneous in their underlying tech stacks.","checker_spec":null,"eval":"observation"},{"case":"The large service uses a monolithic stack that maximizes the impact of a single low-level bug.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'illusion of independence' occurs when services are operationally separate but logically coupled via the underlying infrastructure stack. A failure in a shared low-level dependency (like a TLS library bug) triggers a simultaneous collapse across the 'independent' services, while a large service would have redundant, heterogeneous stacks to mitigate this.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@23a46562df28e2e50614a71b, reason-counter@3ca3203f182a079938266aa6
+
+TARGET SRC_002
+{"analogy":null,"claim":"Decentralized networks are an illusion of resilience; they are more prone to 'invisible' correlated failures caused by shared infrastructure layers (the 'Cloud Paradox').","counterconditions":[{"case":"The decentralized network is explicitly multi-cloud or on-premise diverse.","checker_spec":null,"eval":"observation"},{"case":"The failure is localized to the application layer rather than the infrastructure layer.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Dependency convergence: while services appear independently operated, they often converge on a small set of hyper-scale infrastructure providers (AWS, GCP, Azure). A failure in a single availability zone or a global IAM outage creates a correlated failure that bypasses the perceived independence of the service operators.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@143196dcabf12100bc2357dd, reason-counter@a764ee3b90a19799a5d73aa6
+
+TARGET SRC_003
+{"analogy":null,"claim":"A large service with high internal redundancy is more resilient than a decentralized network because centralized coordination allows for the preemptive isolation of failure vectors that would otherwise propagate as 'hidden correlations' across independent services.","counterconditions":[{"case":"The centralized control plane itself becomes the single point of failure (SPOF).","checker_spec":null,"eval":"observation"},{"case":"The scale of the centralized service introduces emergent complexity that exceeds the capacity of the coordination logic to manage.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Centralized control planes can implement global 'circuit breakers' and uniform versioning, allowing the system to detect a nascent failure pattern and freeze state across the entire fleet instantly, whereas decentralized services lack the shared telemetry to recognize a correlated attack or bug until a critical mass has already failed.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bac8997d0a66c7fd793716f5, reason-counter@15e9256387adfb0a12227499
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The target answers the problem's reliability question only by asserting that the panel is more reliable, then identifies no specific evidence within a single evaluation that would distinguish a genuine reliability gain from mere checklist compliance that merely tracks the right answer. The three counterconditions and mechanism describe failure modes (bad checklist, shared bias, missing variables) but do not supply the requested discriminator for a completed evaluation, so the target fails the problem as stated.", "counterexample": null}]}
+```

@@ -1,0 +1,3 @@
+```json
+{"cases": [{"attack": true, "case": "SRC_001 argues against the claim but fails to address the problem's central evidentiary requirement: identifying what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance. The target's mechanism (Gestalt Pattern Recognition) and counterconditions address why the expert might be superior, but never specify the diagnostic evidence that would separate true reliability from coincidental correctness. This omission means the target does not answer the problem as stated.", "target_alias": "SRC_001"}]}
+```

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The problem context defines the distinguishing evidence as occurring 'within a single evaluation' of a verifiable task (i.e., the original checklist and outcome). SRC_001 requires injecting an extra 'decoy check' into the checklist for that evaluation, which falls outside the problem's stated evidence space and therefore fails the target as posed.",
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "SRC_002 asserts a non-uniform temporal pattern is the 'signature of genuine reliability', but its own countercondition admits a 'time-spike' can also result from total confusion rather than verification. Since a confused panel could still produce more reliable answers by luck, this temporal proxy fails to distinguish a genuine reliability gain within a single evaluation, thus failing the problem's requested distinguishing evidence.",
+      "target_alias": "SRC_002"
+    }
+  ]
+}

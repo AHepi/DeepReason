@@ -1,0 +1,98 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is fundamentally more resilient to correlated failure, provided its diversity is 'organic' rather than 'synthetic', because it avoids the 'Standardization Trap' where optimization for reliability creates systemic fragility.",
+      "mechanism": "Organic heterogeneity in a decentralized network (diverse OS, languages, and config) prevents the synchronization of failure modes. In contrast, a large service's internal redundancy is often homogeneous; a single bug in the core orchestration layer or a shared timeout setting (the 'Herding Effect') transforms redundancy into a vector for instantaneous, global collapse.",
+      "counterconditions": [
+        "The decentralized services share a common critical dependency (e.g., a single DNS provider or cloud region), rendering the independence an architectural illusion.",
+        "The cost of operational inefficiency in a decentralized network leads to a failure to patch critical security vulnerabilities, creating a different form of correlation (e.g., a common CVE exploit)."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_004",
+          "SCR_005"
+        ],
+        "shared_structure": [
+          "Standardization leads to efficiency but removes the 'messy' buffers that prevent systemic resonance.",
+          "Homogeneous redundancy creates a single point of failure at the logic level."
+        ],
+        "disanalogies": [
+          "Biological diversity is evolutionary; software diversity is often accidental or intentional.",
+          "The scale of a single large service may allow for 'synthetic diversity' that mimics organic decentralization."
+        ],
+        "transfer_claims": [
+          "The 'Diversity-Efficiency Frontier' implies that maximum resilience requires an intentional sacrifice of operational uniformity."
+        ],
+        "overturn_conditions": [
+          "Demonstration that synthetic diversity (chaos engineering) in centralized systems achieves the same failure-distribution as organic diversity."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "The claim that decentralization is more resilient is false because 'independence' is typically an L7 illusion; true resilience is determined by the L3/L4 dependency graph, which is often more concentrated in decentralized networks.",
+      "mechanism": "Small, independent operators are more likely to use the same 'industry standard' managed services (e.g., AWS us-east-1, Cloudflare) than a large entity with the capital to build multi-cloud, multi-region, or proprietary infrastructure. Thus, the decentralized network possesses a hidden, high-degree correlation at the infrastructure layer that exceeds the internal correlation of a sophisticated large service.",
+      "counterconditions": [
+        "The decentralized network is explicitly distributed across diverse infrastructure providers.",
+        "The large service relies on a single monolithic proprietary stack that lacks multi-region failover."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_016"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": null
+    },
+    {
+      "claim": "Resilience is not a property of centralization vs. decentralization, but of the 'Entropy of Configuration'; a centralized system can be more resilient if it intentionally simulates 'organic' messiness.",
+      "mechanism": "By employing 'Synthetic Diversity'—intentionally deploying different versions of software, different timeout settings, and randomized resource limits across its redundant nodes—a large service can decouple its failure modes while maintaining the coordination benefits of a single operator, effectively 'outrunning' the correlated failure risk of both models.",
+      "counterconditions": [
+        "The coordination layer (the 'brain' of the large service) remains a single point of failure regardless of node diversity.",
+        "The complexity of managing synthetic diversity introduces new, non-linear failure modes (version-mismatch bugs)."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_003",
+          "SCR_010",
+          "SCR_011"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": null
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "To distinguish independent failures from correlated ones: Independent failures should follow a Poisson distribution (random, staggered). Correlated failures will show 'temporal clustering' or 'trigger-based synchronization' (e.g., all services failing within 5 minutes of a BGP update). The 'smoking gun' is the mapping of failure timestamps to a shared external event or version change across diverse entities.",
+          "why_keep_this": "Directly addresses the second half of the problem prompt regarding evidence for failure modes."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we mathematically define the 'Diversity Threshold' where the probability of a common software bug affecting >X% of a decentralized network becomes negligible?",
+        "related_refs": [
+          "SCR_007",
+          "SCR_015"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 proposes an 'integration' relation (lapse vs knowledge error taxonomy integrated with an error-cancellation mechanism). But the proposed grounding is tautological and non-substantive: it merely redefines the mechanism's scope to exclude exactly the error class it cannot handle, without establishing a real structural, mechanistic, or causal dependence between the two endpoints. The relation reduces to co-definition, not a substantive integration.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}
+```

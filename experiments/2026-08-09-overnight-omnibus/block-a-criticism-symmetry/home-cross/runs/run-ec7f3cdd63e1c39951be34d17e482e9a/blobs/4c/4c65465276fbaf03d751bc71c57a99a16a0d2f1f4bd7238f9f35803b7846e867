@@ -1,0 +1,23 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2257121658c78f032f9b45a5: program:reasoning_observation_pending
+- reason-counter@f7a94efff3fde598531d56f7: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 7fb222f0bf9651071119e4db63ccb4e76a7de3b19f52b443e27505ecc7b9e659
+{"analogy":null,"claim":"Decentralized resilience is an illusion created by 'Diversity of Incompetence,' where the lack of standardization prevents the high-efficiency synchronization required for a total system collapse.","counterconditions":[{"case":"The 'noise' of the decentralized network creates a baseline failure rate so high that it exceeds the rare but total failure rate of a centralized system.","checker_spec":null,"eval":"observation"},{"case":"Standardization of 'best practices' eventually removes the diversity that provided the resilience.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anti-Synchronization via Noise (ref: SCR_002): In a strictly redundant centralized system, identical configurations lead to identical reactions to stress (e.g., simultaneous timeouts), creating a self-inflicted DDoS. A decentralized network's 'messy' configurations act as natural dampeners, ensuring that services fail at different times and in different ways, preventing the 'Herding Effect' from achieving critical mass.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

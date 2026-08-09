@@ -1,0 +1,54 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The reliability of the non-expert panel depends on the 'Error Cancellation Mechanism' described in SRC_001, but this mechanism reduces to a form of statistical noise filtering that is refuted if the checklist itself contains a systemic conceptual error, as the panel lacks the domain expertise to identify the shared failure mode.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_004"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "The claim in SRC_003 regarding the expert's 'gestalt' pattern recognition contradicts the additive reliability of the non-expert panel; the expert's superiority is refuted if the task is purely algorithmic and the checklist is exhaustive, as the high-dimensional synthesis becomes redundant to a complete binary set.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_001"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The distinction between 'lapse errors' and 'knowledge errors' in SRC_004 integrates with the 'stupid mistakes' vs 'conceptual mistakes' framework in SRC_002; the panel's reliability is refuted if the error surface is dominated by Type I errors (misinterpretations) which cannot be offset by redundancy.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The expert's ability to weight variables in SRC_005 abstracts the additive process of the non-expert panel into a prioritized heuristic; this expert advantage is refuted if the 'objectively verifiable' outcome is a simple boolean conjunction of all checklist items where weighting provides no marginal utility.",
+      "neighbours": [
+        "SRC_005",
+        "SRC_001"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "The 'Error Cancellation Mechanism' in SRC_001 is compatible with the 'lapse error' theory in SRC_004, provided that the 'blind spots' are stochastic; however, the mechanism is refuted if the non-experts' errors are positively correlated due to shared misconceptions about the checklist's prompts.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_004"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The panel's reliability in SRC_001 reduces to a variance-reduction exercise that inherits the systemic biases of the checklist's author; this reliability is refuted if the 'objectively verifiable' truth requires a non-linear synthesis of variables that the checklist's additive structure is incapable of representing.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "typicality": 0.3
+    }
+  ]
+}
+```

@@ -1,0 +1,49 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+PROBLEM CONTEXT (conn:0c70e2c3455e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0c70e2c3455e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ee340f2a79aa4f5f99c82b0c: program:reasoning_observation_pending
+- reason-counter@920569eb283481f9a1c51ac1: program:reasoning_observation_pending
+- reason-counter@c8812227e34eb63cf2d80dac: program:reasoning_observation_pending
+- reason-counter@7fc570de3d619f16cf819436: program:reasoning_observation_pending
+- reason-counter@6c572a5e4e5007a45a5eb1b9: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@55be86f776cf: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reason-counter@5bfbeaaac9776c3a42a71ae2: program:reasoning_observation_pending
+- reason-counter@43ac0513f398231c06247248: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Unlike the 'low-pass filter' model, this suggests the checklist can actually 'amplify' certain types of non-expert insight."],"overturn_conditions":["Evidence that reliability increases linearly with checklist detail."],"shared_structure":["Non-linear relationship between tool detail and outcome","Optimal 'Goldilocks' zone of intervention"],"source_memory_refs":["SCR_001","SCR_008"],"transfer_claims":["Reliability is a function of the checklist's ability to trigger active cognition rather than passive compliance."]},"claim":"The panel+checklist is more reliable only if the checklist is 'medium-granular'\u2014acting as a prompt for the panel to generate their own domain-specific intuitions rather than replacing them.","counterconditions":[{"case":"The task is purely algorithmic (high granularity is always better).","checker_spec":null,"eval":"observation"},{"case":"The task is purely creative/synthetic (low granularity is always better).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the checklist is too sparse, the panel guesses. If it is too dense, they become 'bureaucratic' and stop thi
+commitments: reasoning-envelope-wf, reason-counter@ee340f2a79aa4f5f99c82b0c, reason-counter@920569eb283481f9a1c51ac1
+
+TARGET SRC_002
+{"analogy":null,"claim":"A panel of non-experts following a checklist is more reliable than a single expert because it transforms the judgment task from a 'pattern recognition' problem into a 'distributed search' problem, effectively eliminating the expert's single-point-of-failure bias.","counterconditions":[{"case":"The task requires synthesis of contradictory evidence rather than a binary check of presence/absence.","checker_spec":null,"eval":"observation"},{"case":"The checklist is written by the same expert whose intuition it seeks to replace, thereby encoding the same biases.","checker_spec":null,"eval":"observation"},{"case":"The panel exhibits strong groupthink, leading to a 'social' single-point-of-failure.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The expert relies on high-dimensional heuristics (intuition) which are prone to 'availability bias' or 'overfitting' to past cases. The checklist forces a serial, exhaustive search of the problem space. The panel structure ensures that the 'cost' of missing a checklist item is distributed; the probability that all panel members overlook a mandatory check is exponentially lower than the prob
+commitments: reasoning-envelope-wf, reason-counter@c8812227e34eb63cf2d80dac, reason-counter@7fc570de3d619f16cf819436, reason-counter@6c572a5e4e5007a45a5eb1b9
+
+TARGET SRC_003
+The 'checklist effect' described in SRC_001 shares mechanism with the 'blind spot' for systemic failures in SRC_005, where both represent a cognitive narrowing (atomization) that suppresses the expert's ability to perceive holistic patterns. This relation is refuted if an increase in checklist granularity is shown to restore 'edge-case' sensitivity rather than further masking it.
+commitments: hv-floor@2a45b7988522, lineage-ref@55be86f776cf, relation-form@578e42df713e
+
+TARGET SRC_004
+{"analogy":null,"claim":"The panel is *less* reliable because the 'checklist' introduces a new failure mode: 'semantic drift', where non-experts misinterpret the checklist's requirements in a way that an expert would never do.","counterconditions":[{"case":"The checklist items are strictly binary and visually/physically verifiable (e.g., 'Is the red light on?').","checker_spec":null,"eval":"observation"},{"case":"The panel includes a 'moderator' who ensures semantic alignment of the checklist terms.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition is a holistic integration of domain knowledge. A checklist decomposes this into discrete steps. Non-experts, lacking the holistic context, may satisfy the 'letter' of a checklist item while violating its 'spirit' (e.g., checking 'Is the valve closed?' as 'Yes' because the handle is turned, despite the valve being sheared off internally). The 'reliability' of the checklist is an illusion based on the assumption that the checklist items are unambiguous.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5bfbeaaac9776c3a42a71ae2, reason-counter@43ac0513f398231c06247248
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

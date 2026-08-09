@@ -1,0 +1,112 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts following an explicit checklist will produce more reliable judgments on average than a single expert because the checklist transforms the task from one of high-variance pattern recognition (intuition) to one of low-variance verification (execution).",
+      "mechanism": "The checklist acts as a 'variance-reduction filter' (ref SCR_006) that eliminates 'stupid mistakes'—simple omissions or slips—which are the primary drivers of expert error in objectively verifiable tasks. While the expert has a higher performance ceiling, their reliability is undermined by 'premature closure' (ref SCR_007), whereas the panel's reliability is anchored by a high floor created by the proceduralization of the domain's critical failure points.",
+      "counterconditions": [
+        "The task requires the synthesis of non-linear variables not captureable in a discrete list.",
+        "The 'objective verifiability' depends on detecting subtle anomalies that fall outside the checklist's scope (the 'tunnel vision' failure mode ref SCR_007)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The single domain expert remains more reliable because checklists are 'lossy compressions' of expertise that cannot account for the contextual weight of different variables, leading to 'compliance-driven' errors.",
+      "mechanism": "Expert intuition is not random but is a high-dimensional heuristic that weights evidence dynamically. A checklist treats all items as binary or equal, forcing the panel to ignore the 'gestalt' of the problem. In objectively verifiable tasks, the 'right' answer often requires recognizing which checklist items are irrelevant in a specific instance—a meta-cognitive skill the non-expert panel lacks (ref SRC_003, SRC_007).",
+      "counterconditions": [
+        "The task is highly algorithmic with no significant contextual variance.",
+        "The expert is suffering from cognitive overload or fatigue, increasing the rate of simple omission errors."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "A genuine reliability gain is distinguished from mere compliance by the panel's ability to reject a 'plausible but wrong' decoy item embedded in the checklist.",
+      "mechanism": "If the panel is merely compliant, they will check the box for a decoy item that appears to be satisfied by the evidence, regardless of its actual relevance to the outcome. A truly reliable panel exercises 'epistemic agency' (ref SCR_008), treating the checklist as a map to be verified against the terrain. The 'evidence within a single evaluation' is thus the panel's active correction or flagging of the checklist's internal contradictions (ref SCR_005).",
+      "counterconditions": [
+        "The panel's training emphasizes strict adherence to the list over critical inquiry.",
+        "The decoy is indistinguishable from a legitimate requirement without domain expertise."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Reliability gains are distinguished from compliance via the 'justification delta'—the distance between the checklist requirement and the specific evidence cited.",
+      "mechanism": "Mere compliance manifests as 'Item 4 is present' (binary tick). Genuine reliability manifests as 'Item 4 is present because [Observation X]' (ref SCR_002, SCR_003). By analyzing the trace of evidence, we can determine if the panel is tracking the objective reality of the case or simply tracking the structure of the checklist. A high correlation between the justification and the objective outcome, independent of the checklist's phrasing, indicates a reliability gain.",
+      "counterconditions": [
+        "The panel is trained to use boilerplate justifications that mimic reliability.",
+        "The checklist is so granular that the 'justification' is identical to the 'requirement'."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The panel outperforms the expert not because of the checklist, but due to the 'Wisdom of the Crowd' effect reducing individual bias.",
+      "mechanism": "The checklist serves as a common coordination language that allows multiple non-experts to aggregate their observations. The reliability gain is a result of 'error cancellation' (ref SRC_005)—where one panelist's oversight is caught by another—rather than the procedural superiority of the checklist itself. The checklist merely ensures that the crowd is looking at the same things.",
+      "counterconditions": [
+        "The panel suffers from groupthink or 'social loafing', where they defer to a dominant member.",
+        "The errors are systemic to the checklist, causing the entire panel to fail in the same direction."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The panel's reliability is an illusion of consistency; they are more 'reliable' only in the sense that they fail predictably, whereas the expert fails sporadically.",
+      "mechanism": "The checklist creates a 'reliability floor' but also a 'reliability ceiling'. The panel's outcomes are highly consistent (low variance) but may be consistently biased if the checklist is incomplete. The expert's outcomes have higher variance but a higher mean accuracy. In a single evaluation, the 'evidence' of this is the panel's failure to detect an 'edge-case' error that was objectively verifiable but absent from the list (ref SCR_001).",
+      "counterconditions": [
+        "The checklist is exhaustive and covers all possible failure modes of the task.",
+        "The expert's 'intuition' is consistently outperformed by the checklist's basic requirements."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we want to test the 'Reliability vs Compliance' distinction, we should consider the 'Perturbation Test'. If we slightly alter the wording of a checklist item to be ambiguous, a compliant panel will still tick it based on a surface-level match. A reliable panel will pause or flag the ambiguity. This suggests that 'Reliability' is actually 'Critical Application of Procedure', not just 'Following Procedure'.",
+          "why_keep_this": "Adds a third method for the second part of the prompt (Perturbation vs Decoy vs Justification Delta)."
+        }
+      }
+    ]
+  }
+}
+```

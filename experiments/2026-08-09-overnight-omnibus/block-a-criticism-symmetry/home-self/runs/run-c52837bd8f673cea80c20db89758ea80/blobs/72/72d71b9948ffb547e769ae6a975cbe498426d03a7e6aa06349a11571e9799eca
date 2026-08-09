@@ -1,0 +1,90 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The panel-plus-checklist is genuinely more reliable only if, on the subset of cases where the checklist's rule guidance diverges from the expert's intuitive judgment, the panel follows the checklist and is subsequently verified as correct by the objective outcome at a rate exceeding the expert's base rate.",
+      "mechanism": "Causal mechanism: The checklist encodes explicit, domain-specific decision rules. When these rules conflict with intuition (the divergence stratum), the checklist exerts a causal force on the panel's judgment. If the panel complies and achieves higher accuracy specifically on these cases, the checklist's rule content—not mere procedural compliance or crowd-averaging—is demonstrated to be the operative cause of the reliability gain.",
+      "counterconditions": [
+        "The divergence stratum is empty, meaning the checklist and expert always agree; in this case, the checklist is trivial and no single-evaluation evidence can distinguish rule-mediated gain from noise reduction.",
+        "The panel outperforms the expert on divergent cases but does so by defying the checklist's explicit guidance, indicating the gain is caused by the panel's collective intuition, not the checklist."
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_002", "SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_001", "SRC_002", "SRC_005"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A panel-plus-checklist's reliability gain is genuine only if a control panel using a corrupted or inverted version of the checklist performs strictly worse than the panel using the true checklist on the same evaluation tasks.",
+      "mechanism": "Causal mechanism: By holding the procedural and structural aspects of the checklist constant while corrupting its semantic rule content, we isolate the epistemic contribution of the rules themselves. If the corrupted-checklist panel fails, the original gain is attributable to the correctness of the checklist's rules. If the corrupted-checklist panel still succeeds, the gain was mediated by procedural compliance or wisdom-of-crowds effects, not rule validity.",
+      "counterconditions": [
+        "The corrupted checklist inadvertently improves structure or forces deeper deliberation, causing the corrupted-checklist panel to outperform both the true-checklist panel and the expert.",
+        "The corrupted checklist accidentally retains enough true heuristics to outperform the expert, failing to isolate the semantic contribution of the true rules."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_003", "SRC_006"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_003", "SCR_006", "SRC_003", "SRC_006"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Evidence of a genuine reliability gain within a single evaluation consists of the panel demonstrating superior calibration—specifically, higher confidence on cases where the checklist is counterintuitive but correct, and lower confidence on cases where the checklist is intuitive but wrong—rather than uniformly high confidence tied to checklist completion rate.",
+      "mechanism": "Causal mechanism: Genuine rule-mediated reliability requires the panel to monitor the checklist's epistemic validity, not merely track its completion. If the panel's confidence is anchored to box-ticking rate, the gain is mere compliance. If confidence tracks the objective likelihood of correctness on counterintuitive cases, the panel is genuinely leveraging the checklist's semantic content.",
+      "counterconditions": [
+        "The panel's confidence is uniformly high whenever all boxes are ticked, indicating confidence is anchored to completion rather than rule validity.",
+        "The checklist is entirely intuitive, meaning counterintuitive-but-correct cases do not exist in the evaluation, rendering calibration analysis uninformative."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_003", "SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": ["SCR_002", "SCR_007", "SRC_003"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The distinction between genuine reliability gain and mere checklist compliance is a false dichotomy; within a single evaluation, reliable performance is indistinguishable from compliance because all reliable behavior is, by definition, compliance with a valid set of rules, whether internalized by an expert or externalized in a checklist.",
+      "mechanism": "Causal mechanism: Reliability is defined by adherence to the rules that map to objective outcomes. The expert's intuition is merely internalized compliance; the panel's checklist use is externalized compliance. Since both are compliance, there is no causal mechanism that distinguishes 'genuine' from 'compliant' reliability within a single evaluation, rendering the distinction meaningless.",
+      "counterconditions": [
+        "The expert makes errors on cases where the checklist is correct, demonstrating that internalized compliance can fail where externalized compliance succeeds, thus distinguishing the two.",
+        "The panel uses the checklist to override a flawed intuition but arrives at the wrong answer, showing that compliance with the checklist is not always reliable."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_007"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If the panel's reliability gain is a wisdom-of-crowds effect, it will manifest even when the checklist provides no decision-relevant content, but only enforces independent voting; if the gain disappears when the checklist is replaced with a trivial voting procedure, the checklist's content is the causal driver.",
+      "mechanism": "Causal mechanism: The wisdom-of-crowds effect averages out independent, unbiased noise. If the checklist's only role is to anchor the panel to a common framework, the gain is a composition effect. Replacing the checklist with a trivial voting procedure isolates the crowd-averaging mechanism from the rule-mediated mechanism.",
+      "counterconditions": [
+        "The checklist provides no decision-relevant content but still improves reliability by reducing variance, confirming the gain is a wisdom-of-crowds effect and not rule-mediated.",
+        "The trivial voting procedure introduces social dynamics (e.g., groupthink) that the checklist's structure previously suppressed, confounding the comparison."
+      ],
+      "typicality": 0.5,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_006"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The claim that no single-evaluation evidence can distinguish genuine reliability gain from mere compliance is self-undermining: the very act of the panel overriding its own intuitive judgment to follow a counterintuitive checklist rule, and being correct, constitutes such evidence.",
+      "mechanism": "Causal mechanism: If the panel's intuitive judgment diverges from the checklist, and the panel explicitly chooses to comply with the checklist, and the objective outcome verifies the checklist, this directly demonstrates the causal power of the checklist's rule over the panel's intuition. The observation of this override event is single-evaluation evidence.",
+      "counterconditions": [
+        "The panel never diverges from the checklist, meaning no override event is observed and the self-undermining argument holds.",
+        "The panel overrides its intuition to comply with the checklist, but the checklist is wrong, showing that compliance is not always reliable."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_008"],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

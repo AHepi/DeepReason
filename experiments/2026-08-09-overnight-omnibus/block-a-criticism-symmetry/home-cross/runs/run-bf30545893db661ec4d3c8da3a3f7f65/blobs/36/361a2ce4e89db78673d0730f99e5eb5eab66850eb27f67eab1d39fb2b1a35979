@@ -1,0 +1,117 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following a checklist is more reliable than a single expert because the checklist transforms the task from 'knowledge retrieval' (expert) to 'pattern verification' (panel), eliminating the single-point-of-failure inherent in human intuition.",
+      "mechanism": "The checklist acts as a cognitive exoskeleton that offloads the memory burden of domain-specific edge cases to a static document. The panel's reliability is derived from the 'interlocking verification' mechanism: since multiple non-experts must agree on the checklist item's applicability, the probability of a 'lapse in attention' (the primary failure mode of experts) is reduced exponentially by the number of panel members.",
+      "counterconditions": [
+        "The task complexity exceeds the checklist's capacity to capture necessary heuristics.",
+        "The panel exhibits high levels of social conformity (groupthink), neutralizing the redundancy effect."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'cognitive friction'—specifically, the panel's ability to identify and override a checklist item that is logically inconsistent with the specific case evidence.",
+      "mechanism": "Mere compliance is a linear execution of the checklist (A -> B -> C). Genuine reliability involves the panel treating the checklist as a set of hypotheses to be tested. Evidence of this is found in the 'audit trail' of a single evaluation: if the panel records a disagreement or a 'flag' on a checklist item that is technically correct but contextually misleading, and subsequently corrects the path, they have demonstrated an active reliability mechanism (debugging) rather than passive adherence.",
+      "counterconditions": [
+        "The checklist is mathematically perfect for the domain, leaving no room for legitimate override.",
+        "The evaluation process does not record the internal deliberation/audit trail."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_012"
+        ]
+      }
+    },
+    {
+      "claim": "The single expert is more reliable because 'objectively verifiable outcomes' in complex domains often depend on 'silent failures'—anomalies that are by definition absent from any explicit checklist.",
+      "mechanism": "Expert intuition is a high-dimensional pattern matching system. While a checklist covers known-knowns and known-unknowns, the expert detects the 'absence of a expected signal' (the 'dog that didn't bark'). The causal mechanism for the expert's superiority is the ability to perceive global systemic incoherence that a checklist, which decomposes the problem into discrete, local checks, fundamentally ignores.",
+      "counterconditions": [
+        "The task is a 'closed-world' problem where all failure modes are known and documented.",
+        "The expert is suffering from cognitive fatigue or bias that overrides their pattern recognition."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The panel's reliability is an artifact of 'variance reduction' rather than 'accuracy improvement', making them superior only in tasks where the expert's errors are erratic rather than systematic.",
+      "mechanism": "The checklist imposes a floor on performance by preventing 'stupid mistakes' (omissions), while the expert has a higher ceiling but a lower floor (due to overconfidence or intuition gaps). The panel wins on average because the checklist narrows the distribution of outcomes. Evidence of 'genuine reliability' vs 'compliance' in a single case is found in the 'temporal trace': non-linear time spikes at complex checklist items indicate active cognitive processing (reliability), whereas a steady, rhythmic pace indicates blind compliance.",
+      "counterconditions": [
+        "The expert's intuition is consistently high-precision with low variance.",
+        "The checklist is poorly designed, introducing systematic errors that the panel blindly follows."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_009"
+        ]
+      }
+    },
+    {
+      "claim": "A panel of non-experts is inherently less reliable for verifiable outcomes because the 'checklist' creates a false sense of security that suppresses the critical skepticism necessary to verify the outcome.",
+      "mechanism": "The 'compliance trap': non-experts treat the checklist as a sufficient condition for correctness rather than a necessary one. This leads to 'confirmation bias' where the panel seeks evidence to satisfy the checklist item rather than evidence to challenge the conclusion. In contrast, the expert's intuition is often triggered by 'disconfirming evidence', which is the primary driver of reliability in verifiable tasks.",
+      "counterconditions": [
+        "The checklist includes explicit 'challenge' steps that force the panel to argue against their current conclusion.",
+        "The task is purely procedural with no room for interpretive ambiguity."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_006"
+        ]
+      }
+    },
+    {
+      "claim": "Reliability is a property of the checklist's author, not the panel; therefore, the panel's 'reliability' is actually the 'fidelity of execution' of the author's expertise.",
+      "mechanism": "The panel acts as a distributed execution environment for a compiled set of expert heuristics (the checklist). The 'genuine reliability' is distinguished from 'mere compliance' by the panel's ability to 'exception-handle' the checklist—identifying when the checklist's logic fails for a specific edge case. Evidence in a single evaluation would be a documented 'divergence-convergence' pattern: the panel initially disagreeing on a checklist item's application and resolving it through evidence-based debate.",
+      "counterconditions": [
+        "The checklist is so simplistic that no 'exception handling' is ever required.",
+        "The panel lacks the basic literacy/competence to interpret the checklist's logic."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SCR_004",
+          "SCR_012"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we treat the checklist as a 'program' and the panel as the 'CPU', the 'genuine reliability' the prompt asks for is analogous to 'runtime error detection'. A compliant CPU just executes the instructions; a reliable system detects when the instructions lead to an invalid state. This suggests that the only way to distinguish reliability from compliance in a single run is to look for 'interrupts'—moments where the panel stops the checklist to verify a premise.",
+          "why_keep_this": "Provides a computational analogy to the 'compliance vs reliability' distinction."
+        }
+      }
+    ]
+  }
+}
+```

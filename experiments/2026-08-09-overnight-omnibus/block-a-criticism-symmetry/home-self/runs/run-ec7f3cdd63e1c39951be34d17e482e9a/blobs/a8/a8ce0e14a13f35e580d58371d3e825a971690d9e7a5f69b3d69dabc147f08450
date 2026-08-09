@@ -1,0 +1,50 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4e5fe4d7536c22fb4d99f571: program:reasoning_observation_pending
+- reason-counter@ffcf5e225d5b20c41f13aef5: program:reasoning_observation_pending
+- reason-counter@23f08947c2715c6c01149355: program:reasoning_observation_pending
+- reason-counter@a7119a8f725d897f4a4fe1ff: program:reasoning_observation_pending
+- reason-counter@811f90982774905fea61ae97: program:reasoning_observation_pending
+- reason-counter@39543d937f9ef3fdc30df110: program:reasoning_observation_pending
+- reason-counter@1b186983f945e468894ffd64: program:reasoning_observation_pending
+- reason-counter@6e629087786c1a7837716cb8: program:reasoning_observation_pending
+- reason-counter@4bf1fc49c15918006c3a6cf9: program:reasoning_observation_pending
+- reason-counter@8eecc61c4700332472d79c43: program:reasoning_observation_pending
+- reason-counter@b4e5d5fcc1d6d0717ea4123a: program:reasoning_observation_pending
+- reason-counter@025f96dff2849c3cefbf1bf3: program:reasoning_observation_pending
+- reason-counter@c39a30f600e459460f90d5d9: program:reasoning_observation_pending
+- reason-counter@867cbb0f2760a8d5a436757c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A decentralized network of services can be globally re-routed in software, whereas a power grid is constrained by the physical transmission lines.","The cost of modularity in a software network is latency, whereas in a power grid it is energy loss."],"overturn_conditions":["Demonstration that large services can implement internal topological modularity with zero latency or state-sharing penalties.","Proof that decentralized networks naturally converge on sparse, modular topologies without explicit central design."],"shared_structure":["Both a decentralized network and a locally fault-tolerant grid architecture rely on modularity and deliberate isolation to prevent cascading failures.","Both a large, tightly coupled service and a monolithic power grid lack the topological firebreaks needed to isolate a localized fault, leading to widespread blackouts."],"source_memory_refs":["SRC_005"],"transfer_claims":["If a modular power grid prevents a local transformer fault from causing a statewide blackout, a modular decentralized network prevents a single node's failure from crashing the system.","If a tightly coupled power grid experiences a cascading failure from a
+commitments: reasoning-envelope-wf, reason-counter@4e5fe4d7536c22fb4d99f571, reason-counter@ffcf5e225d5b20c41f13aef5, reason-counter@23f08947c2715c6c01149355, reason-counter@a7119a8f725d897f4a4fe1ff
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A single organism's nervous system can learn and adapt its response, whereas a large service's runbook may be static.","Traders in a market can cause correlated 'flash crashes' through algorithmic trading, whereas the 'cognitive diversity' in a decentralized network is less susceptible to algorithmic convergence."],"overturn_conditions":["Evidence that the decentralized network's operators all use the same automated decision-support tools, effectively sharing a single 'mental model'.","Proof that the large service intentionally seeds diverse, conflicting internal hypotheses about any ambiguous threat."],"shared_structure":["Both a large service and a single organism with a single nervous system react to a stimulus in a unified, coordinated way, which can be fatal if the reaction is wrong.","Both a decentralized network and a market of independent traders process information through diverse, disaggregated decision-makers, preventing a single error from crashing the whole."],"source_memory_refs":["SRC_002"],"transfer_claims":["If a market's diversity of opinion prevents a single rumor from causing all investors to sell simultaneously, a decentralized network'
+commitments: reasoning-envelope-wf, reason-counter@811f90982774905fea61ae97, reason-counter@39543d937f9ef3fdc30df110, reason-counter@1b186983f945e468894ffd64
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Sandbags and floods are physical and uncorrelated except under the extreme event, whereas decentralized services can be synchronized by minor signals (market prices) long before the extreme event.","A large service can dynamically allocate internal redundancy, whereas a sandbag's capacity is static."],"overturn_conditions":["Evidence that decentralized networks can reorganize and heal during an extreme event faster than the event propagates.","Proof that the large service's concentrated redundancy introduces a single point of failure that makes it MORE vulnerable to extreme events than distributed small services."],"shared_structure":["Both a decentralized network and a row of individual sandbags appear resilient to moderate stress, but both fail simultaneously under an extreme flood that exceeds their individual capacities.","Both a large service and a single, massive levee concentrate redundancy to withstand a greater magnitude of the same extreme flood."],"source_memory_refs":["SRC_004"],"transfer_claims":["If a row of sandbags washes away together in a 100-year flood while a single large levee holds, a decentralized network will fail together in a massi
+commitments: reasoning-envelope-wf, reason-counter@6e629087786c1a7837716cb8, reason-counter@4bf1fc49c15918006c3a6cf9, reason-counter@8eecc61c4700332472d79c43
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A large service has a single, deliberate architectural designer capable of intentionally breaking correlations, whereas a flock of birds relies on evolved, instinctual behaviors that can be easily hijacked by a single predator cue.","Organismal components cannot dissolve or separate, whereas small services can be decommissioned or fully isolated from the network.","The shared cause in a flock (a predator) is an exogenous shock, whereas the shared cause in a decentralized network is often endogenous (the market signal itself driving the structure of the nodes)."],"overturn_conditions":["Evidence that independent service operators consistently adopt diverse, non-overlapping technological stacks without top-down coordination.","Evidence that large services universally fail to maintain internal architectural diversity due to organizational convergence and communication overhead."],"shared_structure":["Both a single large service and a genetically diverse single organism concentrate redundancy under unified internal control to resist environmental stressors.","Both a decentralized network and a flock of birds consist of nominally independent agents responding to
+commitments: reasoning-envelope-wf, reason-counter@b4e5d5fcc1d6d0717ea4123a, reason-counter@025f96dff2849c3cefbf1bf3, reason-counter@c39a30f600e459460f90d5d9, reason-counter@867cbb0f2760a8d5a436757c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

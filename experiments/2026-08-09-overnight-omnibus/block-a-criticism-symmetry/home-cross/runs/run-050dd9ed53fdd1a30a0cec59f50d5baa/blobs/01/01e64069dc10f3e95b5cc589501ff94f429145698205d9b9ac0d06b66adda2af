@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The proposed relation claims 'integration' between 'corrective friction' (SRC_005) and the 'Checklist Paradox' (SCR_005) producing a ceiling effect, but it never specifies the causal mechanism by which excessive checklist granularity *converts* corrective friction into blind ticking. Without an account of the mediating process—e.g., how cognitive overload suppresses the verification step that distinguishes corrective friction from compliance ticking—the asserted integration is a descriptive juxtaposition of two endpoints rather than a substantive dependence, reduction, or shared-mechanism relation.", "counterexample": null}]}
+```

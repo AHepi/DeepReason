@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3f8554f6b29cca5b558de744: program:reasoning_observation_pending
+- reason-counter@7b2857909d2d1c579ca0d105: program:reasoning_observation_pending
+- reason-counter@8db115402ce04fbf95d1eb0a: program:reasoning_observation_pending
+- reason-counter@d08580863aa9935100299159: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between independent and correlated failures is found in the 'Entropy of Recovery'\u2014the variance in the time and method of service restoration.","counterconditions":[{"case":"The shared cause is a permanent state change (e.g., a deprecated API) requiring manual updates across all services.","checker_spec":null,"eval":"observation"},{"case":"Recovery is gated by a shared dependency that recovers linearly rather than instantaneously.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Truly independent failures exhibit high entropy in recovery; services come back online based on the individual operator's wake-up time and local fix. Correlated failures, even those that appear staggered, exhibit 'Recovery Synchronization'\u2014they recover in waves corresponding to the resolution of the shared cause (e.g., a DNS cache TTL expiration or a cloud provider's regional recovery). If the recovery curves of 'independent' services are tightly coupled, the failure was correlated.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3f8554f6b29cca5b558de744, reason-counter@7b2857909d2d1c579ca0d105
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is fundamentally less resilient to correlated failure because it lacks the 'Global Immune Response' capability of a centralized entity.","counterconditions":[{"case":"The centralized control plane itself becomes the primary vector for the correlated failure (the 'God-mode' failure).","checker_spec":null,"eval":"observation"},{"case":"The decentralized network implements a gossip-based autonomous mitigation protocol that mimics a global response.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"While a large service may suffer a correlated crash, its 'strictly more internal redundancy' is paired with a unified control plane capable of implementing a global circuit breaker or an instantaneous configuration rollback. In a decentralized network, the 'independence' that prevents synchronization also prevents coordinated mitigation. A shared cause (e.g., a malicious packet) will propagate through the network, and because there is no central authority to 'quarantine' the system, the failure persists longer and more unpredictably than in a centralized system that can 'fail-fast' and recover globally.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8db115402ce04fbf95d1eb0a, reason-counter@d08580863aa9935100299159
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

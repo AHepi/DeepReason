@@ -1,0 +1,45 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+PROBLEM CONTEXT (conn:056c95e2ed5f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 056c95e2ed5f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@0c7922e662bd: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6f4e274d1507438a24a88014: program:reasoning_observation_pending
+- reason-counter@873e54f71a85c989c1d3a77b: program:reasoning_observation_pending
+- reason-counter@928536b821438682fe126b4f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_001 abstracts SRC_003: the resilience of decentralized networks is an artifact of observer bias rather than a genuine causal property, because extreme value statistics ensure catastrophic shared causes eventually dominate any topology, and the distributed topology merely fragments the observable failure signal. The abstraction is refuted if regulatory or systemic monitoring forces centralized reporting of all small operator failures, making the hidden shared causes visible, or if the large centralized service actively obfuscates its internal failures, equalizing the observer bias.
+commitments: hv-floor@2a45b7988522, lineage-ref@0c7922e662bd, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_004 contradicts SRC_003: the large-service internal-redundancy advantage and the decentralized-network independence advantage cannot both hold when standardized auto-scaling algorithms create hidden correlations that synchronize failures. The contradiction is refuted if the large service's internal redundancy is homogeneous (identical software instances), which fails to break correlation, or if a shared external dependency fails and both topologies fail in correlation.
+commitments: hv-floor@2a45b7988522, lineage-ref@0c7922e662bd, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_002 depends on SRC_005: algorithmic convergence on identical training data is a specific instance of the general leaderless-synchronization mechanism, where shared data replaces shared metrics as the coupling medium. The dependence is refuted if small services use locally generated, private training data that is not shared, breaking the convergence mechanism, or if the large service also uses a single shared training set for all its sub-services, eliminating its epistemic-firewall advantage.
+commitments: hv-floor@2a45b7988522, lineage-ref@0c7922e662bd, relation-form@578e42df713e
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Biological immune diversity arises from genetic recombination, whereas software heterogeneity in a decentralized network often arises from legacy code or operator negligence, not deliberate design.","A large service can intentionally reseed diversity after a failure, whereas a biological population must wait for a new generation."],"overturn_conditions":["Evidence that the standardization pressure of the market forces all decentralized operators to adopt identical logic, eliminating heterogeneity.","Demonstration that the large service can maintain a 'polyculture' of internal logic without breaking its own operational coherence."],"shared_structure":["Both a heterogeneous decentralized network and a population with diverse immune responses prevent a single pathogen from synchronously decimating the whole.","Both a large service with a unified control system and a monoculture crop have synchronized vulnerabilities that allow a single pest to cause total failure."],"source_memory_refs":["SRC_002"],"transfer_claims":["If a monoculture crop is wiped out by a single blight while a diverse wild meadow survives, a large service with a single stack is more vulnera
+commitments: reasoning-envelope-wf, reason-counter@6f4e274d1507438a24a88014, reason-counter@873e54f71a85c989c1d3a77b, reason-counter@928536b821438682fe126b4f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

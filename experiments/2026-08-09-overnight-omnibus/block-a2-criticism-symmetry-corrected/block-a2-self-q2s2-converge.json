@@ -1,0 +1,9 @@
+{
+  "reason_rc": 5,
+  "run_id": "run-4faa222fd2fb014e56c7005107f84ad3",
+  "continuation_count": 0,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+  "last_stop_reason": "operational_failure",
+  "last_replay_valid": false,
+  "outcome": "non_resumable_not_valid"
+}

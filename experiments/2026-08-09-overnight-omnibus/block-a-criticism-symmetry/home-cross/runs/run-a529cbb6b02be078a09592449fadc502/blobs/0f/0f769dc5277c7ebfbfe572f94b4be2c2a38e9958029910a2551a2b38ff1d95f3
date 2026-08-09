@@ -1,0 +1,112 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist is more reliable than a single expert because the checklist transforms the task from one of 'synthesis' (high-variance) to one of 'verification' (low-variance), raising the performance floor more than it lowers the ceiling.",
+      "mechanism": "The checklist acts as a low-pass filter that eliminates 'slips'—random omissions of known requirements—which are the primary source of expert failure in verifiable tasks. While the expert's intuition allows for higher peak performance (the ceiling), the panel's systematic verification reduces the variance of the outcome, shifting the mean reliability upward by eliminating the catastrophic tail of expert error.",
+      "counterconditions": [
+        "The task requires 'creative synthesis' where the correct path cannot be pre-enumerated in a checklist.",
+        "The checklist is insufficiently granular to capture the critical failure modes of the domain.",
+        "The 'compliance fatigue' threshold is reached, where non-experts tick boxes without actual verification."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_003"
+        ],
+        "shared_structure": [
+          "Expert skill provides depth/ceiling",
+          "Checklist provides safety/floor",
+          "Reliability is the average outcome across many trials"
+        ],
+        "transfer_claims": [
+          "The Surgical Safety Checklist improves outcomes not by making surgeons more skilled, but by preventing 'stupid' mistakes."
+        ],
+        "disanalogies": [
+          "Aviation checklists are used by experts, whereas the prompt specifies non-experts."
+        ],
+        "overturn_conditions": [
+          "Evidence that the checklist introduces new, systematic errors that experts would never make."
+        ]
+      }
+    },
+    {
+      "claim": "The panel's reliability is a product of 'stochastic error cancellation' coordinated by the checklist, but this is distinguishable from mere compliance by the presence of 'critical rejection' of plausible but incorrect checklist items.",
+      "mechanism": "The panel provides a redundant verification layer. To distinguish genuine reliability from blind compliance in a single evaluation, one must introduce a 'plausible-but-wrong' decoy item into the checklist. A compliant panel will tick the box (tracking the checklist, not the truth), whereas a genuinely reliable panel will flag the item as incorrect or irrelevant to the specific case, demonstrating that they are applying the checklist as a tool for verification rather than a script for obedience.",
+      "counterconditions": [
+        "The non-experts lack the baseline knowledge to recognize a plausible-but-wrong decoy.",
+        "The panel's consensus mechanism suppresses the individual who identifies the decoy."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_002"
+        ],
+        "shared_structure": [
+          "Input: A set of instructions (checklist)",
+          "Process: Verification of state",
+          "Output: Judgment of reliability"
+        ],
+        "transfer_claims": [
+          "The ability to reject a false-positive instruction is the primary marker of active judgment over passive compliance."
+        ],
+        "disanalogies": [
+          "Standard checklists are usually assumed to be 100% correct."
+        ],
+        "overturn_conditions": [
+          "If the non-experts are so untrained that they cannot distinguish a decoy from a real requirement."
+        ]
+      }
+    },
+    {
+      "claim": "The single expert is more reliable because the 'cognitive load' of a checklist for non-experts creates a 'reliability paradox' where granularity increases the probability of superficial compliance (ticking without checking).",
+      "mechanism": "As a checklist attempts to codify expert intuition, it grows in length and complexity. For a non-expert, this increases the cognitive overhead of the task, leading to 'compliance fatigue.' The expert, conversely, uses compressed heuristic patterns (intuition) that allow them to maintain a high-level mental model of the system, making them less prone to the 'tunnel vision' induced by a long list of discrete checks.",
+      "counterconditions": [
+        "The checklist is optimized for cognitive load (e.g., hierarchical or adaptive).",
+        "The task is sufficiently simple that 'fatigue' is not a factor."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we want to distinguish 'reliability' from 'consistency' in a single evaluation without a decoy, we could look at the 'justification logs'. A compliant panel will cite the checklist item number. A reliable panel will cite the evidence in the case that satisfies the checklist item. The delta between 'I checked the box' and 'I found X which satisfies the box' is the evidence of genuine reliability.",
+          "why_keep_this": "Alternative to the decoy method for the second part of the prompt."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'panel' aspect (consensus) act as a second-order checklist, or does it introduce groupthink that undermines the checklist's objectivity?",
+        "related_refs": [
+          "SCR_008"
+        ]
+      }
+    ]
+  }
+}
+```

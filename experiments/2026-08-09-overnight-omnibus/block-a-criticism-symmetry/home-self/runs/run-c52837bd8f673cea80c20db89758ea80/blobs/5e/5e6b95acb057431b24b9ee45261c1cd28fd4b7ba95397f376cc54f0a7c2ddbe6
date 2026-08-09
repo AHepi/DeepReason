@@ -1,0 +1,15 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 proposes abstraction as the substantive relation, but the stated refutation is structural, not relational: it specifies conditions under which the evidential principle would fail, rather than naming how 083573bb50cb depends on, reduces to, shares a mechanism with, is compatible with, inherits from, integrates with, contradicts, or abstracts SRC_005 in a way that connects the isolated artifact to its neighbourhood. The claim 'X abstracts Y's analysis into a general principle' summarizes a transformation applied to content, not a relation between artifacts — the 'refuted if' clause pertains to the principle's internal validity, not to the abstraction relation itself. A genuine abstraction relation would identify the shared structure that survives the generalization and state what about the neighbourhood connection is refuted if that shared structure lacks a veridical anchor, rather than restating the principle's failure conditions."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}
+```

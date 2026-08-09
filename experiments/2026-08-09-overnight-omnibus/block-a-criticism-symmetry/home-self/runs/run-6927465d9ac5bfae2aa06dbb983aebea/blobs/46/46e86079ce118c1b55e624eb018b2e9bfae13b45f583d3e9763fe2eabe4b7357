@@ -1,0 +1,56 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-e7ac3266cc18a29a1c7701236a682454) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f2342b85daf3fdd5d0fa360a: program:reasoning_observation_pending
+- reason-counter@d9d01eb1a4cbf04766c06559: program:reasoning_observation_pending
+- reason-counter@6139e95d61447f372ad1cae4: program:reasoning_observation_pending
+- reason-counter@8eb3602b88a51b291184e766: program:reasoning_observation_pending
+- reason-counter@6909950437b66ff2f3972639: program:reasoning_observation_pending
+- reason-counter@89b621f501b8cf2673a1df07: program:reasoning_observation_pending
+- reason-counter@040d48f64283b8adade16f47: program:reasoning_observation_pending
+- reason-counter@d9ff9fd582e4fd1e3e5e534e: program:reasoning_observation_pending
+- reason-counter@a12cebf5f464c9bc1dc0c108: program:reasoning_observation_pending
+- reason-counter@e69ca01c35e61f5bcb81cf9a: program:reasoning_observation_pending
+- reason-counter@4e4a94c02c0744015d5b4125: program:reasoning_observation_pending
+- reason-counter@fcab9c845f2c215f24b5ad7d: program:reasoning_observation_pending
+- reason-counter@a44fa4b145b5b73d684063bd: program:reasoning_observation_pending
+- reason-counter@9a8bb54364e7a99450bded22: program:reasoning_observation_pending
+- reason-counter@306c882dfc5a1500d931af71: program:reasoning_observation_pending
+- reason-counter@caa1211ff611717a6a9a1dcc: program:reasoning_observation_pending
+- reason-counter@ce9ebe5d3ef9847b79bb6d2e: program:reasoning_observation_pending
+- reason-counter@d826fcec5cf40b00e953e38c: program:reasoning_observation_pending
+- reason-counter@471e16b90ce3e13291725a54: program:reasoning_observation_pending
+- reason-counter@098907b5aaf68f45f4871e39: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The non-expert panel *will* outperform the expert because of bias suppression through aggregation. A single expert's intuition is contaminated by case-specific biases (availability, anchoring) that vary across instances, while the non-expert panel, by following the same checklist, has a *fixed* bias profile. Aggregation across panel members cancels idiosyncratic noise while preserving the checklist's systematic signal. Within a single evaluation, genuine gain is distinguished by examining the internal variance of the panel: if members who agree on the answer also agree on the *reasoning* (same checklist items triggered), this is mere compliance; if members reach the same answer via different item subsets, the panel has genuine understanding.","counterconditions":[{"case":"The panel members show near-zero variance in which checklist items they trigger, indicating mechanical compliance rather than independent reasoning","checker_spec":null,"eval":"observation"},{"case":"The expert's bias is shown to be stable across instances (low variance), eliminating the advantage of aggregation","checker_spec":null,"eval":"observation"},{"case":"The task distribution shifts between the checklist's desi
+commitments: reasoning-envelope-wf, reason-counter@f2342b85daf3fdd5d0fa360a, reason-counter@d9d01eb1a4cbf04766c06559, reason-counter@6139e95d61447f372ad1cae4, reason-counter@8eb3602b88a51b291184e766, reason-counter@6909950437b66ff2f3972639
+
+TARGET SRC_002
+{"analogy":null,"claim":"Neither system dominates; the checklist panel and the expert operate in different error regimes that partition the task space. The expert fails on cases requiring consistency (where intuition is swayed by irrelevant context), while the panel fails on cases requiring boundary judgment (where the checklist is too coarse). Reliability gain is genuine only if the panel's error set is a strict subset of the expert's error set within the consistency-requiring partition; otherwise, the panel merely trades one error type for another. Within a single evaluation, the distinguishing evidence is whether the panel's errors fall *outside* the expert's error set (genuine gain) or overlap with it (no gain).","counterconditions":[{"case":"The panel's error rate on high-complexity cases exceeds the expert's error rate on low-complexity cases, making the trade unfavorable","checker_spec":null,"eval":"observation"},{"case":"The complexity proxy (triggered item count) is shown to be uncorrelated with actual case complexity","checker_spec":null,"eval":"observation"},{"case":"The expert's errors are shown to be uniformly distributed across complexity, not concentrated on consistency-requiring cases","checker_s
+commitments: reasoning-envelope-wf, reason-counter@89b621f501b8cf2673a1df07, reason-counter@040d48f64283b8adade16f47, reason-counter@d9ff9fd582e4fd1e3e5e534e, reason-counter@a12cebf5f464c9bc1dc0c108, reason-counter@e69ca01c35e61f5bcb81cf9a
+
+TARGET SRC_003
+{"analogy":null,"claim":"The claim is undecidable from a single evaluation because reliability is a property of a *distribution of judgments*, not a single outcome. A single evaluation measures accuracy, not reliability, and the checklist panel's apparent superiority could be an instance of the checklist happening to align with the evaluation's sample of verifiable outcomes. Genuine reliability gain requires longitudinal or cross-domain evidence of consistent error reduction; within a single evaluation, the best we can do is identify *markers* of genuine gain (error decorrelation, calibration) versus mere compliance (error correlation, overconfidence on easy cases).","counterconditions":[{"case":"The evaluation includes a sufficient number of independent task instances to compute a reliable estimate of the accuracy difference's variance, and the difference is statistically significant","checker_spec":null,"eval":"observation"},{"case":"The evaluation is replicated across independent task domains, showing consistent panel advantage","checker_spec":null,"eval":"observation"},{"case":"The evaluation includes adversarial cases designed to break the checklist, and the panel still outperforms","checker_spec":null,"eva
+commitments: reasoning-envelope-wf, reason-counter@4e4a94c02c0744015d5b4125, reason-counter@fcab9c845f2c215f24b5ad7d, reason-counter@a44fa4b145b5b73d684063bd, reason-counter@9a8bb54364e7a99450bded22, reason-counter@306c882dfc5a1500d931af71
+
+TARGET SRC_004
+{"analogy":null,"claim":"The panel's reliability gain is genuine only if the checklist functions as a *causal model* of the task, not merely a correlation filter. A genuine checklist encodes the causal structure linking inputs to outcomes, so non-experts who follow it are executing a simplified decision procedure that tracks the true generating process. Mere compliance tracks surface correlations that happen to align with outcomes in the evaluation sample but will fail under intervention. Within a single evaluation, genuine gain is distinguished by probing the checklist's *causal validity*: perturb a non-causal feature that the checklist uses, and if the panel's accuracy drops, it was merely compliant; if it does not, the checklist was causally valid.","counterconditions":[{"case":"The perturbation experiment is not feasible within the evaluation framework","checker_spec":null,"eval":"observation"},{"case":"The checklist is shown to contain only correlation-based items, with no causal model, yet the panel still outperforms, refuting the causal requirement","checker_spec":null,"eval":"observation"},{"case":"The causal model is incorrect but the panel still outperforms, suggesting causal validity is unnecessary","
+commitments: reasoning-envelope-wf, reason-counter@caa1211ff611717a6a9a1dcc, reason-counter@ce9ebe5d3ef9847b79bb6d2e, reason-counter@d826fcec5cf40b00e953e38c, reason-counter@471e16b90ce3e13291725a54, reason-counter@098907b5aaf68f45f4871e39
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

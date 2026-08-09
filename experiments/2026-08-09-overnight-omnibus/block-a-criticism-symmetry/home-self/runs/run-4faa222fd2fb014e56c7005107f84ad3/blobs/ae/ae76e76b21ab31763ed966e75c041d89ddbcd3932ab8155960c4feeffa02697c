@@ -1,0 +1,10 @@
+```json
+{
+  "patch": [
+    {
+      "op": "remove",
+      "path": "/candidates/2/analogy/transfer_claws"
+    }
+  ]
+}
+```

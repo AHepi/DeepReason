@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem asks the target to argue for or against the claim, and identify evidence within a single evaluation. The mechanism assumes that the expert's intuition reliably triggers on disconfirming evidence, and the counterconditions fail to address cases where the checklist is genuinely valid and produces reliable outcomes procedurally. But the bigger issue is that the target never fulfills the problem's request: it fails to identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance. The 'compliance trap' theory explains why compliance might be bad, but does not offer a discriminator that could be measured in one evaluation to separate genuine gain from coincidental tracking.",
+      "counterexample": [
+        "A single evaluation where the non-expert panel, following a procedural checklist, achieves a 95% accuracy rate on verifiable outcomes, while the domain expert relying on intuition achieves 70%. In this single evaluation, the panel exhibits no 'challenge' steps or skepticism, yet the outcome reliability is objectively higher. The target's mechanism cannot account for this because it assumes the suppression of skepticism inherently makes the panel less reliable, and its counterconditions (e.g., a 'challenge' step being present) do not cover the case where a valid checklist makes skepticism unnecessary for reliability."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target answers the second part of the problem (identifying evidence) but completely omits the first part: arguing for or against the claim that the panel will, on average, produce more reliable judgments. It focuses solely on the diagnostic for distinguishing compliance from reliability gain, providing no stance or argument on the comparative reliability of the panel vs. the expert.",
+      "counterexample": null
+    }
+  ]
+}

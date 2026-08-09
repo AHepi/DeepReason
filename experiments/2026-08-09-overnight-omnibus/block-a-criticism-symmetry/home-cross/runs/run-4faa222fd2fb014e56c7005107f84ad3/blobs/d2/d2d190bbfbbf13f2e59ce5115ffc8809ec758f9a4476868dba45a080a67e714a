@@ -1,0 +1,11 @@
+```json
+{
+  "patch": {
+    "op": "replace",
+    "path": "/cases/0/counterexample",
+    "value": [
+      "A large service with strictly more total internal redundancy using a shared-nothing, asynchronously replicated architecture has no tight synchronization resonance path, so the proposed mechanism does not make its correlated-failure risk increase with added redundancy."
+    ]
+  }
+}
+```
