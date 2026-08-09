@@ -141,7 +141,75 @@ alarmed by it.
 
 ## Block B — capability-channel stochasticity funnel
 
-(pending — runs in flight as of this segment's drafting)
+10/10 runs complete, PREREG.yaml frozen before the first call. This
+block deliberately departed from reusing turmite/jolt's question
+verbatim (PREREG.yaml's own documented deviation, decided before any
+live call): a 2026-08-09 pre-flight research pass found NO simulation
+proposal had EVER reached COMPILED in this repo's committed history —
+only PROPOSED → VALIDATED → (GRANTED | DENIED) — so this block used a
+new, deliberately trivial flat-observable question (a pseudorandom
+face-count tally) to maximize the chance of observing genuine
+later-stage funnel behavior instead of re-measuring a structural
+ceiling.
+
+**Headline result: the ceiling is broken.** 8 of the 10 runs produced
+at least one simulation proposal that reached the full funnel —
+PROPOSED → VALIDATED → GRANTED → COMPILED → DISPATCHED → SUCCEEDED —
+the first COMPILED, first DISPATCHED, and first SUCCEEDED simulation
+proposals ever recorded in this repo (typed evidence: each
+`run-status.json` + `verify_root` + this block's own
+`block_b_audit.py`, which walks each proposal's FULL transition chain
+via `previous_transition_ref`, not just its current transition).
+
+**The funnel, aggregated across all 10 runs (20 proposals total):**
+
+| stage | proposals reaching it | rate from PROPOSED |
+|---|---|---|
+| PROPOSED | 20 | 100% |
+| VALIDATED | 8 | 40% |
+| GRANTED | 8 | 40% (no loss) |
+| COMPILED | 8 | 40% (no loss) |
+| DISPATCHED | 8 | 40% (no loss) |
+| SUCCEEDED | 8 | 40% (no loss) |
+
+**The real bottleneck is PROPOSED → VALIDATED, not anything
+downstream.** Once a proposal clears validation, this block observed
+ZERO attrition all the way to SUCCEEDED — every validated proposal
+in this sample went on to succeed. That is a strikingly clean result
+for n=8 and should be read as a pilot-scale observation, not a proven
+0% downstream-failure rate; the honest claim is "downstream attrition
+was not observed in this sample," not "downstream attrition is zero."
+
+**Attempts per live capability hit, the number this block exists to
+report:** at the RUN level, 10 attempts → 8 runs with >=1 SUCCEEDED
+= **1.25 runs per hit** (most single attempts hit). At the PROPOSAL
+level, 20 proposals → 8 succeeded = **2.5 proposals per success**
+(a proposal has roughly even odds of clearing validation). Both
+numbers matter for different planning questions: "will one demonstration
+attempt likely work" (yes, ~80% of the time with this question shape)
+vs "how many proposals should a demo budget for" (~2-3).
+
+**The 2/10 run-level misses** (s1, s4) both stopped `operational_failure`
+at cycle 0 with exactly 1 proposal stuck at PROPOSED (never reached
+VALIDATED) — the same typed shape as the pre-2026-08-09 historical
+record, just now the minority outcome instead of the only one.
+
+**Replay-validity confound, same pattern as Block A.** 7/10 runs
+`replay_valid=true`; the 3 that show violations (s2, s6, s10) all
+carry the same `foreign-criticism` coverage-validation violation as
+Block A's confound — this block's 6-cycle/90000-token budget is
+shared with Block A's, so the same budget-tightness effect on
+cross-school criticism coverage shows up here too, unrelated to the
+capability-channel funnel result above.
+
+**Also stale as of this tranche, per PREREG.yaml's own note:**
+CLAUDE.md's "Hard-won invariants" section describing turmite's
+`_not_a_self_link` and jolt's observable-naming failure as CURRENT
+blockers is out of date — both were fixed on 2026-08-01, before this
+tranche started (`experiments/2026-07-31-schema-sweep/SWEEP.md`,
+`REPAIR_OSCILLATION.md`). This should be corrected in CLAUDE.md
+directly in a future change tranche (not this live-run tranche's job
+to edit CLAUDE.md); flagged here so it is not silently re-discovered.
 
 ## Block C — reasoning-token completion-cap curve
 
