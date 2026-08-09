@@ -447,3 +447,79 @@ been substantially rebuilt on this branch." The narrative document itself
 remains committed and its claim stands per the index's own citation
 policy, but its underlying root is not among the 11 `log.jsonl` roots
 grepped above — it predates the rebuild that produced them.
+
+## §4. Adjudication-blindness fix tranche, 2026-08-01 (R5c)
+
+`experiments/2026-08-01-fix-adjudication-blindness/` (`GOAL.md`,
+`DIAGNOSIS.md`, `REPRO.md`, `FIX.md`, `VERIFY.md`) diagnosed and fixed:
+`run-b4d6dfda0c20676a864a051fbc97bda4` (jolt epoch 3, 851 events, 72
+artifacts) had `len(state.att) == 0`, `len(harness.warrants) == 0` — not
+one attack was ever attempted anywhere in the run, all 72 artifacts sat
+ACCEPTED, and `run-result.json` still reported `epistemic_checks_passed:
+true`. `DIAGNOSIS.md` traces the cause to `invariants.py:4040-4048`
+invoking the capture detector purely as a totality check and discarding
+its return value — the blindness-detection flags were computed but never
+reached the epistemic-findings channel, and even once wired up,
+`MIN_ATTACKS_FOR_RITUAL=5` made two of the four ritual conditions
+mathematically unreachable exactly when blindness was total.
+
+**This tranche is NOT judge-discrimination evidence.** The zero-attack
+root's own attack count is zero because `ARGUMENTATIVE_AUTHORITY` defaults
+to `observe_only` (`docs/map/CON-authority.md` §"Everything defaults to
+observe_only") — under that default, prose criticism records scrutiny and
+mints no warrant AT ALL, so no judge (or critic) ruling was ever asked to
+adjudicate anything in this root; there is no judge verdict to be right,
+wrong, discriminating, or biased. `GOAL.md` says this explicitly: fixing
+`authority.py` so text runs CAN mint warrants "is a design decision the
+operator has not made" and was ruled **out of scope** for that tranche.
+The defect this tranche fixed is a **reporting honesty** problem
+(a run that attacked nothing must not claim to be epistemically clean),
+not a judge-calibration problem — the two are adjacent (both concern
+whether the harness's criticism layer is trustworthy) but distinct.
+`GOAL.md`'s own blast-radius measurement is useful background for §2/§7,
+though: of 31 openable roots, only 5 ever had ANY attacks/warrants at all
+(`bronze_flat_2026-07-13/{deepseek-v4-pro: att=11, qwen3_5_397b: att=8,
+kimi-k2_6: att=4}`, `live_compare_2026-07-28/.../shallow-dc6fe3f9: att=1`,
+`live_engaged_2026-07-27/run-f4fa6663e5412d64: att=1`) — 26 of 31 roots
+never attacked anything, consistent with `observe_only` being the actual
+operating default across most of the committed record, which is itself a
+relevant fact for §8 (a solo run today, run with defaults, already spends
+no judge tokens on status-changing text adjudication).
+
+## §5. Stress-triplet and lambda/experiment-module runs (R5d)
+
+### 5.1 Stress-triplet: zero judge involvement (negative finding)
+
+    grep -c '"trial-llm"\|"judge"' experiments/2026-08-02-stress-triplet/home-{orbit,triage,workshop}/runs/run-*/log.jsonl
+
+    home-orbit/runs/run-6472629dbc5d408a733d472040671752/log.jsonl:0
+    home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc/log.jsonl:0
+    home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829/log.jsonl:0
+
+All three roots are rule-engine event traces (`Register`, `Spawn`,
+`Control`, `Refl`), consistent with `docs/map/SUB-adjudication.md`'s Traps
+entry naming `run-6472629d` (orbit) as the committed demonstration of a
+run with `att` empty and every artifact vacuously `ACCEPTED` (the
+adjudication-blindness detector's positive-control fixture, §4 — a
+different but related failure mode: zero warrants, not bad judge
+verdicts). The tranche's own `{orbit,triage,workshop}-audit.json` files
+were also checked directly (traversed for any key containing "judge" or
+"trial") and contain none. **The stress-triplet contributes nothing to
+the judge-discrimination question** — there is no judge ruling anywhere
+in it to evaluate.
+
+### 5.2 Lambda: pre-registered, never run to a committed result
+
+    experiments/lambda_preregistration.yaml, lambda_preregistration_v2.yaml
+    (both present, both prereg-only — no matching result file under
+    experiments/results/, no committed run root under experiments/)
+
+`src/deepreason/experiments/lambda_run.py` and `scripts/lambda_live.py`
+exist as tooling but were never executed to a committed artifact. The one
+"judge"-adjacent line in `lambda_run.py` (a comment: *"Post-hoc oracle
+scoring: the withheld verifier judges every conjecture"*) refers to a
+withheld PROGRAM oracle, not an LLM judge — even conceptually, lambda's
+design does not route through `informal/audits.py` or `informal/trial.py`.
+**Lambda contributes nothing to the judge-discrimination question either;
+its absence from the record is a real gap (untested), not a null
+result** — see §7's INSUFFICIENT EVIDENCE handling.

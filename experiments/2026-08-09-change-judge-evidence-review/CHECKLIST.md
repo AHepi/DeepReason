@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=4 blockers=none
+State: next=7 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -42,16 +42,20 @@ check before handing off to validation, not as the gate itself.
       subsection
       DONE: REVIEW.md §3.2 header says "TEST-FIXTURE, not live"; §3.3
       header says "Live-run counts"; both present -> pass
-- [ ] 5. (S4) Read the `2026-08-01-fix-adjudication-blindness` tranche
+- [x] 5. (S4) Read the `2026-08-01-fix-adjudication-blindness` tranche
       files; write REVIEW.md §4 stating plainly whether it is
       judge-discrimination evidence.
       done-when: REVIEW.md §4 contains the words "is judge-discrimination
       evidence" or "is not judge-discrimination evidence"
-- [ ] 6. (S5) [COMMIT] Grep the stress-triplet run roots and audit files
+      DONE: `grep -q "is NOT judge-discrimination evidence" REVIEW.md &&
+      echo PASS` -> PASS (bolded variant satisfies the substring check)
+- [x] 6. (S5) [COMMIT] Grep the stress-triplet run roots and audit files
       for judge content, check lambda's run status; write REVIEW.md §5;
       commit §3-§5 progress.
       done-when: REVIEW.md §5 states the stress-triplet zero-hit finding
       with its grep command, and lambda's status
+      DONE: REVIEW.md §5.1 has the grep command and 0/0/0 output; §5.2
+      states lambda's prereg-only status -> pass
 - [ ] 7. (S6) Read `docs/EXPERIMENT_PROGRAM_2026-07.md`'s judge sections
       (L52-67, L153-200, L257-320, L415-528, L747-826) and cross-reference
       predictions P1/P2 against the e02 results from step 2; write
