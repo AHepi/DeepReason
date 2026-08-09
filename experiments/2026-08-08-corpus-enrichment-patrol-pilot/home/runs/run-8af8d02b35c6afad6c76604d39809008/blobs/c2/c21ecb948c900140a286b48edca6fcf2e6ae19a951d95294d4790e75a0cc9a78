@@ -1,0 +1,143 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "second",
+      "mechanism": "You occupy the slot of the runner you pass. Passing the second-place runner means you enter second place, displacing them to third. The first-place runner remains ahead of you, unreached by this event.",
+      "counterconditions": [
+        "The race uses non-standard positional semantics (e.g., lap-relative or time-trial 'overtaking a time').",
+        "'Overtake' is used metaphorically to mean surpassing the first-place runner's performance rather than physically passing the runner in the second position.",
+        "The problem is a trick where 'second place' refers to the runner currently in second-to-last, not the runner ranked second from the leader."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_004",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "first",
+      "mechanism": "The reasoner conflates 'overtaking second place' with 'overtaking the person currently at the front of the race' via an ordinal decoupling error: 'second' is read as a label for the leader's immediate pursuer, and passing them is misread as taking the lead, ignoring the unreached first-place runner.",
+      "counterconditions": [
+        "The reasoner correctly tracks the first-place runner as still ahead after the pass.",
+        "The problem explicitly defines 'overtake' as slot replacement rather than lead capture."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_005",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "third",
+      "mechanism": "If 'overtake' is read as 'catch up to but not pass' (a regional usage), you move from fourth to alongside second, effectively entering third position without displacing the second-place runner.",
+      "counterconditions": [
+        "'Overtake' is used in its standard sense of physically passing, not merely catching up to.",
+        "The race disallows dead heats, so occupying the same position as another runner is not a valid outcome."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "ambiguous",
+      "mechanism": "The phrase 'in a race' admits multiple formats (positional, time-trial, handicap). In a time-trial, 'second place' may refer to the runner with the second-best posted time; overtaking their time could put you in first. Without a specified race format, the ordinal semantics are underdetermined.",
+      "counterconditions": [
+        "The problem specifies a positional race format.",
+        "The phrase 'in a race' is interpreted in its default, most common sense of a head-to-head positional contest."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "second",
+      "mechanism": "Causal slot replacement: the pass operation removes the second-place runner from their slot and inserts you into it. The ordinal positions of all other runners remain causally undisturbed; the first-place runner is unaffected by an interaction occurring behind them.",
+      "counterconditions": [
+        "The race format assigns positions by cumulative time rather than physical order at the moment of overtaking.",
+        "The pass triggers a positional reordering rule that promotes the overtaker by more than one rank (e.g., a 'blue flag' rule)."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "first",
+      "mechanism": "If the race is a time-trial where 'second place' denotes the runner with the second-best elapsed time so far, and you 'overtake' them by posting a faster time, your time becomes the best, placing you in first.",
+      "counterconditions": [
+        "The race is a standard positional contest where places are determined by physical order, not posted times.",
+        "'Overtake' is restricted to physical passing on the course rather than surpassing a time."
+      ],
+      "typicality": 0.02,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Counterfactual: in a race where positions are determined by cumulative lap times and 'overtaking' refers to surpassing a runner's posted split, the standard 'second' answer fails. This highlights that the riddle assumes positional racing semantics. An atypical but coherent reading yields 'first' if the overtaken time was the best at that moment.",
+          "bears_on_refs": [
+            "SRC_003",
+            "SRC_008"
+          ],
+          "why_keep_this": "Provides a counterfactual that separates positional from temporal race semantics, motivating the 'ambiguous' candidate."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Unresolved: does 'overtake' ever admit a non-passing meaning in racing English? Some dialects use 'overtake' to mean 'catch up to', which would place the runner alongside, not ahead. If so, 'third' or 'tied for second' could be defensible.",
+          "bears_on_refs": [
+            "SRC_005",
+            "SRC_006"
+          ],
+          "why_keep_this": "Records a linguistic edge case that could generate a novel, criticizable candidate."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_001",
+        "relation_hint": "extends: SCR_001 notes the time-trial ambiguity; NEW_001 supplies a concrete counterfactual mechanism for it."
+      },
+      {
+        "from_ref": "NEW_002",
+        "to_ref": "SRC_005",
+        "relation_hint": "challenges: SRC_005 attributes 'first' to a naive conflation; NEW_002 suggests a linguistic rather than ordinal source of error."
+      }
+    ]
+  }
+}
+```

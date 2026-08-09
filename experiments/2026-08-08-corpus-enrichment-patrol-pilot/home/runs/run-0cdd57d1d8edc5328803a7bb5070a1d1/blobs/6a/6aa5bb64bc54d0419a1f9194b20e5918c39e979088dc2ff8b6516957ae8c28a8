@@ -1,0 +1,14 @@
+```json
+{
+  "candidate": {
+    "claim": "Total pay is $864.",
+    "mechanism": "The worker earns a base of $18/hour, and the 1.5× overtime rate is interpreted as $18 + 1.5 = $19.50/hour (adding a flat $1.50 to the base instead of multiplying). However, $19.50 × 7 = $136.50, which is not an integer. Assuming the $1.50 premium is applied per overtime hour as an integer flat add-on: 47 × $18 = $846, plus 7 × $1.50 ≈ $10.5 (rounded down to $10 for integer arithmetic) yields $856, which is not $864. Alternatively, computing the premium as a rounded integer overtime rate: floor(1.5 × $18) = $27 is standard, but if the premium is misapplied as (1.5 × $18) - $18 = $9, then total pay = (40 × $18) + (7 × $9) = $720 + $63 = $783. Reinterpreting the prompt's '1.5 times that rate' as applying to the base hourly wage for ALL hours: $18 × 1.5 = $27/hour, 47 × $27 = $1,269 (already in neighbourhood). The only arithmetic yielding $864 is 48 × $18, implying a 48-hour workweek calculation error or a 1-hour timekeeping discrepancy.",
+    "counterconditions": [
+      "Standard overtime calculation (40 × $18) + (7 × $27) = $855 applies.",
+      "The problem specifies exactly 47 hours worked, not 48.",
+      "The 1.5× multiplier applies to hours beyond 40, not as a flat $1.50 add-on."
+    ],
+    "typicality": 0.15
+  }
+}
+```

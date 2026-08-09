@@ -1,0 +1,31 @@
+```json
+{
+  "candidate": {
+    "claim": "21 pencils cost $6, but this is an empirical projection rather than a logical entailment: the price depends on whether the store actually upholds uniform linear pricing for the target quantity.",
+    "mechanism": "The causal mechanism is the store's maintained pricing policy: a constant marginal unit price of $2/7 is applied to each pencil, yielding $2/7 × 21 = $6. The mechanism is not arithmetic itself but the empirically-grounded expectation that the store's posted rate generalizes uniformly from the observed 7-pencil bundle to the requested 21-pencil quantity.",
+    "counterconditions": [
+      "If the store imposes a bulk discount for larger quantities (e.g., lower marginal price above 7 pencils), the cost is less than $6.",
+      "If the store imposes a bulk surcharge or quantity limit (e.g., maximum one bundle per customer, or higher marginal price above 7 pencils), the cost exceeds $6 or the transaction is refused.",
+      "If the store's '7 for $2' is a loss-leader or promotional price that does not generalize to 21 pencils, the uniform-rate assumption fails.",
+      "If the store refuses to sell pencils individually or in multiples beyond the advertised bundle, the linear projection is invalid."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_006",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.45
+  }
+}
+```

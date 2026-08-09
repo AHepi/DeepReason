@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4fb8f04c2d1330fceec5b6a0: program:reasoning_observation_pending
+- reason-counter@edb445e6b5c6c38ebde36c52: program:reasoning_observation_pending
+- reason-counter@1a0d99056dc0c572c1b95f43: program:reasoning_observation_pending
+- reason-counter@f2a8d55f7d62f2cc901b007f: program:reasoning_observation_pending
+- reason-counter@153099687839a15106491428: program:reasoning_observation_pending
+- reason-counter@7a9529760d4cfc4521ab977a: program:reasoning_observation_pending
+- reason-counter@56d81d640f2eede360281ce7: program:reasoning_observation_pending
+- reason-counter@acc55b7e736ed73426c46c08: program:reasoning_observation_pending
+- reason-counter@c97a8b57eee505f21b17d9bf: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pen costs $1.25, derived by substituting N = P + 10 into N + P = 12.50, yielding 2P + 10 = 12.50 and P = 1.25.","counterconditions":[{"case":"If 'costs $10 more than' were interpreted as a multiplicative relationship (e.g., N = 10 * P), then P would be approximately $1.136.","checker_spec":null,"eval":"observation"},{"case":"If the total cost were different, the price of the pen would change accordingly.","checker_spec":null,"eval":"observation"},{"case":"If 'costs $10 more' were interpreted as applying to the pen rather than the notebook (i.e., P = N + 10), no non-negative solution would exist.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let P be the price of the pen and N be the price of the notebook. The problem states two constraints: (1) N + P = 12.50 and (2) N = P + 10. Substituting the second equation into the first yields (P + 10) + P = 12.50, which simplifies to 2P + 10 = 12.50, 2P = 2.50, and P = 1.25. This follows the covering principle of solving a system of two linear equations with two unknowns.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4fb8f04c2d1330fceec5b6a0, reason-counter@edb445e6b5c6c38ebde36c52, reason-counter@1a0d99056dc0c572c1b95f43
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pen costs $1.25, derived by setting P = (12.50 - 10) / 2.","counterconditions":[{"case":"If 'costs $10 more than' were interpreted multiplicatively (e.g., n = 10 * p), this solution would not hold.","checker_spec":null,"eval":"observation"},{"case":"If the sum were inclusive of tax or a discount such that the base prices did not sum to $12.50, the derivation would be invalid.","checker_spec":null,"eval":"observation"},{"case":"If the problem intended 'The notebook costs $10, more than the pen' as a comma-separated statement, the system of equations would change.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let p be the price of the pen and n be the price of the notebook. The problem gives two constraints: (1) n + p = 12.50, and (2) n = p + 10. Substituting (2) into (1) gives (p + 10) + p = 12.50, which simplifies to 2p + 10 = 12.50. Subtracting 10 from both sides yields 2p = 2.50, so p = 1.25.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f2a8d55f7d62f2cc901b007f, reason-counter@153099687839a15106491428, reason-counter@7a9529760d4cfc4521ab977a
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The classic bat-and-ball problem uses integer-friendly values (total $1.10, gap $1.00, base $0.05), which may trigger faster pattern recognition, whereas $12.50 and $10 yield a less 'round' $1.25 base, possibly increasing arithmetic error.","Some analogues frame the gap as 'the more expensive item costs $10 more than the cheaper one,' making symmetry explicit; here 'the notebook costs $10 more than the pen' presupposes the notebook is the expensive item."],"overturn_conditions":["If evidence shows that '$10 more than the pen' can be idiomatically read as 'the notebook's price is 10 times the pen's price,' the additive model would be overturned.","If the problem is re-stated such that the notebook's price already includes or embeds the pen's price (e.g., a bundle), the equation N + P = 12.50 would no longer hold."],"shared_structure":["Two items with a total price and a stated additive price gap, solved by splitting the total into the gap plus two equal base-priced units.","A linear system: x + y = total; y = x + offset; solved by substitution."],"source_memory_refs":["SRC_001","SRC_002"],"transfer_claims":["The method of subtracting the gap from the total and dividing by two generalizes to any two-good price problem with an additive difference constraint.","The principle that a currency-unit offset ('costs $10 more') signals addition rather than multiplication transfers across price contexts."]},"claim":"The pen costs $1.25, derived by modeling the total as $10 (the notebook's premium) plus two equal pen-priced units: P + (P + 10) = 12.50, so 2P = 2.50.","cou
+commitments: reasoning-envelope-wf, reason-counter@56d81d640f2eede360281ce7, reason-counter@acc55b7e736ed73426c46c08, reason-counter@c97a8b57eee505f21b17d9bf
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

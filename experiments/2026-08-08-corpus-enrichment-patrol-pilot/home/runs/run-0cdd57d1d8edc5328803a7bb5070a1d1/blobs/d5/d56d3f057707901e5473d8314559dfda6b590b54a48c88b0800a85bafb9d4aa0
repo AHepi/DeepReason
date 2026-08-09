@@ -1,0 +1,22 @@
+```json
+{
+  "candidate": {
+    "claim": "The total pay is $855, computed as 40 hours at the base rate ($720) plus 7 overtime hours at the 1.5× rate ($189).",
+    "mechanism": "Standard piecewise overtime calculation: 40 × $18 = $720 for regular hours; 7 × ($18 × 1.5) = 7 × $27 = $189 for overtime; 720 + 189 = $855.",
+    "counterconditions": [
+      "If the jurisdiction uses a premium-only method where base is paid for all hours and the overtime premium is added on top, the total would be $909 (47 × $18 + 7 × $9 = $846 + $63), but this is not the standard method described by the problem.",
+      "If overtime were calculated at a different multiplier (e.g., 1.25×), the total would differ, but the problem explicitly states 1.5×.",
+      "If all 47 hours were paid at the base rate with no overtime premium, the total would be $846, contradicting the problem's stated overtime rule."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  }
+}
+```

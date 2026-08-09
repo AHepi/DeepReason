@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:1e3a113a2370) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1e3a113a2370 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@c622c02e5ba9: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_001's '-2' unified remainder pattern contradicts SRC_004's algebraic method: SRC_001 claims 33 is the smallest solution via the shared-residue shortcut (both remainders interpreted as -2), while SRC_004 derives 18 by explicitly showing 4≡-3 mod 7 (not -2), then solving 5a≡1 mod 7 via the inverse 5×3=15≡1. The contradiction is mechanistic: SRC_001's pattern-matching misreads the mod-7 remainder, collapsing two distinct offsets into one, whereas SRC_004's substitution-and-inversion correctly distinguishes them. REFUTED IF: 4 mod 7 actually equals -2 mod 7 (it does not: 4≠-2≡5), or if 33 satisfies x≡4 mod 7 (it gives 33 mod 7=5≠4), or if the algebraic method's inverse computation yields a different residue class than 18 mod 35.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_003 and SRC_001 are compatible with each other but jointly contradict SRC_002: both attempt the constant-difference shortcut (SRC_003 internally catches the error mid-derivation, SRC_001 commits to 33 as the answer), and both share the mechanistic error of equating 4 mod 7 with -2 mod 7 when it is actually -3 mod 7. Their compatibility lies in the shared (flawed) heuristic; their contradiction with SRC_002 is that SRC_002's CRT derivation produces n≡18 mod 35, which excludes 33 entirely (33 mod 35 ≠ 18). The causal mechanism driving the contradiction is the miscomputation of the mod-7 residue offset: -3≠-2, so the unified-residue assumption shared by SRC_001 and SRC_003 generates a different residue class than the algebraic CRT. REFUTED IF: 4≡-2 mod 7 (false: 4≠5), or if 33∈{18+35k: k∈ℤ} (false: 33-18=15 is not divisible by 35), or if SRC_003's self-correction actually arrives at 18 via the shortcut rather than abandoning it.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

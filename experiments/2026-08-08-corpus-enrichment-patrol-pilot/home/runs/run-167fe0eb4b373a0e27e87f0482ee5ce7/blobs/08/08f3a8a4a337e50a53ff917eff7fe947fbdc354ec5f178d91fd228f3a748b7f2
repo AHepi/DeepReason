@@ -1,0 +1,8 @@
+{
+  "operations": [
+    {
+      "op": "remove",
+      "path": "/0/evidence_refs"
+    }
+  ]
+}

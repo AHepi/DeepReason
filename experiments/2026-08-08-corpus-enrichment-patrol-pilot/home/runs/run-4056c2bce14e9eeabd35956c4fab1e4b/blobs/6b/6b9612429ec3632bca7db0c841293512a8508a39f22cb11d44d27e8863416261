@@ -1,0 +1,15 @@
+```json
+{
+  "candidate": {
+    "content": "The directional attachment error abstracted in 07a139da8aba depends on the absence of a simultaneous constraint representation: the $10 premium is mis-attributed to the pen rather than the notebook precisely because the system substitutes the premium into the total sum without first encoding the directional comparative N - P = 10 as an explicit paired constraint. This is refuted if the directionality of the comparative can be correctly resolved by a mechanism that parses 'X costs $10 more than Y' as N - P = 10 before any substitution into the sum constraint, independent of whether both constraints are simultaneously written down.",
+    "typicality": 0.72,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005"
+    ]
+  }
+}
+```

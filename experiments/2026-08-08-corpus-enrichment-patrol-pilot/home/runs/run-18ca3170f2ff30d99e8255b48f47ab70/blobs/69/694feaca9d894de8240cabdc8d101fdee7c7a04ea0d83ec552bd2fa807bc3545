@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails this problem by introducing a spurious ambiguity and mislabeling the problem 'ill-posed.' In standard mathematical usage 'consecutive even integers' unambiguously means even integers differing by 2 (e.g., 44, 46, 48). The proposed alternate reading (b) — 'consecutive in the full integer sequence that also satisfy evenness' — is incoherent, since three consecutive integers in the full integer sequence cannot all be even. The target itself acknowledges (b) has no solution, yet still declares the problem ill-posed and downgrades the answer to 'only because' of the ambiguity. Since the only mathematically coherent reading yields the triple and the largest value 48, the problem is not ill-posed; the objection is a strawman, and the causal mechanism (ambiguity undermining the answer) does not exist.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}
+```

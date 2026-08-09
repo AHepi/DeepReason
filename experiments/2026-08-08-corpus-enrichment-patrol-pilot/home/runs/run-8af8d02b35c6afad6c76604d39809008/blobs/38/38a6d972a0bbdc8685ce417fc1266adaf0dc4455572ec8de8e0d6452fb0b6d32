@@ -1,0 +1,14 @@
+```json
+{
+  "candidate": {
+    "content": "The mechanism in 1a1676a83b27 reduces to the same class of error as its sibling parses: it shares mechanism with the 'second from leader' misparse (4337209f57a6) and the 'assume exact position' parse (0cb1951e11), differing only in which positional anchor is distorted; this lineage contradicts the correct ordinal-displacement answer (second) because all three misparse mechanisms are refuted if 'second place' retains its standard absolute ordinal meaning and 'overtake' means displacing the overtaken runner by exactly one rank.",
+    "typicality": 0.78,
+    "evidence_refs": [],
+    "neighbours": [
+      "SRC_002",
+      "SRC_005",
+      "SRC_009"
+    ]
+  }
+}
+```

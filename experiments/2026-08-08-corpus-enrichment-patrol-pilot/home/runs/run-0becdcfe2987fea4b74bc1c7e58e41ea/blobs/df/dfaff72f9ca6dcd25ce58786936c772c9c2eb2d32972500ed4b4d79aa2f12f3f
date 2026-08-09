@@ -1,0 +1,44 @@
+```json
+{
+  "candidate": {
+    "claim": "The maximum number of pieces produced by 4 straight cuts through the exact center is 8, because the constraint of concurrency prevents the fourth cut from adding more than 2 pieces.",
+    "mechanism": "Let C(n) be the number of pieces with n concurrent lines. C(0)=1. The 1st cut adds 1 piece -> C(1)=2. Each subsequent cut (k ≥ 2) intersects the previous k-1 lines at the identical center point. It passes through 2 existing regions, split by that point, adding exactly 2 new pieces. Therefore C(n)=1+1+2(n-1)=2n, and for n=4, C(4)=8.",
+    "counterconditions": [
+      "If 'each passing through the exact center' is reinterpreted to mean each cut must pass through the center point but no two cuts share the same line and cuts are not straight, the regime breaks.",
+      "If the pizza is not a perfect circle and the cuts do not intersect region boundaries symmetrically, the maximum of 8 might not be reached.",
+      "If the problem is interpreted as 4 arbitrary straight cuts (general position) rather than concurrent cuts, the answer would be 11, not 8."
+    ],
+    "typicality": 0.95,
+    "optional_refs": ["SRC_001"],
+    "evidence_refs": [],
+    "checker_specs": [],
+    "analogy": {
+      "source_memory_refs": [
+        "15cd66ac0981afd90964d37ed8287f18e6e035297f2ff9007bdfc47aa7938b62"
+      ],
+      "shared_structure": [
+        "Both involve lines intersecting in a plane to partition a region.",
+        "The k-th line adds a number of regions equal to the number of existing lines it crosses plus 1 (or 2 if circular).",
+        "Both rely on the combinatorial addition of regions as cuts/lines are sequentially introduced."
+      ],
+      "disanalogies": [
+        "In general position, every new line crosses all previous lines at distinct points, maximizing intersections.",
+        "In the concurrent case, all intersections collapse to a single point, drastically reducing the number of pieces added per new cut.",
+        "The general lines in a plane problem is not bounded by a closed shape like a pizza."
+      ],
+      "transfer_claims": [
+        "The counting formula logic (pieces added = intersections + 1) applies, but must be adapted for the concurrency collapse.",
+        "The maximum region limit from concurrent lines translates directly to the limit on pizza pieces under the center constraint."
+      ],
+      "overturn_conditions": [
+        "If it is shown that the 4th cut, by some geometric trick of finite thickness, can avoid the exact center or intersect multiple times, the maximum could be higher.",
+        "If the pizza is allowed to be folded or rearranged between cuts, the topological constraints change completely."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
+```

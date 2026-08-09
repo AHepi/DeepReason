@@ -1,0 +1,24 @@
+```json
+{
+  "candidate": {
+    "claim": "second",
+    "mechanism": "Covering principle of positional slot replacement: in a standard positionally-ranked race, overtaking the runner currently occupying slot N transfers you into slot N, displacing the former occupant to N+1. Applying this to N=2 yields second place.",
+    "counterconditions": [
+      "The phrase 'in second place' is interpreted to mean second-best time in a time-trial context, where overtaking the time could move you to first.",
+      "An idiosyncratic numbering convention is used where 'second place' means second from the back of the field."
+    ],
+    "typicality": 0.95,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_005",
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
+```

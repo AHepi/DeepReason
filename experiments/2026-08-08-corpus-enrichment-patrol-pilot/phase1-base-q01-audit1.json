@@ -1,0 +1,47 @@
+{
+  "accepted_artifacts": 96,
+  "artifacts": 98,
+  "att_edges": 2,
+  "candidate_checker_commitment_count": 0,
+  "conjecturer_turn_contract": "conjecturer.turn.v6",
+  "encoder_calls": 0,
+  "events": 1218,
+  "llm_call_count": 52,
+  "llm_calls_by_role": {
+    "argumentative_critic": [
+      "glm-5.2"
+    ],
+    "conjecturer": [
+      "glm-5.2"
+    ]
+  },
+  "property_designer_calls": 0,
+  "replay_valid": false,
+  "root": "/home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+  "seat_bindings_for_run": [
+    {
+      "group": "coder",
+      "model_id": "gemma4:31b",
+      "provider": "ollama"
+    }
+  ],
+  "seat_bindings_stamp_count": 1,
+  "seat_bindings_stamps": [
+    {
+      "bindings": [
+        {
+          "group": "coder",
+          "model_id": "gemma4:31b",
+          "provider": "ollama"
+        }
+      ],
+      "digest": "ae0034400f7381fd2f45256e7764f7656f6450cbc53606db1b98e7b642d74121"
+    }
+  ],
+  "state": "completed",
+  "stop_reason": "budget_exhausted",
+  "verify_violations": [
+    "foreign-criticism",
+    "foreign-criticism"
+  ]
+}

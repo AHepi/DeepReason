@@ -1,0 +1,36 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@654eed0e5159bf6a41880fb3: program:reasoning_observation_pending
+- reason-counter@f5478ca9eb780923446dfeec: program:reasoning_observation_pending
+- reason-counter@343f8bd671c66228e599c5ee: program:reasoning_observation_pending
+- reason-counter@7ba6a475c67243484fc76e83: program:reasoning_observation_pending
+- reason-counter@9e5bc32b2cd2ce52694d967a: program:reasoning_observation_pending
+- reason-counter@1693391c748a9e0a78ea0129: program:reasoning_observation_pending
+- reason-counter@3c481a9f2f85c16b5f85db9a: program:reasoning_observation_pending
+- reason-counter@3f15d6e00fce781d677c4273: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, because the unit pricing mechanism causes the total cost to scale multiplicatively with quantity: the unit rate $2/7 per pencil, when applied to the causal target quantity of 21 pencils, produces $6.","counterconditions":[{"case":"If the store imposes a non-linear pricing policy (e.g., bulk discount or surcharge for quantities beyond 7), the unit rate is not constant and the multiplicative transfer fails.","checker_spec":null,"eval":"observation"},{"case":"If the '7 for $2' is a strict one-bundle-per-customer limit, the customer cannot causally acquire 21 pencils at the proportional rate, and the $6 answer is not entailed.","checker_spec":null,"eval":"observation"},{"case":"If the target quantity is not a multiple of 7 and the store forbids partial bundles, the continuous unit-rate mechanism breaks down and the discrete-bundle model diverges.","checker_spec":null,"eval":"observation"},{"case":"If the listed price is a marketing artifact rather than the operative causal price, the stated rate does not generate the transaction cost.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The pricing structure induces a constant unit rate ($2/7 per pencil) as its generative cause. When a customer causally acquires 21 pencils \u2014 a quantity exactly three times the base bundle of 7 \u2014 the unit rate mechanism transmits the cost multiplicatively, yielding 21 \u00d7 ($2/7) = $6. The mechanism is the store's uniform pricing policy acting as the causal source of the total cost.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@654eed0e5159bf6a41880fb3, reason-counter@f5478ca9eb780923446dfeec, reason-counter@343f8bd671c66228e599c5ee, reason-counter@7ba6a475c67243484fc76e83
+
+TARGET SRC_002
+{"analogy":null,"claim":"21 pencils cost $6 because the covering principle for uniform unit rates applies: 21 is a multiple of 7, so the bundle price scales by the factor 21/7 = 3, yielding 3 \u00d7 $2 = $6.","counterconditions":[{"case":"If the store's pricing is strictly limited to one bundle per customer, the cost of 21 pencils is not determined by the given information.","checker_spec":null,"eval":"observation"},{"case":"If the store imposes a non-linear bulk discount or surcharge for quantities other than exactly 7, the $6 result may not hold.","checker_spec":null,"eval":"observation"},{"case":"If the '7 for $2' price is a limited-time or conditional promotion not applicable to a 21-pencil purchase, the $6 result is not entailed.","checker_spec":null,"eval":"observation"},{"case":"If the store refuses to sell 21 pencils at all (e.g., inventory limit), the question is unanswerable under the given data.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The stated price '7 for $2' establishes a uniform unit rate of $2/7 per pencil. When the target quantity (21) is an exact integer multiple of the bundle size (7), the covering principle directly applies: the cost is (21/7) \u00d7 $2 = 3 \u00d7 $2 = $6. No pro-ration or fractional-bundle assumption is required, so the discrete-bundle and continuous-unit-rate models converge exactly.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9e5bc32b2cd2ce52694d967a, reason-counter@1693391c748a9e0a78ea0129, reason-counter@3c481a9f2f85c16b5f85db9a, reason-counter@3f15d6e00fce781d677c4273
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

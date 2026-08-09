@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a446ee9061bf57be64e28dee: program:reasoning_observation_pending
+- reason-counter@050ef83f268fd39f5a4c0072: program:reasoning_observation_pending
+- reason-counter@61f352d4fd7b2c84d584b6b5: program:reasoning_observation_pending
+- reason-counter@b97005b545a165aa831fc8e6: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The count is 648, derived by modeling the lexical order generation of digit strings via a Dirichlet energy landscape where the hundreds digit has an infinite barrier at zero, and the tens and units digits experience harmonic exclusion potentials, resulting in exactly 9\u00d79\u00d78 admissible stable states.","counterconditions":[{"case":"This model fails if the formal problem allows leading zeros (which would alter the ground state count to 10\u00d79\u00d78 = 720).","checker_spec":null,"eval":"observation"},{"case":"The energy landscape analogy collapses if the digits are not independent sites with symmetric exclusion, but instead undergo quantum entanglement.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"We model the construction of a three-digit number as finding a ground state in a 1D lattice of 3 sites (H, T, U). The Hamiltonian assigns infinite energy if H=0. It adds a pairwise penalty V=\u221e if any two sites share the same digit value. The partition function over this discrete configuration space exactly factors: the domain of H has 9 states; T has 10 minus 1 excluded state (H); U has 10 minus 2 excluded states (H, T). The partition function evaluates to 9\u00d79\u00d78 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a446ee9061bf57be64e28dee, reason-counter@050ef83f268fd39f5a4c0072
+
+TARGET SRC_002
+{"analogy":null,"claim":"There are 648 valid three-digit numbers with all distinct digits, determined by the chromatic polynomial of a complete graph K_3 equipped with a vertex-restricted color list.","counterconditions":[{"case":"The claim is falsified if the palette is not uniformly available to the unrestricted positions.","checker_spec":null,"eval":"observation"},{"case":"The claim fails if the constraint 'all three digits different' is interpreted as a path graph P_3 rather than a complete graph K_3 (though for 3 vertices, path coloring allows the ends to match, which violates the problem's criteria).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem of assigning distinct digits to positions (H, T, U) maps to a proper vertex coloring of a complete graph K_3. An edge connects every pair of positions, enforcing inequality. The digits 0-9 form the color palette. The H vertex has a list of 9 colors (1-9), while T and U have lists of 10 colors (0-9). Evaluating the chromatic polynomial for K_3 under these list constraints yields the product of available choices: 9 for H, 9 for T, and 8 for U, totaling 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@61f352d4fd7b2c84d584b6b5, reason-counter@b97005b545a165aa831fc8e6
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

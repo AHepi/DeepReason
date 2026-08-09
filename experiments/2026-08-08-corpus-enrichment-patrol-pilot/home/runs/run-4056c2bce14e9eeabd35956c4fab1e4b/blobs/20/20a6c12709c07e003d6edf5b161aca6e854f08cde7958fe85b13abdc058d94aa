@@ -1,0 +1,18 @@
+```json
+{
+  "candidate": {
+    "claim": "The pen costs $1.25, derived by setting P = (12.50 - 10) / 2.",
+    "mechanism": "Let p be the price of the pen and n be the price of the notebook. The problem gives two constraints: (1) n + p = 12.50, and (2) n = p + 10. Substituting (2) into (1) gives (p + 10) + p = 12.50, which simplifies to 2p + 10 = 12.50. Subtracting 10 from both sides yields 2p = 2.50, so p = 1.25.",
+    "counterconditions": [
+      "If 'costs $10 more than' were interpreted multiplicatively (e.g., n = 10 * p), this solution would not hold.",
+      "If the sum were inclusive of tax or a discount such that the base prices did not sum to $12.50, the derivation would be invalid.",
+      "If the problem intended 'The notebook costs $10, more than the pen' as a comma-separated statement, the system of equations would change."
+    ],
+    "typicality": 1.0,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ]
+  }
+}
+```

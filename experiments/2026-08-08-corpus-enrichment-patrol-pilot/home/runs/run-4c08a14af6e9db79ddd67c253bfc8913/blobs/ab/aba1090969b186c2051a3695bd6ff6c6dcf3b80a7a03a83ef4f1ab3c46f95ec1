@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5d571ab020d6daf8c799e902: program:reasoning_observation_pending
+- reason-counter@25fff9eadb9515547303d976: program:reasoning_observation_pending
+- reason-counter@dfdf909af6b715744171c9ec: program:reasoning_observation_pending
+- reason-counter@26aacb856ad51eec0c1481af: program:reasoning_observation_pending
+- reason-counter@032ca8c9422d06fa48e1c817: program:reasoning_observation_pending
+- reason-counter@94722efcbb866a8046c2fc9b: program:reasoning_observation_pending
+- reason-counter@e7c50d7a2479d578d2df2809: program:reasoning_observation_pending
+- reason-counter@413b0686e363c32b912c549f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"18 is the smallest positive solution, obtained by overlaying the two periodic remainder sequences and locating their first simultaneous match.","counterconditions":[{"case":"If the two periodic sequences have a match at some x < 18, the overlay analysis is overturned.","checker_spec":null,"eval":"observation"},{"case":"If the combined period is not 35, the periodic intersection set is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Define two periodic functions on the positive integers: f(x) = x mod 5 and g(x) = x mod 7, with periods 5 and 7. Their combined pattern has period lcm(5,7) = 35. Within one full period {1, ..., 35}, f(x) = 3 at x \u2208 {3, 8, 13, 18, 23, 28, 33} and g(x) = 4 at x \u2208 {4, 11, 18, 25, 32}. The unique intersection is x = 18. Since the pattern repeats with period 35, the solution set is {18, 53, 88, ...} = {x : x \u2261 18 (mod 35)}. The smallest positive element is 18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5d571ab020d6daf8c799e902, reason-counter@25fff9eadb9515547303d976
+
+TARGET SRC_002
+{"analogy":null,"claim":"18 is the smallest positive solution, found by first solving the transformed system x \u2261 -2 (mod 5) and x \u2261 -3 (mod 7), where the residues are each one less than a common value of -1 relative to their moduli, and correcting.","counterconditions":[{"case":"If the constant-difference shortcut somehow applies with offset -2 giving x \u2261 -2 (mod 35) \u2192 33 as the smallest positive solution, this candidate is overturned (but 18 < 33 and 18 satisfies both, so 33 is not smallest).","checker_spec":null,"eval":"observation"},{"case":"If a positive integer smaller than 18 satisfies both congruences, the offset analysis is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rewrite the remainders: x \u2261 3 (mod 5) means x + 2 \u2261 0 (mod 5), so x \u2261 -2 (mod 5). And x \u2261 4 (mod 7) means x + 3 \u2261 0 (mod 7), so x \u2261 -3 (mod 7). The offsets from the moduli are -2 and -3, which are NOT equal. The constant-difference shortcut (which would require both offsets to be the same value c, giving x \u2261 c mod lcm) does NOT apply directly here. Instead, the difference between the offsets is -2 - (-3) = 1,
+commitments: reasoning-envelope-wf, reason-counter@dfdf909af6b715744171c9ec, reason-counter@26aacb856ad51eec0c1481af
+
+TARGET SRC_003
+{"analogy":null,"claim":"18 is the smallest positive solution, constructed by expressing x as a stack of two layers: a base residue that satisfies the mod-5 constraint, plus a correction that enforces the mod-7 constraint.","counterconditions":[{"case":"If 5\u207b\u00b9 mod 7 is not 3, the modular inverse step fails.","checker_spec":null,"eval":"observation"},{"case":"If a smaller non-negative t yields x \u2261 4 (mod 7), the layer construction is overturned.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Start with the mod-5 residue: x = 3 + 5t. This guarantees x \u2261 3 (mod 5) for all integers t. Now impose the mod-7 constraint: 3 + 5t \u2261 4 (mod 7), so 5t \u2261 1 (mod 7). Since 5\u207b\u00b9 \u2261 3 (mod 7) because 5\u00b73 = 15 \u2261 1 (mod 7), we get t \u2261 3 (mod 7). The smallest non-negative t is 3, giving x = 3 + 5\u00b73 = 18. The next solution uses t = 10, giving x = 53 = 18 + 35. The complete family is x \u2261 18 (mod 35).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@032ca8c9422d06fa48e1c817, reason-counter@94722efcbb866a8046c2fc9b
+
+TARGET SRC_004
+{"analogy":null,"claim":"18 is the smallest positive solution, found by exhaustive enumeration: each integer from 1 to 18 is tested against both divisors until both remainders match simultaneously.","counterconditions":[{"case":"If any integer in {1, ..., 17} yields remainder 3 mod 5 and 4 mod 7, the enumeration is overturned.","checker_spec":null,"eval":"observation"},{"case":"If the admission sets are incorrectly computed, the intersection analysis fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The positive integers are tested in order. The mod-5 test (remainder 3) admits 3, 8, 13, 18. The mod-7 test (remainder 4) admits 4, 11, 18. The first integer appearing in both admission sets is 18. No integer in {1, ..., 17} passes both filters: 17 fails mod-5 (remainder 2), 16 fails mod-5 (remainder 1), 15 fails mod-5, 14 fails mod-7 (remainder 0), 13 fails mod-7 (remainder 6), 12 fails mod-5, 11 fails mod-5, and so on. The intersection of the two admission sets first becomes non-empty at 18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e7c50d7a2479d578d2df2809, reason-counter@413b0686e363c32b912c549f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

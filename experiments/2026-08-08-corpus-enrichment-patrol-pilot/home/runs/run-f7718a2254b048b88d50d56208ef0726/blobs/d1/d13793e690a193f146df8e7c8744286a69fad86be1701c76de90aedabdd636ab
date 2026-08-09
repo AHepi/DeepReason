@@ -1,0 +1,11 @@
+{
+  "patch": {
+    "op": "replace",
+    "path": "/cases/2/counterexample",
+    "value": [
+      "792 - 9 - 180 = 603",
+      "603 / 3 = 201",
+      "99 + 201 = 300 pages, not 363"
+    ]
+  }
+}

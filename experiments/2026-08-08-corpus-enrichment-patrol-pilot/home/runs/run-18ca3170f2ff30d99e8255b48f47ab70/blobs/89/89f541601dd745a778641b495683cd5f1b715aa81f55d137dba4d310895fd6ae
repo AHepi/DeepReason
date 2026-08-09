@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7e7bab1b7bf3231fb3cbd355: program:reasoning_observation_pending
+- reason-counter@3aa23b36cf3160a54d5c429b: program:reasoning_observation_pending
+- reason-counter@8f421e0c707f4c0acbc141bc: program:reasoning_observation_pending
+- reason-counter@e6ac67d4cc4110b92874ae30: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest integer is 48, determined by inferring the offset class from the target sum.","counterconditions":[{"case":"If the sum were not a multiple of 6, there would be no solution in even integers.","checker_spec":null,"eval":"observation"},{"case":"If the integers were not even, this parameterization would not hold.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The sum of three consecutive even integers is always a multiple of 6. Let the integers be 2k, 2k+2, 2k+4. The sum is 6k+6 = 138. Solving for k gives k = 22. The integers are 44, 46, 48. The largest is 48. This matches SRC_007.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7e7bab1b7bf3231fb3cbd355, reason-counter@3aa23b36cf3160a54d5c429b
+
+TARGET SRC_002
+{"analogy":null,"claim":"The largest even integer is 48.","counterconditions":[{"case":"If the integers were not even (e.g., any consecutive integers), the step size would be 1, and the largest would be 47.","checker_spec":null,"eval":"observation"},{"case":"If the integers were negative, the 'largest' would refer to the one closest to zero, but the math would still hold if we correctly identify the maximum.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let the integers be x-2, x, and x+2. Summing them gives 3x = 138, so x = 46. The largest is x+2 = 48. This matches SRC_005.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8f421e0c707f4c0acbc141bc, reason-counter@e6ac67d4cc4110b92874ae30
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

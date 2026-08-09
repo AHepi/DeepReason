@@ -1,0 +1,11 @@
+```json
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/candidates/0/evidence_refs/0/block",
+      "value": "SRC_002a1b3c5d6e7f8091a2b3c4d5e6f7081920a2b3c4d5e6f7081920a2b3c4d5"
+    }
+  ]
+}
+```

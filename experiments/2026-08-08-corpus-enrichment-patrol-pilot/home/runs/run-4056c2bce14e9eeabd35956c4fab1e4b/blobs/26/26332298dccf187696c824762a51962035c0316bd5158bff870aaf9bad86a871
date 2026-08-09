@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "claim": "The pen costs $1.25.",
+    "mechanism": "Let P be the pen's price and N the notebook's price. The constraints are N + P = 12.50 and N - P = 10. Substituting N = P + 10 into the sum: (P + 10) + P = 12.50, so 2P = 2.50, hence P = 1.25. The notebook then costs 11.25, and the two add to 12.50.",
+    "counterconditions": [
+      "If the phrase '$10 more than' is interpreted multiplicatively rather than additively, then N = 10P and the solution changes.",
+      "If the problem meant the total is $12.50 before tax and a hidden multiplicative tax applies, the net prices differ.",
+      "If 'costs $10 more' refers to manufacturing cost rather than retail price, the retail price of the pen is underdetermined."
+    ],
+    "typicality": 0.95,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

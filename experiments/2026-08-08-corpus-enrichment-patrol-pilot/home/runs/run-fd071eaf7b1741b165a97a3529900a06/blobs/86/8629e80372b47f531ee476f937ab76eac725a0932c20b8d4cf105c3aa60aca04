@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@999c9185cc37cf250d2b0d08: program:reasoning_observation_pending
+- reason-counter@4d751d7ed97749ddb76b5530: program:reasoning_observation_pending
+- reason-counter@2362c575d5e1b8493e8d87f3: program:reasoning_observation_pending
+- reason-counter@13afc7a4f3827405612c2be3: program:reasoning_observation_pending
+- reason-counter@eca434c91d4c3187d796018d: program:reasoning_observation_pending
+- reason-counter@4fcb7188b87315bb13cad3d4: program:reasoning_observation_pending
+- reason-counter@ab75d27da9cf36822550d158: program:reasoning_observation_pending
+- reason-counter@b2d621ae8966e1d1ea124c09: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via the complementary principle: computing what is left after removing 85%.","counterconditions":[{"case":"The complement (85%) is harder to compute than the original (15%), negating the benefit.","checker_spec":null,"eval":"observation"},{"case":"The operation is not complement-conserving (e.g., in a non-idempotent algebra, 100% might not mean 'all').","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Since 100% - 15% = 85%, we have 15% of 80 = 80 - (85% of 80). Compute 85% of 80 = 0.85 \u00d7 80 = 68. Then 80 - 68 = 12. This uses the complement to reframe 'take a part' as 'remove the rest', which is useful when the complement is rounder or easier to compute.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@999c9185cc37cf250d2b0d08, reason-counter@4d751d7ed97749ddb76b5530
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived via structural decomposition into 10% and 5% components.","counterconditions":[{"case":"The base or rate is not additively decomposable into convenient parts (e.g., an irrational percentage).","checker_spec":null,"eval":"observation"},{"case":"The operation is non-distributive (e.g., exponentiation), so decomposition fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Decompose 15% = 10% + 5%. Then 10% of 80 = 8, and 5% of 80 = half of 10% = 4. Sum: 8 + 4 = 12. This leverages the distributive law: p\u00d7(a+b) = p\u00d7a + p\u00d7b, with a base-10 partition that maps to easy mental anchors (10%, 5%, 1%).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2362c575d5e1b8493e8d87f3, reason-counter@13afc7a4f3827405612c2be3
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Standard percentages are single linear operations, not recursive","The original problem states no compounding, whereas a financial context inherently implies time-based iteration"],"overturn_conditions":["If the problem context implicitly requires compounding (e.g., '15% over 3 periods')","If standard percentage is redefined as a compound rate by domain convention"],"shared_structure":["Both involve a scaling factor (15%) applied to a base (80)","Both attempt to find a portion of the whole"],"source_memory_refs":["SRC_001"],"transfer_claims":["If the problem is interpreted as a compound rate, the result would not be 12 but rather 80 \u00d7 (1.15)^n for n periods","Standard percentage arithmetic fails if the operation is not linear but iterative"]},"claim":"If the percentage is compounded over multiple iterations rather than applied as a single linear factor, the result diverges from 12.","counterconditions":[{"case":"The problem specifies a single linear application (which it does implicitly)","checker_spec":null,"eval":"observation"},{"case":"The context is standard arithmetic, not financial compounding","checker_spec":null,"eval":"observation"}],"definit
+commitments: reasoning-envelope-wf, reason-counter@eca434c91d4c3187d796018d, reason-counter@4fcb7188b87315bb13cad3d4
+
+TARGET SRC_004
+{"analogy":null,"claim":"15% of 80 equals 1200, derived by computing the raw product of the percentage points and the base without division by 100.","counterconditions":[{"case":"The definition of percentage is correctly applied (requiring division by 100)","checker_spec":null,"eval":"observation"},{"case":"The result 1200 is recognized as exceeding the base 80, flagging an error","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the percentage operator is erroneously stripped to raw integer multiplication, 15 \u00d7 80 = 1200. This represents a failure mode where the scaling factor is not normalized to a decimal or fraction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ab75d27da9cf36822550d158, reason-counter@b2d621ae8966e1d1ea124c09
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

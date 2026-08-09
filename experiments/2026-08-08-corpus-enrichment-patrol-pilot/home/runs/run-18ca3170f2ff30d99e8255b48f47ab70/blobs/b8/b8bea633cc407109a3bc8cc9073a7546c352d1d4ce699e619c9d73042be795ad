@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c8dee7650143e674c047fba0: program:reasoning_observation_pending
+- reason-counter@b0cf07a8c3886573da8369ff: program:reasoning_observation_pending
+- reason-counter@72f27a409c318b1d93288dbd: program:reasoning_observation_pending
+- reason-counter@53a3adbde3f631c0e375ec3f: program:reasoning_observation_pending
+- reason-counter@5e09d4a0e9367eb2630bad15: program:reasoning_observation_pending
+- reason-counter@69ed475e6f97476887145e27: program:reasoning_observation_pending
+- reason-counter@220d9b8e1784c36e3ae51afc: program:reasoning_observation_pending
+- reason-counter@305cdbf741ae76319c04d44f: program:reasoning_observation_pending
+- reason-counter@2e41e2f1f4800b7ca4cf545b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["SRC_002 frames reasoning as counterexample-first rejection, whereas this candidate constructs directly from the mean.","SRC_001's countercondition focuses on divisibility by 3, not on the parity of the mean, so it would not fire for sum=141 (mean=47, odd).","SRC_003's mechanism would produce an odd triple for an odd mean without flagging the even-constraint violation."],"overturn_conditions":["If a different consecutive-even triple (e.g., 40, 46, 52) also summed to 138, uniqueness would fail and the largest term would not be fixed.","If the problem's 'even' constraint were removed, 48 would not be uniquely determined (e.g., 45, 46, 47 also sums to 138)."],"shared_structure":["Both use a symmetric decomposition around a central mean to reduce a 3-term arithmetic progression to a single linear equation.","Both check a parity condition on the computed mean to validate the integer-type constraint (even).","Both output the largest term as mean + common difference."],"source_memory_refs":["SRC_001","SRC_002","SRC_003"],"transfer_claims":["For any target sum S divisible by 3 with even mean, the method yields the unique consecutive-even triple and its largest term.","For S divisible by 3 with odd mean, the method reveals a coverage gap: no consecutive-even triple exists, and this candidate's parity countercondition fires."]},"claim":"The largest of the three consecutive even integers summing to 138 is 48, derived via algebraic mean-parity construction.","counterconditions":[{"case":"If 138 were not divisible by 3, no integer triple with common difference 2 could sum 
+commitments: reasoning-envelope-wf, reason-counter@c8dee7650143e674c047fba0, reason-counter@b0cf07a8c3886573da8369ff, reason-counter@72f27a409c318b1d93288dbd, reason-counter@53a3adbde3f631c0e375ec3f
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A balance scale is continuous and can rest at any real-number fulcrum, whereas integer sequences are discrete.","The physical spacing of weights on a scale is arbitrary, whereas consecutive even integers have a rigid gap of exactly 2."],"overturn_conditions":["If the balance scale analogy is applied to a target sum with an odd mean (e.g., 141/3 = 47), the discrete parity mismatch invalidates the transfer.","If the required spacing between integers were anything other than 2, the symmetric counterweight model would not apply."],"shared_structure":["Both a physical balance scale and an arithmetic sequence share a center of mass (the mean) with symmetrically distributed weights around it.","In both systems, the total sum is conserved by equal and opposite displacements from the center."],"source_memory_refs":["SRC_001","SRC_003"],"transfer_claims":["Just as moving mass from one side of a fulcrum to the other conserves total weight, adding 2 to the left and subtracting 2 from the right conserves the total sum of the sequence.","The largest integer in the sequence corresponds to the lightest counterweight on the scale, which is positioned furthest from the center."]},"claim":"The largest even integer is 48, found by treating the sum as three weights on a balance scale: 138/3 = 46 is the fulcrum, and since the even integers are spaced in units of 2, the sequence 44, 46, 48 naturally balances to 138.","counterconditions":[{"case":"If 138 were not exactly divisible by 3, the fulcrum would fall on a non-integer, preventing an integer triple.","checker_spec":null,"eval
+commitments: reasoning-envelope-wf, reason-counter@5e09d4a0e9367eb2630bad15, reason-counter@69ed475e6f97476887145e27
+
+TARGET SRC_003
+{"analogy":null,"claim":"The three consecutive even integers summing to 138 are 44, 46, and 48, making the largest 48.","counterconditions":[{"case":"If 138 were not divisible by 3, the arithmetic mean would be non-integer and no equally spaced triple of integers could sum to 138.","checker_spec":null,"eval":"observation"},{"case":"If the problem required consecutive odd integers instead of even, 46 would be the wrong parity and no valid triple would exist.","checker_spec":null,"eval":"observation"},{"case":"If the constraint that the integers are consecutive and spaced by 2 were removed, other triples could sum to 138 (e.g., 40, 46, 52) and the largest would not be determined.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let the three consecutive even integers be x, x+2, and x+4. Their sum is 3x+6 = 138, which yields 3x = 132 and x = 44. The largest is x+4 = 48. This isolates the causal mechanism producing the triple: the mean (46) acts as the central term, and the even spacing (step 2) determines the neighbors, which works precisely because the mean is an even integer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@220d9b8e1784c36e3ae51afc, reason-counter@305cdbf741ae76319c04d44f, reason-counter@2e41e2f1f4800b7ca4cf545b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

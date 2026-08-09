@@ -1,0 +1,3 @@
+```json
+{"pointers": {"/candidates/4/optional_refs/2": "SRC_002"}, "operations": [{"op": "replace", "path": "/candidates/4/optional_refs/2", "value": "SRC_002"}]}
+```

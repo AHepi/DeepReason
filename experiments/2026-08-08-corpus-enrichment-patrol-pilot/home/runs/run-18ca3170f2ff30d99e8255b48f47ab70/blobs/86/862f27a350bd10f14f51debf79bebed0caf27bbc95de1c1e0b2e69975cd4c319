@@ -1,0 +1,18 @@
+```json
+{
+  "candidate": {
+    "claim": "The three consecutive even integers are 44, 46, and 48, making 48 the largest.",
+    "mechanism": "Let the middle even integer be x. The three consecutive even integers are x-2, x, and x+2. The sum is (x-2) + x + (x+2) = 3x. Setting 3x = 138 yields x = 46. The three integers are 44, 46, and 48. This works because the constant difference of 2 between consecutive even integers causes the -2 and +2 to cancel exactly, making the sum equal to three times the middle value.",
+    "counterconditions": [
+      "If 138 were not divisible by 3, then the middle value would not be an integer and no such triple of consecutive even integers would exist.",
+      "If 138 divided by 3 yielded an odd number (e.g. 141/3 = 47), the resulting triple (45, 47, 49) would be odd, not even, and the even-constraint would fail.",
+      "If the problem did not require the integers to be even (allowing any consecutive integers), the answer would be different."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_003", "SRC_005"]
+    }
+  }
+}
+```

@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@327108d63d7be027e5bfcbba: program:reasoning_observation_pending
+- reason-counter@9cad0eeb1d30ceb022f6ddf2: program:reasoning_observation_pending
+- reason-counter@0920573d64ee2a48e0daaa44: program:reasoning_observation_pending
+- reason-counter@a39c1a1c6b9e58a6b948faa2: program:reasoning_observation_pending
+- reason-counter@84e8a8024e82ccdc005a64d5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["General lines in a plane can be placed to ensure no three intersect at the same point, maximizing regions.","Cutting a pizza imposes a circular boundary, whereas plane division is infinite.","The constraint of passing through the exact center forces all cuts to be concurrent, which is a special case of plane division."],"overturn_conditions":["A cut passing through the center is shown to be able to intersect previous cuts at distinct points (impossible for straight lines through a single point).","The definition of 'pieces' includes unbounded outer regions."],"shared_structure":["Topological division of a 2D plane by 1D curves.","The formula for the maximum number of regions formed by n lines in a plane is (n^2 + n + 2)/2, which assumes no three lines are concurrent.","When lines are concurrent, the number of regions is less than the maximum."],"source_memory_refs":["SRC_001","SRC_004"],"transfer_claims":["For n concurrent lines, the number of regions is 2n.","The constraint of centrality reduces the problem from maximizing plane regions to counting regions formed by concurrent diameters."]},"claim":"The maximum number of pieces produced by 4 straight cuts through the center of a pizza is 8.","counterconditions":[{"case":"The cuts do not all pass through the exact center, allowing for distinct intersection points.","checker_spec":null,"eval":"observation"},{"case":"The cuts are not straight lines.","checker_spec":null,"eval":"observation"},{"case":"The pieces are not counted by the standard topological definition of distinct bounded areas.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Any straight line passing through the center of a circle is a diameter and bisects the circle into 2 halves. Since all 4 cuts pass through the exact center, they all intersect at a single point. Therefore, the k-th cut intersects exactly k-1 previous cuts at that single point (not k-1 distinct points). A line passing through a region boundary at a point where m other lines already cross does not pass through m+1 distinct regions, but rather splits exactly m+1 regions (in this case, exactly k regions). With all lines concurrent, the k-th cut splits exactly k regions. The total number of pieces is 1 + sum(k for k=1 to 4) = 1 + 1 + 2 + 3 + 4 = 11. Wait, correction: if all cuts pass through the center, they all intersect 
+commitments: reasoning-envelope-wf, reason-counter@327108d63d7be027e5bfcbba, reason-counter@9cad0eeb1d30ceb022f6ddf2, reason-counter@0920573d64ee2a48e0daaa44
+
+TARGET SRC_002
+{"analogy":null,"claim":"The number of pieces is unbounded or undefined.","counterconditions":[{"case":"Standard geometric idealizations of zero-width lines are applied.","checker_spec":null,"eval":"observation"},{"case":"The center is treated as a single mathematical point.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the straight cuts have any non-zero thickness, or if 'passing through the exact center' allows for infinitesimally close but distinct intersection points near the center, the number of pieces could be larger. However, for ideal mathematical lines of zero thickness, this is not the case. This challenges the idealization of the problem.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a39c1a1c6b9e58a6b948faa2, reason-counter@84e8a8024e82ccdc005a64d5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "claim": "Total pay is $882. This assumes a single blended overtime wage of $18.75/hour applied uniformly to all 47 hours.",
+    "mechanism": "Calculate a uniform blended rate: (40×$18 + 7×$27) / 47 = $18.75/hour. Multiply this flat rate by the total 47 hours worked, bypassing the need to track separate regular and overtime buckets.",
+    "counterconditions": [
+      "Payroll system mandates time-and-a-half strictly on the marginal hours beyond 40 rather than a single blended rate.",
+      "The problem requires the base rate for the first 40 hours to remain $18 in the final disbursement, not be averaged.",
+      "Statutory law disallows averaging of overtime rates for weekly payroll calculations."
+    ],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    },
+    "typicality": 0.03
+  }
+}

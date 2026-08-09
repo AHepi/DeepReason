@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@11e2b61aa0c831ef3a7a96fb: program:reasoning_observation_pending
+- reason-counter@12223365294fd21633c781d3: program:reasoning_observation_pending
+- reason-counter@dcbe079bdf6c2c74da6f3c61: program:reasoning_observation_pending
+- reason-counter@e660751ff52cf464be9ad78a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, but this is a trivial consequence of the problem's design as a proportionality exercise; the 'real' question is whether the student can identify the implicit covering principle rather than just compute 3 \u00d7 $2.","counterconditions":[{"case":"The task is evaluated strictly on numerical output without philosophical or meta-mathematical analysis of the problem's assumptions.","checker_spec":null,"eval":"observation"},{"case":"The curriculum explicitly prohibits interpreting word problems as anything other than direct arithmetic computations.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Moving away from the computation itself, the candidate frames the problem as a test of identifying the hidden axiom (the covering principle/uniform pricing). The $6 answer is merely the artifact of the exercise's construction, while the underlying reasoning skill being tested is the recognition of proportional invariance.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@11e2b61aa0c831ef3a7a96fb, reason-counter@12223365294fd21633c781d3
+
+TARGET SRC_002
+{"analogy":null,"claim":"21 pencils cost $6, derived not by assuming proportionality but by observing that 21 is a strict multiple of 7, requiring exactly 3 complete bundles at $2 each, making the total independent of the per-pencil pricing model.","counterconditions":[{"case":"The pricing schema requires an exact multiple of the base bundle size, so this derivation fails if the target quantity is not a multiple of 7.","checker_spec":null,"eval":"observation"},{"case":"The store enforces a non-linear bulk discount or surcharge for buying multiple bundles simultaneously.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem states '7 for $2'. If this is interpreted as a discrete bundle SKU, 21 pencils correspond exactly to 3 SKUs. The total cost is 3 bundles \u00d7 $2 = $6. This derivation is robust against the skeptic's counterexamples because it does not require calculating or assuming a continuous per-pencil rate; it only requires counting bundles.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@dcbe079bdf6c2c74da6f3c61, reason-counter@e660751ff52cf464be9ad78a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

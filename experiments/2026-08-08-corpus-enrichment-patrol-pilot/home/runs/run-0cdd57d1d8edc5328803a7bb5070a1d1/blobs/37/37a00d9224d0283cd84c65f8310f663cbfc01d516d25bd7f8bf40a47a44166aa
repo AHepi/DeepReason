@@ -1,0 +1,11 @@
+```json
+{
+  "patches": [
+    {
+      "op": "replace",
+      "path": "/scratch_proposal/links/1/to_ref",
+      "value": "NEW_001"
+    }
+  ]
+}
+```

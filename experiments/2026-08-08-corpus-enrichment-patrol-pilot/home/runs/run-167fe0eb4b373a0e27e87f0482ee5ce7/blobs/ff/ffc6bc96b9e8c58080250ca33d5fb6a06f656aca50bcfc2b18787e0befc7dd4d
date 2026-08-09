@@ -1,0 +1,20 @@
+```json
+{
+  "candidate": {
+    "claim": "The answer is 504, computed as 9*8*7 = 504, where zero is excluded from every position.",
+    "mechanism": "Strictly interpret 'all three digits different from each other' as requiring three distinct nonzero digits: 9 choices for hundreds, 8 for tens, 7 for units.",
+    "counterconditions": [
+      "If zero is a valid digit in tens or units, the count increases beyond 504.",
+      "If 'three-digit number' permits zero in tens or units, the 504 count undercounts.",
+      "If the complement of repeated-digit numbers equals 648, then 504 is wrong.",
+      "If direct positional counting 9*9*8=648 is correct, 504 is falsified."
+    ],
+    "typicality": 0.35,
+    "optional_refs": ["SRC_008"],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_008"]
+    }
+  }
+}
+```

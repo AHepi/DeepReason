@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "15% of 80 equals 12, by decomposing the percentage into 10% + 5% and scaling the base linearly.",
+    "mechanism": "The percentage 15% is split into 10% and 5%. 10% of 80 is 8. 5% is half of 10%, so 5% of 80 is 4. Adding the two linear components yields 8 + 4 = 12.",
+    "counterconditions": [
+      "The percentage operator is redefined to apply non-linearly or recursively",
+      "The base 80 is a vector or matrix where scalar percentage scaling fails",
+      "The decomposition 10% + 5% is rendered invalid by a non-standard base-100 arithmetic"
+    ],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_006"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_006"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.95
+  }
+}

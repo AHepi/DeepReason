@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 misinterprets the standard English phrase 'costs $10 more than' as a multiplicative relation (N = 10 * P), treating it as a 'misphrasing for costs 10 times as much' without any textual basis. The problem states the notebook costs $10 more than the pen, which canonically means N = P + 10. The correct solution is P = $1.25 (N = $11.25, sum = $12.50, difference = $10), but SRC_001 yields approximately $1.136, which fails to satisfy the stated constraints.",
+      "counterexample": [
+        {
+          "P": 1.25,
+          "N": 11.25,
+          "sum": 12.5,
+          "difference": 10.0,
+          "satisfies_constraints": true
+        }
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}
+```

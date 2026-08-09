@@ -1,0 +1,31 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-17f006091d6deeb318c5448f91949f54) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@234333898d1697a90395e5c9: program:reasoning_observation_pending
+- reason-counter@3702b1b49d97924c565e8282: program:reasoning_observation_pending
+- reason-counter@d732b82f896adba36be58c07: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Total pay is $855.","counterconditions":[{"case":"Overtime is computed differently (e.g., not 1.5\u00d7 for hours > 40).","checker_spec":null,"eval":"observation"},{"case":"Some hours are unpaid or paid at a different rate.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Regular pay = 40 hours \u00d7 $18/hour = $720. Overtime rate = $18 \u00d7 1.5 = $27/hour. Overtime hours = 47 - 40 = 7 hours. Overtime pay = 7 \u00d7 $27 = $189. Total = $720 + $189 = $855.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@234333898d1697a90395e5c9, reason-counter@3702b1b49d97924c565e8282
+
+TARGET SRC_002
+{"analogy":null,"claim":"Total pay is $909.","counterconditions":[{"case":"Standard overtime interpretation applies: only hours beyond 40 are at 1.5\u00d7.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If all 47 hours are paid at the overtime rate of $27/hour (ignoring the regular-first-40 rule), total = 47 \u00d7 27 = $1,269. If instead regular pay is 40 \u00d7 18 = 720 and overtime is all 47 hours at 27 = 1,269, total would be 1,989. Neither is standard; the correct reading is 40 regular + 7 overtime. However, if the 'first 40' rule is interpreted as 40 at 18 and the remaining 7 at 1.5\u00d7, total = 855. The $909 figure arises if regular is miscomputed as 47\u00d718=846 plus 7\u00d7(27-18)=63 \u2192 909.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d732b82f896adba36be58c07
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

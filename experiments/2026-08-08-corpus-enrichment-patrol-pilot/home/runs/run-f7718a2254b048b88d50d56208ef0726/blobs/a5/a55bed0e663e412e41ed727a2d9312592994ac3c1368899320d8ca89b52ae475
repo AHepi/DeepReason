@@ -1,0 +1,46 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+## problem-context
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9e7528c7f868596bd367326b: program:reasoning_observation_pending
+- reason-counter@87ac53b78dc5ea6578362f83: program:reasoning_observation_pending
+- reason-counter@107af41ba621997b64fd831c: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 88664e580acad743a0b3e8870b8a19a929b76f50e04d567d27feaa33ecd93a5d
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Geometric construction requires continuous space, whereas page numbering is inherently discrete","The compass cannot naturally represent the piecewise cost changes at boundaries 9 and 99"],"overturn_conditions":["If a computational arithmetic approach is mandated by the problem's context","If the problem involves non-standard page numbering that defies geometric series summation"],"shared_structure":["Cumulative resource consumption is modeled as a sum of consecutive uniform segments","The unknown 'final page' is located at the boundary where the total consumed resource hits a target value","The mechanism operates by linearly interpolating within the correct segment after eliminating prior segments"],"source_memory_refs":["SRC_003"],"transfer_claims":["The page count can be found by a compass-and-straightedge style segment addition: construct a segment of length 792, subtract known blocks (9 and 180), and divide the remainder by 3","The geometric 'ruler' method confirms that the remainder 603 is exactly divisible by 3, landing on an integer page boundary"]},"claim":"The book has 363 pages, derived by solving the piecewise digit-usage function 9\u00d71 + 90\u00d72 + (n\u221299)\u00d73 = 792 directly without first computing the boundary at page 99, which results in an arithmetic slip if the function is applied to n rather than accounting for the cumulative structure properly.","counterconditions":[{"case":"If the arithmetic is performed correctly accounting for the 99-page boundary, the answer reverts to 300","checker_spec":null,"eval":"observation"},{"case":"If the problem involves 4-digit page numbers, the piecewise function requires an additional term","checker_spec":null,"eval":"observation"},{"case":"If the total digit count falls within the 1-digit or 2-digit range, the formula's higher-order terms must be zeroed","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By treating the total digit count as a single linear equation 3n - 198 = 792 (after subtracting the 1-digit and 2-digit constants), one solves for n directly. However, this approach incorrectly models the function as globally linear rather than piecewise, leading to n = (792 - 189 + 297) / 3 = 363. The mechanism is arithmetically coherent but structurally misaligned with the problem's discrete regime changes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- fc5ce240eae3a4be5cdf4d090c35a1b6b129870a0ec98043827e908ebdc0c10e [mention]
+- 1842549ad3c275b00e78a2333ab66bcf380266328b10842481fe8feb5f91e7d2 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- fc5ce240eae3a4be5cdf4d090c35a1b6b129870a0ec98043827e908ebdc0c10e: {"analogy":null,"claim":"The book has 363 pages, derived by solving the piecewise digit-usage function 9\u00d71 + 90\u00d72 + (n\u221299)\u00d73 = 792 directly 
+- 1842549ad3c275b00e78a2333ab66bcf380266328b10842481fe8feb5f91e7d2: The target's stated mechanism cannot causally produce the claimed answer of exactly 297 pages. The target itself simulates its hypothesized arithmetic slip and 
+
+## output-contract
+DIRECTIVE: mount the strongest 

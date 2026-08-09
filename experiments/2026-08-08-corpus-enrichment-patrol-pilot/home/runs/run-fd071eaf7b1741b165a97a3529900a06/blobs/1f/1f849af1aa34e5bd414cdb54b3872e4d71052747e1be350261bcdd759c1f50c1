@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "15% of 80 equals 12.",
+      "mechanism": "Direct arithmetic scaling: convert 15% to its decimal equivalent 0.15, then multiply by the base quantity 80 (0.15 * 80 = 12). This is the standard definitional mechanism for percentage operations.",
+      "counterconditions": [
+        "The standard definition of percentage as parts per hundred is suspended or redefined.",
+        "The multiplication operation fails due to a non-standard arithmetic algebra (e.g., modular arithmetic with a small modulus)."
+      ],
+      "typicality": 0.99,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "15% of 80 equals 12, derived via decomposition into 10% and 5%.",
+      "mechanism": "Decompose the percentage into mentally tractable chunks: 10% of 80 is 8. Half of that (5%) is 4. Summing the chunks yields 8 + 4 = 12. This leverages the distributive property of multiplication over addition.",
+      "counterconditions": [
+        "The percentage cannot be cleanly decomposed into additive integer or simple fractional parts.",
+        "The base quantity is not amenable to easy decimal shifting (e.g., lacks factors of 10)."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "15% of 80 equals 12, by transposing the operands and computing 80% of 15.",
+      "mechanism": "Exploit the commutative property of multiplication. The expression 0.15 * 80 is equivalent to 0.80 * 15. 80% of 15 is 12. This shifts the cognitive load to a potentially easier base-10 scaling.",
+      "counterconditions": [
+        "The operation is strictly defined as applying the percentage to a fixed base, disallowing commutative transposition of the operands.",
+        "A non-scalar algebraic structure (e.g., matrix multiplication) is implicitly assumed, where commutativity does not hold."
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "15% of 80 equals 12, via a unit-rate scaling mechanism.",
+      "mechanism": "Determine the value of 1% of the base by dividing by 100 (80 / 100 = 0.8). Then scale this unit-rate by the target percentage (0.8 * 15 = 12). This establishes a proportional ratio mapping between the whole and the requested fraction.",
+      "counterconditions": [
+        "The rate of scaling is non-linear (e.g., compound percentage growth over discrete intervals).",
+        "The base quantity of 80 does not represent a uniformly divisible whole."
+      ],
+      "typicality": 0.50,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "15% of 80 equals 11, assuming a continuous compounding or a truncated step-function distribution.",
+      "mechanism": "In certain discrete or bounded systems, applying a 15% scale to a quantity of 80 might not yield exactly 12 if intermediate states are quantized. If the system requires integer truncation at each proportional step (e.g., 10% yields 8, 5% yields 3 after truncation of 3.5), the sum yields 11. This is a non-standard, bounded-rational mechanism.",
+      "counterconditions": [
+        "Standard continuous arithmetic applies without discrete truncation or quantization penalties.",
+        "The problem space is strictly mathematical real-number arithmetic rather than a physical or economic simulation."
+      ],
+      "typicality": 0.02,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "15% of 80 equals 0.001875, derived by misapplying the percentage as a recursive division operator.",
+      "mechanism": "Interpret '15% of 80' as a sequential operator: 15 / (100 * 80). This assumes '%' acts as a division by 100, and 'of' acts as a subsequent division by the base, rather than multiplication. 15 / 8000 = 0.001875.",
+      "counterconditions": [
+        "The operator 'of' is correctly defined as multiplication rather than division.",
+        "The linguistic syntax of the problem maps to standard algebraic notation (0.15 * 80)."
+      ],
+      "typicality": 0.01,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+```json
+{
+  "op": "add",
+  "path": "/scratch_proposal/links/0/from_ref",
+  "value": "NEW_001"
+}
+```

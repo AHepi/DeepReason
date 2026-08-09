@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ff9ccc5e9ca5d9dd61ee7bba: program:reasoning_observation_pending
+- reason-counter@c334fc9328487de7449e8d17: program:reasoning_observation_pending
+- reason-counter@2a51aba7dbfaa8e8d330af7d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The answer is 18, obtained by applying the full Chinese Remainder Theorem construction: x = 3\u00b7(7\u00b77^{-1}_5) + 4\u00b7(5\u00b75^{-1}_7) mod 35, where 7^{-1} mod 5 = 3 and 5^{-1} mod 7 = 3.","counterconditions":[{"case":"If the modular inverses are computed incorrectly, the CRT formula yields a wrong value.","checker_spec":null,"eval":"observation"},{"case":"If gcd(5,7) were not 1, CRT would not guarantee a unique solution mod 35.","checker_spec":null,"eval":"observation"},{"case":"If the formula coefficients are misassigned (swapping which remainder pairs with which modulus), the result changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By CRT, since gcd(5,7)=1, the system x\u22613 mod 5, x\u22614 mod 7 has a unique solution mod 35. Compute: x = 3\u00b7(7\u00b73) + 4\u00b7(5\u00b73) mod 35 = 3\u00b721 + 4\u00b715 mod 35 = 63 + 60 mod 35 = 123 mod 35 = 123 - 3\u00b735 = 123 - 105 = 18. Verification: 18 mod 5 = 3 \u2713, 18 mod 7 = 4 \u2713. The CRT guarantees this is the unique solution class mod 35, and 18 is the smallest positive representative.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ff9ccc5e9ca5d9dd61ee7bba, reason-counter@c334fc9328487de7449e8d17, reason-counter@2a51aba7dbfaa8e8d330af7d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

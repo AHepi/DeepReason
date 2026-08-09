@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9edbb5166ae9a8ad40573ef2: program:reasoning_observation_pending
+- reason-counter@fe2af93368c25a933b4d58d4: program:reasoning_observation_pending
+- reason-counter@2cfbf1d50a3b5fd8df37dda4: program:reasoning_observation_pending
+- reason-counter@38862bea3fa703511aebb939: program:reasoning_observation_pending
+- reason-counter@13f0196ca4381ed446013a61: program:reasoning_observation_pending
+- reason-counter@7b4f38827cbea69cd45edb79: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, but this is a trivial consequence of the problem's design as a proportionality exercise; the 'real' question is whether the store's pricing is actually proportional, which the problem stipulates away.","counterconditions":[{"case":"The problem is not pedagogical but a real-world pricing query with unknown structure.","checker_spec":null,"eval":"observation"},{"case":"The '7 for $2' is not a proportionality axiom but a contingent observation subject to market forces.","checker_spec":null,"eval":"observation"},{"case":"The problem contains unstated constraints (e.g., maximum purchase limits) that bound the validity of proportionality.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem is constructed so that 21 = 3\u00b77, making the answer mechanically $6. This meta-mechanism recognizes the problem as a pedagogical artifact encoding a proportionality assumption. The mechanist stance is satisfied by identifying the hidden axiom: pricing is strictly linear.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9edbb5166ae9a8ad40573ef2, reason-counter@fe2af93368c25a933b4d58d4, reason-counter@2cfbf1d50a3b5fd8df37dda4
+
+TARGET SRC_002
+{"analogy":null,"claim":"21 pencils cost $6 because the bundle is treated as a composite unit: '7 pencils' is a single SKU priced at $2, and 21 pencils corresponds to exactly 3 such SKUs.","counterconditions":[{"case":"The store allows sub-bundle purchases at a different fractional rate, breaking the discreteness of the SKU.","checker_spec":null,"eval":"observation"},{"case":"The '7 for $2' is a maximum or limit rather than a fixed bundle, allowing fewer pencils at the same price.","checker_spec":null,"eval":"observation"},{"case":"Bundle integrity is not preserved (e.g., pencils can be bought individually at a different rate).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By reifying the bundle as an atomic product unit, the problem reduces to simple integer multiplication: 3 units \u00d7 $2/unit = $6. This bypasses fractional unit pricing and operates purely on discrete aggregates.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@38862bea3fa703511aebb939, reason-counter@13f0196ca4381ed446013a61, reason-counter@7b4f38827cbea69cd45edb79
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

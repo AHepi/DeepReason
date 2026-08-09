@@ -1,0 +1,7 @@
+```json
+{
+  "operation": "add",
+  "path": "/scratch_proposal/new_blocks/0/local_key",
+  "value": "NEW_002"
+}
+```

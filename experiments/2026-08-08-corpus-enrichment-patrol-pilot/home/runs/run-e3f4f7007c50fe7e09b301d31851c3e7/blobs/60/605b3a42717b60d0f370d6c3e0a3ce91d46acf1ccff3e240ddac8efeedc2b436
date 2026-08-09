@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:00b9136cb146) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 00b9136cb146 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@d11f97ccc462: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_005 and SRC_001 inherit a common abstraction from SRC_002: all three concern whether the problem text logically entails $6 or requires an unstated axiom. SRC_005 and SRC_001 occupy the 'pedagogical artifact with hidden axiom' branch of this abstraction; SRC_002 occupies the 'logical underdetermination' branch. The shared abstraction is 'the text underdetermines the answer unless an axiom is supplied'. SRC_005 and SRC_001 inherit it by treating the axiom as deliberately concealed by the exercise design; SRC_002 treats it as a logical gap awaiting explicit constraint. This relation is refuted if the inheritance claim reduces to 'all three talk about the same problem', or if SRC_005/SRC_001 can be fully described without any notion of an unstated or hidden axiom — a summary of the endpoints is not a relation.
+commitments: hv-floor@2a45b7988522, lineage-ref@d11f97ccc462, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_005 and SRC_001 are compatible via shared mechanism: both frame the $6 answer as the artifact of a constructed pedagogical exercise that hides a proportional axiom. SRC_005 identifies the hidden axiom as a covering principle (uniform pricing) tested as a reasoning skill; SRC_001 identifies it as strict linearity stipulated away by construction. Their shared mechanism is pedagogical concealment of an axiom, and they are compatible because one emphasizes skill-recognition while the other emphasizes assumption-stipulation, with no contradiction. This relation is refuted if the two artifacts' mechanisms are merely described side-by-side without naming the shared predicate (concealment of an axiom by construction), or if they actually contradict on whether the axiom is a reasoning skill versus a stipulation — a summary of the endpoints is not a relation.
+commitments: hv-floor@2a45b7988522, lineage-ref@d11f97ccc462, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_004 contradicts SRC_001: SRC_004 holds that the proportional convention is a contingent adoption (the computation is logically valid only if we adopt the convention), while SRC_001 holds that proportionality is stipulated away by the problem's own design (the problem encodes the assumption, so the answer is mechanically determined within the exercise). Under SRC_004, there is genuine logical underdetermination resolved only by convention choice; under SRC_001, the problem itself supplies the axiom, so there is no gap to bridge. This relation is refuted if the two positions do not actually conflict — e.g., if SRC_001's 'stipulated away' is compatible with SRC_004's 'adopt the convention' because both yield $6 — or if the claim merely says 'SRC_004 is skeptical and SRC_001 is not' without naming the predicate of contradiction (logical entailment vs. contingent convention) — a summary of the endpoints is not a relation.
+commitments: hv-floor@2a45b7988522, lineage-ref@d11f97ccc462, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

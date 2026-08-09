@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@dfd411fa5d0666af27992ec9: program:reasoning_observation_pending
+- reason-counter@0529eaa938fc6b96913dc29c: program:reasoning_observation_pending
+- reason-counter@176f886fe866cc30b1be6208: program:reasoning_observation_pending
+- reason-counter@2a93680034a053e9cd55fd1b: program:reasoning_observation_pending
+- reason-counter@ff28b3f8b3f506b1d883b18e: program:reasoning_observation_pending
+- reason-counter@c6256f110883eea188ce42c8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via decimal multiplication: 0.15 \u00d7 80 = 12.","counterconditions":[{"case":"The base quantity is not exactly 80","checker_spec":null,"eval":"observation"},{"case":"The percentage is interpreted as a non-linear growth rate rather than a linear fraction","checker_spec":null,"eval":"observation"},{"case":"The operation is applied to a different quantity","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The percentage 15% is a dimensionless ratio of 15 parts per 100 (0.15). Multiplying this ratio by the base quantity (80) yields the part: 0.15 \u00d7 80 = 12. This is the direct linear scaling mechanism.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@dfd411fa5d0666af27992ec9, reason-counter@0529eaa938fc6b96913dc29c, reason-counter@176f886fe866cc30b1be6208
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by taking three-fifths of 20% of 80.","counterconditions":[{"case":"The proportional relationship between 15 and 20 is misapplied","checker_spec":null,"eval":"observation"},{"case":"20% of 80 is calculated incorrectly","checker_spec":null,"eval":"observation"},{"case":"The fraction 3/4 is applied to the wrong base","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"First compute 20% of 80: 0.20 \u00d7 80 = 16. Since 15 is three-quarters of 20 (15/20 = 3/4), 15% is three-quarters of 20%. Therefore, 15% of 80 = (3/4) \u00d7 16 = 12. This is proportional reasoning on the percentage itself.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2a93680034a053e9cd55fd1b, reason-counter@ff28b3f8b3f506b1d883b18e, reason-counter@c6256f110883eea188ce42c8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

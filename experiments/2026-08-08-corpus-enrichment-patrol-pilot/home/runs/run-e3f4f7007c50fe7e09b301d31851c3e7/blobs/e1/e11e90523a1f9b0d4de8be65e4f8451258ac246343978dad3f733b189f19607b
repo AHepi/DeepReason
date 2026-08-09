@@ -1,0 +1,30 @@
+```json
+{
+  "candidate": {
+    "claim": "21 pencils cost $6 because the bundle rate of $2 per 7 pencils acts as a unit pricing invariant, so the target quantity 21 decomposes exactly into 3 bundles of 7, each inheriting the fixed price of $2, yielding a deterministic total of 3 × $2 = $6.",
+    "mechanism": "The price ratio $2/7 functions as a stable unit-rate constant over the transaction domain. The target quantity 21 is a strict integer multiple of the bundle size 7 (21 = 3 × 7). Under the covering principle for uniform pricing, each bundle of 7 pencils maps deterministically to a $2 cost, and the costs compose additively without remainder or fractional-pricing penalties, producing 3 × $2 = $6.",
+    "counterconditions": [
+      "If the store imposes a non-linear pricing rule (e.g., a bulk discount or surcharge for multiples), the additive cost of 3 bundles would not equal $6.",
+      "If '7 for $2' is a strict one-bundle-per-customer limit rather than a scalable unit rate, the problem becomes unanswerable without additional policy information.",
+      "If the target quantity were not a multiple of 7 (e.g., 10 pencils), the linear unit-rate model and the discrete-bundle-only model would diverge, exposing hidden assumptions.",
+      "If the store refuses to sell 21 pencils at the pro-rated bundle price and requires purchasing 4 bundles (28 pencils) to cover 21, the minimum cost would be $8, not $6."
+    ],
+    "typicality": 0.92,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_006",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_006",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

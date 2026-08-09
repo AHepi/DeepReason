@@ -1,0 +1,87 @@
+{
+  "candidates": [
+    {
+      "claim": "The maximum number of pieces produced by 4 straight cuts through the center of a pizza is 8.",
+      "mechanism": "Any straight line passing through the center of a circle is a diameter and bisects the circle into 2 halves. Since all 4 cuts pass through the exact center, they all intersect at a single point. Therefore, the k-th cut intersects exactly k-1 previous cuts at that single point (not k-1 distinct points). A line passing through a region boundary at a point where m other lines already cross does not pass through m+1 distinct regions, but rather splits exactly m+1 regions (in this case, exactly k regions). With all lines concurrent, the k-th cut splits exactly k regions. The total number of pieces is 1 + sum(k for k=1 to 4) = 1 + 1 + 2 + 3 + 4 = 11. Wait, correction: if all cuts pass through the center, they all intersect each other at exactly 1 point. The k-th cut intersects the previous k-1 cuts at 1 single point, thus it crosses k-1 distinct lines but only enters 1 new region on each side. The k-th cut splits exactly 2 regions (one on each side of the center), adding 2 pieces per cut. Total pieces = 2 + 2*3 = 8.",
+      "counterconditions": [
+        "The cuts do not all pass through the exact center, allowing for distinct intersection points.",
+        "The cuts are not straight lines.",
+        "The pieces are not counted by the standard topological definition of distinct bounded areas."
+      ],
+      "typicality": 1.0,
+      "optional_refs": ["SRC_001", "SRC_004"],
+      "analogy": {
+        "source_memory_refs": ["SRC_001", "SRC_004"],
+        "shared_structure": [
+          "Topological division of a 2D plane by 1D curves.",
+          "The formula for the maximum number of regions formed by n lines in a plane is (n^2 + n + 2)/2, which assumes no three lines are concurrent.",
+          "When lines are concurrent, the number of regions is less than the maximum."
+        ],
+        "disanalogies": [
+          "General lines in a plane can be placed to ensure no three intersect at the same point, maximizing regions.",
+          "Cutting a pizza imposes a circular boundary, whereas plane division is infinite.",
+          "The constraint of passing through the exact center forces all cuts to be concurrent, which is a special case of plane division."
+        ],
+        "transfer_claims": [
+          "For n concurrent lines, the number of regions is 2n.",
+          "The constraint of centrality reduces the problem from maximizing plane regions to counting regions formed by concurrent diameters."
+        ],
+        "overturn_conditions": [
+          "A cut passing through the center is shown to be able to intersect previous cuts at distinct points (impossible for straight lines through a single point).",
+          "The definition of 'pieces' includes unbounded outer regions."
+        ]
+      }
+    },
+    {
+      "claim": "The number of pieces produced by 4 straight cuts through the center of a pizza is exactly 8.",
+      "mechanism": "Each cut is a diameter. A diameter splits the circle into two halves. The first cut produces 2 pieces. The second cut, also a diameter, crosses the first at the center, dividing each of the 2 pieces into 2, yielding 4. The third cut crosses the previous two at the center, passing through exactly 2 of the existing 4 pieces, dividing them into 2 each, yielding 6. The fourth cut crosses the previous three at the center, passing through exactly 2 of the existing 6 pieces, dividing them into 2 each, yielding 8. In general, the n-th cut adds exactly 2 new pieces because it only passes through 2 regions (one on each side of the center). Total = 2 + (4-1)*2 = 8.",
+      "counterconditions": [
+        "A cut is allowed to bend or deviate from a straight line.",
+        "The cuts do not all intersect at the exact center point."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_001", "SRC_003"]
+    },
+    {
+      "claim": "The maximum number of pieces is 11, assuming the formula for the maximum number of regions formed by n lines in a plane, R = (n^2 + n + 2)/2.",
+      "mechanism": "Using the standard combinatorial geometry result for n lines in a plane, the maximum number of regions is given by the lazy caterer's sequence. For n=4, R = (16 + 4 + 2)/2 = 11. Each new line intersects all previous lines at distinct points, maximizing the number of regions it splits.",
+      "counterconditions": [
+        "The problem's constraint that all cuts must pass through the exact center is enforced, which prevents distinct intersection points.",
+        "The pizza's circular boundary is considered, which might cap the number of bounded regions differently than an infinite plane."
+      ],
+      "typicality": 0.4,
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "The number of pieces produced is 4.",
+      "mechanism": "If all 4 cuts pass through the exact center, one might mistakenly assume they all overlap or that the problem implies a specific degenerate configuration where cuts coincide, resulting in only the initial cuts being distinct. Or, if one assumes the cuts must be made sequentially and each subsequent cut must pass through the center of the *remaining* pieces, the cuts might coincide. This is a flawed mechanism but represents a common intuitive error.",
+      "counterconditions": [
+        "The cuts are understood to be distinct straight lines.",
+        "The geometric definition of a straight line cut is applied correctly."
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The number of pieces is unbounded or undefined.",
+      "mechanism": "If the straight cuts have any non-zero thickness, or if 'passing through the exact center' allows for infinitesimally close but distinct intersection points near the center, the number of pieces could be larger. However, for ideal mathematical lines of zero thickness, this is not the case. This challenges the idealization of the problem.",
+      "counterconditions": [
+        "Standard geometric idealizations of zero-width lines are applied.",
+        "The center is treated as a single mathematical point."
+      ],
+      "typicality": 0.05,
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The number of pieces produced is 8, derived from the recurrence relation P(n) = P(n-1) + 2.",
+      "mechanism": "Let P(n) be the number of pieces after n cuts through the center. P(1) = 2. When adding the n-th cut (a diameter), it crosses all n-1 previous cuts at the single center point. This means it enters one region on one side of the center and one region on the other side. It thus splits exactly 2 regions. Therefore, P(n) = P(n-1) + 2. Solving this recurrence: P(4) = 2 + 3*2 = 8.",
+      "counterconditions": [
+        "The cuts are not straight.",
+        "The cuts do not pass through the exact center.",
+        "The recurrence relation is misapplied by assuming the n-th cut splits n regions instead of 2."
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_001", "SRC_003"]
+    }
+  ]
+}

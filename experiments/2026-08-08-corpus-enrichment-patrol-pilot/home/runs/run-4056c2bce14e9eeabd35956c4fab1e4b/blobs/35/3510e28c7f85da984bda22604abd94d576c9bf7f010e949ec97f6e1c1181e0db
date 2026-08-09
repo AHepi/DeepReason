@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e5024ffeb5861556a3ad6406: program:reasoning_observation_pending
+- reason-counter@7f71796851f98f129f53c445: program:reasoning_observation_pending
+- reason-counter@a10b767113e8ece7beb8856e: program:reasoning_observation_pending
+- reason-counter@79d37c2a2623f9420030c6bd: program:reasoning_observation_pending
+- reason-counter@4a1ea3ef4839bc073416546c: program:reasoning_observation_pending
+- reason-counter@f35ded65033560bdebb86c08: program:reasoning_observation_pending
+- reason-counter@9803a085fa9891fddd4798e5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pen costs $2.50, from reading 'costs $10 more' as modifying the pen's own price rather than establishing the relative gap between notebook and pen.","counterconditions":[{"case":"If the comparative 'more than' is parsed as establishing N - P = 10 (notebook above pen), the directional error is avoided.","checker_spec":null,"eval":"observation"},{"case":"If both constraints N + P = 12.50 and N - P = 10 are written down before solving, the error is avoided.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A reading where 'the notebook costs $10 more than the pen' is mis-segmented as 'the notebook costs $10' and 'more than the pen' is dropped, or the $10 is attached to the pen. This yields N = 10, P = 2.50 from the residual of 12.50 - 10. The covering principle is the directionality of the comparative: the $10 belongs to the notebook's premium, not the pen's base.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e5024ffeb5861556a3ad6406, reason-counter@7f71796851f98f129f53c445
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pen costs $1.25, derived by substituting N = P + 10 into N + P = 12.50, yielding P = 1.25.","counterconditions":[{"case":"If prices are not denominated in US dollars, the numerical answer changes.","checker_spec":null,"eval":"observation"},{"case":"If 'costs $10 more' is interpreted as a ratio rather than an additive difference, the result differs.","checker_spec":null,"eval":"observation"},{"case":"If the problem contains a typo and the total or difference is different, the answer changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let P be the pen price and N the notebook price. The difference constraint gives N = P + 10. Substituting into the sum constraint N + P = 12.50 yields (P + 10) + P = 12.50, so 2P = 2.50 and P = 1.25. The $10 is added to the notebook, not the pen, which is the key covering principle that prevents the common $2.25 error.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a10b767113e8ece7beb8856e, reason-counter@79d37c2a2623f9420030c6bd, reason-counter@4a1ea3ef4839bc073416546c
+
+TARGET SRC_003
+{"analogy":null,"claim":"The pen costs $0, from a skeptical stance that treats 'costs $10 more than the pen' as vacuously satisfied when the pen is free, with the notebook absorbing the entire $12.50 or exactly $10.","counterconditions":[{"case":"If both constraints are checked (N + P = 0 + 10 = 10 \u2260 12.50), the solution is immediately rejected.","checker_spec":null,"eval":"observation"},{"case":"If the problem is read as requiring both conditions to hold, the zero solution fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If P = 0, then N = 10 satisfies the difference constraint (N - P = 10). The sum constraint N + P = 10 \u2260 12.50 is either ignored or the total is mis-remembered. The covering principle is that both constraints must be satisfied simultaneously; the skeptical stance here is a degenerate solution that satisfies only the difference constraint.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f35ded65033560bdebb86c08, reason-counter@9803a085fa9891fddd4798e5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

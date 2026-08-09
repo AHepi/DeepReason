@@ -1,0 +1,50 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@970c864250a9a8c173796fec: program:reasoning_observation_pending
+- reason-counter@6cfa25dd9013852aa0243744: program:reasoning_observation_pending
+- reason-counter@ddcac930a583132fa9ce6b8d: program:reasoning_observation_pending
+- reason-counter@638ae0b185656c72c2bace91: program:reasoning_observation_pending
+- reason-counter@769758db5a11957fb726d2f1: program:reasoning_observation_pending
+- reason-counter@d43217eccda333903a87caf9: program:reasoning_observation_pending
+- reason-counter@08a5345a9350d34178a78a5a: program:reasoning_observation_pending
+- reason-counter@524c602cc4653b9e252180df: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Four concurrent straight cuts through the exact center yield exactly 8 pieces, derived from the rule that n concurrent lines produce 2n regions.","counterconditions":[{"case":"The cuts are not straight.","checker_spec":null,"eval":"observation"},{"case":"The cuts do not pass through the exact center, moving them into general position.","checker_spec":null,"eval":"observation"},{"case":"More than two cuts overlap perfectly, reducing the number of distinct diameters.","checker_spec":null,"eval":"observation"},{"case":"The pizza is not simply connected (e.g., an annulus), which may alter the topological definition of a 'piece' even if the count remains 8.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Four straight, concurrent lines intersecting at a single point divide the plane into exactly 8 distinct angular regions. Because they pass through the exact center of the pizza, these 8 regions correspond directly to 8 identical slices. The maximum piece count for 4 lines in general position (11) is reduced by 3 due to the loss of regions caused by perfect concurrency: C(4,2) - 1 = 5 lost pairwise intersections.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@970c864250a9a8c173796fec, reason-counter@6cfa25dd9013852aa0243744, reason-counter@ddcac930a583132fa9ce6b8d, reason-counter@638ae0b185656c72c2bace91
+
+TARGET SRC_002
+{"analogy":null,"claim":"Four straight cuts, each passing through the exact center of the pizza, produce exactly 8 pieces.","counterconditions":[{"case":"If one or more cuts do not pass through the exact center (general position), the number of regions increases.","checker_spec":null,"eval":"observation"},{"case":"If cuts are not straight, the region count depends on the curvature and intersections of the cuts.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because every cut passes through the center, they form 4 concurrent lines intersecting at a single point. Each distinct line adds 2 new regions, so n concurrent lines yield 2n regions. For n=4, this gives 8 regions.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@769758db5a11957fb726d2f1, reason-counter@d43217eccda333903a87caf9
+
+TARGET SRC_003
+{"analogy":null,"claim":"If the cuts are straight and pass through the center but are not required to be diameters (stopping at the center), they yield 4 pieces.","counterconditions":[{"case":"The cuts are defined as passing entirely through the pizza (diameters), yielding 8 pieces.","checker_spec":null,"eval":"observation"},{"case":"The cuts are not straight.","checker_spec":null,"eval":"observation"},{"case":"The cuts do not terminate exactly at the cen

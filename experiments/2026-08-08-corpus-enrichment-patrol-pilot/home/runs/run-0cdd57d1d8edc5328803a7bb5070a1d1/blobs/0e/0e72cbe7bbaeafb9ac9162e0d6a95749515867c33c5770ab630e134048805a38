@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:190d009cd72e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 190d009cd72e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@4796ddef8e78: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_009 (claiming $1,269) DEPENDS ON the causal mechanism of SRC_012/SRC_007: the $1,269 total is the incorrect output of the standard piecewise overtime calculation when the overtime rate ($27) is misapplied to ALL 47 hours instead of only the 7 overtime hours. This is a scope-error dependence: the correct mechanism's overtime function is causally inherited but its domain is over-extended from {hours > 40} to {all hours}. REFUTED IF: the $1,269 total results from a globally uniform premium contract (1.5× for all hours) rather than from the misapplication of a piecewise standard to all hours, or if the standard mechanism itself intrinsically mandates $1,269.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_008 CONTRADICTS SRC_012/SRC_007: the $846 claim is incompatible with the correct standard piecewise overtime calculation ($855) given the same premises ($18 base, 40 threshold, 1.5× premium, 47 hours). The causal mechanism of SRC_008 (flat $18 for all hours) and the causal mechanism of SRC_012 (piecewise $18/$27) are mutually exclusive under the stated problem parameters. REFUTED IF: a pay structure exists where both $846 and $855 are simultaneously valid for the same worker under the same hourly rate and hours, or if the underlying premises differ.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

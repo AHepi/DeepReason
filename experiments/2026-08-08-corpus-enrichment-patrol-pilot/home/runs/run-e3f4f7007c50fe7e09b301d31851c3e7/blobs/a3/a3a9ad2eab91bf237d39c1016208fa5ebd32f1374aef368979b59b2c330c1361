@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "21 pencils cost $6, because the unit pricing mechanism causes the total cost to scale multiplicatively with quantity: the unit rate $2/7 per pencil, when applied to the causal target quantity of 21 pencils, produces $6.",
+    "mechanism": "The pricing structure induces a constant unit rate ($2/7 per pencil) as its generative cause. When a customer causally acquires 21 pencils — a quantity exactly three times the base bundle of 7 — the unit rate mechanism transmits the cost multiplicatively, yielding 21 × ($2/7) = $6. The mechanism is the store's uniform pricing policy acting as the causal source of the total cost.",
+    "counterconditions": [
+      "If the store imposes a non-linear pricing policy (e.g., bulk discount or surcharge for quantities beyond 7), the unit rate is not constant and the multiplicative transfer fails.",
+      "If the '7 for $2' is a strict one-bundle-per-customer limit, the customer cannot causally acquire 21 pencils at the proportional rate, and the $6 answer is not entailed.",
+      "If the target quantity is not a multiple of 7 and the store forbids partial bundles, the continuous unit-rate mechanism breaks down and the discrete-bundle model diverges.",
+      "If the listed price is a marketing artifact rather than the operative causal price, the stated rate does not generate the transaction cost."
+    ],
+    "typicality": 0.92,
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": ["SRC_001", "SRC_003", "SRC_006", "SRC_008"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_003", "SRC_006", "SRC_008"],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}
+```

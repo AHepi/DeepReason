@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "claim": "15% of 80 equals 12, derived by computing 15% of 100 (which is 15) and then scaling that result down by the factor 80/100, yielding 15 × 0.8 = 12.",
+    "mechanism": "The percentage operator is interpreted as applying to a canonical base of 100 first. 15% of 100 gives an intermediate amount of 15. Because the actual base 80 is 80% of the canonical base 100, the intermediate result must be scaled by 0.8 to correct for the actual base. This yields 15 × 0.8 = 12. This mechanism effectively reduces to evaluating the product 0.15 × 80, but it factors the computation through a normalization step anchored at 100.",
+    "counterconditions": [
+      "The percentage is interpreted as a recursive or compound rate rather than a single linear scaling operation.",
+      "The base 80 is not a scalar quantity but a vector, matrix, or other object for which scalar percentage scaling is undefined or non-standard.",
+      "The canonical base of 100 is not admissible as an intermediate normalization point for this problem's domain.",
+      "The scaling factor 80/100 is applied in a non-linear domain such as logarithmic space, changing the result."
+    ],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_006"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.62
+  }
+}

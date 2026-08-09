@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@76a20c5502288502ac8e192a: program:reasoning_observation_pending
+- reason-counter@9cd1b722c43abf0b1105d5dd: program:reasoning_observation_pending
+- reason-counter@8ea38a787801ab9930f05bd8: program:reasoning_observation_pending
+- reason-counter@99a0625d3bf6a2ad3e51791a: program:reasoning_observation_pending
+- reason-counter@fafaf5af2dae0ddf0887f42d: program:reasoning_observation_pending
+- reason-counter@4ae43d8140a4b860f4b3670a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, by decomposition into 10% and 5%.","counterconditions":[{"case":"The decomposition is not additive","checker_spec":null,"eval":"observation"},{"case":"The base quantity 80 is not divisible into clean parts","checker_spec":null,"eval":"observation"},{"case":"The decomposition is miscalculated","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"10% of 80 is 8. Half of that 10% portion gives the 5% portion, which is 4. Adding the 10% and 5% portions (8 + 4) yields 12. This decomposes the percentage into a sum of manageable sub-percentages.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@76a20c5502288502ac8e192a, reason-counter@9cd1b722c43abf0b1105d5dd, reason-counter@8ea38a787801ab9930f05bd8
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, by transposing the operands and computing 80% of 15.","counterconditions":[{"case":"The commutative property does not hold for the context","checker_spec":null,"eval":"observation"},{"case":"The operands are not compatible scalar values","checker_spec":null,"eval":"observation"},{"case":"The operation is interpreted as non-commutative exponentiation","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The expression 15% of 80 is mathematically equivalent to (15/100) \u00d7 80, which equals 15 \u00d7 (80/100) = 15 \u00d7 0.8 = 80% of 15. 80% of 15 is 12. This leverages the commutative property of multiplication to simplify the computation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@99a0625d3bf6a2ad3e51791a, reason-counter@fafaf5af2dae0ddf0887f42d, reason-counter@4ae43d8140a4b860f4b3670a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

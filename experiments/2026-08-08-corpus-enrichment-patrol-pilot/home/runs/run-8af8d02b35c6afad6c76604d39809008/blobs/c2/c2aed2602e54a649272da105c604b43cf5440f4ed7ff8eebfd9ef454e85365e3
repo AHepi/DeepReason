@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:0ba8f16f5116) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0ba8f16f5116 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@80cbdbd5b752: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Artifact 0ba8f16f5116 abstracts the entire neighbourhood conflict over 'second' vs 'first' vs 'third' by positing that the problem's answer is underdetermined until one fixes a formal semantics for 'overtake': it is compatible with SRC_006 (second) under ordinal-exchange semantics, compatible with SRC_004 (first) under relative-position semantics, and compatible with SRC_008 (third) under lap-count semantics. The abstraction is a parameterization of the answer by the overtaking convention. It is refuted if the problem text uniquely entails exactly one of these semantics without additional stipulation.
+commitments: hv-floor@2a45b7988522, lineage-ref@80cbdbd5b752, relation-form@578e42df713e
+
+TARGET SRC_002
+Artifact 0ba8f16f5116 shares mechanism with SRC_008 and SRC_009: all three invoke a lap-count or positional-increment misframing that severs the link between physical passing and ordinal rank, producing 'third' from the false premise that the overtaken runner's label acts as a floor rather than a transferable position. The shared mechanism is ordinal decoupling — the claim that physical order and ordinal placement can diverge. This is refuted if the race is single-lap with real-time position tracking such that physical order always equals ordinal placement, or if overtaking is defined as assuming the overtaken runner's exact rank.
+commitments: hv-floor@2a45b7988522, lineage-ref@80cbdbd5b752, relation-form@578e42df713e
+
+TARGET SRC_003
+Artifact 0ba8f16f5116 depends on SRC_004 as its error-theory anchor: the 'first' answer is explained by SRC_004's mechanism in which 'overtake the runner in second place' is misparsed as overtaking the runner immediately ahead of you, collapsing the distance to first. The relation is a dependence because the artifact's wrong answer cannot be mechanically generated without this conflation of relative and absolute position. It is refuted if 'first' can be arrived at via a mechanism that does not involve conflating 'second place' with 'second from you' or with the runner just ahead.
+commitments: hv-floor@2a45b7988522, lineage-ref@80cbdbd5b752, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:0342d559aaec) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0342d559aaec to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@176e3504b752: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_004 and SRC_005 share a mechanism: positive cut thickness (or pathological curves) changes the topological count by destroying or fragmenting the center region. SRC_004 projects this to infinity via fractal cuts; SRC_005 projects it to a center-singularity that may disconnect the 8 sectors. They abstract a common principle: when cut width is non-zero the center is no longer a shared boundary, and the count is no longer 8. This is REFUTED IF a finite-thickness model with four straight concurrent cuts yields exactly 8 disconnected pieces with no center-removal effect — which would mean thickness alone, without fractal geometry, is insufficient to change the count, breaking the shared mechanism.
+commitments: hv-floor@2a45b7988522, lineage-ref@176e3504b752, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_002 and SCR_002 share a mechanism: the transition from concurrency (8 pieces) to general position (11 pieces) is governed by whether 'passing through the exact center' is read as strict concurrence or approximate near-concurrence. SRC_002 inherits the combinatorial formula n(n+1)/2 + 1, and SCR_002 maps the semantic ambiguity of 'exact' to the mathematical bifurcation. This is REFUTED IF the offset interpretation yields a piece count other than 11 for four lines — for example, if paired offsets produce parallelism that reduces the count below 11 — since then a single formula cannot cover the mechanism.
+commitments: hv-floor@2a45b7988522, lineage-ref@176e3504b752, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_003 contradicts SRC_002 because they apply the same pizza-cutting scenario to incompatible interpretive frameworks: SRC_003 adopts a topological measure-theoretic lens yielding 1 piece, while SRC_002 adopts a combinatorial general-position lens yielding 11 pieces. The contradiction is REFUTED IF the two frameworks are shown to be compatible under a unified partition theory — for instance, if the topological remainder (1 connected component) and the combinatorial sectors (11 bounded regions) are recognized as different answers to different questions rather than contradictory answers to the same question, in which case the relation becomes abstraction rather than contradiction.
+commitments: hv-floor@2a45b7988522, lineage-ref@176e3504b752, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

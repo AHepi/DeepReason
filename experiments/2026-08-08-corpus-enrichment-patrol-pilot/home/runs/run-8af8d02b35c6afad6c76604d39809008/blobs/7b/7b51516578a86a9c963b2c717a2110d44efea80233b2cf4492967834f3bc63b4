@@ -1,0 +1,3 @@
+```json
+{"cases":[{"attack":true,"case":"The target's answer 'first' is incorrect for the stated problem. In a standard race, overtaking the runner in second place means you take their position, so you are now in second place, not first. The target defends 'first' only by invoking a time-trial interpretation, which is outside the normal positional meaning of the riddle.","counterexample":[{"place":"second"}],"target_alias":"SRC_001"}]}
+```

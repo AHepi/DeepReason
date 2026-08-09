@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@56e7a8713e7e6c4054a03ef4: program:reasoning_observation_pending
+- reason-counter@02c3debe19e847d18f15bc06: program:reasoning_observation_pending
+- reason-counter@699048a0918ff72521668790: program:reasoning_observation_pending
+- reason-counter@326a6b5987a6c5632f4bbea1: program:reasoning_observation_pending
+- reason-counter@8a344452a4d03905fa5d36a5: program:reasoning_observation_pending
+- reason-counter@2c72b7d3e0c783315b39df8c: program:reasoning_observation_pending
+- reason-counter@57d48689cf941cea2d59e370: program:reasoning_observation_pending
+- reason-counter@068233076466027d99f00eaa: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 120, derived by an off-by-one order of magnitude error in decimal shifting.","counterconditions":[{"case":"The decimal shift is performed correctly, yielding 0.15.","checker_spec":null,"eval":"observation"},{"case":"The magnitude of the result is checked for sanity (120 > 80 is impossible for a sub-unit percentage).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Convert 15% to 0.15, but shift the decimal incorrectly by one place to get 1.5, then multiply: 1.5 \u00d7 80 = 120. This is an error in the decimal normalization step, producing a result that is 10\u00d7 too large. It is a standard failure mode in percentage computation, serving as a counterfactual that tests decimal place discipline.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@56e7a8713e7e6c4054a03ef4, reason-counter@02c3debe19e847d18f15bc06
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by exploiting the commutativity of multiplication: 0.15 \u00d7 80 = 80 \u00d7 0.15 = 80 \u00d7 15% = 12.","counterconditions":[{"case":"Multiplication is found to be non-commutative for this class of scalars (extremely unlikely)","checker_spec":null,"eval":"observation"},{"case":"The percentage operator is redefined as a non-symmetric directional scaling","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By the covering principle that multiplication is commutative, p% of N is strictly equal to N% of p. Thus 15% of 80 = 80% of 15. 80% is 4/5, and 4/5 of 15 is 12. This circumvents direct decimal multiplication by swapping to a more cognitively accessible base.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@699048a0918ff72521668790, reason-counter@326a6b5987a6c5632f4bbea1
+
+TARGET SRC_003
+{"analogy":null,"claim":"15% of 80 equals 12, derived by scaling the unit fraction 1% to the target 15%.","counterconditions":[{"case":"The definition of 1% as division by 100 is suspended or altered.","checker_spec":null,"eval":"observation"},{"case":"The scaling is non-linear, so 15 \u00d7 (1%) \u2260 15%.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"First establish the unit: 1% of 80 = 0.80. Then scale by 15: 15 \u00d7 0.80 = 12. This is the definition of percentage as parts per hundred, followed by linear scaling. It is the most direct covering principle: 'percent' = 'per centum' = 'per hundred'; find one hundredth, then take fifteen of them.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8a344452a4d03905fa5d36a5, reason-counter@2c72b7d3e0c783315b39df8c
+
+TARGET SRC_004
+{"analogy":null,"claim":"15% of 80 equals 12, derived from the covering principle that multiplication is commutative, making 15% of 80 strictly equal to 80% of 15.","counterconditions":[{"case":"A non-commutative algebra (e.g., matrix or quaternion) is introduced as the base or rate, breaking the swap.","checker_spec":null,"eval":"observation"},{"case":"The rate is interpreted as a sequential compound operator rather than a scalar, so order matters.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By commutativity, 0.15 \u00d7 80 = 80 \u00d7 0.15. The latter is simpler: 80% of 15 = 0.8 \u00d7 15 = 12. This swaps the roles of base and rate, turning a 'hard' percentage of a round base into an 'easy' base of a round percentage. It exposes percentage-as-operator as symmetric multiplication, with no privileged direction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@57d48689cf941cea2d59e370, reason-counter@068233076466027d99f00eaa
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

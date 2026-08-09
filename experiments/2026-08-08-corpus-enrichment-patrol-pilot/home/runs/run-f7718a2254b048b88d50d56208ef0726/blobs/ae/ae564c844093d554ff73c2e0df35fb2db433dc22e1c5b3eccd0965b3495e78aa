@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8b3d9a4eef7816e2128a8994: program:reasoning_observation_pending
+- reason-counter@d092d94d2f23a9308a50857e: program:reasoning_observation_pending
+- reason-counter@9b195729f125df705eceb447: program:reasoning_observation_pending
+- reason-counter@00c817ce39ba888fbc53a566: program:reasoning_observation_pending
+- reason-counter@9d71b6f24d5a87eeff9e187a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The book has 300 pages, but a verification via simulation of the digit-counting function confirms that D(300) = 792 and D(299) = 789, D(301) = 795, establishing 300 as the unique solution.","counterconditions":[{"case":"If D(n) is not strictly monotonic (e.g., if some pages have zero digits), uniqueness may fail.","checker_spec":null,"eval":"observation"},{"case":"If 792 is not in the range of D for any valid n (which it is, since D(300)=792), there would be no solution.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The digit-counting function D(n) = \u03a3_{k=1}^{n} len(str(k)) is strictly increasing for n \u2265 1, since each additional page adds at least one digit. Therefore, if D(n) = 792 has a solution, it is unique. Computing: D(299) = 9 + 180 + 3\u00d7200 = 789; D(300) = 789 + 3 = 792; D(301) = 792 + 3 = 795. The unique n with D(n) = 792 is n = 300. The causal mechanism is the monotonicity of cumulative digit count with respect to page count.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8b3d9a4eef7816e2128a8994, reason-counter@d092d94d2f23a9308a50857e
+
+TARGET SRC_002
+{"analogy":null,"claim":"The answer is exactly 300 pages, derived by summing digit-width blocks: 9 + 180 + 603 = 792, where 603 = 3 \u00d7 201 and 201 = 300 \u2212 99.","counterconditions":[{"case":"If 792 were less than 189, the partition would not reach the 3-digit block.","checker_spec":null,"eval":"observation"},{"case":"If 792 exceeded 2889 (digits through page 999), a 4-digit block would be needed.","checker_spec":null,"eval":"observation"},{"case":"If the book starts numbering from a page other than 1, the partition shifts.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Digit consumption partitions into blocks by width: single-digit (1\u20139, 9 pages, 9 digits), double-digit (10\u201399, 90 pages, 180 digits), triple-digit (100\u2013N, N\u221299 pages, 3(N\u221299) digits). The total 792 must be decomposed as 9 + 180 + 3k where k = N \u2212 99. Solving: 3k = 603, k = 201, N = 300. The causal mechanism is the base-10 positional numeral system: each page number's digit count equals \u230alog\u2081\u2080(n)\u230b + 1, creating discrete jumps at powers of 10.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9b195729f125df705eceb447, reason-counter@00c817ce39ba888fbc53a566, reason-counter@9d71b6f24d5a87eeff9e187a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

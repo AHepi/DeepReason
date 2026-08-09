@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The pen costs $1.25.",
+      "mechanism": "Let P be the price of the pen and N be the price of the notebook. The problem states two facts: (1) N + P = 12.50, and (2) N = P + 10.00. By substituting the second equation into the first, we get (P + 10.00) + P = 12.50. Simplifying yields 2P + 10.00 = 12.50, so 2P = 2.50, and thus P = 1.25. The causal mechanism is the arithmetic substitution of the defined price difference into the total sum.",
+      "counterconditions": [
+        "The prices are not denominated in USD (e.g., cents, different currency).",
+        "The price difference is asymmetric in a way not captured by the algebraic substitution."
+      ],
+      "typicality": 1.0,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The pen costs $2.50.",
+      "mechanism": "A common error is to subtract the difference ($10) from the total ($12.50) and attribute the remainder entirely to the pen, yielding $2.50. This mechanism assumes the difference is the only cost attributable to the pen, ignoring the fact that the notebook also includes the pen's baseline price plus the $10 difference.",
+      "counterconditions": [
+        "The problem is solved correctly using algebraic substitution, which yields a different value.",
+        "The interpretation requires distinguishing between baseline price and differential."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The problem is unsolvable as stated because the causal mechanism for price determination is missing.",
+      "mechanism": "An algebraic relation specifies a mathematical constraint but not a causal mechanism. Without a model of how the prices are determined (e.g., supply and demand, cost-plus pricing), the problem is a mathematical puzzle, not a causal explanation. The price is derived but not causally explained.",
+      "counterconditions": [
+        "The problem is interpreted as a pure math puzzle, not a causal inquiry.",
+        "A causal mechanism is deemed implicit in the algebraic relations."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The pen costs $0.",
+      "mechanism": "If the notebook costs $10 more than the pen and together they cost $12.50, one might incorrectly assume the pen is free and the notebook costs $12.50, ignoring the $10 difference constraint entirely. This is a misreading of the problem where the total is mistaken for the difference.",
+      "counterconditions": [
+        "The problem is read correctly, requiring both sum and difference constraints to be satisfied.",
+        "Any algebraic check is performed, immediately invalidating this answer."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The pen costs $1.25, but this is only under the assumption of linear additivity of prices.",
+      "mechanism": "The standard solution assumes prices are linearly additive and that the 'costs $10 more' is a strict linear difference. In a non-linear pricing regime (e.g., bundling discounts), the sum of individual prices might not equal the bundle price. The mechanism is the algebraic solution within a linear model, which must be explicitly stated as an assumption.",
+      "counterconditions": [
+        "Pricing is non-linear (e.g., bundle discounts exist).",
+        "The 'costs $10 more' refers to a marginal cost rather than a retail price difference."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4b6452c1a4d0e97ba34adb45: program:reasoning_observation_pending
+- reason-counter@712e91cedd87bd0a7a8a3bff: program:reasoning_observation_pending
+- reason-counter@a7c905de165ffddacb87ef95: program:reasoning_observation_pending
+- reason-counter@6978af4949604b47eb8419af: program:reasoning_observation_pending
+- reason-counter@46a001e57ff37d3c6067ad2d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest of the three consecutive even integers is 48, derived by exploiting the algebraic identity that the arithmetic mean of an odd-length symmetric arithmetic progression equals its central term (n/3), so the middle term is 46 and the largest is 48.","counterconditions":[{"case":"If the arithmetic mean 138/3 = 46 were odd, the triple would be consecutive odd integers, violating the evenness constraint and yielding no valid solution","checker_spec":null,"eval":"observation"},{"case":"If the problem asked for consecutive integers with a different common difference d, the mean would still be 46 but the largest term would be m + d rather than 48","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"For three consecutive even integers with common difference 2, model them as (m-2, m, m+2). Their sum is 3m = 138, giving m = 46. The three numbers are 44, 46, and 48. The divisibility of 138 by 3 guarantees an integer mean, and the even parity of the target mean (46) guarantees that the entire symmetric triple consists of even integers. The largest is thus m + 2 = 48.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4b6452c1a4d0e97ba34adb45, reason-counter@712e91cedd87bd0a7a8a3bff
+
+TARGET SRC_002
+{"analogy":null,"claim":"The three consecutive even integers are 44, 46, and 48, making 48 the largest.","counterconditions":[{"case":"If 138 were not divisible by 3, then the middle value would not be an integer and no such triple of consecutive even integers would exist.","checker_spec":null,"eval":"observation"},{"case":"If 138 divided by 3 yielded an odd number (e.g. 141/3 = 47), the resulting triple (45, 47, 49) would be odd, not even, and the even-constraint would fail.","checker_spec":null,"eval":"observation"},{"case":"If the problem did not require the integers to be even (allowing any consecutive integers), the answer would be different.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let the middle even integer be x. The three consecutive even integers are x-2, x, and x+2. The sum is (x-2) + x + (x+2) = 3x. Setting 3x = 138 yields x = 46. The three integers are 44, 46, and 48. This works because the constant difference of 2 between consecutive even integers causes the -2 and +2 to cancel exactly, making the sum equal to three times the middle value.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a7c905de165ffddacb87ef95, reason-counter@6978af4949604b47eb8419af, reason-counter@46a001e57ff37d3c6067ad2d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

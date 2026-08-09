@@ -1,0 +1,21 @@
+```json
+{
+  "candidate": {
+    "claim": "There are exactly 648 three-digit numbers with all distinct digits.",
+    "mechanism": "By case split on whether the digit zero is present. If zero is present, the hundreds digit is nonzero, and zero is one of the remaining positions. This yields 144 such numbers. If zero is absent, all three digits are selected from {1..9}, with all distinct, yielding 9*8*7 = 504. Total: 504 + 144 = 648.",
+    "counterconditions": [
+      "If the problem asked for numbers with all digits nonzero, the count would be 504.",
+      "If the problem asked for numbers with at least one repeated digit, the count would be 252.",
+      "If the problem allowed zero in the hundreds place, the count would be larger."
+    ],
+    "typicality": 0.92,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_005"
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}
+```

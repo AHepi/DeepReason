@@ -1,0 +1,30 @@
+```json
+{
+  "candidate": {
+    "claim": "There are exactly 648 three-digit numbers (100 to 999) whose three digits are pairwise distinct.",
+    "mechanism": "Positional construction: the hundreds digit must be nonzero, so 9 choices {1..9}; the tens digit must be distinct from the hundreds, so 9 choices (0..9 minus the one used); the units digit must be distinct from both, so 8 choices. Thus 9*9*8 = 648.",
+    "counterconditions": [
+      "If the problem intended all digits nonzero, 9*8*7 = 504 would result.",
+      "If the pairwise-distinct constraint were dropped, 9*10*10 = 900 would result.",
+      "If zero were allowed as the hundreds digit, 10*9*8 = 720 would result.",
+      "If the pairwise distinct constraint were applied without fixing the hundreds digit's non-zero constraint, the count would drop to 504 or other incorrect values.",
+      "If one subtracts only the 252 same-tens-and-units cases from 900, one gets 648, but this must be combined with other PIE terms correctly."
+    ],
+    "typicality": 0.97,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_005",
+      "SRC_006",
+      "SRC_007"
+    ]
+  }
+}
+```

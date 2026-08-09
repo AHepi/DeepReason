@@ -1,0 +1,8 @@
+```json
+{
+  "schema": "repair.patch.v1",
+  "pointer": "/scratch_proposal/links/0/from_ref",
+  "operation": "replace",
+  "value": null
+}
+```

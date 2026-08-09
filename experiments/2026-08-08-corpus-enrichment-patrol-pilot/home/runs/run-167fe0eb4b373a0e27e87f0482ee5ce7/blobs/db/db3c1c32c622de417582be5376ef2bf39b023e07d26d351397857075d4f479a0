@@ -1,0 +1,3 @@
+```json
+{"candidate":{"content":"The distinct-digit three-digit count (648) abstracts from two complementary derivations: a direct construction by zero/non-zero case split and an inclusion-exclusion complement, both reducing to the same count; refuted if either derivation yields a count other than 648 or if the two methods do not share the same underlying partition of three-digit space.","typicality":0.7,"neighbours":["SRC_001","SRC_002","SRC_003"]}}
+```

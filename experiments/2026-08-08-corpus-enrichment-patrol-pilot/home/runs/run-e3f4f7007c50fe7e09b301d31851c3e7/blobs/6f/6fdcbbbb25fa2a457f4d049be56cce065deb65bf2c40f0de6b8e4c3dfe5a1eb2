@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5ad28314c762ea7022ea0cc7: program:reasoning_observation_pending
+- reason-counter@42261125f9340aa9407a0975: program:reasoning_observation_pending
+- reason-counter@54ff296d5785bfc8f5debd9e: program:reasoning_observation_pending
+- reason-counter@f99be57468c91f895d4c8208: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The problem is underdetermined: $6 is the answer under linear uniform pricing, but the problem statement does not explicitly constrain the cost of 21 pencils to scale linearly from the 7-for-$2 rate.","counterconditions":[{"case":"The problem's domain is standard unit-rate pricing, where linear scaling is the implicit default and the expected answer is $6.","checker_spec":null,"eval":"observation"},{"case":"The problem statement implies uniform pricing by context, making $6 the uniquely correct answer.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"While standard convention assumes linear scaling, strictly speaking the statement only specifies the price for 7 pencils. Without an explicit covering principle (e.g., 'pencils are sold at a constant per-unit rate'), the cost of 21 pencils is not uniquely determined.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5ad28314c762ea7022ea0cc7, reason-counter@42261125f9340aa9407a0975
+
+TARGET SRC_002
+{"analogy":null,"claim":"The answer $6 is an empirical expectation: in a standard store context, pricing is uniform, so 21 pencils should cost $6, but this is a defeasible expectation rather than a logical entailment from the problem text alone.","counterconditions":[{"case":"The problem is purely mathematical and expects the linear scaling answer $6 without empirical qualification.","checker_spec":null,"eval":"observation"},{"case":"The problem context explicitly guarantees uniform pricing, making $6 logically entailed, not merely expected.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"From an empiricist stance, the problem text provides a single data point (7 for $2). The expectation of uniform pricing is an empirical prior, not a logical necessity. Under that prior, 21 pencils cost $6, but observation could overturn this.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@54ff296d5785bfc8f5debd9e, reason-counter@f99be57468c91f895d4c8208
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

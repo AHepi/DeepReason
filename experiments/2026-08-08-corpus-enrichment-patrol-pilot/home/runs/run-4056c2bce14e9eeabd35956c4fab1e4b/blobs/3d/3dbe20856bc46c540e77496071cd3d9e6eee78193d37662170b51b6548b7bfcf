@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "claim": "The pen costs $1.25.",
+      "mechanism": "Let p be the price of the pen and n be the price of the notebook. We have n + p = 12.50 and n = p + 10. Substituting the second equation into the first gives (p + 10) + p = 12.50, so 2p + 10 = 12.50, yielding 2p = 2.50 and thus p = 1.25.",
+      "counterconditions": [
+        "The prices are not denominated in USD (e.g., cents, different currency).",
+        "The word 'more' is reinterpreted to mean a multiplicative factor instead of an additive difference.",
+        "The prices are subject to a non-linear pricing scheme (e.g., bundled discount not reflected in the stated sum)."
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 1.0
+    },
+    {
+      "claim": "The pen costs $2.50.",
+      "mechanism": "A naive reading assumes the $10 difference is taken from the total $12.50 directly, leaving $2.50 for the pen. This is the classic intuitive trap where one fails to subtract the $10 difference from both items symmetrically.",
+      "counterconditions": [
+        "The problem is solved correctly using algebraic substitution, which yields a different result.",
+        "The $10 is correctly recognized as the price difference, not the notebook's total price."
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "The problem is unsolvable as stated because the causal mechanism for price determination is missing.",
+      "mechanism": "The mathematical framing imposes an abstract algebraic relation, but without an empirical or causal account of how these specific prices came to be, the solution is a formal exercise disconnected from any real-world price determination. Hence, the price cannot be definitively stated.",
+      "counterconditions": [
+        "The problem is accepted as a formal algebraic puzzle rather than an empirical claim about a real market transaction.",
+        "A concrete pricing model is provided that validates the linear equations."
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.2
+    }
+  ]
+}

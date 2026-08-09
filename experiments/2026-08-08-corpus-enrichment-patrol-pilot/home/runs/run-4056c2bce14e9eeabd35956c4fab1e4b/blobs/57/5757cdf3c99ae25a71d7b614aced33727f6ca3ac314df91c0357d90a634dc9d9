@@ -1,0 +1,14 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem is a standard arithmetic word problem asking for the price of the pen given two constraints. The target's claim that the problem is 'unsolvable as stated because the causal mechanism for price determination is missing' is false. The two constraints given — (1) the notebook and pen together cost $12.50, and (2) the notebook costs $10 more than the pen — are sufficient to determine a unique solution algebraically. By substituting N = P + 10 into N + P = 12.50, one obtains 2P + 10 = 12.50, yielding P = $1.25. No causal or real-world pricing model is required to solve the problem as stated. The target conflates a self-contained algebra puzzle with an econometric question about price formation, and its own counterconditions concede that the equations are sufficient. Therefore the conclusion that the problem is unsolvable contradicts the mathematical sufficiency the target itself acknowledges.",
+      "counterexample": [
+        "Let P be the price of the pen and N be the price of the notebook. Given N + P = 12.50 and N = P + 10. Substituting: (P + 10) + P = 12.50 → 2P = 2.50 → P = 1.25. The pen costs $1.25, demonstrating the problem is solvable without any causal pricing model."
+      ]
+    }
+  ]
+}
+```

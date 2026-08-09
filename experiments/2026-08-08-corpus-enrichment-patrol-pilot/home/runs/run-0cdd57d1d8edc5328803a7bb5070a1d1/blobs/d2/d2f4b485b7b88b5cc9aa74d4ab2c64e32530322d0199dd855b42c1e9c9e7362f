@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-17f006091d6deeb318c5448f91949f54) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f839124ec7fd6e983a721377: program:reasoning_observation_pending
+- reason-counter@b462bba2bc6bc7ac13eabbec: program:reasoning_observation_pending
+- reason-counter@306310f6ba728e1660c53be5: program:reasoning_observation_pending
+- reason-counter@b093dd521dfafa2b6e794dd0: program:reasoning_observation_pending
+- reason-counter@f866371a3ebbb2de0ff28228: program:reasoning_observation_pending
+- reason-counter@d5e6944cec54461007c6ef94: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Total pay is $855, verified via the premium-only decomposition: base wage for all 47 hours plus the 0.5\u00d7 premium for 7 overtime hours.","counterconditions":[{"case":"The premium-only decomposition yields the same total as the standard method (it does not here, indicating an error in that approach).","checker_spec":null,"eval":"observation"},{"case":"The base rate or overtime multiplier differs from stated values.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Base-for-all: 47 \u00d7 $18 = $846. Overtime premium: 7 \u00d7 ($18 \u00d7 0.5) = 7 \u00d7 $9 = $63. Total: $846 + $63 = $909. WAIT \u2014 this yields $909, not $855, exposing a fallacy. The correct premium-only decomposition is 40 \u00d7 $18 + 7 \u00d7 $18 + 7 \u00d7 $9 = 720 + 126 + 63 = 909 \u2014 which still overcounts. The standard method alone gives $855: 40 \u00d7 $18 + 7 \u00d7 $27 = $855.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f839124ec7fd6e983a721377, reason-counter@b462bba2bc6bc7ac13eabbec
+
+TARGET SRC_002
+{"analogy":null,"claim":"Total pay is $846, paying all hours at the base rate and ignoring the overtime multiplier.","counterconditions":[{"case":"This ignores the explicit overtime provision in the problem statement.","checker_spec":null,"eval":"observation"},{"case":"If any hours above 40 must be paid at 1.5\u00d7, this answer is wrong.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"47 hours \u00d7 $18/hour = $846. No overtime premium applied.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@306310f6ba728e1660c53be5, reason-counter@b093dd521dfafa2b6e794dd0
+
+TARGET SRC_003
+{"analogy":null,"claim":"Total pay is $837, paying the first 40 hours at base rate and the overtime hours at 1.25\u00d7 the base rate.","counterconditions":[{"case":"The overtime multiplier is 1.5\u00d7, not 1.25\u00d7 as assumed.","checker_spec":null,"eval":"observation"},{"case":"The hour count is 47, not a different figure.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Regular pay: 40 \u00d7 $18 = $720. Overtime rate: 1.25 \u00d7 $18 = $22.50. Overtime pay: 7 \u00d7 $22.50 = $157.50. Total: $720 + $157.50 = $877.50 \u2014 corrected: using 1.25\u00d7 yields $877.50, not $837; $837 would require a different rate or hour count.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f866371a3ebbb2de0ff28228, reason-counter@d5e6944cec54461007c6ef94
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

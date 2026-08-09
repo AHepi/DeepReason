@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@acab25bbea159f108793ba21: program:reasoning_observation_pending
+- reason-counter@53c350060cb65414720ac7e1: program:reasoning_observation_pending
+- reason-counter@5dc7d81d3b31c62973357fb0: program:reasoning_observation_pending
+- reason-counter@6743ea87fb9fccb549355311: program:reasoning_observation_pending
+- reason-counter@a2060f8b03ef30009f9a25f1: program:reasoning_observation_pending
+- reason-counter@21b9dbadc4b8b3f152c25b4c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12.","counterconditions":[{"case":"If the percentage is incorrectly converted to a decimal (e.g., 1.5 instead of 0.15).","checker_spec":null,"eval":"observation"},{"case":"If the multiplication 0.15 * 80 is computed incorrectly due to a place value error.","checker_spec":null,"eval":"observation"},{"case":"If the percentage is erroneously treated as an absolute addition (e.g., 80 + 15).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"15% is 0.15 in decimal form. Multiplying 0.15 by 80 yields 12. Alternatively, 15/100 * 80 = 1200/100 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@acab25bbea159f108793ba21, reason-counter@53c350060cb65414720ac7e1, reason-counter@5dc7d81d3b31c62973357fb0
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, by transposing the operands and computing 80% of 15.","counterconditions":[{"case":"If the commutative property is misapplied to division (e.g., 80 / (15/100) yielding 533.3).","checker_spec":null,"eval":"observation"},{"case":"If the operands are transposed but the percentage operator is not adjusted (e.g., computing 80 + 15 instead of 80% of 15).","checker_spec":null,"eval":"observation"},{"case":"If the decimal representation of 80% is misidentified (e.g., 0.08).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The expression x * y / 100 is commutative, so 15 * 80 / 100 is equivalent to 80 * 15 / 100. 80% of 15 is 0.8 * 15 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6743ea87fb9fccb549355311, reason-counter@a2060f8b03ef30009f9a25f1, reason-counter@21b9dbadc4b8b3f152c25b4c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

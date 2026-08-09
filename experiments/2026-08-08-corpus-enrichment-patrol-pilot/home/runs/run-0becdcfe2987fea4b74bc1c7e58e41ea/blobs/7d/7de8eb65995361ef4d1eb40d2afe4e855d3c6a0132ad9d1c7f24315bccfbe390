@@ -1,0 +1,10 @@
+```json
+{
+  "patch": [
+    {
+      "op": "remove",
+      "path": "/$defs"
+    }
+  ]
+}
+```

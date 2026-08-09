@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@15e4d4ee2c5facd23399b4e7: program:reasoning_observation_pending
+- reason-counter@c4e207f64d37e34ca1a431fa: program:reasoning_observation_pending
+- reason-counter@ead38325a7b730c8688730c2: program:reasoning_observation_pending
+- reason-counter@52d15d309e4d6ecdf983223a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The problem is underdetermined because the cost-determination mechanism is unspecified.","counterconditions":[{"case":"If the problem is recognized as a standard algebraic word problem with scalar unknowns, it is fully determined.","checker_spec":null,"eval":"observation"},{"case":"If 'costs $10 more' is a fixed additive constraint in the same units, the system has a unique solution.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The algebraic solution assumes prices are exogenously fixed scalars satisfying two linear equations. But without a causal model of how prices are set (market equilibrium, cost-plus markup, auction, bargaining), the equations are descriptive constraints, not an explanation. A different pricing mechanism could produce prices that satisfy the word problem's constraints yet differ from the naive algebraic solution if, e.g., 'costs $10 more' is interpreted dynamically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@15e4d4ee2c5facd23399b4e7, reason-counter@c4e207f64d37e34ca1a431fa
+
+TARGET SRC_002
+{"analogy":null,"claim":"If the $12.50 total includes sales tax and the $10 difference is pre-tax, the pen's sticker price may differ from $1.25.","counterconditions":[{"case":"If the $12.50 is a pre-tax total (the standard reading in math problems), p = $1.25 exactly.","checker_spec":null,"eval":"observation"},{"case":"If no tax is implied, this candidate is vacuous.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Suppose pre-tax prices satisfy n - p = 10 and (n + p)(1 + t) = 12.50 for some tax rate t. Then the pre-tax total is 12.50/(1+t), and p = (12.50/(1+t) - 10)/2. For t = 0, p = 1.25. For t > 0, p changes. This conjecture explores whether 'costs $12.50 together' is post-tax.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ead38325a7b730c8688730c2, reason-counter@52d15d309e4d6ecdf983223a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

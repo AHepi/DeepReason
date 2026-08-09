@@ -1,0 +1,42 @@
+```json
+{
+  "candidate": {
+    "claim": "second",
+    "mechanism": "When you overtake the runner in second place, you take their position (slot replacement). The former second-place runner is pushed back to third, and you now occupy the second position behind the leader.",
+    "counterconditions": [
+      "The race uses relative framing where 'overtake the runner in second place' means to pass the runner currently in first place who was previously second",
+      "The race is a time-trial where 'second place' refers to the runner with the second-best recorded time, and overtaking their time puts you in first",
+      "The problem uses non-standard ordinal semantics where 'second place' means second from the back of the field"
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_001", "SRC_005", "SRC_008"],
+      "shared_structure": [
+        "A finite ordered sequence of positions ranked from first to last",
+        "An actor advances by overtaking an occupant at position N, thereby inheriting position N",
+        "The overtaken occupant is displaced exactly one rank backward"
+      ],
+      "disanalogies": [
+        "Unlike a queue where overtaking the second person might place you at the front, in a race the leader remains ahead unless separately overtaken",
+        "The riddle exploits the temptation to answer 'first' by conflating 'overtaking second place' with 'overtaking for the lead'"
+      ],
+      "transfer_claims": [
+        "In any positional ranking system, displacing the occupant of rank N yields rank N for the actor, not rank N-1",
+        "The structural operation is slot replacement: you inherit the exact ordinal of the person you pass"
+      ],
+      "overturn_conditions": [
+        "If the race format is a time-trial where 'second place' is a time benchmark rather than a positional rank",
+        "If the problem's framing uses 'second place' to mean the runner one position ahead of you in relative terms",
+        "If overtaking is defined as lapping (passing by a full lap), which would not change your ordinal position"
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+      "search_signal": "productive"
+    },
+    "checker_specs": [],
+    "typicality": 0.92
+  }
+}
+```

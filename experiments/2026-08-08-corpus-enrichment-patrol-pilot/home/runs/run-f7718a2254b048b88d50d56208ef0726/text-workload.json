@@ -1,0 +1,1 @@
+{"allow_formalization":true,"allow_rubric":true,"allow_simulation":true,"brain":{"enabled":false,"query":null},"criteria":[],"problem":{"description":"A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?","id":"question-f0bc16794e45a705e44a1ce3285b9b1f"},"schema":"deepreason-text-workload-v1","sources":[]}

@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6ec8b1770d833912152a73dd: program:reasoning_observation_pending
+- reason-counter@5e401d4ef737e76af3c9b74d: program:reasoning_observation_pending
+- reason-counter@c7a599be89e5b6ef851fe703: program:reasoning_observation_pending
+- reason-counter@14a444cbc0d6de00ef1b4821: program:reasoning_observation_pending
+- reason-counter@9a2d67d6e8969b90346806f6: program:reasoning_observation_pending
+- reason-counter@606a628917640b2ee81da193: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"There are 504 three-digit numbers with all distinct digits.","counterconditions":[{"case":"This is falsified if the standard definition of three-digit numbers is used, where tens and units can be 0.","checker_spec":null,"eval":"observation"},{"case":"This fails if empirically tested against the range 100-999 by brute force.","checker_spec":null,"eval":"observation"},{"case":"The count is incorrect if any valid number containing a 0 (e.g., 102, 390) is observed.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If zero is entirely excluded from the problem's universe (perhaps interpreting three-digit numbers as consisting only of the digits 1-9), the choices are: hundreds (9), tens (8 remaining), units (7 remaining). The total is 9 \u00d7 8 \u00d7 7 = 504.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6ec8b1770d833912152a73dd, reason-counter@5e401d4ef737e76af3c9b74d, reason-counter@c7a599be89e5b6ef851fe703
+
+TARGET SRC_002
+{"analogy":null,"claim":"There are 648 valid three-digit numbers with all distinct digits, derived by removing the 288 numbers with at least one repeated digit from the 900 total.","counterconditions":[{"case":"If the complement count 288 is asserted without correcting for over-subtraction of AAA forms, the math is inconsistent.","checker_spec":null,"eval":"observation"},{"case":"If the inclusion-exclusion correction is misapplied (e.g., adding back 9 instead of 18), the result diverges from 648.","checker_spec":null,"eval":"observation"},{"case":"If the alphabet for the complement calculation does not restrict the hundreds digit to 1-9, the categories AAB, ABA, BAA will have incorrect sizes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Start with 900 total three-digit numbers. Count the complement: numbers with at least one repeated digit. These have the form AAB (81: 9 hundreds \u00d7 1 match \u00d7 9 free), ABA (81), or BAA (72: 9 hundreds \u00d7 8 non-matching tens \u00d7 1 match). Sum = 81 + 81 + 72 = 234. However, AAA (9) is subtracted three times in this sum, so add back 2 \u00d7 9 = 18. Total repeats = 234 + 18 = 252. Valid numbers = 900 - 252 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@14a444cbc0d6de00ef1b4821, reason-counter@9a2d67d6e8969b90346806f6, reason-counter@606a628917640b2ee81da193
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

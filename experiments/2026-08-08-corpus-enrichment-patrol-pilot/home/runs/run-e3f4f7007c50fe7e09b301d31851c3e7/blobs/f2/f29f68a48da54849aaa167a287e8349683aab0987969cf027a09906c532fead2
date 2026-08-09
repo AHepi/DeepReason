@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "claim": "21 pencils cost $6 because the covering principle for uniform unit rates applies: 21 is a multiple of 7, so the bundle price scales by the factor 21/7 = 3, yielding 3 × $2 = $6.",
+    "mechanism": "The stated price '7 for $2' establishes a uniform unit rate of $2/7 per pencil. When the target quantity (21) is an exact integer multiple of the bundle size (7), the covering principle directly applies: the cost is (21/7) × $2 = 3 × $2 = $6. No pro-ration or fractional-bundle assumption is required, so the discrete-bundle and continuous-unit-rate models converge exactly.",
+    "counterconditions": [
+      "If the store's pricing is strictly limited to one bundle per customer, the cost of 21 pencils is not determined by the given information.",
+      "If the store imposes a non-linear bulk discount or surcharge for quantities other than exactly 7, the $6 result may not hold.",
+      "If the '7 for $2' price is a limited-time or conditional promotion not applicable to a 21-pencil purchase, the $6 result is not entailed.",
+      "If the store refuses to sell 21 pencils at all (e.g., inventory limit), the question is unanswerable under the given data."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_006"
+      ]
+    }
+  }
+}

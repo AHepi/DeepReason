@@ -1,0 +1,11 @@
+{
+  "repair.patch.v1": {
+    "pointer": "/0/content",
+    "operation": "replace",
+    "value": "The isolated 648-count reduces to a projection of a uniform de Bruijn-sequence construction: any maximal cyclic arrangement of 10 symbols admits exactly 720 length-3 windows, of which 648 have pairwise distinct elements; refuted if the underlying de Bruijn B(10,3) sequence is shown to have non-uniform 3-window distribution or if the projection from cyclic to linear fails to yield 648 by losing the zero-exclusion constraint on the leading symbol.",
+    "basis": {
+      "diagnostic_code": "extra_forbidden",
+      "diagnostic_path": "/0/content"
+    }
+  }
+}

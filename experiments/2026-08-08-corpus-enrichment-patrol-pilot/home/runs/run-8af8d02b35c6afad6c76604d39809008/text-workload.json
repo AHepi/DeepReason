@@ -1,0 +1,1 @@
+{"allow_formalization":true,"allow_rubric":true,"allow_simulation":true,"brain":{"enabled":false,"query":null},"criteria":[],"problem":{"description":"In a race, you overtake the runner in second place. What place are you now in? Answer with a single word or number.","id":"question-2f9eac6de35390886b837a79ed2d9548"},"schema":"deepreason-text-workload-v1","sources":[]}

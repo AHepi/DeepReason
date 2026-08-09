@@ -1,0 +1,44 @@
+```json
+{
+  "candidate": {
+    "claim": "There are exactly 648 three-digit numbers (100–999) whose three digits are pairwise distinct.",
+    "mechanism": "Count by positions. The hundreds digit cannot be zero: 9 choices (1–9). The tens digit can be anything except the hundreds digit: 9 choices. The units digit can be anything except the two already used: 8 choices. Total = 9 × 9 × 8 = 648. This correctly allows zero in tens/units, which the rival 9×8×7=504 erroneously excludes.",
+    "counterconditions": [
+      "If the problem required all digits nonzero, the count would be 9×8×7=504, contradicting 648.",
+      "If zero were allowed as a hundreds digit, the universe would expand to 1000, not 900, and the positional product would differ.",
+      "If any neighbourhood artifact claiming 612 or 504 can produce a valid positional rule consistent with 'three-digit numbers with pairwise distinct digits,' it overturns 648."
+    ],
+    "evidence_refs": [
+      {
+        "block": "8929789f0ae19d5b",
+        "quote": null
+      },
+      {
+        "block": "f8b296b24a6e2464e",
+        "quote": "The target explicitly answers 612 for the problem"
+      },
+      {
+        "block": "abb5a382492ca8db",
+        "quote": null
+      },
+      {
+        "block": "bcfbcf393cf54f6a",
+        "quote": null
+      },
+      {
+        "block": "bbde1c958e2d1dfa",
+        "quote": null
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.95
+  }
+}
+```

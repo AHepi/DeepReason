@@ -1,0 +1,46 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+PROBLEM CONTEXT (conn:0d3303c07350) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0d3303c07350 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@85f6323aa8cd: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@465f70c806aeefaeffc34dc9: program:reasoning_observation_pending
+- reason-counter@9051f1f178586bb609a2c457: program:reasoning_observation_pending
+- reason-counter@21948208bb1cdd0eb2c6863c: program:reasoning_observation_pending
+- reason-counter@ebcdd39592b743b0357d9908: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_002 and SRC_005 are compatible with SRC_004's demand for a causal mechanism if the algebraic substitution itself is abstracted as a causal mechanism: the constraint N+P=12.50 represents the transaction total (a market-clearing condition), and N=P+10 represents a structural price-determination rule (e.g., cost-plus premium). Under this abstraction, SRC_002's derivation integrates with a mechanistic frame by treating the equations as encoding a supply-side pricing rule. This is refuted if algebraic constraints are definitionally incapable of constituting causal mechanisms, or if the school stance requires an empirically grounded pricing model rather than a structural one.
+commitments: hv-floor@2a45b7988522, lineage-ref@85f6323aa8cd, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_006 and SRC_007 share a mechanism of comparative-directionality failure but differ in error type: SRC_006 mis-segments the sentence (dropping 'more than the pen' and treating $10 as the notebook's absolute price), while SRC_007 inverts the comparative (assigning the premium to the pen instead of the notebook). SRC_006 depends on a truncation error, SRC_007 on a directional inversion. This is refuted if both error types collapse to the same misparse, or if either artifact's mechanism is shown to produce a different algebraic structure.
+commitments: hv-floor@2a45b7988522, lineage-ref@85f6323aa8cd, relation-form@578e42df713e
+
+TARGET SRC_003
+{"analogy":null,"claim":"The pen costs $1.25.","counterconditions":[{"case":"If '$10 more than' does not designate simple addition but a multiplicative factor, this result is invalid.","checker_spec":null,"eval":"observation"},{"case":"If the prices are subject to tax or discount not mentioned in the problem text, the base price calculation changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let p be the price of the pen and n be the price of the notebook. The problem gives two linear equations: n + p = 12.50 and n = p + 10. Substituting the second into the first yields (p + 10) + p = 12.50, which simplifies to 2p + 10 = 12.50. Subtracting 10 from both sides gives 2p = 2.50. Dividing by 2 gives p = 1.25. The notebook therefore costs $11.25, and the sum is $12.50.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@465f70c806aeefaeffc34dc9, reason-counter@9051f1f178586bb609a2c457
+
+TARGET SRC_004
+{"analogy":null,"claim":"The pen costs $11.25 and the notebook costs $1.25.","counterconditions":[{"case":"If the solver tracks the variable identity 'n = p + 10' strictly through the calculation.","checker_spec":null,"eval":"observation"},{"case":"If the solver verifies the sum and difference conditions at the end.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The equations are set up correctly: n + p = 12.50 and n = p + 10. However, during the substitution phase, the variable assignment is swapped. The solver assigns the $10 premium to the pen instead of the notebook, or misidentifies the result of (12.50 - 10) / 2 = 1.25 as the notebook's price. Since the notebook is known to be the expensive item, they conclude the notebook is $1.25, leaving the pen as the remainder $11.25.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@21948208bb1cdd0eb2c6863c, reason-counter@ebcdd39592b743b0357d9908
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 demands a causal mechanism yet provides none. Its 'mechanism' is a sociological framing ('the candidate frames the problem as a test of identifying the hidden axiom') rather than a derivation linking the premise '7 for $2' to the output '$6'. The $6 figure is asserted in the claim but never traced through any quantitative step (e.g., 21÷7×2); instead the target explicitly redirects attention to meta-mathematical commentary about what skill is being tested, leaving the actual causal chain from inputs to answer unspecified and unsupported.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}

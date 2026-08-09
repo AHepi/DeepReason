@@ -1,0 +1,28 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7283cb1ccd7647918cfe9c40: program:reasoning_observation_pending
+- reason-counter@ce5231305c355f651194b091: program:reasoning_observation_pending
+- reason-counter@f94b1bf4fb6c7b894076a935: program:reasoning_observation_pending
+- reason-counter@4e2a4bd878784a5ccbdd1a04: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pizza is divided into exactly 8 pieces because each of the 4 concurrent central cuts generates two new boundary rays, and every new boundary ray splits exactly one existing sector, yielding 2N pieces.","counterconditions":[{"case":"A cut is strictly tangent to the center rather than passing through it as a diameter.","checker_spec":null,"eval":"observation"},{"case":"A cut is exactly coincident with a previous cut.","checker_spec":null,"eval":"observation"},{"case":"The pizza is not modeled as a convex disk.","checker_spec":null,"eval":"observation"},{"case":"Cuts are permitted to stop or start at the center rather than passing completely through the disk.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Represent the cuts as N distinct diameters incident at a single point. They form 2N rays partitioning the plane into 2N angular sectors. By induction: with 0 cuts, the disk is 1 piece; adding a new diameter across the center creates two boundary rays. Each of these rays traverses an existing sector and bisects it, incrementing the piece count by 2 (one per ray). Thus, the total number of pieces is 1 + 2*4 = 9, subtracting 1 to count the pieces strictly inside the pizza: 8 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7283cb1ccd7647918cfe9c40, reason-counter@ce5231305c355f651194b091, reason-counter@f94b1bf4fb6c7b894076a935, reason-counter@4e2a4bd878784a5ccbdd1a04
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

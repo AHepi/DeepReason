@@ -1,0 +1,57 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The pen costs $1.25.",
+      "mechanism": "Let P be the price of the pen and N be the price of the notebook. The problem gives a system of two equations: 1) P + N = 12.50. 2) N = P + 10.00. Substituting the second equation into the first: P + (P + 10.00) = 12.50. Combining like terms yields 2P + 10.00 = 12.50. Subtracting 10.00 from both sides gives 2P = 2.50. Dividing by 2 yields P = 1.25. This mechanism satisfies the mechanistic school stance by explicitly demonstrating the algebraic substitution and arithmetic causal steps that transform the given constraints into the result.",
+      "counterconditions": [
+        "The phrase 'costs $10 more than' is interpreted as a multiplicative relation (e.g., N = 10 * P).",
+        "The currency unit is not additive (e.g., psychological pricing or bulk discounts apply).",
+        "The problem is in a different currency where '12.50' and '$10' are not commensurate."
+      ],
+      "typicality": 1.0,
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "The pen costs $2.50.",
+      "mechanism": "The sum of the prices is $12.50. The notebook costs $10 more than the pen. The difference between the two prices is $10.00. The correct procedure to extract the base value from a sum and a difference is to subtract the difference from the sum, then divide by 2: P = (12.50 - 10.00) / 2. However, the incorrect intuitive shortcut is to subtract the difference from the sum directly without dividing by 2: P = 12.50 - 10.00 = 2.50. This yields $2.50 for the pen, but it ignores the constraint that the notebook must then be $12.50 - $2.50 = $10.00, which fails the '$10 more' test.",
+      "counterconditions": [
+        "The reader correctly identifies that the difference must be subtracted from the sum and the result divided by 2, yielding $1.25.",
+        "The algebraic constraint N = P + 10 is rigorously checked."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_003", "SRC_007"]
+    },
+    {
+      "claim": "The problem is unsolvable as stated because the causal mechanism for price determination is missing.",
+      "mechanism": "In alignment with a strict mechanistic school stance, the problem describes a static relationship between two prices but provides no causal mechanism for how those prices were generated. While one can infer P=1.25 via algebraic substitution, that is a descriptive constraint satisfaction, not a causal explanation of the price values. Without a generative model (e.g., cost-plus pricing, market equilibrium, or an exogenous pricing oracle), the prices cannot be causally derived, only mathematically deduced.",
+      "counterconditions": [
+        "The school stance is relaxed to accept logical-algebraic deduction as a sufficient mechanism.",
+        "The problem context implies a standard algebraic word problem where logical deduction is the expected mechanism."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "The pen costs $0.",
+      "mechanism": "Assume the phrase 'The notebook costs $10 more than the pen' is misread to mean the notebook itself costs exactly $10, and the pen contributes the remaining balance of $12.50 - $10.00 = $2.50. A further error might conflate the notebook's cost with the total, or simply assign a null/zero value to the unmentioned object in a fragmented parsing: 'The notebook costs $10. More than the pen, what is the price of the pen in dollars?' -> The pen is not priced, so $0.",
+      "counterconditions": [
+        "The problem is read correctly, requiring both sum and difference constraints to be satisfied simultaneously.",
+        "Basic algebra is applied correctly, yielding $1.25."
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_005", "SRC_008"]
+    },
+    {
+      "claim": "The pen costs approximately $1.136.",
+      "mechanism": "Let P be the price of the pen and N be the price of the notebook. Sum constraint: P + N = 12.50. Difference constraint: N = 10 * P (assuming 'costs $10 more than' is a misphrasing for 'costs 10 times as much', treating the dollar sign as a typo or unit-agnostic scalar). Substituting: P + 10P = 12.50 -> 11P = 12.50 -> P = 12.50 / 11 ≈ 1.13636...",
+      "counterconditions": [
+        "The phrase '$10 more than' is correctly interpreted as additive (N = P + 10), which is standard for units of currency.",
+        "The problem text is taken literally with the dollar sign indicating a monetary value, not a scalar."
+      ],
+      "typicality": 0.05,
+      "optional_refs": []
+    }
+  ]
+}
+```

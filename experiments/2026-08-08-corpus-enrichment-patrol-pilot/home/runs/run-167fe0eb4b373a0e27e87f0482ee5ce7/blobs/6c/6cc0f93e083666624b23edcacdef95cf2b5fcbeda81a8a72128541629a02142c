@@ -1,0 +1,59 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated count depends on the complement principle established in SRC_002, reducing to it by abstracting the set of distinct-digit numbers as the set difference between the universe of 900 three-digit numbers and the complement of repeated-digit numbers. This dependence is refuted if the repeated-digit complement can be computed without double-counting corrections, obviating the need for subtraction from the total.",
+      "typicality": 0.1,
+      "neighbours": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_001"
+      ]
+    },
+    {
+      "content": "The positional derivation in SRC_005 shares mechanism with SRC_004, as both resolve the combinatorial space by splitting on the inclusion of zero to handle the asymmetry of the hundreds digit. This shared mechanism is refuted if the zero-inclusion case yields a count other than 144, breaking the 144+504 partition into 648.",
+      "typicality": 0.3,
+      "neighbours": [
+        "SRC_005",
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "SRC_001 contradicts SRC_003 by computing the repeated-digit complement through direct enumeration of positional isomorphism classes (AAB, ABA, BAA) with an add-back correction, rather than symmetric inclusion-exclusion. This contradiction is refuted if the 234 sum from AAB/ABA/BAA does not require an 18-point AAA correction to reach 252, rendering both methods equivalent in mechanism rather than distinct.",
+      "typicality": 0.25,
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "SRC_002 abstracts SRC_005 by replacing the sequential positional constraint (9 choices for hundreds, 9 for tens, 8 for units) with the universal set-theoretic principle of complement subtraction. This abstraction is refuted if the positional product 9*9*8 does not evaluate to the set-theoretic difference 900-252, proving the abstraction fails to capture the same combinatorial object.",
+      "typicality": 0.2,
+      "neighbours": [
+        "SRC_002",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "SRC_004 integrates with SRC_001 to form a complete proof: SRC_004 provides the direct construction (144+504=648), while SRC_001 provides the falsifying countercondition logic by independently verifying that the complement (252) subtracts cleanly from 900. This integration is refuted if the two derivations do not intersect on the exact value of the zero-present sub-count, which both compute as 144 via different partitions.",
+      "typicality": 0.4,
+      "neighbours": [
+        "SRC_004",
+        "SRC_001",
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "The convergence of all derivations on 648 depends on a shared mechanism: the correct handling of the zero-digit asymmetry, where zero is excluded from the hundreds place but permitted elsewhere. This shared mechanism is refuted if any derivation yields 648 while incorrectly allowing zero in the hundreds place, as the count would then exceed 648 by 72, proving the derivations do not share a common combinatorial constraint.",
+      "typicality": 0.05,
+      "neighbours": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003",
+        "SRC_004",
+        "SRC_005"
+      ]
+    }
+  ]
+}
+```

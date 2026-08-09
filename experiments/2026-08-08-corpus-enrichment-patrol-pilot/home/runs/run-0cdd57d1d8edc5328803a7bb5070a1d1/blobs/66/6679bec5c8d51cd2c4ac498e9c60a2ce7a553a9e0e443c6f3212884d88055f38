@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 mislabels the relation as a 'shared mechanism' when it actually describes a contradiction/difference in calculation forms. By its own admission, $909 'abstracts into' a base-for-all-plus-premium-only form while $855 'uses the standard replacement form' — these are structurally incompatible representations of the overtime computation, differing in 'whether the overtime rate replaces or supplements the base rate.' A relation that identifies two artifacts as diverging in their core representational logic is a contradiction, not a shared mechanism. The target's 'REFUTED IF' reinforces the mislabeling: it only tests whether the premium is shared, ignoring the real substantive relation it surfaced — that the two forms are incompatible abstractions of the same rule.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 asserts a 'dependence' relation but fails to name what kind of dependence it is. The problem requires proposing a SUBSTANTIVE relation 'naming its kind' — the target says 'DEPENDS ON the causal mechanism' then immediately recharacterizes it as 'abstracts ... into a two-component additive model,' which is an abstraction relation, not a dependence. The artifact oscillates between two relation kinds without committing to one, leaving the substantive relation ambiguous. Furthermore, 'causally unrelated' in the refutation clause is undefined: mathematical equivalence of two arithmetic decompositions is not a causal dependence in any standard sense — $909 as a number does not 'depend on' the piecewise method; it can be derived independently. The relation is one of reduction/equivalence, not dependence.",
+      "counterexample": null
+    }
+  ]
+}
+```

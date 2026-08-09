@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "The book has 300 pages because pages 1-9 use 9 digits and pages 10-99 use 180 digits, leaving 603 digits for 3-digit pages, yielding exactly 201 such pages (99+201=300).",
+    "mechanism": "Partition page numbers by digit-length: single-digit pages (1-9) consume 9×1=9 digits, double-digit pages (10-99) consume 90×2=180 digits, totaling 189 digits. Subtracting from 792 leaves 603 digits for 3-digit pages (100+), so 603÷3=201 pages. 99+201=300.",
+    "counterconditions": [
+      "If front matter or unnumbered pages were included in the 792-digit count, the total would differ.",
+      "If pages were physical leaves (each with two numbered sides), the count of leaves would be 150 instead of 300.",
+      "If the problem meant 'distinct digits appearing' rather than total digit characters used, the answer would be different."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

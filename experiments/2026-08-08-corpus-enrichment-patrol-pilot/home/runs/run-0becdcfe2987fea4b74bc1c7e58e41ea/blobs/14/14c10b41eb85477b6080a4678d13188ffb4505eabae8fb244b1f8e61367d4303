@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7edb46af76f3cff219b30771: program:reasoning_observation_pending
+- reason-counter@6da72bfbf6969b8d150dea2e: program:reasoning_observation_pending
+- reason-counter@456f539381e079e0789c6810: program:reasoning_observation_pending
+- reason-counter@739e2f5c50329b882b0fdd96: program:reasoning_observation_pending
+- reason-counter@d39c79b1dc9c20fe0820f8a5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The number of pieces produced by 4 straight cuts through the exact center is exactly 8.","counterconditions":[{"case":"The problem standard is relaxed to allow straight cuts that do not pass through the exact center, enabling general position arrangements that yield up to 11 pieces.","checker_spec":null,"eval":"observation"},{"case":"A cut is allowed to coincide with a previous cut, adding 0 pieces instead of 2.","checker_spec":null,"eval":"observation"},{"case":"The pizza is not a convex disk, invalidating the assumption that a line through the center intersects the boundary in exactly two points.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Under the standard mathematical idealization of zero-width lines, all 4 cuts pass through a single common point (the center). This concurrency means the k-th cut intersects the previous k-1 lines at exactly the same point. Thus, the k-th cut traverses only 2 existing regions (one on each side of the center), splitting them and adding exactly 2 new pieces. The total is 1 + 4*2 = 8.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7edb46af76f3cff219b30771, reason-counter@6da72bfbf6969b8d150dea2e, reason-counter@456f539381e079e0789c6810
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Wedge partitions typically assume radial symmetry; a pizza may be oval or irregular.","Angles between cuts are not necessarily equal."],"overturn_conditions":["The cuts are allowed to stop before reaching the center.","The center point is not well-defined."],"shared_structure":["A central point of origin","Linear boundaries extending from the origin to the boundary","Division of a bounded space into angular sectors"],"source_memory_refs":["SRC_008"],"transfer_claims":["The formula for the number of sectors in a circle (2n) maps exactly to the number of pieces in a pizza cut by n concurrent lines."]},"claim":"The number of pieces produced is 8, derived from the isomorphism between concurrent cuts through a center and the formation of a 2n-wedge partition.","counterconditions":[{"case":"The 'cuts' are not constrained to be straight lines.","checker_spec":null,"eval":"observation"},{"case":"The pizza's shape is non-circular, meaning a line through the center does not form a perfect diameter and may not divide the shape into exactly two symmetric regions.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A straight cut through the center of a convex disk corresponds to a diameter. n concurrent diameters divide the disk into 2n sectors (wedges). For n = 4 cuts, this yields exactly 2(4) = 8 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@739e2f5c50329b882b0fdd96, reason-counter@d39c79b1dc9c20fe0820f8a5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

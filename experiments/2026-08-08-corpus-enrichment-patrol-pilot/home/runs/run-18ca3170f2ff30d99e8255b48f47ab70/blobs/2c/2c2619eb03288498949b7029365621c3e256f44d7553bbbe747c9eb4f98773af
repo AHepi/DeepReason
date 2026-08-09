@@ -1,0 +1,118 @@
+{
+  "candidates": [
+    {
+      "claim": "The largest integer is 48, found by locating the arithmetic mean (46) and incrementing by the common step.",
+      "mechanism": "Let the three consecutive even integers be n-2, n, n+2. Their sum is 3n=138, so n=46. The sequence is 44, 46, 48, and the largest is 48.",
+      "counterconditions": [
+        "If the integers were not required to be even, they could be 45, 46, 47 and the largest would be 47.",
+        "If the word 'consecutive' meant a step other than 2, the result would differ."
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.95
+    },
+    {
+      "claim": "The largest integer is 48, determined by inferring the even offset class from the target sum.",
+      "mechanism": "Since 138/3 = 46 is even, the sought triple is centered on an even number. Thus the numbers are 44, 46, 48, and the largest is 48.",
+      "counterconditions": [
+        "If 138 were not divisible by 3, no three evenly spaced integers could sum to 138.",
+        "If a non-even triple were allowed, the largest would differ."
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_005",
+        "SRC_006",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.82
+    },
+    {
+      "claim": "The largest integer is 48, reached by inverting the arithmetic mean.",
+      "mechanism": "The mean of three consecutive even integers equals the middle one. The mean is 138/3 = 46, so the sequence is 44, 46, 48; the largest is 48.",
+      "counterconditions": [
+        "If the three numbers did not have the same spacing, the mean would not equal the middle term.",
+        "If the problem allowed a different parity, the offset class would change."
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.78
+    },
+    {
+      "claim": "The largest even integer is 48, confirmed by exhaustive parity search.",
+      "mechanism": "Search candidates x such that x is even and x + (x-2) + (x-4) = 138. Solving gives 3x-6=138, so x=48. The numbers are 44, 46, 48.",
+      "counterconditions": [
+        "If the problem allowed for non-integer solutions, the parity search would fail.",
+        "If the search window were bounded below 48, it would miss the solution."
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_005",
+        "SRC_006",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "The largest integer is 48, reached by forming the midpoint and stepping forward by the even-integer stride.",
+      "mechanism": "For an arithmetic progression with common difference d=2, the middle term is S/3 = 46. The largest term is 46 + 2 = 48.",
+      "counterconditions": [
+        "If the common difference were not 2, the largest term would not be 48.",
+        "If S were not divisible by 3, no such centered progression would exist."
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_005",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "The largest integer is 48, established only after rejecting a non-even counterexample.",
+      "mechanism": "Counterexample first: 45, 46, 47 are consecutive and sum to 138, but they are not even. The even triple must therefore be 44, 46, 48, so the largest is 48.",
+      "counterconditions": [
+        "If the problem's constraint 'even' were removed, 47 would be a rival answer and 48 would not be uniquely determined.",
+        "If multiple parities were allowed, no unique largest could be inferred."
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.45
+    }
+  ]
+}

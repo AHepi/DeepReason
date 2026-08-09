@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "The pen costs $1.25, derived by substituting N = P + 10 into N + P = 12.50, yielding 2P + 10 = 12.50 and P = 1.25.",
+    "mechanism": "Let P be the price of the pen and N be the price of the notebook. The problem states two constraints: (1) N + P = 12.50 and (2) N = P + 10. Substituting the second equation into the first yields (P + 10) + P = 12.50, which simplifies to 2P + 10 = 12.50, 2P = 2.50, and P = 1.25. This follows the covering principle of solving a system of two linear equations with two unknowns.",
+    "counterconditions": [
+      "If 'costs $10 more than' were interpreted as a multiplicative relationship (e.g., N = 10 * P), then P would be approximately $1.136.",
+      "If the total cost were different, the price of the pen would change accordingly.",
+      "If 'costs $10 more' were interpreted as applying to the pen rather than the notebook (i.e., P = N + 10), no non-negative solution would exist."
+    ],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 1.0
+  }
+}
+```

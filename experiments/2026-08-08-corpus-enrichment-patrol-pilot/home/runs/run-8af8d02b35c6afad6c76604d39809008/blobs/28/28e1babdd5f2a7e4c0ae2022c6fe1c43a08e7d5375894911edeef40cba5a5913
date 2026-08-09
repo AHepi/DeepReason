@@ -1,0 +1,57 @@
+{
+  "candidates": [
+    {
+      "claim": "second",
+      "mechanism": "Overtaking the runner in second place means you take their position, and they are pushed back to third. You do not overtake the first-place runner, so you remain in second place.",
+      "counterconditions": [
+        "The race uses a continuous time-trial format where 'second place' refers to a time benchmark rather than a physical position.",
+        "The term 'overtake' is interpreted as physically passing but not gaining the ordinal position (e.g., lapping a runner).",
+        "The race has non-standard rules where overtaking does not transfer ordinal position."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "first",
+      "mechanism": "A common cognitive misinterpretation assumes that overtaking the second-place runner moves you up two positions to first place, conflating the act of passing with taking the lead.",
+      "counterconditions": [
+        "Standard race ordinal semantics are enforced.",
+        "The problem is interpreted with discrete positional slots.",
+        "The runner in first place is not simultaneously overtaken."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "third",
+      "mechanism": "An alternative erroneous reasoning path assumes that overtaking the second-place runner puts you behind them in third place, or misinterprets the initial state as being in fourth place before the overtake.",
+      "counterconditions": [
+        "Standard race rules where overtaking immediately transfers ordinal position.",
+        "Correct parsing of the initial position as third place before the overtake occurs."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

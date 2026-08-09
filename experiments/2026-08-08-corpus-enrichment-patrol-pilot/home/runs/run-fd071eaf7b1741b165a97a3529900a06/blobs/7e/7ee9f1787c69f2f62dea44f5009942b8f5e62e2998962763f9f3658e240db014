@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f440b92e4dbdb551c50789e9: program:reasoning_observation_pending
+- reason-counter@a9e14f51a6b02e09a2ac9768: program:reasoning_observation_pending
+- reason-counter@bd620481b46bc8a6988d94b4: program:reasoning_observation_pending
+- reason-counter@16bfb476ff973a4cd1509a1f: program:reasoning_observation_pending
+- reason-counter@8dec53736b255c24212e42a9: program:reasoning_observation_pending
+- reason-counter@2d35b2bab7659d1008304267: program:reasoning_observation_pending
+- reason-counter@ba86939351dee16585374420: program:reasoning_observation_pending
+- reason-counter@0b88c6bd27ff51b5d0e97943: program:reasoning_observation_pending
+- reason-counter@9f29fe666cbcb5514946595d: program:reasoning_observation_pending
+- reason-counter@54568394c884d9a84043d757: program:reasoning_observation_pending
+- reason-counter@bb01531155d94f5472a985e7: program:reasoning_observation_pending
+- reason-counter@74eb485fb605f806448701ad: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived by interpreting 15% as the dimensional scalar 0.15 and operating on the extensive quantity 80, anchoring the computation in a foundational case of linear scaling that abstracts over specific operand identities.","counterconditions":[{"case":"The operation is not a single linear application but is compounded over multiple periods, which would require an exponential function.","checker_spec":null,"eval":"observation"},{"case":"The operands are not independent scalar magnitudes but vector quantities, where standard commutativity may fail.","checker_spec":null,"eval":"observation"},{"case":"The percentage is not a static scalar but a function of the base quantity itself, introducing non-linearity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The scalar 0.15 is applied to the base quantity 80. Per the established linearity case (SRC_006), a single-step scalar multiplication scales the extensive magnitude directly, yielding 80 \u00d7 0.15 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f440b92e4dbdb551c50789e9, reason-counter@a9e14f51a6b02e09a2ac9768, reason-counter@bd620481b46bc8a6988d94b4
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by translating the percentage into a decimal fraction (0.15) and applying linear scalar multiplication: 0.15 \u00d7 80 = 12.","counterconditions":[{"case":"The percentage is interpreted as a compound rate applied over one or more time periods rather than a linear scalar (e.g., a 15% growth rate over n periods).","checker_spec":null,"eval":"observation"},{"case":"The base '80' is a vector or matrix, and '15%' refers to a non-linear transformation such as finding the intersection of the vector with the 15th percentile of a distribution.","checker_spec":null,"eval":"observation"},{"case":"The standard mathematical definition of 'percentage' as 'parts per hundred' is suspended or redefined as a recursive division operator.","checker_spec":null,"eval":"observation"},{"case":"The operation is strictly defined in a non-commutative algebraic structure where the direction of scalar application alters the result.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mechanism: Direct Fractional Scaling. The percentage '15%' is semantically converted into its canonical multiplicative form (15/100 = 0.15). The base quantity '80' is then multiplied by this scalar. This leverages the fundamental axiom of linearity: a percentage acts as a uniform, single-step linear operator on a base value.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@16bfb476ff973a4cd1509a1f, reason-counter@8dec53736b255c24212e42a9, reason-counter@2d35b2bab7659d1008304267, reason-counter@ba86939351dee16585374420
+
+TARGET SRC_003
+{"analogy":null,"claim":"15% of 80 equals 12, derived via a base-ten shift and unit-scaling mechanism: 15% is defined as 15 per 100, establishing a scalar ratio of 15/100 = 0.15, which scales the base 80 by linear multiplication.","counterconditions":[{"case":"The standard definition of percentage as parts per hundred is suspended or redefined.","checker_spec":null,"eval":"observation"},{"case":"The operation is compounded over multiple time periods or iterations.","checker_spec":null,"eval":"observation"},{"case":"The operands are vector or tensor quantities for which scalar multiplication is not defined.","checker_spec":null,"eval":"observation"},{"case":"The problem context mandates a non-linear or truncated step-function interpretation of the percentage.","checker_spec":null,"eval":"observation"},{"case":"The operation is misapplied as a recursive division operator rather than a linear scalar.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The percentage 15% is a syntactic notation for the dimensionless scalar 15/100 = 0.15. Single-step linear scaling applies this scalar to the magnitude 80: 80 \u00d7 0.15 = 12. The base-ten structure of 100 allows decomposition into (10/100 + 5/100), providing an arithmetic fallback of 8 + 4 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0b88c6bd27ff51b5d0e97943, reason-counter@9f29fe666cbcb5514946595d, reason-counter@54568394c884d9a84043d757, reason-counter@bb01531155d94f5472a985e7, reason-counter@74eb485fb605f806448701ad
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

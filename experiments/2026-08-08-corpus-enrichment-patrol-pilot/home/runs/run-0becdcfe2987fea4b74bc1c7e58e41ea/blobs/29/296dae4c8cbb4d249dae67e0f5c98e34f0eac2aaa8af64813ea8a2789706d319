@@ -1,0 +1,54 @@
+```json
+{
+  "candidate": {
+    "claim": "4 straight cuts through the center of a pizza produce exactly 8 pieces.",
+    "mechanism": "Each cut passes through the center, forming a diameter. The Nth cut crosses N-1 prior diameters at the center, and since all diameters intersect at that single point, each new cut adds 2 pieces (one on each side of the center) regardless of angle, yielding 2N pieces for N=4: 8.",
+    "counterconditions": [
+      "If the problem intended general straight cuts not constrained to pass through the center, the maximum would be 11.",
+      "If two or more cuts are allowed to coincide (identical angles), the count drops.",
+      "If the pizza is treated as an open disk with the center point removed, crossings at the center would not split arcs into distinct regions and the count would differ.",
+      "If cuts are interpreted as finite segments rather than full infinite lines through the disk, alignment failures could reduce the count."
+    ],
+    "typicality": 1.0,
+    "evidence_refs": [],
+    "checker_specs": [],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "analogy": {
+      "adopted_commitment_refs": [],
+      "source_memory_refs": [
+        "d95b5f9287875f7188705595ef0a81c837042dae2689f3fabe99a830c4389fb1",
+        "b0d9e8cd737a073f412d7b88b936f6550330e743f0d9c85fb6835350d3e8712e"
+      ],
+      "shared_structure": [
+        "All cuts are diameters, so any pair crosses exactly once at the common center point.",
+        "The center acts as the sole concurrency point for all lines.",
+        "Region count is governed by how many existing regions a new chord splits as it traverses the disk.",
+        "For diameters, each new cut enters two opposite regions and splits both, adding exactly 2 regions."
+      ],
+      "disanalogies": [
+        "General lines in a plane can be placed to ensure no three intersect at the same point, maximizing region additions; concurrent diameters cannot avoid the shared center crossing.",
+        "The standard maximal cut recurrence for arbitrary lines (1 + n(n+1)/2) does not apply because all pairwise intersections coincide.",
+        "Unlike arbitrary chords, diameters are topologically constrained to cross at a single shared point rather than generating distinct interior vertices."
+      ],
+      "transfer_claims": [
+        "The count 2N for N concurrent diameters is the correct regime for any number of center-passing cuts.",
+        "The erroneous answer 11 arises from importing the non-concurrent general-line formula into a concurrent-diameter setting.",
+        "When a problem specifies all cuts pass through the exact center, the concurrency constraint dominates over the generic maximal-cut heuristic."
+      ],
+      "overturn_conditions": [
+        "If the problem is reinterpreted to permit arbitrary cuts not through the center, the maximum becomes 11.",
+        "If coincident cuts are allowed, the count is below 8.",
+        "If the pizza is modeled as an annulus (center removed), the topology changes and the region count differs."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}
+```

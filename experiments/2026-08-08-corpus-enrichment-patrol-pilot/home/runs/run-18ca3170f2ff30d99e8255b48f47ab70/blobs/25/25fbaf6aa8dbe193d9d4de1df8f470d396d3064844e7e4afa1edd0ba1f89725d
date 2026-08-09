@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed contradiction is mechanically ill-posed: the target concedes both paths compute the identical value 46 and emit 48, so 'd is fixed a priori by parity' vs 'n is checked after' is a difference in narrative framing, not in any observable or causal mechanism. Without a distinct computational consequence the contradiction collapses into the very refutation condition the target itself states — identical execution traces — leaving the claimed relation unsubstantiated.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The 'necessity' claim is asserted without a mechanism: the target states that without the even-parity constraint 45,46,47 is a 'rival,' but never demonstrates a causal or logical step showing why that rival is actually admissible (e.g., that it satisfies all constraints the problem imposes) and therefore why parity is *required* to exclude it. Mere exhibition of a different triple is not a proof of necessity; the biconditional is left unconnected because the necessity half has no derivable mechanism.",
+      "counterexample": null
+    }
+  ]
+}
+```

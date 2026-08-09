@@ -1,0 +1,17 @@
+```json
+{
+  "candidate": {
+    "claim": "The largest of the three consecutive even integers is 48, derived by exploiting the algebraic identity that the arithmetic mean of an odd-length symmetric arithmetic progression equals its central term (n/3), so the middle term is 46 and the largest is 48.",
+    "mechanism": "For three consecutive even integers with common difference 2, model them as (m-2, m, m+2). Their sum is 3m = 138, giving m = 46. The three numbers are 44, 46, and 48. The divisibility of 138 by 3 guarantees an integer mean, and the even parity of the target mean (46) guarantees that the entire symmetric triple consists of even integers. The largest is thus m + 2 = 48.",
+    "counterconditions": [
+      "If the arithmetic mean 138/3 = 46 were odd, the triple would be consecutive odd integers, violating the evenness constraint and yielding no valid solution",
+      "If the problem asked for consecutive integers with a different common difference d, the mean would still be 46 but the largest term would be m + d rather than 48"
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_003", "SRC_004"]
+    }
+  }
+}
+```

@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ed294af6eb84bffe22482b30: program:reasoning_observation_pending
+- reason-counter@2b3189fcca6630f974b2a01d: program:reasoning_observation_pending
+- reason-counter@da66d25d37196aefd33d7cd5: program:reasoning_observation_pending
+- reason-counter@38faa429e3279a87d561de19: program:reasoning_observation_pending
+- reason-counter@74959abe6a6d720ed19ff6c7: program:reasoning_observation_pending
+- reason-counter@2679e50789e707ffdce26394: program:reasoning_observation_pending
+- reason-counter@79cc2ad413a4b66785f51d2f: program:reasoning_observation_pending
+- reason-counter@a47b14e8a2e688bf27b8dc3e: program:reasoning_observation_pending
+- reason-counter@b16c596105b9b4aa8a3a8de9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest integer is 48, but the derivation is circular: one must already know the triple is centered at 46 to assert 138/3 = 46 is the mean, and the even-stride guarantee presupposes the structure it claims to derive.","counterconditions":[{"case":"If the mean principle is applied as a theorem about all arithmetic progressions (not just this one), the circularity charge fails.","checker_spec":null,"eval":"observation"},{"case":"If 'consecutive even integers' does not entail arithmetic progression with stride 2, the presupposition claim is wrong.","checker_spec":null,"eval":"observation"},{"case":"If the problem is pedagogical and expects the student to discover the mean principle, calling it circular mischaracterizes the intent.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mean-principle says: for three terms in arithmetic progression, the middle term is the sum/3. But 'three consecutive even integers' already encodes both the arithmetic-progression structure and the stride. Dividing by 3 merely reads off the encoded value; it does not derive it. The answer 48 is correct but the reasoning is epistemically circular.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ed294af6eb84bffe22482b30, reason-counter@2b3189fcca6630f974b2a01d, reason-counter@da66d25d37196aefd33d7cd5
+
+TARGET SRC_002
+{"analogy":null,"claim":"The largest integer is 48, reached by treating 'consecutive even integers' as a definitional unfold of the even residue class mod 2 and the arithmetic mean as a fixed point of the unfolding operator.","counterconditions":[{"case":"If the unfolding operator is just the mean principle in disguise, the candidate reduces to SRC_002 and is not novel.","checker_spec":null,"eval":"observation"},{"case":"If the problem allowed non-even n, the operator would produce invalid triples and the fixed-point would be meaningless.","checker_spec":null,"eval":"observation"},{"case":"If the fixed-point equation 3n = 138 has no integer solution, the method fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Define the unfolding operator U(n) = (n\u22122, n, n+2) for even n. The fixed-point condition sum(U(n)) = 3n = 138 yields n = 46. The largest element of U(46) is 48. This is not the mean principle but a fixed-point characterization.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@38faa429e3279a87d561de19, reason-counter@74959abe6a6d720ed19ff6c7, reason-counter@2679e50789e707ffdce26394
+
+TARGET SRC_003
+{"analogy":null,"claim":"The largest integer is 48, but this follows vacuously because the problem's premise is self-undermining: 'consecutive even integers' presupposes a unique residue class, yet any three such integers sum to a multiple of 6, and 138 being a multiple of 6 merely licenses the inference rather than constraining it.","counterconditions":[{"case":"If the sum 138 were not divisible by 6, the vacuous-discharge framing would collapse.","checker_spec":null,"eval":"observation"},{"case":"If the even-constraint were independently necessary to fix the residue, the 'does no work' claim fails.","checker_spec":null,"eval":"observation"},{"case":"If the problem asked for the smallest integer, the vacuous framing would not yield 48.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Recast the problem as a consistency check: if 138 mod 3 \u2260 0, no triple exists; since 138 \u2261 0, the problem is well-posed but only accidentally. The answer 48 is recovered by parity-gated vacuous discharge: the even-constraint does no work because the sum already fixes the residue.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@79cc2ad413a4b66785f51d2f, reason-counter@a47b14e8a2e688bf27b8dc3e, reason-counter@b16c596105b9b4aa8a3a8de9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

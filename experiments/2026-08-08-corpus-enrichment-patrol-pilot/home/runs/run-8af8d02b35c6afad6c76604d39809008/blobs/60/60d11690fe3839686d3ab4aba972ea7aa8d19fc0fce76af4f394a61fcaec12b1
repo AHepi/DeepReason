@@ -1,0 +1,12 @@
+```json
+{
+  "baseline_sha256": "57c5e51b538fffa52361ae9c6f0108dda951eb009eb8771480dac6c98e613391",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/candidates/0/optional_refs/3",
+      "value": "SRC_007"
+    }
+  ]
+}
+```

@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@46f095a58a5e419be5c70c2b: program:reasoning_observation_pending
+- reason-counter@712fddf283db9eb1187315ea: program:reasoning_observation_pending
+- reason-counter@0b88c6bd27ff51b5d0e97943: program:reasoning_observation_pending
+- reason-counter@d992ce8761fd42ab46aed182: program:reasoning_observation_pending
+- reason-counter@ea9f98263543ee66dcfae7b9: program:reasoning_observation_pending
+- reason-counter@4fffe44c3ff7899e2cd3862c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, by transposing the operands and computing 80% of 15.","counterconditions":[{"case":"The operation is strictly defined as applying the percentage to a fixed base, disallowing commutative transposition of the operands.","checker_spec":null,"eval":"observation"},{"case":"A non-scalar algebraic structure (e.g., matrix multiplication) is implicitly assumed, where commutativity does not hold.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Exploit the commutative property of multiplication. The expression 0.15 * 80 is equivalent to 0.80 * 15. 80% of 15 is 12. This shifts the cognitive load to a potentially easier base-10 scaling.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@46f095a58a5e419be5c70c2b, reason-counter@712fddf283db9eb1187315ea
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12.","counterconditions":[{"case":"The standard definition of percentage as parts per hundred is suspended or redefined.","checker_spec":null,"eval":"observation"},{"case":"The multiplication operation fails due to a non-standard arithmetic algebra (e.g., modular arithmetic with a small modulus).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Direct arithmetic scaling: convert 15% to its decimal equivalent 0.15, then multiply by the base quantity 80 (0.15 * 80 = 12). This is the standard definitional mechanism for percentage operations.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0b88c6bd27ff51b5d0e97943, reason-counter@d992ce8761fd42ab46aed182
+
+TARGET SRC_003
+{"analogy":null,"claim":"15% of 80 equals 11, assuming a continuous compounding or a truncated step-function distribution.","counterconditions":[{"case":"Standard continuous arithmetic applies without discrete truncation or quantization penalties.","checker_spec":null,"eval":"observation"},{"case":"The problem space is strictly mathematical real-number arithmetic rather than a physical or economic simulation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In certain discrete or bounded systems, applying a 15% scale to a quantity of 80 might not yield exactly 12 if intermediate states are quantized. If the system requires integer truncation at each proportional step (e.g., 10% yields 8, 5% yields 3 after truncation of 3.5), the sum yields 11. This is a non-standard, bounded-rational mechanism.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ea9f98263543ee66dcfae7b9, reason-counter@4fffe44c3ff7899e2cd3862c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

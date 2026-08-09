@@ -1,0 +1,86 @@
+{
+  "candidates": [
+    {
+      "claim": "There are exactly 648 three-digit numbers (100 to 999) with all distinct digits.",
+      "mechanism": "Decompose a three-digit number as (hundreds, tens, units). Hundreds: 9 choices (1-9, no zero). Tens: 9 choices (0-9 excluding hundreds). Units: 8 choices (0-9 excluding hundreds and tens). By the multiplication principle, total = 9 × 9 × 8 = 648.",
+      "counterconditions": [
+        "If zero were allowed as a hundreds digit, the product would be invalid for the three-digit range.",
+        "If the problem counted 000-099, the base of the counting tree would change to 10 for the first digit, breaking the 9 × 9 × 8 count.",
+        "If \"different from each other\" were misread as strictly increasing, the count would collapse.",
+        "If leading-zero representations of numbers below 100 were somehow admitted as three-digit, the count would be overestimated."
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.99
+    },
+    {
+      "claim": "There are 648 valid three-digit numbers with all distinct digits, derived by removing the 288 numbers with at least one repeated digit from the 900 total.",
+      "mechanism": "Start with 900 total three-digit numbers. Count the complement: numbers with at least one repeated digit. These have the form AAB (81: 9 hundreds × 1 match × 9 free), ABA (81), or BAA (72: 9 hundreds × 8 non-matching tens × 1 match). Sum = 81 + 81 + 72 = 234. However, AAA (9) is subtracted three times in this sum, so add back 2 × 9 = 18. Total repeats = 234 + 18 = 252. Valid numbers = 900 - 252 = 648.",
+      "counterconditions": [
+        "If the complement count 288 is asserted without correcting for over-subtraction of AAA forms, the math is inconsistent.",
+        "If the inclusion-exclusion correction is misapplied (e.g., adding back 9 instead of 18), the result diverges from 648.",
+        "If the alphabet for the complement calculation does not restrict the hundreds digit to 1-9, the categories AAB, ABA, BAA will have incorrect sizes."
+      ],
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "There are 648 valid three-digit numbers with all distinct digits, found by filtering all 900 numbers through a pattern automaton that rejects any repeated digit.",
+      "mechanism": "Define a deterministic finite automaton processing the digit string d1 d2 d3. State 0 (start) reads d1 ∈ [1-9] (9 transitions) to state 1. State 1 reads d2 ∈ [0-9] \\ {d1} (9 transitions) to state 2. State 2 reads d3 ∈ [0-9] \\ {d1, d2} (8 transitions) to state 3 (accept). The total accepted paths are 9 × 9 × 8 = 648.",
+      "counterconditions": [
+        "If the automaton permitted an epsilon-transition to a leading zero, it would accept non-three-digit strings.",
+        "If the alphabet for the automaton's transitions was defined as 1-9 for all positions (excluding 0 entirely), the count would be 9 × 8 × 7 = 504.",
+        "If state memory was not preserved between transitions, the distinctness constraint would fail."
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "There are 504 three-digit numbers with all distinct digits.",
+      "mechanism": "If zero is entirely excluded from the problem's universe (perhaps interpreting three-digit numbers as consisting only of the digits 1-9), the choices are: hundreds (9), tens (8 remaining), units (7 remaining). The total is 9 × 8 × 7 = 504.",
+      "counterconditions": [
+        "This is falsified if the standard definition of three-digit numbers is used, where tens and units can be 0.",
+        "This fails if empirically tested against the range 100-999 by brute force.",
+        "The count is incorrect if any valid number containing a 0 (e.g., 102, 390) is observed."
+      ],
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.15
+    },
+    {
+      "claim": "There are 648 valid numbers, derived by sequentially fixing the tens digit T and summing valid hundreds H and units U combinations for each T.",
+      "mechanism": "Iterate by the tens digit T. If T = 0: H has 9 choices (1-9), U has 8 choices (1-9, excluding H). 9 × 8 = 72. If T ≠ 0: 9 choices for T. H has 8 choices (1-9, excluding T). U has 8 choices (0-9, excluding H and T). 9 × 8 × 8 = 576. Total = 72 + 576 = 648.",
+      "counterconditions": [
+        "If the case T=0 is not handled separately to allow H its full 9 choices, the count is undercalculated.",
+        "If U is incorrectly restricted to 1-9 for all cases, the count drops.",
+        "If the subtraction for T in the U choices is omitted when T ≠ 0, the count becomes 9 × 9 × 9 = 729."
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.4
+    }
+  ]
+}

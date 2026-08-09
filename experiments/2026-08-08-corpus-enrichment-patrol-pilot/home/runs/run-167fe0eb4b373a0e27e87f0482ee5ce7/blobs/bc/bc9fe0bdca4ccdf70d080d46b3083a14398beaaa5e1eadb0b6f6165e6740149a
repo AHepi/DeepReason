@@ -1,0 +1,3 @@
+```json
+{"cases":[{"target_alias":"SRC_001","attack":false},{"target_alias":"SRC_002","attack":true,"case":"SRC_002 erroneously excludes zero from the tens and units positions. The problem asks for three-digit numbers (100 to 999) with all three digits different; zero is a valid digit in the tens and units places (e.g., 102, 230). The correct positional count is 9*9*8 = 648, not 9*8*7 = 504.","counterexample":[102, 103, 120, 130, 203, 230, 302, 320, 402, 503]},{"target_alias":"SRC_003","attack":false}]}
+```

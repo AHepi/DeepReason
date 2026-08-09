@@ -1,0 +1,106 @@
+{
+  "candidates": [
+    {
+      "claim": "15% of 80 equals 12.",
+      "mechanism": "A percentage is a dimensionless ratio scaled to a base of 100. To find 15% of 80, one operates the multiplicative chain (15 / 100) * 80. By the associative property, this transforms into 80 * 0.15, which evaluates to 12. The causal mechanism is the scaling of the base quantity by the fractional proportion 0.15.",
+      "counterconditions": [
+        "The base quantity is not exactly 80.",
+        "The percentage is defined on a different base (e.g., 15% of 100), altering the scaling factor.",
+        "Arithmetic error in the multiplication 80 * 0.15 yields a different result."
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.99
+    },
+    {
+      "claim": "15% of 80 equals 12, derived via decomposition into 10% and 5%.",
+      "mechanism": "The proportion 15% can be decomposed into 10% + 5%. 10% of 80 is operationally 8 (shifting the decimal point). 5% is half of 10%, so 5% of 80 is 4. Summing the causal contributions: 8 + 4 = 12. This distributes the scaling operation across additive components.",
+      "counterconditions": [
+        "The decomposition is miscalculated (e.g., 5% of 80 is not 4).",
+        "The base 80 is not preserved across the two sub-operations.",
+        "The addition of partial results fails to follow standard integer arithmetic."
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    },
+    {
+      "claim": "15% of 80 equals 12, by transposing the operands and computing 80% of 15.",
+      "mechanism": "By the commutativity of multiplication, the operation 0.15 * 80 is mathematically identical to 0.80 * 15. Computing 80% of 15 is mechanically simpler: 10% of 15 is 1.5; multiplied by 8 gives 12. The causal structure is preserved by operand symmetry.",
+      "counterconditions": [
+        "The commutative property does not hold for the defined operation.",
+        "80% of 15 is miscalculated.",
+        "The problem implicitly requires preserving the original operand order (15% of 80) in the evaluation trace, disallowing transposition."
+      ],
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "15% of 80 equals 12, via a unit-rate scaling mechanism.",
+      "mechanism": "The rate '15%' implies 15 units per 100. To scale this to a base of 80, first find the value of 1 unit per 100: 15 / 100 = 0.15. Then scale this rate by the target base: 0.15 * 80 = 12. Alternatively, 80 is 0.8 of 100, so 15 * 0.8 = 12. The mechanism is linear scaling of a unit rate.",
+      "counterconditions": [
+        "The rate scaling is non-linear (e.g., compound percentage).",
+        "The unit rate 0.15 is incorrectly derived.",
+        "The target base 80 is incorrectly treated as 80% of 100 without multiplying by the 15 units."
+      ],
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.4
+    },
+    {
+      "claim": "15% of 80 equals 12, derived via fraction reduction and multiplication.",
+      "mechanism": "Convert the percentage to a reduced fraction: 15% = 15/100 = 3/20. Multiply this fraction by the base 80: (3/20) * 80. The 20 in the denominator divides the 80 in the numerator exactly 4 times, yielding 3 * 4 = 12. The mechanism is exact rational arithmetic via fraction reduction.",
+      "counterconditions": [
+        "The fraction 15/100 is reduced incorrectly.",
+        "The division of 80 by 20 does not yield exactly 4.",
+        "The final multiplication 3 * 4 fails."
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.2
+    },
+    {
+      "claim": "15% of 80 equals 12, assuming the percentage is a markup on a cost base that is unknown.",
+      "mechanism": "If the problem is from a financial context where '15% of 80' implies a 15% increase on an 80 base, the markup amount is still (0.15 * 80) = 12. If the question implies that 80 is the result *after* a 15% reduction, the original base would be 80 / 0.85 ≈ 94.12, and 15% of that would be ≈ 14.12. However, under the standard interpretation of 'find the portion', the mechanism is direct multiplication: 0.15 * 80 = 12.",
+      "counterconditions": [
+        "The context defines '15% of 80' as a reverse-percentage problem where 80 is the post-discount price.",
+        "The percentage applies to a different quantity than 80.",
+        "The problem implies a compound operation where 15% is applied iteratively."
+      ],
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.05
+    }
+  ]
+}

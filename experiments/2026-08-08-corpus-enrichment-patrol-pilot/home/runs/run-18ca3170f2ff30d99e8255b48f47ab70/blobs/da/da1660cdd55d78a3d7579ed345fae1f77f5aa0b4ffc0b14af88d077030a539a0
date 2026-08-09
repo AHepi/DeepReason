@@ -1,0 +1,41 @@
+```json
+{
+  "candidate": {
+    "claim": "The largest of the three consecutive even integers summing to 138 is 48, derived via algebraic mean-parity construction.",
+    "mechanism": "Let the three consecutive even integers be (n-2), n, and (n+2). Their sum is 3n = 138, so the mean n = 46. Since n is even, the triple (44, 46, 48) satisfies both the consecutive-even requirement and the sum constraint. The largest integer is 48.",
+    "counterconditions": [
+      "If 138 were not divisible by 3, no integer triple with common difference 2 could sum to it.",
+      "If the computed mean n were odd (e.g., sum = 141, mean = 47), no consecutive even triple could satisfy the even-parity requirement.",
+      "If the problem did not require even integers, a consecutive odd triple (e.g., 45, 47, 49 for sum 141) could satisfy a relaxed constraint.",
+      "If another triple of consecutive even integers also summed to 138, the uniqueness of 48 would fail."
+    ],
+    "typicality": 0.95,
+    "analogy": {
+      "source_memory_refs": ["SRC_001", "SRC_002", "SRC_003"],
+      "shared_structure": [
+        "Both use a symmetric decomposition around a central mean to reduce a 3-term arithmetic progression to a single linear equation.",
+        "Both check a parity condition on the computed mean to validate the integer-type constraint (even).",
+        "Both output the largest term as mean + common difference."
+      ],
+      "disanalogies": [
+        "SRC_002 frames reasoning as counterexample-first rejection, whereas this candidate constructs directly from the mean.",
+        "SRC_001's countercondition focuses on divisibility by 3, not on the parity of the mean, so it would not fire for sum=141 (mean=47, odd).",
+        "SRC_003's mechanism would produce an odd triple for an odd mean without flagging the even-constraint violation."
+      ],
+      "transfer_claims": [
+        "For any target sum S divisible by 3 with even mean, the method yields the unique consecutive-even triple and its largest term.",
+        "For S divisible by 3 with odd mean, the method reveals a coverage gap: no consecutive-even triple exists, and this candidate's parity countercondition fires."
+      ],
+      "overturn_conditions": [
+        "If a different consecutive-even triple (e.g., 40, 46, 52) also summed to 138, uniqueness would fail and the largest term would not be fixed.",
+        "If the problem's 'even' constraint were removed, 48 would not be uniquely determined (e.g., 45, 46, 47 also sums to 138)."
+      ]
+    },
+    "optional_refs": ["SRC_001", "SRC_002", "SRC_003"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_003", "SRC_007"],
+      "search_signal": "productive"
+    }
+  }
+}
+```

@@ -1,0 +1,26 @@
+```json
+{
+  "candidate": {
+    "claim": "15% of 80 equals 12, derived by translating the percentage into a decimal fraction (0.15) and applying linear scalar multiplication: 0.15 × 80 = 12.",
+    "mechanism": "Mechanism: Direct Fractional Scaling. The percentage '15%' is semantically converted into its canonical multiplicative form (15/100 = 0.15). The base quantity '80' is then multiplied by this scalar. This leverages the fundamental axiom of linearity: a percentage acts as a uniform, single-step linear operator on a base value.",
+    "counterconditions": [
+      "The percentage is interpreted as a compound rate applied over one or more time periods rather than a linear scalar (e.g., a 15% growth rate over n periods).",
+      "The base '80' is a vector or matrix, and '15%' refers to a non-linear transformation such as finding the intersection of the vector with the 15th percentile of a distribution.",
+      "The standard mathematical definition of 'percentage' as 'parts per hundred' is suspended or redefined as a recursive division operator.",
+      "The operation is strictly defined in a non-commutative algebraic structure where the direction of scalar application alters the result."
+    ],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_006"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_006"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.98
+  }
+}
+```

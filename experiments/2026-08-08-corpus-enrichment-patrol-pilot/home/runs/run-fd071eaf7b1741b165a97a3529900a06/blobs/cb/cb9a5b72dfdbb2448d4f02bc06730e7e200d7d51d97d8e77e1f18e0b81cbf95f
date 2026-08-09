@@ -1,0 +1,3 @@
+```json
+{"cases":[{"attack":false,"target_alias":"SRC_001"},{"attack":false,"target_alias":"SRC_002"},{"attack":true,"case":"The target claims 15% of 80 equals 11 under truncation, but the stated truncation arithmetic is internally inconsistent: if 5% of 80 is truncated from 4.0 (not 3.5) the sum is 8+4=12; and if the intent is 15% computed in one step, 0.15*80=12 exactly with no truncation possible. The counterexample fails because the problem is pure real-number arithmetic, and no step decomposition producing 3.5 from 5% of 80 is arithmetically valid.","counterexample":[{"pct":"10%","raw":8,"truncated":8},{"pct":"5%","raw":4,"truncated":4},{"sum":12}],"target_alias":"SRC_003"}]}
+```

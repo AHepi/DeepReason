@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:0b13382ebfe2) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0b13382ebfe2 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f780c80c8510: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated artifact INHERITS SRC_010's empiric-style confirmation structure (reconstruct the triple, verify both constraints) but COMPLEMENTS it by substituting the confirmation target: SRC_010 verifies the candidate triple 44,46,48 satisfies 'consecutive even integers summing to 138'; the isolated artifact verifies instead that the constraint space itself is singleton — that exactly one parity class of evenly-spaced triples is consistent with 138/3 being even. This is a structural inheritance: same two-constraint verification schema (sum constraint + structural constraint), different verified object (triple-instance vs constraint-space-admissibility). REFUTED IF the isolated artifact performs no verification step at all, because then it does not inherit SRC_010's confirmation structure. REFUTED IF the isolated artifact verifies the triple 44,46,48 directly rather than verifying the meta-fact that the constraint space is non-degenerate and unique — because then it merely duplicates SRC_010 rather than complementing it. The inheritance is from the verification schema, not from the verified content.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact DEPENDS ON SRC_008's algebraic resolution (n-2, n, n+2 → 3n=138 → n=46) in a non-obvious way: it treats SRC_008's computation not as a direct solution but as a witness generator for a proof obligation. The isolated artifact requires that the mean-principle computation (SRC_008) succeed AND that a separate parity-lattice check confirm 46 ∈ 2ℤ before the answer 48 is admissible. SRC_008 alone proves 'if three evenly-spaced numbers sum to 138, the middle is 46'; the isolated artifact adds the proof obligation '46 is even, therefore the evenly-spaced triple is an even triple' — converting a conditional existence result into a parity-qualified uniqueness result. REFUTED IF the isolated artifact uses SRC_008's mean computation as the complete proof rather than as one input to a multi-step obligation — because then it simply duplicates SRC_008 without adding a dependence layer. REFUTED IF the isolated artifact never references or presupposes the computation 138/3=46 — because then the dependence is vacuous. The dependence is on the algebraic move, not on the conclusion.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+TARGET SRC_003
+The isolated artifact INTEGRATES the counterexample-first stance (SRC_007, school stance weight 0.70) with the direct-construction approach (SRC_009's arithmetic-progression formula) by treating them as dual proof obligations that must both succeed. SRC_007 says: reject 45,46,47 (not even) → only 44,46,48 survives. SRC_009 says: a+4 = 48 by algebra. The isolated artifact requires BOTH: (a) the counterexample 45,46,47 is constructible and rejected by parity, establishing that the constraint space has ≥2 candidates before filtering, and (b) the algebraic construction a,a+2,a+4 with 3a+6=138 yields the unique survivor. Integration: the counterexample step proves the constraint space is non-trivial (the 'even' filter does real work), and the construction step proves the filtered space is singleton. REFUTED IF the isolated artifact uses only one of the two methods — because then it does not integrate but merely selects. REFUTED IF the counterexample 45,46,47 is never constructed — because then the 'even' constraint's discriminatory role is assumed, not demonstrated, and the integration with SRC_007 is hollow. This integrates two rival epistemic stances into one conjunctive proof.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

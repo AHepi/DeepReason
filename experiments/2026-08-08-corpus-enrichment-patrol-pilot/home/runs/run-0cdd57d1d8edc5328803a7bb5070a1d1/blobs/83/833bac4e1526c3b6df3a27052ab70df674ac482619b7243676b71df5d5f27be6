@@ -1,0 +1,27 @@
+```json
+{
+  "candidate": {
+    "claim": "Total pay is $855, derived as 40 hours of regular pay ($720) plus 7 hours of overtime pay at $27/hour ($189).",
+    "mechanism": "Regular pay: 40 × $18 = $720. Overtime rate: 1.5 × $18 = $27. Overtime pay: 7 × $27 = $189. Total: $720 + $189 = $855. The scratchpad's $909 figure results from a premium-only method that overcounts because it pays the base $18 rate for all 47 hours AND adds a $9 premium for the 7 OT hours, which is non-standard here; the correct interpretation applies the 1.5x rate only to hours beyond 40.",
+    "counterconditions": [
+      "If overtime were legally defined as a premium on top of base-for-all-hours rather than a higher rate replacing base for OT hours, then $909 could be correct.",
+      "If overtime hours were defined differently (e.g., over 35 hours), the pay bands would shift.",
+      "If overtime did not apply to the 7 hours beyond 40 in this jurisdiction, only base pay of $846 would result."
+    ],
+    "typicality": 0.9,
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  }
+}
+```

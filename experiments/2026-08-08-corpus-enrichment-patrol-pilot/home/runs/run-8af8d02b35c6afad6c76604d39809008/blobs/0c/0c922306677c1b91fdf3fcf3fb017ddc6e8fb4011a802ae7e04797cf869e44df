@@ -1,0 +1,12 @@
+```json
+{
+  "authorized_pointers": ["/candidates/0/optional_refs/3"],
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/candidates/0/optional_refs/3",
+      "value": "SRC_005"
+    }
+  ]
+}
+```

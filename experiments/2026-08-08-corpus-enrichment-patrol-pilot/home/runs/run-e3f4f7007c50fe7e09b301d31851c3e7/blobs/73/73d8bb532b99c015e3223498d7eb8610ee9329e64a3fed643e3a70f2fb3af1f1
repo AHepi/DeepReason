@@ -1,0 +1,5 @@
+{
+  "op": "replace",
+  "path": "/scratch_proposal/unresolved_questions/0/related_refs",
+  "value": ["NEW_001", "SCR_001", "SRC_002"]
+}

@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a377b06694e18746c8e4888c: program:reasoning_observation_pending
+- reason-counter@25683e0c5758e6cf94aa9135: program:reasoning_observation_pending
+- reason-counter@861db9a128c29cbfc41431f4: program:reasoning_observation_pending
+- reason-counter@5d5403a354d0db93cb27c6fa: program:reasoning_observation_pending
+- reason-counter@2f3c36db9413553c5c555f16: program:reasoning_observation_pending
+- reason-counter@f60f0a6620d2bb44a5d91af2: program:reasoning_observation_pending
+- reason-counter@61331ad6a7f592f2ba4e1fe2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The full disk's 8 pieces are wedges joined at a central point; the annulus's 8 pieces are disconnected arcs.","The topological connectedness at the center differs between the two domains."],"overturn_conditions":["If the definition of 'piece' requires connectedness at the center, the annulus model does not satisfy it.","If the annulus has a different inner radius, the arc lengths change but the count remains 8."],"shared_structure":["Both the full disk and the annulus are divided by 4 concurrent lines.","In both cases, the count of separated material components is 8."],"source_memory_refs":["SCR_001","SCR_005"],"transfer_claims":["The count of 8 pieces is robust to the topological change from a disk to an annulus, as long as the cuts are straight and concurrent."]},"claim":"If the pizza is modeled as an annulus (a ring missing the center), four concurrent cuts through the central hole yield 8 disconnected pieces.","counterconditions":[{"case":"If the pizza is a full disk, the 8 pieces are wedges joined at the center.","checker_spec":null,"eval":"observation"},{"case":"If the cuts do not pass through the center, the intersection pattern with the annulus changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"An annulus has its center missing. Four straight lines passing through the center intersect the annulus in 8 disjoint arc-like segments. These are 8 separate pieces, topologically distinct from the 8 wedge-like sectors of a full disk.","premises":[],"schema":"deepreason-reasoning-envelope-v
+commitments: reasoning-envelope-wf, reason-counter@a377b06694e18746c8e4888c, reason-counter@25683e0c5758e6cf94aa9135
+
+TARGET SRC_002
+{"analogy":null,"claim":"If the four straight cuts are assumed to be in general position rather than concurrent, they produce a maximum of 11 pieces.","counterconditions":[{"case":"If the cuts are constrained to pass through the exact center, they become concurrent and the number of regions drops to 8.","checker_spec":null,"eval":"observation"},{"case":"If some cuts are parallel or concurrent, the number of regions is less than 11.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The lazy caterer's sequence gives the maximum number of regions for n lines in a plane as R(n) = n(n+1)/2 + 1. For n=4, R(4) = 11. This is a known trap if the solver ignores the 'exact center' constraint and treats the cuts as generic lines.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@861db9a128c29cbfc41431f4, reason-counter@5d5403a354d0db93cb27c6fa
+
+TARGET SRC_003
+{"analogy":null,"claim":"The maximum number of pieces is 11, given by the lazy caterer's sequence for 4 lines in a plane.","counterconditions":[{"case":"The problem's constraint that cuts pass through the exact center is strictly enforced, rendering the lines concurrent.","checker_spec":

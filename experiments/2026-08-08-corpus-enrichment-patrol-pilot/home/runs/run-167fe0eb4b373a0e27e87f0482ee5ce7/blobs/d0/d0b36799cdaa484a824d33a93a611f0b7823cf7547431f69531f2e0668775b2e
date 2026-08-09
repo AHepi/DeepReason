@@ -1,0 +1,13 @@
+{
+  "candidate": {
+    "content": "The direct constructive split (case on presence of zero) and the inclusion-exclusion complement share mechanism as two independent derivations of the same combinatorial identity, and the result reduces to the count 648; refuted if either derivation yields a different residue modulo 9, since both count the same set and must agree numerically, or if the PIE calculation double-counts by mishandling the triple-equality intersection. The intermediate complement must equal 252 for both; refuted if any partition over-subtracts by one due to boundary mishandling of 100.",
+    "typicality": 0.78,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005"
+    ]
+  }
+}

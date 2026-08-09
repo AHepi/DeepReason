@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-5a0c75b86712457e928a099a5d8b3df1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A store sells pencils at 7 for $2. How much do 21 pencils cost, in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@625e4091d12fdff5a21ba882: program:reasoning_observation_pending
+- reason-counter@bf584ae9d6d51132d59e9455: program:reasoning_observation_pending
+- reason-counter@538d60b8fc336c15336df672: program:reasoning_observation_pending
+- reason-counter@c0eee8b5e28373870a063248: program:reasoning_observation_pending
+- reason-counter@d1b3b4323f17e22468da6ccb: program:reasoning_observation_pending
+- reason-counter@f34ba9087d489b45a1ad5d2d: program:reasoning_observation_pending
+- reason-counter@24eb5c9607e8b8ea3c3a3ff9: program:reasoning_observation_pending
+- reason-counter@db507e3993cf63c31a364c3f: program:reasoning_observation_pending
+- reason-counter@02cf95a716f39b10ceb412a3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"21 pencils cost $6, but this rests on the empiric observation that pricing is proportional: no explicit rule guarantees that 14 pencils cost $4, so the claim is an inductive generalization from a single data point.","counterconditions":[{"case":"The store's actual pricing function is nonlinear (e.g., convex, concave, or piecewise).","checker_spec":null,"eval":"observation"},{"case":"Additional empirical data contradicts the linear extrapolation (e.g., 14 pencils are observed to cost $3.50).","checker_spec":null,"eval":"observation"},{"case":"The single data point is insufficient to justify the inductive leap under a skeptic stance.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"From one observed data point (7 pencils \u2192 $2), we infer a linear pricing function P(n) = (2/7)\u00b7n. This is an empirical induction, not a deductive necessity: the store could have a nonlinear schedule. Under the simplest inductive hypothesis (linearity), P(21) = $6.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@625e4091d12fdff5a21ba882, reason-counter@bf584ae9d6d51132d59e9455, reason-counter@538d60b8fc336c15336df672
+
+TARGET SRC_002
+{"analogy":null,"claim":"21 pencils cost $6 only if '7 for $2' is a strict proportional contract; however, real-world stores often impose bulk discounts or premiums, so the proportional model is a fragile default.","counterconditions":[{"case":"Observation of a non-proportional price for any multiple of 7 other than 7 itself.","checker_spec":null,"eval":"observation"},{"case":"Store policy documentation explicitly defines a nonlinear pricing schedule.","checker_spec":null,"eval":"observation"},{"case":"A competing store with the same '7 for $2' offer charges differently for 21, indicating context-dependence.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanistic derivation P(21) = 3\u00b7$2 = $6 assumes a linear homogeneous extension of the observed rate. The skeptic stance highlights that this is a conjecture refutable by a single counterexample: if 14 pencils cost less than $4, the proportional model collapses.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c0eee8b5e28373870a063248, reason-counter@d1b3b4323f17e22468da6ccb, reason-counter@f34ba9087d489b45a1ad5d2d
+
+TARGET SRC_003
+{"analogy":null,"claim":"21 pencils cost $6 because $2/7 per pencil is a scalar invariant under regrouping: any partition of 21 into bundles of 7 preserves the total cost.","counterconditions":[{"case":"The symmetry is broken by a non-abelian pricing structure (unlikely but conceivable in exotic market designs).","checker_spec":null,"eval":"observation"},{"case":"The invariant does not hold under regrouping due to interaction effects (e.g., bundle premiums).","checker_spec":null,"eval":"observation"},{"case":"The mathematical abstraction of pencils as group elements fails to capture real-world pricing discontinuities.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The unit price $2/7 is invariant under the group operation of bundling. Under the unifier stance, this symmetry implies that cost is a linear functional on the free abelian group generated by pencils, with the generator mapping to $2/7. Thus, 21 pencils map to 21 \u00d7 ($2/7) = $6.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@24eb5c9607e8b8ea3c3a3ff9, reason-counter@db507e3993cf63c31a364c3f, reason-counter@02cf95a716f39b10ceb412a3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

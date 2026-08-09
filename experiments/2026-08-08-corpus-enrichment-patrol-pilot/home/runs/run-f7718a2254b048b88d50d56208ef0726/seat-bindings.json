@@ -1,0 +1,1 @@
+{"schema":"seat-bindings.v1","bindings":[{"group":"coder","provider":"ollama","model_id":"gemma4:31b","profile_digest":"1acf7f07b4435443938c2ed14bade95233fea4128e8189fa8b45a1d13f44743a"}],"digest":"ae0034400f7381fd2f45256e7764f7656f6450cbc53606db1b98e7b642d74121"}

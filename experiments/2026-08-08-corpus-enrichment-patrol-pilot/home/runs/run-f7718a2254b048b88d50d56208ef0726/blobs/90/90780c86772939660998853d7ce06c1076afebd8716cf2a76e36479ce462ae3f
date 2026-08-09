@@ -1,0 +1,46 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+PROBLEM CONTEXT (conn:06f6f6e24748) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 06f6f6e24748 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@8b23e78ea360: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3f9be8b869a5adf5f126eb75: program:reasoning_observation_pending
+- reason-counter@1ab9e37b6319579c70cbda1a: program:reasoning_observation_pending
+- reason-counter@3a031a51db522228d86423c7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_003 contradicts SRC_002 because SRC_003 asserts the result as a direct arithmetic fact (300 pages) without establishing the uniqueness of the solution, while SRC_002 explicitly depends on the strict monotonicity of D(n) to prove that 300 is the unique solution rather than merely a feasible one. It is refuted if SRC_003's derivation implicitly assumes uniqueness through the arithmetic partition without requiring a separate monotonicity argument—in that case, the contradiction collapses into a difference in explicitness rather than substance.
+commitments: hv-floor@2a45b7988522, lineage-ref@8b23e78ea360, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Logarithmic integration is continuous, whereas digit allocation is discrete and step-wise","The integral approximation introduces error at regime boundaries that does not exist in the exact arithmetic sum"],"overturn_conditions":["If the problem requires an exact integer answer, the approximation must be refined by boundary correction","If the page count is small enough that the integral approximation error dominates the result"],"shared_structure":["The cumulative digit count grows approximately as n \u00d7 log(n), analogous to the integral of a logarithmic function","The exact solution is found by evaluating the integral and correcting for discretization at known boundaries"],"source_memory_refs":["SRC_007"],"transfer_claims":["The digit-count function D(n) \u2248 \u222b(log10(x) + 1)dx can be approximated by n\u00d7log10(n) - n/ln(10) + n, and solving this for D(n)=792 provides a continuous estimate of n","The continuous estimate must be rounded and verified against the exact discrete formula D(n) = 9 + 180 + 3\u00d7(n-99) for n in the 3-digit range"]},"claim":"The book has 297 pages, found by exhausting the 189 digits used by pages 1\u201399, leaving 603 digits for 3-digit page numbers. Dividing 603 by 3 gives exactly 201, so pages 100 through 300 account for the remaining digits. However, a subtle off-by-one error in the boundary handling (treating page 99 as the first 3-digit page or page 100 as the last 2-digit page) yields 297 instead of 300.","counterconditions":[{"case":"If the boundary between 2-digit and 3-digit pages is correctly placed at 99/100, the answer is 300","checker_spec":null,"eval":"observation"},{"case":"If the problem includes 4-digit pages, the exhaustion method requires an additional iteration","checker_spec":null,"eval":"observation"},{"case":"If the total digit count is not divisible by 3 after subtracting 189, the page count is non-integer","checker_spec"

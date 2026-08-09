@@ -1,0 +1,43 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@817abb3602fd62d2688ad05f: program:reasoning_observation_pending
+- reason-counter@23ce37d21951b99a3446ecda: program:reasoning_observation_pending
+- reason-counter@47bf033d3de3acdb4bc486d9: program:reasoning_observation_pending
+- reason-counter@12e555f532f89576e4493983: program:reasoning_observation_pending
+- reason-counter@8a834927009320750e6933c3: program:reasoning_observation_pending
+- reason-counter@7893a4029ac0d701a8728839: program:reasoning_observation_pending
+- reason-counter@3417856b3858e20babaeb8e7: program:reasoning_observation_pending
+- reason-counter@f7e3ea1f013e32a0c2cf77d5: program:reasoning_observation_pending
+- reason-counter@9058709b12b151d7a3fafc1c: program:reasoning_observation_pending
+- reason-counter@1ec60a530ba64b24358b6511: program:reasoning_observation_pending
+- reason-counter@4c2ace2f7ea2f352fd96188c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The book has 300 pages, derived by partitioning the 792 digits into three blocks: 9 one-digit page numbers (pages 1\u20139) using 9 digits, 90 two-digit page numbers (pages 10\u201399) using 180 digits, and the remaining 603 digits assigned to three-digit page numbers, which exactly accommodates 201 pages (pages 100\u2013300).","counterconditions":[{"case":"If front matter (e.g., roman numerals) consumed part of the 792-digit budget, then fewer digits remain for arabic-numbered pages and the page count falls below 300.","checker_spec":null,"eval":"observation"},{"case":"If 'pages' means physical leaves rather than numbered sides, the count of leaves would be 150, not 300.","checker_spec":null,"eval":"observation"},{"case":"If facing-page spreads are counted once per spread instead of once per page, the allocation of digits to physical sheets changes and the arithmetic no longer holds.","checker_spec":null,"eval":"observation"},{"case":"If the page numbering skips any numbers (e.g., blank unnumbered pages or plates counted separately), the linear digit-length sum is disrupted.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Total digits D(n) = sum_{k=1}^{n} len(k). Split into blocks by digit length: 9\u00d71 = 9 digits for 1\u20139, 90\u00d72 = 180 digits for 10\u201399. Remainder after the two-digit block: 792 \u2212 9 \u2212 180 = 603. Since each subsequent page number uses 3 digits, the count of three-digit pages is 603 / 3 = 201. Adding to the base of 99 gives 99 + 201 = 300 pages. The remainder after division by 3 is exactl
+commitments: reasoning-envelope-wf, reason-counter@817abb3602fd62d2688ad05f, reason-counter@23ce37d21951b99a3446ecda, reason-counter@47bf033d3de3acdb4bc486d9, reason-counter@12e555f532f89576e4493983
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The digit-counting problem has tiers defined by decimal digit-length (1, 2, 3, \u2026), which scale by powers of 10, whereas stamp denominations can be arbitrary.","Digit allocation is strictly deterministic with unit items; stamp problems may involve combinations and non-uniqueness.","The digit problem's marginal cost per tier is constant and integer-valued; stamp costs may vary non-linearly."],"overturn_conditions":["If an alternative problem interpretation (front matter, leaves, spreads) is admitted, the tier boundaries change and the transfer breaks.","If the stamp analogy introduces a non-monotonic cost structure, the 'fill upward' covering principle no longer governs."],"shared_structure":["Both the classic digit-counting problem and the postage-stamp denomination problem use a piecewise-stratified cost function where items fall into tiers with different per-item costs.","In each, one exhausts lower-cost tiers first, then divides the remaining budget by the marginal cost of the next tier to find the number of items in that tier.","The inverse problem (given total cost, find number of items) requires the same 'fill from the cheapest tier upward' covering logic."],"source_memory_refs":["SRC_001","SRC_003"],"transfer_claims":["The tier-exhaustion method transfers: compute cumulative cost up to tier k, subtract from the budget, then divide by the next tier's marginal cost.","The validation that the budget must be reachable by some integer item-count (well-posedness check) transfers to any stratified-summation inverse problem."]},"claim":"The book has 300 pag
+commitments: reasoning-envelope-wf, reason-counter@8a834927009320750e6933c3, reason-counter@7893a4029ac0d701a8728839, reason-counter@3417856b3858e20babaeb8e7, reason-counter@f7e3ea1f013e32a0c2cf77d5
+
+TARGET SRC_003
+{"analogy":null,"claim":"The book has 300 pages because pages 1-9 use 9 digits and pages 10-99 use 180 digits, leaving 603 digits for 3-digit pages, yielding exactly 201 such pages (99+201=300).","counterconditions":[{"case":"If front matter or unnumbered pages were included in the 792-digit count, the total would differ.","checker_spec":null,"eval":"observation"},{"case":"If pages were physical leaves (each with two numbered sides), the count of leaves would be 150 instead of 300.","checker_spec":null,"eval":"observation"},{"case":"If the problem meant 'distinct digits appearing' rather than total digit characters used, the answer would be different.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Partition page numbers by digit-length: single-digit pages (1-9) consume 9\u00d71=9 digits, double-digit pages (10-99) consume 90\u00d72=180 digits, totaling 189 digits. Subtracting from 792 leaves 603 digits for 3-digit pages (100+), so 603\u00f73=201 pages. 99+201=300.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9058709b12b151d7a3fafc1c, reason-counter@1ec60a530ba64b24358b6511, reason-counter@4c2ace2f7ea2f352fd96188c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

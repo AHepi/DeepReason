@@ -1,0 +1,9 @@
+```json
+{
+  "patch": {
+    "op": "remove",
+    "path": "/$defs"
+  },
+  "baseline_sha256": "cb8df19d0693881b77384271214721678cf287f4ef69fda92c32de92a8442441"
+}
+```

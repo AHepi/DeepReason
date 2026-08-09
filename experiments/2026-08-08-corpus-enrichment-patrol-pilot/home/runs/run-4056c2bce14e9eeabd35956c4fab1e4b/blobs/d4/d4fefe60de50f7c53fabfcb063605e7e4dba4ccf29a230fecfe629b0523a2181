@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's analogy section fabricates strawman claims about its neighbours. It asserts 'Neighbour SRC_001 (P = $2.50)' and 'Neighbour SRC_002 (P = $0)', inventing wrong answers and attributing them to other sources. Since SRC_002's own claim correctly states the pen costs $1.25, and the algebraic derivation is sound, these fabricated neighbour positions do not directly corrupt the answer, but they violate the integrity of the analogy/case-based reasoning by inventing false cases instead of anchoring in actual artifacts.",
+      "counterexample": null
+    }
+  ]
+}
+```

@@ -1,0 +1,20 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed relation is a false reduction. A reduction must preserve the output of the target it reduces to (the standard piecewise mechanism), but SRC_001's uniform-rate transformation yields $1,269 whereas the standard piecewise calculation yields $1,251 (40×$18 + 7×$27). Applying the premium rate to all 47 hours is not a simplification of the two-band mechanism—it fundamentally changes the base-band rate from $18 to $27, producing a numerically different result. Calling this a 'reduction' conflates 'simpler to compute' with 'reduces to'; the relation is actually a modification, not a reduction. The target even undercuts itself: the refutation clause asks whether $1,269 can be described as a simplification or reduction of the standard piecewise mechanism, and since it changes the base-band price, it cannot.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The 'depends on' relation is unsupported as stated because the target's own refutation clause is satisfiable, defeating the claim. The clause says the relation is refuted if the $846 total can be derived by a mathematically distinct causal pathway such as a flat-rate contract. $846 is exactly derivable as a flat-rate contract at $18/hr for 47 hours (47 × $18 = $846), which is a mathematically distinct pathway that does not require the standard piecewise mechanism at all. Since this counterexample is explicitly allowed by the target's own refutation condition, the dependence claim is not established: $846 can arise without any causal link to the piecewise overtime mechanism, so 'depends on' is merely one possible etiology among others, not the substantive relation the problem demands.",
+      "counterexample": [
+        {"pathway": "flat-rate contract", "calculation": "47 × $18 = $846", "distinct_from": "piecewise overtime mechanism"}
+      ]
+    }
+  ]
+}
+```

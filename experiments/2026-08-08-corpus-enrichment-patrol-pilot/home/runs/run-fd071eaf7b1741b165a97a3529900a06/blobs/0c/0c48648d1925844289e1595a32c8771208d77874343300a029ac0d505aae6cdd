@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@faab958e9fa801911868d10d: program:reasoning_observation_pending
+- reason-counter@0684e97582586023f4065506: program:reasoning_observation_pending
+- reason-counter@00ef0febab39bae6f7399b68: program:reasoning_observation_pending
+- reason-counter@725342c21428ad2f2710edaa: program:reasoning_observation_pending
+- reason-counter@cab381bd12f01607c56dde10: program:reasoning_observation_pending
+- reason-counter@d2e3fa597627844d372bc9e5: program:reasoning_observation_pending
+- reason-counter@09eeae4c97251c8ce6624100: program:reasoning_observation_pending
+- reason-counter@c887a3d52b515c03ee950189: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived by computing the complementary remainder after removing 85%.","counterconditions":[{"case":"The complementary principle is invalid for this type of percentage problem","checker_spec":null,"eval":"observation"},{"case":"An off-by-one error in the complement (e.g., using 80% instead of 85%) leads to a different result","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By the covering principle of complements, 15% of 80 = 80 - (85% of 80). 85% of 80 = 68. Therefore, 15% of 80 = 80 - 68 = 12. This tests the boundary by using the inverse fraction rather than direct scaling.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@faab958e9fa801911868d10d, reason-counter@0684e97582586023f4065506
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 1200, derived by computing the raw product of the percentage points and the base without division by 100.","counterconditions":[{"case":"The definition of percent explicitly requires division by 100, which is present in the standard algorithm.","checker_spec":null,"eval":"observation"},{"case":"The problem context demands a percentage, not a raw product.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Multiply the percentage as a raw integer by the base: 15 \u00d7 80 = 1200. This omits the normalization step (\u00f7100) that converts 'parts per hundred' into a dimensionless fraction. It is a plausible error mode that isolates the normalization step as the load-bearing element of the percentage operation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@00ef0febab39bae6f7399b68, reason-counter@725342c21428ad2f2710edaa
+
+TARGET SRC_003
+{"analogy":null,"claim":"15% of 80 equals 120, derived by an off-by-one order of magnitude error in decimal shifting.","counterconditions":[{"case":"The decimal conversion of 15% to 0.15 is correctly executed","checker_spec":null,"eval":"observation"},{"case":"The result 120 is recognized as exceeding the base 80 (which is impossible for a percentage < 100%)","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If 15% is converted to 1.5 instead of 0.15 due to a decimal place error, the calculation becomes 1.5 \u00d7 80 = 120. This tests the boundary of decimal normalization and order of magnitude awareness.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cab381bd12f01607c56dde10, reason-counter@d2e3fa597627844d372bc9e5
+
+TARGET SRC_004
+{"analogy":null,"claim":"15% of 80 equals 12, derived via structural decomposition into 10% and 5% components.","counterconditions":[{"case":"The distributive property fails to hold for percentage operators","checker_spec":null,"eval":"observation"},{"case":"The base 80 cannot be cleanly divided by 10 or 2 (false for this specific base)","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"15% is decomposed into 10% + 5%. 10% of 80 is 8. 5% is half of 10%, so 5% of 80 is 4. By the distributive property, 15% of 80 = (10% + 5%) of 80 = 8 + 4 = 12.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@09eeae4c97251c8ce6624100, reason-counter@c887a3d52b515c03ee950189
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

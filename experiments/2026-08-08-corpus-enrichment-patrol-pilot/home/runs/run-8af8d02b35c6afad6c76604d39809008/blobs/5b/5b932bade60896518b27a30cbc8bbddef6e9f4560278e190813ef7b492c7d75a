@@ -1,0 +1,25 @@
+```json
+{
+  "candidate": {
+    "claim": "second",
+    "mechanism": "Positional slot replacement: overtaking the runner currently holding the second-place slot displaces that runner backward by one position, so the overtaker now occupies the second-place slot exactly. The runner formerly in second moves to third; the leader is unaffected.",
+    "counterconditions": [
+      "The race uses a relative-proximity convention where 'the runner in second place' means the runner closest behind you, so overtaking them merely shortens the gap without changing ordinal rank.",
+      "The event is a time-trial where 'second place' denotes the competitor holding the second-best posted time; overtaking that time on the clock places you in first, not second.",
+      "Lapped racing or multi-loop formats create compound standings where passing the ordinal-second competitor on track does not alter lap-count standings."
+    ],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.92
+  }
+}
+```

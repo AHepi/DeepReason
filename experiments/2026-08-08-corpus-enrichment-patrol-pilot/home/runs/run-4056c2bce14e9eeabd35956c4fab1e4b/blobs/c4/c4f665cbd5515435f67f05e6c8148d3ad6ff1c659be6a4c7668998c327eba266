@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@517e67a1e8d0a771198da977: program:reasoning_observation_pending
+- reason-counter@9a7d47f9b3e85a6db8125f11: program:reasoning_observation_pending
+- reason-counter@cdc4f6f7f38e8d66314afb50: program:reasoning_observation_pending
+- reason-counter@2d0b57d2df1ae9c9eb4759f7: program:reasoning_observation_pending
+- reason-counter@6830de3785fca4da07e88409: program:reasoning_observation_pending
+- reason-counter@eff5b0155d305fa0553f6d2c: program:reasoning_observation_pending
+- reason-counter@3d4e61470ebfb98c6d74f3eb: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pen costs $2.25, because one subtracts $10 from $12.50 and fails to halve the remainder.","counterconditions":[{"case":"If the solver correctly halves the remainder after subtracting $10, the answer becomes $1.25.","checker_spec":null,"eval":"observation"},{"case":"If the problem is interpreted with $10 as the pen's surcharge over the notebook rather than the reverse, the roles flip.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The naive (and incorrect) procedure subtracts the $10 difference directly from the $12.50 total to get $2.50, then either stops or rounds to $2.25. This mirrors the classic 'bat and ball' cognitive reflection error. The mechanism explicitly describes the subtraction-halving inversion error.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@517e67a1e8d0a771198da977, reason-counter@9a7d47f9b3e85a6db8125f11
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pen costs $1.25.","counterconditions":[{"case":"If the $10 'more than' refers to a percentage or ratio rather than a fixed dollar amount, the answer changes.","checker_spec":null,"eval":"observation"},{"case":"If there is a hidden third item or tax included in the $12.50 total, the decomposition is invalid.","checker_spec":null,"eval":"observation"},{"case":"If the problem is stated in a non-decimal currency without conversion, the algebraic result may not hold.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let p be the pen price and n be the notebook price. The constraints are p + n = 12.50 and n = p + 10. Substituting the second into the first gives p + (p + 10) = 12.50, so 2p = 2.50, hence p = 1.25. Verification: pen = $1.25, notebook = $11.25; sum = $12.50, difference = $10.00.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cdc4f6f7f38e8d66314afb50, reason-counter@2d0b57d2df1ae9c9eb4759f7, reason-counter@6830de3785fca4da07e88409
+
+TARGET SRC_003
+{"analogy":null,"claim":"If '$10 more' is interpreted as a percentage surcharge on the pen, the pen costs approximately $5.45.","counterconditions":[{"case":"If 'costs $10 more' is a fixed dollar difference (the standard reading), this candidate is invalid.","checker_spec":null,"eval":"observation"},{"case":"If the problem specifies USD as the unit (which it does by saying 'in dollars'), the percentage reading is ruled out.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Suppose 'the notebook costs $10 more than the pen' means n = p + 0.10p = 1.10p. Then p + 1.10p = 12.50, so 2.10p = 12.50, p \u2248 5.952, n \u2248 6.548. Check: n - p \u2248 0.595, which is $10 more as a percentage of p but not $10 in absolute terms. This reading is non-standard but demonstrates that 'more than' is ambiguous without unit specification.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@eff5b0155d305fa0553f6d2c, reason-counter@3d4e61470ebfb98c6d74f3eb
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

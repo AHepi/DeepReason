@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_004 reduces to SRC_003 because computing 15% of 100 (yielding 15) and then scaling by 80/100 is arithmetically equivalent to finding the unit rate 1% of 80 (0.8) and multiplying by 15; both are factored forms of the associative product 15 × (80/100). This is refuted if SRC_004's normalization to a canonical base of 100 is a domain requirement (e.g., tax brackets) rather than an arithmetic shortcut, making the intermediate value 15 a semantically necessary quantity.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004", "SRC_003"]
+    },
+    {
+      "content": "SRC_002 depends on SRC_005 because the direct decimal multiplication 0.15 × 80 inherits its validity from the base-ten definition of percentage as 15/100 = 0.15. SRC_002 is a single-step compression of SRC_005's explicit base-ten decomposition (10/100 + 5/100 of 80). This is refuted if the multiplication 0.15 × 80 relies on a floating-point approximation rather than the exact rational fraction 15/100, violating SRC_005's dimensionless scalar definition.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_002", "SRC_005"]
+    },
+    {
+      "content": "SRC_001 and SRC_003 share mechanism: they both isolate a unit rate (1% = 0.15, then 1% of 80 = 0.8) and scale it linearly by 15 to reach 12. This is refuted if the unit rate '0.15' in SRC_001 is interpreted as a fixed coefficient rather than a derived quantity per 100, breaking the conceptual symmetry with SRC_003's explicit derivation of 0.8.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "SRC_004 contradicts SRC_003 in causal mechanism if the canonical base of 100 is a semantic prerequisite: SRC_004 anchors the operation to 100 and scales down, while SRC_003 anchors directly to 80. This is refuted if both methods are proven to be strictly commutative and associative re-factorizations of the same linear equation with no domain-specific anchoring constraints.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_004", "SRC_003"]
+    },
+    {
+      "content": "SRC_005 abstracts SRC_001, SRC_002, SRC_003, and SRC_004 by providing the general principle that percentage is a dimensionless scalar applied via linear multiplication. The specific decomposition routes (unit-rate, direct decimal, canonical normalization) are concrete instantiations of this abstraction. This is refuted if any specific route (e.g., SRC_004's intermediate value of 15) carries domain information that is lost in the abstract scalar multiplication, making the abstraction invalid for that domain.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_005", "SRC_001", "SRC_002", "SRC_003", "SRC_004"]
+    },
+    {
+      "content": "SRC_002 reduces to SRC_004 because direct decimal multiplication (0.15 × 80) implicitly embeds the canonical normalization to 100 (where 15% of 100 = 15) and the scaling factor (80/100 = 0.8). This is refuted if 0.15 is treated as a primitive irrational coefficient independent of the base-ten percentage definition, severing the dependency on the normalization step.",
+      "typicality": 0.15,
+      "neighbours": ["SRC_002", "SRC_004"]
+    }
+  ]
+}
+```

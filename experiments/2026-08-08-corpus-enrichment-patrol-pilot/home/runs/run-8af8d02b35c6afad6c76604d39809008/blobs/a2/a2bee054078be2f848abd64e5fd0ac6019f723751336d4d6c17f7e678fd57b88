@@ -1,0 +1,3 @@
+```json
+{"patch": {"op": "replace", "path": "/candidates/2/optional_refs/1", "value": "SRC_008"}}
+```

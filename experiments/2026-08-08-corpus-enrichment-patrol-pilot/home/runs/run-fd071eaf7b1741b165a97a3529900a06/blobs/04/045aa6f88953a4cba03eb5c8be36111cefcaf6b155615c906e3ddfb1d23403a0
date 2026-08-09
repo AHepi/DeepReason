@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "claim": "15% of 80 equals 12, derived by interpreting 15% as the dimensional scalar 0.15 and operating on the extensive quantity 80, anchoring the computation in a foundational case of linear scaling that abstracts over specific operand identities.",
+    "mechanism": "The scalar 0.15 is applied to the base quantity 80. Per the established linearity case (SRC_006), a single-step scalar multiplication scales the extensive magnitude directly, yielding 80 × 0.15 = 12.",
+    "counterconditions": [
+      "The operation is not a single linear application but is compounded over multiple periods, which would require an exponential function.",
+      "The operands are not independent scalar magnitudes but vector quantities, where standard commutativity may fail.",
+      "The percentage is not a static scalar but a function of the base quantity itself, introducing non-linearity."
+    ],
+    "typicality": 0.95,
+    "optional_refs": ["SRC_003", "SRC_006"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_003", "SRC_006"],
+      "search_signal": "productive"
+    }
+  }
+}
+```

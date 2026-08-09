@@ -1,0 +1,50 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f0bc16794e45a705e44a1ce3285b9b1f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A book's pages are numbered starting from 1, using 792 digits in total. How many pages does the book have?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d2ba96e90eeee20846ac081c: program:reasoning_observation_pending
+- reason-counter@762d97482e4690cf69098563: program:reasoning_observation_pending
+- reason-counter@2089bf88e56a6e05cf59e33a: program:reasoning_observation_pending
+- reason-counter@5cf1350abedfb321ea7b6e8f: program:reasoning_observation_pending
+- reason-counter@f6d40fc7f33fc0fb11378f2f: program:reasoning_observation_pending
+- reason-counter@6844b290f35f098f78e0a94c: program:reasoning_observation_pending
+- reason-counter@1ac949bc839367dd8ed297b9: program:reasoning_observation_pending
+- reason-counter@8f4f373a777102e50347d4a8: program:reasoning_observation_pending
+- reason-counter@4d1e356491affd8b095a6f0d: program:reasoning_observation_pending
+- reason-counter@f48893adbd4c12cce36fa5ce: program:reasoning_observation_pending
+- reason-counter@51ca8394183f73b481e50659: program:reasoning_observation_pending
+- reason-counter@bb21f9ca036117d160035c67: program:reasoning_observation_pending
+- reason-counter@f070312b0fe6599414771264: program:reasoning_observation_pending
+- reason-counter@c192583490ccfed726f81e97: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The book has 300 pages, found by exhausting 189 digits for pages 1\u201399, leaving 603 digits for 3-digit page numbers, which implies 201 three-digit pages and therefore page 300.","counterconditions":[{"case":"If '792 digits' counts only distinct digit symbols (0\u20139), the allocation would differ.","checker_spec":null,"eval":"observation"},{"case":"If front matter is included in the digit count despite 'starting from 1', the total would change.","checker_spec":null,"eval":"observation"},{"case":"If 'pages' means physical leaves (two numbered sides per leaf), the page count would be halved.","checker_spec":null,"eval":"observation"},{"case":"If the problem intended a different numeral system (e.g., Roman numerals), the digit-usage function would differ.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Pages 1\u20139 consume 9\u00d71=9 digits; pages 10\u201399 consume 90\u00d72=180 digits; 9+180=189. Remaining digits: 792\u2212189=603. Each remaining page is a 3-digit page, so 603/3=201 additional pages beyond 99, giving 99+201=300 pages.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"ex
+commitments: reasoning-envelope-wf, reason-counter@d2ba96e90eeee20846ac081c, reason-counter@762d97482e4690cf69098563, reason-counter@2089bf88e56a6e05cf59e33a, reason-counter@5cf1350abedfb321ea7b6e8f
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Memory allocation padding is typically constrained by powers of two or system-specific block sizes, whereas page-numbering digit blocks are constrained by decimal powers (10, 100, etc.).","The 'unused digits' in a page-numbering template are not physical objects and do not consume space in the same sense as allocated memory; a book does not contain blank 'padding pages' for numbering unless explicitly designed that way.","Standard book page numbering counts actual printed digits, not allocated capacity."],"overturn_conditions":["Discovery that the term 'using 792 digits' in standard mathematical problem contexts strictly means exact consumption, invalidating capacity-based interpretations.","Evidence that page numbering templates are never over-allocated in publishing practice.","Demonstration that the 12-digit gap cannot be meaningfully interpreted as template padding."],"shared_structure":["Allocation of contiguous numbered space into blocks of fixed width (1-digit, 2-digit, 3-digit) mirrors memory allocation in fixed-size blocks.","The 792 digit target corresponds to a capacity allocation limit rather than exact usage.","Padding or unused space in the 
+commitments: reasoning-envelope-wf, reason-counter@f6d40fc7f33fc0fb11378f2f, reason-counter@6844b290f35f098f78e0a94c, reason-counter@1ac949bc839367dd8ed297b9
+
+TARGET SRC_003
+{"analogy":null,"claim":"The book has 300 pages, found by exhausting the 189 digits used by pages 1\u201399, leaving 603 digits for 3-digit page numbers, which yields exactly 201 additional pages (603 \u00f7 3), so 99 + 201 = 300.","counterconditions":[{"case":"The count of 792 digits includes unnumbered front matter (e.g., blank pages, frontispiece) in the digit total, which would shift the calculation.","checker_spec":null,"eval":"observation"},{"case":"The problem counts physical leaves (sheets) rather than numbered sides, requiring halving the final result.","checker_spec":null,"eval":"observation"},{"case":"The problem counts digits appearing on facing pages (spreads) rather than individual page numbers, altering the allocation formula.","checker_spec":null,"eval":"observation"},{"case":"The 792-digit total includes digits from a back-matter section (e.g., index) numbered separately or continuously, invalidating the simple piecewise sum.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Pages 1\u20139 use 9 digits (9\u00d71). Pages 10\u201399 use 180 digits (90\u00d72). The cumulative digits used is 189. Subtracting 189 from 792 leaves 603 digi
+commitments: reasoning-envelope-wf, reason-counter@8f4f373a777102e50347d4a8, reason-counter@4d1e356491affd8b095a6f0d, reason-counter@f48893adbd4c12cce36fa5ce, reason-counter@51ca8394183f73b481e50659
+
+TARGET SRC_004
+{"analogy":null,"claim":"The book has exactly 300 pages.","counterconditions":[{"case":"If front matter or unnumbered pages were included in the digit count, the total page count would differ.","checker_spec":null,"eval":"observation"},{"case":"If the problem counts physical leaves rather than numbered sides, the answer would be 150 leaves.","checker_spec":null,"eval":"observation"},{"case":"If facing-page spreads were counted as a single unit, the digit allocation model would change.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Pages 1\u20139 use 9\u00d71=9 digits. Pages 10\u201399 use 90\u00d72=180 digits. This exhausts 189 digits, leaving 792\u2212189=603 digits for 3-digit pages. 603\u00f73=201, so pages 100\u2013300 account for the remaining digits. Total pages = 300.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bb21f9ca036117d160035c67, reason-counter@f070312b0fe6599414771264, reason-counter@c192583490ccfed726f81e97
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

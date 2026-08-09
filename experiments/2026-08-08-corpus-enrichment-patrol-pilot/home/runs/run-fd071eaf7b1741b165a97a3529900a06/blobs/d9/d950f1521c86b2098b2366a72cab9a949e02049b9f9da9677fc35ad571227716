@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ce911425d2a2f71fd0bfbcd265cf043f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is 15% of 80?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@b4867c968f45151fec07d082: program:reasoning_observation_pending
+- reason-counter@015de035522c6586c2936c48: program:reasoning_observation_pending
+- reason-counter@af9d3832b1923927718ebab7: program:reasoning_observation_pending
+- reason-counter@9f5a1d2bdca1bda7b320fbea: program:reasoning_observation_pending
+- reason-counter@78392c1cf2c98d64b83e6829: program:reasoning_observation_pending
+- reason-counter@cce8c248061cade06e837420: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"15% of 80 equals 12, derived via a unit-rate scaling mechanism where 1% of 80 equals 0.8.","counterconditions":[{"case":"The rate scaling is non-linear (e.g., compound percentage)","checker_spec":null,"eval":"observation"},{"case":"The unit rate 1% of 80 is miscalculated","checker_spec":null,"eval":"observation"},{"case":"The scaling by 15 is applied to a different unit rate","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"First establish the unit rate: 1% of 80 is 0.01 \u00d7 80 = 0.8. Then scale this unit rate by 15: 15 \u00d7 0.8 = 12. This is equivalent to 15 \u00d7 (1/100) \u00d7 80, exploiting the associativity of multiplication.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b4867c968f45151fec07d082, reason-counter@015de035522c6586c2936c48, reason-counter@af9d3832b1923927718ebab7
+
+TARGET SRC_002
+{"analogy":null,"claim":"15% of 80 equals 12, derived by decomposing the percentage into 10% and 5%.","counterconditions":[{"case":"The decomposition is miscalculated (e.g., 5% of 80 is mistaken as 5)","checker_spec":null,"eval":"observation"},{"case":"The base quantity is not 80","checker_spec":null,"eval":"observation"},{"case":"Addition of the parts fails","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"10% of 80 is found by moving the decimal one place left: 8. Since 5% is half of 10%, 5% of 80 is 4. Adding the components: 8 + 4 = 12. This leverages distributivity: (10% + 5%) \u00d7 80 = 10%\u00d780 + 5%\u00d780.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9f5a1d2bdca1bda7b320fbea, reason-counter@78392c1cf2c98d64b83e6829, reason-counter@cce8c248061cade06e837420
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

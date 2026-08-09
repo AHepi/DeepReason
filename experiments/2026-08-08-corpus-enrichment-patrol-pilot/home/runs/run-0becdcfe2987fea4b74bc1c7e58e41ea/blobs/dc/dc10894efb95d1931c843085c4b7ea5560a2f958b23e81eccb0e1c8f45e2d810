@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1":{"baseline_sha256":"99f6830b0b65594bf28d1850177ceeca2c7e0e65e8b70d9b434b3607f62e0e2b","patches":[{"op":"replace","path":"/scratch_proposal/links/1/from_ref","value":"NEW_001"}]}}
+```

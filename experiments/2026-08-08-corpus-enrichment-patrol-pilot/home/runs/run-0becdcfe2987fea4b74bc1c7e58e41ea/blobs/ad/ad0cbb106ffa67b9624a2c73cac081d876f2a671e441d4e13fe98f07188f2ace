@@ -1,0 +1,34 @@
+```json
+{
+  "cases": [
+    {
+      "attack": false,
+      "case": "SRC_001 proposes a substantive abstraction relation (covering principle over cut-width and piece-definition axes). It names the relation kind ('abstraction') and states what it is refuted if.",
+      "counterexample": null,
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "SRC_002 fails the pizza problem as stated. The problem specifies that the 4 cuts each pass through the exact center, which for straight lines means they are concurrent. The claim states the pieces number is less than 8 only if cuts overlap, and the counterconditions assert that 4 distinct concurrent lines yield 8 pieces. However, the maximum number of regions formed by k distinct concurrent lines is 2k, so 4 distinct concurrent lines yield at most 8 pieces only if they are arranged to divide the plane equally; any other angles yield fewer than 8. The claim and countercondition incorrectly assert or imply 8 is guaranteed for distinct cuts.",
+      "counterexample": [
+        "4 distinct concurrent lines through the center with angles 0, 10, 20, and 30 degrees yield 8 regions, but if one line is at 0 and another at 180 they are not distinct; assuming distinct lines with angles 0, 10, 20, and 30 degrees yields 8 regions, but the claim that all distinct concurrent lines yield 8 is false if any angles are supplementary (making them the same line)."
+      ],
+      "target_alias": "SRC_002"
+    },
+    {
+      "attack": true,
+      "case": "SRC_003 fails the pizza problem as stated. The problem asks for the number of pieces produced by 4 straight cuts through the exact center. The target claims that if two of the four cuts overlap perfectly, they result in 6 pieces; if two pairs overlap, 4 pieces. However, the problem does not specify overlapping cuts; it specifies 4 straight cuts. The target omits the default case and incorrectly scopes the problem to overlapping cuts, failing to answer the problem as stated.",
+      "counterexample": [
+        "4 straight cuts through the exact center with no overlaps yield 8 pieces, which is the standard answer to the problem as stated."
+      ],
+      "target_alias": "SRC_003"
+    },
+    {
+      "attack": false,
+      "case": "No fault identified for SRC_004 based on the provided content.",
+      "counterexample": null,
+      "target_alias": "SRC_004"
+    }
+  ]
+}
+```

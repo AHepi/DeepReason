@@ -1,0 +1,27 @@
+```json
+{
+  "candidate": {
+    "claim": "The total pay is $855, calculated as (40 × $18) + (7 × $27) = $720 + $189.",
+    "mechanism": "For hours 1–40, pay the base rate of $18/hour. For hours 41–47 (overtime), pay 1.5 × $18 = $27/hour. The total is 40 × 18 = 720 for regular time, plus 7 × 27 = 189 for overtime, giving 720 + 189 = 855.",
+    "counterconditions": [
+      "If overtime is defined as hours beyond a threshold other than 40, the split changes.",
+      "If the overtime multiplier differs from 1.5, the OT rate changes.",
+      "If the base rate is not $18/hour, the regular and OT rates both change."
+    ],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.96
+  }
+}
+```

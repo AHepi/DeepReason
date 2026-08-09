@@ -1,0 +1,43 @@
+```json
+{
+  "candidate": {
+    "claim": "The book has 300 pages, obtained by summing digits in three contiguous blocks: 9 for single-digit pages (1–9), 180 for double-digit pages (10–99), and 603 remaining digits allocated to 201 three-digit pages (100–300).",
+    "mechanism": "Let D(n) be the total count of digits used to number pages 1 through n. Split into digit-length strata: pages 1–9 use 9 digits (9×1), pages 10–99 use 180 digits (90×2), exhausting 189 digits. The remaining 792 − 189 = 603 digits fund 603/3 = 201 three-digit pages, starting at page 100 and ending at page 300. Thus n = 300. The covering principle is the stratified summation D(n) = 9·1 + 90·2 + (n−99)·3 valid for 100 ≤ n ≤ 999.",
+    "counterconditions": [
+      "If front matter (e.g., roman numerals i, ii) were included in the 792-digit count, the arithmetic would shift and the answer would differ.",
+      "If 'pages' meant physical leaves rather than numbered sides, the leaf count would be half of 300.",
+      "If the digit count were per facing-page spread rather than per page number, the allocation formula would not apply.",
+      "If 792 were not reachable by any integer page count under the standard reading (it is), the problem would be ill-posed."
+    ],
+    "typicality": 0.92,
+    "evidence_refs": [],
+    "optional_refs": ["SRC_001", "SRC_003"],
+    "analogy": {
+      "source_memory_refs": ["SRC_001", "SRC_003"],
+      "shared_structure": [
+        "Both the classic digit-counting problem and the postage-stamp denomination problem use a piecewise-stratified cost function where items fall into tiers with different per-item costs.",
+        "In each, one exhausts lower-cost tiers first, then divides the remaining budget by the marginal cost of the next tier to find the number of items in that tier.",
+        "The inverse problem (given total cost, find number of items) requires the same 'fill from the cheapest tier upward' covering logic."
+      ],
+      "disanalogies": [
+        "The digit-counting problem has tiers defined by decimal digit-length (1, 2, 3, …), which scale by powers of 10, whereas stamp denominations can be arbitrary.",
+        "Digit allocation is strictly deterministic with unit items; stamp problems may involve combinations and non-uniqueness.",
+        "The digit problem's marginal cost per tier is constant and integer-valued; stamp costs may vary non-linearly."
+      ],
+      "transfer_claims": [
+        "The tier-exhaustion method transfers: compute cumulative cost up to tier k, subtract from the budget, then divide by the next tier's marginal cost.",
+        "The validation that the budget must be reachable by some integer item-count (well-posedness check) transfers to any stratified-summation inverse problem."
+      ],
+      "overturn_conditions": [
+        "If an alternative problem interpretation (front matter, leaves, spreads) is admitted, the tier boundaries change and the transfer breaks.",
+        "If the stamp analogy introduces a non-monotonic cost structure, the 'fill upward' covering principle no longer governs."
+      ]
+    },
+    "checker_specs": [],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_003"],
+      "search_signal": "productive"
+    }
+  }
+}
+```

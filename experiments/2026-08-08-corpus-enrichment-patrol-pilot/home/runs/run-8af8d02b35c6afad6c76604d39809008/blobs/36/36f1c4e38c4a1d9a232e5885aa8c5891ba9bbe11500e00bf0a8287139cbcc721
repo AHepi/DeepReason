@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "second",
+    "mechanism": "Overtaking the runner in second place means you take their position. You do not leapfrog over the leader; you simply move ahead of the second-place runner, which means you are now in second place and the former second-place runner is now in third place. The leader remains in first place.",
+    "counterconditions": [
+      "The race is a time-trial where 'second place' refers to the runner with the second-best recorded time and overtaking their time puts you in first.",
+      "The race uses relative framing where 'overtake the runner in second place' means to pass the runner currently in second from the back.",
+      "The race has only two runners.",
+      "The race uses non-standard ordinal exchange where overtaking position N places you into position N-1."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_008",
+        "SRC_006"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

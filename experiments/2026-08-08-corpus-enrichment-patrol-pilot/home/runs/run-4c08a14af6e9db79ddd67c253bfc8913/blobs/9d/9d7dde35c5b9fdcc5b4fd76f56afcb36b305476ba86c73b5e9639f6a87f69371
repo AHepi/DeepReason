@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c82da997f0a88930c4be9a7c: program:reasoning_observation_pending
+- reason-counter@c16bf91ef098572d5e80ff84: program:reasoning_observation_pending
+- reason-counter@df543c839b2c8da7c3f32c9f: program:reasoning_observation_pending
+- reason-counter@13a2a15296d06f92bd57cf8f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The smallest positive integer satisfying x \u2261 3 (mod 5) and x \u2261 4 (mod 7) is 18, found by stepwise search along the residue chain 3, 8, 13, 18.","counterconditions":[{"case":"If a positive integer smaller than 18 satisfies both congruences, this candidate is overturned.","checker_spec":null,"eval":"observation"},{"case":"If the progression 5k+3 has a positive term below 18 that leaves remainder 4 mod 7, the chain analysis is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The constraints x = 5k + 3 (k \u2265 0) and x = 7m + 4 (m \u2265 0) generate the arithmetic progression {3, 8, 13, 18, ...}. The search walks this chain from its origin: x=3 leaves 3 mod 7 (not 4); x=8 leaves 1; x=13 leaves 6; x=18 leaves 4. At k=3, m=2, both congruences hold simultaneously. The progression increases by 5 each step and is bounded below by 3, so no positive integer smaller than 18 can lie on the 5-chain; among {3, 8, 13}, none satisfies the mod-7 test. Therefore 18 is the least positive solution and the complete solution is x \u2261 18 (mod 35).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c82da997f0a88930c4be9a7c, reason-counter@c16bf91ef098572d5e80ff84
+
+TARGET SRC_002
+{"analogy":null,"claim":"18 is the smallest positive solution, derived by parameterizing both constraints as explicit formulas and eliminating the shared variable.","counterconditions":[{"case":"If 5k - 7m = 1 has a solution with 0 \u2264 k < 3 and x > 0, this is overturned.","checker_spec":null,"eval":"observation"},{"case":"If the Diophantine equation 5k - 7m = 1 has no solution, the elimination approach fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"From x \u2261 3 (mod 5): x = 5k + 3. From x \u2261 4 (mod 7): x = 7m + 4. Equating: 5k + 3 = 7m + 4, so 5k - 7m = 1. For k=3, m=2: 15 - 14 = 1. Thus x = 5(3) + 3 = 18. For k=-4, m=-3: x = -17, giving the complementary residue class x \u2261 -17 \u2261 18 (mod 35). Since k=3 is the smallest non-negative k satisfying 5k \u2261 1 (mod 7) (k \u2261 3 mod 7), x = 18 is the smallest positive representative.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@df543c839b2c8da7c3f32c9f, reason-counter@13a2a15296d06f92bd57cf8f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,3 @@
+```json
+{"candidate": {"content": "The case-split method (split by presence of zero) reduces to a direct permutation product over the restricted alphabet {1..9} when zero is absent (yielding 9*8*7 = 504), and is refuted if the zero-present case is not correctly constrained to forbid zero in the hundreds place (which would inflate the count).", "typicality": 0.55, "neighbours": ["SRC_001", "SRC_002", "SRC_004"]}}
+```

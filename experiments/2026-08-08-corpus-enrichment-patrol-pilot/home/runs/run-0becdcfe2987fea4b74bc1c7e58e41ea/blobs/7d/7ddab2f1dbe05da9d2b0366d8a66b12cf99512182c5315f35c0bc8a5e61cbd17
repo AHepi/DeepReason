@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a8ada6e48a68adb8f83367cc: program:reasoning_observation_pending
+- reason-counter@cf8859440062ee47171e2fb2: program:reasoning_observation_pending
+- reason-counter@7d5175fea7c0e29280eb8613: program:reasoning_observation_pending
+- reason-counter@3e807f679bc52ed4907f7bbe: program:reasoning_observation_pending
+- reason-counter@46f13ae48f10ac160efbba1f: program:reasoning_observation_pending
+- reason-counter@223bd229d546bc6227c5f411: program:reasoning_observation_pending
+- reason-counter@c3c53f31094436a0b91f6bc9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Four concurrent straight cuts through a central point divide the plane into exactly 8 regions, yielding exactly 8 pieces of pizza.","counterconditions":[{"case":"If cuts were not constrained to pass through the exact center, we could rotate them to prevent triple-intersections and reach 11 pieces.","checker_spec":null,"eval":"observation"},{"case":"If the pizza had a non-circular topology or holes, the count of connected components could differ.","checker_spec":null,"eval":"observation"},{"case":"If cuts were curved instead of straight, the central concurrency would not necessarily limit regions to 2n.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Since all four straight cuts pass through the exact center, they all share exactly one common point. Through any point in a plane, at most 2n distinct regions can be formed by n lines (yielding 2n sectors). We can achieve this maximum by ensuring no two cuts overlap entirely (no two cuts share the same angle). Four distinct straight cuts through the center therefore yield 2 * 4 = 8 sectors, which directly correspond to 8 pieces of pizza.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a8ada6e48a68adb8f83367cc, reason-counter@cf8859440062ee47171e2fb2, reason-counter@7d5175fea7c0e29280eb8613
+
+TARGET SRC_002
+{"analogy":null,"claim":"Because the lines all pass through the center, they form a set of 4 intersecting diameters. Four diameters create exactly 8 slices.","counterconditions":[{"case":"If a cut is exactly identical to a previous cut, it yields 0 new pieces.","checker_spec":null,"eval":"observation"},{"case":"If the pizza is not perfectly circular and cuts terminate before crossing the entire shape, the 'diameter' framing might not yield full slices.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A diameter is a chord passing through the center. Four straight cuts through the center correspond to 4 diameters. Each new diameter crosses the center and extends across the entire pizza, splitting exactly 2 existing slices into 4. This yields 2 additional pieces per cut: cut 1 yields 2 pieces, cut 2 yields 4, cut 3 yields 6, cut 4 yields 8. Therefore, 4 diameters produce 8 slices.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3e807f679bc52ed4907f7bbe, reason-counter@46f13ae48f10ac160efbba1f
+
+TARGET SRC_003
+{"analogy":null,"claim":"Even though 4 general lines in a plane produce 11 pieces, 4 concurrent lines produce 8. This loss of 3 regions is due to the 4 lines intersecting at a single point instead of producing the 6 distinct pairwise intersections expected in a general position.","counterconditions":[{"case":"If exactly two cuts perfectly overlap, the number of pieces drops to 6.","checker_spec":null,"eval":"observation"},{"case":"If three cuts overlap, it drops to 4.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a general position, 4 lines yield C(4,2) = 6 pairwise intersection points. The formula for max regions R = 1 + n + (number of intersections). For 4 general lines, R = 1 + 4 + 6 = 11. If all 4 lines are concurrent, they share exactly 1 intersection point. Thus R = 1 + n + 1 = 1 + 4 + 1 = 6, but we must account for the unbounded rays. Actually, each of the 4 lines is divided into 2 rays by the origin, resulting in 8 unbounded sectors. Therefore, the pizza has exactly 8 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@223bd229d546bc6227c5f411, reason-counter@c3c53f31094436a0b91f6bc9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

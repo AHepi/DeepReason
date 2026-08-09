@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8d6145c861f13b4431cecf83: program:reasoning_observation_pending
+- reason-counter@d6c13bbc586b1b1706a261ec: program:reasoning_observation_pending
+- reason-counter@dd914ca8af55a3866ad9d5ae: program:reasoning_observation_pending
+- reason-counter@c7005cd4f0c9314aa4d3e846: program:reasoning_observation_pending
+- reason-counter@b5565123182263c2abcb1632: program:reasoning_observation_pending
+- reason-counter@5ab61bcd453f69e331f82c2f: program:reasoning_observation_pending
+- reason-counter@8342e9453e2f6eff88e6b9be: program:reasoning_observation_pending
+- reason-counter@743482bc7f2138ac3906e544: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The smallest positive integer is 18, found by CRT lattice-lifting: the inverse of 5 mod 7 is 3, so k\u22613 (mod 7), giving x\u226118 (mod 35).","counterconditions":[{"case":"If a positive integer m<18 with m\u22613 (mod 5) and m\u22614 (mod 7) exists, then 18 is not minimal and this claim fails.","checker_spec":null,"eval":"observation"},{"case":"If the modular inverse of 5 mod 7 were computed incorrectly, the residue class would be wrong.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Write x=5k+3; require 5k+3\u22614 (mod 7), i.e., 5k\u22611 (mod 7). The inverse of 5 mod 7 is 3 (since 5\u00b73=15\u22611 mod 7), so k\u22613 (mod 7). Substituting k=3 gives x=5\u00b73+3=18; verification: 18 mod 5=3, 18 mod 7=4. The full solution class is x\u226118 (mod 35), so 18 is the smallest positive member.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8d6145c861f13b4431cecf83, reason-counter@d6c13bbc586b1b1706a261ec
+
+TARGET SRC_002
+{"analogy":null,"claim":"The answer is 18, found by adding 7 to the first remainder 3 until the mod-5 condition is preserved: 3,10,17,24,31, but a complementary search adding 5 to remainder 4 gives 4,9,14,19,24,29,34; the intersection at 24 satisfies both, so x=24.","counterconditions":[{"case":"If 24 does not actually satisfy both congruences, this candidate fails \u2014 and indeed 24 mod 5=4, 24 mod 7=3, so the remainders are swapped, not matched.","checker_spec":null,"eval":"observation"},{"case":"If the intersection computation is wrong or a smaller intersection exists, the claim fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Two congruence classes mod 7 and mod 5: {3,10,17,24,31} (values \u22613 mod 7) and {4,9,14,19,24,29,34} (values \u22614 mod 5). The intersection within the range [1,35] is {24}. This appears to give x=24 as the smallest positive integer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@dd914ca8af55a3866ad9d5ae, reason-counter@c7005cd4f0c9314aa4d3e846
+
+TARGET SRC_003
+{"analogy":null,"claim":"The answer is 18, established by a proof-by-exhaustion over the finite candidate set {3,8,13,18} bounded by lcm(5,7)=35.","counterconditions":[{"case":"If the enumeration of 5k+3 for k=0,1,2,3 is miscomputed or incomplete, the first-hit claim is unproven.","checker_spec":null,"eval":"observation"},{"case":"If the periodicity argument that no smaller positive solution exists outside this range is invalid, minimality fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Any solution must be of the form 5k+3. Enumerating the positive values less than 35: k=0\u21923 (3 mod 7=3\u22604), k=1\u21928 (8 mod 7=1\u22604), k=2\u219213 (13 mod 7=6\u22604), k=3\u219218 (18 mod 7=4 \u2713). Since the solution class mod 35 repeats with period 35, the first hit at 18 is globally minimal among positive integers.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b5565123182263c2abcb1632, reason-counter@5ab61bcd453f69e331f82c2f
+
+TARGET SRC_004
+{"analogy":null,"claim":"The smallest positive integer is 18, found by treating the congruences as an integer linear program: minimize x subject to x=5a+3, x=7b+4, x\u22651, a,b\u22650.","counterconditions":[{"case":"If a smaller non-negative (a,b) solving 5a\u22127b=1 exists, then a smaller x exists.","checker_spec":null,"eval":"observation"},{"case":"If the constraint a,b\u22650 does not actually bind (i.e., negative a or b could yield a smaller positive x via the lcm wrap), the minimality argument is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Setting 5a+3=7b+4 gives 5a\u22127b=1. The smallest non-negative solution to this Diophantine equation is (a,b)=(3,2) since 5\u00b73\u22127\u00b72=15\u221214=1. Substituting back: x=5\u00b73+3=18 (equivalently x=7\u00b72+4=18). Because a\u22650 and b\u22650 are required for positive x and the general solution shifts by (a,b)\u2192(a+7t, b+5t), (3,2) yields the minimal positive x.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8342e9453e2f6eff88e6b9be, reason-counter@743482bc7f2138ac3906e544
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

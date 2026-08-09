@@ -1,0 +1,14 @@
+```json
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target presupposes an annulus (ring) with the center missing, a geometry not stated in the problem; for a standard pizza (a disk with material at the center), 4 diametral cuts yield 8 pieces (regions), not '8 disconnected arcs'.",
+      "counterexample": [
+        "A standard circular pizza with 4 straight cuts through the center produces 8 connected pieces, not arcs."
+      ],
+      "target_alias": "SRC_001"
+    }
+  ]
+}
+```

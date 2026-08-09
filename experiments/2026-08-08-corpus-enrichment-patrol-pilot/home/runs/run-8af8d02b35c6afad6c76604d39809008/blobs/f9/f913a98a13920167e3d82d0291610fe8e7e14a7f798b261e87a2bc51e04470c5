@@ -1,0 +1,3 @@
+```json
+{"schema": "repair.patch.v1","baseline_sha256": "90b35d954014adb398b78891d6ca3c917c20cf825f8ca0521ed1a439ceedf1f4","patch": {"op": "replace","path": "/candidates/2/optional_refs/2","value": "SRC_004"}}
+```
