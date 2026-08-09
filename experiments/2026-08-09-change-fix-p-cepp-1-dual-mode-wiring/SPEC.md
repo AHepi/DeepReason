@@ -338,6 +338,24 @@ checks.
 files + 1-2 map documents.** Under the `dr-drive-harness` default
 ~300-line guideline; no sub-tranche split needed.
 
+### Amendment (post-step-4, operator-confirmed): ceiling raised
+
+After S1 and S2's regression test landed, `tools/diff_budget.py` read
+228/190 (EXCEEDED) — driven by a mid-step discovery in S2 (CHECKLIST.md
+step 4): the realistic dispatch path needs a durable model-classification
+binding that would otherwise require touching `cli/doctor.py` (explicitly
+out of scope), so a ~50-line doctor-bypassing test helper was added
+instead, legitimate and necessary, not scope creep. Presented to the
+operator via `AskUserQuestion` with three priced options (raise the
+ceiling / trim the test / split into sub-tranches); **operator chose
+"raise the ceiling and continue."** New ceiling: **320 lines** (the
+estimated final total from the stop report, with headroom), still under
+the `dr-drive-harness` ~300-line guideline's *intent* (a genuinely
+coherent one-fix change, not sprawl) even though the raw number now sits
+just over that soft default — recorded plainly rather than quietly
+redefining "guideline." No functional scope changed; only the ceiling
+`dr-execute-step`'s diff-budget gate checks against.
+
 Commits: one per spec item (S1-S4), so a failure in one item's gate run
 does not block committing the others — 4 commits, each running the
 affected-file ring (CLAUDE.md's own iterate-on-the-ring rule) plus one

@@ -1,5 +1,6 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=5 blockers=diff-budget EXCEEDED (228/190) after step 4 -- STOPPED per dr-execute-step's own rule, awaiting operator decision (see below)
+State: next=5 blockers=none (diff-budget ceiling raised 190->320 by
+operator decision, SPEC.md amendment; resuming)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
