@@ -160,4 +160,12 @@ resume policy, applied identically each time.
 | hard2-h2-01 | hard2 | committed | 12 (10+2 continue) | 95/95 | 0 (expected) | third foreign-criticism gap case, closed by continue |
 | hard2-h2-08 | hard2 | committed | 12 (10+2 continue) | 100/100 | 0 (expected) | fourth foreign-criticism gap case, closed by continue |
 | hard2-h2-15 | hard2 | committed | 12 (10+2 continue) | 115/116 | 0 (expected) | fifth foreign-criticism gap case, closed by continue |
-| hard2-h2-22 | hard2 | continuing | 10 (+2 pending) | 77/? | - | sixth foreign-criticism gap case (final question); continue in flight (task bd7pef2jk) |
+| hard2-h2-22 | hard2 | committed | 12 (10+2 continue) | 93/94 | 0 (expected) | sixth foreign-criticism gap case (final question), closed by continue |
+
+**Phase 1 complete: 10/10 questions committed.** All zero on
+`candidate_checker_commitment_count` and on `encoder_calls`/
+`property_designer_calls` (P-CEPP-1, expected throughout). Failure
+ledger: 3 spent (container/process deaths; see above). 6 of 10 first
+stops needed one `continue --budget cycles=2` top-up for a
+foreign-criticism gap; all 6 closed cleanly on the first try, 0 needed a
+second.
