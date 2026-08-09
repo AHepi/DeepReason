@@ -534,6 +534,90 @@ glm-5.2 in both cells — whether the asymmetry (calls/artifact,
 continuation counts) comes from the conjecturer's foreign identity or
 would also appear with a foreign CRITIC is still completely unknown.
 
+## Phase 4 + Phase 5 — adversarial hit validation and live adjudication of the consistency patrol (BLOCKED, not executed)
+
+Requested to close the three-number chain (raw hit rate → validated
+rate → live-adjudicated outcomes) that decides whether the O2-shelved
+"consistency patrol" design (`experiments/2026-08-08-change-grounded-overlay-o2/SPEC.md`
+S7) earns permanent machinery. Both phases build on Phase 1/2 of a
+SEPARATE, sibling session's work (`claude/corpus-enrichment-patrol-pilot-f4khnk`),
+read-only — this tranche made no patrol calls itself, consistent with
+the original instruction not to duplicate that window.
+
+**What was done before stopping:**
+
+- Read the sibling branch's Phase 1 (10 enrichment roots, committed,
+  replay-valid) and Phase 2 (a "consistency patrol": one bounded,
+  neutral-framed call per accepted-artifact pair within a shared
+  problem, asking only "do these two claims contradict"; a hit =
+  `contradiction == true AND confidence >= 0.6`) via `git show`/`git
+  archive` only — never checked out, never merged.
+- Found and documented an inherited (not caused) defect in Phase 2's
+  own data: 130/8872 records have a well-formed JSON response wrapped
+  in a markdown fence that its parser doesn't strip, silently
+  mis-scored as non-hits rather than tallied as parse failures.
+- Read O2's own `SPEC.md` S7 and confirmed the binding design
+  constraint both phases had to honor: "the patrol proposes, it never
+  itself adjudicates" — every candidate must pass through ORDINARY
+  criticism, never a label written by either phase.
+- Read `docs/proposals/AMENDMENT_EPOCHS.md` and confirmed, from
+  `src/deepreason/cli/main.py`, that `amend`/`continue` operate purely
+  on `--root` — no `DEEPREASON_HOME` or fresh qualification battery
+  needed, simplifying Phase 5's design considerably from what was
+  assumed going in.
+- Froze `PREREG-P4.yaml` and `PREREG-P5.yaml` before any live call,
+  per the operator's instruction.
+- Built and SMOKE-TESTED LIVE (not just compiled) the full tool chain
+  for both phases:
+  - `phase4_sample.py` — verified against the sibling's real (partial)
+    data: correctly reproduces 1767 hits / 130 excluded
+    fence-parse-failures / 6975 clean non-hits.
+  - `phase4_rejudge.py` — run live against 1 real hit: the
+    skeptic-framed check (deliberately refute-biased) found a
+    consistent reading the original neutral-framed patrol call missed,
+    so that hit correctly failed to validate — the mechanism works as
+    designed, on real data, on the first try.
+  - `phase4_analyze.py` — verified against that same mini-run's output.
+  - `phase5_check_amendable.py` — verified against a real committed
+    root; caught and fixed a real bug in the process (calling
+    `derive_terminal_authority` without first loading the epoch-aware
+    manifest silently returns `historical_read_only` for EVERY root,
+    which would have made Phase 5 wrongly skip every single candidate
+    had it not been caught here, before any real candidate was
+    evaluated).
+  - `phase5_run_case.py` — run live end-to-end against 1 real (but
+    Phase-4-unvalidated, so not a real candidate) hit: amend succeeded,
+    `continue` ran 10 genuine criticism cycles,
+    `state=completed`, `replay_valid=true`, no new attack edge minted
+    (the tension survived criticism in that demonstration) — confirms
+    the whole copy → amend → continue → audit pipeline works before
+    it would have been spent on real candidates.
+
+**Why it stopped here.** PREREG-P4.yaml's own trigger condition
+required Phase 2 to reach its pre-registered total (9277 pairs)
+before any real sample could be drawn. As of the last check before
+stopping, the sibling branch showed 8872/9277 (95.6%) and its last
+commit was **2 hours old** — a sustained stall, not a between-chunk
+pause. Per the operator's explicit choice when presented with this
+stall (wait longer / proceed with partial data / stop and report),
+this tranche stops here: no sample was drawn, no re-judgment calls
+beyond the verification smoke tests above were made, and Phase 5 never
+selected or acted on a real candidate.
+
+**Residue: what a future session needs to pick this up.** Both
+preregs are frozen and complete; every script is built, syntax-checked
+AND live-verified against real data; the one real bug found
+(`derive_terminal_authority` needing an explicit loaded manifest) is
+already fixed in the committed `phase5_check_amendable.py`. Resuming
+requires exactly two things: (1) confirm Phase 2 has reached 9277/9277
+on the sibling branch (`git fetch` + the same `git show ... | wc -l`
+check used throughout this segment), (2) run
+`phase4_sample.py` against the real, complete `patrol_results.jsonl`,
+then `phase4_rejudge.py` (hit and non-hit), `phase4_analyze.py`, then
+select Phase 5 candidates per `PREREG-P5.yaml`'s strength ranking and
+run `phase5_run_case.py` per candidate. No further design work is
+needed — only execution, once the dependency clears.
+
 ## Omnibus decision table
 
 | # | number | block | what it decides |
@@ -581,6 +665,8 @@ mistakes; each is marked accordingly.
 | 9 | Block D 16384-point: 3/4 samples show scope violations, each a different pair | D (measurement) | inverts the block's own prereg expectation; the tranche's most surprising number |
 | 10 | Block A-2 SELF q2s2: `ValueError: adapter rejected a repair that revalidates successfully` (repair_transaction.py:522), non-resumable | A-2 (candidate defect) | NEW internal-consistency bug candidate, unrelated to seat routing (SELF has no seat override); parked, not fixed |
 | 11 | Block A-2 CROSS q2s2: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` at cycle 11 (during a `continue` call), confirmed via log inspection to be the same `critic.atomic-target.v1` mechanism as Block A's original failures | A-2 (measurement) | refines "cycle-0 death" framing -- the mechanism can strike deep into an otherwise-successful run too, not just at the start |
+| 12 | Phase 5 tooling: `derive_terminal_authority(root)` called without loading the epoch-aware manifest first silently returns `historical_read_only` for EVERY root, which would have made Phase 5 wrongly skip every candidate as non-amendable | process (self-caught before live use) | caught during live smoke-testing, fixed by loading `load_epoch_manifest` first (mirroring `amendment/apply.py`'s own pattern) before any real candidate was evaluated; no incorrect skip ever happened on real data |
+| 13 | Phase 4/5 stopped: sibling branch's Phase 2 stalled at 8872/9277 pairs (95.6%), last commit 2 hours old | process (external dependency, not a defect) | operator chose "stop and report" when presented the stall; no sample drawn, no real candidates adjudicated -- preregs and tooling stand ready for a future session |
 
 ## Residue
 
@@ -637,3 +723,13 @@ conclusion the data does not support:
 - **Block E's density comparison is a single before/after snapshot,
   not a trend.** Whether density recovers, keeps falling, or holds as
   the corpus keeps growing needs more than one data point.
+- **Phase 4/5's three-number chain (raw hit rate → validated rate →
+  live-adjudicated outcomes) is entirely unfilled.** Only the first
+  link (Phase 2's raw ~19.9% hit rate, inherited from the sibling
+  branch, itself slightly undercounted by that branch's own 130-record
+  parse-failure defect) exists. Whether the O2-shelved consistency
+  patrol earns permanent machinery is exactly as undecided as it was
+  before tonight — this tranche proved the validation/adjudication
+  MACHINERY works (both phases' scripts verified live on real data)
+  but never got to run it for real, purely because of an external
+  dependency's stall, not any flaw in the design.
