@@ -1,0 +1,112 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The Collatz conjecture is unsettled because it represents a 'collision' between incompatible additive and multiplicative structures, where the causal mechanism is the systematic erasure of base-3 structure by base-2 shifts.",
+      "mechanism": "The 3n+1 operation acts as a base-conversion noise source. In binary, '3n' is 'n + 2n', which introduces a carry-bit that shifts the number's bit-density. The 'causal mechanism' is the statistical bias where the binary carry-propagation eventually aligns the integer with a power of 2, regardless of its initial base-3 complexity. The conjecture is settled only when we prove the 'carry-bit frequency' is strictly sufficient to ensure a negative average slope in the sequence's growth.",
+      "counterconditions": [
+        "Discovery of a 'structured' integer whose binary representation is invariant or grows under the (3n+1)/2 sequence.",
+        "Proof that base-3 representations can maintain a 'protected' structure that resists binary erasure."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_009"
+        ],
+        "shared_structure": [
+          "Interplay between two different representation bases",
+          "Noise introduction vs. structural erasure"
+        ],
+        "disanalogies": [
+          "Unlike standard noise, the Collatz map is deterministic",
+          "Base conversion usually preserves information; here it is hypothesized to destroy it"
+        ],
+        "transfer_claims": [
+          "The 'erasure' of base-3 structure is the causal driver of the descent to 1"
+        ],
+        "overturn_conditions": [
+          "Proof that certain base-3 structures are stable under the binary shift operation"
+        ]
+      }
+    },
+    {
+      "claim": "The conjecture is unsettled because it is a hidden problem of Diophantine approximation; the 'mechanism' is the gap in the distribution of {k log 3 / log 2}.",
+      "mechanism": "A cycle requires (3^k / 2^m) to be extremely close to 1. The causal mechanism is not in the numbers themselves, but in the transcendence properties of the ratio log(3)/log(2). If this ratio is 'sufficiently' irrational (satisfying a specific linear form in logarithms bound), it creates a 'gap' that prevents any non-trivial cycle from closing.",
+      "counterconditions": [
+        "Proof that 3^k / 2^m can approach 1 with an error term smaller than the smallest possible Collatz cycle difference.",
+        "Discovery of a cycle that violates Baker's theorem on linear forms in logarithms."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_005"
+        ],
+        "shared_structure": [
+          "Use of logarithmic ratios to bound cycle possibility",
+          "Shift from integer search to bound search"
+        ],
+        "disanalogies": [
+          "Analytic bounds are usually non-constructive",
+          "Does not directly explain the 'descent' to 1, only the absence of cycles"
+        ],
+        "transfer_claims": [
+          "The covering principle is actually a manifestation of the gap in {k log 3 / log 2}"
+        ],
+        "overturn_conditions": [
+          "Finding a value of k and m that allows for a near-cycle to close"
+        ]
+      }
+    },
+    {
+      "claim": "The Collatz conjecture is settled in the 'probabilistic' sense but remains formally unsettled because we lack a mapping from the random-walk bias to a deterministic integer-level constraint.",
+      "mechanism": "The 'mechanism' is the 2-adic extension of the map, where the trajectory of any integer is seen as a path on a 2-adic tree. The global attraction to 1 is caused by the fact that the 'average' trajectory in the 2-adic space is contracting. To settle it, one must prove that no discrete 'island' of integers escapes this 2-adic flow.",
+      "counterconditions": [
+        "Existence of a 2-adic attractor other than 1.",
+        "Proof that the 2-adic contraction does not apply to all positive integers."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If the 'causal mechanism' is the erasure of base-3 structure, then we should be able to quantify 'base-3 complexity' (e.g., using Kolmogorov complexity) and show that the map (3n+1)/2 strictly reduces this complexity on average. This would turn the problem into a Lyapunov function problem for integers.",
+          "why_keep_this": "Proposes a formal way to measure the 'mechanism' suggested in candidate 1."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a specific 'critical' carry-bit density that guarantees descent, and can that density be proven for all n?",
+        "related_refs": [
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```

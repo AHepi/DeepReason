@@ -1,0 +1,74 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The Collatz conjecture is unsettled because the 'covering principle' for the 3n+1 map is not a property of individual integers, but an emergent property of the distribution of parity sequences in the 2-adic integers.",
+      "mechanism": "The map can be viewed as a shift on the space of 2-adic integers. The conjecture is settled only when it is proven that the 'parity vector' (the sequence of evens and odds) for every positive integer eventually matches the parity vector of some power of 2, effectively proving that the 'attractor' 1 is the only sink in the 2-adic topology for the natural numbers subset.",
+      "counterconditions": [
+        "Discovery of a cycle other than 4-2-1",
+        "Proof that a sequence diverges to infinity",
+        "Proof that the 2-adic shift is ergodic over the natural numbers"
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The Collatz conjecture is unsettled and likely undecidable because it is a specific instance of a general class of Collatz-like functions that are provably undecidable.",
+      "mechanism": "By mapping the 3n+1 rule to a Tag system or a Turing-complete Collatz-like function (as per Conway), one can show that determining if a specific starting value reaches 1 is equivalent to the Halting Problem. The 'covering principle' here is the isomorphism between the Collatz map and universal computation.",
+      "counterconditions": [
+        "A proof that the specific constants (3, 1) constrain the map's complexity below the threshold of Turing-completeness",
+        "A direct proof of the conjecture using induction or analytic number theory"
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The Collatz conjecture is unsettled, but the covering principle is found in the 'probabilistic drift' where the expected value of the sequence decreases geometrically over time.",
+      "mechanism": "In each step, if n is odd, it becomes (3n+1)/2 (since 3n+1 is always even); if n is even, it becomes n/2. The average multiplier is sqrt(3/2 * 1/2) = sqrt(3/4) < 1. To settle this, one must prove that the 'fluctuations' around this downward drift cannot produce a cycle or an escaping sequence for any n.",
+      "counterconditions": [
+        "Finding a value n where the parity sequence is biased toward odds significantly longer than the law of large numbers allows",
+        "Proof that the sequence of parities is not sufficiently 'random' to justify the probabilistic drift"
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If the Collatz conjecture is fundamentally about the 'mixing' of powers of 2 and 3, is there a version of the Baker's theorem on linear forms in logarithms that could bound the possibility of cycles? A cycle requires (3^k / 2^m) to be extremely close to 1. Maybe the covering principle is actually a gap in the distribution of {k log 3 / log 2}.",
+          "why_keep_this": "Explores a quantitative analytic approach to the 'covering principle' involving transcendence theory."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can the 'covering principle' be formulated as a density theorem for the set of integers that reach 1?",
+        "related_refs": [
+          "SRC_005"
+        ]
+      }
+    ]
+  }
+}
+```

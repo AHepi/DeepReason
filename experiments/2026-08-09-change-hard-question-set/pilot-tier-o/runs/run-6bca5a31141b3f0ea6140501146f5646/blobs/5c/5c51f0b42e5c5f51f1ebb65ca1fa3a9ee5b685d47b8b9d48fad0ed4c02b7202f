@@ -1,0 +1,122 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The Collatz conjecture is unsettled, but it is fundamentally a problem of 'base-representation erasure' where the 3n+1 map acts as a noise source that destroys base-3 structure in favor of base-2 convergence.",
+      "mechanism": "The 'covering principle' is the systematic reduction of the Kolmogorov complexity of n when expressed in base 3, as the interleaved operations of multiplication by 3 (shifting base-3 digits) and division by 2 (introducing base-2 noise) force the sequence toward the simplest base-2 state (1).",
+      "counterconditions": [
+        "The existence of an integer n whose base-3 structure is 'self-healing' under the (3n+1)/2 map.",
+        "Proof that base-3 complexity can increase monotonically for a subset of integers."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_008",
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "Interaction between disparate bases",
+          "Complexity reduction over time",
+          "Attractor states"
+        ],
+        "transfer_claims": [
+          "The process of reaching 1 is analogous to the erasure of a structured signal by white noise."
+        ],
+        "disanalogies": [
+          "Integer maps are deterministic, unlike physical noise.",
+          "Kolmogorov complexity is generally non-computable."
+        ],
+        "overturn_conditions": [
+          "Discovery of a cycle where base-3 complexity is preserved."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "The Collatz conjecture is unsettled and would be settled by proving a lower bound on the gap between powers of 2 and 3, specifically showing that |2^m - 3^k| cannot be sufficiently small to allow a non-trivial cycle.",
+      "mechanism": "The 'covering principle' is a Diophantine gap: since log 2 / log 3 is irrational (and likely has a specific transcendence type), the 'near-misses' where 3^k / 2^m ≈ 1 are too rare and too distant to support a closed loop in the integer domain.",
+      "counterconditions": [
+        "The existence of a sequence of integers where the ratio 3^k/2^m approaches 1 faster than the growth of the sequence itself.",
+        "Proof that the gap |2^m - 3^k| can be arbitrarily small relative to k."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_007",
+          "SCR_005"
+        ],
+        "shared_structure": [
+          "Linear forms in logarithms",
+          "Approximation of irrational ratios",
+          "Bounding gaps to prevent cycles"
+        ],
+        "transfer_claims": [
+          "The impossibility of a cycle is a corollary of Baker's theorem on linear forms in logarithms."
+        ],
+        "disanalogies": [
+          "Baker's theorem provides a bound, but not necessarily one tight enough to rule out all cycles for all n."
+        ],
+        "overturn_conditions": [
+          "Finding a cycle that satisfies the Diophantine constraints."
+        ],
+        "adopted_commitment_refs": []
+      }
+    },
+    {
+      "claim": "The Collatz conjecture is settled as 'True' in a probabilistic sense, and the formal proof requires demonstrating that the sequence is a supermartingale with a drift toward 1 that dominates all possible local fluctuations.",
+      "mechanism": "The covering principle is the logarithmic drift: on average, the operation (3n+1)/2 occurs with probability 1/2 and n/2 with probability 1/2, leading to an expected growth factor of sqrt(3/2) < 1 per 'step' (where a step is one odd followed by one or more even operations).",
+      "counterconditions": [
+        "Identification of a 'black swan' region of integers where the local drift is positive for an infinite duration.",
+        "Proof that the probabilistic average is not representative of all starting values."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_006"
+        ],
+        "shared_structure": [
+          "Random walk dynamics",
+          "Negative drift",
+          "Stochastic convergence"
+        ],
+        "transfer_claims": [
+          "The Collatz sequence is a biased random walk on the log scale."
+        ],
+        "disanalogies": [
+          "The sequence is deterministic, not random."
+        ],
+        "overturn_conditions": [
+          "Discovery of a divergence path (n -> infinity)."
+        ],
+        "adopted_commitment_refs": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Contradiction check: If the problem is isomorphic to a UTM (SRC_008), then it is undecidable. But if it's a Diophantine gap problem (SCR_007), it's a matter of analytic number theory. The 'covering principle' must be the bridge that explains why a deterministic rule behaves like a random process. Perhaps the 'noise' is exactly the discrepancy between the two bases.",
+          "why_keep_this": "Synthesizes the neighborhood's conflict between undecidability and analytic provability."
+        }
+      }
+    ]
+  }
+}
+```

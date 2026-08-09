@@ -1,0 +1,95 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The Collatz conjecture is unsettled because the 3n+1 operation acts as a pseudo-random bit-generator that creates a non-linear 'carry-propagation' mechanism, making the trajectory's descent a stochastic property rather than a structural one.",
+      "mechanism": "The 3n+1 operation, viewed in binary, is a shift-left and add. The resulting 'carry' bits create a fluctuating density of ones in the binary representation. The conjecture's resolution requires proving that the expected number of divisions by 2 (shifts-right) always exceeds the growth from 3n+1 over a sufficiently long window, effectively treating the sequence as a random walk with a negative drift in the log-space of the value.",
+      "counterconditions": [
+        "Discovery of a 'stable' binary pattern that resists the carry-propagation, leading to a divergent sequence.",
+        "Proof that the carry-propagation is not pseudo-random but follows a deterministic cycle for certain large n."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_008"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The Collatz conjecture is unsettled because it is a manifestation of the distribution of the sequence {k log 3 / log 2}, and resolution requires a bound on the diophantine approximation of these logarithms to rule out non-trivial cycles.",
+      "mechanism": "A cycle exists if and only if (3^k / 2^m) is extremely close to 1 for some k, m. The 'mechanism' for the attractor is the gap in the distribution of these fractional parts; if the distance |k log 3 - m log 2| is bounded away from zero by a specific function of k, then no cycles other than 4-2-1 can exist. This transforms the problem from an integer search to a transcendence theory problem.",
+      "counterconditions": [
+        "Proof that the distance |k log 3 - m log 2| can be arbitrarily small in a way that supports a cycle equation (3^k / 2^m ≈ 1).",
+        "Discovery of a cycle via direct computation."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The Collatz conjecture is settled in the negative: it is fundamentally undecidable because the 3n+1 map can simulate a Universal Turing Machine.",
+      "mechanism": "By constructing a Collatz-like function that is isomorphic to a Tag system or a Turing machine, the 'halting problem' is mapped onto the 'reach 1' problem. If 3n+1 possesses enough structural complexity to encode a UTM, then no general algorithm can determine if every n reaches 1, making the conjecture formally undecidable within ZFC.",
+      "counterconditions": [
+        "A proof of the conjecture within ZFC.",
+        "A formal proof that the 3n+1 map is too simple to simulate a UTM (i.e., it lacks the required memory or state-transition complexity)."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_005"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The Collatz conjecture can be settled by proving the existence of a global Lyapunov function in the 2-adic integers (Z_2) that strictly decreases under the Collatz map.",
+      "mechanism": "Extend the Collatz map to the 2-adic integers Z_2. If one can define a continuous function (a 'potential') that is strictly decreasing on average and has 1 as its unique global minimum, the attraction to 1 becomes a causal necessity of the topology of Z_2 rather than a probabilistic accident of integers.",
+      "counterconditions": [
+        "Proof that no such continuous Lyapunov function exists on Z_2.",
+        "Discovery of a 2-adic cycle that does not correspond to an integer cycle."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_007"
+        ],
+        "search_signal": "productive"
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "What if the 'causal mechanism' isn't a property of n, but a property of the interaction between the base-2 and base-3 representations? The 3n+1 operation is effectively a base-conversion noise source. The conjecture is essentially asking: 'Does base-2 noise always eventually erase base-3 structure?'",
+          "why_keep_this": "Explores the school stance's demand for a mechanism through the lens of representation theory."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a formal way to map the 'carry-bit frequency' (SCR_007) to a specific class of L-functions or modular forms?",
+        "related_refs": [
+          "SCR_007"
+        ]
+      }
+    ]
+  }
+}
+```

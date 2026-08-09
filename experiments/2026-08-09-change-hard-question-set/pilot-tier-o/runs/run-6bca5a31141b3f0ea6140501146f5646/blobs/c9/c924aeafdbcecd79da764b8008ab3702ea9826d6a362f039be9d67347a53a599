@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-aeefcdc804d2dda06765d79367672f03) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Collatz conjecture: start from any positive integer n. If n is even, divide it by 2; if n is odd, replace it with 3n+1. Repeating this, does every starting value eventually reach 1? State clearly whether you consider this settled, and if not, what would be needed to settle it.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fc95b347a2dca3974e8e2b56: program:reasoning_observation_pending
+- reason-counter@7878a0ff047442c7fbdc03e7: program:reasoning_observation_pending
+- reason-counter@07943d420892492a5c19b374: program:reasoning_observation_pending
+- reason-counter@374e7a483838b0d7c302d8b5: program:reasoning_observation_pending
+- reason-counter@2339f42089391933e081aa43: program:reasoning_observation_pending
+- reason-counter@8ee1370751a75a9660928a4e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The Collatz conjecture is unsettled and formally undecidable within ZFC, rendering the search for a proof or counterexample futile.","counterconditions":[{"case":"Construction of a ZFC-consistent proof of convergence.","checker_spec":null,"eval":"observation"},{"case":"Discovery of a concrete counterexample (cycle or divergence).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem maps to the halting problem for a specific class of Turing machines; the Collatz-like structure allows for the encoding of universal computation, meaning no general algorithm can determine the fate of all starting values.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fc95b347a2dca3974e8e2b56, reason-counter@7878a0ff047442c7fbdc03e7
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The Collatz map is deterministic, whereas entropy is typically a statistical measure."],"overturn_conditions":["Proof that 3n+1 can increase binary complexity faster than division by 2 removes it."],"shared_structure":["Information loss in state transitions","Attraction to a low-energy/low-entropy state"],"source_memory_refs":["SCR_001"],"transfer_claims":["The 'causal mechanism' is the inevitable loss of binary complexity over time."]},"claim":"The Collatz conjecture is unsettled because the parity sequence of n functions as a pseudo-random bit-stream that requires a specific information-theoretic 'collapse' to reach 1.","counterconditions":[{"case":"Proof that there exists a starting value whose parity sequence maintains high entropy indefinitely (divergence).","checker_spec":null,"eval":"observation"},{"case":"A proof that the entropy always trends toward zero.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The sequence only terminates when the 'entropy' of the binary representation of the current term is sufficiently reduced through repeated divisions by 2, outweighing the additive 'noise' introduced by 3n+1. The conjecture is settled when the decay rate of this entropy is proven to be positive for all n.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@07943d420892492a5c19b374, reason-counter@374e7a483838b0d7c302d8b5
+
+TARGET SRC_003
+{"analogy":null,"claim":"The Collatz conjecture is unsettled, and its resolution requires mapping the dynamics to the p-adic integers (specifically 2-adic), where the map's structure becomes a continuous transformation.","counterconditions":[{"case":"Identification of a 2-adic attractor that intersects with the positive integers but not at 1","checker_spec":null,"eval":"observation"},{"case":"Proof that the 2-adic extension does not provide additional structural constraints on Z+","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By extending the domain from positive integers to the 2-adic integers Z_2, the Collatz map can be analyzed as a dynamical system. A proof of the conjecture would require showing that the attractor at 1 is global for the subset of positive integers.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2339f42089391933e081aa43, reason-counter@8ee1370751a75a9660928a4e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

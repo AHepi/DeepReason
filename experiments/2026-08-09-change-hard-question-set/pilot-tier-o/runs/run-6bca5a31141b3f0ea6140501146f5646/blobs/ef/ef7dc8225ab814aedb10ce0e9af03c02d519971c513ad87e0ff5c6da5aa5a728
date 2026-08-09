@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-aeefcdc804d2dda06765d79367672f03) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Collatz conjecture: start from any positive integer n. If n is even, divide it by 2; if n is odd, replace it with 3n+1. Repeating this, does every starting value eventually reach 1? State clearly whether you consider this settled, and if not, what would be needed to settle it.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@cda080cafed1ed754535675b: program:reasoning_observation_pending
+- reason-counter@5067a5f53fe6c0479fc6d729: program:reasoning_observation_pending
+- reason-counter@066cf7ca0ac80948116ee205: program:reasoning_observation_pending
+- reason-counter@bdbcfb2bc6b693e05ae5f070: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The Collatz conjecture is unsettled and likely undecidable because it is a specific instance of a general class of Collatz-like functions that are provably undecidable.","counterconditions":[{"case":"A proof that the specific constants (3, 1) constrain the map's complexity below the threshold of Turing-completeness","checker_spec":null,"eval":"observation"},{"case":"A direct proof of the conjecture using induction or analytic number theory","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By mapping the 3n+1 rule to a Tag system or a Turing-complete Collatz-like function (as per Conway), one can show that determining if a specific starting value reaches 1 is equivalent to the Halting Problem. The 'covering principle' here is the isomorphism between the Collatz map and universal computation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cda080cafed1ed754535675b, reason-counter@5067a5f53fe6c0479fc6d729
+
+TARGET SRC_002
+{"analogy":null,"claim":"The Collatz conjecture is unsettled; the covering principle is the transcendence of log 3 / log 2, which precludes the existence of non-trivial cycles.","counterconditions":[{"case":"Discovery of a counter-example cycle via high-performance computing.","checker_spec":null,"eval":"observation"},{"case":"Proof that Baker's Theorem bounds are not tight enough to exclude cycles for very large n.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A non-trivial cycle requires an equality of the form 3^k * n + C = 2^m * n, implying 3^k / 2^m is extremely close to 1. The 'covering principle' here is the linear forms in logarithms (Baker's Theorem), which provides a lower bound on |k log 3 - m log 2|, suggesting that the gap between powers of 2 and 3 grows such that no integer n can satisfy the cycle condition.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@066cf7ca0ac80948116ee205, reason-counter@bdbcfb2bc6b693e05ae5f070
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
