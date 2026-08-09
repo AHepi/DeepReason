@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-c856a11604d8f9d53c3836e480091e9e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+For positive integer n such that n < 10,000, the number n+2005 has exactly 21 positive factors. What is the sum of all the possible values of n? State your final answer as a single number in your concluding claim.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f759c868d466c9cad03783c3: program:reasoning_observation_pending
+- reason-counter@a71e745906cb6c3b1a539732: program:reasoning_observation_pending
+- reason-counter@5a6256767495c76876129218: program:reasoning_observation_pending
+- reason-counter@8624398d816b92aee360138b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The sum of all possible values of n is 2448.","counterconditions":[{"case":"Verification that n=5739 and n=8811 satisfy the 21-factor condition for n+2005","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Calculation based on the assumption that only the case p=2, q=7 (m=3136) and p=3, q=2 (m=2916) are valid, or similar arithmetic constraints leading to n=1131 and n=1317 (erroneously).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f759c868d466c9cad03783c3
+
+TARGET SRC_002
+{"analogy":null,"claim":"The sum of all possible values of n is 2448.","counterconditions":[{"case":"m = p^20 is found to be within the range","checker_spec":null,"eval":"observation"},{"case":"Other prime combinations for p^6 * q^2 exist within the range","checker_spec":null,"eval":"observation"},{"case":"Arithmetic error in summation","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let m = n + 2005. Given d(m) = 21, and since 21 = 7 * 3 or 21 * 1, m must be of the form p^6 * q^2 or p^20. Since n < 10,000, 2005 < m < 12005. p^20 is too large for any prime p. For m = p^6 * q^2: if p=2, m = 64 * q^2. We need 2005 < 64q^2 < 12005, so 31.3 < q^2 < 187.5. Possible primes q are 7, 11, 13. This gives m = 64*49=3136, 64*121=7744, 64*169=10816. If p=3, m = 729 * q^2. We need 2005 < 729q^2 < 12005, so 2.75 < q^2 < 16.46. Possible primes q are 2, 3 (but q must be distinct from p), so q=2. This gives m = 729*4 = 2916. For p >= 5, p^6 is too large (5^6 = 15625). The possible values of m are {3136, 7744, 10816, 2916}. The values of n = m - 2005 are {1131, 5739, 8811, 911}. Sum = 1131 + 5739 + 8811 + 911 = 16592. Wait, re-evaluating the sum: 1131 + 5739 = 6870; 6870 + 8811 = 15681; 15681 + 911 = 16592. Let me check the bounds again: 12005. 64*13^2 = 10816 (ok). 729*2^2 = 2916 (ok). If q=3, p=2, m = 64*9 = 576 (too small). If p=2, q=5, m = 64*25 = 1600 (too small). If p=2, q=7, m = 3136. Correct. Let me re-sum carefully: 1131 + 5739 + 8811 + 911 = 16592.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a71e745906cb6c3b1a539732, reason-counter@5a6256767495c76876129218, reason-counter@8624398d816b92aee360138b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
