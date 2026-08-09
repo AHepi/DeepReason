@@ -218,6 +218,42 @@ require running them back through the harness's own criticism machinery
 — that is exactly the "future criticism" this pilot's own framing
 reserves them for, not something this tranche did or should do.
 
+## 2026-08-09 — Phase 3 complete: overlay comparison, old vs new
+
+Ran O1's `run_all_overlays.py` unmodified, same method as the
+pre-enrichment baseline (copy output aside, restore O1's committed file
+byte-for-byte — verified clean via `git status` both times).
+
+| | pre-enrichment (48 roots) | post-enrichment (58 roots) | delta |
+|---|---|---|---|
+| Total claims (nodes) | 1947 | 2932 | +985 |
+| Total attack edges | 26 | 37 | +11 |
+| **Attack-edge density** (edges/nodes) | 0.013354 | 0.012619 | **-5.5% relative** |
+| **Mean reasoning-cycle count** per root | 6.212 (33/48 roots) | 7.186 (43/58 roots) | **+15.7%** |
+| Genuine unresolved controversy (SCCs) | 0 | 0 | unchanged |
+| Floating (disconnected) claim components | 2690 | 3965 | +1275 |
+| Roots with a resolvable warrant-sensitivity read (O1d) | 37 | 47 | +10 (all new roots resolved) |
+
+**Reading these plainly.** Adding 10 harder questions grew the claim
+pile by about half (1947→2932) but did NOT make the argument structure
+proportionally more contentious — attack-edge density went slightly
+DOWN, not up, and the count of claims genuinely stuck in unresolved
+back-and-forth stayed at exactly zero in both the old and new corpus.
+What DID change: the new runs took noticeably more reasoning cycles on
+average (7.186 vs 6.212) — expected, since 6 of the 10 needed the
+prereg's own `continue` top-up, and the older corpus's average run
+predates some of those same policy checks. The floating-claims count
+grew by exactly 1275 — the SAME number as Phase 2's own
+"unaddressed-accepted-artifacts-excluded" count from its dry run. This
+is a striking coincidence WORTH FLAGGING but NOT claimed as the same
+fact: O1c's "floating" measure is about missing `dep`/`att` graph edges
+(a claim that neither supports nor attacks anything), while Phase 2's
+"unaddressed" count is about a missing `addr` (problem) link — two
+different relations in the same record that COULD correlate (a claim
+disconnected from the argument graph is plausibly also less likely to
+carry a problem address) without being identical. Confirming or
+refuting that correlation is residue, not resolved here.
+
 ## 2026-08-08 — Phase 1 progress (running table, updated per root)
 
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |
@@ -240,3 +276,103 @@ ledger: 3 spent (container/process deaths; see above). 6 of 10 first
 stops needed one `continue --budget cycles=2` top-up for a
 foreign-criticism gap; all 6 closed cleanly on the first try, 0 needed a
 second.
+
+## 2026-08-09 — DELIVERY: decision table, prereg conformance, residue
+
+### Decision table
+
+| Metric | Value |
+|---|---|
+| Phase 1 questions run | 10/10 committed (2 base, 4 hard, 4 hard2) |
+| Phase 1 failure budget spent | 3/10 (all container/process deaths, none data-losing) |
+| Dual-mode (`conjecturer.turn.v7`) commitments | 0/10 roots — expected, P-CEPP-1 (v7 has no live opt-in; encoder role has zero callers regardless) |
+| Phase 2 pairs checked | 9277/9277 (100%, 0 API errors, 143 parse failures = 1.5%) |
+| Phase 2 candidate-contradiction rate, overall | **20.9%** (1941/9277) |
+| Phase 2 candidate-contradiction rate, historical half | 18.7% (1133/6065) |
+| Phase 2 candidate-contradiction rate, enriched half | **25.2%** (808/3212) |
+| Roots contributing at least one hit | 43/47 openable (91%) |
+| Phase 3 attack-edge density, old → new | 0.013354 → 0.012619 (-5.5% relative) |
+| Phase 3 mean cycle count, old → new | 6.212 → 7.186 (+15.7%) |
+| Phase 3 unresolved-controversy count, old → new | 0 → 0 (unchanged) |
+| Phase 3 floating-claim components, old → new | 2690 → 3965 (+1275) |
+
+### Prereg conformance, deviation-by-deviation
+
+1. **Dual-mode ("Dual-mode ON")** — NOT honored as literally instructed.
+   `conjecturer.turn.v7` has no working opt-in for any live run
+   (`V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED`, confirmed by direct
+   construction). Recorded BEFORE Phase 1 launch, parked as P-CEPP-1,
+   Phase 1 ran on the harness default (v6) instead. This was the single
+   largest deviation from the task's own instructions and was reported
+   to the operator before any Phase 1 compute was spent, not discovered
+   after the fact.
+2. **"Encoder seat"** — the task named a seat group that does not exist
+   (`--seat encoder=...`); corrected before launch to the real group
+   (`--seat coder=...`, which covers both `property_designer` and
+   `encoder` roles). Recorded in the prereg and the launch commit.
+3. **Topical-neighborhood rule** — used problem-address locality
+   (`state.addr`) only, not refs-based locality. A deliberate
+   simplification named in the prereg BEFORE Phase 2 launch, parked as
+   P-CEPP-2, not a discovered gap.
+4. **Resume policy** — applied exactly as pre-registered
+   (`continue --budget cycles=2` once per `budget_exhausted`/`converged`
+   stop); 6/10 Phase 1 roots needed it, all 6 closed cleanly on the
+   first application, 0 needed a second.
+5. **Chunked Phase 2 execution** — the prereg did not anticipate
+   splitting the patrol into resumable chunks; this was an operational
+   adaptation forced by repeated container/process interruptions (see
+   the failure ledger), not a change to the patrol's own rules (sampling
+   rule, narrow question, output contract, and hit threshold were never
+   touched mid-run).
+6. **O1 overlay re-run's methodology note** — a fresh
+   `run_all_overlays.py` invocation is not byte-reproducible against a
+   prior run (Python's hash-randomized list ordering); comparisons here
+   were always made on canonicalized counts, confirmed identical-content
+   on a hand-checked sample before trusting the pattern for the rest.
+
+Nothing else in `prereg.yaml` was deviated from: the run matrix, budgets
+per run, narrow pair-contradiction question (verbatim, frozen before
+Phase 2's first call), output contract, and candidate-hit threshold
+(confidence >= 0.6) were all used exactly as registered.
+
+### What this pilot proves, and what it cannot claim (the residue)
+
+**Proven, by the typed record:**
+- The consistency-patrol MECHANISM works end to end: a bounded,
+  single-call, strict-JSON-contract question reliably surfaces
+  plausible same-problem contradictions between claims a harness run
+  separately accepted, at meaningful volume (1941 candidates from 9277
+  checks) and at acceptable parse-failure cost (1.5%).
+- Harder/newer material (this tranche's enriched half) shows a
+  measurably higher candidate-contradiction rate than the historical
+  average (25.2% vs 18.7%), without a corresponding increase in the
+  harness's own structural "attack density" or genuine unresolved-
+  controversy count — the patrol is catching something the harness's
+  existing machinery does not already flag on its own.
+- Dual-mode/candidate-checker delegation is confirmed, not assumed,
+  unreachable in the current codebase for any live run — a concrete,
+  reproducible defect handed off as P-CEPP-1 with the exact file/line
+  and the exact fix shape needed.
+
+**What a pilot this size cannot claim:**
+- WHY the enriched half's rate is higher (question difficulty vs.
+  claim-group size vs. both) — residue, needs a matched-difficulty
+  follow-up, not resolved here.
+- Whether the 1941 candidate hits are TRUE contradictions in any
+  stronger sense than "the model, asked once, said so" — no adjudication
+  ran, no root was touched, and the task's own framing forbids treating
+  a hit as anything but a candidate for FUTURE criticism. Confirming any
+  individual hit would require running it back through the harness's own
+  criticism cycle, which this tranche deliberately did not do.
+- Whether the floating-components/unaddressed-artifacts correlation
+  (both +1275) is a real relationship or coincidence — flagged, not
+  chased.
+- Generalization beyond these specific 10 questions and this specific
+  47-root corpus slice — a pilot decision-number set, not a claim about
+  the harness's behavior in general.
+
+All roots, raw patrol responses (`patrol_results.jsonl`, `patrol_hits.jsonl`),
+and both overlay sweeps (`phase3/overlay_results_pre_enrichment.jsonl`,
+`phase3/overlay_results_post_enrichment.jsonl`) are committed verbatim
+under this tranche's directory. Stop condition met: decision table
+complete, pushed.
