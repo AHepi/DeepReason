@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ba392a3bbded96884426b4adf04fb85e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seed-10 variant of the same question: Argue for or against the claim that the following pseudorandom generator produces a FAIR distribution over six faces after 10000 draws, where fair means every face count falls within two standard deviations of the uniform expectation (expectation 10000/6, standard deviation sqrt(10000 * (1/6) * (5/6))). The generator: X_0 = 42; X_(n+1) = (1103515245 * X_n + 12345) mod 2^31; die_n = 1 + (X_n mod 6), for n = 1 .. 10000. There is no closed-form shortcut for the exact counts at this horizon: the only way to know them is to run the exact recurrence and tally the results. File a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) implementing this exact recurrence and return the six face counts as flat, single-segment observables (count_1 through count_6) plus total. Before any tally is used as evidence, calibrate the implementation in the same channel: return the first ten (X_n, die_n) pairs so the recurrence and the face-mapping can be checked by hand against this specification.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2e32344ac47139ee3c337fc8: program:reasoning_observation_pending
+- reason-counter@28d048a95e0ac347ad6877de: program:reasoning_observation_pending
+- reason-counter@881a842d4f83aa38370daf98: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Filing a sandboxed Python simulation that exactly implements the specified LCG recurrence and face-mapping, returning the six face counts and total plus a calibration trace so the recurrence can be hand-verified before any tally is trusted.","counterconditions":[{"case":"If the harness rejects the simulation because a requested_observables key does not resolve in the returned mapping, the proposal yields no evidence.","checker_spec":null,"eval":"observation"},{"case":"If the calibration trace (first ten X_n, die_n pairs) does not byte-match a hand-computed reference from the specification, the implementation is wrong and no tally from it is admissible.","checker_spec":null,"eval":"observation"},{"case":"If the recurrence is not run for the full 10000 terms, the counts are incomplete and the fairness claim is untestable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The generator is X_0=42; X_(n+1)=(1103515245*X_n+12345) mod 2^31; die_n=1+(X_n mod 6). A Python function computes this iteratively for n=1..10000, tallying die_n into six counters. Because 2^31 mod 6=2, the LCG outputs do not cycle through residues mod 6 with perfect uniformity over short horizons, so the exact tallies are only knowable by running the recurrence. The function also emits the first ten (X_n, die_n) pairs as calibration keys (cal_1_x, cal_1_die, ...) so a checker can hand-verify X_1=1103527585, die_1=1, and each subsequent step.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2e32344ac47139ee3c337fc8, reason-counter@28d048a95e0ac347ad6877de, reason-counter@881a842d4f83aa38370daf98
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

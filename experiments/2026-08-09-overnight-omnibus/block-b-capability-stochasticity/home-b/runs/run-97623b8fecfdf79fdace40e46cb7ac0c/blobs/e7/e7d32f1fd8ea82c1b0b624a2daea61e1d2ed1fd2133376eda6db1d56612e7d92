@@ -1,0 +1,29 @@
+{
+  "candidate": {
+    "claim": "The linear congruential generator's modulo-6 face mapping is systematically biased on this seed because 2^31 is not divisible by 6, causing the residual range to split unevenly across face buckets; this bias of ~2 parts in 10^9 is theoretically present at n=10000 but is too small to breach the two-sigma fairness bound alone.",
+    "mechanism": "Since 2^31 = 2147483648 and 2147483648 = 357913941 * 6 + 2, mapping X_n mod 6 assigns faces 0 and 1 to residues 0..357913941 and 357913942..715827883 respectively (357913942 values), while faces 2..5 receive only 357913941 values each. This uneven partition injects a per-step bias of ~2.33e-9, accumulating a deterministic shift over 10000 draws. However, with a two-sigma tolerance of ~83.3 counts, this bias is negligible, so fairness will be retained absent bad mixing.",
+    "counterconditions": [
+      "A tally that ignores the 2^31 mod 6 != 0 residue bias will incorrectly reject the fairness bound.",
+      "If the simulation substitutes 2^32 or uses a multiple of 6 as the modulus, the modulo-bias argument fails.",
+      "If total != 10000 or count values are negative, the sequence is improperly bounded and the fairness claim is null."
+    ],
+    "evidence_refs": [
+      {
+        "block": "c6c31b919b1cd091",
+        "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=10"
+      },
+      {
+        "block": "ff5f75b13b928302",
+        "quote": "- **Establishing the exact counts.** Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.35
+  }
+}
