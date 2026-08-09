@@ -101,8 +101,9 @@ order. One step per `dr-execute-step` invocation.
       done-when: pushed; failure-budget ledger updated.
       DONE: RESULTS.md updated with the Tier O section and failure ledger (still 0/6 charged -- every command returned rc=0; the JUNK-ACCEPTANCE hygiene verdict is CONTENT the pilot correctly measured and reported, not an execution failure of the pilot itself, per PREREG.md's own framing that this is what the metric exists to catch).
 
-- [ ] 24. (R18) Write `experiments/2026-08-09-change-hard-question-set/PARKED.md` listing every defect noticed during steps 1-23 (or explicitly "none found this tranche" if true), each with a one-line WHAT and a ready-to-send prompt for its future `deepreason-orchestrator` runner.
+- [x] 24. (R18) Write `experiments/2026-08-09-change-hard-question-set/PARKED.md` listing every defect noticed during steps 1-23 (or explicitly "none found this tranche" if true), each with a one-line WHAT and a ready-to-send prompt for its future `deepreason-orchestrator` runner.
       done-when: file exists and is non-empty (even the "none found" case is a written, dated statement, not a missing file).
+      DONE: PARKED.md written with 2 findings, each WHAT + ready-to-send dr-set-goal prompt: (1) the transient foreign-criticism verify_root violation observed identically on both pilots' first audit, cleared by the second; (2) the open question of whether criticism judged correct but never formally warranted should be reflected differently than an uncontested accepted claim -- framed as an open question per CLAUDE.md's own "no warrant, no edge, no REFUTED" law, not asserted as a bug.
 
 - [ ] 25. (R19/R20) [COMMIT] Commit PARKED.md, then write `experiments/2026-08-09-change-hard-question-set/RESULTS.md`: the dated honest-ledger segment — corpus delivered (counts, licenses), what the two live pilots proved and did NOT prove (n=1 per tier, stochasticity doctrine), the gemma-sole-model calibration answer (full vs shallow tier reached), the failure-budget spend.
       done-when: pushed; RESULTS.md contains a dated segment header and explicitly answers the operator's standing gemma-sole-model question.
