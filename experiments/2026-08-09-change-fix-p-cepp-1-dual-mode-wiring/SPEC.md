@@ -58,6 +58,112 @@ without needing to also fix the separate dead-code gap — but this
 softens the encoder-specific wording, it does not shrink the 23-site
 census above.
 
+## Items (Option C, operator-confirmed scope)
+
+S1 (R1, C1): `run_manifest.py`, 5 sites.
+- `_compile_contract_schema_repair_policy` (~line 2491): before — the
+  `ceilings` dict key is the literal `"conjecturer.turn.v6"`; a
+  v7-configured manifest's `assignments` (built dynamically in
+  `_route_seat_behavioral_contract_assignments`, already reads
+  `contracts.conjecturer_turn_contract` correctly) contains
+  `"conjecturer.turn.v7"`, which has no matching grant. After — the key
+  is `control_plane_policy.contract_versions.conjecturer_turn_contract`
+  (whatever the manifest actually configured), so v6 and v7 both get an
+  identical `conjecture_ceiling` grant.
+- `_compile_route_seat_behavioral_capability_plan`'s `is_conjecture` set
+  (~line 2004-2007) and `scratch_write` check (~line 2020): before —
+  both hardcode `"conjecturer.turn.v6"` only. After — both recognize
+  `"conjecturer.turn.v7"` as an equal member (a small shared
+  membership set, not two independently-maintained literals).
+  accept: `python -m pytest tests/test_v6_contract_schema_repair_policy.py tests/test_v6_contract_schema_repair_runtime.py tests/test_v6_route_seat_behavioral_capability_plan.py tests/test_v6_route_seat_behavioral_capability_runtime.py -q` (all four verified to exist) stays green
+  AND a new regression test constructs a v7-configured
+  `ControlPlanePolicyV3`, compiles a full v6-schema manifest, and
+  asserts: the compiled `contract_schema_repair_policy` has a
+  `"conjecturer.turn.v7"` grant with `maximum_schema_repairs ==` the
+  same value a v6-configured manifest gets; `_compile_route_seat_behavioral_capability_plan`'s
+  output for that seat has `scratch_read="advisory"` and
+  `scratch_write="contract_governed"`, matching the v6 case exactly.
+
+S2 (R1): `rules/conj.py`, 5 sites (all under the SAME function/module,
+grouped as one item since they must move together or the module is left
+internally inconsistent).
+- `expected_contract` dict (~line 730-742): before — schema_version 6
+  hardcodes the literal `"conjecturer.turn.v6"` as the ONLY accepted
+  value, raising `ValueError` otherwise. After — for schema_version 6,
+  the accepted value is whichever of `{"conjecturer.turn.v6",
+  "conjecturer.turn.v7"}` the manifest's own `RunManifest`-validated
+  `Literal` field carries (the manifest's own Pydantic validation
+  already restricts it to exactly these two; this check need only
+  confirm schema_version 6 implies an ACTIVE-mode manifest, not
+  re-pin the literal value). v4/v5 branches unchanged.
+- `effective_contract` (~line 2210-2218): before — hardcodes
+  `"conjecturer.turn.v6"` whenever `active_v6` and not
+  `atomic_fallback_completed`, regardless of what the manifest
+  configured. After — uses the manifest's configured
+  `conjecturer_turn_contract` value in that branch (captured once,
+  where `control`/`active_v6` are already set, into a new local
+  variable) instead of a hardcoded literal; the
+  `"conjecturer.atomic-candidate.v1"` fallback branch is UNCHANGED
+  (atomic decomposition always uses its own dedicated contract,
+  independent of v6/v7 — confirmed by S1's own `is_conjecture` set,
+  which already lists `conjecturer.atomic-candidate.v1` as a SEPARATE
+  member, not derived from the turn contract).
+- Lines 946, 1018, 1874 (atomic-decomposition source-contract
+  bookkeeping): before — all three hardcode `"conjecturer.turn.v6"` as
+  the SOURCE contract id when preparing, matching, or resolving an
+  atomic-decomposition transition. After — all three use the same
+  captured configured-contract local variable as `effective_contract`'s
+  fix, so a v7 turn's decomposition bookkeeping stays internally
+  consistent with its own contract id rather than silently mislabeling
+  itself as v6.
+  accept: `python -m pytest tests/test_v6_conjecture_component_atomicity.py tests/test_v6_conjecture_scratch_consumption.py tests/test_v6_context_continuation.py tests/test_v6_controller3_replay_verification.py tests/test_v6_engaged_public_defaults.py tests/test_v6_engaged_repair_verification.py tests/test_v6_transaction_qualification.py -q`
+  (all verified to exist and import `rules.conj`) stays green AND a new
+  regression test drives a v7-configured manifest's conjecture turn
+  through `Conj(...)` (the narrowest existing v6-exercising test's
+  fixture, adapted) and asserts the resulting admitted commitment's
+  contract id is `"conjecturer.turn.v7"`, not `"conjecturer.turn.v6"`.
+
+S3 (R1, C1 — same class of frozen-surface concern as C1, not literally
+named): `workflow/profiles.py`, 4 sites.
+- `WorkflowControlProfileV1.conjecturer_contract_id`'s `Literal` type
+  (~line 74-79): before — `Literal["conjecturer.legacy.v1",
+  "conjecturer.turn.v4", "conjecturer.turn.v5", "conjecturer.turn.v6"]`;
+  a v7 value raises `pydantic.ValidationError` outright. After — the
+  Literal additionally admits `"conjecturer.turn.v7"`. This is the SAME
+  additive-Literal pattern `run_manifest.py`'s own
+  `ContractVersionPolicyV3.conjecturer_turn_contract` already uses
+  (line 658) — the exact precedent this fix mirrors, not a new pattern.
+- The two membership-set checks (~line 109-113, ~154-158) gating
+  `CONTEXT_REQUEST`/`ABSTENTION` outcomes and the "active conjecture
+  profile requires a controlled turn contract" validator: before — both
+  check membership in `{"conjecturer.turn.v4", "v5", "v6"}` literally.
+  After — both include `"conjecturer.turn.v7"`.
+  accept: `python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_control_replay_c1.py -q` (both verified to exist, both cited in the blast-radius census) stays green AND a new regression
+  test constructs `WorkflowControlProfileV1(conjecturer_contract_id="conjecturer.turn.v7", ...)`
+  with `workflow_profile="inquiry.active.v2"` and confirms it validates
+  (no `ValidationError`) and its `available_capability_outcomes()`
+  (or equivalent) includes `CONTEXT_REQUEST`/`ABSTENTION` exactly as a
+  v6-configured profile would.
+
+S4 (R1, frozen surface 3 — operator-approved via the Option C choice):
+`invariants.py`, 2 sites.
+- Lines ~1192 and ~2987: before — both membership checks are
+  `{"conjecturer.turn.v4", "conjecturer.turn.v5", "conjecturer.turn.v6"}`
+  literally; replaying a v7-authored root's log would `fail("conjecture-turn",
+  "manifest does not authorize v4 conjecture turns")` even though the
+  manifest legitimately authorized v7. After — both sets additionally
+  admit `"conjecturer.turn.v7"`.
+  accept: `python -m pytest tests/test_scratch_provenance_refs.py tests/test_v6_transaction_qualification.py tests/test_chaos_invariants.py tests/test_invariant_call_outcomes.py tests/test_persistence_invariants.py tests/test_replay.py tests/test_replay_code.py tests/test_replay_formal.py tests/test_replay_reasoning.py -q`
+  (all nine verified to exist; the first two are the only files
+  currently asserting on the `"conjecture-turn"` fail reason this item
+  touches) stays green (existing v4/v5/v6 root replay assertions MUST
+  NOT MOVE — blast-radius census) AND a new regression test builds a
+  minimal
+  v7-configured root (fixture, no live call), runs `verify_root`, and
+  asserts no `"conjecture-turn"` violation is raised for the v7 contract
+  specifically (mirroring whatever existing fixture proves the same for
+  v6, adapted).
+
 ## Assumptions (operator may override)
 
 A1 (Q1, REQUEST.md): reuse CP1M's existing verified operator keys
@@ -77,6 +183,22 @@ minted, compiles, and executes through the live path (the INLINE
 mechanism, A1 above) — not a full run to a CONFIRMED/REFUTED verdict on
 a specific claim. A single cycle reaching that dispatch is the bar —
 assumed, operator may override.
+
+## Operator decision (resolves Q4, recorded before continuing)
+
+Presented as a batched question (AskUserQuestion) with the three priced
+options above plus their preview detail. **Operator chose Option C
+(critical-path fix, recommended)**: `run_manifest.py`, `rules/conj.py`,
+`workflow/profiles.py`, `invariants.py` — 4 files, all 16 hardcoded
+sites within them (the full per-file counts from the census: 5 + 5 + 4
++ 2). This selection is also the operator's explicit approval to touch
+`invariants.py` (frozen surface 3) for this specific, named change — the
+option's own preview text said so plainly ("touches replay-validation, a
+protected surface") before it was chosen. `cli/doctor.py`,
+`capabilities/simulation.py`, `capabilities/research.py`, and
+`workflow/conjecture_recovery.py` remain OUT OF SCOPE (moved from
+"Questions for operator" to "Out of scope", confirmed, not just
+deferred pending an answer).
 
 ## Questions for operator (STOP — this is the material contradiction case)
 
@@ -191,16 +313,61 @@ Every symbol/file the spec's candidate options change, grepped against
   path (Option C's hand-built test manifest avoids exercising it,
   deferring the ~14-minute cache-miss cost).
 
-## Budget
+## Budget (Option C, operator-confirmed)
 
-Pending Q4's answer — see the three priced options above. No single
-Budget line can be given honestly before the operator picks a scope;
-committing one now would be exactly the "headline that contradicts its
-own itemization" trap `dr-spec-change`'s own procedure warns against.
+Itemized by spec item, source-line changes only (not counting new
+regression tests, which are additive and estimated separately):
 
-Rubric: 6/7 yes — the 7th ("nothing in the spec untraceable to an R/C
-number") is the one item this STOP itself represents: the 22 EXTRA sites
-beyond `PARKED.md`'s named one are not literally traceable to R1's
-QUOTED words (which named only `run_manifest.py`), which is exactly why
-this is reported as a material contradiction and a stop, not silently
-folded into "R1, expanded."
+- S1 (`run_manifest.py`): 3 sites, ~2-4 lines each (dict key /
+  membership-set widen) = ~9 lines
+- S2 (`rules/conj.py`): 5 sites, ~2-5 lines each (one new captured
+  local variable + 4 call-site substitutions) = ~18 lines
+- S3 (`workflow/profiles.py`): 4 sites, ~1-3 lines each (Literal widen +
+  3 membership-set widens) = ~9 lines
+- S4 (`invariants.py`): 2 sites, ~1-2 lines each = ~3 lines
+
+Headline arithmetic: `python3 -c "print(9 + 18 + 9 + 3)"` → **39 lines**
+(source only). Regression tests: 4 new test functions (one per item),
+estimated ~15-30 lines each = ~60-120 lines. Map update (the gap named
+in the blast-radius census — `SUB-rules.md`/`SUB-manifest.md` do not
+document the v6/v7 contract-version dispatch path) in the SAME commit(s)
+as the code, per CLAUDE.md's own rule: ~20-40 lines of new map prose +
+checks.
+
+**Total estimated diff: ~120-190 lines across 4 source files + 4 test
+files + 1-2 map documents.** Under the `dr-drive-harness` default
+~300-line guideline; no sub-tranche split needed.
+
+Commits: one per spec item (S1-S4), so a failure in one item's gate run
+does not block committing the others — 4 commits, each running the
+affected-file ring (CLAUDE.md's own iterate-on-the-ring rule) plus one
+final full-gate commit closing the CHECKLIST.
+
+Frozen surfaces touched: `run_manifest.py` (surface 4, approved — C1)
+and `invariants.py` (surface 3, approved via the Option C choice,
+above). `workflow/profiles.py` is the same class of concern as surface
+4 (a validator being widened) though not literally named by that
+surface's file list — flagged, not assumed silently covered.
+
+Rubric (re-read as reviewer, after the operator's answer resolved Q4):
+- every R has a spec item with a machine-decidable accept? **yes** — R1
+  → S1-S4, each with a pasted `pytest` command over verified-to-exist
+  files; R2 → the live-run test (next phase, after CHECKLIST); R3 →
+  satisfied by this session's own CLAUDE.md re-read at dr-change-orchestrator's
+  environment preflight.
+- blast-radius census pasted (or pasted-empty) and every hit classified?
+  **yes** — full 23-site census above, all classified by file/impact;
+  the 6-file test census for the v6-literal symbol also pasted and
+  classified MUST NOT MOVE.
+- frozen-surface contact forecast recorded? **yes** — table above,
+  3 surfaces, 2 approved, 1 flagged-as-same-class.
+- every mechanism the request names traced to code it actually reaches?
+  **yes** — this IS the material-contradiction finding: `PARKED.md`'s
+  named mechanism (the repair-policy dict) does NOT alone reach R1's
+  success condition; traced exhaustively, not assumed.
+- nothing in the spec untraceable to an R/C number? **yes** — every
+  Item cites R1 (+C1 where the frozen-surface approval matters); the
+  Option C scope itself traces to the operator's own AskUserQuestion
+  answer, recorded above as its own citable decision.
+
+Rubric: 5/5 yes.
