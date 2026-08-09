@@ -1,0 +1,39 @@
+```json
+{
+  "candidate": {
+    "claim": "A large service with strictly more internal redundancy is more resilient to correlated failure than a decentralized network, because the large service can engineer and verify independence of its redundancy internally, whereas the decentralized network cannot enforce it across independent operators.",
+    "mechanism": "The large operator with more total redundancy can co-locate redundant components in independent failure domains (power, network, hardware) and verify that dependencies do not overlap. Each operator in the decentralized network controls only its own internal redundancy and cannot audit or constrain external shared causes that appear across the network (shared cloud provider, transit, library vulnerabilities), creating latent correlated failure without a mechanism to detect or prevent it.",
+    "counterconditions": [
+      "If the large operator's redundancy is verifiably independent, internal redundancy scales more controllably than decentralization.",
+      "If decentralized operators share a common protocol that independently routes around failure, it could approximate the resilience of a redundant monolith.",
+      "If the large operator lacks the ability to audit its own dependency graph, it becomes a single point of correlated failure rather than a mitigator."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+      ],
+      "shared_structure": [
+        "Both systems attempt to ensure that failures do not cascade.",
+        "Both rely on redundancy to prevent single points of failure.",
+        "Both face the challenge of correlated failures that bypass redundant design."
+      ],
+      "disanalogies": [
+        "The monolith has direct control over its internal redundancy, while decentralization cannot enforce independence of external operators.",
+        "Verification of independence is possible within one organization, but verification across organizations is limited by information barriers.",
+        "A monolith's failure is internally observable; a decentralized network's correlated failure may be obscured by distributed ownership."
+      ],
+      "transfer_claims": [
+        "Just as a large redundant datacenter can audit power and network redundancy, a large service can audit its own internal failure domains.",
+        "Decentralized services cannot enforce global audits of their dependencies.",
+        "Latent correlated failures accumulate undetected in decentralized networks due to lack of unified observability."
+      ],
+      "overturn_conditions": [
+        "Evidence that decentralized networks exhibit lower rates of correlated failure despite common dependencies.",
+        "Proof that decentralized operators independently mitigate shared causes without coordination.",
+        "Demonstration that large services cannot effectively audit their own internal dependencies."
+      ]
+    },
+    "typicality": 0.42
+  }
+}
+```

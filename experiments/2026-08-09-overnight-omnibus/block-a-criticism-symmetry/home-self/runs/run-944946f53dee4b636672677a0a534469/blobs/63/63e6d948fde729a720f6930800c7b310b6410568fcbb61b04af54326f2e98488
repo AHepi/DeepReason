@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The dependence relation is substantively circular in its refutation condition: the analogy between datacenter redundancy and internal auditing 'depends on' a disanalogy in information barriers, yet the refuter collapses that very disanalogy by requiring the monolith's internal observability to be 'as information-barrier-limited as the decentralized network's external observability.' If both sides share the same barrier limitation, the analogy is not refuted on dependence grounds but rather re-grounded as a similarity — meaning the proposed 'dependence' never identified a genuine structural differential to transfer. The relation thus reduces to 'both domains are equally barrier-limited,' which is an isomorphism, not a dependence.",
+      "counterexample": [
+        "If internal and external observability share identical information barriers, the analogy loses transfer force not because dependence is refuted but because no dependence was ever established — the relation label is wrong from the outset."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}
+```

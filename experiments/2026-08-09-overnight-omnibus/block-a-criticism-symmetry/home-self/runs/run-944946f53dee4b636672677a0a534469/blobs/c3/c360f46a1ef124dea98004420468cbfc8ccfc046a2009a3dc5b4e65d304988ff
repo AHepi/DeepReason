@@ -1,0 +1,46 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f752458d3e195358e0b35875: program:reasoning_observation_pending
+- reason-counter@257d7c8805cff9dfe855727b: program:reasoning_observation_pending
+- reason-counter@5aac44e9553b2f930ec37f47: program:reasoning_observation_pending
+- reason-counter@fb8b0c9a79ec313e9085d5e1: program:reasoning_observation_pending
+- reason-counter@b29eb9f7624b5aad01010343: program:reasoning_observation_pending
+- reason-counter@481ac435282a3a20434b0422: program:reasoning_observation_pending
+- reason-counter@3d1494bb84a1d752effcc5b6: program:reasoning_observation_pending
+- reason-counter@fc39f8d5dba04fb350d96783: program:reasoning_observation_pending
+- reason-counter@bdbbf95bcee11a0b0d33e16c: program:reasoning_observation_pending
+- reason-counter@f2d1f5490a0bbee6b64e0058: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A decentralized network is more resilient if operators have strong incentives to avoid herding behavior, making the 'shared cause' a deliberate target of distributed mitigation rather than an unmanaged externality.","counterconditions":[{"case":"Operators converge on a single standard for cost reasons, eliminating heterogeneity.","checker_spec":null,"eval":"observation"},{"case":"The cost of maintaining independence exceeds the cost of failure, creating a natural monopoly.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Heterogeneous incentives and stacks naturally diversify the attack surface. If the large service has a bug, it affects all redundant copies; if decentralized services have different bugs, a single exploit does not cascade.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f752458d3e195358e0b35875, reason-counter@257d7c8805cff9dfe855727b
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network of small, independently operated services can be MORE resilient to correlated failure than one large service with strictly more internal redundancy, provided the dominant failure mode is control-plane coordination rather than individual component failure. The strict total-redundancy advantage of the monolith is a red herring when failures are governed by central misconfiguration or coordination collapse.","counterconditions":[{"case":"Failures are dominated by component-level wear-out rather than control-plane decisions, in which case the monolith's strict redundancy advantage dominates.","checker_spec":null,"eval":"observation"},{"case":"The decentralized services are operationally homogeneous (e.g., all using the same cloud provider or same deploy tooling), collapsing the independence of the control planes and recreating monolithic correlated risk.","checker_spec":null,"eval":"observation"},{"case":"The monolith architecturally isolates its redundant components across independent control planes internally (e.g., via strict cell-based architecture), negating the decentralization advantage.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":
+commitments: reasoning-envelope-wf, reason-counter@5aac44e9553b2f930ec37f47, reason-counter@fb8b0c9a79ec313e9085d5e1, reason-counter@b29eb9f7624b5aad01010343
+
+TARGET SRC_003
+{"analogy":null,"claim":"The large service is strictly more resilient because internal redundancy allows for engineered fault-tolerance that eliminates single points of failure, whereas decentralized networks cannot enforce coordination during a crisis.","counterconditions":[{"case":"The large service's unified control plane becomes the single point of failure.","checker_spec":null,"eval":"observation"},{"case":"Decentralized services adopt a shared, self-healing protocol (e.g., BGP) that provides de facto coordination without central control.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A monolith can deploy active-active redundancy across isolated internal zones with a unified control plane. Decentralized services lack a central controller to detect and reroute around failures, making them brittle under correlated stress.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@481ac435282a3a20434b0422, reason-counter@3d1494bb84a1d752effcc5b6
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["In a biological monoculture, convergence is often enforced by centralized agricultural markets; in software, it can occur simply because one library is objectively better, an emergent phenomenon without a central enforcer.","Software vulnerabilities can be patched globally once discovered, whereas biological vulnerabilities require physical replacement of the crop.","Software systems can be partially diverse at different layers (e.g., different apps running on the same OS), adding nuance to what 'monoculture' means."],"overturn_conditions":["Empirical data shows that decentralized operators naturally maintain high stack diversity without external regulation.","The primary failure mode in decentralized networks is found to be local resource exhaustion, not upstream dependency compromise.","The shared-cause failure rate in the decentralized network is proven to be lower than the internal coordination failure rate of the large monolith."],"shared_structure":["Both decentralized networks and agricultural monocultures have the appearance of diversity at the operator level (different farmers/independent services) but hide a fatal lack of diversity at the depend
+commitments: reasoning-envelope-wf, reason-counter@fc39f8d5dba04fb350d96783, reason-counter@bdbbf95bcee11a0b0d33e16c, reason-counter@f2d1f5490a0bbee6b64e0058
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

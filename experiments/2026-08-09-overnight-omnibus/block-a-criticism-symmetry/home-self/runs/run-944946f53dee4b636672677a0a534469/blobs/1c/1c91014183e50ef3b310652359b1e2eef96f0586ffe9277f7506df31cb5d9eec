@@ -1,0 +1,10 @@
+```json
+{
+  "authorized_path": "/values",
+  "operation": "replace",
+  "replacement": [
+    "decentralized",
+    "monolith"
+  ]
+}
+```

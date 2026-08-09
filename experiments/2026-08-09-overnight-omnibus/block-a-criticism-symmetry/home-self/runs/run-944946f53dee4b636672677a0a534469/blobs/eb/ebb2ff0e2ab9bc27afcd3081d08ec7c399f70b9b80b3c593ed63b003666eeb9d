@@ -1,0 +1,60 @@
+```json
+{
+  "candidate": {
+    "claim": "The formal distinction between apparent and true independence of small-service failures is epistemologically unstable: by a variant of the underdetermination problem, any finite observation of uncorrelated failures across a decentralized network is equally consistent with true independence or with a latent shared cause whose activation has not yet been sampled. Strong evidence for independence requires not merely absence of observed correlation but positive mechanistic proof that the services' failure-generating processes have no common causal inputs (shared dependencies, common-mode shocks, correlated update channels).",
+    "mechanism": "A skeptic-dissenter mechanism: each service's failure is governed by an activation function f_i over a vector of causes. If all services share an input X (e.g., a common runtime, a common transit network, a common certificate authority, a common cloud region, or correlated outage events), their failures are not truly independent even if no single X has fired yet. Without a structural argument that no such shared X exists, an observation of uncorrelated failures cannot distinguish true independence from independence conditioned on X being latent. The 'large service has more internal redundancy' argument fails symmetrically: internal redundancy can also share a common mode failure (e.g., a bug in the redundancy logic, a common power source, a common misconfiguration), so total internal redundancy is not a decisive quantity unless the redundancy is itself diversified in a way that defeats shared causes. The argument is intractable in general and is only decidable relative to a specific class of hypothesized shared causes and a specific set of admitted evidence about the service graph.",
+    "counterconditions": [
+      "A positive mechanistic proof of causal isolation across services would defeat this skepticism; if the proof is admitted, true independence can be established.",
+      "A class of hypothesized shared causes can be ruled out empirically (e.g., long observation period with no common failure after known perturbations); this would weaken the skeptic claim within that class.",
+      "If the decentralized services demonstrably share a dependency (e.g., all use the same CDN), they are positively known not to be independent, and the skeptic claim collapses into a finding of known dependence."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "shared_structure": [
+        "Causal graph with potential shared inputs: both decentralized networks and large redundant systems can have hidden common causes whose absence to date is not evidence of absence forever.",
+        "Epistemic scope: finite observations of uncorrelated behavior cannot definitively prove true independence; they only establish independence conditioned on observed perturbations.",
+        "Adversarial symmetry: any argument that decentralized nodes look independent can be applied symmetrically to argue that internal redundancy subsystems look independent, so the argument underdetermines the comparison."
+      ],
+      "disanalogies": [
+        "Independent services are heterogeneous in stack, team, and deployment, so common causes are sparser and harder to identify; a single large service often shares more common causes (same runtime, same SRE team, same build pipeline).",
+        "The relevant question is comparative resilience, not absolute independence; even if independence cannot be proven, decentralized systems may still be more resilient on average because the class of shared causes is harder to trigger than in a monolith.",
+        "Empirically, large services often have known shared modes (e.g., common outage of a control plane) that are public and frequent, whereas decentralized networks often have latent shared modes (e.g., common runtime) that are harder to enumerate."
+      ],
+      "transfer_claims": [
+        "Evidence distinguishing true from apparent independence should focus on identifying (or ruling out) specific common inputs, not on measuring historical lack of correlation.",
+        "A strong case for decentralized resilience must enumerate hypothesized shared causes (runtime, dependency, transit, operator, certificate, regulatory) and show, for each, that the services are not jointly exposed.",
+        "Comparison to a large service should enumerate the same hypothesized shared causes for both architectures, not apply a stricter standard to one than to the other."
+      ],
+      "overturn_conditions": [
+        "A long, high-coverage observation period with no correlated failures under a diverse set of perturbations would weaken the skeptic claim (though not refute it).",
+        "A mechanistic isolation proof (e.g., formally verified non-overlapping dependency graphs) would refute the skeptic claim for the enumerated dependencies.",
+        "If a shared cause were observed to cause a mass failure across the decentralized network, the skeptic claim would collapse into an observed-dependence finding."
+      ]
+    },
+    "evidence_refs": [
+      {
+        "block": "ba687c5f145e404c",
+        "quote": "mechanist"
+      },
+      {
+        "block": "74fde5320d6c7952",
+        "quote": "skeptic"
+      }
+    ],
+    "optional_refs": [
+      "SRC_002",
+      "SRC_004"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_002"
+      ]
+    },
+    "typicality": 0.55
+  }
+}
+```

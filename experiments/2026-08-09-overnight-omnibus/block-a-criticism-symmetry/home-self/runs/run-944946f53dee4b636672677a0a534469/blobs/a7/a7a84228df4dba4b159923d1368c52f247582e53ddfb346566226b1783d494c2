@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1": {"authorized_pointer": "/values", "operation": "replace", "value": [{"architecture": "decentralized"}, {"architecture": "monolith"}]}}
+```

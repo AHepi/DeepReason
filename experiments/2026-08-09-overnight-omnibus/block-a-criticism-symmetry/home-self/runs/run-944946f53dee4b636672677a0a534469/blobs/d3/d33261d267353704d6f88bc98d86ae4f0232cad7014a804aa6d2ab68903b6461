@@ -1,0 +1,42 @@
+```json
+{
+  "candidate": {
+    "claim": "A decentralized network is more resilient if, and only if, the operators' independent epistemic conditions (heterogeneous tooling, isolated supply chains) break the shared-causal links that render apparent independence fragile under stress.",
+    "mechanism": "True independence is an attribute of the control plane and operational supply chain, not component count. The large service centralizes its risk management; the failure of a single vendor or a single flawed deployment logic acts as a hidden common cause that correlates all 'redundant' components. Decentralization provides resilience only when operators draw from independent causal pools (different cloud providers, language stacks, dependency trees), decoupling their failure modes.",
+    "counterconditions": [
+      "If operators converge on the same underlying dependencies (e.g., same TLS library, same cloud provider), their failures are merely apparent-independent, and the large service with strict internal redundancy is superior.",
+      "If the large service uses formally verified, isolated redundancy domains with independent vendor sourcing, the decentralization advantage vanishes."
+    ],
+    "typicality": 0.62,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": {
+      "source_memory_refs": [
+        "SCR_002"
+      ],
+      "shared_structure": [
+        "Resilience is determined by the correlation of failure domains, not the raw count of redundant units.",
+        "A shared root cause can act as a single point of failure that collapses multiple nominally independent components."
+      ],
+      "disanalogies": [
+        "Decentralized operators are economically independent actors, while a monolith's internal components are managed by a single coordinating entity.",
+        "A monolith can enforce strict physical isolation of redundant components, whereas a decentralized network relies on assumed, unenforced heterogeneity."
+      ],
+      "transfer_claims": [
+        "If decentralized nodes share a common dependency, they inherit the same correlated failure risk as a monolith, losing their resilience advantage.",
+        "The large service's redundancy is mathematically strict but causally coupled; the decentralized network's redundancy is causally decoupled but mathematically fragile."
+      ],
+      "overturn_conditions": [
+        "Evidence that decentralized networks naturally converge on identical toolchains and dependencies (e.g., standardization pressure) without enforcing isolation.",
+        "Proof that large services can cheaply maintain strictly independent causal supply chains for their internal redundancy."
+      ]
+    }
+  }
+}
+```

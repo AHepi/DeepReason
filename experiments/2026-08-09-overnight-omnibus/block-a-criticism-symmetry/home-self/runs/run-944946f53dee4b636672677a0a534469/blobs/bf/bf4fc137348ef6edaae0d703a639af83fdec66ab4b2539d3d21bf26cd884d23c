@@ -1,0 +1,43 @@
+```json
+{
+  "candidate": {
+    "claim": "A decentralized network is more resilient than a monolith with strictly more internal redundancy if and only if the marginal independence of its operators' control planes exceeds the independence gains of the monolith's internal components; the key empirical distinction is whether failures remain uncorrelated under exogenous shocks targeting the shared supply chain, which would reveal hidden common causes in the decentralized network.",
+    "mechanism": "The total redundancy count is a red herring if the dominant failure mode is control-plane coordination. A large service centralizes the control plane, meaning a single coordinated decision (e.g., a bad config push) can defeat all N redundant components. A decentralized network distributes control planes across independent operators. However, if these operators converge on a shared supply chain (e.g., a common cloud provider, library, or vendor), the system exhibits 'hidden common causes'—failures appear uncorrelated in normal operation but collapse under exogenous shocks. Resilience is determined by the statistical independence of the control planes and their dependencies, not the raw count of redundant components.",
+    "counterconditions": [
+      "Decentralized operators exhibit correlated behavior during an exogenous shock, revealing a shared dependency that was hidden during normal operation.",
+      "The monolith's internal redundancy is governed by strictly isolated, independently verifiable control planes that do not share a common coordination point.",
+      "The 'anti-resilience' effect dominates: decentralized operators underinvest in redundancy because they assume others will absorb failures, making the network more fragile than the monolith."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "09a3c8106b138005252dd72e7642b00f65aa891fecff6e3fa95b043a5b98435b"
+      ],
+      "shared_structure": [
+        "Both systems have a number of redundant elements that can absorb failures.",
+        "The resilience of both systems depends on the independence of the failure modes of those elements.",
+        "A shared cause can defeat the redundancy in both systems, but the nature of the shared cause (internal coordination vs. external supply chain) differs."
+      ],
+      "disanalogies": [
+        "The monolith has direct control over its internal redundancy, while decentralization cannot enforce independence.",
+        "Decentralized network operators often have different threat models and budgets, whereas a single large service has a unified threat model."
+      ],
+      "transfer_claims": [
+        "The 'strictly more total internal redundancy' condition may be a mathematical trap if the dominant failure mode is control-plane coordination.",
+        "An empirical test using exogenous shocks can distinguish 'true independence' from 'hidden common causes' in the decentralized network."
+      ],
+      "overturn_conditions": [
+        "The monolith's internal redundancy is governed by strictly isolated, independently verifiable control planes.",
+        "Decentralized operators exhibit correlated behavior during an exogenous shock."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  }
+}
+```
