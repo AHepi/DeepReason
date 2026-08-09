@@ -1,21 +1,23 @@
 # Checklist for: update the Errata (sweep + automation)
-State: next=1 blockers=none
+State: next=3 blockers=none
 Map ids: none — docs/skills-only tranche (docs/map covers
 src/deepreason/ only; see REQUEST.md's Map preflight section).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S1,S2,S3,S4,S5,S6,S7) Append seven new entries (E11-E17) to
+- [x] 1. (S1,S2,S3,S4,S5,S6,S7) Append seven new entries (E11-E17) to
       `docs/ERRATA.md`, under one new dated header ("## 2026-08-09
       (sweep of tranches since 2026-08-04)"), each following the
       file's existing "**E<n> — title.** ..." paragraph format and
       evidence-pointer style. Content per SPEC.md items S1-S7 exactly.
       done-when: `grep -Ec "^\*\*E1[1-7] —" docs/ERRATA.md` -> 7
+      DONE: 7
 
-- [ ] 2. (S8) Verify the excluded S5 budget-headline candidate left no
+- [x] 2. (S8) Verify the excluded S5 budget-headline candidate left no
       trace in docs/ERRATA.md (negative check for SPEC.md's S8
       exclusion decision).
       done-when: `grep -c "220-300\|220–300" docs/ERRATA.md` -> 0
+      DONE: 0
 
 - [ ] 3. (S1-S8) [COMMIT] Commit and push docs/ERRATA.md.
       done-when: `git status --porcelain docs/ERRATA.md` empty AND
