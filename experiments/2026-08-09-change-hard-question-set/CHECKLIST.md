@@ -113,8 +113,9 @@ order. One step per `dr-execute-step` invocation.
       done-when: exits reporting 0 failed (this tranche touches no `docs/map/` document, so this is a no-regression check, not new content).
       DONE: `docs_verify [full]: 53 documents, 851 checks, 4 workers` / `docs_verify: 0 failed`.
 
-- [ ] 27. (all) Full gate: `python -m pytest tests/ -q -n 4`
+- [x] 27. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it); if the known bronze-census environment-coupling item (`experiments/2026-08-08-parked-bronze-census-env/PARKED.md`) is the only failure, name it explicitly rather than treating it as new.
+      DONE: `1 failed, 3434 passed, 7 skipped in 681.13s (0:11:21)`. The one failure is `tests/test_bronze_report.py::test_census_totals_internally_consistent`, `assert 159 == 165` on the `deepseek-v4-pro` stream -- an EXACT match to the already-parked, pre-existing environment-coupling defect in `experiments/2026-08-08-parked-bronze-census-env/PARKED.md` (which names this precise assertion, this precise stream, and this precise 159-vs-165/delta-6 shape). Not new, not caused by this tranche (this tranche touches no `src/`/`tests/` file the bronze census reads). `jsonschema` (the other named known item) is installed this session and did not fail. Net of the named known item: 0 unexpected failures, satisfying R19.
 
 - [ ] 28. (R21) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` is empty; `git log origin/<branch>..HEAD` is empty (local head == pushed head).
