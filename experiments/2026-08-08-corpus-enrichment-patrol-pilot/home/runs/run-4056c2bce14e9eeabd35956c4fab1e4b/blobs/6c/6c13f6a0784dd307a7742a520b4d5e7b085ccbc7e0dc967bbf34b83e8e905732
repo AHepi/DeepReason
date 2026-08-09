@@ -1,0 +1,65 @@
+{
+  "candidates": [
+    {
+      "claim": "The pen costs $1.25, derived by substituting N = P + 10 into N + P = 12.50, yielding P = 1.25.",
+      "mechanism": "Let P be the pen price and N the notebook price. The difference constraint gives N = P + 10. Substituting into the sum constraint N + P = 12.50 yields (P + 10) + P = 12.50, so 2P = 2.50 and P = 1.25. The $10 is added to the notebook, not the pen, which is the key covering principle that prevents the common $2.25 error.",
+      "counterconditions": [
+        "If prices are not denominated in US dollars, the numerical answer changes.",
+        "If 'costs $10 more' is interpreted as a ratio rather than an additive difference, the result differs.",
+        "If the problem contains a typo and the total or difference is different, the answer changes."
+      ],
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_007", "SRC_008"],
+      "typicality": 1.0
+    },
+    {
+      "claim": "The pen costs $2.25, obtained by a partial-commitment reading where the $10 difference is mentally grouped with the sum as 12.50 - 10 = 2.50, then halved.",
+      "mechanism": "A reader commits to the total 12.50 and the difference 10, but performs the subtraction 12.50 - 10 = 2.50 and treats this as the pen price without halving, or halves 12.50 to get 6.25 and subtracts 3.75. The covering principle (that the $10 must be removed from the total before halving, not after) is violated. This is the systematic subtraction-halving inversion error.",
+      "counterconditions": [
+        "If the reader correctly identifies that after removing the $10 difference from $12.50, the remaining $2.50 must be split equally between pen and notebook, the error is caught.",
+        "If the problem is re-read slowly and both constraints are checked simultaneously, the error is caught."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "typicality": 0.3
+    },
+    {
+      "claim": "The pen costs $2.50, from reading 'costs $10 more' as modifying the pen's own price rather than establishing the relative gap between notebook and pen.",
+      "mechanism": "A reading where 'the notebook costs $10 more than the pen' is mis-segmented as 'the notebook costs $10' and 'more than the pen' is dropped, or the $10 is attached to the pen. This yields N = 10, P = 2.50 from the residual of 12.50 - 10. The covering principle is the directionality of the comparative: the $10 belongs to the notebook's premium, not the pen's base.",
+      "counterconditions": [
+        "If the comparative 'more than' is parsed as establishing N - P = 10 (notebook above pen), the directional error is avoided.",
+        "If both constraints N + P = 12.50 and N - P = 10 are written down before solving, the error is avoided."
+      ],
+      "optional_refs": ["SRC_001", "SRC_006", "SRC_008"],
+      "typicality": 0.2
+    },
+    {
+      "claim": "The pen costs $0, from a skeptical stance that treats 'costs $10 more than the pen' as vacuously satisfied when the pen is free, with the notebook absorbing the entire $12.50 or exactly $10.",
+      "mechanism": "If P = 0, then N = 10 satisfies the difference constraint (N - P = 10). The sum constraint N + P = 10 ≠ 12.50 is either ignored or the total is mis-remembered. The covering principle is that both constraints must be satisfied simultaneously; the skeptical stance here is a degenerate solution that satisfies only the difference constraint.",
+      "counterconditions": [
+        "If both constraints are checked (N + P = 0 + 10 = 10 ≠ 12.50), the solution is immediately rejected.",
+        "If the problem is read as requiring both conditions to hold, the zero solution fails."
+      ],
+      "optional_refs": ["SRC_002", "SRC_007"],
+      "typicality": 0.05
+    },
+    {
+      "claim": "The pen costs $11.25, from inverting the direction of the $10 difference so that P = N + 10 (pen costs more than notebook) while keeping N + P = 12.50.",
+      "mechanism": "If the comparative is inverted so the pen costs $10 more than the notebook, then P = N + 10 and N + P = 12.50 gives N + (N + 10) = 12.50, so 2N = 2.50, N = 1.25, P = 11.25. The covering principle is the directionality of 'more than': the notebook is above the pen, not the reverse.",
+      "counterconditions": [
+        "If the sentence is parsed as 'notebook costs $10 more than pen' (N above P), the inversion is corrected.",
+        "If the plausibility of a pen costing $11.25 and a notebook $1.25 is questioned, the inversion is caught."
+      ],
+      "optional_refs": ["SRC_001"],
+      "typicality": 0.1
+    },
+    {
+      "claim": "The price of the pen is underdetermined unless we specify whether 'costs $10 more' is gross or net of tax, and whether the $12.50 is pre-tax or post-tax.",
+      "mechanism": "An empiric stance probes whether the two constraints fully pin down the pen price under real-world pricing conventions. If the $12.50 total is tax-inclusive but the $10 difference is pre-tax, or vice versa, the system has a third free parameter (tax rate) and the pen price is not uniquely determined. The covering principle is constraint completeness: two equations pin down two unknowns only if they are independent and identically scoped.",
+      "counterconditions": [
+        "If the problem is taken at face value in a pure-mathematics context (no tax), the standard solution P = 1.25 holds.",
+        "If both the $12.50 and the $10 are confirmed to be in the same denomination and scope, the underdetermination is resolved."
+      ],
+      "optional_refs": ["SRC_004", "SRC_003"],
+      "typicality": 0.05
+    }
+  ]
+}

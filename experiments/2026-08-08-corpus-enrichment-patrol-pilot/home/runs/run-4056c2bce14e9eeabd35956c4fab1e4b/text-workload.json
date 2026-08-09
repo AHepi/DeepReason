@@ -1,0 +1,1 @@
+{"allow_formalization":true,"allow_rubric":true,"allow_simulation":true,"brain":{"enabled":false,"query":null},"criteria":[],"problem":{"description":"A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?","id":"question-65a709e755f5ace91f631c29da0b8b59"},"schema":"deepreason-text-workload-v1","sources":[]}

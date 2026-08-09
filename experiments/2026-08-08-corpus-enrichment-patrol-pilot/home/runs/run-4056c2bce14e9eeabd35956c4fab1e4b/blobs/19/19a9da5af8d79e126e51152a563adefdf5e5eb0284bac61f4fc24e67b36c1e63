@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2c245498d2d4024d63f61102: program:reasoning_observation_pending
+- reason-counter@324a1f5874fab61c0e588de1: program:reasoning_observation_pending
+- reason-counter@5286d249b1cdb5f4d42418e9: program:reasoning_observation_pending
+- reason-counter@7044a71ad75c7e2fe91f3659: program:reasoning_observation_pending
+- reason-counter@7b703814e37cf4c423314dd8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pen costs approximately $1.136.","counterconditions":[{"case":"The phrase '$10 more than' is correctly interpreted as additive (N = P + 10), which is standard for units of currency.","checker_spec":null,"eval":"observation"},{"case":"The problem text is taken literally with the dollar sign indicating a monetary value, not a scalar.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let P be the price of the pen and N be the price of the notebook. Sum constraint: P + N = 12.50. Difference constraint: N = 10 * P (assuming 'costs $10 more than' is a misphrasing for 'costs 10 times as much', treating the dollar sign as a typo or unit-agnostic scalar). Substituting: P + 10P = 12.50 -> 11P = 12.50 -> P = 12.50 / 11 \u2248 1.13636...","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2c245498d2d4024d63f61102, reason-counter@324a1f5874fab61c0e588de1
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pen costs $1.25.","counterconditions":[{"case":"The phrase 'costs $10 more than' is interpreted as a multiplicative relation (e.g., N = 10 * P).","checker_spec":null,"eval":"observation"},{"case":"The currency unit is not additive (e.g., psychological pricing or bulk discounts apply).","checker_spec":null,"eval":"observation"},{"case":"The problem is in a different currency where '12.50' and '$10' are not commensurate.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let P be the price of the pen and N be the price of the notebook. The problem gives a system of two equations: 1) P + N = 12.50. 2) N = P + 10.00. Substituting the second equation into the first: P + (P + 10.00) = 12.50. Combining like terms yields 2P + 10.00 = 12.50. Subtracting 10.00 from both sides gives 2P = 2.50. Dividing by 2 yields P = 1.25. This mechanism satisfies the mechanistic school stance by explicitly demonstrating the algebraic substitution and arithmetic causal steps that transform the given constraints into the result.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5286d249b1cdb5f4d42418e9, reason-counter@7044a71ad75c7e2fe91f3659, reason-counter@7b703814e37cf4c423314dd8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@eaf5e8252ca9427a0e706dea: program:reasoning_observation_pending
+- reason-counter@bfe6c9bf7fbf4f53b3c7fe54: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The dollar amounts differ ($12.50/$10 vs $1.10/$1.00).","The objects differ (notebook/pen vs bat/ball), which may affect semantic priming."],"overturn_conditions":["If the source problem involves a multiplicative rather than additive difference, the transfer is invalid.","If the target problem has a different number of items, the isomorphism fails."],"shared_structure":["Two unknown prices with a fixed total and a fixed additive difference.","The cheaper item equals (total - difference) / 2.","A common wrong answer results from subtracting the difference once without halving."],"source_memory_refs":["SRC_005"],"transfer_claims":["The same halving-after-subtraction procedure applies to yield the cheaper item's price.","The same class of intuitive error (subtracting without halving) predicts the wrong answer."]},"claim":"The pen costs $1.25 because the problem is structurally identical to the bat-and-ball problem.","counterconditions":[{"case":"If the totals or differences are not in the same units, the isomorphism breaks.","checker_spec":null,"eval":"observation"},{"case":"If there are more than two items, the halving strategy fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The bat-and-ball problem (bat + ball = $1.10, bat costs $1.00 more) is isomorphic: total T, difference D, cheaper item = (T - D)/2. Here, pen = (12.50 - 10)/2 = 1.25. The shared structure is a two-equation linear system with one item priced D more than the other.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@eaf5e8252ca9427a0e706dea, reason-counter@bfe6c9bf7fbf4f53b3c7fe54
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

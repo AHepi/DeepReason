@@ -1,0 +1,3 @@
+```json
+{"candidate":{"content":"The correct answer (pen = $1.25) reduces to the simultaneous satisfaction of two linear constraints: the sum N + P = 12.50 and the difference N - P = 10.00, such that substituting N = P + 10 into the sum yields P = 1.25. This reduction is REFUTED IF the problem's language does not unambiguously establish N - P = 10 as a directional difference (e.g., 'costs $10 more' is symmetric or attaches the $10 to the pen), since then the substitution is invalid and any of the erroneous answers ($2.50, $2.25) could be admitted.","typicality":0.78,"neighbours":["SRC_001","SRC_003","SRC_006"]}}
+```

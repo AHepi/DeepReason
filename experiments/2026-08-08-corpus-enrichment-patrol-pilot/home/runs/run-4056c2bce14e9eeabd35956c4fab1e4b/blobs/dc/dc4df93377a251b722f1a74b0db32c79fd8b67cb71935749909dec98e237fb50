@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-65a709e755f5ace91f631c29da0b8b59) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A notebook and a pen cost $12.50 together. The notebook costs $10 more than the pen. What is the price of the pen in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c0c0c8c309fde15893f91168: program:reasoning_observation_pending
+- reason-counter@8ddc4246cd1a585eb57af247: program:reasoning_observation_pending
+- reason-counter@1d484f93be2f3668ea17161c: program:reasoning_observation_pending
+- reason-counter@96d92e1c16ca67f5e80da676: program:reasoning_observation_pending
+- reason-counter@700ff0945e6a011008408b5f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pen costs $1.25.","counterconditions":[{"case":"The prices are not denominated in USD (e.g., cents, different currency).","checker_spec":null,"eval":"observation"},{"case":"The word 'more' is reinterpreted to mean a multiplicative factor instead of an additive difference.","checker_spec":null,"eval":"observation"},{"case":"The prices are subject to a non-linear pricing scheme (e.g., bundled discount not reflected in the stated sum).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let p be the price of the pen and n be the price of the notebook. We have n + p = 12.50 and n = p + 10. Substituting the second equation into the first gives (p + 10) + p = 12.50, so 2p + 10 = 12.50, yielding 2p = 2.50 and thus p = 1.25.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c0c0c8c309fde15893f91168, reason-counter@8ddc4246cd1a585eb57af247, reason-counter@1d484f93be2f3668ea17161c
+
+TARGET SRC_002
+{"analogy":null,"claim":"The problem is unsolvable as stated because the causal mechanism for price determination is missing.","counterconditions":[{"case":"The problem is accepted as a formal algebraic puzzle rather than an empirical claim about a real market transaction.","checker_spec":null,"eval":"observation"},{"case":"A concrete pricing model is provided that validates the linear equations.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mathematical framing imposes an abstract algebraic relation, but without an empirical or causal account of how these specific prices came to be, the solution is a formal exercise disconnected from any real-world price determination. Hence, the price cannot be definitively stated.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@96d92e1c16ca67f5e80da676, reason-counter@700ff0945e6a011008408b5f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
