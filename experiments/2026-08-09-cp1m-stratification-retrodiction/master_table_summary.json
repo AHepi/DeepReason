@@ -1,8 +1,11 @@
 {
   "s_formal": {
-    "outcome_counts": {},
-    "population": 0,
-    "stability_flip_rate": "0/0"
+    "outcome_counts": {
+      "confirmed_negation": 815,
+      "not_clean_shape": 14
+    },
+    "population": 829,
+    "stability_flip_rate": "0/83"
   },
   "s_judgment": {
     "confirmed": 0,

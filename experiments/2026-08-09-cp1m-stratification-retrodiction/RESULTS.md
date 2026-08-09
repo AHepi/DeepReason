@@ -267,6 +267,44 @@ established for this API: identical calls are not always
 bit-identical). Validation accepted; full 829-pair run launched as a
 harness-tracked background call.
 
+## 2026-08-09 — S-formal COMPLETE: 829/829 pairs
+
+| outcome | count | share |
+|---|---|---|
+| `confirmed_negation` (same object+property, mechanically differing values) | 815 | 98.3% |
+| `not_clean_shape` (extraction declined — no shared object/property found) | 14 | 1.7% |
+| `values_agree` / `extraction_parse_failed` | 0 | 0.0% |
+
+**Stability control: 0/83 sampled repeats flipped (0.0%)** — a striking
+contrast with S-mech (18.9%) and S-truth (6.7%). The extraction +
+mechanical-negation task is far more constrained than either authoring
+sandboxed code or free-form judgment, and this tranche's own repeat
+data backs that up directly, not just by argument.
+
+**Honesty caveat on the 98.3% figure, stated plainly rather than
+presented as unqualified strength**: this rate is high enough to warrant
+suspicion that the extraction step is too PERMISSIVE — i.e., that it
+finds *a* shared object/property and *some* value difference for almost
+any pair handed to it, rather than only pairs with a genuinely clean
+same-topic disagreement. The 50-hit pre-registered validation sample
+(above) was read and found topically coherent on spot inspection, and
+that sample's own rate (46/50 = 92%, then 46/50 again on the fresh
+validation-only tally) is consistent with the full run's 98.3% rather
+than a sudden jump — so this is not a case where the full run behaved
+differently from what was validated. But a 50-pair manual read is not
+proof against systematic over-permissiveness across 829 pairs, and this
+tranche did not run an independent second check (e.g. asking a second
+model, blind to which claim said which, whether the two extracted
+values actually look distinct) to rule it out. **Recorded
+as residue: `S-formal`'s CONFIRMED count should be read as "structurally
+matches the confirmed-negation shape," not as independently verified at
+the same evidentiary strength as `S-mech`'s sandboxed execution or
+`S-truth`'s known-answer check** — the master table keeps this
+stratum's method column distinct for exactly this reason.
+
+Committed verbatim: `s_formal_results.jsonl` (912 rows: 829 primary + 83
+stability repeats).
+
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
 matched to its source question's `id` and `accept` list by seed-problem-
