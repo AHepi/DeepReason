@@ -159,5 +159,5 @@ resume policy, applied identically each time.
 | hard-h15 | hard | committed | 12 (10+2 continue) | 99/100 | 0 (expected) | second foreign-criticism-gap case, closed by continue same as hard-h01 |
 | hard2-h2-01 | hard2 | committed | 12 (10+2 continue) | 95/95 | 0 (expected) | third foreign-criticism gap case, closed by continue |
 | hard2-h2-08 | hard2 | committed | 12 (10+2 continue) | 100/100 | 0 (expected) | fourth foreign-criticism gap case, closed by continue |
-| hard2-h2-15 | hard2 | continuing | 10 (+2 pending) | 102/? | - | fifth foreign-criticism gap case; continue in flight (task ba6p39irk) |
-| hard2-h2-22 | hard2 | not started | - | - | - | |
+| hard2-h2-15 | hard2 | committed | 12 (10+2 continue) | 115/116 | 0 (expected) | fifth foreign-criticism gap case, closed by continue |
+| hard2-h2-22 | hard2 | in progress | - | - | - | tracked-background task b083djzgk (final question) |
