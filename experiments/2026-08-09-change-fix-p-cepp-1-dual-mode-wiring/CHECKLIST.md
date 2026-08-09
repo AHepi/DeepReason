@@ -1,6 +1,7 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=10 blockers=none (diff-budget ceiling raised 190->320->420
-by operator decision, SPEC.md amendments; S1+S2+S3 complete)
+State: next=13 blockers=none (diff-budget ceiling raised 190->320->420
+by operator decision, SPEC.md amendments; S1+S2+S3+S4 ALL COMPLETE,
+final diff 405/420 WITHIN)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
