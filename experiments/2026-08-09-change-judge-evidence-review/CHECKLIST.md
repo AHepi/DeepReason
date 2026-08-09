@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=2 blockers=none
+State: next=4 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -22,12 +22,15 @@ check before handing off to validation, not as the gate itself.
       (preview paragraph deferred to end of §8, not written before evidence
       — see note in REVIEW.md; this is a smaller-than-planned but still
       compliant reading of "one-paragraph preview")
-- [ ] 2. (S2) Read `src/deepreason/informal/audits.py`'s four audit
+- [x] 2. (S2) Read `src/deepreason/informal/audits.py`'s four audit
       functions and log tags; read the 15 `experiments/results/*.json`
       files named in SPEC S2 plus `tests/test_audits.py`'s pinned numbers;
       write REVIEW.md §2 with every number sourced inline.
       done-when: REVIEW.md §2 exists and cites all 15 files by path
-- [ ] 3. (S2) [COMMIT] commit REVIEW.md §2 progress.
+      DONE: python census script confirmed all 17 files SPEC S2 names
+      (15 + the glm_judge/gemma files it also lists) appear in REVIEW.md
+      -> `missing: NONE - all 17 cited`
+- [x] 3. (S2) [COMMIT] commit REVIEW.md §2 progress.
       done-when: `git log -1 --oneline` shows this tranche's commit
 - [ ] 4. (S3) Read `informal/trial.py`'s order-swap/paraphrase guard code,
       the `2026-08-01-change-prose-can-refute` tranche files, and grep
