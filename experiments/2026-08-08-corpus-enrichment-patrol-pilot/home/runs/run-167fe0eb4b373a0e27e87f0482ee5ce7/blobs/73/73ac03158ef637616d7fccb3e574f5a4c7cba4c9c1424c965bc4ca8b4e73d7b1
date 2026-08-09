@@ -1,0 +1,14 @@
+```json
+{
+  "candidate": {
+    "content": "The 648-count derivation (complement or direct casework) abstracts to a single combinatorial template: select k distinct symbols from an alphabet of size n under a positional constraint (one position forbidden a specific symbol, e.g. zero), so the problem reduces to a constrained permutation count. This abstract template is refuted if the 648 result cannot be recovered as a special instance of P(n, k) with the boundary constraint applied — i.e., if the 9*8*7 + 1*9*8 = 648 split does not instantiate the general formula C(n,k) * k! with the constrained-position correction folded in.",
+    "evidence_refs": [],
+    "neighbours": [
+      "SRC_002",
+      "SRC_004",
+      "SRC_005"
+    ],
+    "typicality": 0.72
+  }
+}
+```

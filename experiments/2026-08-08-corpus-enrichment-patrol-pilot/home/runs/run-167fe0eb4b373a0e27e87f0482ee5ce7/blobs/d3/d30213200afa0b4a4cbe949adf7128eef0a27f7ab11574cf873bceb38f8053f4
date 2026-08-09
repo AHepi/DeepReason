@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ddc4ed9b2aebfa7a41408f05: program:reasoning_observation_pending
+- reason-counter@a8fe2f67045c5dc1c0894f59: program:reasoning_observation_pending
+- reason-counter@c48eb25ba1735bad940dd3d6: program:reasoning_observation_pending
+- reason-counter@1fdd6940bbcf7a2f783a56b1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"There are 612 three-digit numbers with all distinct digits.","counterconditions":[{"case":"Falsified by enumeration of valid numbers containing zero, such as 102, 103, etc.","checker_spec":null,"eval":"observation"},{"case":"Falsified if the standard base-10 definition is used.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Assume the problem implies a strict interpretation where the presence of the digit zero in the units or tens place is disallowed because it might be considered a 'leading zero' or stylistically impure. In this case: d1 (1-9): 9. d2 (1-9, excluding d1): 8. d3 (1-9, excluding d1, d2): 7. Total = 9 * 8 * 7 = 504. Wait, 504 is not 612. Recalculating with a different error: d1 (1-9): 9. d2 (0-9, excluding d1): 9. d3 (1-9, excluding d1, d2): 7. Total = 567. No, let's assume the error is that d1 cannot be 0, d2 cannot be 0, and d3 cannot be 0. This gives 9*8*7 = 504. Or if d1!=d2, d2!=d3, but d1 can equal d3, we get 9*9*9 = 729. Let's posit 612 arises from a specific permutation error.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ddc4ed9b2aebfa7a41408f05, reason-counter@a8fe2f67045c5dc1c0894f59
+
+TARGET SRC_002
+{"analogy":null,"claim":"There are exactly 648 three-digit numbers with all distinct digits.","counterconditions":[{"case":"This is falsified if the standard definition of a three-digit number (100-999) were changed to exclude zero from any position.","checker_spec":null,"eval":"observation"},{"case":"This is falsified if 'all three digits different' were interpreted to mean adjacent distinctness rather than pairwise distinctness.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By direct combinatorial construction: choose the hundreds digit (9 options: 1-9), then the tens digit (9 options: 0-9 excluding the hundreds digit), then the units digit (8 options: 0-9 excluding the two already chosen). Total = 9 \u00d7 9 \u00d7 8 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c48eb25ba1735bad940dd3d6, reason-counter@1fdd6940bbcf7a2f783a56b1
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

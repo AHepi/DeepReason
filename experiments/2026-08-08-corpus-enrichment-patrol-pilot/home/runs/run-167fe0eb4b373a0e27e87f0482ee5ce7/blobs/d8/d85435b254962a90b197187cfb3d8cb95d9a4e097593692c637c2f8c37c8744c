@@ -1,0 +1,5 @@
+{
+  "op": "replace",
+  "path": "/0/evidence_refs",
+  "value": null
+}

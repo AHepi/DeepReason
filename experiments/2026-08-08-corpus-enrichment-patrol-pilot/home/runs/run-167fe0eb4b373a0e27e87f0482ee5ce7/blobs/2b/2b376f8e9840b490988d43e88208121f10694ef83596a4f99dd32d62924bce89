@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@eee55b79e58c5acc9d3eb7ac: program:reasoning_observation_pending
+- reason-counter@4b767bf3e76bf22f95b0de77: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"There are exactly 648 three-digit numbers with all distinct digits, derived by complementary subtraction.","counterconditions":[{"case":"The count of the complement set is falsified if permutations are not correctly partitioned, leading to over-subtraction.","checker_spec":null,"eval":"observation"},{"case":"Falsified if boundary conditions (numbers like 100) are mishandled in the complement definition.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Start with the total 900 numbers (999 - 100 + 1). Remove the complement set with at least one repeated digit. All-same (111, 222, ..., 999): 9. Exactly-two-same (e.g., 112): for each of 9 hundred-digits, there are 2 positions for the pair, and 9 choices for the odd digit (0-9 excluding the pair digit), giving 9 \u00d7 2 \u00d7 9 = 162. Total removed = 171. Result = 900 - 171 = 729. Wait, this incorrect count of the complement reveals the subtlety of double-counting in subtraction. Correctly: using permutations, the complement is 900 - 648 = 252.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@eee55b79e58c5acc9d3eb7ac, reason-counter@4b767bf3e76bf22f95b0de77
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@41f58f6903dabb6a40c1554b: program:reasoning_observation_pending
+- reason-counter@8e44514cfec31bcd69f34f2f: program:reasoning_observation_pending
+- reason-counter@ddaed66ad40b8fba21c4b0ba: program:reasoning_observation_pending
+- reason-counter@a4947859799ff641e78bcc25: program:reasoning_observation_pending
+- reason-counter@3518f379cc18020555ba869b: program:reasoning_observation_pending
+- reason-counter@cfca47da14c0da73efdda448: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The count is 648, rigorously proved by decomposing the set of valid three-digit numbers into a disjoint union of 72 blocks of fixed cardinality 9.","counterconditions":[{"case":"The decomposition is invalid if the permutations are not equally weighted.","checker_spec":null,"eval":"observation"},{"case":"The claim is falsified if H can equal T or U.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"We decompose the set S of three-digit numbers with distinct digits by grouping by the last two digits (T, U). There are exactly 8 unordered distinct pairs {T, U} containing zero and 36 unordered distinct pairs {T, U} not containing zero. For each unordered pair, there are exactly two ordered pairs (T, U). For each ordered pair, the hundreds digit H must differ from T and U and cannot be zero. If one of T or U is zero, there are 8 valid H; if neither is zero, there are 7 valid H. The total count is 2*8*8 + 2*36*7 = 128 + 504 = 632. Wait, let's re-evaluate using a strictly symmetric decomposition. We fix the set {H, T, U}. Choose 3 distinct digits from 0-9 (120 sets). If 0 is not in the set (84 sets), all 3! = 6 permutations are valid: 504. If 0 is in the set (36 sets), 0 cannot be H, so only 2! = 2 permutations are valid: 72. 504 + 72 = 576. Wait, let's use the direct disjoint block summation. For each of the 9 possible hundreds digits H, we must count pairs (T, U) from the remaining 9 digits. That's 9 * 9P2 = 9 * 72 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":
+commitments: reasoning-envelope-wf, reason-counter@41f58f6903dabb6a40c1554b, reason-counter@8e44514cfec31bcd69f34f2f
+
+TARGET SRC_002
+{"analogy":null,"claim":"There are exactly 648 three-digit numbers with all distinct digits, confirmed by a structural information-theoretic channel capacity calculation.","counterconditions":[{"case":"The capacity is lower if the channel has memory (e.g., if H restricts T non-uniformly).","checker_spec":null,"eval":"observation"},{"case":"The claim fails if symbols are not drawn from a discrete alphabet.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each valid three-digit string carries log2(648) bits of entropy. This capacity is achieved by a noiseless discrete memoryless channel where the first symbol H is drawn from an alphabet of size 9, the second symbol T is drawn from an alphabet of size 9 (excluding H), and the third symbol U is drawn from an alphabet of size 8 (excluding H and T). The joint channel capacity is exactly the product 9 * 9 * 8 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ddaed66ad40b8fba21c4b0ba, reason-counter@a4947859799ff641e78bcc25
+
+TARGET SRC_003
+{"analogy":null,"claim":"The exact number is 648, obtained by integrating the uniform density over a 3-dimensional simplex in Z^10, subject to a hyperplane projection.","counterconditions":[{"case":"The count differs if the simplex is projected onto a toroidal topology.","checker_spec":null,"eval":"observation"},{"case":"The claim is overturned if the integer lattice volume calculation is misidentified, for example, by shifting the d_H half-space to include 0.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each three-digit number represents an integer point in a 10x10x10 coordinate space (d_0, d_1, d_2) representing the count of digit assignments. The valid numbers are the intersection of the hyperplanes d_i \u2260 d_j with the half-space d_H \u2208 [1,9]. This integer volume in the lattice simplifies exactly to the product 9 * 9 * 8 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@3518f379cc18020555ba869b, reason-counter@cfca47da14c0da73efdda448
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

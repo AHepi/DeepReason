@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:05ae27a040f0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 05ae27a040f0 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@ebda2ebd3191: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_005's mechanism, which derives 648 by a single positional product 9 × 9 × 8, abstracts away the combinatorial structure that SRC_003 and SRC_001 retain: the PIE correction terms (add back 2 × 9 = 18 for the all-equal triple intersection) disappear in SRC_005 because the positional counting never partitions the space into overlapping sets. This is a genuine abstraction: the direct product is a quotient of the complement construction by the PIE symmetry group. It is refuted if the direct product can be recovered from the complement construction without eliminating the PIE correction step, or if any direct-product generalization (e.g., n-digit distinct numbers in base b) requires PIE-like corrections that the abstraction loses.
+commitments: hv-floor@2a45b7988522, lineage-ref@ebda2ebd3191, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_002's derivation contradicts SRC_001 as mathematical artifacts even though both yield 648, because SRC_002's mechanism initially computes the exactly-two-same complement as 9 × 2 × 9 = 162 (ignoring the ordering of the pair), while SRC_001 computes the same category as AAB + ABA + BAA = 81 + 81 + 72 = 234 (respecting ordering and the asymmetry of the hundreds-place constraint). Their agreement at 648 depends on compensating errors in SRC_002's intermediate step — the '162' is only correct if we later treat 'all-same' as 9 rather than also respecting position, which obscures the PIE structure SRC_001 makes explicit. This is refuted if SRC_002's 162 is reinterpreted as a deliberately over-corrected quantity that cleanly simplifies to 252 without double-counting, i.e. if the formula 9 × 2 × 9 already accounts for all 252 tuples including the AAA triple via a different partition.
+commitments: hv-floor@2a45b7988522, lineage-ref@ebda2ebd3191, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

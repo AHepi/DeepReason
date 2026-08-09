@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:05ae27a040f0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 05ae27a040f0 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@ebda2ebd3191: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_004 inherits from SRC_005's positional product by decomposing 9*9*8=648 into a case split on zero presence: the zero-absent case yields 9*8*7=504 (the positional product restricted to nonzero digits) and the zero-present case yields 144, making SRC_004's sum 504+144=648 a refinement of SRC_005's single multiplication. It is refuted if SRC_004's zero-present count of 144 is not consistent with SRC_005's positional counting (where zero can occupy tens or units), or if 504+144 does not equal 9*9*8=648.
+commitments: hv-floor@2a45b7988522, lineage-ref@ebda2ebd3191, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_005 shares mechanism with SRC_001: both use a direct positional counting argument—SRC_005 by the multiplication 9*9*8=648 (hundreds nonzero, tens distinct, units distinct) and SRC_001 by partitioning the complement into AAB/ABA/BAA positional forms—so the two mechanisms are duals (counting the valid set vs. counting its positional complement). It is refuted if SRC_001's AAB/ABA/BAA partition does not cover exactly the complement of SRC_005's 9*9*8 positional set, or if the AAA correction in SRC_001 is not the exact intersection of the three position-equality classes implied by SRC_005's distinctness constraint.
+commitments: hv-floor@2a45b7988522, lineage-ref@ebda2ebd3191, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_004 abstracts SRC_003's complement method: SRC_004 counts the valid set directly via zero-presence cases (144+504=648), while SRC_003 counts the complement via inclusion-exclusion (252) and subtracts from 900, so both target the identical quantity but SRC_004 lifts the abstraction from 'count the complement and subtract' to 'count the valid set by structural decomposition'. It is refuted if SRC_004's direct count does not equal 900 minus SRC_003's complement (648≠900-252), or if the zero-presence case split misses a case modeled by the PIE over position-equality.
+commitments: hv-floor@2a45b7988522, lineage-ref@ebda2ebd3191, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

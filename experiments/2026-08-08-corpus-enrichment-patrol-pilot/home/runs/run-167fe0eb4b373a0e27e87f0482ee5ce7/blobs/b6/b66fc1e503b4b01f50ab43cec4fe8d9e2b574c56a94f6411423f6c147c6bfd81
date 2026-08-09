@@ -1,0 +1,3 @@
+```json
+{"candidate":{"content":"The complement-counting derivation (900−252=648) reduces to the same case-split mechanism (504+144) by the identity |complement| = Σ|repeated-digit classes| correctly partitioned; it is refuted if the inclusion-exclusion double/triple intersection terms are misaligned with the case-split's zero-present vs. zero-absent boundary, since then the two methods count different underlying partitions rather than the same set. ","typicality":0.8,"neighbours":["SRC_001","SRC_002","SRC_003"]}}
+```

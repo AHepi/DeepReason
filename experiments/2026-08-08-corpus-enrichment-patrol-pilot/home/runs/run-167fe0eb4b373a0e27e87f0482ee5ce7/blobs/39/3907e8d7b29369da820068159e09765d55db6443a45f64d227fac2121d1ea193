@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-6c5085280a8996cec99c1fbe5873ccf0) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+How many three-digit numbers (100 to 999) have all three digits different from each other?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@1640ddc875024d0b2ef73aed: program:reasoning_observation_pending
+- reason-counter@afff1b5188390fe1b4e714f6: program:reasoning_observation_pending
+- reason-counter@5634c5c4b774052de1add9de: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"There are 648 three-digit numbers (100 to 999) with all distinct digits, computed via casework on zero: 144 have zero (with 1-9 in hundreds, 8 options in the remaining nonzero slot), plus 504 have no zero (9*8*7 choices), giving 144 + 504 = 648.","counterconditions":[{"case":"If zero appearing in tens or units still triggered an extra adjacency restriction, the 144 count would not hold.","checker_spec":null,"eval":"observation"},{"case":"If 'three-digit number' excluded any number containing the digit zero (contrary to standard conventions), only case B would survive and the answer would be 504.","checker_spec":null,"eval":"observation"},{"case":"If the problem instead required 'all digits nonzero' rather than 'all three digits different', the count would be 504 and the 144 zero-cases would be invalid.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Split all valid numbers by whether zero appears. (A) Zero appears: hundreds digit has 9 options (1-9); exactly one of tens or units is zero (2 positions); the other nonzero digit has 8 options. Count: 9*2*8 = 144. (B) No zero appears: choose hundreds (9 options 1-9), tens (8 remaining nonzero), units (7 remaining nonzero). Count: 9*8*7 = 504. Total: 144 + 504 = 648.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1640ddc875024d0b2ef73aed, reason-counter@afff1b5188390fe1b4e714f6, reason-counter@5634c5c4b774052de1add9de
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
