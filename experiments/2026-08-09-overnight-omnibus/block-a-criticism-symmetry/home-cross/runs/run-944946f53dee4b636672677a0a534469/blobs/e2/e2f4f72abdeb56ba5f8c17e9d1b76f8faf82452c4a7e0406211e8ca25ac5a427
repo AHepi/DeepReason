@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem explicitly asks the answer to identify what evidence would distinguish truly independent failure modes from failures that merely appear uncorrelated until a shared cause is found. SRC_001's mechanism (dependency intersection / 'shadow monolith') describes *why* apparent independence is dangerous but never identifies the distinguishing evidence itself. It mentions implicit shared dependencies 'not visible until a trigger occurs,' yet it specifies no evidentiary procedure, observable signal, or test that would separate genuinely independent failures from merely-uncorrelated-until-triggered ones. The closest it comes is the countercondition naming 'intentional operational chaos,' which is a design choice rather than evidence for distinguishing observed failure modes. Thus the target engages the claim but omits the evidentiary half of the problem.",
+      "counterexample": [
+        "A target whose mechanism included a concrete evidentiary criterion, e.g.: 'Evidence of true independence requires demonstrating disjoint dependency footprints across services (distinct runtime stacks, clock sources, library versions) verified through active probing; failures that appear uncorrelated but share a latent NTP source would be distinguishable by correlated timestamp drift observed only after cross-service log alignment.'"
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's defense of the monolith hinges on the monolith's 'global view of system load' enabling superior global load shedding and backpressure, and its first countercondition excludes the case where the monolith's central orchestrator is a single point of failure. But the mechanism never addresses the core problem requirement to identify evidence distinguishing truly independent from merely-apparent-uncorrelated failures. The thundering-herd / resource-exhaustion failure mode it highlights is paradigmatically a *correlated* failure triggered by a shared cause (a load spike affecting all nodes), so it does not engage the evidentiary question at all. Additionally, the countercondition excluding orchestrator-as-SPOF is under-justified: the monolith's 'strictly more internal redundancy' does not by itself guarantee the orchestrator is not a SPOF, so the argument's resilience claim rests on an unstated assumption rather than on evidence.",
+      "counterexample": [
+        "A target that, for the resource-exhaustion case, specified the distinguishing evidence: e.g., 'Under a thundering-herd event, per-service load traces would show synchronized onset times and a common triggering input — evidence of shared cause — whereas truly independent failures would show staggered, unrelated onset with no common upstream signal.'"
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,93 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure because it replaces linear redundancy with combinatorial diversity, preventing 'single-type' failures from zeroing out total system capacity.",
+      "mechanism": "The system's failure probability is governed by the intersection of dependency sets across heterogeneous implementations. While a monolith's redundancy (R) is homogeneous, the decentralized network's diversity (D) ensures that a specific bug or vulnerability only affects a fraction of the nodes, provided they do not share a common substrate (e.g., the same OS or cloud provider).",
+      "counterconditions": [
+        "The network adopts a unified 'best-practice' stack (e.g., all nodes move to the same Kubernetes version), creating a virtual monolith.",
+        "The failure mode is an external protocol-level flaw that all services must implement to communicate."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The distinction between truly independent failures and apparent independence is identified by the 'Trigger-Response Divergence' across a shared temporal or environmental event.",
+      "mechanism": "By monitoring the system's response to a global 'stressor' (e.g., a leap second, a DNS root zone update, or a major cloud region outage), one can observe if services fail simultaneously despite having different operators. If the response is uniform (correlated failure), the 'independence' was illusory, masking a shared latent dependency in the substrate.",
+      "counterconditions": [
+        "The shared trigger is so catastrophic that it destroys the observability layer itself, preventing the measurement of divergence."
+      ],
+      "typicality": 0.85,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "A decentralized network is *less* resilient than a redundant monolith when the primary failure mode is 'cascading fragility' caused by the lack of centralized coordination.",
+      "mechanism": "In a decentralized network, the failure of a few small services can create a 'thundering herd' effect or a recursive retry storm that overwhelms the remaining nodes. A monolith, with its strict internal redundancy and centralized load balancing, can prune failing components and throttle traffic more effectively than a collection of independent actors.",
+      "counterconditions": [
+        "The network employs an asynchronous, circuit-breaking communication protocol that prevents failure propagation."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The perceived resilience of decentralized networks is a function of 'Operational Chaos'—the intentional or accidental inefficiency of their setups—which acts as a biological-style mutation shield.",
+      "mechanism": "Because small, independent operators use a messy mix of legacy hardware, varying OS versions, and idiosyncratic configurations, they inadvertently avoid the 'monoculture' trap. This heterogeneity ensures that no single exploit or bug can achieve a 100% infection rate, whereas a professionalized monolith's strict consistency makes it a perfect target for a single, precise failure mode.",
+      "counterconditions": [
+        "The network reaches a state of 'hyper-standardization' through the adoption of a single dominant orchestration framework (e.g., a global shift to a specific serverless provider)."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesizing the 'Standardization Trap': There is a non-linear relationship between 'operational maturity' and 'systemic resilience'. As a decentralized network moves from 'chaos' (diverse, sub-optimal) to 'mature' (standardized, optimized), it increases the probability of correlated failure. This implies that the most resilient decentralized network is one that explicitly forbids homogeneity.",
+          "why_keep_this": "Explores the paradox where optimization leads to fragility."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we quantify the 'Diversity Coefficient' (D) in a way that allows a direct mathematical comparison between a monolith's R and a network's D?",
+        "related_refs": [
+          "SCR_001",
+          "SCR_004"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,95 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient to correlated failure than a monolith with superior redundancy because it replaces homogeneous redundancy with operational heterogeneity, which breaks the causal chain of systemic triggers.",
+      "mechanism": "The mechanism is 'Type Diversity'. In a monolith, redundancy is typically identical (same binary, same OS, same config), meaning a single trigger (e.g., a specific packet sequence) causes a 100% failure rate regardless of the number of nodes. In a decentralized network, the lack of a central authority leads to idiosyncratic implementation choices (different languages, OS versions, hardware), which prevents a single trigger from activating the failure mode across the majority of the network.",
+      "counterconditions": [
+        "The decentralized network adopts a standardized 'best practice' stack (e.g., all using the same cloud provider's managed Kubernetes version), creating a virtual monolith.",
+        "The monolith employs N-version programming or heterogeneous redundancy (different implementations of the same spec across its internal nodes)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Decentralized networks are actually less resilient to correlated failure because they shift the failure point from internal logic to 'invisible' shared upstream dependencies that are harder to monitor and mitigate than monolithic internal failures.",
+      "mechanism": "The 'Shadow Monolith' mechanism. While services appear independent at the operator level, they share a deep, hidden dependency graph (e.g., a common DNS provider, a shared open-source library like Log4j, or a specific CDN). This creates a latent correlation where the 'independence' is a facade, and the failure is triggered by a change in the shared substrate rather than the service logic itself.",
+      "counterconditions": [
+        "The decentralized network explicitly implements 'dependency diversity' or air-gapping of critical paths.",
+        "The monolith's internal redundancy is so high and geographically distributed that it survives the same substrate failure."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "True independence of failure is distinguished from apparent independence by the temporal synchronization of recovery and the variance of the failure trigger's effect across different environments.",
+      "mechanism": "The 'Recovery Synchronization' and 'Trigger Variance' discriminator. Independent failures occur at stochastic intervals and recover at rates proportional to individual operator response times. Correlated failures exhibit 'phase-locking': they crash nearly simultaneously and, crucially, recover in a synchronized burst when the shared trigger (e.g., a leap second or a DNS update) is resolved or expires, regardless of the service's internal scale.",
+      "counterconditions": [
+        "The shared trigger causes permanent data corruption, leading to staggered, manual recovery processes that mimic independent recovery.",
+        "The network is so small that stochastic coincidence is statistically plausible."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The resilience of a decentralized network is a function of its 'intentional inefficiency,' where the cost of not optimizing for a single standard is the primary driver of its survival against correlated shocks.",
+      "mechanism": "The 'Sub-optimal Diversity' mechanism. By avoiding the 'efficiency' of a unified platform (the monolith's strength), the decentralized network maintains a fragmented state. This fragmentation acts as a biological mutation rate; because no two nodes are perfectly aligned, a 'virus' (software bug or configuration error) cannot find a universal host, effectively limiting the blast radius of any single correlated trigger.",
+      "counterconditions": [
+        "The pressure for interoperability forces the network to converge on a single protocol implementation, eliminating the fragmentation.",
+        "The failure is caused by a physical layer event (e.g., a regional power outage) that ignores software diversity."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: The 'Redundancy' in the monolith is a linear scale (1x, 2x, 10x), whereas 'Diversity' in the decentralized network is a combinatorial scale. If a failure mode targets a specific implementation, the monolith's linear redundancy provides 0% protection, while the decentralized network's combinatorial diversity provides (1 - P(match))% protection. This suggests that the only way for a monolith to compete is to move from linear to combinatorial redundancy (N-version programming).",
+          "why_keep_this": "Provides a mathematical intuition for why 'strictly more total redundancy' is a decoy metric."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we quantify the 'diversity coefficient' of a decentralized network to predict the probability of a correlated crash?",
+        "related_refs": [
+          "SRC_002"
+        ]
+      }
+    ]
+  }
+}
+```

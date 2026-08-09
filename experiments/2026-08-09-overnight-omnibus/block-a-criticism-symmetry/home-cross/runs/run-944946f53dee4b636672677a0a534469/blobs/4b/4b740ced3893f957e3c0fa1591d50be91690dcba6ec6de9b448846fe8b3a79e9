@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5dea71ffc92e1576a363d11a: program:reasoning_observation_pending
+- reason-counter@a8cd9dc70237de2900f636a1: program:reasoning_observation_pending
+- reason-counter@240517722786445db0918f14: program:reasoning_observation_pending
+- reason-counter@83186245049d4c5bd3c69923: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Decentralized networks are actually *less* resilient to correlated failure because they hide 'latent shared triggers' in their dependency graphs that are invisible until a critical event occurs.","counterconditions":[{"case":"The network implements a 'Diversity Coefficient' audit that ensures no single dependency is shared by more than a small percentage of nodes.","checker_spec":null,"eval":"observation"},{"case":"The monolith's redundancy is so vast that it can survive the total loss of its primary dependency through multi-cloud failover.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Virtual Monolith' effect: while operators are independent, they share an intersection of upstream dependencies (e.g., a common DNS provider or a specific NPM package). Failure is not caused by the operator's actions but by a shared dependency failure. This is more dangerous than a monolith's failure because the dependency is implicit and unmonitored, creating a false sense of resilience until the shared trigger activates.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5dea71ffc92e1576a363d11a, reason-counter@a8cd9dc70237de2900f636a1
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure than a redundant monolith because it leverages 'operational heterogeneity' as a primary firewall against systemic software bugs.","counterconditions":[{"case":"The decentralized network adopts a standardized 'best-practice' substrate (e.g., a single managed Kubernetes provider) that re-introduces homogeneity.","checker_spec":null,"eval":"observation"},{"case":"The monolith employs 'N-version programming' or diverse redundancy (different binaries for the same function).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The decentralized network's resilience is derived from the variance in its execution environments (different kernels, OS versions, and hardware). A single bug in a shared library (e.g., a memory leak in a specific GLIBC version) will only affect the subset of services running that specific environment, whereas a monolith with high internal redundancy typically employs a homogeneous stack, meaning the same bug triggers a simultaneous failure across all redundant nodes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@240517722786445db0918f14, reason-counter@83186245049d4c5bd3c69923
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

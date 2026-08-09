@@ -1,0 +1,45 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+## problem-context
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ad3e1888df2ec0627fb55444: program:reasoning_observation_pending
+- reason-counter@9b814b50221272ddd5fd7786: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 16cd4dccfa1bf717232dc6717ec887f3b0065d70ba8bf07216fedaf223a90d00
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure because it replaces linear redundancy with combinatorial diversity, preventing 'single-type' failures from zeroing out total system capacity.","counterconditions":[{"case":"The network adopts a unified 'best-practice' stack (e.g., all nodes move to the same Kubernetes version), creating a virtual monolith.","checker_spec":null,"eval":"observation"},{"case":"The failure mode is an external protocol-level flaw that all services must implement to communicate.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The system's failure probability is governed by the intersection of dependency sets across heterogeneous implementations. While a monolith's redundancy (R) is homogeneous, the decentralized network's diversity (D) ensures that a specific bug or vulnerability only affects a fraction of the nodes, provided they do not share a common substrate (e.g., the same OS or cloud provider).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- df684ec2719d992b5f0eaf0e75b1d3c9f24ba20f171c3376229aa8508fb9119c [mention]
+- fa120577169899e4436f2a2779b4d5747a0417d57a40a52e4187f353ed45998a [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- df684ec2719d992b5f0eaf0e75b1d3c9f24ba20f171c3376229aa8508fb9119c: {"analogy":null,"claim":"The decentralized network's resilience is derived not from the quantity of redundancy, but from 'operational heterogeneity'\u2014the fa
+- fa120577169899e4436f2a2779b4d5747a0417d57a40a52e4187f353ed45998a: {"analogy":null,"claim":"The decentralized network is fundamentally more resilient to correlated failure than a redundant monolith because it trades 'redundancy
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

@@ -1,0 +1,6 @@
+```json
+{
+  "op": "remove",
+  "path": "/candidates/0/typicality_estimate"
+}
+```

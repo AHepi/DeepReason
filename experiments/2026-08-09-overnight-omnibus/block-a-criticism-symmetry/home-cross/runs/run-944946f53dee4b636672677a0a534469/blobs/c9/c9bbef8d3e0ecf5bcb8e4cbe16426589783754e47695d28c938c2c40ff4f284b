@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4005c145af5369dced7349b8: program:reasoning_observation_pending
+- reason-counter@387bcade87b597f820de1918: program:reasoning_observation_pending
+- reason-counter@b37087319551fb8d47012af7: program:reasoning_observation_pending
+- reason-counter@0494adcdb0bf97149bc4c874: program:reasoning_observation_pending
+- reason-counter@4be4125ac6a3e7371540d7c0: program:reasoning_observation_pending
+- reason-counter@9b36539b0cb08003d68102ee: program:reasoning_observation_pending
+- reason-counter@bc8a07757a2102f80c6cbc24: program:reasoning_observation_pending
+- reason-counter@4d0111c3a54588d83f4d91e5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between truly independent failures and apparent independence is empirically determined by the 'divergence of recovery' during a systemic event.","counterconditions":[{"case":"The shared cause is a 'poison pill' that requires manual local remediation for every service, masking the synchronization of the trigger.","checker_spec":null,"eval":"observation"},{"case":"The recovery of a decentralized network is gated by a single shared recovery dependency (e.g., a global auth service).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If failure modes are truly independent, the timing and nature of service restoration will correlate with the individual operator's local capabilities and recovery scripts. If failures are correlated via a shared cause, services will exhibit 'synchronized recovery'\u2014all returning to health at the exact moment the shared trigger (e.g., a leap second or a BGP route) is resolved, regardless of local operator intervention.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4005c145af5369dced7349b8, reason-counter@387bcade87b597f820de1918
+
+TARGET SRC_002
+{"analogy":null,"claim":"Resilience in decentralized networks is a function of 'intentional inefficiency' rather than total redundancy.","counterconditions":[{"case":"The 'inefficiency' introduces more local bugs than it prevents global ones.","checker_spec":null,"eval":"observation"},{"case":"The monolith's internal redundancy is implemented via heterogeneous hardware and software versions.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By avoiding the optimization of the stack (e.g., using slightly outdated versions of libraries or non-standard configurations), decentralized services create 'stochastic firewalls'. The cost of this inefficiency is a lower baseline performance, but the benefit is that a global exploit or bug cannot propagate through the network because the 'attack surface' is fragmented and non-uniform.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b37087319551fb8d47012af7, reason-counter@0494adcdb0bf97149bc4c874
+
+TARGET SRC_003
+{"analogy":null,"claim":"True independence of failure is distinguished from apparent independence by the temporal synchronization of the failure-recovery cycle.","counterconditions":[{"case":"The failure is a cascading event where an independent trigger in one service causes a deterministic, rapid-fire collapse of others via a dependency chain.","checker_spec":null,"eval":"observation"},{"case":"The recovery is gated by a shared external resource that creates an artificial synchronization point during the reboot phase.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Recovery Synchronization' discriminator: if independent services fail and recover within a tight, synchronized temporal window (e.g., 10ms), the probability of independent failure is statistically zero, indicating a latent shared trigger (like a leap second or a global DNS outage). True independence manifests as stochastic, staggered failure and recovery times across the network.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4be4125ac6a3e7371540d7c0, reason-counter@9b36539b0cb08003d68102ee
+
+TARGET SRC_004
+{"analogy":null,"claim":"The 'strictly more total internal redundancy' of a monolith is a vanity metric that actually increases the probability of correlated failure by expanding the systemic attack surface.","counterconditions":[{"case":"The monolith implements diverse redundancy (e.g., different OSes, different languages for the same logic).","checker_spec":null,"eval":"observation"},{"case":"The decentralized network's lack of redundancy makes it so fragile that individual failures trigger a systemic collapse via cascading load.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Homogeneity Amplification: In a monolith, redundancy usually implies replication of the same state and logic. This ensures that any bug triggering a failure in one node is present in all redundant nodes. A decentralized network's 'inefficiency' (fragmented, sub-optimal setups) provides the heterogeneity necessary to prevent a single exploit or bug from achieving 100% penetration.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bc8a07757a2102f80c6cbc24, reason-counter@4d0111c3a54588d83f4d91e5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

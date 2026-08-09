@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-622df0a08dd44792063159b38a80be9c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the third-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@40f4c95f9e24b09db12c5459: program:reasoning_observation_pending
+- reason-counter@13fb740dafea81929a02dbda: program:reasoning_observation_pending
+- reason-counter@9c57e108c9744f7e16411f14: program:reasoning_observation_pending
+- reason-counter@38a565c254e46d1bc605c3bc: program:reasoning_observation_pending
+- reason-counter@440a98ccfd8db246bca97d81: program:reasoning_observation_pending
+- reason-counter@b8296e86500de114577ae320: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The claim that decentralization increases resilience is a fallacy of 'perceived independence'; the network is actually more fragile if it exhibits a 'shadow monolith' structure via shared low-level dependencies.","counterconditions":[{"case":"The network maintains a high 'entropy of the dependency graph'.","checker_spec":null,"eval":"observation"},{"case":"Services are strictly air-gapped at the dependency level.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Economic convergence leads small operators to adopt the same 'free tier' tools and common NPM/PyPI packages. This creates a latent shared trigger where a failure in a common utility (like a leap second bug or a compromised base image) causes a simultaneous collapse of 'independent' services, effectively mimicking a monolith without the benefit of the monolith's coordinated recovery tools.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@40f4c95f9e24b09db12c5459, reason-counter@13fb740dafea81929a02dbda
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure than a redundant monolith because it maximizes operational heterogeneity, which prevents single-point-of-failure logic bugs from propagating across the entire system.","counterconditions":[{"case":"The network shares a critical upstream dependency (e.g., a single DNS provider or cloud region).","checker_spec":null,"eval":"observation"},{"case":"The services are forced into a homogeneous stack by a shared framework or mandatory compliance standard.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By utilizing diverse software stacks, kernels, and deployment configurations, the decentralized network ensures that a specific bug (e.g., a buffer overflow in a specific library version) only affects a subset of nodes, whereas a monolith with 'internal redundancy' typically replicates the same vulnerable binary across all redundant nodes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9c57e108c9744f7e16411f14, reason-counter@38a565c254e46d1bc605c3bc
+
+TARGET SRC_003
+{"analogy":null,"claim":"The claim that decentralization increases resilience is false if the network's 'entropy of the dependency graph' is low, as it merely masks a 'virtual monolith' of shared third-party dependencies.","counterconditions":[{"case":"Operators actively maintain a diverse set of toolchains.","checker_spec":null,"eval":"observation"},{"case":"The shared dependencies are non-critical or have local fallbacks.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Economic convergence drives small operators toward the same 'free tier' tools and common libraries (NPM/PyPI), creating latent correlations that trigger simultaneously despite the appearance of independent operation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@440a98ccfd8db246bca97d81, reason-counter@b8296e86500de114577ae320
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

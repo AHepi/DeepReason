@@ -1,0 +1,97 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure than a redundant monolith because it leverages 'operational heterogeneity' as a primary firewall against systemic software bugs.",
+      "mechanism": "The decentralized network's resilience is derived from the variance in its execution environments (different kernels, OS versions, and hardware). A single bug in a shared library (e.g., a memory leak in a specific GLIBC version) will only affect the subset of services running that specific environment, whereas a monolith with high internal redundancy typically employs a homogeneous stack, meaning the same bug triggers a simultaneous failure across all redundant nodes.",
+      "counterconditions": [
+        "The decentralized network adopts a standardized 'best-practice' substrate (e.g., a single managed Kubernetes provider) that re-introduces homogeneity.",
+        "The monolith employs 'N-version programming' or diverse redundancy (different binaries for the same function)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Decentralized networks are actually *less* resilient to correlated failure because they hide 'latent shared triggers' in their dependency graphs that are invisible until a critical event occurs.",
+      "mechanism": "The 'Virtual Monolith' effect: while operators are independent, they share an intersection of upstream dependencies (e.g., a common DNS provider or a specific NPM package). Failure is not caused by the operator's actions but by a shared dependency failure. This is more dangerous than a monolith's failure because the dependency is implicit and unmonitored, creating a false sense of resilience until the shared trigger activates.",
+      "counterconditions": [
+        "The network implements a 'Diversity Coefficient' audit that ensures no single dependency is shared by more than a small percentage of nodes.",
+        "The monolith's redundancy is so vast that it can survive the total loss of its primary dependency through multi-cloud failover."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The distinction between truly independent failures and apparent independence is empirically determined by the 'divergence of recovery' during a systemic event.",
+      "mechanism": "If failure modes are truly independent, the timing and nature of service restoration will correlate with the individual operator's local capabilities and recovery scripts. If failures are correlated via a shared cause, services will exhibit 'synchronized recovery'—all returning to health at the exact moment the shared trigger (e.g., a leap second or a BGP route) is resolved, regardless of local operator intervention.",
+      "counterconditions": [
+        "The shared cause is a 'poison pill' that requires manual local remediation for every service, masking the synchronization of the trigger.",
+        "The recovery of a decentralized network is gated by a single shared recovery dependency (e.g., a global auth service)."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Resilience in decentralized networks is a function of 'intentional inefficiency' rather than total redundancy.",
+      "mechanism": "By avoiding the optimization of the stack (e.g., using slightly outdated versions of libraries or non-standard configurations), decentralized services create 'stochastic firewalls'. The cost of this inefficiency is a lower baseline performance, but the benefit is that a global exploit or bug cannot propagate through the network because the 'attack surface' is fragmented and non-uniform.",
+      "counterconditions": [
+        "The 'inefficiency' introduces more local bugs than it prevents global ones.",
+        "The monolith's internal redundancy is implemented via heterogeneous hardware and software versions."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Recovery Synchronization' hypothesis: If we see 100 independent services crash and then 100 services recover within the same 10ms window, the probability of independent failure is effectively zero. This provides a clear evidence-based discriminator for 'apparent' vs 'true' independence.",
+          "why_keep_this": "Proposes a concrete empirical test for the second part of the problem."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'redundancy' in a monolith actually increase correlated failure by creating a larger, more attractive target for a single systemic exploit?",
+        "related_refs": [
+          "SRC_006"
+        ]
+      }
+    ]
+  }
+}
+```
