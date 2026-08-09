@@ -1,0 +1,119 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts using a checklist is more reliable on average because it replaces the high-variance 'peak' performance of an expert with a high-floor 'baseline' performance, effectively filtering out catastrophic idiosyncratic errors.",
+      "mechanism": "Variance reduction via systematic decomposition: The checklist acts as a low-pass filter (per SCR_002) that removes high-frequency noise (random expert slips) while ensuring that the minimum required criteria for a correct outcome are met, shifting the mean reliability upward even if the maximum possible 'insight' is lowered.",
+      "counterconditions": [
+        "The task requires synthesis of non-linear variables that cannot be decomposed into a checklist.",
+        "The checklist is so granular that it induces 'compliance fatigue' (per SCR_005), leading to missed checks.",
+        "The expert's 'intuition' is actually a high-speed processing of the same checklist items, but with superior weighting."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_004"
+        ],
+        "shared_structure": [
+          "High-skill individual (Surgeon/Pilot) vs. Systematic safety protocol",
+          "Prevention of 'stupid' mistakes vs. Enhancement of peak skill"
+        ],
+        "transfer_claims": [
+          "The 'Surgical Safety Checklist' model demonstrates that reliability gains come from raising the floor rather than raising the ceiling."
+        ],
+        "disanalogies": [
+          "Aviation checklists are often used by experts, whereas the prompt specifies non-experts."
+        ],
+        "overturn_conditions": [
+          "Evidence that checklists in high-stakes environments increase error rates due to cognitive overload."
+        ]
+      }
+    },
+    {
+      "claim": "The panel is less reliable because checklist compliance creates a 'false positive' of rigor that masks the absence of the critical synthesis required for objectively verifiable outcomes.",
+      "mechanism": "Substitution of process for outcome: Non-experts mistake the act of ticking a box for the act of verifying the underlying condition, leading to 'blind compliance' where the panel tracks the checklist but fails to track the truth.",
+      "counterconditions": [
+        "The checklist includes 'verification' steps that require external, independent evidence for each tick.",
+        "The task is purely additive (sum of parts) rather than synthetic."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance in a single evaluation by the presence of 'justification-evidence linkage' in the logs.",
+      "mechanism": "Evidence-based verification: A compliant panel provides a binary 'Yes' for a checklist item; a reliable panel provides the specific data point from the case that satisfies the item. The delta between 'I checked the box' and 'I found X which satisfies the box' (per SCR_001) serves as the diagnostic.",
+      "counterconditions": [
+        "The non-experts are trained to 'fake' justifications by copying text from the case without understanding it.",
+        "The checklist items are too binary to allow for descriptive justification."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the panel's response to a 'plausible but wrong' decoy item embedded in the checklist.",
+      "mechanism": "Critical application filter: By introducing a decoy requirement that is plausible but irrelevant to the correct outcome (per SCR_003), the evaluator can see if the panel is in 'compliance mode' (ticking the decoy) or 'reliability mode' (rejecting the decoy as irrelevant).",
+      "counterconditions": [
+        "The decoy is too obvious, making the test a measure of intelligence rather than reliability.",
+        "The decoy is so plausible that even a reliable panel would tick it."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    },
+    {
+      "claim": "The panel is more reliable only when the checklist's granularity reaches a 'Goldilocks zone'—detailed enough to capture expert heuristics but sparse enough to avoid cognitive collapse.",
+      "mechanism": "Cognitive load optimization: Reliability follows a bell curve relative to checklist detail. Too simple, and it misses the expert's 'signal'; too complex, and it triggers 'compliance fatigue' (per SCR_005), where the panel ticks boxes to finish the task rather than to verify the outcome.",
+      "counterconditions": [
+        "Human cognitive load is not the limiting factor in the specific task provided.",
+        "Non-experts can be scaled (larger panel) to distribute the load of a complex checklist."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [],
+      "analogy": null
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we use the 'decoy' method from SCR_003, we are essentially testing for 'Epistemic Agency'. A compliant agent follows the map; a reliable agent checks the map against the terrain. The 'evidence within a single evaluation' is the act of the panel correcting the map (the checklist) when the map is wrong.",
+          "why_keep_this": "Connects the decoy method to a broader conceptual framework of epistemic agency."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can we distinguish 'reliability' from 'consistency' if the expert and the panel both arrive at the same wrong answer but for different reasons?",
+        "related_refs": [
+          "SCR_006",
+          "SCR_008"
+        ]
+      }
+    ]
+  }
+}
+```

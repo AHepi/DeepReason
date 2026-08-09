@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 004c5856e33e depends on SRC_005 by operationalizing the 'Reliability Floor' mechanism; it proposes that the panel's reliability is a function of variance reduction via the elimination of 'stupid' errors. This relation is refuted if the panel's error rate is driven by systematic checklist-induced biases rather than the random omissions the floor is designed to prevent.",
+      "neighbours": [
+        "SRC_005",
+        "SRC_001"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "The problem 004c5856e33e integrates the 'low-pass filter' mechanism from SRC_002 to explain the trade-off between reliability and precision. It posits that the panel's success relies on the filter removing noise (slips) without removing critical signal (expert synthesis). This relation is refuted if the 'accuracy ceiling' loss (loss of expert insight) outweighs the 'reliability floor' gain (reduction of slips) in the specific task domain.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_001"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The problem 004c5856e33e abstracts the 'Surgical Safety Checklist' analogy from SRC_004 into a general principle of 'Proceduralization vs Intuition'. It claims that reliability is increased by insulating the process from cognitive lapses. This relation is refuted if evidence shows that non-experts using checklists create a 'false sense of security' that introduces more catastrophic errors than the expert's intuitive lapses.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_003"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The problem 004c5856e33e contradicts the assumption of expert superiority by utilizing the 'baseline performance' claim in SRC_003, arguing that a high-floor baseline is more reliable than a high-variance peak. This relation is refuted if the expert's 'intuition' is proven to be a high-speed processing of the same checklist items with superior weighting, making the checklist redundant or obstructive.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_002"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The problem 004c5856e33e shares mechanism with SRC_001 regarding the tension between 'reliability floor' and 'accuracy ceiling', proposing that the panel wins only when the cost of a catastrophic slip is the primary concern. This relation is refuted if the task requires high-dimensional synthesis that cannot be decomposed into binary checks, rendering the checklist mechanism inapplicable.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.8
+    }
+  ]
+}
+```

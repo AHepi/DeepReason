@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-c18a220185e07eb2d327cde014e85ba8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the fifth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c72980d673842b1b1991e8b6: program:reasoning_observation_pending
+- reason-counter@7718ace92b29d03a5e4a19ad: program:reasoning_observation_pending
+- reason-counter@da14f1621f243859e133ff16: program:reasoning_observation_pending
+- reason-counter@b4537aa5a737293876ccfbf1: program:reasoning_observation_pending
+- reason-counter@7a514e529dbd769ff1f2f558: program:reasoning_observation_pending
+- reason-counter@07020bb4fb4f1e8b3e5fa828: program:reasoning_observation_pending
+- reason-counter@037aba2143aeb880b5b2c5ca: program:reasoning_observation_pending
+- reason-counter@b3920751452d258578cc5f58: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts following a checklist is less reliable than a single expert because checklists act as low-pass filters that eliminate high-frequency expert signal (intuitive leaps) while only marginally reducing noise.","counterconditions":[{"case":"The task is 'shallow' or purely algorithmic, meaning the expert's intuition adds no value beyond the checklist's steps.","checker_spec":null,"eval":"observation"},{"case":"The expert is prone to high-frequency random slips (noise) that exceed the loss of signal caused by the checklist's rigidity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The expert's intuition is a compressed form of conditional logic that handles edge cases; the checklist decomposes this into binary checks. While this reduces variance (raising the floor), it truncates the ceiling of accuracy by forcing the panel to ignore context-specific signals not captured in the explicit checklist, resulting in a lower average reliability for complex tasks.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c72980d673842b1b1991e8b6, reason-counter@7718ace92b29d03a5e4a19ad
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel's reliability is a statistical artifact of 'error cancellation' rather than a superior judgment process, and can be distinguished from genuine reliability by the presence of 'blind compliance' to irrelevant checklist items.","counterconditions":[{"case":"The panel members are trained to challenge the checklist's relevance to the specific case.","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is prone to high-frequency random slips (noise) rather than systematic bias.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a coordination mechanism that reduces variance (the 'floor' effect) by preventing catastrophic omissions, but the 'reliability' is merely the average of multiple non-expert guesses anchored to a common set of points.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@da14f1621f243859e133ff16, reason-counter@b4537aa5a737293876ccfbf1
+
+TARGET SRC_003
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Unlike a simple low-pass filter, the decoy actively probes the agent's internal validation mechanism."],"overturn_conditions":["If the panel's 'reliability' is derived from a social hierarchy where the lead non-expert overrides the checklist."],"shared_structure":["Signal vs Noise filtering","Introduction of a control variable (decoy) to test for blind adherence"],"source_memory_refs":["SCR_001","SCR_004"],"transfer_claims":["The 'decoy' method allows for the empirical separation of 'process compliance' from 'judgment reliability'."]},"claim":"The perceived reliability of a checklist panel is often a statistical artifact of error cancellation rather than a superior judgment process, which can be exposed by introducing a 'plausible but wrong' decoy item.","counterconditions":[{"case":"The panel is trained to prioritize checklist adherence over all other signals as a primary metric of success.","checker_spec":null,"eval":"observation"},{"case":"The decoy is indistinguishable from a valid requirement without expert-level domain knowledge.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Reliabi
+commitments: reasoning-envelope-wf, reason-counter@7a514e529dbd769ff1f2f558, reason-counter@07020bb4fb4f1e8b3e5fa828
+
+TARGET SRC_004
+{"analogy":null,"claim":"A panel of non-experts following a checklist is less reliable than a single expert because checklists cannot capture the 'conditional logic' (context-dependent weighting) required for high-stakes verifiable outcomes, making any perceived gain a result of simple task-decomposition that ignores systemic edge cases.","counterconditions":[{"case":"The task is purely algorithmic or procedural with no hidden dependencies.","checker_spec":null,"eval":"observation"},{"case":"The checklist is dynamically adaptive to the context of the specific case.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition operates as a high-dimensional pattern recognition system that weights variables non-linearly; checklists force a linear, additive weighting that fails when the interaction between variables is the primary driver of the outcome.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@037aba2143aeb880b5b2c5ca, reason-counter@b3920751452d258578cc5f58
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

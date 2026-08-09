@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-c18a220185e07eb2d327cde014e85ba8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the fifth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fcc545582aff5ebd905047a0: program:reasoning_observation_pending
+- reason-counter@041b9344337c5f8d4f9062c3: program:reasoning_observation_pending
+- reason-counter@b30e594829ff41489d455816: program:reasoning_observation_pending
+- reason-counter@adecab3e603fe9b94498384d: program:reasoning_observation_pending
+- reason-counter@1539c1c2f9859e7cc0c08bb3: program:reasoning_observation_pending
+- reason-counter@193d037d3a484ad0b80a066e: program:reasoning_observation_pending
+- reason-counter@13f27129855fb54a61ff8757: program:reasoning_observation_pending
+- reason-counter@9fcea74435c4c2e3552635f0: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The panel's reliability is an illusion of consistency; they are more 'reliable' only in the sense that they fail predictably, whereas the expert fails sporadically.","counterconditions":[{"case":"The checklist is exhaustive and covers all possible failure modes of the task.","checker_spec":null,"eval":"observation"},{"case":"The expert's 'intuition' is consistently outperformed by the checklist's basic requirements.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist creates a 'reliability floor' but also a 'reliability ceiling'. The panel's outcomes are highly consistent (low variance) but may be consistently biased if the checklist is incomplete. The expert's outcomes have higher variance but a higher mean accuracy. In a single evaluation, the 'evidence' of this is the panel's failure to detect an 'edge-case' error that was objectively verifiable but absent from the list (ref SCR_001).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fcc545582aff5ebd905047a0, reason-counter@041b9344337c5f8d4f9062c3
+
+TARGET SRC_002
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from compliance by the 'Justification Trace': the distance between the checklist requirement (the 'what') and the specific evidence cited from the case (the 'why').","counterconditions":[{"case":"The panel is trained to 'hallucinate' justifications to appear more reliable.","checker_spec":null,"eval":"observation"},{"case":"The checklist items are binary (Yes/No) with no room for descriptive evidence.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Compliance is characterized by 'referential shorthand' (e.g., 'Item 4 is present'). Reliability is characterized by 'evidentiary grounding' (e.g., 'Item 4 is present because observation X in the data shows Y'). By analyzing the logs of a single evaluation, if the panel provides specific, case-dependent evidence that satisfies the checklist item, they are demonstrating reliability. If they provide generic confirmations, they are merely compliant (SCR_002, SCR_003).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b30e594829ff41489d455816, reason-counter@adecab3e603fe9b94498384d
+
+TARGET SRC_003
+{"analogy":null,"claim":"The single domain expert remains more reliable because checklists are 'lossy compressions' of expertise that cannot account for the contextual weight of different variables, leading to 'compliance-driven' errors.","counterconditions":[{"case":"The task is highly algorithmic with no significant contextual variance.","checker_spec":null,"eval":"observation"},{"case":"The expert is suffering from cognitive overload or fatigue, increasing the rate of simple omission errors.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition is not random but is a high-dimensional heuristic that weights evidence dynamically. A checklist treats all items as binary or equal, forcing the panel to ignore the 'gestalt' of the problem. In objectively verifiable tasks, the 'right' answer often requires recognizing which checklist items are irrelevant in a specific instance\u2014a meta-cognitive skill the non-expert panel lacks (ref SRC_003, SRC_007).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1539c1c2f9859e7cc0c08bb3, reason-counter@193d037d3a484ad0b80a066e
+
+TARGET SRC_004
+{"analogy":null,"claim":"A panel of trained non-experts following an explicit checklist will produce more reliable judgments on average than a single expert because the checklist transforms the task from one of high-variance pattern recognition (intuition) to one of low-variance verification (execution).","counterconditions":[{"case":"The task requires the synthesis of non-linear variables not captureable in a discrete list.","checker_spec":null,"eval":"observation"},{"case":"The 'objective verifiability' depends on detecting subtle anomalies that fall outside the checklist's scope (the 'tunnel vision' failure mode ref SCR_007).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a 'variance-reduction filter' (ref SCR_006) that eliminates 'stupid mistakes'\u2014simple omissions or slips\u2014which are the primary drivers of expert error in objectively verifiable tasks. While the expert has a higher performance ceiling, their reliability is undermined by 'premature closure' (ref SCR_007), whereas the panel's reliability is anchored by a high floor created by the proceduralization of the domain's critical failure points.","premises"
+commitments: reasoning-envelope-wf, reason-counter@13f27129855fb54a61ff8757, reason-counter@9fcea74435c4c2e3552635f0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

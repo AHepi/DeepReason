@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-c18a220185e07eb2d327cde014e85ba8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the fifth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@aa5ae628c1e1a05556bdd6a8: program:reasoning_observation_pending
+- reason-counter@6c88767c2618455de8ce600b: program:reasoning_observation_pending
+- reason-counter@44446d9c9d469801dd0054e9: program:reasoning_observation_pending
+- reason-counter@75c1f5084c3ab7fa6538c6e1: program:reasoning_observation_pending
+- reason-counter@88aa5787fa91c5ee17cced96: program:reasoning_observation_pending
+- reason-counter@afd0dadd65a5c51981c90a5e: program:reasoning_observation_pending
+- reason-counter@363a403e9741768e0bb1c21f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts using a checklist will outperform a single expert because the checklist decomposes complex intuition into a series of independent, low-variance binary checks, effectively neutralizing the 'single point of failure' inherent in expert cognitive bias.","counterconditions":[{"case":"The task requires synthesis of non-linear variables that cannot be decomposed into a checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist is poorly designed, omitting critical latent variables known to the expert.","checker_spec":null,"eval":"observation"},{"case":"Panel members exhibit 'groupthink' or 'social loafing,' treating the checklist as a formality rather than a rigorous probe.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as a variance-reduction filter. While the expert's intuition is a high-dimensional heuristic prone to 'availability bias' or 'overconfidence effect,' the checklist forces an exhaustive scan of necessary conditions. Reliability increases because the probability of the panel missing a mandatory check is lower than the probability of a single expert experiencing a cognitive lapse in a high-stakes intuition.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@aa5ae628c1e1a05556bdd6a8, reason-counter@6c88767c2618455de8ce600b, reason-counter@44446d9c9d469801dd0054e9
+
+TARGET SRC_002
+{"analogy":null,"claim":"A single domain expert will remain more reliable because the checklist is a 'lossy compression' of expertise that fails to capture the conditional logic necessary for complex, verifiable outcomes.","counterconditions":[{"case":"The task is purely algorithmic or additive in nature.","checker_spec":null,"eval":"observation"},{"case":"The expert is suffering from extreme cognitive load or fatigue.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition is not a lack of a checklist, but the internalisation of a dynamic, weighted graph of dependencies. A static checklist provides a linear path that non-experts follow blindly. In cases where the 'right' answer depends on the relative weighting of two checklist items (conditional logic), the non-expert panel will follow the checklist to a wrong conclusion, whereas the expert's intuition correctly weights the evidence.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@75c1f5084c3ab7fa6538c6e1, reason-counter@88aa5787fa91c5ee17cced96
+
+TARGET SRC_003
+{"analogy":null,"claim":"The panel's reliability is a product of 'Wisdom of the Crowd' error-cancellation rather than the checklist's content itself.","counterconditions":[{"case":"The panel members are not independent (e.g., they discuss and converge on a dominant member's view).","checker_spec":null,"eval":"observation"},{"case":"The non-experts share a common systemic bias.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist serves primarily as a coordination mechanism to ensure all panel members are looking at the same data. The actual reliability gain comes from the statistical averaging of independent non-expert judgments, which cancels out idiosyncratic noise. The checklist prevents the panel from diverging too wildly, while the 'crowd' effect pulls the average toward the objective truth.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@afd0dadd65a5c51981c90a5e, reason-counter@363a403e9741768e0bb1c21f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

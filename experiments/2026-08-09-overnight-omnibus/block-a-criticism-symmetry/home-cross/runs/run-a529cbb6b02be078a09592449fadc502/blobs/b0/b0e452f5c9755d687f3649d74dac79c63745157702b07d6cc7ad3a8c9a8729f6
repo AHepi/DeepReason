@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-c18a220185e07eb2d327cde014e85ba8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the fifth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5c694fe0fd55a7d41822184f: program:reasoning_observation_pending
+- reason-counter@0854e29349f21df0b3c9187d: program:reasoning_observation_pending
+- reason-counter@b69d29ce039739bbcd15cc66: program:reasoning_observation_pending
+- reason-counter@1ef8c10d5e7693ba88adf246: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine reliability gains can be distinguished from mere checklist compliance by analyzing the 'error-residue'\u2014the specific nature of the mistakes made when the panel fails.","counterconditions":[{"case":"The checklist is so comprehensive that no 'outside' errors are possible.","checker_spec":null,"eval":"observation"},{"case":"The evaluation set is too small to distinguish error distributions.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the panel is merely complying, errors will occur on items the checklist covers but the panel misinterprets (compliance errors). If there is a genuine reliability gain, the panel's errors will be randomly distributed or limited to items outside the checklist's scope, while their success rate on 'trap' items (which usually trip up intuitive experts) will be significantly higher. A 'reliability gain' is evidenced by the elimination of 'expert-typical' blind spots.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5c694fe0fd55a7d41822184f, reason-counter@0854e29349f21df0b3c9187d
+
+TARGET SRC_002
+{"analogy":null,"claim":"The single domain expert will remain more reliable because the 'checklist' for non-experts is a lossy compression of the expert's intuition, failing to capture the essential 'gestalt' required for high-accuracy judgments in complex domains.","counterconditions":[{"case":"The task is primarily procedural rather than pattern-recognition based.","checker_spec":null,"eval":"observation"},{"case":"The expert is suffering from 'expertise reversal effect' or rigid adherence to outdated paradigms.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expertise is characterized by 'chunking'\u2014the ability to perceive complex patterns as single units. A checklist forces a linear, additive process that misses the synergistic interactions between variables. The 'reliability' of the panel is an illusion created by the checklist's ability to solve simple cases, but it fails on the 'edge cases' where the expert's intuition is actually a highly refined probabilistic model.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b69d29ce039739bbcd15cc66, reason-counter@1ef8c10d5e7693ba88adf246
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

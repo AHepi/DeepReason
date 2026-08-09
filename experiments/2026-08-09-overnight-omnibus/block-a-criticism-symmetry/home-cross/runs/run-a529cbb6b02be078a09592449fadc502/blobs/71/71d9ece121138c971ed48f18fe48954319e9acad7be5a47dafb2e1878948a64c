@@ -1,0 +1,92 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts using an explicit checklist will produce more reliable judgments than a single expert on average because the checklist acts as a variance-reduction mechanism that eliminates 'stupid' mistakes (low-frequency omissions) which outweigh the expert's superior 'peak' performance.",
+      "mechanism": "The causal mechanism is the trade-off between 'Pattern-Based Error' (expert premature closure) and 'Rule-Based Error' (non-expert tunnel vision). In objectively verifiable tasks, the most frequent failure mode is the omission of a critical but simple step. The checklist raises the 'reliability floor' by ensuring 100% coverage of known critical failure points, effectively filtering out the high-variance 'slips' typical of intuitive expertise, whereas the expert's intuition, while higher in peak capability, is susceptible to cognitive biases like premature closure (SCR_006, SCR_007).",
+      "counterconditions": [
+        "The task's objective verifiability depends on emergent properties not captureable by discrete rules.",
+        "The checklist's granularity reaches a point of 'compliance fatigue' where cognitive load induces random errors (SCR_012).",
+        "The cost of a Type II error (omission) is significantly lower than the cost of a Type I error (false pattern recognition)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The single domain expert will remain more reliable because the checklist merely formalizes a subset of expertise, and the 'reliability' of the panel is an illusion of consistency that fails on the 'edge cases' which actually determine the objective outcome.",
+      "mechanism": "Reliability in complex, verifiable tasks is not the absence of simple errors, but the presence of 'deep' detection. The expert's intuition is a compressed representation of a high-dimensional state-space. A checklist is a low-dimensional projection. The panel's reliability is 'shallow'; they achieve consistency by ignoring any signal not explicitly listed. The expert wins because they detect 'unlisted' critical variables that are objectively verifiable but procedurally invisible (SCR_001).",
+      "counterconditions": [
+        "The task is highly routine with a finite, known set of failure modes.",
+        "The expert is prone to high-frequency 'lapse' errors (e.g., forgetting to check a valve).",
+        "The checklist is comprehensive enough to cover 99% of all historical failure modes."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The distinction between genuine reliability and mere compliance in a single evaluation can be identified by the presence of 'Epistemic Agency'—specifically, the panel's ability to reject or flag a 'plausible but wrong' decoy item embedded in the checklist.",
+      "mechanism": "By introducing a 'decoy'—a checklist item that appears relevant but is objectively irrelevant or counter-intuitive to the correct outcome—the evaluator can measure the 'justification delta'. A compliant panel will mark the decoy as 'satisfied' or 'critical' to signal obedience to the process. A reliable panel will exercise critical judgment, flagging the decoy as irrelevant or correcting the map against the terrain, proving they are applying the checklist as a tool rather than a script (SCR_004, SCR_005, SCR_008).",
+      "counterconditions": [
+        "The panel is incentivized via strict KPIs to achieve 100% checklist completion regardless of content.",
+        "The decoy is too obvious, leading to 'test-awareness' rather than genuine critical judgment."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from compliance by the 'Justification Trace': the distance between the checklist requirement (the 'what') and the specific evidence cited from the case (the 'why').",
+      "mechanism": "Compliance is characterized by 'referential shorthand' (e.g., 'Item 4 is present'). Reliability is characterized by 'evidentiary grounding' (e.g., 'Item 4 is present because observation X in the data shows Y'). By analyzing the logs of a single evaluation, if the panel provides specific, case-dependent evidence that satisfies the checklist item, they are demonstrating reliability. If they provide generic confirmations, they are merely compliant (SCR_002, SCR_003).",
+      "counterconditions": [
+        "The panel is trained to 'hallucinate' justifications to appear more reliable.",
+        "The checklist items are binary (Yes/No) with no room for descriptive evidence."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Considering the 'Perturbation Test' (SCR_009): if we introduce an ambiguity in the checklist wording, a compliant panel will 'force-fit' the data to the wording. A reliable panel will pause. This suggests that the 'evidence' of reliability is actually the 'friction' encountered during the process. Reliability = Process + Friction (Criticality), while Compliance = Process - Friction (Automation).",
+          "why_keep_this": "Adds a temporal/behavioral dimension to the evidence of reliability."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'Reliability Paradox' (SCR_012) imply that there is a point where adding more items to a checklist actually decreases the reliability of non-experts more than it increases the coverage?",
+        "related_refs": [
+          "SCR_012",
+          "SCR_015"
+        ]
+      }
+    ]
+  }
+}
+```

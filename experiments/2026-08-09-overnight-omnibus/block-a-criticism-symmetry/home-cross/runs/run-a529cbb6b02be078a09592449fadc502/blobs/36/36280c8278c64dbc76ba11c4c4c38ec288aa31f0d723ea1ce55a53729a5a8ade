@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-c18a220185e07eb2d327cde014e85ba8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the fifth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e733b6b321f460fe55767d47: program:reasoning_observation_pending
+- reason-counter@77fe1e22726b75576b437549: program:reasoning_observation_pending
+- reason-counter@fd595de678440bc8849fa378: program:reasoning_observation_pending
+- reason-counter@861b44c56fb2aa537602c0bc: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The panel's reliability is not a product of the checklist's content, but an emergent property of 'Wisdom of the Crowd' error-cancellation.","counterconditions":[{"case":"The panel suffers from groupthink, causing errors to correlate rather than cancel.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so restrictive that it eliminates the diversity of perspective required for the crowd effect.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist provides a common language and a shared focal point, but the reliability gain comes from the averaging of multiple non-expert perspectives. Individual non-experts may misinterpret checklist items, but these errors are randomly distributed. The expert's errors, conversely, are often systemic (blind spots). The panel's aggregate judgment cancels out random noise, whereas the expert's single-point failure is catastrophic.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e733b6b321f460fe55767d47, reason-counter@77fe1e22726b75576b437549
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The analogy is conceptual rather than empirical."],"overturn_conditions":["Discovery that high-performing non-experts are actually *more* likely to follow a checklist blindly because they trust the system over their own intuition."],"shared_structure":["Map vs. Terrain","Agent following instructions","Introduction of a deliberate error in the instructions"],"source_memory_refs":["SCR_003","SCR_005"],"transfer_claims":["The distinction between a 'map-follower' and a 'terrain-verifier' is the key to identifying genuine reliability."]},"claim":"Genuine reliability gains can be distinguished from mere checklist compliance within a single evaluation by the presence of 'epistemic agency'\u2014specifically, the panel's ability to identify and reject a 'plausible but wrong' decoy item embedded in the checklist.","counterconditions":[{"case":"The panel is trained to follow the checklist exactly as a matter of protocol, regardless of perceived errors.","checker_spec":null,"eval":"observation"},{"case":"The decoy is too obvious, failing to trigger the 'compliance' reflex.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A purely compliant panel operates in 'obedience mode', where the act of checking the box is the goal. A reliable panel operates in 'verification mode', where the box is a prompt to find evidence. By introducing a decoy item that appears relevant but is objectively incorrect or irrelevant to the outcome, the evaluator can see if the panel blindly ticks it (compliance) or flags it as an error (reliability).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fd595de678440bc8849fa378, reason-counter@861b44c56fb2aa537602c0bc
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,74 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of non-experts following a checklist is less reliable than a single expert because checklists cannot capture the 'conditional logic' (context-dependent weighting) required for high-stakes verifiable outcomes, making any perceived gain a result of simple task-decomposition that ignores systemic edge cases.",
+      "mechanism": "Expert intuition operates as a high-dimensional pattern recognition system that weights variables non-linearly; checklists force a linear, additive weighting that fails when the interaction between variables is the primary driver of the outcome.",
+      "counterconditions": [
+        "The task is purely algorithmic or procedural with no hidden dependencies.",
+        "The checklist is dynamically adaptive to the context of the specific case."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The panel's reliability is a statistical artifact of 'error cancellation' rather than a superior judgment process, and can be distinguished from genuine reliability by the presence of 'blind compliance' to irrelevant checklist items.",
+      "mechanism": "The checklist acts as a coordination mechanism that reduces variance (the 'floor' effect) by preventing catastrophic omissions, but the 'reliability' is merely the average of multiple non-expert guesses anchored to a common set of points.",
+      "counterconditions": [
+        "The panel members are trained to challenge the checklist's relevance to the specific case.",
+        "The expert's intuition is prone to high-frequency random slips (noise) rather than systematic bias."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "A panel of non-experts will produce more reliable judgments if the task's complexity is 'shallow' (decomposable into binary checks), but this is distinguishable from genuine reliability through the use of 'decoy' checklist items that track whether the panel is thinking or merely ticking.",
+      "mechanism": "The checklist transforms a complex judgment task into a series of low-variance binary decisions, effectively filtering out the 'noise' of individual non-expert incompetence while simultaneously capping the 'ceiling' of possible insight.",
+      "counterconditions": [
+        "The task requires holistic synthesis that cannot be decomposed without losing critical information.",
+        "The expert's intuition is fundamentally a compressed version of the checklist's logic."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If the checklist is a 'low-pass filter' (as per SCR_001), then the 'genuine reliability' is the signal that survives the filter. The 'compliance' is the act of filtering itself. To distinguish them: if we introduce a 'counter-intuitive' but correct requirement into the checklist, a compliant panel will follow it blindly (reliability via obedience), whereas a truly reliable panel would recognize the requirement's necessity in the specific context. Wait, that's the same as the decoy. Better: a decoy that is *plausible but wrong*. If they tick it, they are compliant. If they reject it, they are exercising judgment.",
+          "why_keep_this": "Refines the decoy method from SCR_001 to differentiate between 'blind obedience' and 'critical application' of the checklist."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can 'reliability' be defined as 'consistency' (low variance) or 'accuracy' (proximity to truth), and does the checklist trade the latter for the former?",
+        "related_refs": [
+          "SCR_001",
+          "SCR_002"
+        ]
+      }
+    ]
+  }
+}
+```
