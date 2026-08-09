@@ -1,0 +1,48 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c629bb40407a246be679ba62: program:reasoning_observation_pending
+- reason-counter@58f4b381d49176e3afebbbff: program:reasoning_observation_pending
+- reason-counter@fcf1468d727466dee94ec9ed: program:reasoning_observation_pending
+- reason-counter@fb79b48c6d494bf93a9ffb08: program:reasoning_observation_pending
+- reason-counter@25486f4dffc107473436d39e: program:reasoning_observation_pending
+- reason-counter@768f14e8040c38a9d07f5003: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from mere compliance by the 'Perturbation Response': the panel's ability to correctly reject a 'trap item' (a checklist entry that is objectively false for the case but superficially plausible).","counterconditions":[{"case":"The trap item is so subtle that even a reliable judge cannot distinguish it from a true item.","checker_spec":null,"eval":"observation"},{"case":"The panel uses a consensus mechanism that suppresses individual 'False' marks in favor of group harmony (groupthink).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the panel is merely compliant, they will mark 'True' for a trap item to maintain the perceived pattern of a 'positive' result. If they are genuinely reliable, the checklist acts as a rigorous filter; they will mark the trap item 'False' despite the pressure to comply. This 'internal contradiction' within a single evaluation\u2014where the panel rejects a plausible but false step\u2014proves they are engaging with the evidence rather than the process.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c629bb40407a246be679ba62, reason-counter@58f4b381d49176e3afebbbff
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel is more reliable because it converts the judgment process into a 'Trace-to-Outcome' graph, where reliability is measured by the logical coherence of the path rather than the final answer.","counterconditions":[{"case":"The checklist items are too abstract to allow for a granular evidence trace.","checker_spec":null,"eval":"observation"},{"case":"The non-experts are trained to 'back-fill' the evidence trail after they have already decided on the outcome.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Reliability is evidenced by the 'path' taken through the checklist. Mere compliance is a 'jump' from start to finish (marking all boxes without verification). Genuine reliability is a coherent traversal where each 'True' mark is supported by a specific piece of evidence. Within a single evaluation, the presence of a detailed, evidence-linked audit trail for each checklist item distinguishes a reliable judgment from a lucky guess that happened to track the right answer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fcf1468d727466dee94ec9ed, reason-counter@fb79b48c6d494bf93a9ffb08
+
+TARGET SRC_003
+{"analogy":null,"claim":"The panel's superiority is not due to distributed knowledge, but to 'Cognit

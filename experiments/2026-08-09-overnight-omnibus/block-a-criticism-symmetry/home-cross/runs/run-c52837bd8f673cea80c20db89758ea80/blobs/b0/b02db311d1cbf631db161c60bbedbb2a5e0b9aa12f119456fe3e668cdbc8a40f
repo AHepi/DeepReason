@@ -1,0 +1,53 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The reliability of the non-expert panel depends on SRC_004, specifically that the task's error surface is dominated by lapse errors; however, this relationship is refuted if the 'reliability' observed is actually a manifestation of 'compliance' (marking items to finish the list) rather than genuine verification, as the panel may converge on a wrong answer through shared systemic blind spots.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_001"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "The claim in SRC_003 (expert superiority via gestalt synthesis) contradicts the mechanism in SRC_001 (non-expert reliability via error cancellation); this contradiction is refuted if the 'objectively verifiable outcome' can be fully decomposed into a binary checklist without loss of critical weighting, effectively reducing the expert's gestalt to a series of additive checks.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_001"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The mechanism of 'Error Cancellation' in SRC_001 integrates with the 'stupid mistake' threshold in SRC_002, asserting that the panel's advantage is a statistical filter for omissions; this is refuted if the checklist prompts are ambiguous enough to transform 'lapse errors' into 'knowledge errors', thereby shifting the error surface back in favor of the expert.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The 'pivot variable' theory in SRC_005 abstracts the conceptual errors mentioned in SRC_002, proposing that expertise is the ability to weight variables rather than just identify them; this is refuted if a 'weighted checklist' (assigning numerical values to items) allows non-experts to achieve expert-level reliability without domain knowledge.",
+      "neighbours": [
+        "SRC_005",
+        "SRC_002"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The non-expert panel's reliability inherits the fragility of the checklist's design as described in SRC_004; specifically, the panel's success is a function of the checklist's completeness, and this is refuted if the introduction of a 'trap item' (a false prompt that feels true) causes the panel to prioritize compliance over objective verification.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The 'Systemic Blind Spot' mechanism in SRC_004 reduces to a shared knowledge error across the panel; this is refuted if the non-experts are selected from sufficiently diverse cognitive backgrounds such that their 'blind spots' are uncorrelated, thereby restoring the additive reliability described in SRC_001.",
+      "neighbours": [
+        "SRC_004",
+        "SRC_001"
+      ],
+      "typicality": 0.3
+    }
+  ]
+}
+```

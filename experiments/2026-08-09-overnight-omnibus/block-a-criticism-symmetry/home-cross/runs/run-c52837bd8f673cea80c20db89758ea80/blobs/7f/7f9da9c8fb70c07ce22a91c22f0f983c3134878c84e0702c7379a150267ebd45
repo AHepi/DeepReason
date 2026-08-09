@@ -1,0 +1,26 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target proposes a substantive contradiction relation between SRC_003's gestalt synthesis and SRC_001's error cancellation, correctly naming the relation kind and stating a refutation condition (binary decomposition without loss of weighting). This satisfies the problem's demand for a relation that is more than a summary of endpoints."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "The target proposes a substantive reduction relation (SRC_004's 'Systemic Blind Spot' reduces to shared knowledge error) and states a refutation condition (diverse backgrounds making blind spots uncorrelated), which restores the additive reliability of SRC_001. This is a genuine relation, not a mere summary."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "The target proposes a substantive dependence relation (SRC_001's reliability depends on SRC_004's lapse-error dominance) and states a refutation condition (observed reliability being compliance rather than verification, leading to convergence on wrong answers via shared blind spots). This names a relation kind and is not a bare endpoint summary."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The target claims the panel's reliability 'inherits' the checklist's fragility, but the relation is mislabeled: inheritance implies the panel takes on a structural property of the checklist, yet the content describes a functional dependence (success is a function of completeness) plus a behavioral refutation (trap item causing compliance over verification). The substantive connection is dependence, not inheritance, so the named relation kind does not match the described mechanism."
+    }
+  ]
+}
+```

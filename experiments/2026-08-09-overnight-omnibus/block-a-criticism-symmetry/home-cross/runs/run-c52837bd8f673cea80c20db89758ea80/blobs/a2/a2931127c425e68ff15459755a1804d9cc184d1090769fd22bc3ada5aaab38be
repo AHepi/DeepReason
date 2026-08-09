@@ -1,0 +1,48 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 07c99bef33a8 integrates with SRC_005 by proposing that the 'Trace-to-Outcome' coherence is not merely a verification tool but the primary causal mechanism for reliability; it is refuted if the 'Coherence Path' can be perfectly simulated by a non-reliable agent through back-filling or pattern-matching without accessing the underlying evidence.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.8
+    },
+    {
+      "content": "The problem 07c99bef33a8 depends on SRC_001 to establish the 'Trace-to-Outcome' gap as the only viable metric for distinguishing reliability from compliance in a single evaluation; this relation is refuted if a high correlation between intermediate marks and the final outcome can be achieved by agents who are merely 'compliance-tracking' based on a perceived pattern.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The problem 07c99bef33a8 contradicts SRC_004 by suggesting that the 'detailed, evidence-linked audit trail' is a post-hoc justification (compliance) rather than a sign of reliability; this is refuted if the presence of the audit trail strictly constrains the possible final outcomes in a way that a 'jump' to the answer cannot.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The problem 07c99bef33a8 abstracts the 'Path-Coherence' mechanism in SRC_003 into a general requirement for any objectively verifiable task to have a non-linear heuristic path; it is refuted if the 'logical chain' requirement is found to be an unnecessary constraint that does not actually increase the reliability of the final judgment over a simple 'leap'.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The problem 07c99bef33a8 shares mechanism with SRC_002 in treating the checklist as a directed graph where reliability is the existence of a valid logical derivation; this relation is refuted if the 'logical mapping' is found to be purely descriptive rather than prescriptive of the outcome.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The problem 07c99bef33a8 reduces to SRC_005's 'Coherence Path' by claiming that all reliability gains in non-expert panels are simply the result of forcing the agent to traverse a non-trivial logical path; it is refuted if reliability gains persist even when the checklist items are designed as independent binary flags with no logical interdependence.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
+```

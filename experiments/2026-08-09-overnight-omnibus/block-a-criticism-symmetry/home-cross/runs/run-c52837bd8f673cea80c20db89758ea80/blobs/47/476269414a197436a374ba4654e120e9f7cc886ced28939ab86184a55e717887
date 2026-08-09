@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 attempts to connect to the neighbourhood by claiming the panel's reliability 'depends on' the Error Cancellation Mechanism and 'reduces to' statistical noise filtering. However, the substance is a summary of the endpoints: it restates that the panel is non-expert and that a checklist exists, then names a mechanism internal to SRC_001. A genuine dependence or reduction relation to a neighbourhood item must identify the external thing being relied upon or reduced to, but the sentence only mentions SRC_001's own mechanism and the panel's lack of expertise. The 'refuted if' clause likewise targets an internal failure of the checklist, not a relation between 099a3bb5ce19 and a named neighbour. Naming a kind of relation is insufficient when the relata are not substantively established.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 states a substantive compatibility relation: the Error Cancellation Mechanism (from SRC_001) is compatible with the lapse error theory (from SRC_004), conditional on stochastic blind spots, and is refuted if errors are positively correlated via shared misconceptions. It names the relation kind (compatibility), identifies the external neighbour (SRC_004's lapse error theory), and supplies a concrete refutation condition tied to that neighbour's content. This satisfies the requirement of a substantive relation rather than a mere summary.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "SRC_003 proposes an integration relation between SRC_004's lapse/knowledge error distinction and SRC_002's 'stupid mistakes' vs 'conceptual mistakes' framework, then ties the panel's reliability to that integration via a refutation condition involving Type I errors. It names the relation kind (integration), identifies two external neighbours, and states what would refute the integrated account. This is a substantive relation, not merely a summary of endpoints.",
+      "counterexample": null
+    }
+  ]
+}
+```

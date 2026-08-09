@@ -1,0 +1,52 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:099a3bb5ce19) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 099a3bb5ce19 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@49ac5d8f1ce5: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The claim in SRC_003 (expert superiority via gestalt synthesis) contradicts the mechanism in SRC_001 (non-expert reliability via error cancellation); this contradiction is refuted if the 'objectively verifiable outcome' can be fully decomposed into a binary checklist without loss of critical weighting, effectively reducing the expert's gestalt to a series of additive checks.
+commitments: hv-floor@2a45b7988522, lineage-ref@49ac5d8f1ce5, relation-form@578e42df713e
+
+TARGET SRC_002
+The 'Systemic Blind Spot' mechanism in SRC_004 reduces to a shared knowledge error across the panel; this is refuted if the non-experts are selected from sufficiently diverse cognitive backgrounds such that their 'blind spots' are uncorrelated, thereby restoring the additive reliability described in SRC_001.
+commitments: hv-floor@2a45b7988522, lineage-ref@49ac5d8f1ce5, relation-form@578e42df713e
+
+TARGET SRC_003
+The reliability of the non-expert panel depends on SRC_004, specifically that the task's error surface is dominated by lapse errors; however, this relationship is refuted if the 'reliability' observed is actually a manifestation of 'compliance' (marking items to finish the list) rather than genuine verification, as the panel may converge on a wrong answer through shared systemic blind spots.
+commitments: hv-floor@2a45b7988522, lineage-ref@49ac5d8f1ce5, relation-form@578e42df713e
+
+TARGET SRC_004
+The non-expert panel's reliability inherits the fragility of the checklist's design as described in SRC_004; specifically, the panel's success is a function of the checklist's completeness, and this is refuted if the introduction of a 'trap item' (a false prompt that feels true) causes the panel to prioritize compliance over objective verification.
+commitments: hv-floor@2a45b7988522, lineage-ref@49ac5d8f1ce5, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

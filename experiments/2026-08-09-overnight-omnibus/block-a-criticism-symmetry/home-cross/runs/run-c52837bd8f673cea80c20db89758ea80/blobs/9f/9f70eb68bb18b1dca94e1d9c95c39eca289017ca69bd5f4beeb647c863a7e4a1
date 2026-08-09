@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 proposes a substantive integration relation ('Reliability-Compliance Paradox integrates SRC_001 and SRC_004') with a stated kind (integration) and a specific refutation condition (lapse errors decrease without corresponding increase in compliance-driven false positives). It satisfies the problem's requirement for a substantive relation.", "counterexample": null}]}
+```
