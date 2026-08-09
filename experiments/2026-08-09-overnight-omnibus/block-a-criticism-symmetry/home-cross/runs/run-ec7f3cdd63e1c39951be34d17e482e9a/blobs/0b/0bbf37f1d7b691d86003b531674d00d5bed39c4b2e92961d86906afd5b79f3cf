@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@91d952cc8cb1d1b7bbaf1b29: program:reasoning_observation_pending
+- reason-counter@da58a68814c610ffc3f4874a: program:reasoning_observation_pending
+- reason-counter@c819b3392ef40b8c78c4ae97: program:reasoning_observation_pending
+- reason-counter@30e28921760cec582055cdca: program:reasoning_observation_pending
+- reason-counter@5abffb5e921ebada8e849439: program:reasoning_observation_pending
+- reason-counter@9d06bf779792a99cf2519f14: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Truly independent failures are distinguished from hidden correlations by the absence of 'trigger-based synchronization' in the temporal distribution of outages.","counterconditions":[{"case":"The shared cause is a slow-burn degradation that triggers failures across a wide temporal window, mimicking a Poisson distribution.","checker_spec":null,"eval":"observation"},{"case":"The failures are truly independent but are clustered due to an external environmental factor (e.g., a regional power outage) that is not a 'software' correlation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Independent failures are stochastic and follow a Poisson process (SCR_002), where the probability of failure is constant over time. Correlated failures, even if they appear staggered, are driven by a latent common cause (e.g., a leap second, a BGP update, or a shared API deprecation). Evidence for correlation is found when failure timestamps across diverse services align with a singular external event or a specific version rollout, regardless of the perceived independence of the operators.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@91d952cc8cb1d1b7bbaf1b29, reason-counter@da58a68814c610ffc3f4874a
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is more resilient to correlated failure specifically because 'organic diversity' in implementation stacks creates a non-linear failure boundary that cannot be replicated by synthetic redundancy.","counterconditions":[{"case":"The decentralized services share a common critical dependency (e.g., a single DNS provider or cloud region) that outweighs stack diversity.","checker_spec":null,"eval":"observation"},{"case":"The 'Diversity Threshold' is not met, meaning the number of distinct stacks is too low to statistically prevent a common software bug from affecting a majority of nodes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The causal mechanism is the 'Diversity-Efficiency Frontier': centralized systems optimize for reliability through standardization (uniform versions, unified config), which creates a single, global failure surface. Decentralized networks, by virtue of independent agency, maintain a high 'Entropy of Configuration' (diverse OS, languages, and timeout settings). This prevents 'Herding Effects' where a single trigger (e.g., a specific packet sequence) synchronizes failure across all nodes, as the trigger's effect varies across heterogeneous stacks.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: 

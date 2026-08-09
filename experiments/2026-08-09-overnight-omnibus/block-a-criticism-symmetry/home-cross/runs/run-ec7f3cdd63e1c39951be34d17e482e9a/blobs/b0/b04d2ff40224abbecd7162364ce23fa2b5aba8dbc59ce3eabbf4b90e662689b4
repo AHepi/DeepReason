@@ -1,0 +1,69 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The claim in SRC_005 regarding 'synthetic diversity' integrates with the 'Diversity Threshold' hypothesis in SCR_005; specifically, the ability of a centralized operator to simulate organic entropy is refuted if the required resilience threshold exceeds the maximum entropy a single organizational entity can maintain without introducing fatal coordination complexity.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The mechanism of 'Coordinated Mitigation' in SRC_004 contradicts the 'Herding Effect' described in SCR_004; the assertion that centralized control prevents propagation is refuted if the global control plane's uniformity creates a synchronization vector (e.g., identical retry timers) that causes a larger failure than the stochastic failures of a decentralized network.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": []
+    },
+    {
+      "content": "The resilience of large services via 'global load-balancing' in SRC_001 depends on the 'Fragility of the Commons' logic in SCR_001; the claim that internal redundancy increases resilience is refuted if the service's redundancy is concentrated within a single shared infrastructure dependency (e.g., one cloud region), rendering the internal coordination moot against a regional outage.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The 'global circuit breaker' mechanism in SRC_002 abstracts the concept of 'temporal clustering' from SCR_002; the efficacy of centralized isolation is refuted if the latency of the central control plane exceeds the propagation speed of the 'trigger-based synchronization' event, making the 'brake' arrive after the system has already crashed.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.3,
+      "evidence_refs": []
+    },
+    {
+      "content": "The claim in SRC_003 that centralized control isolates correlated failure vectors reduces to a problem of 'Coordination Overhead' as posited in SCR_008; the resilience benefit is refuted if the computational and temporal cost of maintaining global state grows super-linearly with the scale of the service, eventually creating a tipping point where decentralization is objectively more stable.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.2,
+      "evidence_refs": []
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Could there be a 'Resilience Paradox' where the very tools used to prevent correlated failures (global config locks, unified versioning) are the only things capable of creating a truly global, instantaneous failure? This would mean the 'Synthetic Diversity' of SRC_005 is not just a feature, but a necessary hedge against the central operator's own efficiency.",
+          "bears_on_refs": [
+            "SRC_005",
+            "SRC_002"
+          ]
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there a formal way to measure if 'synthetic diversity' (managed by one entity) is mathematically equivalent to 'organic diversity' (emerging from independent entities) in terms of failure correlation?",
+        "related_refs": [
+          "SRC_005",
+          "SCR_003"
+        ]
+      }
+    ]
+  }
+}
+```

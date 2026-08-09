@@ -1,0 +1,51 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The resilience of large services depends on the capacity for 'Synthetic Diversity' (SRC_005) to simulate the organic entropy of decentralized networks; this relation is refuted if the coordination overhead required to manage N-version programming creates a synchronization bottleneck that triggers a global 'Herding Effect' (SCR_004), thereby reducing the system to a single failure domain.",
+      "neighbours": [
+        "SRC_005",
+        "SRC_004"
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "The claim that centralized control allows for rapid isolation of correlated failures (SRC_003) integrates with the concept of 'Controlled Entropy' (SRC_005), where the central operator intentionally introduces variance to prevent stochastic synchronization; this is refuted if the 'Diversity Threshold' (SCR_005) is only achievable through independent organizational agency, making synthetic diversity a structural illusion.",
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "The mechanism of global load-balancing in large services (SRC_001) contradicts the resilience of decentralized networks if the 'Fragility of the Commons' (SCR_001) is present, meaning the decentralized network's perceived independence is actually a hidden dependence on a single shared infrastructure provider; this is refuted if the decentralized nodes maintain true physical and provider-level heterogeneity.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "The ability to 'outrun' failure correlation via high-bandwidth telemetry (SRC_001) reduces to a problem of 'Temporal Clustering' (SCR_002), where the speed of the central response must exceed the propagation velocity of the trigger; this is refuted if the failure vector is a 'zero-day' logic error that is identical across all redundant nodes, rendering telemetry-based shifting irrelevant.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "The 'Coordinated Mitigation' strategy (SRC_004) inherits the risks of the 'Centralized Control Plane' SPOF, creating a paradox where the mechanism used to prevent correlated failure becomes the primary vector for it; this is refuted if the control plane is itself implemented as a decentralized, Byzantine fault-tolerant consensus group rather than a monolithic operator.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "The preemptive isolation of failure vectors (SRC_002) shares mechanism with 'Global Circuit Breaking' (SRC_003), both relying on the assumption that the system can distinguish a nascent failure from normal volatility; this is refuted if the 'Entropy of Configuration' (SCR_007) in a decentralized system provides a more robust noise-floor that prevents the 'Herding Effect' from occurring in the first place.",
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
+```

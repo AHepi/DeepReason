@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@04bc5a0ef2ce381a9f09c847: program:reasoning_observation_pending
+- reason-counter@c75a5b915d18a8f4e10687b8: program:reasoning_observation_pending
+- reason-counter@bc0272db62fa5b8bd39838eb: program:reasoning_observation_pending
+- reason-counter@a3059476f23a39951291fde2: program:reasoning_observation_pending
+- reason-counter@af18cb2c12757b68e6031dc6: program:reasoning_observation_pending
+- reason-counter@9dc0ed0a30dff72c1a2c00a6: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Centralized redundancy is a 'Fragility Trap' where the tools used to ensure reliability (standardized monitoring, unified deployment) actually maximize the potential for catastrophic correlated failure.","counterconditions":[{"case":"The centralized entity implements 'Synthetic Diversity' (intentionally running different versions/configs) that exceeds the organic diversity of the decentralized network.","checker_spec":null,"eval":"observation"},{"case":"The primary failure mode is an external dependency that ignores internal implementation diversity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Standardization Trap' mechanism: by removing 'inefficient' variance to achieve high SLAs, the central operator eliminates the structural dampers that prevent failure propagation. A decentralized network's 'diversity of incompetence' (messy, non-standard configs) acts as a natural firewall. The causal link is that standardization reduces the distance between any two nodes in the failure-mode space, ensuring that any bug that kills one node is mathematically certain to kill all others.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@04bc5a0ef2ce381a9f09c847, reason-counter@c75a5b915d18a8f4e10687b8
+
+TARGET SRC_002
+{"analogy":null,"claim":"Decentralized networks are more resilient to correlated failure because organic heterogeneity in implementation stacks creates a 'biological' immunity to single-point software vulnerabilities.","counterconditions":[{"case":"The decentralized services converge on a single dominant framework or cloud provider (SCR_001).","checker_spec":null,"eval":"observation"},{"case":"The failure trigger is a protocol-level flaw (e.g., TCP/IP or DNS) rather than an implementation-level flaw.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Unlike centralized redundancy, which typically clones a single 'golden image' (creating a uniform attack surface), decentralized services utilize diverse OS kernels, language runtimes, and configuration quirks. A specific exploit or logic bug (e.g., a buffer overflow in a specific library version) that would catastrophically fail 100% of a centralized service's redundant nodes will only affect the subset of decentralized nodes sharing that specific stack, effectively capping the maximum correlated failure at the 'Diversity Threshold' (SCR_005).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bc0272db62fa5b8bd39838eb, reason-counter@a3059476f23a39951291fde2
+
+TARGET SRC_003

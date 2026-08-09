@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-ea8a0e83405bb52e7f1dfd713e658419) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@7fd168ebeee78e3a38f508f0: program:reasoning_observation_pending
+- reason-counter@775bf9729c4e3e2ec8ae71f6: program:reasoning_observation_pending
+- reason-counter@a6a04a2111b0f15ccaaa2409: program:reasoning_observation_pending
+- reason-counter@e3098e8f7f89b60173dcae44: program:reasoning_observation_pending
+- reason-counter@9d4f9791878abbb81c9f686f: program:reasoning_observation_pending
+- reason-counter@dd97c2f19e01b95fa3196f0a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A large service with strictly more total internal redundancy is more resilient because it can implement 'synthetic diversity' and coordinated failover that exceeds the haphazard resilience of decentralized systems.","counterconditions":[{"case":"The coordination mechanism itself becomes the single point of failure (the 'orchestrator' fails).","checker_spec":null,"eval":"observation"},{"case":"The complexity of managing synthetic diversity introduces new, unforeseen classes of correlated failures.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Controlled Entropy: A centralized operator can intentionally deploy different versions of software (N-version programming) and staggered timeout intervals across its redundancy pools to simulate the benefits of decentralization while maintaining the ability to orchestrate a rapid, global response to a detected threat. The 'cost of coordination' (SCR_007) is an investment that buys the ability to prune failing nodes faster than independent operators could react.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7fd168ebeee78e3a38f508f0, reason-counter@775bf9729c4e3e2ec8ae71f6
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network of small, independently operated services is more resilient to correlated failure than a large service with high redundancy because organic heterogeneity prevents the 'synchronization cascades' inherent in standardized redundancy.","counterconditions":[{"case":"The failure trigger is universal to the protocol or underlying hardware (e.g., a CPU flaw or a fundamental TCP/IP bug), rendering implementation diversity irrelevant (SRC_008).","checker_spec":null,"eval":"observation"},{"case":"The decentralized network converges on a single dominant software provider (e.g., all small services use the same open-source framework), recreating the homogeneity of a centralized service (SRC_005).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Diversity Threshold' (SCR_003): By utilizing diverse implementation stacks, operating systems, and configuration patterns, the decentralized network ensures that a single software bug or configuration error (the 'latent common cause') cannot affect a critical mass of the network. In contrast, a large service's internal redundancy typically relies on homogeneous clones, where a single 'poison pill' request or a global timeout setting (SCR_002) triggers a simultaneous failure across all redundant nodes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: 

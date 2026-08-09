@@ -1,0 +1,36 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims a Poisson distribution of failure arrivals distinguishes truly independent failures, but this is not necessarily true. Failures caused by non-overlapping, independent localized wear under a common, slowly changing environmental stressor can still yield a Poisson-like arrival distribution. The proposed temporal signature fails to distinguish true causal independence from hidden correlation caused by a slow-burn common cause.",
+      "counterexample": [
+        "A set of decentralized nodes all run identical hardware that degrades under a gradually warming ambient temperature.",
+        "The stochastic local decay triggers failures at a roughly constant hazard rate, producing an arrival distribution statistically indistinguishable from a homogeneous Poisson process.",
+        "The failures appear independent by the target's temporal signature but are actually correlated by the shared environmental cause."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target argues for the resilience of decentralized networks by attributing safety to 'diversity of incompetence' and non-standard configurations, but this directly contradicts the premise being argued for. If the network's resistance to correlated failure depends on messiness and a lack of coordination rather than on being decentralized with independently operated services, the target fails to defend the actual claim. It merely replaces one hidden correlated risk (shared best practices) with another (shared incompetence), without proving that independently operated services inherently maintain the required diversity.",
+      "counterexample": [
+        "A decentralized network of small, independently operated services that all independently converge on the same optimal retry/circuit-breaking configuration because it is objectively the most efficient.",
+        "During a transient dip, they all retry simultaneously and suffer a self-inflicted DDoS, exactly like the centralized system.",
+        "The network lacks 'diversity of incompetence', proving the target's mechanism is incidental to decentralization rather than a result of it."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target is truncated and incomplete, providing no actual argument, mechanism, or evidence to assess. It fails to engage with the problem statement entirely.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

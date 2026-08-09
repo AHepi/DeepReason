@@ -1,0 +1,14 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts integration but the 'refuted if' clause describes a refutation of stochastic shielding's resilience claim, not an integration relation between trigger-based synchronization and stochastic shielding. The actual relation is test/empirical-validation, but the named kind is 'integrates', and the clause says resilience is refuted if the outage signature is Poisson—this is a contradiction/refutation of the shielding theory by the synchronization mechanism, not an integration. Naming the wrong relation kind while stating the opposite (refutation) means the summary does not state what relation holds; it mislabels a refutation as an integration.",
+      "counterexample": [
+        "Trigger-based synchronization does not integrate with stochastic shielding; it potentially contradicts it, because if outages are Poisson (as synchronization would imply if triggers are independent), implementation diversity is irrelevant—exactly what shielding denies."
+      ]
+    }
+  ]
+}
+```

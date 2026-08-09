@@ -1,0 +1,27 @@
+```json
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "SRC_001 is incorrect because a decentralized network of small, independently operated services is not necessarily more resilient to correlated failure if they share common dependencies (such as a cloud provider, DNS, or library).",
+      "counterexample": [
+        "If every small, decentralized service uses the same cloud provider, a failure of that cloud provider causes a correlated failure across all services."
+      ],
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "SRC_002 is incorrect because biological immunity is not perfect, so a common-mode failure can still cause a correlated failure in a decentralized network.",
+      "counterexample": [
+        "If the failure trigger is a protocol-level flaw such as TCP/IP or DNS, even a heterogeneous decentralized network can be fully correlated."
+      ],
+      "target_alias": "SRC_002"
+    },
+    {
+      "attack": false,
+      "case": "SRC_003 is correct.",
+      "target_alias": "SRC_003"
+    }
+  ]
+}
+```
