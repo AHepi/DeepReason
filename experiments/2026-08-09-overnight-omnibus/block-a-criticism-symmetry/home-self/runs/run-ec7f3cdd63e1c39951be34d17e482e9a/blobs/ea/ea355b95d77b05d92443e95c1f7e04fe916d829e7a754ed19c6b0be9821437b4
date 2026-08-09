@@ -1,0 +1,46 @@
+```json
+{
+  "candidate": {
+    "claim": "The decentralized network is NOT necessarily more resilient; if independent operators monitor identical market signals or use identical auto-scaling models, their actions become synchronized, creating a 'hidden shared cause' that makes the entire network fail in unison.",
+    "mechanism": "Independent operators, despite being separate, can become coupled oscillators. When they optimize for the same external metric (e.g., cost, uptime) using the same rules, their independent decisions align in time. This synchrony acts as a latent shared dependency, turning 'independent' nodes into a correlated swarm.",
+    "counterconditions": [
+      "If operators use heterogeneous models with diverse thresholds, market signals do not synchronize failures.",
+      "If the large centralized service also synchronizes its internal redundant components via a central brain, it is equally vulnerable.",
+      "If there is no external market signal or shared optimization metric, operators remain truly independent."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_008"
+      ],
+      "shared_structure": [
+        "Multiple autonomous entities updating state based on a shared external feedback loop",
+        "Lack of explicit coordination despite identical response functions",
+        "Emergent synchronization producing macroscopically correlated behavior"
+      ],
+      "disanalogies": [
+        "Decentralized operators are independent economic units, whereas coupled oscillators are physical systems bound by physical forces",
+        "Market signals have noise and stochastic delays, unlike physical coupling"
+      ],
+      "transfer_claims": [
+        "The network will exhibit self-organized criticality",
+        "Failures will appear uncorrelated until the shared market signal is identified as the trigger"
+      ],
+      "overturn_conditions": [
+        "If measuring the cross-correlation of operator decisions over time shows no phase-locking, the synchrony mechanism fails",
+        "If operators explicitly randomize their thresholds, the coupling breaks"
+      ]
+    },
+    "typicality": 0.75,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_008"
+      ]
+    }
+  }
+}
+```

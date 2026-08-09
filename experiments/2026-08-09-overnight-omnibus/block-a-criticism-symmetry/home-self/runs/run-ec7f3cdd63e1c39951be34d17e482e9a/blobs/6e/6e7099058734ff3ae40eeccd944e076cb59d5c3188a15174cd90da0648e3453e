@@ -1,0 +1,9 @@
+{
+  "repair": [
+    {
+      "op": "replace",
+      "path": "/scratch_proposal/new_blocks/0/body/bears_on_refs/2",
+      "value": "SRC_002"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network of small services is more resilient than a single large service because independent failure modes do not share common triggers, limiting systemic correlation.",
+      "mechanism": "Independently operated services possess distinct administrative domains, deployment schedules, and software stacks, creating a 'defense in depth' where local failures remain localized and do not propagate system-wide.",
+      "counterconditions": [
+        "If operators adopt identical cloud infrastructure or standardized auto-scaling algorithms, hidden correlations emerge that synchronize failures.",
+        "If a shared external dependency (e.g., a major cloud provider or CDN) fails, both the large service and the decentralized network fail in correlation."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "A large service with strictly more internal redundancy is more resilient because it can enforce global coordination to break feedback loops that would synchronize a decentralized network.",
+      "mechanism": "Strictly greater internal redundancy allows a large service to deploy 'Byzantine fault tolerance' or 'n-version programming' at the system level, ensuring independent implementations fail independently. A decentralized network cannot enforce this and risks synchronizing on shared external signals.",
+      "counterconditions": [
+        "If the large service's internal redundancy is homogeneous (e.g., identical software instances), it does not break correlation.",
+        "If the large service's centralized administrative layer fails, the entire system fails despite internal redundancy."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Apparent independence in decentralized networks is fragile because algorithmic convergence on shared market signals creates self-organized criticality, leading to synchronized systemic failure.",
+      "mechanism": "If all independent operators monitor the same metrics and optimize using identical thresholds, they act as coupled oscillators. A shock to the system causes them to reboot or scale in phase, creating a 'leaderless synchronization' that results in perfectly correlated failure.",
+      "counterconditions": [
+        "If operators have highly diverse operational goals or risk tolerances, the coupling is broken.",
+        "If the shared market signal is sufficiently noisy, the oscillators desynchronize."
+      ],
+      "typicality": 0.70,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Distinguishing truly independent failures from merely uncorrelated ones requires evidence of shared latent variables or algorithmic monoculture, not just historical failure data.",
+      "mechanism": "Failures appear uncorrelated until a shared cause (e.g., a time-of-day trigger, a specific data pattern, or an identical software dependency) is activated. Only evidence of diverse operational dependencies and non-convergent optimization models can prove independence.",
+      "counterconditions": [
+        "If historical failure data shows zero correlation even across diverse external shocks, independence is empirically supported.",
+        "If shared causes are non-obvious and deeply latent (e.g., shared training data biases in AI systems), they may be practically impossible to distinguish beforehand."
+      ],
+      "typicality": 0.90,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Decentralization does not guarantee resilience against correlated failure because the 'strictly more internal redundancy' of a large service can include organizational and software diversity that a decentralized network cannot enforce.",
+      "mechanism": "A large service can mandate 'algorithmic monoculture prevention' by design, using diverse teams to build redundant systems. A decentralized network has no central authority to enforce diversity and may default to the same industry-standard tools, creating an unenforced, hidden monoculture.",
+      "counterconditions": [
+        "If the large service prioritizes efficiency over diversity, it may collapse into a monoculture anyway.",
+        "If the decentralized network emerges from a culture that strongly values exotic or niche technologies, it may have higher de facto diversity."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "Can a 'leaderless' protocol for decentralized services provably prevent them from synchronizing on shared external signals, or is some form of global coordination (a 'leader') always necessary to break synchronization?",
+        "related_refs": [
+          "SCR_003"
+        ]
+      },
+      {
+        "question": "Does algorithmic convergence via identical models or training data constitute a 'shared cause' in the formal sense required to invalidate independence claims?",
+        "related_refs": [
+          "SCR_004"
+        ]
+      }
+    ],
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The problem distinguishes 'strictly more total internal redundancy' in a large service from decentralization. A large service could, in theory, implement n-version programming with diverse teams. Decentralization's diversity is unenforced. This suggests the large service could be *engineered* for independence, while the decentralized network only *hopes* for it.",
+          "why_keep_this": "This directly challenges the assumption that decentralization is the only path to independence, opening a line of argument that a designed-but-large system might be superior."
+        }
+      }
+    ]
+  }
+}
+```

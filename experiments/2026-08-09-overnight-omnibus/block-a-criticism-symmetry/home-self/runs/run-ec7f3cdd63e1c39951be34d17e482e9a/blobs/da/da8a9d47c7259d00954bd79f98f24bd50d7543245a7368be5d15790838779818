@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "SRC_005 depends on SRC_003: the leaderless-synchronization mechanism refutes the independence premise of decentralized resilience by showing that shared market signals coupled with algorithmic convergence create synchronized systemic failure. The dependence is refuted if operators have highly diverse operational goals or risk tolerances that break the coupling, or if the shared market signal is sufficiently noisy to desynchronize the oscillators.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005", "SRC_003", "SRC_002"]
+    },
+    {
+      "content": "SRC_004 contradicts SRC_003: the large-service internal-redundancy advantage and the decentralized-network independence advantage cannot both hold when standardized auto-scaling algorithms create hidden correlations that synchronize failures. The contradiction is refuted if the large service's internal redundancy is homogeneous (identical software instances), which fails to break correlation, or if a shared external dependency fails and both topologies fail in correlation.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_004", "SRC_003", "SRC_001"]
+    },
+    {
+      "content": "SRC_002 depends on SRC_005: algorithmic convergence on identical training data is a specific instance of the general leaderless-synchronization mechanism, where shared data replaces shared metrics as the coupling medium. The dependence is refuted if small services use locally generated, private training data that is not shared, breaking the convergence mechanism, or if the large service also uses a single shared training set for all its sub-services, eliminating its epistemic-firewall advantage.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_002", "SRC_005", "SRC_003"]
+    },
+    {
+      "content": "SRC_001 abstracts SRC_003: the resilience of decentralized networks is an artifact of observer bias rather than a genuine causal property, because extreme value statistics ensure catastrophic shared causes eventually dominate any topology, and the distributed topology merely fragments the observable failure signal. The abstraction is refuted if regulatory or systemic monitoring forces centralized reporting of all small operator failures, making the hidden shared causes visible, or if the large centralized service actively obfuscates its internal failures, equalizing the observer bias.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001", "SRC_003", "SRC_004"]
+    },
+    {
+      "content": "SRC_005 shares mechanism with SRC_004: leaderless synchronization via algorithmic convergence is the precise mechanism by which a decentralized network fails to enforce the global coordination that would break feedback loops. A large service with strictly more internal redundancy inherits an advantage because it can deploy Byzantine fault tolerance or n-version programming to break the same synchronization that the decentralized network cannot. The shared mechanism is refuted if the large service's internal redundancy is homogeneous, so it too cannot break correlation, or if operators have diverse operational goals that break the coupling in the decentralized case.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_005", "SRC_004", "SRC_002"]
+    },
+    {
+      "content": "SRC_002 reduces to SRC_001: the claim that algorithmic convergence on shared training data makes decentralized networks strictly less resilient is a specific instance of the observer-bias artifact, because the shared training data is a heavy-tailed catastrophic shared cause whose correlated failure signal is fragmented across isolated operators and never recognized. The reduction is refuted if regulatory or systemic monitoring forces centralized reporting of small operator failures, making the shared training data correlation visible and the resilience artifact disappear, or if small services use private, non-shared training data, eliminating the shared cause.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_002", "SRC_001", "SRC_005"]
+    }
+  ]
+}

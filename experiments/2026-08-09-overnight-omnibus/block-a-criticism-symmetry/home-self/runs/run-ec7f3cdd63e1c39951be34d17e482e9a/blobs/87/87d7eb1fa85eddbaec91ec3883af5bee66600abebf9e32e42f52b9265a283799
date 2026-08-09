@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "SRC_005 reduces to SRC_002: the external market signal synchronization mechanism is a specific economic instance of the de facto monoculture constraint, where the shared cause (optimization metric) forces independent operators into identical failure modes. Refuted if small operators optimize for orthogonal, non-market metrics (e.g., local physical constraints) that desynchronize their scaling thresholds regardless of shared market signals.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005", "SRC_002", "SRC_001"]
+    },
+    {
+      "content": "SRC_003 contradicts SRC_004: topological isolation (DAG structure) cannot provide superior correlated failure resilience if the observer-bias mechanism holds, because the DAG merely fragments and hides the catastrophic shared-cause failures rather than preventing them. Refuted if topological isolation provably reduces the absolute frequency of shared-cause failures (not just their observability), demonstrating causal isolation independent of the observation framework.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_001"]
+    },
+    {
+      "content": "SRC_001 inherits from SRC_004: the requirement for causal firebreaks (independent codebases, power domains) is a specific implementation of the general topological requirement for a modular, loosely-coupled DAG, because causal firebreaks enforce the edges that make the dependency graph acyclic and prevent cascading failures. Refuted if a system can possess causal firebreaks while maintaining a cyclic dependency topology that still allows cascading failures under specific load conditions.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_001", "SRC_004"]
+    },
+    {
+      "content": "SRC_002 abstracts SRC_005: the economic monoculture argument generalizes beyond market signal synchronization to include any isomorphic selection pressure (regulatory compliance, off-the-shelf solutions, shared training data) that collapses the causal independence of decentralized operators. Refuted if market signal synchronization induces correlated failures through a distinct dynamical mechanism (self-organized criticality) that economic monoculture arguments cannot predict or explain.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_002", "SRC_005", "SRC_001"]
+    },
+    {
+      "content": "SRC_003 shares mechanism with SRC_005: both mechanisms depend on a hidden synchronizing cause—extreme value statistics in SRC_003 and market signals in SRC_005—that induces correlated failures across 'independent' nodes while masking the correlation from observers. Refuted if the heavy-tailed distribution of catastrophic shared causes in SRC_003 operates independently of operator optimization behavior, meaning failures would correlate identically even if operators used diverse, non-convergent scaling algorithms.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_005", "SRC_001"]
+    },
+    {
+      "content": "SRC_004 is compatible with SRC_002: topological superiority (DAG structure) and economic superiority (engineered architectural diversity) are non-exclusive mechanisms by which a large centralized service can achieve strictly greater correlated failure resilience than a decentralized network, provided the large service enforces both internal bulkheading and diverse team practices. Refuted if enforcing a DAG topology in a decentralized network is sufficient to overcome the economic monoculture effect, making the large service's architectural diversity redundant.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_002", "SRC_001"]
+    }
+  ]
+}

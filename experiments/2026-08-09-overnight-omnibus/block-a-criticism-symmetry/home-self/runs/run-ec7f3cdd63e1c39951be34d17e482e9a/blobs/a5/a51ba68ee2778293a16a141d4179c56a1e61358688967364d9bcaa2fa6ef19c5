@@ -1,0 +1,53 @@
+```json
+{
+  "candidate": {
+    "claim": "A decentralized network is more resilient to correlated failure if its independent operators rely on heterogeneous control algorithms and local observations, but is strictly less resilient if algorithmic convergence causes them to synchronize on a shared external signal, as this synchrony mimics the failure modes of a centralized service while forfeiting the redundancy of centralized internal governance.",
+    "mechanism": "Independent operators in a decentralized network appear uncorrelated but can undergo self-organized synchronization if they adapt to the same market signals, metrics, or auto-scaling models. This synchronization phase-locks their operational states (e.g., scaling, rebooting, throttling), creating a 'phantom centralization' where failures propagate in perfect synchrony. The shared cause is not a single hardware or software component, but a shared information source governing the independent controllers.",
+    "counterconditions": [
+      "Operators use highly diverse, non-overlapping sets of metrics for scaling decisions, preventing phase-locking.",
+      "The external market signal is so noisy or delayed that operators cannot synchronize their adaptations.",
+      "The large centralized service has a fault-tolerant consensus protocol that proves its internal components fail independently, matching or exceeding the decentralization benefit.",
+      "The decentralized network lacks any feedback mechanism for operators to observe and react to each other's state."
+    ],
+    "typicality": 0.65,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003",
+      "SRC_008"
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "shared_structure": [
+        "Independent components adapt to a shared external stimulus",
+        "Adaptive responses, when identical, lead to synchronized state transitions (phase-locking)",
+        "Synchronized state transitions cause correlated failures that mimic the failure modes of a single centralized organism"
+      ],
+      "disanalogies": [
+        "In coupled oscillators, synchronization is often a stable mathematical attractor, whereas in decentralized networks, synchronization might be intermittent and triggered only by specific market panics.",
+        "The 'leader bird' in a flock is a biological signal, whereas the 'leader' in a service network is often an abstract algorithm or market price, which lacks agency but still forces convergence."
+      ],
+      "transfer_claims": [
+        "Evidence of prior synchronization in market-driven service networks should predict future correlated failures.",
+        "Introducing intentional noise or algorithmic diversity into decentralized operators' control loops should reduce correlated failure rates."
+      ],
+      "overturn_conditions": [
+        "Empirical data shows that decentralized operators do not phase-lock even when using identical auto-scaling models because local latencies break the symmetry.",
+        "The centralized service is proven to have strictly independent internal failure modes, rendering the decentralization synchronization risk moot."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "checker_specs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```
