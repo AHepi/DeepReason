@@ -1,6 +1,6 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=5 blockers=none (diff-budget ceiling raised 190->320 by
-operator decision, SPEC.md amendment; resuming)
+State: next=7 blockers=none (diff-budget ceiling raised 190->320 by
+operator decision, SPEC.md amendment; S1+S2 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
@@ -155,8 +155,10 @@ operator wants it (recorded in PARKED.md at delivery).
       S3 and S4 also land; each subsequent step's own DONE block re-runs
       this same test and shows it progressing further.
 
-- [ ] 6. (S2) [COMMIT] Commit S2 with `tools/diff_budget.py` pasted.
+- [x] 6. (S2) [COMMIT] Commit S2 with `tools/diff_budget.py` pasted.
       done-when: same shape as step 3, for S2's diff.
+      DONE: already satisfied by step 5's own commit (`01513e3b8`),
+      diff budget 249/320 WITHIN, pushed.
 
 - [ ] 7. (S3) Write the regression test for `workflow/profiles.py`'s
       four S3 sites (a `WorkflowControlProfileV1` with
