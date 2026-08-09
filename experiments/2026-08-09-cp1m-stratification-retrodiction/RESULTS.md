@@ -107,3 +107,82 @@ Per `dr-ask-the-right-question` (route to the cheapest authority; this
 is a credential the record and the framework cannot supply — only the
 operator can), this is raised to the operator now rather than guessed
 at, fabricated, or silently skipped.
+
+## 2026-08-09 — credentials received, verified, live phases underway
+
+Two operator keys received. Written to a gitignored, `chmod 600` file
+under this tranche's own directory (`env`; `git check-ignore -v`
+confirmed it matches the existing `experiments/*/env` pattern before
+anything was written — no gitignore edit was needed). **Never printed
+in full in this record or any commit; only outcome (works/doesn't) is
+logged.** Both keys smoke-tested with one bounded call each, both
+models (`glm-5.2`, `gemma4:31b`) — all four combinations returned a
+valid response. `≤3 concurrent per key` is enforced in-process by a
+`threading.Semaphore(3)` per key in every phase script below; the four
+live phases (S-mech, S-truth, S-formal, S-judgment) are run
+SEQUENTIALLY, never concurrently with each other, so the 3-per-key cap
+is never exceeded by two scripts running at once.
+
+**S-mech deviation, recorded before spending the bulk of the stratum's
+budget** (first ~6 calls only): `PREREG.md` originally specified one
+checker per CLAIM. Redesigned to one COMBINED checker per PAIR — the
+encoder is given both claims together, asked to compute the underlying
+quantity from scratch (never to pick a side), and to state what each
+claim asserts about it; the SAME compiled checker is then scored
+against both claims' asserted values through the real dispatch path
+(`candidate_checker_commitment` + `run_from_full_spec`, one commitment
+per claim, same `source`/`entry`, different `tests[0].out`). Reason: a
+per-claim checker risks being a tautological echo of its own claim (the
+model just hardcodes what it was told) rather than an independent
+computation; scoring the SAME checker against both claims makes it
+impossible for the checker to win by construction. `scripts/s_mech_run.py`
+implements this. A second, purely SYNTACTIC fix followed a 4-call smoke
+test: both models, despite `json_mode=True`, sometimes wrapped output in
+markdown code fences and used Python literal syntax (unquoted int dict
+keys, capitalized `True`/`False`) instead of strict JSON — added a
+two-tier parse (strict JSON first, then a repair pass that ONLY strips
+fences and fixes Python-vs-JSON syntax, never touches semantic content)
+and tightened the prompt to require `check()` return a single SCALAR
+(number/string/bool), never a nested structure — the original prompt's
+open-ended "value" invited multi-key dict returns that were both hard to
+score and often not strict JSON.
+
+**S-mech run launched** (harness-tracked background call, per the patrol
+pilot's own lesson that a raw detached `setsid`/`nohup` process does not
+reliably survive this container — CLAUDE.md's Environment section,
+confirmed again by that pilot's Failure #3). Population: 960 pairs
+(Rule-184-family's 43 first), ~1044 total tasks including the 10%
+stability-repeat sample. Real, in-progress outcome counts at the 580th
+task: `confirmed_a=150, confirmed_b=125, both_fail=193, compile_fail=53,
+authoring_failed=31, both_pass=28` — roughly half the population
+CONFIRMED so far, a genuine and non-trivial `compile_fail` rate (checker
+source rejected by the oracle sandbox's AST guard — commonly `**`
+exponentiation, flagged "int bomb" risk, or an `import` statement inside
+the checker body, both real, intentional restrictions of the SAME
+whitelist sandbox `exec_oracle`/`property_oracle` already use, not a bug
+in this tranche's own code). Final counts and rates by model land in the
+master table once the run completes.
+
+**Ground-truth mapping for S-truth built and committed**
+(`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
+matched to its source question's `id` and `accept` list by seed-problem-
+text prefix match against `experiments/validation_questions*.json` — all
+10 matched cleanly (e.g. `run-fd071eaf...` → `q13`, `accept: ["12"]`).
+152 of the 808 hits in these roots are NOT S-mech-eligible and so form
+the S-truth population; the other 656 are claimed by S-mech's priority.
+
+**Offline artifact-type + depth-0/depth-k first count** (zero live
+calls, `scripts/artifact_depth_breakdown.py`, committed as
+`artifact_depth_breakdown.json`): across the 1,941 hits' 3,882 artifacts
+(all resolved; no unopenable root among hit-contributing roots), **3,871
+are `conjecturer`-provenance and 11 are `import`-provenance** — every
+patrol hit is, unsurprisingly, a pair of conjectured claims, not a
+seed/import artifact. Depth (hops via `Interface.refs`
+`RefRole.DEPENDENCE` edges back to an artifact with no such ref of its
+own, computed per-root): **3,355 depth-0, 527 depth-1, zero depth-2+,
+zero unresolved/cyclic**. This is the FIRST such count taken over this
+corpus — it seeds CP3/CP4 by establishing that essentially all
+candidate-contradiction material sits at most one derivation hop from a
+root claim in this corpus slice; a program that wanted deeper chains
+would need either a different corpus or a design that deliberately grows
+one.
