@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=1 blockers=none
+State: next=2 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -15,9 +15,13 @@ discipline ("the full suite is a gate, not a feedback loop"). This
 checklist's last step re-confirms the tripwire is still 0 as a cheap local
 check before handing off to validation, not as the gate itself.
 
-- [ ] 1. (S1) Create REVIEW.md skeleton: title, the operator's question
+- [x] 1. (S1) Create REVIEW.md skeleton: title, the operator's question
       verbatim, one-paragraph preview, section headers for S2-S9.
       done-when: `head -5 REVIEW.md | grep -q "LLM-judge discrimination"`
+      DONE: `head -5 REVIEW.md | grep -q "LLM-judge discrimination" && echo "DONE-CRITERION PASS"` -> `DONE-CRITERION PASS`
+      (preview paragraph deferred to end of §8, not written before evidence
+      — see note in REVIEW.md; this is a smaller-than-planned but still
+      compliant reading of "one-paragraph preview")
 - [ ] 2. (S2) Read `src/deepreason/informal/audits.py`'s four audit
       functions and log tags; read the 15 `experiments/results/*.json`
       files named in SPEC S2 plus `tests/test_audits.py`'s pinned numbers;
