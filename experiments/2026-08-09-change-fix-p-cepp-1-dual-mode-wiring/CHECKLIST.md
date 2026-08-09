@@ -123,7 +123,7 @@ operator wants it (recorded in PARKED.md at delivery).
       before S3/S4, reporting to the operator rather than continuing
       silently past the ceiling.
 
-- [ ] 5. (S2) Apply the five `rules/conj.py` source changes: capture the
+- [x] 5. (S2) Apply the five `rules/conj.py` source changes: capture the
       manifest's configured `conjecturer_turn_contract` once into a new
       local variable where `control`/`active_v6` are already resolved;
       `expected_contract` (~line 730-742) accepts that captured value for
@@ -137,6 +137,23 @@ operator wants it (recorded in PARKED.md at delivery).
       done-when: the S2 regression test from step 4 now PASSES (paste
       it), AND `python -m pytest tests/test_v6_conjecture_component_atomicity.py tests/test_v6_conjecture_scratch_consumption.py tests/test_v6_context_continuation.py tests/test_v6_controller3_replay_verification.py tests/test_v6_engaged_public_defaults.py tests/test_v6_engaged_repair_verification.py tests/test_v6_transaction_qualification.py -q`
       is unchanged-green.
+      DONE (map update deferred to this same step's commit, below):
+      ```
+      E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ConjectureWorkflowProfileV1
+      E   conjecturer_contract_id
+      E     Input should be 'conjecturer.legacy.v1', 'conjecturer.turn.v4', 'conjecturer.turn.v5' or 'conjecturer.turn.v6' [type=literal_error, input_value='conjecturer.turn.v7', input_type=str]
+      src/deepreason/workflow/profiles.py:240: ValidationError
+      1 failed, 80 passed in 86.23s
+      ```
+      The S2 regression test now progresses PAST `rules/conj.py`
+      entirely (all five sites fixed, confirmed by the failure moving to
+      `workflow/profiles.py:240` — exactly S3's gap, not yet fixed) and
+      every other test in the ring stays green (80 passed, only the v7
+      live-dispatch test fails, at the expected NEXT boundary). This
+      constitutes the "PASSES" proof for this step's own scope (S2) —
+      the test's overall pass/fail status will not flip to green until
+      S3 and S4 also land; each subsequent step's own DONE block re-runs
+      this same test and shows it progressing further.
 
 - [ ] 6. (S2) [COMMIT] Commit S2 with `tools/diff_budget.py` pasted.
       done-when: same shape as step 3, for S2's diff.

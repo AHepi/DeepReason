@@ -707,6 +707,11 @@ def conj(
     active_v4 = False
     active_v5 = False
     active_v6 = False
+    # P-CEPP-1: the manifest's own configured conjecturer-turn contract
+    # (v6 or v7) once active_v6, threaded through effective_contract and
+    # the atomic-decomposition bookkeeping below instead of each
+    # re-hardcoding "conjecturer.turn.v6" independently.
+    configured_turn_contract = None
     context_policy = None
     scratch_policy = None
     transaction_service = None
@@ -730,10 +735,20 @@ def conj(
 
         run_manifest = RunManifest.model_validate(run_manifest)
         control = run_manifest.control_plane_policy
+        # P-CEPP-1: schema 6 accepts whichever of the two legal v6-family
+        # contracts (v6, v7 -- ContractVersionPolicyV3's own Literal) the
+        # manifest configured, rather than re-pinning v6 a second time
+        # here; v4/v5 stay pinned since ContractVersionPolicyV1/V2 admit
+        # exactly one value each.
+        configured_turn_contract = (
+            control.contract_versions.conjecturer_turn_contract
+            if control is not None
+            else None
+        )
         expected_contract = {
             4: "conjecturer.turn.v4",
             5: "conjecturer.turn.v5",
-            6: "conjecturer.turn.v6",
+            6: configured_turn_contract,
         }.get(run_manifest.schema_version)
         if (
             expected_contract is None
@@ -943,7 +958,7 @@ def conj(
             if (
                 transition.manifest_digest == run_manifest.sha256
                 and transition.route_lease == route_ref
-                and transition.source_contract_id == "conjecturer.turn.v6"
+                and transition.source_contract_id == configured_turn_contract
                 and transition.atomic_contract_id
                 == "conjecturer.atomic-candidate.v1"
                 and source_root is not None
@@ -1015,7 +1030,7 @@ def conj(
             task_kind=WorkflowTaskKind.CONJECTURE,
             attempt_index=0,
             route_lease=route_ref,
-            contract_id="conjecturer.turn.v6",
+            contract_id=configured_turn_contract,
             trigger_ref=trigger_ref,
             formal_fence_seq=fence,
             scratch_fence_seq=fence,
@@ -1871,7 +1886,7 @@ def conj(
                     seat=dispatch_endpoint_lease.seat,
                     endpoint_id=dispatch_endpoint_lease.route.endpoint_id,
                     route_sha256=route_ref.route_sha256,
-                    source_contract_id="conjecturer.turn.v6",
+                    source_contract_id=configured_turn_contract,
                 )
             except RunManifestError as authority_error:
                 if authority_error.code in {
@@ -2212,7 +2227,7 @@ def conj(
             (
                 "conjecturer.atomic-candidate.v1"
                 if atomic_fallback_completed
-                else "conjecturer.turn.v6"
+                else configured_turn_contract
             )
             if active_v6
             else ("conjecturer.turn.v5" if active_v5 else "conjecturer.turn.v4")
