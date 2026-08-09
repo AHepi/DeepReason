@@ -6,7 +6,7 @@ For positive integer n such that n < 10,000, the number n+2005 has exactly 21 po
 
 ## Positions the record accepts
 
-85 positions stand formally accepted. Where they answer the same question differently they are unresolved rivals: the record deliberately preserves the disagreement rather than merging it.
+92 positions stand formally accepted. Where they answer the same question differently they are unresolved rivals: the record deliberately preserves the disagreement rather than merging it.
 
 - The possible values of n are derived from the prime factorization of m = n + 2005, where d(m) = 21. Since 21 = 7 * 3 or 21 * 1, m must be of the form p^20 or p^6 * q^2 for distinct primes p and q. Given n < 10,000, m < 12,005. The only viable forms are p^6 * q^2. `[7f432713ff79]`
 - The sum of all possible values of n is determined by evaluating m = p^6 * q^2 for p=2 and p=3, ensuring m > 2005 and m < 12005. `[bb9693613936]`
@@ -93,6 +93,13 @@ For positive integer n such that n < 10,000, the number n+2005 has exactly 21 po
 - The sum of all possible values of n is 2448. `[ec2b7abf4276]`
 - The target provides a final claim (sum is 2448) but fails to provide a causal mechanism or derivation showing how that sum is reached; instead, it explicitly describes its own 'mechanism' as following an 'erroneous path' and being a 'low-typicality outlier,' which constitutes a failure to provide a valid logical derivation for the answer to the problem context. `[42211565dadc]`
 - The target claims the sum of all possible values of n is 7781, but it fails to correctly identify all values of m = n + 2005 that have exactly 21 factors. For a number to have 21 factors, its prime factorization must be of the form p^20 or p^2 * q^6. Testing p^2 * q^6: if q=2, m = p^2 * 64. For n < 10000, m < 12005. Possible p values are 3, 5, 7, 11, 13. If p=3, m=576 (too small, n would be negative); if p=5, m=1600 (too small); if p=7, m=3136 (n=1131); if p=11, m=7744 (n=5739); if p=13, m=10816 (n=8811). If q=3, m = p^2 * 729. If p=2, m=2916 (n=911). If p=5, m=18225 (too large). The target's … `[f6f22497d3ca]`
+- The claim in SRC_001 shares mechanism with SRC_003, SRC_004, and SRC_005, specifically the erroneous belief that the sum of all possible values of n is 2448. This shared mechanism is refuted if any correct enumeration of m = p^6 * q^2 in the range [2006, 12004] yields a sum of n different from 2448. `[690c34130258]`
+- The claim in SRC_002 reduces to a more restricted version of the logic in SRC_001, as it specifically identifies the omission of larger primes (q=11, q=13) as the causal mechanism for its specific erroneous sum. This reduction is refuted if the omission of these primes does not mathematically lead to the specific value 2448 described in the neighborhood. `[5eeed3878b69]`
+- The claim in SRC_005 integrates the failure mode described in SRC_003, where a subset of valid m values (like m=3136) is identified but the total set is not exhausted. This integration is refuted if SRC_005 identifies a different set of missed values than those listed in the counterconditions of SRC_003. `[f0f2885fc367]`
+- The claim in SRC_004 contradicts the exhaustive search described in SCR_008 by assuming that only a restricted case (like p^20) could potentially lead to the sum 2448, which ignores the p^6 * q^2 possibility. This contradiction is refuted if the p^20 case is mathematically proven to be impossible within the given n < 10,000 constraint. `[9e88eab3d9d8]`
+- The proposed relation is a tautology regarding the consistency of value sets rather than a substantive relation between the mechanisms or claims of the sources. Stating that an integration is refuted if the sets of missed values differ does not establish a substantive connection between how SRC_005 integrates SRC_003, but merely defines a condition for set equality. `[fd3028f39131]`
+- The target claims SRC_001 shares a mechanism of believing the sum is 2448, but SRC_001 explicitly claims the sum is 16592. `[0108db71550e]`
+- The target attempts to establish a relation between SRC_004 and SCR_008, but neither SRC_004 nor SCR_008 are provided in the target list or context, making the substantive relation unverifiable and effectively hallucinated within this scope. `[b353f6042eea]`
 
 ## Positions the record refuted
 

@@ -17,3 +17,4 @@ run_id=run-7906485ce1cfc314a653c185cbf61d75
 audit1_rc=0
 stop_reason=budget_exhausted
 resumable=yes
+continue1_rc=0 continue1_seconds=463
