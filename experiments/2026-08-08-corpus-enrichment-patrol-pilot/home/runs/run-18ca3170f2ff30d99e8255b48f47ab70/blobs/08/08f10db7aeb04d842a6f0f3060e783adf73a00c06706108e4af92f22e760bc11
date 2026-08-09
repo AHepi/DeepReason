@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9bd69305a5e2e796f1fd614c: program:reasoning_observation_pending
+- reason-counter@51fee29dc6f19634f736bac0: program:reasoning_observation_pending
+- reason-counter@9e3cfe1064b61f388d71a600: program:reasoning_observation_pending
+- reason-counter@b8c9a5e833385610aeec0795: program:reasoning_observation_pending
+- reason-counter@570be71681f82849d5a38d40: program:reasoning_observation_pending
+- reason-counter@090b015d991d51ecb0358c3b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest integer is 48, but only because the problem is ill-posed: it conflates 'consecutive even integers' (stride 2) with 'consecutive integers that happen to be even', and 48 is the answer to the former reading.","counterconditions":[{"case":"If standard mathematical convention uniquely fixes reading (a), the ambiguity is spurious and the candidate collapses.","checker_spec":null,"eval":"observation"},{"case":"If the problem's source explicitly defines 'consecutive even integers' as stride-2, the ill-posedness claim is overturned.","checker_spec":null,"eval":"observation"},{"case":"If reading (b) is mathematically incoherent (three consecutive integers cannot all be even), the candidate is a strawman.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The phrase is ambiguous: (a) integers differing by 2, all even; (b) consecutive in the full integer sequence that also satisfy evenness. Under (a) the unique triple is 44,46,48. Under (b) no three consecutive integers are all even. The answer 48 presupposes reading (a) without acknowledging reading (b).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9bd69305a5e2e796f1fd614c, reason-counter@51fee29dc6f19634f736bac0, reason-counter@9e3cfe1064b61f388d71a600
+
+TARGET SRC_002
+{"analogy":null,"claim":"The largest integer is 48, derived by assuming the triple is NOT a valid arithmetic progression and recovering it through contradiction.","counterconditions":[{"case":"If the counterexample-first stance required rejecting the problem rather than testing its negation, this derivation would be malformed.","checker_spec":null,"eval":"observation"},{"case":"If 'consecutive even integers' were ambiguous about stride, the triple 44,46,48 would not be a clean counterexample.","checker_spec":null,"eval":"observation"},{"case":"If the supposition were 'the triple is (45,46,47)' rather than 'no valid triple exists', the contradiction would miss 48.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Counterexample-first: suppose no three consecutive even integers sum to 138. Then every triple of consecutive even integers sums to something else. But the triple 44,46,48 sums to 138, contradicting the supposition. Therefore a valid triple exists, and its largest member is 48.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b8c9a5e833385610aeec0795, reason-counter@570be71681f82849d5a38d40, reason-counter@090b015d991d51ecb0358c3b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

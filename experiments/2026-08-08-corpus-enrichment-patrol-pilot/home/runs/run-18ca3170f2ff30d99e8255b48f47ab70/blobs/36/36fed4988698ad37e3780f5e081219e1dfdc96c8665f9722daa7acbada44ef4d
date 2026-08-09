@@ -1,0 +1,14 @@
+```json
+{
+  "repair.patch.v1": {
+    "baseline_sha256": "344396aec6d04e541c7852716e8cd8e0ad7400582b4c0f0ab8102b0769161791",
+    "operations": [
+      {
+        "op": "add",
+        "path": "/scratch_proposal/new_blocks/0/local_key",
+        "value": "NEW_002"
+      }
+    ]
+  }
+}
+```

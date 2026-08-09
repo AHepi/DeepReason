@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:0b13382ebfe2) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0b13382ebfe2 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f780c80c8510: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+0b13382ebfe2 DEPENDS ON SRC_004's arithmetic-progression characterization but integrates an additional constraint the neighbourhood omits: SRC_004 models the triple as a, a+2, a+4 and solves 3a+6=138, but never states that 'consecutive even' requires both d=2 AND a≡0 (mod 2). The artifact adds the modular constraint a≡0 (mod 2) as a co-equal premise, so the derivation jointly solves 3a+6=138 AND a≡0 (mod 2), whereas SRC_004 solves the first and checks the second. This is REFUTED IF the artifact's derivation does not name or use the modular residue condition a≡0 (mod 2) as a premise in the solution step, but only verifies evenness of the final answer — because then it is a post-hoc check, not a co-equality premise.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact 0b13382ebfe2 REDUCES TO SRC_003: any proof-by-counterexample method is a strictly weaker derivation, because eliminating non-even triples (SRC_002's 45,46,47) adds no information once the arithmetic-progression principle already fixes n=46 by 3n=138. The counterexample is eliminable as a proof obligation. This is REFUTED IF there exists a target sum divisible by 3 where the mean is odd, the even constraint makes no even triple exist, and the counterexample-first method correctly outputs 'no solution' while the mean-principle alone produces an invalid odd-centered triple — showing the counterexample filter carries indispensable content the reduction loses.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+TARGET SRC_003
+0b13382ebfe2 SHARES MECHANISM with SRC_002 at the meta-level rather than the object level: the neighbourhood uses counterexample reasoning to reject 45,46,47 (object-level contradiction against a rival triple), but the isolated artifact uses counterexample reasoning to reject the hypothesis 'multiple even triples sum to 138' (meta-level contradiction against multiplicity). The shared mechanism is proof-by-counterexample, but the proof obligation differs. This is REFUTED IF the artifact's text contains no attempt to assume multiplicity or non-uniqueness and derive a contradiction — i.e., it never raises the meta-level question of whether more than one valid triple could exist.
+commitments: hv-floor@2a45b7988522, lineage-ref@f780c80c8510, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

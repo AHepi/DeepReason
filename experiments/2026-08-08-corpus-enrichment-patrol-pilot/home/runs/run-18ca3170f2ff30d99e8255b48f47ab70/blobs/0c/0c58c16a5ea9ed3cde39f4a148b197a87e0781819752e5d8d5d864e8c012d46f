@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@43deb1fb0faa88738f29caeb: program:reasoning_observation_pending
+- reason-counter@3ea6da10c61f350234612b88: program:reasoning_observation_pending
+- reason-counter@203304fdbbf075a7d50d1186: program:reasoning_observation_pending
+- reason-counter@b5188c2971fda24ed0186a9e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest integer is 48, derived via an atypical base-scaling analogy.","counterconditions":[{"case":"If the translation offsets were not symmetric (e.g., [1, 0, -2]), the center of mass would not be the middle value.","checker_spec":null,"eval":"observation"},{"case":"If the numbers were not required to be integers, the discrete offset class would be an arbitrary choice.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Consider the numbers as base values in a linear shift. We treat 138 as 3 times the base value. 138/3 = 46. We need a translation by [+2, 0, -2] to find the actual values from the base. This gives [46-2, 46, 46+2] = [44, 46, 48]. This mirrors a barycentric coordinate system where the center of mass is 46 and the offsets are determined by the even-integer constraint.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@43deb1fb0faa88738f29caeb, reason-counter@3ea6da10c61f350234612b88
+
+TARGET SRC_002
+{"analogy":null,"claim":"The largest integer is 48, confirmed by exhaustive parity search.","counterconditions":[{"case":"If the problem allowed for non-integers or a different definition of 'even', the discrete search space would be incorrect.","checker_spec":null,"eval":"observation"},{"case":"If the search bounds were set incorrectly, the triplet might be missed.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"We search for three integers a, b, c such that b = a+2, c = b+2 (enforcing even spacing), and a+b+c = 138. Iterating a through even numbers: starting near 138/3 - 2, we find (44, 46, 48). The search confirms the symmetric triplet sums to 138, yielding the maximum c = 48.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@203304fdbbf075a7d50d1186, reason-counter@b5188c2971fda24ed0186a9e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

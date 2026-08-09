@@ -1,0 +1,18 @@
+```json
+{
+  "candidate": {
+    "claim": "The three consecutive even integers summing to 138 are 44, 46, and 48, making the largest 48.",
+    "mechanism": "Let the three consecutive even integers be x, x+2, and x+4. Their sum is 3x+6 = 138, which yields 3x = 132 and x = 44. The largest is x+4 = 48. This isolates the causal mechanism producing the triple: the mean (46) acts as the central term, and the even spacing (step 2) determines the neighbors, which works precisely because the mean is an even integer.",
+    "counterconditions": [
+      "If 138 were not divisible by 3, the arithmetic mean would be non-integer and no equally spaced triple of integers could sum to 138.",
+      "If the problem required consecutive odd integers instead of even, 46 would be the wrong parity and no valid triple would exist.",
+      "If the constraint that the integers are consecutive and spaced by 2 were removed, other triples could sum to 138 (e.g., 40, 46, 52) and the largest would not be determined."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_003", "SRC_005", "SRC_007"]
+    }
+  }
+}
+```

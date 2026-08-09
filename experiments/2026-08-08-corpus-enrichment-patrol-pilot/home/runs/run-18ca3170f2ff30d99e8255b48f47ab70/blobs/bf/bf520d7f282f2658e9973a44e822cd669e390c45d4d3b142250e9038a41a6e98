@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-e5bd6570d04d8805b7a344fcb96da8db) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The sum of three consecutive even integers is 138. What is the largest of the three?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@1680bdbbf17d3871f855dcb5: program:reasoning_observation_pending
+- reason-counter@4f48deedd01602eafea4ad61: program:reasoning_observation_pending
+- reason-counter@020c9e94729f89970de01311: program:reasoning_observation_pending
+- reason-counter@90089283df99f5a213a1a379: program:reasoning_observation_pending
+- reason-counter@5fa2fe16c532f05696943ac0: program:reasoning_observation_pending
+- reason-counter@65de78e798627565b2e680e1: program:reasoning_observation_pending
+- reason-counter@7c4d34b0b960ba66a8fcaa9f: program:reasoning_observation_pending
+- reason-counter@0c3f8c831c4d02dc3da1e9d7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The largest integer is 48, obtained by exhaustive parity-constrained search: the only triple of consecutive even integers summing to 138 is (44, 46, 48).","counterconditions":[{"case":"If the integers were not constrained to be even, the lattice would be all integers and the search space would differ.","checker_spec":null,"eval":"observation"},{"case":"If the sum were not divisible by 3 after the parity adjustment, no such triple of consecutive even integers would exist.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because the integers are even, write them as 2k, 2k+2, 2k+4 with sum 6k+6 = 138, giving k = 22. The largest is 2k+4 = 48. Equivalently, an exhaustive search over even integers near 138/3 = 46 confirms the unique triple. The covering principle is parity-constrained enumeration: the evenness requirement restricts candidates to a lattice, and the sum selects a unique lattice point.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1680bdbbf17d3871f855dcb5, reason-counter@4f48deedd01602eafea4ad61
+
+TARGET SRC_002
+{"analogy":null,"claim":"The largest of the three consecutive even integers is 48, because the three integers are 44, 46, and 48, which sum to 138.","counterconditions":[{"case":"If the three numbers were not required to be even (e.g., any three consecutive integers), the offset structure would change and the largest would differ.","checker_spec":null,"eval":"observation"},{"case":"If the problem did not specify exactly three integers, the sum-of-mean principle would not apply in this form.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let the three consecutive even integers be n-2, n, and n+2. Their sum is 3n. Setting 3n = 138 yields n = 46. The three integers are therefore 44, 46, and 48, making the largest 48. This is the covering principle: for any three evenly spaced numbers, the sum is three times the middle value, so the middle value is the arithmetic mean (138/3 = 46).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@020c9e94729f89970de01311, reason-counter@90089283df99f5a213a1a379
+
+TARGET SRC_003
+{"analogy":null,"claim":"The largest integer is 48, derived by first finding the arithmetic mean and then stepping one even interval above it.","counterconditions":[{"case":"If the spacing between consecutive terms were not 2 (i.e., not even integers), the +2 step would not recover the largest.","checker_spec":null,"eval":"observation"},{"case":"If the problem involved a different count of integers, the mean would not equal the middle term.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The arithmetic mean of any three evenly spaced values equals the middle value. The mean of the sum 138 is 138/3 = 46. Since the integers are consecutive even integers, the spacing is 2, so the largest is 46 + 2 = 48. This isolates the mean-step principle as the covering law.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5fa2fe16c532f05696943ac0, reason-counter@65de78e798627565b2e680e1
+
+TARGET SRC_004
+{"analogy":null,"claim":"The largest integer is 48, determined by recognizing that the three terms form a three-term arithmetic progression with common difference 2, so the sum fixes the middle term and the largest is one step beyond it.","counterconditions":[{"case":"If the progression's common difference were not 2, the relation between the sum and the largest term would change.","checker_spec":null,"eval":"observation"},{"case":"If the terms were not evenly spaced, the middle-term-equals-mean principle would fail.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Three consecutive even integers are an arithmetic progression: a, a+2, a+4. The sum is 3a+6 = 138, so 3a = 132 and a = 44. The largest is a+4 = 48. The covering principle is that the sum of an arithmetic progression is the term count times the average (middle) term.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7c4d34b0b960ba66a8fcaa9f, reason-counter@0c3f8c831c4d02dc3da1e9d7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
