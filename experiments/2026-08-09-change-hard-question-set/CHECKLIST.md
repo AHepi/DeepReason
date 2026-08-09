@@ -41,10 +41,11 @@ order. One step per `dr-execute-step` invocation.
 - [ ] 8. (R6/R11) [COMMIT] Commit `experiments/tier_v_checkers/` (20 files).
       done-when: pushed; `git diff --numstat` shows only `experiments/tier_v_checkers/*`; `tools/diff_budget.py <base> --paths experiments/tier_v_checkers` reported and under the 2500-line ceiling.
 
-- [ ] 9. (R3/R4/R11) Assemble `experiments/validation_questions_tier_v.json` from the two drafts (public shape only — no reference solutions inline, checker path instead) and validate.
+- [x] 9. (R3/R4/R11) Assemble `experiments/validation_questions_tier_v.json` from the two drafts (public shape only — no reference solutions inline, checker path instead) and validate.
       done-when: `python experiments/2026-08-09-change-hard-question-set/schema_check.py experiments/validation_questions_tier_v.json --kind both` exits 0; file has exactly 20 entries.
+      DONE: `PASS: experiments/validation_questions_tier_v.json (20 records, kind=both)`.
 
-- [ ] 10. (R3/R4) [COMMIT] Commit `experiments/validation_questions_tier_v.json`.
+- [x] 10. (R3/R4) [COMMIT] Commit `experiments/validation_questions_tier_v.json`.
       done-when: pushed; diff scoped to that one file plus nothing under src/tests/tools.
 
 - [ ] 11. (R7/R8/R9/A4) Source and independently verify 10 Tier O problems (shortlist in SPEC.md, subject to swap if re-verification fails): for each, restate the conjecture in original words, record attribution, source_url, and `still_open_verified` date from an independent check performed THIS step (not copied from SPEC.md's research pass), and `computable_special_case` (or null, stated honestly). Write to `experiments/2026-08-09-change-hard-question-set/draft_tier_o.json`.
