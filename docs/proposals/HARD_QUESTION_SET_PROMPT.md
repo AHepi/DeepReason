@@ -33,6 +33,9 @@ ledger:
 > interesting results worth analysing.
 >
 > Yup. Do it.
+>
+> GLM 5.2 is a frontier model that is very capable. Using smaller
+> older models are best, since they're less optimised.
 
 Context the capture should cite: across 37 historical roots the
 committed attack graphs total 26 edges — current questions are too
@@ -47,8 +50,11 @@ first and match it), plus per-problem metadata:
 - **Tier V (verifiable-hard), 20–30 problems:** hard math and coding
   problems with machine-checkable ground truth (numeric/short answer
   a program can check, or a test suite the sandbox can run). Hard
-  means hard FOR THE MODELS THIS HARNESS RUNS (glm-5.2,
-  gemma4:31b-class) — competition-level, not research-level.
+  means hard FOR SMALLER, OLDER MODELS (gemma4:31b-class and below —
+  the operator's calibration target per the ledgered words above:
+  less benchmark-optimised models give a cleaner measure of harness
+  lift than a frontier model whose training likely contains these
+  problems) — competition-level, not research-level.
   LICENSING IS BINDING: permissively-licensed sources only (e.g.
   MIT/Apache-licensed problem datasets); record source and license
   per problem; a restrictively-licensed problem is referenced, never
@@ -78,7 +84,16 @@ discipline: `git check-ignore` the path first, `chmod 600`, never
 committed).** Two live runs, one per tier, generous budget
 (`--cycles 10 --token-budget 195000`, `continue --budget cycles=2`
 after a budget_exhausted stop, repeat up to twice, per the proven
-recipe), default single-model glm-5.2 config: prove the format flows
+recipe), SOLE-MODEL gemma4:31b config (`deepreason setup --model
+gemma4:31b ...`, no seat flags — gemma fills every role; profile
+pattern from `experiments/2026-08-08-live-two-seat-ab-s6/`'s coder
+profile). This is gemma's FIRST qualification as the sole subject
+(prior batteries were combinations only), so the battery (~14 min) is
+itself a deliverable: record the tier it reaches per role-pair. Full
+tier → run the pilots normally; shallow tier → run them `--shallow`
+and say so plainly — either outcome is the calibration answer the
+operator asked for earlier ("is DeepReason in a position to test
+gemma4:31b as the sole model"). Prove the format flows
 through the harness end to end — question in, typed record out,
 Tier V checker executed against whatever final answer the run
 committed, Tier O hygiene metric computed from the final state.
