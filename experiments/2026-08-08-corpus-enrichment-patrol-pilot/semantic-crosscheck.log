@@ -2,3 +2,19 @@
 [500/9277] roots processed so far, 9.6s elapsed
 [1085/9277] roots processed so far, 18.2s elapsed
 [1504/9277] roots processed so far, 28.8s elapsed
+[2279/9277] roots processed so far, 39.7s elapsed
+[2659/9277] roots processed so far, 44.8s elapsed
+[3289/9277] roots processed so far, 56.2s elapsed
+[3524/9277] roots processed so far, 63.0s elapsed
+[4290/9277] roots processed so far, 75.9s elapsed
+[4505/9277] roots processed so far, 81.8s elapsed
+[5095/9277] roots processed so far, 93.6s elapsed
+[5576/9277] roots processed so far, 101.8s elapsed
+[6186/9277] roots processed so far, 114.6s elapsed
+[6656/9277] roots processed so far, 125.2s elapsed
+[7006/9277] roots processed so far, 136.7s elapsed
+[7551/9277] roots processed so far, 145.7s elapsed
+[8087/9277] roots processed so far, 154.8s elapsed
+[8663/9277] roots processed so far, 169.8s elapsed
+[9087/9277] roots processed so far, 180.9s elapsed
+CROSSCHECK COMPLETE: 9277 rows -> /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/semantic_crosscheck.jsonl

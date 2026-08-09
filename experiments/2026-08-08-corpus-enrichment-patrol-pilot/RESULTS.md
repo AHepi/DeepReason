@@ -410,3 +410,52 @@ documentation already states for capability-channel use generally
 ("stochastic across identical runs; one live attempt is inconclusive on
 its own") — it was true of Phase 2 from the start and should have been
 stated here explicitly rather than left for the operator to surface.
+
+## 2026-08-09 — Addendum: semantic-similarity cross-check (operator-requested)
+
+Not part of the original pre-registration; added after delivery to give
+the non-deterministic Phase 2 judgment an independent, fully
+deterministic cross-check, using DeepReason's own embedding machinery
+(`deepreason.llm.embedder`) rather than another LLM call. Two embedders
+run over all 9277 pairs Phase 2 already scored: `HashingEmbedder`
+(lexical, zero-dependency, exactly deterministic) and
+`NeuralEmbedder(BAAI/bge-small-en-v1.5)` (semantic, ONNX/fastembed,
+CPU-only, no API calls, deterministic within this environment — the
+module's own documented caveat is cross-environment reproducibility,
+not this-run reproducibility). Completed in ~3 minutes, 0 errors.
+
+| | hits (n=1941) | non-hits (n=7336) |
+|---|---|---|
+| Lexical similarity (hashing), mean | 0.546 | 0.478 |
+| **Semantic similarity (neural), mean** | **0.895** | **0.845** |
+| Semantic similarity, stdev | 0.043 (tight) | 0.080 (wider) |
+
+**Reading this plainly.** Every pair in this pilot was already
+constrained to share a problem (Phase 2's own sampling rule), so
+baseline similarity is elevated everywhere — this was never a test of
+"are these about the same thing at all." The real signal is that
+LLM-flagged hits cluster measurably tighter and higher (mean 0.895,
+narrow spread) than non-hits (mean 0.845, wider spread) on the fully
+deterministic semantic measure, and the lowest similarity found among
+ALL 1941 hits was still 0.706 — no hit was a weakly-related, likely-
+spurious pairing by this independent measure. There's also a moderate
+positive correlation (r=0.399) between the LLM's own stated confidence
+and this deterministic similarity score AMONG the hits themselves — the
+more confident the (non-deterministic) judge was, the more topically
+tight the (deterministic) embedding says the pair is. That correlation
+would not be expected to exist if the LLM's contradiction calls were
+close to random noise with respect to the actual claim content.
+
+**What this does and does not prove.** This corroborates that Phase 2's
+hits are, as a population, sitting where genuine same-topic
+disagreements should sit — not scattered randomly across the similarity
+range the way arbitrary/hallucinated pairings would be expected to.
+It does NOT independently verify any single hit's TRUTH (an embedder
+measures relatedness, not truth-value polarity — two claims that
+straightforwardly AGREE would also show high similarity; similarity
+alone cannot distinguish "same topic, agree" from "same topic,
+disagree"). It also does not test the non-determinism question directly
+— no pair was asked twice — it tests a different, complementary
+question: is the population of hits topically coherent, or the mechanism
+finding noise. Raw output: `semantic_crosscheck.jsonl` (9277 rows, both
+similarity scores per pair, committed verbatim).
