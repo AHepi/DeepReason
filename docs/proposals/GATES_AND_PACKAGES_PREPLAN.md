@@ -47,13 +47,19 @@ and every opt-in the current spec designs.
 - **Stage 1 (approval-ready now)**: the opt-in tranche's surfaces ship
   as STATIC mint-time gates — frozen in the manifest, no dynamic
   machinery, trivial hardening.
-- **Stage 2 (the pilot, one gate one signal one package)**: the
-  anti-attractor package — temporarily close the scratch→conjecture
-  gate when the convergence signal fires (gate-block rate, the signal
-  BASIN_REPORT measured as cleanly separating healthy from orbiting
-  runs and which the liveness census must confirm consumable). Builds
-  and hardens the typed-flip event machinery on the smallest real
-  surface, with a live signal whose validity is already proven.
+- **Stage 2 — BENCHED (operator, 2026-08-09: "I think I'm going to
+  bench the mid run gate flips for now since it's not necessary for
+  modes. But abstracting signals is still a helpful move since
+  historical runs have proven that dynamic behaviour can be
+  helpful.")**: no dynamic flip machinery for now; all gates are
+  static and mint-time frozen, which modes do not need more than.
+  What survives of this stage immediately: SIGNAL ABSTRACTION as a
+  static surface — the signals (convergence/gate-block rate, referee
+  verdicts, and the liveness census's confirmed-live set) become
+  typed, uniformly consumable outputs that packages, config, and
+  operators read at run boundaries; nothing consumes them mid-run to
+  flip anything. The anti-attractor pilot returns when the operator
+  unbenches dynamic flips.
 - **Stage 3 (only after the pilot survives)**: the package vocabulary
   generalizes; modes = named packages; S7 consumes. Dials (D4's
   load-mix weights) stay a separate, continuous surface: gates are
