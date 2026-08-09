@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a5246d6a0f900c0661ca1730: program:reasoning_observation_pending
+- reason-counter@151150535b80d9a8975e6e57: program:reasoning_observation_pending
+- reason-counter@1973c3afe401b13665fc89c5: program:reasoning_observation_pending
+- reason-counter@3f83db6200401eac109b5a81: program:reasoning_observation_pending
+- reason-counter@ce54c81edb9d6ee2f6b88a6a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The large service with superior internal redundancy is more resilient because the 'Complexity Tax' of managing a decentralized network introduces more frequent and severe correlated failures through human operational error.","counterconditions":[{"case":"The large service's internal redundancy is managed by a coordination layer (e.g., Paxos/Raft) that reaches a complexity threshold where it becomes the primary failure vector (the 'Redundancy Paradox' in SCR_004).","checker_spec":null,"eval":"observation"},{"case":"The decentralized network employs fully automated, immutable deployment pipelines that eliminate human configuration error.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"While a large service has a single, well-understood failure domain, a decentralized network increases the total surface area of configuration. The lack of unified orchestration leads to 'configuration drift' and inconsistent security patching. Correlated failures emerge not from the code, but from shared human behaviors or shared tooling (e.g., a common monitoring agent failing across all nodes, as posed in SCR_006), creating a 'meta-correlation' that outweighs the benefits of implementation diversity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a5246d6a0f900c0661ca1730, reason-counter@151150535b80d9a8975e6e57
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network of small services is more resilient to correlated failure than a single large service because it replaces 'homogeneous redundancy' with 'heterogeneous diversity', shifting the failure boundary from a single point of systemic collapse to a fragmented landscape of partial outages.","counterconditions":[{"case":"The decentralized network converges on a 'standard' stack for cost efficiency (the 'Diversity Debt' described in SCR_003), erasing the heterogeneity advantage.","checker_spec":null,"eval":"observation"},{"case":"The failure is triggered by a universal protocol-level vulnerability (e.g., a flaw in the shared API specification) rather than an implementation-level bug.","checker_spec":null,"eval":"observation"},{"case":"The coordination overhead of the decentralized network introduces a new, centralized point of failure in the discovery or routing layer.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The large service relies on internal redundancy (replication), which creates a high-density target for 'common-mode failures' (e.g., a single bug in the consensus logic or a shared kernel version). In contrast, decentralized services typically utilize diverse hardware, OS versions, and implementation stacks. This 'Architectural Distance' (as hinted in SCR_007) ensures that a trigger causing a crash in one node is unlikely to be present in another, thereby converting a potential total system failure into a series of uncorrelated, localized events.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1973c3afe401b13665fc89c5, reason-counter@3f83db6200401eac109b5a81, reason-counter@ce54c81edb9d6ee2f6b88a6a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

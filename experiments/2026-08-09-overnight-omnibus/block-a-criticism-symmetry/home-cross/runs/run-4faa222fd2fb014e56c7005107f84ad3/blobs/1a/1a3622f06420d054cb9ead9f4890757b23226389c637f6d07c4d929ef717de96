@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c3cc869894a9bfe5d47ec9e9: program:reasoning_observation_pending
+- reason-counter@e850b94d670cb4fc246fec9e: program:reasoning_observation_pending
+- reason-counter@2d44f8d84fa69cd3476fa5f2: program:reasoning_observation_pending
+- reason-counter@7fc0b3ca5da351a8be6872fe: program:reasoning_observation_pending
+- reason-counter@1fd27aa1c7f1d7495f6b9be4: program:reasoning_observation_pending
+- reason-counter@c494e594260a994a73e58d2b: program:reasoning_observation_pending
+- reason-counter@42600e364b9f152ab3f59abc: program:reasoning_observation_pending
+- reason-counter@5b6cb615d72218f8e056962d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Decentralized networks are more resilient because they constrain the 'Blast Radius' of internal logic errors, provided that failure modes are truly independent.","counterconditions":[{"case":"The decentralized services share a common upstream API or dependency.","checker_spec":null,"eval":"observation"},{"case":"The network utilizes a shared global load balancer that fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Physical and administrative isolation prevents a single memory corruption or logic bug in one service's codebase from propagating to others. In a large service, shared memory spaces or shared internal APIs allow a single 'poison pill' request to crash all redundant instances sequentially (cascading failure).","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c3cc869894a9bfe5d47ec9e9, reason-counter@e850b94d670cb4fc246fec9e
+
+TARGET SRC_002
+{"analogy":null,"claim":"A decentralized network is less resilient than a large redundant service because 'diversity' is a surface-level illusion that masks deep-stack monocultures (e.g., shared kernel, cloud provider, or library vulnerabilities).","counterconditions":[{"case":"The network mandates strict, verified architectural distance between nodes.","checker_spec":null,"eval":"observation"},{"case":"Services are deployed across heterogeneous hardware and OS kernels.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The 'Diversity Debt' mechanism: operators of small services optimize for cost and ease of deployment by adopting the same 'industry standard' stacks, creating a hidden monoculture that allows a single vulnerability to trigger a synchronized collapse across nominally independent services.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2d44f8d84fa69cd3476fa5f2, reason-counter@7fc0b3ca5da351a8be6872fe
+
+TARGET SRC_003
+{"analogy":null,"claim":"Decentralized networks are fundamentally less resilient due to 'Coordination Decay', where the lack of central authority prevents rapid, synchronized patching of emerging shared vulnerabilities.","counterconditions":[{"case":"The network employs an automated, decentralized patching protocol (e.g., smart contracts).","checker_spec":null,"eval":"observation"},{"case":"The cost of failure for small operators is high enough to incentivize immediate patching.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"While a large service can deploy a global fix in minutes, a decentralized network relies on the varying priorities and capabilities of independent operators. This creates a 'vulnerability window' where the network remains susceptible to a correlated attack longer than a centralized entity would.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1fd27aa1c7f1d7495f6b9be4, reason-counter@c494e594260a994a73e58d2b
+
+TARGET SRC_004
+{"analogy":null,"claim":"True independence of failure modes in a decentralized network is distinguished from apparent uncorrelation by the presence of 'Cross-Domain Temporal Correlation' in telemetry.","counterconditions":[{"case":"The sample size of failing nodes is too small to establish statistical significance.","checker_spec":null,"eval":"observation"},{"case":"The shared cause is an 'invisible' variable not captured in telemetry.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If failures occur across diverse services but align precisely with a shared external event (e.g., a leap second, a specific BGP update, or a global cloud region outage), the failures are correlated. True independence is evidenced by a Poisson distribution of failures over time that does not correlate with any shared environmental variable.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@42600e364b9f152ab3f59abc, reason-counter@5b6cb615d72218f8e056962d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

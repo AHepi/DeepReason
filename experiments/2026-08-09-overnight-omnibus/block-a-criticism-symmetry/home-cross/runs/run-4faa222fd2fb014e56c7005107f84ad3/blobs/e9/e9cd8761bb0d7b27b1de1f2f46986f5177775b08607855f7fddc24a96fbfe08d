@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-420e179aa1747527c5ee50dbea4f3dfc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a decentralized network of small, independently operated services is more resilient to correlated failure than one large service with strictly more total internal redundancy. Identify what evidence would distinguish failure modes that are truly independent from failures that merely appear uncorrelated until a shared cause is found.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@3937c74c6476260c42a3b499: program:reasoning_observation_pending
+- reason-counter@364ca84b7246f17736c43822: program:reasoning_observation_pending
+- reason-counter@d651f82ec8ac033cda25cbf2: program:reasoning_observation_pending
+- reason-counter@1c27c908b2461bbbfe5b7333: program:reasoning_observation_pending
+- reason-counter@e7f4d53768e20815d3e22e96: program:reasoning_observation_pending
+- reason-counter@9b23ff58eb0cfbbfe5ed6cc5: program:reasoning_observation_pending
+- reason-counter@bc89a7a4435f079208d3bf65: program:reasoning_observation_pending
+- reason-counter@4cd5a291f2adbed0c2bee3e0: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A decentralized network of small, independently operated services is more resilient to correlated failure than a large redundant service because it replaces 'homogeneous redundancy' with 'architectural diversity,' preventing a single trigger from causing a total system collapse.","counterconditions":[{"case":"The decentralized operators converge on a 'standard' industry stack (Diversity Debt), effectively recreating the homogeneity of a large service.","checker_spec":null,"eval":"observation"},{"case":"The services share a critical common dependency (e.g., a single DNS provider or a shared cloud region) that introduces a hidden correlation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In a large service, internal redundancy typically involves identical replicas of the same software stack and configuration; a single 'poison pill' request or zero-day exploit triggers a simultaneous crash across all redundant nodes. A decentralized network utilizes diverse operating systems, language runtimes, and configurations across different operators, ensuring that a failure trigger for one service is unlikely to be compatible with th
+commitments: reasoning-envelope-wf, reason-counter@3937c74c6476260c42a3b499, reason-counter@364ca84b7246f17736c43822
+
+TARGET SRC_002
+{"analogy":null,"claim":"The distinction between truly independent failures and those that merely appear uncorrelated lies in the 'Error Signature Diversity' and the statistical improbability of temporal coincidence.","counterconditions":[{"case":"The failure manifests as a generic 'Timeout' or 'Connection Refused' across all nodes, masking the internal error signature.","checker_spec":null,"eval":"observation"},{"case":"Monitoring data is siloed across independent operators, preventing the aggregation of signatures needed to identify correlation.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"To distinguish failure modes, one must analyze the stack traces and error logs of failing nodes. Truly independent failures exhibit high 'Error Signature Diversity' (different causes, different symptoms). Correlated failures, even those appearing temporally staggered (Slow-Burn), exhibit identical or highly similar error signatures (e.g., the same memory address fault or exception type). If the coincidence of these signatures exceeds the expected Mean Time Between Failures (MTBF) for independent components, a shared latent cause is inferred.","premises":[],
+commitments: reasoning-envelope-wf, reason-counter@d651f82ec8ac033cda25cbf2, reason-counter@1c27c908b2461bbbfe5b7333
+
+TARGET SRC_003
+{"analogy":null,"claim":"A decentralized network of small services is more resilient to correlated failure than a large redundant service, provided the network maintains high 'Architectural Distance' (heterogeneity).","counterconditions":[{"case":"Operators converge on a single 'industry standard' stack (Diversity Debt), neutralizing heterogeneity.","checker_spec":null,"eval":"observation"},{"case":"The network shares a critical common dependency (e.g., a single DNS provider or cloud region) that outweighs architectural diversity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The large service's internal redundancy typically relies on homogeneous replication (same OS, same binary, same config), creating a single failure domain where a specific trigger (e.g., a 'poison pill' request) propagates instantly. In contrast, a decentralized network of independent operators naturally introduces heterogeneity in software versions, hardware, and configuration, ensuring that a trigger crashing one node is unlikely to be present in another.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"un
+commitments: reasoning-envelope-wf, reason-counter@e7f4d53768e20815d3e22e96, reason-counter@9b23ff58eb0cfbbfe5ed6cc5
+
+TARGET SRC_004
+{"analogy":null,"claim":"Decentralized networks are fundamentally less resilient because the 'Diversity Debt' leads to an inevitable convergence on shared failure modes.","counterconditions":[{"case":"Strong economic or regulatory incentives exist to maintain architectural diversity (e.g., sovereign cloud requirements).","checker_spec":null,"eval":"observation"},{"case":"The 'standard' stack is so robust that it is objectively superior to any diverse alternative.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Economic pressure forces small operators to adopt the same optimized, open-source 'golden images' and managed services. This creates a 'phantom' decentralized network that is actually a homogeneous system without the benefit of a centralized coordinator to manage the failures, combining the worst of both worlds: shared failure modes and fragmented recovery.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bc89a7a4435f079208d3bf65, reason-counter@4cd5a291f2adbed0c2bee3e0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

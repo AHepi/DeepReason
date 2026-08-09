@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 fails the problem's requirement to identify evidence that distinguishes truly independent failures from failures merely appearing uncorrelated. Its mechanism asserts 'Infrastructure Convergence' (shared TCP/IP, BGP, DNS, cloud) negates architectural independence, but it provides no causal evidence protocol to determine whether an observed uncorrelated pattern is actually driven by these shared primitives. The problem demands a distinguishing evidentiary standard; SRC_001 instead assumes correlation by assertion without specifying the test or observation that would reveal the hidden shared cause.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's causal mechanism claims that the 'strictly more internal redundancy' in the large service causes non-linearly growing coordination complexity (meta-failures), making the decentralized network more resilient. But this conflates redundancy with coordination topology: a large service with strictly more redundancy could use independent, non-coordinated replicas (e.g., active-active stateless deployments behind a load balancer, or eventually-consistent local copies), which do not incur Raft/Paxos consensus overhead. By equating all increased internal redundancy with a global consensus layer, the mechanism fails to causally demonstrate that redundancy itself—rather than a specific, optional coordination design choice—drives correlated failure.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_003's mechanism claims 'Error Signature Diversity' distinguishes independent from merely uncorrelated failures. However, its own countercondition—Heisenbugs that manifest differently across environments despite a single root cause—defeats the proposed causal mechanism: if one shared cause can produce diverse signatures, then signature diversity is not a reliable distinguishing signal for true independence. The target does not specify a causal test that separates signature-diverse-but-caused-by-one-trigger cases from genuinely independent causes; it merely names the phenomenon and leaves the evidence criterion equivocal.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "SRC_004's causal mechanism is that 'Architectural Distance' (heterogeneous stacks) prevents propagation of systemic software bugs, making decentralization more resilient than a large service with strictly more internal redundancy. This mechanism is incomplete as a causal claim because it fails to account for correlated failure from shared upstream dependencies: it lists a common DNS provider as a countercondition, but the mechanism does not explain how architectural distance provides any resilience advantage against exactly the class of correlated failures the problem asks about. A large internally redundant service can also use heterogeneous stacks across its redundant nodes, so 'Architectural Distance' is not a property unique to decentralization and cannot causally explain why the decentralized network is more resilient.",
+      "counterexample": null
+    }
+  ]
+}

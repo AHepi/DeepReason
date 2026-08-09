@@ -1,0 +1,54 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 02f6c610d992 integrates with SRC_005 by proposing that 'Infrastructure Correlation' is not a static state but a dynamic convergence process; it is refuted if the network exhibits 'Architectural Distance' that persists despite the use of shared global primitives.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.8,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 02f6c610d992 contradicts SRC_001 by asserting that the 'diversification of the failure domain' is a superficial layer that depends on the underlying substrate; it is refuted if a heterogeneous software stack prevents a correlated crash despite a shared runtime environment.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.6,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 02f6c610d992 reduces to the 'Coordination Decay' mechanism in SRC_004, arguing that the inability to patch is the primary driver of correlated failure in decentralized systems; it is refuted if automated, decentralized patching protocols eliminate the vulnerability window.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 02f6c610d992 abstracts the telemetry requirements of SRC_003 into a general principle of 'Cross-Domain Temporal Correlation'; it is refuted if a Poisson distribution of failures is observed despite the presence of shared environmental variables.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 02f6c610d992 shares mechanism with SRC_002 regarding 'Hidden Common-Mode Failure', specifically that 'false independence' is a product of substrate monoculture; it is refuted if services are hosted on truly heterogeneous infrastructure across diverse geographic jurisdictions.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 02f6c610d992 inherits the 'Infrastructure Convergence' thesis from SRC_005, proposing that any claim of resilience in a decentralized network depends on the independence of its physical layer; it is refuted if application-level bugs remain the primary failure mode regardless of infrastructure sharing.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.3,
+      "evidence_refs": []
+    }
+  ]
+}
+```

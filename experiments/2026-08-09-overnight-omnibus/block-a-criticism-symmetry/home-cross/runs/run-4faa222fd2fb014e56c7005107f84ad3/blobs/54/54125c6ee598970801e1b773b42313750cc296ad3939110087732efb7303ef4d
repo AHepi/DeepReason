@@ -1,0 +1,38 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The 'Redundancy Paradox' mechanism asserts that a coordination layer becomes a single point of failure as redundancy increases, but this conflates redundancy with distribution. A large service with strictly more total internal redundancy can use partitioned/sharded coordination (multiple independent consensus groups) or formally verified consensus logic. The mechanism provides no causal link showing why added redundancy must necessarily increase coordination complexity rather than, e.g., reducing it via isolated failure domains.",
+      "counterexample": [
+        "A large service with N independent replicas partitioned into K isolated consensus groups (K>1), where each group fails independently and total system capacity degrades gracefully, contradicts the claim that added redundancy necessarily creates a single global coordination-layer failure."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 argues against decentralization by claiming coordination decay causes slow patch propagation, but its causal mechanism conflates 'decentralized operation' with 'slow deployment.' A large monolithic service also has staged rollout, change-control windows, and canary requirements that delay global patching; conversely, a decentralized network of small services can employ automated push-based update mechanisms with per-operator opt-out, producing faster effective patching than a risk-averse monolith. The argument does not establish that operational independence causally implies slower remediation.",
+      "counterexample": [
+        "A decentralized network using containerized services with automatic image refresh and verified update manifests can patch all operators within minutes, while a large monolithic service under strict ITIL change-control with 24-hour maintenance windows deploys the equivalent fix slower."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_03 proposes distinguishing truly independent failures from merely apparent uncorrelation by looking for 'absence of temporal synchronization in onset' (staggered timeline). But this evidentiary criterion fails: failures triggered by a shared external cause can manifest with staggered onsets due to different load patterns, caching, or propagation delays, yielding a staggered timeline that SRC_03 would classify as independent. Conversely, independent bugs triggered by a common external stimulus (e.g., a date-bound event like Y2K) can produce synchronized onsets that SRC_03 would misclassify as non-independent. The proposed evidence does not reliably distinguish the two failure classes.",
+      "counterexample": [
+        "Two independent services with different bugs both triggered by a leap-second event: one crashes immediately, the other crashes minutes later due to a delayed time-sync. The staggered onset looks independent under SRC_003's criterion, but the cause is shared."
+      ]
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "SRC_04 argues that decentralized services mask shared infrastructure dependencies (DNS, cloud, BGP), but its own countercondition concedes the issue vanishes under heterogeneous infrastructure. The argument does not establish that decentralized small services are necessarily or typically co-located on shared substrate; it provides no causal mechanism for why a decentralized network of independently operated services would converge on the same infrastructure provider, nor does it compare whether a large service with strictly more total internal redundancy can realistically avoid those same shared primitives.",
+      "counterexample": [
+        "A large monolithic service also depends on the same critical infrastructure layers (DNS, BGP, cloud regions); having more internal replicas within the same provider does not necessarily remove that shared-substrate risk, so the comparative disadvantage is not established."
+      ]
+    }
+  ]
+}
+```
