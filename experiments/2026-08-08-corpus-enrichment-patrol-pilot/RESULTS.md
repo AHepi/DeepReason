@@ -160,4 +160,4 @@ resume policy, applied identically each time.
 | hard2-h2-01 | hard2 | committed | 12 (10+2 continue) | 95/95 | 0 (expected) | third foreign-criticism gap case, closed by continue |
 | hard2-h2-08 | hard2 | committed | 12 (10+2 continue) | 100/100 | 0 (expected) | fourth foreign-criticism gap case, closed by continue |
 | hard2-h2-15 | hard2 | committed | 12 (10+2 continue) | 115/116 | 0 (expected) | fifth foreign-criticism gap case, closed by continue |
-| hard2-h2-22 | hard2 | in progress | - | - | - | tracked-background task b083djzgk (final question) |
+| hard2-h2-22 | hard2 | continuing | 10 (+2 pending) | 77/? | - | sixth foreign-criticism gap case (final question); continue in flight (task bd7pef2jk) |
