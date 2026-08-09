@@ -115,13 +115,36 @@ automatically) instead of relying on a Unix process surviving on its
 own, which is the mechanism that kept failing. `base-q13` is retrying
 under this new mechanism now; further progress is appended below.
 
+## 2026-08-09 — first non-crash finding: budget_exhausted stops can land replay_valid=false
+
+`hard-h01`'s first `reason` call completed cleanly (`reason_rc=0`, state
+`completed`, `stop_reason: budget_exhausted`, no process interruption
+involved at all) — but `verify_root` still returned `replay_valid:
+false`, citing two accepted artifacts with `foreign-criticism: 0 foreign
+schools; policy requires 1`. Checked whether this was somehow caused by
+this tranche's own coder-seat binding before treating it as a general
+harness fact: `llm_calls_by_role` on this root shows ONLY
+`argumentative_critic`/`conjecturer` on `glm-5.2` — `gemma4:31b` never
+fired (consistent with the coder/encoder dead-seat finding), so the
+seat binding is not the cause. This matches a pattern already named in
+CLAUDE.md/S6's own RESULTS.md ("foreign-criticism verify violations
+...  at natural stop points") for a different root cause (there,
+gemma4:31b-as-conjecturer outpacing the critic) — here the same
+SYMPTOM shows up for the mundane reason CLAUDE.md's own Live-runs
+section predicts: a budget ceiling can be hit before every accepted
+claim has accumulated its required cross-school criticism. This is not
+evidence corruption and not a crash; it is the intended trigger for the
+prereg's own resume policy (`continue --budget cycles=2` on any
+`budget_exhausted`/`converged` stop) — applied here exactly as
+pre-registered, not as an improvised workaround.
+
 ## 2026-08-08 — Phase 1 progress (running table, updated per root)
 
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |
 |---|---|---|---|---|---|---|
 | base-q01 | base | committed | 12 (10+2 continue) | 110/113 | 0 (expected, P-CEPP-1) | recovered from failure #1, see above |
 | base-q13 | base | committed | 10 | 93/94 | 0 (expected) | 3rd attempt succeeded under tracked-background strategy (task beb9axlw2) |
-| hard-h01 | hard | in progress | - | - | - | tracked-background task br9pg3lk8 |
+| hard-h01 | hard | continuing | 10 (+2 pending) | 84/86 | 0 (expected) | genuine (non-crash) replay_valid=false at first stop, see note below; continue in flight (task bhwyj8zwi) |
 | hard-h05 | hard | not started | - | - | - | |
 | hard-h10 | hard | not started | - | - | - | |
 | hard-h15 | hard | not started | - | - | - | |
