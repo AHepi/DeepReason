@@ -26,11 +26,17 @@ order. One step per `dr-execute-step` invocation.
 - [x] 5. (R6) [COMMIT] Commit the two Tier V drafts.
       done-when: pushed; `git diff --numstat` scoped to the tranche directory only.
 
-- [ ] 6. (R6) Write the 10 math checkers, `experiments/tier_v_checkers/tv-m0{1..10}_checker.py` (normalize+compare against `accept`, mirroring `scripts/validate.py`'s `normalize()`), and RUN each against its own known answer.
+- [x] 6. (R6) Write the 10 math checkers, `experiments/tier_v_checkers/tv-m0{1..10}_checker.py` (normalize+compare against `accept`, mirroring `scripts/validate.py`'s `normalize()`), and RUN each against its own known answer.
       done-when: for each of the 10 scripts, `python experiments/tier_v_checkers/tv-mNN_checker.py "<known-answer>"` prints/exits PASS (paste all 10 results).
+      DONE (all 10, known-answer input → PASS rc=0; +1-off wrong input → FAIL rc=1, mutation-proving each checker can actually fail):
+      tv-m01 PASS 44 / FAIL 45 | tv-m02 PASS 13 / FAIL 14 | tv-m03 PASS 201 / FAIL 202 |
+      tv-m04 PASS 16592 / FAIL 16593 | tv-m05 PASS 835 / FAIL 836 | tv-m06 PASS 31 / FAIL 32 |
+      tv-m07 PASS 2 / FAIL 3 | tv-m08 PASS 38 / FAIL 39 | tv-m09 PASS 9 / FAIL 10 | tv-m10 PASS 144 / FAIL 145.
+      ALL_OK.
 
-- [ ] 7. (R6) Write the 10 coding checkers, `experiments/tier_v_checkers/tv-c0{1..10}_checker.py` (each embeds that HumanEval problem's own `check(candidate)` test function), and RUN each against its problem's reference solution.
+- [x] 7. (R6) Write the 10 coding checkers, `experiments/tier_v_checkers/tv-c0{1..10}_checker.py` (each embeds that HumanEval problem's own `check(candidate)` test function), and RUN each against its problem's reference solution.
       done-when: for each of the 10 scripts, running it with the reference solution loaded prints/exits PASS (paste all 10 results) — a checker that has not produced a passing run is not committed (R6).
+      DONE: all 10 PASS rc=0 against the embedded reference solution (`python tv-cNN_checker.py` with no args). One bug found and fixed during authoring: tv-c07 (HumanEval/32, find_zero) initially raised `NameError: name 'poly' is not defined` because its test calls a PROMPT-level helper (`poly`) that a naive per-call `exec` into a throwaway dict didn't expose to `check()`'s own module scope; fixed by `exec(PROMPT, globals())` once at module load so helper functions defined in the prompt are visible everywhere the checker runs, same as any real HumanEval harness. Mutation-proof: all 10 also run against a deliberately wrong candidate (`return '__WRONG_SENTINEL__'` for any input) and all 10 correctly FAIL rc=1 (tv-c07 raises TypeError uncaught, still rc=1 — a genuine reject, not a false pass).
 
 - [ ] 8. (R6/R11) [COMMIT] Commit `experiments/tier_v_checkers/` (20 files).
       done-when: pushed; `git diff --numstat` shows only `experiments/tier_v_checkers/*`; `tools/diff_budget.py <base> --paths experiments/tier_v_checkers` reported and under the 2500-line ceiling.
