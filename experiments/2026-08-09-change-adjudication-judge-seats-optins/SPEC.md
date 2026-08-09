@@ -935,6 +935,22 @@ Per Amendment 2 (C11): every fork below is priced as roads with a
 recommendation; none is taken here. This window ends at SPEC.md, not at a
 chosen implementation.
 
+**RESOLVED by Amendment 5** (operator, "every decision-sheet recommendation
+is approved as written"): every road below is now APPROVED at the
+recommendation, annotated inline. Additionally, R13/Road E (the pre-school
+criticism circuit's v6 transaction contract) is APPROVED and folded into
+§2(c) as its concrete surface, to be built FIRST per the operator's
+explicit ordering requirement. The whole tranche is scoped STATIC/mint-time
+-frozen only — Amendment 5's benching directive defers every dynamic,
+mid-run, signal-consuming mechanism this document named as future work
+(§5.2's live standoff-summons wiring, §5.6's M1-M3 signal-adaptive
+throttle, R12's Road C where it implied dynamic behavior) to a later
+tranche, per `docs/proposals/GATES_AND_PACKAGES_PREPLAN.md` (merged to
+main at `b19c5661b`; Stage 1 = what this tranche builds, Stage 2 = dynamic
+flips, explicitly BENCHED there). Signal abstraction survives in STATIC
+form only (R15): a uniform typed read surface over the liveness census's
+confirmed-live signals, consumable at run boundaries, never mid-run.
+
 ## 5.1 — Reading of C3's "mint-time frozen into the manifest"
 
 - **Road A (recommended)**: Config-knob-value-projected-into-existing-

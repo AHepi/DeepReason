@@ -282,3 +282,88 @@ R13 (artifact, new): a claim to verify and trace: does a pre-school,
 non-school-routed criticism dispatch path still exist in the code, and if
 so, can it be reactivated as the school-free criticism circuit when
 "schools: opt-in" is turned off?
+
+### Amendment 5 (2026-08-09, operator's own words, "the spec is APPROVED on this basis")
+
+> Let's do it. And I think I'm going to bench the mid run gate flips for
+> now since it's not necessary for modes. But abstracting signals is still
+> a helpful move since historical runs have proven that dynamic behaviour
+> can be helpful.
+>
+> Binding readings, confirmed by the monitor: every decision-sheet
+> recommendation is approved as written — 5.1 Road A (mint-time), 5.2 Road
+> A (judge opt-in surface ships first; the standoff-summons wiring is its
+> own later tranche), 5.3 Road A (no calibrated_status verifier), 5.4 Road
+> A with Road B as the named follow-up, 5.5 Road B (no new critic/judge
+> seat vocabulary — existing school/family levers only), and Road E folded
+> into the legacy-criticism opt-in as its concrete surface. The benching
+> amendment scopes the whole tranche: every gate in this implementation is
+> STATIC and mint-time frozen — no dynamic flip machinery, no mid-run
+> signal consumption, nothing that changes behavior after compile. Signal
+> abstraction stays IN scope in its static form: the liveness census's
+> confirmed-live signals (config-critique verdicts, gate-block/convergence
+> counts, and peers) get a uniform typed read surface consumable at run
+> boundaries (report/audit/operator), so future packages read one shape
+> instead of scraping logs — but nothing consumes them mid-run to change
+> anything. docs/proposals/GATES_AND_PACKAGES_PREPLAN.md (now on main,
+> Stage 2 marked BENCHED) records this staging; cite it.
+>
+> Proceed to dr-plan-steps: convert the approved SPEC plus this amendment
+> into CHECKLIST.md. Ordering requirement: Road E first — the v6
+> transaction contract for the school-free argumentative-criticism phase is
+> the smallest change with the largest decoupling, and everything else
+> layers on a tree where criticism no longer silently depends on schools;
+> then the opt-in surfaces (adjudication, judge seats, schools, legacy path
+> — each defaulting byte-identical to today, each with its
+> absence-tolerant reader before any writer per the standing template);
+> then the static signal-read surface; map documents in the same commits as
+> the behavior they describe. Every step: one done-criterion, R/S
+> citations, tools/diff_budget.py at every [COMMIT] step against a computed
+> ceiling. Frozen surfaces: honor the SPEC's own contact forecast exactly
+> — any contact the forecast marked as requiring authorization is
+> presented AT THE CHECKLIST STOP as a named, scoped grant request (the R19
+> wording pattern), never assumed; any contact the forecast did not predict
+> is a hard STOP. Reader tests are partition claims. Commit and push
+> CHECKLIST.md, then STOP for review before any dr-execute-step.
+
+### Requirement resolution from Amendment 5
+
+The decision sheet's six forks (SPEC.md §5.1-5.5 plus Road E) are RESOLVED,
+not open questions any more:
+
+- §5.1: Road A (Config-knob-value-projected-into-existing-manifest-field).
+- §5.2: Road A (opt-in surface ships first; live standoff-summons wiring —
+  the O1a-style even-cycle detection wired into the scheduler, and the
+  suspended-pair→pairwise-trial connection — is its own later tranche,
+  NOT this one; §5.6's M1-M3 rungs and R12's Road C also move to that
+  later tranche, per the benching amendment's static-only scope).
+- §5.3: Road A (`calibrated_status` stays inert; no verifier built).
+- §5.4: Road A now, Road B named as the follow-up if disclosure alone
+  proves insufficient.
+- §5.5: Road B (no new critic/judge seat vocabulary; existing school/family
+  routing gets an operator-facing surface instead).
+- R13's Road E: folded into the legacy-criticism-paths opt-in (§2(c)) as
+  its concrete surface, and — per the operator's explicit ordering
+  requirement — built FIRST in the checklist, ahead of the other three
+  opt-ins.
+
+R14 (process, new): the entire implementation is STATIC/mint-time-frozen
+gates only. No dynamic flip machinery, no mid-run signal consumption. This
+benches: the live O1a-summons wiring (§5.2/§5.6's M1-M2), the adaptive
+judge-throttle-from-signals design (§5.6 M2), and any other mid-run
+gate-flip mechanism this SPEC's decision sheet gestured toward as future
+work. `docs/proposals/GATES_AND_PACKAGES_PREPLAN.md` (merged to main,
+commit `b19c5661b`) is the authority for this staging — Stage 1 (static
+mint-time gates) is what this tranche builds; Stage 2 (dynamic flips) is
+explicitly BENCHED there.
+
+R15 (behavior/artifact, new): signal abstraction survives, in STATIC form
+only — a uniform, typed READ surface over the liveness census's
+confirmed-live signals (config-critique verdicts from `config_referee`,
+gate-block/convergence counts, and peers), consumable at run boundaries
+(report/audit/operator tooling) — never consumed mid-run to change
+behavior.
+
+C13 (process): "Proceed to dr-plan-steps... Commit and push CHECKLIST.md,
+then STOP for review before any dr-execute-step." — the next and only
+deliverable this phase is CHECKLIST.md; no step of it executes yet.
