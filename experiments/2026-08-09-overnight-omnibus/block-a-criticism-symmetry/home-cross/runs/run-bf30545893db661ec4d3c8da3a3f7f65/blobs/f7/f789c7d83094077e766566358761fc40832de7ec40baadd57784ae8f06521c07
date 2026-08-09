@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e2a0293673f03f17a9e59fa1: program:reasoning_observation_pending
+- reason-counter@4cddbebf74acf2571258fcf4: program:reasoning_observation_pending
+- reason-counter@2e704e5779612e4d77b91fea: program:reasoning_observation_pending
+- reason-counter@425c7fd4f035c7c602bb7713: program:reasoning_observation_pending
+- reason-counter@ad3002c0cd65b3108f922477: program:reasoning_observation_pending
+- reason-counter@c4234824fdd8fb59833367af: program:reasoning_observation_pending
+- reason-counter@234471579fe700b9e8713087: program:reasoning_observation_pending
+- reason-counter@6612b8c94f20c9e9ece479dc: program:reasoning_observation_pending
+- reason-counter@42da72a968feca536ee6469e: program:reasoning_observation_pending
+- reason-counter@12bc1b4f2887df81c0ff1a19: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The single expert is more reliable because 'objectively verifiable outcomes' in complex domains often depend on 'latent variables' that checklists cannot capture, making the panel's reliability a fragile artifact of the checklist's specific scope.","counterconditions":[{"case":"The task is 'additive' (the outcome is the sum of independent binary checks).","checker_spec":null,"eval":"observation"},{"case":"The expert is suffering from 'overfitting' (applying a pattern that no longer fits the current case).","checker_spec":null,"eval":"observation"},{"case":"The checklist was authored by a 'super-expert' who successfully captured all latent variables.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The expert's intuition is a compressed representation of high-dimensional data. A checklist is a low-dimensional projection of that data. In tasks where the 'verifiable outcome' depends on the interaction of variables (rather than a sum of parts), the checklist will systematically miss the 'interaction effect'. The expert's reliability is higher because their mechanism\u2014subconscious pattern matching\u2014operates on the full dim
+commitments: reasoning-envelope-wf, reason-counter@e2a0293673f03f17a9e59fa1, reason-counter@4cddbebf74acf2571258fcf4, reason-counter@2e704e5779612e4d77b91fea
+
+TARGET SRC_002
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'active friction'\u2014documented disagreements and subsequent resolutions within the panel's internal deliberation process.","counterconditions":[{"case":"The panel is subject to high social pressure or a strong hierarchy (Groupthink), suppressing friction.","checker_spec":null,"eval":"observation"},{"case":"The checklist is so unambiguous that genuine reliability requires no deliberation.","checker_spec":null,"eval":"observation"},{"case":"The 'friction' is noise (pedantic disagreement) rather than signal (error detection).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Mere compliance is characterized by linear, frictionless adherence to the checklist (a 'rubber stamp' process). Genuine reliability emerges from the 'error-correction' mechanism of a panel: when members disagree on a checklist item, they are forced to provide evidence for their interpretation. The evidence of reliability is therefore not the final answer, but the 'trace' of

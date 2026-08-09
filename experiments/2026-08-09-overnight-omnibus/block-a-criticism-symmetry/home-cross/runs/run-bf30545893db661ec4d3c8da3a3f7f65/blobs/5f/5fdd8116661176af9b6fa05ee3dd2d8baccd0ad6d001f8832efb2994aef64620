@@ -1,0 +1,99 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable because checklists create a 'ceiling of mediocrity' where non-experts can only verify known-knowns, whereas experts detect 'silent failures'—anomalies that the checklist isn't designed to capture.",
+      "mechanism": "Expert intuition functions as a high-dimensional pattern matcher (as suggested in SRC_006) that identifies 'out-of-distribution' errors. A checklist, by definition, is a finite set of known failure modes. In tasks with objectively verifiable outcomes, the most critical failures are often those that the checklist author failed to anticipate.",
+      "counterconditions": [
+        "The task is purely procedural with no 'unknown unknowns'.",
+        "The expert is suffering from extreme overconfidence or cognitive tunnel vision (Type I errors per SRC_008)."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006",
+          "SRC_008"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The panel of non-experts is more reliable specifically in high-variance environments because the checklist acts as a 'variance reduction' tool, eliminating the catastrophic idiosyncratic errors of a single human.",
+      "mechanism": "While the expert has a higher 'peak' accuracy, their error distribution is fat-tailed (extreme misses). The checklist-driven panel shifts the error distribution toward a narrow Gaussian; they may miss subtle nuances, but they rarely commit the 'absurd' errors that a single expert might make due to a momentary lapse in intuition.",
+      "counterconditions": [
+        "The checklist is poorly constructed or contains systemic biases.",
+        "The task requires synthesis of disparate data points that cannot be decomposed into a linear list."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "Reliability is not a function of the agent (expert vs. panel) but of the 'resolution' of the checklist; a panel is only more reliable if the checklist's granularity matches or exceeds the expert's subconscious heuristic.",
+      "mechanism": "The 'reliability gain' is actually a transfer of intelligence from the checklist author (a meta-expert) to the panel. The panel is merely a distributed execution engine for the author's codified expertise. If the checklist is a low-resolution approximation, the expert's intuition (high-resolution) wins.",
+      "counterconditions": [
+        "The checklist author is less competent than the domain expert being compared.",
+        "The task is dynamic and requires real-time adaptation that a static checklist cannot provide."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_001"
+        ]
+      },
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'Corrective Friction'—where the panel's internal disagreement on checklist items leads to the discovery of a nuance that the checklist itself did not explicitly require.",
+      "mechanism": "Drawing on SCR_001, if the panel converges on the right answer through a process of debate (divergence $\\rightarrow$ convergence), they are exercising a form of collective intelligence. If they arrive at the answer through robotic 'box-checking' without friction, they have merely followed a path that happened to be correct, which is fragile and not a 'reliability gain' in the systemic sense.",
+      "counterconditions": [
+        "The panel is subject to groupthink, suppressing the divergence necessary for corrective friction.",
+        "The task is so simple that any reasonable person following the list arrives at the answer without need for debate."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Contradiction: If we define 'reliability' as the ability to produce the correct outcome consistently, then 'mere checklist compliance' that tracks the right answer IS a reliability gain. Why does the prompt distinguish 'genuine reliability' from 'compliance that happens to track the right answer'? This implies a distinction between 'Robustness' (the process works because it understands the problem) and 'Luck/Coincidence' (the process works because the checklist was lucky).",
+          "why_keep_this": "Challenges the premise of the second half of the problem prompt."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the 'objectively verifiable outcome' requirement favor the checklist (which reduces variance) or the expert (who can find the needle in the haystack)?",
+        "related_refs": [
+          "SRC_006"
+        ]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@0949d18d4317de2e9a5a0aa2: program:reasoning_observation_pending
+- reason-counter@0700167810ec580f64b991a9: program:reasoning_observation_pending
+- reason-counter@1ca23ed2c99917c536aff1b0: program:reasoning_observation_pending
+- reason-counter@fdafc897a087485335cd776c: program:reasoning_observation_pending
+- reason-counter@f4acc9b463db86ab7bba32c1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The single expert remains more reliable because 'objectively verifiable outcomes' in complex domains are often the result of 'hidden' dependencies that a checklist cannot exhaustively map.","counterconditions":[{"case":"The task is purely procedural with no emergent properties.","checker_spec":null,"eval":"observation"},{"case":"The expert is suffering from cognitive fatigue or confirmation bias.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition is not a guess but a compressed form of pattern recognition (recognition-primed decision making). A checklist is a linear approximation of a multi-dimensional problem. For tasks where the 'correct' answer depends on the interaction of variables rather than the sum of variables, the expert's ability to perceive the 'gestalt' prevents the 'checklist paradox' where every box is checked but the conclusion is wrong.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0949d18d4317de2e9a5a0aa2, reason-counter@0700167810ec580f64b991a9
+
+TARGET SRC_002
+{"analogy":null,"claim":"The single expert remains more reliable because 'objectively verifiable outcomes' often depend on a 'gestalt' recognition of patterns that checklists decompose into lossy components.","counterconditions":[{"case":"The task is purely additive (e.g., a pre-flight check) where no holistic synthesis is required.","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is heavily compromised by systematic cognitive biases (e.g., overconfidence).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Expert intuition is not 'guessing' but high-speed pattern matching. By forcing a decomposition into a checklist, the non-experts lose the holistic context (the 'forest') while focusing on the individual criteria (the 'trees'), leading to 'correct' checklist completion but an incorrect final judgment.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1ca23ed2c99917c536aff1b0, reason-counter@fdafc897a087485335cd776c
+
+TARGET SRC_003
+{"analogy":null,"claim":"Reliability is a property of the 'System' (Checklist + Panel) rather than the 'Agent', rendering the distinction between 'genuine reliability' and 'compliance' a category error.","counterconditions":[{"case":"The system must be tested against a 'perturbed' dataset where the checklist remains the same but the correct answer shifts (SCR_006).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the outcome is objectively verifiable, the i

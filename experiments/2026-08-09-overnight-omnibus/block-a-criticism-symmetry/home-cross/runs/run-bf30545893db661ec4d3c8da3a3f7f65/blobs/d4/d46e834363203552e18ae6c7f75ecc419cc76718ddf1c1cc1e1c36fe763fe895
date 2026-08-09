@@ -1,0 +1,45 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7066fbf7e37434205117d2e8e227ca2f) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the sixth-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@85c831187a440bd38d65a403: program:reasoning_observation_pending
+- reason-counter@d401879ffc9882ef2e53eaa6: program:reasoning_observation_pending
+- reason-counter@abef63c3e81fe34b6e59b44f: program:reasoning_observation_pending
+- reason-counter@0b451fe87d81ec3685db6c68: program:reasoning_observation_pending
+- reason-counter@8c51c150246f325e1155247b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The panel of non-experts is more reliable than the expert, but only if the 'objectively verifiable outcome' is a composite of multiple independent binary checks rather than a single holistic judgment.","counterconditions":[{"case":"The checklist items are highly correlated (failure in one implies failure in all).","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is a perfect proxy for the composite of all checklist items.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist decomposes a complex judgment into N independent boolean variables. While an expert's intuition is a high-dimensional heuristic that can fail catastrophically on a single 'blind spot', the panel's reliability is a function of the binomial probability of the group failing multiple independent checklist items simultaneously. Reliability gain is achieved through the 'law of large numbers' applied to the checklist's granularity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@85c831187a440bd38d65a403, reason-counter@d401879ffc9882ef2e53eaa6
+
+TARGET SRC_002
+{"analogy":null,"claim":"Genuine reliability is distinguished from compliance by the panel's ability to 'Debug the Tool'\u2014specifically, flagging a checklist item as inapplicable or misleading for the specific case while still reaching the correct outcome.","counterconditions":[{"case":"The checklist is mathematically optimal and contains no misleading items.","checker_spec":null,"eval":"observation"},{"case":"The panel overrides a correct checklist item due to a misunderstanding, luckily still arriving at the right answer.","checker_spec":null,"eval":"observation"},{"case":"The panel is forbidden from overriding the checklist by the protocol.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Drawing from SCR_007, 'mere compliance' is the execution of a program. 'Genuine reliability' is the ability to detect a runtime error in the program (the checklist). If the panel identifies a specific checklist item that would have led to a wrong answer and provides a justification for overriding it, they have demonstrated a reliability that exceeds the tool itself.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@abef63c3e81fe34b6e59b44f, reason-counter@0b451fe87d81ec3685db6c68, reason-counter@8c51c150246f325e1155247b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

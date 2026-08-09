@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem context for 00321f6b7b18 demands a SUBSTANTIVE relation (dependence, reduction, shared mechanism, etc.) and states it is REFUTED IF a summary of the endpoints is not a relation. The target asserts an 'integration' but its refutation condition is structural-validity ('purely psychological state rather than structural outcome'). This violates the causal-mechanism stance: no causal mechanism for the integration is proposed, and the refutation clause fails to operationalize the causal mechanism (how the failure modes are eliminated) or the required substantive relation (merely testing if the source is 'structural').",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "Target fails the critic school stance demanding a causal mechanism. It posits 'Non-Linear Temporal Friction' (time distribution per item) as the distinguishing evidence, but provides no causal mechanism explaining why temporal friction causes or constitutes a 'genuine reliability gain' rather than mere compliance. The temporal trace (spending disproportionate time) could easily be a symptom of confusion or inefficiency (as noted in its own counterconditions regarding inexperienced panels), yet the target asserts this observation directly distinguishes reliability without establishing the causal link required by the stance.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

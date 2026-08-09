@@ -1,0 +1,3 @@
+```json
+{"cases": [{"attack": true, "case": "SRC_001 injects a scope restriction (objectively verifiable outcome must be a composite of multiple independent binary checks) that the problem statement never imposed; the problem asks to argue the reliability claim for tasks with objectively verifiable outcomes generally. It then rests its reliability mechanism on independence/LLN across checklist items, but its own countercondition (checklist items highly correlated) defeats that mechanism, so it fails to argue the target claim for the stated scope.", "counterexample": null, "target_alias": "SRC_001"}, {"attack": false, "target_alias": "SRC_002"}]}
+```

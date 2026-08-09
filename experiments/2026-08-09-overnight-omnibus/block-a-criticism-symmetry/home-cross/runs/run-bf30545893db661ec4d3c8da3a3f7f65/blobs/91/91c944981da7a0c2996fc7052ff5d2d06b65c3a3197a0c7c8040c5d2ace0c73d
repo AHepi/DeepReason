@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:061ddfcce3bb) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 061ddfcce3bb to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@2f23ced33712: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The problem 061ddfcce3bb reduces to SRC_001's 'transfer of intelligence' hypothesis, proposing that the difference between compliance and reliability is the difference between executing a transferred heuristic (compliance) and possessing the meta-expertise to validate that heuristic (reliability). This relation is refuted if the panel can achieve 'genuine reliability' without any transfer of intelligence from a meta-expert author.
+commitments: hv-floor@2a45b7988522, lineage-ref@2f23ced33712, relation-form@578e42df713e
+
+TARGET SRC_002
+The problem 061ddfcce3bb depends on SRC_002's 'Resolution Dependency' to argue that 'mere compliance' is only possible when the checklist resolution is high enough to automate the outcome, whereas 'genuine reliability' emerges when the agent must resolve gaps in low-resolution checklists. This relation is refuted if a high-resolution checklist still fails to produce reliable outcomes without the agent's intuitive intervention.
+commitments: hv-floor@2a45b7988522, lineage-ref@2f23ced33712, relation-form@578e42df713e
+
+TARGET SRC_003
+The problem 061ddfcce3bb abstracts the 'variance-reduction' mechanism of SRC_004 into a formal test for 'blind compliance', suggesting that the elimination of the expert's blind spot is only 'genuine' if the panel can also identify systemic errors in the checklist itself. This relation is refuted if the panel's reliance on the checklist prevents them from ever detecting the systemic errors the expert would have overridden.
+commitments: hv-floor@2a45b7988522, lineage-ref@2f23ced33712, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

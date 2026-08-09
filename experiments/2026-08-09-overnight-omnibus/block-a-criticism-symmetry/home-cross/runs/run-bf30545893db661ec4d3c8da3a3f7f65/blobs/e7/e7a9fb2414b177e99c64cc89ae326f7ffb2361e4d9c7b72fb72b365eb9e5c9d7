@@ -1,0 +1,120 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The panel of non-experts is more reliable than the expert, but only if the 'objectively verifiable outcome' is a composite of multiple independent binary checks rather than a single holistic judgment.",
+      "mechanism": "The checklist decomposes a complex judgment into N independent boolean variables. While an expert's intuition is a high-dimensional heuristic that can fail catastrophically on a single 'blind spot', the panel's reliability is a function of the binomial probability of the group failing multiple independent checklist items simultaneously. Reliability gain is achieved through the 'law of large numbers' applied to the checklist's granularity.",
+      "counterconditions": [
+        "The checklist items are highly correlated (failure in one implies failure in all).",
+        "The expert's intuition is a perfect proxy for the composite of all checklist items."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005",
+          "SRC_006"
+        ]
+      }
+    },
+    {
+      "claim": "A panel of non-experts is more reliable because the checklist serves as an 'externalized memory' that eliminates the expert's primary failure mode: the 'availability heuristic' (over-weighting recent or vivid cases).",
+      "mechanism": "Experts rely on pattern matching (intuition), which is susceptible to recency bias. The checklist forces a systematic traversal of the entire problem space, ensuring that 'boring' but critical variables are not omitted. The panel's reliability stems from the checklist's ability to enforce a constant-time complexity for the search of failure modes, whereas the expert's search is stochastic.",
+      "counterconditions": [
+        "The problem requires 'out-of-distribution' reasoning that the checklist author did not anticipate.",
+        "The checklist is so exhaustive that the non-experts suffer from cognitive overload, introducing random noise."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_008"
+        ]
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'Negative Constraints'—the panel's ability to correctly reject a checklist item that is technically applicable but logically contradictory to the specific case.",
+      "mechanism": "Mere compliance is a linear mapping: Checklist Item X -> Check. Genuine reliability is a conditional mapping: (Checklist Item X AND Context Y) -> Reject. If the evaluation record shows the panel actively debated and overrode a checklist item to reach the correct answer, it proves the panel is exercising the 'reliability' of the process rather than the 'automation' of the list.",
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_004",
+          "SCR_007"
+        ],
+        "shared_structure": [
+          "Execution of a predefined set of instructions",
+          "Detection of an invalid state during execution",
+          "Interruption of the linear flow to prevent error"
+        ],
+        "transfer_claims": [
+          "The 'interrupt' in a CPU (SCR_004) is analogous to the 'override' in a human panel.",
+          "Debugging a compiler (SCR_007) is analogous to the panel correcting a misleading checklist item."
+        ],
+        "disanalogies": [
+          "CPUs cannot 'debate' the logic of an instruction; humans can.",
+          "Compilers are static; panels are dynamic social groups."
+        ],
+        "overturn_conditions": [
+          "The checklist is mathematically perfect, making any override an error."
+        ],
+        "adopted_commitment_refs": [
+          "reasoning-envelope-wf"
+        ]
+      },
+      "counterconditions": [
+        "The panel's 'override' is a lucky guess that happens to align with the correct answer.",
+        "The checklist is so rigid that the panel is penalized for any deviation, regardless of correctness."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      }
+    },
+    {
+      "claim": "The expert is more reliable because the 'checklist' for non-experts is actually a 'lossy compression' of the expert's intuition, and the loss occurs exactly where the most critical, case-specific nuances reside.",
+      "mechanism": "The checklist is a set of 'averages' (the most common failure modes). However, objectively verifiable outcomes in complex tasks often depend on the 'long tail' of edge cases. The expert's intuition is a high-fidelity model of the domain; the checklist is a low-fidelity approximation. The panel is more reliable for 'common' cases, but the expert is more reliable for 'critical' cases, making the expert more reliable in aggregate for high-stakes tasks.",
+      "counterconditions": [
+        "The task is trivial enough that the 'long tail' of edge cases is empty.",
+        "The expert's intuition is corrupted by systemic biases (e.g., overconfidence) that exceed the loss of the checklist's compression."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_004",
+          "SRC_008"
+        ]
+      }
+    },
+    {
+      "claim": "The panel is more reliable only if the 'checklist' is designed as a 'Conflict-Generator' rather than a 'Confirmation-Tool'.",
+      "mechanism": "If the checklist asks 'Is X present?', it encourages confirmation bias (mere compliance). If the checklist asks 'Provide evidence that X is NOT present', it forces the panel into a falsification mode. Genuine reliability gain is evidenced by the panel's ability to generate counter-evidence for each checklist item, rather than simply checking a box.",
+      "counterconditions": [
+        "The panel lacks the domain knowledge to even identify what 'counter-evidence' would look like.",
+        "The time-cost of falsification makes the process prohibitively slow compared to the expert's intuition."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the 'Temporal Trace' hypothesis from SCR_003: If we can't see the panel's internal thoughts, can we use the 'delta' between the time spent on 'easy' checklist items vs 'hard' ones to distinguish compliance from reliability? A 'compliant' panel has a uniform time-per-item distribution. A 'reliable' panel has a high-variance distribution, spending 80% of their time on the 20% of items that actually matter for the specific case. This would be the 'evidence within a single evaluation'.",
+          "why_keep_this": "Provides a quantitative proxy for the 'genuine vs compliance' distinction that doesn't rely on the final answer."
+        }
+      }
+    ]
+  }
+}
+```
