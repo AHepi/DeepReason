@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2f9eac6de35390886b837a79ed2d9548) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+In a race, you overtake the runner in second place. What place are you now in? Answer with a single word or number.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@bd5d0c6b5ab723d7d76fb1f3: program:reasoning_observation_pending
+- reason-counter@47028b67337580b038cb65ba: program:reasoning_observation_pending
+- reason-counter@55c917252b68e2f423cb0f1d: program:reasoning_observation_pending
+- reason-counter@0117452558b16dc0d2db8245: program:reasoning_observation_pending
+- reason-counter@91e815f46e0bb6138cc805ce: program:reasoning_observation_pending
+- reason-counter@aa4450686b6b16eab13b7ff4: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"second","counterconditions":[{"case":"Non-standard race rules where overtaking does not transfer ordinal position","checker_spec":null,"eval":"observation"},{"case":"The problem is interpreted as a trick question where 'second place' refers to a fixed marker rather than a runner's rank","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anchoring in the empirical case provided by SRC_008 and SRC_005: in a standard race, overtaking the runner in second place means you assume their position. The overtaken runner falls back to third. This is the empirically grounded, case-anchored explanation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bd5d0c6b5ab723d7d76fb1f3, reason-counter@47028b67337580b038cb65ba
+
+TARGET SRC_002
+{"analogy":null,"claim":"first","counterconditions":[{"case":"Standard race ordinal semantics are enforced","checker_spec":null,"eval":"observation"},{"case":"The overtaken runner's position is correctly inherited by the overtaker","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A naive reading conflates 'overtaking the runner in second place' with 'moving up two positions'. If one reasons that the position ahead of second is first, passing the second-place runner might be erroneously thought to place you at the front of the race.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@55c917252b68e2f423cb0f1d, reason-counter@0117452558b16dc0d2db8245
+
+TARGET SRC_003
+{"analogy":null,"claim":"second","counterconditions":[{"case":"The term 'overtake' is interpreted as physically passing but not gaining the ordinal position","checker_spec":null,"eval":"observation"},{"case":"The race rules assign positions by lap count rather than running order at the moment of overtaking","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"You are in third place, behind the runner in first and the runner in second. When you overtake the runner in second place, you move ahead of them and take their position. The runner who was in second is now pushed back to third. You do not reach first place because you did not overtake the first-place runner.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@91e815f46e0bb6138cc805ce, reason-counter@aa4450686b6b16eab13b7ff4
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

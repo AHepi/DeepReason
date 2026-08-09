@@ -1,0 +1,51 @@
+{
+  "candidate": {
+    "claim": "second",
+    "mechanism": "When you overtake the runner in second place, you assume their exact ordinal position. You move from the position immediately behind them (third) into their slot (second), displacing them backward into third place. This follows the covering principle of discrete positional replacement: in a linearly ordered set representing a race, overtaking the occupant of rank k transfers you to rank k and shifts the displaced runner to rank k+1. The identity of the runner in first place is unaffected by this exchange, as your action occurred behind them.",
+    "counterconditions": [
+      "The race is a time-trial format where 'second place' refers to the runner with the second-best elapsed time, and 'overtaking' means bettering their time, which would place you in first.",
+      "The race uses relative framing where 'overtake the runner in second place' means to pass the runner currently in second from the back of the field.",
+      "The race is a relay event, and 'overtaking the runner in second place' refers to exchanging the baton with a teammate, thereby altering team position rather than individual position."
+    ],
+    "typicality": 0.95,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_005",
+        "SRC_008",
+        "SRC_007",
+        "SRC_006",
+        "SRC_001"
+      ],
+      "shared_structure": [
+        "Discrete positional hierarchy: competitors occupy distinct, non-shareable integer ranks in a sequence.",
+        "Substitution by proximity: an object overtaking the occupant of rank k assumes rank k, shifting the displaced object to k+1.",
+        "Invariance of superior ranks: actions affecting rank k leave ranks < k unchanged, provided the structure is linear and unidirectional."
+      ],
+      "disanalogies": [
+        "In a queue of people, overtaking does not imply physical speed but a social agreement to swap positions, which lacks the temporal racing component.",
+        "In a ranking ladder system, multiple competitors can tie for a rank, unlike a singular physical race where positions are exclusive.",
+        "In a board game with 'overtake' mechanics, the overtaking player might send the displaced piece to a starting area rather than merely shifting it to the next rank."
+      ],
+      "transfer_claims": [
+        "If you overtake the runner in 10th place, you are now in 10th place, and they are in 11th.",
+        "If you overtake the runner in first place, you are now in first place.",
+        "Overtaking any runner at rank k results in you assuming rank k, reinforcing the discrete positional replacement principle."
+      ],
+      "overturn_conditions": [
+        "Discovery that the race rules specify a non-standard 'leapfrog' mechanic where overtaking rank k places you at rank k-1.",
+        "Evidence that the phrase 'in a race' contextually implies a time-trial or non-positional competition rather than a standard linear track race.",
+        "A formal redefinition of 'overtake' in the problem's domain to mean 'to lap' or 'to eliminate' rather than 'to pass and assume the position of'."
+      ]
+    },
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_008",
+        "SRC_007",
+        "SRC_006",
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "repair_patch": {
+    "patch_version": 1,
+    "patches": [
+      {
+        "op": "replace",
+        "path": "/candidates/2/neighbours/1",
+        "value": "SRC_001"
+      }
+    ]
+  }
+}

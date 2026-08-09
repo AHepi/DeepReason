@@ -1,0 +1,10 @@
+```json
+{
+  "candidate": {
+    "content": "The 1a1676a83b27 misparse depends on a second-from-leader (narrator-relative) frame, and it is refuted if the overtaken runner is explicitly named as the current absolute second-place holder, because then no misidentification of the lead runner can occur.",
+    "typicality": 0.7,
+    "evidence_refs": [],
+    "neighbours": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"]
+  }
+}
+```

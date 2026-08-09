@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-2f9eac6de35390886b837a79ed2d9548) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+In a race, you overtake the runner in second place. What place are you now in? Answer with a single word or number.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f0df943228e52b1da15728b8: program:reasoning_observation_pending
+- reason-counter@fad0e1aff13f6a4ab67d4fa7: program:reasoning_observation_pending
+- reason-counter@b396d0a0e72183ba91b59af6: program:reasoning_observation_pending
+- reason-counter@121980528322002897e74b9b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"first","counterconditions":[{"case":"The problem context validates the 'first' reading by defining 'overtake' as 'to take the lead'","checker_spec":null,"eval":"observation"},{"case":"The race is a time-trial and 'second place' means second-best time","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A common error-theory candidate: the reasoner conflates 'overtaking the runner in second place' with 'overtaking into first place', effectively treating the operation as moving ahead of the second-place runner into the lead. This is the documented wrong answer observed in SRC_004 and SRC_006. Proposing it as a candidate is criticizable: it explains why 'first' arises but is mechanistically incorrect for a standard race.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f0df943228e52b1da15728b8, reason-counter@fad0e1aff13f6a4ab67d4fa7
+
+TARGET SRC_002
+{"analogy":null,"claim":"second","counterconditions":[{"case":"Overtaking is defined as leapfrogging more than one position in this context","checker_spec":null,"eval":"observation"},{"case":"The race is not a standard positional race","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Slot-exchange: overtaking is a well-formed operation that swaps the positions of the two runners involved. Since the target slot is 'second place', you take the second slot and the overtaken runner moves to third. The first-place runner is not involved.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b396d0a0e72183ba91b59af6, reason-counter@121980528322002897e74b9b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

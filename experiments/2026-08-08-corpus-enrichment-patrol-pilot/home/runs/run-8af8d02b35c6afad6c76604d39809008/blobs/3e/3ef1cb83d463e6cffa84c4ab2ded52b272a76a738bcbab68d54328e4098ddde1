@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:0ba8f16f5116) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0ba8f16f5116 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@80cbdbd5b752: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Artifact 0ba8f16f5116 integrates SRC_011's timing-snapshot mechanism with SRC_009's positional-increment misframing: the 'third' answer arises when positions are recorded by instantaneous snapshots (SRC_011) and the overtaken runner's label is treated as a floor rather than a vacated slot (SRC_009), so the overtaker is credited with third while the overtaken retains second by timing-chip precedence. The integration is a composite mechanism producing 'third' from the interaction of two independent misframings. It is refuted if standard ordinal exchange applies (overtaking immediately transfers rank), or if real-time position tracking updates rank at the moment of passing.
+commitments: hv-floor@2a45b7988522, lineage-ref@80cbdbd5b752, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact 0ba8f16f5116 reduces to the standard slot-exchange mechanism in SRC_006: overtaking the second-place runner is a well-formed operation that swaps your ordinal rank with theirs, promoting you to second and demoting them to third. The artifact's counterconditions (multi-lap lapping, timing-chip snapshots, positional-increment misframing) each describe a departure from standard ordinal exchange, so under the conjunction of their negation the reduction holds. This is refuted if overtaking in the problem context does not entail assuming the overtaken runner's exact ordinal rank, or if 'second place' is not the rank of exactly one runner ahead.
+commitments: hv-floor@2a45b7988522, lineage-ref@80cbdbd5b752, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

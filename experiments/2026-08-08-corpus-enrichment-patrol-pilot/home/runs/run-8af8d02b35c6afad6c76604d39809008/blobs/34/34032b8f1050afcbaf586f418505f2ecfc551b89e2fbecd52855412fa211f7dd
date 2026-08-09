@@ -1,0 +1,39 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-2f9eac6de35390886b837a79ed2d9548) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+In a race, you overtake the runner in second place. What place are you now in? Answer with a single word or number.
+
+PROBLEM CONTEXT (conn:1a1676a83b27) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1a1676a83b27 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@9da8752a7f41: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@92e05283798884563e7d3316: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The foundational artifacts 1a1676a83b2776903485db006361e048bc0c0d83362ab58558852c8824eee470, 0cb1951e1158a92715cb17c40483231dca6bb3fdfacfe0adf6b155132475e95d, and 4337209f57a617d289cb2f0654e0ab1e42d4b46e9bbd990d6df1a94f476035ed each independently shares mechanism via the same abstract parsing fallacy (confusing relative proximity with absolute rank) to infer 'first', whereas artifact 83e2d1f789323de9dc1153ab2f0454bfbae783969d5cfe3f7a4f3927a63df5db contradicts them all by applying standard ordinal semantics to conclude 'second'. The entire cluster abstracts to a linguistic ambiguity in the phrase 'the runner in second place', and the mechanism of all three artifacts reduces to an unfaithful misparse that is REFUTED IF 'second place' is explicitly defined in the problem as the absolute ordinal position with exactly one runner ahead, or if overtaking is defined as swapping ordinal positions rather than eliminating the lead.
+commitments: hv-floor@2a45b7988522, lineage-ref@9da8752a7f41, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":null,"claim":"ambiguous","counterconditions":[{"case":"The phrase 'in a race' is conventionally taken to mean positional racing, resolving the ambiguity in favor of 'second'","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A systematic ambiguity exists between positional racing and time-trial semantics, so the problem lacks sufficient context to yield a unique answer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@92e05283798884563e7d3316
+
+TARGET SRC_003
+The mechanism in 1a1676a83b27 reduces to the same class of error as its sibling parses: it shares mechanism with the 'second from leader' misparse (4337209f57a6) and the 'assume exact position' parse (0cb1951e11), differing only in which positional anchor is distorted; this lineage contradicts the correct ordinal-displacement answer (second) because all three misparse mechanisms are refuted if 'second place' retains its standard absolute ordinal meaning and 'overtake' means displacing the overtaken runner by exactly one rank.
+commitments: hv-floor@2a45b7988522, lineage-ref@9da8752a7f41, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

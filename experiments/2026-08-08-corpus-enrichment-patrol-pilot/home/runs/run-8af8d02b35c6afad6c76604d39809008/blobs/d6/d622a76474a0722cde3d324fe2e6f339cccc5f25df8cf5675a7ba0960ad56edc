@@ -1,0 +1,9 @@
+```json
+{
+  "candidate": {
+    "content": "The token 1a1676a83b27 contradicts the neighbouring consensus (SRC_001, SRC_003) in its mechanistic claim that 'second place' refers to the front of the pack; it is refuted if standard absolute ordinal semantics hold, under which overtaking the runner in second position reduces to assuming exactly second place, since the unaffected lead runner remains ahead.",
+    "typicality": 0.6,
+    "neighbours": ["SRC_001", "SRC_003"]
+  }
+}
+```

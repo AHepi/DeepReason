@@ -1,0 +1,51 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "second",
+      "mechanism": "Slot replacement: the overtaken runner moves to third, you take the now-vacated second slot, leader unchanged.",
+      "counterconditions": [
+        "If 'overtake' is meant as catching up alongside without passing, the operation is not a slot swap"
+      ],
+      "typicality": 1.0,
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "first",
+      "mechanism": "Misread: the phrase is parsed as 'overtake the runner in first place' via skip-reading, yielding the leader's slot.",
+      "counterconditions": [
+        "Standard English semantics where 'the runner in second place' denotes the runner ranked exactly second, not the leader"
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_004", "SRC_008"]
+    },
+    {
+      "claim": "third",
+      "mechanism": "Additive counting: count your prior position (third) and then add the one runner you overtook, stopping at 'third' by miscounting the swap as an increment.",
+      "counterconditions": [
+        "Single-lap or position-only race where physical order equals ordinal placement and passing the second runner must promote you to second"
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "ambiguous",
+      "mechanism": "A systematic ambiguity exists between positional racing and time-trial semantics, so the problem lacks sufficient context to yield a unique answer.",
+      "counterconditions": [
+        "The phrase 'in a race' is conventionally taken to mean positional racing, resolving the ambiguity in favor of 'second'"
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "tied for second",
+      "mechanism": "If 'overtake' means drawing level with the runner, you are now alongside them at the second position, not ahead.",
+      "counterconditions": [
+        "Standard racing English where 'overtake' implies passing, not merely catching up"
+      ],
+      "typicality": 0.2,
+      "optional_refs": ["SRC_005"]
+    }
+  ]
+}
+```

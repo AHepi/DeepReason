@@ -1,0 +1,9 @@
+{
+  "repair": [
+    {
+      "op": "replace",
+      "path": "/scratch_proposal/links/0/to_ref",
+      "value": "NEW_001"
+    }
+  ]
+}
