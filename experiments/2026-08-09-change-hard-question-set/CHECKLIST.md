@@ -1,14 +1,15 @@
 # Checklist for: the two-tier hard question set
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids: `DR-CON-run-identity`, `DR-SUB-manifest`, `DR-CON-seats`,
 `DR-SUB-scheduler` (navigation only — no `src/` change in this
 tranche; see SPEC.md).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
-- [ ] 1. (R3/R11) Create `experiments/2026-08-09-change-hard-question-set/schema_check.py`: validates a Tier V or Tier O JSON array against SPEC.md's field lists (id/tier/q/kind/accept-or-checker/source/license/verification for V; id/tier/q/attribution/source_url/still_open_verified/computable_special_case/verification for O), exits 1 with a clear message per violation.
+- [x] 1. (R3/R11) Create `experiments/2026-08-09-change-hard-question-set/schema_check.py`: validates a Tier V or Tier O JSON array against SPEC.md's field lists (id/tier/q/kind/accept-or-checker/source/license/verification for V; id/tier/q/attribution/source_url/still_open_verified/computable_special_case/verification for O), exits 1 with a clear message per violation.
       done-when: `python experiments/2026-08-09-change-hard-question-set/schema_check.py --selftest` exits 0 against two small inline fixtures (one valid, one deliberately broken, asserting the broken one is rejected).
+      DONE: `SELFTEST PASS: valid fixture accepted (0 errors), broken fixture rejected (1 errors: ["error: record 0 (tv-m01): missing ['source']"])`, exit=0.
 
 - [ ] 2. (R3/R11) [COMMIT] Commit schema_check.py.
       done-when: `git add ... && git commit -m ... && git push` succeeds; `git diff --numstat` for the commit touches only files under `experiments/2026-08-09-change-hard-question-set/`.
