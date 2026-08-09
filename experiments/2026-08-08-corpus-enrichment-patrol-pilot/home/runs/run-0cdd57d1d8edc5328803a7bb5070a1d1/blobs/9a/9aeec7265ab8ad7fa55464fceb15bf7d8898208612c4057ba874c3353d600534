@@ -1,0 +1,82 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "190d009cd72e depends on SRC_008: the $1269 figure ($27×47h) is the limiting case where the 1.5× premium replaces the base rate on the entire shift — a structural misapplication of the overtime threshold. The $855 figure (SRC_010) refutes this if the overtime multiplier is an independent premium that replaces the base rate *only* for hours beyond 40, not an exhaustive multiplier for all hours worked.",
+      "evidence_refs": [
+        {
+          "block": "190d009cd72e"
+        }
+      ],
+      "neighbours": [
+        "SRC_008",
+        "SRC_010",
+        "SRC_005"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "190d009cd72e depends on SRC_007: the $846 figure is an additive decomposition error where the $27/hr overtime rate is substituted for the premium differential, yielding $18×47 = $846 — it collapses the compound overtime function into a flat base rate. The $855 figure (SRC_010) refutes this if the overtime premium is an independent rate class that does not retroactively flatten regular hours.",
+      "evidence_refs": [
+        {
+          "block": "190d009cd72e"
+        }
+      ],
+      "neighbours": [
+        "SRC_007",
+        "SRC_003",
+        "SRC_010",
+        "SRC_005"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": "190d009cd72e depends on SRC_010: the $855 figure is the canonical synthesis that integrates the base rate on regular hours with the 1.5× rate on overtime hours, avoiding the reductive errors of $846 (flat base), $909 (premium-on-base), and $1269 (premium-all). It refutes all three if the overtime law defines a piecewise rate function (40×$18 + 7×$27) rather than a global multiplier or additive premium. REFUTED IF the applicable wage law defines overtime as a 0.5× supplement on top of the base rate for all hours.",
+      "evidence_refs": [
+        {
+          "block": "190d009cd72e"
+        }
+      ],
+      "neighbours": [
+        "SRC_010",
+        "SRC_005",
+        "SRC_007",
+        "SRC_003",
+        "SRC_008"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "content": "190d009cd72e depends on SRC_005: the $855 figure is the standard-interpretation instantiation of the wage law where overtime is time-and-a-half for hours beyond 40, directly satisfying the counterconditions stated in SRC_007, SRC_008, and SRC_003. It refutes the $846, $909, and $1269 claims if those counterconditions hold as binary rejections. REFUTED IF the counterconditions are not exhaustive and another valid pay structure yields a different total.",
+      "evidence_refs": [
+        {
+          "block": "190d009cd72e"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_010",
+        "SRC_007",
+        "SRC_008",
+        "SRC_003"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "190d009cd72e shares mechanism with SRC_003 and SRC_007: both $846 and the $909 explanation in SRC_003 trace to a common arithmetic failure mode where the 1.5× multiplier is not treated as an independent rate class for overtime hours — $846 via full substitution ($18 for all), $909 via additive premium ($18 + $9 for OT hours). They reduce to a shared mechanism: failure to replace the base rate with the overtime rate for hours beyond 40. REFUTED IF a jurisdiction defines overtime as an additive premium rather than a replacement rate, making $909 legally correct.",
+      "evidence_refs": [
+        {
+          "block": "190d009cd72e"
+        }
+      ],
+      "neighbours": [
+        "SRC_003",
+        "SRC_007",
+        "SRC_010",
+        "SRC_005"
+      ],
+      "typicality": 0.2
+    }
+  ]
+}
+```

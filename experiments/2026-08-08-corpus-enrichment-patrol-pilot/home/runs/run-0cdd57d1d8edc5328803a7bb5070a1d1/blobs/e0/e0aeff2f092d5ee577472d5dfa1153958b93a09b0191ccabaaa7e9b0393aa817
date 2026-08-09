@@ -1,0 +1,40 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-17f006091d6deeb318c5448f91949f54) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e8f25ba9f57a11fa4b136a5b: program:reasoning_observation_pending
+- reason-counter@5aa0ef3ff4569d7e9ee62c65: program:reasoning_observation_pending
+- reason-counter@da41c9a8b879c97e509dd0bb: program:reasoning_observation_pending
+- reason-counter@8a0be2156b721a0a0da5a750: program:reasoning_observation_pending
+- reason-counter@92eb9e22155813edfabdd007: program:reasoning_observation_pending
+- reason-counter@87ee136cd0774183313521e1: program:reasoning_observation_pending
+- reason-counter@95cb43af7d876a4460900d41: program:reasoning_observation_pending
+- reason-counter@c3e8359fd88c7c495bcfb59d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Total pay is $864.","counterconditions":[{"case":"Standard overtime calculation (40 \u00d7 $18) + (7 \u00d7 $27) = $855 applies.","checker_spec":null,"eval":"observation"},{"case":"The problem specifies exactly 47 hours worked, not 48.","checker_spec":null,"eval":"observation"},{"case":"The 1.5\u00d7 multiplier applies to hours beyond 40, not as a flat $1.50 add-on.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The worker earns a base of $18/hour, and the 1.5\u00d7 overtime rate is interpreted as $18 + 1.5 = $19.50/hour (adding a flat $1.50 to the base instead of multiplying). However, $19.50 \u00d7 7 = $136.50, which is not an integer. Assuming the $1.50 premium is applied per overtime hour as an integer flat add-on: 47 \u00d7 $18 = $846, plus 7 \u00d7 $1.50 \u2248 $10.5 (rounded down to $10 for integer arithmetic) yields $856, which is not $864. Alternatively, computing the premium as a rounded integer overtime rate: floor(1.5 \u00d7 $18) = $27 is standard, but if the premium is misapplied as (1.5 \u00d7 $18) - $18 = $9, then total pay = (40 \u00d7 $18) + (7 \u00d7 $9) = $720 + $63 = $783. Reinterpreting the prompt's '1.5 times that rate' as applying to the base hourly wage for ALL hours: $18 \u00d7 1.5 = $27/hour, 47 \u00d7 $27 = $1,269 (already in neighbourhood). The only arithmetic yielding $864 is 48 \u00d7 $18, implying a 48-hour workweek calculation error or a 1-hour timekeeping discrepancy.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertaint
+commitments: reasoning-envelope-wf, reason-counter@e8f25ba9f57a11fa4b136a5b, reason-counter@5aa0ef3ff4569d7e9ee62c65, reason-counter@da41c9a8b879c97e509dd0bb
+
+TARGET SRC_002
+{"analogy":null,"claim":"Under a 'premium-only' wage construction, the worker's total pay is $909, computed as base pay for all 47 hours ($846) plus a 50% overtime premium for the 7 hours over 40 ($63).","counterconditions":[{"case":"The jurisdiction's labor standard legally defines overtime compensation as exactly 1.5\u00d7 the regular rate applied to hours beyond 40, replacing the base rate rather than supplementing it.","checker_spec":null,"eval":"observation"},{"case":"The employment contract explicitly specifies that overtime hours are paid at a flat rate of $27/hour inclusive of base pay.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Calculate base compensation for all hours worked at the regular rate ($18/hour \u00d7 47 = $846). Identify overtime hours as the quantity exceeding 40 (7 hours). Apply the overtime premium rate (0.5 \u00d7 $18 = $9/hour) strictly to the overtime hours. Add the premium compensation ($9 \u00d7 7 = $63) to the total base compensation ($846) to yield $909.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8a0be2156b721a0a0da5a750, reason-counter@92eb9e22155813edfabdd007
+
+TARGET SRC_003
+{"analogy":null,"claim":"Total pay is $855, derived causally by partitioning the week into a 40-hour base block at $18/hr and a 7-hour overtime block at $27/hr ($720 + $189).","counterconditions":[{"case":"The jurisdiction or contract uses a 'base-for-all + premium' accounting method (yielding $909), contradicting standard hourly spot pricing.","checker_spec":null,"eval":"observation"},{"case":"The overtime multiplier is applied retroactively to all 47 hours (yielding $1,269), contradicting the explicit 'first 40 hours' clause.","checker_spec":null,"eval":"observation"},{"case":"The problem explicitly states the base rate is $18/hr for all hours worked, rendering overtime inapplicable (yielding $846).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The wage contract causes a regime change at t=40 hours. For hours 1-40, the hourly spot price is exactly $18. For hours 41-47, the spot price steps up to 1.5\u00d7$18 = $27. The mechanism is strictly additive and order-invariant over the partitions: 40\u00d718 + 7\u00d727 = 720 + 189 = 855. This actively avoids the $909 error (47\u00d718 + 7\u00d79), which double-counts the base rate on overtime hours by treating the premium as a bonus on top of an already full base, rather than a rate change.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@87ee136cd0774183313521e1, reason-counter@95cb43af7d876a4460900d41, reason-counter@c3e8359fd88c7c495bcfb59d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

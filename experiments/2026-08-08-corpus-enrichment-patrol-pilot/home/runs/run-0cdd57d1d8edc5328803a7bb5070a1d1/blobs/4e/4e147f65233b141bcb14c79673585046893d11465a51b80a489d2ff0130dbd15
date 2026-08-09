@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-17f006091d6deeb318c5448f91949f54) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e0b59eec6cd6c403e6ec9277: program:reasoning_observation_pending
+- reason-counter@50a959ad6c07eee97e6b50b8: program:reasoning_observation_pending
+- reason-counter@1d4d0ecc3074354b3e337d07: program:reasoning_observation_pending
+- reason-counter@7c0ece0d605762d37faae972: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Total pay is $1269.","counterconditions":[{"case":"Only hours beyond 40 are paid at 1.5\u00d7, not all 47 hours.","checker_spec":null,"eval":"observation"},{"case":"The first 40 hours are at the base rate of $18/hour.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the entire 47 hours were paid at the overtime rate ($27/hour), total = 47 * $27 = $1269. This misapplies overtime to all hours rather than only those beyond 40.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e0b59eec6cd6c403e6ec9277, reason-counter@50a959ad6c07eee97e6b50b8
+
+TARGET SRC_002
+{"analogy":null,"claim":"Total pay is $909.","counterconditions":[{"case":"Standard overtime interpretation applies: only hours beyond 40 are at 1.5\u00d7, totaling $855.","checker_spec":null,"eval":"observation"},{"case":"The $909 calculation method is not supported by the problem text.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Overtime rate is 1.5 * $18 = $27/hour. Total pay = 47 hours * $27/hour = $1269? No. Alternatively, if the problem implies a blended or alternate calculation yielding $909, it might apply overtime premium to all hours or use a different threshold. However, $909 could result from 47 * $18 + 7 * $9 = $846 + $63 = $909, treating overtime premium as an additive $9/hour on top of base for the 7 OT hours, plus base for all 47 hours.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1d4d0ecc3074354b3e337d07, reason-counter@7c0ece0d605762d37faae972
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

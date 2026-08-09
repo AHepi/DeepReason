@@ -1,0 +1,41 @@
+{
+  "candidates": [
+    {
+      "claim": "Total pay is $855.",
+      "mechanism": "Regular pay = 40 hours × $18/hour = $720. Overtime rate = $18 × 1.5 = $27/hour. Overtime hours = 47 - 40 = 7 hours. Overtime pay = 7 × $27 = $189. Total = $720 + $189 = $855.",
+      "counterconditions": [
+        "Overtime is computed differently (e.g., not 1.5× for hours > 40).",
+        "Some hours are unpaid or paid at a different rate."
+      ],
+      "typicality": 0.98,
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "Total pay is $846.",
+      "mechanism": "Regular pay = 40 × 18 = 720. Overtime rate = 18 × 1.5 = 27. Overtime hours = 47 - 40 = 7. Total = 720 + (7 × 27) = 720 + 189 = 909. If the overtime rate were rounded to 18 only (common confusion), total = 720 + 7×18 = 846.",
+      "counterconditions": [
+        "Overtime rate is confirmed to be exactly 1.5×, not the base rate."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "Total pay is $909.",
+      "mechanism": "If all 47 hours are paid at the overtime rate of $27/hour (ignoring the regular-first-40 rule), total = 47 × 27 = $1,269. If instead regular pay is 40 × 18 = 720 and overtime is all 47 hours at 27 = 1,269, total would be 1,989. Neither is standard; the correct reading is 40 regular + 7 overtime. However, if the 'first 40' rule is interpreted as 40 at 18 and the remaining 7 at 1.5×, total = 855. The $909 figure arises if regular is miscomputed as 47×18=846 plus 7×(27-18)=63 → 909.",
+      "counterconditions": [
+        "Standard overtime interpretation applies: only hours beyond 40 are at 1.5×."
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "Total pay is $1,269.",
+      "mechanism": "All 47 hours paid at the overtime rate: 47 × $27 = $1,269. This would be the result if the 'first 40 at $18' clause were ignored entirely and every hour received the overtime premium.",
+      "counterconditions": [
+        "The problem explicitly states the first 40 hours are at the regular rate."
+      ],
+      "typicality": 0.05,
+      "optional_refs": ["SRC_004"]
+    }
+  ]
+}

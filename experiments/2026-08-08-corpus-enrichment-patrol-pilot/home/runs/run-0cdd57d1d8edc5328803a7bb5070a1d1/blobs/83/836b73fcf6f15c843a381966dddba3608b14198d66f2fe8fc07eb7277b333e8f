@@ -1,0 +1,3 @@
+```json
+{"cases":[{"attack":true,"case":"The target's stated claim is 'Total pay is $846,' which directly contradicts its own mechanism. The mechanism correctly derives 720 + 189 = 909, yet the claim asserts 846 — a value the mechanism itself flags as arising only from a mistaken confusion (overtime rate rounded to 18 only). The problem states overtime is 1.5× the base rate, so the correct total is 909, not 846. The claim is therefore a substantive falsehood: it reports a wrong answer while the derivation shows the right one.","counterexample":[{"regular_pay":720,"overtime_rate":27,"overtime_hours":7,"overtime_pay":189,"total_pay":909}],"target_alias":"SRC_001"}]}
+```

@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:190d009cd72e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 190d009cd72e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@4796ddef8e78: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The $846 error (SRC_005) abstracts from the $909 premium-only variant (SRC_002) by reducing overtime to a flat-rate miscalculation, while both depend on the same failure to apply the 1.5× multiplier correctly. It is refuted if the overtime rate is confirmed to be $27/hour for hours beyond 40.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+TARGET SRC_002
+The $855 answer (SRC_010) abstracts the correct payroll rule as a piecewise-linear function f(h) = 18·min(h,40) + 27·max(h−40,0), which the $1269 error (SRC_006) approximates by linearizing the slope to 27 across the entire domain. It is refuted if the pay function is confirmed to have a single rate change at h=40 rather than a constant slope.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+TARGET SRC_003
+The $1269 error (SRC_006) contradicts the correct $855 standard (SRC_013) because it applies the overtime rate to all 47 hours instead of only the 7 beyond 40. It is refuted if the 1.5× multiplier is confirmed to replace—rather than supplement—the base rate exclusively for hours exceeding the 40-hour threshold.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+TARGET SRC_004
+The $855 standard result (SRC_004) depends on the $909 premium-only variant (SRC_002) being algebraically distinct, since 40×18 + 7×27 = 855 ≠ 909 = 47×18 + 7×9. The two are compatible with the same base rate and multiplier but differ in whether the base rate is replaced or supplemented for overtime hours. It is refuted if the premium-only method is shown to be legally equivalent to the standard replacement method in this context.
+commitments: hv-floor@2a45b7988522, lineage-ref@4796ddef8e78, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

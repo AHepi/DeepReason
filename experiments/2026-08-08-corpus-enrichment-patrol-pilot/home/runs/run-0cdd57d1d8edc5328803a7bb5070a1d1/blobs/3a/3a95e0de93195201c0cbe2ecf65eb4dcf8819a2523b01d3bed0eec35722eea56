@@ -1,0 +1,25 @@
+{
+  "candidate": {
+    "claim": "Total pay is $729.",
+    "mechanism": "Apply a causal 'progressive clawback' cap: any compensation beyond a 40-hour straight-time threshold is offset (clawed back) dollar-for-dollar against the straight-time pool, up to the amount of the overtime premium. Straight-time pool = 47 × $18 = $846. Overtime premium generated = 7 × $9 = $63. The first $63 of the straight-time pool is withheld as the 'cost of overtime', leaving $846 − $63 = $783 as the payable straight-time base. Adding the $63 overtime premium back yields $783 + $63 = $846, but the clawback rule then imposes a ceiling equal to (base hours × base rate) − (overtime premium) = (40 × $18) − $63 = $717, so total pay is capped at $729. (Note: I am deliberately exploring a non-standard mechanism; the standard calculation would yield $855.)",
+    "counterconditions": [
+      "Problem specifies a conventional time-and-a-half overtime premium with no clawback or threshold offset.",
+      "Any counterfactual cap (e.g., $717) is rejected and full 1.5× premium is owed on hours 41–47.",
+      "The straight-time pool is owed in full for all hours, and the premium is additive rather than offsetting."
+    ],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.05
+  }
+}

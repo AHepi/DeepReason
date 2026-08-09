@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-17f006091d6deeb318c5448f91949f54) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a5bcc9803ee5c959d2d30b23: program:reasoning_observation_pending
+- reason-counter@35c94ac9c3d2556a44430fb7: program:reasoning_observation_pending
+- reason-counter@5890e2f4b2ba5420c5196dc5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Total pay is $729.","counterconditions":[{"case":"Problem specifies a conventional time-and-a-half overtime premium with no clawback or threshold offset.","checker_spec":null,"eval":"observation"},{"case":"Any counterfactual cap (e.g., $717) is rejected and full 1.5\u00d7 premium is owed on hours 41\u201347.","checker_spec":null,"eval":"observation"},{"case":"The straight-time pool is owed in full for all hours, and the premium is additive rather than offsetting.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Apply a causal 'progressive clawback' cap: any compensation beyond a 40-hour straight-time threshold is offset (clawed back) dollar-for-dollar against the straight-time pool, up to the amount of the overtime premium. Straight-time pool = 47 \u00d7 $18 = $846. Overtime premium generated = 7 \u00d7 $9 = $63. The first $63 of the straight-time pool is withheld as the 'cost of overtime', leaving $846 \u2212 $63 = $783 as the payable straight-time base. Adding the $63 overtime premium back yields $783 + $63 = $846, but the clawback rule then imposes a ceiling equal to (base hours \u00d7 base rate) \u2212 (overtime premium) = (40 \u00d7 $18) \u2212 $63 = $717, so total pay is capped at $729. (Note: I am deliberately exploring a non-standard mechanism; the standard calculation would yield $855.)","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a5bcc9803ee5c959d2d30b23, reason-counter@35c94ac9c3d2556a44430fb7, reason-counter@5890e2f4b2ba5420c5196dc5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

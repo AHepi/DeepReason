@@ -1,0 +1,9 @@
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/candidates/1/neighbours/4",
+      "value": "SRC_011"
+    }
+  ]
+}

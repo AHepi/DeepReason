@@ -1,0 +1,1 @@
+{"cases":[{"target_alias":"SRC_001","attack":false,"case":"The target correctly applies the standard overtime calculation: 40 regular hours at $18/hour = $720, plus 7 overtime hours at $27/hour (1.5 × $18) = $189, totaling $855. The math is accurate and the interpretation of 1.5x rate for hours beyond 40 is the conventional standard.","counterexample":null}]}

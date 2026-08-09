@@ -1,0 +1,17 @@
+{
+  "candidate": {
+    "claim": "Total pay is $855",
+    "mechanism": "First 40 hours at $18/hour = $720. Overtime rate is 1.5 × $18 = $27/hour. 7 overtime hours at $27 = $189. Total = $720 + $189 = $855.",
+    "counterconditions": [
+      "If the problem intended the premium-only method (base for all hours plus 0.5× premium for OT), total would be $909 instead of $855",
+      "If overtime were capped differently or 40 hours were not the threshold, the split would change",
+      "If the 1.5× rate were interpreted as a surcharge on top of base rather than the total hourly rate, the calculation would differ"
+    ],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "typicality": 0.92
+  }
+}

@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:274e86c9d466) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 274e86c9d466 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@b1001379fc5e: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_005 and SRC_009 share mechanism for computing $855: both decompose pay into 40 regular hours at $18/hour ($720) plus 7 overtime hours at 1.5×$18=$27/hour ($189), totaling $855. SRC_005 states it as a standalone claim while SRC_009 uses it to refute premium-only overcounting. This shared mechanism is compatible with SRC_006's verification attempt. It is refuted if the overtime rate is not 1.5× the base rate or if overtime does not apply exclusively to hours beyond 40.
+commitments: hv-floor@2a45b7988522, lineage-ref@b1001379fc5e, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_007 (claiming $909) depends on a premium-only decomposition: base-for-all (47×$18=$846) plus overtime premium (7×$9=$63). This reduces to the calculation 47×18 + 7×9 = 909, which structurally differs from the standard method (40×18 + 7×27 = 855) by overcounting base pay for overtime hours. It is refuted if the standard piecewise method (paying overtime hours at 1.5× the base rate instead of stacking a half-time premium on already-paid base hours) is the correct interpretation of the overtime rule.
+commitments: hv-floor@2a45b7988522, lineage-ref@b1001379fc5e, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_004 criticizes SRC_007's $909 as relying on a non-standard, unstated premium-only method. This is compatible with the observation that SRC_007 numerically overcounts by $54 ($909−$855), which equals exactly 7×$9−7×$0 = 7 overtime hours paid an extra half-time premium on top of already-included base pay. SRC_007's error reduces to a decomposition mismatch: it adds a premium to a base that already covers all hours, whereas the standard method replaces (not augments) the base rate with 1.5×base for overtime hours. It is refuted if the premium-only method is explicitly endorsed by the problem or jurisdiction as equivalent to the standard method.
+commitments: hv-floor@2a45b7988522, lineage-ref@b1001379fc5e, relation-form@578e42df713e
+
+TARGET SRC_004
+SRC_006 attempts to verify $855 via premium-only decomposition but internally discovers it yields $909 (47×18 + 7×9 = 846+63 = 909), not $855. This exposes a self-contradiction: the artifact's claim ($855) contradicts its own mechanism ($909). It inherits a structural error from SRC_007's premium-only method, where base pay for overtime hours is double-counted. It is refuted if the premium-only decomposition is applied correctly to verify, since it cannot reproduce $855 without reverting to the standard piecewise method.
+commitments: hv-floor@2a45b7988522, lineage-ref@b1001379fc5e, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
