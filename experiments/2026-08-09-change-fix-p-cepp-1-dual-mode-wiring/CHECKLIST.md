@@ -1,5 +1,5 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=2 blockers=none
+State: next=4 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
@@ -63,11 +63,16 @@ operator wants it (recorded in PARKED.md at delivery).
       `Verified-at:` NOT advanced (that stamp covers the whole
       document's checks, not re-run yet in full).
 
-- [ ] 3. (S1) [COMMIT] Commit S1 with `tools/diff_budget.py` run against
+- [x] 3. (S1) [COMMIT] Commit S1 with `tools/diff_budget.py` run against
       the tranche's base commit and pasted.
       done-when: `git log -1 --oneline` shows the S1 commit AND the
       diff-budget tool's `DIFF_BUDGET_RESULT_V1.verdict` is pasted and
       is not `EXCEEDED`.
+      DONE: already satisfied by step 2's own commit (`4952c4b66`),
+      which included the diff-budget run (84/190, WITHIN) and push —
+      per the execute-step rule that any file-changing step commits
+      immediately, not only steps explicitly tagged `[COMMIT]`. No
+      separate action needed.
 
 - [ ] 4. (S2) Write the regression test for `rules/conj.py`'s five S2
       sites (a v7-configured conjecture turn mints a
