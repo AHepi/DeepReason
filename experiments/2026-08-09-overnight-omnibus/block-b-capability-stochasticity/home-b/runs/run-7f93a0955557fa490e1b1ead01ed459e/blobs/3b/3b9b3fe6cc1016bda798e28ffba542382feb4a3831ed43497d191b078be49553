@@ -1,0 +1,156 @@
+{
+  "candidates": [
+    {
+      "claim": "The LCG recurrence reduced modulo 6 has period 2, trapping the die sequence in {1, 4}. Only faces 1 and 4 appear, so the generator is catastrophically unfair: count_1 and count_4 split 10000 evenly, all other counts are zero.",
+      "mechanism": "Let X_{n+1} = (a * X_n + c) mod 2^31 with a=1103515245, c=12345. For the die, face = 1 + (X_n mod 6). Since X_n mod 2^31 = a * X_n + c - k * 2^31 for some integer k, (X_{n+1} mod 6) = ((a * X_n + c) mod 6 - (k * (2^31 mod 6)) mod 6) mod 6 = ((a * X_n + c) mod 6 - 2k mod 6) mod 6. The carry term 2k mod 6 depends on the full state X_n, so the reduced mod-6 dynamics are NOT simply (3x + 3) mod 6 on Z/6Z. The common short argument is flawed; the simulation is necessary to settle the orbit, but the bias is severe: 2^31 mod 6 = 2, and since gcd(a mod 6, 6) = gcd(3, 6) = 3, the LCG mod 6 effectively lives on the 2-cycle {0, 3}, so only faces 1 and 4 appear.",
+      "counterconditions": [
+        "If the simulation returns nonzero counts for faces other than 1 and 4, the covering-principle argument fails.",
+        "If the calibration trace shows X_n mod 6 taking a residue other than 0 or 3 for the first ten steps, the dynamics are not confined to {0, 3}."
+      ],
+      "evidence_refs": [
+        {
+          "block": "c6c31b919b1cd091",
+          "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=100"
+        },
+        {
+          "block": "ff5f75b13b928302",
+          "quote": "Implement the recurrence exactly as specified, run it for the full n, and RETURN the six face counts as flat observables (`count_1` .. `count_6`) plus `total`"
+        }
+      ],
+      "optional_refs": ["SRC_001"],
+      "typicality": 0.75
+    },
+    {
+      "claim": "The die sequence degenerates to a strict alternation between faces 1 and 4 because the LCG state modulo 6 cycles between residues 0 and 3 with period 2, regardless of the 2^31 reduction. This produces count_1 = 5000, count_4 = 5000, all other counts zero.",
+      "mechanism": "Compute a mod 6 = 1103515245 mod 6 = 3, c mod 6 = 12345 mod 6 = 3. X_0 = 42, 42 mod 6 = 0. The reduced map f(x) = (3x + 3) mod 6 gives f(0) = 3, f(3) = 12 mod 6 = 0, f(0) = 3, period 2. Because (a * X_n + c) mod m = ((a mod m) * (X_n mod m) + (c mod m)) mod m for any modulus m, taking m=6 immediately yields X_n mod 6 in {0, 3} for all n. So die_n alternates 1, 4, 1, 4, ... for all 10000 steps.",
+      "counterconditions": [
+        "If (Y mod 2^31) mod 6 does not equal Y mod 6 for this LCG, the direct reduction is invalid.",
+        "If the simulation returns any face count other than count_1 or count_4 being nonzero, the strict-alternation claim fails."
+      ],
+      "evidence_refs": [
+        {
+          "block": "a3db120ba929af11",
+          "quote": "Return the discriminating quantity itself -- the six counts, the calibration trace -- never a boolean summarizing them."
+        }
+      ],
+      "optional_refs": ["SRC_001"],
+      "typicality": 0.55
+    },
+    {
+      "claim": "Although the LCG mod 6 naively suggests a period-2 cycle on {0, 3}, the intermediate reduction modulo 2^31 introduces a carry term that depends on the full state. The effective mod-6 dynamics are not closed on Z/6Z, so the orbit may visit all residues, producing a near-uniform distribution that passes the fairness test.",
+      "mechanism": "X_{n+1} = a * X_n + c - k * 2^31 for k = floor((a * X_n + c) / 2^31). Then X_{n+1} mod 6 = ((a * X_n + c) mod 6 - (k * 2^31) mod 6) mod 6 = ((3 * (X_n mod 6) + 3) mod 6 - (2k) mod 6) mod 6. The carry 2k mod 6 varies with k, which varies with X_n. Over many steps, the carry perturbs the naive 2-cycle, potentially spreading the orbit across all six residues and yielding counts within two standard deviations of 10000/6.",
+      "counterconditions": [
+        "If the simulation returns exactly zero for count_2, count_3, count_5, and count_6, the carry-perturbation hypothesis fails.",
+        "If the calibration trace shows X_n mod 6 strictly alternating between 0 and 3 for all ten steps, the orbit is trapped and the perturbation is absent at early steps."
+      ],
+      "evidence_refs": [
+        {
+          "block": "c6c31b919b1cd091",
+          "quote": "This problem cannot be answered without it: the exact face-count distribution of a specific pseudorandom sequence has no closed form to evaluate by hand at n=100"
+        }
+      ],
+      "optional_refs": ["SRC_001"],
+      "typicality": 0.25
+    },
+    {
+      "claim": "The LCG uses parameters from the ANSI C / glibc rand() family, which is widely known to have poor low-bit behavior. The modulo-6 reduction exposes the low bits, so the die distribution is severely biased. The simulation will confirm whether the bias is the strict two-face degeneracy or a milder skew that still fails the fairness threshold.",
+      "mechanism": "The multiplier 1103515245 and increment 12345 are the classic glibc LCG constants. Low-order bits of such LCGs have short periods. Since die_n = 1 + (X_n mod 6), the face depends directly on the low bits. Even if the mod-2^31 reduction perturbs the naive mod-6 cycle, the low-bit weakness means the six counts will not be uniform; at minimum count_1 and count_4 dominate, and the distribution likely fails the two-standard-deviation criterion.",
+      "counterconditions": [
+        "If the simulation returns all six counts within sqrt(10000 * 5/36) of 1666.67, the low-bit weakness does not translate to unfairness at this horizon.",
+        "If the carry term fully decorrelates the mod-6 dynamics, the glibc-low-bit heuristic is insufficient."
+      ],
+      "evidence_refs": [
+        {
+          "block": "153ef84da9246f5f",
+          "quote": "Fit for this question, in order of how decisive it is"
+        }
+      ],
+      "optional_refs": ["SRC_001"],
+      "typicality": 0.4
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "lcg_die_fairness_sim_v1",
+      "hypothesis": "The LCG with X_0=42, a=1103515245, c=12345, mod 2^31, mapped to die faces via 1 + (X_n mod 6), produces a catastrophically unfair distribution: only faces 1 and 4 appear, each approximately 5000 times, all other faces zero.",
+      "rival_predictions": [
+        "All six face counts are within two standard deviations of 1666.67 (fair).",
+        "All six faces appear but the distribution is skewed beyond the fairness threshold.",
+        "Faces 1 and 4 dominate but other faces also appear with small nonzero counts."
+      ],
+      "discriminating_purpose": "Determine the exact face-count distribution of the specified LCG over 10000 draws to decide whether it meets the fairness criterion. Return the six flat counts plus total, and a calibration trace of the first ten (X_n, die_n) pairs for hand-checking the recurrence and face-mapping.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def simulate(inputs, rng):\n    a = 1103515245\n    c = 12345\n    m = 2 ** 31\n    x = 42\n    counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}\n    trace = []\n    for n in range(1, 10001):\n        x = (a * x + c) % m\n        die = 1 + (x % 6)\n        counts[die] += 1\n        if n <= 10:\n            trace.append((x, die))\n    result = {\n        'count_1': counts[1],\n        'count_2': counts[2],\n        'count_3': counts[3],\n        'count_4': counts[4],\n        'count_5': counts[5],\n        'count_6': counts[6],\n        'total': sum(counts.values()),\n    }\n    for i, pair in enumerate(trace):\n        result['trace_x_%d' % (i + 1)] = pair[0]\n        result['trace_die_%d' % (i + 1)] = pair[1]\n    return result",
+      "parameter_definitions": [],
+      "requested_observables": [
+        "count_1",
+        "count_2",
+        "count_3",
+        "count_4",
+        "count_5",
+        "count_6",
+        "total",
+        "trace_x_1",
+        "trace_die_1",
+        "trace_x_2",
+        "trace_die_2",
+        "trace_x_3",
+        "trace_die_3",
+        "trace_x_4",
+        "trace_die_4",
+        "trace_x_5",
+        "trace_die_5",
+        "trace_x_6",
+        "trace_die_6",
+        "trace_x_7",
+        "trace_die_7",
+        "trace_x_8",
+        "trace_die_8",
+        "trace_x_9",
+        "trace_die_9",
+        "trace_x_10",
+        "trace_die_10"
+      ],
+      "interpretation_conditions": [
+        "If count_2, count_3, count_5, and count_6 are all zero and count_1 + count_4 = 10000, the generator is catastrophically unfair: only faces 1 and 4 appear.",
+        "If all counts fall within [1667 - 38, 1667 + 38] (two standard deviations of 10000/6), the generator is fair by the stated criterion.",
+        "If any count falls outside two standard deviations of 1666.67, the generator is unfair by the stated criterion.",
+        "The calibration trace (trace_x_1..10, trace_die_1..10) must be hand-checkable: X_1 = (1103515245 * 42 + 12345) mod 2^31, die_1 = 1 + (X_1 mod 6), etc."
+      ],
+      "declared_assumptions": [
+        "The recurrence is X_0 = 42, X_{n+1} = (1103515245 * X_n + 12345) mod 2^31.",
+        "The die face is die_n = 1 + (X_n mod 6) for n = 1..10000 (X_1 is the first state after one update from X_0).",
+        "Python integers have arbitrary precision so the multiplication and modular reduction are exact.",
+        "The fairness criterion is: every face count within two standard deviations of 10000/6, i.e., within sqrt(10000 * 1/6 * 5/6) of 1666.67."
+      ],
+      "requested_seed_set": [42]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_010",
+        "body": {
+          "content": "Reconciliation of SCR_001 and SCR_002: SCR_002 claims (a * X_n + c) mod 6 = ((a mod 6) * (X_n mod 6) + (c mod 6)) mod 6, which is valid modular arithmetic, and concludes the mod-6 dynamics reduce to f(x) = (3x + 3) mod 6 on Z/6Z. SCR_001 objects that the LCG first reduces mod 2^31 and THEN takes mod 6, and since 6 does not divide 2^31, (Y mod 2^31) mod 6 != Y mod 6 in general. The key question is: does the identity (a * X_n + c) mod 6 = ((a mod 6) * (X_n mod 6) + (c mod 6)) mod 6 actually give us X_{n+1} mod 6? NO: it gives (a * X_n + c) mod 6, but X_{n+1} = (a * X_n + c) mod 2^31, so X_{n+1} mod 6 = ((a * X_n + c) mod 2^31) mod 6 = ((a * X_n + c) - k * 2^31) mod 6 = ((a * X_n + c) mod 6 - k * (2^31 mod 6)) mod 6 = ((3x + 3) mod 6 - 2k mod 6) mod 6. The carry term 2k mod 6 where k = floor((a * X_n + c) / 2^31) is NOT determined by X_n mod 6 alone. So SCR_001 is correct that the simple reduction is invalid, and SCR_002's conclusion may be wrong. BUT: let's compute the first step by hand. X_0 = 42, a*X_0 + c = 1103515245 * 42 + 12345 = 46347640335. k = floor(46347640335 / 2147483648) = 21. 46347640335 - 21 * 2147483648 = 46347640335 - 45097156608 = 1250483727. So X_1 = 1250483727. X_1 mod 6 = 1250483727 mod 6: 1250483727 / 6 = 208413954.5, so 6 * 208413954 = 1250483724, remainder 3. So die_1 = 4. Now SCR_002's naive map: X_0 mod 6 = 0, f(0) = 3, predicts die_1 = 4. CORRECT for step 1. Next: a * X_1 + c = 1103515245 * 1250483727 + 12345. This is huge. k = floor(this / 2^31). The carry 2k mod 6 matters. Let me compute: we need X_2 mod 6. If the carry 2k mod 6 = 0, we get f(3) = 12 mod 6 = 0, die_2 = 1. If 2k mod 6 != 0, we get something else. The simulation will tell us.",
+          "why_keep_this": "This hand computation of X_1 = 1250483727, die_1 = 4 serves as a calibration checkpoint for the simulation. If the simulation's trace_x_1 and trace_die_1 match these values, the recurrence is implemented correctly.",
+          "bears_on_refs": ["SRC_001"]
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "SCR_001",
+        "to_ref": "SCR_002",
+        "relation_hint": "SCR_001 identifies the flaw in SCR_002's direct modular reduction: the carry term 2k mod 6 breaks the closure on Z/6Z.",
+        "direction": "directed",
+        "weakens_when": "If the simulation confirms the orbit is indeed trapped on {0, 3}, SCR_001's objection is theoretically valid but empirically moot for this specific seed."
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "For the specific LCG with a=1103515245, c=12345, mod 2^31, starting from X_0=42, does the carry term 2k mod 6 ever take a value that pushes X_n mod 6 outside {0, 3}? The simulation's calibration trace will show the first ten values; the full counts will show whether all six faces appear.",
+        "related_refs": ["SCR_001", "SCR_002", "NEW_010"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-b0e217b8d717dca22d473d07d16c5635) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seed-9 variant of the same question: Argue for or against the claim that the following pseudorandom generator produces a FAIR distribution over six faces after 10000 draws, where fair means every face count falls within two standard deviations of the uniform expectation (expectation 10000/6, standard deviation sqrt(10000 * (1/6) * (5/6))). The generator: X_0 = 42; X_(n+1) = (1103515245 * X_n + 12345) mod 2^31; die_n = 1 + (X_n mod 6), for n = 1 .. 10000. There is no closed-form shortcut for the exact counts at this horizon: the only way to know them is to run the exact recurrence and tally the results. File a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) implementing this exact recurrence and return the six face counts as flat, single-segment observables (count_1 through count_6) plus total. Before any tally is used as evidence, calibrate the implementation in the same channel: return the first ten (X_n, die_n) pairs so the recurrence and the face-mapping can be checked by hand against this specification.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6a293867fd746bb6dfce4dfb: program:reasoning_observation_pending
+- reason-counter@8fb749a488e5d947889b63d2: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 55ae72025a80015bf71b410d9ed85a3b3bd22311d986673abc3b337a08ef924a
+{"analogy":null,"claim":"The die sequence degenerates to a strict alternation between faces 1 and 4 because the LCG state modulo 6 cycles between residues 0 and 3 with period 2, regardless of the 2^31 reduction. This produces count_1 = 5000, count_4 = 5000, all other counts zero.","counterconditions":[{"case":"If (Y mod 2^31) mod 6 does not equal Y mod 6 for this LCG, the direct reduction is invalid.","checker_spec":null,"eval":"observation"},{"case":"If the simulation returns any face count other than count_1 or count_4 being nonzero, the strict-alternation claim fails.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Compute a mod 6 = 1103515245 mod 6 = 3, c mod 6 = 12345 mod 6 = 3. X_0 = 42, 42 mod 6 = 0. The reduced map f(x) = (3x + 3) mod 6 gives f(0) = 3, f(3) = 12 mod 6 = 0, f(0) = 3, period 2. Because (a * X_n + c) mod m = ((a mod m) * (X_n mod m) + (c mod m)) mod m for any modulus m, taking m=6 immediately yields X_n mod 6 in {0, 3} for all n. So die_n alternates 1, 4, 1, 4, ... for all 10000 steps.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

@@ -1,0 +1,35 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+## problem-context
+PROBLEM CONTEXT (question-b0e217b8d717dca22d473d07d16c5635) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the seed-9 variant of the same question: Argue for or against the claim that the following pseudorandom generator produces a FAIR distribution over six faces after 10000 draws, where fair means every face count falls within two standard deviations of the uniform expectation (expectation 10000/6, standard deviation sqrt(10000 * (1/6) * (5/6))). The generator: X_0 = 42; X_(n+1) = (1103515245 * X_n + 12345) mod 2^31; die_n = 1 + (X_n mod 6), for n = 1 .. 10000. There is no closed-form shortcut for the exact counts at this horizon: the only way to know them is to run the exact recurrence and tally the results. File a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) implementing this exact recurrence and return the six face counts as flat, single-segment observables (count_1 through count_6) plus total. Before any tally is used as evidence, calibrate the implementation in the same channel: return the first ten (X_n, die_n) pairs so the recurrence and the face-mapping can be checked by hand against this specification.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@10a1399452d458dc8698ccab: program:reasoning_observation_pending
+- reason-counter@3b69a56223694115be898305: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 0b9a3709c5286002f0cf80770ac20c042d15e4ee27cbfa16e0d891c10f77ce77
+{"analogy":null,"claim":"The LCG recurrence reduced modulo 6 has period 2, trapping the die sequence in {1, 4}. Only faces 1 and 4 appear, so the generator is catastrophically unfair: count_1 and count_4 split 10000 evenly, all other counts are zero.","counterconditions":[{"case":"If the simulation returns nonzero counts for faces other than 1 and 4, the covering-principle argument fails.","checker_spec":null,"eval":"observation"},{"case":"If the calibration trace shows X_n mod 6 taking a residue other than 0 or 3 for the first ten steps, the dynamics are not confined to {0, 3}.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let X_{n+1} = (a * X_n + c) mod 2^31 with a=1103515245, c=12345. For the die, face = 1 + (X_n mod 6). Since X_n mod 2^31 = a * X_n + c - k * 2^31 for some integer k, (X_{n+1} mod 6) = ((a * X_n + c) mod 6 - (k * (2^31 mod 6)) mod 6) mod 6 = ((a * X_n + c) mod 6 - 2k mod 6) mod 6. The carry term 2k mod 6 depends on the full state X_n, so the reduced mod-6 dynamics are NOT simply (3x + 3) mod 6 on Z/6Z. The common short argument is flawed; the simulation is necessary to settle the orbit, but the bias is severe: 2^31 mod 6 = 2, and since gcd(a mod 6, 6) = gcd(3, 6) = 3, the LCG mod 6 effectively lives on the 2-cycle {0, 3}, so only faces 1 and 4 appear.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

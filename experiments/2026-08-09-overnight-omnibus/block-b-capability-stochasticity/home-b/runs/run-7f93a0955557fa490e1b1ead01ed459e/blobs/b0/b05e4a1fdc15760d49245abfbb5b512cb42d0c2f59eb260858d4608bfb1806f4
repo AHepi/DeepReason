@@ -1,0 +1,55 @@
+{
+  "candidates": [
+    {
+      "claim": "The exact face-count distribution for the specified LCG over the first 10000 terms must be established by a deterministic sandboxed simulation, because the recurrence has no closed-form shortcut at this horizon; the simulation must return the six counts plus a ten-pair calibration trace.",
+      "mechanism": "The generator X_0=42, X_{n+1}=(1103515245*X_n+12345) mod 2^31 is a fully specified deterministic map. A single Python function carrying only integer arithmetic can iterate it 10000 times, apply die_n=1+(X_n mod 6) for n=1..10000, and tally the six face counts. By also returning the first ten (X_n, die_n) pairs, the recurrence and face-mapping can be checked by hand against the specification before the tally is trusted as evidence.",
+      "counterconditions": [
+        "The harness sandbox rejects the proposal as malformed or missing an observable.",
+        "The returned calibration trace contradicts the specified recurrence on hand-checking.",
+        "The returned total is not exactly 10000, exposing a tally bug.",
+        "A closed-form shortcut for the exact counts at n=10000 is later proven to exist, making simulation unnecessary for the core claim."
+      ],
+      "evidence_refs": [
+        {"block": "c6c31b919b1cd091"},
+        {"block": "ff5f75b13b928302"},
+        {"block": "a3db120ba929af11"}
+      ],
+      "optional_refs": ["SRC_009", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.98
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "seed9_lcg_exact_counts_and_calibration",
+      "hypothesis": "Implementing the exact recurrence X_0=42, X_{n+1}=(1103515245*X_n+12345) mod 2^31, die_n=1+(X_n mod 6) for n=1..10000 yields six face counts. The calibration trace (first 10 pairs) can be checked by hand, and the full tally will be the only durable evidence for or against the fairness claim.",
+      "rival_predictions": [
+        "The generator is fair: all six counts fall within [1666.67 - 2*sqrt(10000*(1/6)*(5/6)), 1666.67 + 2*sqrt(10000*(1/6)*(5/6))] = [1519.21, 1814.12].",
+        "The generator is unfair: at least one count falls outside the [1519, 1815] tolerance band."
+      ],
+      "discriminating_purpose": "Produce the exact six face counts (count_1..count_6) and a ten-pair calibration trace (x1, die1, ..., x10, die10) so that the recurrence and face-mapping can be checked by hand, and the fairness verdict can be applied by the criticism cycle rather than baked in.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def simulate(inputs, rng):\n    M = 2147483648\n    a = 1103515245\n    c = 12345\n    x = 42\n    counts = [0, 0, 0, 0, 0, 0, 0]\n    calibration = {}\n    for n in range(1, 10001):\n        x = (a * x + c) % M\n        die = 1 + (x % 6)\n        counts[die] += 1\n        if n <= 10:\n            calibration['x' + str(n)] = x\n            calibration['die' + str(n)] = die\n    result = {\n        'count_1': counts[1],\n        'count_2': counts[2],\n        'count_3': counts[3],\n        'count_4': counts[4],\n        'count_5': counts[5],\n        'count_6': counts[6],\n        'total': counts[1] + counts[2] + counts[3] + counts[4] + counts[5] + counts[6]\n    }\n    result.update(calibration)\n    return result",
+      "requested_observables": [
+        "count_1", "count_2", "count_3", "count_4", "count_5", "count_6", "total",
+        "x1", "die1", "x2", "die2", "x3", "die3", "x4", "die4", "x5", "die5",
+        "x6", "die6", "x7", "die7", "x8", "die8", "x9", "die9", "x10", "die10"
+      ],
+      "parameter_definitions": [],
+      "requested_seed_set": [1],
+      "declared_assumptions": [
+        "The recurrence is deterministic; a single seed is sufficient to produce the exact sequence.",
+        "Integer multiplication a*X_n where a=1103515245 and X_n<2^31 yields a value < 2^62, which Python handles exactly as a big integer.",
+        "The problem specifies n=1..10000, so the first die value uses X_1 (the first application of the recurrence to X_0=42), not X_0 itself.",
+        "The calibration trace covers n=1..10, the first ten terms used in the tally."
+      ],
+      "interpretation_conditions": [
+        "The calibration trace must match the specified recurrence on hand-checking: X_1=(1103515245*42+12345) mod 2^31, etc., and die_n=1+(X_n mod 6).",
+        "The total observable must equal exactly 10000.",
+        "Fairness is refuted if any count falls outside [1519, 1815] (the 2-sigma band around 10000/6).",
+        "Fairness is supported if all counts fall within [1519, 1815].",
+        "The calibration observables are for verification only; the count_1..count_6 observables are the discriminating evidence for the fairness claim."
+      ]
+    }
+  ]
+}

@@ -35,3 +35,4 @@ run_id=run-ecf3ce54012a3df4eef08d0cdb772f41 tag=s8
 audit_rc=0 tag=s8
 reason_rc=0 reason_seconds=348 tag=s9
 run_id=run-7f93a0955557fa490e1b1ead01ed459e tag=s9
+audit_rc=0 tag=s9
