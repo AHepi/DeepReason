@@ -1,0 +1,50 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "015994869366 inherits from SRC_001: a checklist's genuine reliability reduces to the frozen mapping's causal completeness, which an adversarial in-distribution probe (SRC_002) can only partially decouple because constructing adversarial items requires prior knowledge of the very structure the checklist is meant to encode. This is refuted if any single-evaluation method — adversarial or process-based — is shown to uniquely determine causal completeness without cross-distribution testing.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "015994869366 depends on SRC_002: the adversarial-probe methodology for distinguishing checklist compliance from genuine reliability is circular if constructing an item where surface cues and causal structure diverge presupposes knowledge of that structure. If the probe's construction is itself circular, any single-evaluation reliability claim inherits that circularity and the distinction collapses. This is refuted if adversarial items can be constructed from surface-cue statistics alone, without presupposing the latent causal model.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "015994869366 shares mechanism with SRC_005: the frozen-theory-quality × execution-fidelity framework dissolves the panel-vs-expert question into a comparison of two coupled (theory, executor) systems, implying that single-evaluation reliability claims are claims about the relative ranking of these products, not about aggregation as such. This is refuted if the Condorcet aggregation layer provides a reliability boost that is not factorizable into either theory quality or execution fidelity, making the product decomposition incomplete.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "015994869366 is compatible with SRC_004 but in a strictly weaker way than it claims: process-tracing can detect whether the panel terminates its reasoning at checklist items or integrates them into a broader mental model, but this integration is itself consistent with a more sophisticated surface-correlation strategy, so process-tracing merely relocates the confound rather than resolving it. This is refuted if a process trace can uniquely decompose integrated reasoning into causal-structure inference versus correlation exploitation, distinguishing the two at the level of verbal protocol or response-time signature.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.45
+    },
+    {
+      "content": "015994869366 contradicts SRC_003's analogy claim that the explicit-procedure/implicit-capacity confound is symmetric between human panels and models. For a human panel, the implicit reasoning capacity is external to the frozen theory and can be independently probed; for a model, the mapping and the implicit capacity are the same substrate, so the confound is structural and cannot be decoupled by any evaluation strategy available to the panel. This asymmetry is refuted if the model's implicit capacity is shown to be modular and independently probeable in the same way a human's extra-checklist reasoning is.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.3
+    },
+    {
+      "content": "015994869366 reduces to a deductive limit: if the checklist is provably causally complete, single-evaluation reliability becomes trivial (panel ≥ expert by construction) and the compliance-vs-genuine-reliability distinction collapses, because compliance with a complete causal theory IS genuine reliability. This is refuted if causal completeness is shown to be necessary but not sufficient for genuine reliability — e.g., if execution noise in the panel can destroy the guarantee even when the frozen theory is complete, so that the distinction remains live even in the deductive limit.",
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "typicality": 0.2
+    }
+  ]
+}
+```

@@ -1,0 +1,13 @@
+{
+  "repair.patch.v1": {
+    "baseline_sha256": "4b0135363bea76d9077a85329d8918b13b12861394eb1c4650e515c9852877a8",
+    "ops": [
+      {
+        "op": "replace",
+        "path": "/candidates/1/optional_refs/2",
+        "value": "SRC_008"
+      }
+    ],
+    "postcondition_hash": "7c6375b31d414c54b579f1cd14d5f4ec2cc44e93ae4a9bcf3e2d9dc2e7ad1f7f"
+  }
+}

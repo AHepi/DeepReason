@@ -1,0 +1,10 @@
+```json
+{
+  "repair": {
+    "pointer": "/candidates/4/optional_refs/1",
+    "op": "replace",
+    "value": "SRC_004",
+    "diagnostic": "V6_WIRE_REFERENCE_INVALID"
+  }
+}
+```

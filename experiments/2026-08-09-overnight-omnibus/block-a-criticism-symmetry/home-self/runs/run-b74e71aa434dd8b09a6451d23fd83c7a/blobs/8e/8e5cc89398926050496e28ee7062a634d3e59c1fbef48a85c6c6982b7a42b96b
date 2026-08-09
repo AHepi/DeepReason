@@ -1,0 +1,50 @@
+```json
+{
+  "candidate": {
+    "claim": "A non-expert panel using a checklist outperforms a single expert only when the checklist encodes a causally complete or structurally faithful model of the task domain; under that condition, 'checklist compliance' and 'genuine reasoning' coincide rather than diverge, so the problem of distinguishing them partially dissolves.",
+    "mechanism": "The checklist acts as a 'frozen theory' (per SCR_001) that encodes the checklist author's causal model in procedural form. The non-expert panel supplies execution fidelity. If the frozen theory is causally complete, the panel's compliance is the mechanism of reliable judgment. The panel-vs-expert comparison is thus reframed as 'high-fidelity execution of a good frozen theory' vs 'biased execution of a mutable internal theory.' The distinction between genuine reliability gain and mere compliance-tracking collapses if the checklist is deductively complete (SCR_003), because compliance is the correct application of a complete causal model.",
+    "counterconditions": [
+      "The checklist is a surface heuristic rather than a causal model; in that case, compliance is not genuine reasoning and the distinction remains meaningful.",
+      "The expert's mutable internal theory is strictly better-calibrated than the frozen theory (e.g., in a novel domain the checklist has not yet incorporated); then the panel's fidelity advantage is outweighed by theory-quality deficit.",
+      "Cross-distribution shifts break the observed→latent edge assumed by the frozen theory (SCR_002); then a single evaluation cannot distinguish genuine gain from distribution-specific luck."
+    ],
+    "typicality": 0.55,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "shared_structure": [
+        "Both a compiled program and a checklist encode a prior causal/theoretic model in a fixed procedural form that is then executed faithfully by an agent who may not understand the underlying model.",
+        "In both cases, the reliability of the output depends on (theory-quality of the fixed artifact) × (execution-fidelity by the operator), rather than on the operator's own expertise.",
+        "When the fixed artifact is deductively complete for the task class, compliance with the artifact and genuine reasoning about the task converge: there is no additional latent reasoning the operator needs to supply."
+      ],
+      "disanalogies": [
+        "A compiled program executes with perfect fidelity on digital hardware; a non-expert panel introduces stochastic execution errors, reading-comprehension failures, and aggregation noise, so 'fidelity' is not guaranteed.",
+        "A program's causal completeness can be formally verified against a specification; a checklist's causal completeness typically cannot, because real-world tasks lack a formal specification and the 'frozen theory' is informal natural-language procedure.",
+        "A program is rigid and cannot adapt to novel inputs outside its specification; a human expert's mutable theory can, so the expert retains an advantage on distributional shift that a compiled artifact lacks."
+      ],
+      "transfer_claims": [
+        "If a checklist is a frozen theory analogous to a compiled program, then evaluating the checklist's causal completeness (does it capture structure or surface correlations?) is equivalent to evaluating the program's specification-correctness — and adversarial items are the analogue of property-based test cases designed to separate correct implementations from implementations that pass on the evaluated distribution but fail on edge cases.",
+        "The distinction between 'genuine reliability' and 'compliance that tracks the right answer' maps to the distinction between 'the program is correct' and 'the program passes the test suite'; a single evaluation with adversarial probes can distinguish them only if the probes are designed to break surface correlations, just as property-based tests target edge cases."
+      ],
+      "overturn_conditions": [
+        "If the checklist is explicitly a surface heuristic and does not purport to encode causal structure, the program-completeness analogy fails and the distinction between compliance and genuine reasoning is not moot but central.",
+        "If the panel's execution fidelity is so low that it introduces more noise than the frozen-theory advantage, the panel cannot outperform the expert regardless of theory quality, breaking the decomposition.",
+        "If a single evaluation cannot distinguish causal completeness from distribution-specific surface fit (as SCR_002 worries), then the program-correctness analogy overclaims: even property-based tests within one distribution cannot rule out distribution-specific luck, and cross-distribution evidence is required by necessity."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```
