@@ -1,0 +1,36 @@
+{
+  "candidate": {
+    "claim": "A large, internally redundant service is more resilient to correlated failure than a decentralized network of small, independent services when the shared common-mode dependencies (e.g., cloud provider outages, DNS failures, SSL certificate expiry) are deliberately internalized and protected against. Decentralization often creates a false sense of independence because the independent operators share hidden dependencies, making the network brittle to correlated failure.",
+    "mechanism": "Independently operated services naturally converge on a monoculture of underlying infrastructure and libraries (e.g., AWS us-east-1, Cloudflare, shared open-source packages). A large service can identify and eliminate these single points of failure by explicitly engineering internal redundancy (e.g., multi-region deployment, defense-in-depth). Therefore, the decentralized network's independence is merely apparent, while the large service achieves actual resilience by actively breaking correlation.",
+    "counterconditions": [
+      "If the large service cannot internally isolate its redundant components from shared software supply chain attacks.",
+      "If the decentralized network is proven to use entirely disjoint infrastructure stacks (no shared cloud, DNS, or OS providers).",
+      "If the large service's internal communication overhead creates a fragility that scales superlinearly with size."
+    ],
+    "analogy": {
+      "source_memory_refs": ["ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"],
+      "shared_structure": [
+        "Both systems provide a function that must survive node failure.",
+        "Both systems have redundant components.",
+        "Both systems rely on a supply chain of infrastructure that is vulnerable to common-mode failure."
+      ],
+      "disanalogies": [
+        "The large service has centralized governance to enforce disjoint dependencies, while the decentralized network relies on the independent choices of operators.",
+        "Decentralized nodes may have lower correlation in configuration and software stack due to heterogeneous administration."
+      ],
+      "transfer_claims": [
+        "Resilience against correlated failure depends on breaking shared dependencies, not on the count of redundant components.",
+        "Apparent uncorrelation in decentralized networks is fragile and collapses when a shared dependency fails."
+      ],
+      "overturn_conditions": [
+        "Evidence that decentralized networks inherently select for heterogeneous infrastructure.",
+        "Evidence that large services cannot internally achieve multi-region, multi-provider redundancy."
+      ]
+    },
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  }
+}

@@ -1,0 +1,45 @@
+```json
+{
+  "candidate": {
+    "claim": "A decentralized network of small services is MORE resilient to correlated failure than one large, internally redundant service IF, and only if, their independent operation implies a higher diversity of hidden shared dependencies (OS kernels, cloud providers, DNS registries, management tooling), meaning a decentralized failure space is more likely to surface an otherwise hidden common cause as an isolated, independent fault before it cascades system-wide.",
+    "mechanism": "In a large service, strict internal redundancy is usually homogeneous, and all redundant components are coupled to the same internal dependencies. A localized fault in a shared dependency is invisible to monitoring systems because all redundant backups fail simultaneously or are masked by failover. This establishes a 'reliability monoculture'. In a decentralized network, diverse actors generally adopt heterogeneous dependencies, which raises the baseline rate of isolated failures. This increased noise actually strengthens the system against hidden common causes: a shared dependency failure is statistically more likely to strike a minority subset of services, allowing the rest to survive and, crucially, providing an observable, non-correlated signal BEFORE a global catastrophe occurs.",
+    "counterconditions": [
+      "Decentralized services converge on identical software stacks, eliminating dependency diversity and creating a hidden shared point of failure.",
+      "Isolated failures in decentralized nodes are insufficiently monitored and allowed to propagate system-wide via network load-balancing cascades.",
+      "The large centralized service actively employs redundant dependency-diversity, such that internal backups are not strictly more coupled to shared internals than decentralized alternatives.",
+      "The increased isolated failure rate inherent to decentralized networks overwhelms their capacity for self-repair, negating the benefits of early signal detection."
+    ],
+    "typicality": 0.35,
+    "optional_refs": ["SRC_002"],
+    "analogy": {
+      "source_memory_refs": ["ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"],
+      "shared_structure": [
+        "Components map to services/nodes.",
+        "Hidden shared dependencies map to common-cause failure drivers.",
+        "Component failures map to observed service outages.",
+        "Independent failures map to observable isolated faults.",
+        "Correlated failures map to system-wide catastrophic collapse."
+      ],
+      "disanalogies": [
+        "Biological immune systems evolve autonomously against many random threats; decentralized software does not inherently evolve or learn from observed failures.",
+        "An immune system tolerates collateral damage to host tissue during learning; software systems have strict availability requirements that do not tolerate isolated failures as a 'learning cost'.",
+        "Innate immunity provides an immediate, general defense layer prior to adaptation; decentralized networks have no equivalent innate systemic response to novel dependencies."
+      ],
+      "transfer_claims": [
+        "The baseline rate of isolated failures in a system should be non-zero and diverse to establish robustness against unknown shared causes.",
+        "A 'too quiet' system with perfect internal redundancy is more likely to mask a hidden common-cause vulnerability than a 'noisy' system with frequent isolated failures.",
+        "Diversity of failure modes is a signal of structural independence."
+      ],
+      "overturn_conditions": [
+        "Empirical observation shows decentralized networks converging on the same hidden dependencies as centralized services.",
+        "Data demonstrates that the 'noise' of isolated failures in decentralized networks degrades total availability more than the catastrophic correlated failures they prevent.",
+        "Centralized services with active dependency-diversity demonstrate superior resilience to decentralized networks."
+      ]
+    },
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    }
+  }
+}
+```

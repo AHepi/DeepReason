@@ -1,0 +1,11 @@
+{
+  "repair.patch.v1": {
+    "contract": "conjecturer.turn.v6",
+    "baseline_sha256": "df758a2351f48b569507abfb8c0003554da44525af66fcc79cc0c7b9c366459b",
+    "patch": {
+      "op": "replace",
+      "path": "/candidates/1/optional_refs/2",
+      "value": "SRC_006"
+    }
+  }
+}

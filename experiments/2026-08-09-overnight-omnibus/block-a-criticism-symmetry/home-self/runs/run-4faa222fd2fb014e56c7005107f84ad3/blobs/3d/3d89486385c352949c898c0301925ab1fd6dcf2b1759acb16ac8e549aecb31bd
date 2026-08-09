@@ -1,0 +1,8 @@
+{
+  "repair.patch.v1": [
+    {
+      "op": "remove",
+      "path": "/cases/0/target_alias2"
+    }
+  ]
+}

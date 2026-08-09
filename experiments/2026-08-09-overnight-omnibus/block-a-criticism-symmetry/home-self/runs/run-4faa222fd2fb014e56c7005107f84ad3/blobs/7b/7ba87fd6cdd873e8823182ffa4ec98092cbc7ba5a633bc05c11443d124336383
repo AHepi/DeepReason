@@ -1,0 +1,144 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is strictly less resilient if its independent operators, optimizing rationally for cost and reliability, converge on identical 'best-in-class' dependencies (e.g., the same cloud provider, OS kernel, or TLS library), producing a latent monoculture with high hidden correlation.",
+      "mechanism": "Rational economic behavior drives uncoordinated operators toward identical optimal solutions. Because operators independently optimize for cost-efficiency and proven reliability, they select identical market-leading dependencies, resulting in an unintentionally synchronized architecture. The network's apparent independence is surface-level; the shared underlying dependency chain guarantees that a latent flaw in the chosen 'best-in-class' component will trigger a simultaneous, correlated failure across the decentralized network. Meanwhile, a single large service can intentionally choose diverse, formally isolated internal stacks to avoid this monoculture.",
+      "counterconditions": [
+        "Operators are incentivized or subsidized to deliberately choose diverse, suboptimal dependencies.",
+        "No single 'best-in-class' dependency dominates the market, ensuring naturally diverse selections.",
+        "The single large service cannot afford or enforce formal internal diversity and falls victim to the same internal monoculture."
+      ],
+      "typicality": 0.85,
+      "analogy": {
+        "source_memory_refs": ["SCR_004"],
+        "shared_structure": [
+          "Independent agents making locally optimal choices under identical environmental constraints",
+          "Convergence toward a single optimal solution without explicit coordination",
+          "Latent shared vulnerability to an unforeseen perturbation in the shared environment"
+        ],
+        "disanalogies": [
+          "Species in an ecosystem may speciate via natural selection, whereas human operators are often bound by short-term economic incentives that stifle costly experimentation.",
+          "Ecological convergence relies on physical resource limits, while digital monoculture is driven by network effects and standardized protocols."
+        ],
+        "transfer_claims": [
+          "A decentralized network without enforced diversity mandates will converge to a functional monoculture.",
+          "Apparent independence in decentralized systems masks hidden correlation via shared optimal dependencies."
+        ],
+        "overturn_conditions": [
+          "Empirical evidence shows decentralized networks naturally maintain high stack diversity despite market forces.",
+          "Regulatory or protocol-level mandates successfully force decentralized networks to use diverse dependencies."
+        ]
+      },
+      "optional_refs": ["SRC_007", "SRC_008"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Correlated failures in decentralized networks are dominated by an 'ecological coincidence' mechanism: nodes do not fail because of a shared internal dependency, but because independent operators react identically to a shared external shock.",
+      "mechanism": "Independent operators facing the same external environment (e.g., a sudden spike in traffic, a change in upstream API rate limits, a global supply chain shortage) will rationally deploy identical mitigation strategies (e.g., enabling aggressive rate limiting, shutting down non-essential endpoints). These synchronized rational responses cause simultaneous service degradation that looks like a shared internal failure but is actually an externally triggered correlation. The large service, having a unified command structure, can coordinate a localized response that sacrifices non-critical functions to save the core, avoiding system-wide failure.",
+      "counterconditions": [
+        "Operators face entirely heterogeneous environments and shocks, preventing synchronized responses.",
+        "The external shock is so severe that both the centralized and decentralized networks fail completely regardless of response strategy."
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_006", "SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The claim that decentralization provides superior correlated-failure resilience is unfalsifiable as typically stated, because 'independent operation' is operationally defined post hoc by the absence of observed correlation.",
+      "mechanism": "When a decentralized network fails simultaneously, observers naturally look for a shared cause. Finding any shared cause (e.g., a common library, a shared cloud region, or a shared external shock) retroactively disqualifies the nodes from being 'truly independent'. This creates a protective ring around the hypothesis: if no failure occurs, the network is deemed resilient; if a failure occurs, the nodes are deemed not truly independent. Because the definition of independence excludes the very correlations that would disprove the hypothesis, the claim is structurally immune to falsification and thus meaningless for comparative resilience analysis without an independent, pre-registered metric for independence.",
+      "counterconditions": [
+        "A pre-registered, time-stamped inventory of all dependencies and environmental factors is available, preventing post-hoc rationalization of discovered correlations.",
+        "The hypothesis is explicitly limited to a narrow, pre-defined class of failures (e.g., internal software bugs) rather than general resilience."
+      ],
+      "typicality": 0.6,
+      "analogy": {
+        "source_memory_refs": ["SCR_003"],
+        "shared_structure": [
+          "Retroactive exclusion of disconfirming evidence based on a newly discovered shared trait",
+          "Unfalsifiable core hypothesis protected by shifting the definition of the subject post hoc"
+        ],
+        "disanalogies": [
+          "The Scottish Pride example is an explicit logical fallacy, whereas the decentralization argument often stems from the practical difficulty of enumerating all dependencies rather than deliberate fallacious reasoning."
+        ],
+        "transfer_claims": [
+          "Any argument for decentralization based on 'independent operation' must be rejected unless independence is defined a priori with observable metrics.",
+          "Post-hoc discovery of shared causes in decentralized failures does not weaken the original claim, rendering the original claim useless for prediction."
+        ],
+        "overturn_conditions": [
+          "A formal, pre-registered metric for 'independence' is adopted and used to evaluate the claim prospectively.",
+          "Proponents of the claim agree on a specific, observable failure mode that would definitively falsify it without redefining terms."
+        ]
+      },
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A decentralized network is strictly more resilient to correlated design flaws because it naturally maintains design independence, whereas the large service's strictly greater component redundancy is illusory if all components share the same flawed specification.",
+      "mechanism": "A large service with N redundant components may have zero design redundancy if all components are built from the same specification. A latent flaw in the specification (e.g., a misunderstanding of a cryptographic protocol) renders all N components simultaneously vulnerable. A decentralized network, composed of independently designed services, will naturally exhibit design diversity because different teams solve the same problem differently. This design diversity acts as a true redundancy against correlated specification flaws, making the decentralized network more resilient to this class of correlated failure despite having fewer redundant components.",
+      "counterconditions": [
+        "The large service intentionally employs N independent design teams with diverse specifications.",
+        "The decentralized network operators all use the same open-source library, negating design independence.",
+        "The correlated failure is caused by a shared environmental factor rather than a design flaw."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_001", "SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A single large service is strictly more resilient than a decentralized network because it can enforce formally verified isolation domains using different OS kernels and compilers, eliminating hidden correlations by fiat.",
+      "mechanism": "A single large service has the resources and centralized authority to implement strict, formally verified isolation domains. It can enforce that different redundant components are built with different compilers, run on different OS kernels, and use diverse hardware. This top-down enforcement guarantees true independence and eliminates hidden correlations. A decentralized network cannot enforce this; its independence is emergent and relies on the absence of coordination, which is constantly threatened by market forces pushing toward standardization.",
+      "counterconditions": [
+        "The cost of formal verification and diverse kernels scales super-linearly with the number of domains, making it practically unachievable for large services.",
+        "The decentralized network is composed of services so vastly different in age, scale, and technology stack that their natural diversity outperforms the large service's enforced diversity.",
+        "The large service's central coordination infrastructure itself becomes a single point of failure."
+      ],
+      "typicality": 0.5,
+      "analogy": {
+        "source_memory_refs": ["SCR_002"],
+        "shared_structure": [
+          "A top-down authority enforcing strict isolation between redundant components",
+          "Elimination of hidden correlations via deliberate architectural fiat"
+        ],
+        "disanalogies": [
+          "A physical cleanroom operates under the laws of physics which guarantee isolation, whereas software formal verification only guarantees isolation under its specified assumptions, which may be incomplete."
+        ],
+        "transfer_claims": [
+          "Centralized control enables a level of enforced independence unachievable by uncoordinated decentralized actors.",
+          "Formal verification provides a stronger guarantee of independence than emergent diversity."
+        ],
+        "overturn_conditions": [
+        "Empirical evidence shows that formally verified isolation domains in large services still suffer from correlated failures due to shared assumptions.",
+        "The economic cost of formal verification makes large-scale implementation infeasible, leaving the theoretical advantage unrealized."
+        ]
+      },
+      "optional_refs": ["SRC_003", "SRC_008"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A large service is vulnerable to a systemic specification failure that eliminates its internal redundancy, because a single centralized design process creates a monoculture of assumptions that decentralized networks naturally avoid.",
+      "mechanism": "When a large service specifies its redundant components, it uses a single design process, a single set of assumptions, and a single mental model of the operating environment. If this mental model is flawed (e.g., assuming a certain type of network partition is impossible), all redundant components share this blind spot. A decentralized network, by having multiple independent design processes, naturally explores a wider space of assumptions. Some nodes will assume the network partition is possible and handle it correctly, providing functional redundancy that the large service lacks.",
+      "counterconditions": [
+        "The large service deliberately uses multiple independent design teams with conflicting assumptions.",
+        "The decentralized network shares a common open-source foundation that encodes the same flawed assumptions.",
+        "The failure mode is not related to design assumptions but to external shocks."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

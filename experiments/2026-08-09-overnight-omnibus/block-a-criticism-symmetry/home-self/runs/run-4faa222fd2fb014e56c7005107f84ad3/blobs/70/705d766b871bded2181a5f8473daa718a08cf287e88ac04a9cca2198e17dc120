@@ -1,0 +1,113 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A decentralized network is more resilient to correlated failure only if and only if it enforces dissimilar, structurally diverse approaches across nodes (design redundancy), which often violates operators' rational economic incentive to converge on a single best-in-class stack.",
+      "mechanism": "Independence of failure is not guaranteed by organizational decentralization; it requires design independence. Rational independent operators facing similar environments will optimize toward identical 'best-in-class' dependencies, creating a hidden monoculture. A shared external shock or a vulnerability in that shared dependency then causes synchronous degradation across the network. True resilience to correlated failure therefore requires intentional suboptimality—enforcing diversity—which is not the default equilibrium of a decentralized market.",
+      "counterconditions": [
+        "Decentralized network operators intentionally adopt highly diverse stacks, libraries, and infrastructure to avoid monoculture, preserving failure independence.",
+        "The large service's redundancy is purely structural (component-level) without design independence, meaning a single specification flaw can overcome all N redundant components simultaneously.",
+        "The external shock is so universal (e.g., a global internet outage or fundamental physics failure) that neither design diversity nor component redundancy provides protection."
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_007"
+        ],
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "A large service with strictly more total internal redundancy is more resilient to correlated failure than a decentralized network because it can unilaterally enforce formally verified isolation domains, providing a mathematical guarantee of independence that decentralized operators cannot reliably coordinate.",
+      "mechanism": "Strictly more internal redundancy within a single organization allows for the imposition of formally verified isolation boundaries. These mathematical guarantees ensure that failures in one domain cannot propagate to another. A decentralized network lacks a central authority to enforce such rigorous verification across all independent operators; relying instead on conventions that may be violated. Consequently, the large service achieves true independence, while the decentralized network only achieves apparent independence until a shared cause is found.",
+      "counterconditions": [
+        "The cost of formal verification scales super-linearly with the number of isolation domains, eventually exceeding the large service's budget and limiting the practical redundancy achieved.",
+        "A zero-day vulnerability is discovered in the formal verification toolchain itself, invalidating the mathematical guarantees and creating a correlated failure across all 'verified' domains.",
+        "Decentralized network operators successfully coordinate on a protocol that mandates and automatically verifies design diversity before allowing participation."
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.75
+    },
+    {
+      "claim": "The premise that a large service has 'strictly more total internal redundancy' is often meaningless because component-level redundancy does not equate to design redundancy; a large service may have many redundant components but zero redundancy against shared design flaws.",
+      "mechanism": "Resilience to correlated failure requires diversity of problem-solving approaches (design independence), not merely multiplicity of components. A large service with N redundant components might all share a common design specification flaw. In this case, the 'strictly more' redundancy is illusory. A decentralized network, despite having fewer redundant components, might have more design independence, making it more resilient to correlated design flaws. The debate should be reframed from component count to design diversity.",
+      "counterconditions": [
+        "The large service's redundancy strategy specifically includes design diversity (e.g., N-version programming) to mitigate common specification flaws.",
+        "The decentralized network suffers from a lack of coordinated updates, leaving nodes with unpatched, divergent flaws that cause a cascade of independent failures indistinguishable from a correlated outage in impact.",
+        "The failure mode in question is not a design flaw but a physical component failure, where component-level redundancy is the most effective mitigation."
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "Decentralized software systems are fundamentally less resilient than biological immune systems because they do not evolve without coordinated updates, making them vulnerable to synchronized degradation when a shared external shock exploits a common unpatched vulnerability.",
+      "mechanism": "Biological immune systems maintain resilience through continuous, uncoordinated evolutionary adaptation, creating a moving target for pathogens. Decentralized software networks typically rely on coordinated updates or rational operators independently choosing to patch. If operators rationally delay patching due to cost, or if they all use the same underlying library, a shared external shock will exploit this common vulnerability simultaneously. The analogy to biological immune systems breaks down because software does not evolve dynamically in the same way, leaving decentralized networks static and correlated in their exposure.",
+      "counterconditions": [
+        "Decentralized network operators implement automated, autonomous patching mechanisms that allow continuous evolution without central coordination.",
+        "The large service's formal verification process is so slow that it cannot adapt to novel threats as quickly as an uncoordinated network of independent operators.",
+        "The biological immune system analogy is flawed because biological systems also suffer from correlated failures (e.g., a pandemic affecting all individuals lacking a specific genetic immunity)."
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.5
+    },
+    {
+      "claim": "Apparent independence in a decentralized network is fundamentally a mask for hidden correlation via shared optimal dependencies, meaning that in any unregulated market, decentralized networks will inevitably converge toward correlated failure modes, making the large service strictly more resilient if it can eliminate shared dependencies.",
+      "mechanism": "In an unregulated market, rational independent operators will optimize for cost and reliability by choosing the same 'best-in-class' dependencies. This convergent evolution creates a monoculture. Apparent independence (failure events not occurring simultaneously) is merely a mask for hidden correlation; the shared dependency is a single point of failure. The only way to maintain true independence is to intentionally choose suboptimal or diverse dependencies, violating rational economic behavior. Therefore, the large service, which can by fiat eliminate shared dependencies, is strictly more resilient.",
+      "counterconditions": [
+        "The market for dependencies is fragmented enough that no single 'best-in-class' solution dominates, leading to natural diversity in the decentralized network.",
+        "The large service's attempt to eliminate shared dependencies results in such bespoke, untested code that it introduces more novel, uncorrelated failure modes than it prevents.",
+        "Operators in the decentralized network are not purely rational economic actors but are motivated by ideological diversity, intentionally avoiding monoculture."
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "A zero-day vulnerability in a foundational decentralized protocol can wipe out the entire network simultaneously, demonstrating that decentralized systems are highly vulnerable to correlated failure; whereas a large service with a bridge-population fail-safe can isolate the damage, making the large service strictly more resilient.",
+      "mechanism": "Decentralized networks often rely on shared foundational protocols (e.g., a common consensus algorithm or networking library). A zero-day exploit against this protocol affects all nodes simultaneously, resulting in total network failure. This is a correlated failure by design. A large service, conversely, can implement bridge-population fail-safes: isolating redundant components behind strict boundaries that prevent the propagation of a failure from one domain to another. Thus, the large service's internal redundancy is more resilient to correlated failure than the decentralized network's shared protocol dependency.",
+      "counterconditions": [
+        "The decentralized network has evolved multiple, incompatible protocol implementations, meaning a zero-day in one implementation does not affect others.",
+        "The large service's 'bridge-population' fail-safe is itself a shared component that can fail, creating a single point of correlation.",
+        "The foundational decentralized protocol has been formally verified to a degree that makes the probability of a zero-day effectively zero, whereas the large service's internal code has not."
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.65
+    }
+  ]
+}
+```
