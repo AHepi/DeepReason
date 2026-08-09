@@ -1,5 +1,5 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=4 blockers=none
+State: next=5 blockers=diff-budget EXCEEDED (228/190) after step 4 -- STOPPED per dr-execute-step's own rule, awaiting operator decision (see below)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
@@ -74,7 +74,7 @@ operator wants it (recorded in PARKED.md at delivery).
       immediately, not only steps explicitly tagged `[COMMIT]`. No
       separate action needed.
 
-- [ ] 4. (S2) Write the regression test for `rules/conj.py`'s five S2
+- [x] 4. (S2) Write the regression test for `rules/conj.py`'s five S2
       sites (a v7-configured conjecture turn mints a
       `"conjecturer.turn.v7"`-contracted commitment, not v6) BEFORE
       changing the source — it must FAIL against the current tree
@@ -83,6 +83,44 @@ operator wants it (recorded in PARKED.md at delivery).
       whichever failure actually occurs).
       done-when: the new test is collected and FAILING, pasted output
       showing which of the two failure modes fired.
+      DONE:
+      ```
+      E   ValueError: controlled conjecture turns require their exact active manifest contract
+      src/deepreason/rules/conj.py:744: ValueError
+      1 failed, 25 deselected in 0.62s
+      ```
+      MID-STEP DISCOVERY (not a plan change, handled within this step):
+      the realistic dispatch path (`Scheduler.run()`) requires a durable
+      route-seat MODEL CLASSIFICATION to exist before any transactional
+      work prepares (`workflow/transaction_service.py`'s
+      `V6_MODEL_CLASSIFICATION_REQUIRED`), and the normal way to get one
+      (`run_production_contract_doctor`) needs `cli/doctor.py`'s
+      `ProductionContractPairV1.contract_id` to admit v7 — a file Option
+      C explicitly excludes. Traced `_validate_model_classification`
+      (`workflow/replay.py`): it checks a classification plan ONLY
+      against `manifest.route_seat_behavioral_capability_plan` (already
+      v7-correct after step 2), never against a `ProductionContractPairV1`
+      — so a plan hand-built directly from the manifest's own grants
+      (`_bind_classification_bypassing_doctor`, new test helper) legally
+      bypasses the doctor without touching it, keeping `cli/doctor.py`
+      out of scope as the operator's Option C choice intended. Recorded
+      here rather than silently used without explanation; this is a
+      TEST-ONLY technique (the real live-run test at R2 will use the
+      same bypass, documented there too).
+
+      **DIFF BUDGET: EXCEEDED.**
+      `python tools/diff_budget.py 781ad6811 --ceiling 190 --paths
+      src/deepreason/run_manifest.py tests/test_v6_contract_schema_repair_policy.py
+      docs/map/SUB-manifest.md tests/test_v6_transaction_qualification.py`
+      → `{"total_insertions": 228, "ceiling": 190, "verdict": "EXCEEDED"}`
+      (38 over, with S3 and S4 still to come). Driven almost entirely by
+      the mid-step classification-bypass discovery above (~50 of the
+      144 lines in the test file), not scope creep — SPEC.md's original
+      ~60-120 line test estimate did not anticipate needing to route
+      around `V6_MODEL_CLASSIFICATION_REQUIRED`. Per this skill's own
+      rule ("EXCEEDED is a STOP... not a footnote"), stopping HERE
+      before S3/S4, reporting to the operator rather than continuing
+      silently past the ceiling.
 
 - [ ] 5. (S2) Apply the five `rules/conj.py` source changes: capture the
       manifest's configured `conjecturer_turn_contract` once into a new

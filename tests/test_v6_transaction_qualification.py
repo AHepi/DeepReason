@@ -6,6 +6,7 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -68,7 +69,11 @@ from deepreason.scratch.proposals import (
 )
 from deepreason.scratch.service import ScratchService
 from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
-from deepreason.workflow.transaction import WorkBudgetDenied
+from deepreason.workflow.transaction import (
+    RouteSeatModelClassificationPlanV1,
+    RouteSeatModelClassificationV1,
+    WorkBudgetDenied,
+)
 from deepreason.workflow.transaction_service import InquiryTransactionService
 from deepreason.cli.doctor import run_production_contract_doctor
 from tests.test_cli_production_doctor_v6 import _admitted_case
@@ -110,7 +115,9 @@ def _config(*, critics: bool = False) -> Config:
 
 
 def _control(
-    *, scratch_authoring: ScratchAuthoringPolicyV1 | None = None
+    *,
+    scratch_authoring: ScratchAuthoringPolicyV1 | None = None,
+    contract_versions: ContractVersionPolicyV3 | None = None,
 ) -> ControlPlanePolicyV3:
     return ControlPlanePolicyV3(
         school_execution=SchoolExecutionPolicyV1(
@@ -131,7 +138,7 @@ def _control(
             exploration_slot_mandatory=False,
         ),
         workflow_retry=WorkflowRetryPolicyV1(),
-        contract_versions=ContractVersionPolicyV3(),
+        contract_versions=contract_versions or ContractVersionPolicyV3(),
         scratch_authoring=scratch_authoring or ScratchAuthoringPolicyV1(),
     )
 
@@ -161,6 +168,7 @@ def _manifest(
     scratch_authoring: ScratchAuthoringPolicyV1 | None = None,
     simulation: SimulationCapabilityPolicyV1 | None = None,
     research=None,
+    contract_versions: ContractVersionPolicyV3 | None = None,
 ):
     toolchains = ()
     capabilities = None
@@ -193,7 +201,9 @@ def _manifest(
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
-        control_plane_policy=_control(scratch_authoring=scratch_authoring),
+        control_plane_policy=_control(
+            scratch_authoring=scratch_authoring, contract_versions=contract_versions
+        ),
         criticism_policy=_criticism_policy() if critics else None,
         inquiry_capability_policy=capabilities,
         run_input_digest="f" * 64,
@@ -259,6 +269,68 @@ def _bind_classification(harness: Harness, manifest) -> None:
         manifest,
         case_executor=lambda _manifest, _pair, index: _admitted_case(index),
     )
+    harness.bind_model_classification(manifest, report)
+
+
+def _bind_classification_bypassing_doctor(harness: Harness, manifest) -> None:
+    """P-CEPP-1 Option C (experiments/2026-08-09-change-fix-p-cepp-1-dual-
+    mode-wiring/SPEC.md): cli/doctor.py's ProductionContractPairV1.contract_id
+    Literal does not admit "conjecturer.turn.v7" and is explicitly out of
+    this tranche's scope. _validate_model_classification
+    (workflow/replay.py) only checks a classification plan against the
+    manifest's OWN route_seat_behavioral_capability_plan -- it never reads
+    a ProductionContractPairV1 -- so a plan built directly from the
+    manifest's frozen grants satisfies it without touching the doctor at
+    all. Real qualification evidence is a real digest of real doctor
+    pairs; this bypass's placeholder digest is never compared against
+    doctor output, only stored, so it cannot be confused with one."""
+    if harness.workflow_state.route_seat_model_classification is not None:
+        return
+    behavioral_plan = manifest.route_seat_behavioral_capability_plan
+    entries = []
+    for grant in behavioral_plan.entries:
+        grant_digest = hashlib.sha256(
+            b"deepreason.route-seat-behavioral-grant.v1\x00"
+            + canonical_json(
+                grant.model_dump(mode="json", by_alias=True, exclude_none=True)
+            )
+        ).hexdigest()
+        contracts = tuple(item.contract_id for item in grant.contracts)
+        # A "qualified_exact_behavior" entry needs >=1 evidence pair id per
+        # RouteSeatModelClassificationV1's own _classification_is_exact
+        # validator (inactive iff no authorized contracts iff no evidence
+        # pairs) -- synthetic ids, sorted, one per authorized contract.
+        evidence_pair_ids = tuple(
+            sorted(
+                "sha256:"
+                + hashlib.sha256(
+                    f"p-cepp-1-test-bypass\x00{grant.role}\x00{grant.seat}\x00{contract_id}".encode()
+                ).hexdigest()
+                for contract_id in contracts
+            )
+        )
+        entries.append(
+            RouteSeatModelClassificationV1(
+                role=grant.role,
+                seat=grant.seat,
+                endpoint_id=grant.endpoint_id,
+                route_sha256=grant.route_sha256,
+                behavioral_grant_sha256=grant_digest,
+                selected_class=(
+                    "inactive_no_authorized_contract"
+                    if not contracts
+                    else "qualified_exact_behavior"
+                ),
+                authorized_contract_ids=contracts,
+                evidence_pair_ids=evidence_pair_ids,
+            )
+        )
+    plan = RouteSeatModelClassificationPlanV1.create(
+        manifest_digest=manifest.sha256,
+        qualification_evidence_sha256="0" * 64,
+        entries=tuple(entries),
+    )
+    report = SimpleNamespace(route_seat_model_classification=plan)
     harness.bind_model_classification(manifest, report)
 
 
@@ -832,7 +904,9 @@ def _seed_live_conjecture(harness: Harness) -> None:
     )
 
 
-def _live_adapter(harness, manifest, response, *, budget=100_000):
+def _live_adapter(
+    harness, manifest, response, *, budget=100_000, classification_binder=_bind_classification
+):
     route = manifest.roles["conjecturer"][0]
     endpoint = MockEndpoint(
         response,
@@ -849,7 +923,7 @@ def _live_adapter(harness, manifest, response, *, budget=100_000):
         leases=leases_from_manifest(manifest),
         transaction_authority_required=True,
     )
-    _bind_classification(harness, manifest)
+    classification_binder(harness, manifest)
     adapter.bind_v6_authority(harness, manifest)
     return adapter, endpoint
 
@@ -975,6 +1049,70 @@ def test_live_v6_conjecture_dispatch_observes_durable_issue_authority(tmp_path):
     assert reopened.workflow_state.transaction_work[
         work.preparation.id
     ].terminal.status == "completed"
+
+
+def test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment(tmp_path):
+    """P-CEPP-1 (experiments/2026-08-08-corpus-enrichment-patrol-pilot/
+    PARKED.md; fixed experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-
+    wiring/): a manifest configured for conjecturer.turn.v7 (D2 rev 2
+    dual-mode) dispatches a real conjecture turn end to end AND the
+    admitted work's own contract id is "conjecturer.turn.v7", not a
+    silently-relabeled v6 -- same shape as
+    test_live_v6_conjecture_dispatch_observes_durable_issue_authority,
+    the only differences being the v7-configured manifest and the
+    doctor-bypassing classification bind (see
+    _bind_classification_bypassing_doctor's own docstring: cli/doctor.py
+    is explicitly out of this tranche's scope)."""
+    config = _config()
+    manifest = _manifest(
+        contract_versions=ContractVersionPolicyV3(
+            conjecturer_turn_contract="conjecturer.turn.v7"
+        )
+    )
+    harness = Harness(tmp_path / "live-issued-v7")
+    _seed_live_conjecture(harness)
+    observed = []
+
+    def response(prompt):
+        transactions = tuple(harness.workflow_state.transaction_work.values())
+        assert len(transactions) == 1
+        work = transactions[0]
+        assert work.preparation.contract_id == "conjecturer.turn.v7"
+        observed.append(work.authorization.id)
+        return json.dumps(
+            {
+                "candidates": [
+                    {
+                        "content": "A reversible feedback mechanism.",
+                        "typicality": 0.37,
+                    }
+                ]
+            }
+        )
+
+    adapter, _endpoint = _live_adapter(
+        harness,
+        manifest,
+        response,
+        classification_binder=_bind_classification_bypassing_doctor,
+    )
+    Scheduler(
+        harness,
+        adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
+    ).run(1)
+
+    assert len(observed) == 1
+    work, = harness.workflow_state.transaction_work.values()
+    assert work.terminal.status == "completed"
+    assert work.preparation.contract_id == "conjecturer.turn.v7"
+    reopened = Harness(harness.root)
+    assert reopened.workflow_state.transaction_work[
+        work.preparation.id
+    ].preparation.contract_id == "conjecturer.turn.v7"
+
 
 def test_live_v6_enabled_scratch_is_a_positive_advisory_workshop(tmp_path):
     policy = ScratchAuthoringPolicyV1(
