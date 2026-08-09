@@ -401,12 +401,80 @@ permanently for any future comparison.
 
 ## Omnibus decision table
 
-(filled in at the end: every number, its block, what it decides)
+| # | number | block | what it decides |
+|---|---|---|---|
+| 1 | 12/12 Block A runs complete; SELF 6/6 completed, CROSS 4/6 completed | A | pilot has enough data to read, not enough to power a full P1/P2 test |
+| 2 | refutation rate = 0.0 in all 10 completed Block A runs | A | P1 is untestable from this data (no variance); needs harder questions or more cycles, Rung C2's job |
+| 3 | criticism calls/artifact: SELF 0.477 vs CROSS 0.594 | A | leans toward P2's predicted direction (cross argues more), n too small to trust alone |
+| 4 | criticism tokens/artifact: SELF 1006.7 vs CROSS 925.9 | A | leans AGAINST P2's predicted direction on this one axis — mixed signal, not a clean confirmation |
+| 5 | foreign-criticism debt: SELF nonzero in 2/6 (vals 4,4); CROSS nonzero in 4/4 (vals 9,5,12,9) | A | strongest directional Block A finding: heterogeneous seat routing leaves more coverage debt at natural stop, consistently |
+| 6 | CROSS cell: 2/6 runs hit V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at cycle 0; SELF: 0/6 | A | a real, CROSS-specific failure mode exists, at ~33% rate, not universal |
+| 7 | 8/10 Block B runs reached SUCCEEDED (first-ever in this repo); 20 proposals, 8 validated, 0 downstream attrition after validation | B | the "capability channel never compiles" ceiling was a question-shape artifact, not a structural wall; bottleneck is PROPOSED→VALIDATED |
+| 8 | attempts per live capability hit: 1.25 runs/hit, 2.5 proposals/success | B | the number future demonstrations need to budget for, at this question's difficulty |
+| 9 | typed seat-failure at cap 4096: 1/2 runs; at cap 16384: 0/2 | C | raising `--maximum-completion-tokens` does reduce this failure mode, as CLAUDE.md's guidance claims |
+| 10 | cap 8192 qualified `ready_shallow` (not full) on a fresh independent battery | C | confirms the 8192 fragility is reproducible on demand, a 3rd/4th independent observation combined with Block D |
+| 11 | new typed error at cap 4096 seed 2: `ROUTE_LEASE_MISMATCH` (expected 4096, actual 2560) | C | a genuine candidate defect, parked with a ready diagnose prompt, not a capacity issue |
+| 12 | scope-violation rate at cap 8192: 1/5 independent draws (Block D's 4 + Block C's 1), always the same pair | D | leans stochastic-but-concentrated, not deterministic, not clean |
+| 13 | scope-violation rate at cap 16384: 3/5 independent draws, a DIFFERENT pair each time | D | inverts this block's own prereg expectation; 16384 is not a safe control point — needs a larger resample before trusting the direction |
+| 14 | qualification demotion rate across all 8 Block D batteries: 4/8 (50%) | D | a concrete cost number for any future qualification-repair-scope design discussion (S4b: every battery, demoted or not, is paid for in full) |
+| 15 | overlay corpus: 48 → 76 roots; attack-edge density 0.01335 → 0.01001 (-25% relative); 0 new overlay errors | E | corpus grew cleanly; density fell because new roots are node-heavy, not because argumentation quality declined |
 
 ## Failure ledger
 
-(ledgered S6-style; budget 15)
+Ledgered S6-style; budget 15, none needed to stop the tranche early.
+"Failure" here means any typed abnormal/refusal outcome or process
+error encountered while executing this tranche — most are the
+experimental measurements the relevant block exists to take, not
+mistakes; each is marked accordingly.
+
+| # | what | block | disposition |
+|---|---|---|---|
+| 1 | `snapshot_loop.sh` exclude pathspec matched only the `runs` directory entry, not its contents — one manual commit and one auto-snapshot briefly committed an in-flight CROSS-cell run root (lock files included) before this was caught | process | self-caught, fixed forward (`d7fdec85`), not rewritten; no data lost |
+| 2 | CROSS cell q1s1, q1s2: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` at cycle 0 | A (measurement) | this IS the block's own finding — CROSS-cell seat-capability exhaustion, ~33% rate |
+| 3 | Both cells, `foreign-criticism` coverage-validation violations (SELF 3/6 clean, CROSS 0/6 clean) | A (measurement, confound) | pre-existing harness invariant, unrelated to seat identity; attributed to this block's own tight budget choice, reported as residue |
+| 4 | Block B s1, s4: stuck at PROPOSED, `operational_failure` | B (measurement) | the minority (2/10) outcome of the funnel measurement itself |
+| 5 | Block C cap=4096 s1: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` | C (measurement) | expected mechanism per CLAUDE.md's own guidance, confirmed |
+| 6 | Block C cap=4096 s2: `ROUTE_LEASE_MISMATCH` (expected 4096, actual 2560) | C (measurement + candidate defect) | NEW typed error, parked with ready diagnose prompt, not fixed this tranche |
+| 7 | Block C cap=8192: `QUALIFICATION_TIER_SHALLOW`, both seeds refused before any `reason` call | C (measurement) | battery-level demotion, cross-validates Block D |
+| 8 | Block D 8192-point: 0/4 samples clean-violating, but Block C's independent 8192 battery (item 7) shows the same pair violating | D (measurement) | combined 1/5 draws — reported jointly, not double-counted as two findings |
+| 9 | Block D 16384-point: 3/4 samples show scope violations, each a different pair | D (measurement) | inverts the block's own prereg expectation; the tranche's most surprising number |
 
 ## Residue
 
-(what remains unproven, honestly stated)
+What remains unproven, honestly stated — not smoothed into a
+conclusion the data does not support:
+
+- **Block A's P1/P2 are still open questions.** This pilot could not
+  generate a single refutation in 10 completed runs at its budget, so
+  P1 has no variance to test. P2's two axes (calls/artifact,
+  tokens/artifact) point in different directions at n=6/cell. Rung
+  C2's full pre-registered design (harder questions, more seeds, a
+  critic-seat rung once built) is still required before either claim
+  can be called supported or refuted.
+- **The reverse arm (glm conjectures, gemma criticizes) is still
+  structurally impossible.** `GROUP_ROLES` has no `critic` group;
+  PARKED.md carries a ready prompt, not yet implemented.
+- **Whether heterogeneous seat routing genuinely worsens
+  foreign-criticism coverage debt, or whether this tranche's shared
+  tight budget explains all of it, is not separated.** CROSS cell's
+  4/4-runs-with-debt vs SELF's 2/6 is suggestive, not proven; needs a
+  budget-matched follow-up.
+- **Block B's "zero downstream attrition after VALIDATED" is an
+  8-sample observation, not a proven rate.** A larger resample could
+  still find COMPILED/DISPATCHED/SUCCEEDED failures this pilot's size
+  was too small to see.
+- **Block D's 16384-riskier-than-8192 finding is n=4-5 per point.** A
+  properly powered resample (same method, more samples) is needed
+  before treating "raising the cap past a point increases scope
+  violations" as established rather than observed once.
+- **`ROUTE_LEASE_MISMATCH` at cap=4096 is diagnosed only to the level
+  of "a typed error occurred and what it said."** Root cause (why
+  max_tokens=2560 was leased against a 4096-token profile) is
+  genuinely unknown and parked for a future `dr-diagnose` pass.
+- **CLAUDE.md's "Hard-won invariants" entry about turmite/jolt's
+  cycle-0 killers is stale** (both fixed 2026-08-01, before this
+  tranche) — flagged, not corrected; editing CLAUDE.md is out of scope
+  for a live-run tranche.
+- **Block E's density comparison is a single before/after snapshot,
+  not a trend.** Whether density recovers, keeps falling, or holds as
+  the corpus keeps growing needs more than one data point.
