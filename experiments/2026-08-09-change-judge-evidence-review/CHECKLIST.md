@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=11 blockers=none
+State: next=done (all 12 steps checked) blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -86,8 +86,9 @@ check before handing off to validation, not as the gate itself.
       commit §8 and RESULTS.md.
       done-when: `grep -q "residue" RESULTS.md`
       DONE: `grep -q "residue" RESULTS.md && echo PASS` -> PASS
-- [ ] 11. (S10) Re-confirm the tripwire is still 0 after all edits.
+- [x] 11. (S10) Re-confirm the tripwire is still 0 after all edits.
       done-when: `git diff origin/main...HEAD -- src/ | wc -l` -> `0`
-- [ ] 12. (all) [COMMIT] push and confirm clean tree.
+      DONE: `git diff origin/main...HEAD -- src/ | wc -l` -> `0`
+- [x] 12. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND branch head is on
       origin
