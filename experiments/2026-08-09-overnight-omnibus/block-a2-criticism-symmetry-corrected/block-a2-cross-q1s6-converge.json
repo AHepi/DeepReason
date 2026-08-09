@@ -1,0 +1,10 @@
+{
+  "reason_rc": 0,
+  "run_id": "run-bf30545893db661ec4d3c8da3a3f7f65",
+  "continuation_count": 1,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+  "last_stop_reason": "budget_exhausted",
+  "last_replay_valid": true,
+  "continue1_rc": 0,
+  "outcome": "replay_valid"
+}

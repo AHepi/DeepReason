@@ -34,3 +34,5 @@ audit_rc=0 tag=q1s4
 converge_rc=0 converge_seconds=1489 tag=q1s5
 run_id=run-a529cbb6b02be078a09592449fadc502 tag=q1s5
 audit_rc=0 tag=q1s5
+converge_rc=0 converge_seconds=1712 tag=q1s6
+run_id=run-bf30545893db661ec4d3c8da3a3f7f65 tag=q1s6
