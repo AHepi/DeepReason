@@ -356,6 +356,16 @@ just over that soft default — recorded plainly rather than quietly
 redefining "guideline." No functional scope changed; only the ceiling
 `dr-execute-step`'s diff-budget gate checks against.
 
+### Second amendment (post-step-8/9, operator-confirmed): ceiling raised again
+
+After S3 landed plus a mid-step discovery (`llm/wire.py`'s wire-contract
+class hardcoded its own `contract_id`, a 5th file not in Option C's
+original 4), the diff read 346/320 (EXCEEDED). Presented via
+`AskUserQuestion` with three priced options; **operator chose "raise
+ceiling to 420 and finish."** New ceiling: **420 lines**, sized to cover
+S4 (`invariants.py`, the smallest remaining item) plus its own
+regression test and map update without a third stop.
+
 Commits: one per spec item (S1-S4), so a failure in one item's gate run
 does not block committing the others — 4 commits, each running the
 affected-file ring (CLAUDE.md's own iterate-on-the-ring rule) plus one
