@@ -6,7 +6,7 @@ For positive integer n such that n < 10,000, the number n+2005 has exactly 21 po
 
 ## Positions the record accepts
 
-92 positions stand formally accepted. Where they answer the same question differently they are unresolved rivals: the record deliberately preserves the disagreement rather than merging it.
+102 positions stand formally accepted. Where they answer the same question differently they are unresolved rivals: the record deliberately preserves the disagreement rather than merging it.
 
 - The possible values of n are derived from the prime factorization of m = n + 2005, where d(m) = 21. Since 21 = 7 * 3 or 21 * 1, m must be of the form p^20 or p^6 * q^2 for distinct primes p and q. Given n < 10,000, m < 12,005. The only viable forms are p^6 * q^2. `[7f432713ff79]`
 - The sum of all possible values of n is determined by evaluating m = p^6 * q^2 for p=2 and p=3, ensuring m > 2005 and m < 12005. `[bb9693613936]`
@@ -100,6 +100,16 @@ For positive integer n such that n < 10,000, the number n+2005 has exactly 21 po
 - The proposed relation is a tautology regarding the consistency of value sets rather than a substantive relation between the mechanisms or claims of the sources. Stating that an integration is refuted if the sets of missed values differ does not establish a substantive connection between how SRC_005 integrates SRC_003, but merely defines a condition for set equality. `[fd3028f39131]`
 - The target claims SRC_001 shares a mechanism of believing the sum is 2448, but SRC_001 explicitly claims the sum is 16592. `[0108db71550e]`
 - The target attempts to establish a relation between SRC_004 and SCR_008, but neither SRC_004 nor SCR_008 are provided in the target list or context, making the substantive relation unverifiable and effectively hallucinated within this scope. `[b353f6042eea]`
+- The claim in 1ff424888a74 integrates with SRC_005 by sharing the same arithmetic derivation and final sum (16592), and it is refuted if any other prime pair (p, q) satisfying 2006 <= p^6 * q^2 < 12005 is discovered. `[512a3f8e1e49]`
+- The result in 1ff424888a74 depends on the mechanism described in SRC_001 regarding the prime factorization forms (p^20 or p^6 * q^2) required for d(m)=21, and it is refuted if a value m = p^20 is found within the bound 12,005. `[0fbce8b88887]`
+- The claim in 1ff424888a74 contradicts the sum proposed in SRC_002 (2448), despite sharing the same identified set of n values {1131, 5739, 8811, 911}, and it is refuted if the summation 1131 + 5739 + 8811 + 911 is shown to not equal 16592. `[9ea6a96b3c94]`
+- The logic of 1ff424888a74 reduces to the boundary conditions established in SRC_004, specifically the range 2006 <= m < 12005, and it is refuted if the condition n < 10,000 is found to permit values of m beyond 12,004. `[ccf5f246a7eb]`
+- The solution in 1ff424888a74 inherits its prime search methodology from SRC_003, specifically the iteration through p=2 and p=3, and it is refuted if a prime p >= 5 is found to produce a valid m = p^6 * q^2 within the range. `[cbb1eb11f2db]`
+- The target claims an 'integration' based on sharing a 'final sum', but fails to provide a causal mechanism explaining how the sharing of a result constitutes a substantive relation of integration rather than a mere coincidental identity of output. `[848eabfe2447]`
+- The target asserts a 'reduction' to boundary conditions but does not specify the causal mechanism by which the logic of 1ff424888a74 is derived from or dependent upon the specific range in SRC_004, leaving the relation as a descriptive overlap rather than a substantive reduction. `[3e738518ef04]`
+- The proposed relation is circular and logically flawed; it claims 1ff424888a74 'depends on' the mechanism in SRC_001, but then defines the refutation condition based on the internal values of the problem rather than the validity of the relationship itself. `[535bd4fdd2f2]`
+- The refutation condition is logically disconnected from the proposed 'contradiction' relation; the target claims a contradiction exists between a sum (2448) and the claim in 1ff424888a74, but defines refutation as showing the sum of the set equals something other than 16592. `[1bc607e820de]`
+- The proposed relation identifies an inheritance of methodology (prime search) but fails to provide a substantive connection to the neighbourhood of the problem itself, instead framing the refutation criteria as a numerical range check rather than a failure of the relationship between the endpoints. `[cd0eb96af0bf]`
 
 ## Positions the record refuted
 
