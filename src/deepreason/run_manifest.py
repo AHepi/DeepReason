@@ -1938,6 +1938,15 @@ def _route_seat_behavioral_contract_assignments(
     return tuple(sorted(assignments, key=lambda item: (item[1], item[2], item[0])))
 
 
+# P-CEPP-1: both conjecturer-turn contract versions a v6-schema manifest
+# may configure (ContractVersionPolicyV3.conjecturer_turn_contract) share
+# the SAME conjecture-family scratch authority below -- v7 (D2 rev 2
+# dual-mode) is additive to v6, never a different kind of turn.
+CONJECTURER_TURN_CONTRACTS = frozenset(
+    {"conjecturer.turn.v6", "conjecturer.turn.v7"}
+)
+
+
 def _compile_route_seat_behavioral_capability_plan(
     manifest: RunManifest,
 ) -> RouteSeatBehavioralCapabilityPlanV1:
@@ -2001,10 +2010,10 @@ def _compile_route_seat_behavioral_capability_plan(
                         "/contract_schema_repair_policy/grants",
                     )
                 is_scratch = contract_id.startswith("scratch.")
-                is_conjecture = contract_id in {
-                    "conjecturer.turn.v6",
-                    "conjecturer.atomic-candidate.v1",
-                }
+                is_conjecture = (
+                    contract_id in CONJECTURER_TURN_CONTRACTS
+                    or contract_id == "conjecturer.atomic-candidate.v1"
+                )
                 decomposition = decomposition_by_contract.get(
                     (role, seat, contract_id)
                 )
@@ -2017,7 +2026,7 @@ def _compile_route_seat_behavioral_capability_plan(
                         ),
                         scratch_write=(
                             "contract_governed"
-                            if is_scratch or contract_id == "conjecturer.turn.v6"
+                            if is_scratch or contract_id in CONJECTURER_TURN_CONTRACTS
                             else "none"
                         ),
                         decomposition_permission=(
@@ -2488,7 +2497,13 @@ def _compile_contract_schema_repair_policy(
         "batch-critic.v2": shared_ceiling,
         "critic.atomic-target.v1": shared_ceiling,
         "conjecturer.atomic-candidate.v1": conjecture_ceiling,
-        "conjecturer.turn.v6": conjecture_ceiling,
+        # P-CEPP-1: granted to whichever conjecturer-turn contract the
+        # manifest actually configured (v6 or v7, D2 rev 2 dual-mode) --
+        # v7 is additive to v6, so it earns the identical ceiling, not a
+        # separately hardcoded one.
+        control_plane_policy.contract_versions.conjecturer_turn_contract: (
+            conjecture_ceiling
+        ),
     }
     if control_plane_policy.scratch_authoring.enabled:
         ceilings.update(

@@ -32,7 +32,7 @@ operator wants it (recorded in PARKED.md at delivery).
       Fails exactly at P-CEPP-1's own documented error, confirming the
       test exercises the real gap.
 
-- [ ] 2. (S1) Apply the three `run_manifest.py` source changes: the
+- [x] 2. (S1) Apply the three `run_manifest.py` source changes: the
       `ceilings` dict key (~line 2491) reads
       `control_plane_policy.contract_versions.conjecturer_turn_contract`
       instead of the literal `"conjecturer.turn.v6"`; the `is_conjecture`
@@ -47,6 +47,21 @@ operator wants it (recorded in PARKED.md at delivery).
       done-when: `python -m pytest tests/test_v6_contract_schema_repair_policy.py -k v7 -q`
       now PASSES (paste it), AND `python -m pytest tests/test_v6_contract_schema_repair_policy.py tests/test_v6_contract_schema_repair_runtime.py tests/test_v6_route_seat_behavioral_capability_plan.py tests/test_v6_route_seat_behavioral_capability_runtime.py -q`
       is unchanged-green (0 failed, same count as before this step).
+      DONE:
+      ```
+      1 passed, 31 deselected in 0.18s
+      57 passed in 5.02s   (full S1 ring, unchanged-green)
+      ```
+      Added module constant `CONJECTURER_TURN_CONTRACTS` (used by both
+      `is_conjecture` and `scratch_write`); `_compile_contract_schema_repair_policy`'s
+      ceilings dict now keys off the manifest's own configured contract.
+      `docs/map/SUB-manifest.md`'s "Reading the model and not the
+      validator" trap extended with this fix's own history + a new
+      `check:` line, verified standalone (passed, see above) — full
+      `docs_verify.py` deferred to step 14 (running in background,
+      slow — re-runs every map document's checks, not just this one).
+      `Verified-at:` NOT advanced (that stamp covers the whole
+      document's checks, not re-run yet in full).
 
 - [ ] 3. (S1) [COMMIT] Commit S1 with `tools/diff_budget.py` run against
       the tranche's base commit and pasted.

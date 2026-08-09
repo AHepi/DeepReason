@@ -175,7 +175,19 @@ credential. The only mutable in-memory state is `_EXECUTOR_OPTIONS` in
 - **Reading the model and not the validator.** Pydantic admits values the
   module-level `_validate_v*` functions refuse, so a field's `Literal` is not
   the admissibility rule. `DR-INV-frozen-surfaces` records the tranche this
-  actually cost; read it before scoping any change to a policy model.
+  actually cost; read it before scoping any change to a policy model. A live
+  example of exactly this trap: `ContractVersionPolicyV3.conjecturer_turn_
+  contract`'s `Literal` admitted `"conjecturer.turn.v7"` (D2 rev 2 dual-mode,
+  additive to v6) from the day it was added, but
+  `_compile_contract_schema_repair_policy` hardcoded the repair-grant key to
+  the literal `"conjecturer.turn.v6"`, so any v7-configured manifest was
+  refused at `V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED` before a run could start —
+  parked as P-CEPP-1, fixed in
+  `experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/`. The grant
+  key and the conjecture-family scratch-authority checks
+  (`CONJECTURER_TURN_CONTRACTS`) now read the manifest's own configured
+  value instead of re-hardcoding it a second time.
+`check: grep -q "^CONJECTURER_TURN_CONTRACTS = frozenset(" src/deepreason/run_manifest.py && python -m pytest "tests/test_v6_contract_schema_repair_policy.py::test_v7_manifest_gets_an_equivalent_repair_grant_and_scratch_authority" -q`
 - **`roles` is a `_FrozenDict`, not a dict.** Mutating it raises `TypeError`
   rather than silently producing a manifest whose bytes no longer describe its
   routes. `budget_policy`, `stop_policy` and `memory_policy` are frozen the same
