@@ -147,6 +147,35 @@ configuration, not an edge case — every instance closed cleanly with one
 `continue --budget cycles=2` top-up, consistent with the prereg's own
 resume policy, applied identically each time.
 
+## 2026-08-09 — Phase 2 patrol underway
+
+Post-enrichment pairing plan: 58 corpus roots (47 openable, 11
+unopenable — same pre-v6-schema roots Phase 3's baseline already
+excluded), **9277 pairs** (6065 historical, 3212 enriched — Phase 1's
+10 new roots contributed disproportionately more pairs per root than
+the historical average, since every enriched root has a single
+locked-in problem with many accepted claims, while historical roots
+often address several problems each with fewer claims per group).
+1275 accepted artifacts excluded as unaddressed.
+
+Running in bounded, resumable chunks (`--max-calls=N`, resume-by-scan
+of already-answered pairs) rather than one continuous call — the same
+adaptation Phase 1 needed, since a single ~5-hour call is a much larger
+target for the container's demonstrated instability than a chunk of a
+few thousand. **Chunk 1** (300 calls, ~13 minutes including one-time
+corpus-opening overhead): 109 hits, 1 parse failure. **This is a much
+higher candidate-hit rate than expected (36%)** — sanity-checked before
+trusting it and continuing: the first several hits are all from one
+root (`2026-08-02-stress-triplet/home-orbit`, a Wolfram-rule cellular-
+automaton problem) where two accepted claims make literally opposite
+factual assertions about the same rule/width pair ("Rule 184 fails the
+criterion and is nonlinear" vs "Rule 184 passes and is linear," same
+problem, same root). These read as genuine candidate contradictions,
+not classifier noise — the mechanism is doing what it was built to do.
+Whether the 36% rate holds corpus-wide or is concentrated in a few
+noisy roots is exactly what the per-root/per-half breakdown in the
+final decision table will show; not assumed here.
+
 ## 2026-08-08 — Phase 1 progress (running table, updated per root)
 
 | run id | question tier | status | cycles | accepted | candidate_checker_count | notes |

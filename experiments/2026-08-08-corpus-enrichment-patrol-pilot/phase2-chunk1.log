@@ -1,0 +1,16 @@
+corpus roots=58 openable=47 unopenable=11 pairs=9277 historical=6065 enriched=3212 unaddressed_accepted_excluded=1275
+unopenable root list -> /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/phase2_unopenable_roots.json
+[25/9277] hits=21 parse_failures=1
+[50/9277] hits=32 parse_failures=1
+[75/9277] hits=43 parse_failures=1
+[100/9277] hits=59 parse_failures=1
+[125/9277] hits=70 parse_failures=2
+[150/9277] hits=80 parse_failures=2
+[175/9277] hits=85 parse_failures=2
+[200/9277] hits=98 parse_failures=2
+[225/9277] hits=101 parse_failures=2
+[250/9277] hits=102 parse_failures=2
+[275/9277] hits=106 parse_failures=2
+[300/9277] hits=109 parse_failures=2
+max-calls=300 reached this invocation; 300 calls made, re-run to continue
+PATROL CHUNK COMPLETE: pairs_this_run=300 -> /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/patrol_results.jsonl
