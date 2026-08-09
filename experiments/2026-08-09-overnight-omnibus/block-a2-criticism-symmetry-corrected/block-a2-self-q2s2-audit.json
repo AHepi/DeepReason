@@ -1,0 +1,36 @@
+{
+  "artifact_status_counts": {
+    "accepted": 58
+  },
+  "artifact_total": 58,
+  "cell": "self",
+  "continuation_count": 0,
+  "converge_outcome": "non_resumable_not_valid",
+  "coverage_debt_completed_total": 24,
+  "coverage_debt_outstanding_total": 0,
+  "coverage_debt_targets": 24,
+  "coverage_debt_targets_with_outstanding": 0,
+  "criticism_call_count_total": 18,
+  "criticism_calls_per_accepted_artifact_mean": 0.4482758620689655,
+  "criticism_token_total": 33593,
+  "criticism_tokens_per_accepted_artifact_mean": 1025.4310344827586,
+  "events_total": 515,
+  "foreign_criticism_debt_at_natural_stop": null,
+  "q_idx": "2",
+  "refutation_rate": 0.0,
+  "replay_valid": false,
+  "root": "/home/user/DeepReason/experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+  "run_status_message": "adapter rejected a repair that revalidates successfully",
+  "seed_idx": "2",
+  "self_criticism_debt_at_natural_stop": 0,
+  "state": "failed",
+  "stop_reason": "operational_failure",
+  "typed_seat_failure": false,
+  "verify_violations": [
+    "attempt-validity",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism",
+    "foreign-criticism"
+  ]
+}
