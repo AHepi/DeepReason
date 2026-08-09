@@ -247,3 +247,28 @@ surface it in the decision sheet."
 C12 (process): "The only valid stop is the final one." — no intermediate
 STOP this window; the SPEC-AND-STOP endpoint (SPEC.md pushed, per C5) is
 the sole stop point for this tranche.
+
+### Amendment 3 (2026-08-09, post-STOP clarifying questions, operator's own words)
+
+> Starving the judge should be something that's doable in config. There
+> should be built in signals to detect active judges as well. Also, single
+> model two judge seats should be possible. Is none of this possible?
+
+Sent after SPEC.md was committed, pushed, and reported at the SPEC-AND-STOP
+endpoint (C12). Read as clarifying questions plus a statement of intent for
+the already-priced judge-seats design (§2b), not as a new implementation
+directive — no code follows from this amendment; it sharpens Half 1/Half 2
+with three additional measured findings, captured as a SPEC.md addendum.
+
+R10 (artifact, refines R6/C7): "Starving the judge should be something
+that's doable in config." — confirms the direction of §2(b)'s throttle
+fields; no new requirement, a validation of the existing design.
+
+R11 (artifact, refines R7/R9): "There should be built in signals to detect
+active judges as well." — a claim to verify against the record: do such
+signals exist, live or dead, generic-rate or quality-specific?
+
+R12 (artifact, new): "single model two judge seats should be possible." —
+a claim to verify: is a genuinely single-model run with two judge seats
+(same model in both, independence carried by school rather than family)
+reachable through any code path today?

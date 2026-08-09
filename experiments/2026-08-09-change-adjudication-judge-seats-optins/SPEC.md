@@ -1129,3 +1129,143 @@ formal budget-overrun stop was actually triggered.
   new opt-in surface needed beyond §2(a)'s adjudication flag.
 - §5.1, §5.4, §5.5: the three forks with real design-direction consequences,
   priced above, awaiting operator words.
+
+---
+
+# ADDENDUM (Amendment 3, R10-R12) — post-STOP clarifying findings
+
+Sent after the SPEC-AND-STOP endpoint; answered here from direct code
+verification rather than a new research fan-out, since all three questions
+resolve from files already read for Half 1/2. No design change to §2(b)'s
+opt-in surface results from this addendum — it sharpens the evidence behind
+it and surfaces one additional structural gap (R12).
+
+## R10 — config-based judge starvation: confirms §2(b) as designed
+
+No new finding; §2(b)'s `JUDGE_SUMMONS_PER_CYCLE`/`JUDGE_SUMMONS_COOLDOWN`
+fields are exactly this, modeled on the existing `ADVISORY_TRIALS_PER_CYCLE`/
+`DISC_ATTEMPTS_MAX`/`DISC_COOLDOWN` pattern (§1(e)). Static (operator-set
+caps), not adaptive to a live zeal measurement — the adaptive version is
+§5.6's M2 rung, gated on M1 first producing real signals (next).
+
+## R11 — built-in signals to detect active judges: two different things exist, in two different states
+
+**Quality/misbehavior signals** (self-preference, verbosity bias, error
+rate) — code exists, `informal/audits.py:228` (`planted_flaw_calibration`)
+and `:273` (`bias_probes`, emitting `judge-self-preference:`/
+`judge-verbosity-bias:`), consuming `JUDGE_ERR_MAX` (`config.py:269`). Per
+Half 1(d), these have zero call sites in production — only
+`tests/test_audits.py` calls them — and zero occurrences in any committed
+`log.jsonl`. This is exactly §5.6's M1 rung: the signal-producing code is
+written but never plugged in.
+
+**Raw activity-rate signals** (how often the judge fires per cycle,
+independent of quality) — no generic per-role counter exists. `TokenMeter`
+(`llm/budget.py`) has `calls` but no role dimension (`grep` for "judge" in
+`llm/budget.py` returns zero hits, confirmed in Half 1(d)). The pattern
+exists only for narrower, already-named cases:
+`self._advisory_trials_this_cycle` (`scheduler.py`, counted against
+`ADVISORY_TRIALS_PER_CYCLE`) and the `DISC_ATTEMPTS_MAX` attempt counter —
+both scoped to one trial kind, not "judge calls in general." A generic
+judge-activity-rate counter would need to be added; it does not exist
+today under any name.
+
+## R12 — single-model, two-judge-seats: the runtime logic is built and correct; nothing today can construct the manifest it needs
+
+**The runtime fallback already exists and is exactly the operator's
+described shape.** `informal/trial.py:614-629` (`_argument_trial_steps`):
+```python
+if adapter.is_single_model():
+    # One model in every position cannot supply cross-FAMILY independence:
+    # the ensemble gate is unsatisfiable by construction, so the trial was
+    # unreachable rather than strict. The substitute is cross-SCHOOL
+    # CRITICISM -- the case must come from a school other than the one that
+    # authored the target.
+    if len(adapter.leases.get("judge", ())) < 2:
+        return _decline(harness, target_id, "single-judge-seat", diagnostics)
+    if not critic_school_id:
+        return _decline(harness, target_id, "no-critic-school", diagnostics)
+    if critic_school_id == target.provenance.school:
+        return _decline(harness, target_id, "same-school-critic", diagnostics)
+else:
+    adapter.require_cross_family_judges()
+```
+When the whole run is single-model, this branch does **not** call
+`require_cross_family_judges()` at all — it only requires ≥2 judge seats
+(same model is fine, since the run is already known single-model) plus a
+`critic_school_id` distinct from the target's own school. `critic_school_id`
+comes from the criticism side's own foreign-school assignment
+(§1(f) — a mechanism already live and working today), not from the
+separately-noted-superseded `school_judge_bindings`/
+`require_cross_school_judge_ensemble` path. So the school-based
+independence substitute this branch implements is real, reachable
+machinery, not dead code.
+
+**The blocker is one level up: manifest construction has no way to produce
+≥2 judge seats without also breaking single-model-ness.**
+`run_manifest.py:3137-3160` (`compile_run_manifest`, `single_model` branch):
+```python
+for role in configured_roles:
+    roles[role] = (exact,)          # every role, including judge, gets ONE route
+    ...
+if "judge" in configured_roles and judge_family:
+    second_spec = _select_second_judge_spec(data, judge_family, exact.family, ...)
+    roles["judge"] = (exact, _route_from_spec(second_spec, ...))   # a SECOND, DIFFERENT-family route
+```
+Without `--judge-family`, judge gets exactly one route — `len(judge seats)
+< 2`, so the single-model branch above always declines with
+`"single-judge-seat"`. The only CLI lever that adds a second judge route,
+`--judge-family`, is built (by its own parameter name and
+`_select_second_judge_spec`'s signature, which is explicitly handed
+`exact.family` to select against) to pick a **different** family — by
+design, never the same model twice. Adding that second, different-family
+route makes `is_single_model_run` (which pools leases across *every* role,
+`llm/firewall.py:299-338`, per §1(f)'s Consequence B) return False for the
+whole run, so `_argument_trial_steps` takes the **other** branch
+(`require_cross_family_judges()`) instead — which then also happens to
+succeed, since judge already has its 2 distinct families. The practical
+result: `--judge-family` gives you a working two-judge trial, but never
+through the single-model/same-model-twice substitute path — it always
+routes around it into the ordinary cross-family gate.
+
+**Verdict: genuinely single-model, same-model-in-both-judge-seats is not
+constructible through any operator-facing surface today**, despite the
+runtime logic that would consume it being written, commented, and correct.
+This is the same shape of finding as the dead seats in Half 1(a) and the
+unwired O1a detector in Half 1(e) — real logic, no reachable path to it —
+newly discovered by this question rather than by the original ten-agent
+sweep, and it belongs in the same category: not a defect (nothing is
+broken; the fallback was clearly built deliberately and correctly for this
+exact case), but a gap between what the engine can do and what the CLI
+exposes.
+
+**Decision-sheet consequence**: this adds a fourth road option to §5.2
+(judge-summons live wiring scope), priced here rather than reopening §5.2's
+numbering:
+
+- **Road C (new) — add a manifest-construction lever for "N identical judge
+  seats, no forced family divergence."** Smallest fix: a CLI flag (e.g.
+  `--judge-seats N` or reusing `--judge-family` with a sentinel meaning
+  "same family, just more seats") that populates `roles["judge"]` with N
+  copies of `exact` instead of requiring a second, different-family spec.
+  Cost: small — the runtime consumer already exists and is already tested
+  against this exact shape (`_argument_trial_steps`'s single-model branch);
+  this is purely a manifest-construction change in `compile_run_manifest`
+  plus a CLI argument, not new adjudication/trial logic.
+  **Recommended** — of everything in this addendum, this is the one clear,
+  low-cost, high-value fix: it makes an already-built, already-correct,
+  already-tested-in-shape fallback actually reachable, directly serving
+  the solo law (a solo run should not be structurally locked out of any
+  harness capability, including a judge-mediated trial) at minimal
+  implementation cost.
+- **Road D — leave it unreachable; treat the `--judge-family` path as the
+  only way to get a defended trial with judges on a mostly-single-model
+  run.** No cost, but leaves a solo-law gap: an operator who genuinely
+  wants school-carried independence instead of introducing a second model
+  family has no way to get it, even though the code was built for exactly
+  that preference.
+- Recommendation: Road C, folded into the same follow-up program as §5.6's
+  M1-M3 rungs (a natural M0, since it's smaller and independent of the
+  judge-bias-signal wiring those rungs need) — not this tranche's
+  implementation, since C4/no-code-this-window still holds, but worth
+  naming as the cheapest of all the gaps this SPEC found.
