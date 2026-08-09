@@ -337,3 +337,113 @@ live small-model evidence for a different experiment, E1.2) have **no**
 judge activity to report. Listed for completeness per R5a's "find every
 committed root or results file carrying their numbers" — these two carry
 none.
+
+## §3. Trial-protocol experiments (R5b)
+
+### 3.1 The guard design, read from `informal/trial.py` directly
+
+`run_trial`'s decisive path (`_trial_steps`, confirmed by direct read) runs
+five checks in this fixed order after a `fail` ruling, each capable of
+blocking (or, under `observe_only`, filing an advisory outcome instead of a
+warrant):
+
+1. **Referential integrity** (`trial.py:362-381`, a PROGRAM check, no
+   extra judge call) — every `decisive_point` the judge cited must be a
+   real substring of the actual case+answer exchange. `outcome=
+   "blocked:referential-integrity"`.
+2. **Order-swap consistency** (`trial.py:383-431`, anchored/pairwise modes
+   only) — re-runs the SAME ruling with the exchange presented in swapped
+   order; if the verdict flips, or the swapped ruling cites a decisive
+   point outside the exchange, the trial blocks
+   (`outcome="blocked:order-swap"` or `"blocked:referential-integrity"`).
+   This requires one extra judge call — it catches the judge disagreeing
+   with itself, it does not remove the judge from the loop (relevant to
+   §8).
+3. **Paraphrase spot-check** (`_paraphrase_screen`, `trial.py:513`,
+   called at `trial.py:440`) — re-rules on paraphrases of the same
+   exchange through the SAME preflighted cross-family ensemble; a split or
+   a unanimous non-fail blocks (`outcome="blocked:<reason>"`).
+4. Every check runs on the ALREADY-cross-family-preflighted ensemble
+   (`adapter.require_cross_family_judges()`, `trial.py:360`) — a run with
+   only one model family available cannot reach this code path at all
+   (§2.0's authority-gate distinction; `pairwise_discriminate`,
+   `trial.py:810`, carries its own order-swap block at `trial.py:874-897`,
+   docstring quoted: *"Under the swap, candidate a is labelled B: the same
+   real winner is required (order-swap consistency, §3)"*).
+
+None of these three checks is itself a second, independent adjudicator —
+they are consistency screens ON the same judge ensemble's own output.
+Referential integrity is the one true exception: it needs no additional
+provider call at all, just a string-containment check against the ruling
+the judge already gave (relevant to §8).
+
+### 3.2 The prose-can-refute tranche's own evidence (`experiments/2026-08-01-change-prose-can-refute/`) — TEST-FIXTURE, not live
+
+This tranche made prose criticism able to refute a target for the first
+time in the codebase (`DELIVERY.md`, quoted: *"Before this tranche, no text
+run in DeepReason could ever refute anything by argument... 26 of 42
+[recorded] roots had executed criticism and produced zero attacks, every
+artifact vacuously accepted."*). Its own proof of the mechanism working is
+explicit about what it is:
+
+    VALIDATION.md:36-51 (S2, R2):
+    test_a_single_family_run_can_refute_by_prose_end_to_end PASSED
+    single_family_run: True      len(state.att)   : 1
+    judge families   : {'mock:glm'}   target status: refuted
+    bound schools    : ('school-0', 'school-1')   warrant type: argumentative
+
+`judge families: {'mock:glm'}` (also `CHECKLIST.md:569`) is a **scripted
+mock adapter**, not a live model — this tranche's decisive proof is an
+offline test fixture demonstrating the WIRING works (a prose case CAN mint
+an attack edge and flip `Status` to `REFUTED`), not a live judge ruling.
+`DELIVERY.md`'s own gate line — *"Proof: full gate 3287 passed, 7 skipped,
+0 failed"* — confirms the tranche's evidence standard was the test suite,
+consistent with `docs/map/INV-frozen-surfaces.md`'s Traps entry citing
+this same tranche's `CHECKLIST.md` step 11 for the manifest-vocabulary
+decision. This tranche is evidence about GUARD DESIGN (real, in the
+committed code) and about WIRING CORRECTNESS (real, proven by test), not
+live-run evidence of judge discrimination.
+
+### 3.3 Live-run counts: order-swap and referential-integrity actually firing
+
+Grepped directly against every committed harness root's `log.jsonl`
+(`grep -rl "blocked:order-swap" experiments/ --include=log.jsonl` and the
+same for `blocked:referential-integrity`, `audit-hit:`,
+`audit-blocked:ensemble-split`, `pairwise-observation`,
+`blocked:paraphrase`, 2026-08-09):
+
+| tag | roots with ≥1 hit | total live hits |
+|---|---|---|
+| `"trial-llm"` (any judge call inside a rubric trial) | 11 roots | **1801** |
+| `blocked:order-swap` | 5 roots (`glm_judge_2026-07-14`, `bronze_repertoire_v2_2026-07-14/{gpt-oss_120b,qwen3_5_397b}`, `bronze_feedback_v1_superseded_2026-07-14/{observe_only,trial_required}`) | **8** |
+| `blocked:referential-integrity` | 7 roots (adds `bronze_repertoire_v2_2026-07-14/{deepseek-v4-pro,kimi-k2_6}`, `bronze_pilot_2026-07-14`) | **31** |
+| `blocked:paraphrase` | 0 | **0** |
+| `audit-hit:` (paraphrase/premise-deletion audit landed a warrant) | 0 | **0** |
+| `audit-blocked:ensemble-split` (inside the harness log format, distinct from the e02/bronze script-run reports in §2 which use a different logging convention) | 0 | **0** |
+| `pairwise-observation` | 0 | **0** |
+
+Reading this table plainly: the order-swap and referential-integrity
+screens are REAL and DO fire on live traffic (8 and 31 times respectively,
+against 1801 total judge calls inside trials — roughly 2% combined block
+rate on calls that reach a trial at all, a small but non-zero fraction of
+judge output the guards themselves catch as inconsistent or ungrounded).
+The paraphrase screen and the two audit functions wired to fire mid-run
+(`paraphrase_invariance_audit`, `premise_deletion_audit`) have **never
+fired in any committed root** — despite `paraphrase_invariance_audit`
+having a live call site in `scheduler.py` (§2.1). This is a genuine gap:
+the paraphrase-flip and ensemble-agreement questions R5b explicitly asks
+about are answered by the STANDALONE e02 experiments in §2 (which measure
+paraphrase-adjacent phenomena via a different, script-based harness, not
+via `informal/audits.py`'s in-run functions), not by any in-run audit
+event.
+
+`docs/AUTONOMICS_REPORT.md:17` reports a much larger historical count —
+*"117 invalid conviction attempts blocked (88 referential-integrity, 27
+ensemble-split) vs 36 valid rubric convictions admitted"* — but this is
+from the 2026-07-05 pre-rebuild harness run, whose result files were
+retired from the working tree by `experiments/results/INDEX_2026-07-13.md`
+(recoverable at commit `3d839b3`, per that index) after "the harness has
+been substantially rebuilt on this branch." The narrative document itself
+remains committed and its claim stands per the index's own citation
+policy, but its underlying root is not among the 11 `log.jsonl` roots
+grepped above — it predates the rebuild that produced them.

@@ -32,7 +32,7 @@ check before handing off to validation, not as the gate itself.
       -> `missing: NONE - all 17 cited`
 - [x] 3. (S2) [COMMIT] commit REVIEW.md §2 progress.
       done-when: `git log -1 --oneline` shows this tranche's commit
-- [ ] 4. (S3) Read `informal/trial.py`'s order-swap/paraphrase guard code,
+- [x] 4. (S3) Read `informal/trial.py`'s order-swap/paraphrase guard code,
       the `2026-08-01-change-prose-can-refute` tranche files, and grep
       committed logs for `trial-llm`/`pairwise-observation`/
       `blocked:order-swap`/`blocked:paraphrase` hits; write REVIEW.md §3,
@@ -40,6 +40,8 @@ check before handing off to validation, not as the gate itself.
       demonstrations.
       done-when: REVIEW.md §3 has both a "live-run" and a "test-fixture"
       subsection
+      DONE: REVIEW.md §3.2 header says "TEST-FIXTURE, not live"; §3.3
+      header says "Live-run counts"; both present -> pass
 - [ ] 5. (S4) Read the `2026-08-01-fix-adjudication-blindness` tranche
       files; write REVIEW.md §4 stating plainly whether it is
       judge-discrimination evidence.
