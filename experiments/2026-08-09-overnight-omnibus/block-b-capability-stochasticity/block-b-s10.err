@@ -1,0 +1,14 @@
+{
+  "evidence": {
+    "blocks": {
+      "paragraph": 7,
+      "section": 2
+    },
+    "evidence_dossier_digest": "0b2355f4677afa59bd28b414285149a47e1e1c47edc45280a1979f56b9f4fc62",
+    "refusals": [],
+    "sources_admitted": 1,
+    "tiers": {
+      "evidence": 9
+    }
+  }
+}
