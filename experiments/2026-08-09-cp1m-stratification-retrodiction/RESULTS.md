@@ -346,6 +346,45 @@ found perfect.
 Committed verbatim: `s_judgment_results.jsonl` (84 rows: 14 pairs × up
 to 6 readings each).
 
+## 2026-08-09 — 150-control false-negative check complete
+
+Same priority-ordered stratum routing applied to the 150 pre-drawn
+non-hit controls (`scripts/controls_check.py`): 67 routed to S-mech
+(28.4% flagged), 13 to S-truth (7.7% flagged), 70 to S-formal (74.3%
+flagged) — **72/150 overall (48.0%)** would be flagged as a
+contradiction under this tranche's stronger methods, despite the
+original patrol call saying no. Read with the same caveat as the main
+headline: the blended figure is dominated by S-formal's likely-
+permissive method; the S-mech-routed and S-truth-routed subsets
+(28.4%, 7.7%) are the trustworthy signal, and they still say the
+patrol's 0.6-confidence threshold missed real material, just less of
+it than 48.0% would suggest on its own.
+
+## 2026-08-09 — DELIVERY: master table pushed, stop condition met
+
+All four strata complete (S-mech 468/960, S-truth 100/152, S-formal
+815/829 flagged with caveat, S-judgment 2/14), offline artifact-type/
+depth-0/depth-k count complete, 150-control false-negative check
+complete. Full master table, headline (1,385/1,941 blended / 570/1,941
+strong-evidence-only), dual-mode verdict and recommendation, and
+complete residue ledger are in `MASTER_TABLE.md` — the tranche's primary
+deliverable, cross-referencing every committed JSONL file rather than
+restating numbers that could drift from their source.
+
+**Two-sentence answer to the operator's two priority questions:**
+between 570 and 1,385 of the patrol's 1,941 candidates are CONFIRMED
+contradictions depending on how much weight is placed on one
+flagged-as-possibly-permissive method (S-formal), with the strongest
+independently-verifiable evidence (sandboxed execution + known ground
+truth) landing at 51.1% (568/1,112) on its own; and yes, models CAN
+author working dual-mode checkers for real historical claims at a
+~49% discrimination rate with ~87% sandbox compile-pass, subject to an
+18.9% single-call non-determinism rate, making P-CEPP-1's wiring fix
+look worth doing (operator's decision).
+
+Stop condition met per the task instruction: master table complete,
+committed, pushed.
+
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
 matched to its source question's `id` and `accept` list by seed-problem-
