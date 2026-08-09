@@ -222,6 +222,19 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   EVIDENCE** (the modes/packages guardrail, BEHAVIOR_MODES_PREPLAN /
   ROLE_SEAT_SEPARATION_PLAN S7): no seat, mode, or package may let a
   generation seat's prose skip criticism.
+- **A solo run with everything on must be an option** (2026-08-09,
+  operator's words verbatim: "A solo run with everything on should be
+  an option. That's what solo run option should always have been.
+  However, turning on judges at all should be done with caution. I
+  would prefer to do without, since they prosecute without any
+  discernable discrimination."): sole-model operation may never be
+  structurally locked out of any harness capability — including
+  status-changing criticism; designs gated on multi-family judge
+  ensembles need a solo-compatible road. And judge seats are
+  suspect-by-default: any design leaning on LLM judges must first
+  consult the judge-audit evidence in the committed record (see the
+  judge-evidence review tranche) rather than assume judges
+  discriminate.
 - **Tokens are cheap; the agent is not** (2026-08-08, operator's words
   verbatim: "Ollama API tokens are cheap, you are not. Running endless
   API experiments is preferred if it means you do less work. Creating
