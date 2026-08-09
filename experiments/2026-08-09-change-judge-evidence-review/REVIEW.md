@@ -7,8 +7,34 @@ is what this document tests, not what it assumes. Every claim below carries
 its source (`path:line` or a JSON field inside a named file) so the number
 can be re-derived, not just trusted.
 
-*(Executive summary is written last, after §2-§8 are evidenced — filling it
-in before the sweep would decorate a conclusion instead of testing one.)*
+**Executive summary** (written last, after §2-§8 below; full reasoning and
+every number is in those sections):
+
+The flat hypothesis — judges prosecute with no discernible discrimination
+— is **not what the committed record shows**, but a real, narrower version
+of it survives, and it lands on a DIFFERENT part of the pipeline than
+"judge" naturally suggests. Splitting the pipeline in two matters more
+than any single number here: the pre-court argumentative CRITIC objects to
+essentially 100% of everything it sees, clean or flawed alike, across
+three independent live studies (§2.5, §7b) — genuinely, repeatedly,
+content-blind. But the JUDGE-gated conviction step that actually changes
+an artifact's status is the opposite problem: it rarely convicts anything
+(11.9% sensitivity against 42 planted, ground-truth defects, §2.5), misses
+most novel flaws outside its certified taxonomy (§2.3, §7a), and — in the
+harness's actual frozen configuration (cross-family, unanimous judges) —
+almost never falsely convicts sound work (0-2.5% false-positive rate,
+§2.4, §7c). Loosen that configuration (same-family pairing, or any
+either-suffices vote rule) and false conviction of sound work jumps to
+47-60% (§2.4) — so the operator's worry is FALSE of what the harness
+actually runs today and a real, quantified risk of what it would become
+under a weaker configuration. One strand — self-preference/verbosity bias
+specifically — has never been measured live at all (§2.2, §7c): a genuine
+gap, not a negative result. §8 lays out what already exists in the tree
+for a judge-free or judge-minimal road, and what it cannot do: no
+mechanism in the record adjudicates open-ended prose without an LLM in
+some role, so eliminating judges as a category would mean giving up on
+prose ever being able to refute anything — which is the exact state 26 of
+31 measured roots are already in, by default (§4, §8.1).
 
 ## Contents
 
@@ -740,3 +766,168 @@ form of either-suffices voting, and the pre-judge critic stage). This is a
 genuine warning about what happens if a future run relaxes those specific
 guards, not evidence that the guarded mechanism as it stands today
 over-prosecutes.
+
+## §8. Design consequence: a judge-free or judge-minimal road for solo runs
+
+Two standing operator design laws bound this section (both quoted from
+CLAUDE.md, both binding, neither derived from §7's findings — they hold
+regardless of what the numbers said): **"A solo run with everything on
+must be an option"** — no harness capability, including status-changing
+criticism, may be structurally locked out of sole-model operation; and
+**"Formalism is an option, never an obligation"** — nothing may penalize
+a conjecture, or a criticism, for being informal. A judge-free road
+therefore cannot simply say "criticism now requires a formal commitment";
+it must ADD non-judge routes without narrowing what an informal
+conjecture may already do. §7's findings bound the DESIGN, not the LAW —
+even if §7 had come back "judges are perfectly calibrated," these two laws
+would still require a solo-compatible, non-formalism-obligated path to
+exist.
+
+### 8.1 Candidate mechanisms already in the tree
+
+**Program/predicate commitments** (`programs.py::evaluate`,
+`EXEC_PROGRAMS = {"exec_oracle", "property_oracle", "dataset_oracle"}`,
+per `docs/map/SUB-evaluation.md`).
+CAN: adjudicate any commitment a machine can decide from the artifact's
+real bytes alone — `predicate:` expressions and any `program:` name in
+`PROGRAMS`/`BLOB_PROGRAMS`. This is a pure function of content (§0 of
+`docs/map/SUB-evaluation.md`: "no wall-clock reaches a verdict"),
+zero-token, fully deterministic, and already the majority mechanism in the
+richest live record this review found — 30 of 32 refutations in the GLM
+flat run (§2.9) were program checks, not judge rulings.
+CANNOT: adjudicate anything requiring judgment of PROSE — relevance,
+argument quality, whether a claim actually answers the question. A target
+can immunize itself against this route entirely by attaching only a
+structural commitment (`json-wf`, `skeleton_wf`) — `_STRUCTURAL_PROGRAMS`
+exists specifically to stop that trick from also blocking prose criticism
+(`docs/map/SUB-evaluation.md` Traps). Program commitments are therefore
+NECESSARY infrastructure but cannot by themselves replace what prose
+criticism does.
+PRICE: near-zero — this mechanism is fully built and already the
+dominant conviction path in the one live run that measured its share.
+RECOMMENDATION: no design work needed; the gap is coverage (how many
+conjectures ship a machine-decidable commitment at all), not mechanism.
+
+**Counterexample execution**
+(`oracle.py::admit_counterexample`, `fuzz_property`).
+CAN: give a critic a GROUNDED, non-judge route to refute a proposed
+property or checker — `admit_counterexample` gates a proposed input and
+mints a single-input property oracle with a deterministic rejection
+reason; `fuzz_property` enumerates generator outputs with no model in the
+loop at all. Both produce a verdict from execution, which the record
+treats as `EXEC_PROGRAMS`-grade evidence, immune to a prose case
+(`formally_backed`, `docs/map/SUB-evaluation.md`).
+CANNOT: apply to anything that is not itself a checkable property or
+executable claim — a historical-mechanism conjecture (the bronze runs'
+entire subject matter, §2.7) has no counterexample to execute.
+PRICE: near-zero for domains that are already property/executable
+(formal, code, simulation workloads); not applicable to open-ended text
+domains, which is most of the record's live evidence.
+RECOMMENDATION: already the right tool where it applies; no new design
+needed, only broader authorship of properties/checkers per problem.
+
+**Referential integrity** (`trial.py:362-381`, confirmed by §3.1/3.3).
+CAN: catch a judge citing a `decisive_point` that is not actually present
+in the exchange it ruled on — a real, cheap, zero-additional-provider-call
+consistency check on a ruling the harness ALREADY paid for. It is live
+and firing: 31 hits across 7 committed roots (§3.3), plus the retired
+2026-07-05 harness's larger count of 88 (§3.3, historical, not
+independently re-verifiable from the current tree). `circularity_verifier`
+(§2.6) is a second, structurally similar example already in the tree —
+a fully mechanical, 0-token screen that catches 8/10 constructed circular
+arguments.
+CANNOT: judge whether the judge's VERDICT was right — only whether its
+STATED grounds are real. A judge can cite a real, present sentence and
+still misjudge its significance; referential integrity would not catch
+that. `circularity_verifier`'s own numbers (§2.6) show a mechanical screen
+is not automatically well-calibrated either — 60% clean-item FP, the same
+order of magnitude as the worst LLM judges (§2.4).
+PRICE: near-zero — already built, already firing, requires no new judge
+call.
+RECOMMENDATION: this is the cheapest available discrimination the tree
+already has for the harness's own judge output; nothing to build, keep as
+a mandatory precondition on every trial (it already is one).
+
+**Order-swap consistency** (`trial.py:383-431`, `pairwise_discriminate`
+`trial.py:874-897`).
+CAN: catch a judge disagreeing with itself when the same content is
+re-presented in a different order — a real self-consistency screen, live
+and firing (8 hits across 5 roots, §3.3).
+CANNOT — and this is the distinction §3.1 flagged as easy to overstate —
+**eliminate the judge from the loop.** It requires one additional judge
+call under the swapped presentation; it screens the judge's OWN output
+against itself, it is not a judge-free mechanism. Framing it as part of a
+"judge-minimal" road is correct (it adds no NEW judge dependency beyond
+the ensemble already required) but framing it as "judge-free" would be
+wrong.
+PRICE: one extra judge call per screened ruling — already paid in every
+live trial today.
+RECOMMENDATION: keep; correctly labeled as a consistency screen ON
+judge output, not a substitute for it, in any future design document.
+
+**`observe_only` as the existing default** (`docs/map/CON-authority.md`).
+CAN: already deliver a genuinely judge-FREE road for status-changing
+criticism, TODAY, with no design work — `ARGUMENTATIVE_AUTHORITY`,
+`TEXT_RUBRIC_AUTHORITY`, `PAIRWISE_AUTHORITY`, and
+`INFRASTRUCTURE_REVIEW_AUTHORITY` all default to `observe_only`
+(`CON-authority.md`, checked live), and §4's blast-radius measurement
+(from the adjudication-blindness tranche) shows 26 of 31 openable roots
+in the current record already ran this way — no warrant, no status
+change, criticism recorded as scrutiny only. This mode is explicitly
+solo-compatible (no cross-family requirement applies; `observe_only`
+never calls `require_cross_family_judges` at all).
+CANNOT: change `Status` from prose at all — a run in `observe_only` gets
+the "no judge can misjudge you" property by giving up the "prose CAN
+refute you" property entirely. This is the OPPOSITE end of the tradeoff
+from what R8 is asking about (a road for solo runs to still get
+status-changing criticism, just not FROM a judge) — `observe_only` is a
+valid answer only if the operator is content with prose remaining
+advisory-only in solo mode, same as most of the record already is.
+PRICE: zero — already the default, already proven at scale (26/31 roots).
+RECOMMENDATION: worth stating explicitly as the FLOOR any new mechanism
+must beat: if a proposed judge-minimal mechanism cannot outperform
+`observe_only`'s "no false convictions, no status change" balance on §7's
+own evidence, `observe_only` remains the safer solo default.
+
+### 8.2 What none of these can do
+
+None of the four "can-adjudicate" mechanisms above (program/predicate
+commitments, counterexample execution, referential integrity,
+order-swap) can perform the one thing a judge ruling actually does:
+decide whether a piece of PROSE — a historical mechanism, an argued
+claim, a piece of open-ended reasoning with no executable ground truth —
+is sound. That is definitionally what `informal/` exists for
+(`docs/map/SUB-evaluation.md`: "the guarded rubric court for claims no
+program can decide"). §7's own evidence is double-edged here: the
+judge-mediated court is real but severely under-powered (7a, 11.9%
+sensitivity) and its raw upstream critic stage is content-blind (7b);
+neither fact makes a NON-judge alternative for prose-quality adjudication
+appear anywhere in the tree. This review found no existing mechanism that
+adjudicates prose without an LLM in some role.
+
+### 8.3 Decisions not made (forks this review surfaces but does not resolve)
+
+- Whether `observe_only`'s current default is SUFFICIENT for solo runs
+  going forward, or whether the operator wants a genuinely new
+  non-judge-mediated status-changing path built for prose specifically.
+  This review supplies the evidence (§7) and the floor (§8.1's
+  `observe_only` entry) but the choice between "accept the floor" and
+  "fund new machinery none of which currently exists" is the operator's,
+  not this review's.
+- Whether referential-integrity's demonstrated 2% combined block rate
+  (§3.3: 39 blocks / 1801 trial-llm calls) is itself worth widening —
+  e.g. to a stricter same-content-verbatim-quote requirement — as a
+  cheap, already-proven lever, independent of any judge-identity
+  question.
+- Whether the aggregation-rule finding in §7b (net 0.0pp from loosening
+  unanimous to either-suffices) generalizes beyond the two seat pairs
+  `e02_t2_voting` tested, or is specific to that pairing — the record
+  does not have a third aggregation rule's data to check monotonicity.
+- Whether `bias_probes`' complete absence of live data (§2.2, §7c) is
+  worth closing before any judge-authority decision is made, given the
+  operator's own standing law ("judge seats are suspect-by-default...
+  must first consult the judge-audit evidence") — this review is that
+  consultation, and it found the self-preference/verbosity strand of the
+  audit machinery has never been run live. Closing that gap is priced as
+  a live-run/API-experiment task (per CLAUDE.md's "tokens are cheap, the
+  agent is not" law) if the operator wants it filled before deciding.

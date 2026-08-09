@@ -1,6 +1,6 @@
 # Checklist for: judge-evidence review — read-only archaeology
 Map ids: DR-SUB-evaluation, DR-SUB-adjudication, DR-CON-authority, DR-CON-schools
-State: next=9 blockers=none
+State: next=11 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -73,16 +73,19 @@ check before handing off to validation, not as the gate itself.
       CONTRADICTED / MIXED / INSUFFICIENT EVIDENCE
       DONE: 3 subsections (7a/7b/7c) found, each ending "Verdict: SUPPORTED"
       / "Verdict: MIXED" / "Verdict: MIXED" -> pass
-- [ ] 9. (S8) Write REVIEW.md §8, the design-consequence section:
+- [x] 9. (S8) Write REVIEW.md §8, the design-consequence section:
       program/predicate commitments, counterexample execution, and the
       trial guard's non-judge screens (referential integrity, order-swap),
       each with can/cannot/price/recommendation, plus a "decisions not
       made" list.
       done-when: REVIEW.md §8 enumerates >=3 mechanisms and ends with a
       non-empty "Decisions not made" list
-- [ ] 10. (S9) [COMMIT] Write RESULTS.md's dated honest-ledger segment;
+      DONE: 5 mechanisms, each with CAN/CANNOT/PRICE/RECOMMENDATION (grep
+      counts: 5/5/5/5); §8.3 "Decisions not made" has 4 items -> pass
+- [x] 10. (S9) [COMMIT] Write RESULTS.md's dated honest-ledger segment;
       commit §8 and RESULTS.md.
       done-when: `grep -q "residue" RESULTS.md`
+      DONE: `grep -q "residue" RESULTS.md && echo PASS` -> PASS
 - [ ] 11. (S10) Re-confirm the tripwire is still 0 after all edits.
       done-when: `git diff origin/main...HEAD -- src/ | wc -l` -> `0`
 - [ ] 12. (all) [COMMIT] push and confirm clean tree.
