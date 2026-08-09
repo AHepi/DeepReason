@@ -1,0 +1,172 @@
+[
+  {
+    "id": "tv-m01",
+    "tier": "V",
+    "q": "Compute $17^{-1}\\pmod{83}$. Express your answer as a residue from $0$ to $82$, inclusive.\n\n(You may find it helpful to consider the fact that $17\\cdot 5=85$.)",
+    "kind": "math",
+    "accept": [
+      "44"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m01_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "number_theory/test#3 (Level 5, Number Theory)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/number_theory/test?row=3"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m02",
+    "tier": "V",
+    "q": "What is the least positive integer $n$ such that 1560 divides $n!$?",
+    "kind": "math",
+    "accept": [
+      "13"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m02_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "number_theory/test#23 (Level 4, Number Theory)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/number_theory/test?row=23"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m03",
+    "tier": "V",
+    "q": "What is the smallest positive integer $n$ such that $\\frac{n}{2010}$ is a terminating decimal?",
+    "kind": "math",
+    "accept": [
+      "201"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m03_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "number_theory/test#40 (Level 4, Number Theory)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/number_theory/test?row=40"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m04",
+    "tier": "V",
+    "q": "For positive integer $n$ such that $n < 10{,}000$, the number $n+2005$ has exactly 21 positive factors. What is the sum of all the possible values of $n$?",
+    "kind": "math",
+    "accept": [
+      "16592"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m04_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "number_theory/test#79 (Level 5, Number Theory)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/number_theory/test?row=79"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m05",
+    "tier": "V",
+    "q": "How many numbers between 1 and 2005 are integer multiples of 3 or 4 but not 12?",
+    "kind": "math",
+    "accept": [
+      "835"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m05_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "counting_and_probability/test#4 (Level 4, Counting & Probability)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/counting_and_probability/test?row=4"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m06",
+    "tier": "V",
+    "q": "How many non-empty subsets of $\\{ 1 , 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 \\}$ consist entirely of prime numbers?  (We form a subset of the group of numbers by choosing some number of them, without regard to order.  So, $\\{1,2,3\\}$ is the same as $\\{3,1,2\\}$.)",
+    "kind": "math",
+    "accept": [
+      "31"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m06_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "counting_and_probability/test#50 (Level 4, Counting & Probability)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/counting_and_probability/test?row=50"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m07",
+    "tier": "V",
+    "q": "Compute\n\\[\\sum_{n = 1}^\\infty \\frac{F_{n + 1}}{F_n F_{n + 2}},\\]where $F_n$ denotes the $n$th Fibonacci number, so $F_0 = 0$ and $F_1 = 1.$",
+    "kind": "math",
+    "accept": [
+      "2"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m07_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "intermediate_algebra/test#11 (Level 4, Intermediate Algebra)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/intermediate_algebra/test?row=11"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m08",
+    "tier": "V",
+    "q": "Let $k$ be the smallest positive integer such that the binomial coefficient $\\binom{10^9}{k}$ is less than the binomial coefficient $\\binom{10^9 + 1}{k - 1}$.  Let $a$ be the first (from the left) digit of $k$ and let $b$ be the second (from the left) digit of $k$.  What is the value of $10a + b$?",
+    "kind": "math",
+    "accept": [
+      "38"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m08_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "intermediate_algebra/test#57 (Level 5, Intermediate Algebra)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/intermediate_algebra/test?row=57"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m09",
+    "tier": "V",
+    "q": "What is the product of the squares of the solutions of $2x^2 + 13x + 6 = 0$?",
+    "kind": "math",
+    "accept": [
+      "9"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m09_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "algebra/test#63 (Level 4, Algebra)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/algebra/test?row=63"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  },
+  {
+    "id": "tv-m10",
+    "tier": "V",
+    "q": "The sets $A = \\{z : z^{18} = 1\\}$ and $B = \\{w : w^{48} = 1\\}$ are both sets of complex roots of unity. The set $C = \\{zw : z \\in A ~ \\mbox{and} ~ w \\in B\\}$ is also a set of complex roots of unity. How many distinct elements are in $C^{}_{}$?",
+    "kind": "math",
+    "accept": [
+      "144"
+    ],
+    "checker": "experiments/tier_v_checkers/tv-m10_checker.py",
+    "source": {
+      "dataset": "Hendrycks MATH (hendrycks/math, level 4-5 competition split)",
+      "problem_id": "precalculus/test#59 (Level 4, Precalculus)",
+      "url": "https://huggingface.co/datasets/EleutherAI/hendrycks_math/viewer/precalculus/test?row=59"
+    },
+    "license": "MIT",
+    "verification": "checker script (run against known answer before commit)"
+  }
+]

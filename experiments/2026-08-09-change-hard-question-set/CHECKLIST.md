@@ -11,16 +11,19 @@ order. One step per `dr-execute-step` invocation.
       done-when: `python experiments/2026-08-09-change-hard-question-set/schema_check.py --selftest` exits 0 against two small inline fixtures (one valid, one deliberately broken, asserting the broken one is rejected).
       DONE: `SELFTEST PASS: valid fixture accepted (0 errors), broken fixture rejected (1 errors: ["error: record 0 (tv-m01): missing ['source']"])`, exit=0.
 
-- [ ] 2. (R3/R11) [COMMIT] Commit schema_check.py.
+- [x] 2. (R3/R11) [COMMIT] Commit schema_check.py.
       done-when: `git add ... && git commit -m ... && git push` succeeds; `git diff --numstat` for the commit touches only files under `experiments/2026-08-09-change-hard-question-set/`.
+      DONE: commit ae79a24e5, pushed. diff_budget: 164 insertions (WITHIN ceiling 2500), both changed files under experiments/2026-08-09-change-hard-question-set/.
 
-- [ ] 3. (R4/R5/A3) Draft 10 Tier V math problems into `experiments/2026-08-09-change-hard-question-set/draft_tier_v_math.json`: sourced from the Hendrycks MATH dataset's level-4/5 (competition-difficulty) split, each with id (`tv-m01`..`tv-m10`), statement, numeric/short `accept` answer(s), `source` (dataset+problem locator+URL), `license: MIT`.
+- [x] 3. (R4/R5/A3) Draft 10 Tier V math problems into `experiments/2026-08-09-change-hard-question-set/draft_tier_v_math.json`: sourced from the Hendrycks MATH dataset's level-4/5 (competition-difficulty) split, each with id (`tv-m01`..`tv-m10`), statement, numeric/short `accept` answer(s), `source` (dataset+problem locator+URL), `license: MIT`.
       done-when: file contains exactly 10 entries; `python experiments/2026-08-09-change-hard-question-set/schema_check.py experiments/2026-08-09-change-hard-question-set/draft_tier_v_math.json --kind math` exits 0.
+      DONE: `PASS: .../draft_tier_v_math.json (10 records, kind=math)`. Sourced via the EleutherAI/hendrycks_math HF mirror (content = MIT-licensed hendrycks/math), fetched live via the datasets-server REST API, filtered to Level 4-5, self-contained (no diagram dependency), clean short answers. Subjects: number_theory(4), counting_and_probability(2), intermediate_algebra(2), algebra(1), precalculus(1).
 
-- [ ] 4. (R4/R5/A3) Draft 10 Tier V coding problems into `experiments/2026-08-09-change-hard-question-set/draft_tier_v_coding.json`: sourced from OpenAI HumanEval, hand-selected for multi-step algorithmic content (not single-line ops), each with id (`tv-c01`..`tv-c10`), statement (docstring), reference solution (kept in the draft for checker-authoring, not in the final public JSON), `source`/`license: MIT`.
+- [x] 4. (R4/R5/A3) Draft 10 Tier V coding problems into `experiments/2026-08-09-change-hard-question-set/draft_tier_v_coding.json`: sourced from OpenAI HumanEval, hand-selected for multi-step algorithmic content (not single-line ops), each with id (`tv-c01`..`tv-c10`), statement (docstring), reference solution (kept in the draft for checker-authoring, not in the final public JSON), `source`/`license: MIT`.
       done-when: file contains exactly 10 entries; `python experiments/2026-08-09-change-hard-question-set/schema_check.py experiments/2026-08-09-change-hard-question-set/draft_tier_v_coding.json --kind coding` exits 0.
+      DONE: `PASS: .../draft_tier_v_coding.json (10 records, kind=coding)`. Sourced live from openai/openai_humaneval via the HF datasets-server API, ranked by canonical-solution length as a difficulty proxy, hand-picked for genuine algorithmic content (grid DP, prime Fibonacci, interval/primality, date validation, array-rotation feasibility, prime factorization, polynomial root bisection, closest-pair search, Roman numeral conversion, bracket-nesting depth) rather than string one-liners.
 
-- [ ] 5. (R6) [COMMIT] Commit the two Tier V drafts.
+- [x] 5. (R6) [COMMIT] Commit the two Tier V drafts.
       done-when: pushed; `git diff --numstat` scoped to the tranche directory only.
 
 - [ ] 6. (R6) Write the 10 math checkers, `experiments/tier_v_checkers/tv-m0{1..10}_checker.py` (normalize+compare against `accept`, mirroring `scripts/validate.py`'s `normalize()`), and RUN each against its own known answer.
