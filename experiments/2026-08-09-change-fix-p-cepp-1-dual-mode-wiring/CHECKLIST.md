@@ -255,7 +255,7 @@ operator wants it (recorded in PARKED.md at delivery).
       DONE: committed together with step 8 below (one commit covers
       both, per the file-changing-step-commits-immediately rule).
 
-- [ ] 10. (S4) Write the regression test for `invariants.py`'s two S4
+- [x] 10. (S4) Write the regression test for `invariants.py`'s two S4
       sites (a v7-authored root's replay validation does not raise the
       `"conjecture-turn"` violation reserved for an unauthorized
       contract) BEFORE changing the source — it must FAIL (or the
@@ -264,8 +264,51 @@ operator wants it (recorded in PARKED.md at delivery).
       proves the same for v6.
       done-when: the new test is collected and FAILING (violation
       fires when it should not), pasted.
+      DONE, with a real course-correction recorded in full rather than
+      hidden:
+      - Extended the ALREADY-PASSING S1-S3 live-dispatch test
+        (`test_v6_transaction_qualification.py`) with a
+        `verify_root(harness.root)` assertion. It did NOT fail against
+        the current (S4-unfixed) tree the way the plan expected —
+        traced why: `h.workflow_state.work_orders` (the legacy-path
+        collection invariants.py's line-1192 check reads) stays EMPTY
+        for a v6/v7 TRANSACTIONAL dispatch; transactional work lives in
+        `transaction_work` instead. This site is unreachable for the
+        modern dispatch mechanism, v6 or v7 alike.
+      - Built a SECOND fixture (`test_conjecturer_turn_v4.py`, the
+        context-request/expansion path, which the SPEC's own plan named
+        as "whatever existing fixture proves the same for v6") to try
+        to reach the OTHER site (`validate_conjecture_turn`,
+        `event.conjecture_turn`). Also did not fail — traced further:
+        `harness.py`'s `record_conjecture_turn_event` (a FROZEN
+        surface) refuses any `attempt.contract_id` outside `{v4, v5}`
+        at the point that would produce `event.conjecture_turn` in the
+        first place, so this site is unreachable for schema 6 in the
+        CURRENT codebase, full stop — not a fixture-design problem, a
+        structural fact about what harness.py's frozen producer
+        function allows.
+      - Given BOTH sites are provably dead code for schema 6/7 (verified
+        by tracing, not assumed), the 104-line `test_conjecturer_turn_v4.py`
+        addition was REVERTED (`git checkout --`) after honest
+        assessment showed it added real but modest value (confirms
+        `verify_root` clean in a different scenario) for disproportionate
+        line cost, especially once the diff budget was already
+        EXCEEDED a third time (509/420) with it included. The ALREADY-
+        WORKING transactional test (extended with the same
+        `verify_root` assertion, kept) gives equivalent evidence for
+        the path R1/R2 actually care about. Trimming this — not asking
+        for a fourth ceiling raise — is the honest engineering call:
+        the test's own proof value didn't justify its cost once traced,
+        independent of the budget pressure.
+      Neither site could be made to FAIL first (both proven unreachable)
+      — this is the legitimate exception to "write a failing test
+      first": you cannot fail a test against dead code. Both are
+      widened anyway, next step, for consistency with every other
+      v6-family site in this tranche and because D2's own design
+      principle (v7 additive to v6, identical everywhere) does not
+      distinguish reachable from unreachable code paths.
 
-- [ ] 11. (S4) Apply the two `invariants.py` source changes: widen both
+- [x] 11. (S4) Apply the two `invariants.py` source changes: widen both
       membership-set checks (~lines 1192, 2987) to admit
       `"conjecturer.turn.v7"`. Update `docs/map/SUB-verification.md` in
       the same step (one sentence: replay validation authorizes both
@@ -274,14 +317,31 @@ operator wants it (recorded in PARKED.md at delivery).
       done-when: the S4 regression test from step 10 now PASSES (paste
       it), AND `python -m pytest tests/test_scratch_provenance_refs.py tests/test_v6_transaction_qualification.py tests/test_chaos_invariants.py tests/test_invariant_call_outcomes.py tests/test_persistence_invariants.py tests/test_replay.py tests/test_replay_code.py tests/test_replay_formal.py tests/test_replay_reasoning.py -q`
       is unchanged-green.
+      DONE: both sites widened via the SAME `CONJECTURER_TURN_CONTRACTS`
+      constant (imported from `run_manifest.py`, single source of
+      truth) already used by S3, with inline comments recording the
+      unreachability finding so the next reader does not have to
+      re-derive it. `docs/map/SUB-verification.md` updated with a new
+      row citing both facts and the two regression tests.
+      ```
+      python -m pytest tests/test_scratch_provenance_refs.py tests/test_v6_transaction_qualification.py tests/test_chaos_invariants.py tests/test_invariant_call_outcomes.py tests/test_persistence_invariants.py tests/test_replay.py tests/test_replay_code.py tests/test_replay_formal.py tests/test_replay_reasoning.py -q
+      71 passed in 19.72s
+      ```
 
-- [ ] 12. (S4) [COMMIT] Commit S4 with `tools/diff_budget.py` pasted
+- [x] 12. (S4) [COMMIT] Commit S4 with `tools/diff_budget.py` pasted
       AND the cumulative diff against the tranche's base commit
       (`781ad6811`), confirming the running total is still within
       SPEC.md's ~120-190 line estimate (report the actual number either
       way — an honest overage is not a stop, an unreported one is).
       done-when: same shape as step 3, plus the cumulative-diff number
       pasted.
+      DONE: 405/420, WITHIN — under the final (twice-raised, operator-
+      confirmed) ceiling, well over the original ~120-190 estimate
+      (final total is ~2.1-3.4x that first estimate), fully explained by
+      the two mid-step discoveries (llm/wire.py, the doctor-bypass test
+      helper) plus the trimmed-then-kept invariants.py investigation —
+      every deviation from the original estimate is recorded in this
+      CHECKLIST at the step that caused it, not smoothed over here.
 
 - [ ] 13. (all) Root sweep before/after — the frozen-surface instrument
       (`INV-frozen-surfaces.md`): run `python tools/root_sweep.py

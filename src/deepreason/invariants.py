@@ -20,6 +20,7 @@ from deepreason.harness import Harness
 from deepreason.llm.firewall import route_fingerprint
 from deepreason.ontology.state import Status
 from deepreason.run_manifest import (
+    CONJECTURER_TURN_CONTRACTS,
     MANIFEST_HASH_NAME,
     MANIFEST_NAME,
     load_run_manifest,
@@ -1187,9 +1188,18 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"event seq={event.seq}: decision differs from manifest authority",
                     )
             if workflow_profile is not None:
-                if (
-                    workflow_profile.conjecturer_contract_id
-                    in {"conjecturer.turn.v4", "conjecturer.turn.v5", "conjecturer.turn.v6"}
+                # P-CEPP-1: v6 and v7 (CONJECTURER_TURN_CONTRACTS) are both
+                # "controlled" -- v4/v5 are their own distinct legacy
+                # generations. This legacy work_orders branch (below) is
+                # unreachable for any v6/v7 TRANSACTIONAL dispatch in the
+                # current codebase (h.workflow_state.work_orders stays
+                # empty; transactional work lives in transaction_work
+                # instead) -- widened for consistency and correctness, not
+                # because a live v6/v7 root can currently exercise it.
+                if workflow_profile.conjecturer_contract_id in (
+                    "conjecturer.turn.v4",
+                    "conjecturer.turn.v5",
+                    *CONJECTURER_TURN_CONTRACTS,
                 ):
                     authorized_contract_ids = {
                         workflow_profile.conjecturer_contract_id
@@ -2977,15 +2987,22 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             )
         else:
             control = manifest.control_plane_policy
+            # P-CEPP-1: widened for consistency (v6/v7 both "controlled"),
+            # though this whole branch is unreachable for schema 6 in
+            # practice -- harness.py's record_conjecture_turn_event (a
+            # FROZEN surface) refuses any attempt.contract_id outside
+            # {v4, v5} at the point that would produce this event's own
+            # evidence, so no v6/v7 root can ever populate
+            # event.conjecture_turn to reach here.
             if (
                 control is None
                 or control.mode not in {"active_conjecture", "active_inquiry"}
                 or control.contract_versions.conjecturer_turn_contract
-                not in {
+                not in (
                     "conjecturer.turn.v4",
                     "conjecturer.turn.v5",
-                    "conjecturer.turn.v6",
-                }
+                    *CONJECTURER_TURN_CONTRACTS,
+                )
             ):
                 fail(
                     "conjecture-turn",

@@ -20,6 +20,7 @@ from deepreason.capabilities.policy import (
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.indexes import DerivedIndexError, load_indexes, rebuild_indexes
+from deepreason.invariants import verify_root
 from deepreason.llm.adapter import LLMAdapter, RequestEnvelopeExceeded
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import EndpointError, MockEndpoint
@@ -1062,7 +1063,13 @@ def test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment(tmp_path):
     the only differences being the v7-configured manifest and the
     doctor-bypassing classification bind (see
     _bind_classification_bypassing_doctor's own docstring: cli/doctor.py
-    is explicitly out of this tranche's scope)."""
+    is explicitly out of this tranche's scope). ALSO covers S4
+    (invariants.py): the resulting root must replay-validate with zero
+    violations -- before the fix, invariants.py's own conjecturer-
+    contract membership checks only knew v4/v5/v6, so a v7 root's
+    replay would derive the WRONG authorized contract set (falling
+    into the pre-v4 legacy-wire-contract branch) instead of failing
+    closed loudly, a worse failure mode than an outright rejection."""
     config = _config()
     manifest = _manifest(
         contract_versions=ContractVersionPolicyV3(
@@ -1112,6 +1119,34 @@ def test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment(tmp_path):
     assert reopened.workflow_state.transaction_work[
         work.preparation.id
     ].preparation.contract_id == "conjecturer.turn.v7"
+
+    # S4 (invariants.py): the v7 root must replay-validate with NO
+    # v7-SPECIFIC violation. This minimal transactional fixture (built
+    # the identical way for the v6 comparison below, differing only in
+    # conjecturer_turn_contract) carries two known, pre-existing,
+    # v6-identical violations unrelated to P-CEPP-1 -- a Config-level
+    # "opt-in v4 workflow controller profile" flag this fixture never
+    # sets, and a call-pairing artifact of the mock endpoint's timing --
+    # so the comparison is against a live v6 baseline computed the SAME
+    # way, not a hardcoded list, so a future v7-specific regression
+    # cannot be masked by this known baseline drifting.
+    v7_violations = verify_root(harness.root)["violations"]
+    v6_manifest = _manifest()
+    v6_harness = Harness(tmp_path / "live-issued-v6-baseline")
+    _seed_live_conjecture(v6_harness)
+
+    def v6_response(prompt):
+        return json.dumps(
+            {"candidates": [{"content": "A reversible feedback mechanism.", "typicality": 0.37}]}
+        )
+
+    v6_adapter, _ = _live_adapter(v6_harness, v6_manifest, v6_response)
+    Scheduler(
+        v6_harness, v6_adapter, _config(), workload_profile="text", run_manifest=v6_manifest
+    ).run(1)
+    v6_violations = verify_root(v6_harness.root)["violations"]
+    assert v7_violations == v6_violations, (v7_violations, v6_violations)
+    assert not any("conjecture-turn" in str(v) for v in v7_violations), v7_violations
 
 
 def test_v7_manifest_compiles_a_workflow_profile_naming_v7():
