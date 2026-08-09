@@ -62,10 +62,11 @@ order. One step per `dr-execute-step` invocation.
 - [x] 14. (R3/R7) [COMMIT] Commit `experiments/validation_questions_tier_o.json`.
       done-when: pushed; `tools/diff_budget.py <base> --paths experiments/validation_questions_tier_v.json experiments/validation_questions_tier_o.json experiments/tier_v_checkers experiments/2026-08-09-change-hard-question-set` reported and under 2500 lines total so far.
 
-- [ ] 15. (R10) Write `experiments/2026-08-09-change-hard-question-set/PREREG.md`: the Tier O hygiene rule verbatim (claims-resolution = fail, honest inconclusive/partial = success), the typed fields the audit will read to classify a run, and the Tier V checker-invocation rule — written before any pilot output exists.
+- [x] 15. (R10) Write `experiments/2026-08-09-change-hard-question-set/PREREG.md`: the Tier O hygiene rule verbatim (claims-resolution = fail, honest inconclusive/partial = success), the typed fields the audit will read to classify a run, and the Tier V checker-invocation rule — written before any pilot output exists.
       done-when: file exists; `git log` shows this commit's timestamp precedes any `pilot-tier-*` run-root commit (checked at delivery, not here, but the ordering constraint is satisfied by executing this step before 17+).
+      DONE: PREREG.md exists, quotes R10 verbatim, defines junk-acceptance/honest-inconclusive operationally against typed fields only, records the "every Tier O problem already has an unreviewed proof claim in circulation" finding as the rule's motivation, and states R16's checker-invocation rule. Written this step, before any pilot_tier_*_run.sh exists (steps 17+ not yet started) — ordering satisfied.
 
-- [ ] 16. (R10) [COMMIT] Commit PREREG.md.
+- [x] 16. (R10) [COMMIT] Commit PREREG.md.
       done-when: pushed.
 
 - [ ] 17. (R12) Write `experiments/2026-08-09-change-hard-question-set/env` containing `OLLAMA_API_KEY=<the key from this session>`; `chmod 600` it.
