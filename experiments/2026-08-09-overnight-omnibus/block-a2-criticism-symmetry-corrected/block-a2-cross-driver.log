@@ -30,3 +30,4 @@ run_id=run-944946f53dee4b636672677a0a534469 tag=q2s3
 audit_rc=0 tag=q2s3
 converge_rc=0 converge_seconds=1619 tag=q1s4
 run_id=run-050dd9ed53fdd1a30a0cec59f50d5baa tag=q1s4
+audit_rc=0 tag=q1s4
