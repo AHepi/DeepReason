@@ -122,4 +122,98 @@ with evidence, not assumed.
 
 ## Amendments
 
-(none yet)
+### Amendment 1 (2026-08-09, mid-workflow, operator's own words)
+
+> Yeah schools need to be opt in seats as well. The judge adjudication is
+> meant to settle disputes. That's why they exist. Two conjectures that
+> contradict each other, two attack edges drawn, no grounded extension can
+> rule them out. The judge steps in. It doesn't need to be active, but we
+> have configuration machinery to starve the judge if it's becoming too
+> zealous. There's also an additional function that checks the config,
+> figures out whether it's latest adjustments actually diagnose the problem
+> properly, and sends out a config recommendation. The signals all exist for
+> that reason. If these functions are dead and the signals are dead, then
+> the workflow needs a makeover.
+
+The task issuer's own message framed the binding scope consequences of this
+amendment as follows (captured verbatim as elaboration, not new operator
+authority, per the same rule applied to the original capture):
+
+> Scope consequences, binding: (1) Schools join Half 2 as opt-in seat
+> surfaces — measure how school identity is minted and bound today (the
+> manifest's school-keyed criticism bindings from Half 1(c)) and spec what
+> "school as an assignable, opt-in seat" means without breaking
+> foreign-school coverage semantics — if binding schools to models changes
+> what "foreign" counts, that consequence is priced explicitly, never
+> absorbed silently. (2) The judge's design target in Half 2 is now the
+> operator's own definition: dormant by default; SUMMONED only for
+> grounded-undecidable standoffs (mutual/symmetric attack structures — the
+> even-cycle inventory the O1a overlay scripts already compute is the
+> summoning condition's measurement basis); ruling through the existing
+> pairwise/trial guard machinery, never as an open-ended prosecutor; and
+> STARVABLE — spec the throttle explicitly (budget/rate config that caps
+> judge activity). (3) A liveness census joins Half 1, same discipline as
+> the property_designer diagnosis (categorical, file/line, record evidence
+> — a dispatch site that exists but is unreachable is DEAD): (a)
+> config_referee — every dispatch site, every precondition, whether ANY
+> committed root shows it firing; (b) the judge-starving configuration
+> machinery the operator names — find it, or establish it does not exist;
+> (c) the steering/config-recommendation signals (llm/budget.py and
+> neighbors) — which are produced, which are consumed, and by what; a
+> signal produced but never consumed is DEAD. (4) The conditional the
+> operator set: if the liveness census finds these functions/signals dead,
+> SPEC.md's decision sheet must include the workflow-makeover road — scoped
+> as its own follow-up program with a rung sketch, priced, not designed in
+> full here. Everything else stands: SPEC-AND-STOP, frozen forecast from
+> scratch, defaults byte-identical, decision sheet with recommendations.
+> Commit and push, STOP for operator words.
+
+### New/superseding requirements from Amendment 1
+
+R5 (behavior/artifact): "schools need to be opt in seats as well" —
+supersedes nothing, adds a fourth opt-in seat surface (schools) alongside
+R1-R3's three opt-ins, to be specified in Half 2 with today's actual
+school-identity-minting/binding mechanism measured first.
+
+R6 (artifact): "The judge adjudication is meant to settle disputes... The
+judge steps in [on] two conjectures that contradict each other, two attack
+edges drawn, no grounded extension can rule them out... It doesn't need to
+be active" — the judge seats opt-in design (R2) must target this
+operator-defined shape: dormant by default, summoned only for
+grounded-undecidable standoffs, ruling through existing
+pairwise/trial-guard machinery.
+
+R7 (artifact): "we have configuration machinery to starve the judge if it's
+becoming too zealous" — a claim to verify: find this machinery (file/line)
+or establish it does not exist, as part of the liveness census.
+
+R8 (artifact): "There's also an additional function that checks the config,
+figures out whether it's latest adjustments actually diagnose the problem
+properly, and sends out a config recommendation. The signals all exist for
+that reason." — a second claim to verify: find this function/signal chain
+(file/line) or establish it does not exist, as part of the liveness census.
+
+R9 (process/artifact): "If these functions are dead and the signals are
+dead, then the workflow needs a makeover." — conditional: IF the liveness
+census (R7, R8, plus config_referee per the task issuer's framing) finds
+these dead, SPEC.md's decision sheet must include a workflow-makeover road,
+scoped as a priced follow-up program with a rung sketch — not designed in
+full this window.
+
+### Standing constraints added by Amendment 1
+
+C6: "if binding schools to models changes what 'foreign' counts, that
+consequence is priced explicitly, never absorbed silently" — task issuer's
+framing of R5's acceptance bar.
+
+C7: "STARVABLE — spec the throttle explicitly (budget/rate config that caps
+judge activity)" — task issuer's framing of R6's acceptance bar.
+
+C8: "a dispatch site that exists but is unreachable is DEAD" — task
+issuer's framing of the liveness-census discipline (R7/R8/config_referee),
+matching the already-established property_designer/S6 precedent from Half
+1(a).
+
+C9: "Everything else stands: SPEC-AND-STOP, frozen forecast from scratch,
+defaults byte-identical, decision sheet with recommendations. Commit and
+push, STOP for operator words." — reaffirms C1-C5 unchanged.
