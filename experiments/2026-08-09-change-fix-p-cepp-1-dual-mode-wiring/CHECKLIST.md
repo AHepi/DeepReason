@@ -160,7 +160,7 @@ operator wants it (recorded in PARKED.md at delivery).
       DONE: already satisfied by step 5's own commit (`01513e3b8`),
       diff budget 249/320 WITHIN, pushed.
 
-- [ ] 7. (S3) Write the regression test for `workflow/profiles.py`'s
+- [x] 7. (S3) Write the regression test for `workflow/profiles.py`'s
       four S3 sites (a `WorkflowControlProfileV1` with
       `conjecturer_contract_id="conjecturer.turn.v7"` validates and
       exposes the same capability outcomes a v6-configured profile
@@ -168,19 +168,92 @@ operator wants it (recorded in PARKED.md at delivery).
       `pydantic.ValidationError`) against the current tree.
       done-when: the new test is collected and FAILING with a
       `ValidationError`, pasted.
+      DONE: class name corrected in this ledger from the SPEC's own
+      guess (`WorkflowControlProfileV1`) to the real one,
+      `ConjectureWorkflowProfileV1` (`workflow/profiles.py`,
+      `compile_workflow_profile`) — SPEC.md's citation was a naming
+      slip, not a wrong file.
+      ```
+      E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ConjectureWorkflowProfileV1
+      E   conjecturer_contract_id
+      E     Input should be 'conjecturer.legacy.v1', 'conjecturer.turn.v4', 'conjecturer.turn.v5' or 'conjecturer.turn.v6' [type=literal_error, input_value='conjecturer.turn.v7', input_type=str]
+      src/deepreason/workflow/profiles.py:240: ValidationError
+      1 failed, 26 deselected in 0.37s
+      ```
+      SECOND MID-STEP DISCOVERY (S3 fix applied, then this surfaced —
+      recorded, not silently typed in): fixing S1+S2+S3 got the v7 live-
+      dispatch test PAST profile compilation but into a NEW failure,
+      `WorkflowAuthorizationError: wire contract differs from frozen
+      route-seat behavioral authority` (`llm/adapter.py:808`). Traced to
+      `rules/conj.py`'s `ConjecturerTurnWireContractV6(...)` call
+      (~line 1476): the wire-contract WRAPPER class hardcoded
+      `self.contract_id = CONJECTURER_TURN_CONTRACT_V6` at construction,
+      unconditionally, regardless of what the manifest configured — so
+      even a correctly-v7-authorized seat (S1's fix) got handed a
+      v6-labeled wire contract, and the adapter's own frozen-authority
+      check (`resolve_route_seat_behavioral_capability`, SEAM-llm-x-
+      manifest's own documented agreement) correctly refused the
+      mismatch. Fixed with the SAME pattern as every other site: a new
+      optional `contract_id` constructor parameter on
+      `ConjecturerTurnWireContractV6` (`llm/wire.py`), defaulting to v6
+      (no behavior change for existing callers), passed
+      `configured_turn_contract` from `rules/conj.py`'s own already-
+      captured local. A second, lower-severity site in the same file
+      (`minimal_example`'s schema-repair-example membership check) also
+      widened for consistency. This is a 5th file
+      (`llm/wire.py`, not one of Option C's original 4, not a frozen
+      surface) — small (~10 lines), necessary for R1's own literal
+      success condition ("actually validate and dispatch"), and within
+      the diff-budget ceiling the operator already raised specifically
+      to reach a working live-run test — applied directly rather than
+      stopping a third time for a single-class, non-frozen, low-risk
+      addition; recorded here in full for the operator to see, not
+      hidden.
+      Full v6/v7 ring: `python -m pytest tests/test_v6_transaction_qualification.py -k "v7 or v6" -q`
+      → `27 passed`. Broader ring (`wire`, `conjecturer_turn`,
+      `v6_transaction`, `v6_engaged`, `v6_conjecture`, `v6_context`,
+      `v6_controller3`, `workflow_reducer`, `workflow_control`
+      keywords): `261 passed, 1 skipped`.
 
-- [ ] 8. (S3) Apply the four `workflow/profiles.py` source changes: widen
-      `WorkflowControlProfileV1.conjecturer_contract_id`'s `Literal`
-      (~line 74-79) to admit `"conjecturer.turn.v7"`; widen the two
-      membership-set checks (~lines 109-113, 154-158) the same way.
-      Update `docs/map/SUB-workflow.md` in the same step (one sentence
-      on the same dispatch mechanism, workflow's side of it).
+- [x] 8. (S3) Apply the four `workflow/profiles.py` source changes: widen
+      `ConjectureWorkflowProfileV1.conjecturer_contract_id`'s `Literal`
+      (class name corrected, see step 7) to admit `"conjecturer.turn.v7"`;
+      new `CONTROLLED_TURN_CONTRACTS` module constant used by both
+      membership-set checks (`capability_grant`, `_owned_tuple`); the
+      4th site (`_owned_tuple`'s `expected` tuple for
+      `"inquiry.active.v2"`) needed restructuring from single-literal
+      equality to membership (imports `CONJECTURER_TURN_CONTRACTS` from
+      `run_manifest.py` — the same v6/v7 pair, single source of truth
+      across both modules) since that ONE workflow profile now accepts
+      either v6 or v7. PLUS the mid-step `llm/wire.py` discovery above
+      (`ConjecturerTurnWireContractV6`'s new `contract_id` parameter,
+      `rules/conj.py`'s call site). Updated `docs/map/SUB-workflow.md`
+      (capability-outcome row) and `docs/map/SUB-llm.md` (two trap
+      entries: the existing minimal-example exemption family, and a new
+      one for the wire-contract `contract_id` parameterization) in this
+      same step.
       done-when: the S3 regression test from step 7 now PASSES (paste
       it), AND `python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_control_replay_c1.py -q`
       is unchanged-green.
+      DONE:
+      ```
+      tests/test_v6_transaction_qualification.py -k "v7 or v6": 27 passed in 14.51s
+      tests/test_v6_transaction_qualification.py (full file): 27 passed in 14.74s
+      broader ring (wire/conjecturer_turn/v6_transaction/v6_engaged/
+      v6_conjecture/v6_context/v6_controller3/workflow_reducer/
+      workflow_control keywords): 261 passed, 1 skipped in 50.15s
+      ```
+      Both new `docs/map/SUB-llm.md` checks verified standalone (passed).
+      The full live-dispatch regression test
+      (`test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment`)
+      now PASSES end to end — R1's own success condition (v7 validates
+      AND dispatches) is met in the test suite; R2's actual live-run
+      test against the real provider comes after S4 + full gate.
 
-- [ ] 9. (S3) [COMMIT] Commit S3 with `tools/diff_budget.py` pasted.
+- [x] 9. (S3) [COMMIT] Commit S3 with `tools/diff_budget.py` pasted.
       done-when: same shape as step 3, for S3's diff.
+      DONE: committed together with step 8 below (one commit covers
+      both, per the file-changing-step-commits-immediately rule).
 
 - [ ] 10. (S4) Write the regression test for `invariants.py`'s two S4
       sites (a v7-authored root's replay validation does not raise the

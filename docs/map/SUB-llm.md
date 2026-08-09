@@ -231,11 +231,25 @@ through the caller, including on the failure paths.
   and `required`, ignores `allOf`, and takes the first enum value — so on any
   contract carrying a conditional shape it happily builds an example document
   that the contract itself rejects. A contract whose rules it cannot see must
-  supply `minimal_example_document`; the `conjecturer.turn.v4/v5/v6` family is
-  the older hardcoded form of the same exemption. Adding a shape clause to a
-  contract without adding one of those two escapes ships a prompt whose
-  worked example is invalid.
-`check: grep -q "minimal_example_document" src/deepreason/llm/wire.py && ! grep -q "allOf" src/deepreason/llm/repair.py && grep -q "conjecturer.turn.v4" src/deepreason/llm/wire.py`
+  supply `minimal_example_document`; the `conjecturer.turn.v4/v5/v6/v7` family
+  (P-CEPP-1 added v7, additive to v6, same exemption) is the older hardcoded
+  form of the same exemption. Adding a shape clause to a contract without
+  adding one of those two escapes ships a prompt whose worked example is
+  invalid.
+`check: grep -q "minimal_example_document" src/deepreason/llm/wire.py && ! grep -q "allOf" src/deepreason/llm/repair.py && grep -q "conjecturer.turn.v4" src/deepreason/llm/wire.py && grep -q "^CONJECTURER_TURN_CONTRACT_V7 = " src/deepreason/llm/wire.py`
+- **`ConjecturerTurnWireContractV6.contract_id` is a constructor parameter,
+  not a fixed literal.** P-CEPP-1: the class's own name is now the SAME wire
+  schema for both `conjecturer.turn.v6` and `conjecturer.turn.v7` (D2 rev 2
+  dual-mode is additive — no new fields on this class), distinguished only by
+  which `contract_id` the caller (`rules/conj.py`, from the manifest's own
+  configured `conjecturer_turn_contract`) passes at construction. The
+  frozen-authority check at `llm/adapter.py`'s `_render_request` v6 branch
+  (`resolve_route_seat_behavioral_capability`, `DR-SEAM-llm-x-manifest`)
+  refuses a wire contract whose `contract_id` disagrees with the seat's
+  frozen grants — this is what caught the gap before the fix (a v7-authorized
+  seat handed a hardcoded v6-labeled wire contract), not a new guard added
+  for it.
+`check: grep -q "contract_id: str = CONJECTURER_TURN_CONTRACT_V6" src/deepreason/llm/wire.py && grep -q "contract_id=configured_turn_contract" src/deepreason/rules/conj.py`
 - **`_document_excerpt` is dead code.** The labeled head/tail excerpt existed
   because prefix-only clipping made compact critics refute valid compiled
   designs for "ending abruptly"; the critic target is now a mandatory section

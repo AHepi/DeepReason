@@ -1114,6 +1114,37 @@ def test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment(tmp_path):
     ].preparation.contract_id == "conjecturer.turn.v7"
 
 
+def test_v7_manifest_compiles_a_workflow_profile_naming_v7():
+    """P-CEPP-1 (experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-
+    wiring/, Option C, workflow/profiles.py): ConjectureWorkflowProfileV1
+    (compile_workflow_profile) rejected "conjecturer.turn.v7" outright --
+    its own Literal type never admitted the value, a hard
+    pydantic.ValidationError reached before a run could even start,
+    independent of run_manifest.py's or rules/conj.py's own P-CEPP-1
+    fixes (both already landed, this is the third and last gap)."""
+    from deepreason.workflow.profiles import compile_workflow_profile
+
+    v7_manifest = _manifest(
+        contract_versions=ContractVersionPolicyV3(
+            conjecturer_turn_contract="conjecturer.turn.v7"
+        )
+    )
+    v6_manifest = _manifest()
+
+    v7_profile = compile_workflow_profile(v7_manifest)
+    v6_profile = compile_workflow_profile(v6_manifest)
+    assert v7_profile.conjecturer_contract_id == "conjecturer.turn.v7"
+    assert v6_profile.conjecturer_contract_id == "conjecturer.turn.v6"
+
+    from deepreason.workflow.models import CapabilityOutcome
+
+    v7_outcomes = v7_profile.capability_grant().allowed_outcomes
+    v6_outcomes = v6_profile.capability_grant().allowed_outcomes
+    assert CapabilityOutcome.CONTEXT_REQUEST in v7_outcomes
+    assert CapabilityOutcome.ABSTENTION in v7_outcomes
+    assert v7_outcomes == v6_outcomes
+
+
 def test_live_v6_enabled_scratch_is_a_positive_advisory_workshop(tmp_path):
     policy = ScratchAuthoringPolicyV1(
         enabled=True,

@@ -79,6 +79,10 @@ from deepreason.workloads.text import (
 CanonicalOutput = TypeVar("CanonicalOutput", bound=BaseModel)
 
 CONJECTURER_TURN_CONTRACT_V6 = "conjecturer.turn.v6"
+# P-CEPP-1: additive to v6 (D2 rev 2 dual-mode) -- the SAME wire schema,
+# a different manifest-facing label so the new eval-kind vocabulary
+# entry (program:candidate_checker) is expected on this turn.
+CONJECTURER_TURN_CONTRACT_V7 = "conjecturer.turn.v7"
 BATCH_CRITIC_CONTRACT_V2 = "batch-critic.v2"
 ATOMIC_CONJECTURE_CONTRACT_V1 = "conjecturer.atomic-candidate.v1"
 ATOMIC_CRITIC_CONTRACT_V1 = "critic.atomic-target.v1"
@@ -1917,6 +1921,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         scratch_authoring_policy: Any | None = None,
         research_enabled: bool = False,
         maximum_research_proposals: int = 0,
+        contract_id: str = CONJECTURER_TURN_CONTRACT_V6,
     ) -> None:
         formal = tuple(aliases.aliases)
         scratch = tuple((scratch_aliases or {}).keys())
@@ -1964,7 +1969,9 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             permitted_retrieval_channels=permitted_retrieval_channels,
             maximum_simulation_proposals=maximum_simulation_proposals,
         )
-        self.contract_id = CONJECTURER_TURN_CONTRACT_V6
+        if contract_id not in (CONJECTURER_TURN_CONTRACT_V6, CONJECTURER_TURN_CONTRACT_V7):
+            raise ValueError(f"unknown conjecturer-turn contract id: {contract_id}")
+        self.contract_id = contract_id
         self.wire_model = (
             ReasoningConjecturerTurnWireV6
             if reasoning
@@ -2729,6 +2736,7 @@ def minimal_example(contract: WireContract) -> str:
         "conjecturer.turn.v4",
         "conjecturer.turn.v5",
         CONJECTURER_TURN_CONTRACT_V6,
+        CONJECTURER_TURN_CONTRACT_V7,
     }:
         return '{"abstention":{"search_signal":"stuck"}}'
     supplied = getattr(contract, "minimal_example_document", None)

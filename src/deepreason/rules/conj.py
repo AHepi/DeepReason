@@ -1488,6 +1488,7 @@ def conj(
             maximum_research_proposals=(
                 _RESEARCH_TURN_MAXIMUM if v6_research_policy.enabled else 0
             ),
+            contract_id=configured_turn_contract,
         )
     elif active_v4:
         turn_contract = (

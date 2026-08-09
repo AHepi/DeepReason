@@ -15,6 +15,7 @@ from deepreason.llm.firewall import (
     select_lease,
 )
 from deepreason.run_manifest import (
+    CONJECTURER_TURN_CONTRACTS,
     ConjectureContextPolicyV1,
     RunManifest,
     config_from_run_manifest,
@@ -50,6 +51,19 @@ class WorkflowProfileError(ValueError):
     """A manifest does not name one complete repository-owned profile."""
 
 
+# P-CEPP-1: the "controlled turn" contracts (a real active-conjecture
+# manifest, never the shadow profile's legacy contract) -- v7 (D2 rev 2
+# dual-mode) is additive to v6 and grants identical capability outcomes.
+CONTROLLED_TURN_CONTRACTS = frozenset(
+    {
+        "conjecturer.turn.v4",
+        "conjecturer.turn.v5",
+        "conjecturer.turn.v6",
+        "conjecturer.turn.v7",
+    }
+)
+
+
 class ConjectureWorkflowProfileV1(FrozenRecord):
     """Small executable profile; this is not a user-authored workflow DSL."""
 
@@ -76,6 +90,9 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         "conjecturer.turn.v4",
         "conjecturer.turn.v5",
         "conjecturer.turn.v6",
+        # P-CEPP-1: additive to v6 (D2 rev 2 dual-mode), never a
+        # downgrade -- see run_manifest.py's ContractVersionPolicyV3.
+        "conjecturer.turn.v7",
     ]
     control_event_schema: Literal[
         "control.event.v1",
@@ -106,11 +123,7 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             - completed_context_expansions,
         )
         outcomes = [CapabilityOutcome.CANDIDATE_PROPOSAL]
-        if self.conjecturer_contract_id in {
-            "conjecturer.turn.v4",
-            "conjecturer.turn.v5",
-            "conjecturer.turn.v6",
-        }:
+        if self.conjecturer_contract_id in CONTROLLED_TURN_CONTRACTS:
             outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
             outcomes.append(CapabilityOutcome.ABSTENTION)
         if self.mode == "active_inquiry" and self.simulation_enabled:
@@ -151,11 +164,7 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
                 raise ValueError("shadow profile must preserve the legacy conjecturer contract")
             if self.context_policy.mode != "disabled":
                 raise ValueError("shadow profile must not actuate conjecture context")
-        elif self.conjecturer_contract_id not in {
-            "conjecturer.turn.v4",
-            "conjecturer.turn.v5",
-            "conjecturer.turn.v6",
-        }:
+        elif self.conjecturer_contract_id not in CONTROLLED_TURN_CONTRACTS:
             raise ValueError("active conjecture profile requires a controlled turn contract")
         expected = {
             "conjecture.shadow.v1": (
@@ -179,7 +188,11 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             "inquiry.active.v2": (
                 "workflow.controller.v3",
                 "inquiry-capabilities.v2",
-                "conjecturer.turn.v6",
+                # P-CEPP-1: v7 (D2 rev 2 dual-mode) is additive to v6 for
+                # this SAME workflow profile -- either is a legal exact
+                # match, checked by membership below instead of a single
+                # pinned literal.
+                CONJECTURER_TURN_CONTRACTS,
                 "control.event.v3",
             ),
         }[self.workflow_profile]
@@ -189,7 +202,18 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             self.conjecturer_contract_id,
             self.control_event_schema,
         )
-        if supplied != expected:
+        expected_conjecturer = expected[2]
+        conjecturer_matches = (
+            supplied[2] in expected_conjecturer
+            if isinstance(expected_conjecturer, frozenset)
+            else supplied[2] == expected_conjecturer
+        )
+        if (
+            supplied[0] != expected[0]
+            or supplied[1] != expected[1]
+            or not conjecturer_matches
+            or supplied[3] != expected[3]
+        ):
             raise ValueError("workflow profile authority tuple is inconsistent")
         inquiry = self.mode == "active_inquiry"
         if inquiry != (self.run_input_digest is not None):
