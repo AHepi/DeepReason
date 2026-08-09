@@ -146,8 +146,8 @@ pre-registered, not as an improvised workaround.
 | base-q13 | base | committed | 10 | 93/94 | 0 (expected) | 3rd attempt succeeded under tracked-background strategy (task beb9axlw2) |
 | hard-h01 | hard | committed | 12 (10+2 continue) | 95/97 | 0 (expected) | continue closed the foreign-criticism gap, see note above |
 | hard-h05 | hard | committed | 10 | 91/91 | 0 (expected) | clean on first stop |
-| hard-h10 | hard | in progress | - | - | - | tracked-background task b6mud0sl6 |
-| hard-h15 | hard | not started | - | - | - | |
+| hard-h10 | hard | committed | 10 | 83/85 | 0 (expected) | clean on first stop |
+| hard-h15 | hard | in progress | - | - | - | tracked-background task brd84y6uu |
 | hard2-h2-01 | hard2 | not started | - | - | - | |
 | hard2-h2-08 | hard2 | not started | - | - | - | |
 | hard2-h2-15 | hard2 | not started | - | - | - | |
