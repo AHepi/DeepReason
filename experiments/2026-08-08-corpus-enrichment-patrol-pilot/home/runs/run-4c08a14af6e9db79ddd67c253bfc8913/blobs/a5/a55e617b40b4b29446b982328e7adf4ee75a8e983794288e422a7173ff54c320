@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d29f699288bb534f0714ea78: program:reasoning_observation_pending
+- reason-counter@a5494c19d07ed562b3b0a050: program:reasoning_observation_pending
+- reason-counter@5b8ffd32d0a32a6ac46cec9f: program:reasoning_observation_pending
+- reason-counter@0c1e7fa2cf337cd15e671035: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 53.","counterconditions":[{"case":"If no such implicit threshold x>35 exists, the strict minimality condition strictly selects 18 over 53.","checker_spec":null,"eval":"observation"},{"case":"If a generalized CRT theorem forces the minimal positive residue for coprime moduli to always be less than their product, 53 is rejected in favor of 18.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The system x\u22613 (mod 5), x\u22614 (mod 7) is structurally invariant under a cyclic shift of the solution space. If the heuristic search is biased to start at a secondary basin (e.g., assuming an implicit x>35 boundary), the next solution in the residue class x\u226118 (mod 35) is 53. This acts as a counterfactual anchor: 53 is a valid simultaneous solution, but only minimal if an unspoken minimum threshold filters out 18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d29f699288bb534f0714ea78, reason-counter@a5494c19d07ed562b3b0a050
+
+TARGET SRC_002
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If the Bezout coefficients are mistakenly taken as the final x value (yielding 3 or -2) rather than as multipliers for k and j, 18 would be missed.","checker_spec":null,"eval":"observation"},{"case":"If an algebraic manipulation error in 5k - 7j = 1 incorrectly yields k=5 and j=3, substituting back would wrongly produce 28.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Solve the linear Diophantine equation 5k + 3 = 7j + 4. Rearranging yields 5k - 7j = 1. Since gcd(5, 7) = 1 divides 1, a solution exists. The extended Euclidean algorithm gives the Bezout identity 3*5 + (-2)*7 = 1, yielding a base solution (k=3, j=2). Substituting k=3 back into 5k + 3 gives 5(3) + 3 = 18. The complete solution family is x \u2261 18 (mod 35), making 18 the smallest positive integer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5b8ffd32d0a32a6ac46cec9f, reason-counter@0c1e7fa2cf337cd15e671035
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

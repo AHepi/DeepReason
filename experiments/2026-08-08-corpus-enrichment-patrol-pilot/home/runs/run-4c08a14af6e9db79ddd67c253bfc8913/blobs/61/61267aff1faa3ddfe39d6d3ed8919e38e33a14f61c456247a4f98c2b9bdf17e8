@@ -1,0 +1,31 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2b0c2f57bba56c3c236a0a9b: program:reasoning_observation_pending
+- reason-counter@72c3cb146dbd5bf57f2ff711: program:reasoning_observation_pending
+- reason-counter@4357722201753cbf8b7c64d9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"18 is the answer, but reasoning via CRT is fragile: the system x\u2261a (mod 5), x\u2261b (mod 7) has a unified residue only when a-b is constant across pairwise checks; here a-b=-1 both times, so the 'constant offset' heuristic coincidentally yields -2.","counterconditions":[{"case":"If the offset heuristic is applied where remainders do not share a constant difference to their divisors.","checker_spec":null,"eval":"observation"},{"case":"If divisors are not coprime.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Compare a-b for each divisor pair: 3-4=-1, and 5-7=-2, so x\u2261-2 (mod 35) by the constant-difference shortcut. This is a heuristic, not general CRT.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2b0c2f57bba56c3c236a0a9b, reason-counter@72c3cb146dbd5bf57f2ff711
+
+TARGET SRC_002
+{"analogy":null,"claim":"x=-2 is the common residue, so x\u226133 (mod 35) is the solution class; but 33 is not minimal because the class contains 18, not 33.","counterconditions":[{"case":"If 33 is claimed as least without checking 33-35=18.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Observe 33\u22613 (mod 5) and 33\u22614 (mod 7), but 33=-2+35, while 18=-2+35 is not the representative; actually -2 is negative so the least positive is -2+35=18, whereas 33=-2+35 is incorrect: 33\u2261-2 (mod 35) and 18\u2261-2 (mod 35), so the class is {...,-37,-2,33,68,...}; the least positive is 18=33-35.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4357722201753cbf8b7c64d9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

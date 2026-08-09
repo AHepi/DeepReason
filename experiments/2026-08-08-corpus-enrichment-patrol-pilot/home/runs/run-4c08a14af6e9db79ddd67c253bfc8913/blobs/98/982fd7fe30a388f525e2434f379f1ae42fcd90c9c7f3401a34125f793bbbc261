@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:1e3a113a2370) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1e3a113a2370 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@c622c02e5ba9: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_001 CONTRADICTS SRC_004: the '-2' pattern-matching shortcut yields x=33, but direct algebraic solution via modular inverse (5^{-1}≡3 mod 7) gives x=18. Refuted if 33 mod 7 = 4 (it gives 5, so the shortcut's residue class is wrong) or if 18 mod 5 ≠ 3 (it is 3, confirming 18).
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_005 REDUCES TO SRC_004: the exhaustive enumeration of {3,8,13} below 18 in the x≡3 mod 5 class is a finitary concretization of SRC_004's algebraic parametrization x=5a+3 — SRC_005 instantiates SRC_004's parameter a=0,1,2 and checks each against mod 7, reaching the same answer by substitution rather than inversion. Refuted if some x≡3 mod 5 with x<18 is not of the form 5a+3 for integer a≥0 (impossible by definition), or if the enumeration omits a valid candidate.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+TARGET SRC_003
+SRC_003 DEPENDS ON SRC_002: the self-correction from 33 to 18 requires the CRT machinery that SRC_002 formalizes — once SRC_003 catches that 33 mod 7 = 5 ≠ 4, it must fall back to the modular-inverse substitution method that SRC_002 already established, making SRC_003's corrected answer structurally dependent on SRC_002's framework. Refuted if SRC_002's modular inverse (5×3≡1 mod 7) is wrong, since SRC_003's recovery reuses exactly that step.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

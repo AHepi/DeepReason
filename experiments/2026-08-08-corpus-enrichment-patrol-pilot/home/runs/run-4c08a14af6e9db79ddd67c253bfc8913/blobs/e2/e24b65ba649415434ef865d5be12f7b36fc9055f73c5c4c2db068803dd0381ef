@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:204d29004328) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 204d29004328 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@b96667708ec3: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+conn:204d29004328 DEPENDS ON SRC_001's identification of the modular-inverse step as the causal link between the two congruences: SRC_001 establishes that computing 5⁻¹ mod 7 = 3 is the irreducible operation that transforms two independent congruences into a single residue class mod 35. All concrete methods (SRC_003's substitution, SRC_004's formula, SRC_005's search) implicitly or explicitly depend on this inverse existing and being computable. This dependence is REFUTED IF the modular inverse of 5 mod 7 is not 3, or if a solution method exists that solves the system without any reliance on the invertibility of 5 modulo 7 (e.g., a purely additive construction).
+commitments: hv-floor@2a45b7988522, lineage-ref@b96667708ec3, relation-form@578e42df713e
+
+TARGET SRC_002
+conn:204d29004328 ABSTRACTS from all three methods (SRC_003 algebraic, SRC_004 CRT formula, SRC_005 enumeration) to the covering principle: any coprime two-congruence system x≡a mod m, x≡b mod n has a unique solution mod mn, and the smallest positive representative is found by one of three procedures—algebraic substitution with inversion, direct CRT formula evaluation, or ordered enumeration of the sparser residue class. The abstraction depends on the coprimality invariant gcd(m,n)=1. This abstraction is REFUTED IF the three methods do not actually produce the same residue class for all valid inputs—i.e., if there exists a coprime pair (m,n) and residues (a,b) where the methods diverge.
+commitments: hv-floor@2a45b7988522, lineage-ref@b96667708ec3, relation-form@578e42df713e
+
+TARGET SRC_003
+conn:204d29004328 INTEGRATES the enumeration strategy of SRC_005 with the algebraic guarantee of SRC_004: enumeration from the sparser residue class (mod 7) is a constructive search whose termination is guaranteed by CRT's uniqueness theorem (gcd(5,7)=1 ⟹ unique mod 35). The integration is that CRT provides the proof of correctness (exactly one solution class mod 35 exists) while enumeration provides the discovery procedure (find the smallest positive element). This integration is REFUTED IF CRT's uniqueness guarantee is insufficient to bound the enumeration—i.e., if the search could miss the solution despite uniqueness, or if gcd(5,7)≠1 making the solution class non-unique.
+commitments: hv-floor@2a45b7988522, lineage-ref@b96667708ec3, relation-form@578e42df713e
+
+TARGET SRC_004
+conn:204d29004328 CONTRADICTS SRC_002's constant-residue shortcut: SRC_002 claims x≡-2 mod 5 and x≡-2 mod 7 ⟹ x≡-2 mod 35, yielding 33. But 4≡-3 mod 7 (not -2), so the residues relative to moduli are unequal (-2 vs -3) and the shortcut produces a value (33) failing the mod 7 check (33 mod 7 = 5 ≠ 4). The correct CRT answer is 18, which the shortcut cannot reach. This contradiction is REFUTED IF the constant-residue shortcut can be modified to handle unequal residues—i.e., if there exists a generalization of the common-residue heuristic that correctly yields 18 without modular inversion.
+commitments: hv-floor@2a45b7988522, lineage-ref@b96667708ec3, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

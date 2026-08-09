@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:1dced5d5a8ff) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1dced5d5a8ff to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f2c384a6fa77: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated node 1dced5d5a8ff depends on SRC_005's enumeration procedure but inverts its search direction: rather than checking 3, 8, 13, 18 ascending through x≡3 (mod 5), the isolated node likely enumerates 4, 11, 18 descending from x≡4 (mod 7), and a failure to test all candidates in the shorter progression produces a wrong or right answer by a different causal route. The dependence is on the bounded-enumeration mechanism, but the inversion constitutes a genuinely distinct algorithmic path. REFUTED IF 1dced5d5a8ff uses a closed-form CRT computation (as in SRC_001/SRC_002) rather than any enumeration procedure, since then the enumerated-progression mechanism shared with SRC_005 would not apply.
+commitments: hv-floor@2a45b7988522, lineage-ref@f2c384a6fa77, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated node 1dced5d5a8ff depends on SRC_003 as a boundary-conditioned instance of the same CRT problem: if one imposes an implicit lower bound x>35 on the solution space, the next member of the residue class x≡18 (mod 35) is 53, making the isolated node's answer a threshold-shifted variant of SRC_003's counterfactual mechanism. The causal mechanism is the cyclic-shift invariance of the CRT lattice: the solution class is infinite, and a shifted search basin selects a later lattice point. REFUTED IF 1dced5d5a8ff's content does not actually claim 53 (or another >35 member of x≡18 mod 35) as the answer, since the dependence is specifically on SRC_003's threshold mechanism producing 53.
+commitments: hv-floor@2a45b7988522, lineage-ref@f2c384a6fa77, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

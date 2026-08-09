@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d4725ca7bb929ab557dcc917: program:reasoning_observation_pending
+- reason-counter@0a80b87eeda10223070228fa: program:reasoning_observation_pending
+- reason-counter@dba0e103a7f3ca1b00e62aa7: program:reasoning_observation_pending
+- reason-counter@255ded3940aaf3ec7779c7ef: program:reasoning_observation_pending
+- reason-counter@c6e5344edf95d41e147ff369: program:reasoning_observation_pending
+- reason-counter@a02257cce07facbd27d83a27: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The answer is 18, verified by the property that 18-3=15 is divisible by 5 and 18-4=14 is divisible by 7, confirming both congruences, and 18 is minimal because the only positive integers below 18 in the x\u22613 mod 5 class are {3, 8, 13}, none of which satisfy x\u22614 mod 7.","counterconditions":[{"case":"If an integer below 18 outside the x\u22613 mod 5 class could satisfy x\u22613 mod 5, the exhaustiveness argument fails\u2014 but this is impossible by definition of the residue class.","checker_spec":null,"eval":"observation"},{"case":"If 18 does not satisfy both congruences, the answer is wrong.","checker_spec":null,"eval":"observation"},{"case":"If there are more candidates below 18 in the residue class than {3,8,13}, the enumeration is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Exhaustive verification: The set of positive integers satisfying x\u22613 mod 5 and x<18 is {3, 8, 13}. Check each: 3 mod 7=3\u22604, 8 mod 7=1\u22604, 13 mod 7=6\u22604. None satisfy the second congruence. Since 18 satisfies both (18 mod 5=3, 18 mod 7=4) and all smaller candidates in the first residue class fail, 18 is the smallest positive solution. The gap between consecutive candidates in the x\u22613 mod 5 class is 5, and we checked all three below 18, covering the entire range [1,17].","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d4725ca7bb929ab557dcc917, reason-counter@0a80b87eeda10223070228fa, reason-counter@dba0e103a7f3ca1b00e62aa7
+
+TARGET SRC_002
+{"analogy":null,"claim":"The answer is 18, found by systematic enumeration of the residue class x\u22613 mod 5 until one also satisfies x\u22614 mod 7.","counterconditions":[{"case":"If the enumeration is not in increasing order, the first match is not guaranteed smallest.","checker_spec":null,"eval":"observation"},{"case":"If the first congruence x\u22613 mod 5 has been misidentified, the entire search space is wrong.","checker_spec":null,"eval":"observation"},{"case":"If a candidate below 18 were skipped, the enumeration is incomplete.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"List candidates satisfying the first congruence x\u22613 mod 5: 3, 8, 13, 18, 23, 28, ... Check each against the second condition x\u22614 mod 7: 3 mod 7=3 \u2717, 8 mod 7=1 \u2717, 13 mod 7=6 \u2717, 18 mod 7=4 \u2713. The first hit is x=18. Since we enumerate in increasing order starting from the smallest positive element of the residue class, the first match is guaranteed to be the smallest positive solution.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@255ded3940aaf3ec7779c7ef, reason-counter@c6e5344edf95d41e147ff369, reason-counter@a02257cce07facbd27d83a27
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

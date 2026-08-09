@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:1e3a113a2370) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1e3a113a2370 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@c622c02e5ba9: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated block contradicts SRC_001 by demonstrating that the constant-difference shortcut (x≡-2 mod 35 → 33) produces a spurious smallest solution because 3 mod 5 and 4 mod 7 have unequal residues relative to moduli (-2 vs -3), breaking the shared-residue assumption. It is refuted if 33 mod 5 = 3 AND 33 mod 7 = 4 both hold (making 33 a valid solution), or if 18 does not satisfy both congruences (making 18 invalid).
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated block reduces to SRC_002 in that both require computing the modular inverse of 5 mod 7 (=3) to derive the parametric substitution a≡3 mod 7, which is the minimal algebraic step shared by every correct derivation. It is refuted if the inverse step is not the load-bearing operation—i.e., if 5 and 7 are not coprime, making the inverse nonexistent, or if the inverse is not 3, breaking the derivation at the substitution stage.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+TARGET SRC_003
+The isolated block depends on SRC_005 by requiring exhaustive enumeration of the residue class {3,8,13} below 18 to establish minimality without relying on the full CRT lattice. It is refuted if some candidate below 18 outside the enumerated set {3,8,13} satisfies x≡3 mod 5, or if 18 itself fails either congruence check.
+commitments: hv-floor@2a45b7988522, lineage-ref@c622c02e5ba9, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

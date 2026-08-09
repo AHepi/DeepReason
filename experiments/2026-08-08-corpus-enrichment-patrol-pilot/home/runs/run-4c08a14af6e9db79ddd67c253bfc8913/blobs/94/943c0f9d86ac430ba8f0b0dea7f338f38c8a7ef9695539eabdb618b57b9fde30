@@ -1,0 +1,127 @@
+{
+  "candidates": [
+    {
+      "claim": "The smallest positive integer satisfying both congruences is 18.",
+      "mechanism": "Both congruences imply a 'minus 2' remainder pattern: n ≡ 3 (mod 5) corresponds to n = 5a - 2, and n ≡ 4 (mod 7) corresponds to n = 7b - 2. Solving 5a - 2 = 7b - 2 yields 5a = 7b, whose smallest positive solution is a = 7, b = 5. Substituting gives n = 5·7 - 2 = 33. But this computes an invariant across the -2 offset, not the smallest n. Enumerating 5a + 3 (3, 8, 13, 18, 23, 28, 33) and checking mod 7 = 4 hits n = 18 first, making 18 the smallest solution.",
+      "counterconditions": [
+        "If any positive integer less than 18 leaves remainder 3 mod 5 and 4 mod 7, this claim is falsified",
+        "If the modular offset pattern is wrongly generalized to the -2 invariant n = 35k - 2, it yields 33 as the smallest, which must be ruled out by enumeration of the actual residue sequence"
+      ],
+      "typicality": 0.95,
+      "optional_refs": ["SRC_001"],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "CRT offset trick: when two remainders are each one less than their divisor (divisor, remainder pairs of (5,4) and (7,6)), the solution is LCM - 1",
+          "In the dual of the given problem, x ≡ 4 mod 5 and x ≡ 6 mod 7, the solution is 34",
+          "Both are instances of matching remainder-vs-divisor offset patterns"
+        ],
+        "disanalogies": [
+          "Here the remainders are 3 and 4, which are 2 and 3 less than their divisors, not 1 and 1; the offset trick does not collapse to LCM - 2",
+          "The '-2' offset works for the relation 5a - 2 = 7b - 2 but gives 33, an invariant of that offset equation, not the smallest positive solution to the original congruence pair"
+        ],
+        "transfer_claims": [
+          "CRT-like offset tricks reveal hidden structure but can mislead when offsets are unequal or when they solve a transformed rather than original equation",
+          "The smallest solution lives in the residue class sequence 5a + 3, and must be verified by checking against the second modulus"
+        ],
+        "overturn_conditions": [
+          "Enumeration of n = 5a + 3 for a = 0..6 yields 3, 8, 13, 18, 23, 28, 33; of these, only 18 (a = 3) satisfies n mod 7 = 4",
+          "If any smaller positive integer than 18 satisfies both congruences, the claim is false"
+        ],
+        "adopted_commitment_refs": ["program:reasoning-envelope-wf"]
+      },
+      "evidence_refs": []
+    },
+    {
+      "claim": "A simulation enumerating integers and filtering by both modular conditions causally determines the smallest valid answer, providing empirical validation independent of algebraic derivation.",
+      "mechanism": "Construct a deterministic sweep over positive integers n = 1, 2, 3, ..., evaluating the boolean condition (n mod 5 == 3) AND (n mod 7 == 4). The first n returning True is the answer by construction. This mechanizes the search space traversal and stops at the first match, yielding 18.",
+      "counterconditions": [
+        "If the simulation's first-match value differs from the algebraic CRT solution, there is a bug in the sweep or the algebra",
+        "If the filter condition is mistated (e.g., n mod 5 == 4), it returns the wrong value"
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_004"],
+      "analogy": {
+        "source_memory_refs": ["SRC_004"],
+        "shared_structure": [
+          "Empirical enumeration over a bounded search space returns the smallest hit",
+          "Filter-and-find is a general pattern: sweep, test a predicate, halt at first success"
+        ],
+        "disanalogies": [
+          "Algebraic CRT gives the full residue class directly without iteration, while simulation must traverse the space",
+          "Simulation validates but does not derive the general solution form"
+        ],
+        "transfer_claims": [
+          "Simulating the sweep confirms the smallest answer without relying on number-theoretic machinery",
+          "This provides an independent check on the algebraic answer"
+        ],
+        "overturn_conditions": [
+          "If the simulation returns a value other than 18, the algebraic claim is in doubt",
+          "If the sweep range is truncated below the true answer, it returns nothing or a spurious miss"
+        ],
+        "adopted_commitment_refs": ["program:reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The solution is 33, derived from the unified '-2' remainder pattern, and no smaller positive integer satisfies both constraints.",
+      "mechanism": "Both congruences share the form n ≡ -2 (mod m): 3 = 5 - 2 and 4 = 7 - 2. By CRT, the solution is n ≡ -2 (mod 35), so n = 35k - 2. The smallest positive value is 33 (k = 1).",
+      "counterconditions": [
+        "If there exists a positive integer smaller than 33 that leaves remainder 3 mod 5 and 4 mod 7, this claim is falsified",
+        "Direct enumeration of n = 5a + 3 finds n = 18 (18 mod 5 = 3, 18 mod 7 = 4), which is smaller than 33 and refutes this claim"
+      ],
+      "typicality": 0.25,
+      "optional_refs": ["SRC_001", "SRC_002"],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "The '-2' remainder pattern is a real CRT invariant: n ≡ -2 (mod 35) does describe a valid residue class containing solutions",
+          "The CRT combination of the two '-2' congruences is legitimately 35k - 2"
+        ],
+        "disanalogies": [
+          "The claim conflates 'a solution in the same residue class as -2 mod 35' with 'the smallest positive solution'",
+          "The '-2' pattern describes only the subset of solutions that are 2 less than a common multiple of 5 and 7, missing solutions like 18 that do not lie in that sub-pattern",
+          "The original congruences n ≡ 3 (mod 5) and n ≡ 4 (mod 7) do not require n ≡ -2 (mod 5) and n ≡ -2 (mod 7) in the sense of n + 2 being divisible by both; they require it separately, and the general solution is n ≡ 18 (mod 35)"
+        ],
+        "transfer_claims": [
+          "The '-2' offset trick is seductive but yields a spurious 'smallest' because 33 is merely the smallest member of the -2 mod 35 class, not the smallest solution overall",
+          "This illustrates how pattern-matching to a known CRT shortcut can mislead when the actual congruences have a different general solution"
+        ],
+        "overturn_conditions": [
+          "Enumeration of 5a + 3 for small a yields 18 as the first match mod 7 = 4, falsifying 33 as smallest",
+          "The general CRT solution is n ≡ 18 (mod 35), not n ≡ 33 (mod 35), so 33 is in the wrong residue class"
+        ],
+        "adopted_commitment_refs": ["program:reasoning-envelope-wf"]
+      }
+    },
+    {
+      "claim": "The lattice of solutions forms a single residue class mod 35, and 18 is its smallest positive representative, derived by CRT combination.",
+      "mechanism": "Solve n = 5a + 3 and n = 7b + 4. Substituting: 5a + 3 ≡ 4 (mod 7), so 5a ≡ 1 (mod 7). The inverse of 5 mod 7 is 3 (since 5·3 = 15 ≡ 1), so a ≡ 3 (mod 7), giving a = 7k + 3. Then n = 5(7k + 3) + 3 = 35k + 18. The smallest positive solution is n = 18 (k = 0).",
+      "counterconditions": [
+        "If the modular inverse of 5 mod 7 is not 3, the derivation fails",
+        "If 18 does not satisfy both congruences, the entire residue class is wrong"
+      ],
+      "typicality": 0.92,
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "analogy": {
+        "source_memory_refs": ["SRC_001", "SRC_003"],
+        "shared_structure": [
+          "CRT produces a unique residue class mod LCM(5, 7) = 35 when the moduli are coprime",
+          "Finding the modular inverse to solve the linear congruence is the standard unifying step"
+        ],
+        "disanalogies": [
+          "This is a general method, while the '-2' shortcut only works for specific remainder patterns and gives a different (spurious smallest) answer",
+          "The unifier's CRT approach yields the full solution class, unlike empirical sweep which only finds one value"
+        ],
+        "transfer_claims": [
+          "The general solution n = 35k + 18 subsumes all solutions, and 18 is the canonical smallest positive representative",
+          "This provides the causal mechanism: the modular inverse step is what links the two congruences into one residue class"
+        ],
+        "overturn_conditions": [
+          "If 18 mod 5 ≠ 3 or 18 mod 7 ≠ 4, the residue class is incorrect",
+          "If the modular inverse computation is wrong, the derived residue class shifts"
+        ],
+        "adopted_commitment_refs": ["program:reasoning-envelope-wf"]
+      }
+    }
+  ]
+}

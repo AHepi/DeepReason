@@ -1,0 +1,40 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4e9378dc4e8560274f8a536e: program:reasoning_observation_pending
+- reason-counter@7e6b319840ecbc7bc7a41859: program:reasoning_observation_pending
+- reason-counter@a74734a78207824bde867e1b: program:reasoning_observation_pending
+- reason-counter@904973a3ccf03a39c1b8d50a: program:reasoning_observation_pending
+- reason-counter@f1dc5cdce88d4c2270326a0e: program:reasoning_observation_pending
+- reason-counter@134841db319385a4437499ad: program:reasoning_observation_pending
+- reason-counter@e31579d160de761e47e999c3: program:reasoning_observation_pending
+- reason-counter@b2c14884cca1da36fdf76310: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If the constant-difference shortcut is applied carelessly, one gets 33, which is too large","checker_spec":null,"eval":"observation"},{"case":"If CRT solution a\u22612 mod 5 fails to produce x=18","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Both remainders are exactly 2 less than their divisors, so x\u2261-2 (mod 5) and x\u2261-2 (mod 7). Because gcd(5,7)=1, these combine to x\u2261-2 (mod 35). The smallest positive representative is 35-2=33. Checking x=33: 33 mod 5=3 and 33 mod 7=4. However, enumerating the residue class x\u2261-2 (mod 35) yields ...,33,68,101, and going down x\u2261-2 (mod 35) gives x=33-35=-2, so the positive members are 33,68,... Wait, 33 is the smallest positive. But direct check of small candidates shows 18\u22613 (mod 5) and 18\u22614 (mod 7), and 18<33. The constant-difference shortcut x\u2261-2 (mod lcm) gives 33 as the first positive above 0, but the true smallest positive solution is 18, which does NOT satisfy x\u2261-2 (mod 35). The error: 18\u22613\u2261-2 (mod 5) and 18\u22614\u2261-3 (mod 7), so the differences are -2 and -3, not both -2. Correct CRT: x\u2261-2 (mod 5), x\u2261-3 (mod 7). Solve: x=7a+4, 7a+4\u22613 (mod 5), 2a\u2261-1\u22614 (mod 5), a\u22612 (mod 5), x=7\u00b72+4=18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4e9378dc4e8560274f8a536e, reason-counter@7e6b319840ecbc7bc7a41859
+
+TARGET SRC_002
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If the Diophantine equation 5a-7b=1 has no solution (it does: a=3,b=2)","checker_spec":null,"eval":"observation"},{"case":"If 18 does not satisfy both original congruences (it does)","checker_spec":null,"eval":"observation"},{"case":"If the period is not 35 (it is, since gcd(5,7)=1)","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By CRT, the unique solution mod 35 is found via x=5a+3=7b+4, giving 5a-7b=1. One solution is a=3, b=2, so x=5\u00b73+3=18. The full solution set is x\u226118 (mod 35), and the smallest positive representative is 18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a74734a78207824bde867e1b, reason-counter@904973a3ccf03a39c1b8d50a, reason-counter@f1dc5cdce88d4c2270326a0e
+
+TARGET SRC_003
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If x=5k+3 fails for all non-negative k","checker_spec":null,"eval":"observation"},{"case":"If 5 has no inverse mod 7 (it does)","checker_spec":null,"eval":"observation"},{"case":"If a smaller positive x exists (7 and 13 fail: 7\u22612 mod 5, 13\u22613 mod 7)","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Since x\u22613 (mod 5), write x=5k+3. The condition x\u22614 (mod 7) gives 5k+3\u22614 (mod 7), so 5k\u22611 (mod 7). The inverse of 5 mod 7 is 3 (since 5\u00b73=15\u22611), hence k\u22613 (mod 7). With k=3, x=5\u00b73+3=18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@134841db319385a4437499ad, reason-counter@e31579d160de761e47e999c3, reason-counter@b2c14884cca1da36fdf76310
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

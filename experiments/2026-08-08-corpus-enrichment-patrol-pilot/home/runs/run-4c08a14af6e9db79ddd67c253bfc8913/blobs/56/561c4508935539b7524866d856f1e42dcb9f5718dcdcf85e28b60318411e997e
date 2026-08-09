@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "claim": "The smallest positive integer satisfying x ≡ 3 (mod 5) and x ≡ 4 (mod 7) is 18, found by stepwise search along the residue chain 3, 8, 13, 18.",
+      "mechanism": "The constraints x = 5k + 3 (k ≥ 0) and x = 7m + 4 (m ≥ 0) generate the arithmetic progression {3, 8, 13, 18, ...}. The search walks this chain from its origin: x=3 leaves 3 mod 7 (not 4); x=8 leaves 1; x=13 leaves 6; x=18 leaves 4. At k=3, m=2, both congruences hold simultaneously. The progression increases by 5 each step and is bounded below by 3, so no positive integer smaller than 18 can lie on the 5-chain; among {3, 8, 13}, none satisfies the mod-7 test. Therefore 18 is the least positive solution and the complete solution is x ≡ 18 (mod 35).",
+      "counterconditions": [
+        "If a positive integer smaller than 18 satisfies both congruences, this candidate is overturned.",
+        "If the progression 5k+3 has a positive term below 18 that leaves remainder 4 mod 7, the chain analysis is incomplete."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.95
+    },
+    {
+      "claim": "18 is the smallest positive solution, derived by parameterizing both constraints as explicit formulas and eliminating the shared variable.",
+      "mechanism": "From x ≡ 3 (mod 5): x = 5k + 3. From x ≡ 4 (mod 7): x = 7m + 4. Equating: 5k + 3 = 7m + 4, so 5k - 7m = 1. For k=3, m=2: 15 - 14 = 1. Thus x = 5(3) + 3 = 18. For k=-4, m=-3: x = -17, giving the complementary residue class x ≡ -17 ≡ 18 (mod 35). Since k=3 is the smallest non-negative k satisfying 5k ≡ 1 (mod 7) (k ≡ 3 mod 7), x = 18 is the smallest positive representative.",
+      "counterconditions": [
+        "If 5k - 7m = 1 has a solution with 0 ≤ k < 3 and x > 0, this is overturned.",
+        "If the Diophantine equation 5k - 7m = 1 has no solution, the elimination approach fails."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.82
+    },
+    {
+      "claim": "18 is the smallest positive solution, found by exhaustive enumeration: each integer from 1 to 18 is tested against both divisors until both remainders match simultaneously.",
+      "mechanism": "The positive integers are tested in order. The mod-5 test (remainder 3) admits 3, 8, 13, 18. The mod-7 test (remainder 4) admits 4, 11, 18. The first integer appearing in both admission sets is 18. No integer in {1, ..., 17} passes both filters: 17 fails mod-5 (remainder 2), 16 fails mod-5 (remainder 1), 15 fails mod-5, 14 fails mod-7 (remainder 0), 13 fails mod-7 (remainder 6), 12 fails mod-5, 11 fails mod-5, and so on. The intersection of the two admission sets first becomes non-empty at 18.",
+      "counterconditions": [
+        "If any integer in {1, ..., 17} yields remainder 3 mod 5 and 4 mod 7, the enumeration is overturned.",
+        "If the admission sets are incorrectly computed, the intersection analysis fails."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.7
+    },
+    {
+      "claim": "18 is the smallest positive solution, constructed by expressing x as a stack of two layers: a base residue that satisfies the mod-5 constraint, plus a correction that enforces the mod-7 constraint.",
+      "mechanism": "Start with the mod-5 residue: x = 3 + 5t. This guarantees x ≡ 3 (mod 5) for all integers t. Now impose the mod-7 constraint: 3 + 5t ≡ 4 (mod 7), so 5t ≡ 1 (mod 7). Since 5⁻¹ ≡ 3 (mod 7) because 5·3 = 15 ≡ 1 (mod 7), we get t ≡ 3 (mod 7). The smallest non-negative t is 3, giving x = 3 + 5·3 = 18. The next solution uses t = 10, giving x = 53 = 18 + 35. The complete family is x ≡ 18 (mod 35).",
+      "counterconditions": [
+        "If 5⁻¹ mod 7 is not 3, the modular inverse step fails.",
+        "If a smaller non-negative t yields x ≡ 4 (mod 7), the layer construction is overturned."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_005"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.78
+    },
+    {
+      "claim": "18 is the smallest positive solution, obtained by overlaying the two periodic remainder sequences and locating their first simultaneous match.",
+      "mechanism": "Define two periodic functions on the positive integers: f(x) = x mod 5 and g(x) = x mod 7, with periods 5 and 7. Their combined pattern has period lcm(5,7) = 35. Within one full period {1, ..., 35}, f(x) = 3 at x ∈ {3, 8, 13, 18, 23, 28, 33} and g(x) = 4 at x ∈ {4, 11, 18, 25, 32}. The unique intersection is x = 18. Since the pattern repeats with period 35, the solution set is {18, 53, 88, ...} = {x : x ≡ 18 (mod 35)}. The smallest positive element is 18.",
+      "counterconditions": [
+        "If the two periodic sequences have a match at some x < 18, the overlay analysis is overturned.",
+        "If the combined period is not 35, the periodic intersection set is incomplete."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_005"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.62
+    },
+    {
+      "claim": "18 is the smallest positive solution, found by first solving the transformed system x ≡ -2 (mod 5) and x ≡ -3 (mod 7), where the residues are each one less than a common value of -1 relative to their moduli, and correcting.",
+      "mechanism": "Rewrite the remainders: x ≡ 3 (mod 5) means x + 2 ≡ 0 (mod 5), so x ≡ -2 (mod 5). And x ≡ 4 (mod 7) means x + 3 ≡ 0 (mod 7), so x ≡ -3 (mod 7). The offsets from the moduli are -2 and -3, which are NOT equal. The constant-difference shortcut (which would require both offsets to be the same value c, giving x ≡ c mod lcm) does NOT apply directly here. Instead, the difference between the offsets is -2 - (-3) = 1, which must be absorbed by the modular structure. Testing the residue chain x = -2 + 5t: for t = 0, x = -2 ≡ 5 (mod 7); t = 1, x = 3 ≡ 3 (mod 7); t = 2, x = 8 ≡ 1; t = 3, x = 13 ≡ 6; t = 4, x = 18 ≡ 4 (mod 7). The match is at x = 18, confirming that the unequal-offset case requires stepwise search, not a single-residue shortcut.",
+      "counterconditions": [
+        "If the constant-difference shortcut somehow applies with offset -2 giving x ≡ -2 (mod 35) → 33 as the smallest positive solution, this candidate is overturned (but 18 < 33 and 18 satisfies both, so 33 is not smallest).",
+        "If a positive integer smaller than 18 satisfies both congruences, the offset analysis is incomplete."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_005", "SRC_006"],
+      "sidecar": {"search_signal": "productive", "requested_context_aliases": []},
+      "typicality": 0.3
+    }
+  ]
+}

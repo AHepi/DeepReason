@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@89d1bee6b29d8cedd5bea4a0: program:reasoning_observation_pending
+- reason-counter@02ada6b489f64a14e1f5b084: program:reasoning_observation_pending
+- reason-counter@e66b1bec78dfa9fb51698b85: program:reasoning_observation_pending
+- reason-counter@e0651af80910d08624cb78c9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If the arithmetic progression 3+5k is interrupted by a prime-modulus wormhole such that 3+5k jumps directly to 23 for k=3, the enumeration would miss 18.","checker_spec":null,"eval":"observation"},{"case":"If the identity of remainder operations is falsified and division by 7 operates under a non-Euclidean modulus where remainder 4 is equivalent to remainder -3, x=4 might be reported as the minimal solution.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anchor in bounded empirical enumeration of the progression 3, 8, 13, 18, ... for the x\u22613 (mod 5) condition, and test each for the x\u22614 (mod 7) condition. The values to test are 3, 8, 13, and 18. Checking x mod 7 for these gives 3, 1, 6, and 4. Since 18 leaves a remainder of 3 when divided by 5 and 4 when divided by 7, and no smaller positive integer in the sequence does, 18 is the minimal positive solution.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@89d1bee6b29d8cedd5bea4a0, reason-counter@02ada6b489f64a14e1f5b084
+
+TARGET SRC_002
+{"analogy":null,"claim":"The smallest positive integer satisfying x\u22613 (mod 5) and x\u22614 (mod 7) is 18.","counterconditions":[{"case":"If the Diophantine search space is bound to begin at b=5, the minimal solution is excluded.","checker_spec":null,"eval":"observation"},{"case":"If the search incorrectly tests (7b-4) instead of (7b+4), a divergent progression is generated.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Transform the congruences into an exact Diophantine equation: x = 5a + 3 and x = 7b + 4, implying 5a - 7b = 1. By evaluating b = 0, 1, 2, 3, 4: (b, 7b+4) pairs are (0,4), (1,11), (2,18), (3,25), (4,32). Testing these for x\u22613 (mod 5) immediately finds 18 mod 5 = 3. Because the mod 7 progression is strictly increasing from 4, 18 is the smallest positive integer.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e66b1bec78dfa9fb51698b85, reason-counter@e0651af80910d08624cb78c9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

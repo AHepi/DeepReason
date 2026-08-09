@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "conn:204d29004328 REDUCES TO the CRT formula construction in SRC_004: any correct solution to x≡3 mod 5, x≡4 mod 7 can be obtained by evaluating the CRT expression x = 3·(7·3) + 4·(5·3) mod 35 = 123 mod 35 = 18. The successive-enumeration method of SRC_005 is a special case that searches the residue class produced by CRT without constructing it explicitly. This reduction is REFUTED IF there exists a solution to the congruence system that the CRT formula cannot produce, or if the CRT formula requires computing a modular inverse that fails (e.g., gcd(5,7)≠1).",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004", "SRC_005", "SRC_003", "SRC_001"]
+    },
+    {
+      "content": "conn:204d29004328 SHARES MECHANISM with SRC_003 and SRC_001 in the modular-inverse step: both the algebraic substitution method (x=5a+3 → 5a≡1 mod 7 → a≡3 mod 7) and the CRT formula (5⁻¹ mod 7 = 3) compute the same inverse of 5 modulo 7 to link the two congruences. The unifying mechanism is solving a linear congruence via modular inversion, which is the irreducible computational core that neither enumeration (SRC_005) nor the failed shortcut (SRC_002) can bypass. This shared mechanism is REFUTED IF the modular inverse step is not actually necessary—i.e., if the correct answer 18 can be derived by a method that never computes or implicitly uses 5⁻¹ mod 7.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_003", "SRC_001", "SRC_004", "SRC_002"]
+    },
+    {
+      "content": "conn:204d29004328 INTEGRATES the enumeration strategy of SRC_005 with the algebraic guarantee of SRC_004: enumeration from the sparser residue class (mod 7) is a constructive search whose termination is guaranteed by CRT's uniqueness theorem (gcd(5,7)=1 ⟹ unique mod 35). The integration is that CRT provides the proof of correctness (exactly one solution class mod 35 exists) while enumeration provides the discovery procedure (find the smallest positive element). This integration is REFUTED IF CRT's uniqueness guarantee is insufficient to bound the enumeration—i.e., if the search could miss the solution despite uniqueness, or if gcd(5,7)≠1 making the solution class non-unique.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_005", "SRC_004", "SRC_003"]
+    },
+    {
+      "content": "conn:204d29004328 CONTRADICTS SRC_002's constant-residue shortcut: SRC_002 claims x≡-2 mod 5 and x≡-2 mod 7 ⟹ x≡-2 mod 35, yielding 33. But 4≡-3 mod 7 (not -2), so the residues relative to moduli are unequal (-2 vs -3) and the shortcut produces a value (33) failing the mod 7 check (33 mod 7 = 5 ≠ 4). The correct CRT answer is 18, which the shortcut cannot reach. This contradiction is REFUTED IF the constant-residue shortcut can be modified to handle unequal residues—i.e., if there exists a generalization of the common-residue heuristic that correctly yields 18 without modular inversion.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_002", "SRC_003", "SRC_001", "SRC_004"]
+    },
+    {
+      "content": "conn:204d29004328 ABSTRACTS from all three methods (SRC_003 algebraic, SRC_004 CRT formula, SRC_005 enumeration) to the covering principle: any coprime two-congruence system x≡a mod m, x≡b mod n has a unique solution mod mn, and the smallest positive representative is found by one of three procedures—algebraic substitution with inversion, direct CRT formula evaluation, or ordered enumeration of the sparser residue class. The abstraction depends on the coprimality invariant gcd(m,n)=1. This abstraction is REFUTED IF the three methods do not actually produce the same residue class for all valid inputs—i.e., if there exists a coprime pair (m,n) and residues (a,b) where the methods diverge.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_005", "SRC_001"]
+    },
+    {
+      "content": "conn:204d29004328 DEPENDS ON SRC_001's identification of the modular-inverse step as the causal link between the two congruences: SRC_001 establishes that computing 5⁻¹ mod 7 = 3 is the irreducible operation that transforms two independent congruences into a single residue class mod 35. All concrete methods (SRC_003's substitution, SRC_004's formula, SRC_005's search) implicitly or explicitly depend on this inverse existing and being computable. This dependence is REFUTED IF the modular inverse of 5 mod 7 is not 3, or if a solution method exists that solves the system without any reliance on the invertibility of 5 modulo 7 (e.g., a purely additive construction).",
+      "typicality": 0.65,
+      "neighbours": ["SRC_001", "SRC_003", "SRC_004", "SRC_005"]
+    }
+  ]
+}
+```

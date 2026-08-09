@@ -1,0 +1,3 @@
+```json
+{"cases":[{"attack":false,"target_alias":"SRC_001"},{"attack":true,"case":"SRC_002's own countercondition concedes that 24 mod 5 = 4 and 24 mod 7 = 3, which are the swapped remainders, not the required remainder 3 mod 5 and 4 mod 7. The mechanism mistakenly labels the set {3,10,17,24,31} as values ≡ 3 (mod 7), when they are actually the values satisfying remainder 3 mod 5. This conflation produces the incorrect answer 24, failing the problem's stated conditions.","counterexample":null,"target_alias":"SRC_002"},{"attack":false,"target_alias":"SRC_003"},{"attack":false,"target_alias":"SRC_004"}]}
+```

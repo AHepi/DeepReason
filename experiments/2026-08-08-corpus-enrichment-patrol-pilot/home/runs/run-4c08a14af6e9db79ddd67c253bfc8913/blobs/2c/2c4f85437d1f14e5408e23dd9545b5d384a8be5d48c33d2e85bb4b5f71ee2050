@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-be9a1190124d60d1196a134b780635c3) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+What is the smallest positive integer that leaves remainder 3 when divided by 5, and remainder 4 when divided by 7?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@848958bcc8c253ada345e5ee: program:reasoning_observation_pending
+- reason-counter@b5859695779941171159ffc2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":["program:reasoning-envelope-wf"],"disanalogies":["Algebraic CRT gives the full residue class directly without iteration, while simulation must traverse the space","Simulation validates but does not derive the general solution form"],"overturn_conditions":["If the simulation returns a value other than 18, the algebraic claim is in doubt","If the sweep range is truncated below the true answer, it returns nothing or a spurious miss"],"shared_structure":["Empirical enumeration over a bounded search space returns the smallest hit","Filter-and-find is a general pattern: sweep, test a predicate, halt at first success"],"source_memory_refs":["SRC_004"],"transfer_claims":["Simulating the sweep confirms the smallest answer without relying on number-theoretic machinery","This provides an independent check on the algebraic answer"]},"claim":"A simulation enumerating integers and filtering by both modular conditions causally determines the smallest valid answer, providing empirical validation independent of algebraic derivation.","counterconditions":[{"case":"If the simulation's first-match value differs from the algebraic CRT solution, there is a bug in the sweep or the algebra","checker_spec":null,"eval":"observation"},{"case":"If the filter condition is mistated (e.g., n mod 5 == 4), it returns the wrong value","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Construct a deterministic sweep over positive integers n = 1, 2, 3, ..., evaluating the boolean condition (n mod 5 == 3) AND (n mod 7 == 4). The first n returning True is the answer by construction. This mechanizes the search space traversal and stops at the first match, yielding 18.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@848958bcc8c253ada345e5ee, reason-counter@b5859695779941171159ffc2
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
