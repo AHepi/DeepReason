@@ -14,3 +14,6 @@ Qualification will test ollama/gemma4:31b; maximum expected provider calls: 1140
 qualify_rc=0 qualify_seconds=114
 reason_rc=0 reason_seconds=758 tier=full
 run_id=run-6bca5a31141b3f0ea6140501146f5646
+audit1_rc=0
+stop_reason=budget_exhausted
+resumable=yes
