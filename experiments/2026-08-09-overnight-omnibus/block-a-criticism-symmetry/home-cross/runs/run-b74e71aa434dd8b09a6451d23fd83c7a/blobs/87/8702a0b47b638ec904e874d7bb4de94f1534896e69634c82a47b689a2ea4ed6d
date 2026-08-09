@@ -1,0 +1,84 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A panel of trained non-experts using a checklist is more reliable than a single expert for tasks where the failure mode is primarily the omission of known critical variables rather than the misinterpretation of complex patterns.",
+      "mechanism": "The checklist acts as an externalized memory system that eliminates 'lapse' errors (omissions), which are common even in experts, while the panel structure averages out individual non-expert biases. Reliability is gained by shifting the bottleneck from internal cognitive recall to external procedural adherence.",
+      "counterconditions": [
+        "The task requires high-dimensional synthesis where the relationship between checklist items is non-linear.",
+        "The 'trained non-experts' lack the minimum threshold of literacy required to interpret the checklist items correctly.",
+        "The expert's intuition is actually a compressed form of the checklist that operates faster and with fewer execution errors."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is distinguished from mere compliance by the presence of 'correction events'—documented instances where a checklist item forces the panel to override an initial, incorrect intuitive consensus.",
+      "mechanism": "If a panel reaches the correct answer but their trace shows they ignored checklist items that would have led to the wrong answer, they were 'lucky' (compliance without utility). If the trace shows a pivot from a wrong intuitive path to a correct one specifically triggered by a checklist step, the tool has actively increased reliability.",
+      "counterconditions": [
+        "The panel is incentivized to fabricate 'correction events' in their notes to appear more rigorous.",
+        "The initial consensus was already correct, making the checklist redundant for that specific instance.",
+        "The correction event leads to a correct answer but for the wrong reasons (double-error cancellation)."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "A single domain expert is more reliable than a checklist-led panel for tasks with high 'interdependency' of variables, where the checklist's atomization of the problem creates a 'blind spot' for systemic failures.",
+      "mechanism": "Checklists decompose problems into discrete binary checks. Experts using intuition often perceive the 'gestalt' or the systemic interaction between variables. In high-interdependency tasks, the reliability gain of the checklist is negated by its inability to capture emergent properties that an expert's intuition recognizes as a 'red flag'.",
+      "counterconditions": [
+        "The checklist is designed with conditional logic (if X then check Y) that mimics systemic analysis.",
+        "The expert's intuition is subject to 'confirmation bias' that causes them to ignore the very interdependencies they claim to see.",
+        "The task is 'linear' enough that atomization does not lose critical information."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The reliability gain of a panel+checklist system is fundamentally a 'fragility reduction' rather than a 'performance increase', making it superior in high-stakes environments despite lower peak accuracy.",
+      "mechanism": "Experts are 'high-performance, high-fragility' systems; a single cognitive lapse or 'off-day' leads to total failure. The panel+checklist is a 'low-performance, low-fragility' system. Reliability is defined here as the minimization of the worst-case outcome (variance reduction) rather than the maximization of the mean accuracy.",
+      "counterconditions": [
+        "The cost of a 'near-miss' is as high as a total failure.",
+        "The panel's internal variance is so high that the checklist cannot center the mean effectively.",
+        "The expert's intuition is robust across a wide range of internal states (e.g., fatigue, stress)."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Counter-factual Trace Analysis: To distinguish reliability gain from luck in a single eval, we should ask: 'If checklist item X were removed, would the panel have reached the wrong answer?' If the answer is yes, and the panel actually used X to reach the right answer, we have a formal proof of reliability gain for that instance.",
+          "why_keep_this": "Refines the 'correction event' idea into a counter-factual framework."
+        }
+      }
+    ]
+  }
+}
+```

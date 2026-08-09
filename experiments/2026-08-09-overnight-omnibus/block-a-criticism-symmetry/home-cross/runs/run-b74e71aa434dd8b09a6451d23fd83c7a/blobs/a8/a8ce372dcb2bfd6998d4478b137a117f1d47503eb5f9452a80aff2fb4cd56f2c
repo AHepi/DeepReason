@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The problem 0563ea623c17 integrates with SRC_001 by proposing that the 'fragmentation error' inherent in checklist-driven panels is the causal mechanism for their failure in non-linear tasks; this relation is refuted if it is shown that a checklist can be structured as a non-linear graph (conditional branching) that captures the same gestalt patterns as expert intuition.",
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.9,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 0563ea623c17 depends on SRC_003's claim that expert intuition is an integrative process; specifically, it posits that the reliability gap between experts and panels is caused by the panel's inability to synthesize 'silent failures' from additive binary gates, and is refuted if additive verification is found to be sufficient for identifying all systemic failure modes in high-interdependency tasks.",
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.85,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 0563ea623c17 shares mechanism with SRC_005 regarding 'compressed high-dimensional pattern matching' as the driver of expert reliability; it argues that this compression allows for the detection of non-linear dependencies that are lost during the linearization process of a checklist, and is refuted if a formal mapping of interdependencies into a hierarchical checklist eliminates the fragmentation error.",
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.7,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 0563ea623c17 contradicts the implicit assumption that any increase in verification steps (checklist length) increases reliability, instead inheriting the premise from SRC_004 that fragmented verification creates a 'false sense of security' by ignoring variable interdependency; this is refuted if increasing checklist granularity consistently reduces the error rate in complex, non-linear tasks.",
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": []
+    },
+    {
+      "content": "The problem 0563ea623c17 abstracts the tension between 'gestalt' and 'atomized' reasoning found in SRC_002, proposing that the failure of checklists is a fundamental category error—applying linear tools to non-linear systems—and is refuted if the 'emergent property' of a complex interaction can be perfectly decomposed into a finite set of binary checks without loss of signal.",
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.4,
+      "evidence_refs": []
+    }
+  ]
+}
+```

@@ -1,0 +1,118 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A single domain expert is more reliable than a checklist-driven panel because objective verification tasks often require the synthesis of non-linear variables that checklists cannot decompose without losing critical context.",
+      "mechanism": "Expertise operates as an integrative, non-linear function where the 'whole' of the judgment is greater than the sum of its checklist parts. A checklist forces a linear, additive approach (as suggested in SRC_003) which creates blind spots for edge cases or systemic interactions that only an expert's intuition—trained on high-dimensional pattern recognition—can detect.",
+      "counterconditions": [
+        "The task is purely additive/verification-heavy (e.g., a pre-flight checklist).",
+        "The expert is suffering from cognitive fatigue or known systemic bias.",
+        "The checklist is dynamically updated based on real-time expert failure modes."
+      ],
+      "typicality": 0.9,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_004"
+        ]
+      },
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "A panel of non-experts following a checklist is more reliable on average because it replaces the 'fragile' high-performance of a single expert with a robust, variance-reducing system.",
+      "mechanism": "The panel acts as a distributed processing unit where the checklist serves as an external memory. This configuration reduces the probability of catastrophic failure (the 'single point of failure' risk in SRC_008) by ensuring that the minimum required verification steps are executed, shifting the mean reliability toward a stable, albeit lower-peak, performance level.",
+      "counterconditions": [
+        "The task requires 'leap-of-faith' integrative synthesis rather than additive verification.",
+        "The panel is subject to strong groupthink or hierarchical social pressure.",
+        "The checklist is fundamentally flawed or incomplete."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_005"
+        ]
+      },
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The distinction between genuine reliability gain and mere compliance in a single evaluation is found in the 'correction event'—where the checklist forces a reversal of an initial intuitive error.",
+      "mechanism": "By comparing the panel's pre-checklist intuitive consensus with the final post-checklist judgment (as proposed in SCR_005), we can isolate the delta. If the final correct answer was reached only after a checklist item contradicted the initial consensus, the checklist provided a causal reliability gain. If the consensus was already correct, the checklist provided mere compliance.",
+      "counterconditions": [
+        "The panel does not record their initial intuitive state.",
+        "The checklist item is so vague that 'compliance' can be interpreted to fit any outcome.",
+        "The initial consensus was wrong, and the checklist also led them to the wrong answer, but for different reasons."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_007"
+        ]
+      },
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Reliability is not a binary of Expert vs. Panel, but a function of 'Task Topology': verification-heavy tasks favor panels, while synthesis-heavy tasks favor experts.",
+      "mechanism": "Verification tasks have a 'flat' topology where success is the sum of avoiding specific errors (additive). Synthesis tasks have a 'peaked' topology where success requires a specific integrative insight (non-linear). Reliability gain occurs when the tool (checklist) matches the topology of the task (SRC_006).",
+      "counterconditions": [
+        "A task is identified as 'verification-heavy' but contains a hidden, critical synthesis requirement.",
+        "The expert's intuition is fundamentally flawed for the specific objective outcome."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": [
+          "SRC_006"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "A checklist-driven panel is more reliable because it eliminates the 'expert's blind spot'—the tendency of high-competence individuals to skip 'obvious' basic steps due to over-reliance on intuition.",
+      "mechanism": "Experts often utilize 'chunking' to bypass basic verification, which increases speed but introduces a specific failure mode: the omission of trivial but critical steps. A non-expert panel, lacking the confidence to chunk, adheres strictly to the checklist, thereby capturing the 'low-hanging' errors that experts systematically ignore.",
+      "counterconditions": [
+        "The 'basic steps' are so trivial they never actually cause failure in the given domain.",
+        "The checklist is so cumbersome that the panel ignores items to save time, mirroring the expert's shortcutting."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Genuine reliability gain is evidenced by 'counterfactual robustness': the ability of the panel to reach the correct answer even when individual members are misled.",
+      "mechanism": "In a single evaluation, if the internal notes show that some panel members were initially wrong but were 'pulled back' by the checklist's objective requirements, the system demonstrates reliability gain. This is a 'near-miss' capture (SCR_008) that proves the checklist is actively mitigating human error rather than just accompanying a correct guess.",
+      "counterconditions": [
+        "The panel reaches consensus through social coercion rather than checklist adherence.",
+        "The checklist is so prescriptive that it removes all individual judgment, making 'near-misses' impossible to track."
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "If we treat the expert as a 'high-gain' amplifier and the panel as a 'low-pass filter', the reliability question becomes one of signal-to-noise. The expert amplifies the signal but also the noise (bias). The panel filters the noise but may also attenuate the signal (nuance). The 'evidence' in a single eval is whether the final answer preserves a nuance that a simple checklist would have filtered out, or whether it removes a bias that an expert would have amplified.",
+          "why_keep_this": "Provides a signal-processing analogy to frame the expert/panel trade-off."
+        }
+      }
+    ]
+  }
+}
+```

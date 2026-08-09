@@ -1,0 +1,47 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-dfd3c67226465bf2c8b88ebbf57f5127) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the first-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@dd3bca48ec89c46e3f2b7efc: program:reasoning_observation_pending
+- reason-counter@8e6b7a85c08419b153a8bf21: program:reasoning_observation_pending
+- reason-counter@ba4dd2bb76a5b3c73d83bda0: program:reasoning_observation_pending
+- reason-counter@5ef4755abd0012a511ed309d: program:reasoning_observation_pending
+- reason-counter@429290ca3b89796354ff5817: program:reasoning_observation_pending
+- reason-counter@9af692d3839086f39c9c23a8: program:reasoning_observation_pending
+- reason-counter@cb18dd4d19f7e29147b6f028: program:reasoning_observation_pending
+- reason-counter@21be66ead282ff5d6940feeb: program:reasoning_observation_pending
+- reason-counter@858be62c171e58b7ba92c68c: program:reasoning_observation_pending
+- reason-counter@46dcf439af475f3da6e7b96e: program:reasoning_observation_pending
+- reason-counter@b61ae3141e7fa224abb5dfb7: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel of non-experts using an explicit checklist is more reliable than a single expert for tasks where errors are primarily caused by omission rather than conceptual misunderstanding.","counterconditions":[{"case":"The task requires high-level conceptual synthesis that cannot be decomposed into a checklist.","checker_spec":null,"eval":"observation"},{"case":"The checklist is poorly designed or contains systemic gaps.","checker_spec":null,"eval":"observation"},{"case":"The panel suffers from strong groupthink that overrides checklist-indicated discrepancies.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist transforms the task from a 'recall' problem (which taxes the expert's intuition and is prone to fatigue or bias) into a 'recognition' problem. The panel's reliability gain is derived from the redundancy of multiple observers verifying the checklist items, which suppresses the probability of a single-point failure (omission) that an expert might overlook due to overconfidence.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]
+commitments: reasoning-envelope-wf, reason-counter@dd3bca48ec89c46e3f2b7efc, reason-counter@8e6b7a85c08419b153a8bf21, reason-counter@ba4dd2bb76a5b3c73d83bda0
+
+TARGET SRC_002
+{"analogy":null,"claim":"Reliability gain cannot be distinguished from 'compliance luck' in a single evaluation without a counterfactual trace of the panel's decision process.","counterconditions":[{"case":"The evaluation allows for multiple trials of the same task with different checklist versions.","checker_spec":null,"eval":"observation"},{"case":"The panel's internal notes are sufficiently detailed to allow a logical reconstruction of the 'no-checklist' path.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because the outcome (correct/incorrect) is binary and the process (checklist compliance) is a requirement, a correct answer is ambiguous. Only by identifying a 'critical checklist item'\u2014one that, if removed, would have led the panel to a wrong answer based on their recorded notes\u2014can we prove the tool caused the reliability.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5ef4755abd0012a511ed309d, reason-counter@429290ca3b89796354ff5817
+
+TARGET SRC_003
+{"analogy":null,"claim":"Genuine reliability gain is distinguished from mere compliance by the presence of 'documented correction events' during the evaluation process.","counterconditions":[{"case":"The panel fails to document their internal reasoning or pivots.","checker_spec":null,"eval":"observation"},{"case":"The 'correction' was actually a pivot from a correct intuition to a correct answer via a circuitous route.","checker_spec":null,"eval":"observation"},{"case":"The checklist item was ambiguous and the 'correction' was based on a misinterpretation that happened to yield the right result.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the panel reaches the correct answer but their internal logs show they ignored checklist items that should have flagged errors, they are 'compliant by luck'. Conversely, a reliability gain is evidenced when the checklist forces a pivot: a panel member's initial incorrect intuition is overruled by a specific checklist requirement, leading to the correct outcome. This demonstrates the process actively corrected an error that would have otherwise persisted.","premises":[],"schema":"deepreason-reasoning-envelop
+commitments: reasoning-envelope-wf, reason-counter@9af692d3839086f39c9c23a8, reason-counter@cb18dd4d19f7e29147b6f028, reason-counter@21be66ead282ff5d6940feeb
+
+TARGET SRC_004
+{"analogy":null,"claim":"A panel of trained non-experts using a checklist is more reliable than a single expert for tasks where the failure mode is primarily the omission of known critical variables rather than the misinterpretation of complex patterns.","counterconditions":[{"case":"The task requires high-dimensional synthesis where the relationship between checklist items is non-linear.","checker_spec":null,"eval":"observation"},{"case":"The 'trained non-experts' lack the minimum threshold of literacy required to interpret the checklist items correctly.","checker_spec":null,"eval":"observation"},{"case":"The expert's intuition is actually a compressed form of the checklist that operates faster and with fewer execution errors.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The checklist acts as an externalized memory system that eliminates 'lapse' errors (omissions), which are common even in experts, while the panel structure averages out individual non-expert biases. Reliability is gained by shifting the bottleneck from internal cognitive recall to external procedural adherence.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":
+commitments: reasoning-envelope-wf, reason-counter@858be62c171e58b7ba92c68c, reason-counter@46dcf439af475f3da6e7b96e, reason-counter@b61ae3141e7fa224abb5dfb7
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
