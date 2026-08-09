@@ -1,6 +1,6 @@
 # Checklist for: the two-tier hard question set
 
-State: next=2 blockers=none
+State: next=none (all 28 steps checked) blockers=none
 Map ids: `DR-CON-run-identity`, `DR-SUB-manifest`, `DR-CON-seats`,
 `DR-SUB-scheduler` (navigation only — no `src/` change in this
 tranche; see SPEC.md).
@@ -117,5 +117,6 @@ order. One step per `dr-execute-step` invocation.
       done-when: output ends "N passed, 0 failed" (paste it); if the known bronze-census environment-coupling item (`experiments/2026-08-08-parked-bronze-census-env/PARKED.md`) is the only failure, name it explicitly rather than treating it as new.
       DONE: `1 failed, 3434 passed, 7 skipped in 681.13s (0:11:21)`. The one failure is `tests/test_bronze_report.py::test_census_totals_internally_consistent`, `assert 159 == 165` on the `deepseek-v4-pro` stream -- an EXACT match to the already-parked, pre-existing environment-coupling defect in `experiments/2026-08-08-parked-bronze-census-env/PARKED.md` (which names this precise assertion, this precise stream, and this precise 159-vs-165/delta-6 shape). Not new, not caused by this tranche (this tranche touches no `src/`/`tests/` file the bronze census reads). `jsonschema` (the other named known item) is installed this session and did not fail. Net of the named known item: 0 unexpected failures, satisfying R19.
 
-- [ ] 28. (R21) [COMMIT] Final push and clean-tree check.
+- [x] 28. (R21) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` is empty; `git log origin/<branch>..HEAD` is empty (local head == pushed head).
+      DONE: `git status --porcelain` empty; `git log origin/claude/hard-question-set-x7q2mn..HEAD --oneline` empty. All 28 steps checked. Ready for dr-validate-change.
