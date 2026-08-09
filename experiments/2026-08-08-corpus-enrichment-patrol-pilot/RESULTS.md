@@ -148,7 +148,7 @@ pre-registered, not as an improvised workaround.
 | hard-h05 | hard | committed | 10 | 91/91 | 0 (expected) | clean on first stop |
 | hard-h10 | hard | committed | 10 | 83/85 | 0 (expected) | clean on first stop |
 | hard-h15 | hard | committed | 12 (10+2 continue) | 99/100 | 0 (expected) | second foreign-criticism-gap case, closed by continue same as hard-h01 |
-| hard2-h2-01 | hard2 | continuing | 10 (+2 pending) | 82/? | - | third foreign-criticism gap case; continue in flight (task b6d86e9vd) |
-| hard2-h2-08 | hard2 | not started | - | - | - | |
+| hard2-h2-01 | hard2 | committed | 12 (10+2 continue) | 95/95 | 0 (expected) | third foreign-criticism gap case, closed by continue |
+| hard2-h2-08 | hard2 | in progress | - | - | - | tracked-background task bc2kvkst3 |
 | hard2-h2-15 | hard2 | not started | - | - | - | |
 | hard2-h2-22 | hard2 | not started | - | - | - | |
