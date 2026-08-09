@@ -1,0 +1,20 @@
+corpus roots=58 openable=47 unopenable=11 pairs=9277 historical=6065 enriched=3212 unaddressed_accepted_excluded=1275
+unopenable root list -> /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/phase2_unopenable_roots.json
+resuming: 8872 pairs already recorded, skipping them
+[25/9277] hits=13 parse_failures=2
+[50/9277] hits=31 parse_failures=2
+[75/9277] hits=45 parse_failures=2
+[100/9277] hits=53 parse_failures=3
+[125/9277] hits=57 parse_failures=3
+[150/9277] hits=58 parse_failures=3
+[175/9277] hits=61 parse_failures=3
+[200/9277] hits=70 parse_failures=4
+[225/9277] hits=82 parse_failures=5
+[250/9277] hits=93 parse_failures=5
+[275/9277] hits=106 parse_failures=5
+[300/9277] hits=124 parse_failures=5
+[325/9277] hits=135 parse_failures=9
+[350/9277] hits=152 parse_failures=9
+[375/9277] hits=164 parse_failures=10
+[400/9277] hits=171 parse_failures=12
+PATROL COMPLETE: pairs=405 hits=174 parse_failures=13 -> /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/patrol_results.jsonl
