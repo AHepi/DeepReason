@@ -39,8 +39,13 @@
     "stability_flip_rate": "17/90"
   },
   "s_truth": {
-    "outcome_counts": {},
-    "population": 0,
-    "stability_flip_rate": "0/0"
+    "outcome_counts": {
+      "both_contradict_ground_truth": 18,
+      "confirmed_a": 27,
+      "confirmed_b": 73,
+      "ground_truth_agrees": 34
+    },
+    "population": 152,
+    "stability_flip_rate": "1/15"
   }
 }

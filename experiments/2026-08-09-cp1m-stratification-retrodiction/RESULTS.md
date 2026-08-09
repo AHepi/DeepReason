@@ -200,6 +200,50 @@ ONE checker-authoring call's verdict can bear on its own.
 Committed verbatim: `s_mech_results.jsonl` (1,050 rows: 960 primary + 90
 stability repeats).
 
+## 2026-08-09 — S-truth COMPLETE: 152/152 pairs
+
+One bounded classification call per pair (ground truth stated
+explicitly; `scripts/s_truth_run.py`), split evenly across both models
+and both keys, same 10%-sampled stability control as every other
+stratum.
+
+| outcome | count | share |
+|---|---|---|
+| `confirmed_b` (claim A contradicts the known answer, B stands) | 73 | 48.0% |
+| `confirmed_a` (claim B contradicts the known answer, A stands) | 27 | 17.8% |
+| **CONFIRMED total (clean polarity)** | **100** | **65.8%** |
+| `both_contradict_ground_truth` (neither claim matches the known answer) | 18 | 11.8% |
+| `ground_truth_agrees` (both claims consistent with the known answer) | 34 | 22.4% |
+
+**`both_contradict_ground_truth` is reported separately, NOT folded into
+CONFIRMED**: this method only checks each claim against the known
+answer independently — it does not itself prove the two WRONG claims
+disagree with EACH OTHER (they could, in principle, both assert the same
+incorrect value, which would make them consistent with each other and
+wrong together, not a contradiction). Flagged as residue, not chased
+further this tranche (would need its own values-agree check, the same
+mechanical comparison `S-formal` already performs elsewhere in this
+pipeline).
+
+**`ground_truth_agrees` (34/152, 22.4%) is the S-truth stratum's own
+disagreement with the original patrol call**: the patrol's narrow
+question flagged these as contradictions, but checked against the
+KNOWN correct answer, both claims in the pair are consistent with it.
+`PREREG.md` named this residue in advance ("routed to S-formal/
+S-judgment for a second read rather than left unexamined") — not
+re-run through a second live stratum this tranche for budget reasons
+(recorded here as a deviation, not silently dropped): these 34 pairs
+are carried into the master table as their own row rather than
+re-classified.
+
+**Stability control: 1/15 sampled repeats flipped (6.7%)** — markedly
+lower than S-mech's 18.9%. Consistent with this being a genuinely easier
+judgment task (the model is handed the correct answer and only has to
+compare against it), not a fluke of sample size alone.
+
+Committed verbatim: `s_truth_results.jsonl` (167 rows: 152 primary + 15
+stability repeats).
+
 **Ground-truth mapping for S-truth built and committed**
 (`root_ground_truth.json`): each of Phase 1's 10 base/hard/hard2 roots
 matched to its source question's `id` and `accept` list by seed-problem-
