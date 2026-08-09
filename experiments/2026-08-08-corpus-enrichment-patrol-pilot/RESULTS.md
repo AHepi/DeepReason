@@ -376,3 +376,37 @@ and both overlay sweeps (`phase3/overlay_results_pre_enrichment.jsonl`,
 `phase3/overlay_results_post_enrichment.jsonl`) are committed verbatim
 under this tranche's directory. Stop condition met: decision table
 complete, pushed.
+
+## 2026-08-09 — Correction: the patrol's judgment step is not deterministic
+
+Raised by the operator, and worth stating plainly rather than leaving
+implicit: **this pilot's infrastructure is deterministic; its finding
+mechanism is not**, and the delivery above did not say so clearly
+enough.
+
+What IS deterministic: the claim PAIRS fed into Phase 2. Every accepted
+claim comes from an append-only, replay-verifiable record — re-opening
+any committed root reproduces byte-identical claim text every time
+(`verify_root`'s whole job). So the INPUT to every one of the 9277
+patrol calls is fixed and reproducible, permanently.
+
+What is NOT deterministic: the JUDGMENT that a given pair contradicts.
+Each judgment came from one AI model call at temperature 0 (the setting
+that minimizes response variance) — but temperature 0 reduces
+variability, it does not guarantee bit-for-bit reproducibility; large-
+model inference is not generally guaranteed deterministic even at
+temperature 0. This was never tested directly: no pair in this pilot
+was asked twice to check whether the model gave the same verdict both
+times.
+
+**Correct framing of the 1941 hits**: they are what ONE non-deterministic
+pass of judgment found over a fixed, reproducible set of claim pairs —
+not a provably complete or stable set of contradictions. A second pass
+under identical settings could plausibly find a somewhat different set;
+probably heavily overlapping for the clear-cut cases (opposite numbers,
+direct negations) shown in the family typology above, but not
+guaranteed identical. This is the same caveat this codebase's own
+documentation already states for capability-channel use generally
+("stochastic across identical runs; one live attempt is inconclusive on
+its own") — it was true of Phase 2 from the start and should have been
+stated here explicitly rather than left for the operator to surface.
