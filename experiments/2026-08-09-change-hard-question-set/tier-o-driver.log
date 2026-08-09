@@ -18,3 +18,6 @@ audit1_rc=0
 stop_reason=budget_exhausted
 resumable=yes
 continue1_rc=0 continue1_seconds=601
+audit2_rc=0
+stop_reason=budget_exhausted
+resumable=yes
