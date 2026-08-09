@@ -217,3 +217,33 @@ matching the already-established property_designer/S6 precedent from Half
 C9: "Everything else stands: SPEC-AND-STOP, frozen forecast from scratch,
 defaults byte-identical, decision sheet with recommendations. Commit and
 push, STOP for operator words." — reaffirms C1-C5 unchanged.
+
+### Amendment 2 (2026-08-09, mid-workflow, operator's own words, "standing words for tonight")
+
+> Standing words for tonight, ledger as an amendment: for any budget-overrun
+> stop in this tranche, the answer is "continue, report the final total at
+> delivery" — pre-authorized now. For any genuine design fork that would
+> otherwise stop mid-flight: do not wait; record every road priced in the
+> decision sheet, take no road, and continue to the SPEC-AND-STOP endpoint.
+> The only valid stop is the final one.
+
+### New standing constraints from Amendment 2
+
+C10 (process, pre-authorization, scoped "for tonight"/this tranche): a
+budget-overrun stop condition in this tranche is pre-answered — continue
+the work, and report the actual final total (tokens/diff/whatever the
+overrun metric is) at delivery rather than stopping to ask.
+
+C11 (process, pre-authorization, scoped to this tranche): a genuine design
+fork that would otherwise be a mid-flight stop-and-ask is NOT to be asked
+mid-flight in this tranche — instead, price every road in SPEC.md's
+decision sheet, select none of them (no silent pick), and continue to the
+SPEC-AND-STOP endpoint (SPEC.md committed and pushed). This narrows, for
+this tranche only, the change-orchestrator's normal "stop conditions"
+list (estimated diff exceeds budget; a fork the operator must decide) —
+both collapse into "keep going, ledger it, decide nothing unilaterally,
+surface it in the decision sheet."
+
+C12 (process): "The only valid stop is the final one." — no intermediate
+STOP this window; the SPEC-AND-STOP endpoint (SPEC.md pushed, per C5) is
+the sole stop point for this tranche.
