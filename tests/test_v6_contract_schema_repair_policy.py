@@ -103,12 +103,14 @@ def _scratch_authoring(enabled: bool) -> ScratchAuthoringPolicyV1:
     )
 
 
-def _control(*, scratch_authoring: bool) -> ControlPlanePolicyV3:
+def _control(
+    *, scratch_authoring: bool, contract_versions: ContractVersionPolicyV3 | None = None
+) -> ControlPlanePolicyV3:
     return ControlPlanePolicyV3(
         school_execution=_school_execution(),
         conjecture_context=_context_policy(),
         workflow_retry=WorkflowRetryPolicyV1(),
-        contract_versions=ContractVersionPolicyV3(),
+        contract_versions=contract_versions or ContractVersionPolicyV3(),
         scratch_authoring=_scratch_authoring(scratch_authoring),
     )
 
@@ -123,6 +125,7 @@ def _compile_v6(
     bridge_schema_repairs: int = 2,
     grounding_repairs: int = 4,
     run_input_digest: str = "a" * 64,
+    contract_versions: ContractVersionPolicyV3 | None = None,
 ):
     roles = {
         role: _route(role)
@@ -152,7 +155,9 @@ def _compile_v6(
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
-        control_plane_policy=_control(scratch_authoring=scratch_authoring),
+        control_plane_policy=_control(
+            scratch_authoring=scratch_authoring, contract_versions=contract_versions
+        ),
         run_input_digest=run_input_digest,
     )
 
@@ -201,6 +206,48 @@ def test_new_v6_manifest_freezes_typed_core_contract_grants():
         and grant.route_scope == "same_route_seat"
         and grant.exhaustion_status == "schema_exhausted"
         for grant in grants.values()
+    )
+
+
+def test_v7_manifest_gets_an_equivalent_repair_grant_and_scratch_authority():
+    """P-CEPP-1 (experiments/2026-08-08-corpus-enrichment-patrol-pilot/
+    PARKED.md; re-verified experiments/2026-08-09-cp1m-stratification-
+    retrodiction/): conjecturer.turn.v7 (D2 rev 2 dual-mode) is additive
+    to v6, never a downgrade -- it must compile with the SAME repair
+    ceiling and the SAME conjecture-family scratch authority a v6
+    manifest gets, not a different (or absent) one."""
+    v7_manifest = _compile_v6(
+        contract_versions=ContractVersionPolicyV3(
+            conjecturer_turn_contract="conjecturer.turn.v7"
+        )
+    )
+    v6_manifest = _compile_v6()
+
+    v7_grants = _grant_map(v7_manifest)
+    v6_grants = _grant_map(v6_manifest)
+    assert "conjecturer.turn.v7" in v7_grants
+    assert "conjecturer.turn.v6" not in v7_grants
+    assert (
+        v7_grants["conjecturer.turn.v7"].maximum_schema_repairs
+        == v6_grants["conjecturer.turn.v6"].maximum_schema_repairs
+    )
+    assert (
+        v7_grants["conjecturer.turn.v7"].maximum_provider_calls
+        == v6_grants["conjecturer.turn.v6"].maximum_provider_calls
+    )
+
+    def _conjecturer_grant(manifest, contract_id):
+        plan = manifest.route_seat_behavioral_capability_plan
+        entry = next(e for e in plan.entries if e.role == "conjecturer")
+        return next(c for c in entry.contracts if c.contract_id == contract_id)
+
+    v7_contract_grant = _conjecturer_grant(v7_manifest, "conjecturer.turn.v7")
+    v6_contract_grant = _conjecturer_grant(v6_manifest, "conjecturer.turn.v6")
+    assert v7_contract_grant.scratch_read == v6_contract_grant.scratch_read == "advisory"
+    assert (
+        v7_contract_grant.scratch_write
+        == v6_contract_grant.scratch_write
+        == "contract_governed"
     )
 
 

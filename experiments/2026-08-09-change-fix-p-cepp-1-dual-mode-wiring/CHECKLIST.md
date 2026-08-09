@@ -1,5 +1,5 @@
 # Checklist for: fix dual seat wiring and test with a short live run
-State: next=1 blockers=none
+State: next=2 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
@@ -17,12 +17,20 @@ three newly-surfaced pairs is out of this tranche's ~120-190 line
 budget and is PARKED as its own future map-closing tranche if the
 operator wants it (recorded in PARKED.md at delivery).
 
-- [ ] 1. (S1) Write the regression test for `run_manifest.py`'s three
+- [x] 1. (S1) Write the regression test for `run_manifest.py`'s three
       S1 sites (repair-grant dict, `is_conjecture` set, `scratch_write`
       check) BEFORE changing the source — it must FAIL against the
       current tree, proving it actually exercises the gap.
       done-when: `python -m pytest tests/test_v6_contract_schema_repair_policy.py -k v7 -q`
       shows the new test collected and FAILING (paste the failure).
+      DONE:
+      ```
+      E   deepreason.run_manifest.RunManifestError: V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED at /contract_schema_repair_policy/grants: contract conjecturer.turn.v7 lacks exact repair authority
+      src/deepreason/run_manifest.py:1998: RunManifestError
+      1 failed, 31 deselected in 0.53s
+      ```
+      Fails exactly at P-CEPP-1's own documented error, confirming the
+      test exercises the real gap.
 
 - [ ] 2. (S1) Apply the three `run_manifest.py` source changes: the
       `ceilings` dict key (~line 2491) reads
