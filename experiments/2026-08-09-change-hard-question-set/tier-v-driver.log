@@ -22,3 +22,7 @@ audit2_rc=0
 stop_reason=budget_exhausted
 resumable=yes
 continue2_rc=0 continue2_seconds=522
+audit3_rc=0
+stop_reason=budget_exhausted
+resumable=yes
+=== pilot-tier-v end 2026-08-09T07:54:47Z ===
