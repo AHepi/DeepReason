@@ -16,3 +16,5 @@ audit_rc=0 tag=q1s1
 converge_rc=0 converge_seconds=916 tag=q1s2
 run_id=run-c52837bd8f673cea80c20db89758ea80 tag=q1s2
 audit_rc=0 tag=q1s2
+converge_rc=0 converge_seconds=952 tag=q1s3
+run_id=run-6927465d9ac5bfae2aa06dbb983aebea tag=q1s3
