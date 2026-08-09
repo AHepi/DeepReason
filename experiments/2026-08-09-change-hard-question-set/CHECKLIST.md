@@ -105,8 +105,9 @@ order. One step per `dr-execute-step` invocation.
       done-when: file exists and is non-empty (even the "none found" case is a written, dated statement, not a missing file).
       DONE: PARKED.md written with 2 findings, each WHAT + ready-to-send dr-set-goal prompt: (1) the transient foreign-criticism verify_root violation observed identically on both pilots' first audit, cleared by the second; (2) the open question of whether criticism judged correct but never formally warranted should be reflected differently than an uncontested accepted claim -- framed as an open question per CLAUDE.md's own "no warrant, no edge, no REFUTED" law, not asserted as a bug.
 
-- [ ] 25. (R19/R20) [COMMIT] Commit PARKED.md, then write `experiments/2026-08-09-change-hard-question-set/RESULTS.md`: the dated honest-ledger segment — corpus delivered (counts, licenses), what the two live pilots proved and did NOT prove (n=1 per tier, stochasticity doctrine), the gemma-sole-model calibration answer (full vs shallow tier reached), the failure-budget spend.
+- [x] 25. (R19/R20) [COMMIT] Commit PARKED.md, then write `experiments/2026-08-09-change-hard-question-set/RESULTS.md`: the dated honest-ledger segment — corpus delivered (counts, licenses), what the two live pilots proved and did NOT prove (n=1 per tier, stochasticity doctrine), the gemma-sole-model calibration answer (full vs shallow tier reached), the failure-budget spend.
       done-when: pushed; RESULTS.md contains a dated segment header and explicitly answers the operator's standing gemma-sole-model question.
+      DONE: RESULTS.md has a dated segment header (## 2026-08-09), corpus delivery summary with counts+licenses, both pilots' typed outcomes, an explicit "What the pilots proved, and what they did NOT" residue section (n=1/stochasticity named explicitly), the gemma-sole-model answer (full tier, reproduced twice), and the failure ledger (0/6 spent).
 
 - [ ] 26. (all) Map check: `python tools/docs_verify.py`
       done-when: exits reporting 0 failed (this tranche touches no `docs/map/` document, so this is a no-regression check, not new content).

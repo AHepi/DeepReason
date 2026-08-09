@@ -1,10 +1,31 @@
-# Results: the two-tier hard question set (in progress)
+# Results: the two-tier hard question set
 
-Honest ledger, updated as each pilot leg completes (CHECKLIST.md steps
-20/23 write to this file; step 25 turns it into the final narrative).
-Full segment write-up follows at delivery; this section tracks the
-S6-style numbered failure ledger for the pilot phase (R18, budget 6)
-live, as spent, not retrospectively.
+## 2026-08-09 — corpus delivered, both pilots run, honest ledger
+
+### The corpus (R1, R3, R4, R7, R11)
+
+- **Tier V** (`experiments/validation_questions_tier_v.json`, 20
+  problems): 10 math (Hendrycks MATH, Level 4-5 competition split, MIT
+  license) + 10 coding (OpenAI HumanEval, hand-picked for genuine
+  algorithmic content, MIT license). Every problem has a checker
+  (`experiments/tier_v_checkers/`, 20 files) that was RUN against its
+  known answer/reference solution before commit (R6) and
+  mutation-proven against a deliberately wrong answer/candidate.
+- **Tier O** (`experiments/validation_questions_tier_o.json`, 10
+  problems): Collatz, Goldbach, Twin Prime, Legendre's, Erdős–Straus,
+  Lonely Runner, Beal's, odd-perfect-number existence, Riemann
+  Hypothesis, Union-closed sets — each independently re-verified STILL
+  OPEN on 2026-08-09 (not trusted from any single index), with a
+  correction found in the process (Lonely Runner is now proven for
+  k<=12 as of 2025-2026; the record names k=13 as the real open
+  frontier, not "unproven in general"). Noteworthy: every one of the
+  10 currently has an unreviewed, non-peer-reviewed "proof" claim in
+  public circulation — direct motivation for PREREG.md's hygiene rule.
+- **PREREG.md** committed before either pilot launched (R10): the
+  scoring rules could not be fitted to what a pilot happened to
+  produce.
+
+### Failure ledger (pilot phase, budget 6)
 
 ## Failure ledger (pilot phase, budget 6)
 
@@ -81,3 +102,46 @@ unambiguous and reproduced twice: DeepReason is in a position to test
 gemma4:31b as the sole model at FULL capability, not the reduced
 `--shallow` fallback — no `--shallow` retry branch fired in either
 pilot.
+
+### What the pilots proved, and what they did NOT (honest residue)
+
+**Proved (typed, replay-verifiable):**
+- The two-tier corpus format flows through the real harness end to
+  end — question in, typed record out — for both a closed hard
+  problem (Tier V) and a genuinely open one (Tier O).
+- gemma4:31b qualifies at full tier as the sole model, reproduced
+  twice.
+- The corpus is materially harder than the prior set: across 37
+  historical roots the baseline was 26 total attack-graph edges; a
+  SINGLE Tier O pilot run alone produced 141 accepted positions with
+  active, consequential (if imperfectly wired) criticism traffic —
+  the under-exercise problem the operator named is measurably
+  addressed by this corpus, at least on the two questions tried.
+- A genuine, reproducible weakness: Tier O hygiene fails on first
+  contact with a real open problem, and a real, evidenced gap exists
+  between "criticism happened and was right" and "the record's own
+  accepted-claims view reflects that" (PARKED.md item 2).
+
+**NOT proved — residue, stated plainly:**
+- **n=1 per tier.** One live attempt on one representative question
+  per tier is a DEMONSTRATION, not a statistical claim, per CLAUDE.md's
+  own stochasticity doctrine — capability-channel and criticism
+  behavior varies run to run. Whether the Tier V checker-miss and the
+  Tier O junk-acceptance verdict are TYPICAL of the other 19 Tier V and
+  9 Tier O problems, or artifacts of these two particular questions, is
+  unknown and unproven by this tranche. A full-corpus run is future
+  work, not attempted here (R13 specified "one per tier," and the CLI's
+  own `reason` command takes one question at a time — SPEC.md's A1).
+- **The `foreign-criticism` transient violation's cause** is observed
+  (twice) but not diagnosed — PARKED.md item 1, not investigated here
+  by design (scope-locked, `src/` untouched).
+- **Whether the criticism-status gap (PARKED.md item 2) is a defect or
+  intended behavior** is an open question this tranche raises and
+  explicitly does NOT answer — CLAUDE.md's "no warrant, no edge, no
+  REFUTED" law is cited as the plausible intended-behavior explanation,
+  not confirmed as the actual cause.
+- **Difficulty calibration (R2/A2)** was picked by SOURCE (MATH's own
+  Level 4-5 split; hand-picked non-trivial HumanEval problems), not
+  validated by a systematic probe against gemma4:31b-class models
+  before commit — the pilot's own no-match result on tv-m04 is n=1
+  evidence consistent with the calibration, not proof of it.
