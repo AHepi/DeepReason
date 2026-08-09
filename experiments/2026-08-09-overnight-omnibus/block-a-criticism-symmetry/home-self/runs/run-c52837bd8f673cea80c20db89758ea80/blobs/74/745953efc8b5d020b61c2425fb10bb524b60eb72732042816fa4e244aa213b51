@@ -1,0 +1,7 @@
+{
+  "patch": {
+    "op": "replace",
+    "path": "/candidates/3/optional_refs/0",
+    "value": "SRC_006"
+  }
+}

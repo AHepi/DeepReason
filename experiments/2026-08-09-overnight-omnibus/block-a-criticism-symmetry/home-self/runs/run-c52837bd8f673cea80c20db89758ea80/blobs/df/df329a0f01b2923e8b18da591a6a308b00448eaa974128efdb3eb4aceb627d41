@@ -1,0 +1,43 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4830a01fc799491bc456d9be: program:reasoning_observation_pending
+- reason-counter@0b032fe78e83fd8544e95a17: program:reasoning_observation_pending
+- reason-counter@224b212454dc6a6d38a6c80a: program:reasoning_observation_pending
+- reason-counter@23389952ac8e0c796b03ab86: program:reasoning_observation_pending
+- reason-counter@704bae51afdc44f054271509: program:reasoning_observation_pending
+- reason-counter@304089dc08b74af7155f1dba: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A panel-plus-checklist's reliability gain is genuine only if a control panel using a corrupted or inverted version of the checklist performs strictly worse than the panel using the true checklist on the same evaluation tasks.","counterconditions":[{"case":"The corrupted checklist inadvertently improves structure or forces deeper deliberation, causing the corrupted-checklist panel to outperform both the true-checklist panel and the expert.","checker_spec":null,"eval":"observation"},{"case":"The corrupted checklist accidentally retains enough true heuristics to outperform the expert, failing to isolate the semantic contribution of the true rules.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal mechanism: By holding the procedural and structural aspects of the checklist constant while corrupting its semantic rule content, we isolate the epistemic contribution of the rules themselves. If the corrupted-checklist panel fails, the original gain is attributable to the correctness of the checklist's rules. If the corrupted-checklist panel still succeeds, the gain was mediated by procedural compliance or wisdom-of-crowds effects, not rule validity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@4830a01fc799491bc456d9be, reason-counter@0b032fe78e83fd8544e95a17
+
+TARGET SRC_002
+{"analogy":null,"claim":"The panel-plus-checklist is genuinely more reliable only if, on the subset of cases where the checklist's rule guidance diverges from the expert's intuitive judgment, the panel follows the checklist and is subsequently verified as correct by the objective outcome at a rate exceeding the expert's base rate.","counterconditions":[{"case":"The divergence stratum is empty, meaning the checklist and expert always agree; in this case, the checklist is trivial and no single-evaluation evidence can distinguish rule-mediated gain from noise reduction.","checker_spec":null,"eval":"observation"},{"case":"The panel outperforms the expert on divergent cases but does so by defying the checklist's explicit guidance, indicating the gain is caused by the panel's collective intuition, not the checklist.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal mechanism: The checklist encodes explicit, domain-specific decision rules. When these rules conflict with intuition (the divergence stratum), the checklist exerts a causal force on the panel's judgment. If the panel complies and achieves higher accuracy specifically on these cases, the checklist's rule content\u2014not mere procedural compliance or crowd-averaging\u2014is demons

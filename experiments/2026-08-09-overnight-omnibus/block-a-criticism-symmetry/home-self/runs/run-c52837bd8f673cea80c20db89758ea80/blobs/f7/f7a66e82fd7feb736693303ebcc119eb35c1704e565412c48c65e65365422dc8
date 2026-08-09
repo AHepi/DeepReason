@@ -1,0 +1,43 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2c299058e9ed6e1b7681cb76: program:reasoning_observation_pending
+- reason-counter@6b9552867c362a17d6d19460: program:reasoning_observation_pending
+- reason-counter@c001c72be73ee12de965bc95: program:reasoning_observation_pending
+- reason-counter@39f280650f73b9c64210cad7: program:reasoning_observation_pending
+- reason-counter@2193d3cbceefeb6a8bda71eb: program:reasoning_observation_pending
+- reason-counter@4ebc3922b21d7fd346b3f0dd: program:reasoning_observation_pending
+- reason-counter@eb3fa503da564f58ef15502c: program:reasoning_observation_pending
+- reason-counter@1b9ba0d91d65d868fae174b3: program:reasoning_observation_pending
+- reason-counter@88530a79531a575bf385d9f0: program:reasoning_observation_pending
+- reason-counter@525dd7d6a71fbe05fc3def84: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"If the divergence stratum is empty, no single-evaluation evidence can distinguish genuine gain from compliance: the problem is unsatisfiable by construction, and this negative result is itself the strongest available answer.","counterconditions":[{"case":"The divergence stratum is non-empty, making the negative result inapplicable.","checker_spec":null,"eval":"observation"},{"case":"An external or multi-evaluation source of evidence (e.g., longitudinal replication, mechanism inspection) is admitted, violating the single-evaluation constraint.","checker_spec":null,"eval":"observation"},{"case":"The checklist is non-trivial and the expert is imperfect but they nevertheless always agree, which would require an explanation beyond the trivial-or-perfect dichotomy.","checker_spec":null,"eval":"observation"},{"case":"A corrupted-checklist control reveals a contrast even with an empty divergence stratum, because the corrupted checklist creates synthetic divergence.","checker_spec":null,"eval":"observation"},{"case":"Panel-level noise reduction itself constitutes a genuine reliability gain distinct from compliance, which would make the gain real even if not checklist-mediated.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The counterexample-first stance (SCR_001, SCR_005) establishes a hard boundary: when checklist and expert never disagree, the checklist is either trivial (codifying what the expert already does) or the expert is already perfect. In either case, panel outperformance cannot be attributed to checklist rule content within a single evaluation, because there is no case where the rule content could have made a difference. The set of possible single-evaluation observables is exhausted: performance, compliance, calibration, and confidence all collapse into either agreement or noise. The negative result is not a failure of method but a structural property of the problem space. This is an atypical candidate because it argues that the distinguishing-evidence question may be unanswerable in the very case the problem targets, rather than proposing a discriminating observable.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2c299058e9ed6e1b7681cb76, reason-counter@6b9552867c362a17d6d19460, reason-counter@c001c72be73ee12de965bc95, reason-counter@39f280650f73b9c64210cad7,

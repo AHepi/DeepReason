@@ -1,0 +1,52 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@1c4fb06fa25103c6041a75de: program:reasoning_observation_pending
+- reason-counter@3a8cc88bba47c3e8a4cfc0be: program:reasoning_observation_pending
+- reason-counter@127f479af05e07faf88d0f3d: program:reasoning_observation_pending
+- reason-counter@c48ddd98ad68ab1147aece87: program:reasoning_observation_pending
+- reason-counter@384baab43a74ee4b4b36f789: program:reasoning_observation_pending
+- reason-counter@e8f60381c6d7665204c1d2c9: program:reasoning_observation_pending
+- reason-counter@e2cda15cf64c661fbb516ad4: program:reasoning_observation_pending
+- reason-counter@da7ad76bd10ac5158ffa5484: program:reasoning_observation_pending
+- reason-counter@c440af0c7b2b10d0605733d7: program:reasoning_observation_pending
+- reason-counter@1a4c56a039b070426e22b0fd: program:reasoning_observation_pending
+- reason-counter@3e46e1cf4a90fd0d5794cecb: program:reasoning_observation_pending
+- reason-counter@9734d22dd843d140113cbf12: program:reasoning_observation_pending
+- reason-counter@fe65954fe3ec0e529ed312ad: program:reasoning_observation_pending
+- reason-counter@ce3c9ee08338f4f1dabab69d: program:reasoning_observation_pending
+- reason-counter@4fbfe7936e88813ca9adf7c9: program:reasoning_observation_pending
+- reason-counter@d4a6fd3b65883ec18797e46b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A navigation system has a dynamic model of the environment, whereas a static checklist is a fixed codification of rules that may not adapt to novel cases.","The 'panel' in the navigation analogy is a single driver, lacking the noise-reduction properties of a group aggregate.","Navigation outcomes are often continuous (route efficiency) while judgments are typically discrete (binary correct/incorrect)."],"overturn_conditions":["The navigator (checklist) is found to be giving directions based on a corrupted map (flawed rules) but the driver (panel) still arrives at the correct destination due to independent local knowledge, showing the checklist is not the source of reliability.","The driver (panel) consistently overrides the navigator (checklist) on divergence cases and is more often correct than the navigator, showing the intuition is superior to the codified rules."],"shared_structure":["Both a navigator and a checklist provide explicit procedural guidance that can be verified against an objective outcome (correct route vs. correct judgment).","In both cases, the user (driver or panel) might ignore the guidance when it conflicts with intuition, making com
+commitments: reasoning-envelope-wf, reason-counter@1c4fb06fa25103c6041a75de, reason-counter@3a8cc88bba47c3e8a4cfc0be, reason-counter@127f479af05e07faf88d0f3d, reason-counter@c48ddd98ad68ab1147aece87
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":["SCR_001","SCR_005"],"disanalogies":["The medical test analogy assumes a ground truth that is independently accessible (biopsy), whereas the checklist's correctness is what is in question; there is no external validator beyond outcome verification.","In the medical test, the discriminating stratum is defined by an independent variable (disease status); in the checklist evaluation, the discriminating stratum is defined by the checklist itself, creating a circularity risk if the checklist is used to define the very partition that validates it."],"overturn_conditions":["If a reliable method exists for validating checklist correctness on aligned cases without recourse to the divergence stratum (e.g., process tracing of panel reasoning), the analogy's claim that the divergence stratum is the only discriminating evidence is false.","If composition effects alone can be cleanly separated from checklist effects without a corrupted-checklist control, the need for the divergence stratum is bypassed."],"shared_structure":["Both the checklist-vs-expert evaluation and a causal-vs-coincidental medical test share the structure of needing a discriminating stratum: a partition of the data whe
+commitments: reasoning-envelope-wf, reason-counter@384baab43a74ee4b4b36f789, reason-counter@e8f60381c6d7665204c1d2c9, reason-counter@e2cda15cf64c661fbb516ad4, reason-counter@da7ad76bd10ac5158ffa5484
+
+TARGET SRC_003
+{"analogy":null,"claim":"The distinguishing evidence is a structured regression on the divergence stratum (cases where checklist-rule verdict and expert-intuition verdict disagree): the panel's reliability gain is genuine only if its incremental correctness over the expert on the disagreement stratum is mediated by checklist compliance rather than by crowd-noise-cancellation, and this is detected by a corrupted-checklist control that preserves deliberation structure but inverts rule content.","counterconditions":[{"case":"If the valid-checklist panel does not significantly outperform the expert on the divergence stratum, there is no reliability gain to explain.","checker_spec":null,"eval":"observation"},{"case":"If the corrupted-checklist panel outperforms the expert by a similar margin to the valid-checklist panel, the gain is not checklist-content-mediated and is not evidence of genuine checklist-driven reliability.","checker_spec":null,"eval":"observation"},{"case":"If the divergence stratum is too small for adequate statistical power, a single evaluation cannot distinguish the two explanations.","checker_spec":null,"eval":"observation"},{"case":"If the panel's divergence-stratum accuracy is fully predicted by
+commitments: reasoning-envelope-wf, reason-counter@c440af0c7b2b10d0605733d7, reason-counter@1a4c56a039b070426e22b0fd, reason-counter@3e46e1cf4a90fd0d5794cecb, reason-counter@9734d22dd843d140113cbf12
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["In clinical trials, the placebo effect is a known psychological phenomenon; in checklist evaluations, the procedural-structure effect is an aggregation/deliberation effect that may itself be epistemically relevant.","Drug content has a single active mechanism; checklist rules may interact with procedural structure synergistically, making complete isolation artificial.","Clinical trial placebos are inert by construction; a corrupted checklist may actively mislead, creating a different baseline than mere neutrality.","The corrupted-checklist control tests content validity, but a checklist could contribute epistemically through structure alone (e.g., ensuring all relevant factors are considered), which the placebo analogy treats as non-specific."],"overturn_conditions":["The analogy breaks if checklist rules and deliberation structure are not separable in practice\u2014e.g., if panels recognize corrupted rules and disengage, making the control invalid.","The analogy fails if the procedural-structure effect is itself an epistemic good that the claim intends to capture, in which case isolating content from structure answers the wrong question.","If corrupted-ch
+commitments: reasoning-envelope-wf, reason-counter@fe65954fe3ec0e529ed312ad, reason-counter@ce3c9ee08338f4f1dabab69d, reason-counter@4fbfe7936e88813ca9adf7c9, reason-counter@d4a6fd3b65883ec18797e46b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

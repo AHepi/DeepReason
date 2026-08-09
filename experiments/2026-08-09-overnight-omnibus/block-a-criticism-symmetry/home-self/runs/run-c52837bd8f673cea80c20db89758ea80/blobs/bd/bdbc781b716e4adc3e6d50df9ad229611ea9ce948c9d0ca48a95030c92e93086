@@ -1,0 +1,43 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-44d28261f496a533555747476a9125b1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+This is the second-seed variant of the same question: Argue for or against the claim that a panel of trained non-experts following an explicit checklist will, on average, produce more reliable judgments than a single domain expert relying on intuition, for tasks with objectively verifiable outcomes. Identify what evidence within a single evaluation would distinguish a genuine reliability gain from mere checklist compliance that happens to track the right answer.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@733a5e959431980a5e5ecb8e: program:reasoning_observation_pending
+- reason-counter@01c60d16de22227f720fbceb: program:reasoning_observation_pending
+- reason-counter@014e84cc7da26d241558d796: program:reasoning_observation_pending
+- reason-counter@d21386edd672d681ad7942a8: program:reasoning_observation_pending
+- reason-counter@b78cfc976abea2c560517471: program:reasoning_observation_pending
+- reason-counter@ee1e800e6c15399cfbc72b42: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between genuine reliability gain and mere checklist compliance is a false dichotomy; within a single evaluation, reliable performance is indistinguishable from compliance because all reliable behavior is, by definition, compliance with a valid set of rules, whether internalized by an expert or externalized in a checklist.","counterconditions":[{"case":"The expert makes errors on cases where the checklist is correct, demonstrating that internalized compliance can fail where externalized compliance succeeds, thus distinguishing the two.","checker_spec":null,"eval":"observation"},{"case":"The panel uses the checklist to override a flawed intuition but arrives at the wrong answer, showing that compliance with the checklist is not always reliable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal mechanism: Reliability is defined by adherence to the rules that map to objective outcomes. The expert's intuition is merely internalized compliance; the panel's checklist use is externalized compliance. Since both are compliance, there is no causal mechanism that distinguishes 'genuine' from 'compliant' reliability within a single evaluation, rendering the distinction meaningless.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@733a5e959431980a5e5ecb8e, reason-counter@01c60d16de22227f720fbceb
+
+TARGET SRC_002
+{"analogy":null,"claim":"If the panel's reliability gain is a wisdom-of-crowds effect, it will manifest even when the checklist provides no decision-relevant content, but only enforces independent voting; if the gain disappears when the checklist is replaced with a trivial voting procedure, the checklist's content is the causal driver.","counterconditions":[{"case":"The checklist provides no decision-relevant content but still improves reliability by reducing variance, confirming the gain is a wisdom-of-crowds effect and not rule-mediated.","checker_spec":null,"eval":"observation"},{"case":"The trivial voting procedure introduces social dynamics (e.g., groupthink) that the checklist's structure previously suppressed, confounding the comparison.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causal mechanism: The wisdom-of-crowds effect averages out independent, unbiased noise. If the checklist's only role is to anchor the panel to a common framework, the gain is a composition effect. Replacing the checklist with a trivial voting procedure isolates the crowd-averaging mechanism from the rule-mediated mechanism.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"
