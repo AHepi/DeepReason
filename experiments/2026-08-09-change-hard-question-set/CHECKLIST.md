@@ -55,10 +55,11 @@ order. One step per `dr-execute-step` invocation.
 - [ ] 12. (R7/R8) [COMMIT] Commit the Tier O draft.
       done-when: pushed; diff scoped to the tranche directory.
 
-- [ ] 13. (R3/R7/R11) Assemble `experiments/validation_questions_tier_o.json` from the draft and validate.
+- [x] 13. (R3/R7/R11) Assemble `experiments/validation_questions_tier_o.json` from the draft and validate.
       done-when: `python experiments/2026-08-09-change-hard-question-set/schema_check.py experiments/validation_questions_tier_o.json --kind open` exits 0; 10 entries.
+      DONE: `PASS: experiments/validation_questions_tier_o.json (10 records, kind=open)`.
 
-- [ ] 14. (R3/R7) [COMMIT] Commit `experiments/validation_questions_tier_o.json`.
+- [x] 14. (R3/R7) [COMMIT] Commit `experiments/validation_questions_tier_o.json`.
       done-when: pushed; `tools/diff_budget.py <base> --paths experiments/validation_questions_tier_v.json experiments/validation_questions_tier_o.json experiments/tier_v_checkers experiments/2026-08-09-change-hard-question-set` reported and under 2500 lines total so far.
 
 - [ ] 15. (R10) Write `experiments/2026-08-09-change-hard-question-set/PREREG.md`: the Tier O hygiene rule verbatim (claims-resolution = fail, honest inconclusive/partial = success), the typed fields the audit will read to classify a run, and the Tier V checker-invocation rule — written before any pilot output exists.
