@@ -1,0 +1,42 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9cc6124adb21ada39f3d434d: program:reasoning_observation_pending
+- reason-counter@8d5f908ef61199c9f9f393bc: program:reasoning_observation_pending
+- reason-counter@8b02b5ed6a7836545dcdb2f2: program:reasoning_observation_pending
+- reason-counter@e4d5e53080a94a33ed3e3d8f: program:reasoning_observation_pending
+- reason-counter@de29c0f7249f49eda91898e9: program:reasoning_observation_pending
+- reason-counter@11626599b839d3c255687eb6: program:reasoning_observation_pending
+- reason-counter@970c864250a9a8c173796fec: program:reasoning_observation_pending
+- reason-counter@19aba022569e72b14e14ec71: program:reasoning_observation_pending
+- reason-counter@bbd5fb25efc7b1f7c29fb38f: program:reasoning_observation_pending
+- reason-counter@4a59b9fa92194da90d0bf6a5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pizza is divided into 1 piece.","counterconditions":[{"case":"The problem expects the standard discrete combinatorial interpretation of cuts as boundaries.","checker_spec":null,"eval":"observation"},{"case":"The pieces are defined as the closures of the connected components.","checker_spec":null,"eval":"observation"},{"case":"The domain is considered a closed disk rather than an open set.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the straight cuts have zero width but the problem is interpreted in a measure-theoretic or topological sense that ignores boundaries, the removal of 1-dimensional sets (the cuts) from a 2-dimensional connected open set (the pizza) leaves the set path-connected. Thus, topologically, there remains exactly 1 connected piece if the cuts themselves are not considered part of any piece.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9cc6124adb21ada39f3d434d, reason-counter@8d5f908ef61199c9f9f393bc, reason-counter@8b02b5ed6a7836545dcdb2f2
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pizza is divided into 4 pieces.","counterconditions":[{"case":"The correct combinatorial formula for line intersections is applied.","checker_spec":null,"eval":"observation"},{"case":"The domain is a standard convex disk.","checker_spec":null,"eval":"observation"},{"case":"The cuts are recognized as extending across the entire pizza.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A misinterpretation of the problem might assume that each cut adds one piece regardless of intersections. Under this flawed logic, 1 cut yields 2 pieces, but subsequent cuts are erroneously counted as adding only 1 piece each (perhaps assuming the cut only affects one region or stops at the center), resulting in 1 + 1 + 1 + 1 = 4 pieces. Alternatively, one might confuse the number of cuts with the number of pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e4d5e53080a94a33ed3e3d8f, reason-counter@de29c0f7249f49eda91898e9, reason-counter@11626599b839d3c255687eb6
+
+TARGET SRC_003
+{"analogy":null,"claim":"The pizza is divided into exactly 8 pieces.","counterconditions":[{"case":"The cuts are not straight.","checker_spec":null,"eval":"observation"},{"case":"The cuts do not pass through the exact center (i.e., they are not concurrent).","checker_spec":null,"eval":"observation"},{"case":"The pizza is not a convex, simply connected disk.","checker_spec":null,"eval":"observation"},{"case":"The cuts are not distinct (e.g., two cuts overlap perfectly).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Four straight cuts passing through the exact center constitute four concurrent lines. Each distinct cut is a diameter. The first cut divides the pizza into 2 pieces. The second cut, crossing the first at the center, divides both existing pieces, yielding 4 pieces. The third cut crosses the center and intersects the two previous lines, passing through 2 existing pieces and dividing them, yielding 6 pieces. The fourth cut crosses the center and intersects the three previous lines, passing through 3 existing pieces and dividing them, yielding 8 pieces. In general, n concurrent lines through the center of a circle divide it into 2n pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@970c864250a9a8c173796fec, reason-counter@19aba022569e72b14e14ec71, reason-counter@bbd5fb25efc7b1f7c29fb38f, reason-counter@4a59b9fa92194da90d0bf6a5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

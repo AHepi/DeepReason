@@ -1,0 +1,1 @@
+{"allow_formalization":true,"allow_rubric":true,"allow_simulation":true,"brain":{"enabled":false,"query":null},"criteria":[],"problem":{"description":"A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?","id":"question-521af4e954a86fedc08c192d20ef2519"},"schema":"deepreason-text-workload-v1","sources":[]}

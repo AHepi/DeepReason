@@ -1,0 +1,92 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Four straight cuts, each passing through the exact center of a pizza, produce exactly 8 pieces.",
+      "mechanism": "Each cut passing through the center is a diameter of the circular disk. When n lines all intersect at a single common point, they divide the plane into exactly 2n angular sectors. Therefore, 4 concurrent lines divide the disk into exactly 2 * 4 = 8 equal sectors.",
+      "counterconditions": [
+        "If any cut does not pass exactly through the center, it breaks the strict concurrency condition.",
+        "If the cuts are not perfectly straight or zero-width, the geometric idealization breaks down.",
+        "If two cuts perfectly overlap (are collinear), they do not produce distinct sectors, resulting in fewer pieces."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The problem is ambiguous because 'each passing through the exact center' can be interpreted as consecutive cuts passing through the center of the pieces they intersect, allowing a maximum of 11 pieces.",
+      "mechanism": "If 'center' is read operationally as the centroid of the locally available piece, the cuts are no longer globally concurrent. Four lines in general position, with no three concurrent, form a maximum of (n^2 + n + 2)/2 = 11 regions. This interpretation exploits the gap between 'the exact center of the pizza' and 'the exact center of a piece'.",
+      "counterconditions": [
+        "If 'the exact center' is strictly defined as the single geometric origin of the original pizza, the local centroid interpretation is invalid.",
+        "If the topological region is required to lie entirely within the disk's boundary, the maximum number of regions for 4 lines clipped to a circle may be less than the unbounded plane maximum of 11."
+      ],
+      "typicality": 0.15,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The number of pieces is undefined or infinite because geometric cuts of zero-width leave the underlying manifold with a single connected component.",
+      "mechanism": "In standard geometric idealization, lines have zero width. Cutting a 2D manifold along a 1D subspace of zero area does not disconnect the topological space (similar to cutting the real number line at a single point). Therefore, no 2D pieces are actually produced; the pizza remains a single connected region.",
+      "counterconditions": [
+        "If physical pizza cuts are modeled with non-zero width (kerf), the pizza is physically separated.",
+        "If the problem is interpreted combinatorially rather than topologically, the count of bounding lines is taken as the count of logical sectors.",
+        "If the lines are treated as boundaries rather than cuts, they partition the space logically into 8 regions."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If cuts are processed sequentially and every cut must pass through the exact center of the original pizza, the 4th cut can produce a maximum of 7 pieces (1 piece if collinear, 7 if distinct).",
+      "mechanism": "Under sequential cutting, the nth cut adds as many new pieces as the number of existing regions it passes through. A line through the center intersects all previous concurrent lines exactly at the center. If the 4th cut is collinear with a previous cut, it adds 1 piece. If it is distinct, it passes through 4 existing regions (sharing a boundary at the center point), adding 4 pieces to the previous 3 cuts' 6 pieces, yielding 10 pieces. Wait, if the 4th cut is distinct from the 3 concurrent cuts, it passes through 6 regions (2 for each of the 3 lines), adding 6 pieces to the existing 6, totaling 12. If we strictly require passing through the exact center but only counting regions whose interior is crossed, it crosses 4 regions, adding 4 to the existing 6 for a total of 10 pieces.",
+      "counterconditions": [
+        "If all cuts are applied simultaneously rather than sequentially, the count is exactly 8.",
+        "If the 4th cut is collinear with a previous cut, it adds 1 piece, yielding 7 pieces.",
+        "If the sequential process is not constrained to pass through the center of the original pizza but the current piece, the count differs."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Four cuts passing through the exact center of a pizza produce exactly 4 pieces.",
+      "mechanism": "Each cut is a single straight line, and a single straight line passing through the center of a pizza divides it into exactly 2 pieces. Adding a second cut divides the pizza further. If the interpretation is that the cuts are made sequentially but each new cut only bisects the pizza (or a specific piece) without regard for the maximum intersection, or if the '4 cuts' refers to 4 physical slashes that do not fully cross the entire pizza, the number of pieces can be 4. Alternatively, if cuts are interpreted as rays (half-lines) from the center to the edge, 4 rays produce 4 pieces.",
+      "counterconditions": [
+        "If 'straight cuts' are defined as full lines (diameters) crossing the entire pizza, this claim is invalid.",
+        "If the maximum number of pieces is sought, this interpretation is suboptimal."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

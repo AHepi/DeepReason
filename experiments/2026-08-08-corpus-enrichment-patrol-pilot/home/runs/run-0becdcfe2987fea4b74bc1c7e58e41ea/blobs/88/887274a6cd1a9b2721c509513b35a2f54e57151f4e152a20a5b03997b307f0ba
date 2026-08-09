@@ -1,0 +1,49 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d4175502cf31ba66b47f0e00: program:reasoning_observation_pending
+- reason-counter@a7d8a0f2f6a0ee37bcbc9712: program:reasoning_observation_pending
+- reason-counter@941ac889c730a6c4ecab4533: program:reasoning_observation_pending
+- reason-counter@4acb6d6dcc642970cf97b3ba: program:reasoning_observation_pending
+- reason-counter@c900e65cbfef8164619f9d6e: program:reasoning_observation_pending
+- reason-counter@6743d5a1bc4bc0f4e7cbe4a8: program:reasoning_observation_pending
+- reason-counter@36f0d8649277c393e1a6975b: program:reasoning_observation_pending
+- reason-counter@47670591a5c46d33fd2ddff3: program:reasoning_observation_pending
+- reason-counter@43336ac71c20a82675f55e4c: program:reasoning_observation_pending
+- reason-counter@a3ae12c2bc2bda6bb34d2df6: program:reasoning_observation_pending
+- reason-counter@01b49febb05d8351650813d5: program:reasoning_observation_pending
+- reason-counter@5f027322d4c307026f4342a9: program:reasoning_observation_pending
+- reason-counter@78a494e2dd1963792746fd0c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pizza is divided into exactly 8 pieces. Four distinct straight cuts passing through the exact center constitute four concurrent lines. The complete arrangement forms 8 planar sectors, which are the indivisible pieces of the pizza.","counterconditions":[{"case":"If the four cuts are not distinct (e.g., duplicate or perfectly overlapping cuts), the number of pieces will be strictly less than 8.","checker_spec":null,"eval":"observation"},{"case":"If the cuts do not perfectly intersect at the exact center, the arrangement is no longer concurrent; a generic arrangement of 4 lines can produce up to 11 pieces, with variations yielding 9, 10, or 11 pieces.","checker_spec":null,"eval":"observation"},{"case":"If the pizza is not perfectly circular or has holes, the intersection of the cuts with the boundary may not produce clean sectors, altering the piece count.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each cut passing through the exact center acts as a diameter. When the first two non-parallel cuts are made, they intersect at the center, producing 4 pieces. Each subsequent distinct diameter intersects all previous diamet
+commitments: reasoning-envelope-wf, reason-counter@d4175502cf31ba66b47f0e00, reason-counter@a7d8a0f2f6a0ee37bcbc9712, reason-counter@941ac889c730a6c4ecab4533
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["In general position, every new line crosses all previous lines at distinct points, maximizing intersections.","In the concurrent case, all intersections collapse to a single point, drastically reducing the number of pieces added per new cut.","The general lines in a plane problem is not bounded by a closed shape like a pizza."],"overturn_conditions":["If it is shown that the 4th cut, by some geometric trick of finite thickness, can avoid the exact center or intersect multiple times, the maximum could be higher.","If the pizza is allowed to be folded or rearranged between cuts, the topological constraints change completely."],"shared_structure":["Both involve lines intersecting in a plane to partition a region.","The k-th line adds a number of regions equal to the number of existing lines it crosses plus 1 (or 2 if circular).","Both rely on the combinatorial addition of regions as cuts/lines are sequentially introduced."],"source_memory_refs":["15cd66ac0981afd90964d37ed8287f18e6e035297f2ff9007bdfc47aa7938b62"],"transfer_claims":["The counting formula logic (pieces added = intersections + 1) applies, but must be adapted for the concurrency collapse.","The ma
+commitments: reasoning-envelope-wf, reason-counter@4acb6d6dcc642970cf97b3ba, reason-counter@c900e65cbfef8164619f9d6e, reason-counter@6743d5a1bc4bc0f4e7cbe4a8
+
+TARGET SRC_003
+{"analogy":null,"claim":"The maximum number of pieces produced by 4 straight cuts through the exact center is 8, assuming all cuts are in general position relative to the surface (i.e., no two cuts overlap as the same line).","counterconditions":[{"case":"If any two cuts are collinear, they act as a single cut, producing fewer than 8 pieces (e.g., 3 distinct cuts yield 6 pieces).","checker_spec":null,"eval":"observation"},{"case":"If the pizza is non-Euclidean (e.g., on a sphere) or the cuts have non-zero thickness, the count may differ.","checker_spec":null,"eval":"observation"},{"case":"If a cut is allowed to curve, it no longer acts as a straight line and the general position bound changes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because all 4 lines pass through the exact center, they are concurrent at a single point. Consequently, the first 2 cuts yield 4 pieces, and each subsequent cut can only bisect 2 existing pieces, adding exactly 2 pieces per cut, yielding 4 + 2 + 2 = 8 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@36f0d8649277c393e1a6975b, reason-counter@47670591a5c46d33fd2ddff3, reason-counter@43336ac71c20a82675f55e4c
+
+TARGET SRC_004
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["General lines in a plane can be placed to ensure no three intersect at the same point, maximizing region additions; concurrent diameters cannot avoid the shared center crossing.","The standard maximal cut recurrence for arbitrary lines (1 + n(n+1)/2) does not apply because all pairwise intersections coincide.","Unlike arbitrary chords, diameters are topologically constrained to cross at a single shared point rather than generating distinct interior vertices."],"overturn_conditions":["If the problem is reinterpreted to permit arbitrary cuts not through the center, the maximum becomes 11.","If coincident cuts are allowed, the count is below 8.","If the pizza is modeled as an annulus (center removed), the topology changes and the region count differs."],"shared_structure":["All cuts are diameters, so any pair crosses exactly once at the common center point.","The center acts as the sole concurrency point for all lines.","Region count is governed by how many existing regions a new chord splits as it traverses the disk.","For diameters, each new cut enters two opposite regions and splits both, adding exactly 2 regions."],"source_memory_refs":["d95b5f9287875f718
+commitments: reasoning-envelope-wf, reason-counter@a3ae12c2bc2bda6bb34d2df6, reason-counter@01b49febb05d8351650813d5, reason-counter@5f027322d4c307026f4342a9, reason-counter@78a494e2dd1963792746fd0c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

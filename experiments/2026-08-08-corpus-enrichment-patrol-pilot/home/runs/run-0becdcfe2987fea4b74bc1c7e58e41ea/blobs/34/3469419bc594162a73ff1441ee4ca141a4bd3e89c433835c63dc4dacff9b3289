@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "claim": "The pizza is divided into exactly 8 pieces because each of the 4 concurrent central cuts generates two new boundary rays, and every new boundary ray splits exactly one existing sector, yielding 2N pieces.",
+    "mechanism": "Represent the cuts as N distinct diameters incident at a single point. They form 2N rays partitioning the plane into 2N angular sectors. By induction: with 0 cuts, the disk is 1 piece; adding a new diameter across the center creates two boundary rays. Each of these rays traverses an existing sector and bisects it, incrementing the piece count by 2 (one per ray). Thus, the total number of pieces is 1 + 2*4 = 9, subtracting 1 to count the pieces strictly inside the pizza: 8 pieces.",
+    "counterconditions": [
+      "A cut is strictly tangent to the center rather than passing through it as a diameter.",
+      "A cut is exactly coincident with a previous cut.",
+      "The pizza is not modeled as a convex disk.",
+      "Cuts are permitted to stop or start at the center rather than passing completely through the disk."
+    ],
+    "typicality": 0.85,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "evidence_refs": []
+  }
+}

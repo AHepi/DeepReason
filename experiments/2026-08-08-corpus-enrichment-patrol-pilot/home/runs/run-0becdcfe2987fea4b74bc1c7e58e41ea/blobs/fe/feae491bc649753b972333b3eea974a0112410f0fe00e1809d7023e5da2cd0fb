@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "claim": "The number of pieces produced by 4 straight cuts through the exact center is exactly 8.",
+      "mechanism": "Under the standard mathematical idealization of zero-width lines, all 4 cuts pass through a single common point (the center). This concurrency means the k-th cut intersects the previous k-1 lines at exactly the same point. Thus, the k-th cut traverses only 2 existing regions (one on each side of the center), splitting them and adding exactly 2 new pieces. The total is 1 + 4*2 = 8.",
+      "counterconditions": [
+        "The problem standard is relaxed to allow straight cuts that do not pass through the exact center, enabling general position arrangements that yield up to 11 pieces.",
+        "A cut is allowed to coincide with a previous cut, adding 0 pieces instead of 2.",
+        "The pizza is not a convex disk, invalidating the assumption that a line through the center intersects the boundary in exactly two points."
+      ],
+      "optional_refs": ["SRC_008", "SRC_006", "SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.95
+    },
+    {
+      "claim": "The problem is a trap: a solver might incorrectly calculate 11 pieces by over-applying the planar line arrangement formula (1 + k(k+1)/2), failing to account for the forced concurrence at the center.",
+      "mechanism": "The recurrence for maximum regions formed by n lines in a plane, R(n) = R(n-1) + n, assumes general position where no three lines intersect at the same point. However, the constraint 'passing through the exact center' forces all 4 lines to be concurrent, violating general position. A solver ignoring this constraint computes R(4) = 1 + 1 + 2 + 3 + 4 = 11. The mechanism here is the identification of this incorrect transfer as the primary alternative explanation.",
+      "counterconditions": [
+        "The problem is actually asking for the maximum pieces with 4 cuts without the center constraint, making 11 the correct answer.",
+        "The text of the problem is found to explicitly ask for an arrangement that avoids concurrence."
+      ],
+      "optional_refs": ["SRC_007", "SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    },
+    {
+      "claim": "The number of pieces produced is 8, derived from the isomorphism between concurrent cuts through a center and the formation of a 2n-wedge partition.",
+      "mechanism": "A straight cut through the center of a convex disk corresponds to a diameter. n concurrent diameters divide the disk into 2n sectors (wedges). For n = 4 cuts, this yields exactly 2(4) = 8 pieces.",
+      "counterconditions": [
+        "The 'cuts' are not constrained to be straight lines.",
+        "The pizza's shape is non-circular, meaning a line through the center does not form a perfect diameter and may not divide the shape into exactly two symmetric regions."
+      ],
+      "optional_refs": ["SRC_008", "SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "analogy": {
+        "source_memory_refs": ["SRC_008"],
+        "shared_structure": [
+          "A central point of origin",
+          "Linear boundaries extending from the origin to the boundary",
+          "Division of a bounded space into angular sectors"
+        ],
+        "disanalogies": [
+          "Wedge partitions typically assume radial symmetry; a pizza may be oval or irregular.",
+          "Angles between cuts are not necessarily equal."
+        ],
+        "transfer_claims": [
+          "The formula for the number of sectors in a circle (2n) maps exactly to the number of pieces in a pizza cut by n concurrent lines."
+        ],
+        "overturn_conditions": [
+          "The cuts are allowed to stop before reaching the center.",
+          "The center point is not well-defined."
+        ]
+      },
+      "typicality": 0.75
+    },
+    {
+      "claim": "The number of pieces produced is 8 because physical cutting introduces thickness that prevents exact concurrence, but the dominant mathematical constraint of passing through a single point still limits the result to 8 rather than 11.",
+      "mechanism": "While a physical knife has width, the requirement that all cuts pass through the exact center means they still act as concurrent lines in the idealized model. The width of the cut removes some material, but the topological division of the pizza into 8 distinct regions remains unchanged.",
+      "counterconditions": [
+        "The problem is interpreted purely physically, where the kerf of the blade destroys the central point of intersection, potentially fusing regions or altering the count.",
+        "The cuts are so thick that they remove the center entirely, changing the topology."
+      ],
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.3
+    },
+    {
+      "claim": "The number of pieces is 8, because in the limit of zero cut-width, 4 concurrent lines through a central point partition the plane into 8 unbounded regions, and the pizza is a convex compact subset containing the center.",
+      "mechanism": "4 concurrent lines divide the plane into 8 sectors. Since the pizza is a convex disk containing the point of concurrence, its boundary intersects each of the 4 lines exactly twice, bounding the 8 sectors into 8 finite pieces.",
+      "counterconditions": [
+        "The pizza is not convex.",
+        "The pizza does not contain the center point of the cuts."
+      ],
+      "optional_refs": ["SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.5
+    }
+  ]
+}

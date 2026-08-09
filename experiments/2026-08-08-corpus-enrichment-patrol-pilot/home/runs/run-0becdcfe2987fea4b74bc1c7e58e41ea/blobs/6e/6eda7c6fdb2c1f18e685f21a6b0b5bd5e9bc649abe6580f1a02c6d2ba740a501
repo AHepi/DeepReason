@@ -1,0 +1,56 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+PROBLEM CONTEXT (conn:0342d559aaec) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0342d559aaec to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@176e3504b752: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@bf8b2d4a977d41d5a7e97471: program:reasoning_observation_pending
+- reason-counter@83cadc182eefb0a0c78d22e2: program:reasoning_observation_pending
+- reason-counter@9b2b6c3ba9a06755532d380a: program:reasoning_observation_pending
+- reason-counter@4d4d6094967429452322af4a: program:reasoning_observation_pending
+- reason-counter@970c864250a9a8c173796fec: program:reasoning_observation_pending
+- reason-counter@f93ab9614e722534666b934f: program:reasoning_observation_pending
+- reason-counter@f39baa20516adeec2359d66d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+All five neighborhood candidates depend on a single covering principle: the answer to 'how many pieces' is determined by two interpretive choices — (1) whether cuts are idealized as zero-width lines or physical kerfs, and (2) whether 'pieces' are counted combinatorially (as regions bounded by cut lines) or topologically (as connected components of the remainder). Each candidate is a projection of one combination: SRC_003 (zero-width + topological = 1 piece), SRC_004 (positive-width or fractal + topological = infinite), SRC_002 (general-position + combinatorial = 11), SRC_005 (kerf + topological = count depends on center singularity), SRC_001 (zero-width + topological = 1). The principle is REFUTED IF any candidate cannot be mapped to a unique coordinate in this two-axis space, or if a candidate's mechanism requires an interpretive dimension beyond cut-width and piece-definition.
+commitments: hv-floor@2a45b7988522, lineage-ref@176e3504b752, relation-form@578e42df713e
+
+TARGET SRC_002
+{"analogy":null,"claim":"If two or more of the four cuts overlap perfectly (same line), the number of pieces is less than 8.","counterconditions":[{"case":"If all four cuts are distinct straight lines through the center, they yield 8 pieces.","checker_spec":null,"eval":"observation"},{"case":"If the cuts have different slopes but do not pass through the center, the count depends on their intersections.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If two cuts are identical, they do not add new regions. The effective number of distinct lines is less than 4. For k distinct concurrent lines, the number of regions is 2k. If, for example, only 3 distinct lines are present, the pizza is cut into 6 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bf8b2d4a977d41d5a7e97471, reason-counter@83cadc182eefb0a0c78d22e2
+
+TARGET SRC_003
+{"analogy":null,"claim":"If two of the four cuts overlap perfectly, they act as a single cut, resulting in 6 pieces; if two pairs overlap, the result is 4 pieces.","counterconditions":[{"case":"All four cuts are entirely distinct, yielding 8 pieces.","

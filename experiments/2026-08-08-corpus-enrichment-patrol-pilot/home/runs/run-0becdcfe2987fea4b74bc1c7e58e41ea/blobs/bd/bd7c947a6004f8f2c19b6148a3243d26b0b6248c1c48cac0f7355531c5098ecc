@@ -1,0 +1,46 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@5a476f5eeea97aba33779225: program:reasoning_observation_pending
+- reason-counter@f1f9eaf102a5a2d0e2e3ab2f: program:reasoning_observation_pending
+- reason-counter@932a0fac3b87033b26360451: program:reasoning_observation_pending
+- reason-counter@734fdb455b08fa1d096daad8: program:reasoning_observation_pending
+- reason-counter@454af59238353c28140d8128: program:reasoning_observation_pending
+- reason-counter@25f61107b519808591c79a8d: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The pizza is divided into infinitely many pieces.","counterconditions":[{"case":"Cuts are idealized as 1-dimensional lines with zero thickness.","checker_spec":null,"eval":"observation"},{"case":"Cuts are required to be straight, preventing fractal curves.","checker_spec":null,"eval":"observation"},{"case":"The problem assumes a finite combinatorial partition.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If 'straight cuts' are interpreted as having non-zero thickness (e.g., physical cuts with width), or if the problem allows for curved cuts that pass through the center but oscillate infinitely, the resulting partition could yield an infinite number of regions. In the thickness case, the center becomes a measure-zero region of removed material, but the boundaries could generate infinitely many disjoint components if the cuts are fractal or pathological.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5a476f5eeea97aba33779225, reason-counter@f1f9eaf102a5a2d0e2e3ab2f, reason-counter@932a0fac3b87033b26360451
+
+TARGET SRC_002
+{"analogy":null,"claim":"The pizza is divided into 11 pieces.","counterconditions":[{"case":"The cuts strictly pass through the exact center (enforcing concurrency).","checker_spec":null,"eval":"observation"},{"case":"The pizza has physical boundaries that prevent infinite lines from extending beyond the domain.","checker_spec":null,"eval":"observation"},{"case":"The cuts are not distinct.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the cuts are interpreted as being in general position (no two parallel, no three concurrent), the maximum number of pieces for n lines is given by the formula n(n+1)/2 + 1. For n=4, this yields 4(5)/2 + 1 = 11 pieces. This occurs if the constraint 'passing through the exact center' is ignored or interpreted as an approximation that fails to enforce strict concurrency.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@734fdb455b08fa1d096daad8, reason-counter@454af59238353c28140d8128, reason-counter@25f61107b519808591c79a8d
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@970c864250a9a8c173796fec: program:reasoning_observation_pending
+- reason-counter@aadfb3d45ea020344f44bc24: program:reasoning_observation_pending
+- reason-counter@fd13bbdd35e5278a7372ff45: program:reasoning_observation_pending
+- reason-counter@11b510ed7782867df5102601: program:reasoning_observation_pending
+- reason-counter@36714093c34da4a67392e32c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The number of pieces produced is 8, derived from the recurrence relation P(n) = P(n-1) + 2.","counterconditions":[{"case":"The cuts are not straight.","checker_spec":null,"eval":"observation"},{"case":"The cuts do not pass through the exact center.","checker_spec":null,"eval":"observation"},{"case":"The recurrence relation is misapplied by assuming the n-th cut splits n regions instead of 2.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let P(n) be the number of pieces after n cuts through the center. P(1) = 2. When adding the n-th cut (a diameter), it crosses all n-1 previous cuts at the single center point. This means it enters one region on one side of the center and one region on the other side. It thus splits exactly 2 regions. Therefore, P(n) = P(n-1) + 2. Solving this recurrence: P(4) = 2 + 3*2 = 8.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@970c864250a9a8c173796fec, reason-counter@aadfb3d45ea020344f44bc24, reason-counter@fd13bbdd35e5278a7372ff45
+
+TARGET SRC_002
+{"analogy":null,"claim":"The maximum number of pieces is 11, assuming the formula for the maximum number of regions formed by n lines in a plane, R = (n^2 + n + 2)/2.","counterconditions":[{"case":"The problem's constraint that all cuts must pass through the exact center is enforced, which prevents distinct intersection points.","checker_spec":null,"eval":"observation"},{"case":"The pizza's circular boundary is considered, which might cap the number of bounded regions differently than an infinite plane.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Using the standard combinatorial geometry result for n lines in a plane, the maximum number of regions is given by the lazy caterer's sequence. For n=4, R = (16 + 4 + 2)/2 = 11. Each new line intersects all previous lines at distinct points, maximizing the number of regions it splits.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@11b510ed7782867df5102601, reason-counter@36714093c34da4a67392e32c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

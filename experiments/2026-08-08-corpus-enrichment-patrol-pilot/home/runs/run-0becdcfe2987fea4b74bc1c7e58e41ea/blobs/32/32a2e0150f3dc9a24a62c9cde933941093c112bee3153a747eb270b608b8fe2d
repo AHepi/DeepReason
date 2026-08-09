@@ -1,0 +1,35 @@
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+## problem-context
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@970c864250a9a8c173796fec: program:reasoning_observation_pending
+- reason-counter@19aba022569e72b14e14ec71: program:reasoning_observation_pending
+- reason-counter@bbd5fb25efc7b1f7c29fb38f: program:reasoning_observation_pending
+- reason-counter@4a59b9fa92194da90d0bf6a5: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET e8c7b6e2b22da9f11c160adfa616ca897f970b90ab1445dd9fa6384782bbf803
+{"analogy":null,"claim":"The pizza is divided into exactly 8 pieces.","counterconditions":[{"case":"The cuts are not straight.","checker_spec":null,"eval":"observation"},{"case":"The cuts do not pass through the exact center (i.e., they are not concurrent).","checker_spec":null,"eval":"observation"},{"case":"The pizza is not a convex, simply connected disk.","checker_spec":null,"eval":"observation"},{"case":"The cuts are not distinct (e.g., two cuts overlap perfectly).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Four straight cuts passing through the exact center constitute four concurrent lines. Each distinct cut is a diameter. The first cut divides the pizza into 2 pieces. The second cut, crossing the first at the center, divides both existing pieces, yielding 4 pieces. The third cut crosses the center and intersects the two previous lines, passing through 2 existing pieces and dividing them, yielding 6 pieces. The fourth cut crosses the center and intersects the three previous lines, passing through 3 existing pieces and dividing them, yielding 8 pieces. In general, n concurrent lines through the center of a circle divide it into 2n pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- c60da9b1a8baf1e358db42ff2b9357d27966fd120a10a786e13e35e697797871 [mention]
+- 78249aafa4934cf50b22146ee943de999f7a8359cf6aa909c20c29dd96a06020 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- c60da9b1a8baf1e358db42ff2b9357d27966fd120a10a786e13e35e697797871: {"analogy":null,"claim":"The pizza is divided into exactly 8 pieces because each of the 4 concurrent central cuts generates two new boundary rays, and every new
+- 78249aafa4934cf50b22146ee943de999f7a8359cf6aa909c20c29dd96a06020: {"analogy":null,"claim":"The pizza is divided into exactly 8 pieces. Four distinct straight cuts passing through the exact center constitute four concurrent lin
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

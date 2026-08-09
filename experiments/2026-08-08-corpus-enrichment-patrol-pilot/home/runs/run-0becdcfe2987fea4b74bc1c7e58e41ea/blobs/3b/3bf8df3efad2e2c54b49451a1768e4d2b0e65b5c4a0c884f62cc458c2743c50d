@@ -1,0 +1,116 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Four straight cuts, each passing through the exact center of the pizza, produce exactly 8 pieces.",
+      "mechanism": "Because every cut passes through the center, they form 4 concurrent lines intersecting at a single point. Each distinct line adds 2 new regions, so n concurrent lines yield 2n regions. For n=4, this gives 8 regions.",
+      "counterconditions": [
+        "If one or more cuts do not pass through the exact center (general position), the number of regions increases.",
+        "If cuts are not straight, the region count depends on the curvature and intersections of the cuts."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004",
+        "SRC_005",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If the four straight cuts are assumed to be in general position rather than concurrent, they produce a maximum of 11 pieces.",
+      "mechanism": "The lazy caterer's sequence gives the maximum number of regions for n lines in a plane as R(n) = n(n+1)/2 + 1. For n=4, R(4) = 11. This is a known trap if the solver ignores the 'exact center' constraint and treats the cuts as generic lines.",
+      "counterconditions": [
+        "If the cuts are constrained to pass through the exact center, they become concurrent and the number of regions drops to 8.",
+        "If some cuts are parallel or concurrent, the number of regions is less than 11."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If two or more of the four cuts overlap perfectly (same line), the number of pieces is less than 8.",
+      "mechanism": "If two cuts are identical, they do not add new regions. The effective number of distinct lines is less than 4. For k distinct concurrent lines, the number of regions is 2k. If, for example, only 3 distinct lines are present, the pizza is cut into 6 pieces.",
+      "counterconditions": [
+        "If all four cuts are distinct straight lines through the center, they yield 8 pieces.",
+        "If the cuts have different slopes but do not pass through the center, the count depends on their intersections."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If 'passing through the exact center' is physically interpreted as cuts with non-zero thickness, the center point is destroyed, potentially changing the topological count of connected pieces.",
+      "mechanism": "A physical cut removes material along its width. If four cuts intersect at the center, a small disk of material is removed. The remaining pieces are not joined at a single point. Depending on how 'piece' is defined topologically, this might yield a different count or interpretation than the idealized 8 sectors.",
+      "counterconditions": [
+        "In the idealized mathematical model where cuts are lines of zero width, the pieces remain connected at the center point and count as 8.",
+        "If the problem assumes standard geometric idealization, physical thickness is irrelevant."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_004",
+          "SCR_008"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "If the pizza is modeled as an annulus (a ring missing the center), four concurrent cuts through the central hole yield 8 disconnected pieces.",
+      "mechanism": "An annulus has its center missing. Four straight lines passing through the center intersect the annulus in 8 disjoint arc-like segments. These are 8 separate pieces, topologically distinct from the 8 wedge-like sectors of a full disk.",
+      "counterconditions": [
+        "If the pizza is a full disk, the 8 pieces are wedges joined at the center.",
+        "If the cuts do not pass through the center, the intersection pattern with the annulus changes."
+      ],
+      "typicality": 0.02,
+      "optional_refs": [],
+      "analogy": {
+        "source_memory_refs": [
+          "SCR_001",
+          "SCR_005"
+        ],
+        "shared_structure": [
+          "Both the full disk and the annulus are divided by 4 concurrent lines.",
+          "In both cases, the count of separated material components is 8."
+        ],
+        "disanalogies": [
+          "The full disk's 8 pieces are wedges joined at a central point; the annulus's 8 pieces are disconnected arcs.",
+          "The topological connectedness at the center differs between the two domains."
+        ],
+        "transfer_claims": [
+          "The count of 8 pieces is robust to the topological change from a disk to an annulus, as long as the cuts are straight and concurrent."
+        ],
+        "overturn_conditions": [
+          "If the definition of 'piece' requires connectedness at the center, the annulus model does not satisfy it.",
+          "If the annulus has a different inner radius, the arc lengths change but the count remains 8."
+        ]
+      },
+      "sidecar": {
+        "requested_context_aliases": [
+          "SCR_001",
+          "SCR_005"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

@@ -1,0 +1,22 @@
+```json
+{
+  "candidate": {
+    "claim": "The maximum number of pieces produced by 4 straight cuts through the exact center is 8, assuming all cuts are in general position relative to the surface (i.e., no two cuts overlap as the same line).",
+    "mechanism": "Because all 4 lines pass through the exact center, they are concurrent at a single point. Consequently, the first 2 cuts yield 4 pieces, and each subsequent cut can only bisect 2 existing pieces, adding exactly 2 pieces per cut, yielding 4 + 2 + 2 = 8 pieces.",
+    "counterconditions": [
+      "If any two cuts are collinear, they act as a single cut, producing fewer than 8 pieces (e.g., 3 distinct cuts yield 6 pieces).",
+      "If the pizza is non-Euclidean (e.g., on a sphere) or the cuts have non-zero thickness, the count may differ.",
+      "If a cut is allowed to curve, it no longer acts as a straight line and the general position bound changes."
+    ],
+    "typicality": 0.95,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003"
+      ]
+    }
+  }
+}
+```

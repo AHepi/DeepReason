@@ -1,0 +1,44 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+## problem-context
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e4d5e53080a94a33ed3e3d8f: program:reasoning_observation_pending
+- reason-counter@de29c0f7249f49eda91898e9: program:reasoning_observation_pending
+- reason-counter@11626599b839d3c255687eb6: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET a33c3459288e1ec877f8d1e0e1e78cad5556fae4be75759436bc267cc6c42c43
+{"analogy":null,"claim":"The pizza is divided into 4 pieces.","counterconditions":[{"case":"The correct combinatorial formula for line intersections is applied.","checker_spec":null,"eval":"observation"},{"case":"The domain is a standard convex disk.","checker_spec":null,"eval":"observation"},{"case":"The cuts are recognized as extending across the entire pizza.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A misinterpretation of the problem might assume that each cut adds one piece regardless of intersections. Under this flawed logic, 1 cut yields 2 pieces, but subsequent cuts are erroneously counted as adding only 1 piece each (perhaps assuming the cut only affects one region or stops at the center), resulting in 1 + 1 + 1 + 1 = 4 pieces. Alternatively, one might confuse the number of cuts with the number of pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- d95b5f9287875f7188705595ef0a81c837042dae2689f3fabe99a830c4389fb1 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- d95b5f9287875f7188705595ef0a81c837042dae2689f3fabe99a830c4389fb1: The claim of 4 pieces is wrong for the problem as stated. Four distinct straight cuts through the center are four distinct diameters; each new diameter crosses 
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

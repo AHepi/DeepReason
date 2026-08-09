@@ -1,0 +1,40 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-521af4e954a86fedc08c192d20ef2519) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@bd3033d26d6407f53c832e9a: program:reasoning_observation_pending
+- reason-counter@c374420e869c06e9d7ea07c9: program:reasoning_observation_pending
+- reason-counter@b5124d2d68ef5e2dfcf1df26: program:reasoning_observation_pending
+- reason-counter@642f776ec8204e0abaa5a128: program:reasoning_observation_pending
+- reason-counter@4bf9fe584991ff6381892ea8: program:reasoning_observation_pending
+- reason-counter@556c8a24160ce70afaad7b7b: program:reasoning_observation_pending
+- reason-counter@852142622e7f53fb14a49178: program:reasoning_observation_pending
+- reason-counter@206fdfb86d39f0b409a5e44f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Four cuts passing through the exact center of a pizza produce exactly 4 pieces.","counterconditions":[{"case":"If 'straight cuts' are defined as full lines (diameters) crossing the entire pizza, this claim is invalid.","checker_spec":null,"eval":"observation"},{"case":"If the maximum number of pieces is sought, this interpretation is suboptimal.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each cut is a single straight line, and a single straight line passing through the center of a pizza divides it into exactly 2 pieces. Adding a second cut divides the pizza further. If the interpretation is that the cuts are made sequentially but each new cut only bisects the pizza (or a specific piece) without regard for the maximum intersection, or if the '4 cuts' refers to 4 physical slashes that do not fully cross the entire pizza, the number of pieces can be 4. Alternatively, if cuts are interpreted as rays (half-lines) from the center to the edge, 4 rays produce 4 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@bd3033d26d6407f53c832e9a, reason-counter@c374420e869c06e9d7ea07c9
+
+TARGET SRC_002
+{"analogy":null,"claim":"If cuts are processed sequentially and every cut must pass through the exact center of the original pizza, the 4th cut can produce a maximum of 7 pieces (1 piece if collinear, 7 if distinct).","counterconditions":[{"case":"If all cuts are applied simultaneously rather than sequentially, the count is exactly 8.","checker_spec":null,"eval":"observation"},{"case":"If the 4th cut is collinear with a previous cut, it adds 1 piece, yielding 7 pieces.","checker_spec":null,"eval":"observation"},{"case":"If the sequential process is not constrained to pass through the center of the original pizza but the current piece, the count differs.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Under sequential cutting, the nth cut adds as many new pieces as the number of existing regions it passes through. A line through the center intersects all previous concurrent lines exactly at the center. If the 4th cut is collinear with a previous cut, it adds 1 piece. If it is distinct, it passes through 4 existing regions (sharing a boundary at the center point), adding 4 pieces to the previous 3 cuts' 6 pieces, yielding 10 pieces. Wait, if the 4th cut is distinct from the 3 concurrent cuts, it passes through 6 regions (2 for each of the 3 lines), adding 6 pieces to the existing 6, totaling 12. If we strictly require passing through the exact center but only counting regions whose interior is crossed, it crosses 4 regions, adding 4 to the existing 6 for a total of 10 pieces.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[
+commitments: reasoning-envelope-wf, reason-counter@b5124d2d68ef5e2dfcf1df26, reason-counter@642f776ec8204e0abaa5a128, reason-counter@4bf9fe584991ff6381892ea8
+
+TARGET SRC_003
+{"analogy":null,"claim":"Four straight cuts, each passing through the exact center of a pizza, produce exactly 8 pieces.","counterconditions":[{"case":"If any cut does not pass exactly through the center, it breaks the strict concurrency condition.","checker_spec":null,"eval":"observation"},{"case":"If the cuts are not perfectly straight or zero-width, the geometric idealization breaks down.","checker_spec":null,"eval":"observation"},{"case":"If two cuts perfectly overlap (are collinear), they do not produce distinct sectors, resulting in fewer pieces.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each cut passing through the center is a diameter of the circular disk. When n lines all intersect at a single common point, they divide the plane into exactly 2n angular sectors. Therefore, 4 concurrent lines divide the disk into exactly 2 * 4 = 8 equal sectors.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@556c8a24160ce70afaad7b7b, reason-counter@852142622e7f53fb14a49178, reason-counter@206fdfb86d39f0b409a5e44f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
