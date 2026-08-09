@@ -272,3 +272,13 @@ R12 (artifact, new): "single model two judge seats should be possible." —
 a claim to verify: is a genuinely single-model run with two judge seats
 (same model in both, independence carried by school rather than family)
 reachable through any code path today?
+
+### Amendment 4 (2026-08-09, post-STOP clarifying question, operator's own words)
+
+> Can you trace the code for criticism before schools? Because it exists.
+> And the circuit can be switched back on if schools are unwanted.
+
+R13 (artifact, new): a claim to verify and trace: does a pre-school,
+non-school-routed criticism dispatch path still exist in the code, and if
+so, can it be reactivated as the school-free criticism circuit when
+"schools: opt-in" is turned off?

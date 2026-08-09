@@ -1269,3 +1269,132 @@ numbering:
   judge-bias-signal wiring those rungs need) — not this tranche's
   implementation, since C4/no-code-this-window still holds, but worth
   naming as the cheapest of all the gaps this SPEC found.
+
+## R13 (Amendment 4) — the pre-school criticism circuit: real, live-elsewhere, one contract away from working
+
+The operator's own words: *"Can you trace the code for criticism before
+schools? Because it exists. And the circuit can be switched back on if
+schools are unwanted."* Traced directly; the claim is correct, and this
+revises §2(c)'s earlier conclusion that the legacy-criticism census found
+"no dormant legacy code requiring its own new flag" — it did not go deep
+enough. This is a genuine, cheap, named legacy-criticism-path opt-in
+candidate that supersedes that conclusion.
+
+**The circuit**: `scheduler/scheduler.py::_arg_crit` (`:1187-1259`) branches
+on whether `criticism_policy` is present:
+```python
+criticism_policy = (
+    self.run_manifest.criticism_policy
+    if self.run_manifest is not None and self.run_manifest.schema_version in {4, 5, 6}
+    else None
+)
+...
+if criticism_policy is not None:
+    self._foreign_arg_crit()      # school-routed path (§1(c), §2(d))
+    return
+eligible: list[str] = [...]        # PLAIN path: no school assignment at all
+...
+for i in range(0, len(eligible), size):
+    batch = eligible[i : i + size]
+    if self.run_manifest is not None and self.run_manifest.schema_version == 6:
+        for target_id in batch:
+            self._defer_untransactional_v6_phase(
+                "argumentative-criticism", "argumentative_critic", target_id,
+            )
+        continue
+    crit_argumentative_batch(harness, batch, self.adapter, config)   # never reached under v6
+```
+The dispatch function itself, `crit_argumentative_batch`
+(`rules/crit.py:1336`), is not a stale duplicate — it is the SAME function
+`_foreign_arg_crit` calls to actually execute school-routed criticism
+(`scheduler.py:1413-1419`, called directly, no deferral check, inside a
+plain try/except). It is proven, live, actively-dispatching code today;
+only the non-school *entry ramp* into it is blocked.
+
+**Reachability of `criticism_policy=None`, verified**: `compile_run_manifest`'s
+own parameter default is `criticism_policy: CriticismPolicyV1 | None = None`
+(`run_manifest.py:2935`). The high-level convenience path every ordinary
+`setup`/`prepare` run goes through, `build_preparation_manifest`
+(`preparation.py:364-400`), unconditionally supplies
+`criticism_policy=engaged_criticism_policy(...)` — schools are never
+optional through that path. But the lower-level `deepreason compile` CLI
+subcommand (`cli/main.py:696-711`) calls `compile_run_manifest` **without
+ever passing `criticism_policy`**, so it already defaults to `None` through
+that path, today, with zero code changes.
+
+**Why it still doesn't fire under v6, precisely**: `_defer_untransactional_v6_phase`
+(`scheduler.py:582-638`) — its own docstring: *"Defer a legacy model phase
+that has no v6 transaction contract. RunManifest v6 makes the adapter fail
+closed on every unbound provider dispatch. Optional legacy scheduler phases
+must therefore become visible completion debt instead of tripping that
+global guard."* For schema v6 it always returns `True`, so the `continue`
+above always fires — `crit_argumentative_batch` is never reached in this
+branch under the only schema version the harness accepts today. Instead a
+permanent, append-only marker is recorded
+(`"v6-model-phase-deferred.v1","argumentative-criticism","argumentative_critic",...`)
+and nothing anywhere in the tree ever reads it back to retry the call —
+confirmed by exhaustive grep: `workflow/criticism.py` (the actual
+v6-transactional criticism machinery) is built exclusively around
+school-keyed `ForeignCriticism*` types, and no other module references the
+`"v6-model-phase-deferred.v1"` marker except the writer
+(`scheduler.py`) and the reporter (`verification/report.py`, which surfaces
+it as a diagnostic finding, `_deferred_model_phase_findings`,
+`verification/report.py:1074`) — it is a one-way "this was skipped" receipt,
+never a retry queue.
+
+**This is a real, general v6-migration pattern, not unique to criticism**:
+the identical shape gates the plain rubric/judge trial too
+(`scheduler.py:1108-1115`: `if self._defer_untransactional_v6_phase("rubric-trial", "judge", ...): continue`)
+and the plain HV-floor check (`scheduler.py:1097-1107`, phase
+`"hv-floor"`/`"hv-spot-check"`) — the latter two are confirmed genuinely
+LIVE and firing (81 occurrences across the committed corpus,
+re-verified directly, e.g.
+`experiments/2026-08-08-corpus-enrichment-patrol-pilot/.../log.jsonl:415`),
+but exclusively for `hv-floor`/`hv-spot-check` — `grep` for
+`"argumentative-criticism"` inside any deferral marker across the entire
+committed corpus returns zero hits, confirming no committed run has yet
+compiled with `criticism_policy=None` while also having eligible targets
+reach this exact branch.
+
+**What "switching it back on" actually requires**: not a config flip alone.
+Two things are already true today (no code needed): `criticism_policy=None`
+is reachable via `deepreason compile`, and the dispatch function
+(`crit_argumentative_batch`) is proven live code. One thing is missing:
+this specific phase needs the same treatment `_foreign_arg_crit`'s
+school-routed call already has — a v6 transaction contract, so
+`_defer_untransactional_v6_phase` either isn't consulted for this phase or
+is backed by a real recovery path (mirroring how
+`workflow/nonconjecture_recovery.py` already recovers OTHER interrupted v6
+transactions, per Half 1(d)'s finding on `config_referee`'s own recovery
+handler). Because the eligibility computation, budget capping
+(`ARG_CRIT_PER_CYCLE`, `RECRIT_STANDING`, `CRIT_BATCH_K`), and the dispatch
+function are all already written and exercised daily via the school-routed
+path, this is a smaller, more contained change than either §5.2's judge-
+summons wiring or the R12 judge-seat-count CLI lever — it is the single
+cheapest concrete finding in this entire tranche.
+
+**Decision-sheet consequence — Road E, added to §2(c)/§2(d)'s scope**:
+
+- **Road E (new, recommended)**: give the `"argumentative-criticism"` phase
+  a v6 transaction contract, making the already-existing
+  `criticism_policy=None` circuit actually dispatch under v6. This becomes
+  the genuine "schools opt-out, criticism keeps working" path §2(d) gestured
+  at without yet naming a mechanism — a school-free `argumentative_critic`
+  seat is not a new seat vocabulary (§5.5's Road B still holds — this is
+  not seat_bindings.py-shaped), it is the pre-existing, non-school
+  dispatch ramp, finished. Should be folded into the legacy-criticism-paths
+  opt-in (§2(c)) as its one concrete, evidenced surface, superseding that
+  section's earlier "no additional distinct surface" conclusion.
+- **Road F — leave it deferred.** Schools remain effectively mandatory for
+  any criticism to actually happen under v6, regardless of whether the
+  operator wants them. This is the status quo Amendment 1 was raised to
+  question in the first place; it does not serve "schools: opt-in"
+  faithfully, since opting out of schools today silently opts out of
+  criticism entirely (a silent, undisclosed consequence exactly of the
+  kind C6 warned against for the schools-as-seats question, now found to
+  apply to schools-as-mandatory-routing too).
+- **Recommendation**: Road E. This is not a design fork with a real
+  trade-off the way §5.1/§5.4/§5.5 are — Road F actively contradicts the
+  operator's stated intent ("schools need to be opt in") by leaving
+  criticism silently dependent on schools being on. Road E is priced here
+  rather than executed only because C4 still holds (no code this window).
