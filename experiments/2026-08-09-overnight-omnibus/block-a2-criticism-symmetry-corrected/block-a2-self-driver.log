@@ -22,3 +22,5 @@ audit_rc=0 tag=q1s3
 converge_rc=0 converge_seconds=1678 tag=q2s1
 run_id=run-ec7f3cdd63e1c39951be34d17e482e9a tag=q2s1
 audit_rc=0 tag=q2s1
+converge_rc=0 converge_seconds=631 tag=q2s2
+run_id=run-4faa222fd2fb014e56c7005107f84ad3 tag=q2s2
