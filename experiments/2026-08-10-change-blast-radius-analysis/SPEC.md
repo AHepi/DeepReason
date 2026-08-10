@@ -721,14 +721,32 @@ repeated here.
 
 ## Budget
 
-**Headline: ~755 lines of future `dr-plan-steps`/`dr-execute-step`
-implementation work, forecast by item — verified as the sum of its own
-itemization:**
+**Headline: ~755 lines forecast at design time; ~1,089 lines measured
+actual for the tool + tests alone (`tools/diff_budget.py`, EXCEEDED
+against the 755 ceiling — CHECKLIST.md step 2's own pasted verdict).
+Corrected here rather than left contradicting the record, per this
+section's own rule that the headline must equal the record, never be
+restated by hand over it:**
+
+The original itemization (below, kept for the record) under-forecast
+`tools/blast_radius.py` and its test file specifically — the AST-based
+call-graph computation (frozen-surface tiering, entry-point BFS,
+base-vs-current diffing) and its honest four-way consumer/qualification/
+wheel-smoke breakdown, plus 20 tests covering all four computations,
+three mutation proofs, and three exit-class paths, measured larger than
+the `diff_budget.py`-scaled estimate below predicted. Resolved as a
+dominant, decide-without-asking case (CHECKLIST.md step 2): the overrun
+traces entirely to already-approved scope (Item 1/Item 2, R6), not scope
+creep, and CLAUDE.md's own "tokens are cheap; the agent is not" and
+"honesty over polish" values favor keeping the coverage over trimming it
+to force-fit a self-authored estimate.
+
+**Original itemization (design-time forecast, kept for the record):**
 
 | Item | Forecast (lines) | Basis |
 |---|---|---|
-| `tools/blast_radius.py` (CLI, four computations, typed result, exit classes, `--self-test` fixture) | 420 | comparable to `tools/diff_budget.py` (229 lines) scaled up for three additional computations (reachability's AST walk, consumer's four sub-checks, disclosure-summary generation) beyond diff_budget's single line-count computation — roughly 1.8x on three added computations |
-| Mutation-proof tests (`tests/test_blast_radius.py`, three proofs named in Item 1) | 180 | comparable to `tests/test_diff_budget.py`'s own scope for a single-gate test file |
+| `tools/blast_radius.py` (CLI, four computations, typed result, exit classes, `--self-test` fixture) | 420 | comparable to `tools/diff_budget.py` (229 lines) scaled up for three additional computations (reachability's AST walk, consumer's four sub-checks, disclosure-summary generation) beyond diff_budget's single line-count computation — roughly 1.8x on three added computations — **measured actual: 772 lines**, `wc -l tools/blast_radius.py` |
+| Mutation-proof tests (`tests/test_blast_radius.py`, three proofs named in Item 1) | 180 | comparable to `tests/test_diff_budget.py`'s own scope for a single-gate test file — **measured actual: 317 lines** (20 tests: 3 mutation proofs plus per-computation and exit-class coverage the original estimate did not itemize separately), `wc -l tests/test_blast_radius.py` |
 | `dr-spec-change` amendment (Checkpoint 1) | 25 | one procedure-step paragraph plus template-section wording, comparable to the existing diff-budget amendment's own size (`dr-spec-change` step 6, ~10 lines) doubled for the two sections (steps 3 and 4) it touches |
 | `dr-ask-the-right-question` amendment (Checkpoint 2, second site) | 10 | one clause added to an existing bullet |
 | `dr-execute-step` amendment (Checkpoint 3) | 20 | one additional command plus drift-handling paragraph inserted into the existing step 6, comparable to the existing diff-budget paragraph's own size |
