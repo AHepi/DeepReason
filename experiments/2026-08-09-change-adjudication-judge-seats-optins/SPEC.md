@@ -1608,3 +1608,99 @@ carried over from this being a mid-execution correction; options were not
 separately priced because M1-M5 leave exactly one viable design, not a
 genuine fork — Road A/Road B from the step-3 stop report are both
 superseded, not chosen between; nothing here is untraceable to R13/R19/R20/C15).
+
+---
+
+## S13h (addendum, found executing CHECKLIST.md step 6) — a fourth guard site M1-M5 missed
+
+`_critic_execution` (`rules/crit.py:106-134`) is called by BOTH
+`crit_argumentative` and `crit_argumentative_batch`, before either reaches
+the `active_v6` branch S13a-g already loosened. It has its own,
+independent all-or-nothing guard:
+```python
+supplied = (
+    endpoint_lease is not None,
+    critic_school_id is not None,
+    critic_school_context is not None,
+)
+if any(supplied) and not all(supplied):
+    raise ValueError(
+        "school-routed criticism requires endpoint_lease, critic_school_id, "
+        "and critic_school_context"
+    )
+```
+Road E's dispatch shape (`endpoint_lease` supplied, `critic_school_id`/
+`critic_school_context` both `None`) is exactly the `any(supplied) and
+not all(supplied)` case this raises on. S13a-g alone does not make Road E
+actually dispatch — this is not a hypothetical, it is the next guard the
+call would hit immediately after S13a-g's changes. M1-M5's read of
+`crit_argumentative_batch`/`_v6_transactional_batch_call`/
+`_v6_transactional_atomic_critic_call` did not include this earlier-called
+helper; that is the miss.
+
+**Design**: add one early-return branch, before the existing all-or-nothing
+check, for exactly the Road E shape (`endpoint_lease` present, both school
+fields absent) — mirroring the existing school-routed return's `call_kwargs`
+shape but with `school_id: None` and no conditioning prefix (there is no
+school stance to render):
+```python
+if endpoint_lease is not None and critic_school_id is None and critic_school_context is None:
+    if endpoint_lease.role != "argumentative_critic":
+        raise ValueError("criticism endpoint lease must belong to argumentative_critic")
+    return (
+        {
+            "endpoint_index": endpoint_lease.seat,
+            "endpoint_lease": endpoint_lease,
+            "school_id": None,
+        },
+        "",
+    )
+```
+Every other combination (all three `None`; all three present; a genuinely
+partial supply like `endpoint_lease` + `critic_school_id` but no context)
+falls through UNCHANGED to the existing logic — byte-identical for every
+existing caller.
+
+- S13h (R19, R20): `rules/crit.py:106-134` — add the branch above.
+  accept: `tests/test_foreign_school_criticism_scheduler_c3.py -q` (its
+  school-routed calls into `crit_argumentative_batch` exercise
+  `_critic_execution` indirectly — it is a private, leading-underscore
+  helper with no direct test-file callers by name, confirmed by
+  `grep -rln "_critic_execution" tests/` returning zero hits) passes
+  unmodified, PLUS a new test,
+  `tests/test_v6_scheduler_model_phase_deferral.py::test_critic_execution_permits_endpoint_only_dispatch`,
+  asserting `_critic_execution(endpoint_lease=<lease>,
+  critic_school_id=None, critic_school_context=None)` returns
+  `({"endpoint_index": ..., "endpoint_lease": ..., "school_id": None}, "")`
+  without raising, AND that the ORIGINAL partial-supply rejection (e.g.
+  `endpoint_lease` + `critic_school_id`, no context) still raises
+  `ValueError` with the original message.
+
+### Frozen-surface contact forecast (S13h)
+
+None — `rules/crit.py`, already covered by S13a-g's forecast.
+
+### Blast-radius census (S13h)
+
+`grep -rln "_critic_execution" tests/ docs/map/` → zero hits in `tests/`
+(it is called only internally by `crit_argumentative`/
+`crit_argumentative_batch`, never named directly by a test); four map
+documents (`SEAM-schools-x-scratch.md`, `SEAM-llm-x-rules.md`,
+`CON-criticism-source.md`, `CON-schools.md`) describe it by name. All four
+classified MUST NOT MOVE — none document the all-or-nothing guard's exact
+three-way shape as an invariant (checked: none of the four contain the
+literal guard text), so none needs updating for a widened combination;
+the real regression surface is `test_foreign_school_criticism_scheduler_c3.py`'s
+indirect exercise via `crit_argumentative_batch`'s school-routed calls,
+already listed under M6's census and re-run as this item's accept
+criterion.
+
+### Budget (S13h)
+
+~15 lines (new branch) + ~20 lines (new test) = 35 lines, added to the
+Road E total: 131 + 35 = **166 lines**, still well inside the 1,600
+ceiling and the ~1,131-line component sum.
+
+Rubric: 4/4 yes (accept criterion present; blast-radius census pasted and
+classified; frozen-surface forecast recorded — none; traceable to
+R19/R20, the same authority as S13a-g, not a new fork).
