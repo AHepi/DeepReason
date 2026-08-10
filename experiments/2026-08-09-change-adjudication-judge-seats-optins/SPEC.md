@@ -1542,11 +1542,36 @@ genuinely school-optional, not by forking a second schema). Concretely:
   exactly mirroring how a plain `select_lease("argumentative_critic", 0)`
   resolves in the dispatch direction. The `school_id is not None` branch
   is UNTOUCHED — byte-identical to today.
+
+  **Authority-recoverability clarification (found alongside S13i, same
+  root cause):** the school-routed branch's `"critic authority is not
+  recoverable"` refusal (`_authority(policy.authority == "observe_only",
+  ...)`, currently checked line-for-line by
+  `docs/map/SEAM-manifest-x-schools.md:133`'s inline check) reads a
+  FROZEN, replay-stable value (`manifest.criticism_policy.authority`) —
+  safe to trust unconditionally at recovery time. Road E's circuit has no
+  such frozen value: per S13i-2, its authority is resolved LIVE from
+  `Config` at dispatch time (`policy_call=False` →
+  `_authority(config)`), and `Config` is not part of the frozen manifest
+  — a resumed run's `Config` could differ from the interrupted attempt's.
+  The None-school branch must NOT skip an authority check entirely (that
+  would be a real, not hypothetical, correctness gap — recovering a call
+  under a resumed run's current, possibly-different `Config` and treating
+  it as equivalent to the original attempt); it must re-derive from the
+  CURRENT resumed run's `Config`/`_authority(config)` and refuse
+  (typed, mirroring the school-routed branch's own conservatism) unless it
+  currently evaluates to `observe_only` — the same restriction the
+  school-routed branch already enforces, applied to the live source of
+  truth this circuit actually has, not a frozen one it does not.
   accept: `tests/test_v6_nonconjecture_recovery.py -q` passes in full,
   including every existing `_criticism_contract`-adjacent test
-  unmodified, PLUS one new test,
-  `test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`,
-  proving the None branch resolves and admits correctly.
+  unmodified, PLUS two new tests,
+  `test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
+  (observe_only case, resolves and admits) and
+  `::test_criticism_contract_refuses_recovery_without_a_school_when_config_authority_is_not_observe_only`
+  (mirrors the school-routed branch's own `'critic authority is not
+  recoverable'` test shape, sourced from `Config` instead of
+  `criticism_policy.authority`).
 - S13f (R19, R20): `scheduler.py::_arg_crit`'s plain branch
   (`:1244-1259`, the code Step 4 was going to touch) — replace the
   `_defer_untransactional_v6_phase(...)` + `continue` with: resolve
