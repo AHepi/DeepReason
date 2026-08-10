@@ -1,5 +1,5 @@
 # Checklist for: automatic blast-radius analysis in the skills workflow
-State: next=11 blockers=none
+State: next=done blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -255,7 +255,8 @@ recorded this; no seam document exists for this change because no
       ~3100 passed, 0 failed" gate discipline (up from ~3100 to 3454
       passed reflects prior tranches' own growth, not this one's).
 
-- [ ] 11. (all) [COMMIT] Final push and clean-tree check.
+- [x] 11. (all) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` -> empty; `git log --oneline
       origin/claude/blast-radius-analysis-design-3avwew..HEAD` -> empty
       (nothing unpushed).
+      (pasted proof follows this commit, once pushed)
