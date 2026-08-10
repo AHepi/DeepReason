@@ -105,7 +105,9 @@ def test_disagreeing_ensemble_and_weak_defender(tmp_path):
         ],
     }
     adapter = LLMAdapter(endpoints, h.blobs, retry_max=1, meter=meter)
-    Scheduler(h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0)).run(3)
+    Scheduler(
+        h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0, JUDGE_SEATS_ENABLED=True)
+    ).run(3)
 
     result = verify_root(root, meter.total)
     assert result["violations"] == [], result["violations"]

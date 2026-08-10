@@ -106,13 +106,20 @@ def trial_authority_for(
 ) -> TrialAuthority:
     """Choose the concrete mode for an LLM trial/comparison.
 
-    Workloads other than text preserve their established mechanical and formal
-    behaviour (gated separately, by JUDGE_SEATS_ENABLED, not this master
-    flag). Schema-v2 manifest preflight rejects text status modes; a
-    calibrated mode remains unavailable until receipt verification exists.
+    Workloads other than text otherwise preserve their established
+    mechanical and formal STATUS behaviour, but that path previously had
+    NO suppression at all (Part D, S2b, 2026-08-10) -- JUDGE_SEATS_ENABLED
+    is the master judge-dispatch gate consulted here, distinct from
+    ADJUDICATION_STATUS_AUTHORITY_ENABLED (Part C), which governs whether
+    a judge's ruling may change status once a judge is already permitted
+    to fire at all. Schema-v2 manifest preflight rejects text status
+    modes; a calibrated mode remains unavailable until receipt
+    verification exists.
     """
 
     if workload_profile != "text":
+        if not bool(_get(config, "JUDGE_SEATS_ENABLED", False)):
+            return TrialAuthority.OBSERVE_ONLY
         return TrialAuthority.STATUS
     mode = text_authority_mode(config, surface)
     if mode == TextAuthorityMode.CALIBRATED_STATUS:

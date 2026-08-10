@@ -547,8 +547,11 @@ def test_scheduler_conjectures_ground_truth_and_kills_the_trap(tmp_path):
         harness.blobs,
         retry_max=2,
     )
-    config = Config(VS_K=1, N_SCHOOLS=0, GEN_PROPOSE_PERIOD=0,
-                    PROP_PROPOSE_PERIOD=1, PROP_MAX=1)
+    config = Config(
+        VS_K=1, N_SCHOOLS=0, GEN_PROPOSE_PERIOD=0,
+        PROP_PROPOSE_PERIOD=1, PROP_MAX=1,
+        JUDGE_SEATS_ENABLED=True, ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+    )
     scheduler = Scheduler(harness, adapter, config)
     scheduler.step()
     assert harness.state.status[trap.id] == Status.REFUTED  # same-cycle kill

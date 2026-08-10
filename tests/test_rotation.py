@@ -71,7 +71,9 @@ def _starvation_setup(tmp_path, **config_kwargs):
         harness.blobs,
         retry_max=2,
     )
-    config = Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0, **config_kwargs)
+    config = Config(
+        VS_K=1, N_SCHOOLS=0, FUZZ_N=0, JUDGE_SEATS_ENABLED=True, **config_kwargs
+    )
     return harness, Scheduler(harness, adapter, config), conj_calls
 
 
@@ -169,7 +171,10 @@ def test_transport_drop_defers_instead_of_burning_the_futility_cap(tmp_path):
     )
     scheduler = Scheduler(
         harness, adapter,
-        Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0, DISC_ATTEMPTS_MAX=2, DISC_COOLDOWN=0),
+        Config(
+            VS_K=1, N_SCHOOLS=0, FUZZ_N=0, DISC_ATTEMPTS_MAX=2, DISC_COOLDOWN=0,
+            JUDGE_SEATS_ENABLED=True,
+        ),
     )
     for _ in range(4):
         scheduler.step()

@@ -1255,15 +1255,33 @@ low-level `deepreason compile` path reaching it.
 ## PART D — Judge seats opt-in
 (S: SPEC.md §2(b); R2, R6, R10, C3, C7)
 
-- [ ] 33. (S2b, R2) Reader/default test FIRST:
+- [x] 33. (S2b, R2) Reader/default test FIRST:
       `tests/test_judge_ensemble_boundary.py::test_judge_seats_disabled_by_default_is_byte_identical`
       — `Config().JUDGE_SEATS_ENABLED is False`, existing judge-dispatch
       tests unmodified. done-when: fails only on missing attribute.
-- [ ] 34. (S2b, R2) Add `JUDGE_SEATS_ENABLED: bool = False`,
+
+      File and test name both correct.
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py::test_judge_seats_disabled_by_default_is_byte_identical -q
+      AttributeError: 'Config' object has no attribute 'JUDGE_SEATS_ENABLED'
+      1 failed in 0.10s
+      ```
+- [x] 34. (S2b, R2) Add `JUDGE_SEATS_ENABLED: bool = False`,
       `JUDGE_SUMMONS_PER_CYCLE: int = 0`, `JUDGE_SUMMONS_COOLDOWN: int = 4`
       to `config.py`, modeled on `ADVISORY_TRIALS_PER_CYCLE`/`DISC_COOLDOWN`'s
       existing shape (`config.py:401,441-442`). done-when: Step 33's
       attribute half passes.
+
+      Placed right before `ADVISORY_TRIALS_PER_CYCLE` (the master gate
+      ahead of the field it's most conceptually adjacent to), matching
+      how `ADJUDICATION_STATUS_AUTHORITY_ENABLED` was placed ahead of
+      `ARGUMENTATIVE_AUTHORITY` in Step 25.
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py::test_judge_seats_disabled_by_default_is_byte_identical -q
+      1 passed in 0.07s
+      ```
 - [ ] 35. (S2b, R2) [COMMIT] Gate every current judge-dispatch site on
       `JUDGE_SEATS_ENABLED`: `scheduler.py:1116-1117` (rubric-trial
       `has_role("judge")` check), `scheduler.py:2167-2168` (audit-step),

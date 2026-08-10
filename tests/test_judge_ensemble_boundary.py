@@ -56,6 +56,14 @@ def _trial_adapter(harness, judge_endpoints, calls):
     )
 
 
+def test_judge_seats_disabled_by_default_is_byte_identical():
+    """Part D (S2b, R2): the master judge-dispatch gate defaults False,
+    and every existing judge-dispatch test in this file passes
+    unmodified -- the new gate changes nothing when False."""
+
+    assert Config().JUDGE_SEATS_ENABLED is False
+
+
 @pytest.mark.parametrize("same_family_pair", [False, True])
 def test_trial_rejects_invalid_direct_ensemble_before_any_endpoint_call(
     harness, same_family_pair

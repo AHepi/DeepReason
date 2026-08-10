@@ -1113,7 +1113,7 @@ class Scheduler:
                     kappa.id,
                 ):
                     continue
-                if not self.adapter.has_role("judge"):
+                if not self.adapter.has_role("judge") or not config.JUDGE_SEATS_ENABLED:
                     continue
                 from deepreason.informal.trial import run_trial
 
@@ -2155,6 +2155,7 @@ class Scheduler:
             or self._cycles % self.config.AUDIT_PERIOD != 0
             or not self.adapter.has_role("judge")
             or not self.adapter.has_role("variator")
+            or not self.config.JUDGE_SEATS_ENABLED
         ):
             return
         if self._defer_untransactional_v6_phase(
@@ -2272,6 +2273,7 @@ class Scheduler:
             or self._cycles % config.PROP_PROPOSE_PERIOD != 0
             or not self.adapter.has_role("property_designer")
             or not self.adapter.has_role("judge")
+            or not config.JUDGE_SEATS_ENABLED
         ):
             return
         from deepreason.oracle import PROPERTY_PROGRAM

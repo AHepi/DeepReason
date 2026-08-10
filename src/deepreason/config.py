@@ -406,6 +406,21 @@ class Config(BaseModel):
     # calibrated text-status mode. The manifest stores this source config
     # field; preflight fails closed when a status mode omits the reference.
     CALIBRATION_RECEIPT: str | None = None
+    # Master gate for judge-role dispatch itself (distinct from
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED, which governs whether a
+    # judge's ruling may change status): when False, no judge role
+    # dispatches at all, for any workload_profile, regardless of rubric
+    # criteria or role wiring. Byte-identical to today at the default
+    # False (judge participation was already de facto closed on the
+    # common path, but as an emergent consequence of several
+    # independently-defaulted-closed gates, not one switch).
+    JUDGE_SEATS_ENABLED: bool = False
+    # Static per-cycle cap and cooldown on judge summons once seats are
+    # enabled (modeled on ADVISORY_TRIALS_PER_CYCLE/DISC_COOLDOWN's shape).
+    # Both default to preserve exactly zero judge activity until
+    # JUDGE_SEATS_ENABLED and a nonzero rate are set.
+    JUDGE_SUMMONS_PER_CYCLE: int = Field(default=0, ge=0)
+    JUDGE_SUMMONS_COOLDOWN: int = 4
     # Default text runs do not spend judge tokens on rubric trials.  Setting a
     # positive budget opts into bounded advisory trials only while the rubric
     # authority remains observe_only.

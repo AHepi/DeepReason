@@ -188,9 +188,16 @@ def test_valid_fail_refutes_only_theorem_and_cascades_through_explicit_support(t
 
 
 def test_formal_verifier_authority_survives_text_policy_layer(tmp_path: Path):
-    """The new text gate cannot demote a verifier-backed formal failure."""
+    """The text gate (ADJUDICATION_STATUS_AUTHORITY_ENABLED, Part C) cannot
+    demote a verifier-backed formal failure -- it never touches this
+    branch. Reaching STATUS at all for a non-text workload now also
+    requires JUDGE_SEATS_ENABLED (Part D closed the one gap with no
+    existing suppression), unrelated to the text-authority question this
+    test protects."""
     assert (
-        trial_authority_for(Config(), "formal", AuthoritySurface.RUBRIC)
+        trial_authority_for(
+            Config(JUDGE_SEATS_ENABLED=True), "formal", AuthoritySurface.RUBRIC
+        )
         == TrialAuthority.STATUS
     )
     harness = Harness(tmp_path / "run")
