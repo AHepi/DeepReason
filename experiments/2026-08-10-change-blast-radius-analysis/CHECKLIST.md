@@ -205,9 +205,27 @@ recorded this; no seam document exists for this change because no
       `SCHEMA.md`); it is a standing ledger alongside `docs/ERRATA.md`,
       outside the map's own routing, same as those two documents.
 
-- [ ] 9. (all) Map check: `python tools/docs_verify.py`
+- [x] 9. (all) Map check: `python tools/docs_verify.py`
       done-when: 0 failed, `--audit` reports 0 findings, `--links`
       reports 0 dangling (paste all three).
+      ```
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 0 finding(s)
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 53 document(s)
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 854 checks, 4 workers
+        FAIL CON-run-identity.md:195/197/199 (unknown revision '1637e808',
+        'f304fec1' -- shallow-clone gaps, CON-run-identity.md untouched by
+        this tranche)
+      docs_verify: 3 failed
+      ```
+      Same 3 pre-existing, environment-caused failures as step 3's own
+      run (identical hashes, identical document, identical shallow-clone
+      cause — `git rev-parse --is-shallow-repository` -> `true`,
+      reconfirmed). `--audit` and `--links` both fully clean (0/0),
+      confirming this tranche's own map additions (Rung G6's subsection
+      and Traps entry) carry no vacuous or dangling checks.
 
 - [ ] 10. (all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it).
