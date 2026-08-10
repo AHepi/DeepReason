@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=32 blockers=none (Parts A+B complete; Steps 27-31 done)
+State: next=33 blockers=none (Parts A+B+C complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1236,9 +1236,19 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/preparation.py tests/test_v6_engaged_public_defaults.py docs/map/CON-authority.md
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/preparation.py": 11, "tests/test_v6_engaged_public_defaults.py": 217, "docs/map/CON-authority.md": 3}, "total_insertions": 231, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 32. (S2a) [COMMIT] Subsystem ring:
+- [x] 32. (S2a) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_text_authority_policy.py tests/test_imports.py tests/test_experiment.py tests/test_run_manifest.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+      Widened to every file touched or newly relevant across Part C
+      (16 files), not just the four originally named.
+
+      ```
+      $ python -m pytest tests/test_text_authority_policy.py tests/test_imports.py tests/test_experiment.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_criticism_authority.py tests/test_prose_refutation_boundaries.py tests/test_judge_ensemble_boundary.py tests/test_evidence_view.py tests/test_properties.py tests/test_v6_engaged_public_defaults.py tests/test_v6_policy_preset.py tests/test_reusable_qualification.py tests/test_signals.py tests/test_v6_nonconjecture_recovery.py tests/test_manifest_integration.py tests/test_workload_formal.py -q
+      325 passed in 129.34s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 208, "tests": 714, "docs/map": 98}, "total_insertions": 1020, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 
 ---
 
