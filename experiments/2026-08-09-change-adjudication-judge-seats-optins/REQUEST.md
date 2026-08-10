@@ -487,3 +487,89 @@ confirmed behaviorally identical to today for every combination reachable
 before S13h (checked: every existing test/map check on `policy_call`/
 `_resolve_authority` supplies `policy_call` explicitly, never depends on
 its internal computation). Recorded as SPEC.md's S13i.
+
+### Amendment 9 (2026-08-10, mid-execution of Part D, operator's own words, not yet actioned — frozen-surface grant request pending)
+
+> A few questions. When this is done: will judge seats be assignable at the
+> beginning without restriction. No rules about different families
+> required. Is installing no judge or one judge optional? Also, can I swap
+> out schools criticism mechanism for another one if I make it in the
+> future? Or can I swap out schools for the legacy criticism route without
+> causing a crash?
+
+> Ok. Judge seat assignment needs to be without restriction. That's why I
+> wanted everything to be modular. it isn't about the quality of work
+> done, but the testability of various model configurations. Also, the
+> split between schools and criticism needs to happen. That's what I said
+> above. But that's later. What are you building instead?
+
+> Same model grading it's own answer should be a legitimate and minting
+> should still happen. Observe only should also be an optional config.
+
+R22 (behavior, new): "judge seat assignment needs to be without
+restriction. No rules about different families required" +
+"Same model grading it's own answer should be a legitimate and minting
+should still happen" — a genuinely single-model judge configuration (the
+same model occupying every judge seat, no cross-family or cross-school
+diversity at all) must be constructible AND must be able to mint a real,
+status-changing warrant when a defended/rubric trial rules — not be
+silently forced to `observe_only`, and not refused at compile or dispatch
+time on independence grounds. The operator's own framing: "it isn't about
+the quality of work done, but the testability of various model
+configurations" — this is a request for CONFIGURABILITY of the
+independence guarantee, not a claim that self-graded rulings are
+epistemically as strong as cross-family ones.
+
+R23 (process, new, explicit non-removal): "Observe only should also be an
+optional config." — R22 must not remove or narrow `observe_only`'s
+existing standing as a selectable, judge-free, zero-cost floor
+(`ADJUDICATION_STATUS_AUTHORITY_ENABLED=False`/`TrialAuthority.OBSERVE_
+ONLY`'s current default path, S2(a)/S2(b) as already shipped this
+tranche); it must remain reachable exactly as it is today, alongside the
+new same-model-mints road R22 adds.
+
+C16 (process, standing, restated from R19/Amendment 7): "the split between
+schools and criticism needs to happen... But that's later" — the operator
+explicitly defers the schools/criticism separation beyond R19/R20/R21's
+already-delivered architectural separation (S13i) to a FURTHER, unscoped
+future tranche; not a requirement of this window.
+
+**Blast radius (read, not yet touched, per Amendment 6's "any other
+run_manifest.py hunk is a stop, not a judgment call"):** R22 requires
+relaxing an INDEPENDENCE GUARANTEE enforced at two frozen layers, both
+outside Amendment 6's narrow pop-line grant:
+- `run_manifest.py`'s compile-time `V4_CRITICISM_CROSS_FAMILY_JUDGES_
+  REQUIRED` validator (`SECOND_JUDGE_FAMILY_REQUIRED`, four raise sites:
+  `run_manifest.py:1524,2397,2832,3207,3797`) and the `single_model`
+  branch of `compile_run_manifest` (SPEC.md's own "Road C" finding,
+  §5.2's decision sheet: genuinely single-model, same-model-in-both-
+  judge-seats "is not constructible through any operator-facing surface
+  today", explicitly priced as Road C and deferred by Amendment 5's own
+  resolution to "that later tranche" — R22 now pulls this back into
+  scope).
+- `llm/firewall.py`'s runtime gate: `is_single_model_run`/
+  `is_single_family_run` (`firewall.py:300-338`) and
+  `require_cross_family_judge_ensemble` (`firewall.py:341-358`, raises
+  `JudgeEnsemblePolicyError`/`SECOND_JUDGE_FAMILY_REQUIRED` whenever
+  `len(seats) < 2 or len(families) < 2`) — consulted from
+  `LLMAdapter._select_judge_ensemble`/`require_cross_family_judges`
+  (`adapter.py:648-674`). A same-school substitute already exists
+  (`require_cross_school_judge_ensemble`, gated on
+  `school_judge_bindings` + `is_single_family_run`) but requires DISTINCT
+  schools, not merely the same model — R22 asks for a road with NEITHER
+  family NOR school diversity.
+
+Both sites carry explicit design-rationale comments stating the opposite
+of R22 today (`is_single_model_run`'s docstring: "this predicate unlocks a
+substitute for an independence guarantee... must not fire on a run that
+has more independence available than it thinks") — R22 is a genuine
+reversal of that rationale's scope (from "no substitute without SOME
+diversity axis" to "a substitute is available with zero diversity, as an
+explicit operator choice"), not a bug in it. This is exactly the shape of
+contact Amendment 5/6 name as a hard stop rather than a judgment call: not
+predicted by SPEC.md's frozen-surface forecast (Road C was priced and then
+explicitly deferred), and reaching both `run_manifest.py` beyond its pop-
+line grant and (arguably) `llm/firewall.py`. Per this tranche's own rule,
+this needs its own scoped grant, ledgered as its own numbered amendment,
+before any implementation — not assumed from R22's behavioral statement
+alone. STOP, pending that grant.
