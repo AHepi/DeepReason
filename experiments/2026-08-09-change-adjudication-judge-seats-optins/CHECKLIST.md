@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=36 blockers=none (Parts A+B+C complete; Part D steps 33-35 complete)
+State: next=37 blockers=none (Parts A+B+C complete; Part D steps 33-36 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1344,7 +1344,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 243, "tests": 792, "docs/map": 111}, "total_insertions": 1146, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 36. (S2b, R6/R10) Throttle wiring: `JUDGE_SUMMONS_PER_CYCLE`/
+- [x] 36. (S2b, R6/R10) Throttle wiring: `JUDGE_SUMMONS_PER_CYCLE`/
       `JUDGE_SUMMONS_COOLDOWN` are STATIC caps only (Amendment 5's
       benching — no signal-adaptive behavior in this tranche). Wire them
       identically to how `ADVISORY_TRIALS_PER_CYCLE`/`DISC_COOLDOWN`
@@ -1352,6 +1352,59 @@ low-level `deepreason compile` path reaching it.
       dispatch site(s) Step 35 gated. done-when:
       `tests/test_budget.py::test_judge_summons_per_cycle_cap` and
       `::test_judge_summons_cooldown` both pass.
+
+      New `Scheduler._judge_summons_admitted(key)` helper: a per-cycle
+      counter (`_judge_summons_this_cycle`, reset in `step()`, modeled on
+      `_advisory_trials_this_cycle`) plus a per-target cooldown dict
+      (`_judge_summons_last`, modeled on `_disc_last`). Consulted at all
+      three `JUDGE_SEATS_ENABLED` dispatch sites from Step 35: the rubric-
+      trial branch (keyed `artifact.id:commitment.id`), `_audit_step`
+      (keyed `"audit:run"`, checked after its v6-defer check so a deferred
+      audit never spends real-dispatch budget), and `_property_step`
+      (keyed `problem.id:cid`, checked right before `propose_properties`
+      for the same reason). Both fields default to preserve exactly zero
+      judge activity (`JUDGE_SUMMONS_PER_CYCLE=0`) even with
+      `JUDGE_SEATS_ENABLED=True`, per SPEC.md's own prediction — an
+      operator must set a nonzero rate too.
+
+      **Collateral (predicted reachability, same pattern as every prior
+      part):** `test_properties.py::test_scheduler_conjectures_ground_
+      truth_and_kills_the_trap` and `test_chaos_invariants.py::test_
+      disagreeing_ensemble_and_weak_defender` set `JUDGE_SEATS_ENABLED=
+      True` but not the new per-cycle cap; both got `JUDGE_SUMMONS_PER_
+      CYCLE` added to their `Config(...)`.
+
+      **Test design note:** both new tests call `scheduler._criticize`
+      directly rather than driving a full `run()` — VS_K>1 rivals on one
+      problem spawn discrimination, an existing judge-dispatch path
+      outside Step 35's scope (pairwise trials, not rubric/audit/
+      property-relevance) that isn't throttled by this gate at all and
+      would contaminate a call-count assertion trying to isolate it. Each
+      admitted rubric trial also consults BOTH cross-family judge seats
+      (`require_cross_family_judges`), so the counters in these tests are
+      2x/4x the number of trials, not the number of judge calls 1:1 — the
+      tests' comments spell this out explicitly rather than leaving a
+      "why 2, why 4" for a future reader to re-derive.
+
+      **Map staleness fixed in the same commit:**
+      `SEAM-scheduler-x-rules.md`'s pinned scheduler-side config-field-
+      read count moved `(12, 30)` → `(12, 32)` for the two new
+      `config.JUDGE_SUMMONS_PER_CYCLE`/`config.JUDGE_SUMMONS_COOLDOWN`
+      reads (the `rules/` count and the `FUZZ_N` intersection unchanged).
+      A first `docs_verify.py` run genuinely caught this stale check —
+      not a false alarm — confirming the check still does its job.
+
+      ```
+      $ python -m pytest tests/test_budget.py -q
+      11 passed in 0.62s
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_scheduler.py tests/test_properties.py tests/test_workload_formal.py tests/test_rotation.py tests/test_chaos_invariants.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_budget.py tests/test_imports.py tests/test_experiment.py -q
+      91 passed in 29.09s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 902, "docs/map": 111}, "total_insertions": 1284, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 37. (S2b, R2) Reconciliation test with the cross-family gate (solo
       law): `JUDGE_SEATS_ENABLED=True` on a genuinely single-model-family
       run still refuses typed (`SECOND_JUDGE_FAMILY_REQUIRED`) at the same
