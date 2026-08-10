@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=45 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-44b complete -- BOTH independent school-seat levers now fully wired: conjecture-side `--school-seat` (Step 44) and criticism-side `--criticism-seat` (Step 44b, reusing the renamed `_school_seat_route_ensemble` helper and `parse_school_seat_flags`, its own `criticism-seat-bindings.yaml` persistence file, and `engaged_criticism_policy`'s new `seat_map` keyword), each with its own master-gate/prerequisite refusal tests and CLI round-trip tests; full gate + full docs_verify both 0 failed; next is Step 45, the Consequence-A regression test; diff-budget base a942f404c, 743/1600)
+State: next=52 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E FULLY COMPLETE, steps 42-51 -- both independent school-seat levers wired (conjecture-side `--school-seat` Step 44, criticism-side `--criticism-seat` Step 44b), Consequence-A/B regression tests (45-46), CLI disclosure text for both (47, 49), qualification-subject-exclusion test (48), map updated for both levers (50), subsystem-ring batch commit (51); targeted sweep 260 passed, `docs_verify --fast` 0 failed, full `docs_verify` launched in background (authority of record; any miss becomes a follow-up fix, not a retroactive edit); next is Step 52, Part F's static signal-read surface; diff-budget base a942f404c, 1068/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1919,31 +1919,139 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 360, "tests": 579, "docs/map": 46}, "total_insertions": 985, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 47. (S2d) CLI operator-facing surface: `--seat school-N=<profile>`'s
+- [x] 47. (S2d) CLI operator-facing surface: `--seat school-N=<profile>`'s
       help text names Consequence B explicitly (a school-seat opt-in that
       adds route diversity anywhere in the run's role table can revoke the
       argument trial's cross-school substitute for the judge role) —
       static string, not new research. done-when:
       `tests/test_cli.py::test_school_seat_flag_surfaces_single_model_warning`
       passes.
-- [ ] 48. (S2d, C3) `_versioned_source_config_data` pop-line for
+
+      No `[COMMIT]` tag — bundled into Step 51's subsystem-ring commit.
+
+      **Filename correction (same pattern as Steps 16/20/44/44b):**
+      `tests/test_cli.py` does not exist; every other `--setup`-flag
+      help-text test this tranche added lives in
+      `tests/test_cli_setup_seats.py` (mirrors
+      `test_judge_seats_flag_help_text_also_surfaces_the_evidence`'s own
+      shape exactly).
+
+      Added one sentence to `--school-seat`'s help text (`cli/main.py`)
+      naming the flip Step 46 proved: adding route diversity anywhere in
+      the role table can revoke the argument trial's cross-school
+      substitute for the judge role, turning a graceful decline into a
+      hard preflight failure there.
+
+      ```
+      $ python -m pytest tests/test_cli_setup_seats.py -q
+      10 passed in 0.43s
+      ```
+- [x] 48. (S2d, C3) `_versioned_source_config_data` pop-line for
       `SCHOOL_SEATS_ENABLED`. Qualification-subject-exclusion test (same
       shape as Step 20).
-- [ ] 49. (S2d) Solo-law/qualification-cost disclosure: help text also
+
+      No `[COMMIT]` tag — bundled into Step 51's subsystem-ring commit.
+      Pop-line half already done at Step 43 (same commit that added the
+      field). This step is the remaining qualification-subject-exclusion
+      test, `tests/test_reusable_qualification.py::
+      test_school_seats_enabled_field_excluded_from_subject_digest`,
+      mirroring `test_judge_seats_fields_excluded_from_subject_digest`'s
+      exact shape.
+
+      ```
+      $ python -m pytest tests/test_reusable_qualification.py -q
+      37 passed in 17.37s
+      ```
+- [x] 49. (S2d) Solo-law/qualification-cost disclosure: help text also
       names the qualification-battery cache-miss cost
       (`docs/map/SEAM-manifest-x-schools.md:137-144`) of moving a school
       to a different seat. done-when: same test file as Step 47 gains an
       assertion for this string.
-- [ ] 50. (S2d) Map update, same commit: `docs/map/SEAM-manifest-x-schools.md`
+
+      No `[COMMIT]` tag — bundled into Step 51's subsystem-ring commit.
+      Added one more sentence to `--school-seat`'s help text naming the
+      cache-miss cost (pair inventory -> subject digest -> full battery
+      rerun), and
+      `tests/test_cli_setup_seats.py::test_school_seat_flag_surfaces_qualification_cache_miss_cost`.
+
+      ```
+      $ python -m pytest tests/test_cli_setup_seats.py -q
+      11 passed in 0.54s
+      ```
+- [x] 50. (S2d) Map update, same commit: `docs/map/SEAM-manifest-x-schools.md`
       gains a note that `route_bound` mode is no longer dormant-in-every-
       shipped-configuration — it is now reachable via
       `SCHOOL_SEATS_ENABLED`, still defaulting off. Update the seam's own
       "Every `SchoolExecutionPolicyV1` constructed anywhere in `src/` is
       `conditioning_only`" check to account for the new (default-off)
       exception.
-- [ ] 51. (S2d) [COMMIT] Subsystem ring:
+
+      No `[COMMIT]` tag — bundled into Step 51's subsystem-ring commit.
+
+      **Already substantially done, discovered checking the current
+      state before writing:** the `route_bound`-conjecturer half of this
+      step (the trap rewrite plus its check, and the file-census
+      count/list fix) was already completed as a MID-STEP docs_verify fix
+      during Step 44's core-mechanism work, before this CHECKLIST entry
+      was reached in order. Verified it's still accurate and complete —
+      no further conjecturer-side edit needed.
+
+      **New this step:** Step 44b's criticism-side counterpart
+      (`engaged_criticism_policy`'s `seat_map` parameter) was NOT yet
+      documented here — Step 44b's own commit never touched this file.
+      Fixed two staleness/gap points found reading the doc fresh: (1) the
+      "The only in-tree author" table row (`engaged_criticism_policy`,
+      `PUBLIC_SCHOOL_COUNT`) still said it "binds all four public schools
+      to the single critic seat" unconditionally — now notes the optional
+      `seat_map` divergence. (2) Added a new Traps entry distinguishing
+      the two levers' shapes: `SchoolExecutionPolicyV1` has a `mode`
+      literal to flip (conjecturer side); `CriticismPolicyV1` has no such
+      field and never did — the criticism-side lever is a builder
+      PARAMETER (`seat_map`), not a policy mode, so a future reader
+      should not go looking for a `route_bound`-style criticism mode.
+
+      ```
+      $ grep -q "seat_map: Mapping\[str, tuple\[int, str\]\] | None = None" src/deepreason/v6_policy.py && echo OK1
+      OK1
+      $ grep -q "CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM" src/deepreason/preparation.py && echo OK3
+      OK3
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -k criticism_seat -q
+      3 passed, 17 deselected in 0.31s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 853 checks, 775 reused, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 51. (S2d) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_run_manifest.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_judge_ensemble_boundary.py tests/test_cli.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+      **Filename correction (same pattern as every prior step):**
+      `tests/test_cli.py` does not exist; substituted
+      `tests/test_cli_setup_seats.py`, this tranche's real home for every
+      `--setup`-flag CLI test.
+
+      This is the batched commit for Steps 45-51 (none of which carried
+      their own `[COMMIT]` tag, per the CHECKLIST's own ordering) — Part
+      E's conjecture-side (`--school-seat`, Step 44) and criticism-side
+      (`--criticism-seat`, Step 44b) levers are now both fully specced,
+      built, tested, disclosed, and documented.
+
+      ```
+      $ python -m pytest tests/test_run_manifest.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_judge_ensemble_boundary.py tests/test_cli_setup_seats.py -q
+      94 passed in 2.19s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_criticism_school_execution_c3.py tests/test_reusable_qualification.py tests/test_qualification_per_seat.py tests/test_cli_setup_seats.py tests/test_seat_bindings.py tests/test_config.py tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py -q
+      260 passed in 55.43s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 853 checks, 775 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 370, "tests": 633, "docs/map": 65}, "total_insertions": 1068, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+      (Full, non-`--fast` `docs_verify.py` was also launched and is the
+      authority of record; if it had surfaced anything `--fast`'s reuse
+      missed, that would appear as a follow-up fix in the next step's
+      diff rather than retroactively edited into this one, per the
+      map's own "never silently patch" discipline.)
 
 ---
 

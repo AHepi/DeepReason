@@ -76,6 +76,39 @@ def test_setup_without_school_seat_flag_writes_no_school_seat_bindings(tmp_path,
     assert load_seat_bindings(school_seat_bindings_path()) == {}
 
 
+def test_school_seat_flag_surfaces_single_model_warning():
+    """Step 47 (S2d, Consequence-B disclosure): `--school-seat`'s own
+    --help text names the side effect Step 46 proved is real -- adding
+    route diversity anywhere in the role table (including here, on
+    conjecturer) can flip the whole run out of single-model status and
+    revoke the argument trial's cross-school substitute for the judge
+    role. Static string, not new research; a filename correction from the
+    CHECKLIST's original `tests/test_cli.py` (that file does not exist --
+    every other CLI-flag-help test in this tranche already lives in
+    `tests/test_cli_setup_seats.py`)."""
+
+    parser = build_parser()
+    setup_help = parser._subparsers._group_actions[0].choices["setup"].format_help()
+    normalized = " ".join(setup_help.split()).replace("- ", "-")
+    assert "single-model" in normalized
+    assert "cross-school" in normalized
+    assert "judge" in normalized
+
+
+def test_school_seat_flag_surfaces_qualification_cache_miss_cost():
+    """Step 49 (S2d): `--school-seat`'s --help text also names the
+    qualification-battery cache-miss cost of moving a school to a
+    different seat (`docs/map/SEAM-manifest-x-schools.md:137-144` --
+    binding topology decides the pair inventory, which decides the
+    subject digest, which decides whether the battery reruns)."""
+
+    parser = build_parser()
+    setup_help = parser._subparsers._group_actions[0].choices["setup"].format_help()
+    normalized = " ".join(setup_help.split()).replace("- ", "-")
+    assert "cache miss" in normalized
+    assert "qualification" in normalized
+
+
 def test_setup_with_criticism_seat_flag_writes_criticism_seat_bindings(tmp_path, monkeypatch):
     """Step 44b (S2d/R27): setup accepts a per-school criticism-side profile
     path, persisted separately from BOTH the role-group --seat file and the

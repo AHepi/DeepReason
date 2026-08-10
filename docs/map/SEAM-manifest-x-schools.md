@@ -49,7 +49,7 @@ live where a reader expects it.
 | Referee seat | `referee.py` | `run_config_referee` | picks `min(binding.school_id)` off the manifest — the one school id chosen without consulting the roster |
 | Qualification inventory | `run_manifest.py`, `cli/doctor.py` | `_route_seat_behavioral_contract_assignments`, `production_contract_pairs` | which critic seats get probed comes from the criticism bindings |
 | Replay | `invariants.py` | `verify_root` (`school-route`, `foreign-criticism`) | every `SchoolRouteReceiptV1` re-derived against the bindings; coverage counted against `minimum_foreign_school_coverage` |
-| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` |
+| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` by default; an optional `seat_map` (Step 44b, Amendment 11/R27) lets named schools diverge to a distinct seat, still dormant unless `preparation.py` supplies one |
 
 Two of those rows have no test anywhere in `tests/`: nothing imports
 `resolve_conjecture_route` or `compile_criticism_assignments`, so their claims
@@ -233,6 +233,24 @@ CLI surface, and still dormant in every default/shipped configuration —
 do not read the default dormancy as evidence the path is unreachable.
 
 `check: python -c "import ast,pathlib; modes=[(p.name, next((k.value.value for k in n.keywords if k.arg=='mode'), None)) for p in pathlib.Path('src/deepreason').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='SchoolExecutionPolicyV1']; assert sorted(modes) == [('v6_policy.py','conditioning_only'),('v6_policy.py','conditioning_only'),('v6_policy.py','route_bound')], modes" && grep -q 'mode: Literal\["conditioning_only", "route_bound"\]' src/deepreason/run_manifest.py && grep -q "def route_bound_school_execution_policy" src/deepreason/v6_policy.py && grep -q "SCHOOL_SEATS_DISABLED" src/deepreason/preparation.py`
+
+**Criticism's counterpart is a parameter, not a mode — never confuse the
+two shapes.** Unlike `SchoolExecutionPolicyV1`, `CriticismPolicyV1` has
+no `mode` field to flip; there was never a `conditioning_only` to
+supersede. Step 44b's `--criticism-seat school-N=<profile>` instead
+gives `engaged_criticism_policy` an optional `seat_map` argument — every
+call site that omits it (still every SHIPPED preset) gets the
+byte-identical shared-seat-0 policy; `preparation.py::build_preparation_
+manifest` is the only caller that ever supplies one, gated on BOTH
+`Config.SCHOOL_SEATS_ENABLED` and `Config.LEGACY_CRITICISM_ENABLED is
+False` (`RunManifestError` typed `CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_
+CRITICISM` otherwise). Same dormant-by-default shape as the conjecturer
+lever above, different mechanism — do not go looking for a
+`route_bound`-style criticism mode; it does not exist and was never
+planned (Amendment 11: schools are a conjecture-side tool; criticism's
+attachment to one is always a separate, optional wire).
+
+`check: grep -q "seat_map: Mapping\[str, tuple\[int, str\]\] | None = None" src/deepreason/v6_policy.py && grep -q "def engaged_criticism_policy" src/deepreason/v6_policy.py && grep -q "CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM" src/deepreason/preparation.py && python -m pytest tests/test_v6_engaged_public_defaults.py -k criticism_seat -q`
 
 **Criticism cannot demand route diversity.** `require_distinct_models` and
 `require_distinct_families` exist on the conjecturer policy only; the criticism

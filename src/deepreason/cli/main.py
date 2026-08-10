@@ -97,7 +97,17 @@ def build_parser() -> argparse.ArgumentParser:
             "SCHOOL_SEATS_ENABLED in your config profile (this flag only "
             "persists the binding; the master gate itself is still set "
             "via --config). Default (no --school-seat) leaves every "
-            "school on the profile above."
+            "school on the profile above. Caution: adding route diversity "
+            "ANYWHERE in the run's role table -- including here, on "
+            "conjecturer -- flips the whole run out of single-model "
+            "status, which can revoke the argument trial's cross-school "
+            "substitute for the (unrelated, untouched) judge role and "
+            "turn a graceful decline into a hard preflight failure there. "
+            "Cost: moving a school to a different seat changes the "
+            "qualification battery's pair inventory, which changes the "
+            "qualification subject digest -- this is a cache miss, not a "
+            "routing tweak, and reruns the full battery (minutes, "
+            "hundreds of provider calls) on the next `deepreason qualify`."
         ),
     )
     setup_cmd.add_argument(

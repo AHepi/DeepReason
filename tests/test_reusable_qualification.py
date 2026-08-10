@@ -252,6 +252,27 @@ def test_judge_seats_fields_excluded_from_subject_digest():
     assert "JUDGE_SUMMONS_COOLDOWN" not in dumped
 
 
+def test_school_seats_enabled_field_excluded_from_subject_digest():
+    """Part E Step 48 (S2d, C3): SCHOOL_SEATS_ENABLED is the shared master
+    gate for the conjecture-side and criticism-side school-seat levers
+    (Steps 44/44b) -- consulted only at `preparation.build_preparation_
+    manifest`'s own defense-in-depth check, never written to the manifest,
+    same shape as ADJUDICATION_STATUS_AUTHORITY_ENABLED/JUDGE_SEATS_ENABLED
+    above. The `_versioned_source_config_data` pop-line itself was already
+    added at Step 43 (the same commit that added the field, per the
+    established pop-line trap); this is the qualification-subject half."""
+
+    profile = _profile()
+    manifest = _manifest(
+        profile,
+        config_updates={"SCHOOL_SEATS_ENABLED": True},
+    )
+
+    payload = qualification_subject_payload(manifest, profile)
+
+    assert "SCHOOL_SEATS_ENABLED" not in json.dumps(payload)
+
+
 def test_incomplete_cache_is_never_reusable(tmp_path):
     profile = _profile()
     manifest = _manifest(profile)
