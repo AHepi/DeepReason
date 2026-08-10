@@ -76,8 +76,21 @@ def text_authority_mode(config, surface: AuthoritySurface | str) -> TextAuthorit
     return TextAuthorityMode(raw)
 
 
+def _adjudication_status_authority_enabled(config) -> bool:
+    return bool(_get(config, "ADJUDICATION_STATUS_AUTHORITY_ENABLED", False))
+
+
 def argumentative_authority_mode(config) -> str:
-    """Read the V6 prose-authority mode and reject historical bypasses."""
+    """Read the V6 prose-authority mode and reject historical bypasses.
+
+    Returns the DECLARED value, not the operationally-gated one: this
+    feeds both the actual dispatch decision (`rules/crit.py::_authority`,
+    which applies the master gate itself) and preflight misconfiguration
+    detection (`text_status_authority_issues`, `authority_policy_snapshot`)
+    -- masking a genuine "trial_required without a calibration receipt"
+    issue behind the master gate would hide operator errors, not gate
+    authority.
+    """
 
     raw = _get(config, "ARGUMENTATIVE_AUTHORITY", "observe_only")
     value = _value(raw)
@@ -94,7 +107,8 @@ def trial_authority_for(
     """Choose the concrete mode for an LLM trial/comparison.
 
     Workloads other than text preserve their established mechanical and formal
-    behaviour. Schema-v2 manifest preflight rejects text status modes; a
+    behaviour (gated separately, by JUDGE_SEATS_ENABLED, not this master
+    flag). Schema-v2 manifest preflight rejects text status modes; a
     calibrated mode remains unavailable until receipt verification exists.
     """
 
@@ -102,12 +116,18 @@ def trial_authority_for(
         return TrialAuthority.STATUS
     mode = text_authority_mode(config, surface)
     if mode == TextAuthorityMode.CALIBRATED_STATUS:
-        return (
+        resolved = (
             TrialAuthority.STATUS
             if calibration_receipt_is_verified(config)
             else TrialAuthority.OBSERVE_ONLY
         )
-    return TrialAuthority.OBSERVE_ONLY
+    else:
+        resolved = TrialAuthority.OBSERVE_ONLY
+    if resolved == TrialAuthority.STATUS and not _adjudication_status_authority_enabled(
+        config
+    ):
+        return TrialAuthority.OBSERVE_ONLY
+    return resolved
 
 
 def calibration_receipt_is_verified(config) -> bool:

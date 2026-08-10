@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=24 blockers=none (Parts A+B complete)
+State: next=27 blockers=none (Parts A+B complete; Step 28 done early)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -904,16 +904,33 @@ low-level `deepreason compile` path reaching it.
 ## PART C — Adjudication opt-in
 (S: SPEC.md §2(a); R1, C3)
 
-- [ ] 24. (S2a, R1) Reader/default test FIRST:
+- [x] 24. (S2a, R1) Reader/default test FIRST:
       `tests/test_text_authority_policy.py::test_adjudication_status_authority_disabled_by_default_is_byte_identical`
       — `Config().ADJUDICATION_STATUS_AUTHORITY_ENABLED is False`, and
       every existing authority test in this file still passes unmodified
       (proving the new gate changes nothing when False). done-when: fails
       only on the missing attribute (paste).
-- [ ] 25. (S2a, R1) Add `ADJUDICATION_STATUS_AUTHORITY_ENABLED: bool = False`
+
+      File and test name both correct this time (no correction needed).
+
+      ```
+      $ python -m pytest tests/test_text_authority_policy.py::test_adjudication_status_authority_disabled_by_default_is_byte_identical -q
+      AttributeError: 'Config' object has no attribute 'ADJUDICATION_STATUS_AUTHORITY_ENABLED'
+      1 failed in 0.14s
+      ```
+- [x] 25. (S2a, R1) Add `ADJUDICATION_STATUS_AUTHORITY_ENABLED: bool = False`
       to `config.py`. done-when: Step 24's attribute-existence half
       passes.
-- [ ] 26. (S2a, R1) [COMMIT] Wire the master gate: in `authority.py`'s
+
+      Placed BEFORE `ARGUMENTATIVE_AUTHORITY` (not "adjacent... after", as
+      originally scoped) so the master gate reads first, ahead of the six
+      knobs it governs.
+
+      ```
+      $ python -m pytest tests/test_text_authority_policy.py::test_adjudication_status_authority_disabled_by_default_is_byte_identical -q
+      1 passed in 0.08s
+      ```
+- [x] 26. (S2a, R1) [COMMIT] Wire the master gate: in `authority.py`'s
       resolution functions (`argumentative_authority_mode`,
       `trial_authority_for`, and the `AuthoritySurface`-keyed lookups),
       when `config.ADJUDICATION_STATUS_AUTHORITY_ENABLED` is False, force
@@ -928,6 +945,91 @@ low-level `deepreason compile` path reaching it.
       `ADJUDICATION_STATUS_AUTHORITY_ENABLED=False`, asserts the run still
       only produces scrutiny observations, never a warrant) passes. Diff
       budget check, commit, push.
+
+      **Scope check against SPEC.md before touching `trial_authority_for`
+      (not assumed):** its `if workload_profile != "text": return
+      TrialAuthority.STATUS` early return is explicitly Part D's job
+      (SPEC.md §2(b): "the rubric-authority forced-STATUS path for
+      non-text workloads" is closed by `JUDGE_SEATS_ENABLED`, not this
+      flag) — left untouched. The gate applies only inside the
+      `workload_profile == "text"` branch, and only to
+      `argumentative_authority_mode`/`trial_authority_for`'s RETURN
+      VALUES, not to `text_authority_mode` itself (used by
+      `text_status_authority_issues`/`authority_policy_snapshot` for
+      misconfiguration detection — masking a genuine
+      `calibrated_status`-without-a-receipt issue behind this flag would
+      hide operator errors, not gate authority).
+      `argumentative_authority_mode` validates BEFORE applying the gate,
+      so a malformed `ARGUMENTATIVE_AUTHORITY` still raises regardless of
+      the flag's state.
+
+      ```
+      $ python -m pytest tests/test_text_authority_policy.py::test_master_gate_forces_observe_only_even_when_trial_configured -q
+      1 passed in 0.28s
+      $ python -m pytest tests/test_text_authority_policy.py tests/test_workload_formal.py -q
+      24 passed in 1.23s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/authority.py tests/test_text_authority_policy.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/authority.py": 22, "tests/test_text_authority_policy.py": 44}, "total_insertions": 66, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+
+      **Major mid-step discovery — `docs_verify.py` run proactively
+      (habit from Steps 13a/14b/22), found the first version of this
+      step's fix was WRONG, not just incomplete:** the initial
+      implementation put the master-gate override INSIDE
+      `argumentative_authority_mode` itself. That function has THREE
+      callers, not one — `rules/crit.py::_authority` (operational
+      dispatch, correctly the gate's target) AND
+      `authority.py::text_status_authority_issues` /
+      `authority_policy_snapshot` (schema-v2 PREFLIGHT MISCONFIGURATION
+      DETECTION and a frozen policy snapshot — both need the DECLARED
+      value, gate or no gate). Gating the shared function made preflight
+      silently stop detecting "trial_required without a calibration
+      receipt" whenever the master flag was off — masking a genuine
+      operator misconfiguration, exactly the failure mode Step 26's own
+      `trial_authority_for` design already avoided for
+      `text_authority_mode`. Caught by `CON-authority.md:194`'s check
+      (`test_text_status_authority_requires_calibration_receipt` and
+      `test_arbitrary_calibration_receipt_is_unverified` both failed).
+      **Fixed** by reverting `argumentative_authority_mode` to always
+      return the declared value, and moving the gate to
+      `rules/crit.py::_authority` — the one place that actually consumes
+      it operationally, matching how `trial_authority_for` was already
+      scoped.
+
+      **Collateral test breaks (predicted by this step's own design text
+      — "makes R1 an actual opt-in... since the six knobs are
+      independently settable today" — so minimally updated, not
+      weakened):** three pre-existing tests exercised `trial_required`/
+      `single_family_trial` reachability directly through `Config(
+      ARGUMENTATIVE_AUTHORITY=...)` without also setting the new master
+      flag — `test_criticism_authority.py::test_trial_required_needs_court`,
+      `test_prose_refutation_boundaries.py::test_the_new_mode_routes_to_the_same_defended_trial`,
+      `::test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee`.
+      Each got `ADJUDICATION_STATUS_AUTHORITY_ENABLED=True` added to its
+      `Config(...)` construction — restoring the SAME reachability each
+      always tested, not changing any assertion.
+
+      **Step 28 pulled forward (not deferred):** `docs_verify.py` also
+      surfaced `SEAM-manifest-x-schools.md:302` (pinned v1-v3 canonical
+      hash goldens) and `SUB-application.md:165`
+      (`test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4`)
+      failing — the SAME "new Config field leaks into the pinned hash"
+      problem Step 19 already solved for `LEGACY_CRITICISM_ENABLED`, now
+      hitting `ADJUDICATION_STATUS_AUTHORITY_ENABLED` between Step 25
+      (field added) and Step 28 (pop-line, originally scheduled later).
+      Rather than commit with the gate red for two steps, added Step 28's
+      pop-line now (see Step 28's own entry below, marked done here).
+      `docs_verify.py`: 0 failed after all of the above (was 4 failed).
+
+      ```
+      $ python -m pytest tests/test_text_authority_policy.py tests/test_criticism_authority.py tests/test_prose_refutation_boundaries.py tests/test_v6_nonconjecture_recovery.py tests/test_manifest_integration.py tests/test_workload_formal.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_qualification_per_seat.py tests/test_experiment.py -q
+      217 passed in 83.68s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/authority.py src/deepreason/rules/crit.py src/deepreason/config.py src/deepreason/run_manifest.py tests/test_text_authority_policy.py tests/test_criticism_authority.py tests/test_prose_refutation_boundaries.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/authority.py": 24, "src/deepreason/rules/crit.py": 51, "src/deepreason/config.py": 11, "src/deepreason/run_manifest.py": 12, "tests/test_text_authority_policy.py": 44, "tests/test_criticism_authority.py": 5, "tests/test_prose_refutation_boundaries.py": 10}, "total_insertions": 157, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 27. (S2a, R1) Close the two ungated mint sites: add the same master
       check to `imports.py::register_epistemic_import_failure` and
       `rules/experiment.py::relevance_trial`, defaulting closed (i.e.
@@ -938,10 +1040,17 @@ low-level `deepreason compile` path reaching it.
       and
       `test_experiment.py::test_relevance_trial_gated_by_adjudication_master_flag`,
       both pass.
-- [ ] 28. (S2a, C3) `_versioned_source_config_data` pop-line for
+- [x] 28. (S2a, C3) `_versioned_source_config_data` pop-line for
       `ADJUDICATION_STATUS_AUTHORITY_ENABLED`, unconditional across schema
       versions. done-when: canonical-hash goldens still pass (same command
       as Step 19).
+
+      Done as part of Step 26 (pulled forward — see that step's own entry
+      for the discovery and full proof). `run_manifest.py`'s pop-line
+      comment is honest that, unlike `ENGAGED_CRITICISM_AUTHORITY`/
+      `LEGACY_CRITICISM_ENABLED`, this field's effect is NEVER manifest-
+      visible at all (per the frozen-surfaces law), not merely "already
+      visible elsewhere."
 - [ ] 29. (S2a, C9) Qualification-subject-exclusion test for this field,
       same shape as Step 20.
 - [ ] 30. (S2a, R1) Solo-law regression test: with the master flag True

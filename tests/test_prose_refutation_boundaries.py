@@ -191,9 +191,12 @@ def test_the_new_mode_routes_to_the_same_defended_trial(harness):
     from deepreason.config import Config
     from deepreason.rules import crit
 
-    assert crit._authority(Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY)) == (
-        SINGLE_FAMILY_AUTHORITY
-    )
+    assert crit._authority(
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        )
+    ) == (SINGLE_FAMILY_AUTHORITY)
     assert SINGLE_FAMILY_AUTHORITY in crit._TRIAL_MODES
     assert "trial_required" in crit._TRIAL_MODES
     assert "observe_only" not in crit._TRIAL_MODES
@@ -1096,7 +1099,10 @@ def test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee(harness)
         harness,
         target.id,
         _substitute_adapter(harness),
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ),
     )
 
     assert critic is None

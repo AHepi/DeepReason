@@ -118,6 +118,50 @@ def test_default_text_policy_keeps_prose_criticism_as_scrutiny(tmp_path):
     assert any(event.inputs[:2] == ["scrutiny", target.id] for event in harness.log.read())
 
 
+def test_adjudication_status_authority_disabled_by_default_is_byte_identical():
+    """Part C (S2a, R1): the master reachability gate defaults False and,
+    at that default, every existing authority test in this file passes
+    unmodified -- the new gate changes nothing when False."""
+
+    assert Config().ADJUDICATION_STATUS_AUTHORITY_ENABLED is False
+
+
+def test_master_gate_forces_observe_only_even_when_trial_configured(tmp_path):
+    """Part C (S2a, R1): ARGUMENTATIVE_AUTHORITY="trial_required" alone is
+    not enough to reach a trial -- with ADJUDICATION_STATUS_AUTHORITY_ENABLED
+    at its default False, the run still only produces scrutiny, never a
+    warrant. No defender/judge endpoint is configured; if the master gate
+    failed to intercept, this would error on a missing role rather than
+    silently pass."""
+
+    harness = Harness(tmp_path / "run")
+    target = harness.create_artifact(
+        "a speculative causal account",
+        provenance=Provenance(role="conjecturer"),
+    )
+    adapter = LLMAdapter(
+        {
+            "argumentative_critic": MockEndpoint(
+                [json.dumps({"attack": True, "case": "missing mechanism"})]
+            )
+        },
+        harness.blobs,
+        retry_max=2,
+    )
+    config = Config(
+        ARGUMENTATIVE_AUTHORITY="trial_required",
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=False,
+    )
+
+    critic = crit_argumentative(harness, target.id, adapter, config)
+
+    assert critic is not None
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    assert not harness.warrants
+    assert not harness.state.att
+    assert any(event.inputs[:2] == ["scrutiny", target.id] for event in harness.log.read())
+
+
 def test_missing_direct_prose_authority_is_observe_only(tmp_path):
     harness = Harness(tmp_path / "run")
     target = harness.create_artifact(

@@ -49,8 +49,18 @@ from deepreason.rules.warrants import (
 
 
 def _authority(config) -> str:
-    """Resolve the closed V6 argumentative-authority policy."""
-    return argumentative_authority_mode(config)
+    """Resolve the closed V6 argumentative-authority policy.
+
+    The master reachability gate (ADJUDICATION_STATUS_AUTHORITY_ENABLED)
+    is applied HERE, at the operational consumption site, not inside
+    `argumentative_authority_mode` itself -- that function's return value
+    also feeds preflight misconfiguration detection, which needs the
+    DECLARED value regardless of the gate's state.
+    """
+    mode = argumentative_authority_mode(config)
+    if not getattr(config, "ADJUDICATION_STATUS_AUTHORITY_ENABLED", False):
+        return "observe_only"
+    return mode
 
 
 # The manifest's own vocabulary (`CriticismPolicyV1.authority`), deliberately

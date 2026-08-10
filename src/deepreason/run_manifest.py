@@ -2161,6 +2161,13 @@ def _versioned_source_config_data(
     # in the compiled manifest's own criticism_policy (None vs populated),
     # so the Config echo drops it unconditionally too.
     data.pop("LEGACY_CRITICISM_ENABLED", None)
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED postdates every schema version's
+    # frozen wire-byte goldens too. Unlike the two knobs above, its effect
+    # is NEVER written to the manifest at all (the frozen-surfaces law:
+    # authority knobs live on Config only, consulted at mint sites) -- the
+    # Config echo drops it unconditionally for the same reason every other
+    # authority knob was never added here in the first place.
+    data.pop("ADJUDICATION_STATUS_AUTHORITY_ENABLED", None)
     return data
 
 

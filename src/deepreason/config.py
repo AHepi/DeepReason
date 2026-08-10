@@ -375,6 +375,12 @@ class Config(BaseModel):
     #                    unobtainable, i.e. one route family across the run's
     #                    leases (llm/firewall.py is_single_family_run); route
     #                    topology, not this value, decides which gate applies.
+    # Master reachability gate for status-changing LLM-mediated text
+    # adjudication (Config-side; the six knobs below and the two mint
+    # sites at imports.py/rules/experiment.py all stay observe_only-
+    # equivalent unless this is True). It does not itself select a trial
+    # mode -- it only permits one of the below to take effect.
+    ADJUDICATION_STATUS_AUTHORITY_ENABLED: bool = False
     # Demonstrative outcomes (counterexamples, program/verifier failures)
     # remain status-changing under every mode.
     ARGUMENTATIVE_AUTHORITY: Literal[
