@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=1 blockers=none
+State: next=2 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -36,7 +36,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
 ## PART A — Road E: the pre-school criticism circuit's v6 transaction contract
 (S: SPEC.md "R13 (Amendment 4)"/Road E; R13, R3)
 
-- [ ] 1. (R13) Read `src/deepreason/workflow/transaction_service.py`
+- [x] 1. (R13) Read `src/deepreason/workflow/transaction_service.py`
       (`InquiryTransactionService` and neighbors), `src/deepreason/referee.py`'s
       `run_config_referee` (`:455-...`) in full, and
       `src/deepreason/workflow/nonconjecture_recovery.py`'s
@@ -56,6 +56,61 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       named files above, or names exactly what contact is required (in
       which case this is a STOP per REQUEST.md Amendment 5's un-forecast
       rule, not a step to continue past).
+
+      **Design note (done-criterion output):**
+
+      Reused verbatim, zero changes: `InquiryTransactionService`
+      (`.prepare`, `.issue`/`.reserve_dispatch`/`.finalize_dispatch`,
+      `.record_provider_attempt`, `.record_semantic_admission`,
+      `.terminate`, `.repair_schema_failure`) — all generic v6
+      transaction primitives with no criticism-specific logic;
+      `RouteLeaseRefV1`, `WorkflowTaskKind` (Road E dispatches under the
+      SAME `WorkflowTaskKind.CRITICISM` kind config_referee already uses,
+      `referee.py:553`); `route_fingerprint`, `select_lease` from
+      `llm/firewall.py`; `harness.record_transaction_transition`,
+      `harness.blobs.put`, `harness.workflow_state.transaction_work` — all
+      pre-existing generic harness API, no new method.
+
+      `run_config_referee` (`referee.py:493-508`) is the EXACT dispatch
+      template: `if criticism is not None: resolve_school_role_lease(...)
+      else: critic_school_id = None; select_lease(adapter.leases,
+      "argumentative_critic", 0)`. This is already the
+      `criticism_policy=None` fallback shape Road E needs — config_referee
+      already handles the school-free case for ITS OWN dispatch. Road E's
+      new dispatch function for `crit_argumentative_batch`'s plain branch
+      follows this identical shape.
+
+      Recovery — NOT directly reusable, confirmed by reading
+      `_criticism_contract` (`nonconjecture_recovery.py:643-718`) in full:
+      it hard-requires `manifest.criticism_policy is not None` (line 649,
+      `_authority(policy is not None, "manifest does not authorize
+      criticism")`) and resolves a `critic_school_id` against
+      `policy.bindings` (line 651-653) — this is the SCHOOL-ROUTED
+      recovery path only, structurally incompatible with a
+      `criticism_policy=None` circuit. Confirmed the correct insertion
+      point instead: `recover_nonconjecture_admission`
+      (`nonconjecture_recovery.py:1036-1052`) already special-cases
+      `payload.get("schema") == "config-referee.semantic-task.v1"` AHEAD
+      OF the generic `WorkflowTaskKind.CRITICISM` fallback that reaches
+      `_criticism_contract`. Road E needs the identical shape: a new
+      special-cased branch for
+      `payload.get("schema") == "legacy-argumentative-criticism.v1"`,
+      inserted ahead of the same generic fallback, with its own
+      `_legacy_arg_criticism_contract`/`_recover_legacy_arg_criticism_effect`
+      pair (Step 5) — NOT a reuse of `_criticism_contract`/
+      `_recover_criticism_effect`.
+
+      **Frozen-surface confirmation**: zero contact with `harness.py`
+      (only pre-existing public methods called, none added),
+      `capabilities/state.py` (unrelated — simulation/research proposal
+      state, never imported by any file read in this step),
+      `invariants.py`/replay-validation formats (unchanged — replay reads
+      whatever the harness recorded generically, no new format), or any
+      `run_manifest.py` SCHEMA field (`RunManifest`, `RunManifestError`,
+      `resolve_route_seat_behavioral_capability`,
+      `resolve_route_seat_base_profile` are READ-ONLY imports already used
+      by this exact file for config_referee; no new Pydantic model field).
+      Confirmed: proceed, no STOP.
 - [ ] 2. (R13) Write the new contract-id constant and payload schema
       module-level declaration in `src/deepreason/rules/crit.py` (co-located
       with `crit_argumentative_batch`, the function it will wrap), mirroring
