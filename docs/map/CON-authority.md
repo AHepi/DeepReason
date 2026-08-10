@@ -95,6 +95,7 @@ receipt verifier exists.
 | Compile-time and pre-adapter preflight | `src/deepreason/run_manifest.py` | `_preflight_text_authority`, `preflight_harness` |
 | Rubric / pairwise call sites | `src/deepreason/scheduler/scheduler.py` | `Scheduler._criticize`, `Scheduler.step` |
 | Infrastructure-review call site | `src/deepreason/ops.py` | `review_infrastructure` |
+| Judge-ensemble independence: cross-family diversity, OR a structural same-model substitute (Amendment 9/R24, 2026-08-10 — narrower than same-family, so a same-family-different-model pair still fails; relies on the judge pack's content-blindness guarantee, `tests/test_judge_ensemble_boundary.py::test_judge_pack_never_names_an_author_school_or_model`; reachable only via `--blind-same-model-judges` on the manifest-compile CLI, mirrors the existing cross-school substitute's no-separate-flag shape) | `src/deepreason/llm/firewall.py`, `src/deepreason/run_manifest.py` | `require_cross_family_judge_ensemble`; `RunManifest`'s `rubric_policy` model-validator, `compile_run_manifest`'s own pre-check, `_validate_v4_criticism_policy`'s `defended_trial` branch |
 | Pilot preflight that forbids all of it | `src/deepreason/jolts.py` | `JOLT_STATUS_AUTHORITY_FORBIDDEN` |
 | Which ensemble a status trial must convene | `src/deepreason/llm/adapter.py` | `_select_judge_ensemble` |
 

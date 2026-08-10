@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57e blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57d complete; diff-budget base 1079c86ed for Part D2, 335/1600)
+State: next=57f blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57e complete; diff-budget base 1079c86ed for Part D2, 337/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1921,13 +1921,33 @@ that lever IS "the switch."
       $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 103, "tests": 232, "docs/map": 0}, "total_insertions": 335, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 57e. (S16) CLI/map updates, same commits as 57b-57d:
+- [x] 57e. (S16) CLI/map updates, same commits as 57b-57d:
       `--blind-same-model-judges`'s own `--help` text states the
       blindness guarantee it relies on (cross-reference 57a's pinned
       invariant); `docs/map/CON-authority.md`/`CON-seats.md` gain rows
       for the new flag, `require_cross_family_judge_ensemble`'s
       structural substitute, and its relationship to the existing
       cross-school substitute.
+
+      The `--help` text half already landed in Step 57b's commit
+      (`ad9e339d1`) — written alongside the flag itself, cross-
+      referencing `test_judge_pack_never_names_an_author_school_or_
+      model` by name. This step adds the two map rows: `CON-authority.md`
+      ("Where it lives", next to the trial-authority call sites) and
+      `CON-seats.md` ("Where it lives", directly under the
+      `JUDGE_SEATS_ENABLED` row Step 40 added), each naming all four
+      relaxed sites and cross-referencing the existing cross-school
+      substitute's identical no-separate-flag shape. No new `check:`
+      needed — descriptive pointer rows, same convention as their
+      neighbors.
+
+      ```
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 852 reused
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 103, "tests": 232, "docs/map": 2}, "total_insertions": 337, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 57f. (all) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_run_manifest.py tests/test_model_firewall.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
