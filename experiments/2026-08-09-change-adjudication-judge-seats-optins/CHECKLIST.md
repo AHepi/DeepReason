@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57f blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57e complete; diff-budget base 1079c86ed for Part D2, 337/1600)
+State: next=42 blockers=none (Parts A+B+C+D+D2 complete; Part E schools opt-in is next per the original ordering; diff-budget base reverts to 81d08e5f0 for Part E, or a fresh base at Part E's own first step if that one is also near-exhausted)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1948,9 +1948,26 @@ that lever IS "the switch."
       $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 103, "tests": 232, "docs/map": 2}, "total_insertions": 337, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 57f. (all) [COMMIT] Subsystem ring:
+- [x] 57f. (all) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_run_manifest.py tests/test_model_firewall.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+      Widened to every file touched or newly relevant across Part D2 (10
+      files), not just the four originally named — matching the same
+      widening convention Step 32 used for Part C.
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_run_manifest.py tests/test_model_firewall.py tests/test_run_manifest_v4.py tests/test_v6_manifest_defended_trial.py tests/test_criticism_school_execution_c3.py tests/test_foreign_criticism_policy_c3.py tests/test_v6_engaged_public_defaults.py tests/test_cli_setup_seats.py -q
+      204 passed in 26.89s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 103, "tests": 232, "docs/map": 2}, "total_insertions": 337, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+
+      **Part D2 (content-blind same-model judge ensembles) complete:
+      steps 57a-57f.**
 
 ---
 
