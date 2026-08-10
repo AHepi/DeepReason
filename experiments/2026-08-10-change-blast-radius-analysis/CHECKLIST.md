@@ -1,0 +1,105 @@
+# Checklist for: automatic blast-radius analysis in the skills workflow
+State: next=1 blockers=none
+Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
+order. One step per dr-execute-step invocation.
+
+Map scope: no `DR-SUB-`/`DR-CON-`/`DR-SEAM-` id applies — every target
+file is under `tools/`, `.claude/skills/`, `docs/proposals/`, or
+`docs/map/INV-frozen-surfaces.md` itself (an `INV-` document, not a
+subsystem/concept/seam document), none of which `docs/map/INDEX.md`
+routes as a package. SPEC.md's own Map preflight section already
+recorded this; no seam document exists for this change because no
+`src/deepreason/` package is touched.
+
+- [ ] 1. (S1) Write `tools/blast_radius.py`: CLI (`--files`/`--symbols`/
+      `--against`/`--self-test`), the four computations (frozen-surface
+      contacts at DIRECT/SYMBOL_INDIRECT tiers, reachability via
+      AST-based syntactic call-graph BFS from a hand-maintained
+      entry-point registry with an honest UNKNOWN bucket, consumers
+      across tests/map-checks/qualification-digest/wheel-smoke-pins,
+      and a generated disclosure summary), `BLAST_RADIUS_RESULT_V1`,
+      exit classes 0/2/3, and a `--self-test` fixture harness mirroring
+      `diff_budget.py`'s own temp-git-repo pattern.
+      done-when: `python tools/blast_radius.py --self-test` -> exits 0.
+
+- [ ] 2. (S1) [COMMIT] Write `tests/test_blast_radius.py` with the three
+      mutation-proof tests SPEC.md Item 1 names (frozen-surface DIRECT
+      tier flips on/off; a fixture function flips UNREACHABLE ->
+      REACHABLE when a call site is added; a fixture test file's hit
+      appears in `consumers.tests` and disappears when removed), plus
+      exit-class coverage (2 invalid invocation, 3 evidence
+      unavailable).
+      done-when: `python -m pytest tests/test_blast_radius.py -q` ->
+      "N passed, 0 failed" (paste it); `git add tools/blast_radius.py
+      tests/test_blast_radius.py experiments/2026-08-10-change-blast-radius-analysis/CHECKLIST.md`,
+      `python tools/diff_budget.py <tranche-base> --ceiling 755 --paths
+      tools/ tests/ .claude/skills/ docs/proposals/ docs/map/`, verdict
+      WITHIN/NO_CEILING, commit, push.
+
+- [ ] 3. (S1) [COMMIT] Add a "### Blast-radius gate (Rung G6)"
+      subsection to `docs/map/INV-frozen-surfaces.md` (mirroring the
+      existing "Diff budget gate (Rung G1)" subsection's own shape and
+      two `check:` lines) AND backfill a Traps entry for the 2026-08-09
+      incident (CENSUS.md A6's own noted gap: the incident has no Traps
+      entry in this file today, only in `docs/ERRATA_EXECUTOR.md`) —
+      same file, same commit, per dr-plan-steps rule 4c.
+      done-when: `python tools/docs_verify.py` -> 0 failed (includes the
+      two new checks passing); commit, push.
+
+- [ ] 4. (S1) [COMMIT] Add a "### Rung G6 — blast-radius disclosure
+      gate" section to `docs/proposals/DETERMINISTIC_GATES_PREPLAN.md`,
+      matching the G1-G5 entries' own format (Recorded failure /
+      Deliverable / Skill amendments / Accept), citing CENSUS.md B1-B7
+      as the recorded-failure evidence and this REQUEST.md's R6 as the
+      operator word the ladder's own "sixth gate" rule requires (M4).
+      done-when: `grep -q "Rung G6" docs/proposals/DETERMINISTIC_GATES_PREPLAN.md`;
+      commit, push.
+
+- [ ] 5. (S2, R2) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`:
+      step 4 (Blast-radius census becomes tool-backed, manual grep
+      retained as an UNKNOWN-only cross-check) and step 3 (the
+      grant-request STOP sentence requiring `tools/blast_radius.py`'s
+      `frozen_surface_contacts`/`frozen_adjacent_contacts` to be
+      embedded verbatim) — Checkpoint 1 and Checkpoint 2's first site.
+      done-when: `grep -q "tools/blast_radius.py" .claude/skills/dr-spec-change/SKILL.md`;
+      commit, push.
+
+- [ ] 6. (S2, R2) [COMMIT] Amend `.claude/skills/dr-ask-the-right-question/SKILL.md`
+      section 4 ("What earns a question"): add the clause that a
+      frozen-surface-earning question must embed
+      `tools/blast_radius.py`'s `BLAST_RADIUS_RESULT_V1` result, per
+      section 1's own "cite the instrument with the number" rule —
+      Checkpoint 2's second site.
+      done-when: `grep -q "blast_radius" .claude/skills/dr-ask-the-right-question/SKILL.md`;
+      commit, push.
+
+- [ ] 7. (S2) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
+      step 6: alongside the existing `diff_budget.py` invocation, add
+      the `tools/blast_radius.py --against <tranche-base>` drift check
+      (actual-touch vs. SPEC.md's own specced radius); drift is a STOP
+      in `diff_budget.py`'s own `EXCEEDED` format — Checkpoint 3.
+      done-when: `grep -q "blast_radius" .claude/skills/dr-execute-step/SKILL.md`;
+      commit, push.
+
+- [ ] 8. (S5, Fork F4 Road B) [COMMIT] Promote
+      `experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md`
+      to `docs/HIDDEN_LEGACY_INVENTORY.md` (`git mv`), adding a standing,
+      append-only ledger header mirroring `docs/ERRATA.md`'s own header
+      convention (started-date, scope note, entry-append discipline) so
+      future disconnections can be added the same way `docs/ERRATA.md`
+      and `docs/ERRATA_EXECUTOR.md` already grow.
+      done-when: `test -f docs/HIDDEN_LEGACY_INVENTORY.md && test ! -f
+      experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md`;
+      commit, push.
+
+- [ ] 9. (all) Map check: `python tools/docs_verify.py`
+      done-when: 0 failed, `--audit` reports 0 findings, `--links`
+      reports 0 dangling (paste all three).
+
+- [ ] 10. (all) Full gate: `pytest tests/ -q -n 4`
+      done-when: output ends "N passed, 0 failed" (paste it).
+
+- [ ] 11. (all) [COMMIT] Final push and clean-tree check.
+      done-when: `git status --porcelain` -> empty; `git log --oneline
+      origin/claude/blast-radius-analysis-design-3avwew..HEAD` -> empty
+      (nothing unpushed).
