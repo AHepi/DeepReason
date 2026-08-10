@@ -9,6 +9,28 @@ from deepreason.harness import Harness
 from deepreason.views.theory import theory
 from deepreason.views.why import why
 
+# Part D (S2b, R2, "judge-suspicion law"): the judge-audit evidence-review
+# tranche's findings, surfaced at opt-in rather than left for the operator
+# to discover only after enabling JUDGE_SEATS_ENABLED. A static summary of
+# already-committed evidence (experiments/2026-08-09-change-judge-evidence-
+# review/REVIEW.md), not new research -- update only if that review is
+# ever redone, never to make the opt-in read more favorably.
+JUDGE_SEATS_EVIDENCE_SUMMARY = (
+    "Judge-audit evidence (experiments/2026-08-09-change-judge-evidence-"
+    "review/REVIEW.md): the CRITIC stage is measured content-blind "
+    "(objection rate 1.0 on both clean and corrupted content, three "
+    "independent live studies). The JUDGE-gated conviction stage, under "
+    "the harness's strict default (cross-family, unanimous), has measured "
+    "sensitivity of only 11.9% against 42 planted ground-truth defects, at "
+    "0% false conviction -- it almost never convicts. Loosening to "
+    "same-family unanimous voting raises false conviction of clean work to "
+    "47.5%; either-suffices to 60%. Self-preference/verbosity bias has "
+    "zero live measurements in the committed record -- an open evidentiary "
+    "gap, not a clean bill of health. observe_only (today's default) is "
+    "already a judge-free, solo-compatible road at zero cost: enabling "
+    "judge seats means opting OUT of that already-proven-safe floor."
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -61,6 +83,22 @@ def build_parser() -> argparse.ArgumentParser:
             "bind an existing provider profile file to a role group "
             "(conjecture, coder, scratch, simulation); repeatable, "
             "default (no --seat) leaves every role on the profile above"
+        ),
+    )
+    setup_cmd.add_argument(
+        "--judge-seats",
+        action="store_true",
+        help=(
+            "acknowledge the judge-audit evidence before enabling "
+            "JUDGE_SEATS_ENABLED in your config profile (this flag only "
+            "prints the disclosure below; JUDGE_SEATS_ENABLED itself is "
+            "still set via --config). "
+            # argparse's HelpFormatter treats "%" as its own %(...)s
+            # substitution syntax, so every literal "%" in the evidence
+            # text (11.9%, 47.5%, etc.) must be doubled for --help alone;
+            # the printed setup-time disclosure below uses the unescaped
+            # constant, since print() does no such substitution.
+            + JUDGE_SEATS_EVIDENCE_SUMMARY.replace("%", "%%")
         ),
     )
     qualify_cmd = sub.add_parser(
@@ -606,6 +644,8 @@ def _main(argv: list[str] | None = None) -> int:
                 write_seat_bindings(
                     parse_seat_flags(args.seat), seat_bindings_path()
                 )
+            if getattr(args, "judge_seats", False):
+                print("\n" + JUDGE_SEATS_EVIDENCE_SUMMARY + "\n")
         except ValueError as error:
             print(str(error), file=sys.stderr)
             return 1

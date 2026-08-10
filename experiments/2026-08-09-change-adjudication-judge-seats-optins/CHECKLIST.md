@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=39 blockers=none (Parts A+B+C complete; Part D steps 33-38 complete)
+State: next=40 blockers=none (Parts A+B+C complete; Part D steps 33-39 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1469,7 +1469,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 948, "docs/map": 111}, "total_insertions": 1330, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 39. (S2b) CLI/operator-facing surface: the flag's help text (or
+- [x] 39. (S2b) CLI/operator-facing surface: the flag's help text (or
       setup-time confirmation prompt) surfaces the judge-audit evidence
       summary named in SPEC.md §2(b) (11.9% sensitivity under strict
       default, 47.5-60% false-conviction under loosened voting,
@@ -1477,6 +1477,52 @@ low-level `deepreason compile` path reaching it.
       constant, not new research. done-when:
       `tests/test_cli.py::test_judge_seats_flag_surfaces_evidence_warning`
       passes.
+
+      **Filename correction (same pattern as Steps 20/21/33):**
+      `tests/test_cli.py` does not exist. Real home:
+      `tests/test_cli_setup_seats.py` (already exercises `setup`'s
+      optional flags, `--seat` in particular — the closest existing
+      precedent for an opt-in `setup` flag).
+
+      **No CLI flag existed anywhere for `JUDGE_SEATS_ENABLED` before this
+      step** (unlike `LEGACY_CRITICISM_ENABLED`/
+      `ADJUDICATION_STATUS_AUTHORITY_ENABLED`, which likewise have none —
+      both are set via `--config`'s YAML profile only). Added a new
+      `--judge-seats` flag to `setup_cmd` in `cli/main.py`, scoped
+      narrowly to disclosure per the step's own wording ("the flag's help
+      text (or setup-time confirmation prompt) surfaces...", never "and
+      persists the flag") — `setup_wizard` writes only the provider/route
+      profile, not general `Config` toggles, so `JUDGE_SEATS_ENABLED`
+      itself is still set the same way every other Part A-D flag is: via
+      `--config`'s YAML profile. `--judge-seats` is a pure acknowledgement
+      gate: it prints the same `JUDGE_SEATS_EVIDENCE_SUMMARY` constant
+      that's baked into its own `--help` text, satisfying the step's
+      "help text (or setup-time confirmation prompt)" wording via BOTH
+      channels rather than picking one. Not passing `--judge-seats`
+      prints nothing extra — the disclosure is opt-in-triggered, not
+      forced on every `setup` run.
+
+      **Trap found and fixed while writing the `--help` test:** argparse's
+      `HelpFormatter` performs `%`-substitution
+      (`%(default)s`-style) on every action's help string, so the
+      evidence text's literal `%` characters (`11.9%`, `47.5%`, `60%`)
+      crashed `format_help()` with `TypeError: not enough arguments for
+      format string` until escaped to `%%` — but ONLY in the argparse
+      `help=` copy; the setup-time `print()` uses the unescaped constant,
+      since `print()` does no such substitution and printing the escaped
+      copy would show literal `%%` to the operator.
+
+      ```
+      $ python -m pytest tests/test_cli_setup_seats.py -q
+      5 passed in 0.25s
+      $ python -m pytest tests/test_cli_setup_seats.py tests/test_easy.py tests/test_v6_only_cli_admission.py -q
+      115 passed, 1 skipped in 1.80s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 782 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 311, "tests": 997, "docs/map": 111}, "total_insertions": 1419, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 40. (S2b) Map update, same commit: `docs/map/CON-seats.md` gains a
       row noting `JUDGE_SEATS_ENABLED` as the master judge-dispatch gate,
       distinct from (and upstream of) `require_cross_family_judges`'s

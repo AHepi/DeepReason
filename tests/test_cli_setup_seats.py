@@ -1,4 +1,8 @@
-from deepreason.cli.main import _main
+from deepreason.cli.main import (
+    JUDGE_SEATS_EVIDENCE_SUMMARY,
+    _main,
+    build_parser,
+)
 from deepreason.seat_bindings import load_seat_bindings, seat_bindings_path
 
 
@@ -41,3 +45,47 @@ def test_setup_without_seat_flag_writes_no_seat_bindings(tmp_path, monkeypatch):
     assert rc == 0
     assert not seat_bindings_path().exists()
     assert load_seat_bindings(seat_bindings_path()) == {}
+
+
+def test_judge_seats_flag_surfaces_evidence_warning(tmp_path, monkeypatch, capsys):
+    """Part D (S2b, R2, judge-suspicion law): --judge-seats prints the
+    judge-audit evidence-review findings (sensitivity, false-conviction
+    rates, the unmeasured self-preference/verbosity gap) before the
+    operator can act on the opt-in -- a static disclosure of already-
+    committed evidence, surfaced at setup time, not new research."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    rc = _main(_setup_argv(tmp_path, extra=["--judge-seats"]))
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "11.9%" in out
+    assert "47.5%" in out
+    assert "Self-preference" in out
+    assert JUDGE_SEATS_EVIDENCE_SUMMARY in out
+
+
+def test_judge_seats_flag_help_text_also_surfaces_the_evidence():
+    """The flag's --help text alone (no invocation) already discloses the
+    same evidence, for an operator who only reads `deepreason setup -h`."""
+
+    parser = build_parser()
+    setup_help = parser._subparsers._group_actions[0].choices["setup"].format_help()
+    # argparse word-wraps help text, so a hyphenated phrase can split across
+    # lines ("Self-\npreference"); collapse all whitespace including the
+    # wrap-hyphen boundary before asserting.
+    normalized = " ".join(setup_help.split()).replace("- ", "-")
+    assert "11.9%" in normalized
+    assert "Self-preference" in normalized
+
+
+def test_setup_without_judge_seats_flag_prints_no_evidence(tmp_path, monkeypatch, capsys):
+    """Default (no --judge-seats): the disclosure is not forced on every
+    setup run, only on the ones opting into judges."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    rc = _main(_setup_argv(tmp_path))
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "11.9%" not in out
