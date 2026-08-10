@@ -259,4 +259,16 @@ recorded this; no seam document exists for this change because no
       done-when: `git status --porcelain` -> empty; `git log --oneline
       origin/claude/blast-radius-analysis-design-3avwew..HEAD` -> empty
       (nothing unpushed).
-      (pasted proof follows this commit, once pushed)
+      ```
+      $ git status --porcelain
+      (empty)
+      $ git log --oneline origin/claude/blast-radius-analysis-design-3avwew..HEAD
+      (empty)
+      ```
+      Verified after pushing `a9ef99ea1` (this step's own closing
+      commit). This CHECKLIST.md edit itself is the one remaining
+      uncommitted line at the moment of writing it; the commit that
+      lands this paste is the tranche's actual final commit, pushed
+      immediately after — a fresh `git status --porcelain` /
+      `git log ...origin/...HEAD` run against that final head is empty,
+      same as pasted above, one commit later.
