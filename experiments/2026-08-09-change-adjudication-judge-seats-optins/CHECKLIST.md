@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=40 blockers=none (Parts A+B+C complete; Part D steps 33-39 complete)
+State: next=42 blockers=none (Parts A+B+C+D complete; Amendment 9 (blindness-based same-model judge minting) ledgered, spec/plan pending before Part D2 executes)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1523,13 +1523,37 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 311, "tests": 997, "docs/map": 111}, "total_insertions": 1419, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 40. (S2b) Map update, same commit: `docs/map/CON-seats.md` gains a
+- [x] 40. (S2b) Map update, same commit: `docs/map/CON-seats.md` gains a
       row noting `JUDGE_SEATS_ENABLED` as the master judge-dispatch gate,
       distinct from (and upstream of) `require_cross_family_judges`'s
       diversity guarantee.
-- [ ] 41. (S2b) [COMMIT] Subsystem ring:
+
+      Added to the "Where it lives" table, next to the other
+      `judge`/seat-routing rows, cross-referencing the exact dispatch
+      sites Step 35 gated. No new `check:` line — a descriptive pointer
+      row, matching the convention most other rows in this table already
+      follow (not every row carries its own independent check).
+
+      ```
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 852 reused
+      docs_verify: 0 failed
+      ```
+- [x] 41. (S2b) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_budget.py tests/test_scheduler.py tests/test_run_manifest.py tests/test_cli.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+      `tests/test_cli.py` substituted with `tests/test_cli_setup_seats.py`
+      (Step 39's filename correction).
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_budget.py tests/test_scheduler.py tests/test_run_manifest.py tests/test_cli_setup_seats.py -q
+      93 passed in 2.54s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 311, "tests": 997, "docs/map": 112}, "total_insertions": 1420, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+
+      **Part D (judge seats opt-in) complete: steps 33-41.**
 
 ---
 

@@ -118,6 +118,7 @@ of information the manifest already froze at mint time.
 | Group-keyed binding view, no role expansion (Rung S5's mint-time carrier) | `seat_bindings.py` | `resolve_seat_bindings_by_group` |
 | Which provider/model sat in which seat, in the append-only record (Rung S5) | `seat_events.py`, `harness.py`, `scheduler/scheduler.py` | `SeatBindingV1`, `SeatBindingsEventPayloadV1`, `recorded_seat_bindings`, `seat_bindings_for_run`, `Harness.record_seat_bindings`, `Scheduler._record_seat_bindings` |
 | The ONE call site that bypasses `LLMAdapter.call` entirely | `cli/doctor.py` | qualification battery: `render_role_prompt` + inline `EndpointLease` construction, dispatched via `endpoint.complete` directly |
+| Whether a judge ROLE dispatches at all (mint-time, upstream of and orthogonal to `require_cross_family_judges`'s cross-family diversity guarantee below — a run can have `JUDGE_SEATS_ENABLED=False` and a fully cross-family judge ensemble configured and still never fire a single judge call) | `config.py`, `scheduler/scheduler.py` | `Config.JUDGE_SEATS_ENABLED` (default `False`); consulted at `_criticize`'s rubric-trial branch, `_audit_step`, `_property_step`, and `authority.py::trial_authority_for`'s non-text branch (adjudication-judge-seats-optins tranche, S2b, 2026-08-10) |
 
 ## The rules it obeys
 
