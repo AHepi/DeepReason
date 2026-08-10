@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=7 blockers=none
+State: next=8 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -267,7 +267,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 16}, "total_insertions": 16, "ceiling": 1600, "verdict": "WITHIN"}
       ```
 
-- [ ] 7. (S13c) [COMMIT] Widen `_v6_transactional_batch_call`
+- [x] 7. (S13c) [COMMIT] Widen `_v6_transactional_batch_call`
       (`rules/crit.py:255-262`): change `critic_school_id: str` to
       `critic_school_id: str | None = None`; remove the `if not
       critic_school_id: raise ValueError("transactional criticism
@@ -278,6 +278,13 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       passes unmodified (paste "N passed, 0 failed"). Diff budget check
       (same command shape as Step 5, `--paths src/deepreason/rules/crit.py`),
       paste, commit, push.
+
+      ```
+      $ python -m pytest tests/test_v6_live_repair_transactions.py -q
+      10 passed in 14.40s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 17}, "total_insertions": 17, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 8. (S13d) Widen `_v6_transactional_atomic_critic_call`
       (`rules/crit.py:522-528`): change `critic_school_id: str` to
       `critic_school_id: str | None = None` (type hint only — M3 found no

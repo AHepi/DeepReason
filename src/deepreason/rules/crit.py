@@ -271,7 +271,7 @@ def _v6_transactional_batch_call(
     run_manifest,
     *,
     endpoint_lease: EndpointLease,
-    critic_school_id: str,
+    critic_school_id: str | None = None,
     target_ids: tuple[str, ...],
     assignment_refs: tuple[str, ...],
     coverage_attempt_index: int,
@@ -309,8 +309,6 @@ def _v6_transactional_batch_call(
         raise ValueError("transactional criticism requires the exact v6 critic contract")
     if endpoint_lease.role != "argumentative_critic":
         raise ValueError("transactional criticism requires a critic route lease")
-    if not critic_school_id:
-        raise ValueError("transactional criticism requires a critic school")
     targets = tuple(dict.fromkeys(target_ids))
     if not targets or len(targets) != len(target_ids):
         raise ValueError("transactional criticism targets must be nonempty and unique")
