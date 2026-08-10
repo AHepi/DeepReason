@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=14 blockers=none
+State: next=16 blockers=none (Part A / Road E complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -623,7 +623,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/workflow/nonconjecture_recovery.py tests/test_v6_nonconjecture_recovery.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/workflow/nonconjecture_recovery.py": 44, "tests/test_v6_nonconjecture_recovery.py": 170}, "total_insertions": 214, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 14. (R13) Map update, same commit as the behavior (rule 4c): edit
+- [x] 14. (R13) Map update, same commit as the behavior (rule 4c): edit
       `docs/map/SUB-scheduler.md`'s row "A legacy model phase v6 cannot
       yet dispatch | `_defer_untransactional_v6_phase` at the phase's call
       site" to note the `"argumentative-criticism"` phase is now an
@@ -637,12 +637,60 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `Traps` entry naming this tranche's run id, per the map's "every fix
       earns a Traps entry" rule. done-when:
       `python tools/docs_verify.py` reports 0 failed.
-- [ ] 15. (R13) [COMMIT] Subsystem test ring:
+
+      Note: this step's own R13/S13a-g map work was already substantially
+      done as part of Step 13a's mid-step map-consistency pass (that step
+      updated `SEAM-scheduler-x-workflow.md`, `SEAM-scheduler-x-rules.md`,
+      `CON-schools.md`, `SEAM-rules-x-workflow.md`, `SEAM-llm-x-rules.md`
+      for staleness `docs_verify.py` surfaced directly). This step covers
+      the two items that pass specifically named: `SUB-scheduler.md`'s
+      table row (this tranche's `Owns:` search confirmed `SUB-workflow.md`
+      is the correct target for the recovery-branch note, not
+      `CON-criticism-source.md`, which does not exist) and the dedicated
+      `_criticism_contract` Traps entry in `SUB-workflow.md`'s Traps
+      section (distinct from the S13i Traps entries already added
+      elsewhere — this one is specifically about the recovery-side
+      school-optional shape, S13e).
+
+      ```
+      $ python -c "import inspect; from deepreason.workflow.nonconjecture_recovery import _criticism_contract as C; s = inspect.getsource(C); assert 'if school_id is None:' in s and 'dispatch_authority' in s and 'manifest does not authorize criticism' in s" && python -m pytest tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only -q
+      2 passed in 4.04s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 15. (R13) [COMMIT] Subsystem test ring:
       `python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py -q`.
       done-when: output ends "N passed, 0 failed" (paste it). Run
       `python tools/diff_budget.py 81d08e5f0 --ceiling 1600`,
       paste output, commit with message citing R13/S13a-g, push with
       retry.
+
+      **Unscoped diff budget is EXCEEDED, expected and pre-authorized
+      (Amendment 2: "for any budget-overrun stop in this tranche, the
+      answer is 'continue, report the final total at delivery'").**
+      Broken down: `src/deepreason` + `tests` = 358 lines (within),
+      `docs/map` = 75 lines (within), this tranche's own
+      `experiments/2026-08-09-.../` paperwork (REQUEST.md/SPEC.md/
+      CHECKLIST.md) = 3455 lines — the unscoped total (3959) is
+      dominated by the tranche's own ledger, not code. Road E's own
+      forecast (SPEC.md, S13a-i budget notes) was ~186 lines of source;
+      actual source contribution (96 in `src/deepreason` alone) is
+      UNDER that forecast. Continuing per Amendment 2; final total
+      reported at delivery.
+
+      ```
+      $ python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py -q
+      66 passed in 77.06s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"total": 3959}, "total_insertions": 3959, "ceiling": 1600, "verdict": "EXCEEDED"}
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 96, "tests": 262}, "total_insertions": 358, "ceiling": 1600, "verdict": "WITHIN"}
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"docs/map": 75}, "total_insertions": 75, "ceiling": 1600, "verdict": "WITHIN"}
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths experiments/2026-08-09-change-adjudication-judge-seats-optins
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"experiments/2026-08-09-change-adjudication-judge-seats-optins": 3455}, "total_insertions": 3455, "ceiling": 1600, "verdict": "EXCEEDED"}
+      ```
 
 ---
 

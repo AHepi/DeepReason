@@ -269,3 +269,26 @@ model or the reducer — it materializes only what the records already say.
   atomic-decomposed task family needs the same recognition before its
   own batch-shaped recovery handler, not after.
 `check: grep -q 'contract-decomposition-child.v1"' src/deepreason/workflow/nonconjecture_recovery.py && grep -q "atomic criticism decomposition child recovery is not" src/deepreason/workflow/nonconjecture_recovery.py && python -m pytest tests/test_l1_continue_resumable_crash.py -q`
+- **`_criticism_contract` recovers a school-optional payload, and the
+  two shapes recover through genuinely disjoint logic
+  (adjudication-judge-seats-optins tranche, S13e, 2026-08-10).** When
+  `payload["critic_school_id"]` is `None` (the legacy/school-free
+  dispatch S13i's self-detection produces), recovery skips the
+  `criticism_policy`/binding-lookup requirement entirely — there is
+  none to recover against — verifies the route belongs to the
+  manifest's `argumentative_critic` seats instead of a school binding,
+  and reads authority from the frozen `payload["dispatch_authority"]`
+  field rather than `criticism_policy.authority` (never a live or
+  manifest-reconstructed `Config`: `ARGUMENTATIVE_AUTHORITY` is never
+  written to the manifest, so reconstruction would silently report the
+  bare default and mask a real override — the same "freeze at mint
+  time" principle `critic_school_id` itself already followed). The
+  per-target `CriticismAssignmentV1` obligation and its cardinality
+  check ALSO do not apply to the school-free shape — that record's own
+  `critic_school_id` field is a required, pattern-constrained `str`, so
+  the whole obligation concept is inherently school-specific, and the
+  self-sufficient dispatch always passes zero assignment refs. A new
+  provider work family that ever needs a THIRD partial-envelope shape
+  must gate on its own discriminator the same explicit way, not assume
+  "school missing" is the only alternative to "school present."
+`check: python -c "import inspect; from deepreason.workflow.nonconjecture_recovery import _criticism_contract as C; s = inspect.getsource(C); assert 'if school_id is None:' in s and 'dispatch_authority' in s and 'manifest does not authorize criticism' in s" && python -m pytest tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only -q`
