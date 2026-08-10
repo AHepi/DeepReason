@@ -1543,35 +1543,53 @@ genuinely school-optional, not by forking a second schema). Concretely:
   resolves in the dispatch direction. The `school_id is not None` branch
   is UNTOUCHED — byte-identical to today.
 
-  **Authority-recoverability clarification (found alongside S13i, same
-  root cause):** the school-routed branch's `"critic authority is not
-  recoverable"` refusal (`_authority(policy.authority == "observe_only",
-  ...)`, currently checked line-for-line by
-  `docs/map/SEAM-manifest-x-schools.md:133`'s inline check) reads a
-  FROZEN, replay-stable value (`manifest.criticism_policy.authority`) —
-  safe to trust unconditionally at recovery time. Road E's circuit has no
-  such frozen value: per S13i-2, its authority is resolved LIVE from
-  `Config` at dispatch time (`policy_call=False` →
-  `_authority(config)`), and `Config` is not part of the frozen manifest
-  — a resumed run's `Config` could differ from the interrupted attempt's.
-  The None-school branch must NOT skip an authority check entirely (that
-  would be a real, not hypothetical, correctness gap — recovering a call
-  under a resumed run's current, possibly-different `Config` and treating
-  it as equivalent to the original attempt); it must re-derive from the
-  CURRENT resumed run's `Config`/`_authority(config)` and refuse
-  (typed, mirroring the school-routed branch's own conservatism) unless it
-  currently evaluates to `observe_only` — the same restriction the
-  school-routed branch already enforces, applied to the live source of
-  truth this circuit actually has, not a frozen one it does not.
+  **Authority-recoverability clarification, CORRECTED (found alongside
+  S13i, same root cause; superseding the first version of this
+  paragraph):** `_criticism_contract(harness, manifest, item, preparation,
+  payload)` receives no live `Config` object at all — checked directly,
+  its signature carries no such parameter, and the file's only
+  `Config`-shaped helper, `config_from_run_manifest(manifest)` (imported
+  at `nonconjecture_recovery.py:32`, used once at `:349` for an unrelated
+  purpose), DERIVES a `Config` from the frozen manifest — but
+  `ARGUMENTATIVE_AUTHORITY` is, by the frozen-surfaces law itself, NEVER
+  written into the manifest, so `config_from_run_manifest` cannot recover
+  its true original value; it would always report the bare default
+  (`observe_only`), silently masking a real override. Re-deriving
+  authority live at recovery time (this paragraph's original proposal) is
+  therefore WRONG twice over: no live `Config` reaches this function at
+  all, and even a manifest-derived reconstruction cannot see this
+  specific field. The correct fix, consistent with the "freeze at mint
+  time, never reread mutable state at recovery" principle this codebase
+  states repeatedly (`docs/map/INV-frozen-surfaces.md`,
+  `SEAM-adjudication-x-authority.md`): bake the RESOLVED authority value
+  into the durable transaction payload at ORIGINAL dispatch time — the
+  same treatment `critic_school_id` already gets. Concretely: S13i-3's
+  self-resolved dispatch, via the `transactional_call` closure inside
+  `crit_argumentative_batch` (which already captures `authority` from its
+  enclosing scope), adds one new field,
+  `payload["dispatch_authority"] = authority if critic_school_id is None
+  else None`, to `_v6_transactional_batch_call`'s payload construction
+  (a new keyword-only parameter on that function, threaded from the
+  closure — the school-routed case passes `None`/omits it, since that
+  case already has its own frozen source of truth and does not need a
+  second one). Recovery then reads `payload.get("dispatch_authority")`
+  (frozen, replay-stable, exactly like `critic_school_id`) and refuses
+  typed unless it equals `"observe_only"` — no live or reconstructed
+  `Config` access anywhere in the recovery path.
   accept: `tests/test_v6_nonconjecture_recovery.py -q` passes in full,
   including every existing `_criticism_contract`-adjacent test
   unmodified, PLUS two new tests,
   `test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
-  (observe_only case, resolves and admits) and
-  `::test_criticism_contract_refuses_recovery_without_a_school_when_config_authority_is_not_observe_only`
-  (mirrors the school-routed branch's own `'critic authority is not
-  recoverable'` test shape, sourced from `Config` instead of
-  `criticism_policy.authority`).
+  (payload's `dispatch_authority` is `"observe_only"` — resolves and
+  admits) and
+  `::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only`
+  (payload's `dispatch_authority` is e.g. `"trial_required"` — refuses
+  typed, mirroring the school-routed branch's own `'critic authority is
+  not recoverable'` shape, sourced from the frozen payload field instead
+  of `criticism_policy.authority`), PLUS a third test,
+  `::test_v6_transactional_batch_call_freezes_dispatch_authority_for_school_free_calls`,
+  proving the payload actually carries the resolved authority at dispatch
+  time (not just that recovery reads it correctly).
 - S13f (R19, R20): `scheduler.py::_arg_crit`'s plain branch
   (`:1244-1259`, the code Step 4 was going to touch) — replace the
   `_defer_untransactional_v6_phase(...)` + `continue` with: resolve
@@ -1819,7 +1837,12 @@ that needs to differ.
   computation — `critic_school_id` stays `None`. If
   `adapter.bound_v6_manifest()` is None (a genuinely pre-v6/legacy
   adapter), behavior is BYTE-IDENTICAL to today (falls through to the
-  existing non-transactional `else` branch). accept: a new test,
+  existing non-transactional `else` branch). Also thread `dispatch_authority`
+  (per S13e's corrected authority-recoverability design above) through the
+  `transactional_call` closure into `_v6_transactional_batch_call`'s new
+  payload field, sourced from `authority` (already in scope, computed
+  earlier in this same function) whenever `critic_school_id is None`.
+  accept: a new test,
   `tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6`
   (Step 11's originally-planned test, now written against the corrected
   design) passes with the SCHEDULER'S call to `crit_argumentative_batch`
