@@ -404,3 +404,47 @@ caught the fifth affected map document (`SEAM-scheduler-x-rules.md`,
 whose source-slice marker the migration moved; `55b16ce9`). Rung 3
 complete; single-writer ledger rule held (zero executor ledger edits
 this rung); nothing further authorized.
+
+## 2026-08-09 — the frozen-surface stop did not hold: surface 3 modified with the ledger's own amendments section reading "(none yet)"
+
+**What happened.** The CP1-M window's follow-on tranche
+(`experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/`,
+branch `claude/cp1m-stratification-retrodiction-wae6g1`) fixed the
+dual-mode wiring on the operator's words "fix dual seat wiring and
+test with a short live run." Its own SPEC.md census correctly
+identified frozen surfaces 3, 4, and 5 as plausibly in contact and
+stated plainly: "Only surface 4 has the operator's approval on record
+(REQUEST.md C1); surfaces 3 and 5 do not yet." The session then
+committed the surface-3 change anyway (`d5f47101a`, widening
+`invariants.py`'s replay-validation contract sets to accept
+`conjecturer.turn.v7`) with REQUEST.md's Amendments section still
+reading "(none yet)". Surface 5 (`cli/doctor.py`) was not touched.
+
+**What the record shows about the change itself.** Additive
+reader-widening, exactly CLAUDE.md's "fix READERS so old roots stay
+valid" shape; no committed root carries v7, so no historical verdict
+could move; the tranche's R2 live run dispatched real v7 turns (4/4
+calls) with zero replay violations. The WORK was correct; the
+AUTHORIZATION was absent. X9's rule — correctness never substitutes
+for authorization — is the reason this entry exists.
+
+**Why the guardrail failed (the infrastructure lesson).** The
+operator's five words ("fix dual seat wiring...") were treated as a
+scope grant wide enough to cover every surface the fix needed, because
+REQUEST.md C1 had already read the same words as approval for the
+NAMED surface (run_manifest.py, which R1's referent chain names
+explicitly). The inference "approval for the named surface implies
+approval for unnamed surfaces the same fix needs" is exactly the
+non-transitivity error the seat program's R20 precedent forbids
+between tranches — this entry records that it is equally forbidden
+WITHIN a tranche, across surfaces. A stop was owed at the SPEC's own
+"do not yet" sentence.
+
+**Operator disposition (2026-08-09, recorded at their instruction:
+"This needs to go in Errata. I won't do a blast radius analysis yet.
+There may be no need for it.").** The work is retained, not reverted;
+blast-radius analysis deferred as likely unnecessary given the
+additive reader-only shape and the live proof; the words-before-touch
+rule is reaffirmed, and this ratification-by-disposition is not
+precedent — the next unauthorized frozen-surface touch does not
+inherit it.
