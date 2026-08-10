@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=44 blockers=none (Parts A+B+C+D+D2 complete; Part E steps 42-43 complete; diff-budget base a942f404c for Part E, 32/1600)
+State: next=44 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-43 complete, Part E resumes at step 44; diff-budget base a942f404c shared by Part E and Part B2, 121/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -2014,6 +2014,92 @@ that lever IS "the switch."
 
       **Part D2 (content-blind same-model judge ensembles) complete:
       steps 57a-57f.**
+
+---
+
+## PART B2 — Flip LEGACY_CRITICISM_ENABLED's shipped default (Amendment 11, R27/R28)
+
+Corrects Amendment 10's too-coupled reading (R26) mid-Part-E: a school is
+a conjecture-side attractor-minimization tool; criticism stays a generic,
+structurally separate operator, only ever optionally "primed" by a
+school as an explicit attachment — never automatically coupled. R28
+resolves the operator's "legacy should be the default" as reading (b): a
+genuine flip of the already-shipped `engaged` v6 preset's default, not
+merely a rule for Part E's new opt-in. `LEGACY_CRITICISM_ENABLED=False`
+remains fully supported as the explicit opt-back-in to school-routed
+criticism — "That's a configuration option," the operator's own words.
+
+- [x] 58a. (Amendment 11, R28) [COMMIT] Flip
+      `Config.LEGACY_CRITICISM_ENABLED`'s default from `False` to `True`
+      in `config.py`. done-when: `Config().LEGACY_CRITICISM_ENABLED is
+      True` and `build_preparation_manifest`'s default `criticism_policy`
+      is `None`.
+
+      **Collateral (predicted, same pattern as every default change this
+      tranche has made, but larger — this flips an EXISTING shipped
+      default, not merely a new opt-in defaulting closed):**
+      `tests/test_v6_engaged_public_defaults.py` — 4 tests fixed:
+      - `test_public_manifest_enables_scratch_and_binds_all_four_schools`
+        split into `test_public_manifest_enables_scratch_with_legacy_
+        criticism_by_default` (new default: `criticism_policy is None`,
+        schools still seeded for CONJECTURE via `N_SCHOOLS`, checked
+        independently of criticism bindings) and `test_public_manifest_
+        binds_all_four_schools_when_school_routed_criticism_is_enabled`
+        (the full pre-flip assertion set, now under an explicit
+        `LEGACY_CRITICISM_ENABLED=False` override).
+      - `test_legacy_criticism_disabled_by_default_is_byte_identical`
+        renamed to `test_legacy_criticism_enabled_by_default_is_byte_
+        identical`, its claim rewritten to state the NEW default rather
+        than deleted — the byte-identical coverage moves to the flipped
+        value, per this tranche's own "never claim more than the record
+        shows" discipline.
+      - `test_engaged_criticism_authority_inert_without_the_master_gate`
+        and `::_reachable_with_the_master_gate` (Part C) both needed an
+        added `LEGACY_CRITICISM_ENABLED=False` override: `ENGAGED_
+        CRITICISM_AUTHORITY` only matters on the school-routed path (it's
+        `engaged_criticism_policy`'s `authority=` argument), so without
+        the override `criticism_policy` is `None` and these tests could
+        no longer exercise what they're actually testing.
+      - `test_legacy_criticism_enabled_routes_to_school_free_circuit`
+        needed no change — it already forced the flag `True` explicitly,
+        now redundant with the default but still a legitimate defense-
+        in-depth check that the flag itself works.
+
+      **A second, genuinely different collateral class, found only by
+      running the qualification-battery test file (not predicted by any
+      SPEC text):** `tests/test_qualification_per_seat.py::test_single_
+      profile_home_qualify_output_is_byte_identical_to_pre_s4` compares
+      live `deepreason qualify` output byte-for-byte against
+      `experiments/2026-08-06-change-qualification-per-seat-s4/before-
+      qualify.json`, a PERMANENT HISTORICAL fixture from an entirely
+      different, already-delivered tranche (Rung S4/role-seat-separation)
+      — `qualification_subject_digest` hashes the compiled manifest's
+      actual content, so it legitimately diverged the moment `criticism_
+      policy`'s shape changed. Fixed by excluding just that one field
+      from the byte-identical comparison (dated, explained inline) rather
+      than editing the historical fixture, which must stay an unedited
+      snapshot of Rung S4's own deliverable — every other field still
+      compares strict, still proving Rung S4 itself changed nothing.
+
+      **Map update, same commit:** `docs/map/CON-authority.md`'s
+      `LEGACY_CRITICISM_ENABLED` row updated to state the new default and
+      cite Amendment 11/R28.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -q
+      15 passed in 15.51s
+      $ python -m pytest tests/test_qualification_per_seat.py tests/test_reusable_qualification.py tests/test_schema_v3_consumers.py tests/test_seat_bindings_record.py -q
+      58 passed in 234.93s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_qualification_per_seat.py tests/test_reusable_qualification.py tests/test_schema_v3_consumers.py tests/test_seat_bindings_record.py tests/test_run_manifest.py tests/test_criticism_authority.py -q
+      149 passed in 256.35s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 852 reused
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 22, "tests": 98, "docs/map": 1}, "total_insertions": 121, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+
+      **Part B2 (LEGACY_CRITICISM_ENABLED default flip) complete.**
 
 ---
 
