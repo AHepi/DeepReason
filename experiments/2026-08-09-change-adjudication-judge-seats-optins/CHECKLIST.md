@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=44 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-43 complete, Part E resumes at step 44; diff-budget base a942f404c shared by Part E and Part B2, 121/1600)
+State: next=44 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-43 complete, revised per Amendment 11/R27 (SPEC.md addendum S18) into two independent levers -- Step 44 conjecture-side only, new Step 44b criticism-side only; diff-budget base a942f404c, 121/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1613,17 +1613,34 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 16, "tests": 16, "docs/map": 0}, "total_insertions": 32, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 44. (S2d, R5) [COMMIT] Add the `--seat school-N=<profile>` CLI
-      surface (parallel in shape to `seat_bindings.py`'s existing `--seat
-      GROUP=PATH`, per §5.5 Road B — reusing the manifest's own
-      school-keyed shape, NOT extending `seat_bindings.py::GROUP_ROLES`),
-      gated on `SCHOOL_SEATS_ENABLED`: when set, populates
-      `SchoolExecutionPolicyV1(mode="route_bound", ...)` (conjecture side)
-      and/or per-school distinct `endpoint_id`s in
-      `CriticismPolicyV1.bindings` (criticism side) at manifest-compile
-      time. done-when:
+- [ ] 44. (S2d, R5, revised by Amendment 11/R27 — SPEC.md addendum S18)
+      [COMMIT] Add the `--seat school-N=<profile>` CLI surface (parallel
+      in shape to `seat_bindings.py`'s existing `--seat GROUP=PATH`, per
+      §5.5 Road B — reusing the manifest's own school-keyed shape, NOT
+      extending `seat_bindings.py::GROUP_ROLES`), gated on
+      `SCHOOL_SEATS_ENABLED`: CONJECTURE-SIDE ONLY (Amendment 11 corrects
+      the original "and/or" coupling to criticism — a school is a
+      conjecture-side tool; criticism's attachment is Step 44b, fully
+      independent). Populates
+      `SchoolExecutionPolicyV1(mode="route_bound", ...)`; never touches
+      `CriticismPolicyV1`. done-when:
       `tests/test_run_manifest.py::test_seat_school_flag_produces_route_bound_policy`
       passes. Diff budget check, commit, push.
+- [ ] 44b. (S2d, R27 — SPEC.md addendum S18, new step, not in the
+      original plan) [COMMIT] Add the `--criticism-seat school-N=<profile>`
+      CLI surface: criticism-side ONLY, independent of Step 44's flag —
+      "the criticism seats are primed by a school," the operator's own
+      phrase. Requires `LEGACY_CRITICISM_ENABLED=False` already set
+      (criticism must be school-routed at all before a per-school distinct
+      route is meaningful); refuses clearly and typed if legacy criticism
+      is still active, rather than silently no-op. Populates a per-school
+      distinct `endpoint_id` in `CriticismPolicyV1.bindings` (today's
+      `engaged_criticism_policy` shares one endpoint across every school's
+      binding; this lets one named school's binding diverge). done-when: a
+      new `tests/test_run_manifest.py` test proves (a) the flag produces a
+      distinct binding for the named school when legacy criticism is off,
+      and (b) a clear, typed refusal when legacy criticism is still the
+      active default. Diff budget check, commit, push.
 - [ ] 45. (S2d, C6) Consequence-A regression test (must stay inert, per
       the map's own pinned invariant): binding two schools to two distinct
       models does not change `foreign_schools` computation in

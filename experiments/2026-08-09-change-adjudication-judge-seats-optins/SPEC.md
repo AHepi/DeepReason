@@ -2047,3 +2047,62 @@ two manifest sites + threading + collateral test update in
 lines. CLI/map updates: ~40 lines. Estimated total: ~250-300 lines,
 comfortably inside a fresh 1,600-line ceiling for this addendum's own
 diff-budget base commit (to be set at Part D2's first step).
+
+# ADDENDUM (Amendment 11, R27/R28) — Part E revised: two independent levers, not one coupled flag
+
+Written after Part B2 (`LEGACY_CRITICISM_ENABLED`'s default flip) shipped
+and before Part E's Step 44 executes, correcting Amendment 10's reading
+(R26) of what "schools opt-in... for both criticism and conjecture"
+meant. The operator's own words: a school is a CONJECTURE-side
+attractor-minimization tool; criticism is a generic, minimal operator
+("hand it a conjecture, look for objections") that stays structurally
+separate from whatever conjecture tool produced the candidate, and MAY
+optionally be primed by a school as an explicit, independent attachment
+— never an automatic consequence of conjecture-side school seats
+existing.
+
+## S18 — Two independent levers, one shared master flag
+
+`SCHOOL_SEATS_ENABLED` (already shipped, Step 43) stays the single master
+gate for "may a school be bound to a distinct route at all" — mirroring
+`JUDGE_SEATS_ENABLED`'s shape (a master reachability gate, not itself a
+routing decision). Under it, two INDEPENDENT CLI levers, either usable
+without the other:
+
+- **`--seat school-N=<profile>`** (Step 44, revised): conjecture-side
+  ONLY. Populates `SchoolExecutionPolicyV1(mode="route_bound", bindings=(
+  SchoolRoleBindingV1(school_id="school-N", role="conjecturer", seat=0,
+  endpoint_id=<profile's endpoint_id>), ...))`. Never touches
+  `CriticismPolicyV1` in any way. An operator using this flag alone gets
+  route diversity for conjecture; criticism keeps doing whatever it
+  already does (legacy by default, per Part B2, or school-routed if
+  separately opted in via `LEGACY_CRITICISM_ENABLED=False`).
+- **`--criticism-seat school-N=<profile>`** (a new, later step — Step 44b,
+  inserted after Step 44): criticism-side ONLY, requires
+  `LEGACY_CRITICISM_ENABLED=False` already set (criticism must be
+  school-routed at all before a PER-SCHOOL distinct route is meaningful)
+  — refuses clearly, typed, if legacy criticism is still active, rather
+  than silently no-op. Populates a per-school distinct `endpoint_id` in
+  `CriticismPolicyV1.bindings` (today's `engaged_criticism_policy` shares
+  ONE endpoint across every school's binding; this flag lets ONE named
+  school's binding diverge). This is literally "the criticism seats are
+  primed by a school" — the operator's own phrase.
+
+Using `--seat school-N=<profile>` WITHOUT `--criticism-seat` for that
+school is the common case and stays fully supported: conjecture gets
+diversity, criticism is untouched. Using `--criticism-seat` for a school
+never previously given `--seat` is legal (the school still exists via
+`N_SCHOOLS`'s conditioning-only seeding; only its ROUTE was never made
+distinct) but unusual — no special-casing needed, `SchoolRoleBindingV1`
+doesn't require a matching conjecturer binding to exist.
+
+## Revised CHECKLIST ordering
+
+Step 44 (conjecture-side `--seat school-N=<profile>`) executes first,
+alone — it is Amendment 11's PRIMARY case ("schools, by default, is a
+conjecture tool"). Steps 45-51 (Consequence A/B regressions, operator-
+facing disclosure, pop-line, map update, subsystem ring) still apply to
+the conjecture-side lever as originally scoped. The criticism-priming
+lever (`--criticism-seat`) is a NEW step inserted as 44b, with its own
+done-criterion, after Step 44 lands — not folded into Step 44's own
+done-when, since Amendment 11 explicitly separates them.
