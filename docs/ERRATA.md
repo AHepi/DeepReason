@@ -295,3 +295,23 @@ O1's own `RESULTS.md`/`DELIVERY.md`/`CHECKLIST.md`/`VALIDATION.md`/
 itself is a DESIGN-AND-STOP tranche per its own preplan and stopped at
 `SPEC.md`, never delivering a closing note back into O1's documents.
 The correction stands only in O2's `SPEC.md` prose until this entry.
+
+**E18 — `GATES_AND_PACKAGES_PREPLAN.md` cites a tranche as authority
+that was never opened.** `docs/proposals/GATES_AND_PACKAGES_PREPLAN.md:4-5`
+reads: "Extends BEHAVIOR_MODES_PREPLAN and the adjudication/judge/schools
+opt-in spec (`experiments/2026-08-09-change-adjudication-judge-seats-
+optins/`)." That directory does not exist in the committed tree
+(`ls experiments/ | grep -i adjudication-judge-seats` -> no hits) — the
+cited tranche was planned but never opened, so the document's own
+"Existing gates-in-fragments this unifies" census (the paragraph
+immediately following the citation) rests in part on a source that
+cannot be read to verify it. Found by
+`experiments/2026-08-10-change-blast-radius-analysis/CENSUS.md` Part B
+while tracing the operator's own "Road E" shorthand (which itself
+resolves to no literal document anywhere in the repo — the operator's
+compressed reference to the substance now written up as CENSUS.md B2/B3,
+not to this preplan or its dangling citation). Not corrected here — the
+preplan's own status line reads "PROPOSED," so no live rung depends on
+this citation resolving today; recorded so a future session picking up
+`GATES_AND_PACKAGES_PREPLAN.md` does not spend time looking for a
+directory that was never created.
