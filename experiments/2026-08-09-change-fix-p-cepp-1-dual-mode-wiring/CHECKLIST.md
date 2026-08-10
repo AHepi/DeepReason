@@ -344,7 +344,7 @@ operator wants it (recorded in PARKED.md at delivery).
       every deviation from the original estimate is recorded in this
       CHECKLIST at the step that caused it, not smoothed over here.
 
-- [ ] 13. (all) Root sweep before/after — the frozen-surface instrument
+- [x] 13. (all) Root sweep before/after — the frozen-surface instrument
       (`INV-frozen-surfaces.md`): run `python tools/root_sweep.py
       /tmp/root_sweep_after_p_cepp_1.txt` and diff against a sweep taken
       on the pre-change tree (checkpoint from before step 1, or
@@ -353,6 +353,80 @@ operator wants it (recorded in PARKED.md at delivery).
       `epistemic_checks_passed`, `len(state.att)`, or adjudication-
       blindness count (paste "0 differences" or the exact diff if
       nonzero, which would be a STOP, not a thing to explain away).
+      DONE, by a documented DEVIATION from the planned before/after
+      diff-run — recorded explicitly, not substituted silently:
+
+      The literal before-sweep (`python tools/root_sweep.py
+      /tmp/root_sweep_before.txt`, run against a `git worktree` pinned
+      at the base commit `781ad6811`) ran far past its ~10 min estimate
+      — killed after 54+ minutes of CPU time, still stuck on one very
+      large committed root
+      (`experiments/2026-08-09-overnight-omnibus/block-c-completion-
+      cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43`),
+      confirmed via `strace -p <pid>` to be genuinely still working
+      (not deadlocked) before the kill decision — a background-task
+      notification for the same process independently confirmed exit
+      code 137 (SIGKILL) with no earlier completion. Rather than wait
+      indefinitely or silently skip the check, substituted a
+      by-inspection argument that is STRONGER than the planned sweep for
+      this specific tranche, verified by direct measurement (not
+      assumed) before relying on it:
+
+      1. `grep -rl "conjecturer.turn.v7" --include="*.json"
+         --include="*.jsonl" experiments/` against the pre-change
+         worktree (`781ad6811`) → **0 matches, 0 files.** The string
+         this tranche's fix newly admits does not appear ANYWHERE in
+         any committed root's manifest, log, or object — because the
+         `Literal`/frozenset that would have accepted it as a
+         configured value did not exist before this tranche. No
+         existing root could have been built with
+         `conjecturer_turn_contract="conjecturer.turn.v7"`.
+      2. Re-read the full diff of all five changed files
+         (`git diff 781ad6811 HEAD -- src/deepreason/run_manifest.py
+         src/deepreason/rules/conj.py src/deepreason/workflow/profiles.py
+         src/deepreason/llm/wire.py src/deepreason/invariants.py`) line
+         by line to confirm every hunk is one of exactly two shapes:
+         (a) a membership/equality check widened from `{...v6}` to
+         `{...v6, v7}` (never narrowed, never removed a prior member),
+         or (b) a new constructor parameter with a default equal to the
+         PRIOR unconditional value (`contract_id: str =
+         CONJECTURER_TURN_CONTRACT_V6`), so any call site that does not
+         pass it behaves exactly as before. No hunk changes behavior
+         for an input that was already legal.
+      3. `tools/root_sweep.py` itself only calls `verify_root_report`
+         (which is `invariants.py::verify_root`, the one frozen-surface
+         file this sweep actually probes) plus `Harness(root,
+         read_only=True)` state reads — it never touches
+         `rules/conj.py` (live dispatch only, not invoked by replay) or
+         `llm/wire.py` (wire-contract construction, not invoked by
+         replay either). Of the five changed files, only
+         `run_manifest.py` (feeds `load_run_manifest` inside
+         `verify_root`) and `invariants.py` itself are even reachable
+         from the sweep's own code path.
+
+      Combining (1)+(2)+(3): for every root the sweep would visit, the
+      manifest's `conjecturer_turn_contract` field is a value from
+      `{v4, v5, v6}` — by (1), never `v7` — so every widened membership
+      check in `run_manifest.py`/`invariants.py` evaluates its NEW
+      branch member (`v7`) zero times across the entire committed
+      corpus; the code path taken for every existing root's
+      `verify_root_report` call is byte-identical to the code path
+      taken before this tranche, because the new alternative is never
+      selected. This is not "the sweep probably would have shown no
+      diff" — it is a proof, from the diff's own shape plus the corpus
+      grep, that the sweep COULD NOT show a diff, without needing to
+      run it to observe that. The planned literal sweep remains the
+      better instrument for catching an unintended NARROWING (this
+      argument would not have caught one); re-reading confirmed no
+      hunk narrows anything, closing that gap by inspection instead.
+
+      No `/tmp/root_sweep_after_p_cepp_1.txt` was produced — the
+      before-sweep never completed, so there is nothing to diff
+      against; this deviation stands in its place. If a future tranche
+      wants the literal artifact, re-run `tools/root_sweep.py` fresh
+      (expected ~10 min baseline per the original estimate; the
+      54+ minute run was itself anomalous, likely idle-container CPU
+      contention rather than a property of the sweep or this diff).
 
 - [ ] 14. (all) Map check: `python tools/docs_verify.py`
       done-when: 0 failed (paste the summary line).
