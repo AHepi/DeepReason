@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=5 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -159,7 +159,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       syntax OK
       ```
       exits 0.
-- [ ] 5. (S13a) [COMMIT] Narrow `crit_argumentative_batch`'s top-level
+- [x] 5. (S13a) [COMMIT] Narrow `crit_argumentative_batch`'s top-level
       guard (`rules/crit.py:1378-1379`) from `if active_v6 and
       (endpoint_lease is None or critic_school_id is None): raise
       ValueError("v6 criticism requires one manifest-bound school
@@ -168,8 +168,21 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       done-when: `python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py -q`
       passes unmodified (paste "N passed, 0 failed" — proves the
       school-routed path is untouched by this narrowing). Run
-      `python tools/diff_budget.py $(git merge-base HEAD origin/main) --ceiling 1600 --paths src/deepreason/rules/crit.py`,
+      `python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py`,
       paste output, commit, push.
+
+      ```
+      $ python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py -q
+      2 passed in 1.30s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 2}, "total_insertions": 2, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+      (Used the true tranche-base commit `81d08e5f0` rather than
+      `81d08e5f0`, which now resolves to
+      `origin/main`'s own tip since this branch merged it mid-tranche —
+      the checklist text's literal command would measure zero pre-tranche
+      diff against the wrong reference; the intent, diffing against the
+      tranche's start point, is what was run.)
 - [ ] 6. (S13b) Remove `assert critic_school_id is not None`
       (`rules/crit.py:1438`, inside the `active_v6:` block), keeping
       `assert endpoint_lease is not None`. done-when: same test command as
@@ -265,7 +278,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
 - [ ] 15. (R13) [COMMIT] Subsystem test ring:
       `python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py -q`.
       done-when: output ends "N passed, 0 failed" (paste it). Run
-      `python tools/diff_budget.py $(git merge-base HEAD origin/main) --ceiling 1600`,
+      `python tools/diff_budget.py 81d08e5f0 --ceiling 1600`,
       paste output, commit with message citing R13/S13a-g, push with
       retry.
 
@@ -302,7 +315,7 @@ low-level `deepreason compile` path reaching it.
       `test_legacy_criticism_enabled_routes_to_school_free_circuit`,
       confirms `manifest.criticism_policy is None` when the flag is True
       — paste `python -m pytest tests/test_preparation.py -k legacy_criticism -q`
-      ending "2 passed". Run `python tools/diff_budget.py $(git merge-base HEAD origin/main) --ceiling 1600`,
+      ending "2 passed". Run `python tools/diff_budget.py 81d08e5f0 --ceiling 1600`,
       paste, commit, push.
 - [ ] 19. (S2c, C3) Add the `_versioned_source_config_data` pop-line for
       `LEGACY_CRITICISM_ENABLED` in `run_manifest.py`, UNCONDITIONALLY for
@@ -588,8 +601,8 @@ holds).
       `_versioned_source_config_data` pop-lines, additive only) — no
       other line in `capabilities/state.py`, `harness.py`'s event
       application, `invariants.py`, or any manifest schema/validator.
-      done-when: `git diff --stat $(git merge-base HEAD origin/main) -- src/deepreason/capabilities/state.py src/deepreason/harness.py src/deepreason/invariants.py` is empty, AND
-      `git diff $(git merge-base HEAD origin/main) -- src/deepreason/run_manifest.py`
+      done-when: `git diff --stat 81d08e5f0 -- src/deepreason/capabilities/state.py src/deepreason/harness.py src/deepreason/invariants.py` is empty, AND
+      `git diff 81d08e5f0 -- src/deepreason/run_manifest.py`
       shows ONLY `.pop(...)` line additions inside
       `_versioned_source_config_data` (paste the diff for visual
       confirmation).

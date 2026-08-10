@@ -1370,8 +1370,8 @@ def crit_argumentative_batch(
 
         run_manifest = RunManifest.model_validate(run_manifest)
         active_v6 = run_manifest.schema_version == 6
-    if active_v6 and (endpoint_lease is None or critic_school_id is None):
-        raise ValueError("v6 criticism requires one manifest-bound school route")
+    if active_v6 and endpoint_lease is None:
+        raise ValueError("v6 criticism requires a manifest-bound route")
     target_ids = list(dict.fromkeys(target_ids))
     if not target_ids:
         return []
