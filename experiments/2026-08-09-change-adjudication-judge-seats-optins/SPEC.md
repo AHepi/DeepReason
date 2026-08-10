@@ -1704,3 +1704,154 @@ ceiling and the ~1,131-line component sum.
 Rubric: 4/4 yes (accept criterion present; blast-radius census pasted and
 classified; frozen-surface forecast recorded — none; traceable to
 R19/R20, the same authority as S13a-g, not a new fork).
+
+---
+
+## S13i (addendum, R21) — self-sufficient dispatch: how the scheduler-authority boundary and the school separation both hold
+
+### Measurements
+
+M7: `docs/map/SEAM-scheduler-x-rules.md`'s checked invariant (`check:` at
+the "The scheduler never chooses a prose authority" paragraph):
+```python
+f = lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m)))))
+               if isinstance(n, ast.Call) and getattr(n.func, "id", "") == "crit_argumentative_batch"]
+a = f("_arg_crit"); b = f("_foreign_arg_crit")
+assert len(a) == 1 and not a[0].keywords, [k.arg for k in a[0].keywords]
+```
+`_arg_crit`'s call to `crit_argumentative_batch` must carry ZERO keywords.
+S13f as originally planned (scheduler resolves `endpoint_lease`, passes it
+plus `run_manifest`/`critic_school_id=None` as keywords) violates this
+literally and in principle — traced to `_resolve_authority`
+(`rules/crit.py:91-93`): `if explicit_authority is None: if policy_call:
+raise ValueError("manifest-bound criticism requires explicit
+argumentative authority")`. `policy_call` becomes `True` the moment
+`_critic_execution`'s `call_kwargs` is non-empty (`rules/crit.py:1213,1376`:
+`policy_call = (bool(call_kwargs) or argumentative_authority is not None
+or coverage_observer is not None)`), which S13h's own endpoint-only branch
+makes non-empty. The scheduler would be the only party able to supply
+`argumentative_authority` on this call site — exactly the "third state"
+the seam's prose forbids.
+
+M8: `LLMAdapter` already carries a private, pre-bound manifest reference
+independent of any per-call argument — `llm/adapter.py:253-254`:
+`self._v6_authority_harness = None; self._v6_authority_manifest = None`
+at construction, populated by `bind_v6_authority(self, harness, manifest)`
+(`:256-...`), called exactly once, at `Scheduler.__init__`
+(`scheduler/scheduler.py:203`: `adapter.bind_v6_authority(harness,
+run_manifest)`) — confirmed by
+`tests/test_v6_scheduler_model_phase_deferral.py::test_v6_scheduler_rejects_an_unguarded_adapter_before_work`
+raising `WorkflowAuthorizationError` when this binding is absent. By the
+time ANY scheduler method runs under a v6 manifest, `self.adapter`
+already carries the canonical manifest — no new call-time plumbing
+needed.
+
+M9: `policy_call`'s current computation (`bool(call_kwargs) or ...`) is
+NEVER independently tested — `grep -rn "policy_call" tests/ docs/map/`
+shows every hit either IS the computation itself (`rules/crit.py:1213,1376`)
+or calls `_resolve_authority` directly with an explicit `policy_call=`
+boolean (`test_prose_refutation_boundaries.py`,
+`docs/map/CON-authority.md:132,148`, `docs/map/CON-criticism-source.md:37`)
+— none exercises the internal `bool(call_kwargs)` derivation. Before
+S13h, `call_kwargs` was non-empty if and only if `critic_school_id is not
+None` (the old all-or-nothing guard made the two conditions identical for
+every reachable combination) — so redefining `policy_call =
+(critic_school_id is not None or argumentative_authority is not None or
+coverage_observer is not None)` is behaviorally IDENTICAL to today for
+every combination reachable before S13h, and differs only for the new
+endpoint-only combination S13h introduced — which is exactly the case
+that needs to differ.
+
+### Design
+
+- S13i-1 (R21): add one small public read-only accessor to `LLMAdapter`
+  (`llm/adapter.py`, adjacent to `bind_v6_authority`):
+  ```python
+  def bound_v6_manifest(self):
+      """The manifest bound by bind_v6_authority, or None if unbound."""
+      return self._v6_authority_manifest
+  ```
+  accept: `tests/test_model_firewall.py` or a new small test asserts
+  `LLMAdapter(...).bound_v6_manifest() is None` before binding and equals
+  the bound manifest after `bind_v6_authority(harness, manifest)`.
+- S13i-2 (R19, R21): redefine `policy_call` in BOTH `crit_argumentative`
+  (`rules/crit.py:1213` region — the single-target function) and
+  `crit_argumentative_batch` (`:1376` region) from `bool(call_kwargs) or
+  argumentative_authority is not None or coverage_observer is not None`
+  to `critic_school_id is not None or argumentative_authority is not None
+  or coverage_observer is not None`. accept: every existing test in
+  `tests/test_foreign_school_criticism_scheduler_c3.py`,
+  `tests/test_prose_refutation_boundaries.py` passes unmodified (M9's
+  proof made concrete).
+- S13i-3 (R19, R21): in `crit_argumentative_batch`, when the caller
+  supplies no `run_manifest`/`endpoint_lease`/`critic_school_id` (the
+  scheduler's existing keyword-free call shape, UNCHANGED), self-detect
+  v6-ness via `adapter.bound_v6_manifest()`: if non-None, internally set
+  `run_manifest = adapter.bound_v6_manifest()` and `endpoint_lease =
+  select_lease(adapter.leases, "argumentative_critic", 0)` (the identical
+  fallback `run_config_referee` already uses, `referee.py:507-508`)
+  before the existing `active_v6 = run_manifest.schema_version == 6`
+  computation — `critic_school_id` stays `None`. If
+  `adapter.bound_v6_manifest()` is None (a genuinely pre-v6/legacy
+  adapter), behavior is BYTE-IDENTICAL to today (falls through to the
+  existing non-transactional `else` branch). accept: a new test,
+  `tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6`
+  (Step 11's originally-planned test, now written against the corrected
+  design) passes with the SCHEDULER'S call to `crit_argumentative_batch`
+  unchanged (`harness, batch, self.adapter, config` — zero keywords),
+  AND `python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._arg_crit))); calls = [n for n in ast.walk(t) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'crit_argumentative_batch']; assert len(calls) == 1 and not calls[0].keywords"`
+  exits 0 — this IS `SEAM-scheduler-x-rules.md`'s own checked invariant,
+  re-run directly to prove S13i does not violate it.
+- S13i-4 (R19, R21): simplify `scheduler.py::_arg_crit`'s plain branch —
+  DELETE the `if self.run_manifest is not None and
+  self.run_manifest.schema_version == 6: ... _defer_untransactional_v6_phase(...) ...
+  continue` block entirely (S13i-3 makes `crit_argumentative_batch`
+  self-sufficient under v6, so deferring is no longer needed for this
+  phase); the call `crit_argumentative_batch(harness, batch, self.adapter,
+  config)` becomes reachable unconditionally, exactly as it already is
+  for schema versions other than 6. This is SMALLER than the original
+  S13f plan (deletes code, adds none at the call site) and needs no new
+  `select_lease`/`run_manifest`/`transaction_trigger_ref` plumbing in
+  `scheduler.py` at all — that logic now lives entirely inside
+  `crit_argumentative_batch` (S13i-3), which is the correct owner per
+  "the scheduler decides what is worked on... the rules decide what that
+  work means" (`SEAM-scheduler-x-rules.md`'s own opening line).
+  accept: Step 13's reader test (deferral marker still correct for
+  `hv-floor`/`hv-spot-check`/`rubric-trial`) passes unmodified.
+
+### Frozen-surface contact forecast (S13i)
+
+`llm/adapter.py` is touched (S13i-1) — NOT one of the five named frozen
+surfaces (`capabilities/state.py`, `harness.py`, `invariants.py`,
+`run_manifest.py`, replay-validation formats). The new accessor is
+read-only, additive, and reads state the adapter already stores; no
+construction-signature change, no new stored attribute. No grant needed
+beyond R16's already-scoped `run_manifest.py` pop-lines (unrelated).
+
+### Blast-radius census (S13i)
+
+`grep -rln "bound_v6_manifest\|_v6_authority_manifest" tests/ docs/map/` →
+`_v6_authority_manifest`/`_v6_authority_harness` appear only inside
+`llm/adapter.py` itself per M8's trace (no test or map document names them
+directly) — the new PUBLIC name `bound_v6_manifest` is genuinely new,
+zero existing hits, nothing to classify as MUST NOT MOVE. `policy_call`'s
+census is M9 above. `_arg_crit`'s call-shape census is
+`SEAM-scheduler-x-rules.md`'s own check, re-run as S13i-3's accept
+criterion rather than merely read.
+
+### Budget (S13i)
+
+S13i-1: ~5 lines. S13i-2: ~2 lines (two one-line redefinitions). S13i-3:
+~10 lines. S13i-4: ~-12 lines (net deletion). New tests: ~25 lines net
+(the accessor test and the corrected dispatch test both already counted
+in earlier budgets; the deleted deferral-branch code reduces S13f's
+original estimate). Net addition to the Road E total: approximately +20
+lines against the 166-line S13a-h subtotal → **~186 lines**, still well
+inside the 1,600 ceiling.
+
+Rubric: 6/6 yes (every S13i item has an accept criterion; blast-radius
+census pasted and classified; frozen-surface forecast recorded — `llm/adapter.py`
+touched, confirmed not one of the five; every measurement precedes its
+design claim; the design was independently verified to satisfy
+`SEAM-scheduler-x-rules.md`'s own checked invariant, not merely argued to;
+traceable to R19/R20/R21, not invented).
