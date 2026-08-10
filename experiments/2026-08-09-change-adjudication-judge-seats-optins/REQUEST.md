@@ -451,3 +451,39 @@ re-planned — R19/R20 state the requirement; the concrete code shape (which
 payload schema, which recovery contract, how the existing school-routed
 `_foreign_arg_crit` path keeps working byte-identically) is SPEC work, not
 assumed here.
+
+### Amendment 8 (2026-08-09, mid-execution, operator's own words, response to the blast-radius report)
+
+> Conduct blast radius analysis before changing any code. Then return
+> results here.
+
+> The separation between schools and criticism need to exist.
+
+The first message paused execution before Step 7 to conduct a full census
+of the remaining Road E and opt-in touch points. That census surfaced a
+serious, previously-unread architectural boundary
+(`docs/map/SEAM-scheduler-x-rules.md`'s checked invariant: the scheduler's
+call into criticism must carry zero keywords, enforcing "the scheduler
+never chooses a prose authority") that the originally-planned scheduler
+wiring (S13f) would have violated. Two candidate resolutions were priced
+and reported; the operator's second message reaffirms R19/R20's standing
+requirement rather than picking the boundary-weakening option, which
+resolves the choice: the separation must be achieved WITHOUT touching the
+scheduler-authority boundary.
+
+R21 (process, reaffirming R19/R20, resolving the blast-radius report's
+fork): "The separation between schools and criticism need to exist." —
+read together with R19/R20 and Amendment 8's first message, this rules
+out the report's option (b) (revising `SEAM-scheduler-x-rules.md`'s
+documented boundary) and directs the resolution toward option (a)
+(`crit_argumentative_batch` self-detects v6-ness and self-resolves its own
+route, with no new scheduler-supplied keywords) — subsequently verified
+fully viable: `LLMAdapter` already stores a private manifest reference
+(`_v6_authority_manifest`, bound once at `Scheduler.__init__` via
+`adapter.bind_v6_authority`, `scheduler.py:203`) that a small new
+read-only accessor can expose, and redefining `policy_call` to key on
+`critic_school_id` presence rather than `call_kwargs` non-emptiness is
+confirmed behaviorally identical to today for every combination reachable
+before S13h (checked: every existing test/map check on `policy_call`/
+`_resolve_authority` supplies `policy_call` explicitly, never depends on
+its internal computation). Recorded as SPEC.md's S13i.
