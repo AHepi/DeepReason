@@ -306,6 +306,12 @@ def _lease(family: str, role: str = "judge", seat: int = 0):
 
     The endpoint identity varies with the seat, so a binding that names the
     wrong seat's endpoint is distinguishable from one that names the right one.
+    model_id also varies with the seat (Part D2, S16, Amendment 9 R24):
+    require_cross_family_judge_ensemble gained a structural same-model
+    substitute, and two _lease("glm", seat=N) calls with the SAME model_id
+    would silently satisfy it -- this file's whole point is testing what
+    happens when family independence is NOT obtainable, so its fixture must
+    not accidentally hand model independence to same-family leases instead.
     """
 
     from deepreason.llm.firewall import EndpointLease, Route
@@ -316,7 +322,7 @@ def _lease(family: str, role: str = "judge", seat: int = 0):
         route=Route(
             endpoint_id=f"{role}-{family}-{seat}",
             base_url=f"mock://{family}",
-            model_id=f"model-{family}",
+            model_id=f"model-{family}-{seat}",
             provider="mock",
             family=family,
             max_tokens=64,
@@ -416,6 +422,12 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
     Byte-level proof that the existing gate did not move lives in `git diff`;
     this pins the behaviour that diff is protecting, so a future edit to the
     cross-family gate fails here even if the diff is never inspected again.
+
+    `one_family` uses two DIFFERENT models of the one family (seat 0 vs 1,
+    `_lease`'s model_id varies with seat) rather than two calls with
+    identical arguments: the latter would exercise Part D2's later,
+    deliberately different same-MODEL substitute (Amendment 9/R24) instead
+    of this test's actual subject, same-family-without-cross-school.
     """
 
     import pytest
@@ -424,7 +436,7 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
         require_cross_family_judge_ensemble,
     )
 
-    one_family = (_lease("glm"), _lease("glm"))
+    one_family = (_lease("glm", seat=0), _lease("glm", seat=1))
     with pytest.raises(JudgeEnsemblePolicyError, match="SECOND_JUDGE_FAMILY_REQUIRED"):
         require_cross_family_judge_ensemble({"judge": one_family})
 

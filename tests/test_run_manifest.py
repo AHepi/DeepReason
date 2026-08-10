@@ -619,6 +619,20 @@ def test_cross_family_rubric_policy_fails_preflight_for_one_family():
     assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
 
 
+def test_blind_same_model_judges_satisfies_require_cross_family_default():
+    """Part D2 (S16, Amendment 9 R24): the structural same-model
+    substitute applies under rubric_policy="require_cross_family" (the
+    DEFAULT) itself, not just a separate policy value -- a manifest built
+    via --blind-same-model-judges' lever validates clean without needing
+    any change to the operator's chosen rubric_policy at all."""
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", blind_same_model_judges=True,
+        rubric_policy="require_cross_family", compiled_at=STAMP,
+    )
+    assert len(manifest.roles["judge"]) == 2
+    assert manifest.roles["judge"][0] == manifest.roles["judge"][1]
+
+
 def test_judge_seats_opt_in_does_not_bypass_cross_family_requirement():
     """Part D, R2 (solo law reconciliation, SPEC.md's "Reconciliation with
     the cross-family gate"): JUDGE_SEATS_ENABLED is the master judge-

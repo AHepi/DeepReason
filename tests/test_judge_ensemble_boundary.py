@@ -129,6 +129,36 @@ def test_trial_accepts_frozen_cross_family_direct_ensemble(harness):
     assert calls == ["critic-test", "defender-test", "gemma-test", "qwen-test"]
 
 
+def test_trial_accepts_genuinely_identical_model_direct_ensemble(harness):
+    """Part D2 (S16, Amendment 9 R24): >=2 judge seats that are the exact
+    same (provider, model_id) satisfy require_cross_family_judge_ensemble
+    via the structural same-model substitute -- distinct from the
+    same_family_pair=True case in test_trial_rejects_invalid_direct_
+    ensemble_before_any_endpoint_call above (different model STRINGS of
+    one family, still correctly rejected)."""
+    target, commitment = _trial_fixture(harness)
+    calls = []
+    ruling = json.dumps(
+        {"verdict": "pass", "decisive_point": "the mechanism is explicit"}
+    )
+    judges = [
+        _counting_endpoint(
+            calls, ruling, name="mock://judge-seat-0", model="gemma-test"
+        ),
+        _counting_endpoint(
+            calls, ruling, name="mock://judge-seat-1", model="gemma-test"
+        ),
+    ]
+
+    result = run_trial(
+        harness, target.id, commitment, _trial_adapter(harness, judges, calls), Config(),
+        authority="status",
+    )
+
+    assert result is None
+    assert calls == ["critic-test", "defender-test", "gemma-test", "gemma-test"]
+
+
 def test_judge_pack_never_names_an_author_school_or_model(harness):
     """Part D2 (S15, Amendment 9 R24, judge-facing twin of R9's
     test_the_criticism_prompt_never_names_an_author_or_a_school): the

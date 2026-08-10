@@ -1514,12 +1514,22 @@ class RunManifest(BaseModel):
                         f"roles.{role}.{index}.model_id is unresolved: {route.model_id}"
                     )
         if self.rubric_policy == "require_cross_family":
+            judge_routes = self.roles.get("judge", ())
             families = {
                 route.family.strip().casefold()
-                for route in self.roles.get("judge", ())
+                for route in judge_routes
                 if route.family.strip()
             }
-            if len(families) < 2:
+            models = {
+                f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+                for route in judge_routes
+            }
+            # Structural same-model substitute (Amendment 9/R24, mirrors
+            # llm/firewall.py::require_cross_family_judge_ensemble's
+            # runtime check): >=2 judge seats that are the exact same
+            # model satisfy this, narrower than same-family so a
+            # same-family-different-model pair still fails below.
+            if len(families) < 2 and not (len(judge_routes) >= 2 and len(models) == 1):
                 raise ValueError(
                     "SECOND_JUDGE_FAMILY_REQUIRED: require_cross_family needs "
                     "at least two distinct judge families"
@@ -3215,12 +3225,23 @@ def compile_run_manifest(
         }
 
     if rubric_policy == "require_cross_family":
+        judge_routes = roles.get("judge", ())
         families = {
             route.family.strip().casefold()
-            for route in roles.get("judge", ())
+            for route in judge_routes
             if route.family.strip()
         }
-        if len(families) < 2:
+        judge_models = {
+            f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+            for route in judge_routes
+        }
+        # Structural same-model substitute (Amendment 9/R24), mirrored
+        # from RunManifest's own model-validator above and
+        # llm/firewall.py::require_cross_family_judge_ensemble's runtime
+        # check: >=2 judge seats, all the exact same model.
+        if len(families) < 2 and not (
+            len(judge_routes) >= 2 and len(judge_models) == 1
+        ):
             raise RunManifestError(
                 "SECOND_JUDGE_FAMILY_REQUIRED",
                 "rubric workloads require at least two frozen judge families; "

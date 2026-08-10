@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57c blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57b complete; diff-budget base switched to 1079c86ed for Part D2, 175/1600)
+State: next=57d blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57c complete; diff-budget base 1079c86ed for Part D2, 281/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1809,7 +1809,7 @@ that lever IS "the switch."
       $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 39, "tests": 136, "docs/map": 0}, "total_insertions": 175, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 57c. (S16, R24) [COMMIT] `llm/firewall.py::require_cross_family_
+- [x] 57c. (S16, R24) [COMMIT] `llm/firewall.py::require_cross_family_
       judge_ensemble` (runtime) and `RunManifest`'s own `rubric_policy ==
       "require_cross_family"` model-validator (compile-time,
       `run_manifest.py:1516-1526`) both gain the structural same-model
@@ -1824,6 +1824,61 @@ that lever IS "the switch."
       AND `tests/test_run_manifest.py::test_cross_family_rubric_policy_
       fails_preflight_for_one_family` pass UNMODIFIED (per the note
       above — same-family-different-model stays rejected).
+
+      **Fourth enforcement site found, not three** (SPEC.md's S14 census
+      corrected again): `compile_run_manifest` itself has its OWN
+      pre-check (`run_manifest.py:3227-3240`, function-level, raising
+      before the `RunManifest` object is even constructed) — separate
+      from the `RunManifest.model_validator` at `:1516-1526` this step
+      originally named. Both needed the identical structural-substitute
+      edit; missed on the first pass, caught immediately by
+      `test_blind_same_model_judges_satisfies_require_cross_family_
+      default` failing against the unpatched second site, fixed before
+      commit.
+
+      **Three more collateral fixes, all in
+      `tests/test_prose_refutation_boundaries.py`** (not predicted by
+      SPEC.md's S14/S16 — a genuine gap in that census, found only by
+      running the full ring): its `_lease(family, seat=0)` test helper
+      derived `model_id` from `family` ALONE, so two same-family calls
+      were also, coincidentally, two same-MODEL calls under the old code
+      — harmless before this step (family was the only diversity axis
+      that mattered), but three tests explicitly constructing
+      `_lease("glm"), _lease("glm")` to prove "same family, no
+      cross-school binding, must still refuse" now accidentally
+      satisfied the NEW same-model substitute instead of hitting the
+      rejection they were pinning. Fixed at the helper (`model_id` now
+      varies with `seat` too, so two DIFFERENT seats of one family are
+      genuinely different models — matching how every other same-family
+      fixture in this tranche, e.g. `gemma-test-a`/`gemma-test-b`, was
+      already built) plus one caller
+      (`test_the_cross_family_gate_is_untouched_by_the_cross_school_
+      sibling`) that called `_lease("glm")` twice with NO seat argument
+      at all (both defaulting to seat 0, so the helper fix alone
+      couldn't differentiate them) — given explicit `seat=0`/`seat=1`.
+      No assertion weakened: every one of these three tests still proves
+      exactly what its docstring claims, against a fixture that now
+      actually exercises that claim instead of accidentally drifting
+      onto R24's new path.
+
+      **Docs_verify trap:** the first version of `require_cross_family_
+      judge_ensemble`'s new docstring named `compile_run_manifest`
+      literally, tripping `SEAM-llm-x-manifest.md`'s own checked
+      invariant that `src/deepreason/llm/` never references
+      `run_manifest.py`'s construction/persistence functions (a layering
+      boundary: `llm/` is beneath `run_manifest.py`, not the reverse).
+      Reworded to "the manifest-compile CLI" — same information, no
+      forbidden identifier.
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_model_firewall.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_prose_refutation_boundaries.py -q
+      164 passed in 13.14s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 782 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 87, "tests": 194, "docs/map": 0}, "total_insertions": 281, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 57d. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
       grant] The `defended_trial`/V4 criticism-policy
       `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` check
