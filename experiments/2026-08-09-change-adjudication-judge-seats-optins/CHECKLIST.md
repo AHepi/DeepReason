@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=38 blockers=none (Parts A+B+C complete; Part D steps 33-37 complete)
+State: next=39 blockers=none (Parts A+B+C complete; Part D steps 33-38 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1438,10 +1438,37 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 922, "docs/map": 111}, "total_insertions": 1304, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 38. (S2b, R2) `_versioned_source_config_data` pop-lines for all
+- [x] 38. (S2b, R2) `_versioned_source_config_data` pop-lines for all
       three new fields, unconditional. Qualification-subject-exclusion
       test for all three (same shape as Step 20, one assertion per
       field).
+
+      The pop-lines (`JUDGE_SEATS_ENABLED`, `JUDGE_SUMMONS_PER_CYCLE`,
+      `JUDGE_SUMMONS_COOLDOWN`) already landed in Step 35's commit
+      (`f57cf13dc`), pulled forward while fixing that step's
+      `SEAM-manifest-x-schools.md`/`SUB-application.md`/`SUB-scheduler.md`
+      docs_verify failures — noted there, not re-done here. This step
+      adds the qualification-subject-exclusion test only: new
+      `test_judge_seats_fields_excluded_from_subject_digest` in
+      `tests/test_reusable_qualification.py`, modeled on
+      `test_adjudication_status_authority_flag_excluded_from_subject_
+      digest` (same shape: never written to the manifest at all, so no
+      `criticism_policy`-style legitimate downstream difference to carve
+      out, unlike `test_legacy_criticism_flag_excluded_from_subject_
+      digest`'s `criticism_policy=None` override) — one assertion per
+      field, all three raw Config names absent from the payload's JSON.
+
+      ```
+      $ python -m pytest tests/test_reusable_qualification.py::test_judge_seats_fields_excluded_from_subject_digest -q
+      1 passed in 0.31s
+      $ python -m pytest tests/test_reusable_qualification.py -q
+      36 passed in 17.90s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 851 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 948, "docs/map": 111}, "total_insertions": 1330, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 39. (S2b) CLI/operator-facing surface: the flag's help text (or
       setup-time confirmation prompt) surfaces the judge-audit evidence
       summary named in SPEC.md §2(b) (11.9% sensitivity under strict

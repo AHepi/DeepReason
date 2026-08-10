@@ -226,6 +226,32 @@ def test_adjudication_status_authority_flag_excluded_from_subject_digest():
     assert "ADJUDICATION_STATUS_AUTHORITY_ENABLED" not in json.dumps(payload)
 
 
+def test_judge_seats_fields_excluded_from_subject_digest():
+    """Part D (S2b, C9): JUDGE_SEATS_ENABLED and its two throttle knobs
+    (JUDGE_SUMMONS_PER_CYCLE, JUDGE_SUMMONS_COOLDOWN) are consulted only
+    at scheduler dispatch sites (scheduler.py) -- same shape as
+    ADJUDICATION_STATUS_AUTHORITY_ENABLED above, never written to the
+    manifest at all, so all three raw Config field names must be absent
+    from the qualification subject payload, one assertion per field."""
+
+    profile = _profile()
+    manifest = _manifest(
+        profile,
+        config_updates={
+            "JUDGE_SEATS_ENABLED": True,
+            "JUDGE_SUMMONS_PER_CYCLE": 3,
+            "JUDGE_SUMMONS_COOLDOWN": 7,
+        },
+    )
+
+    payload = qualification_subject_payload(manifest, profile)
+    dumped = json.dumps(payload)
+
+    assert "JUDGE_SEATS_ENABLED" not in dumped
+    assert "JUDGE_SUMMONS_PER_CYCLE" not in dumped
+    assert "JUDGE_SUMMONS_COOLDOWN" not in dumped
+
+
 def test_incomplete_cache_is_never_reusable(tmp_path):
     profile = _profile()
     manifest = _manifest(profile)
