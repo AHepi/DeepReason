@@ -1333,11 +1333,6 @@ def crit_argumentative(
         )
 
 
-# The school-free argumentative-criticism circuit's contract id (Road E),
-# mirroring referee.py's CONFIG_REFEREE_CONTRACT_V1.
-LEGACY_ARG_CRITICISM_CONTRACT_V1 = "legacy-argumentative-criticism.v1"
-
-
 def crit_argumentative_batch(
     harness,
     target_ids,

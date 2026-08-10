@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=4 blockers=none
+State: next=5 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -144,13 +144,20 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       are deleted (never executed, per the re-planning rule — no history
       to preserve for unexecuted steps).
 
-- [ ] 4. (S13g) Revert Step 2: remove the now-superseded
+- [x] 4. (S13g) Revert Step 2: remove the now-superseded
       `LEGACY_ARG_CRITICISM_CONTRACT_V1` constant and its comment from
       `src/deepreason/rules/crit.py` (M2-M5 showed the clean-separation
       design needs no second payload schema). done-when:
       `grep -q LEGACY_ARG_CRITICISM_CONTRACT_V1 src/deepreason/rules/crit.py`
       exits 1 (not found), and
       `python -c "import ast; ast.parse(open('src/deepreason/rules/crit.py').read())"`
+
+      ```
+      $ grep -q LEGACY_ARG_CRITICISM_CONTRACT_V1 src/deepreason/rules/crit.py; echo $?
+      1
+      $ python -c "import ast; ast.parse(open('src/deepreason/rules/crit.py').read())" && echo "syntax OK"
+      syntax OK
+      ```
       exits 0.
 - [ ] 5. (S13a) [COMMIT] Narrow `crit_argumentative_batch`'s top-level
       guard (`rules/crit.py:1378-1379`) from `if active_v6 and
