@@ -235,6 +235,110 @@ def test_seat_school_flag_refuses_without_the_master_gate(monkeypatch):
         )
 
 
+def test_criticism_seat_flag_produces_distinct_binding_when_school_routed(monkeypatch):
+    """Step 44b (S2d/R27, SPEC.md addendum S18): criticism_seats (the
+    --criticism-seat CLI flag's eventual carrier) binds ONE named school's
+    argumentative_critic seat to a distinct route, gated on
+    SCHOOL_SEATS_ENABLED AND LEGACY_CRITICISM_ENABLED=False, and never
+    touches control_plane_policy.school_execution at all -- proving the
+    criticism-side lever is independent of Step 44's conjecture-side one."""
+
+    original_config = preparation_module.Config
+
+    def _forced_criticism_seats_config(**kwargs):
+        return original_config(
+            **kwargs, SCHOOL_SEATS_ENABLED=True, LEGACY_CRITICISM_ENABLED=False
+        )
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_criticism_seats_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does a criticism seat bind just that school's critic route?",
+        compiled_at=STAMP,
+        criticism_seats={"school-2": distinct_profile},
+    )
+
+    # The argumentative_critic role is now a two-seat ensemble: the default
+    # profile at seat 0, the distinct profile at seat 1.
+    critic_routes = manifest.roles["argumentative_critic"]
+    assert len(critic_routes) == 2
+    assert critic_routes[0].endpoint_id == profile.endpoint_id
+    assert critic_routes[1].endpoint_id == distinct_profile.endpoint_id
+
+    criticism = manifest.criticism_policy
+    by_school = {b.school_id: b for b in criticism.bindings}
+    assert set(by_school) == {"school-0", "school-1", "school-2", "school-3"}
+    assert by_school["school-2"].endpoint_id == distinct_profile.endpoint_id
+    assert by_school["school-2"].seat == 1
+    assert by_school["school-2"].role == "argumentative_critic"
+    for school_id in ("school-0", "school-1", "school-3"):
+        assert by_school[school_id].endpoint_id == profile.endpoint_id
+        assert by_school[school_id].seat == 0
+    # Conjecture-side routing (Step 44's lever) is untouched by this flag.
+    assert manifest.control_plane_policy.school_execution.mode == "conditioning_only"
+
+
+def test_criticism_seat_flag_refuses_without_school_routed_criticism(monkeypatch):
+    """criticism_seats requires LEGACY_CRITICISM_ENABLED=False already set:
+    a per-school distinct critic route means nothing while criticism is
+    still routed through the school-free legacy circuit (Amendment 11/R28's
+    now-default). Refuses typed, not a silent no-op."""
+
+    original_config = preparation_module.Config
+
+    def _forced_school_seats_only_config(**kwargs):
+        return original_config(**kwargs, SCHOOL_SEATS_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_seats_only_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(
+        RunManifestError, match="CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM"
+    ):
+        build_preparation_manifest(
+            profile,
+            question="Does a criticism seat refuse cleanly under legacy criticism?",
+            compiled_at=STAMP,
+            criticism_seats={"school-0": distinct_profile},
+        )
+
+
+def test_criticism_seat_flag_refuses_without_the_master_gate():
+    """Defense-in-depth companion (mirrors the CLI's own gate): criticism_seats
+    given while SCHOOL_SEATS_ENABLED stays at its default False is a typed
+    refusal -- checked ahead of the LEGACY_CRITICISM_ENABLED check, so this
+    fires even though LEGACY_CRITICISM_ENABLED is also still at its default
+    True here (both prerequisites are missing; the master gate is reported
+    first, matching Step 44's own precedent)."""
+
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(RunManifestError, match="SCHOOL_SEATS_DISABLED"):
+        build_preparation_manifest(
+            profile,
+            question="Does an ungated criticism seat refuse cleanly?",
+            compiled_at=STAMP,
+            criticism_seats={"school-0": distinct_profile},
+        )
+
+
 def test_legacy_criticism_enabled_by_default_is_byte_identical():
     """Amendment 11/R28 (2026-08-10, supersedes Part B/R3's original
     default): LEGACY_CRITICISM_ENABLED now defaults True -- the operator's
@@ -347,9 +451,9 @@ def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch)
     captured = {}
     original_policy = preparation_module.engaged_criticism_policy
 
-    def _capturing_policy(endpoint_id, *, authority="observe_only"):
+    def _capturing_policy(endpoint_id, *, authority="observe_only", seat_map=None):
         captured["authority"] = authority
-        return original_policy(endpoint_id, authority="observe_only")
+        return original_policy(endpoint_id, authority="observe_only", seat_map=seat_map)
 
     monkeypatch.setattr(preparation_module, "engaged_criticism_policy", _capturing_policy)
     profile = _profile()

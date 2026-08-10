@@ -59,6 +59,7 @@ from deepreason.run_manifest import (
     load_run_manifest,
 )
 from deepreason.seat_bindings import (
+    resolve_criticism_seats,
     resolve_school_seats,
     resolve_seat_bindings,
     resolve_seat_bindings_by_group,
@@ -271,22 +272,26 @@ def _request_digest(
     return sha256_hex(_REQUEST_DOMAIN + canonical_json(payload))
 
 
-def _conjecturer_school_seat_ensemble(
+def _school_seat_route_ensemble(
     profile: ProviderProfileV1,
     school_seats: Mapping[str, ProviderProfileV1] | None,
 ) -> tuple[list, dict[str, tuple[int, str]]]:
-    """Extend the conjecturer role into a route ensemble for Part E's
-    conjecture-side school seats (S2d/R5, Amendment 11/R27, 2026-08-10).
+    """Extend one role's route into a route ensemble for a school-seat opt-in
+    (S2d/R5, Amendment 11/R27, 2026-08-10) -- role-agnostic: the caller picks
+    which role's route list this becomes (`conjecturer` for Step 44's
+    conjecture-side `--school-seat`, `argumentative_critic` for Step 44b's
+    criticism-side `--criticism-seat`); both levers need the identical
+    seat-allocation shape, only the destination role differs.
 
     Seat 0 is always the default broadcast profile. Each DISTINCT profile
     named in `school_seats` gets one additional seat (schools sharing the
     same profile share a seat -- deduplicated by endpoint_id, in first-
     seen order for determinism). Returns the route-spec list (for
-    `Config.roles["conjecturer"]`) and a `school_id -> (seat, endpoint_id)`
-    map so `route_bound_school_execution_policy` can bind each school to
-    the seat that actually carries its route -- `SchoolRoleBindingV1`
-    resolves against `manifest.roles["conjecturer"][seat]`, not a bare
-    endpoint_id string, so both must agree with what this function built.
+    `Config.roles[<role>]`) and a `school_id -> (seat, endpoint_id)` map so
+    the caller's policy builder can bind each school to the seat that
+    actually carries its route -- `SchoolRoleBindingV1` resolves against
+    `manifest.roles[<role>][seat]`, not a bare endpoint_id string, so both
+    must agree with what this function built.
     """
 
     default_spec = profile.endpoint_spec()
@@ -307,6 +312,7 @@ def _config_for_profile(
     *,
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
+    criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
 ) -> Config:
     endpoint = profile.endpoint_spec()
     # seat_bindings overrides specific roles onto a DIFFERENT profile's
@@ -321,10 +327,15 @@ def _config_for_profile(
         for role in V3_CANONICAL_ROLES
     }
     if school_seats:
-        conjecturer_routes, _seat_map = _conjecturer_school_seat_ensemble(
+        conjecturer_routes, _seat_map = _school_seat_route_ensemble(
             profile, school_seats
         )
         roles["conjecturer"] = conjecturer_routes
+    if criticism_seats:
+        critic_routes, _seat_map = _school_seat_route_ensemble(
+            profile, criticism_seats
+        )
+        roles["argumentative_critic"] = critic_routes
     return Config(
         engine_profile="full",
         model_profile=profile.model_profile,
@@ -413,6 +424,7 @@ def build_preparation_manifest(
     attached_evidence: bool = False,
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
+    criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
 ):
     """Build the in-memory V6 manifest used by qualification and preparation.
 
@@ -426,30 +438,52 @@ def build_preparation_manifest(
     CONJECTURE-side route (Part E, S2d/R5, Amendment 11/R27, 2026-08-10 --
     a school is a conjecture-side tool; this never touches criticism
     routing); requires ``Config.SCHOOL_SEATS_ENABLED``, checked here as
-    defense-in-depth alongside the CLI's own gate.
+    defense-in-depth alongside the CLI's own gate. ``criticism_seats`` is
+    the fully independent CRITICISM-side counterpart (S2d/R27, Step 44b,
+    SPEC.md addendum S18): maps ``school_id -> ProviderProfileV1`` for one
+    or more schools whose ``argumentative_critic`` binding should diverge
+    from the shared default route; requires BOTH
+    ``Config.SCHOOL_SEATS_ENABLED`` and ``Config.LEGACY_CRITICISM_ENABLED
+    is False`` (criticism must already be school-routed before a
+    per-school distinct route is meaningful) -- refuses typed, not
+    silently, when either prerequisite is missing.
     """
 
     if run_input_digest is None:
         _dossier, run_input, _workload = _records_for_question(question)
         run_input_digest = run_input.run_input_digest
     config = _config_for_profile(
-        profile, seat_bindings=seat_bindings, school_seats=school_seats
+        profile,
+        seat_bindings=seat_bindings,
+        school_seats=school_seats,
+        criticism_seats=criticism_seats,
     )
-    if school_seats and not config.SCHOOL_SEATS_ENABLED:
+    if (school_seats or criticism_seats) and not config.SCHOOL_SEATS_ENABLED:
         raise RunManifestError(
             "SCHOOL_SEATS_DISABLED",
-            "school_seats requires Config.SCHOOL_SEATS_ENABLED",
+            "school_seats/criticism_seats requires Config.SCHOOL_SEATS_ENABLED",
             "/control_plane_policy/school_execution",
+        )
+    if criticism_seats and config.LEGACY_CRITICISM_ENABLED:
+        raise RunManifestError(
+            "CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM",
+            "criticism_seats requires Config.LEGACY_CRITICISM_ENABLED is False",
+            "/criticism_policy",
         )
     control_plane_policy = engaged_control_plane_policy_v3()
     if school_seats:
-        _routes, seat_map = _conjecturer_school_seat_ensemble(profile, school_seats)
+        _routes, seat_map = _school_seat_route_ensemble(profile, school_seats)
         control_plane_policy = control_plane_policy.model_copy(
             update={
                 "school_execution": route_bound_school_execution_policy(
                     profile.endpoint_id, seat_map=seat_map
                 )
             }
+        )
+    criticism_seat_map = None
+    if criticism_seats:
+        _routes, criticism_seat_map = _school_seat_route_ensemble(
+            profile, criticism_seats
         )
     return compile_run_manifest(
         config,
@@ -468,6 +502,7 @@ def build_preparation_manifest(
                     if config.ADJUDICATION_STATUS_AUTHORITY_ENABLED
                     else "observe_only"
                 ),
+                seat_map=criticism_seat_map,
             )
         ),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
@@ -697,6 +732,7 @@ class RunPreparationService:
             environ=self._environ, home=self._home
         )
         school_seats = resolve_school_seats(environ=self._environ, home=self._home)
+        criticism_seats = resolve_criticism_seats(environ=self._environ, home=self._home)
         seat_bindings_payload = (
             SeatBindingsEventPayloadV1.of(
                 [
@@ -715,6 +751,7 @@ class RunPreparationService:
             attached_evidence=request.dossier_digest is not None,
             seat_bindings=seat_bindings or None,
             school_seats=school_seats or None,
+            criticism_seats=criticism_seats or None,
         )
         try:
             bundle = resolve_completed_qualification(

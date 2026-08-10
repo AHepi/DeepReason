@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=44b blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-44 complete -- conjecture-side `--school-seat school-N=<profile>` CLI surface fully wired: config gate, v6_policy route-bound builder, preparation.py ensemble + threading into the production call site, seat_bindings.py persistence, cli/main.py flag+handler, mechanism+CLI-level tests, map fixes; next is Step 44b, the fully independent criticism-side `--criticism-seat` lever; diff-budget base a942f404c, 486/1600)
+State: next=45 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-44b complete -- BOTH independent school-seat levers now fully wired: conjecture-side `--school-seat` (Step 44) and criticism-side `--criticism-seat` (Step 44b, reusing the renamed `_school_seat_route_ensemble` helper and `parse_school_seat_flags`, its own `criticism-seat-bindings.yaml` persistence file, and `engaged_criticism_policy`'s new `seat_map` keyword), each with its own master-gate/prerequisite refusal tests and CLI round-trip tests; full gate + full docs_verify both 0 failed; next is Step 45, the Consequence-A regression test; diff-budget base a942f404c, 743/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1739,7 +1739,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 241, "tests": 199, "docs/map": 46}, "total_insertions": 486, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 44b. (S2d, R27 — SPEC.md addendum S18, new step, not in the
+- [x] 44b. (S2d, R27 — SPEC.md addendum S18, new step, not in the
       original plan) [COMMIT] Add the `--criticism-seat school-N=<profile>`
       CLI surface: criticism-side ONLY, independent of Step 44's flag —
       "the criticism seats are primed by a school," the operator's own
@@ -1754,6 +1754,86 @@ low-level `deepreason compile` path reaching it.
       distinct binding for the named school when legacy criticism is off,
       and (b) a clear, typed refusal when legacy criticism is still the
       active default. Diff budget check, commit, push.
+
+      **Filename correction (same pattern as Steps 16/20/44 — checked, not
+      assumed):** the tests live in `tests/test_v6_engaged_public_defaults.py`,
+      alongside Step 44's own tests — same rationale as before
+      (`build_preparation_manifest`-level default/opt-in tests all live
+      there; `test_run_manifest.py` builds `RunManifest` objects directly,
+      no `build_preparation_manifest` fixture).
+
+      **Refactor before extending (checked, not duplicated):** Step 44's
+      `_conjecturer_school_seat_ensemble` (`preparation.py`) already did
+      everything this step needs for the `argumentative_critic` role — it
+      never referenced "conjecturer" internally, it just builds a generic
+      route ensemble + `school_id -> (seat, endpoint_id)` map from a
+      profile and a `{school_id: ProviderProfileV1}` mapping. Renamed to
+      `_school_seat_route_ensemble` (role-agnostic name, docstring
+      updated to name both callers) and reused for both levers, rather
+      than pasting a near-identical `_argumentative_critic_school_seat_ensemble`
+      copy. No test referenced the old private name, so the rename has no
+      collateral.
+
+      **What was built**, mirroring Step 44's shape on the criticism side:
+      - `src/deepreason/v6_policy.py`: `engaged_criticism_policy` gained an
+        optional `seat_map: Mapping[str, tuple[int, str]] | None = None`
+        keyword (backward compatible — every existing caller passes
+        nothing and gets the byte-identical shared-seat-0 policy); when
+        given, resolves each school's binding the same way
+        `route_bound_school_execution_policy` already does.
+      - `src/deepreason/preparation.py`: `_config_for_profile` gained
+        `criticism_seats`, extending `Config.roles["argumentative_critic"]`
+        into a multi-seat list via `_school_seat_route_ensemble` exactly
+        like the conjecturer role does. `build_preparation_manifest`
+        gained `criticism_seats`, with TWO typed refusals checked before
+        any manifest is compiled: `SCHOOL_SEATS_DISABLED` (shared master
+        gate, checked first — same code Step 44 uses, now guarding
+        `school_seats or criticism_seats`) and the new
+        `CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM` (fires only when
+        the master gate is already open but `LEGACY_CRITICISM_ENABLED` is
+        still True). `criticism_policy`'s construction now threads a
+        `criticism_seat_map` into `engaged_criticism_policy`;
+        `control_plane_policy.school_execution` is completely untouched
+        by this parameter, proving the independence directly (Step 44's
+        own test proves the mirror image).
+      - `src/deepreason/seat_bindings.py`: a THIRD, separate persistence
+        file (`criticism-seat-bindings.yaml`, distinct from both
+        `seat-bindings.yaml` and `school-seat-bindings.yaml`) —
+        `criticism_seat_bindings_path`/`resolve_criticism_seats`, reusing
+        the EXISTING `parse_school_seat_flags` for parsing (the
+        `school-N=PATH` shape and validation are identical for both
+        levers; only the flag name and the file it writes to differ, so
+        no second parser was needed).
+      - `src/deepreason/cli/main.py`: new `--criticism-seat
+        school-N=PATH` flag (separate from `--school-seat`, per the
+        SEPARATE-persistence design) and a parallel setup-handler block.
+      - Threaded into the SAME production call site Step 44 already
+        wired: `criticism_seats = resolve_criticism_seats(...)`, passed
+        as `criticism_seats=criticism_seats or None`.
+
+      **Collateral fix (found running the full sweep, not silently
+      patched):** `test_engaged_criticism_authority_reachable_with_the_master_gate`
+      monkeypatches `engaged_criticism_policy` with a fake
+      `_capturing_policy(endpoint_id, *, authority="observe_only")` to spy
+      on the `authority` argument; `engaged_criticism_policy`'s new
+      `seat_map` keyword broke the call (`build_preparation_manifest`
+      always passes it now). Fixed by widening the fake's signature to
+      accept and forward `seat_map=None` — the test's actual assertion
+      (which `authority` value reached the call) is unchanged.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -q
+      20 passed in 16.72s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_criticism_school_execution_c3.py tests/test_reusable_qualification.py tests/test_qualification_per_seat.py tests/test_cli_setup_seats.py tests/test_seat_bindings.py tests/test_config.py -q
+      202 passed in 53.10s
+      $ python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py tests/test_prose_refutation_boundaries.py tests/test_model_firewall.py -q
+      129 passed in 79.16s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 776 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 360, "tests": 337, "docs/map": 46}, "total_insertions": 743, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 45. (S2d, C6) Consequence-A regression test (must stay inert, per
       the map's own pinned invariant): binding two schools to two distinct
       models does not change `foreign_schools` computation in

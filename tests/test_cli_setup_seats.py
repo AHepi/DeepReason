@@ -4,6 +4,7 @@ from deepreason.cli.main import (
     build_parser,
 )
 from deepreason.seat_bindings import (
+    criticism_seat_bindings_path,
     load_seat_bindings,
     school_seat_bindings_path,
     seat_bindings_path,
@@ -73,6 +74,37 @@ def test_setup_without_school_seat_flag_writes_no_school_seat_bindings(tmp_path,
     assert rc == 0
     assert not school_seat_bindings_path().exists()
     assert load_seat_bindings(school_seat_bindings_path()) == {}
+
+
+def test_setup_with_criticism_seat_flag_writes_criticism_seat_bindings(tmp_path, monkeypatch):
+    """Step 44b (S2d/R27): setup accepts a per-school criticism-side profile
+    path, persisted separately from BOTH the role-group --seat file and the
+    conjecture-side --school-seat file -- the two school-seat levers never
+    share a persistence file, matching their independence."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    bound_path = str(tmp_path / "school-2-critic-profile.yaml")
+    rc = _main(
+        _setup_argv(tmp_path, extra=["--criticism-seat", f"school-2={bound_path}"])
+    )
+    assert rc == 0
+    assert load_seat_bindings(criticism_seat_bindings_path()) == {"school-2": bound_path}
+    assert not school_seat_bindings_path().exists()
+    assert not seat_bindings_path().exists()
+
+
+def test_setup_without_criticism_seat_flag_writes_no_criticism_seat_bindings(
+    tmp_path, monkeypatch
+):
+    """Default (no --criticism-seat) writes no criticism-seat-bindings file."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    rc = _main(_setup_argv(tmp_path))
+    assert rc == 0
+    assert not criticism_seat_bindings_path().exists()
+    assert load_seat_bindings(criticism_seat_bindings_path()) == {}
 
 
 def test_judge_seats_flag_surfaces_evidence_warning(tmp_path, monkeypatch, capsys):

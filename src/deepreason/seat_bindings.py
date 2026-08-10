@@ -34,6 +34,12 @@ SEAT_BINDINGS_FILENAME = "seat-bindings.yaml"
 # vocabulary; it reuses only the generic YAML {key: path} round-trip
 # (load_seat_bindings/write_seat_bindings) that file format already is.
 SCHOOL_SEAT_BINDINGS_FILENAME = "school-seat-bindings.yaml"
+# Step 44b (S2d/R27, Amendment 11, 2026-08-10, SPEC.md addendum S18): the
+# criticism-side counterpart, in ITS OWN file -- the two levers are fully
+# independent (a school may have a distinct conjecture-side route, a
+# distinct criticism-side route, both, or neither), so persisting them
+# together would let one flag's presence silently imply the other.
+CRITICISM_SEAT_BINDINGS_FILENAME = "criticism-seat-bindings.yaml"
 _SCHOOL_ID_PATTERN = re.compile(r"^school-(0|[1-9][0-9]*)$")
 
 # Role-group -> endpoint-bearing role names it controls. "coder" is only
@@ -254,6 +260,35 @@ def resolve_school_seats(
     ``resolve_seat_bindings_by_group``."""
 
     raw = load_seat_bindings(school_seat_bindings_path(home=home, environ=environ))
+    return {
+        school_id: resolve_provider_profile(path, environ=environ, home=home).profile
+        for school_id, path in sorted(raw.items())
+    }
+
+
+def criticism_seat_bindings_path(
+    *,
+    home: str | None = None,
+    environ: Mapping[str, str] | None = None,
+) -> Path:
+    return provider_state_dir(home=home, environ=environ) / CRITICISM_SEAT_BINDINGS_FILENAME
+
+
+def resolve_criticism_seats(
+    *,
+    home: str | None = None,
+    environ: Mapping[str, str] | None = None,
+) -> dict[str, ProviderProfileV1]:
+    """Return ``{school_id: ProviderProfileV1}`` for every persisted
+    criticism-side school seat (Step 44b, S2d/R27) -- the carrier
+    ``preparation.build_preparation_manifest``'s ``criticism_seats``
+    parameter consumes. No file means no bindings, same shape as
+    ``resolve_school_seats``. Values are parsed by the same
+    ``parse_school_seat_flags`` the conjecture-side ``--school-seat`` flag
+    uses -- the ``school-N=PATH`` shape and validation are identical for
+    both levers, only the persisted file and the flag name differ."""
+
+    raw = load_seat_bindings(criticism_seat_bindings_path(home=home, environ=environ))
     return {
         school_id: resolve_provider_profile(path, environ=environ, home=home).profile
         for school_id, path in sorted(raw.items())

@@ -101,6 +101,24 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     setup_cmd.add_argument(
+        "--criticism-seat",
+        action="append",
+        default=None,
+        metavar="school-N=PATH",
+        help=(
+            "bind an existing provider profile file to a single seeded "
+            "school's argumentative_critic route (school-0..school-3); "
+            "repeatable, criticism-side only -- never touches conjecture "
+            "(independent of --school-seat; use both, either, or neither). "
+            "Requires SCHOOL_SEATS_ENABLED AND LEGACY_CRITICISM_ENABLED=False "
+            "already set in your config profile (criticism must already be "
+            "school-routed before a per-school distinct route is "
+            "meaningful; this flag only persists the binding, both gates "
+            "are still set via --config). Default (no --criticism-seat) "
+            "leaves every school's criticism binding on the shared default."
+        ),
+    )
+    setup_cmd.add_argument(
         "--judge-seats",
         action="store_true",
         help=(
@@ -682,6 +700,17 @@ def _main(argv: list[str] | None = None) -> int:
                 write_seat_bindings(
                     parse_school_seat_flags(args.school_seat),
                     school_seat_bindings_path(),
+                )
+            if getattr(args, "criticism_seat", None) is not None:
+                from deepreason.seat_bindings import (
+                    criticism_seat_bindings_path,
+                    parse_school_seat_flags,
+                    write_seat_bindings,
+                )
+
+                write_seat_bindings(
+                    parse_school_seat_flags(args.criticism_seat),
+                    criticism_seat_bindings_path(),
                 )
             if getattr(args, "judge_seats", False):
                 print("\n" + JUDGE_SEATS_EVIDENCE_SUMMARY + "\n")
