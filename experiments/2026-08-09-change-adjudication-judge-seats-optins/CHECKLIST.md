@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=37 blockers=none (Parts A+B+C complete; Part D steps 33-36 complete)
+State: next=38 blockers=none (Parts A+B+C complete; Part D steps 33-37 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1405,7 +1405,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 902, "docs/map": 111}, "total_insertions": 1284, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 37. (S2b, R2) Reconciliation test with the cross-family gate (solo
+- [x] 37. (S2b, R2) Reconciliation test with the cross-family gate (solo
       law): `JUDGE_SEATS_ENABLED=True` on a genuinely single-model-family
       run still refuses typed (`SECOND_JUDGE_FAMILY_REQUIRED`) at the same
       layer it does today — this opt-in does not bypass that guarantee.
@@ -1414,6 +1414,30 @@ low-level `deepreason compile` path reaching it.
       passes (extends the existing
       `test_cross_family_rubric_policy_fails_preflight_for_one_family`
       pattern).
+
+      No production code change: this step's finding IS that
+      `compile_run_manifest`'s cross-family check already ignores
+      `Config.JUDGE_SEATS_ENABLED` entirely (the two gates are wired at
+      genuinely separate layers — one compile-time judge-diversity
+      guarantee in `run_manifest.py`, one runtime dispatch gate in
+      `scheduler.py` — with no code path connecting them), so the new
+      test passes unmodified against the existing implementation. Same
+      config shape as `test_cross_family_rubric_policy_fails_preflight_
+      for_one_family` (`_config()`: two identical `family="gemma"` judge
+      routes), plus `JUDGE_SEATS_ENABLED = True` set directly on the
+      Config instance before compiling.
+
+      ```
+      $ python -m pytest tests/test_run_manifest.py::test_judge_seats_opt_in_does_not_bypass_cross_family_requirement tests/test_run_manifest.py::test_cross_family_rubric_policy_fails_preflight_for_one_family -q
+      2 passed in 0.18s
+      $ python -m pytest tests/test_run_manifest.py -q
+      66 passed in 0.75s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 850 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 271, "tests": 922, "docs/map": 111}, "total_insertions": 1304, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 38. (S2b, R2) `_versioned_source_config_data` pop-lines for all
       three new fields, unconditional. Qualification-subject-exclusion
       test for all three (same shape as Step 20, one assertion per

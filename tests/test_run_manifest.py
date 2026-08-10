@@ -592,6 +592,26 @@ def test_cross_family_rubric_policy_fails_preflight_for_one_family():
     assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
 
 
+def test_judge_seats_opt_in_does_not_bypass_cross_family_requirement():
+    """Part D, R2 (solo law reconciliation, SPEC.md's "Reconciliation with
+    the cross-family gate"): JUDGE_SEATS_ENABLED is the master judge-
+    dispatch gate (scheduler.py) -- an orthogonal, runtime concern from
+    require_cross_family_judges/rubric_policy="require_cross_family", the
+    compile-time judge-diversity guarantee. Turning judge seats on must
+    not, by itself, satisfy or bypass that guarantee: a genuinely single-
+    family run still refuses typed at the same compile-time layer it does
+    today, identically to test_cross_family_rubric_policy_fails_preflight_
+    for_one_family above (same config shape, plus the new opt-in flag)."""
+    config = _config()
+    config.JUDGE_SEATS_ENABLED = True
+    with pytest.raises(RunManifestError, match="SECOND_JUDGE_FAMILY_REQUIRED") as raised:
+        compile_run_manifest(
+            config, single_model="gemma4:31b",
+            rubric_policy="require_cross_family", compiled_at=STAMP,
+        )
+    assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
+
+
 def test_second_explicit_family_is_allowed_without_fallback():
     configured = _config().model_copy(deep=True)
     configured.roles["judge"] = [
