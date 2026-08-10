@@ -1,12 +1,32 @@
 # Hidden-legacy inventory: designed architecture currently disconnected or buried
 
+Started 2026-08-10 (`experiments/2026-08-10-change-blast-radius-analysis/`),
+promoted from that tranche's own directory to this standing, repo-root
+location per its SPEC.md Fork F4 (operator-approved, R6): the page's
+own purpose — "so the operator can decide re-connection priorities from
+a single page instead of archaeology-per-incident" — is a FUTURE-
+discoverability promise, which only holds if a later session can find
+the page without already knowing which tranche produced it.
+
+One page, so the operator can decide re-connection priorities without
+archaeology per incident. This document states what is disconnected
+and, where traceable, how — it does not recommend a priority; that is
+the operator's call once the page exists to make it from.
+
+Append-only discipline, mirroring `docs/ERRATA.md`/`docs/ERRATA_EXECUTOR.md`'s
+own convention: a new disconnected/buried piece found by any future
+tranche is APPENDED as a new numbered item below (never inserted out of
+order, never silently folded into an existing item); an existing item is
+never deleted, only updated in place to record when/if it was
+reconnected (the item's own "Current disposition" field is where that
+update lands). The item numbering below (1-5) is this document's
+initial population, consolidated from
+`experiments/2026-08-10-change-blast-radius-analysis/CENSUS.md` Part B
+at promotion time — items 6+ are for future tranches to add.
+
 Traces: R5. Consolidates `CENSUS.md` Part B plus a targeted sweep of
 `docs/map/*.md` Traps sections and `PARKED.md` files for additional
-disconnected/buried pieces not already surfaced there. One page, so the
-operator can decide re-connection priorities without archaeology per
-incident. This document states what is disconnected and, where
-traceable, how — it does not recommend a priority; that is the
-operator's call once the page exists to make it from.
+disconnected/buried pieces not already surfaced there.
 
 ## How to read this table
 

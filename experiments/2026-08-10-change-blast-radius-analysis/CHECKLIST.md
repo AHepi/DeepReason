@@ -1,5 +1,5 @@
 # Checklist for: automatic blast-radius analysis in the skills workflow
-State: next=8 blockers=none
+State: next=9 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -182,7 +182,7 @@ recorded this; no seam document exists for this change because no
       new diff_budget/docs_verify signal beyond what steps 3-5 already
       recorded and resolved.
 
-- [ ] 8. (S5, Fork F4 Road B) [COMMIT] Promote
+- [x] 8. (S5, Fork F4 Road B) [COMMIT] Promote
       `experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md`
       to `docs/HIDDEN_LEGACY_INVENTORY.md` (`git mv`), adding a standing,
       append-only ledger header mirroring `docs/ERRATA.md`'s own header
@@ -192,6 +192,18 @@ recorded this; no seam document exists for this change because no
       done-when: `test -f docs/HIDDEN_LEGACY_INVENTORY.md && test ! -f
       experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md`;
       commit, push.
+      ```
+      $ git mv experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md docs/HIDDEN_LEGACY_INVENTORY.md
+      $ test -f docs/HIDDEN_LEGACY_INVENTORY.md && test ! -f experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md && echo OK
+      OK
+      ```
+      Standing header added (Started date, append-only discipline
+      mirroring `docs/ERRATA.md`/`docs/ERRATA_EXECUTOR.md`, item
+      numbering reserved 1-5 for this tranche's initial population,
+      6+ for future tranches). `docs/map/INDEX.md` not amended — this
+      document is not a `docs/map/` kind (SUB/CON/SEAM/INV/REC per
+      `SCHEMA.md`); it is a standing ledger alongside `docs/ERRATA.md`,
+      outside the map's own routing, same as those two documents.
 
 - [ ] 9. (all) Map check: `python tools/docs_verify.py`
       done-when: 0 failed, `--audit` reports 0 findings, `--links`
