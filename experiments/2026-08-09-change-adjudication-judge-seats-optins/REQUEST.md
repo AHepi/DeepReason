@@ -410,3 +410,44 @@ C14 (process): the frozen-surface grant (R16) is scoped "for this tranche
 only" and is not transitive (R17) — a later tranche touching
 `run_manifest.py` needs its own explicit grant, this one does not carry
 forward.
+
+### Amendment 7 (2026-08-09, mid-execution, resolves the step-3 STOP, operator's own words)
+
+> No I need a clean separation between school and criticism. Although they
+> still need to interact.
+
+Sent in response to the step-3 STOP report (`crit_argumentative_batch`'s
+`active_v6` branch hard-requires `critic_school_id`, coupling criticism
+dispatch to school routing at the guard level) and the git-blame finding
+that the coupling predates both the tranche system and the school
+mechanism's own maturity (commit `8cf27e850b`, 2026-07-19, "Implement
+transactional inquiry runtime v6 remediation" — operator's own earlier
+commit, written before an alternative to school-routed dispatch existed to
+separate from).
+
+R19 (behavior, new — supersedes the step-3 stop report's Road A/Road B
+framing): "a clean separation between school and criticism" — the v6
+criticism-dispatch mechanics (transactional payload construction, provider
+call, case observation/counterexample/authority-gate handling — the
+reusable logic in `crit_argumentative`'s body and `crit_argumentative_batch`'s
+`active_v6` branch) must not INTRINSICALLY require a school; a school is
+one way to supply routing (`endpoint_lease`/`critic_school_id`), not a
+precondition criticism dispatch is built around.
+
+R20 (behavior, new): "Although they still need to interact" — when a
+school IS configured, criticism dispatch must still carry/record the
+`critic_school_id` (for foreign-coverage counting, audit, and the existing
+`_foreign_criticism_coverage` mechanism) — the separation is architectural
+(criticism does not REQUIRE school to function), not a severing of the
+existing, working interaction when a school is present.
+
+C15 (process): this amendment resolves the step-3 STOP's fork with a THIRD
+shape — neither Road A (widen the existing coupled guard/payload with a
+bypass flag) nor Road B (a fully parallel, duplicate dispatch function) as
+originally priced, but a refactor that removes the coupling at its root.
+Per this session's standing discipline, a change of this shape routes back
+through `dr-spec-change` before CHECKLIST.md's Road E steps are
+re-planned — R19/R20 state the requirement; the concrete code shape (which
+payload schema, which recovery contract, how the existing school-routed
+`_foreign_arg_crit` path keeps working byte-identically) is SPEC work, not
+assumed here.
