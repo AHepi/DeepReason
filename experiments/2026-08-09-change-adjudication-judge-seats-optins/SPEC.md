@@ -1903,3 +1903,129 @@ touched, confirmed not one of the five; every measurement precedes its
 design claim; the design was independently verified to satisfy
 `SEAM-scheduler-x-rules.md`'s own checked invariant, not merely argued to;
 traceable to R19/R20/R21, not invented).
+
+# ADDENDUM (Amendment 9, R22/R24) — content-blind same-model judge ensembles
+
+Written after Part D (judge seats opt-in, CHECKLIST.md steps 33-41)
+shipped and after the operator's clarification resolved R22's open
+question: the independence guarantee a judge ensemble needs is
+CONTENT-BLINDNESS (the judge never learns which model, role, or school
+authored the target), not cross-family or cross-school model diversity —
+diversity was always a proxy for an unstated blindness property. A
+same-model (even literally one model in every judge seat) ensemble may
+mint a real, status-changing warrant once blindness is established as a
+pinned, enforced invariant rather than assumed.
+
+## S14 — three enforcement sites, not two: the corrected census
+
+R12's addendum (Amendment 3) already found and priced the gap for ONE of
+two live judge-gated trial mechanisms (`_argument_trial_steps`/
+`defended_trial`, `informal/trial.py:601+` — argumentative/prose
+criticism). Re-reading for this addendum finds a THIRD site R12 did not
+cover, because R12 was scoped to the `defended_trial` path only:
+
+1. **`_argument_trial_steps`** (`informal/trial.py:614-629`,
+   `defended_trial`): already has a single-model substitute — cross-SCHOOL
+   diversity (`critic_school_id != target.provenance.school`), not
+   blindness. R12/Road C priced making this reachable via a manifest-
+   construction lever; still unreachable today (confirmed: no CLI flag
+   populates `roles["judge"]` with >1 same-model route).
+2. **`run_trial`/`_trial_steps`** (`informal/trial.py:227-360`, the rubric-
+   commitment trial Part D's `JUDGE_SEATS_ENABLED` gates): calls
+   `adapter.require_cross_family_judges()` UNCONDITIONALLY — no
+   single-model branch exists here at all. This is the path Part D's new
+   tests (`tests/test_budget.py::test_judge_summons_per_cycle_cap` and
+   `::test_judge_summons_cooldown`) exercise, and the one
+   `tests/test_judge_ensemble_boundary.py::test_trial_rejects_invalid_
+   direct_ensemble_before_any_endpoint_call` PINS as rejecting a
+   same-family two-judge pair TODAY (parametrized `same_family_pair=True`
+   case) — this test's same-family branch is the one collateral change
+   R24 requires, not a defect in it.
+3. **`run_manifest.py`'s compile-time `V4_CRITICISM_CROSS_FAMILY_JUDGES_
+   REQUIRED`** (`run_manifest.py:2819-2834`, `_validate_v4_criticism_
+   policy`'s `policy.authority == "defended_trial"` branch) — a SEPARATE
+   compile-time check on the school-routed `criticism_policy.authority`
+   field, parallel to but distinct from `rubric_policy`'s own compile-time
+   check (`run_manifest.py:1516,3199`, `SECOND_JUDGE_FAMILY_REQUIRED`) and
+   from `llm/firewall.py::require_cross_family_judge_ensemble`'s runtime
+   check (`firewall.py:341-358`) that both trial paths above ultimately
+   consult through `LLMAdapter.require_cross_family_judges`/
+   `_select_judge_ensemble` (`adapter.py:648-674`).
+
+All three must move together for R24 to hold uniformly — relaxing only
+the runtime gate would leave `compile_run_manifest` refusing to construct
+the manifest a same-model judge ensemble needs; relaxing only
+`rubric_policy` would leave `defended_trial`'s independent V4 check
+enforcing the old requirement.
+
+## S15 — blindness is already structurally true; pin it, don't build it
+
+Read-only verification (Amendment 9 clarification, restated with file:line
+precision): `informal/trial.py::_judge_pack` (`:174-194`) never
+interpolates provenance/role/model/school; `llm/roles.py::TEMPLATES["judge"]`
+(`:83-88`) is fixed boilerplate plus `{pack}`; `adapter.py::call`'s
+`school_id`/`endpoint_lease` params are routing-only, never spliced into
+prompt text (`:965-1062`). This repo already has EXACTLY this shape of
+invariant test for the sibling critic pack —
+`tests/test_prose_refutation_boundaries.py::test_the_criticism_prompt_
+never_names_an_author_or_a_school` (R9) reads a real committed root's
+rendered critic pack and asserts no school id and no `school`/`author`/
+`provenance` substring appears. No equivalent test exists yet for the
+JUDGE pack (`_judge_pack`'s output) specifically — S15's implementation is
+that test's twin, not new mechanism.
+
+## S16 — the additive-knob design (recommended; not yet operator-confirmed)
+
+Given three sites and one existing pinned test whose expected VALUE (not
+shape) must change, and per this tranche's own standing law ("each opt-in
+defaulting byte-identical to today"), the recommended design does NOT
+remove the family/school-diversity requirement — it adds a new, explicit,
+default-off escape hatch beside it, so an operator who wants the existing
+diversity guarantee keeps it unchanged:
+
+- New `Config` field `JUDGE_BLIND_SAME_MODEL_ALLOWED: bool = False`
+  (Part D2's own master flag, same shape as `JUDGE_SEATS_ENABLED`) — pop-
+  line in `_versioned_source_config_data`, qualification-subject
+  exclusion, byte-identical default, per this tranche's own established
+  template.
+- `llm/firewall.py::require_cross_family_judge_ensemble` gains a
+  `blind_same_model_allowed: bool = False` parameter: when True, drops
+  the `len(families) < 2` condition, keeping `len(seats) < 2` (an
+  ensemble is still required — R24 does not ask for a single judge seat,
+  only for same-model seats to be admissible). Callers thread the flag
+  from `Config`/the frozen manifest, never compute it locally.
+- `run_manifest.py`'s two compile-time sites gain the mirrored escape:
+  `rubric_policy` gains a third literal
+  (`Literal["forbid", "require_cross_family", "allow_blind_same_model"]`)
+  and the `defended_trial` V4 check reads an equivalent manifest-level
+  flag — exact field shape (a new `RunManifest` field vs. reusing
+  `rubric_policy`'s axis for both sites) is the one open sub-question S16
+  does not resolve; both are additive to a `Literal`/optional field, not
+  a removal, so neither should disturb existing canonical-hash goldens
+  (same reasoning as every `_versioned_source_config_data` pop-line this
+  tranche has already added) but that claim gets verified, not assumed,
+  before either file changes.
+- S15's blindness-pinning test becomes a hard prerequisite gate baked
+  into the design, not just documentation: `require_cross_family_judge_
+  ensemble`'s new branch is safe to ship only alongside the pinned
+  invariant, so CHECKLIST.md orders S15 first, before any of S16's
+  frozen-surface hunks.
+
+## Frozen-surface forecast (Part D2)
+
+`llm/firewall.py` (not previously listed as CLAUDE.md-frozen but treated
+with the same care as manifest schemas per Amendment 9's grant) and
+`run_manifest.py` (Amendment 9's grant, scoped specifically to this
+relaxation — see REQUEST.md) both change. `informal/trial.py` gains the
+new parameter thread but no behavior change when
+`JUDGE_BLIND_SAME_MODEL_ALLOWED=False`. No `harness.py`/
+`capabilities/state.py`/replay-validation-format change.
+
+## Budget (Part D2, estimate)
+
+S15 (blindness test): ~30 lines. S16 (new Config field + firewall param +
+two manifest sites + threading + collateral test update in
+`test_judge_ensemble_boundary.py` + new positive-path tests): ~150-200
+lines. CLI/map updates: ~40 lines. Estimated total: ~250-300 lines,
+comfortably inside a fresh 1,600-line ceiling for this addendum's own
+diff-budget base commit (to be set at Part D2's first step).

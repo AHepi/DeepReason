@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=42 blockers=none (Parts A+B+C+D complete; Amendment 9 (blindness-based same-model judge minting) ledgered, spec/plan pending before Part D2 executes)
+State: next=57a blockers=none (Parts A+B+C+D complete; Part D2 planned per SPEC.md S14-S16 addendum, steps 57d/57e await operator confirmation of S16's field-shape choice before those two frozen-surface hunks land)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1668,6 +1668,72 @@ holds).
       rather than guessing).
 - [ ] 57. (R15) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_signals_read.py tests/test_verification_report.py tests/test_signals.py -q`.
+      "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+---
+
+## PART D2 — Content-blind same-model judge ensembles (Amendment 9, R22/R24, SPEC.md addendum S14-S16)
+
+Inserted after Part F, before Part G's final gate, using letter-suffixed
+step numbers to avoid renumbering the rest of this checklist. S16's exact
+manifest-field shape (57d/57e) is NOT yet operator-confirmed — 57a-57c
+proceed first (zero frozen-surface risk, self-justifying regardless of
+57d/57e's final shape); 57d onward are a named, scoped grant per
+REQUEST.md's Amendment 9 clarification, but the CONCRETE mechanism
+(`rubric_policy` third literal vs. a separate manifest field) is a design
+choice worth the operator seeing before it lands, per this tranche's own
+"SPEC before CHECKLIST before code" discipline for anything reaching
+`run_manifest.py` beyond a pop-line.
+
+- [ ] 57a. (S15) Reader/pinning test FIRST: a new test proving the JUDGE
+      pack (`informal/trial.py::_judge_pack`'s rendered output) never
+      names an author, model, family, or school — the judge-facing twin
+      of `tests/test_prose_refutation_boundaries.py::test_the_criticism_
+      prompt_never_names_an_author_or_a_school` (R9), which already pins
+      this property for the CRITIC pack but not the judge pack. done-when:
+      a new test in `tests/test_judge_ensemble_boundary.py` (or
+      `test_prose_refutation_boundaries.py`, executor's judgment on best
+      home) passes against CURRENT code with no production change — this
+      step is pure verification that S15's read-only finding holds,
+      turned into an enforced invariant.
+- [ ] 57b. (S16, R24) Add `JUDGE_BLIND_SAME_MODEL_ALLOWED: bool = False`
+      to `config.py`, modeled on `JUDGE_SEATS_ENABLED`'s shape (Step 34).
+      done-when: `Config().JUDGE_BLIND_SAME_MODEL_ALLOWED is False`.
+- [ ] 57c. (S16, R24) [COMMIT] `llm/firewall.py::require_cross_family_
+      judge_ensemble` gains a `blind_same_model_allowed: bool = False`
+      parameter: when True, drop the `len(families) < 2` condition,
+      keep `len(seats) < 2`. Thread from `Config`/frozen manifest through
+      `LLMAdapter._select_judge_ensemble`/`require_cross_family_judges`.
+      Update `tests/test_judge_ensemble_boundary.py::test_trial_rejects_
+      invalid_direct_ensemble_before_any_endpoint_call`'s
+      `same_family_pair=True` case (predicted collateral, SPEC.md S14):
+      still rejects when the flag is False (unchanged default), a NEW
+      test proves it mints when True. done-when: both directions pass.
+- [ ] 57d. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
+      grant] Compile-time `rubric_policy` check gains the same escape:
+      exact field shape (third `Literal` value vs. separate field) per
+      SPEC.md S16's open sub-question — resolve at execution time,
+      documenting the choice and why. done-when: a manifest compiled with
+      the new value/flag and a same-model judge pair succeeds; the
+      existing `require_cross_family` behavior is provably unchanged
+      (`tests/test_run_manifest.py::test_cross_family_rubric_policy_
+      fails_preflight_for_one_family` still passes unmodified).
+- [ ] 57e. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
+      grant] The `defended_trial`/V4 criticism-policy
+      `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` check
+      (`run_manifest.py:2819-2834`) gains the mirrored escape, same
+      mechanism as 57d. done-when: an equivalent same-model `defended_
+      trial` manifest compiles and its existing cross-family case stays
+      provably unchanged.
+- [ ] 57f. (S16, C9) `_versioned_source_config_data` pop-line for
+      `JUDGE_BLIND_SAME_MODEL_ALLOWED`; qualification-subject-exclusion
+      test (same shape as Step 38).
+- [ ] 57g. (S16) CLI/map updates, same commits as 57c-57e: `--judge-seats`
+      help text notes the blindness-based road exists;
+      `docs/map/CON-authority.md`/`CON-seats.md` gain rows for the new
+      flag and its relationship to `require_cross_family_judges`.
+- [ ] 57h. (all) [COMMIT] Subsystem ring:
+      `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_run_manifest.py tests/test_model_firewall.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
 
 ---
