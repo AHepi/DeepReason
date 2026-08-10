@@ -395,7 +395,12 @@ def build_preparation_manifest(
             None
             if config.LEGACY_CRITICISM_ENABLED
             else engaged_criticism_policy(
-                profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY
+                profile.endpoint_id,
+                authority=(
+                    config.ENGAGED_CRITICISM_AUTHORITY
+                    if config.ADJUDICATION_STATUS_AUTHORITY_ENABLED
+                    else "observe_only"
+                ),
             )
         ),
         inquiry_capability_policy=engaged_inquiry_capability_policy(

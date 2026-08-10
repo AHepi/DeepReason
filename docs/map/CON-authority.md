@@ -69,6 +69,7 @@ receipt verifier exists.
 
 | Aspect | File | Symbol |
 |---|---|---|
+| The master reachability gate all six knobs below sit behind (adjudication-judge-seats-optins tranche, S2a/R1, 2026-08-10): each of the six stays independently settable, but stays observe_only-equivalent unless this is ALSO True. Applied at each knob's own operational consumption site, never inside a shared resolution function preflight also reads: `ARGUMENTATIVE_AUTHORITY`/`TEXT_RUBRIC_AUTHORITY`/`PAIRWISE_AUTHORITY`/`INFRASTRUCTURE_REVIEW_AUTHORITY` at `rules/crit.py::_authority`/`authority.py::trial_authority_for`; `ENGAGED_CRITICISM_AUTHORITY` at `preparation.py::build_preparation_manifest` (found missing and fixed while writing this row) | `src/deepreason/config.py` | `ADJUDICATION_STATUS_AUTHORITY_ENABLED` |
 | Surface-mode enum (what a surface is configured to have) | `src/deepreason/authority.py` | `TextAuthorityMode` — `observe_only`, `calibrated_status` |
 | Call-mode enum (what one trial is handed) | `src/deepreason/authority.py` | `TrialAuthority` — `observe_only`, `status` |
 | The three independently-configured surfaces | `src/deepreason/authority.py` | `AuthoritySurface`, `_SURFACE_FIELDS` |
@@ -210,6 +211,7 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
 | To change... | Edit | Test |
 |---|---|---|
 | Add a per-run authority mode | `config.py` `ARGUMENTATIVE_AUTHORITY` Literal, `authority.py` `_ARGUMENTATIVE_VALUES` + `_TRIAL_AUTHORITIES`, `rules/crit.py` `_TRIAL_MODES` | `python -m pytest tests/test_prose_refutation_boundaries.py -k "config_only or routes_to_the_same" -q` |
+| Make a mode reachable at all | Nothing — reachability is `ADJUDICATION_STATUS_AUTHORITY_ENABLED`'s job, the master gate every knob above (and `ENGAGED_CRITICISM_AUTHORITY`) sits behind; a new mode inherits it automatically at whichever consumption site it's read from | `python -m pytest tests/test_text_authority_policy.py::test_master_gate_forces_observe_only_even_when_trial_configured tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_inert_without_the_master_gate -q` |
 | Land a calibration-receipt verifier | `authority.py` `calibration_receipt_is_verified` — the single attachment point | `python -m pytest tests/test_text_authority_policy.py -k unverified_calibrated -q` |
 | Add a fourth adjudication surface | `authority.py` `AuthoritySurface` + `_SURFACE_FIELDS`, a `Config` field, `jolts.py` `authority_fields` | `python -m pytest tests/test_manifest_integration.py -k calibration_receipt -q` |
 | Change what `observe_only` files | `rules/crit.py` `_observe_case` (Measure inputs are compared against recorded roots — see Traps) | `python -m pytest tests/test_text_authority_policy.py -k scrutiny -q` |

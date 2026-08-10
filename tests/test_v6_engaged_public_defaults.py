@@ -168,6 +168,74 @@ def test_legacy_criticism_enabled_routes_to_school_free_circuit(monkeypatch):
     assert manifest.criticism_policy is None
 
 
+def test_engaged_criticism_authority_inert_without_the_master_gate(monkeypatch):
+    """Part C (S2a, R1): ENGAGED_CRITICISM_AUTHORITY is one of the six
+    knobs SPEC.md's design names explicitly ("it only permits an
+    operator to set ARGUMENTATIVE_AUTHORITY/ENGAGED_CRITICISM_AUTHORITY/
+    etc. away from observe_only") -- found missing while writing Step
+    31's map claim that "all six knobs sit behind this gate," which was
+    not yet true for this one. With ADJUDICATION_STATUS_AUTHORITY_ENABLED
+    at its default False, setting ENGAGED_CRITICISM_AUTHORITY away from
+    observe_only must not reach the compiled manifest."""
+
+    original_config = preparation_module.Config
+
+    def _forced_defended_trial_config(**kwargs):
+        return original_config(**kwargs, ENGAGED_CRITICISM_AUTHORITY="defended_trial")
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
+    profile = _profile()
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does an unconsented defended_trial setting stay inert?",
+        compiled_at=STAMP,
+    )
+
+    assert manifest.criticism_policy.authority == "observe_only"
+
+
+def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch):
+    """Part C (S2a, R1) companion: with the master flag ALSO True,
+    ENGAGED_CRITICISM_AUTHORITY's configured value reaches
+    engaged_criticism_policy's authority= argument -- proving the gate
+    does not accidentally make the knob permanently unreachable, only
+    conditionally so. Checked at the argument-passing layer, not a full
+    manifest compile: `defended_trial` also requires two cross-family
+    judge seats (a separate, unrelated compile-time guard) that
+    build_preparation_manifest's single-profile broadcast cannot supply
+    regardless of this flag -- reaching that combination is Part D's
+    seat-diversity territory, not this test's concern."""
+
+    original_config = preparation_module.Config
+
+    def _forced_defended_trial_config(**kwargs):
+        return original_config(
+            **kwargs,
+            ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        )
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
+    captured = {}
+    original_policy = preparation_module.engaged_criticism_policy
+
+    def _capturing_policy(endpoint_id, *, authority="observe_only"):
+        captured["authority"] = authority
+        return original_policy(endpoint_id, authority="observe_only")
+
+    monkeypatch.setattr(preparation_module, "engaged_criticism_policy", _capturing_policy)
+    profile = _profile()
+
+    build_preparation_manifest(
+        profile,
+        question="Does a consented defended_trial setting reach the call?",
+        compiled_at=STAMP,
+    )
+
+    assert captured["authority"] == "defended_trial"
+
+
 def test_public_manifest_compiles_the_grounded_two_stage_bridge():
     profile = _profile()
     manifest = build_preparation_manifest(

@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=31 blockers=none (Parts A+B complete; Steps 27-30 done)
+State: next=32 blockers=none (Parts A+B complete; Steps 27-31 done)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1191,11 +1191,51 @@ low-level `deepreason compile` path reaching it.
       docs_verify [full]: 53 documents, 852 checks, 4 workers
       docs_verify: 0 failed
       ```
-- [ ] 31. (S2a) Map update, same commit: `docs/map/CON-authority.md`
+- [x] 31. (S2a) Map update, same commit: `docs/map/CON-authority.md`
       gains a row for `ADJUDICATION_STATUS_AUTHORITY_ENABLED` and a note
       in its "How to add a new authority mode" table that this is now the
       master reachability gate all six existing knobs sit behind.
       done-when: `python tools/docs_verify.py` 0 failed.
+
+      **Real section name is "Where to change what"** (CHECKLIST's "How
+      to add a new authority mode" doesn't exist as a heading).
+
+      **Major discovery writing this row — the claim "all six knobs sit
+      behind this gate" was FALSE when I went to write it, not merely
+      undocumented:** SPEC.md's own §2(a) design text explicitly names
+      `ENGAGED_CRITICISM_AUTHORITY` as one of the gated knobs ("it only
+      permits an operator to set ARGUMENTATIVE_AUTHORITY/
+      ENGAGED_CRITICISM_AUTHORITY/etc. away from observe_only"), but
+      Steps 26-27's implementation only gated `rules/crit.py::_authority`
+      and the two mint sites — `preparation.py::build_preparation_
+      manifest` still passed `config.ENGAGED_CRITICISM_AUTHORITY`
+      straight through to `engaged_criticism_policy` unconditionally,
+      meaning an operator could ALREADY compile `defended_trial` into
+      the manifest without ever setting the master flag. Fixed now,
+      before writing a map claim that would have been false: the
+      `authority=` argument is `config.ENGAGED_CRITICISM_AUTHORITY` only
+      when `ADJUDICATION_STATUS_AUTHORITY_ENABLED` is True, else
+      `"observe_only"`. Two new tests prove both directions —
+      `test_engaged_criticism_authority_inert_without_the_master_gate`
+      and `::_reachable_with_the_master_gate` (the latter checked at the
+      argument-passing layer via monkeypatch, not a full manifest
+      compile: `defended_trial` also requires two cross-family judge
+      seats, a separate unrelated compile-time guard
+      `build_preparation_manifest`'s single-profile broadcast cannot
+      supply regardless of this flag — that combination is Part D's
+      seat-diversity territory).
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -q
+      14 passed in 17.43s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_v6_policy_preset.py tests/test_reusable_qualification.py tests/test_text_authority_policy.py -q
+      80 passed in 37.56s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/preparation.py tests/test_v6_engaged_public_defaults.py docs/map/CON-authority.md
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/preparation.py": 11, "tests/test_v6_engaged_public_defaults.py": 217, "docs/map/CON-authority.md": 3}, "total_insertions": 231, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 32. (S2a) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_text_authority_policy.py tests/test_imports.py tests/test_experiment.py tests/test_run_manifest.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
