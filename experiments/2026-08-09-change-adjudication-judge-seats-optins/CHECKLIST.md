@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=6a blockers=SPEC.md needs S13h addendum for _critic_execution's guard before Step 7 resumes
+State: next=6a blockers=none (SPEC.md S13h addendum committed a880fdc65; steps 6a/6b added)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -220,8 +220,35 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `any(supplied) and not all(supplied)` case this raises on — S13a-g
       as specified does NOT make Road E's dispatch actually work; this
       site was missed. Not typed around silently: a SPEC.md addendum
-      (S13h) and a new CHECKLIST step follow immediately, before Step 7
-      resumes.
+      (S13h) and a new CHECKLIST step (6a, next) follow immediately,
+      before Step 7 resumes.
+
+- [ ] 6a. (S13h) Reader test FIRST (rule 1): a new test
+      `tests/test_v6_scheduler_model_phase_deferral.py::test_critic_execution_permits_endpoint_only_dispatch`
+      asserting `_critic_execution(endpoint_lease=<a real EndpointLease>,
+      critic_school_id=None, critic_school_context=None)` returns
+      `({"endpoint_index": ..., "endpoint_lease": ..., "school_id": None}, "")`
+      without raising, AND that the ORIGINAL partial-supply rejection
+      (e.g. `endpoint_lease` + `critic_school_id` given, `critic_school_context`
+      omitted) still raises `ValueError` with the original message.
+      done-when: the test currently FAILS (red — the branch doesn't exist
+      yet) — paste the failure output.
+- [ ] 6b. (S13h) [COMMIT] Implement the branch: in
+      `_critic_execution` (`rules/crit.py:106-134`), add one early-return
+      before the existing `supplied`/all-or-nothing check: when
+      `endpoint_lease is not None and critic_school_id is None and
+      critic_school_context is None`, validate
+      `endpoint_lease.role == "argumentative_critic"` and return
+      `({"endpoint_index": endpoint_lease.seat, "endpoint_lease":
+      endpoint_lease, "school_id": None}, "")` — every other combination
+      falls through to the existing, unmodified logic. done-when: Step
+      6a's test now passes, AND
+      `python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py -q`
+      still passes (paste both, "N passed, 0 failed" for each). Run
+      `python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py`,
+      paste output, commit, push.
+
+- [ ] 7. (S13c) [COMMIT] Widen `_v6_transactional_batch_call`
       (`rules/crit.py:255-262`): change `critic_school_id: str` to
       `critic_school_id: str | None = None`; remove the `if not
       critic_school_id: raise ValueError("transactional criticism
