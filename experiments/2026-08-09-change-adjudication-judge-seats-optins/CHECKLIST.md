@@ -133,6 +133,111 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       marker. done-when: `python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 -q`
       currently FAILS (red, confirming the test exercises code that does
       not exist yet) — paste the failure output.
+
+      **STOP — contradiction with the tree found before the test could even
+      be usefully written.** Per dr-execute-step's own rule ("Mid-step
+      discoveries... if the change cannot land without them, back through
+      dr-spec-change as an amendment — never just typed in") and Amendment
+      6's "all stop conditions live": this is not typed in silently.
+
+      `crit_argumentative_batch` (`rules/crit.py:1341-1356` signature,
+      guard at `:1372-1379`) is NOT the simple dispatch function Step 1's
+      design note and SPEC.md's R13/Road E assumed. Read in full just now:
+
+      ```python
+      active_v6 = False
+      if run_manifest is not None:
+          run_manifest = RunManifest.model_validate(run_manifest)
+          active_v6 = run_manifest.schema_version == 6
+      if active_v6 and (endpoint_lease is None or critic_school_id is None):
+          raise ValueError("v6 criticism requires one manifest-bound school route")
+      ```
+      (`rules/crit.py:1372-1379`) — the function ITSELF refuses a v6,
+      school-free call, independent of the scheduler's own defer logic.
+      And its `active_v6` branch (`rules/crit.py:1436-1456+`) is not a
+      thin wrapper around `InquiryTransactionService` — it directly
+      constructs the transactional payload inline, hard-coupled to schools:
+      ```python
+      if active_v6:
+          assert endpoint_lease is not None
+          assert critic_school_id is not None
+          ...
+          expected_strong_payload = {
+              "schema": "criticism.semantic-task.v1",
+              "critic_school_id": critic_school_id,
+              ...
+          }
+      ```
+      (`rules/crit.py:1436-1456`) — `"criticism.semantic-task.v1"` is the
+      exact schema string `nonconjecture_recovery.py::_criticism_contract`
+      (Step 1's note) checks for, confirming this whole branch — not just
+      the recovery side — is school-routing-specific by construction, and
+      the transactional dispatch itself is likely another 100+ lines deep
+      in this same branch (not yet fully read).
+
+      **Decision needed, one sentence**: does Road E's school-free circuit
+      reuse `crit_argumentative_batch` by widening its existing `active_v6`
+      branch to accept a second, non-school dispatch shape (new kwarg,
+      new payload schema, real regression risk to the live school-routed
+      path this function already serves), or does it dispatch
+      independently via a smaller, parallel function that calls
+      `adapter.call(..., dispatch_authorization=...)` directly — closer to
+      `run_config_referee`'s own shape — at the cost of duplicating
+      `crit_argumentative`'s case-observation/counterexample/authority-gate
+      logic for the school-free case?
+
+      **Road A — widen `crit_argumentative_batch`'s existing `active_v6`
+      branch.** Add an explicit, typed alternative to the
+      `endpoint_lease is None or critic_school_id is None` guard: a new
+      keyword (e.g. `legacy_v6_dispatch: bool = False`) that, when True,
+      permits `critic_school_id is None` and routes the `active_v6` branch
+      through the new `"legacy-argumentative-criticism.v1"` payload schema
+      instead of `"criticism.semantic-task.v1"`. Reuses the real,
+      already-tested case/counterexample/authority-gate logic
+      (`crit_argumentative`'s body, shared by both branches) — the
+      original design intent. Cost: touches a function
+      `tests/test_foreign_school_criticism_scheduler_c3.py` and the live
+      school-routed path depend on daily; every existing test in that file
+      must still pass byte-identically after the change (regression risk
+      is real, not hypothetical, given how deeply `critic_school_id`
+      threads through the `active_v6` branch's payload construction).
+      Diff size for this branch alone is larger than CHECKLIST.md's
+      original ~600-line Road E estimate assumed for the whole road.
+
+      **Road B — dispatch independently, parallel to `crit_argumentative_batch`.**
+      A new, smaller function in `rules/crit.py` (or scheduler-adjacent)
+      that follows `run_config_referee`'s shape exactly: build the pack via
+      the EXISTING `render_crit_pack`/`render_batch_crit_pack` (reused,
+      read-only), then dispatch through `InquiryTransactionService`
+      directly with the new `LEGACY_ARG_CRITICISM_CONTRACT_V1`/
+      `"legacy-argumentative-criticism.v1"` payload, calling
+      `adapter.call(..., dispatch_authorization=authorized, ...)` inline
+      rather than through `crit_argumentative`'s shared body. Cost: does
+      NOT reuse `crit_argumentative`'s counterexample-grounding/
+      execution-supremacy/authority-gate sequence — that logic (roughly
+      `rules/crit.py:1229-1326`) would need to be duplicated or factored
+      into a shared helper both the school-routed and school-free paths
+      call, which is itself new design work SPEC.md never scoped. Zero
+      regression risk to the existing school-routed path (touches no
+      shared code), but the "reuses the already-written dispatch function"
+      claim in SPEC.md's R13/Road E and CHECKLIST.md's original pricing
+      (`~600 lines`, "the dispatch function... already written and
+      exercised daily") is not accurate under this road — the true cost is
+      closer to writing a second, smaller version of `crit_argumentative`.
+
+      **Recommendation**: Road A, but the diff-budget ceiling this
+      tranche computed (1,600 lines total, ~600 for Road E) needs revising
+      upward once the exact shape of the widened `active_v6` branch is
+      known — this is new information C10/Amendment 2's "report the final
+      total at delivery" pre-authorization does not resolve on its own,
+      because it is a SCOPE question (which of two designs to build, with
+      real regression-risk difference), not a budget-overrun question.
+      Amendment 6's "all stop conditions live" governs: this is a stop for
+      operator words, not a judgment call this skill invocation makes
+      unilaterally.
+
+      Left unchecked. Returning to the orchestrator per dr-execute-step's
+      exit criteria (step failed/contradicted the tree).
 - [ ] 4. (R13) [COMMIT] Wire `scheduler.py::_arg_crit`'s plain
       (`criticism_policy is None`) branch: replace the unconditional
       `self._defer_untransactional_v6_phase("argumentative-criticism", ...)`
