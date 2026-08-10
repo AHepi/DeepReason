@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57a blockers=none (Parts A+B+C+D complete; Part D2 planned per SPEC.md S14-S16 addendum, steps 57d/57e await operator confirmation of S16's field-shape choice before those two frozen-surface hunks land)
+State: next=57b blockers=57d/57e await operator confirmation of S16's field-shape choice (Parts A+B+C+D complete; Part D2 step 57a complete — judge-pack blindness now a pinned invariant)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1685,7 +1685,7 @@ choice worth the operator seeing before it lands, per this tranche's own
 "SPEC before CHECKLIST before code" discipline for anything reaching
 `run_manifest.py` beyond a pop-line.
 
-- [ ] 57a. (S15) Reader/pinning test FIRST: a new test proving the JUDGE
+- [x] 57a. (S15) Reader/pinning test FIRST: a new test proving the JUDGE
       pack (`informal/trial.py::_judge_pack`'s rendered output) never
       names an author, model, family, or school — the judge-facing twin
       of `tests/test_prose_refutation_boundaries.py::test_the_criticism_
@@ -1696,6 +1696,39 @@ choice worth the operator seeing before it lands, per this tranche's own
       home) passes against CURRENT code with no production change — this
       step is pure verification that S15's read-only finding holds,
       turned into an enforced invariant.
+
+      Home: `tests/test_judge_ensemble_boundary.py` (already has the
+      `_trial_fixture`/`_trial_adapter` rubric-trial scaffolding this
+      test needed; adding it next to R9's sibling file would have meant
+      duplicating that scaffolding for no benefit). New
+      `test_judge_pack_never_names_an_author_school_or_model`: a target
+      artifact carries a distinctive `Provenance(school="school-
+      distinctive-xyz")`; a new `_prompt_capturing_endpoint` helper
+      records the RAW prompt text (not just the calling model, unlike
+      the existing `_counting_endpoint`) each judge seat receives from
+      `run_trial`; asserts the school id and the labels "school",
+      "author", "provenance", "conjecturer", "gemma", "qwen" are all
+      absent from both judge prompts. Passed on the first run against
+      unmodified production code — confirms S15's read-only finding
+      (`_judge_pack` interpolates only rubric/precedents/target text/
+      case/answer; `TEMPLATES["judge"]` is fixed boilerplate;
+      `school_id`/`endpoint_lease` are routing-only params never spliced
+      into prompt text) was correct, and now that property is an
+      enforced invariant rather than an unpinned observation — the
+      prerequisite S16's frozen-surface relaxation (steps 57c-57e) can
+      safely build on.
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py::test_judge_pack_never_names_an_author_school_or_model -q
+      1 passed in 0.11s
+      $ python -m pytest tests/test_judge_ensemble_boundary.py -q
+      6 passed in 0.16s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 849 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 311, "tests": 1053, "docs/map": 112}, "total_insertions": 1476, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 57b. (S16, R24) Add `JUDGE_BLIND_SAME_MODEL_ALLOWED: bool = False`
       to `config.py`, modeled on `JUDGE_SEATS_ENABLED`'s shape (Step 34).
       done-when: `Config().JUDGE_BLIND_SAME_MODEL_ALLOWED is False`.

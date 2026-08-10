@@ -10,7 +10,7 @@ from deepreason.informal.trial import run_trial
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import JudgeEnsemblePolicyError
-from deepreason.ontology import Commitment, Interface, Problem, ProblemProvenance
+from deepreason.ontology import Commitment, Interface, Problem, ProblemProvenance, Provenance
 from deepreason.rules.experiment import relevance_trial
 from tests.conftest import art
 
@@ -33,6 +33,14 @@ def _trial_fixture(harness):
         interface=Interface(commitments=[commitment.id]),
     )
     return target, commitment
+
+
+def _prompt_capturing_endpoint(prompts, response, *, name, model):
+    def complete(prompt):
+        prompts.append(prompt)
+        return response
+
+    return MockEndpoint(complete, name=name, model=model)
 
 
 def _trial_adapter(harness, judge_endpoints, calls):
@@ -119,6 +127,53 @@ def test_trial_accepts_frozen_cross_family_direct_ensemble(harness):
 
     assert result is None
     assert calls == ["critic-test", "defender-test", "gemma-test", "qwen-test"]
+
+
+def test_judge_pack_never_names_an_author_school_or_model(harness):
+    """Part D2 (S15, Amendment 9 R24, judge-facing twin of R9's
+    test_the_criticism_prompt_never_names_an_author_or_a_school): the
+    ensemble-diversity requirement is a proxy for BLINDNESS, and the
+    operator's clarification makes blindness the actual guarantee a
+    same-model judge ensemble must satisfy to mint. This pins that
+    property for the JUDGE's own pack (_judge_pack), which R9 never
+    covered -- it only pinned the CRITIC pack. Fails if the target's
+    distinctive school id, its provenance role, or the word "school"/
+    "author"/"provenance"/"model" ever leaks into what the judge reads."""
+
+    register_standard(harness, "std-x", "must name a mechanism")
+    commitment = Commitment(id="k-rubric", eval="rubric:std-x")
+    harness.register_commitment(commitment)
+    target = art(
+        harness,
+        "the mechanism is explicit",
+        interface=Interface(commitments=[commitment.id]),
+        provenance=Provenance(role="conjecturer", school="school-distinctive-xyz"),
+    )
+    ruling = json.dumps(
+        {"verdict": "pass", "decisive_point": "the mechanism is explicit"}
+    )
+    judge_prompts: list = []
+    calls: list = []
+    adapter = _trial_adapter(
+        harness,
+        [
+            _prompt_capturing_endpoint(
+                judge_prompts, ruling, name="mock://judge-gemma", model="gemma-test"
+            ),
+            _prompt_capturing_endpoint(
+                judge_prompts, ruling, name="mock://judge-qwen", model="qwen-test"
+            ),
+        ],
+        calls,
+    )
+
+    run_trial(harness, target.id, commitment, adapter, Config(), authority="status")
+
+    assert len(judge_prompts) == 2
+    for prompt in judge_prompts:
+        assert "school-distinctive-xyz" not in prompt
+        for label in ("school", "author", "provenance", "conjecturer", "gemma", "qwen"):
+            assert label not in prompt.lower(), (label, prompt)
 
 
 def test_property_relevance_rejects_same_family_before_judge_call(harness):
