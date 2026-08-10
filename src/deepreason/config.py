@@ -421,6 +421,15 @@ class Config(BaseModel):
     # JUDGE_SEATS_ENABLED and a nonzero rate are set.
     JUDGE_SUMMONS_PER_CYCLE: int = Field(default=0, ge=0)
     JUDGE_SUMMONS_COOLDOWN: int = 4
+    # Master gate for the schools opt-in (Part E, S2d/R5): when False,
+    # byte-identical to today -- neither shipped v6 control-plane preset
+    # ever requests route_bound school execution, and no operator-facing
+    # surface exists yet to ask for it. Gates whether a school seat may be
+    # bound to a distinct route for BOTH conjecture-side routing
+    # (SchoolExecutionPolicyV1.mode="route_bound") and criticism-side
+    # routing (CriticismPolicyV1.bindings' per-school distinct
+    # endpoint_id) together, not either in isolation.
+    SCHOOL_SEATS_ENABLED: bool = False
     # Default text runs do not spend judge tokens on rubric trials.  Setting a
     # positive budget opts into bounded advisory trials only while the rubric
     # authority remains observe_only.

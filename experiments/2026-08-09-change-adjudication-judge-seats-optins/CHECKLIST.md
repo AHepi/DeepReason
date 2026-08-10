@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=43 blockers=none (Parts A+B+C+D+D2 complete; Part E step 42 complete; diff-budget base a942f404c for Part E, 16/1600)
+State: next=44 blockers=none (Parts A+B+C+D+D2 complete; Part E steps 42-43 complete; diff-budget base a942f404c for Part E, 32/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1587,8 +1587,32 @@ low-level `deepreason compile` path reaching it.
       AttributeError: 'Config' object has no attribute 'SCHOOL_SEATS_ENABLED'
       1 failed in 0.28s
       ```
-- [ ] 43. (S2d, R5) Add `SCHOOL_SEATS_ENABLED: bool = False` to
+- [x] 43. (S2d, R5) Add `SCHOOL_SEATS_ENABLED: bool = False` to
       `config.py`.
+
+      Placed right after `JUDGE_SUMMONS_COOLDOWN`, matching the existing
+      run of master-gate fields. **Same pop-line trap as Steps 19/26/35
+      (recorded, not re-litigated):** adding the bare field alone broke
+      two pinned canonical-hash goldens
+      (`test_legacy_manifest_hashes_are_stable_after_v3_install`) the
+      moment it existed, since `_versioned_source_config_data` echoes
+      every `Config` field into the v1-v3 source hash by default. Fixed
+      immediately by adding the pop-line in the same commit (pulling
+      that half of Step 48 forward, same as Step 35 did for Part D's
+      three fields) — Step 48 now only needs the qualification-subject-
+      exclusion test.
+
+      ```
+      $ python -m pytest tests/test_run_manifest.py tests/test_config.py -q
+      84 passed in 0.67s
+      $ python -m pytest tests/test_reusable_qualification.py -q
+      36 passed in 15.99s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 755 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 16, "tests": 16, "docs/map": 0}, "total_insertions": 32, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 44. (S2d, R5) [COMMIT] Add the `--seat school-N=<profile>` CLI
       surface (parallel in shape to `seat_bindings.py`'s existing `--seat
       GROUP=PATH`, per §5.5 Road B — reusing the manifest's own

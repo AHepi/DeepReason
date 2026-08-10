@@ -2186,6 +2186,13 @@ def _versioned_source_config_data(
     data.pop("JUDGE_SEATS_ENABLED", None)
     data.pop("JUDGE_SUMMONS_PER_CYCLE", None)
     data.pop("JUDGE_SUMMONS_COOLDOWN", None)
+    # SCHOOL_SEATS_ENABLED (Part E, S2d/R5) postdates every schema
+    # version's frozen wire-byte goldens too, for the same reason as
+    # every other master gate above: it lives on Config only and is never
+    # itself written to the manifest -- its eventual effect (a school
+    # bound to a distinct route) is visible in the compiled manifest's
+    # own school_execution/criticism_policy fields, not in this echo.
+    data.pop("SCHOOL_SEATS_ENABLED", None)
     return data
 
 
