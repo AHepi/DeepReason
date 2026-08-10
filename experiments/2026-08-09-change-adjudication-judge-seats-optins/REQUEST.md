@@ -573,3 +573,73 @@ line grant and (arguably) `llm/firewall.py`. Per this tranche's own rule,
 this needs its own scoped grant, ledgered as its own numbered amendment,
 before any implementation — not assumed from R22's behavioral statement
 alone. STOP, pending that grant.
+
+### Amendment 9, clarification (2026-08-10, response to the STOP report, operator's own words — GRANT)
+
+> As long as the judges never know where the content came from and who
+> generated it, this should be fine. The judge seats should be stateless,
+> so it's completely blind to source or extenuating context. The
+> guarantee should be about blindness. I must not have made that clear.
+> So long as complete blindness is guaranteed, that's fine
+
+This resolves R22's open design question and supplies the grant the STOP
+report asked for, on a NARROWER basis than R22's own words first read: not
+"no independence guarantee at all," but "the guarantee IS blindness, not
+family/school diversity" — family/school diversity was always a proxy for
+an unstated blindness property; the operator is naming the actual property
+directly and asking that IT be the enforced condition instead of the proxy.
+
+R24 (behavior, refines/narrows R22): the cross-family/cross-school
+diversity requirement on judge ensembles may be replaced by an explicit,
+verified CONTENT-BLINDNESS guarantee — the judge-facing pack/prompt must
+never disclose the target's provenance (authoring role, model identity,
+model family, school id, or any "extenuating context" beyond the rubric,
+precedents, the target text itself, the critic's case, and the defender's
+answer). A same-model (even a single literal model in every judge seat)
+ensemble may mint a real, status-changing warrant once this guarantee is
+established and pinned as an enforced invariant, not merely assumed.
+
+**Pre-implementation finding (read-only, before any code changed):**
+blindness of this kind already holds structurally in the current rubric-
+trial dispatch path, verified by reading (not yet pinned as a checked
+invariant):
+- `informal/trial.py::_judge_pack` (`trial.py:174-194`) builds the judge's
+  pack from `body["rubric"]`, `precedent_slice(...)`, `target_text`
+  (`programs.py::content_text` — raw content bytes only, no
+  `Provenance`/role/model fields), `case`, and `answer` — no artifact
+  metadata field is interpolated anywhere in this function.
+- `llm/roles.py::TEMPLATES["judge"]` (`roles.py:83-88`) is fixed
+  instructional boilerplate plus `{pack}` — no per-call identity is ever
+  spliced in.
+- `school_id`/`endpoint_lease` (`adapter.py::call`, `adapter.py:901-902`)
+  are ROUTING parameters only, consumed for lease selection and receipt
+  bookkeeping (`adapter.py:973,1055,1062`); neither is ever written into
+  prompt text.
+
+This is NOT a claim that self-preference/stylistic self-recognition risk
+is zero — SPEC.md's judge-audit evidence review already found that
+specific risk unmeasured (R22's blast-radius report, and the `--judge-
+seats` CLI disclosure this tranche already ships). The operator's words
+read as accepting that residual, unmeasured risk explicitly ("So long as
+complete blindness is guaranteed, that's fine") rather than asking this
+tranche to also resolve it — blindness-of-metadata is the bar, not
+proof against every route by which a model might recognize its own prose.
+
+C17 (process, standing): future changes to judge pack construction must
+preserve this blindness property; the concrete enforcement mechanism
+(a pinned test, an `INV-` frozen-surface document, or both) is SPEC work
+for the upcoming addendum, not decided here.
+
+**GRANT (frozen-surface, scoped, mirroring R16/Amendment 6's form):** the
+operator's clarification, read together with R24, authorizes touching
+`llm/firewall.py`'s `require_cross_family_judge_ensemble`/
+`is_single_model_run`/`is_single_family_run` and `run_manifest.py`'s
+`V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` validator (the `single_model`
+branch of `compile_run_manifest` and its `SECOND_JUDGE_FAMILY_REQUIRED`
+raise sites) — SPECIFICALLY to relax the family/school-diversity
+condition to a pinned content-blindness condition, per R24. This is not a
+blanket run_manifest.py grant; a hunk unrelated to this specific
+relaxation remains a stop, per Amendment 6's standing rule (C14). The
+concrete design (new SPEC.md section, CHECKLIST.md steps) follows before
+any of these files change, per this tranche's own "SPEC before CHECKLIST
+before code" discipline.
