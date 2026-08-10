@@ -1,5 +1,5 @@
 # Checklist for: automatic blast-radius analysis in the skills workflow
-State: next=6 blockers=none
+State: next=8 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -152,7 +152,7 @@ recorded this; no seam document exists for this change because no
       between them, and splitting into three separate pushes would add
       commit-boundary overhead with no isolation benefit.
 
-- [ ] 6. (S2, R2) [COMMIT] Amend `.claude/skills/dr-ask-the-right-question/SKILL.md`
+- [x] 6. (S2, R2) [COMMIT] Amend `.claude/skills/dr-ask-the-right-question/SKILL.md`
       section 4 ("What earns a question"): add the clause that a
       frozen-surface-earning question must embed
       `tools/blast_radius.py`'s `BLAST_RADIUS_RESULT_V1` result, per
@@ -160,14 +160,27 @@ recorded this; no seam document exists for this change because no
       Checkpoint 2's second site.
       done-when: `grep -q "blast_radius" .claude/skills/dr-ask-the-right-question/SKILL.md`;
       commit, push.
+      ```
+      $ grep -q "blast_radius" .claude/skills/dr-ask-the-right-question/SKILL.md && echo OK
+      OK
+      ```
 
-- [ ] 7. (S2) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
+- [x] 7. (S2) [COMMIT] Amend `.claude/skills/dr-execute-step/SKILL.md`
       step 6: alongside the existing `diff_budget.py` invocation, add
       the `tools/blast_radius.py --against <tranche-base>` drift check
       (actual-touch vs. SPEC.md's own specced radius); drift is a STOP
       in `diff_budget.py`'s own `EXCEEDED` format — Checkpoint 3.
       done-when: `grep -q "blast_radius" .claude/skills/dr-execute-step/SKILL.md`;
       commit, push.
+      ```
+      $ grep -q "blast_radius" .claude/skills/dr-execute-step/SKILL.md && echo OK
+      OK
+      ```
+      Combined into the same commit as step 6 — both are additive
+      skill-text edits to the same checkpoint family, no map document
+      applies (`.claude/skills/` is outside `docs/map/`'s domain), no
+      new diff_budget/docs_verify signal beyond what steps 3-5 already
+      recorded and resolved.
 
 - [ ] 8. (S5, Fork F4 Road B) [COMMIT] Promote
       `experiments/2026-08-10-change-blast-radius-analysis/HIDDEN_LEGACY_INVENTORY.md`

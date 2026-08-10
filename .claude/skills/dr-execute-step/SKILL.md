@@ -47,7 +47,21 @@ what keeps a long change from drifting.
    WITHIN/NO_CEILING: continue. EXCEEDED is a STOP in the standard
    format (decision, priced options, recommendation), not a footnote
    (recorded miss: 193 insertions landed against a ≤150 ceiling with
-   no stop, V1 tranche 2026-08-05). Then commit and push now.
+   no stop, V1 tranche 2026-08-05). Alongside it, run
+   `python tools/blast_radius.py --files <this step's actually
+   git-added files> --symbols <this step's actually touched top-level
+   defs, from the diff hunks> --against <tranche-base>` (Rung G6,
+   `docs/map/INV-frozen-surfaces.md`) and diff its
+   `frozen_surface_contacts`/`reachability` output against THIS
+   document's own Frozen-surface contact forecast and Blast-radius
+   census sections in SPEC.md. Any `frozen_surface_contacts` entry not
+   already named in SPEC.md, or any `reachability` entry whose
+   `direction` is `newly_dead`/`newly_live` and was not predicted, is
+   DRIFT — a STOP in the exact same format as `diff_budget.py`'s own
+   EXCEEDED, never a footnote (this is the 2026-08-09 incident's own
+   fix, mechanized: `docs/ERRATA_EXECUTOR.md`'s "the frozen-surface stop
+   did not hold" happened at exactly this commit-time gap, before this
+   checkpoint existed). No drift: continue. Then commit and push now.
 
         git add <files this step touched> <map files> <tranche-dir>
         git commit -m "step <n>: <checklist line>"

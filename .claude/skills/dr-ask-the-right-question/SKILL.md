@@ -101,7 +101,17 @@ own words, or taste on user-facing shape. Batch every such fork into ONE
 question set per tranche; lead with your recommendation and its
 one-sentence reason; state each option's consequence in the operator's
 terms (risk, cost to them, honesty of the record), including the
-do-nothing consequence when it leaves something reachable-broken.
+do-nothing consequence when it leaves something reachable-broken. When
+the earning reason is frozen-surface contact, the question MUST embed
+`tools/blast_radius.py`'s `BLAST_RADIUS_RESULT_V1` result — this is
+section 1's own "cite the instrument with the number" rule, applied to
+this specific instrument (Rung G6,
+`docs/map/INV-frozen-surfaces.md`). The 2026-08-09 incident
+(`docs/ERRATA_EXECUTOR.md`) shows why: a STOP that DESCRIBES contact
+without PASTING the gate's own computed list is words given over an
+inferred surface, not a disclosed one, and the operator cannot be the
+blast-radius calculator for a 125,000-line codebase
+(`experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md`).
 
 ## 5. Frame forks falsifiably
 
