@@ -774,7 +774,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/preparation.py src/deepreason/config.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/preparation.py": 6, "src/deepreason/config.py": 5}, "total_insertions": 11, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 19. (S2c, C3) Add the `_versioned_source_config_data` pop-line for
+- [x] 19. (S2c, C3) Add the `_versioned_source_config_data` pop-line for
       `LEGACY_CRITICISM_ENABLED` in `run_manifest.py`, UNCONDITIONALLY for
       every schema version, per the `ENGAGED_CRITICISM_AUTHORITY` trap
       (`docs/map/INV-frozen-surfaces.md:185-208`) — this is the named,
@@ -784,13 +784,51 @@ low-level `deepreason compile` path reaching it.
       `python -m pytest tests/test_run_manifest.py -k canonical_shapes_and_hashes -q`
       still passes (proves the new field does not silently enter any
       pinned hash), paste output.
-- [ ] 20. (S2c, C9/surface-5 forecast) Qualification-subject-exclusion
+
+      **Test-name correction:** `-k canonical_shapes_and_hashes` matches 0
+      tests in `test_run_manifest.py` (65 deselected) — the actual test is
+      `tests/test_run_manifest_v4.py::test_v1_v2_v3_canonical_shapes_and_hashes_remain_byte_identical`.
+      Ran that plus every other hash-stability test in both files as a
+      broader safety net (used under R16's already-scoped grant for this
+      exact `_versioned_source_config_data` pop-line pattern).
+
+      ```
+      $ python -m pytest tests/test_run_manifest_v4.py -k canonical_shapes_and_hashes -q
+      3 passed, 19 deselected in 0.08s
+      $ python -m pytest tests/test_run_manifest.py tests/test_run_manifest_v4.py -q
+      87 passed in 0.82s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/run_manifest.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/run_manifest.py": 5}, "total_insertions": 5, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+- [x] 20. (S2c, C9/surface-5 forecast) Qualification-subject-exclusion
       test: assert `LEGACY_CRITICISM_ENABLED` does NOT appear in
       `qualification_subject_payload`'s output (it gates dispatch routing,
       not provider identity, per SPEC.md's frozen-surface forecast).
       done-when: a new assertion in
       `tests/test_qualification.py::test_legacy_criticism_flag_excluded_from_subject_digest`
       passes.
+
+      **Filename correction:** `tests/test_qualification.py` does not
+      exist — the real home (found by grepping for
+      `qualification_subject_payload`/`_digest` callers) is
+      `tests/test_reusable_qualification.py`, which already has the exact
+      `_manifest(profile, config_updates=..., **compile_updates)` fixture
+      this test needed (`config_updates={"LEGACY_CRITICISM_ENABLED": True},
+      criticism_policy=None`). The flag trivially cannot appear in the
+      payload — `qualification_subject_payload` only dumps the COMPILED
+      MANIFEST's own fields, and `LEGACY_CRITICISM_ENABLED` is a
+      Config-only field never written into the manifest (only its effect,
+      `criticism_policy` None vs populated, is) — matching Step 19's pop
+      line reasoning exactly.
+
+      ```
+      $ python -m pytest tests/test_reusable_qualification.py::test_legacy_criticism_flag_excluded_from_subject_digest -q
+      1 passed in 0.28s
+      $ python -m pytest tests/test_reusable_qualification.py -q
+      34 passed in 21.46s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths tests/test_reusable_qualification.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"tests/test_reusable_qualification.py": 21}, "total_insertions": 21, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 21. (S2c, R3) End-to-end integration test: with
       `LEGACY_CRITICISM_ENABLED=True` on an ordinary `build_preparation_manifest`-built
       manifest, a scheduler run with an eligible target actually dispatches

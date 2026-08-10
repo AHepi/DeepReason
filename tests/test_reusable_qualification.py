@@ -17,6 +17,7 @@ from deepreason.qualification import (
     project_qualification_report,
     qualification_cache_path,
     qualification_subject_digest,
+    qualification_subject_payload,
     resolve_completed_qualification,
 )
 from deepreason.run_manifest import compile_run_manifest
@@ -186,6 +187,26 @@ def test_subject_digest_is_invariant_only_to_question_and_compile_time():
     assert qualification_subject_digest(first, profile) == (
         qualification_subject_digest(second, profile)
     )
+
+
+def test_legacy_criticism_flag_excluded_from_subject_digest():
+    """Part B (S2c, C9/surface-5 forecast): LEGACY_CRITICISM_ENABLED gates
+    dispatch routing, not provider identity, so the raw Config flag name
+    must not appear anywhere in the qualification subject payload -- its
+    downstream effect (criticism_policy None vs populated) legitimately
+    may, and is exercised separately by the manifest-contract mutation
+    tests above."""
+
+    profile = _profile()
+    manifest = _manifest(
+        profile,
+        config_updates={"LEGACY_CRITICISM_ENABLED": True},
+        criticism_policy=None,
+    )
+
+    payload = qualification_subject_payload(manifest, profile)
+
+    assert "LEGACY_CRITICISM_ENABLED" not in json.dumps(payload)
 
 
 def test_incomplete_cache_is_never_reusable(tmp_path):

@@ -2156,6 +2156,11 @@ def _versioned_source_config_data(
     # unconditionally rather than tracking which versions happen to have
     # a pinned test today.
     data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
+    # LEGACY_CRITICISM_ENABLED postdates every schema version's frozen
+    # wire-byte goldens for the same reason: its effect is already visible
+    # in the compiled manifest's own criticism_policy (None vs populated),
+    # so the Config echo drops it unconditionally too.
+    data.pop("LEGACY_CRITICISM_ENABLED", None)
     return data
 
 
