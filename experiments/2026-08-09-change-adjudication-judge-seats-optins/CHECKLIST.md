@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=8 blockers=none
+State: next=11 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -285,22 +285,40 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 17}, "total_insertions": 17, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 8. (S13d) Widen `_v6_transactional_atomic_critic_call`
+- [x] 8. (S13d) Widen `_v6_transactional_atomic_critic_call`
       (`rules/crit.py:522-528`): change `critic_school_id: str` to
       `critic_school_id: str | None = None` (type hint only — M3 found no
       guard to remove here). done-when: same test command as Step 7 still
       passes.
-- [ ] 9. (S13i-1) Reader test FIRST (rule 1): a new test asserting
+
+      ```
+      $ python -m pytest tests/test_v6_live_repair_transactions.py -q
+      10 passed in 13.32s
+      ```
+- [x] 9. (S13i-1) Reader test FIRST (rule 1): a new test asserting
       `LLMAdapter(...).bound_v6_manifest() is None` before binding, and
       equals the exact manifest object after
       `adapter.bind_v6_authority(harness, manifest)`. done-when: the test
       currently FAILS (red — the accessor doesn't exist yet) — paste the
       failure (`AttributeError`).
-- [ ] 10. (S13i-1) [COMMIT] Add `LLMAdapter.bound_v6_manifest(self)` to
+
+      ```
+      $ python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_llm_adapter_exposes_bound_v6_manifest -q
+      AttributeError: 'LLMAdapter' object has no attribute 'bound_v6_manifest'
+      1 failed in 0.63s
+      ```
+- [x] 10. (S13i-1) [COMMIT] Add `LLMAdapter.bound_v6_manifest(self)` to
       `llm/adapter.py`, adjacent to `bind_v6_authority`: `return
       self._v6_authority_manifest` (read-only, no new stored state).
       done-when: Step 9's test passes. Diff budget check
       (`--paths src/deepreason/llm/adapter.py`), paste, commit, push.
+
+      ```
+      $ python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_llm_adapter_exposes_bound_v6_manifest -q
+      1 passed in 0.75s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/llm/adapter.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/llm/adapter.py": 5}, "total_insertions": 5, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 11. (S13i-2) [COMMIT] Redefine `policy_call` in BOTH
       `crit_argumentative` and `crit_argumentative_batch`
       (`rules/crit.py`, the two `policy_call = (bool(call_kwargs) or

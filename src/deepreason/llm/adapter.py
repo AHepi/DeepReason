@@ -253,6 +253,11 @@ class LLMAdapter:
         self._v6_authority_harness = None
         self._v6_authority_manifest = None
 
+    def bound_v6_manifest(self):
+        """The RunManifest bound by `bind_v6_authority`, or None if unbound."""
+
+        return self._v6_authority_manifest
+
     def bind_v6_authority(self, harness, manifest) -> None:
         """Bind exact route-seat presentation to canonical v6 replay state."""
 

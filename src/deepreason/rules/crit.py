@@ -536,7 +536,7 @@ def _v6_transactional_atomic_critic_call(
     run_manifest,
     *,
     endpoint_lease: EndpointLease,
-    critic_school_id: str,
+    critic_school_id: str | None = None,
     target_id: str,
     transition,
     child_index: int,

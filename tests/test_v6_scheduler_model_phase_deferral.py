@@ -367,3 +367,25 @@ def test_critic_execution_permits_endpoint_only_dispatch():
             critic_school_id="school-0",
             critic_school_context=None,
         )
+
+
+def test_llm_adapter_exposes_bound_v6_manifest(tmp_path):
+    """S13i-1: crit.py's self-detection needs a read-only accessor for the
+    manifest Scheduler.__init__ already binds via bind_v6_authority."""
+
+    harness = Harness(tmp_path / "bound-v6-manifest-accessor")
+    manifest = _manifest()
+    _bind_classification(harness, manifest)
+    adapter = LLMAdapter(
+        {"argumentative_critic": MockEndpoint(lambda _prompt: "")},
+        harness.blobs,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+    )
+
+    assert adapter.bound_v6_manifest() is None
+
+    adapter.bind_v6_authority(harness, manifest)
+
+    assert adapter.bound_v6_manifest() is manifest
