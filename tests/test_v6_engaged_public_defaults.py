@@ -25,6 +25,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 from deepreason import mcp_scratch_bridge as mcp
 from deepreason.bridge.events import BridgeAction
 from deepreason.capabilities.enums import CapabilityLifecycle
@@ -42,7 +44,7 @@ from deepreason import preparation as preparation_module
 from deepreason.preparation import _records_for_question, build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
 from deepreason.rules.conj import conj
-from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
+from deepreason.run_manifest import RunManifestError, bind_run_manifest, compile_run_manifest
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.scratch.authoring import ScratchAuthoringService
 from deepreason.scratch.proposals import (
@@ -162,6 +164,75 @@ def test_public_manifest_binds_all_four_schools_when_school_routed_criticism_is_
     # The seeded school roster and the criticism bindings agree.
     engine = json.loads(manifest.engine_config_json)
     assert engine["N_SCHOOLS"] == len(criticism.bindings) == 4
+
+
+def test_seat_school_flag_produces_route_bound_policy(monkeypatch):
+    """Part E (S2d/R5, Amendment 11/R27) Step 44: school_seats (the
+    --school-seat CLI flag's eventual carrier) binds ONE named school's
+    conjecturer seat to a distinct route, gated on SCHOOL_SEATS_ENABLED,
+    and never touches criticism_policy at all -- proving the conjecture-
+    side lever is independent of the criticism-side one (Step 44b)."""
+
+    original_config = preparation_module.Config
+
+    def _forced_school_seats_config(**kwargs):
+        return original_config(**kwargs, SCHOOL_SEATS_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_seats_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-school-seat",
+        credential_env="DEEPREASON_SCHOOL_SEAT_TEST_KEY",
+    )
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does a school seat bind just that school's route?",
+        compiled_at=STAMP,
+        school_seats={"school-1": distinct_profile},
+    )
+
+    # The conjecturer role is now a two-seat ensemble: the default profile
+    # at seat 0, the distinct profile at seat 1.
+    conjecturer_routes = manifest.roles["conjecturer"]
+    assert len(conjecturer_routes) == 2
+    assert conjecturer_routes[0].endpoint_id == profile.endpoint_id
+    assert conjecturer_routes[1].endpoint_id == distinct_profile.endpoint_id
+
+    school_execution = manifest.control_plane_policy.school_execution
+    assert school_execution.mode == "route_bound"
+    by_school = {b.school_id: b for b in school_execution.bindings}
+    assert set(by_school) == {"school-0", "school-1", "school-2", "school-3"}
+    assert by_school["school-1"].endpoint_id == distinct_profile.endpoint_id
+    assert by_school["school-1"].seat == 1
+    assert by_school["school-1"].role == "conjecturer"
+    for school_id in ("school-0", "school-2", "school-3"):
+        assert by_school[school_id].endpoint_id == profile.endpoint_id
+        assert by_school[school_id].seat == 0
+    # Legacy (default, per Part B2) criticism is untouched by this flag.
+    assert manifest.criticism_policy is None
+
+
+def test_seat_school_flag_refuses_without_the_master_gate(monkeypatch):
+    """Defense-in-depth companion (mirrors the CLI's own gate): school_seats
+    given while SCHOOL_SEATS_ENABLED stays at its default False is a typed
+    refusal, not a silent no-op or an accidental route_bound compile."""
+
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-school-seat",
+        credential_env="DEEPREASON_SCHOOL_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(RunManifestError, match="SCHOOL_SEATS_DISABLED"):
+        build_preparation_manifest(
+            profile,
+            question="Does an ungated school seat refuse cleanly?",
+            compiled_at=STAMP,
+            school_seats={"school-0": distinct_profile},
+        )
 
 
 def test_legacy_criticism_enabled_by_default_is_byte_identical():

@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Mapping
 from pathlib import Path
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
@@ -192,6 +193,48 @@ def engaged_bridge_source() -> dict:
             "max_grounding_repair_attempts",
             "output_section_limit",
         }
+    )
+
+
+def route_bound_school_execution_policy(
+    default_endpoint_id: str,
+    *,
+    seat_map: Mapping[str, tuple[int, str]] | None = None,
+) -> SchoolExecutionPolicyV1:
+    """Bind every seeded public school's conjecturer seat to a route.
+
+    Part E (S2d/R5, Amendment 11/R27, 2026-08-10): a school is a
+    CONJECTURE-side attractor-minimization tool -- this policy never
+    touches criticism routing (`engaged_criticism_policy` is the
+    independent, separately-opted-into criticism-side counterpart).
+    `seat_map` gives `school_id -> (seat, endpoint_id)` for schools
+    explicitly given a distinct route (`deepreason setup --school-seat
+    school-N=<profile>`, resolved by `preparation._conjecturer_school_
+    seat_ensemble` against the ACTUAL compiled conjecturer route list --
+    `SchoolRoleBindingV1` resolves by seat index into `manifest.roles[
+    "conjecturer"]`, so a bare endpoint_id string is not enough); every
+    other school shares seat 0, `default_endpoint_id`, same as before
+    this opt-in existed. `route_bound` mode requires a binding for every
+    seeded school (`run_manifest.py`'s `V4_SCHOOL_BINDING_INCOMPLETE`
+    check) -- there is no partial-binding shape, so every school gets an
+    explicit binding regardless of whether its route is distinct.
+    """
+
+    seat_map = seat_map or {}
+    return SchoolExecutionPolicyV1(
+        mode="route_bound",
+        bindings=tuple(
+            SchoolRoleBindingV1(
+                school_id=f"school-{index}",
+                role="conjecturer",
+                seat=seat_map.get(f"school-{index}", (0, default_endpoint_id))[0],
+                endpoint_id=seat_map.get(f"school-{index}", (0, default_endpoint_id))[1],
+            )
+            for index in range(PUBLIC_SCHOOL_COUNT)
+        ),
+        allow_shared=True,
+        require_distinct_models=False,
+        require_distinct_families=False,
     )
 
 

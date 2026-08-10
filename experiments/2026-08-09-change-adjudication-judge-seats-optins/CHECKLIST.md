@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=44 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-43 complete, revised per Amendment 11/R27 (SPEC.md addendum S18) into two independent levers -- Step 44 conjecture-side only, new Step 44b criticism-side only; diff-budget base a942f404c, 121/1600)
+State: next=44b blockers=none (Parts A+B+C+D+D2+B2 complete; Part E steps 42-44 complete -- conjecture-side `--school-seat school-N=<profile>` CLI surface fully wired: config gate, v6_policy route-bound builder, preparation.py ensemble + threading into the production call site, seat_bindings.py persistence, cli/main.py flag+handler, mechanism+CLI-level tests, map fixes; next is Step 44b, the fully independent criticism-side `--criticism-seat` lever; diff-budget base a942f404c, 486/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1613,7 +1613,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 16, "tests": 16, "docs/map": 0}, "total_insertions": 32, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 44. (S2d, R5, revised by Amendment 11/R27 — SPEC.md addendum S18)
+- [x] 44. (S2d, R5, revised by Amendment 11/R27 — SPEC.md addendum S18)
       [COMMIT] Add the `--seat school-N=<profile>` CLI surface (parallel
       in shape to `seat_bindings.py`'s existing `--seat GROUP=PATH`, per
       §5.5 Road B — reusing the manifest's own school-keyed shape, NOT
@@ -1626,6 +1626,119 @@ low-level `deepreason compile` path reaching it.
       `CriticismPolicyV1`. done-when:
       `tests/test_run_manifest.py::test_seat_school_flag_produces_route_bound_policy`
       passes. Diff budget check, commit, push.
+
+      **Flag-name correction (checked before writing, not silently
+      assumed):** the CHECKLIST's own wording names `--seat
+      school-N=<profile>`, but `--seat` already exists for role-group
+      bindings (`GROUP=PATH`, Rung S3) and a school id is not a group —
+      handing `school-1=<path>` to the existing `--seat` flag would either
+      collide with `SEAT_BINDING_GROUP_UNKNOWN` or, worse, silently be
+      accepted as a new "group" name if the vocabulary check were ever
+      loosened. Implemented as a SEPARATE flag, `--school-seat
+      school-N=PATH`, mirroring `--seat`'s shape exactly but keeping the
+      two vocabularies (role groups vs. school ids) structurally
+      un-collidable — matching `seat_bindings.py`'s own design note (this
+      tranche, Step 44's persistence layer) that school seats are "not a
+      GROUP_ROLES concept."
+
+      **Filename correction (same pattern as Steps 16/20 — checked, not
+      assumed):** the test lives in
+      `tests/test_v6_engaged_public_defaults.py`, not
+      `tests/test_run_manifest.py` — that file already holds every other
+      `build_preparation_manifest`-level default/opt-in test this tranche
+      added (Part B/B2/D's tests), and `test_run_manifest.py` builds
+      `RunManifest` objects directly with no `build_preparation_manifest`
+      fixture at all.
+
+      **What was built**, in commit order:
+      - `src/deepreason/v6_policy.py`: `route_bound_school_execution_policy(default_endpoint_id, *, seat_map=None)`
+        — binds every seeded public school's `conjecturer` seat to a real
+        route (`SchoolExecutionPolicyV1(mode="route_bound", ...)`), taking
+        a pre-resolved `seat_map: {school_id: (seat, endpoint_id)}` rather
+        than bare endpoint-id strings (see mid-step discovery below for
+        why).
+      - `src/deepreason/preparation.py`: `_conjecturer_school_seat_ensemble`
+        builds a genuine multi-seat `conjecturer` route list (seat 0 =
+        the default profile; each distinct school-seat profile gets one
+        new seat, deduplicated by `endpoint_id`) and the matching
+        `seat_map`; `build_preparation_manifest` gained a `school_seats:
+        Mapping[str, ProviderProfileV1] | None` parameter that (a) raises
+        typed `RunManifestError("SCHOOL_SEATS_DISABLED", ...)` when
+        `school_seats` is given without `Config.SCHOOL_SEATS_ENABLED`
+        (defense-in-depth alongside the CLI's own gate), and (b) when
+        enabled, overrides `control_plane_policy.school_execution` with
+        the route-bound policy — `criticism_policy` is untouched in every
+        case, matching the conjecture-only design.
+      - `src/deepreason/seat_bindings.py`: a new, SEPARATE persistence file
+        (`school-seat-bindings.yaml`, not `seat-bindings.yaml`) and three
+        functions (`school_seat_bindings_path`, `parse_school_seat_flags`,
+        `resolve_school_seats`) reusing only the generic YAML `{key:
+        path}` round-trip (`load_seat_bindings`/`write_seat_bindings`) —
+        deliberately NOT extending `GROUP_ROLES`/`parse_seat_flags`, per
+        the CHECKLIST's own instruction (school ids carry no role set).
+      - `src/deepreason/cli/main.py`: `setup_cmd.add_argument("--school-seat",
+        action="append", ...)`, and a handler block parallel to the
+        existing `--seat` block that calls `parse_school_seat_flags` +
+        `write_seat_bindings` against `school_seat_bindings_path()`.
+      - Threaded into the one production call site that resolves seat
+        bindings before calling `build_preparation_manifest`
+        (`preparation.py`'s `RunPreparationService`-shaped class method):
+        `school_seats = resolve_school_seats(environ=self._environ,
+        home=self._home)`, passed through as `school_seats=school_seats or
+        None` — the run manifest a live `reason` run actually compiles now
+        reflects any persisted school-seat bindings, not just the unit-test
+        path.
+      - `src/deepreason/config.py`: corrected `SCHOOL_SEATS_ENABLED`'s
+        comment, stale since Step 43 (written before Amendment 11 split
+        the two levers) — it no longer claims the flag gates conjecture-
+        and criticism-side routing "together, not either in isolation";
+        it now names both levers as independent, sharing only the master
+        gate.
+
+      **Mid-step discovery #1 (found while implementing, not in the
+      original SPEC.md sketch):** a first version of
+      `route_bound_school_execution_policy` took bare `school_seats:
+      Mapping[str, str]` (school_id → endpoint_id) and always bound
+      `seat=0`. This failed `V4_SCHOOL_ENDPOINT_MISMATCH` —
+      `SchoolRoleBindingV1`'s validator requires `binding.endpoint_id ==
+      manifest.roles[binding.role][binding.seat].endpoint_id`, i.e. the
+      binding must resolve against a REAL route at that seat index in the
+      compiled manifest, not an arbitrary string. Fixed by redesigning
+      `school_seats` to carry real `ProviderProfileV1` objects (matching
+      `seat_bindings`'s existing shape) and adding
+      `_conjecturer_school_seat_ensemble` to build a genuine multi-seat
+      route list plus a `seat_map` the policy function binds against
+      directly — bindings now always match the actual compiled route list
+      by construction, not by convention.
+
+      **Mid-step discovery #2 (`docs_verify.py` run proactively, per the
+      lesson recorded at Step 13a):** `SEAM-manifest-x-schools.md`'s
+      exhaustive "school"+"RunManifest" file-census check moved twice
+      during this step — 21→22 when `preparation.py` gained `school_seats`
+      (fixed earlier, Step 44's core-mechanism sub-pass), then 22→23 when
+      `cli/main.py`'s new `--school-seat` help text put the word "school"
+      next to that file's pre-existing "RunManifest" mentions (help text
+      for `config compile`/`inspect`). Fixed by updating the count to 23
+      and adding a new sentence naming `cli/main.py` as a further miss "in
+      the other direction" (names both words, enforces no binding — it
+      only parses and persists). The seam's OTHER check (the "every
+      `SchoolExecutionPolicyV1` constructed anywhere in `src/` is
+      `conditioning_only`" trap) was already updated to its post-Step-44
+      shape during the core-mechanism sub-pass and needed no further
+      change here. `python tools/docs_verify.py` (full, not `--fast`):
+      0 failed after both fixes.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py::test_seat_school_flag_produces_route_bound_policy tests/test_v6_engaged_public_defaults.py::test_seat_school_flag_refuses_without_the_master_gate -q
+      2 passed in 0.51s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_criticism_school_execution_c3.py tests/test_reusable_qualification.py tests/test_qualification_per_seat.py tests/test_cli_setup_seats.py tests/test_seat_bindings.py tests/test_config.py -q
+      213 passed in ~55s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 851 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 241, "tests": 199, "docs/map": 46}, "total_insertions": 486, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 44b. (S2d, R27 — SPEC.md addendum S18, new step, not in the
       original plan) [COMMIT] Add the `--criticism-seat school-N=<profile>`
       CLI surface: criticism-side ONLY, independent of Step 44's flag —

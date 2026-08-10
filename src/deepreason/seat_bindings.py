@@ -17,6 +17,8 @@ from pathlib import Path
 
 import yaml
 
+import re
+
 from deepreason.provider_profile import (
     ProviderProfileV1,
     provider_state_dir,
@@ -24,6 +26,15 @@ from deepreason.provider_profile import (
 )
 
 SEAT_BINDINGS_FILENAME = "seat-bindings.yaml"
+# Part E (S2d/R5, Amendment 11/R27, 2026-08-10): a SEPARATE, school-keyed
+# binding file -- conjecture-side school seats are not a GROUP_ROLES
+# concept (they carry no role set, they name a manifest-level
+# SchoolRoleBindingV1, not a Config.roles override), so this deliberately
+# does NOT extend GROUP_ROLES or reuse parse_seat_flags's group
+# vocabulary; it reuses only the generic YAML {key: path} round-trip
+# (load_seat_bindings/write_seat_bindings) that file format already is.
+SCHOOL_SEAT_BINDINGS_FILENAME = "school-seat-bindings.yaml"
+_SCHOOL_ID_PATTERN = re.compile(r"^school-(0|[1-9][0-9]*)$")
 
 # Role-group -> endpoint-bearing role names it controls. "coder" is only
 # `property_designer`: `rules/experiment.py`'s generator-authoring call
@@ -184,3 +195,66 @@ def resolve_seat_bindings(
             role_profile[role] = profile
             role_group[role] = group
     return role_profile
+
+
+def school_seat_bindings_path(
+    *,
+    home: str | None = None,
+    environ: Mapping[str, str] | None = None,
+) -> Path:
+    return provider_state_dir(home=home, environ=environ) / SCHOOL_SEAT_BINDINGS_FILENAME
+
+
+def parse_school_seat_flags(values: list[str] | None) -> dict[str, str]:
+    """Parse repeated ``school-N=PATH`` flags into ``{school_id: path}``.
+
+    ``None``/``[]`` (no ``--school-seat`` given) returns ``{}`` — the
+    default, no-bindings case existing configs must reproduce byte-
+    identically. Validates the school-id shape against the same pattern
+    ``SchoolRoleBindingV1`` itself enforces (``run_manifest.py``), so a
+    malformed id is refused here rather than surfacing later as an
+    opaque manifest-validation error.
+    """
+
+    if not values:
+        return {}
+    bindings: dict[str, str] = {}
+    for raw in values:
+        school_id, separator, path = raw.partition("=")
+        school_id = school_id.strip()
+        path = path.strip()
+        if not separator or not school_id or not path:
+            raise SeatBindingError(
+                "SCHOOL_SEAT_FLAG_MALFORMED",
+                f"--school-seat value {raw!r} must be school-N=PATH",
+            )
+        if not _SCHOOL_ID_PATTERN.match(school_id):
+            raise SeatBindingError(
+                "SCHOOL_SEAT_ID_MALFORMED",
+                f"--school-seat id {school_id!r} must match school-N (N >= 0)",
+            )
+        if school_id in bindings:
+            raise SeatBindingError(
+                "SCHOOL_SEAT_DUPLICATED",
+                f"--school-seat {school_id!r} was given more than once",
+            )
+        bindings[school_id] = path
+    return bindings
+
+
+def resolve_school_seats(
+    *,
+    home: str | None = None,
+    environ: Mapping[str, str] | None = None,
+) -> dict[str, ProviderProfileV1]:
+    """Return ``{school_id: ProviderProfileV1}`` for every persisted
+    conjecture-side school seat (Part E, S2d/R5) -- the carrier
+    ``preparation.build_preparation_manifest``'s ``school_seats``
+    parameter consumes. No file means no bindings, same shape as
+    ``resolve_seat_bindings_by_group``."""
+
+    raw = load_seat_bindings(school_seat_bindings_path(home=home, environ=environ))
+    return {
+        school_id: resolve_provider_profile(path, environ=environ, home=home).profile
+        for school_id, path in sorted(raw.items())
+    }

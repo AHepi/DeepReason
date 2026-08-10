@@ -3,7 +3,11 @@ from deepreason.cli.main import (
     _main,
     build_parser,
 )
-from deepreason.seat_bindings import load_seat_bindings, seat_bindings_path
+from deepreason.seat_bindings import (
+    load_seat_bindings,
+    school_seat_bindings_path,
+    seat_bindings_path,
+)
 
 
 def _setup_argv(tmp_path, extra=()):
@@ -45,6 +49,30 @@ def test_setup_without_seat_flag_writes_no_seat_bindings(tmp_path, monkeypatch):
     assert rc == 0
     assert not seat_bindings_path().exists()
     assert load_seat_bindings(seat_bindings_path()) == {}
+
+
+def test_setup_with_school_seat_flag_writes_school_seat_bindings(tmp_path, monkeypatch):
+    """S2d/R5, Amendment 11/R27: setup accepts a per-school profile path,
+    persisted separately from the role-group --seat bindings file."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    bound_path = str(tmp_path / "school-1-profile.yaml")
+    rc = _main(_setup_argv(tmp_path, extra=["--school-seat", f"school-1={bound_path}"]))
+    assert rc == 0
+    assert load_seat_bindings(school_seat_bindings_path()) == {"school-1": bound_path}
+    assert not seat_bindings_path().exists()
+
+
+def test_setup_without_school_seat_flag_writes_no_school_seat_bindings(tmp_path, monkeypatch):
+    """Default (no --school-seat) writes no school-seat-bindings file at all."""
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path))
+    monkeypatch.setenv("DEEPREASON_TEST_SETUP_KEY", "already-set")
+    rc = _main(_setup_argv(tmp_path))
+    assert rc == 0
+    assert not school_seat_bindings_path().exists()
+    assert load_seat_bindings(school_seat_bindings_path()) == {}
 
 
 def test_judge_seats_flag_surfaces_evidence_warning(tmp_path, monkeypatch, capsys):

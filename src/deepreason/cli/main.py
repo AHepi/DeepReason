@@ -86,6 +86,21 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     setup_cmd.add_argument(
+        "--school-seat",
+        action="append",
+        default=None,
+        metavar="school-N=PATH",
+        help=(
+            "bind an existing provider profile file to a single seeded "
+            "school's conjecturer route (school-0..school-3); repeatable, "
+            "conjecture-side only -- never touches criticism. Requires "
+            "SCHOOL_SEATS_ENABLED in your config profile (this flag only "
+            "persists the binding; the master gate itself is still set "
+            "via --config). Default (no --school-seat) leaves every "
+            "school on the profile above."
+        ),
+    )
+    setup_cmd.add_argument(
         "--judge-seats",
         action="store_true",
         help=(
@@ -656,6 +671,17 @@ def _main(argv: list[str] | None = None) -> int:
 
                 write_seat_bindings(
                     parse_seat_flags(args.seat), seat_bindings_path()
+                )
+            if getattr(args, "school_seat", None) is not None:
+                from deepreason.seat_bindings import (
+                    parse_school_seat_flags,
+                    school_seat_bindings_path,
+                    write_seat_bindings,
+                )
+
+                write_seat_bindings(
+                    parse_school_seat_flags(args.school_seat),
+                    school_seat_bindings_path(),
                 )
             if getattr(args, "judge_seats", False):
                 print("\n" + JUDGE_SEATS_EVIDENCE_SUMMARY + "\n")
