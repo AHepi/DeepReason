@@ -5,14 +5,53 @@ import json
 import pytest
 
 from deepreason.config import Config
+from deepreason.harness import Harness
 from deepreason.informal.standards import register_standard
-from deepreason.informal.trial import run_trial
+from deepreason.informal.trial import run_argument_trial_from_case, run_trial
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.llm.firewall import JudgeEnsemblePolicyError
+from deepreason.llm.firewall import JudgeEnsemblePolicyError, is_single_model_run, leases_from_manifest
 from deepreason.ontology import Commitment, Interface, Problem, ProblemProvenance, Provenance
+from deepreason.provider_profile import ProviderProfileV1
 from deepreason.rules.experiment import relevance_trial
 from tests.conftest import art
+
+
+_STAMP = "2026-07-16T00:00:00Z"
+
+
+def _seat_test_profile(**updates) -> ProviderProfileV1:
+    values = dict(
+        provider="openai",
+        endpoint="https://api.example.test/v1",
+        model_id="model-judge-boundary-baseline",
+        model_revision="revision-1",
+        family="family-judge-boundary",
+        context_window_tokens=131_072,
+        maximum_completion_tokens=4_096,
+        credential_env="DEEPREASON_JUDGE_BOUNDARY_TEST_KEY",
+    )
+    values.update(updates)
+    return ProviderProfileV1.create(**values)
+
+
+def _mock_for_route(route):
+    return MockEndpoint(
+        lambda _prompt: json.dumps({"answer": "the mechanism is explicit"}),
+        name=route.base_url,
+        model=route.model_id,
+        max_tokens=route.max_tokens,
+    )
+
+
+def _adapter_from_manifest(manifest, harness):
+    endpoints = {
+        "defender": _mock_for_route(manifest.roles["defender"][0]),
+        "judge": _mock_for_route(manifest.roles["judge"][0]),
+    }
+    return LLMAdapter(
+        endpoints, harness.blobs, leases=leases_from_manifest(manifest)
+    )
 
 
 def _counting_endpoint(calls, response, *, name, model):
@@ -242,3 +281,101 @@ def test_property_relevance_rejects_same_family_before_judge_call(harness):
 
     assert calls == []
     assert not any(event.llm is not None for event in harness.log.read())
+
+
+def test_school_seat_diversity_flips_single_model_predicate_for_judge_role(monkeypatch, tmp_path):
+    """Step 46 (S2d, C6, Amendment 11/R27 -- Consequence-B disclosure): a
+    `--school-seat` opt-in that adds route diversity to the CONJECTURER
+    role only -- never touching `judge` -- flips `is_single_model_run` to
+    False for the WHOLE run, because that predicate scans every role's
+    leases (`llm/firewall.py::is_single_model_run` via `_lease_models`),
+    not just the caller's own role.
+
+    `informal/trial.py::_argument_trial_steps` reads exactly this
+    predicate to choose between two paths: a single-model run with fewer
+    than two judge seats DECLINES gracefully ("single-judge-seat", a typed
+    Measure, no exception); a NOT-single-model run skips that graceful
+    decline entirely and calls `adapter.require_cross_family_judges()`,
+    which raises `JudgeEnsemblePolicyError` on that SAME, otherwise
+    untouched, still-one-seat judge role. So the school-seat opt-in can
+    turn a graceful decline into a hard preflight failure for a role it
+    never configured -- this test is the executable proof backing Step
+    47's CLI disclosure text, not a design change."""
+
+    import deepreason.preparation as preparation_module
+    from deepreason.preparation import build_preparation_manifest
+
+    original_config = preparation_module.Config
+
+    def _forced_school_seats_config(**kwargs):
+        return original_config(**kwargs, SCHOOL_SEATS_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_seats_config)
+
+    profile = _seat_test_profile()
+    # Same family as `profile` -- isolates the MODEL axis `is_single_model_run`
+    # actually reads, distinct from the (already-covered) family axis.
+    distinct_profile = _seat_test_profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-judge-boundary-distinct",
+        credential_env="DEEPREASON_JUDGE_BOUNDARY_DISTINCT_TEST_KEY",
+    )
+
+    baseline_manifest = build_preparation_manifest(
+        profile,
+        question="Does an untouched run stay single-model?",
+        compiled_at=_STAMP,
+    )
+    diverse_manifest = build_preparation_manifest(
+        profile,
+        question="Does one conjecturer school seat flip is_single_model_run?",
+        compiled_at=_STAMP,
+        school_seats={"school-1": distinct_profile},
+    )
+
+    # The judge role is untouched by --school-seat in both manifests: one
+    # seat, the same route, either way.
+    baseline_leases = leases_from_manifest(baseline_manifest)
+    diverse_leases = leases_from_manifest(diverse_manifest)
+    assert len(baseline_leases["judge"]) == len(diverse_leases["judge"]) == 1
+    assert (
+        baseline_leases["judge"][0].route.model_id
+        == diverse_leases["judge"][0].route.model_id
+    )
+
+    # The predicate flip itself.
+    assert is_single_model_run(baseline_leases) is True
+    assert is_single_model_run(diverse_leases) is False
+
+    # The concrete behavioral consequence: same 1-seat judge role, same
+    # target, same case -- graceful decline before the opt-in, hard raise
+    # after it.
+    for label, manifest, expect_raise in (
+        ("baseline", baseline_manifest, False),
+        ("diverse", diverse_manifest, True),
+    ):
+        harness = Harness(tmp_path / f"run-{label}")
+        target = art(
+            harness,
+            "the mechanism is explicit",
+            provenance=Provenance(role="conjecturer", school="school-0"),
+        )
+        adapter = _adapter_from_manifest(manifest, harness)
+        diagnostics: list = []
+        if expect_raise:
+            with pytest.raises(JudgeEnsemblePolicyError):
+                run_argument_trial_from_case(
+                    harness, adapter, Config(), target.id,
+                    "the case for fail", None,
+                    authority="status", critic_school_id="school-1",
+                    diagnostics=diagnostics,
+                )
+        else:
+            result = run_argument_trial_from_case(
+                harness, adapter, Config(), target.id,
+                "the case for fail", None,
+                authority="status", critic_school_id="school-1",
+                diagnostics=diagnostics,
+            )
+            assert result is None
+            assert diagnostics[-1]["declined"] == "single-judge-seat"

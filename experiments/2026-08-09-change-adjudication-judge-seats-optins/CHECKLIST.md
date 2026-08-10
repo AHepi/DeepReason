@@ -1834,13 +1834,42 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 360, "tests": 337, "docs/map": 46}, "total_insertions": 743, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 45. (S2d, C6) Consequence-A regression test (must stay inert, per
+- [x] 45. (S2d, C6) Consequence-A regression test (must stay inert, per
       the map's own pinned invariant): binding two schools to two distinct
       models does not change `foreign_schools` computation in
       `plan_foreign_criticism`. done-when:
       `tests/test_foreign_school_criticism_scheduler_c3.py::test_distinct_school_models_do_not_change_foreign_coverage_count`
       passes.
-- [ ] 46. (S2d, C6) Consequence-B disclosure (Road A, approved — no code
+
+      No `[COMMIT]` tag on this step — bundled into Step 51's subsystem-ring
+      commit along with Steps 46-50, per the CHECKLIST's own ordering.
+
+      **What the test proves, read directly from `criticism.py`:**
+      `plan_foreign_criticism`'s `foreign_schools` selection
+      (`sorted(set(bindings) - {target.owner_school_id})`, line 357) and
+      its `foreign_school_coverage` count (`len(covered_schools)`, line
+      406) are pure SCHOOL-ID set arithmetic — neither reads a route,
+      model, or endpoint anywhere. Route/model diversity is real and
+      already tracked, but in three SEPARATE fields
+      (`distinct_route_coverage`, `distinct_model_coverage`,
+      `route_diverse`, added by an earlier tranche) that never feed back
+      into selection or the count. Built a control fixture
+      (`_shared_route_criticism`, three schools sharing ONE seat/route)
+      alongside the file's existing `_criticism()` fixture (three schools
+      already on three DISTINCT routes/models) and called
+      `plan_foreign_criticism` directly on both with the identical target
+      set — `foreign_school_coverage` and the selected `critic_school_id`
+      set are byte-identical between the two, while
+      `distinct_route_coverage`/`distinct_model_coverage`/`route_diverse`
+      correctly diverge (1/1/False vs coverage/coverage/True).
+
+      ```
+      $ python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py -q
+      3 passed in 1.90s
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 360, "tests": 440, "docs/map": 46}, "total_insertions": 846, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+- [x] 46. (S2d, C6) Consequence-B disclosure (Road A, approved — no code
       change to `firewall.py`): a regression test PROVING the documented
       side effect is real and unchanged in shape (so a future reader knows
       it is expected, not a regression): enabling school seats with
@@ -1851,6 +1880,45 @@ low-level `deepreason compile` path reaching it.
       passes (this test's existence and passing IS the "disclosure" —
       it's the executable proof backing the operator-facing help text
       Step 47 writes).
+
+      No `[COMMIT]` tag — bundled into Step 51's subsystem-ring commit.
+
+      **What the test proves, read directly from `informal/trial.py`:**
+      `_argument_trial_steps` (`:601-629`) branches on
+      `adapter.is_single_model()`. A single-model run with fewer than two
+      judge seats DECLINES gracefully (`_decline(..., "single-judge-seat",
+      ...)` — a typed Measure, no exception). A NOT-single-model run skips
+      that decline entirely and calls `adapter.require_cross_family_judges()`,
+      which raises `JudgeEnsemblePolicyError` on the exact same, still
+      one-seat, untouched judge role. Built two manifests via
+      `build_preparation_manifest` — one plain, one with a single
+      conjecture-side `school_seats` entry pointing at a distinct-model,
+      same-family profile (isolating the MODEL axis `is_single_model_run`
+      actually reads, per `llm/firewall.py::_lease_models`) — and drove
+      both through `run_argument_trial_from_case(authority="status")` with
+      an adapter built from each manifest's own real routes/leases
+      (`leases_from_manifest`). Same target, same case, same 1-seat judge
+      role in both: the plain manifest declines with `"single-judge-seat"`;
+      the school-seat manifest raises `JudgeEnsemblePolicyError`.
+
+      **Design note:** `test_judge_ensemble_boundary.py` already had NO
+      helper for building a real `LLMAdapter`/leases from a compiled
+      `RunManifest` (its existing fixtures hand-roll adapters from bare
+      role dicts) — added `_adapter_from_manifest` (mirrors the file's
+      `_trial_adapter` pattern but reads real routes off
+      `manifest.roles["defender"|"judge"]` and passes
+      `leases=leases_from_manifest(manifest)`, so the leases the predicate
+      reads are the SAME ones the production path would compute, not a
+      hand-typed stand-in).
+
+      ```
+      $ python -m pytest tests/test_judge_ensemble_boundary.py -q
+      8 passed in 0.66s
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_v6_engaged_public_defaults.py tests/test_foreign_school_criticism_scheduler_c3.py -q
+      77 passed in 20.31s
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 360, "tests": 579, "docs/map": 46}, "total_insertions": 985, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 47. (S2d) CLI operator-facing surface: `--seat school-N=<profile>`'s
       help text names Consequence B explicitly (a school-seat opt-in that
       adds route diversity anywhere in the run's role table can revoke the
