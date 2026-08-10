@@ -303,13 +303,41 @@ def test_epistemic_import_failure_uses_evidence_on_validity_node(tmp_path):
     design = harness.create_artifact("design", provenance=Provenance(role="conjecturer"))
     evidence = harness.create_artifact(b"registry metadata", provenance=Provenance(role="import"))
     register_epistemic_import_failure(
-        harness, design.id, ImportPlanError("licence-policy", "forbidden", [evidence.id])
+        harness,
+        design.id,
+        ImportPlanError("licence-policy", "forbidden", [evidence.id]),
+        Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True),
     )
     assert harness.state.status[design.id] == Status.REFUTED
     warrant = next(iter(harness.warrants.values()))
     nu = harness.state.artifacts[warrant.validity_node]
     assert any(ref.target == evidence.id and ref.role.value == "evidence"
                for ref in nu.interface.refs)
+
+
+def test_import_failure_gated_by_adjudication_master_flag(tmp_path):
+    """Part C (S2a, R1): register_epistemic_import_failure was one of the
+    two mint sites SPEC.md found consulting neither authority nor a
+    supremacy guard. With ADJUDICATION_STATUS_AUTHORITY_ENABLED at its
+    default False, an import-plan failure now records scrutiny only --
+    no warrant, no status change -- mirroring observe_only."""
+
+    harness = Harness(tmp_path / "run")
+    design = harness.create_artifact("design", provenance=Provenance(role="conjecturer"))
+    evidence = harness.create_artifact(b"registry metadata", provenance=Provenance(role="import"))
+
+    register_epistemic_import_failure(
+        harness,
+        design.id,
+        ImportPlanError("licence-policy", "forbidden", [evidence.id]),
+        Config(),
+    )
+
+    assert harness.state.status[design.id] == Status.ACCEPTED
+    assert not harness.warrants
+    assert any(
+        event.inputs[:2] == ["scrutiny", design.id] for event in harness.log.read()
+    )
 
 
 def test_component_import_lineage_is_machine_checked(tmp_path):

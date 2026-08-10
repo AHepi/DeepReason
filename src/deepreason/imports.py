@@ -819,9 +819,28 @@ class ImportService:
             shutil.rmtree(build, ignore_errors=True)
 
 
-def register_epistemic_import_failure(harness, design_id: str, error: ImportPlanError) -> None:
-    """Put a demonstrated import-plan failure through the ordinary graph path."""
+def register_epistemic_import_failure(
+    harness, design_id: str, error: ImportPlanError, config
+) -> None:
+    """Put a demonstrated import-plan failure through the ordinary graph path.
+
+    Status-changing only when ADJUDICATION_STATUS_AUTHORITY_ENABLED is
+    True (Part C's master gate); otherwise the finding is recorded as
+    scrutiny only, mirroring rules/crit.py's observe_only shape (a
+    critic-role artifact, no warrant, a ["scrutiny", design, critic]
+    Measure) -- this was one of the two mint sites that consulted
+    neither authority nor a supremacy guard before this gate existed.
+    """
     from deepreason.ontology import Rule, Warrant, WarrantType
+
+    if not getattr(config, "ADJUDICATION_STATUS_AUTHORITY_ENABLED", False):
+        critic = harness.create_artifact(
+            f"critic: accepted dependency request violates {error.code}: {error.detail}",
+            provenance=Provenance(role="critic"),
+            rule=Rule.CRIT,
+        )
+        harness.record_measure(inputs=["scrutiny", design_id, critic.id])
+        return
 
     refs = [Ref(target=aid, role=RefRole.EVIDENCE) for aid in error.evidence_ids]
     nu = harness.create_artifact(
@@ -852,5 +871,5 @@ def resolve_for_design(harness, design_id: str, manifest: Manifest, config) -> R
         harness.record_measure(inputs=["import-deferred", design_id, error.code])
         return None
     except ImportPlanError as error:
-        register_epistemic_import_failure(harness, design_id, error)
+        register_epistemic_import_failure(harness, design_id, error, config)
         return None

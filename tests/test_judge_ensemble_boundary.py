@@ -138,7 +138,14 @@ def test_property_relevance_rejects_same_family_before_judge_call(harness):
     )
 
     with pytest.raises(JudgeEnsemblePolicyError):
-        relevance_trial(harness, prop, "required", problem, adapter, Config())
+        relevance_trial(
+            harness,
+            prop,
+            "required",
+            problem,
+            adapter,
+            Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True),
+        )
 
     assert calls == []
     assert not any(event.llm is not None for event in harness.log.read())

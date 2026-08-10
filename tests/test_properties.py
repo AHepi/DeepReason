@@ -160,7 +160,9 @@ def test_propose_activates_trial_passed_and_refutes_vacuous(harness):
          {"claim": "anything goes", "checker": VACUOUS_CHECKER}],
         [PASS_RULING], [PASS_RULING],
     )
-    activated = propose_properties(harness, base, problem, adapter, Config())
+    activated = propose_properties(
+        harness, base, problem, adapter, Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)
+    )
     assert len(activated) == 1
     props = active_properties(harness, base.id)
     assert len(props) == 1 and props[0][1] == ASCENDING_CLAIM
@@ -187,7 +189,9 @@ def test_relevance_trial_unanimity_required(harness):
         [{"claim": ASCENDING_CLAIM, "checker": ASCENDING_CHECKER}],
         [PASS_RULING], [FAIL_RULING],
     )
-    activated = propose_properties(harness, base, problem, adapter, Config())
+    activated = propose_properties(
+        harness, base, problem, adapter, Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)
+    )
     assert activated == []
     assert active_properties(harness, base.id) == []
     prop = next(
@@ -198,6 +202,59 @@ def test_relevance_trial_unanimity_required(harness):
     assert w.type == WarrantType.ARGUMENTATIVE  # a judged case, attackable nu
 
 
+def test_relevance_trial_gated_by_adjudication_master_flag(harness):
+    """Part C (S2a, R1): relevance_trial was the other of the two mint
+    sites SPEC.md found consulting neither authority nor a supremacy
+    guard. With ADJUDICATION_STATUS_AUTHORITY_ENABLED at its default
+    False, no judge is dispatched at all and the proposed property does
+    not activate -- if the gate failed to intercept, the judge endpoints
+    below would raise and fail this test rather than silently pass."""
+
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+
+    def _forbidden(_prompt):
+        raise AssertionError("relevance_trial dispatched a judge with the master gate off")
+
+    adapter = LLMAdapter(
+        {
+            "property_designer": MockEndpoint(
+                [json.dumps({"properties": [
+                    {"claim": ASCENDING_CLAIM, "checker": ASCENDING_CHECKER}
+                ]})]
+            ),
+            "judge": [
+                MockEndpoint(_forbidden, name="mock://judge-gemma", model="gemma-test"),
+                MockEndpoint(_forbidden, name="mock://judge-qwen", model="qwen-test"),
+            ],
+        },
+        harness.blobs,
+        retry_max=2,
+    )
+
+    activated = propose_properties(harness, base, problem, adapter, Config())
+
+    # activated tracks THIS round's newly-confirmed properties -- gated
+    # closed, nothing gets a fresh relevance confirmation.
+    assert activated == []
+    assert not harness.warrants
+    prop = next(
+        a for a in harness.state.artifacts.values() if a.codec == "code:python-prop"
+    )
+    # observe_only semantics: the property's Status is untouched -- still
+    # ACCEPTED from checker_wf's mechanical admission, since no judge ever
+    # ran to refute it. active_properties() therefore still reports it
+    # (its own docstring: "ACCEPTED is the entire activation gate"), which
+    # is the correct "status untouched" analog, not a fresh confirmation.
+    assert harness.state.status[prop.id] == Status.ACCEPTED
+    assert active_properties(harness, base.id) != []
+    assert any(
+        event.inputs[:2] == ["property-relevance-declined", prop.id]
+        for event in harness.log.read()
+    )
+
+
 # ---- use: the conjectured property refutes the trap, with the safety net ----
 
 def _activated_property(harness, base, problem):
@@ -206,7 +263,9 @@ def _activated_property(harness, base, problem):
         [{"claim": ASCENDING_CLAIM, "checker": ASCENDING_CHECKER}],
         [PASS_RULING], [PASS_RULING],
     )
-    activated = propose_properties(harness, base, problem, adapter, Config())
+    activated = propose_properties(
+        harness, base, problem, adapter, Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)
+    )
     assert len(activated) == 1
     return activated[0]
 
@@ -567,7 +626,9 @@ def test_arrival_probe_refutes_crashing_checker_before_any_judge(harness):
         [{"claim": "outputs start with an int", "checker": CRASHY_CHECKER}],
         judge_never_called, judge_never_called,
     )
-    activated = propose_properties(harness, base, problem, adapter, Config())
+    activated = propose_properties(
+        harness, base, problem, adapter, Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)
+    )
 
     assert activated == []
     prop = next(aid for aid, a in harness.state.artifacts.items()

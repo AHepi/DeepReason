@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=27 blockers=none (Parts A+B complete; Step 28 done early)
+State: next=29 blockers=none (Parts A+B complete; Steps 27-28 done)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1030,7 +1030,7 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/authority.py src/deepreason/rules/crit.py src/deepreason/config.py src/deepreason/run_manifest.py tests/test_text_authority_policy.py tests/test_criticism_authority.py tests/test_prose_refutation_boundaries.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/authority.py": 24, "src/deepreason/rules/crit.py": 51, "src/deepreason/config.py": 11, "src/deepreason/run_manifest.py": 12, "tests/test_text_authority_policy.py": 44, "tests/test_criticism_authority.py": 5, "tests/test_prose_refutation_boundaries.py": 10}, "total_insertions": 157, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 27. (S2a, R1) Close the two ungated mint sites: add the same master
+- [x] 27. (S2a, R1) Close the two ungated mint sites: add the same master
       check to `imports.py::register_epistemic_import_failure` and
       `rules/experiment.py::relevance_trial`, defaulting closed (i.e.
       when the flag is False, these two paths behave as if authority is
@@ -1040,6 +1040,76 @@ low-level `deepreason compile` path reaching it.
       and
       `test_experiment.py::test_relevance_trial_gated_by_adjudication_master_flag`,
       both pass.
+
+      **Filename correction:** the second test lives in
+      `tests/test_properties.py` (where every other `relevance_trial`
+      exercise already lives), not `test_experiment.py` (a different
+      mechanism file — generators, not properties).
+
+      **Design decisions made while implementing (not silently typed
+      in):**
+      - `register_epistemic_import_failure` gained a required `config`
+        parameter (threaded from its one caller, `resolve_for_design`,
+        which already had it in scope). Gated closed: records scrutiny
+        (critic artifact, no warrant, `["scrutiny", design, critic]`
+        Measure — reusing the identical registered signal `crit.py`'s
+        own `observe_only` path uses) instead of an unconditional
+        warrant. One pre-existing test
+        (`test_epistemic_import_failure_uses_evidence_on_validity_node`)
+        exercised the warrant path directly without a config argument;
+        updated to pass `Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)`,
+        restoring the exact reachability it always tested.
+      - `relevance_trial` gated closed: dispatches NO judge at all (zero
+        tokens) and leaves the property's `Status` untouched rather than
+        forcing non-activation. Discovered mid-test-writing that
+        `active_properties()`'s own docstring makes "ACCEPTED is the
+        entire activation gate" — a property mechanically admitted by
+        `checker_wf` stays reported as active even with no fresh
+        relevance confirmation, since nothing REFUTES it either. This is
+        the correct observe_only analog ("target status untouched"), not
+        a gap — my first test draft asserted the wrong thing
+        (`active_properties() == []`) and was corrected before
+        finalizing. A new registered signal, `property-relevance-
+        declined`, records the decline (inputs: `[signal, property
+        artifact id]`).
+      - Collateral: same predicted-reachability pattern as Step 26 hit
+        FIVE more `Config()` call sites across
+        `tests/test_properties.py` (4, via the shared `_activated_
+        property` helper) and `tests/test_evidence_view.py` (1), plus
+        `tests/test_judge_ensemble_boundary.py`'s cross-family-guard test
+        (which needs to actually REACH `adapter.require_cross_family_
+        judges()` to test it, now gated behind the flag too). All
+        6 got `ADJUDICATION_STATUS_AUTHORITY_ENABLED=True` added.
+
+      **`docs_verify.py` run proactively (now standard practice), found
+      two more things:**
+      1. `SEAM-adjudication-x-authority.md:92`'s own check explicitly
+         says it "pins TODAY's state, and it is expected to be updated —
+         not deleted — by whatever change gates them" (its own `How to
+         change it` item 4). Rewrote the prose and check to state the
+         fix and the specific design point it asked to be settled: these
+         two sites read the flag DIRECTLY (not routed through
+         `trial_authority_for`/`argumentative_authority_mode`, since
+         neither is a `workload_profile == "text"` judgement). Also
+         updated the earlier "Argumentative mints with no gate at all"
+         table row to match.
+      2. `SUB-harness.md`/`SUB-rules.md`/`SUB-scheduler.md` all reference
+         `tests/test_signals.py::test_every_emitted_signal_is_registered`,
+         which failed: `property-relevance-declined` was an unregistered
+         signal tag. Registered it in `signals.py` alongside the other
+         criticism-authority signals (`scrutiny`/`trial-declined`/etc).
+
+      ```
+      $ python -m pytest tests/test_imports.py::test_import_failure_gated_by_adjudication_master_flag tests/test_properties.py::test_relevance_trial_gated_by_adjudication_master_flag -q
+      2 passed in 0.59s
+      $ python -m pytest tests/test_imports.py tests/test_properties.py tests/test_evidence_view.py tests/test_judge_ensemble_boundary.py tests/test_experiment.py tests/test_signals.py -q
+      59 passed in 28.76s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/imports.py src/deepreason/rules/experiment.py src/deepreason/signals.py tests/test_imports.py tests/test_properties.py tests/test_evidence_view.py tests/test_judge_ensemble_boundary.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/imports.py": 22, "src/deepreason/rules/experiment.py": 14, "src/deepreason/signals.py": 6, "tests/test_imports.py": 29, "tests/test_properties.py": 65, "tests/test_evidence_view.py": 3, "tests/test_judge_ensemble_boundary.py": 8}, "total_insertions": 147, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [x] 28. (S2a, C3) `_versioned_source_config_data` pop-line for
       `ADJUDICATION_STATUS_AUTHORITY_ENABLED`, unconditional across schema
       versions. done-when: canonical-hash goldens still pass (same command
