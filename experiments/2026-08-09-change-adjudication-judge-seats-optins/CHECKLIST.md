@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=13a blockers=none
+State: next=14a blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -419,7 +419,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 38}, "total_insertions": 38, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 13a. (S13i-4) [COMMIT] Simplify `scheduler.py::_arg_crit`'s plain
+- [x] 13a. (S13i-4) [COMMIT] Simplify `scheduler.py::_arg_crit`'s plain
       branch: DELETE the `if self.run_manifest is not None and
       self.run_manifest.schema_version == 6: ...
       _defer_untransactional_v6_phase(...) ... continue` block entirely
@@ -433,6 +433,79 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `hv-floor`/`hv-spot-check`/`rubric-trial` deferrals are untouched).
       Diff budget check, paste (expect a NET NEGATIVE line count for this
       step), commit, push.
+
+      **Obsolete test found and removed (not silently patched):** deleting
+      the defer block breaks `test_v6_local_argumentative_criticism_
+      becomes_completion_debt` — its entire premise (v6 + no
+      `criticism_policy` ⇒ deferral debt) is the exact defect R19/S13i
+      fixes; SPEC.md's S13i-4 explicitly predicted "this defer is no
+      longer reachable/needed for this phase," satisfying CLAUDE.md's "may
+      be minimally updated only when the fix's design doc predicted it."
+      Its replacement, `test_legacy_argumentative_criticism_dispatches_
+      under_v6` (Step 12), already covers the corrected behavior for the
+      identical scenario, so the obsolete test is DELETED rather than
+      inverted into a duplicate.
+
+      **Second, larger mid-step discovery — `python tools/docs_verify.py`
+      run proactively before committing (not skipped):** three documents
+      broke, one of them a genuine architectural conflict, not mere doc
+      staleness:
+      1. `SEAM-llm-x-rules.md:49,90` — Step 13's self-detection imported
+         `select_lease` directly into `rules/crit.py` to resolve its own
+         default route. This SEAM document has its own checked, deliberate
+         boundary: `"! grep -rqE \"select_lease|resolve_school_role_lease\"
+         ... src/deepreason/rules"` and a banned-symbol AST check — "The
+         lease travels one way. The scheduler resolves it, a rule carries
+         it, and the adapter re-verifies it." This is a REAL boundary
+         violation, the same class of conflict as the original
+         SEAM-scheduler-x-rules.md fork (R21), just on the `llm/`x`rules`
+         seam instead of `scheduler`x`rules`. Resolved the same way:
+         pushed the mechanism one layer down into `llm/adapter.py` (not a
+         frozen surface, already touched this tranche) instead of
+         `rules/crit.py`. Added `LLMAdapter.bound_v6_default_lease(role,
+         seat=0)`, a thin wrapper around the SAME `select_lease` call,
+         living entirely on the `llm/` side of the boundary; `crit.py`
+         now calls `adapter.bound_v6_default_lease(...)` instead of
+         importing `select_lease` itself. Updated `SEAM-llm-x-rules.md`'s
+         "Where it is expressed" prose (not a Traps entry, so rewritten
+         directly, not marked FIXED) to describe the adapter now also
+         resolving its own default lease for the self-dispatch case.
+         `rules/crit.py` still imports zero route-resolution primitives;
+         both of this seam's checks pass unmodified in shape.
+      2. `SEAM-rules-x-workflow.md:186` and `SEAM-scheduler-x-rules.md`/
+         `SEAM-scheduler-x-workflow.md` (already fixed inline while
+         writing Step 13a's own diff, see below) — stale "argumentative
+         criticism becomes typed completion debt" claims and a phase-set
+         check asserting `"argumentative-criticism"` still appears among
+         `_defer_untransactional_v6_phase`'s call sites. All rewritten to
+         state the corrected behavior, each as a Traps "FIXED 2026-08-10"
+         rewrite (`docs/map/SCHEMA.md` rule 7: never delete a Traps entry,
+         rewrite it to say when it was fixed) where the stale claim lived
+         in a Traps section, or a direct prose rewrite where it did not.
+      3. `CON-schools.md:167` — a THIRD, PRE-EXISTING staleness from Step
+         6b's S13h (missed at the time — `docs_verify.py` was not run
+         after that step; caught here instead of compounding further).
+         `_critic_execution`'s all-or-nothing pairing check no longer
+         covers the school-free endpoint-only case S13h added; updated
+         the prose and check to state the corrected three-combination
+         shape (no envelope / endpoint-only / paired school-routed).
+      `python tools/docs_verify.py` now reports 0 failed (was 4 failed
+      before this discovery; re-verified fresh after each fix). Lesson
+      recorded for the rest of this CHECKLIST: run `docs_verify.py` at
+      every step touching `docs/map`-owned source files, not only at the
+      dedicated map-update steps.
+
+      ```
+      $ python -m pytest tests/test_v6_scheduler_model_phase_deferral.py -q
+      10 passed in 0.83s
+      $ python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py tests/test_prose_refutation_boundaries.py tests/test_model_firewall.py tests/test_criticism_school_execution_c3.py -q
+      133 passed in 78.62s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 851 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/scheduler/scheduler.py src/deepreason/rules/crit.py src/deepreason/llm/adapter.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/scheduler/scheduler.py": 0, "src/deepreason/rules/crit.py": 39, "src/deepreason/llm/adapter.py": 13}, "total_insertions": 52, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 14a. (S13e) Reader test FIRST (rule 1): three new tests —
       `tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
       (payload's `dispatch_authority` is `"observe_only"` — resolves and

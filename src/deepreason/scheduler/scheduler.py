@@ -1244,17 +1244,6 @@ class Scheduler:
         size = config.CRIT_BATCH_K or 1
         for i in range(0, len(eligible), size):
             batch = eligible[i : i + size]
-            if (
-                self.run_manifest is not None
-                and self.run_manifest.schema_version == 6
-            ):
-                for target_id in batch:
-                    self._defer_untransactional_v6_phase(
-                        "argumentative-criticism",
-                        "argumentative_critic",
-                        target_id,
-                    )
-                continue
             try:
                 crit_argumentative_batch(harness, batch, self.adapter, config)
             except (SchemaRepairError, EndpointError) as e:

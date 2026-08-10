@@ -253,7 +253,11 @@ deferral arm.
 `check: test "$(grep -rln scheduler --include=*.py src/deepreason/rules/ | wc -l)" -eq 5 && grep -q "scheduler.s per-cycle budget counts real runs" src/deepreason/rules/act.py && ! grep -q "PER_CYCLE" src/deepreason/rules/act.py`
 - **Under v6 the local criticism ladder is empty, and that is not a bug.** With
   a manifest `criticism_policy`, `_arg_crit` delegates the whole phase to
-  `_foreign_arg_crit`; without one, a v6 manifest makes each target
-  per-target deferral debt instead of a call. Both look like "criticism did not
-  run" from outside. Recorded in full in `DR-SEAM-scheduler-x-workflow`.
-`check: python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_v6_local_argumentative_criticism_becomes_completion_debt -q`
+  `_foreign_arg_crit`; without one, a v6 manifest used to make each target
+  per-target deferral debt instead of a call — FIXED 2026-08-10
+  (adjudication-judge-seats-optins tranche, S13i): `crit_argumentative_batch`
+  now self-detects a v6-bound adapter and dispatches live even with no
+  `critic_school_id`, so `_arg_crit`'s own call to it stays keyword-free
+  (this seam's own invariant, below) while the phase never defers. Recorded
+  in full in `DR-SEAM-scheduler-x-workflow`.
+`check: python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 -q`

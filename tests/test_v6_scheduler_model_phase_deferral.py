@@ -127,31 +127,6 @@ def test_legacy_scheduler_keeps_ordinary_argumentative_dispatch(monkeypatch):
     assert _markers(scheduler) == []
 
 
-def test_v6_local_argumentative_criticism_becomes_completion_debt(monkeypatch):
-    scheduler = _scheduler(roles={"argumentative_critic"})
-    scheduler.config = SimpleNamespace(
-        ARG_CRIT_PER_CYCLE=None,
-        RECRIT_STANDING=False,
-        CRIT_BATCH_K=None,
-    )
-    scheduler._arg_crit_this_cycle = 0
-    scheduler.harness.state.status["A"] = Status.ACCEPTED
-    monkeypatch.setattr(
-        scheduler_module,
-        "crit_argumentative_batch",
-        lambda *_args, **_kwargs: pytest.fail("unbound v6 criticism dispatched"),
-    )
-
-    scheduler._arg_crit(["A"])
-
-    assert _markers(scheduler)[0][1:5] == (
-        "argumentative-criticism",
-        "argumentative_critic",
-        "A",
-        "-",
-    )
-
-
 def test_v6_criterion_model_checks_defer_without_dispatch(monkeypatch):
     scheduler = _scheduler()
     scheduler.config = SimpleNamespace()

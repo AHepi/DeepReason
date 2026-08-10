@@ -25,7 +25,7 @@ from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCase, BatchCriticOutput
 from deepreason.llm.endpoints import EndpointError
-from deepreason.llm.firewall import EndpointLease, route_fingerprint, select_lease
+from deepreason.llm.firewall import EndpointLease, route_fingerprint
 from deepreason.llm.packs import (
     aliases_for_pack,
     render_batch_crit_pack,
@@ -1385,10 +1385,12 @@ def crit_argumentative_batch(
         # Self-detection: the scheduler's call carries no envelope at all
         # (SEAM-scheduler-x-rules.md forbids it choosing one); a v6-bound
         # adapter still needs its manifest and a default route to dispatch.
+        # The lease itself is asked of the adapter, never resolved here —
+        # a rule may not import a route-resolution primitive (SEAM-llm-x-rules.md).
         bound_manifest = adapter.bound_v6_manifest()
         if bound_manifest is not None:
             run_manifest = bound_manifest
-            endpoint_lease = select_lease(adapter.leases, "argumentative_critic", 0)
+            endpoint_lease = adapter.bound_v6_default_lease("argumentative_critic")
     dispatch_authority = authority if critic_school_id is None else None
     active_v6 = False
     if run_manifest is not None:
