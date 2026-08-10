@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=6 blockers=none
+State: next=6a blockers=SPEC.md needs S13h addendum for _critic_execution's guard before Step 7 resumes
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -177,18 +177,51 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 2}, "total_insertions": 2, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-      (Used the true tranche-base commit `81d08e5f0` rather than
-      `81d08e5f0`, which now resolves to
+      (Used the true tranche-base commit `81d08e5f0` directly rather than
+      computing `git merge-base HEAD origin/main`, which now resolves to
       `origin/main`'s own tip since this branch merged it mid-tranche —
-      the checklist text's literal command would measure zero pre-tranche
-      diff against the wrong reference; the intent, diffing against the
-      tranche's start point, is what was run.)
-- [ ] 6. (S13b) Remove `assert critic_school_id is not None`
+      that computed value would measure zero pre-tranche diff against the
+      wrong reference; the intent, diffing against the tranche's start
+      point, is what was run. All later `[COMMIT]` steps' done-when text
+      below has been updated to cite `81d08e5f0` directly, for the same
+      reason.)
+- [x] 6. (S13b) Remove `assert critic_school_id is not None`
       (`rules/crit.py:1438`, inside the `active_v6:` block), keeping
       `assert endpoint_lease is not None`. done-when: same test command as
       Step 5 still passes (paste it again — confirms no regression from
       this second, adjacent change).
-- [ ] 7. (S13c) [COMMIT] Widen `_v6_transactional_batch_call`
+
+      ```
+      $ python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py -q
+      2 passed in 1.16s
+      ```
+
+      **Mid-step discovery, per dr-execute-step's own rule ("never just
+      typed in"):** re-reading the neighborhood to find this assert's
+      exact line surfaced a THIRD, separate school-required guard that
+      SPEC.md's M1-M5 measurements missed —
+      `_critic_execution` (`rules/crit.py:106-134`, called by both
+      `crit_argumentative` and `crit_argumentative_batch` before either
+      reaches the `active_v6` branch):
+      ```python
+      supplied = (
+          endpoint_lease is not None,
+          critic_school_id is not None,
+          critic_school_context is not None,
+      )
+      if any(supplied) and not all(supplied):
+          raise ValueError(
+              "school-routed criticism requires endpoint_lease, critic_school_id, "
+              "and critic_school_context"
+          )
+      ```
+      Road E's shape (`endpoint_lease` supplied, `critic_school_id`/
+      `critic_school_context` both `None`) is exactly the
+      `any(supplied) and not all(supplied)` case this raises on — S13a-g
+      as specified does NOT make Road E's dispatch actually work; this
+      site was missed. Not typed around silently: a SPEC.md addendum
+      (S13h) and a new CHECKLIST step follow immediately, before Step 7
+      resumes.
       (`rules/crit.py:255-262`): change `critic_school_id: str` to
       `critic_school_id: str | None = None`; remove the `if not
       critic_school_id: raise ValueError("transactional criticism

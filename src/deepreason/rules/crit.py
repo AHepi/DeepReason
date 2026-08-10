@@ -1430,7 +1430,6 @@ def crit_argumentative_batch(
     resuming_atomic_decomposition = False
     if active_v6:
         assert endpoint_lease is not None
-        assert critic_school_id is not None
 
         from deepreason.workflow.models import RouteLeaseRefV1
 
