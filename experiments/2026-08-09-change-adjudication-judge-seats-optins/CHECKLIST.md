@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=14a blockers=none
+State: next=14 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -506,7 +506,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/scheduler/scheduler.py src/deepreason/rules/crit.py src/deepreason/llm/adapter.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/scheduler/scheduler.py": 0, "src/deepreason/rules/crit.py": 39, "src/deepreason/llm/adapter.py": 13}, "total_insertions": 52, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 14a. (S13e) Reader test FIRST (rule 1): three new tests —
+- [x] 14a. (S13e) Reader test FIRST (rule 1): three new tests —
       `tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
       (payload's `dispatch_authority` is `"observe_only"` — resolves and
       admits), `::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only`
@@ -518,7 +518,36 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       into the payload — not just that recovery reads it correctly).
       done-when: all three currently FAIL (red) — paste all three
       failures.
-- [ ] 14b. (S13e) [COMMIT] Implement the recovery branch: in
+
+      **Fixture gap found writing these tests (not silently patched):**
+      the shared `_provider_prefix` helper unconditionally built a
+      `SchoolRouteReceiptV1(school_id=payload["critic_school_id"], ...)`
+      for every `WorkflowTaskKind.CRITICISM` call — `SchoolRouteReceiptV1.
+      school_id` is a required, pattern-constrained `str`, so this crashes
+      for `critic_school_id=None`. Made the receipt conditional on
+      `payload.get("critic_school_id") is not None` (backward compatible:
+      every existing school-routed caller is unaffected, verified by the
+      full subsystem ring below). Added a parallel `_criticism_prefix_
+      school_free` fixture (no `CriticismAssignmentV1` obligation — that
+      record type's `critic_school_id` field is ALSO a required pattern
+      `str`, confirming the obligation concept is inherently
+      school-specific and does not apply to legacy dispatch at all; see
+      Step 14b's own discovery about `_criticism_contract`'s
+      assignment-cardinality check for the consequence of this).
+
+      **Third test result note:** it PASSES already, not red — Step 13
+      already implemented `_v6_transactional_batch_call`'s write side
+      (the `dispatch_authority` parameter and `payload["dispatch_authority"]`
+      line). This is expected, not a gap: the test still earns its place
+      as the WRITE-side proof the other two (READ-side) tests don't cover.
+
+      ```
+      $ python -m pytest tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only tests/test_v6_nonconjecture_recovery.py::test_v6_transactional_batch_call_freezes_dispatch_authority_for_school_free_calls -q
+      FAILED test_criticism_contract_recovers_without_a_school - NonConjectureRecoveryAuthorityError: critic school has no manifest binding
+      FAILED test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only - AssertionError: Regex pattern did not match. Expected: 'critic authority is not recoverable'. Actual: 'critic school has no manifest binding'
+      2 failed, 1 passed in 6.06s
+      ```
+- [x] 14b. (S13e) [COMMIT] Implement the recovery branch: in
       `nonconjecture_recovery.py::_criticism_contract` (`:643-718`), when
       `payload.get("critic_school_id") is None`, skip the
       `criticism_policy is not None`/binding-lookup requirement
@@ -533,6 +562,67 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       passes in full (paste "N passed, 0 failed"). Diff budget check
       (`--paths src/deepreason/workflow/nonconjecture_recovery.py`),
       paste, commit, push.
+
+      **Mid-step discovery #1, checked before writing (not silently
+      patched):** the ORIGINAL assignment-cardinality check
+      (`_authority(len(assignments) == len(targets), "critic assignment
+      cardinality differs")` and the loop below it) is itself
+      school-obligation-specific machinery — `CriticismAssignmentV1.
+      critic_school_id` is ALSO a required, pattern-constrained `str`
+      (confirmed reading the model), so the whole per-target-assignment
+      concept cannot apply to school-free criticism at all, and the
+      self-sufficient dispatch (S13i) always passes an empty
+      `transaction_assignment_refs`. Left unguarded, this check would
+      ALWAYS raise "critic assignment cardinality differs" for every
+      school-free recovery (0 assignments vs N targets), which the
+      original SPEC.md/CHECKLIST wording for this step did not anticipate
+      — found while writing Step 14a's fixtures, not by inspection. Fixed
+      by gating the whole block on `school_id is not None`, with an
+      explicit new check on the school-free side
+      (`_authority(not assignments, "school-free criticism must carry no
+      assignment obligation")`) and its own early return, rather than
+      leaving the gap unchecked.
+
+      **Mid-step discovery #2 (a real, pre-existing latent bug this
+      tranche's new code path exposed, not introduced by it):**
+      `_criticism_contract`'s caller applies the recovered criticism
+      effect via two call sites that unconditionally wrapped
+      `critic_school_id=str(payload["critic_school_id"])`. For every
+      school-routed call before this tranche, `payload["critic_school_id"]`
+      was always a real string, so `str(x) == x` was a silent no-op;
+      for the new school-free case it is `None`, and `str(None) ==
+      "None"` — the critic artifact's `Provenance.school` (itself typed
+      `str | None`, correctly) ended up literally the STRING `"None"`
+      instead of Python `None`. Caught by Step 14a's own first test
+      asserting `critics[0].provenance.school is None`. Both call sites
+      (`:338`, `:355`) had the redundant `str(...)` removed —
+      `_crit_argumentative_batch_result`/`_apply_counterexample_retry_result`
+      already declare `critic_school_id: str | None`, so this is a pure
+      bug fix, not a signature change.
+
+      **`docs_verify.py` run proactively before committing (habit from
+      Step 13a's lesson):** found one collateral break —
+      `SEAM-scheduler-x-rules.md:39` and `SEAM-scheduler-x-workflow.md:39`
+      count files that mention both `deepreason.rules` and the literal
+      word "scheduler"; discovery #1's explanatory comment in
+      `nonconjecture_recovery.py` used the word "scheduler" in prose,
+      pushing that file's count over by one (it already imports from
+      `deepreason.rules.crit`, unrelated to this step). Reworded the
+      comment to avoid the literal word; both counts restored to their
+      checked values. `docs_verify.py`: 0 failed after the reword (was 2
+      failed).
+
+      ```
+      $ python -m pytest tests/test_v6_nonconjecture_recovery.py -q
+      24 passed in 48.40s
+      $ python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_v6_live_repair_transactions.py tests/test_v6_nonconjecture_recovery.py tests/test_prose_refutation_boundaries.py tests/test_model_firewall.py tests/test_criticism_school_execution_c3.py -q
+      136 passed in 81.18s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 851 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/workflow/nonconjecture_recovery.py tests/test_v6_nonconjecture_recovery.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/workflow/nonconjecture_recovery.py": 44, "tests/test_v6_nonconjecture_recovery.py": 170}, "total_insertions": 214, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 14. (R13) Map update, same commit as the behavior (rule 4c): edit
       `docs/map/SUB-scheduler.md`'s row "A legacy model phase v6 cannot
       yet dispatch | `_defer_untransactional_v6_phase` at the phase's call

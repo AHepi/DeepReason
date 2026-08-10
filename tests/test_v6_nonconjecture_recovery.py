@@ -13,7 +13,7 @@ from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.llm.firewall import leases_from_manifest, route_fingerprint
+from deepreason.llm.firewall import leases_from_manifest, route_fingerprint, select_lease
 from deepreason.llm.repair import (
     RepairDiagnosticEnvelopeV2,
     RepairDiagnosticV2,
@@ -28,6 +28,7 @@ from deepreason.ontology import (
     SchoolRouteReceiptV1,
 )
 from deepreason.oracle import property_oracle_commitment
+from deepreason.rules.crit import _v6_transactional_batch_call
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
@@ -288,6 +289,7 @@ def _provider_prefix(
                 contract_id=contract_id,
             )
             if task_kind == WorkflowTaskKind.CRITICISM
+            and payload.get("critic_school_id") is not None
             else None
         ),
     )
@@ -387,6 +389,60 @@ def _criticism_prefix(
     return preparation, provider, target, assignment
 
 
+def _criticism_prefix_school_free(
+    root,
+    manifest,
+    *,
+    dispatch_authority="observe_only",
+    raw=b'{"cases":[]}',
+    attempt_index=0,
+    phase="primary",
+    caller_trigger_ref=None,
+):
+    """S13i/S13e: the school-free (legacy) criticism dispatch shape --
+    no CriticismAssignmentV1 obligation, authority frozen into the
+    payload at dispatch time instead of read from criticism_policy."""
+
+    harness = Harness(root)
+    target = harness.create_artifact(
+        "one legacy target", provenance=Provenance(role="conjecturer")
+    )
+    payload = {
+        "schema": "criticism.semantic-task.v1",
+        "critic_school_id": None,
+        "target_ids": [target.id],
+        "assignment_refs": [],
+        "coverage_attempt_index": attempt_index,
+        "phase": phase,
+        "caller_trigger_ref": caller_trigger_ref,
+        "dispatch_authority": dispatch_authority,
+    }
+    content = target.content_ref.removeprefix("inline:").encode("utf-8")
+    item = VisibleContextItemV1(
+        namespace=ContextNamespace.SOURCE,
+        alias="SRC_001",
+        object_ref=target.id,
+        content_sha256=hashlib.sha256(content).hexdigest(),
+        planned_bytes=64,
+    )
+    preparation, provider = _provider_prefix(
+        harness,
+        manifest,
+        task_kind=WorkflowTaskKind.CRITICISM,
+        role="argumentative_critic",
+        seat=0,
+        contract_id="batch-critic.v2",
+        payload=payload,
+        trigger_prefix="criticism:",
+        raw=raw,
+        target_refs=(target.id,),
+        input_refs=(),
+        items=(item,),
+        attempt_index=attempt_index,
+    )
+    return preparation, provider, target
+
+
 def test_recovered_criticism_applies_canonical_effect_exactly_once(tmp_path):
     _config_value, manifest = _manifest()
     root = tmp_path / "criticism"
@@ -433,6 +489,119 @@ def test_recovered_criticism_applies_canonical_effect_exactly_once(tmp_path):
     assert repeated_item.terminal == item.terminal
     assert repeated_admission == admission
     assert assignment.id in preparation.input_refs
+
+
+def test_criticism_contract_recovers_without_a_school(tmp_path):
+    """S13e: dispatch_authority == 'observe_only' resolves and admits, with
+    no criticism_policy binding required at all."""
+
+    _config_value, manifest = _manifest()
+    root = tmp_path / "criticism-school-free"
+    preparation, provider, target = _criticism_prefix_school_free(
+        root,
+        manifest,
+        raw=(
+            b'{"cases":[{"target_alias":"SRC_001","attack":true,'
+            b'"case":"the legacy circuit dispatches without a school"}]}'
+        ),
+    )
+
+    reopened, item, admission = _recover(root, manifest, provider)
+
+    assert item.terminal.status == "completed"
+    assert admission.outcome == "admitted"
+    critics = [
+        artifact
+        for artifact in reopened.state.artifacts.values()
+        if artifact.provenance.role == "critic"
+    ]
+    assert len(critics) == 1
+    assert critics[0].provenance.school is None
+    assert preparation.target_refs == (target.id,)
+
+
+def test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only(
+    tmp_path,
+):
+    """S13e: mirrors the school-routed branch's own 'critic authority is
+    not recoverable' fail-closed shape, sourced from the frozen payload
+    field instead of criticism_policy.authority."""
+
+    _config_value, manifest = _manifest()
+    root = tmp_path / "criticism-school-free-unrecoverable"
+    _preparation, provider, _target = _criticism_prefix_school_free(
+        root, manifest, dispatch_authority="trial_required"
+    )
+    reopened = Harness(root)
+    before = tuple(reopened.log.read())
+
+    with pytest.raises(NonConjectureRecoveryAuthorityError, match="critic authority is not recoverable"):
+        recover_nonconjecture_admission(
+            reopened,
+            manifest,
+            TokenMeter(100_000),
+            provider,
+        )
+
+    assert tuple(reopened.log.read()) == before
+
+
+def test_v6_transactional_batch_call_freezes_dispatch_authority_for_school_free_calls(
+    tmp_path,
+):
+    """S13e: proves the WRITE side -- _v6_transactional_batch_call actually
+    bakes the resolved authority into the durable payload at dispatch
+    time, not just that recovery reads it back correctly (the previous
+    two tests only cover the read side)."""
+
+    _config_value, manifest = _manifest()
+    harness = Harness(tmp_path / "school-free-dispatch-freezes-authority")
+    _bind_classification(harness, manifest)
+    target = harness.create_artifact(
+        "legacy target", provenance=Provenance(role="conjecturer")
+    )
+    route = manifest.roles["argumentative_critic"][0]
+    endpoint = MockEndpoint(
+        [
+            canonical_json(
+                {"cases": [{"target_alias": "SRC_001", "attack": False, "case": ""}]}
+            ).decode("utf-8")
+        ],
+        name=route.base_url,
+        model=route.model_id,
+        max_tokens=route.max_tokens,
+    )
+    adapter = LLMAdapter(
+        {"argumentative_critic": [endpoint, MockEndpoint([]), MockEndpoint([])]},
+        harness.blobs,
+        retry_max=0,
+        meter=TokenMeter(100_000),
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+    )
+    adapter.bind_v6_authority(harness, manifest)
+    lease = select_lease(adapter.leases, "argumentative_critic", 0)
+
+    _output, _call = _v6_transactional_batch_call(
+        harness,
+        adapter,
+        manifest,
+        endpoint_lease=lease,
+        critic_school_id=None,
+        target_ids=(target.id,),
+        assignment_refs=(),
+        coverage_attempt_index=0,
+        phase="primary",
+        caller_trigger_ref=None,
+        pack_factory=lambda: "SRC_001: target",
+        dispatch_authority="observe_only",
+    )
+
+    work = list(harness.workflow_state.transaction_work.values())
+    assert len(work) == 1
+    assert work[0].preparation.task_payload_value["dispatch_authority"] == "observe_only"
+    assert work[0].preparation.task_payload_value["critic_school_id"] is None
 
 
 def test_identical_critic_effects_remain_isolated_by_source_transaction(tmp_path):
