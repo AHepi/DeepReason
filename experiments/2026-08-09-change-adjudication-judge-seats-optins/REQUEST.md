@@ -662,3 +662,24 @@ the manifest's/adapter's own frozen route shape, mirroring the existing
 cross-school substitute) rather than gated by a separately-threaded
 boolean — SPEC.md's S16 section revised accordingly, same commit as this
 ledger entry.
+
+### Amendment 10 (2026-08-10, confirms Part E's scope before execution, operator's own words)
+
+> Yes. School opt in. But for both criticism and conjecture.
+
+R26 (process, confirms R5/C6, no new design): directs execution to begin
+on Part E (the schools opt-in, CHECKLIST.md steps 42-51) and confirms
+`SCHOOL_SEATS_ENABLED` must cover BOTH school mechanisms together, not
+either in isolation — a school-seat binding must be usable to give BOTH
+the conjecture-side routing (`SchoolExecutionPolicyV1.mode="route_bound"`)
+AND the criticism-side routing (`CriticismPolicyV1.bindings`'s per-school
+distinct endpoint) simultaneously. This matches SPEC.md §2(d)'s design as
+already written ("gating whether `SchoolExecutionPolicyV1.mode` may be
+set to `route_bound` (conjecture side) **and/or** whether
+`CriticismPolicyV1.bindings` may carry per-school distinct `endpoint_id`s
+(criticism side)") — the operator's words resolve the "and/or" toward
+"and": when `--seat school-N=<profile>` binds a school to a distinct
+route, that binding is available to both mechanisms for that school, not
+a forced choice between them. No CHECKLIST.md step needs renumbering;
+Step 44's design already names both structures as targets of the same
+flag.
