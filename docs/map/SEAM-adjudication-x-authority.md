@@ -82,9 +82,12 @@ move or rename fails the check instead of quietly shrinking it.
 `check: python -c "import pathlib; mods=['skills/adoption.py','measures/hv.py','workloads/formal.py','informal/audits.py','informal/trial.py','rules/act.py','rules/experiment.py','rules/crit.py']; texts={m: pathlib.Path('src/deepreason/'+m).read_text() for m in mods}; missing=[m for m,t in texts.items() if 'register_fail_warrant(' not in t]; assert not missing, missing; consult=sorted(m for m,t in texts.items() if 'deepreason.authority' in t); assert consult==['informal/trial.py','rules/crit.py'], consult"`
 
 **The policy governs text workloads only.** A `code` or `formal` run's
-rubric trial gets `STATUS` without consulting a knob, even with the
-knob set the other way and a receipt declared.
-`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f; from deepreason.config import Config; c=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'); assert f(c,'text',S.RUBRIC)==T.OBSERVE_ONLY; assert f(c,'code',S.RUBRIC)==T.STATUS and f(c,'formal',S.RUBRIC)==T.STATUS"`
+rubric trial gets `STATUS` without consulting a text-authority knob, even
+with the knob set the other way and a receipt declared -- but, like the
+text branch, only once `JUDGE_SEATS_ENABLED` (Part D's master judge-
+dispatch gate, off by default) is on; at the default `False` every
+workload gets `OBSERVE_ONLY`.
+`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f; from deepreason.config import Config; c=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'); assert f(c,'text',S.RUBRIC)==T.OBSERVE_ONLY; assert f(c,'code',S.RUBRIC)==T.OBSERVE_ONLY and f(c,'formal',S.RUBRIC)==T.OBSERVE_ONLY; c2=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x', JUDGE_SEATS_ENABLED=True); assert f(c2,'code',S.RUBRIC)==T.STATUS and f(c2,'formal',S.RUBRIC)==T.STATUS"`
 
 **Two argumentative mint sites now consult the same master flag the text
 policy shares, but NOT through `trial_authority_for`/

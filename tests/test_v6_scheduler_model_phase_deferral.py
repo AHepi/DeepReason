@@ -164,6 +164,7 @@ def test_v6_experiment_and_property_design_defer_before_provider(monkeypatch):
         PROP_PROPOSE_PERIOD=1,
         PROP_MAX=1,
         FUZZ_N=1,
+        JUDGE_SEATS_ENABLED=True,
     )
     problem = SimpleNamespace(id="P", criteria=("C",))
     scheduler.harness.state.problems = {"P": problem}
@@ -204,6 +205,7 @@ def test_v6_audit_vision_and_lazy_hv_defer_without_dispatch(monkeypatch):
         VISION_CRIT_PER_CYCLE=1,
         HV_CONTENT_MAX_CHARS=None,
         HV_K=3,
+        JUDGE_SEATS_ENABLED=True,
     )
     scheduler._vision_done = set()
     scheduler._hv_skipped = set()

@@ -2168,6 +2168,14 @@ def _versioned_source_config_data(
     # Config echo drops it unconditionally for the same reason every other
     # authority knob was never added here in the first place.
     data.pop("ADJUDICATION_STATUS_AUTHORITY_ENABLED", None)
+    # JUDGE_SEATS_ENABLED and its throttle knobs postdate every schema
+    # version's frozen wire-byte goldens too, for the same reason as
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED above: the master judge-dispatch
+    # gate lives on Config only, consulted at scheduler dispatch sites, and
+    # is never itself written to the manifest.
+    data.pop("JUDGE_SEATS_ENABLED", None)
+    data.pop("JUDGE_SUMMONS_PER_CYCLE", None)
+    data.pop("JUDGE_SUMMONS_COOLDOWN", None)
     return data
 
 

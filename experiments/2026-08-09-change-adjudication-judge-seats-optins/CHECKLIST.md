@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=33 blockers=none (Parts A+B+C complete)
+State: next=36 blockers=none (Parts A+B+C complete; Part D steps 33-35 complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1282,7 +1282,7 @@ low-level `deepreason compile` path reaching it.
       $ python -m pytest tests/test_judge_ensemble_boundary.py::test_judge_seats_disabled_by_default_is_byte_identical -q
       1 passed in 0.07s
       ```
-- [ ] 35. (S2b, R2) [COMMIT] Gate every current judge-dispatch site on
+- [x] 35. (S2b, R2) [COMMIT] Gate every current judge-dispatch site on
       `JUDGE_SEATS_ENABLED`: `scheduler.py:1116-1117` (rubric-trial
       `has_role("judge")` check), `scheduler.py:2167-2168` (audit-step),
       the property-step fail-closed check, AND the non-text-workload
@@ -1292,6 +1292,58 @@ low-level `deepreason compile` path reaching it.
       rubric criteria present. done-when: a new test
       `tests/test_scheduler.py::test_judge_dispatch_gated_off_even_for_nontext_workload_with_rubric_criteria`
       passes. Diff budget check, commit, push.
+
+      Four dispatch sites gated with direct `config.JUDGE_SEATS_ENABLED`/
+      `self.config.JUDGE_SEATS_ENABLED` reads: the `_criticize` rubric-trial
+      branch (`scheduler.py:1116`), `_audit_step`'s early return
+      (`scheduler.py:2158`), `_property_step`'s early return
+      (`scheduler.py:2276`), and `authority.py::trial_authority_for`'s
+      non-text branch (was an unconditional `TrialAuthority.STATUS` with no
+      suppression at all — now `OBSERVE_ONLY` unless `JUDGE_SEATS_ENABLED`).
+
+      **Collateral (predicted reachability, same pattern as Part C):** every
+      pre-existing test that exercised judge dispatch without setting the
+      new flag broke and got it added to its `Config(...)`/`SimpleNamespace`
+      construction — `test_properties.py`,
+      `test_workload_formal.py`, `test_rotation.py` (both the shared
+      `_starvation_setup` helper and one standalone construction),
+      `test_chaos_invariants.py::test_disagreeing_ensemble_and_weak_defender`,
+      and `test_v6_scheduler_model_phase_deferral.py`'s two v6-defer tests
+      (`test_v6_experiment_and_property_design_defer_before_provider`,
+      `test_v6_audit_vision_and_lazy_hv_defer_without_dispatch` — these use
+      bare `SimpleNamespace` config doubles that lack the field entirely, so
+      the fix is the field added to the namespace, not a `getattr` default,
+      matching every other collateral fix in this tranche).
+
+      **Map staleness (docs_verify.py), all now fixed:** `CON-authority.md`
+      and `SEAM-adjudication-x-authority.md` each had a check asserting
+      `trial_authority_for(Config(), ...) == STATUS` for non-text
+      workloads — now `OBSERVE_ONLY` at the default, `STATUS` only with
+      `JUDGE_SEATS_ENABLED=True` (both checks and their prose updated).
+      `run_manifest.py::_versioned_source_config_data` gained unconditional
+      pop-lines for the three new fields (`JUDGE_SEATS_ENABLED`,
+      `JUDGE_SUMMONS_PER_CYCLE`, `JUDGE_SUMMONS_COOLDOWN`), same pattern as
+      Steps 19/26 — this alone fixed `SEAM-manifest-x-schools.md`,
+      `SUB-application.md`, and `SUB-scheduler.md`'s pytest-backed checks
+      (their config-hash-adjacent test rings were failing on the new field
+      leaking into pinned goldens). `SEAM-scheduler-x-rules.md`'s pinned
+      config-field-reference count moved `(12, 29)` → `(12, 30)` (the new
+      `JUDGE_SEATS_ENABLED` read at the scheduler-side gate sites; the
+      `rules/` count and the `FUZZ_N` intersection are unchanged).
+
+      ```
+      $ python -m pytest tests/test_v6_scheduler_model_phase_deferral.py -q
+      10 passed in 1.53s
+      $ python -m pytest tests/test_judge_ensemble_boundary.py tests/test_scheduler.py tests/test_properties.py tests/test_workload_formal.py tests/test_rotation.py tests/test_chaos_invariants.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_run_manifest_v4.py tests/test_foreign_criticism_policy_c3.py -q
+      93 passed in 25.06s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_v6_only_manifest_loading.py tests/test_runtime_workload_integration.py tests/test_process_metadata.py tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest.py tests/test_jolt_trigger_pilot.py tests/test_compact_profiles.py -q
+      177 passed in 27.12s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 243, "tests": 792, "docs/map": 111}, "total_insertions": 1146, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 36. (S2b, R6/R10) Throttle wiring: `JUDGE_SUMMONS_PER_CYCLE`/
       `JUDGE_SUMMONS_COOLDOWN` are STATIC caps only (Amendment 5's
       benching — no signal-adaptive behavior in this tranche). Wire them

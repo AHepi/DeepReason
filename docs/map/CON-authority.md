@@ -176,11 +176,14 @@ with no warrants and a `["scrutiny", target, critic]` Measure. The target's
 `calibration_receipt_is_verified` returns False unconditionally: no receipt
 verifier exists, and a reference string is a claim about a receipt rather than a
 checked one.
-`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f, calibration_receipt_is_verified as v; from deepreason.config import Config; assert not v(Config(CALIBRATION_RECEIPT='sha256:x')); assert f(Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'), 'text', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(), 'code', S.RUBRIC) == T.STATUS"`
+`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f, calibration_receipt_is_verified as v; from deepreason.config import Config; assert not v(Config(CALIBRATION_RECEIPT='sha256:x')); assert f(Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'), 'text', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(), 'code', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(JUDGE_SEATS_ENABLED=True), 'code', S.RUBRIC) == T.STATUS"`
 
 **This policy governs text workloads only.** The same check above records the
 other half: for any `workload_profile` other than `"text"`,
-`trial_authority_for` returns `STATUS` without reading a knob.
+`trial_authority_for` returns `STATUS` without reading a text-authority knob
+-- but only once `JUDGE_SEATS_ENABLED` is on (Part D's master judge-dispatch
+gate, off by default); at the default `False` it returns `OBSERVE_ONLY`
+regardless of workload.
 
 **Every surface knob is a real `Config` field**, and the surface enum and the
 field map are the same size — a surface with no field would silently read the
