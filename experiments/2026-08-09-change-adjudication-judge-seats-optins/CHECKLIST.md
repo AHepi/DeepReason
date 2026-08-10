@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57b blockers=none (Parts A+B+C+D complete; Part D2 step 57a complete; S16 revised per operator's CLI-exposure requirement to a structural same-model substitute, no Config field — steps 57b-57f replanned accordingly, confirmed via operator direction, no further confirmation blocking)
+State: next=57c blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57b complete; diff-budget base switched to 1079c86ed for Part D2, 175/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1750,7 +1750,7 @@ needed is the construction lever that lets an operator reach "single
 model, ≥2 judge seats" at all (SPEC's Road C, never reachable today) --
 that lever IS "the switch."
 
-- [ ] 57b. (S16, R24) [COMMIT] New `--blind-same-model-judges` boolean
+- [x] 57b. (S16, R24) [COMMIT] New `--blind-same-model-judges` boolean
       flag on `deepreason config compile` (`cli/main.py`, next to
       `--judge-family`; mutually exclusive with it — both requesting a
       second judge route is ambiguous, refuse with a clear error rather
@@ -1763,6 +1763,52 @@ that lever IS "the switch."
       `tests/test_run_manifest.py` test compiles a manifest this way and
       asserts `manifest.roles["judge"] == (exact, exact)` (or equivalent
       route-identity assertion).
+
+      **Diff-budget base switch (SPEC.md's own "Budget (Part D2,
+      estimate)" note, executed now):** the shared `81d08e5f0` base
+      reached 1595/1600 with this step's diff — 5 lines of headroom,
+      about to be exceeded by 57c/57d. Per SPEC.md's own plan ("a fresh
+      1,600-line ceiling for this addendum's own diff-budget base commit,
+      to be set at Part D2's first step"), Part D2 now measures against
+      `1079c86ed` (the Steps 40-41 commit, immediately after Part D
+      finished) instead — 175/1600 against the new base. All Part D2
+      steps from here use this base; Parts A-D's own totals against
+      `81d08e5f0` are unaffected and already recorded in their own steps.
+
+      argparse mutual-exclusivity checked at both layers: the CLI handler
+      (clear stderr message, exit 1, no partial manifest written) and
+      `compile_run_manifest` itself (`RunManifestError`, for any
+      programmatic caller that bypasses the CLI). Four new tests: two at
+      the `compile_run_manifest` layer
+      (`test_blind_same_model_judges_gives_judge_a_second_identical_seat`,
+      `test_blind_same_model_judges_conflicts_with_judge_family`), two at
+      the CLI/`main()` layer
+      (`test_cli_blind_same_model_judges_flag_reaches_the_compiled_
+      manifest`, `test_cli_judge_family_and_blind_same_model_judges_
+      conflict`) — the CLI-layer pair is what actually proves R25 ("the
+      switch needs to be exposed to CLI"), not just the function-level
+      parameter.
+
+      **Editing mistake caught before commit:** an early `Edit` call's
+      `old_string` match ended mid-test, silently orphaning
+      `test_cli_compiles_and_inspects_only_explicit_complete_v6`'s last
+      two assertions (a `config inspect` round-trip) into whatever new
+      test followed. Caught by re-running the full file (`70 passed`)
+      only after noticing an unrelated assertion failure inside a test
+      that never should have contained it, then confirmed via `git diff`
+      showing an unintended deletion — fixed by restoring those two lines
+      to their original test before this commit, verified the diff is
+      now purely additive (`git diff | grep '^-'` empty beyond the
+      hunk header).
+
+      ```
+      $ python -m pytest tests/test_run_manifest.py -q
+      70 passed in 1.02s
+      $ python -m pytest tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_cli_setup_seats.py tests/test_v6_only_cli_admission.py tests/test_schema_v3_consumers.py -q
+      187 passed in 3.24s
+      $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 39, "tests": 136, "docs/map": 0}, "total_insertions": 175, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 57c. (S16, R24) [COMMIT] `llm/firewall.py::require_cross_family_
       judge_ensemble` (runtime) and `RunManifest`'s own `rubric_policy ==
       "require_cross_family"` model-validator (compile-time,

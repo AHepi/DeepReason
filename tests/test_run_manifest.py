@@ -290,6 +290,33 @@ def test_single_model_compiles_one_exact_route_for_every_active_role(monkeypatch
     assert {row["output_mechanism"] for row in rows} == {"json_text"}
 
 
+def test_blind_same_model_judges_gives_judge_a_second_identical_seat():
+    """Part D2 (S16, Amendment 9 R24/R25): --blind-same-model-judges is the
+    CLI-reachable lever for a genuinely single-model judge ensemble --
+    today, per SPEC.md's Road C finding, no operator-facing surface can
+    construct >=2 identical-model judge routes at all. rubric_policy=
+    "forbid" here isolates route CONSTRUCTION (this step) from the
+    independence-check relaxation (a separate step)."""
+
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", blind_same_model_judges=True,
+        rubric_policy="forbid", compiled_at=STAMP,
+    )
+
+    judge_routes = manifest.roles["judge"]
+    assert len(judge_routes) == 2
+    assert judge_routes[0] == judge_routes[1]
+    assert judge_routes[0].model_id == "gemma4:31b"
+
+
+def test_blind_same_model_judges_conflicts_with_judge_family():
+    with pytest.raises(RunManifestError, match="JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT"):
+        compile_run_manifest(
+            _config(), single_model="gemma4:31b", judge_family="second-route",
+            blind_same_model_judges=True, rubric_policy="forbid", compiled_at=STAMP,
+        )
+
+
 def test_decoy_provider_is_not_resolved_or_copied_in_single_model_mode(monkeypatch):
     configured = _config().model_copy(deep=True)
     configured.roles["thesis"] = {
@@ -874,6 +901,59 @@ def test_cli_compiles_and_inspects_only_explicit_complete_v6(tmp_path, capsys):
 
     assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 0
     assert '"schema_version": 6' in capsys.readouterr().out
+
+
+def test_cli_blind_same_model_judges_flag_reaches_the_compiled_manifest(tmp_path):
+    """Part D2 (S16, Amendment 9 R25): the switch is reachable from the
+    command line, not YAML-only -- CLI-level proof that
+    --blind-same-model-judges actually flows through `main()` into
+    compile_run_manifest's judge-route construction."""
+
+    from deepreason.cli.main import main
+    from tests.test_run_input_v6_commitments import _control
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text(_config().model_dump_json())
+    control_path = tmp_path / "control-plane-v3.json"
+    control_path.write_text(_control(6).model_dump_json())
+    manifest_path = tmp_path / "manifest.json"
+    assert main(
+        [
+            "--config", str(config_path), "config", "compile",
+            "--single-model", "gemma4:31b", "--blind-same-model-judges",
+            "--rubric-policy", "forbid", "--out", str(manifest_path),
+            "--workload-profile", "text",
+            "--control-plane-policy", str(control_path),
+            "--run-input-digest", "f" * 64,
+        ]
+    ) == 0
+    compiled = load_run_manifest(manifest_path)
+    assert len(compiled.roles["judge"]) == 2
+    assert compiled.roles["judge"][0] == compiled.roles["judge"][1]
+
+
+def test_cli_judge_family_and_blind_same_model_judges_conflict(tmp_path, capsys):
+    from deepreason.cli.main import main
+    from tests.test_run_input_v6_commitments import _control
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text(_config().model_dump_json())
+    control_path = tmp_path / "control-plane-v3.json"
+    control_path.write_text(_control(6).model_dump_json())
+    manifest_path = tmp_path / "manifest.json"
+    assert main(
+        [
+            "--config", str(config_path), "config", "compile",
+            "--single-model", "gemma4:31b", "--judge-family", "qwen",
+            "--blind-same-model-judges",
+            "--rubric-policy", "forbid", "--out", str(manifest_path),
+            "--workload-profile", "text",
+            "--control-plane-policy", str(control_path),
+            "--run-input-digest", "f" * 64,
+        ]
+    ) == 1
+    assert "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT" in capsys.readouterr().err
+    assert not manifest_path.exists()
 
 
 def test_cli_make_rejects_bound_pre_v6_manifest_and_replacement(

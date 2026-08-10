@@ -142,6 +142,19 @@ def build_parser() -> argparse.ArgumentParser:
                              help="assign this exact concrete model route to every active role")
     compile_cmd.add_argument("--judge-family", default=None,
                              help="configured endpoint id, model id, URL, or family for seat 2")
+    compile_cmd.add_argument(
+        "--blind-same-model-judges",
+        action="store_true",
+        help=(
+            "in --single-model mode, give judge a second seat on the SAME "
+            "frozen route instead of requiring --judge-family's second, "
+            "different-family route. Relies on the judge pack's content-"
+            "blindness guarantee (never discloses author/model/school "
+            "identity, tests/test_judge_ensemble_boundary.py::"
+            "test_judge_pack_never_names_an_author_school_or_model) rather "
+            "than model diversity -- mutually exclusive with --judge-family"
+        ),
+    )
     compile_cmd.add_argument("--profile", choices=("compact", "standard", "frontier"),
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
@@ -725,6 +738,13 @@ def _main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 1
+        if args.judge_family and args.blind_same_model_judges:
+            print(
+                "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT: pass at most one "
+                "of --judge-family, --blind-same-model-judges",
+                file=sys.stderr,
+            )
+            return 1
         control_plane_policy = None
         try:
             control_plane_policy = ControlPlanePolicyV3.model_validate_json(
@@ -740,6 +760,7 @@ def _main(argv: list[str] | None = None) -> int:
                 model_profile=args.profile,
                 single_model=args.single_model,
                 judge_family=args.judge_family,
+                blind_same_model_judges=args.blind_same_model_judges,
                 rubric_policy=args.rubric_policy,
                 concurrency=args.concurrency,
                 capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),

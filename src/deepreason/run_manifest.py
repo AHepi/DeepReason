@@ -2937,6 +2937,7 @@ def compile_run_manifest(
     model_profile: Literal["compact", "standard", "frontier"] | None = None,
     single_model: str | None = None,
     judge_family: str | None = None,
+    blind_same_model_judges: bool = False,
     rubric_policy: Literal["forbid", "require_cross_family"] = "require_cross_family",
     concurrency: int | None = None,
     compiled_at: str | None = None,
@@ -2965,6 +2966,12 @@ def compile_run_manifest(
     In single-model mode only the route explicitly carrying ``single_model``
     is consulted. Other provider entries are not discovered or used.
     """
+    if judge_family and blind_same_model_judges:
+        raise RunManifestError(
+            "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT",
+            "pass at most one of judge_family, blind_same_model_judges",
+            "/roles/judge",
+        )
     explicit_config_profile = (
         "model_profile" in getattr(config, "model_fields_set", set())
         if not isinstance(config, dict)
@@ -3179,6 +3186,17 @@ def compile_run_manifest(
                 exact, _route_from_spec(second_spec, capability_cache=capability_cache)
             )
             presentation_specs["judge"] = (seed, second_spec)
+        elif "judge" in configured_roles and blind_same_model_judges:
+            # R24 (adjudication-judge-seats-optins tranche, Amendment 9,
+            # 2026-08-10): a second seat on the SAME frozen route, relying
+            # on the judge pack's content-blindness guarantee
+            # (tests/test_judge_ensemble_boundary.py::
+            # test_judge_pack_never_names_an_author_school_or_model) rather
+            # than model diversity. require_cross_family_judge_ensemble and
+            # RunManifest's own rubric_policy validator both read this exact
+            # shape (>=2 seats, identical model) as a structural substitute.
+            roles["judge"] = (exact, exact)
+            presentation_specs["judge"] = (seed, seed)
     else:
         grouped: dict[str, list[Route]] = {role: [] for role in role_names}
         grouped_specs: dict[str, list[dict[str, Any]]] = {
