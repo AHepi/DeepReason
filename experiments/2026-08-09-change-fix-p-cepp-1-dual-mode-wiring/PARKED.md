@@ -34,6 +34,45 @@ this tranche never got explicit words for.
 
 ---
 
+**P-CEPP-1-MAP-1 — advance the `Verified-at:` stamps on
+`SEAM-harness-x-verification.md` and `SUB-workflow.md`, and give
+`SEAM-harness-x-verification.md` a sentence about the v6/v7
+conjecturer-turn-contract dispatch fact.**
+
+Found by `dr-validate-change`'s `python tools/docs_verify.py --stale`
+run (`VALIDATION.md`), which is advisory and does not itself block a
+PASS verdict — not fixed in that phase per its own rule against
+editing map documents while validating them. Two small, purely
+mechanical items:
+- `SEAM-harness-x-verification.md` owns `invariants.py` (in addition
+  to `SUB-verification.md`, which this tranche's own CHECKLIST step 11
+  DID update) — this tranche's S4 commit (`d5f47101a`) touched that
+  file without this seam document's prose or `Verified-at:` stamp
+  being touched at all. Needs one sentence (the same v6/v7-both-
+  authorized fact `SUB-verification.md`'s new row already states) plus
+  a re-run of this document's own `check:` commands to justify
+  advancing the stamp.
+- `SUB-workflow.md`'s prose WAS updated in this tranche (CHECKLIST step
+  8), but its `Verified-at:` stamp was never advanced even though
+  `docs_verify.py`'s full run (CHECKLIST step 14, run twice) has since
+  re-verified its checks clean — purely a bookkeeping gap, no content
+  change needed, just re-run its checks standalone and bump the stamp.
+
+**Ready-to-send prompt**: "Close `P-CEPP-1-MAP-1`
+(`experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/PARKED.md`):
+(1) add one sentence to `docs/map/SEAM-harness-x-verification.md`
+stating that `invariants.py`'s two conjecturer-turn-contract membership
+checks (widened by the P-CEPP-1 tranche, commit `d5f47101a`) now
+authorize both `conjecturer.turn.v6` and `conjecturer.turn.v7`, then
+re-run that document's own `check:` commands standalone and advance its
+`Verified-at:` stamp if they pass; (2) re-run
+`docs/map/SUB-workflow.md`'s own `check:` commands standalone (no
+content change needed, already updated by P-CEPP-1 commit `aaefae58e`)
+and advance its `Verified-at:` stamp if they pass. Both are mechanical;
+neither should need new investigation."
+
+---
+
 **P-CEPP-1-BRONZE-1 — `test_bronze_report.py::test_census_totals_internally_consistent`
 fails deterministically (`159 == 165`), found by this tranche's own
 full-gate run but proven unrelated to it.**
