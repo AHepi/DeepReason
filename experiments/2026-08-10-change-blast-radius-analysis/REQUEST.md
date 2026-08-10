@@ -178,4 +178,23 @@ finished-tool description.
 
 ## Amendments
 
-(none yet)
+**Amendment 1** (2026-08-10, operator, in response to SPEC.md's Decision
+sheet): "Go"
+
+R6 (process): the operator's one-word reply to a message that (a)
+summarized SPEC.md's five forks (F1-F5) each with a stated
+recommendation, and (b) explicitly asked "say 'go ahead' and I'll build
+it, or redirect any of the five." Read per `dr-ask-the-right-question`
+section 2's own table ("'Do it' / 'go ahead' after you stated a plan" →
+"approval of EXACTLY that plan," not "a new vague instruction; license
+to widen"): approval of SPEC.md's Decision sheet exactly as recommended
+— Fork F1 Road B (AST-based reachability), Fork F2 Road A (amend
+`DETERMINISTIC_GATES_PREPLAN.md` as Rung G6), Fork F3 Road A (Checkpoint
+2 bounded to `dr-spec-change` + `dr-ask-the-right-question`), Fork F4
+Road B (promote `HIDDEN_LEGACY_INVENTORY.md` to a `docs/`-level standing
+reference), Fork F5 Road B (no re-connection ranking/recommendation
+engine). Authorizes `dr-plan-steps` to proceed from SPEC.md as amended.
+No frozen surface is touched by this amendment or by SPEC.md's own
+forecast (checked, none) — this is a process authorization, not a
+frozen-surface grant, so no separate frozen-surface wording is required
+of it.

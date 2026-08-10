@@ -774,7 +774,7 @@ Rubric: 6/6 yes
 
 ## Decision sheet — every open fork, priced as roads, with a recommendation
 
-**Fork F1 — how should the tool tell whether a piece of code can actually run, versus just whether its name shows up somewhere?**
+**Fork F1 (RESOLVED — Road B APPROVED by the operator, R6) — how should the tool tell whether a piece of code can actually run, versus just whether its name shows up somewhere?**
 - Road A (a simple text search: does the target's name appear anywhere
   in the source): quick to build, but this is the SAME kind of check
   that already missed `property_designer`'s deadness for two whole
@@ -792,7 +792,7 @@ Rubric: 6/6 yes
 - **Recommendation: Road B.** It is the only option that would have
   actually caught the incident it exists to prevent.
 
-**Fork F2 — should this new check get its own brand-new rulebook, or join the one that already exists?**
+**Fork F2 (RESOLVED — Road A APPROVED by the operator, R6) — should this new check get its own brand-new rulebook, or join the one that already exists?**
 - Road A (add one new section to the existing "deterministic gates"
   plan, which already lists five related checks and says in so many
   words that a sixth one needs exactly a recorded incident plus your own
@@ -803,7 +803,7 @@ Rubric: 6/6 yes
   that document's own invitation for exactly this situation.
 - **Recommendation: Road A.**
 
-**Fork F3 — how far should the "you must show your work before asking for permission" rule reach, right now?**
+**Fork F3 (RESOLVED — Road A APPROVED by the operator, R6) — how far should the "you must show your work before asking for permission" rule reach, right now?**
 - Road A (apply it everywhere two specific places in the workflow ask
   the operator for permission on something risky — the two places the
   evidence in this tranche actually points to): matches what the record
@@ -816,7 +816,7 @@ Rubric: 6/6 yes
 - **Recommendation: Road A**, with Road B named as a natural next step
   once this one has run for a while, not dropped.
 
-**Fork F4 — where should the "what's been quietly disconnected" page live: inside this project folder, or as a standing, repo-wide reference next to the error ledgers?**
+**Fork F4 (RESOLVED — Road B APPROVED by the operator, R6) — where should the "what's been quietly disconnected" page live: inside this project folder, or as a standing, repo-wide reference next to the error ledgers?**
 - Road A (leave it inside this tranche's own folder, as delivered):
   costs nothing extra now; matches how similar pages already work
   elsewhere in this repo.
@@ -829,7 +829,7 @@ Rubric: 6/6 yes
   reversible follow-up (a file move plus a one-line note), not a reason
   to hold up delivering the page itself today.
 
-**Fork F5 — should this same tool also tell the operator which disconnected pieces are worth reconnecting first?**
+**Fork F5 (RESOLVED — Road B APPROVED by the operator, R6) — should this same tool also tell the operator which disconnected pieces are worth reconnecting first?**
 - Road A (yes, have it rank/recommend): more directly useful, but was
   never asked for, and grading old decisions is a different, larger job
   than disclosing new ones.
@@ -839,5 +839,7 @@ Rubric: 6/6 yes
   requested.
 - **Recommendation: Road B.**
 
-Every road above awaits the operator's own words before any
-implementation work (`dr-plan-steps`) begins, per C6/S8.
+Every road above was decided by the operator's own words ("Go",
+REQUEST.md Amendment 1, R6) — all five recommendations approved as
+stated, none redirected. `dr-plan-steps` proceeds from SPEC.md as
+amended.
