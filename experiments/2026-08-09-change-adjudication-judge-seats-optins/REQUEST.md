@@ -743,3 +743,29 @@ not an assumption made from this sentence alone. Not resolved here —
 flagged back to the operator per dr-ask-the-right-question's rule that a
 statement contradicting a measured fact gets surfaced, not silently
 picked either way.
+
+### Amendment 11, resolution (2026-08-10, operator's own words — CONFIRMED, reading (b))
+
+> The second one. That's a configuration option. Legacy, not schools,
+> should be default for criticism. That's why I keep wanting
+> independence and modularity.
+
+R28 resolved: reading (b). The operator directs flipping the ALREADY-
+SHIPPED `engaged` v6 preset's default: `Config.LEGACY_CRITICISM_ENABLED`
+(Part B, currently `False`) becomes `True` by default, so
+`build_preparation_manifest` compiles `criticism_policy=None` (Road E's
+school-free legacy circuit) for an ordinary run unless an operator
+explicitly opts BACK INTO school-routed criticism. This is a genuine
+behavior-default flip, not a new opt-in — every test in
+`tests/test_v6_engaged_public_defaults.py` (and any sibling file) that
+exercises `build_preparation_manifest` with a bare `Config()` and asserts
+school-routed criticism needs its own explicit
+`LEGACY_CRITICISM_ENABLED=False` override to keep testing what it
+actually tests; `test_legacy_criticism_disabled_by_default_is_byte_
+identical`'s own claim ("disabled by default is byte identical") becomes
+false and needs rewriting to state the new default instead, not deleting
+the coverage — the byte-identical claim moves to the flipped value.
+Explicitly, this is a "configuration option" (the operator's own words):
+`LEGACY_CRITICISM_ENABLED=False` remains a fully supported, real way to
+opt back into school-routed criticism — nothing about the mechanism
+itself changes, only which value ships as the default.
