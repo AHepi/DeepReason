@@ -283,63 +283,101 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `critic_school_id: str | None = None` (type hint only — M3 found no
       guard to remove here). done-when: same test command as Step 7 still
       passes.
-- [ ] 9. (S13e) Reader test FIRST (rule 1): a new test
-      `tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
-      asserting that `_criticism_contract` given a payload with
-      `"critic_school_id": None` resolves against
-      `manifest.roles["argumentative_critic"]` directly (no
-      `criticism_policy` required) instead of raising "manifest does not
-      authorize criticism". done-when: the test currently FAILS (red) —
-      paste the failure, confirming the branch doesn't exist yet.
-- [ ] 10. (S13e) [COMMIT] Implement the branch: in
-      `nonconjecture_recovery.py::_criticism_contract` (`:643-718`), when
-      `payload.get("critic_school_id") is None`, skip the
-      `criticism_policy is not None`/binding-lookup requirement
-      (`:649-653`) and instead verify `preparation.route_lease` names a
-      route present in `manifest.roles.get("argumentative_critic", ())`
-      (any seat) — the `critic_school_id is not None` branch stays
-      byte-identical. done-when: Step 9's test now passes, AND
-      `python -m pytest tests/test_v6_nonconjecture_recovery.py -q`
-      passes in full (paste "N passed, 0 failed" — proves the
-      school-present recovery path is unmodified). Diff budget check
-      (`--paths src/deepreason/workflow/nonconjecture_recovery.py`),
-      paste, commit, push.
-- [ ] 11. (S13f) Reader test FIRST (rule 1), the corrected version of the
-      original Step-3 test: a new test in
+- [ ] 9. (S13i-1) Reader test FIRST (rule 1): a new test asserting
+      `LLMAdapter(...).bound_v6_manifest() is None` before binding, and
+      equals the exact manifest object after
+      `adapter.bind_v6_authority(harness, manifest)`. done-when: the test
+      currently FAILS (red — the accessor doesn't exist yet) — paste the
+      failure (`AttributeError`).
+- [ ] 10. (S13i-1) [COMMIT] Add `LLMAdapter.bound_v6_manifest(self)` to
+      `llm/adapter.py`, adjacent to `bind_v6_authority`: `return
+      self._v6_authority_manifest` (read-only, no new stored state).
+      done-when: Step 9's test passes. Diff budget check
+      (`--paths src/deepreason/llm/adapter.py`), paste, commit, push.
+- [ ] 11. (S13i-2) [COMMIT] Redefine `policy_call` in BOTH
+      `crit_argumentative` and `crit_argumentative_batch`
+      (`rules/crit.py`, the two `policy_call = (bool(call_kwargs) or
+      argumentative_authority is not None or coverage_observer is not
+      None)` sites) to `policy_call = (critic_school_id is not None or
+      argumentative_authority is not None or coverage_observer is not
+      None)`. done-when:
+      `python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py tests/test_prose_refutation_boundaries.py -q`
+      passes unmodified (paste "N passed, 0 failed" — M9's proof made
+      concrete). Diff budget check, commit, push.
+- [ ] 12. (S13i-3) Reader test FIRST (rule 1), the corrected version of
+      the original Step-3 test: a new test in
       `tests/test_v6_scheduler_model_phase_deferral.py` named
       `test_legacy_argumentative_criticism_dispatches_under_v6`, asserting
       that given a manifest with `criticism_policy=None` and
       `schema_version=6`, and at least one eligible admitted-and-accepted
       target, `Scheduler._arg_crit` dispatches a live
-      `crit_argumentative_batch` call (through the now school-optional
-      `active_v6` path, `critic_school_id=None`) INSTEAD of recording a
-      `"v6-model-phase-deferred.v1","argumentative-criticism"` marker.
-      done-when: the test currently FAILS (red — the scheduler wiring
-      doesn't exist yet) — paste the failure output.
-- [ ] 12. (S13f) [COMMIT] Wire `scheduler.py::_arg_crit`'s plain branch
-      (`:1244-1259`): replace the unconditional
-      `self._defer_untransactional_v6_phase("argumentative-criticism", ...)`
-      + `continue` with: `endpoint_lease = select_lease(self.adapter.leases,
-      "argumentative_critic", 0)` (the same fallback
-      `run_config_referee` already uses when `criticism_policy is None`,
-      `referee.py:507-508`), then call `crit_argumentative_batch(harness,
-      batch, self.adapter, config, run_manifest=self.run_manifest,
-      endpoint_lease=endpoint_lease, critic_school_id=None,
-      transaction_assignment_refs=(), transaction_trigger_ref=f"legacy-arg-crit-cycle:{self._cycles}")`
-      wrapped in the SAME `except (SchemaRepairError, EndpointError) as e:
-      self._drop(e)` pattern already present in this method's non-v6
-      branch. done-when: Step 11's test now passes; paste
+      `crit_argumentative_batch` call INSTEAD of recording a
+      `"v6-model-phase-deferred.v1","argumentative-criticism"` marker —
+      with `Scheduler._arg_crit`'s call to `crit_argumentative_batch`
+      unmodified (`harness, batch, self.adapter, config`, zero keywords).
+      done-when: the test currently FAILS (red) — paste the failure.
+- [ ] 13. (S13i-3) [COMMIT] Implement self-detection in
+      `crit_argumentative_batch`: when `run_manifest`/`endpoint_lease`/
+      `critic_school_id` are all their defaults (the scheduler's existing
+      call shape), check `adapter.bound_v6_manifest()`; if non-None,
+      internally set `run_manifest = adapter.bound_v6_manifest()` and
+      `endpoint_lease = select_lease(adapter.leases,
+      "argumentative_critic", 0)` (the same fallback `run_config_referee`
+      already uses, `referee.py:507-508`) before the existing `active_v6`
+      computation; `critic_school_id` stays `None`. Also thread
+      `dispatch_authority = authority if critic_school_id is None else
+      None` through the `transactional_call` closure into
+      `_v6_transactional_batch_call`'s new keyword-only parameter,
+      written into `payload["dispatch_authority"]`. If
+      `adapter.bound_v6_manifest()` is None, behavior is BYTE-IDENTICAL to
+      today. done-when: Step 12's test passes; paste
       `python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 -q`
-      output ending "1 passed". Diff budget check
-      (`--paths src/deepreason/scheduler/scheduler.py`), paste, commit,
-      push.
-- [ ] 13. (S13f) Reader test (partition claim): assert the
-      `v6-model-phase-deferred.v1` marker is STILL correctly emitted for
-      every OTHER legacy phase (`hv-floor`, `hv-spot-check`,
-      `rubric-trial`) — Step 12's change is scoped to exactly the
-      `"argumentative-criticism"` phase. done-when:
+      output ending "1 passed", AND
+      `python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._arg_crit))); calls = [n for n in ast.walk(t) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'crit_argumentative_batch']; assert len(calls) == 1 and not calls[0].keywords; print('OK')"`
+      prints OK — this IS `SEAM-scheduler-x-rules.md`'s own checked
+      invariant, re-run directly. Diff budget check
+      (`--paths src/deepreason/rules/crit.py`), paste, commit, push.
+- [ ] 13a. (S13i-4) [COMMIT] Simplify `scheduler.py::_arg_crit`'s plain
+      branch: DELETE the `if self.run_manifest is not None and
+      self.run_manifest.schema_version == 6: ...
+      _defer_untransactional_v6_phase(...) ... continue` block entirely
+      — Step 13 makes `crit_argumentative_batch` self-sufficient under
+      v6, so this defer is no longer reachable/needed for this phase; the
+      existing `crit_argumentative_batch(harness, batch, self.adapter,
+      config)` call becomes unconditional, matching every non-v6 schema
+      version already. done-when:
       `python -m pytest tests/test_v6_scheduler_model_phase_deferral.py -q`
-      passes in full (paste the summary line).
+      passes in full (paste "N passed, 0 failed" — proves the
+      `hv-floor`/`hv-spot-check`/`rubric-trial` deferrals are untouched).
+      Diff budget check, paste (expect a NET NEGATIVE line count for this
+      step), commit, push.
+- [ ] 14a. (S13e) Reader test FIRST (rule 1): three new tests —
+      `tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`
+      (payload's `dispatch_authority` is `"observe_only"` — resolves and
+      admits), `::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only`
+      (payload's `dispatch_authority` is e.g. `"trial_required"` —
+      refuses typed, mirroring the school-routed branch's own `'critic
+      authority is not recoverable'` shape), and
+      `::test_v6_transactional_batch_call_freezes_dispatch_authority_for_school_free_calls`
+      (proves Step 13's dispatch actually writes the resolved authority
+      into the payload — not just that recovery reads it correctly).
+      done-when: all three currently FAIL (red) — paste all three
+      failures.
+- [ ] 14b. (S13e) [COMMIT] Implement the recovery branch: in
+      `nonconjecture_recovery.py::_criticism_contract` (`:643-718`), when
+      `payload.get("critic_school_id") is None`, skip the
+      `criticism_policy is not None`/binding-lookup requirement
+      (`:649-653`), verify `preparation.route_lease` names a route
+      present in `manifest.roles.get("argumentative_critic", ())` (any
+      seat), and read authority from `payload.get("dispatch_authority")`
+      (frozen, NOT live/reconstructed `Config` — see SPEC.md's corrected
+      design), refusing typed unless it equals `"observe_only"` — the
+      `critic_school_id is not None` branch stays byte-identical.
+      done-when: Step 14a's three tests now pass, AND
+      `python -m pytest tests/test_v6_nonconjecture_recovery.py -q`
+      passes in full (paste "N passed, 0 failed"). Diff budget check
+      (`--paths src/deepreason/workflow/nonconjecture_recovery.py`),
+      paste, commit, push.
 - [ ] 14. (R13) Map update, same commit as the behavior (rule 4c): edit
       `docs/map/SUB-scheduler.md`'s row "A legacy model phase v6 cannot
       yet dispatch | `_defer_untransactional_v6_phase` at the phase's call
