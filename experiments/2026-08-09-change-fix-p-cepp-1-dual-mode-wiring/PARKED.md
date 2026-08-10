@@ -32,6 +32,39 @@ cache miss (~14 min, ~1160 calls, `CLAUDE.md`'s own documented cost of
 any manifest/pair-inventory change) and touches a THIRD frozen surface
 this tranche never got explicit words for.
 
+---
+
+**P-CEPP-1-BRONZE-1 — `test_bronze_report.py::test_census_totals_internally_consistent`
+fails deterministically (`159 == 165`), found by this tranche's own
+full-gate run but proven unrelated to it.**
+
+Discovered running `pytest tests/ -q -n 4` (`CHECKLIST.md` step 15).
+Proven, not assumed, to predate and be independent of this tranche:
+`git diff 781ad6811 HEAD -- tests/test_bronze_report.py
+scripts/bronze_census.py experiments/bronze_flat_2026-07-13/` is
+EMPTY (byte-identical to base); the census script's only `deepreason`
+import (`harness.py`) is untouched by this tranche's five changed
+files; the failure reproduces deterministically standalone, not
+flaky; the experiment root is fully git-tracked with no missing or
+modified files. This is a defect (not this tranche's to fix, per
+CLAUDE.md's own "a defect found mid-change is PARKED, not fixed") in
+`scripts/bronze_census.py`'s reconciliation of `gate_blocked` count
+against `gate_measures` count for the `bronze_flat_2026-07-13`
+experiment roots — a pre-existing counting/data inconsistency,
+diagnosis not attempted here.
+
+**Ready-to-send prompt**: "Diagnose and fix
+`tests/test_bronze_report.py::test_census_totals_internally_consistent`,
+which fails deterministically with `assert counts['gate_blocked'] ==
+census['streams'][stream]['gate_measures']` → `159 == 165` (as of
+commit `1931f788a`, the P-CEPP-1 tranche's own gate run — confirmed
+pre-existing and unrelated to that tranche's diff). Start from the
+record: `scripts/bronze_census.py`'s `build_census` function, the
+`gate_blocked` tally (counts rows with `disposition == 'gate-blocked'`)
+vs. the `gate_measures` tally (`len(gate_events)`) for whichever
+stream disagrees — read the code before theorizing, per
+`deepreason-orchestrator`'s diagnose-from-the-record discipline."
+
 **Ready-to-send prompt**: "Widen `ProductionContractPairV1.contract_id`
 (`src/deepreason/cli/doctor.py:62`, frozen surface 5) to admit
 `\"conjecturer.turn.v7\"` alongside `\"conjecturer.turn.v6\"`, so a

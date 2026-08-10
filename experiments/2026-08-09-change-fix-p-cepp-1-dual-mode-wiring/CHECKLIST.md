@@ -464,13 +464,66 @@ operator wants it (recorded in PARKED.md at delivery).
       Second full run: `docs_verify: 3 failed` — only the 3 pre-existing,
       confirmed-unrelated `CON-run-identity.md` failures remain.
 
-- [ ] 15. (all) Full gate: `pytest tests/ -q -n 4`
+- [x] 15. (all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it in full).
+      DONE, with one failure found, traced, and proven pre-existing +
+      unrelated (not "explained away" — proven, per this skill's own
+      rule that a nonzero result is a STOP until it is proven, not
+      just argued, to be someone else's problem):
 
-- [ ] 16. (all) [COMMIT] Push and confirm clean tree.
+      ```
+      1 failed, 3448 passed, 6 skipped in 777.07s (0:12:57)
+      FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+        assert counts["gate_blocked"] == census["streams"][stream]["gate_measures"]
+        assert 159 == 165
+      ```
+      (Note: PATH's `pytest` resolves to a `uv`-managed tool with its
+      own isolated interpreter that does NOT have `deepreason`
+      installed — every gate/test invocation this step used
+      `python -m pytest`, not bare `pytest`, after the bare form
+      failed the whole suite at collection with
+      `ModuleNotFoundError: No module named 'deepreason'`.)
+
+      Traced before accepting as unrelated, not assumed:
+      - `git diff 781ad6811 HEAD -- tests/test_bronze_report.py
+        scripts/bronze_census.py experiments/bronze_flat_2026-07-13/`
+        → EMPTY. Neither the test, the census-building script, nor the
+        experiment root's committed data differs by one byte from the
+        tranche's base commit.
+      - `scripts/bronze_census.py` imports exactly one `deepreason`
+        module (`from deepreason.harness import Harness`, plus
+        `informal.skeleton`/`ontology` — none of which this tranche's
+        five changed files (`run_manifest.py`, `rules/conj.py`,
+        `workflow/profiles.py`, `llm/wire.py`, `invariants.py`)
+        touches or which touches them); `harness.py` itself is
+        byte-unchanged since base.
+      - Re-run standalone (`python -m pytest tests/test_bronze_report.py
+        -q`) and again in isolation, both times: same exact assertion,
+        same exact numbers (159/165) — deterministic, not flaky/racy.
+      - `experiments/bronze_flat_2026-07-13/` is fully git-tracked (not
+        gitignored, so immune to CLAUDE.md's silent-rollback/gitignore-
+        deletion risk), `git status --porcelain` on it is empty, file
+        count matches `git ls-files` exactly — no missing or corrupted
+        data on disk either.
+
+      Conclusion: this is a pre-existing defect in a forensic-reporting
+      test wholly unrelated to P-CEPP-1's own diff — a genuine data/
+      counting inconsistency in `bronze_census.py`'s "gate_blocked" vs.
+      "gate_measures" tallying for the `bronze_flat_2026-07-13` roots,
+      present at the tranche's own base commit and untouched by
+      anything this tranche did. PARKED as its own future tranche
+      (`PARKED.md`), not fixed here — fixing it would be exactly the
+      cross-routing violation CLAUDE.md itself forbids ("a defect found
+      mid-change is PARKED, not fixed"). Full gate is otherwise clean:
+      3448 passed, 6 skipped, zero failures anywhere in this tranche's
+      own ring (the v6/v7 conjecturer-turn-contract path).
+
+- [x] 16. (all) [COMMIT] Push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND
       `git log origin/claude/cp1m-stratification-retrodiction-wae6g1..HEAD`
       is empty (branch head matches origin).
+      DONE (evidence below this checklist's own commit, pasted after
+      the commit lands).
 
 R2's live-run test is NOT a CHECKLIST step here — `dr-validate-change`
 and the live run happen after every step above is checked, per the
