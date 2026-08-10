@@ -106,7 +106,11 @@ def test_disagreeing_ensemble_and_weak_defender(tmp_path):
     }
     adapter = LLMAdapter(endpoints, h.blobs, retry_max=1, meter=meter)
     Scheduler(
-        h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0, JUDGE_SEATS_ENABLED=True)
+        h, adapter,
+        Config(
+            VS_K=1, N_SCHOOLS=0, FLOOR=0, JUDGE_SEATS_ENABLED=True,
+            JUDGE_SUMMONS_PER_CYCLE=5, JUDGE_SUMMONS_COOLDOWN=0,
+        ),
     ).run(3)
 
     result = verify_root(root, meter.total)

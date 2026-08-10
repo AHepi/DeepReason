@@ -286,6 +286,8 @@ class Scheduler:
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
         self._advisory_trials_this_cycle = 0
+        self._judge_summons_this_cycle = 0
+        self._judge_summons_last: dict[str, int] = {}
         self._recrit_cursor = 0  # round-robin over standing survivors (§14)
         self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
         self._hv_skipped: set[str] = set()  # oversize hv skips, logged once each
@@ -960,6 +962,25 @@ class Scheduler:
         last = self._disc_last.get(problem.id)
         return last is not None and self._cycles - last < self.config.DISC_COOLDOWN
 
+    def _judge_summons_admitted(self, key: str) -> bool:
+        """JUDGE_SUMMONS_PER_CYCLE / JUDGE_SUMMONS_COOLDOWN (Part D, R10):
+        static throttle on top of JUDGE_SEATS_ENABLED, modeled on
+        ADVISORY_TRIALS_PER_CYCLE / DISC_COOLDOWN -- a per-cycle cap shared
+        by every judge dispatch site, plus a per-target cooldown so one
+        repeatedly re-triggered target cannot monopolize the whole cycle's
+        budget alone. Both default to preserve exactly zero judge activity
+        (JUDGE_SUMMONS_PER_CYCLE=0) until an operator sets a nonzero rate,
+        even with JUDGE_SEATS_ENABLED on."""
+        config = self.config
+        if self._judge_summons_this_cycle >= config.JUDGE_SUMMONS_PER_CYCLE:
+            return False
+        last = self._judge_summons_last.get(key)
+        if last is not None and self._cycles - last < config.JUDGE_SUMMONS_COOLDOWN:
+            return False
+        self._judge_summons_this_cycle += 1
+        self._judge_summons_last[key] = self._cycles
+        return True
+
     def _select_problem(self):
         from deepreason.ontology.artifact import ProvenanceRole
 
@@ -1114,6 +1135,8 @@ class Scheduler:
                 ):
                     continue
                 if not self.adapter.has_role("judge") or not config.JUDGE_SEATS_ENABLED:
+                    continue
+                if not self._judge_summons_admitted(f"{artifact.id}:{kappa.id}"):
                     continue
                 from deepreason.informal.trial import run_trial
 
@@ -1796,6 +1819,7 @@ class Scheduler:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
         self._advisory_trials_this_cycle = 0
+        self._judge_summons_this_cycle = 0
         if not self._embedder_stamped:
             # Geometry identity on the record (§11.5/§17, adjudicated in
             # runs/embedder_design): model + library versions + sentinel-
@@ -2169,6 +2193,8 @@ class Scheduler:
                 "run",
             )
             return
+        if not self._judge_summons_admitted("audit:run"):
+            return
         from deepreason.informal.audits import paraphrase_invariance_audit
 
         try:
@@ -2298,6 +2324,8 @@ class Scheduler:
                         problem.id,
                         cid,
                     )
+                    return
+                if not self._judge_summons_admitted(f"{problem.id}:{cid}"):
                     return
                 try:
                     activated = propose_properties(

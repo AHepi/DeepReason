@@ -46,7 +46,7 @@ it is zero, `crit_fuzz` uses it as the enumeration bound. Both counts are
 pinned exactly, not as floors: a new `Config` read on either side is a seam
 change for the same reason a sixteenth rules import is, and a floor would have
 let either side grow silently past the number written here.
-`check: python -c 'import re, pathlib; cfg = lambda d: {n for p in pathlib.Path(d).rglob("*.py") for n in re.findall(r"config\.([A-Z_]+)", p.read_text())}; r = cfg("src/deepreason/rules"); s = cfg("src/deepreason/scheduler"); assert (len(r), len(s)) == (12, 30), (len(r), len(s)); assert r & s == {"FUZZ_N"}, sorted(r & s); from deepreason.config import Config; c = Config(); assert all(hasattr(c, n) for n in r | s)'`
+`check: python -c 'import re, pathlib; cfg = lambda d: {n for p in pathlib.Path(d).rglob("*.py") for n in re.findall(r"config\.([A-Z_]+)", p.read_text())}; r = cfg("src/deepreason/rules"); s = cfg("src/deepreason/scheduler"); assert (len(r), len(s)) == (12, 32), (len(r), len(s)); assert r & s == {"FUZZ_N"}, sorted(r & s); from deepreason.config import Config; c = Config(); assert all(hasattr(c, n) for n in r | s)'`
 
 ## Where it is expressed
 
