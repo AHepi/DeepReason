@@ -325,3 +325,45 @@ def test_v6_pairwise_discrimination_never_reaches_unbound_judge(tmp_path, monkey
         f"{first.id}|{second.id}",
         "transaction-contract-unavailable",
     ]
+
+
+def test_critic_execution_permits_endpoint_only_dispatch():
+    """S13h: an endpoint-only call (no school) is a valid combination now,
+    distinct from the pre-existing school-routed and no-envelope cases."""
+
+    from deepreason.llm.firewall import EndpointLease, Route
+    from deepreason.rules.crit import _critic_execution
+
+    lease = EndpointLease(
+        role="argumentative_critic",
+        seat=0,
+        route=Route(
+            endpoint_id="critic-mock-0",
+            base_url="mock://legacy",
+            model_id="model-legacy",
+            provider="mock",
+            family="legacy",
+            max_tokens=64,
+            context_window_tokens=1024,
+        ),
+    )
+
+    call_kwargs, prefix = _critic_execution(
+        endpoint_lease=lease,
+        critic_school_id=None,
+        critic_school_context=None,
+    )
+
+    assert call_kwargs == {
+        "endpoint_index": 0,
+        "endpoint_lease": lease,
+        "school_id": None,
+    }
+    assert prefix == ""
+
+    with pytest.raises(ValueError, match="school-routed criticism requires"):
+        _critic_execution(
+            endpoint_lease=lease,
+            critic_school_id="school-0",
+            critic_school_context=None,
+        )
