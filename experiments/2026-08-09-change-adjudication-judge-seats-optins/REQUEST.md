@@ -643,3 +643,22 @@ relaxation remains a stop, per Amendment 6's standing rule (C14). The
 concrete design (new SPEC.md section, CHECKLIST.md steps) follows before
 any of these files change, per this tranche's own "SPEC before CHECKLIST
 before code" discipline.
+
+### Amendment 9, second clarification (2026-08-10, response to the S16 design report, operator's own words — CONFIRMED)
+
+> That's fine. The switch needs to be exposed to CLI is all. Otherwise
+> it's not a setting.
+
+R25 (process, new, refines S16's design choice): approves proceeding with
+the S16 design as reported, on the explicit condition that whatever
+mechanism governs same-model judge minting is reachable from the command
+line — a `Config` field settable only by hand-editing a YAML profile does
+not count ("it's not a setting" otherwise). This rules out the originally
+drafted `JUDGE_BLIND_SAME_MODEL_ALLOWED` Config-only flag and directs the
+design toward SPEC.md's revised S16: a CLI flag on `deepreason config
+compile` (`--blind-same-model-judges`) as the actual reachable lever,
+with the independence-substitute check itself made structural (reading
+the manifest's/adapter's own frozen route shape, mirroring the existing
+cross-school substitute) rather than gated by a separately-threaded
+boolean — SPEC.md's S16 section revised accordingly, same commit as this
+ledger entry.

@@ -1974,42 +1974,60 @@ rendered critic pack and asserts no school id and no `school`/`author`/
 JUDGE pack (`_judge_pack`'s output) specifically — S15's implementation is
 that test's twin, not new mechanism.
 
-## S16 — the additive-knob design (recommended; not yet operator-confirmed)
+## S16 — REVISED (operator, 2026-08-10, "The switch needs to be exposed to CLI is all. Otherwise it's not a setting.")
 
-Given three sites and one existing pinned test whose expected VALUE (not
-shape) must change, and per this tranche's own standing law ("each opt-in
-defaulting byte-identical to today"), the recommended design does NOT
-remove the family/school-diversity requirement — it adds a new, explicit,
-default-off escape hatch beside it, so an operator who wants the existing
-diversity guarantee keeps it unchanged:
+The additive-Config-knob design first drafted here is dropped: a
+`Config`-only flag, settable only via `--config`'s YAML profile, does not
+satisfy the operator's explicit requirement. The corrected design reuses
+a mechanism this codebase already has, rather than inventing a new one:
+`llm/firewall.py::require_cross_family_judge_ensemble`'s sibling,
+`require_cross_school_judge_ensemble`, is ALREADY a structural substitute
+for cross-family diversity — unlocked not by a boolean flag but by the
+manifest's own frozen shape (`school_judge_bindings` configured +
+`is_single_family_run`). R24's same-model substitute takes the identical
+shape: accept EITHER cross-family diversity OR (≥2 judge seats AND every
+seat carries the exact same `(provider, model_id)` — narrower than
+family, confirmed against `is_single_model_run`'s own docstring: "two
+different models of one family are one family and two models"). No
+Config field, no threaded boolean parameter anywhere — the check reads
+`manifest.roles["judge"]`/`leases["judge"]` directly, the same way its
+cross-school sibling already does.
 
-- New `Config` field `JUDGE_BLIND_SAME_MODEL_ALLOWED: bool = False`
-  (Part D2's own master flag, same shape as `JUDGE_SEATS_ENABLED`) — pop-
-  line in `_versioned_source_config_data`, qualification-subject
-  exclusion, byte-identical default, per this tranche's own established
-  template.
-- `llm/firewall.py::require_cross_family_judge_ensemble` gains a
-  `blind_same_model_allowed: bool = False` parameter: when True, drops
-  the `len(families) < 2` condition, keeping `len(seats) < 2` (an
-  ensemble is still required — R24 does not ask for a single judge seat,
-  only for same-model seats to be admissible). Callers thread the flag
-  from `Config`/the frozen manifest, never compute it locally.
-- `run_manifest.py`'s two compile-time sites gain the mirrored escape:
-  `rubric_policy` gains a third literal
-  (`Literal["forbid", "require_cross_family", "allow_blind_same_model"]`)
-  and the `defended_trial` V4 check reads an equivalent manifest-level
-  flag — exact field shape (a new `RunManifest` field vs. reusing
-  `rubric_policy`'s axis for both sites) is the one open sub-question S16
-  does not resolve; both are additive to a `Literal`/optional field, not
-  a removal, so neither should disturb existing canonical-hash goldens
-  (same reasoning as every `_versioned_source_config_data` pop-line this
-  tranche has already added) but that claim gets verified, not assumed,
-  before either file changes.
-- S15's blindness-pinning test becomes a hard prerequisite gate baked
-  into the design, not just documentation: `require_cross_family_judge_
-  ensemble`'s new branch is safe to ship only alongside the pinned
-  invariant, so CHECKLIST.md orders S15 first, before any of S16's
-  frozen-surface hunks.
+Under this design "the switch" is not a boolean at all — it is the CLI
+lever that lets an operator reach the manifest shape this check now
+accepts, which the frozen-surface finding (this addendum's earlier
+"Verdict" and SPEC's original Road C) already established is
+UNREACHABLE today through any operator-facing surface. That lever is:
+
+- New `--blind-same-model-judges` flag on `deepreason config compile`
+  (mutually exclusive with `--judge-family` — both requesting the second
+  judge route is ambiguous). In `single_model` mode, populates
+  `roles["judge"] = (exact, exact)` — two references to the one frozen
+  route the whole run already uses — instead of requiring a second,
+  different-family spec.
+- `require_cross_family_judge_ensemble` (runtime) and `RunManifest`'s own
+  `rubric_policy == "require_cross_family"` model-validator (compile-time)
+  both gain the structural OR described above.
+- The `defended_trial`/V4 criticism-policy check
+  (`run_manifest.py:2819-2834`) gains the identical structural OR, reading
+  the same `roles["judge"]` shape the CLI flag can now produce — no
+  separate CLI lever for this second site, matching how every other
+  `criticism_policy`-adjacent knob in this tranche (`ENGAGED_CRITICISM_
+  AUTHORITY`, `LEGACY_CRITICISM_ENABLED`) is Config/YAML-only, never a
+  CLI flag of its own.
+
+**Verified before writing 57c** (not merely argued): the existing pinned
+test `test_trial_rejects_invalid_direct_ensemble_before_any_endpoint_
+call`'s `same_family_pair=True` case uses two DIFFERENT model strings
+(`gemma-test-a`/`gemma-test-b`) of the same family — under the narrower
+"exact same model" substitute, this case is UNCHANGED (still correctly
+rejected), so this pinned test needs no collateral edit, only a sibling
+positive-path test proving the genuinely-identical-model case now mints.
+
+S15's blindness-pinning test remains the hard prerequisite this design
+builds on — the structural OR is safe to ship only because `_judge_pack`
+is independently proven never to leak the identity that would make
+"same model" a meaningfully weaker guarantee than "different model."
 
 ## Frozen-surface forecast (Part D2)
 

@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57b blockers=57d/57e await operator confirmation of S16's field-shape choice (Parts A+B+C+D complete; Part D2 step 57a complete — judge-pack blindness now a pinned invariant)
+State: next=57b blockers=none (Parts A+B+C+D complete; Part D2 step 57a complete; S16 revised per operator's CLI-exposure requirement to a structural same-model substitute, no Config field — steps 57b-57f replanned accordingly, confirmed via operator direction, no further confirmation blocking)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1729,43 +1729,75 @@ choice worth the operator seeing before it lands, per this tranche's own
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 311, "tests": 1053, "docs/map": 112}, "total_insertions": 1476, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 57b. (S16, R24) Add `JUDGE_BLIND_SAME_MODEL_ALLOWED: bool = False`
-      to `config.py`, modeled on `JUDGE_SEATS_ENABLED`'s shape (Step 34).
-      done-when: `Config().JUDGE_BLIND_SAME_MODEL_ALLOWED is False`.
+**S16 REVISED (operator, 2026-08-10, "The switch needs to be exposed to
+CLI is all. Otherwise it's not a setting."):** the Config-field design
+below is dropped. Read together with the existing `require_cross_school_
+judge_ensemble` substitute (`llm/firewall.py:361+`, unlocked structurally
+by configuring `school_judge_bindings` — no separate boolean flag gates
+it), the correct shape is the SAME kind of structural substitute, keyed
+off the manifest's/adapter's own frozen route shape rather than a
+separately-threaded Config boolean: `require_cross_family_judge_ensemble`
+accepts EITHER cross-family diversity OR (≥2 judge seats AND every seat
+is the exact same `(provider, model_id)`) — narrower than
+`is_single_family_run` per `is_single_model_run`'s own existing docstring
+("two different models of one family are one family and two models"),
+so the existing `test_trial_rejects_invalid_direct_ensemble_before_any_
+endpoint_call`'s `same_family_pair=True` case (two DIFFERENT model
+strings, `gemma-test-a`/`gemma-test-b`, same family) is UNCHANGED by this
+— it is not the same model, so it still correctly rejects; VERIFIED, not
+merely argued, before writing 57c. The ONLY genuinely new CLI surface
+needed is the construction lever that lets an operator reach "single
+model, ≥2 judge seats" at all (SPEC's Road C, never reachable today) --
+that lever IS "the switch."
+
+- [ ] 57b. (S16, R24) [COMMIT] New `--blind-same-model-judges` boolean
+      flag on `deepreason config compile` (`cli/main.py`, next to
+      `--judge-family`; mutually exclusive with it — both requesting a
+      second judge route is ambiguous, refuse with a clear error rather
+      than silently prioritizing one). Threads into
+      `compile_run_manifest(..., blind_same_model_judges: bool = False)`:
+      in `single_model` mode, when set and `"judge"` is a configured
+      role and `judge_family` is not also given, `roles["judge"] =
+      (exact, exact)` (two references to the SAME frozen `Route`) instead
+      of requiring `--judge-family`. done-when: a new
+      `tests/test_run_manifest.py` test compiles a manifest this way and
+      asserts `manifest.roles["judge"] == (exact, exact)` (or equivalent
+      route-identity assertion).
 - [ ] 57c. (S16, R24) [COMMIT] `llm/firewall.py::require_cross_family_
-      judge_ensemble` gains a `blind_same_model_allowed: bool = False`
-      parameter: when True, drop the `len(families) < 2` condition,
-      keep `len(seats) < 2`. Thread from `Config`/frozen manifest through
-      `LLMAdapter._select_judge_ensemble`/`require_cross_family_judges`.
-      Update `tests/test_judge_ensemble_boundary.py::test_trial_rejects_
-      invalid_direct_ensemble_before_any_endpoint_call`'s
-      `same_family_pair=True` case (predicted collateral, SPEC.md S14):
-      still rejects when the flag is False (unchanged default), a NEW
-      test proves it mints when True. done-when: both directions pass.
+      judge_ensemble` (runtime) and `RunManifest`'s own `rubric_policy ==
+      "require_cross_family"` model-validator (compile-time,
+      `run_manifest.py:1516-1526`) both gain the structural same-model
+      substitute described above. New positive-path tests in
+      `tests/test_judge_ensemble_boundary.py` (runtime: a direct
+      `LLMAdapter` with two IDENTICAL-model judge endpoints mints) and
+      `tests/test_run_manifest.py` (compile-time: a manifest built via
+      57b's flag validates clean under `rubric_policy="require_cross_
+      family"`, the default). done-when: both new tests pass AND
+      `tests/test_judge_ensemble_boundary.py::test_trial_rejects_invalid_
+      direct_ensemble_before_any_endpoint_call` (both parametrizations)
+      AND `tests/test_run_manifest.py::test_cross_family_rubric_policy_
+      fails_preflight_for_one_family` pass UNMODIFIED (per the note
+      above — same-family-different-model stays rejected).
 - [ ] 57d. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
-      grant] Compile-time `rubric_policy` check gains the same escape:
-      exact field shape (third `Literal` value vs. separate field) per
-      SPEC.md S16's open sub-question — resolve at execution time,
-      documenting the choice and why. done-when: a manifest compiled with
-      the new value/flag and a same-model judge pair succeeds; the
-      existing `require_cross_family` behavior is provably unchanged
-      (`tests/test_run_manifest.py::test_cross_family_rubric_policy_
-      fails_preflight_for_one_family` still passes unmodified).
-- [ ] 57e. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
       grant] The `defended_trial`/V4 criticism-policy
       `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` check
-      (`run_manifest.py:2819-2834`) gains the mirrored escape, same
-      mechanism as 57d. done-when: an equivalent same-model `defended_
-      trial` manifest compiles and its existing cross-family case stays
-      provably unchanged.
-- [ ] 57f. (S16, C9) `_versioned_source_config_data` pop-line for
-      `JUDGE_BLIND_SAME_MODEL_ALLOWED`; qualification-subject-exclusion
-      test (same shape as Step 38).
-- [ ] 57g. (S16) CLI/map updates, same commits as 57c-57e: `--judge-seats`
-      help text notes the blindness-based road exists;
-      `docs/map/CON-authority.md`/`CON-seats.md` gain rows for the new
-      flag and its relationship to `require_cross_family_judges`.
-- [ ] 57h. (all) [COMMIT] Subsystem ring:
+      (`run_manifest.py:2819-2834`) gains the identical structural
+      substitute, reading the same `manifest.roles["judge"]` shape 57b's
+      flag can now produce (no separate CLI lever needed for THIS site —
+      `criticism_policy` is Config/YAML-driven only for every other
+      knob in this tranche, e.g. `ENGAGED_CRITICISM_AUTHORITY`,
+      `LEGACY_CRITICISM_ENABLED`; this one follows the same precedent).
+      done-when: an equivalent same-model `defended_trial` manifest
+      (built via 57b's flag) compiles clean; the existing cross-family
+      case stays provably unchanged.
+- [ ] 57e. (S16) CLI/map updates, same commits as 57b-57d:
+      `--blind-same-model-judges`'s own `--help` text states the
+      blindness guarantee it relies on (cross-reference 57a's pinned
+      invariant); `docs/map/CON-authority.md`/`CON-seats.md` gain rows
+      for the new flag, `require_cross_family_judge_ensemble`'s
+      structural substitute, and its relationship to the existing
+      cross-school substitute.
+- [ ] 57f. (all) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_prose_refutation_boundaries.py tests/test_run_manifest.py tests/test_model_firewall.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
 
