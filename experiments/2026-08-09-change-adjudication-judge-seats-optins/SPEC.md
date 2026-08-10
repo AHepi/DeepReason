@@ -1414,3 +1414,197 @@ cheapest concrete finding in this entire tranche.
   operator's stated intent ("schools need to be opt in") by leaving
   criticism silently dependent on schools being on. Road E is priced here
   rather than executed only because C4 still holds (no code this window).
+
+---
+
+## R13 Road E — REVISED (Amendment 7, R19/R20; SUPERSEDES the Road A/Road B framing in CHECKLIST.md's step-3 stop report)
+
+Traces: R13, R19, R20, C15. Written mid-execution, after CHECKLIST.md
+step 3 hit a contradiction (`crit_argumentative_batch`'s `active_v6`
+branch hard-requires `critic_school_id`) and the operator resolved it with
+a third shape neither originally-priced road named: *"I need a clean
+separation between school and criticism. Although they still need to
+interact."*
+
+### Measurements (this is a mid-execution DESIGN-AND-STOP correction; measure, don't reason)
+
+M1: `git blame -L 1372,1380 -- src/deepreason/rules/crit.py` (after
+`git fetch --unshallow`, since the container's shallow clone bottomed out
+blame at a boundary commit) →
+```
+8cf27e850b (AHepi 2026-07-19 19:04:07 +1000) active_v6 = False
+...
+8cf27e850b (AHepi 2026-07-19 19:04:07 +1000) if active_v6 and (endpoint_lease is None or critic_school_id is None):
+8cf27e850b (AHepi 2026-07-19 19:04:07 +1000)     raise ValueError("v6 criticism requires one manifest-bound school route")
+```
+Commit message: "Implement transactional inquiry runtime v6 remediation",
+operator's own commit, predating both the `experiments/` tranche system
+and the school mechanism's own maturity — the guard was the ONLY option
+at the time it was written, not a considered exclusion of an alternative.
+Supports: this coupling is safe to loosen; it was never a negotiated
+policy decision to defend.
+
+M2: full read of `_v6_transactional_batch_call` (`rules/crit.py:255-519`)
+— its ONLY school-specific behavior is: (a) the type hint
+`critic_school_id: str` (not `Optional`); (b) one explicit guard,
+`rules/crit.py:299-300`: `if not critic_school_id: raise ValueError(...)`;
+(c) `payload["critic_school_id"] = critic_school_id` (a plain dict value,
+already tolerates `None` as JSON `null`); (d)
+`adapter.call(..., school_id=critic_school_id, ...)` — **already proven to
+tolerate `None`** by `referee.py:507,637`'s own identical usage
+(`run_config_referee`'s no-`criticism_policy` branch sets
+`critic_school_id = None` and passes it straight through the same
+parameter). Supports: exactly one guard line is the entire coupling in
+this function.
+
+M3: full read of `_v6_transactional_atomic_critic_call`
+(`rules/crit.py:522-...`, the per-target schema-exhaustion-retry path) —
+**zero explicit school guards**; `critic_school_id` is carried only as a
+payload field (`rules/crit.py:565`), same tolerate-`None` shape as M2(c).
+Supports: the atomic-decomposition/retry machinery (schema-exhaustion
+handling, per-target children) is ALREADY school-agnostic in practice —
+only its type hint needs relaxing.
+
+M4: `crit_argumentative_batch`'s own top-level guard,
+`rules/crit.py:1378-1379`: `if active_v6 and (endpoint_lease is None or
+critic_school_id is None): raise ValueError("v6 criticism requires one
+manifest-bound school route")`, plus an `assert critic_school_id is not
+None` at `rules/crit.py:1438` inside the `active_v6:` branch. Both are
+guard/assert statements only — nothing downstream in this branch (traced
+in full, `rules/crit.py:1436-1687`) reads `critic_school_id` for anything
+except passing it through as a payload/call value already shown
+`None`-tolerant in M2/M3.
+
+M5: recovery side, `nonconjecture_recovery.py::_criticism_contract`
+(`:643-718`) — the ONE place that genuinely requires more than a guard
+relaxation: `_authority(policy is not None, "manifest does not authorize
+criticism")` (line 649) requires `manifest.criticism_policy`, then
+resolves `school_id = payload.get("critic_school_id")` against
+`policy.bindings` (lines 651-653). This has no `None`-tolerant branch
+today and needs one: when `critic_school_id is None`, the school-binding
+lookup and the `criticism_policy is not None` requirement must both be
+skippable, replaced by verifying `preparation.route_lease` against a
+plain `argumentative_critic` role/route (mirroring `select_lease`'s own
+resolution), not a specific school binding.
+
+M6: blast-radius census, `grep -rln "critic_school_id" tests/ docs/map/`
+→ 9 test files (`test_config_referee.py`,
+`test_criticism_school_execution_c3.py`, `test_foreign_criticism_policy_c3.py`,
+`test_l1_continue_resumable_crash.py`, `test_prose_refutation_boundaries.py`,
+`test_v6_engaged_public_defaults.py`, `test_v6_live_repair_transactions.py`,
+`test_v6_nonconjecture_recovery.py`, `test_v6_transaction_qualification.py`)
+plus 6 map documents. Every hit is classified **MUST NOT MOVE** — this
+design changes nothing about behavior when `critic_school_id` is provided
+(every one of these tests exercises the school-present case); none is
+EXPECTED TO MOVE. `grep` for `LEGACY_ARG_CRITICISM_CONTRACT_V1` (this
+tranche's own step-2 addition) → only `rules/crit.py` and this tranche's
+own `CHECKLIST.md`; safe to remove, nothing else references it.
+
+### Design (revised)
+
+Reject the payload-schema-fork shape entirely (no
+`"legacy-argumentative-criticism.v1"` schema, no
+`LEGACY_ARG_CRITICISM_CONTRACT_V1` constant — **Step 2's addition is
+reverted as part of this revision**, since M2-M5 show it is unnecessary:
+the clean separation is achieved by making the EXISTING
+`"criticism.semantic-task.v1"` schema and `"batch-critic.v2"` contract
+genuinely school-optional, not by forking a second schema). Concretely:
+
+- S13a (R19): `rules/crit.py:1378-1379` — narrow the top-level guard to
+  `if active_v6 and endpoint_lease is None: raise ValueError("v6
+  criticism requires a manifest-bound route")` (drop the `critic_school_id
+  is None` half; reword the message since it no longer names schools
+  specifically).
+  accept: `python -m pytest tests/test_v6_scheduler_model_phase_deferral.py -q`
+  and the full `tests/test_foreign_school_criticism_scheduler_c3.py` still
+  pass unmodified.
+- S13b (R19): `rules/crit.py:1437-1438` — remove `assert critic_school_id
+  is not None` (keep `assert endpoint_lease is not None`).
+  accept: same test files as S13a.
+- S13c (R19): `_v6_transactional_batch_call`
+  (`rules/crit.py:255-262,299-300`) — widen `critic_school_id: str` to
+  `critic_school_id: str | None = None`; remove the `if not
+  critic_school_id: raise ValueError("transactional criticism requires a
+  critic school")` guard (keep the `endpoint_lease.role !=
+  "argumentative_critic"` guard).
+  accept: `tests/test_v6_live_repair_transactions.py -q` passes unmodified
+  (the file with the most direct assertions on this function).
+- S13d (R19): `_v6_transactional_atomic_critic_call`
+  (`rules/crit.py:522-528`) — widen `critic_school_id: str` to
+  `critic_school_id: str | None = None` (type-hint only; M3 showed no
+  guard to remove).
+  accept: same as S13c.
+- S13e (R20): `nonconjecture_recovery.py::_criticism_contract`
+  (`:643-718`) — add the `critic_school_id is None` branch: skip the
+  `criticism_policy is not None`/binding-lookup requirement (lines
+  649-653) and instead verify `preparation.route_lease` names a route
+  present in `manifest.roles.get("argumentative_critic", ())` (any seat),
+  exactly mirroring how a plain `select_lease("argumentative_critic", 0)`
+  resolves in the dispatch direction. The `school_id is not None` branch
+  is UNTOUCHED — byte-identical to today.
+  accept: `tests/test_v6_nonconjecture_recovery.py -q` passes in full,
+  including every existing `_criticism_contract`-adjacent test
+  unmodified, PLUS one new test,
+  `test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school`,
+  proving the None branch resolves and admits correctly.
+- S13f (R19, R20): `scheduler.py::_arg_crit`'s plain branch
+  (`:1244-1259`, the code Step 4 was going to touch) — replace the
+  `_defer_untransactional_v6_phase(...)` + `continue` with: resolve
+  `endpoint_lease = select_lease(adapter.leases, "argumentative_critic",
+  0)` (the SAME fallback `run_config_referee` already uses when
+  `criticism_policy is None`), then call `crit_argumentative_batch(harness,
+  batch, self.adapter, config, run_manifest=self.run_manifest,
+  endpoint_lease=endpoint_lease, critic_school_id=None,
+  transaction_assignment_refs=(), transaction_trigger_ref=...)`. This is
+  now the SAME dispatch function the school-routed path already calls
+  (S13a-e made it accept `critic_school_id=None`), not a new parallel one
+  — R19's "clean separation" (criticism dispatch does not require a
+  school) and R20's "still interact" (the identical function, the
+  identical contract, carries `critic_school_id` when one IS supplied)
+  both hold in one code path.
+  accept: `tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6`
+  (Step 3's originally-planned test, now written against the correct
+  target) passes.
+- S13g (process): revert Step 2's `LEGACY_ARG_CRITICISM_CONTRACT_V1`
+  constant from `rules/crit.py` — dead per M6, superseded by S13a-f.
+  accept: `grep -q LEGACY_ARG_CRITICISM_CONTRACT_V1 src/deepreason/rules/crit.py`
+  exits 1 (not found).
+
+### Frozen-surface contact forecast (revised)
+
+Unchanged from the original Road E forecast: none of S13a-g touch
+`capabilities/state.py`, `harness.py` event application, `invariants.py`,
+or any `run_manifest.py` schema/validator. `nonconjecture_recovery.py`
+(S13e) and `rules/crit.py` (S13a-d,f-g) are not on the five-surface list.
+No new grant needed beyond R16's already-scoped `run_manifest.py`
+`_versioned_source_config_data` pop-lines (unrelated to this revision).
+
+### Blast-radius census
+
+See M6 above — 9 test files, all classified MUST NOT MOVE, none EXPECTED
+TO MOVE. This IS the census; nothing else greps against the touched
+symbols.
+
+### Budget (revised, replaces CHECKLIST.md's original ~600-line Road E estimate)
+
+S13a: ~2 lines changed. S13b: ~1 line removed. S13c: ~3 lines (type hint +
+guard removal). S13d: ~1 line (type hint). S13e: ~20 lines (new branch +
+its own small helper). S13f: ~15 lines (scheduler wiring). S13g: ~4 lines
+removed. New tests: S13e's recovery test ~30 lines, S13f's dispatch test
+~40 lines (Step 3's original test, corrected). Map update (Traps entry,
+`docs/map/SUB-scheduler.md`/a `SUB-workflow.md` note on `_criticism_contract`'s
+new branch): ~15 lines.
+`python3 -c "print(2+1+3+1+20+15+4+30+40+15)"` → **131 lines**, roughly
+1/5 of the original ~600-line Road E estimate — confirms M1-M5's finding
+that this is a small, surgical fix once the actual coupling is measured
+rather than assumed. CHECKLIST.md's tranche-wide 1,600-line ceiling is
+UNCHANGED (this revision reduces one component of it; does not need to
+raise the total).
+
+Rubric: 6/6 yes (every R19/R20 item has an accept criterion; blast-radius
+census pasted and classified; frozen-surface forecast recorded — none;
+measurements precede every design claim, per DESIGN-AND-STOP discipline
+carried over from this being a mid-execution correction; options were not
+separately priced because M1-M5 leave exactly one viable design, not a
+genuine fork — Road A/Road B from the step-3 stop report are both
+superseded, not chosen between; nothing here is untraceable to R13/R19/R20/C15).
