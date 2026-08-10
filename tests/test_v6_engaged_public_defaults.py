@@ -83,7 +83,14 @@ def _profile(**updates) -> ProviderProfileV1:
     return ProviderProfileV1.create(**values)
 
 
-def test_public_manifest_enables_scratch_and_binds_all_four_schools():
+def test_public_manifest_enables_scratch_with_legacy_criticism_by_default():
+    """Amendment 11/R28 (2026-08-10): legacy (school-free) criticism is now
+    the default -- schools remain seeded for CONJECTURE (N_SCHOOLS, an
+    independent knob) but criticism_policy is None by default, not the
+    school-routed engaged policy. The full school-routed criticism shape
+    (bindings, coverage, authority) is now covered by
+    test_public_manifest_binds_all_four_schools_when_school_routed_
+    criticism_is_enabled below, under its explicit opt-back-in."""
     profile = _profile()
     manifest = build_preparation_manifest(
         profile,
@@ -102,6 +109,35 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     assert control == engaged_control_plane_policy_v3()
     assert control.scratch_authoring.enabled is True
     assert control.conjecture_context.mode == "harness_plus_model_request"
+    # Legacy (school-free) criticism by default: Road E's circuit, no
+    # manifest-owned criticism_policy at all.
+    assert manifest.criticism_policy is None
+    # The conjecture-side school roster is unaffected -- still seeded,
+    # independent of criticism's routing.
+    engine = json.loads(manifest.engine_config_json)
+    assert engine["N_SCHOOLS"] == 4
+
+
+def test_public_manifest_binds_all_four_schools_when_school_routed_criticism_is_enabled(
+    monkeypatch,
+):
+    """The pre-Amendment-11 default shape, now reachable by explicitly
+    setting LEGACY_CRITICISM_ENABLED=False -- the operator's own words:
+    "That's a configuration option." Nothing about the mechanism changed,
+    only which value ships as the default."""
+    original_config = preparation_module.Config
+
+    def _forced_school_routed_config(**kwargs):
+        return original_config(**kwargs, LEGACY_CRITICISM_ENABLED=False)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_routed_config)
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does opting back into school-routed criticism still work?",
+        compiled_at=STAMP,
+    )
+
     # Foreign-school criticism is compiled into the public manifest with one
     # binding per seeded school, all seated on the single provider endpoint.
     criticism = manifest.criticism_policy
@@ -128,19 +164,22 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     assert engine["N_SCHOOLS"] == len(criticism.bindings) == 4
 
 
-def test_legacy_criticism_disabled_by_default_is_byte_identical():
-    """Part B (S2c, R3): LEGACY_CRITICISM_ENABLED defaults False and, at
-    that default, build_preparation_manifest's criticism_policy is
-    UNCHANGED from today (still the engaged school-routed policy)."""
+def test_legacy_criticism_enabled_by_default_is_byte_identical():
+    """Amendment 11/R28 (2026-08-10, supersedes Part B/R3's original
+    default): LEGACY_CRITICISM_ENABLED now defaults True -- the operator's
+    words, "Legacy, not schools, should be default for criticism" -- so
+    build_preparation_manifest's criticism_policy is None (Road E's
+    school-free circuit) at the bare default, not the school-routed
+    engaged policy."""
 
-    assert Config().LEGACY_CRITICISM_ENABLED is False
+    assert Config().LEGACY_CRITICISM_ENABLED is True
     profile = _profile()
     manifest = build_preparation_manifest(
         profile,
-        question="Does the default public preset stay school-routed?",
+        question="Does the default public preset stay school-free?",
         compiled_at=STAMP,
     )
-    assert manifest.criticism_policy == engaged_criticism_policy(profile.endpoint_id)
+    assert manifest.criticism_policy is None
 
 
 def test_legacy_criticism_enabled_routes_to_school_free_circuit(monkeypatch):
@@ -176,12 +215,23 @@ def test_engaged_criticism_authority_inert_without_the_master_gate(monkeypatch):
     31's map claim that "all six knobs sit behind this gate," which was
     not yet true for this one. With ADJUDICATION_STATUS_AUTHORITY_ENABLED
     at its default False, setting ENGAGED_CRITICISM_AUTHORITY away from
-    observe_only must not reach the compiled manifest."""
+    observe_only must not reach the compiled manifest.
+
+    Amendment 11/R28 collateral: ENGAGED_CRITICISM_AUTHORITY only matters
+    on the school-routed path (it's engaged_criticism_policy's authority=
+    argument), so this test must also opt back into school routing
+    (LEGACY_CRITICISM_ENABLED=False, now non-default) to keep exercising
+    what it actually tests -- otherwise criticism_policy is None and this
+    knob's gate is untestable, not proven inert."""
 
     original_config = preparation_module.Config
 
     def _forced_defended_trial_config(**kwargs):
-        return original_config(**kwargs, ENGAGED_CRITICISM_AUTHORITY="defended_trial")
+        return original_config(
+            **kwargs,
+            ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+            LEGACY_CRITICISM_ENABLED=False,
+        )
 
     monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
     profile = _profile()
@@ -205,7 +255,12 @@ def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch)
     judge seats (a separate, unrelated compile-time guard) that
     build_preparation_manifest's single-profile broadcast cannot supply
     regardless of this flag -- reaching that combination is Part D's
-    seat-diversity territory, not this test's concern."""
+    seat-diversity territory, not this test's concern.
+
+    Amendment 11/R28 collateral: same reasoning as the companion test
+    above -- LEGACY_CRITICISM_ENABLED=False is required to keep this
+    test on the school-routed path ENGAGED_CRITICISM_AUTHORITY actually
+    gates."""
 
     original_config = preparation_module.Config
 
@@ -214,6 +269,7 @@ def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch)
             **kwargs,
             ENGAGED_CRITICISM_AUTHORITY="defended_trial",
             ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+            LEGACY_CRITICISM_ENABLED=False,
         )
 
     monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)

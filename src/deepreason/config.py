@@ -400,8 +400,12 @@ class Config(BaseModel):
     # When True, ordinary manifest-building (`build_preparation_manifest`)
     # routes argumentative criticism through Road E's school-free circuit
     # (`criticism_policy=None`) instead of the school-routed engaged policy.
-    # Byte-identical to today at the default False.
-    LEGACY_CRITICISM_ENABLED: bool = False
+    # DEFAULT TRUE (Amendment 11/R28, 2026-08-10, operator's explicit
+    # words: "Legacy, not schools, should be default for criticism" --
+    # schools are a conjecture-side tool; criticism stays independently
+    # modular and does not default to school-routing). Set False to opt
+    # back into the school-routed engaged policy.
+    LEGACY_CRITICISM_ENABLED: bool = True
     # Immutable reference to the calibration receipt that authorizes a
     # calibrated text-status mode. The manifest stores this source config
     # field; preflight fails closed when a status mode omits the reference.
