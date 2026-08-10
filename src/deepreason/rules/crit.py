@@ -113,9 +113,22 @@ def _critic_execution(
 
     The returned kwargs are the exact route inputs for ``LLMAdapter.call``;
     the rendered prefix is semantic conditioning only.  No field from the
-    conditioning record is interpreted as routing or authority.
+    conditioning record is interpreted as routing or authority. A route
+    with no school (Road E's legacy circuit) is a third valid combination,
+    distinct from the no-envelope and school-routed cases below.
     """
 
+    if endpoint_lease is not None and critic_school_id is None and critic_school_context is None:
+        if endpoint_lease.role != "argumentative_critic":
+            raise ValueError("criticism endpoint lease must belong to argumentative_critic")
+        return (
+            {
+                "endpoint_index": endpoint_lease.seat,
+                "endpoint_lease": endpoint_lease,
+                "school_id": None,
+            },
+            "",
+        )
     supplied = (
         endpoint_lease is not None,
         critic_school_id is not None,
