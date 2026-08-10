@@ -428,8 +428,41 @@ operator wants it (recorded in PARKED.md at delivery).
       54+ minute run was itself anomalous, likely idle-container CPU
       contention rather than a property of the sweep or this diff).
 
-- [ ] 14. (all) Map check: `python tools/docs_verify.py`
+- [x] 14. (all) Map check: `python tools/docs_verify.py`
       done-when: 0 failed (paste the summary line).
+      DONE, with one real regression found and fixed in this step (not
+      one of the four SUB-*.md documents this tranche's own scope
+      named, but a genuine break this tranche's code caused, fixed per
+      "the map moves in the SAME commit as code"):
+
+      First full run: `docs_verify: 4 failed` — 3 pre-existing
+      (`CON-run-identity.md:195/197/199`, confirmed unrelated: this
+      clone is shallow (294 commits) and does not contain the retirement
+      commits those checks reference, e.g. `git cat-file -e 1637e808` →
+      "Not a valid object name"; these were flagged as pre-existing and
+      out of scope earlier in this session, before this tranche's own
+      commits existed) plus 1 caused by this tranche:
+      `SEAM-rules-x-workflow.md:101`'s check AST-extracts the literal
+      `contract_id=` value from every `.prepare()` call in
+      `rules/conj.py`/`rules/crit.py` and asserts the set is exactly
+      `{'conjecturer.turn.v6','batch-critic.v2','contract.contract_id'}`
+      — S2's fix (step 5, this tranche) replaced the conjecture
+      `.prepare()` call's `contract_id="conjecturer.turn.v6"` literal
+      with `contract_id=configured_turn_contract` (a variable), so the
+      check's `ast.unparse` now sees the source text
+      `'configured_turn_contract'` instead, and the old fixed-literal
+      assertion no longer holds — correctly, since it was never updated
+      for this tranche's own P-CEPP-1 change to a file within scope.
+      Fixed: updated the assertion's expected set (`'conjecturer.turn.v6'`
+      → `'configured_turn_contract'`) and the surrounding prose ("two
+      spelled in the source" → "one spelled in the source
+      (`batch-critic.v2`), one read from the manifest's own configured
+      value... always one of `conjecturer.turn.v6`/`conjecturer.turn.v7`")
+      to state what the code now actually does. Verified standalone
+      (passed) before the second full run.
+
+      Second full run: `docs_verify: 3 failed` — only the 3 pre-existing,
+      confirmed-unrelated `CON-run-identity.md` failures remain.
 
 - [ ] 15. (all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it in full).
