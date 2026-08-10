@@ -391,8 +391,12 @@ def build_preparation_manifest(
         rubric_policy="forbid",
         compiled_at=compiled_at,
         control_plane_policy=engaged_control_plane_policy_v3(),
-        criticism_policy=engaged_criticism_policy(
-            profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY
+        criticism_policy=(
+            None
+            if config.LEGACY_CRITICISM_ENABLED
+            else engaged_criticism_policy(
+                profile.endpoint_id, authority=config.ENGAGED_CRITICISM_AUTHORITY
+            )
         ),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
             attached_evidence=attached_evidence

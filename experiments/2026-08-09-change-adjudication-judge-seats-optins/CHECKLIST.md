@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=16 blockers=none (Part A / Road E complete)
+State: next=19 blockers=none (Part A / Road E complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -701,7 +701,7 @@ This is the operator-facing switch that makes ordinary (`setup`/`prepare`)
 runs able to reach Road E's now-working circuit, instead of only the
 low-level `deepreason compile` path reaching it.
 
-- [ ] 16. (S2c, R3) Reader/default test FIRST: a new test
+- [x] 16. (S2c, R3) Reader/default test FIRST: a new test
       `tests/test_preparation.py::test_legacy_criticism_disabled_by_default_is_byte_identical`
       asserting `Config().LEGACY_CRITICISM_ENABLED is False` and that
       `build_preparation_manifest(...)`'s output `manifest.criticism_policy`
@@ -709,7 +709,34 @@ low-level `deepreason compile` path reaching it.
       is at its default. done-when: the test currently FAILS only because
       `LEGACY_CRITICISM_ENABLED` does not exist yet (paste the
       `AttributeError`).
-- [ ] 17. (S2c, R3) Add `LEGACY_CRITICISM_ENABLED: bool = False` to
+
+      **Filename correction (checked before writing, not silently
+      assumed):** `tests/test_preparation.py` does not exist —
+      `grep -rln build_preparation_manifest tests/` finds the real home,
+      `tests/test_v6_engaged_public_defaults.py` (its own
+      `test_public_manifest_enables_scratch_and_binds_all_four_schools`
+      is the exact byte-identical-default pattern this test mirrors).
+      Every remaining step in Part B that names `test_preparation.py`
+      means this file instead.
+
+      **Architecture note, checked not assumed:** `build_preparation_manifest`
+      builds its `Config` internally via `_config_for_profile`, which
+      accepts no caller override for fields like this (confirmed reading
+      `preparation.py:268-297`) — exactly the same shape
+      `ENGAGED_CRITICISM_AUTHORITY` already has (no test anywhere varies
+      it through `build_preparation_manifest` either). This matches
+      established precedent, not a gap: "operator-facing" in this
+      codebase's idiom means a typed Config field read at mint time, not
+      necessarily a new CLI flag; Step 18's positive-case test will
+      monkeypatch `preparation.Config` the same way any such field would
+      need to be exercised.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py::test_legacy_criticism_disabled_by_default_is_byte_identical -q
+      AttributeError: 'Config' object has no attribute 'LEGACY_CRITICISM_ENABLED'
+      1 failed in 0.37s
+      ```
+- [x] 17. (S2c, R3) Add `LEGACY_CRITICISM_ENABLED: bool = False` to
       `src/deepreason/config.py`, adjacent to the other authority-family
       knobs (`ARGUMENTATIVE_AUTHORITY` etc., `config.py:365-401`), with a
       docstring-comment naming what it does: when True, ordinary
@@ -717,7 +744,12 @@ low-level `deepreason compile` path reaching it.
       Road E built instead of the school-routed one.
       done-when: Step 16's test now passes for the default-False half;
       paste output.
-- [ ] 18. (S2c, R3) [COMMIT] Wire `preparation.py::build_preparation_manifest`
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py::test_legacy_criticism_disabled_by_default_is_byte_identical -q
+      1 passed in 0.28s
+      ```
+- [x] 18. (S2c, R3) [COMMIT] Wire `preparation.py::build_preparation_manifest`
       (`:387-396`) so that when `config.LEGACY_CRITICISM_ENABLED` is True,
       it passes `criticism_policy=None` to `compile_run_manifest` instead
       of `criticism_policy=engaged_criticism_policy(...)`. done-when: a
@@ -727,6 +759,21 @@ low-level `deepreason compile` path reaching it.
       — paste `python -m pytest tests/test_preparation.py -k legacy_criticism -q`
       ending "2 passed". Run `python tools/diff_budget.py 81d08e5f0 --ceiling 1600`,
       paste, commit, push.
+
+      (File is `tests/test_v6_engaged_public_defaults.py` per Step 16's
+      correction.) The positive-case test monkeypatches
+      `preparation.Config` to force `LEGACY_CRITICISM_ENABLED=True` into
+      `_config_for_profile`'s internally-built Config, per Step 16's own
+      architecture note.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -k legacy_criticism -q
+      2 passed, 9 deselected in 0.34s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -q
+      11 passed in 13.43s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/preparation.py src/deepreason/config.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/preparation.py": 6, "src/deepreason/config.py": 5}, "total_insertions": 11, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 19. (S2c, C3) Add the `_versioned_source_config_data` pop-line for
       `LEGACY_CRITICISM_ENABLED` in `run_manifest.py`, UNCONDITIONALLY for
       every schema version, per the `ENGAGED_CRITICISM_AUTHORITY` trap

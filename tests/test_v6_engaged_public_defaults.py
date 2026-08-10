@@ -38,6 +38,7 @@ from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest
 from deepreason.ontology import Commitment, Problem, ProblemProvenance, Provenance, Status
+from deepreason import preparation as preparation_module
 from deepreason.preparation import _records_for_question, build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
 from deepreason.rules.conj import conj
@@ -125,6 +126,46 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     # The seeded school roster and the criticism bindings agree.
     engine = json.loads(manifest.engine_config_json)
     assert engine["N_SCHOOLS"] == len(criticism.bindings) == 4
+
+
+def test_legacy_criticism_disabled_by_default_is_byte_identical():
+    """Part B (S2c, R3): LEGACY_CRITICISM_ENABLED defaults False and, at
+    that default, build_preparation_manifest's criticism_policy is
+    UNCHANGED from today (still the engaged school-routed policy)."""
+
+    assert Config().LEGACY_CRITICISM_ENABLED is False
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does the default public preset stay school-routed?",
+        compiled_at=STAMP,
+    )
+    assert manifest.criticism_policy == engaged_criticism_policy(profile.endpoint_id)
+
+
+def test_legacy_criticism_enabled_routes_to_school_free_circuit(monkeypatch):
+    """Part B (S2c, R3): with the flag True, build_preparation_manifest
+    passes criticism_policy=None -- Road E's school-free circuit -- instead
+    of the engaged school-routed policy. `_config_for_profile` builds its
+    own Config internally with no caller override, so the flag is forced
+    the same way any of its non-injected fields would be: by wrapping the
+    Config constructor it calls."""
+
+    original_config = preparation_module.Config
+
+    def _forced_legacy_config(**kwargs):
+        return original_config(**kwargs, LEGACY_CRITICISM_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_legacy_config)
+    profile = _profile()
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does the legacy-enabled preset skip school routing?",
+        compiled_at=STAMP,
+    )
+
+    assert manifest.criticism_policy is None
 
 
 def test_public_manifest_compiles_the_grounded_two_stage_bridge():

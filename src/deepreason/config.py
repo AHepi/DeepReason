@@ -391,6 +391,11 @@ class Config(BaseModel):
     # CriticismPolicyV1.authority directly; a different code path than
     # ARGUMENTATIVE_AUTHORITY above).
     ENGAGED_CRITICISM_AUTHORITY: Literal["observe_only", "defended_trial"] = "observe_only"
+    # When True, ordinary manifest-building (`build_preparation_manifest`)
+    # routes argumentative criticism through Road E's school-free circuit
+    # (`criticism_policy=None`) instead of the school-routed engaged policy.
+    # Byte-identical to today at the default False.
+    LEGACY_CRITICISM_ENABLED: bool = False
     # Immutable reference to the calibration receipt that authorizes a
     # calibrated text-status mode. The manifest stores this source config
     # field; preflight fails closed when a status mode omits the reference.
