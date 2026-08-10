@@ -367,3 +367,46 @@ behavior.
 C13 (process): "Proceed to dr-plan-steps... Commit and push CHECKLIST.md,
 then STOP for review before any dr-execute-step." — the next and only
 deliverable this phase is CHECKLIST.md; no step of it executes yet.
+
+### Amendment 6 (2026-08-09, operator's own words, frozen-surface grant + execution authorization)
+
+> Grant, ledgered as the next amendment, operator words: "For this
+> tranche only: run_manifest.py may gain additive .pop(...) lines inside
+> _versioned_source_config_data for the new opt-in flags, per the
+> ENGAGED_CRITICISM_AUTHORITY trap pattern the map documents — zero
+> change to any hash, schema, or validator, proven by steps 12, 13, and
+> 52's own done-criteria; any other run_manifest.py hunk is a stop, not a
+> judgment call; this grant is not transitive to any later tranche."
+> CHECKLIST.md is approved — begin dr-execute-step from step 1, one step
+> per invocation, all stop conditions live, push at every [COMMIT] step.
+> Work through the full list, then dr-validate-change, and STOP after
+> VALIDATION.md — delivery waits for review.
+
+R16 (frozen-surface authorization, narrowest reading, mirroring R19's own
+form from the S5 precedent): "run_manifest.py may gain additive .pop(...)
+lines inside _versioned_source_config_data for the new opt-in flags... —
+zero change to any hash, schema, or validator... any other run_manifest.py
+hunk is a stop, not a judgment call." This authorizes EXACTLY one class of
+touch, repeated once per new Config field this tranche adds
+(`LEGACY_CRITICISM_ENABLED`, `ADJUDICATION_STATUS_AUTHORITY_ENABLED`,
+`JUDGE_SEATS_ENABLED`, `JUDGE_SUMMONS_PER_CYCLE`, `JUDGE_SUMMONS_COOLDOWN`,
+`SCHOOL_SEATS_ENABLED`): an unconditional `.pop("<FIELD_NAME>", None)` line
+inside `_versioned_source_config_data`. Nothing else in `run_manifest.py`.
+Satisfies CHECKLIST.md's "Requested grant 1."
+
+R17 (process, non-transitivity, explicit, mirroring R20): "This grant is
+not transitive to any later tranche."
+
+R18 (process): "CHECKLIST.md is approved — begin dr-execute-step from step
+1, one step per invocation, all stop conditions live, push at every
+[COMMIT] step. Work through the full list, then dr-validate-change, and
+STOP after VALIDATION.md — delivery waits for review." Routes this session
+into `dr-execute-step`, repeated once per checklist step, then
+`dr-validate-change`; the STOP after VALIDATION.md is the next and only
+valid stop (supersedes C12/C13 for this later phase of the same tranche —
+`dr-deliver-change` does not run until a further operator review).
+
+C14 (process): the frozen-surface grant (R16) is scoped "for this tranche
+only" and is not transitive (R17) — a later tranche touching
+`run_manifest.py` needs its own explicit grant, this one does not carry
+forward.
