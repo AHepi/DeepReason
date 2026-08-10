@@ -2837,7 +2837,22 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
             for route in judge_routes
             if route.family.strip()
         }
-        if len(judge_routes) < 2 or len(judge_families) < 2:
+        judge_models = {
+            f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+            for route in judge_routes
+        }
+        # Structural same-model substitute (Amendment 9/R24), mirrored
+        # from the rubric_policy checks and llm/firewall.py's runtime
+        # gate: >=2 judge seats, all the exact same model, reads the same
+        # manifest.roles["judge"] shape the manifest-compile CLI's
+        # --blind-same-model-judges lever produces -- no separate lever
+        # needed for this site.
+        if len(judge_routes) < 2:
+            raise ValueError(
+                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
+                "two frozen judge seats from distinct families"
+            )
+        if len(judge_families) < 2 and len(judge_models) != 1:
             raise ValueError(
                 "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
                 "two frozen judge seats from distinct families"

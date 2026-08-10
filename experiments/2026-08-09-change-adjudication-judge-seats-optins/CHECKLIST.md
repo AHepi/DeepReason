@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=57d blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57c complete; diff-budget base 1079c86ed for Part D2, 281/1600)
+State: next=57e blockers=none (Parts A+B+C+D complete; Part D2 steps 57a-57d complete; diff-budget base 1079c86ed for Part D2, 335/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1879,7 +1879,7 @@ that lever IS "the switch."
       $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 87, "tests": 194, "docs/map": 0}, "total_insertions": 281, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 57d. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
+- [x] 57d. (S16, R24) [FROZEN SURFACE — run_manifest.py, Amendment 9
       grant] The `defended_trial`/V4 criticism-policy
       `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED` check
       (`run_manifest.py:2819-2834`) gains the identical structural
@@ -1891,6 +1891,36 @@ that lever IS "the switch."
       done-when: an equivalent same-model `defended_trial` manifest
       (built via 57b's flag) compiles clean; the existing cross-family
       case stays provably unchanged.
+
+      No existing test named `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED`
+      directly (grep confirmed) — the one existing `defended_trial`
+      compile test (`tests/test_v6_manifest_defended_trial.py::test_v6_
+      defended_trial_fails_at_manifest_compile_not_during_dispatch`)
+      already used cross-family judge routes (different seats -> its
+      `_route` helper varies both family and model by seat), so it was
+      unaffected and needed no collateral edit. New test
+      `test_v6_defended_trial_accepts_same_model_judges_past_the_cross_
+      family_gate`: two judge routes built from the identical `_route(
+      "judge-same", 9)` call (same seat reused, so same family AND
+      model) now reach the NEXT check
+      (`V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED`) instead of
+      being stopped by the cross-family gate first — same
+      "which error type survives" proof technique already used in
+      `test_prose_refutation_boundaries.py`'s school-substitute tests, since
+      fully satisfying a v6 transaction contract just to prove this one
+      gate passed would be substantial unrelated fixture work.
+
+      ```
+      $ python -m pytest tests/test_v6_manifest_defended_trial.py tests/test_criticism_school_execution_c3.py tests/test_foreign_criticism_policy_c3.py tests/test_v6_engaged_public_defaults.py tests/test_prose_refutation_boundaries.py -q
+      81 passed in 30.81s
+      $ python -m pytest tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_judge_ensemble_boundary.py tests/test_model_firewall.py -q
+      118 passed in 1.25s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 852 checks, 754 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py 1079c86ed --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "1079c86ed", "against": null, "areas": {"src/deepreason": 103, "tests": 232, "docs/map": 0}, "total_insertions": 335, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 57e. (S16) CLI/map updates, same commits as 57b-57d:
       `--blind-same-model-judges`'s own `--help` text states the
       blindness guarantee it relies on (cross-reference 57a's pinned
