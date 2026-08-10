@@ -209,6 +209,23 @@ def test_legacy_criticism_flag_excluded_from_subject_digest():
     assert "LEGACY_CRITICISM_ENABLED" not in json.dumps(payload)
 
 
+def test_adjudication_status_authority_flag_excluded_from_subject_digest():
+    """Part C (S2a, C9): ADJUDICATION_STATUS_AUTHORITY_ENABLED is an
+    authority knob, never written to the manifest at all (the
+    frozen-surfaces law) -- unlike LEGACY_CRITICISM_ENABLED, it has no
+    manifest-visible downstream effect to even legitimately differ."""
+
+    profile = _profile()
+    manifest = _manifest(
+        profile,
+        config_updates={"ADJUDICATION_STATUS_AUTHORITY_ENABLED": True},
+    )
+
+    payload = qualification_subject_payload(manifest, profile)
+
+    assert "ADJUDICATION_STATUS_AUTHORITY_ENABLED" not in json.dumps(payload)
+
+
 def test_incomplete_cache_is_never_reusable(tmp_path):
     profile = _profile()
     manifest = _manifest(profile)

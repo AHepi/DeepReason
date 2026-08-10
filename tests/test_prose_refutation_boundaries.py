@@ -639,7 +639,10 @@ def test_a_passing_formal_commitment_now_resists_prose(harness):
         harness,
         target.id,
         _single_family_trial_adapter(harness),
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ),
     )
 
     assert not harness.state.att
@@ -997,6 +1000,35 @@ def test_a_single_model_run_refutes_by_prose_end_to_end(harness):
 
     warrant = next(w for w in harness.warrants.values() if w.target == target.id)
     assert warrant.type == WarrantType.ARGUMENTATIVE, warrant.type
+
+
+def test_single_family_trial_reachable_under_master_gate(harness):
+    """Part C (S2a, R1) solo-law compliance: the master reachability gate
+    must not gate single_family_trial away for a genuinely single-family
+    solo run -- the exact accommodation the operator's standing solo law
+    requires (C3, "no configuration may strand solo runs").
+
+    single_family_trial's own school-routed reachability (the substitute
+    ensemble, not the bare Config-only direct-helper path, which
+    `test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee`
+    already shows structurally cannot supply a critic school) is proven
+    live by `test_a_single_model_run_refutes_by_prose_end_to_end` above,
+    unaffected by this gate since it calls the trial mechanism directly
+    with an already-resolved authority. This test proves the OTHER half:
+    the master gate itself does not silently downgrade the configured
+    value to observe_only for a single-family adapter."""
+
+    from deepreason.config import Config
+    from deepreason.llm.firewall import is_single_family_run
+
+    adapter = _single_family_trial_adapter(harness)
+    assert is_single_family_run(adapter.leases) is True
+
+    config = Config(
+        ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+    )
+    assert crit._authority(config) == SINGLE_FAMILY_AUTHORITY
 
 
 def test_the_same_run_under_the_old_mode_refutes_nothing(harness):

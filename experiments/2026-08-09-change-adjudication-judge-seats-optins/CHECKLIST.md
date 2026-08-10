@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=29 blockers=none (Parts A+B complete; Steps 27-28 done)
+State: next=31 blockers=none (Parts A+B complete; Steps 27-30 done)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1121,14 +1121,76 @@ low-level `deepreason compile` path reaching it.
       `LEGACY_CRITICISM_ENABLED`, this field's effect is NEVER manifest-
       visible at all (per the frozen-surfaces law), not merely "already
       visible elsewhere."
-- [ ] 29. (S2a, C9) Qualification-subject-exclusion test for this field,
+- [x] 29. (S2a, C9) Qualification-subject-exclusion test for this field,
       same shape as Step 20.
-- [ ] 30. (S2a, R1) Solo-law regression test: with the master flag True
+
+      Lives in `tests/test_reusable_qualification.py` (Step 20's file),
+      right after its `LEGACY_CRITICISM_ENABLED` sibling. Simpler than
+      Step 20's — this flag has zero manifest-visible downstream effect
+      at all (Step 28's own pop-line comment), so no `criticism_policy`
+      compile-update is needed to make the test meaningful.
+
+      ```
+      $ python -m pytest tests/test_reusable_qualification.py::test_adjudication_status_authority_flag_excluded_from_subject_digest -q
+      1 passed in 0.26s
+      ```
+- [x] 30. (S2a, R1) Solo-law regression test: with the master flag True
       and a genuinely single-model-family run, `single_family_trial`
       remains reachable (not accidentally gated away by this change).
       done-when:
       `tests/test_text_authority_policy.py::test_single_family_trial_reachable_under_master_gate`
       passes.
+
+      **Filename correction, and a scope clarification found reading
+      the existing evidence before writing (not assumed):** lives in
+      `tests/test_prose_refutation_boundaries.py`, next to
+      `_single_family_trial_adapter` and
+      `test_a_single_model_run_refutes_by_prose_end_to_end`, the file
+      that already carries every `single_family_trial` fixture. That
+      neighboring test proves LIVE end-to-end reachability (a warrant
+      mints) but calls `run_argument_trial_from_case` directly with
+      `authority="status"` — it never reads `ARGUMENTATIVE_AUTHORITY` or
+      the new master flag at all, so it is unaffected by this gate and
+      does not by itself prove solo-law compliance for THIS step.
+      Separately, `test_the_config_only_path_cannot_satisfy_the_cross_
+      school_guarantee` (fixed in Step 26) already shows the bare
+      Config-only direct-helper path structurally cannot supply a critic
+      school in a solo run — `single_family_trial` was NEVER reachable
+      through that specific path even before this flag existed. Given
+      both of those, the meaningful, honest claim this step's own
+      wording asks for ("not accidentally gated away by THIS change") is
+      at the resolution layer: `crit._authority(config)` must still
+      return `single_family_trial`, not silently downgrade it to
+      `observe_only`, when the master flag is True on a genuinely
+      single-family adapter. Wrote exactly that, with
+      `is_single_family_run(adapter.leases) is True` asserted alongside
+      it so "genuinely single-family" is proven, not assumed.
+
+      **Second mid-step discovery, this file's `docs_verify.py` habit
+      paying off again:** `test_a_passing_formal_commitment_now_resists_
+      prose` (R21) set `ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY`
+      WITHOUT the master flag — before Step 26, this reached the trial
+      attempt and formal-backing immunity genuinely intercepted it; with
+      the master flag now defaulting the call to `observe_only` before
+      ever attempting a trial, the test's own assertion
+      (`not harness.state.att`) still happened to hold, but for the
+      WRONG reason (no trial attempted at all, not formal-backing
+      immunity actually firing) — a silently weakened test that was
+      still green. Caught rereading the file's full
+      `SINGLE_FAMILY_AUTHORITY` usage list while writing this step's own
+      test, not by a failing check. Added
+      `ADJUDICATION_STATUS_AUTHORITY_ENABLED=True` to restore the real
+      test conditions R21 needs.
+
+      ```
+      $ python -m pytest tests/test_prose_refutation_boundaries.py::test_single_family_trial_reachable_under_master_gate -q
+      1 passed in 0.18s
+      $ python -m pytest tests/test_prose_refutation_boundaries.py -q
+      46 passed in 3.39s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      ```
 - [ ] 31. (S2a) Map update, same commit: `docs/map/CON-authority.md`
       gains a row for `ADJUDICATION_STATUS_AUTHORITY_ENABLED` and a note
       in its "How to add a new authority mode" table that this is now the
