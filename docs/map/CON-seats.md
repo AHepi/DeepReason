@@ -112,6 +112,7 @@ of information the manifest already froze at mint time.
 | Ordinary dispatch: render, resolve seat, call the provider | `llm/adapter.py` | `LLMAdapter.call`, `LLMAdapter._render_request` |
 | Presentation profile (compact/standard/frontier) — per-run today; per-`(role, seat, endpoint_id)` already possible in v6 | `llm/adapter.py`, `run_manifest.py` | `LLMAdapter.profile_for`/`base_profile_for` (legacy, one `self.base_model_profile`); `resolve_route_seat_base_profile` (v6, already seat-scoped) |
 | Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
+| Whether the compiled manifest's criticism goes through a school seat at all — a Config-driven branch, not a seat mechanism itself (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10; full detail in `DR-CON-authority`) | `preparation.py` | `build_preparation_manifest`; `Config.LEGACY_CRITICISM_ENABLED` |
 | The setup-time provider/model/transport bundle | `provider_profile.py` | `ProviderProfileV1` |
 | Role-group -> role-name expansion, binding persistence, and the never-last-wins conflict refusal | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
 | Group-keyed binding view, no role expansion (Rung S5's mint-time carrier) | `seat_bindings.py` | `resolve_seat_bindings_by_group` |

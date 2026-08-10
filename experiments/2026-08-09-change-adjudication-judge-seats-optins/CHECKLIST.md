@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=19 blockers=none (Part A / Road E complete)
+State: next=24 blockers=none (Parts A+B complete)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -829,23 +829,75 @@ low-level `deepreason compile` path reaching it.
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths tests/test_reusable_qualification.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"tests/test_reusable_qualification.py": 21}, "total_insertions": 21, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 21. (S2c, R3) End-to-end integration test: with
+- [x] 21. (S2c, R3) End-to-end integration test: with
       `LEGACY_CRITICISM_ENABLED=True` on an ordinary `build_preparation_manifest`-built
       manifest, a scheduler run with an eligible target actually dispatches
       a live `crit_argumentative_batch` call through Road E's contract (not
       deferred). done-when:
       `python -m pytest tests/test_scheduler.py -k legacy_criticism_end_to_end -q`
       passes.
-- [ ] 22. (S2c) Map update, same commit: add a row to
+
+      **Filename correction (fourth in this Part — noted, not
+      re-litigated):** lives in `tests/test_v6_engaged_public_defaults.py`
+      as `test_legacy_criticism_end_to_end_dispatches_without_a_school`,
+      next to the school-routed sibling test it mirrors
+      (`test_public_preset_run_dispatches_school_routed_criticism`), reused
+      as the fixture template (real `Harness`/`LLMAdapter`/`MockEndpoint`,
+      `Scheduler(harness, adapter, config, run_manifest=manifest)`). Passed
+      on the first run — genuine end-to-end confirmation that Road E plus
+      the Config-flag plumbing (Steps 16-18) actually dispatches live, with
+      no `"v6-model-phase-deferred.v1"` marker, a critic with no school,
+      and the durable payload carrying `critic_school_id: None` /
+      `dispatch_authority: "observe_only"`.
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -k legacy_criticism_end_to_end -q
+      1 passed, 11 deselected in 2.05s
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py -q
+      12 passed in 15.58s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths tests/test_v6_engaged_public_defaults.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"tests/test_v6_engaged_public_defaults.py": 149}, "total_insertions": 149, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+- [x] 22. (S2c) Map update, same commit: add a row to
       `docs/map/CON-authority.md`'s "Where it lives" table for
       `LEGACY_CRITICISM_ENABLED`, and cross-reference from
       `docs/map/CON-seats.md` (which owns `preparation.py`) noting the new
       Config-driven branch in `build_preparation_manifest`. done-when:
       `python tools/docs_verify.py` reports 0 failed for both documents.
-- [ ] 23. (S2c) [COMMIT] Subsystem ring:
+
+      **Collateral break found running the full corpus (not just the two
+      named documents):** `SEAM-manifest-x-schools.md:153`'s check greps
+      the literal substring `"criticism_policy=engaged_criticism_policy("`
+      in `preparation.py` — Step 18's conditional expression
+      (`criticism_policy=(None if config.LEGACY_CRITICISM_ENABLED else
+      engaged_criticism_policy(...))`) removed that exact substring even
+      though the underlying fact the check verifies (this file still
+      calls `engaged_criticism_policy` with `config.ENGAGED_CRITICISM_AUTHORITY`)
+      remains true. Narrowed the grep to `"else engaged_criticism_policy("`
+      — still specific to the real call site, matches the new shape.
+      `docs_verify.py`: 0 failed after the fix (was 1 failed).
+
+      ```
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 852 checks, 4 workers
+      docs_verify: 0 failed
+      ```
+- [x] 23. (S2c) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_preparation.py tests/test_run_manifest.py tests/test_qualification.py tests/test_scheduler.py -q`.
       done-when: "N passed, 0 failed" (paste). Diff budget check, commit,
       push.
+
+      (Real filenames per this Part's corrections:
+      `test_v6_engaged_public_defaults.py`, `test_run_manifest.py`,
+      `test_run_manifest_v4.py`, `test_reusable_qualification.py`,
+      `test_scheduler.py`.)
+
+      ```
+      $ python -m pytest tests/test_v6_engaged_public_defaults.py tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_reusable_qualification.py tests/test_scheduler.py -q
+      138 passed in 36.04s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason": 112, "tests": 432, "docs/map": 78}, "total_insertions": 622, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 
 ---
 

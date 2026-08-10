@@ -422,6 +422,114 @@ def test_public_preset_run_dispatches_school_routed_criticism(tmp_path):
     assert debts[0].outstanding_school_ids == ()
 
 
+def _legacy_criticism_mock_manifest():
+    """Compile a public-preset-shaped manifest with LEGACY_CRITICISM_ENABLED
+    True: schools stay seeded (unrelated), but criticism_policy is None --
+    Road E's school-free circuit -- exactly what build_preparation_manifest
+    now produces for this flag."""
+
+    config = Config(
+        N_SCHOOLS=4,
+        LEGACY_CRITICISM_ENABLED=True,
+        scratchpad={"enabled": True},
+        bridge=engaged_bridge_source(),
+        EMBEDDER_MODEL=None,
+        roles={
+            "conjecturer": [_route("conjecturer-route")],
+            "argumentative_critic": [_route("critic-route-0")],
+            "synthesizer": [_route("synthesizer-route")],
+            "summarizer": [_route("summarizer-route")],
+            "thesis": [_route("thesis-route")],
+            "judge": [_route("judge-route")],
+        },
+    )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=engaged_control_plane_policy_v3(),
+        criticism_policy=None,
+        inquiry_capability_policy=engaged_inquiry_capability_policy(),
+        run_input_digest="f" * 64,
+        toolchains=(engaged_local_simulation_toolchain(),),
+    )
+    return config, manifest
+
+
+def test_legacy_criticism_end_to_end_dispatches_without_a_school(tmp_path):
+    """Part B (S2c, R3): with LEGACY_CRITICISM_ENABLED True and
+    criticism_policy=None, a scheduler run's plain _arg_crit path actually
+    dispatches a live crit_argumentative_batch call through Road E's
+    contract -- not deferred, and with no school in the resulting artifact
+    or durable payload."""
+
+    config, manifest = _legacy_criticism_mock_manifest()
+    harness = Harness(tmp_path / "legacy-criticism-end-to-end")
+    _bind_classification(harness, manifest)
+    target = harness.create_artifact(
+        "a claim with no school-owned lineage",
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    critic_route = manifest.roles["argumentative_critic"][0]
+    critic_response = json.dumps(
+        {
+            "cases": [
+                {
+                    "target_alias": "SRC_001",
+                    "attack": True,
+                    "case": "the claim omits a required boundary condition",
+                }
+            ]
+        }
+    )
+    endpoints = {
+        "conjecturer": MockEndpoint(lambda _prompt: '{"candidates":[]}'),
+        "argumentative_critic": MockEndpoint(
+            lambda _prompt: critic_response,
+            name=critic_route.base_url,
+            model=critic_route.model_id,
+            max_tokens=critic_route.max_tokens,
+        ),
+    }
+    adapter = LLMAdapter(
+        endpoints,
+        harness.blobs,
+        retry_max=0,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+        meter=TokenMeter(100_000),
+    )
+    scheduler = Scheduler(harness, adapter, config, run_manifest=manifest)
+
+    scheduler._arg_crit([target.id])
+
+    assert not any(
+        event.inputs[:2] == ("v6-model-phase-deferred.v1", "argumentative-criticism")
+        for event in harness.log.read()
+    )
+    critics = [
+        artifact
+        for artifact in harness.state.artifacts.values()
+        if artifact.provenance is not None and artifact.provenance.role == "critic"
+    ]
+    assert len(critics) == 1
+    assert critics[0].provenance.school is None
+    assert "required boundary condition" in critics[0].content_ref
+    work = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.task_payload_value.get("schema")
+        == "criticism.semantic-task.v1"
+    ]
+    assert len(work) == 1
+    assert work[0].preparation.task_payload_value["critic_school_id"] is None
+    assert work[0].preparation.task_payload_value["dispatch_authority"] == "observe_only"
+
+
 def test_public_preset_permits_bounded_scratch_authoring(tmp_path):
     policy = engaged_control_plane_policy_v3().scratch_authoring
     assert policy.enabled is True
