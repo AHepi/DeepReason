@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=11 blockers=none
+State: next=12 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -319,7 +319,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/llm/adapter.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/llm/adapter.py": 5}, "total_insertions": 5, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 11. (S13i-2) [COMMIT] Redefine `policy_call` in BOTH
+- [x] 11. (S13i-2) [COMMIT] Redefine `policy_call` in BOTH
       `crit_argumentative` and `crit_argumentative_batch`
       (`rules/crit.py`, the two `policy_call = (bool(call_kwargs) or
       argumentative_authority is not None or coverage_observer is not
@@ -329,6 +329,13 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py tests/test_prose_refutation_boundaries.py -q`
       passes unmodified (paste "N passed, 0 failed" — M9's proof made
       concrete). Diff budget check, commit, push.
+
+      ```
+      $ python -m pytest tests/test_foreign_school_criticism_scheduler_c3.py tests/test_prose_refutation_boundaries.py -q
+      47 passed in 4.73s
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 24}, "total_insertions": 24, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 12. (S13i-3) Reader test FIRST (rule 1), the corrected version of
       the original Step-3 test: a new test in
       `tests/test_v6_scheduler_model_phase_deferral.py` named

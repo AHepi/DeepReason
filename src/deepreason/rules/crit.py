@@ -1209,7 +1209,9 @@ def crit_argumentative(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
+        critic_school_id is not None
+        or argumentative_authority is not None
+        or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
     pack = render_crit_pack(
@@ -1372,7 +1374,9 @@ def crit_argumentative_batch(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
+        critic_school_id is not None
+        or argumentative_authority is not None
+        or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
     active_v6 = False
