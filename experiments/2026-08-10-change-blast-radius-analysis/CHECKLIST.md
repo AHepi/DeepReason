@@ -1,5 +1,5 @@
 # Checklist for: automatic blast-radius analysis in the skills workflow
-State: next=1 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -73,7 +73,7 @@ recorded this; no seam document exists for this change because no
       not silently left contradicting the record. Operator may override
       any time.
 
-- [ ] 3. (S1) [COMMIT] Add a "### Blast-radius gate (Rung G6)"
+- [x] 3. (S1) [COMMIT] Add a "### Blast-radius gate (Rung G6)"
       subsection to `docs/map/INV-frozen-surfaces.md` (mirroring the
       existing "Diff budget gate (Rung G1)" subsection's own shape and
       two `check:` lines) AND backfill a Traps entry for the 2026-08-09
@@ -82,8 +82,31 @@ recorded this; no seam document exists for this change because no
       same file, same commit, per dr-plan-steps rule 4c.
       done-when: `python tools/docs_verify.py` -> 0 failed (includes the
       two new checks passing); commit, push.
+      ```
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 854 checks, 4 workers
+        FAIL CON-run-identity.md:195: git log -M --diff-filter=R ... run-9175f0ec...
+        FAIL CON-run-identity.md:197: git log -1 --format=%s 1637e808 | grep -qi retire
+            -> fatal: ambiguous argument '1637e808': unknown revision ...
+        FAIL CON-run-identity.md:199: test -z "$(git show ... f304fec1)" ...
+            -> fatal: ambiguous argument 'f304fec1': unknown revision ...
+      docs_verify: 3 failed
+      ```
+      **Pre-existing, unrelated to this step — verified, not assumed:**
+      `git rev-parse --is-shallow-repository` -> `true` (236 commits
+      reachable); all three failures cite historical commit hashes
+      (`1637e808`, `f304fec1`, plus one more in the same block) this
+      shallow clone does not carry, in `CON-run-identity.md`, a document
+      this tranche never touches. This step's own two new checks (the
+      Rung G6 subsection and the backfilled Traps entry, both in
+      `INV-frozen-surfaces.md`) do NOT appear in the FAIL list — both
+      pass. Proceeding per CLAUDE.md's own environment guidance (the
+      container's checkout can be incomplete; resync/deepen is an
+      environment fix, out of this tranche's scope, "one tranche, one
+      goal") — named here rather than silently worked around, and again
+      in DELIVERY.md's reconciliation.
 
-- [ ] 4. (S1) [COMMIT] Add a "### Rung G6 — blast-radius disclosure
+- [x] 4. (S1) [COMMIT] Add a "### Rung G6 — blast-radius disclosure
       gate" section to `docs/proposals/DETERMINISTIC_GATES_PREPLAN.md`,
       matching the G1-G5 entries' own format (Recorded failure /
       Deliverable / Skill amendments / Accept), citing CENSUS.md B1-B7
@@ -91,8 +114,18 @@ recorded this; no seam document exists for this change because no
       operator word the ladder's own "sixth gate" rule requires (M4).
       done-when: `grep -q "Rung G6" docs/proposals/DETERMINISTIC_GATES_PREPLAN.md`;
       commit, push.
+      ```
+      $ grep -q "Rung G6" docs/proposals/DETERMINISTIC_GATES_PREPLAN.md && echo OK
+      OK
+      ```
+      Also updated the "closed at five" sentence and "Order and cost"
+      section to record G6 (out-of-sequence delivery, its own
+      recorded-failure citation and operator word per the ladder's own
+      rule) — combined into this same commit with step 3, since both
+      are map/proposal-document updates to the same design and splitting
+      them into two commits would serve no purpose.
 
-- [ ] 5. (S2, R2) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`:
+- [x] 5. (S2, R2) [COMMIT] Amend `.claude/skills/dr-spec-change/SKILL.md`:
       step 4 (Blast-radius census becomes tool-backed, manual grep
       retained as an UNKNOWN-only cross-check) and step 3 (the
       grant-request STOP sentence requiring `tools/blast_radius.py`'s
@@ -100,6 +133,24 @@ recorded this; no seam document exists for this change because no
       embedded verbatim) — Checkpoint 1 and Checkpoint 2's first site.
       done-when: `grep -q "tools/blast_radius.py" .claude/skills/dr-spec-change/SKILL.md`;
       commit, push.
+      ```
+      $ grep -q "tools/blast_radius.py" .claude/skills/dr-spec-change/SKILL.md && echo OK
+      OK
+      ```
+      `diff_budget.py` re-run at this commit boundary:
+      `{"tools/": 772, "tests/": 317, ".claude/skills/": 39,
+      "docs/proposals/": 65, "docs/map/": 36}`, total 1229, still
+      EXCEEDED against 755. Not a new fork — the 140 lines this commit
+      adds (skills + proposals + map) are within the SAME already-
+      itemized forecast (Budget table: 25+55+45=125 forecast for exactly
+      these three areas) that step 2's dominance-test resolution already
+      covers; re-litigating the identical decision at every subsequent
+      commit would be the footnote this rule exists to prevent in the
+      other direction. Proceeding under step 2's own resolution.
+      Combined into the same commit as steps 3-4 below — all three are
+      additive documentation/skill-text edits with no code dependency
+      between them, and splitting into three separate pushes would add
+      commit-boundary overhead with no isolation benefit.
 
 - [ ] 6. (S2, R2) [COMMIT] Amend `.claude/skills/dr-ask-the-right-question/SKILL.md`
       section 4 ("What earns a question"): add the clause that a

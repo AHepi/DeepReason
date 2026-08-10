@@ -40,15 +40,33 @@ interpretation happens, and it happens in writing.
      handover-named fixture that never executed the migrated code;
      docs/ERRATA_EXECUTOR.md X11 — a false premise in the authorization
      itself.)
-3. Frozen-surface contact forecast — mandatory, in writing. Diff the
-   planned target files against `docs/map/INV-frozen-surfaces.md`'s
-   surface list and record the verdict in SPEC.md's "Frozen-surface
-   contact forecast" section; "none expected" counts, but only after
-   actually checking. ANY plausible contact stops the tranche HERE:
-   commit SPEC.md and obtain the operator's words before `dr-plan-steps`
-   runs. Contact discovered at validation is three commits too late —
+3. Frozen-surface contact forecast — mandatory, in writing. Run
+   `python tools/blast_radius.py --files <every planned target file>
+   --symbols <every planned target symbol>` (Rung G6,
+   `docs/map/INV-frozen-surfaces.md`) and record its
+   `frozen_surface_contacts`/`frozen_adjacent_contacts` result in
+   SPEC.md's "Frozen-surface contact forecast" section; "none expected"
+   counts, but only after actually running the gate — a hand-checked
+   "none" is no longer sufficient once the gate exists to check it.
+   ANY plausible contact (the gate's `frozen_surface_verdict: CONTACT`,
+   or an `UNKNOWN` reachability entry the gate cannot resolve) stops the
+   tranche HERE: commit SPEC.md and obtain the operator's words before
+   `dr-plan-steps` runs. **The STOP message — and this document's own
+   Frozen-surface contact forecast / Decision sheet sections — MUST
+   embed `tools/blast_radius.py`'s computed `frozen_surface_contacts`
+   (and `frozen_adjacent_contacts`) list verbatim, never a hand-written
+   summary of it. A STOP that describes contact without pasting the
+   tool's own list is not this checkpoint** — the words the operator
+   gives in reply are words given over a disclosed, computed surface,
+   never an inferred one (the design premise of
+   `experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md`).
+   Contact discovered at validation is three commits too late —
    the tranche that proved it (docs/ERRATA_EXECUTOR.md X9, XE1) was
-   technically perfect and still could not deliver. For changes that add
+   technically perfect and still could not deliver, and the 2026-08-09
+   incident (same file, "the frozen-surface stop did not hold") shows a
+   STOP already written in prose is not a STOP that was obeyed — the
+   gate exists precisely so that finding cannot be silently outrun by
+   memory three steps later. For changes that add
    data to the typed record, one more guardrail: the absence-tolerant
    READER lands before the writer emits, so every existing committed
    root stays valid with the new data absent (the rung-4 guardrail
@@ -66,14 +84,22 @@ interpretation happens, and it happens in writing.
    probes" rules — they must survive dramatic repo changes, failing
    only when the guarded claim stops being true.
 4. Blast-radius census — mandatory, pasted, BEFORE any fixture-drift
-   prediction. For every symbol and file the spec changes, grep what
-   already asserts on it:
+   prediction. Tool-backed (Rung G6): the same
+   `tools/blast_radius.py` invocation step 3 already ran also reports
+   `consumers` (tests, map documents, the qualification digest, the
+   wheel-smoke pins) for every declared target — paste its
+   `consumers.tests`/`consumers.map_checks` fields into SPEC.md's
+   "Blast-radius census" section and classify EVERY hit: EXPECTED TO
+   MOVE (the design predicts it) or MUST NOT MOVE. The manual grep
 
        grep -rn "<symbol>" tests/ docs/map/
 
-   Paste the hit list (or "no hits") into SPEC.md's "Blast-radius
-   census" section and classify EVERY hit: EXPECTED TO MOVE (the
-   design predicts it) or MUST NOT MOVE. A drift forecast written
+   is RETAINED as a required cross-check specifically for anything the
+   gate's own `reachability` field reports `UNKNOWN`, or for a symbol
+   shape the gate cannot resolve (a role-dispatch string label rather
+   than a Python identifier, for instance) — the gate augments the
+   census, it does not remove the author's own judgment where the gate
+   has said, in writing, that it cannot judge. A drift forecast written
    without this census is recall, and recall missed in two consecutive
    specs — under the MORE capable model both times (rung-5 PARKED P6):
    rung 4's prediction was too narrow; rung 5's spec predicted nothing
