@@ -683,3 +683,63 @@ route, that binding is available to both mechanisms for that school, not
 a forced choice between them. No CHECKLIST.md step needs renumbering;
 Step 44's design already names both structures as targets of the same
 flag.
+
+### Amendment 11 (2026-08-10, corrects R26's reading, operator's own words — NOT YET ACTIONED, one open question below)
+
+> What does that mean? School and criticism should be separate. Meaning
+> either the schools just work on conjecture, or they can be plugged into
+> criticism. Schools, by default, is a conjecture tool. Meant to minimise
+> the attractor problem. What I meant by "swapping out schools" is that
+> you can use a different attractor minimisation tool for the conjecture
+> route. Criticism can be wired in to any conjecture tool. Or stay
+> completely separate. Legacy should be the default. Other routes are
+> attached to different types of conjecture tools. That's what
+> independence and modularity mean. The DeepReason as a whole still
+> treats criticism as a minimum operator that it hands conjectures to in
+> order to find objections. But that one purpose can be attached to
+> schools so that the criticism seats are primed by a school. But they
+> are always separate from the conjectures.
+
+R27 (behavior, corrects R26): a school is fundamentally a CONJECTURE-side
+mechanism — a pluggable attractor-minimization tool (diversifying what
+gets conjectured, so the run doesn't collapse onto one voice). "Swapping
+out schools" (the operator's original question this session) means
+swapping in a DIFFERENT attractor-minimization tool for the conjecture
+route in the future — schools must not be architecturally assumed to be
+the only possible such tool, even though it's the only one that exists
+today. Criticism stays a generic, minimal operator ("hand it a
+conjecture, it looks for objections") that is ALWAYS structurally
+separate from whichever conjecture tool produced the candidate — this
+restates and does not weaken R19/R20/R21's already-delivered separation.
+Criticism MAY optionally be "primed" by a school (attached, so its
+seats know the stance context) when an operator wants that, but this is
+an explicit, separate attachment, never an automatic consequence of a
+school existing or being seat-bound for conjecture. R26's reading
+("a school-seat binding is available to both mechanisms... not a forced
+choice") was too coupled — corrected here to: conjecture-side school
+seats and criticism's attachment-to-a-school are two INDEPENDENTLY
+toggleable things, not one flag driving both.
+
+R28 (behavior, new, one open question before Part E resumes): "Legacy
+should be the default." Read plainly this contradicts a measured fact:
+`Config.LEGACY_CRITICISM_ENABLED` (Part B, already shipped this tranche)
+defaults `False` today, and `v6_policy.py`'s `engaged` preset — the
+actual default real public runs compile — routes criticism through
+`engaged_criticism_policy(...)` (school-routed), NOT the school-free
+legacy circuit. Two readings are both consistent with the operator's
+words and need disambiguating before any further Part E code:
+(a) a general architecture principle for Part E's NEW school-seat opt-in
+specifically — when an operator turns on conjecture-side school seats
+(`SCHOOL_SEATS_ENABLED`), criticism does not automatically follow into
+school-routing; it stays on whatever it already defaults to (today:
+`engaged`'s school-routed criticism, unaffected by this tranche's byte-
+identical-default law) unless separately, explicitly attached; or
+(b) a directive to flip the ALREADY-SHIPPED `engaged` preset's default
+so real production runs route criticism through the legacy/school-free
+circuit by default, a materially bigger and higher-blast-radius change
+than anything Part E has touched so far (touches `v6_policy.py`'s public
+preset, not just a new opt-in) and would need its own explicit scoping,
+not an assumption made from this sentence alone. Not resolved here —
+flagged back to the operator per dr-ask-the-right-question's rule that a
+statement contradicting a measured fact gets surfaced, not silently
+picked either way.
