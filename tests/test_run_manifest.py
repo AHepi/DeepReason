@@ -970,6 +970,22 @@ def test_cli_judge_family_and_blind_same_model_judges_conflict(tmp_path, capsys)
     assert not manifest_path.exists()
 
 
+def test_school_seats_disabled_by_default_is_byte_identical():
+    """Part E (S2d, R5): the master flag for the schools opt-in defaults
+    False, and neither shipped v6 control-plane preset ever constructs a
+    route_bound school_execution policy -- true today, independent of
+    this flag, and pinned here so a future preset change that quietly
+    starts requesting route diversity is caught."""
+    from deepreason.v6_policy import (
+        conservative_control_plane_policy_v3,
+        engaged_control_plane_policy_v3,
+    )
+
+    assert Config().SCHOOL_SEATS_ENABLED is False
+    assert conservative_control_plane_policy_v3().school_execution.mode == "conditioning_only"
+    assert engaged_control_plane_policy_v3().school_execution.mode == "conditioning_only"
+
+
 def test_cli_make_rejects_bound_pre_v6_manifest_and_replacement(
     tmp_path, monkeypatch, capsys
 ):

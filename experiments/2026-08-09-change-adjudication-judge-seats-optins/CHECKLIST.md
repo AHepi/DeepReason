@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=42 blockers=none (Parts A+B+C+D+D2 complete; Part E schools opt-in is next per the original ordering; diff-budget base reverts to 81d08e5f0 for Part E, or a fresh base at Part E's own first step if that one is also near-exhausted)
+State: next=43 blockers=none (Parts A+B+C+D+D2 complete; Part E step 42 complete; diff-budget base a942f404c for Part E, 16/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -1560,11 +1560,33 @@ low-level `deepreason compile` path reaching it.
 ## PART E — Schools opt-in
 (S: SPEC.md §2(d); R5, C6)
 
-- [ ] 42. (S2d, R5) Reader/default test FIRST:
+- [x] 42. (S2d, R5) Reader/default test FIRST:
       `tests/test_run_manifest.py::test_school_seats_disabled_by_default_is_byte_identical`
       — `Config().SCHOOL_SEATS_ENABLED is False`, `SchoolExecutionPolicyV1.mode`
       stays `conditioning_only`-only-constructible (no `route_bound`
       reachable) when False.
+
+      Two assertions: `Config().SCHOOL_SEATS_ENABLED is False` (fails now
+      on missing attribute, until Step 43) and a pin that neither shipped
+      v6 control-plane preset (`v6_policy.py`'s `conservative`/`engaged`)
+      ever constructs `route_bound` — true today independent of this
+      flag (`compile_run_manifest` requires an explicit
+      `control_plane_policy` for schema v4+; nothing currently GATES a
+      hand-supplied `route_bound` one, so this pin covers what actually
+      reaches operators through the shipped presets, and Step 44 is where
+      an explicit gate refusing an ungated `route_bound` policy — if that
+      turns out to be needed — gets designed).
+
+      **Diff-budget base switch (same pattern as Part D2):** the
+      `81d08e5f0` base is now 1773/1600 (EXCEEDED) with Parts A-D2's
+      cumulative diff. Part E now measures against `a942f404c` (the last
+      Part D2 commit) — 16/1600 against the new base.
+
+      ```
+      $ python -m pytest tests/test_run_manifest.py::test_school_seats_disabled_by_default_is_byte_identical -q
+      AttributeError: 'Config' object has no attribute 'SCHOOL_SEATS_ENABLED'
+      1 failed in 0.28s
+      ```
 - [ ] 43. (S2d, R5) Add `SCHOOL_SEATS_ENABLED: bool = False` to
       `config.py`.
 - [ ] 44. (S2d, R5) [COMMIT] Add the `--seat school-N=<profile>` CLI
