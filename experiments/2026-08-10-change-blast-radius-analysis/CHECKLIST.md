@@ -1,5 +1,5 @@
 # Checklist for: automatic blast-radius analysis in the skills workflow
-State: next=9 blockers=none
+State: next=11 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -227,8 +227,33 @@ recorded this; no seam document exists for this change because no
       confirming this tranche's own map additions (Rung G6's subsection
       and Traps entry) carry no vacuous or dangling checks.
 
-- [ ] 10. (all) Full gate: `pytest tests/ -q -n 4`
+- [x] 10. (all) Full gate: `pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it).
+      ```
+      $ python -m pytest tests/ -q -n 4
+      1 failed, 3454 passed, 7 skipped in 933.64s (0:15:33)
+      FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+        assert counts["gate_blocked"] == census["streams"][stream]["gate_measures"]
+        assert 159 == 165
+      ```
+      Bare `pytest` first failed with `ModuleNotFoundError: No module
+      named 'deepreason'` (the container PATH's `pytest` shim missing
+      the editable install, `docs/map/SCHEMA.md`'s own documented
+      trap) — `python -m pytest` used instead, per that document.
+
+      **1 failure, verified pre-existing — NOT caused by this tranche:**
+      re-ran `tests/test_bronze_report.py` alone (no `-n`): identical
+      `159 == 165` failure, deterministic (not a parallel-worker race).
+      Then, in an isolated `git worktree` at this tranche's OWN base
+      commit (`25686797`, before any of this tranche's changes),
+      re-ran the same test: IDENTICAL failure, `159 == 165`, same file.
+      This tranche touches none of `scripts/bronze_census.py`,
+      `tests/test_bronze_report.py`, or `experiments/bronze_flat_2026-07-13/`
+      — the failure is unrelated to this tranche's own scope and
+      predates it. Net of this one named pre-existing failure: 3454
+      passed, 0 failed, 7 skipped — matching CLAUDE.md's own "expect
+      ~3100 passed, 0 failed" gate discipline (up from ~3100 to 3454
+      passed reflects prior tranches' own growth, not this one's).
 
 - [ ] 11. (all) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` -> empty; `git log --oneline
