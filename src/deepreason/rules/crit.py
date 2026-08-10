@@ -25,7 +25,7 @@ from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCase, BatchCriticOutput
 from deepreason.llm.endpoints import EndpointError
-from deepreason.llm.firewall import EndpointLease, route_fingerprint
+from deepreason.llm.firewall import EndpointLease, route_fingerprint, select_lease
 from deepreason.llm.packs import (
     aliases_for_pack,
     render_batch_crit_pack,
@@ -278,6 +278,7 @@ def _v6_transactional_batch_call(
     phase: str,
     caller_trigger_ref: str | None,
     pack_factory: Callable[[], str],
+    dispatch_authority: str | None = None,
     recover_existing: bool = False,
 ) -> tuple[BatchCriticOutput, object]:
     """Authorize and terminalize one v6 critic provider boundary.
@@ -332,6 +333,7 @@ def _v6_transactional_batch_call(
         "coverage_attempt_index": coverage_attempt_index,
         "phase": phase,
         "caller_trigger_ref": caller_trigger_ref,
+        "dispatch_authority": dispatch_authority,
     }
     service = InquiryTransactionService(harness, manifest, meter)
     aliases = AliasTable(
@@ -1379,6 +1381,15 @@ def crit_argumentative_batch(
         or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
+    if run_manifest is None and endpoint_lease is None and critic_school_id is None:
+        # Self-detection: the scheduler's call carries no envelope at all
+        # (SEAM-scheduler-x-rules.md forbids it choosing one); a v6-bound
+        # adapter still needs its manifest and a default route to dispatch.
+        bound_manifest = adapter.bound_v6_manifest()
+        if bound_manifest is not None:
+            run_manifest = bound_manifest
+            endpoint_lease = select_lease(adapter.leases, "argumentative_critic", 0)
+    dispatch_authority = authority if critic_school_id is None else None
     active_v6 = False
     if run_manifest is not None:
         from deepreason.run_manifest import RunManifest
@@ -1462,6 +1473,7 @@ def crit_argumentative_batch(
             "coverage_attempt_index": transaction_attempt_index,
             "phase": "primary",
             "caller_trigger_ref": transaction_trigger_ref,
+            "dispatch_authority": dispatch_authority,
         }
 
         def source_root_payload(transition):
@@ -1545,6 +1557,7 @@ def crit_argumentative_batch(
                 phase=phase,
                 caller_trigger_ref=transaction_trigger_ref,
                 pack_factory=pack_factory,
+                dispatch_authority=dispatch_authority,
                 recover_existing=resuming_atomic_decomposition,
             )
 

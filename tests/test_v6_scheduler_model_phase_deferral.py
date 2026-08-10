@@ -389,3 +389,31 @@ def test_llm_adapter_exposes_bound_v6_manifest(tmp_path):
     adapter.bind_v6_authority(harness, manifest)
 
     assert adapter.bound_v6_manifest() is manifest
+
+
+def test_legacy_argumentative_criticism_dispatches_under_v6(monkeypatch):
+    """S13i-3 (corrected Step 3): v6 + no school criticism_policy must no
+    longer defer — crit_argumentative_batch self-detects v6-ness via the
+    adapter's bound manifest and dispatches live, with the scheduler's own
+    call staying keyword-free (SEAM-scheduler-x-rules.md's checked
+    invariant: the scheduler never chooses a prose authority)."""
+
+    scheduler = _scheduler(roles={"argumentative_critic"})
+    scheduler.config = SimpleNamespace(
+        ARG_CRIT_PER_CYCLE=None,
+        RECRIT_STANDING=False,
+        CRIT_BATCH_K=None,
+    )
+    scheduler._arg_crit_this_cycle = 0
+    scheduler.harness.state.status["A"] = Status.ACCEPTED
+    calls = []
+    monkeypatch.setattr(
+        scheduler_module,
+        "crit_argumentative_batch",
+        lambda *args, **kwargs: calls.append((args, kwargs)),
+    )
+
+    scheduler._arg_crit(["A"])
+
+    assert calls == [((scheduler.harness, ["A"], scheduler.adapter, scheduler.config), {})]
+    assert _markers(scheduler) == []

@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=12 blockers=none
+State: next=13a blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -336,7 +336,7 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 24}, "total_insertions": 24, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 12. (S13i-3) Reader test FIRST (rule 1), the corrected version of
+- [x] 12. (S13i-3) Reader test FIRST (rule 1), the corrected version of
       the original Step-3 test: a new test in
       `tests/test_v6_scheduler_model_phase_deferral.py` named
       `test_legacy_argumentative_criticism_dispatches_under_v6`, asserting
@@ -348,7 +348,13 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       with `Scheduler._arg_crit`'s call to `crit_argumentative_batch`
       unmodified (`harness, batch, self.adapter, config`, zero keywords).
       done-when: the test currently FAILS (red) — paste the failure.
-- [ ] 13. (S13i-3) [COMMIT] Implement self-detection in
+
+      ```
+      $ python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 -q
+      AssertionError: assert [] == [((<...Harness...>, ['A'], <..._Adapter...>, namespace(ARG_CRIT_PER_CYCLE=None, RECRIT_STANDING=False, CRIT_BATCH_K=None)), {})]
+      1 failed in 0.16s
+      ```
+- [x] 13. (S13i-3) [COMMIT] Implement self-detection in
       `crit_argumentative_batch`: when `run_manifest`/`endpoint_lease`/
       `critic_school_id` are all their defaults (the scheduler's existing
       call shape), check `adapter.bound_v6_manifest()`; if non-None,
@@ -369,6 +375,50 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       prints OK — this IS `SEAM-scheduler-x-rules.md`'s own checked
       invariant, re-run directly. Diff budget check
       (`--paths src/deepreason/rules/crit.py`), paste, commit, push.
+
+      **Mid-step discovery, checked before writing (not silently
+      patched):** `expected_strong_payload`'s incomplete-decomposition
+      matching (`crit.py:1466-1474`) is a strict dict `==` against the
+      durable `preparation.task_payload_value`; adding
+      `"dispatch_authority"` to both the actual payload and this expected
+      dict is safe for any transition dispatched by the SAME (new) code
+      that later resumes it, but would silently stop recognizing an
+      already-durable, not-yet-completed decomposition transition minted
+      by OLD (pre-this-step) code as "incomplete" — a real
+      resumability/replay-adjacent risk if any committed run root has one.
+      Measured directly:
+      `grep -rl "critic.atomic-target.v1\|route_seat_contract_decomposition\|V6_CONTRACT_DECOMPOSITION" experiments/*/**/log.jsonl`
+      → 0 hits across all 86 `batch-critic.v2`-using committed run roots —
+      the atomic-decomposition path (only reachable via a
+      `SchemaRepairError` exhaustion during batch criticism) has never
+      been exercised by any committed root, so no existing root is at
+      risk. Safe to proceed as specced; no CHECKLIST STOP needed. (If this
+      ever needs re-verifying against a later corpus of committed roots,
+      re-run the same grep.)
+
+      **Step-12/13 done-when correction (found here, not silently
+      typed in):** the pasted test still FAILS at this step — the
+      scheduler's `_arg_crit` still defers under v6 (its own branch is
+      deleted only at Step 13a), so `crit_argumentative_batch` is never
+      reached from the scheduler yet. Step 13's own proof is therefore:
+      syntax OK, the AST keyword-check (below) passing, and the closely
+      coupled `rules/crit.py` test files passing unmodified (proving the
+      new parameter/payload field didn't regress existing dispatch). The
+      "1 passed" for Step 12's test is deferred to Step 13a's own
+      done-when, which already runs the full file.
+
+      ```
+      $ python -c "import ast; ast.parse(open('src/deepreason/rules/crit.py').read())"
+      # (no output = OK)
+      $ python -m pytest tests/test_v6_live_repair_transactions.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_prose_refutation_boundaries.py -q
+      57 passed
+      $ python -m pytest tests/test_scheduler.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_config_referee.py tests/test_v6_nonconjecture_recovery.py -q
+      1 failed, 51 passed  # only test_legacy_argumentative_criticism_dispatches_under_v6, expected until Step 13a
+      $ python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._arg_crit))); calls = [n for n in ast.walk(t) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'crit_argumentative_batch']; assert len(calls) == 1 and not calls[0].keywords; print('OK')"
+      OK
+      $ python tools/diff_budget.py 81d08e5f0 --ceiling 1600 --paths src/deepreason/rules/crit.py
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "81d08e5f0", "against": null, "areas": {"src/deepreason/rules/crit.py": 38}, "total_insertions": 38, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 13a. (S13i-4) [COMMIT] Simplify `scheduler.py::_arg_crit`'s plain
       branch: DELETE the `if self.run_manifest is not None and
       self.run_manifest.schema_version == 6: ...
