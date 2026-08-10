@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=2 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -111,13 +111,18 @@ operator-facing switch, S2b/R2, S2d/R5) → the static signal-read surface
       `resolve_route_seat_base_profile` are READ-ONLY imports already used
       by this exact file for config_referee; no new Pydantic model field).
       Confirmed: proceed, no STOP.
-- [ ] 2. (R13) Write the new contract-id constant and payload schema
+- [x] 2. (R13) Write the new contract-id constant and payload schema
       module-level declaration in `src/deepreason/rules/crit.py` (co-located
       with `crit_argumentative_batch`, the function it will wrap), mirroring
       `referee.py:332`'s `CONFIG_REFEREE_CONTRACT_V1` pattern exactly:
       `LEGACY_ARG_CRITICISM_CONTRACT_V1 = "legacy-argumentative-criticism.v1"`.
       done-when: `python -c "from deepreason.rules.crit import LEGACY_ARG_CRITICISM_CONTRACT_V1; assert LEGACY_ARG_CRITICISM_CONTRACT_V1 == 'legacy-argumentative-criticism.v1'"`
       exits 0.
+
+      ```
+      $ python -c "from deepreason.rules.crit import LEGACY_ARG_CRITICISM_CONTRACT_V1; assert LEGACY_ARG_CRITICISM_CONTRACT_V1 == 'legacy-argumentative-criticism.v1'; print('OK')"
+      OK
+      ```
 - [ ] 3. (R13) Write the failing test FIRST (rule 1: test precedes the
       change it guards): a new test in `tests/test_v6_scheduler_model_phase_deferral.py`
       asserting that, given a manifest with `criticism_policy=None` and
