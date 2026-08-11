@@ -308,7 +308,7 @@ A seam document that does not exist means the pair has not been written up —
     tests/                     the gate; helpers worth reusing:
                                _prepare_run, controller fixtures
     experiments/               live evidence; RESULTS.md = narrative
-    docs/                      specs (harness v1.3 + v1.4/v1.5/v1.6
+    docs/                      specs (harness v1.3 + v1.4/v1.5/v1.6/v1.7
                                amendments — read ALL amendments; note
                                "V6" elsewhere names the RunManifest/
                                policy generation and the wire-contract
