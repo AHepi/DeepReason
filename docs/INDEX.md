@@ -39,12 +39,42 @@ still live at top level:
 [`TOKEN_ECONOMY.md`](TOKEN_ECONOMY.md),
 [`BASIN_REPORT.md`](BASIN_REPORT.md),
 [`CAN_LLMS_EXPLORE.md`](CAN_LLMS_EXPLORE.md),
-[`PATROL_DETERMINISM_REPORT.md`](PATROL_DETERMINISM_REPORT.md),
 [`MINI_STRESS_REPORT.md`](MINI_STRESS_REPORT.md),
 [`AUTONOMICS_REPORT.md`](AUTONOMICS_REPORT.md),
 [`STRESS_INSIGHTS.md`](STRESS_INSIGHTS.md),
 [`OPERATOR_DIAGNOSIS.md`](OPERATOR_DIAGNOSIS.md),
 [`REPORT.md`](REPORT.md).
+
+Relocated: **`PATROL_DETERMINISM_REPORT.md`** moved 2026-08-11 to
+[`experiments/2026-08-08-corpus-enrichment-patrol-pilot/PATROL_DETERMINISM_REPORT.md`](../experiments/2026-08-08-corpus-enrichment-patrol-pilot/PATROL_DETERMINISM_REPORT.md)
+— its own opening line named that one directory as its exclusive data
+source, an unambiguous origin (`experiments/2026-08-11-spec-drift-
+measurement/DOCS_REORG_PROPOSAL.md` step 3).
+
+The other four reports above stayed at `docs/` top level rather than
+moving — each was checked against the same "traces unambiguously to
+one origin directory" test and failed it, or is otherwise blocked:
+
+- **`BASIN_REPORT.md`** stayed: cited by code/test comments
+  (`src/deepreason/config.py`, `src/deepreason/capture/ladder.py`,
+  `src/deepreason/capture/detection.py`, `tests/test_orbit.py`) —
+  moving it would strand those comments' relative paths, which the
+  reorg proposal names as a hard never-move constraint. Its own
+  evidence also spans loose top-level `experiments/` files rather
+  than one dated directory.
+- **`CAN_LLMS_EXPLORE.md`** stayed: its cited evidence
+  (`experiments/basin_study_prereg.yaml`,
+  `experiments/results/mini_creativity_report.json`,
+  `experiments/results/mini_smoke_report.json`) spans several loose
+  top-level files, not one dated experiment directory.
+- **`MINI_STRESS_REPORT.md`** stayed: its cited evidence
+  (`experiments/results/mini_chaos_report.json`,
+  `experiments/results/mini_gauntlet_report.json`) is likewise loose,
+  and the report itself says it "predates MiniReason's shared-kernel
+  consolidation" — no single current tranche produced it.
+- **`AUTONOMICS_REPORT.md`** stayed: its cited evidence
+  (`experiments/solo_autonomics_design.md`) is one loose design file,
+  not a dated experiment directory.
 
 ## Decisions — proposed, not all accepted
 
@@ -54,6 +84,11 @@ free-text `Status:` header (accepted / superseded / open). Not yet
 organized as one-decision-per-file the way an Architecture Decision
 Record chain would be — read each file's own `Status:` line, since a
 proposal here is not automatically current practice.
+
+New-file-forward naming: from 2026-08-11, brand-new proposals use
+`ADR-NNNN-<slug>.md` numbering — see
+[`docs/proposals/README.md`](proposals/README.md) for the full
+convention. Existing `*_PREPLAN.md`/`*_PLAN.md` files are NOT renamed.
 
 ## Corrections — what was found wrong, and where
 

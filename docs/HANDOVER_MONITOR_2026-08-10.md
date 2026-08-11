@@ -98,8 +98,10 @@ segments named below.
   Corpus is shallow (depth-0/1 only). CP2-CP4 queued; the matrix arms
   double as CP2 corpora. Patrol judgment is non-deterministic (inputs
   deterministic; embeddings corroborate — see
-  docs/PATROL_DETERMINISM_REPORT.md and the three-reading
-  decomposition of "deterministic grounded extension for prose").
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/PATROL_DETERMINISM_REPORT.md
+  (relocated 2026-08-11, was `docs/PATROL_DETERMINISM_REPORT.md`) and
+  the three-reading decomposition of "deterministic grounded extension
+  for prose").
 - **Dual-mode is LIVE**: v7 opt-in contract wired end-to-end (CP1-M
   follow-on tranche; real v7 dispatch, zero replay violations).
   Checker-authoring: ~49% discrimination, ~87% compile-pass.
