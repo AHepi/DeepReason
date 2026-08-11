@@ -117,6 +117,57 @@ exits non-zero with a human-readable message citing S2's catalog;
 freshly generated `FORM_DR1_RUN_APPLICATION.md`, proving the committed
 file is not stale relative to its own generator.
 
+## Addendum 2 (2026-08-11, sub-tranche (ii) execution scoping)
+
+Re-examined at execution time against the actual CLI/config surface
+(`cli/main.py`'s real `add_argument` calls, `preparation.py`'s real
+ceiling constants), not FORM_DR1's prose alone:
+
+**Modeled as `IntakeFormV1` fields with real Pydantic validators:**
+Part A (provider setup: `--provider`, `--endpoint`, `--model`,
+`--model-revision`, `--family`, `--context-window-tokens`,
+`--maximum-completion-tokens`, `--credential-env`, `--reasoning`), Part
+B1 (`--seat GROUP=PROFILE`, repeatable, with B1a's conflict rule
+implemented by reusing `seat_bindings.py`'s own
+`GROUP_ALIASES = {"simulation": "conjecture"}` — not a re-derived
+alias table, the same one), Part D mandatory fields (`question`,
+`--cycles`, `--token-budget`, `--shallow`, `--dossier`, `--attach`,
+`--allow-partial`) with D2/D3's ceilings enforced by importing
+`PUBLIC_MAX_CYCLES`/`PUBLIC_MAX_TOKEN_BUDGET` directly from
+`preparation.py` (not re-declared constants — if the real ceiling
+changes, the form's validation follows automatically).
+
+**Explicitly NOT modeled, with reasons (a scope boundary, not an
+oversight):**
+- Part C (qualification) — describes a PROCESS (`deepreason qualify`)
+  and its OUTCOME (a tier), not form fields a caller fills in; nothing
+  to validate offline.
+- D1a (question+config = run identity, collision detection) — requires
+  comparing against EXISTING run roots under a `DEEPREASON_HOME`,
+  external filesystem state a standalone file validator does not have
+  access to and should not reach for (this would turn a pure schema
+  validator into a stateful one, contradicting the whole point of "no
+  dialog state, repairable").
+- D4 (shallow mandatory when tier is SHALLOW) — the tier is an OUTCOME
+  of qualification (external state), not something the intake file
+  itself declares; same reasoning as D1a.
+- Parts B2/B3/E2/E3/F1/F3 (school seats, `LEGACY_CRITICISM_ENABLED`,
+  `SCHOOL_SEATS_ENABLED`, `--judge-seats`, `--blind-same-model-judges`)
+  — confirmed AGAIN at execution time (`git merge-base --is-ancestor
+  <adjudication-branch-tip> origin/main`, still false) these do not
+  exist as real CLI flags on `main`; per `PARKED.md` Residue 3, modeled
+  only once that branch merges.
+
+**MCP tool + packaging-surface consequence (new this addendum, not in
+the original SPEC — found during execution, not anticipated at design
+time):** adding `validate_intake` as an MCP tool changes
+`mcp_server.py`'s `_tools()` output, which is exactly what
+`scripts/wheel_smoke.py`/`wheel_operational_smoke.py` pin
+(`EXPECTED_MCP_TOOLS`, `EXPECTED_MCP_SCHEMA_SHA256`) — per CLAUDE.md's
+rule and this program's own Item 1 finding, both pins update in the
+SAME commit as the tool registration, and both smokes re-run in that
+commit.
+
 ## Assumptions (operator may override)
 
 A1 (Q2): "fully kitted" (R2) is read at the BROADER scope the task
