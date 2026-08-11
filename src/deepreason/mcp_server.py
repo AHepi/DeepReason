@@ -33,6 +33,12 @@ _RUN_THREADS = TEXT_RUN_WORKERS.threads
 _RUN_LOCK = TEXT_RUN_WORKERS.lock
 
 
+def _intake_form_schema() -> dict:
+    from deepreason.intake_form import IntakeFormV1
+
+    return IntakeFormV1.model_json_schema()
+
+
 def _run_tools() -> list[dict]:
     from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
 
@@ -57,6 +63,17 @@ def _run_tools() -> list[dict]:
                 "properties": {},
                 "additionalProperties": False,
             },
+        },
+        {
+            "name": "validate_intake",
+            "description": (
+                "Check a run-application form (the same shape "
+                "FORM_DR1_RUN_APPLICATION.md documents) before any provider "
+                "call is made. Read-only: never selects a provider, never "
+                "spends a token, never starts a run. Returns OK or one "
+                "human-readable line per violation."
+            ),
+            "inputSchema": _intake_form_schema(),
         },
         {
             "name": "start_run",
@@ -601,6 +618,7 @@ def _safe_tool_error(error: Exception) -> str:
 _RUN_TOOL_NAMES = frozenset(
     {
         "get_readiness",
+        "validate_intake",
         "start_run",
         "run_status",
         "run_result",
@@ -675,6 +693,21 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
         payload = json.loads(readiness.model_dump_json(by_alias=True))
         payload["guidance"] = _plain_readiness_guidance(readiness)
         return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+    if name == "validate_intake":
+        from pydantic import ValidationError
+
+        from deepreason.intake_form import IntakeFormV1, render_intake_validation_errors
+
+        try:
+            IntakeFormV1.model_validate(arguments)
+        except ValidationError as error:
+            return json.dumps(
+                {"ok": False, "violations": render_intake_validation_errors(error)},
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+        return json.dumps({"ok": True, "violations": []}, sort_keys=True, separators=(",", ":"))
 
     if name == "start_run":
         return json.dumps(
