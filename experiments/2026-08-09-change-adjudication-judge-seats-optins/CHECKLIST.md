@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=62 blockers=none (Parts A+B+C+D+D2+B2+E+F ALL COMPLETE. Part G steps 58-61 done: docs_verify full+--audit clean (855 checks); frozen-surface diff confirmed (state.py/harness.py/invariants.py untouched, run_manifest.py diff sorted into exactly the two authorized grant categories); full gate run found ONE pre-existing, unrelated failure (test_bronze_report.py::test_census_totals_internally_consistent, reproduced identically against the true pre-tranche base commit in an isolated worktree -- operator's own words, "continue", accepted as documented exception, PARKED not fixed here); wheel_smoke.py clean; wheel_operational_smoke.py found and this tranche FIXED a real regression -- Road E's school-free legacy criticism (Part A) + Part B2's default flip left verification/report.py's _transaction_findings unaware criticism_policy=None is a valid authorized shape, flagging every ordinary run's legacy criticism transactions security-invalid (17 findings on one `reason` call); fixed by mirroring nonconjecture_recovery.py's existing school-free branch, two new regression tests, Traps entry in SUB-verification.md, confirmed via a clean wheel_operational_smoke.py re-run and a 159-test targeted sweep. Only Part G steps 62 (root sweep -- operator has flagged step 62 may not apply cleanly since committed historical experiment roots reflect old choices, not a regression to gate on) and 63 (final push/clean-tree confirmation) remain before `dr-validate-change`. Full `docs_verify`: 855 checks, 0 failed. diff-budget base a942f404c, 1482/1600)
+State: next=dr-validate-change blockers=none (Parts A+B+C+D+D2+B2+E+F+G ALL COMPLETE. Part G: docs_verify full+--audit clean (855 checks); frozen-surface diff confirmed (state.py/harness.py/invariants.py untouched, run_manifest.py diff sorted into exactly the two authorized grant categories); full gate run found ONE pre-existing, unrelated failure (test_bronze_report.py::test_census_totals_internally_consistent, reproduced identically against the true pre-tranche base commit in an isolated worktree -- operator's own words, "continue", accepted as documented exception, PARKED not fixed here); wheel_smoke.py clean; wheel_operational_smoke.py found and this tranche FIXED a real regression -- Road E's school-free legacy criticism (Part A) + Part B2's default flip left verification/report.py's _transaction_findings unaware criticism_policy=None is a valid authorized shape, flagging every ordinary run's legacy criticism transactions security-invalid (17 findings on one `reason` call); fixed by mirroring nonconjecture_recovery.py's existing school-free branch, two new regression tests, Traps entry in SUB-verification.md, confirmed via a clean wheel_operational_smoke.py re-run and a 159-test targeted sweep; root_sweep.py itself hung on an unrelated historical root (live_tri_2026-07-27), killed and parked as a separate pre-existing performance defect, not this tranche's; final push/clean-tree confirmed (git status --porcelain empty, HEAD == origin). Full `docs_verify`: 855 checks, 0 failed. Next: dr-validate-change.)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -2941,12 +2941,33 @@ criticism — "That's a configuration option," the operator's own words.
       `root_sweep.py` hang on `live_tri_2026-07-27`'s root specifically —
       not raised as a blocking question here since the operator already
       said to continue past Step 62.
-- [ ] 63. (all) [COMMIT] Final push and clean-tree confirmation:
+- [x] 63. (all) [COMMIT] Final push and clean-tree confirmation:
       `git status --porcelain` empty AND branch head matches
       `origin/claude/adjudication-judge-seats-optins-4nb7ov`. done-when:
       both conditions hold (paste `git status --porcelain` — empty — and
       `git rev-parse HEAD origin/claude/adjudication-judge-seats-optins-4nb7ov`
       — identical hashes).
+
+      ```
+      $ git status --porcelain
+      (empty)
+      $ git rev-parse HEAD origin/claude/adjudication-judge-seats-optins-4nb7ov
+      763956967235376835afe1949738671d7b3edc6d
+      763956967235376835afe1949738671d7b3edc6d
+      ```
+
+      **Part G complete.** All of Parts A, B, C, D, D2, B2, E, F, G are
+      now checked off. Two findings surfaced along the way, both handled
+      transparently rather than silently: Step 60's pre-existing,
+      unrelated `test_bronze_report.py` failure (confirmed against the
+      tranche's true base commit, accepted by the operator as a parked
+      exception — "continue"), and Step 61's REAL regression (school-free
+      legacy criticism transactions flagged security-invalid), diagnosed
+      via the wheel operational smoke instrument and FIXED in this
+      tranche, with regression tests and a map Traps entry. Step 62's
+      root-sweep instrument itself hung on an unrelated historical root
+      and was parked as a separate, pre-existing performance defect.
+      Next: `dr-validate-change`.
 
 ---
 
