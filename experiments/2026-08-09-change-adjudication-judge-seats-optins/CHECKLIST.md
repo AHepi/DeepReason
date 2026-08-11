@@ -2897,6 +2897,50 @@ criticism — "That's a configuration option," the operator's own words.
       `python tools/root_sweep.py post-tranche-sweep.txt`. done-when: no
       root's `valid` or `att` changed versus the pre-tranche baseline
       (paste the diff, expect byte-identical).
+
+      **Not achievable as specified, per the operator's own prior words
+      ("62 may not be possible as old experiments represent old choices
+      I made. Anyway, continue") — but for a DIFFERENT reason than that
+      caveat anticipated, surfaced here rather than silently substituted:**
+
+      Two separate things are true, and only one was expected:
+      1. (Anticipated, accepted in advance) The Step 61 fix legitimately
+         moves `verify_root_report`'s `valid`/`security_valid` verdict
+         for any historical root carrying legacy/school-free criticism
+         transactions — the reader changed, so per this tranche's own
+         "a committed root is immutable, its verdict can only move if
+         the READER moved" rule, some drift here is EXPECTED, not a
+         regression.
+      2. (NOT anticipated — a separate finding) `python tools/root_
+         sweep.py post-tranche-sweep.txt` does not terminate. Run,
+         monitored via `ps`/`strace`, killed after 1h37m pinned at ~100%
+         CPU making no forward progress toward completion — `strace`
+         showed it repeatedly probing dozens of type-prefixed object
+         paths (`objects/capability-simulation-proposal/<digest>.json`,
+         `objects/capability-transition/<digest>.json`, ... all `ENOENT`)
+         for one specific historical root,
+         `experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03`
+         — an ordinary-sized root (508 log lines, 711 objects, 5.2 MB),
+         not one that should take anywhere near this long. This reads as
+         a pre-existing performance defect in the object-store content
+         lookup path (or in how `root_sweep.py`/`verify_root_report`
+         drives it) on this specific historical root's content shape —
+         not something this tranche's changes plausibly cause (the
+         Step 61 fix only narrows one early-exit branch in `authority_
+         differences`; it adds no lookup, no loop, no new object read).
+
+      Per CLAUDE.md's cross-routing rule, diagnosing and fixing an
+      unrelated performance defect in `root_sweep.py`/the object store is
+      its own problem, not this tranche's — PARKED, not chased down here,
+      matching the operator's own "continue" instruction from the Step 60
+      finding. This tranche's actual regression (Step 61's fix) is
+      already proven safe by the FULL 159-test targeted sweep and the
+      clean `wheel_operational_smoke.py` re-run, both of which exercise
+      real committed-root verification paths without hitting this stuck
+      root. Recommending a separate, dedicated tranche investigate the
+      `root_sweep.py` hang on `live_tri_2026-07-27`'s root specifically —
+      not raised as a blocking question here since the operator already
+      said to continue past Step 62.
 - [ ] 63. (all) [COMMIT] Final push and clean-tree confirmation:
       `git status --porcelain` empty AND branch head matches
       `origin/claude/adjudication-judge-seats-optins-4nb7ov`. done-when:
