@@ -2738,6 +2738,48 @@ criticism — "That's a configuration option," the operator's own words.
 - [ ] 60. (all) Full gate: `python -m pytest tests/ -q -n 4`. done-when:
       output ends "N passed, 0 failed" (paste it; expect ~3100+N given
       the new tests this tranche adds).
+
+      **STOP, not silently resolved — one gate failure, confirmed
+      pre-existing and unrelated, but the "0 failed" done-criterion is
+      literally unmet and closing it is the operator's call, not mine:**
+
+      ```
+      $ python -m pytest tests/ -q -n 4
+      1 failed, 3487 passed, 7 skipped in 732.37s (0:12:12)
+      FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+        assert counts["gate_blocked"] == census["streams"][stream]["gate_measures"]
+        AssertionError: assert 159 == 165
+      ```
+
+      Investigation (cheapest authority first — the record, not
+      speculation): `test_bronze_report.py`'s `census` fixture calls
+      `scripts/bronze_census.py::build_census()`, which scans the
+      COMMITTED, historical `experiments/bronze_flat_2026-07-13/` roots —
+      this tranche never touched `scripts/bronze_census.py` or that
+      directory (`git diff --stat 81d08e5f0 -- scripts/bronze_census.py
+      experiments/bronze_flat_2026-07-13/` is empty). Reproduced against
+      the tranche's own TRUE base commit in an isolated `git worktree`
+      (`81d08e5f0`, before any of this tranche's commits): the identical
+      failure reproduces there byte-for-byte (`159 == 165`, same numbers)
+      — proving this is a PRE-EXISTING defect in the base this tranche
+      started from, not a regression this tranche introduced.
+      `git worktree remove` cleaned up afterward; no trace left in the
+      working tree.
+
+      Per CLAUDE.md's cross-routing rule ("a defect found mid-change is
+      PARKED, not fixed... One tranche, one goal"), fixing
+      `bronze_census.py`/the historical dataset is out of this tranche's
+      scope. But "the gate is a gate, not a feedback loop" and "0 failed
+      is the only acceptable result" are also standing rules, and this
+      step's own done-criterion is literally unmet. Rather than either
+      (a) silently marking this step done despite 1 failed, or (b)
+      unilaterally deciding a pre-existing, unrelated failure is
+      acceptable to ship past, this is surfaced to the operator as a
+      STOP: **the operator's decision, not this tranche's**, on whether
+      to (i) accept this documented, confirmed-pre-existing exception and
+      let Part G proceed with "3487 passed, 0 NEW failed, 1 pre-existing
+      unrelated failure (parked, not this tranche's)", or (ii) something
+      else. Resuming this step once that's answered.
 - [ ] 61. (all) Wheel smoke instruments (per CLAUDE.md — no gate runs
       these automatically, but this tranche adds new CLI flags/console
       surface, so re-run and re-pin if changed):
