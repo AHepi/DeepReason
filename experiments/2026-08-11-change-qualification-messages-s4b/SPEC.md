@@ -60,7 +60,11 @@ for the plain-`ValueError` convention, which has no `.code` attribute
 — print the catalog entry alongside the existing raw code/message,
 never REPLACING the raw code, only appending prose), and a `deepreason
 explain-error CODE` subcommand for out-of-band lookup.
-accept: `deepreason explain-error ADMISSION_DOSSIER_INVALID` prints a
+accept: `deepreason explain-error QUALIFICATION_TIER_UNQUALIFIED`
+(corrected 2026-08-11 at delivery — the original example,
+`ADMISSION_DOSSIER_INVALID`, was never in the 44-entry scope this same
+document's own "Family-grouped counts" paragraph below settles on;
+`VALIDATION_i.md` records the inconsistency this fixes) prints a
 non-empty plain-language summary; every code the catalog claims to
 cover round-trips through a test asserting the code string in the
 catalog is byte-identical to the code string in its raise site (no
