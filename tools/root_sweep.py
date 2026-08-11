@@ -33,6 +33,11 @@ for root in sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jso
         modules = sorted(
             {m.module_id for stamp in stamps for m in stamp.modules}
         )
+        # Payload-level digests, not just the module_id/group names above:
+        # two roots can share identical names while differing in content
+        # (fingerprint_sha256 / profile_digest / the payload's own digest),
+        # and the name-only columns above would sweep them as identical.
+        module_digests = sorted({stamp.digest for stamp in stamps})
         # Seat bindings (Rung S5). Same absence-tolerant shape as modules=
         # above: no committed root under experiments/ carries this stamp
         # yet, so every row reads "-" today, but the column is fed by the
@@ -42,12 +47,15 @@ for root in sorted({p.parent for p in pathlib.Path("experiments").rglob("log.jso
         seats = sorted(
             {b.group for stamp in seat_stamps for b in stamp.bindings}
         )
+        seat_digests = sorted({stamp.digest for stamp in seat_stamps})
         lines.append(
             f"{str(root):72} valid={str(report.valid):5} "
             f"epistemic_passed={str(report.epistemic_checks_passed):5} "
             f"att={len(harness.state.att):3} blind={blind} "
             f"modules={','.join(modules) if modules else '-'} "
-            f"seats={','.join(seats) if seats else '-'}"
+            f"module_digests={','.join(module_digests) if module_digests else '-'} "
+            f"seats={','.join(seats) if seats else '-'} "
+            f"seat_digests={','.join(seat_digests) if seat_digests else '-'}"
         )
     except Exception as error:
         lines.append(f"{str(root):72} ERROR {type(error).__name__}: {error}")

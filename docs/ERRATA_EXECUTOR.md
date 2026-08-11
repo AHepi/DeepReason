@@ -448,3 +448,53 @@ additive reader-only shape and the live proof; the words-before-touch
 rule is reaffirmed, and this ratification-by-disposition is not
 precedent — the next unauthorized frozen-surface touch does not
 inherit it.
+
+## 2026-08-11 — errata-checkpoint compliance audit (Item 2 of the operator's seven-item program)
+
+**What was checked.** The mandatory errata checkpoint (`.claude/skills/
+dr-deliver-change/SKILL.md`, `.claude/skills/dr-verify-outcome/
+SKILL.md` — "entry or explicit 'errata: none'") landed 2026-08-09
+11:49:07 UTC, commit `2416c6f32`. Every `DELIVERY.md`/`VERIFY.md`
+committed on or after that instant was swept for the checkpoint's
+presence (an `## Errata` section citing an entry, or an explicit "errata:
+none" statement).
+
+**One real violation.** `experiments/2026-08-09-change-judge-evidence-
+review/DELIVERY.md`, committed `ced45c702` at 12:24:35 UTC — 35 minutes
+after the rule landed — has no `## Errata` section and no "errata: none"
+statement anywhere. Content-level check: neither that tranche's PARKED.md
+nor its own findings describe a wrong claim in any previously-committed
+document (its two issues — a failing test and a `docs_verify` failure
+from a shallow-clone environment limit — are code/environment findings,
+not document corrections), so "errata: none" would have been the
+CORRECT content; the gap is that the checkpoint step was skipped, not
+that a correction was missed. Recorded here per the checkpoint rule's
+own enforcement design: an omitted section reads as silence, which the
+rule exists to make impossible to mistake for a deliberate "none."
+
+**One same-day, pre-rule gap (not a violation).**
+`experiments/2026-08-09-change-hard-question-set/DELIVERY.md`, committed
+`b78d93962` at 09:14:55 UTC, 2h34m BEFORE the checkpoint rule landed —
+same calendar day, but the rule could not have been followed because it
+did not exist yet. Same content-level check: no wrong document claim
+found; "errata: none" would also have been the correct content.
+Recorded for ledger completeness, explicitly NOT as a process violation.
+
+**Two tranches confirmed compliant.**
+`experiments/2026-08-09-change-errata-sweep-and-automation/DELIVERY.md`
+(cites `docs/ERRATA.md` E11-E17 directly) and
+`experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/
+DELIVERY.md` (cites the pre-existing 2026-08-09 frozen-surface entry
+above, states no new entry needed) both carry an explicit `## Errata`
+section.
+
+**No `VERIFY.md` (Family 1 / `dr-verify-outcome`) tranches closed in
+this window** — the four checked are all `dr-deliver-change` (Family 2)
+deliveries; the `dr-verify-outcome` half of the checkpoint rule has not
+yet been exercised by a real tranche since it landed.
+
+**Disposition.** Not backfilling either DELIVERY.md in place — CLAUDE.md
+convention treats a delivered tranche's artifacts as closed record
+(see E16/E17 above: "a closed tranche's parked item, not edited"; O1's
+own documents "remain unmodified"). The correction stands here, in the
+process ledger, per that same precedent.

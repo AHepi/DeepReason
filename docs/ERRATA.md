@@ -295,3 +295,63 @@ O1's own `RESULTS.md`/`DELIVERY.md`/`CHECKLIST.md`/`VALIDATION.md`/
 itself is a DESIGN-AND-STOP tranche per its own preplan and stopped at
 `SPEC.md`, never delivering a closing note back into O1's documents.
 The correction stands only in O2's `SPEC.md` prose until this entry.
+
+## 2026-08-11
+
+**E18 — `docs/map/INV-frozen-surfaces.md`'s "Fields compared" list
+undercounted what the root sweep actually needed to compare, and
+`tools/root_sweep.py` matched that undercount.** Found during Item 1 of
+the operator's seven-item sweep/smoke currency audit
+(`experiments/2026-08-11-sweep-smoke-currency/`). The sweep's `modules=`
+and `seats=` columns reported only the IDENTITY keys of the two typed
+record families (`ModuleFingerprintV1.module_id`, `SeatBindingV1.group`
+— both sets of names), never their CONTENT digests
+(`ModuleFingerprintsEventPayloadV1.digest`,
+`SeatBindingsEventPayloadV1.digest`). Two roots sharing the same
+module/group names but differing in actual fingerprinted content or
+bound profile would have swept as identical — a real gap in an
+instrument whose stated job (`INV-frozen-surfaces.md`, "The root
+sweep") is exactly to catch a reader change silently reinterpreting a
+stored verdict.
+
+**Correction to this entry's own first draft (same-day, per the
+append-only rule — a claim proved wrong is a new correction, not a
+silent edit): the gap was NOT hypothetical.** The first draft of this
+entry claimed "no committed root under `experiments/` carries either
+stamp yet," inherited unverified from `tools/root_sweep.py`'s own
+comment ("no committed root under `experiments/` carries this stamp
+yet") without independently checking. The completed full-tree re-sweep
+(103 roots, `sweep-after-item1.txt`) shows this was WRONG: several
+committed roots already carry both stamps — e.g.
+`experiments/2026-08-04-change-rung5-dumb-alternative-backend/*` and
+`experiments/2026-08-05-testphase-live-validation/*` carry
+`modules=default`/`round-robin`;
+`experiments/2026-08-08-corpus-enrichment-patrol-pilot/*` carries
+`seats=coder`/`conjecture`. The gap was live on real record data, not
+merely possible in principle. What the correction does NOT change: no
+actual divergence was hiding behind the gap — every distinct identity
+key (`modules=default`, `modules=round-robin`, `seats=coder`,
+`seats=conjecture`) maps to exactly ONE digest across every root that
+uses it, so no committed root's verdict actually changes with this
+fix; only the instrument's ABILITY to have caught a divergence, had one
+existed, was missing. `docs/map/INV-frozen-surfaces.md`'s own "Fields
+compared" prose listed only the four original fields and never named
+the digests as missing, so a reader of that document had no way to
+know the coverage gap existed. Fixed mechanically, same tranche:
+`tools/root_sweep.py` now also reports `module_digests=`/
+`seat_digests=` (commit in
+`experiments/2026-08-11-sweep-smoke-currency/`), and `INV-frozen-
+surfaces.md`'s "Fields compared" list and `Verify` prose were updated
+in the SAME commit per the map's own convention, and corrected again
+in this same-day follow-up for the stale-premise finding above. Zero
+`src/` lines changed. The full detached re-sweep (`sweep-after-item1.txt`,
+103 roots, 11 ERROR lines — matching the documented baseline exactly,
+all `UnsupportedRunManifestVersionError`) confirms no committed root's
+verdict moved on any field that existed before this fix.
+
+Recorded per the operator's standing directive: an out-of-date
+verification instrument is a debugging error, and belongs here whether
+or not it had yet produced a wrong verdict. The self-correction above
+is recorded per this ledger's own rule: a correction to a correction is
+a new addition within the entry, never a silent rewrite of the claim
+it replaces.
