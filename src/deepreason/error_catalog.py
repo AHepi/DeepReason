@@ -5,9 +5,12 @@ code string (tests/test_error_catalog.py proves this), and nothing here may
 ever rename a code or replace its raw message — this is a second, optional
 surface a caller may consult, never a substitute for the typed record.
 
-Covers the QUALIFICATION_* and DOCTOR_* families only (44 of 572 typed codes
+Covers the QUALIFICATION_* and DOCTOR_* families (44 of 572 typed codes
 found by the 2026-08-11 census, experiments/2026-08-11-change-qualification-
-messages-s4b/ERROR_CENSUS.md). The remaining ~528 codes are explicit
+messages-s4b/ERROR_CENSUS.md) plus 3 INTAKE_* codes raised by
+`intake_form.py`'s own field validators (not part of the census — new codes
+this same program minted, catalogued from birth rather than added after the
+fact). The remaining ~528 QUALIFICATION_*/DOCTOR_*-sibling codes are explicit
 residue for follow-on tranches, one family at a time — see that tranche's
 PARKED.md. Do not treat CATALOG's coverage as complete.
 """
@@ -370,6 +373,31 @@ CATALOG: dict[str, ErrorCatalogEntry] = {
             "The `--out` path you gave for writing the doctor report collides "
             "with a manifest file.",
             "Choose a different `--out` path.",
+        ),
+        _entry(
+            "INTAKE_SEAT_CONFLICT",
+            "Two seat groups bind the same role to different profiles.",
+            "In your intake form's `seats` mapping, two group names — one of "
+            "them possibly an alias, like `simulation` for `conjecture` — "
+            "resolve to the same underlying role but name different "
+            "provider profiles. The harness refuses this rather than "
+            "silently picking one ('never last-one-wins').",
+            "Give both group names the same profile, or bind only one of "
+            "them.",
+        ),
+        _entry(
+            "INTAKE_CYCLES_CEILING_EXCEEDED",
+            "The requested cycle budget exceeds the V6 ceiling.",
+            "Your intake form's `cycles` value is higher than the fixed "
+            "maximum the standard reasoning engine accepts.",
+            "Lower `cycles` to the ceiling or below.",
+        ),
+        _entry(
+            "INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED",
+            "The requested token budget exceeds the V6 ceiling.",
+            "Your intake form's `token_budget` value is higher than the "
+            "fixed maximum the standard reasoning engine accepts.",
+            "Lower `token_budget` to the ceiling or below.",
         ),
     )
 }

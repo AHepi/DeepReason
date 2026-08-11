@@ -20,8 +20,20 @@ def test_catalog_keys_are_real_doctor_codes():
     assert catalog_keys <= real, catalog_keys - real
 
 
-def test_catalog_covers_44_entries():
-    assert len(CATALOG) == 44
+def test_catalog_covers_47_entries():
+    assert len(CATALOG) == 47
+
+
+def test_catalog_keys_are_real_intake_codes():
+    from deepreason.intake_form import (
+        INTAKE_CYCLES_CEILING_EXCEEDED,
+        INTAKE_SEAT_CONFLICT,
+        INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED,
+    )
+
+    real = {INTAKE_SEAT_CONFLICT, INTAKE_CYCLES_CEILING_EXCEEDED, INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED}
+    catalog_keys = {k for k in CATALOG if k.startswith("INTAKE_")}
+    assert catalog_keys == real
 
 
 def test_lookup_known_code_returns_entry():
