@@ -12,6 +12,7 @@ from deepreason import mcp_server
 
 SUPPORTED_TOOLS = {
     "get_readiness",
+    "validate_intake",
     "start_run",
     "run_status",
     "run_result",

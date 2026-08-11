@@ -34,6 +34,31 @@ INTAKE_SEAT_CONFLICT = "INTAKE_SEAT_CONFLICT"
 INTAKE_CYCLES_CEILING_EXCEEDED = "INTAKE_CYCLES_CEILING_EXCEEDED"
 INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED = "INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED"
 
+# Part A — filed once via `deepreason setup`, host-owned. The MCP facade's own
+# design boundary (mcp_server.py's module docstring, enforced by
+# tests/test_public_v6_facade.py::
+# test_mcp_schemas_expose_no_path_manifest_provider_or_credential_authority)
+# is that an endpoint model NEVER receives provider/credential authority
+# through any MCP tool schema — so `validate_intake`'s MCP-exposed schema
+# must exclude these fields entirely, even though `IntakeFormV1` itself
+# models them for the CLI/human path. One list, used by both the MCP schema
+# filter (mcp_server.py) and the FORM_DR1 generator (tools/render_form_dr1.py)
+# so "which fields are host-owned" has one answer, not two independently
+# maintained ones.
+HOST_OWNED_FIELDS = frozenset(
+    {
+        "provider",
+        "endpoint",
+        "model",
+        "model_revision",
+        "family",
+        "context_window_tokens",
+        "maximum_completion_tokens",
+        "reasoning",
+        "credential_env",
+    }
+)
+
 
 class IntakeFormV1(BaseModel):
     """A run application, validatable offline before any token is spent.
@@ -147,6 +172,26 @@ class IntakeFormV1(BaseModel):
                 f"exceeds the V6 ceiling of {PUBLIC_MAX_TOKEN_BUDGET}"
             )
         return token_budget
+
+
+def mcp_safe_schema() -> dict:
+    """`IntakeFormV1`'s JSON Schema with every `HOST_OWNED_FIELDS` property
+    removed — the shape `validate_intake`'s MCP tool actually advertises and
+    enforces. The CLI's `validate-intake` command uses the full, unfiltered
+    `IntakeFormV1.model_json_schema()` (a human/developer may legitimately
+    describe their own provider setup in a file); the MCP surface may not.
+    """
+
+    schema = IntakeFormV1.model_json_schema()
+    schema = dict(schema)
+    schema["properties"] = {
+        name: value
+        for name, value in schema["properties"].items()
+        if name not in HOST_OWNED_FIELDS
+    }
+    if "required" in schema:
+        schema["required"] = [name for name in schema["required"] if name not in HOST_OWNED_FIELDS]
+    return schema
 
 
 _LEADING_CODE = re.compile(r"^([A-Z][A-Z0-9_]{2,127}):")

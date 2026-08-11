@@ -34,9 +34,15 @@ _RUN_LOCK = TEXT_RUN_WORKERS.lock
 
 
 def _intake_form_schema() -> dict:
-    from deepreason.intake_form import IntakeFormV1
+    # Host-owned fields (provider/credential setup, filed via
+    # `deepreason setup`) are excluded from the MCP-exposed schema entirely
+    # -- an endpoint model may never even see that shape through this
+    # facade. See intake_form.HOST_OWNED_FIELDS and
+    # tests/test_public_v6_facade.py::
+    # test_mcp_schemas_expose_no_path_manifest_provider_or_credential_authority.
+    from deepreason.intake_form import mcp_safe_schema
 
-    return IntakeFormV1.model_json_schema()
+    return mcp_safe_schema()
 
 
 def _run_tools() -> list[dict]:

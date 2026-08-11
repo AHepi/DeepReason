@@ -35,6 +35,7 @@ REQUEST_OPERATIONS = (
 )
 SUPPORTED_TOOL_NAMES = {
     "get_readiness",
+    "validate_intake",
     "start_run",
     "run_status",
     "run_result",

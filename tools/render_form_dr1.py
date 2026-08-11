@@ -50,17 +50,9 @@ def _bullets(names: list[str]) -> str:
 
 
 def _render_generated_sections() -> dict[str, str]:
-    part_a_fields = [
-        "provider",
-        "endpoint",
-        "model",
-        "model_revision",
-        "family",
-        "context_window_tokens",
-        "maximum_completion_tokens",
-        "reasoning",
-        "credential_env",
-    ]
+    from deepreason.intake_form import HOST_OWNED_FIELDS
+
+    part_a_fields = sorted(HOST_OWNED_FIELDS)  # order fixed by _bullets' label sort
     part_b1_fields = ["seats"]
     part_d_fields = [
         "question",
