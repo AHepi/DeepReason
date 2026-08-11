@@ -2062,7 +2062,7 @@ Strictly a READ aggregation over already-existing, already-live signals —
 no new event/record type, no mid-run consumption (Amendment 5's benching
 holds).
 
-- [ ] 52. (R15) Reader test FIRST: a new module
+- [x] 52. (R15) Reader test FIRST: a new module
       `src/deepreason/signals_read.py` does not exist yet; write
       `tests/test_signals_read.py::test_signal_snapshot_shape` asserting
       the shape of a new typed `SignalSnapshotV1` (fields: latest
@@ -2072,10 +2072,79 @@ holds).
       `_deferred_model_phase_findings` output, and the run's `TokenMeter.snapshot()`)
       against a fixture root. done-when: fails only on the missing module
       (paste `ModuleNotFoundError`).
-- [ ] 53. (R15) [COMMIT] Implement `signals_read.py::read_signal_snapshot(root)`
+
+      **Design research before writing (checked, not guessed):**
+      `TokenMeter.snapshot()` is LIVE-PROCESS-ONLY state (an in-memory
+      object; `budget`/`reserved` have no durable, after-the-fact
+      equivalent) — no run root persists a `TokenMeter.snapshot()`-shaped
+      record anywhere (`TOKEN_ACCOUNTING.json`, the closest durable
+      artifact, is a DIFFERENT, broader audit shape, not this). What IS
+      durable and read-aggregable is `event.llm` (`LLMCall.tokens`/
+      `.prompt_tokens`/`.completion_tokens`) on every logged provider
+      call — the harness's own comment at `record_llm_calls` confirms
+      "token accounting reads event.llm". So `token_spend` is computed by
+      summing those fields across the log, in the SAME shape
+      `TokenMeter.snapshot()` uses for the two fields that survive past
+      the live process (`prompt_tokens`, `completion_tokens`, `total`),
+      plus `calls` — `budget`/`reserved` are correctly absent, since
+      after a run those concepts do not exist to read.
+
+      `_deferred_model_phase_findings` returns `VerificationFindingV2`
+      objects whose only per-event detail is unstructured prose (`f"phase
+      {phase!r} for role {role!r} was deferred..."` — no structured
+      `phase` field exists on the model). Confirmed by reading
+      `VerificationFindingV2`'s definition (`channel`, `check`, `detail`,
+      `source` only). Step 53's implementation will parse `phase` back
+      out of well-formed (`channel == "completion"`) findings' `detail`
+      rather than re-deriving from raw log events a second time — staying
+      a pure reader OVER that function's existing public output, matching
+      Part F's "strictly a READ aggregation" constraint, not a duplicate
+      scan.
+
+      Built the fixture root by hand (`harness.record_measure` for the
+      config-critique and deferral markers, `harness.record_llm_calls`
+      for one real `LLMCall`) rather than through the full
+      `record_config_critique`/scheduler apparatus — `latest_config_
+      critique` only requires `inputs[0]` to start with
+      `"config-critique:"`, and the deferral marker's shape is a fixed
+      6-tuple, so a hand-built fixture is simpler and exercises the exact
+      same read paths.
+
+      ```
+      $ python -m pytest tests/test_signals_read.py -q
+      FAILED tests/test_signals_read.py::test_signal_snapshot_shape - ModuleNotFoundError: No module named 'deepreason.signals_read'
+      FAILED tests/test_signals_read.py::test_signal_snapshot_shape_with_no_signals_at_all - ModuleNotFoundError: No module named 'deepreason.signals_read'
+      2 failed in 0.62s
+      ```
+- [x] 53. (R15) [COMMIT] Implement `signals_read.py::read_signal_snapshot(root)`
       — pure aggregation, read-only, no mid-run wiring, consumable from
       `report`/`audit`/CLI tooling at run boundaries only. done-when:
       Step 52's test passes. Diff budget check, commit, push.
+
+      Implemented exactly as researched at Step 52: `_token_spend` sums
+      `event.llm.tokens`/`.prompt_tokens`/`.completion_tokens` across the
+      log (a `TokenMeter.snapshot()`-shaped dict minus the live-only
+      `budget`/`reserved` fields); `_deferred_model_phase_counts` calls
+      `verification.report._deferred_model_phase_findings(root)` and
+      parses `phase` back out of its well-formed findings' `detail` prose
+      via the fixed `_DEFERRED_PHASE_DETAIL` regex, staying a pure reader
+      over that function's existing public output rather than re-scanning
+      the log; `read_signal_snapshot` opens one read-only `Harness` for
+      `latest_config_critique` and returns the typed `SignalSnapshotV1`.
+      Both an empty-root case and a config/deferral/token-bearing fixture
+      root are covered (Step 52's two tests).
+
+      ```
+      $ python -m pytest tests/test_signals_read.py -q
+      2 passed in 0.37s
+      $ python -m pytest tests/test_signals_read.py tests/test_config_referee.py tests/test_v6_verification_transactions.py -q
+      21 passed in 14.91s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 853 checks, 794 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 477, "tests": 734, "docs/map": 65}, "total_insertions": 1276, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 - [ ] 54. (R15) Wire `read_signal_snapshot` into the existing
       `verification/report.py` report output (an additive field, not a
       new report shape) so `deepreason status`/`report` surfaces it.
