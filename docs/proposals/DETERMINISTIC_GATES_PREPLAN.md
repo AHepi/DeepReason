@@ -146,6 +146,58 @@ a failure.
 gate returns REFUTED (unreachable); pointed at a live premise, CURRENT
 with anchors; mutation-proven.
 
+### Rung G6 — blast-radius disclosure gate  [EXECUTE, medium]
+**Recorded failure class:** an authorized change hiding or
+disconnecting architecture the request never disclosed — seven cases
+(`experiments/2026-08-10-change-blast-radius-analysis/CENSUS.md`,
+Part B): most directly the 2026-08-09 frozen-surface stop
+(`docs/ERRATA_EXECUTOR.md`'s own final entry), where a tranche's own
+SPEC.md had already found surface-3 contact in prose and the STOP that
+finding should have forced did not happen before the commit landed;
+also the legacy-criticism weld (`Config.N_SCHOOLS` silently becoming
+load-bearing for solo-run criticism authority) and the
+`property_designer` seat binding (a role with zero live dispatch
+paths, discovered only during a live run three tranches after it was
+bound). Every fact in every one of the seven cases was statically
+derivable from the tree at grant time; the manual SPEC-phase
+"Blast-radius census" and "Frozen-surface contact forecast" steps
+(`dr-spec-change` steps 3-4) depend entirely on the author remembering
+to run and correctly interpret the right greps.
+**Deliverable:** `tools/blast_radius.py --files PATH [...] [--symbols
+NAME [...]] [--against REF]` → `BLAST_RADIUS_RESULT_V1`: frozen-surface
+contacts (this repo's five surfaces plus the frozen-adjacent list, at
+DIRECT/SYMBOL_INDIRECT tiers), reachability (a hand-maintained
+entry-point registry, AST-based syntactic call-graph BFS, honest
+UNKNOWN for anything unresolvable — proves a call path exists, never
+that it is exercised at runtime), consumers (tests, map documents, the
+qualification digest, the wheel-smoke pins), and a generated
+plain-language disclosure summary. Skill amendments, three checkpoints:
+`dr-spec-change` (the Blast-radius census and Frozen-surface contact
+forecast sections become tool-backed, pasted result required; the
+manual grep is retained only as a cross-check for anything the tool
+reports UNKNOWN); `dr-spec-change` + `dr-ask-the-right-question`
+together (any frozen-surface or scope grant STOP presented to the
+operator must embed the tool's computed contact list verbatim — the
+load-bearing checkpoint, closing the exact gap the 2026-08-09 incident
+fell through); `dr-execute-step` (drift between actual-touch and
+SPEC.md's own specced radius at every `[COMMIT]` step, same STOP shape
+as `diff_budget.py`'s own EXCEEDED).
+**Accept:** mutation-proven (frozen-surface DIRECT tier flips on/off; a
+fixture function flips UNREACHABLE → REACHABLE when a call site is
+added; a consumer hit appears and disappears with its referencing
+file); retrodiction against the 2026-08-09 incident's own target file
+(`invariants.py`) returns `frozen_surface_verdict: CONTACT`, the exact
+fact that incident's own SPEC.md found in prose but that did not stop
+the commit.
+**Sixth-gate rule, satisfied:** "a sixth gate requires its own
+recorded-failure citation and an operator word, same as a frozen
+surface" (below) — the recorded-failure citation is
+`docs/ERRATA_EXECUTOR.md`'s 2026-08-09 entry plus CENSUS.md's six
+further cases; the operator word is
+`experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md`'s own
+verbatim request and its R6 approval of this rung's design (SPEC.md
+Fork F2).
+
 ## Parked (priced, not scheduled)
 
 - **Skill forward-testing** (the report's validation requirement — our
@@ -170,8 +222,14 @@ G1 → G2 (each ~a day: one small tool + one skill amendment + tests +
 map) → G3 (a day; touches root_sweep, so its probe discipline applies)
 → G4 → G5 (each 1–2 days; G4 changes delivery evidence obligations,
 G5 changes capture obligations — both are skill-law changes the
-operator should read before they bind executors). Every rung is
-independently deliverable and independently reversible (delete the
+operator should read before they bind executors) → G6 (1–2 days;
+changes spec-time and grant-time obligations across two skills at
+once — `dr-spec-change` and `dr-ask-the-right-question` — plus a
+commit-time drift check in `dr-execute-step`; delivered out of order,
+after G1 and ahead of G2-G5, on its own recorded-failure citation and
+operator word rather than the ladder's original sequencing, since
+nothing in G2-G5's own scope depends on it or is depended on by it).
+Every rung is independently deliverable and independently reversible (delete the
 tool, revert the SKILL.md paragraph); the ladder stops safely after
 any rung. No rung touches `src/`, frozen surfaces, run identity, or
 the record format. Natural scheduling: the queue-drain window's
@@ -181,9 +239,11 @@ rung at a time between research-program tranches.
 ## What could kill it
 
 - **Gate sprawl** — the failure mode the report itself names: every
-  incident becoming another instrument. The ledger above is closed at
-  five; a sixth gate requires its own recorded-failure citation and an
-  operator word, same as a frozen surface.
+  incident becoming another instrument. The ledger was closed at five;
+  a sixth gate requires its own recorded-failure citation and an
+  operator word, same as a frozen surface — G6 above is the one gate
+  that has met that bar since, and the ledger is closed at six until
+  the next citation-plus-word pair clears it again.
 - **Gates rotting like the checks they replace** — hence each gate's
   own mutation proof and map `check:` line; a gate nobody can prove
   red is worse than prose.

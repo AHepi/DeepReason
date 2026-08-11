@@ -355,3 +355,37 @@ or not it had yet produced a wrong verdict. The self-correction above
 is recorded per this ledger's own rule: a correction to a correction is
 a new addition within the entry, never a silent rewrite of the claim
 it replaces.
+
+**E19 — `GATES_AND_PACKAGES_PREPLAN.md` cites a tranche as authority
+that was never opened.** `docs/proposals/GATES_AND_PACKAGES_PREPLAN.md:4-5`
+reads: "Extends BEHAVIOR_MODES_PREPLAN and the adjudication/judge/schools
+opt-in spec (`experiments/2026-08-09-change-adjudication-judge-seats-
+optins/`)." That directory does not exist in the committed tree
+(`ls experiments/ | grep -i adjudication-judge-seats` -> no hits) — the
+cited tranche was planned but never opened, so the document's own
+"Existing gates-in-fragments this unifies" census (the paragraph
+immediately following the citation) rests in part on a source that
+cannot be read to verify it. Found by
+`experiments/2026-08-10-change-blast-radius-analysis/CENSUS.md` Part B
+while tracing the operator's own "Road E" shorthand (which itself
+resolves to no literal document anywhere in the repo — the operator's
+compressed reference to the substance now written up as CENSUS.md B2/B3,
+not to this preplan or its dangling citation). Not corrected here — the
+preplan's own status line reads "PROPOSED," so no live rung depends on
+this citation resolving today; recorded so a future session picking up
+`GATES_AND_PACKAGES_PREPLAN.md` does not spend time looking for a
+directory that was never created.
+(Renumbering note, added at merge: this entry was minted as "E18" on
+its delivery branch, and
+`experiments/2026-08-10-change-blast-radius-analysis/DELIVERY.md`
+§Errata cites it under that number. Three branches delivered the same
+day each minted an "E18" against a ledger ending at E17; this ledger
+serializes them in merge order, and the closed tranche's DELIVERY.md
+stays as delivered per this ledger's own convention. One factual update
+known at merge time: the cited tranche directory
+`experiments/2026-08-09-change-adjudication-judge-seats-optins/` was
+not "never opened" — it exists and is actively executing on the
+then-unmerged `claude/adjudication-judge-seats-optins-4nb7ov` branch,
+invisible from the tree this entry's check ran against. The dangling
+citation resolves the moment that branch merges; what stands is only
+that the preplan cited it before it was readable from main.)

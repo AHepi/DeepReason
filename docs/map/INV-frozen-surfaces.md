@@ -174,6 +174,28 @@ a stop, decided by the calling skill, never by this tool's exit code.
 `check: python -c "import ast; ast.parse(open('tools/diff_budget.py').read())"`
 `check: grep -q "DIFF_BUDGET_RESULT_V1" tools/diff_budget.py`
 
+### The blast-radius disclosure gate (Rung G6)
+
+Given a proposed change's declared target files/symbols, computes frozen-
+surface contacts (this document's own five surfaces plus the frozen-
+adjacent list above), syntactic reachability (a hand-maintained entry-
+point registry, BFS over an AST-based call graph, with an honest UNKNOWN
+bucket for anything the walk cannot resolve — it proves a call path
+exists, never that it is ever exercised at runtime), consumers (tests,
+map documents, the qualification digest, the wheel-smoke pins), and a
+plain-language disclosure summary — mechanically, so a grant request
+never has to be hand-summarized from memory. The gap this closes: the
+2026-08-09 incident below, where a tranche's own SPEC.md had already
+found surface-3 contact in prose and the STOP that finding should have
+forced did not happen before the commit landed — every fact this gate
+reports was, in that incident and the six others cited in its own module
+docstring, statically derivable from the tree at grant time.
+
+    python tools/blast_radius.py --files PATH [PATH ...] [--symbols NAME [NAME ...]] [--against REF]
+
+`check: python -c "import ast; ast.parse(open('tools/blast_radius.py').read())"`
+`check: grep -q "BLAST_RADIUS_RESULT_V1" tools/blast_radius.py`
+
 ## Traps
 
 - **Reading a model and not its validator.** Surface 4 above. Pydantic permits
@@ -217,3 +239,17 @@ a stop, decided by the calling skill, never by this tool's exit code.
   for it, and "no test covers version N" must be proven by running the
   full gate, not by grepping test names.
 `check: grep -q "ENGAGED_CRITICISM_AUTHORITY" src/deepreason/run_manifest.py`
+- **A STOP already written in prose is not a STOP that was obeyed.**
+  The CP1-M tranche's own SPEC.md correctly identified surface 3
+  (`invariants.py`) as plausible contact and said so in writing — the
+  finding was never the gap. The commit widening `invariants.py`
+  landed anyway, with REQUEST.md's own Amendments section still reading
+  "(none yet)" (`docs/ERRATA_EXECUTOR.md`, "2026-08-09 — the frozen-
+  surface stop did not hold"). The work itself was correct (additive,
+  reader-widening, zero committed-root verdicts moved) — X9's own rule
+  applied a second time: correctness never substitutes for
+  authorization. Fixed going forward by the blast-radius disclosure
+  gate above: `dr-execute-step`'s own `[COMMIT]` checkpoint now diffs
+  actual-touch against SPEC.md's own specced radius mechanically, so a
+  prose finding three steps back cannot be silently outrun by memory.
+`check: grep -q "frozen_surface_verdict" tools/blast_radius.py`
