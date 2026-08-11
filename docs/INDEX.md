@@ -109,6 +109,12 @@ showed to be wrong. Never edits the original claim in place.
 - [`RUN_PLAN_TEMPLATE.md`](RUN_PLAN_TEMPLATE.md),
   [`SMALL_MODEL_COMPATIBILITY.md`](SMALL_MODEL_COMPATIBILITY.md),
   [`RESEARCH_BACKEND.md`](RESEARCH_BACKEND.md).
+- [`OLLAMA_CLOUD_OPERATIONS.md`](OLLAMA_CLOUD_OPERATIONS.md) —
+  operator-supplied provider intelligence (2026-08-12): plan-gated
+  account concurrency, 429 disambiguation (queue vs quota), mid-stream
+  200-with-error hazard, model-retirement reproducibility rules. Claims
+  carry their own [DOCUMENTED]/[INFERRED]/[UNKNOWN] tags; read §8
+  before letting any driver retry or parallelize.
 
 ## Dated snapshots (one-off, not living references)
 
