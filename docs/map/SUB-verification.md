@@ -174,6 +174,28 @@ when `stats` was otherwise empty.
   other `foreign-criticism` finding stays `integrity`. Changing that detail
   string changes the channel.
 `check: grep -q 'check == "foreign-criticism"' src/deepreason/verification/report.py && grep -q 'detail.startswith("target ")' src/deepreason/verification/report.py && grep -q '"policy requires" in detail' src/deepreason/verification/report.py`
+- **FIXED 2026-08-11 (adjudication-judge-seats-optins tranche, run
+  `run-ee9696e2161374f6597f65963a645d8a`, found by
+  `scripts/wheel_operational_smoke.py`): `_transaction_findings`'s
+  `task == "criticism"` authority check assumed `manifest.criticism_policy`
+  is always populated for real criticism work.** Road E (this tranche's
+  Part A) built a genuinely school-free legacy criticism dispatch with NO
+  `criticism_policy` binding at all, and Part B2 made that the DEFAULT
+  (`LEGACY_CRITICISM_ENABLED=True`) — so every ordinary run's legacy
+  criticism transactions were flagged `security`-invalid
+  ("criticism work is not authorized by the manifest"), 17 findings on
+  one ordinary `deepreason reason` call, confirmed live via an installed
+  wheel. `nonconjecture_recovery.py::_criticism_contract`'s RECOVERY-side
+  authority check already had the correct school-free branch (S13e, this
+  same tranche) — this POST-HOC verification check was a second,
+  independent site that needed the identical branch and was missed during
+  Part A's own frozen-surface confirmation (Step 1 checked `harness.py`/
+  `capabilities/state.py`/`invariants.py`/`run_manifest.py` contact, not
+  `verification/report.py`). Fixed by mirroring `_criticism_contract`'s
+  exact shape: `critic_school_id is None` is authorized whenever the
+  `argumentative_critic` role has a manifest route and
+  `payload["dispatch_authority"] == "observe_only"`.
+`check: python -m pytest tests/test_v6_verification_transactions.py -k "school_free_criticism" -q`
 - **An unopenable root returns empty `stats`.** `verify_root` short-circuits to
   a single `open` (or the controller-v3) finding with `"stats": {}`. Callers
   that index into `stats` unconditionally crash on exactly the roots most worth

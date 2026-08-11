@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=58 blockers=none (Parts A+B+C+D+D2+B2+E+F ALL COMPLETE. Part F steps 52-57: `signals_read.py::read_signal_snapshot(root)` -- typed, read-only aggregation of the latest config-critique, per-phase deferred-model-phase counts, and total provider token spend -- wired additively into `verify_root_report`'s `stats["signal_snapshot"]`, map-documented under `SUB-verification.md` (a missing-closing-backtick bug in the new check was found and fixed before it could silently ship uncounted), no new signal marker introduced. Only Part G (steps 58-63, gate and delivery: full `docs_verify --audit`, frozen-surface diff confirmation, full `pytest tests/ -q -n 4` gate, wheel smokes, root sweep, final push/clean-tree confirmation) remains before `dr-validate-change`. Full `docs_verify`: 854 checks, 0 failed. diff-budget base a942f404c, 1340/1600)
+State: next=62 blockers=none (Parts A+B+C+D+D2+B2+E+F ALL COMPLETE. Part G steps 58-61 done: docs_verify full+--audit clean (855 checks); frozen-surface diff confirmed (state.py/harness.py/invariants.py untouched, run_manifest.py diff sorted into exactly the two authorized grant categories); full gate run found ONE pre-existing, unrelated failure (test_bronze_report.py::test_census_totals_internally_consistent, reproduced identically against the true pre-tranche base commit in an isolated worktree -- operator's own words, "continue", accepted as documented exception, PARKED not fixed here); wheel_smoke.py clean; wheel_operational_smoke.py found and this tranche FIXED a real regression -- Road E's school-free legacy criticism (Part A) + Part B2's default flip left verification/report.py's _transaction_findings unaware criticism_policy=None is a valid authorized shape, flagging every ordinary run's legacy criticism transactions security-invalid (17 findings on one `reason` call); fixed by mirroring nonconjecture_recovery.py's existing school-free branch, two new regression tests, Traps entry in SUB-verification.md, confirmed via a clean wheel_operational_smoke.py re-run and a 159-test targeted sweep. Only Part G steps 62 (root sweep -- operator has flagged step 62 may not apply cleanly since committed historical experiment roots reflect old choices, not a regression to gate on) and 63 (final push/clean-tree confirmation) remain before `dr-validate-change`. Full `docs_verify`: 855 checks, 0 failed. diff-budget base a942f404c, 1482/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -2735,7 +2735,7 @@ criticism — "That's a configuration option," the operator's own words.
       # every hunk confirmed to belong to one of the two authorized
       # categories named above)
       ```
-- [ ] 60. (all) Full gate: `python -m pytest tests/ -q -n 4`. done-when:
+- [x] 60. (all) Full gate: `python -m pytest tests/ -q -n 4`. done-when:
       output ends "N passed, 0 failed" (paste it; expect ~3100+N given
       the new tests this tranche adds).
 
@@ -2780,7 +2780,12 @@ criticism — "That's a configuration option," the operator's own words.
       let Part G proceed with "3487 passed, 0 NEW failed, 1 pre-existing
       unrelated failure (parked, not this tranche's)", or (ii) something
       else. Resuming this step once that's answered.
-- [ ] 61. (all) Wheel smoke instruments (per CLAUDE.md — no gate runs
+
+      **Resolved (operator's own words): "continue."** Exception accepted
+      as documented above. `tests/test_bronze_report.py::test_census_
+      totals_internally_consistent` is a pre-existing, unrelated, PARKED
+      defect — not this tranche's to fix, not blocking Part G.
+- [x] 61. (all) Wheel smoke instruments (per CLAUDE.md — no gate runs
       these automatically, but this tranche adds new CLI flags/console
       surface, so re-run and re-pin if changed):
       `python scripts/wheel_smoke.py` and
@@ -2788,6 +2793,103 @@ criticism — "That's a configuration option," the operator's own words.
       exit 0; if the public surface pin changed (new `--seat school-N`,
       new flags), the pin update is folded into this same step's diff, not
       a separate trailing one.
+
+      `wheel_smoke.py` passed cleanly first try (no public-surface pin
+      change needed — the new `--school-seat`/`--criticism-seat` flags
+      don't touch what that instrument pins: console entry points, MCP
+      tool set + schema sha, wheel layout).
+
+      **`wheel_operational_smoke.py` found a REAL regression this
+      tranche introduced — not pre-existing, not out of scope, fixed
+      here rather than parked:**
+
+      ```
+      --- assertion failed (reason) ---
+      terminal verification failed
+        (payload["verification"]["security_valid"] is False,
+         finding_counts.security == 17)
+      ```
+
+      Diagnosed by temporarily instrumenting the smoke script (reverted
+      before committing — `git diff scripts/wheel_operational_smoke.py`
+      confirmed empty) to dump the actual security findings via
+      `verify_root_report` on the run root before cleanup: all 17 were
+      `transaction-authority` findings reading `"work ... exceeds frozen
+      authority: criticism work is not authorized by the manifest"`.
+
+      **Root cause:** `verification/report.py::_transaction_findings`'s
+      `authority_differences` closure, `task == "criticism"` branch,
+      unconditionally required `manifest.criticism_policy is not None`.
+      Road E (Part A, this tranche) built a genuinely school-free legacy
+      criticism dispatch with NO `criticism_policy` binding at all
+      (`critic_school_id=None`, authority frozen into the payload's
+      `dispatch_authority` field at dispatch time, S13i); Part B2 made
+      that circuit the DEFAULT (`LEGACY_CRITICISM_ENABLED=True`). So
+      every ordinary run's legacy criticism transactions were flagged
+      `security`-invalid by this ONE verification site that Part A's
+      Step 1 frozen-surface census never named — it confirmed zero
+      contact with `harness.py`/`capabilities/state.py`/`invariants.py`/
+      `run_manifest.py` SCHEMA fields, but `verification/report.py` is
+      none of those and was never checked. The RECOVERY-side check
+      (`nonconjecture_recovery.py::_criticism_contract`, fixed correctly
+      at Steps 14a-14b of THIS SAME tranche) already had the right
+      school-free branch — this was a second, independent authority-
+      checking site that needed the identical shape and was missed.
+
+      **Fix:** mirrored `_criticism_contract`'s exact school-free branch
+      in `authority_differences`: `critic_school_id is None` is
+      authorized whenever `manifest.roles["argumentative_critic"]` is
+      non-empty (the role has a route at all — the generic per-lease
+      route check just above already verifies the LEASE matches a real
+      manifest route) and `payload["dispatch_authority"] ==
+      "observe_only"`. The school-routed branch (`critic_school_id` set)
+      is untouched, same as before.
+
+      **Regression tests added**
+      (`tests/test_v6_verification_transactions.py`):
+      `test_school_free_criticism_work_is_authorized_when_dispatch_
+      authority_is_observe_only` (the fix: no security finding for the
+      exact shape that broke) and
+      `test_school_free_criticism_work_with_unrecoverable_authority_is_
+      flagged` (the fix is not a no-op: a non-`observe_only` frozen
+      authority still fails, matching `_criticism_contract`'s own
+      symmetric check).
+
+      **Map update, same commit:** `docs/map/SUB-verification.md` gains
+      a Traps entry naming this run id, the root cause, and the fix,
+      with its own check.
+
+      ```
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry points, module parity, MCP registration, and exact MCP schemas
+      $ python -u scripts/wheel_operational_smoke.py   # BEFORE the fix
+      --- assertion failed (reason) ---
+      terminal verification failed
+      $ python -m pytest tests/test_v6_verification_transactions.py -q   # AFTER the fix
+      7 passed in 0.22s
+      $ python -m pytest tests/test_r0_terminal_verification.py tests/test_v6_bridge_transactions.py tests/test_v6_engaged_repair_verification.py tests/test_v6_scratch_authoring_transactions.py tests/test_v6_nonconjecture_recovery.py tests/test_foreign_school_criticism_scheduler_c3.py tests/test_criticism_school_execution_c3.py -q
+      159 passed in 670.80s (0:11:10)
+      $ python -u scripts/wheel_operational_smoke.py   # AFTER the fix
+      wheel operational smoke passed: installed setup, explicit qualification (80 qualification calls; 428 total calls), readiness, question-only reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP restart, budget ceiling, and pre-V6 fail-closed admission
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 855 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 517, "tests": 885, "docs/map": 80}, "total_insertions": 1482, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+
+      **Environment note, not a code issue (recorded for the next
+      session, not left implicit):** diagnosing this required a
+      throwaway `git worktree` to reproduce the pre-existing Step 60
+      bronze-census failure against the tranche's true base commit;
+      `pip install -e .` was (correctly) run inside that worktree to make
+      it importable, which repointed the machine's ONE global editable
+      `deepreason` install at the worktree's path. Removing the worktree
+      afterward broke `import deepreason` everywhere until
+      `pip install -e . --break-system-packages` was re-run from this
+      repo's own root. No repo file was affected; noted here only so a
+      future session recognizes the same symptom instantly instead of
+      re-diagnosing it.
 - [ ] 62. (all) [COMMIT] Root sweep (guard rule from
       `docs/map/INV-frozen-surfaces.md`, since this tranche touches a
       reader-adjacent area — Road E changes what dispatches, not what a

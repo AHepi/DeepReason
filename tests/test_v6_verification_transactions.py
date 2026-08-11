@@ -141,6 +141,113 @@ def test_prepared_budget_denial_still_checks_frozen_contract_authority(
     assert "conjecturer.turn.v6" in authority.detail
 
 
+def _criticism_manifest(*, criticism_policy):
+    critic_route = Route(
+        endpoint_id="critic-route",
+        base_url="mock://critic-route",
+        model_id="offline-model",
+        provider="mock",
+        family="offline-family",
+    )
+    return critic_route, SimpleNamespace(
+        schema_version=6,
+        sha256="d" * 64,
+        roles={"argumentative_critic": (critic_route,)},
+        run_input_digest="e" * 64,
+        criticism_policy=criticism_policy,
+        bridge_policy=SimpleNamespace(),
+        control_plane_policy=SimpleNamespace(
+            contract_versions=SimpleNamespace(
+                conjecturer_turn_contract="conjecturer.turn.v6",
+                batch_critic_contract="batch-critic.v2",
+            ),
+            school_execution=SimpleNamespace(mode="conditioning_only", bindings=()),
+            scratch_authoring=SimpleNamespace(enabled=False),
+        ),
+    )
+
+
+def _criticism_work_item(critic_route, *, dispatch_authority):
+    lease = RouteLeaseRefV1(
+        role="argumentative_critic",
+        seat=0,
+        endpoint_id=critic_route.endpoint_id,
+        route_sha256=route_fingerprint(critic_route),
+    )
+    preparation = SimpleNamespace(
+        manifest_digest="d" * 64,
+        route_lease=lease,
+        task_kind=SimpleNamespace(value="criticism"),
+        contract_id="batch-critic.v2",
+        task_payload_value={
+            "schema": "criticism.semantic-task.v1",
+            "critic_school_id": None,
+            "dispatch_authority": dispatch_authority,
+        },
+    )
+    return SimpleNamespace(
+        preparation=preparation,
+        issued=True,
+        terminal=SimpleNamespace(status="completed", reason_code=None),
+    )
+
+
+def test_school_free_criticism_work_is_authorized_when_dispatch_authority_is_observe_only(
+    tmp_path, monkeypatch
+):
+    """Regression (adjudication-judge-seats-optins tranche, Part G Step 61
+    wheel_operational_smoke.py finding, 2026-08-11): Road E (Part A) built a
+    school-free legacy criticism dispatch with NO `criticism_policy`
+    binding at all, and Part B2 made it the DEFAULT (`LEGACY_CRITICISM_
+    ENABLED=True`). This verification path's `task == "criticism"` branch
+    still required `manifest.criticism_policy is not None`
+    unconditionally, so EVERY legacy criticism transaction under the new
+    default was flagged `security`-invalid ("criticism work is not
+    authorized by the manifest") -- confirmed live via an installed-wheel
+    operational run (17 such findings on one ordinary `deepreason reason`
+    call). Mirrors `nonconjecture_recovery.py::_criticism_contract`'s
+    identical school-free branch: authorized whenever the role has a
+    manifest route and `dispatch_authority == "observe_only"`."""
+
+    critic_route, manifest = _criticism_manifest(criticism_policy=None)
+    work_id = "sha256:" + "f" * 64
+    work = {work_id: _criticism_work_item(critic_route, dispatch_authority="observe_only")}
+    fake = SimpleNamespace(workflow_state=SimpleNamespace(transaction_work=work))
+    (tmp_path / "run-manifest.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr("deepreason.harness.Harness", lambda *_a, **_k: fake)
+    monkeypatch.setattr(
+        "deepreason.run_manifest.load_run_manifest", lambda *_a, **_k: manifest
+    )
+
+    findings = _transaction_findings(tmp_path)
+
+    assert findings == ()
+
+
+def test_school_free_criticism_work_with_unrecoverable_authority_is_flagged(
+    tmp_path, monkeypatch
+):
+    """The fix is not a no-op: a school-free dispatch whose frozen
+    authority was NOT `observe_only` still fails, exactly matching
+    `_criticism_contract`'s recovery-side check."""
+
+    critic_route, manifest = _criticism_manifest(criticism_policy=None)
+    work_id = "sha256:" + "1" * 64
+    work = {work_id: _criticism_work_item(critic_route, dispatch_authority="defended_trial")}
+    fake = SimpleNamespace(workflow_state=SimpleNamespace(transaction_work=work))
+    (tmp_path / "run-manifest.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr("deepreason.harness.Harness", lambda *_a, **_k: fake)
+    monkeypatch.setattr(
+        "deepreason.run_manifest.load_run_manifest", lambda *_a, **_k: manifest
+    )
+
+    findings = _transaction_findings(tmp_path)
+
+    security = [item for item in findings if item.channel == "security"]
+    assert len(security) == 1
+    assert "critic authority is not recoverable" in security[0].detail
+
+
 def test_v6_deferred_model_phase_is_completion_debt_and_malformed_is_integrity(
     tmp_path, monkeypatch
 ):
