@@ -22,7 +22,7 @@ import zipfile
 
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "39d73561bb355bdf42ee8f2aaa3b3bfb3df64cdafea228c7e03bd59e46ff36fc"
+    "954209256fbffef0fdc6ab5c85d274ba36b67e084c4c6c55f38f864101384c02"
 )
 # Every entry-point group the wheel is expected to ship, and its exact
 # contents. Pinning the GROUP SET as well as each group's entries is what
@@ -40,6 +40,7 @@ REQUIRED_ENTRY_POINT_GROUPS = {
 }
 EXPECTED_MCP_TOOLS = {
     "get_readiness",
+    "validate_intake",
     "start_run",
     "run_status",
     "run_result",

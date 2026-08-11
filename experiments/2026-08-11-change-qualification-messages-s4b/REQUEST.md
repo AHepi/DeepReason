@@ -122,4 +122,24 @@ tool wrapping the same validator) — dr-spec-change should adopt that.
 
 ## Amendments
 
-(none yet — append-only; future operator words land here)
+**Amendment 1 (2026-08-11).** Operator's verbatim words: "3 and 4 are
+clear and approved. Message only and default for everyone." Referent:
+`DECISION_SHEET.md`'s Q3 (per-role qualification scope) and Q4 (intake
+tool default scope), renumbered from this SPEC's own Q1/Q3 — the
+operator is answering by the decision sheet's later numbering, not this
+REQUEST's original Q-labels; both refer to the same two forks.
+
+Resolves SPEC.md's Q1 (per-role qualification scope) to **option (a),
+narrow**: human-readable messages only, zero change to what
+"qualified" means, zero frozen-surface-5 contact. S4b Option 1
+(per-role provenance qualification) remains parked, not built.
+
+Resolves SPEC.md's Q3 (intake tool default scope) to **every caller**:
+`IntakeFormV1`/`validate-intake` becomes the default intake path for
+everyone, not only small models; `FORM_DR1_RUN_APPLICATION.md`'s prose
+form is demoted to generated documentation, not a second primary
+intake path.
+
+Both resolutions match this SPEC's own stated recommendations exactly
+— no new design work needed, only removing the STOP that blocked
+`dr-plan-steps`.

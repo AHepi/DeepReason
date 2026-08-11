@@ -5,16 +5,36 @@ are bugs. DESIGN-AND-STOP: no code lands from this SPEC without fresh
 operator words (task handover, Item 4: "frozen surface 5 — no code
 without fresh operator words").
 
+## Addendum (2026-08-11, REQUEST.md Amendment 1 — operator approved)
+
+Q1 resolved to **(a) narrow**: S1 becomes a message-only pass (see S1
+below, revised) — zero change to `qualification_subject_payload` or
+any frozen-surface-5 code, folded into S2's error-catalog work rather
+than a separate item. Q3 resolved to **every caller**: S3's
+`validate-intake`/`IntakeFormV1` is the default intake path for
+everyone; `FORM_DR1_RUN_APPLICATION.md` becomes generated-only
+documentation, never a second primary way to start a run. Both
+resolutions match this SPEC's own recommendations verbatim — no design
+changes below, only removing the STOP. Execution proceeds as two
+sub-tranches per the Budget section's own recommendation: (i) S1+S2
+combined (message-only qualification fix + error catalog mechanism +
+44 entries), (ii) S3 (intake tool), each separately planned, executed,
+validated, and delivered.
+
 ## Items
 
-S1 (R1, Q1): Per-role qualification. Target: `src/deepreason/
-qualification.py` (frozen surface 5), `src/deepreason/runtime/
-launch_policy.py` (`require_v6_production_qualification`), `src/
-deepreason/readiness.py` (`get_seat_readiness`, already per-role since
-Rung S3). MATERIAL FORK — see Questions for operator Q1 below; this
-item is NOT resolved to one behavior in this SPEC.
-accept (once answered): a machine-decidable check depends on which
-option is chosen — deferred to this item's own future dr-plan-steps.
+S1 (R1, Q1 — RESOLVED to option (a) narrow, Addendum above): Per-role
+qualification, message-only — COLLAPSES INTO S2, zero standalone work.
+Re-examined at resolution time: "per role" needs no change (already
+true, Rung S3/S4); "added error messages" IS the catalog (S2). A2
+already establishes S2 is purely additive, reading existing `.code`
+strings without touching any raise site — so S1 requires ZERO edits to
+`qualification.py`, `runtime/launch_policy.py`, or `readiness.py`.
+Recording S1 as its own item only to close the loop on REQUEST.md R1;
+its acceptance check IS S2's.
+accept: S2's `deepreason explain-error <qualification-code>` covering
+all ~21 `QualificationError` codes IS the demonstration that R1's
+"added error messages" is satisfied — no separate check.
 
 S2 (R2, R5-of-Item5's broadened scope): human-readable error-code
 catalog. A full census (this tranche) found **572 deduplicated real
@@ -40,7 +60,11 @@ for the plain-`ValueError` convention, which has no `.code` attribute
 — print the catalog entry alongside the existing raw code/message,
 never REPLACING the raw code, only appending prose), and a `deepreason
 explain-error CODE` subcommand for out-of-band lookup.
-accept: `deepreason explain-error ADMISSION_DOSSIER_INVALID` prints a
+accept: `deepreason explain-error QUALIFICATION_TIER_UNQUALIFIED`
+(corrected 2026-08-11 at delivery — the original example,
+`ADMISSION_DOSSIER_INVALID`, was never in the 44-entry scope this same
+document's own "Family-grouped counts" paragraph below settles on;
+`VALIDATION_i.md` records the inconsistency this fixes) prints a
 non-empty plain-language summary; every code the catalog claims to
 cover round-trips through a test asserting the code string in the
 catalog is byte-identical to the code string in its raise site (no
@@ -92,6 +116,57 @@ exits non-zero with a human-readable message citing S2's catalog;
 `python tools/render_form_dr1.py --check` (diff mode) exits 0 against a
 freshly generated `FORM_DR1_RUN_APPLICATION.md`, proving the committed
 file is not stale relative to its own generator.
+
+## Addendum 2 (2026-08-11, sub-tranche (ii) execution scoping)
+
+Re-examined at execution time against the actual CLI/config surface
+(`cli/main.py`'s real `add_argument` calls, `preparation.py`'s real
+ceiling constants), not FORM_DR1's prose alone:
+
+**Modeled as `IntakeFormV1` fields with real Pydantic validators:**
+Part A (provider setup: `--provider`, `--endpoint`, `--model`,
+`--model-revision`, `--family`, `--context-window-tokens`,
+`--maximum-completion-tokens`, `--credential-env`, `--reasoning`), Part
+B1 (`--seat GROUP=PROFILE`, repeatable, with B1a's conflict rule
+implemented by reusing `seat_bindings.py`'s own
+`GROUP_ALIASES = {"simulation": "conjecture"}` — not a re-derived
+alias table, the same one), Part D mandatory fields (`question`,
+`--cycles`, `--token-budget`, `--shallow`, `--dossier`, `--attach`,
+`--allow-partial`) with D2/D3's ceilings enforced by importing
+`PUBLIC_MAX_CYCLES`/`PUBLIC_MAX_TOKEN_BUDGET` directly from
+`preparation.py` (not re-declared constants — if the real ceiling
+changes, the form's validation follows automatically).
+
+**Explicitly NOT modeled, with reasons (a scope boundary, not an
+oversight):**
+- Part C (qualification) — describes a PROCESS (`deepreason qualify`)
+  and its OUTCOME (a tier), not form fields a caller fills in; nothing
+  to validate offline.
+- D1a (question+config = run identity, collision detection) — requires
+  comparing against EXISTING run roots under a `DEEPREASON_HOME`,
+  external filesystem state a standalone file validator does not have
+  access to and should not reach for (this would turn a pure schema
+  validator into a stateful one, contradicting the whole point of "no
+  dialog state, repairable").
+- D4 (shallow mandatory when tier is SHALLOW) — the tier is an OUTCOME
+  of qualification (external state), not something the intake file
+  itself declares; same reasoning as D1a.
+- Parts B2/B3/E2/E3/F1/F3 (school seats, `LEGACY_CRITICISM_ENABLED`,
+  `SCHOOL_SEATS_ENABLED`, `--judge-seats`, `--blind-same-model-judges`)
+  — confirmed AGAIN at execution time (`git merge-base --is-ancestor
+  <adjudication-branch-tip> origin/main`, still false) these do not
+  exist as real CLI flags on `main`; per `PARKED.md` Residue 3, modeled
+  only once that branch merges.
+
+**MCP tool + packaging-surface consequence (new this addendum, not in
+the original SPEC — found during execution, not anticipated at design
+time):** adding `validate_intake` as an MCP tool changes
+`mcp_server.py`'s `_tools()` output, which is exactly what
+`scripts/wheel_smoke.py`/`wheel_operational_smoke.py` pin
+(`EXPECTED_MCP_TOOLS`, `EXPECTED_MCP_SCHEMA_SHA256`) — per CLAUDE.md's
+rule and this program's own Item 1 finding, both pins update in the
+SAME commit as the tool registration, and both smokes re-run in that
+commit.
 
 ## Assumptions (operator may override)
 
@@ -336,21 +411,19 @@ QUALIFICATION_*/DOCTOR_* families only — the census found 572 codes
 total; the other ~528 are explicit residue, never silently claimed
 covered). S3: ~150-250 lines (`IntakeFormV1` model + validate-intake
 CLI command + MCP tool wrapper + render_form_dr1.py + tests). S1: 0
-lines this tranche (Q1 blocks any code; A option, if approved, is a
-follow-on ~40-80 lines folded into S2's message-text pass, not
-separately budgeted here).
+lines, confirmed final (Addendum above) — collapses entirely into S2,
+no separate raise-site edits.
 
     python3 -c "print(sum([170, 250, 0]))"  # -> 420
 
-Total: ~420 lines upper bound (S2+S3 only; S1 fully deferred to Q1's
-answer), across an estimated 3-4 commits once approved (S2 alone; S3's
-model+validator; S3's CLI+MCP wiring; S3's FORM_DR1 regeneration +
-docs_verify pass). Over the ~300-line rung-split guidance — this SPEC
-itself recommends a two-sub-tranche split once approved: (i) S2 alone,
-(ii) S3 alone, each with its own delivery, rather than one ~420-line
-commit sequence. Frozen surfaces touched: **none, if Q1(a) and this
-SPEC's A3 both hold** — S1(b) is explicitly out of scope for this
-approval.
+Total: ~420 lines upper bound (S2+S3; S1 adds 0), across an estimated
+3-4 commits (S2 alone; S3's model+validator; S3's CLI+MCP wiring; S3's
+FORM_DR1 regeneration + docs_verify pass). Over the ~300-line
+rung-split guidance — executed as a two-sub-tranche split per this
+SPEC's own recommendation: (i) S1+S2 (message catalog, ~170 lines),
+(ii) S3 (intake tool, ~250 lines), each with its own delivery, rather
+than one ~420-line commit sequence. Frozen surfaces touched: **none**
+— Q1(a) confirmed, A3 holds, S1(b) remains out of scope.
 
 Rubric: 8/8 yes — every R has a spec item or an explicit STOP (R1→S1/Q1;
 R2→S2/A1; R3,R4→S3/Q3; R5→S3; R6→M4; C1,C2 out of scope with reason;

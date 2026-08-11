@@ -1,4 +1,78 @@
-# FORM DR-1 — APPLICATION TO REASON ON A QUESTION
+"""Regenerate FORM_DR1_RUN_APPLICATION.md's Parts A/B1/D FROM IntakeFormV1.
+
+Parts A (provider setup), B1 (seat assignments), and D (the question) are
+generated from `IntakeFormV1`'s own `Field(description=...)` text, so the
+form and the schema that actually validates it cannot drift apart the way
+the prior hand-maintained prose could (and did — five stale `†` markers as
+of 2026-08-11). Parts B2 through H are NOT regenerated: they document
+surfaces `IntakeFormV1` does not model (either unmerged-branch-only, or
+requiring external state a standalone file validator cannot see — see
+SPEC.md Addendum 2, experiments/2026-08-11-change-qualification-messages-
+s4b/) and remain the existing hand-maintained prose, untouched by this tool.
+
+Usage:
+    python tools/render_form_dr1.py           # write the file
+    python tools/render_form_dr1.py --check   # exit 1 if the committed
+                                               # file is stale, 0 if fresh
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from pathlib import Path
+
+FORM_PATH = Path(__file__).resolve().parent.parent / "docs" / "FORM_DR1_RUN_APPLICATION.md"
+
+_LABEL = re.compile(r"^([A-Z])(\d+)")
+
+
+def _sort_key(name: str, description: str, declaration_index: int) -> tuple:
+    matched = _LABEL.match(description)
+    letter, number = (matched.group(1), int(matched.group(2))) if matched else ("Z", 0)
+    # Same label (e.g. two D5 fields) ties on declaration order in
+    # IntakeFormV1, not field name — dossier/attach/allow_partial keep the
+    # order they're declared in, not alphabetical.
+    return (letter, number, declaration_index)
+
+
+def _bullets(names: list[str]) -> str:
+    from deepreason.intake_form import IntakeFormV1
+
+    fields = IntakeFormV1.model_fields
+    declaration_order = {name: index for index, name in enumerate(fields)}
+    ordered = sorted(
+        names,
+        key=lambda n: _sort_key(n, fields[n].description or "", declaration_order[n]),
+    )
+    return "\n".join(f"- {fields[n].description}" for n in ordered)
+
+
+def _render_generated_sections() -> dict[str, str]:
+    from deepreason.intake_form import HOST_OWNED_FIELDS
+
+    part_a_fields = sorted(HOST_OWNED_FIELDS)  # order fixed by _bullets' label sort
+    part_b1_fields = ["seats"]
+    part_d_fields = [
+        "question",
+        "cycles",
+        "token_budget",
+        "shallow",
+        "dossier",
+        "attach",
+        "allow_partial",
+    ]
+    return {
+        "PART A": _bullets(part_a_fields),
+        "PART B1": _bullets(part_b1_fields),
+        "PART D": _bullets(part_d_fields),
+    }
+
+
+def render() -> str:
+    generated = _render_generated_sections()
+    return f"""# FORM DR-1 — APPLICATION TO REASON ON A QUESTION
 
 *Department of Popperian Inquiry. Complete Parts A–D for every
 application. Parts E–H apply only where indicated. Incomplete
@@ -16,21 +90,13 @@ opt-in tranche's delivery.*
 (files once per home via `deepreason setup`; changes here alter your
 qualification subject — see Part C notice)
 
-- A1: the provider name, e.g. 'ollama'.
-- A2: the provider endpoint (https).
-- A3: the exact model id.
-- A4: the model revision.
-- A5: model family — governs Part F judge eligibility.
-- A6: the context window, in tokens.
-- A7: completion ceiling. Reasoning-class models may burn this entirely on hidden thought; raise it rather than treating a typed seat failure as a defect report.
-- A8: the reasoning mode.
-- A9: env var name holding the credential; keys never stored.
+{generated["PART A"]}
 
 ## PART B — SEAT ASSIGNMENTS
 (all optional; B blank = one model fills every role, the protected
 solo configuration)
 
-- B1: role-group seats, GROUP -> PROFILE. Groups: conjecture (conjecturer+variator), coder, scratch, simulation (alias of conjecture).
+{generated["PART B1"]}
 - B2 † School seats, conjecture side: `--school-seat school-N=PROFILE`,
   repeatable — each school's conjecturer gets its own profile.
 - B3 † School seats, criticism side: `--criticism-seat
@@ -51,13 +117,7 @@ solo configuration)
 
 ## PART D — THE QUESTION (`deepreason reason "QUESTION"`)
 
-- D1: the question text; part of run identity.
-- D2: cycle budget.
-- D3: token budget.
-- D4: run the MiniReason reduced engine.
-- D5: a stored admission dossier sha256.
-- D5: files/directories to admit as evidence.
-- D5: admit bounded prefixes of oversized attachments.
+{generated["PART D"]}
 - D1a CONDITION: same question + same config = same run id; a
   leftover root refuses relaunch (RUN_ALREADY_STARTED) — retire it
   (H3) or vary the question. Seat bindings are NOT currently in
@@ -124,3 +184,25 @@ solo configuration)
 never an obligation; a solo run with everything on is always
 available; seats and wrappers change how content is generated, never
 what counts as evidence.*
+"""
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", action="store_true")
+    args = parser.parse_args(argv)
+    rendered = render()
+    if args.check:
+        current = FORM_PATH.read_text() if FORM_PATH.exists() else ""
+        if current != rendered:
+            print(f"{FORM_PATH} is stale relative to its generator.", file=sys.stderr)
+            return 1
+        print(f"{FORM_PATH} is fresh.")
+        return 0
+    FORM_PATH.write_text(rendered)
+    print(f"wrote {FORM_PATH}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
