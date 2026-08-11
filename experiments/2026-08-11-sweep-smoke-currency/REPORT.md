@@ -101,3 +101,10 @@ forward-looking note, not a finding against main's history.
   needed for the violation-search half either — this is itself worth one
   line in errata (a negative result, recorded as one, per CLAUDE.md's
   convention that a negative finding is never omitted).
+
+## Errata
+
+`docs/ERRATA.md` E18 (added and later self-corrected, same day, this
+tranche): the root_sweep.py coverage gap, and the correction to this
+tranche's own first-draft claim that no root carried the missing
+stamps. See E18 for the full text.

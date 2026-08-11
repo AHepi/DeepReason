@@ -106,3 +106,9 @@ One message answering both questions is enough: (1) draft v1.7 now /
 wait for the adjudication branch / other; (2) add the index now, defer
 moves / do both now / neither yet.
 
+## Errata
+
+None. This tranche measures coverage; it found no wrong claim in any
+committed document (the spec files are silent, not incorrect — see
+"Reading the table" above) and made no edits to `docs/harness-spec-*.md`.
+

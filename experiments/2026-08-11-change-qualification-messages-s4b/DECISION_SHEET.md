@@ -79,3 +79,9 @@ online form that circles every blank in red before you can submit it
 (the tool) — with a printed copy of that same online form, generated
 automatically, kept for anyone who'd rather read it on paper (the
 regenerated FORM DR-1).
+
+## Errata
+
+None. This tranche designs; it made no code or document edits outside
+its own tranche directory, and found no wrong claim in any other
+committed document.
