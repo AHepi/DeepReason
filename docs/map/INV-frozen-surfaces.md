@@ -128,10 +128,17 @@ every openable run root and diff. The instrument is committed, not per-session:
 
 Fields compared:
 
-    valid, epistemic_checks_passed, len(state.att), adjudication-blindness count
+    valid, epistemic_checks_passed, len(state.att), adjudication-blindness count,
+    module_digests (ModuleFingerprintsEventPayloadV1.digest, content not just
+    module_id), seat_digests (SeatBindingsEventPayloadV1.digest, content not
+    just group name)
 
 No root's `valid` and no root's `att` may change. The two sweeps should compare
-byte-identical. The sweep's expected baseline is 11 ERROR lines, all
+byte-identical. The last two fields were added 2026-08-11 (docs/ERRATA.md E18):
+the sweep previously reported only `modules=`/`seats=` identity keys
+(module_id/group names), which would sweep two roots as identical even if
+their fingerprinted content or bound profiles differed — no committed root
+carried either stamp yet, so this had not yet produced a wrong verdict. The sweep's expected baseline is 11 ERROR lines, all
 `UnsupportedRunManifestVersionError` — not a failure. Note the instrument
 matters twice over: by DIRECT manifest load over every git-tracked root the
 census is 28 v6 / 14 raising / 3 with no manifest (pinned by a check in

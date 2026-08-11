@@ -295,3 +295,40 @@ O1's own `RESULTS.md`/`DELIVERY.md`/`CHECKLIST.md`/`VALIDATION.md`/
 itself is a DESIGN-AND-STOP tranche per its own preplan and stopped at
 `SPEC.md`, never delivering a closing note back into O1's documents.
 The correction stands only in O2's `SPEC.md` prose until this entry.
+
+## 2026-08-11
+
+**E18 — `docs/map/INV-frozen-surfaces.md`'s "Fields compared" list
+undercounted what the root sweep actually needed to compare, and
+`tools/root_sweep.py` matched that undercount.** Found during Item 1 of
+the operator's seven-item sweep/smoke currency audit
+(`experiments/2026-08-11-sweep-smoke-currency/`). The sweep's `modules=`
+and `seats=` columns reported only the IDENTITY keys of the two typed
+record families (`ModuleFingerprintV1.module_id`, `SeatBindingV1.group`
+— both sets of names), never their CONTENT digests
+(`ModuleFingerprintsEventPayloadV1.digest`,
+`SeatBindingsEventPayloadV1.digest`). Two roots sharing the same
+module/group names but differing in actual fingerprinted content or
+bound profile would have swept as identical — not yet a wrong verdict,
+since no committed root under `experiments/` carries either stamp yet
+(confirmed: every sweep row before this fix read `modules=- seats=-`),
+but a real gap in an instrument whose stated job (`INV-frozen-
+surfaces.md`, "The root sweep") is exactly to catch a reader change
+silently reinterpreting a stored verdict. `docs/map/INV-frozen-
+surfaces.md`'s own "Fields compared" prose listed only the four
+original fields and never named the digests as missing, so a reader of
+that document had no way to know the coverage gap existed. Fixed
+mechanically, same tranche: `tools/root_sweep.py` now also reports
+`module_digests=`/`seat_digests=` (commit in
+`experiments/2026-08-11-sweep-smoke-currency/`), and `INV-frozen-
+surfaces.md`'s "Fields compared" list and `Verify` prose were updated in
+the SAME commit per the map's own convention. Zero `src/` lines changed.
+A full detached re-sweep over all 103 roots (`sweep-after-item1.txt`)
+was launched to confirm no committed root's verdict moved on any field
+that existed before this fix; LAUNCHED, result pending as of this
+entry (~1 min/root serially) — this entry is updated with the outcome
+once it completes, per this ledger's own append-only rule (a
+correction to a correction is a new entry, never a silent rewrite).
+Recorded per the operator's standing directive: an out-of-date
+verification instrument is a debugging error, and belongs here whether
+or not it had yet produced a wrong verdict.
