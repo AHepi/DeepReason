@@ -205,6 +205,10 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   more than the record shows; a negative or inconclusive result is
   recorded as one.
 - Scratch/temp files go in the session scratchpad, never the repo.
+- Prompts written for the operator to paste into executor windows are
+  delivered inline in the chat reply as ONE fenced code block (easy to
+  copy whole), never only in a committed file or spread across prose
+  (operator request, 2026-08-11).
 
 ## Operator design laws (stated by the operator, standing, not
 ## derived from defects)
