@@ -5,16 +5,36 @@ are bugs. DESIGN-AND-STOP: no code lands from this SPEC without fresh
 operator words (task handover, Item 4: "frozen surface 5 — no code
 without fresh operator words").
 
+## Addendum (2026-08-11, REQUEST.md Amendment 1 — operator approved)
+
+Q1 resolved to **(a) narrow**: S1 becomes a message-only pass (see S1
+below, revised) — zero change to `qualification_subject_payload` or
+any frozen-surface-5 code, folded into S2's error-catalog work rather
+than a separate item. Q3 resolved to **every caller**: S3's
+`validate-intake`/`IntakeFormV1` is the default intake path for
+everyone; `FORM_DR1_RUN_APPLICATION.md` becomes generated-only
+documentation, never a second primary way to start a run. Both
+resolutions match this SPEC's own recommendations verbatim — no design
+changes below, only removing the STOP. Execution proceeds as two
+sub-tranches per the Budget section's own recommendation: (i) S1+S2
+combined (message-only qualification fix + error catalog mechanism +
+44 entries), (ii) S3 (intake tool), each separately planned, executed,
+validated, and delivered.
+
 ## Items
 
-S1 (R1, Q1): Per-role qualification. Target: `src/deepreason/
-qualification.py` (frozen surface 5), `src/deepreason/runtime/
-launch_policy.py` (`require_v6_production_qualification`), `src/
-deepreason/readiness.py` (`get_seat_readiness`, already per-role since
-Rung S3). MATERIAL FORK — see Questions for operator Q1 below; this
-item is NOT resolved to one behavior in this SPEC.
-accept (once answered): a machine-decidable check depends on which
-option is chosen — deferred to this item's own future dr-plan-steps.
+S1 (R1, Q1 — RESOLVED to option (a) narrow, Addendum above): Per-role
+qualification, message-only — COLLAPSES INTO S2, zero standalone work.
+Re-examined at resolution time: "per role" needs no change (already
+true, Rung S3/S4); "added error messages" IS the catalog (S2). A2
+already establishes S2 is purely additive, reading existing `.code`
+strings without touching any raise site — so S1 requires ZERO edits to
+`qualification.py`, `runtime/launch_policy.py`, or `readiness.py`.
+Recording S1 as its own item only to close the loop on REQUEST.md R1;
+its acceptance check IS S2's.
+accept: S2's `deepreason explain-error <qualification-code>` covering
+all ~21 `QualificationError` codes IS the demonstration that R1's
+"added error messages" is satisfied — no separate check.
 
 S2 (R2, R5-of-Item5's broadened scope): human-readable error-code
 catalog. A full census (this tranche) found **572 deduplicated real
@@ -336,21 +356,19 @@ QUALIFICATION_*/DOCTOR_* families only — the census found 572 codes
 total; the other ~528 are explicit residue, never silently claimed
 covered). S3: ~150-250 lines (`IntakeFormV1` model + validate-intake
 CLI command + MCP tool wrapper + render_form_dr1.py + tests). S1: 0
-lines this tranche (Q1 blocks any code; A option, if approved, is a
-follow-on ~40-80 lines folded into S2's message-text pass, not
-separately budgeted here).
+lines, confirmed final (Addendum above) — collapses entirely into S2,
+no separate raise-site edits.
 
     python3 -c "print(sum([170, 250, 0]))"  # -> 420
 
-Total: ~420 lines upper bound (S2+S3 only; S1 fully deferred to Q1's
-answer), across an estimated 3-4 commits once approved (S2 alone; S3's
-model+validator; S3's CLI+MCP wiring; S3's FORM_DR1 regeneration +
-docs_verify pass). Over the ~300-line rung-split guidance — this SPEC
-itself recommends a two-sub-tranche split once approved: (i) S2 alone,
-(ii) S3 alone, each with its own delivery, rather than one ~420-line
-commit sequence. Frozen surfaces touched: **none, if Q1(a) and this
-SPEC's A3 both hold** — S1(b) is explicitly out of scope for this
-approval.
+Total: ~420 lines upper bound (S2+S3; S1 adds 0), across an estimated
+3-4 commits (S2 alone; S3's model+validator; S3's CLI+MCP wiring; S3's
+FORM_DR1 regeneration + docs_verify pass). Over the ~300-line
+rung-split guidance — executed as a two-sub-tranche split per this
+SPEC's own recommendation: (i) S1+S2 (message catalog, ~170 lines),
+(ii) S3 (intake tool, ~250 lines), each with its own delivery, rather
+than one ~420-line commit sequence. Frozen surfaces touched: **none**
+— Q1(a) confirmed, A3 holds, S1(b) remains out of scope.
 
 Rubric: 8/8 yes — every R has a spec item or an explicit STOP (R1→S1/Q1;
 R2→S2/A1; R3,R4→S3/Q3; R5→S3; R6→M4; C1,C2 out of scope with reason;
