@@ -93,6 +93,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     status_cmd = sub.add_parser("status", help="show provider and V6 qualification readiness")
     status_cmd.add_argument("--json", action="store_true")
+    explain_error_cmd = sub.add_parser(
+        "explain-error",
+        help="print a plain-language gloss for a typed error/refusal code",
+    )
+    explain_error_cmd.add_argument("code", help="the UPPERCASE_CODE to explain")
     config_cmd = sub.add_parser(
         "config", help="print source config, or compile/inspect a frozen RunManifest"
     )
@@ -614,6 +619,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "status":
         return _cmd_status(args)
+
+    if args.command == "explain-error":
+        return _cmd_explain_error(args)
 
     if args.command == "qualify":
         return _cmd_qualify(args)
@@ -1723,7 +1731,13 @@ def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | No
 
 def _print_qualify_failure(error: ValueError) -> None:
     print(str(error), file=sys.stderr)
-    if str(error).startswith(("QUALIFICATION_EXECUTION_FAILED", "DOCTOR_")):
+    from deepreason.error_catalog import lookup as _lookup_error_code
+
+    catalog_entry = _lookup_error_code(getattr(error, "code", "") or "")
+    if catalog_entry is not None:
+        print(f"What this means: {catalog_entry.what_it_means}", file=sys.stderr)
+        print(f"Next: {catalog_entry.next_action}", file=sys.stderr)
+    elif str(error).startswith(("QUALIFICATION_EXECUTION_FAILED", "DOCTOR_")):
         print(
             "This model did not complete production qualification. The "
             'reduced engine remains available: deepreason reason --shallow '
@@ -1736,6 +1750,25 @@ def _print_qualify_failure(error: ValueError) -> None:
             "qualification tier was recorded. Retry: deepreason qualify",
             file=sys.stderr,
         )
+
+
+def _cmd_explain_error(args) -> int:
+    from deepreason.error_catalog import lookup as _lookup_error_code
+
+    entry = _lookup_error_code(args.code)
+    if entry is None:
+        print(f"No catalog entry for {args.code} yet.", file=sys.stderr)
+        print(
+            "This code is real but not yet documented in the human-readable "
+            "catalog — see experiments/2026-08-11-change-qualification-"
+            "messages-s4b/PARKED.md for the residue queue.",
+            file=sys.stderr,
+        )
+        return 0
+    print(entry.summary)
+    print(f"What this means: {entry.what_it_means}")
+    print(f"Next: {entry.next_action}")
+    return 0
 
 
 def _print_qualify_headline(payload: dict, *, indent: str = "") -> None:
