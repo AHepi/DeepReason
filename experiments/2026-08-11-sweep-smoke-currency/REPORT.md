@@ -38,13 +38,23 @@ move without the reader moving."
 `seat_digests=` — the sorted set of each family's payload-level `digest`
 field, appended to the existing report line. `ast.parse` confirms the
 edit is syntactically valid; a live detached full-tree run
-(`sweep-after-item1.txt`, 103 roots) was launched to confirm the
-extended sweep completes cleanly and every pre-existing field stays
-byte-identical — LAUNCHED, not yet confirmed complete as of this
-commit (it runs ~1 min/root serially; still in progress). This entry
-will be updated with the result once it finishes; the code change
-itself does not depend on that confirmation to be correct (it is
-purely additive to the printed line, per the diff).
+(`sweep-after-item1.txt`, 103 roots) completed cleanly: 11 ERROR lines,
+matching the documented baseline exactly (all
+`UnsupportedRunManifestVersionError`), and every pre-existing field
+stays byte-identical to what the unmodified code would have produced.
+
+**Correction to this REPORT's own first draft:** the draft repeated
+`tools/root_sweep.py`'s own code comment that "no committed root under
+`experiments/` carries either stamp yet," without independently
+checking. The completed sweep disproves this — several committed roots
+already carry both module fingerprints (`modules=default`/
+`round-robin`) and seat bindings (`seats=coder`/`conjecture`), so the
+coverage gap was live on real record data, not merely hypothetical.
+What stands unchanged: every distinct identity key maps to exactly one
+digest across every root that carries it, so no actual divergence was
+hiding behind the gap and no committed root's verdict moves with this
+fix — only the instrument's ability to have caught one, had it existed,
+was missing. See `docs/ERRATA.md` E18 for the full correction.
 
 ## Part B — wheel smoke pin currency
 

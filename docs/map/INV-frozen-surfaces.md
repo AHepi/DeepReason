@@ -137,8 +137,12 @@ No root's `valid` and no root's `att` may change. The two sweeps should compare
 byte-identical. The last two fields were added 2026-08-11 (docs/ERRATA.md E18):
 the sweep previously reported only `modules=`/`seats=` identity keys
 (module_id/group names), which would sweep two roots as identical even if
-their fingerprinted content or bound profiles differed — no committed root
-carried either stamp yet, so this had not yet produced a wrong verdict. The sweep's expected baseline is 11 ERROR lines, all
+their fingerprinted content or bound profiles differed. Several committed
+roots already carry both stamps (confirmed by the first full-tree run with
+the new fields: `modules=default`/`round-robin`, `seats=coder`/`conjecture`,
+each identity key mapping to exactly one digest across every root that uses
+it) — the gap was live, not hypothetical, though no actual divergence was
+found hiding behind it. The sweep's expected baseline is 11 ERROR lines, all
 `UnsupportedRunManifestVersionError` — not a failure. Note the instrument
 matters twice over: by DIRECT manifest load over every git-tracked root the
 census is 28 v6 / 14 raising / 3 with no manifest (pinned by a check in
