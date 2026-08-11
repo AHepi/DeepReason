@@ -170,3 +170,47 @@ def test_v6_deferred_model_phase_is_completion_debt_and_malformed_is_integrity(
     assert findings[0].check == "model-phase-deferred"
     assert "rubric-trial" in findings[0].detail
     assert "malformed" in findings[1].detail
+
+
+def test_report_includes_signal_snapshot(tmp_path):
+    """Part F Step 54 (R15): `verify_root_report`'s `stats` dict gains an
+    additive `signal_snapshot` key carrying `signals_read.read_signal_
+    snapshot`'s output -- not a new report shape, no change to the typed
+    `VerificationReportV2` field set, so `deepreason status`/`report`
+    surfaces it without any consumer needing a schema migration."""
+
+    from deepreason.harness import Harness
+    from deepreason.ontology.event import LLMCall
+    from deepreason.verification.report import verify_root_report
+
+    root = tmp_path / "run"
+    harness = Harness(root)
+    harness.record_measure(
+        inputs=["config-critique:config_mistuned", "recommendation:x", "cited:1"]
+    )
+    prompt_ref = harness.blobs.put(b"prompt")
+    raw_ref = harness.blobs.put(b'{"ok":true}')
+    call = LLMCall(
+        role="conjecturer",
+        model="gemma4:31b",
+        endpoint="https://gemma.invalid/v1",
+        prompt_ref=prompt_ref,
+        raw_ref=raw_ref,
+        tokens=5,
+        prompt_tokens=3,
+        completion_tokens=2,
+    )
+    harness.record_llm_calls([call], "test-spend")
+
+    report = verify_root_report(root, allow_missing_terminal=True)
+
+    snapshot = report.stats["signal_snapshot"]
+    assert snapshot["schema"] == "deepreason-signal-snapshot.v1"
+    assert snapshot["config_critique"]["signal"] == "config-critique:config_mistuned"
+    assert snapshot["deferred_model_phase_counts"] == {}
+    assert snapshot["token_spend"] == {
+        "prompt_tokens": 3,
+        "completion_tokens": 2,
+        "total": 5,
+        "calls": 1,
+    }

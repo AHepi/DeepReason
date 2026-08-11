@@ -1237,6 +1237,11 @@ def verify_root_report(
         "legacy_adapter_suppressed_count": 0,
         "manifest_schema_version": manifest_schema_version,
     }
+    from deepreason.signals_read import read_signal_snapshot
+
+    stats["signal_snapshot"] = read_signal_snapshot(resolved).model_dump(
+        mode="json", by_alias=True
+    )
     return VerificationReportV2(
         integrity=tuple(channels["integrity"]),
         security=tuple(channels["security"]),

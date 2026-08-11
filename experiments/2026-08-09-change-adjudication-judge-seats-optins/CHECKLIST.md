@@ -1,5 +1,5 @@
 # Checklist for: adjudication / judge-seats / legacy-criticism / schools opt-ins
-State: next=52 blockers=none (Parts A+B+C+D+D2+B2 complete; Part E FULLY COMPLETE, steps 42-51 -- both independent school-seat levers wired (conjecture-side `--school-seat` Step 44, criticism-side `--criticism-seat` Step 44b), Consequence-A/B regression tests (45-46), CLI disclosure text for both (47, 49), qualification-subject-exclusion test (48), map updated for both levers (50), subsystem-ring batch commit (51); targeted sweep 260 passed, `docs_verify --fast` 0 failed, full `docs_verify` launched in background (authority of record; any miss becomes a follow-up fix, not a retroactive edit); next is Step 52, Part F's static signal-read surface; diff-budget base a942f404c, 1068/1600)
+State: next=58 blockers=none (Parts A+B+C+D+D2+B2+E+F ALL COMPLETE. Part F steps 52-57: `signals_read.py::read_signal_snapshot(root)` -- typed, read-only aggregation of the latest config-critique, per-phase deferred-model-phase counts, and total provider token spend -- wired additively into `verify_root_report`'s `stats["signal_snapshot"]`, map-documented under `SUB-verification.md` (a missing-closing-backtick bug in the new check was found and fixed before it could silently ship uncounted), no new signal marker introduced. Only Part G (steps 58-63, gate and delivery: full `docs_verify --audit`, frozen-surface diff confirmation, full `pytest tests/ -q -n 4` gate, wheel smokes, root sweep, final push/clean-tree confirmation) remains before `dr-validate-change`. Full `docs_verify`: 854 checks, 0 failed. diff-budget base a942f404c, 1340/1600)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -2145,12 +2145,42 @@ holds).
       $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
       {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 477, "tests": 734, "docs/map": 65}, "total_insertions": 1276, "ceiling": 1600, "verdict": "WITHIN"}
       ```
-- [ ] 54. (R15) Wire `read_signal_snapshot` into the existing
+- [x] 54. (R15) Wire `read_signal_snapshot` into the existing
       `verification/report.py` report output (an additive field, not a
       new report shape) so `deepreason status`/`report` surfaces it.
       done-when: `tests/test_verification_report.py::test_report_includes_signal_snapshot`
       passes.
-- [ ] 55. (R15) Register the new marker's signal name in
+
+      **Filename correction:** `tests/test_verification_report.py` does
+      not exist; `_deferred_model_phase_findings`'s own tests (the
+      closest existing coverage of `verify_root_report`'s dimensional
+      wiring) live in `tests/test_v6_verification_transactions.py`, which
+      is where this test was added.
+
+      **Design choice, not a guess:** `VerificationReportV2` is a
+      `frozen=True, strict=True, extra="forbid"` model with a fixed field
+      set (`integrity`/`security`/.../`stats`); adding a NEW top-level
+      Pydantic field would be a schema growth, closer to "a new report
+      shape" than the CHECKLIST's own "additive field, not a new report
+      shape" phrasing allows. `stats: dict[str, Any]` is already the
+      report's open extension point (`stats["verification_v2"]` is the
+      existing precedent right above the new line) — added
+      `stats["signal_snapshot"] = read_signal_snapshot(resolved).model_dump(
+      mode="json", by_alias=True)` there instead, one line, no schema
+      migration for any existing consumer.
+
+      ```
+      $ python -m pytest tests/test_v6_verification_transactions.py -q
+      5 passed in 0.14s
+      $ python -m pytest tests/test_adjudication_blindness.py tests/test_amendment_chain_integrity.py tests/test_bridge_after_typed_stop.py tests/test_bridge_retry_failed_terminal.py tests/test_campaign_coordinator.py tests/test_incident_wave_a_v2_fixtures.py tests/test_r0_terminal_verification.py tests/test_v6_bridge_transactions.py tests/test_v6_compact_recovery_reporting.py tests/test_v6_controller3_replay_verification.py tests/test_v6_engaged_repair_verification.py tests/test_v6_indexes_atomic.py tests/test_v6_insufficient_capability_reporting.py tests/test_v6_resumed_terminal_revalidation.py tests/test_v6_scratch_authoring_transactions.py tests/test_v6_terminal_commitment_authority.py tests/test_v6_three_root_concurrency.py tests/test_v6_verification_transactions.py -q -n 4
+      323 passed, 2 skipped in 289.71s
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 853 checks, 783 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 482, "tests": 778, "docs/map": 65}, "total_insertions": 1325, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+- [x] 55. (R15) Register the new marker's signal name in
       `src/deepreason/signals.py` if `read_signal_snapshot` introduces any
       new literal signal string (closing the exact "escapes the signal
       registry" trap `docs/map/SUB-scheduler.md`'s Traps section already
@@ -2161,15 +2191,94 @@ holds).
       aggregation of existing markers only), this step's done-criterion is
       "no new literal signal string was introduced" — confirm by grep and
       paste the (empty) result.
-- [ ] 56. (R15) Map update, same commit: add a row to
+
+      No new marker: `signals_read.py` is purely a READER
+      (`_deferred_model_phase_counts`, `_token_spend`,
+      `read_signal_snapshot`) — it never calls `harness.record_measure`
+      or `harness.record_llm_calls` itself, so it cannot introduce a new
+      log-writing literal by construction. `"deepreason-signal-snapshot.v1"`
+      is a Pydantic model schema tag on `SignalSnapshotV1`, not a
+      `Measure` event's `inputs[0]` — a different namespace entirely, not
+      subject to this registry.
+
+      ```
+      $ grep -n "record_measure(\|record_llm_calls(" src/deepreason/signals_read.py
+      (no output — signals_read.py writes nothing)
+      $ python -m pytest tests/test_signals.py -q
+      9 passed in 3.31s
+      ```
+- [x] 56. (R15) Map update, same commit: add a row to
       `docs/map/SUB-scheduler.md` or a new small doc for
       `signals_read.py` (executor's judgment at execution time on whether
       this warrants its own `SUB-*.md` or a row in an existing one — flag
       for the operator if genuinely ambiguous, per dr-ask-the-right-question,
       rather than guessing).
-- [ ] 57. (R15) [COMMIT] Subsystem ring:
+
+      **Executor's judgment, not ambiguous enough to STOP for:**
+      `SUB-scheduler.md`'s `Owns:` is `src/deepreason/scheduler/` —
+      `signals_read.py` lives at the top level, not under that package,
+      and its only wired-in consumer (Step 54) is `verify_root_report`.
+      `SUB-verification.md` (`Owns: invariants.py, verification/`) is
+      where the wiring actually lands, so that's where the map update
+      went — added `src/deepreason/signals_read.py` to its `Owns:` line,
+      extended the existing "in-memory `stats`" paragraph to describe
+      `stats["signal_snapshot"]` (with a note that, unlike bare `stats`,
+      it never fails closed to `{}` on an unopenable root — each of its
+      three sub-reads tolerates that independently), and added a
+      "Where to change what" row. A brand-new `SUB-signals-read.md` felt
+      disproportionate for one ~100-line module with a single consumer
+      today; if it grows independent consumers later, splitting it out
+      is a small, well-scoped follow-up, not lost work now.
+
+      **Bug found and fixed, not silently worked around:** the first
+      version of the new `check:` line was missing its CLOSING backtick
+      (only opened with `` `check: `` at column 0, never closed) — this
+      is a real defect in the map edit itself, not a docs_verify quirk:
+      `docs_verify.py` silently SKIPS a malformed check line rather than
+      erroring on it, so `--fast` and even a full run both reported
+      "853 checks" (unchanged) with 0 failed, which LOOKED like success
+      but meant the new check was never counted or executed at all. Only
+      caught by independently counting `` `check: ``-prefixed lines in
+      the file (23, expected) versus the tool's reported total (853, not
+      854) and noticing the mismatch. Fixed by closing the backtick;
+      re-verified the total moved to 854 with 0 failed, confirming the
+      new check now actually runs (and passes).
+
+      ```
+      $ python tools/docs_verify.py --fast
+      docs_verify [fast]: 53 documents, 854 checks, 853 reused, 4 workers
+      docs_verify: 0 failed
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 854 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 482, "tests": 778, "docs/map": 80}, "total_insertions": 1340, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
+- [x] 57. (R15) [COMMIT] Subsystem ring:
       `python -m pytest tests/test_signals_read.py tests/test_verification_report.py tests/test_signals.py -q`.
       "N passed, 0 failed" (paste). Diff budget, commit, push.
+
+      **Filename correction:** `tests/test_verification_report.py` does
+      not exist; substituted `tests/test_v6_verification_transactions.py`
+      per Step 54's own correction.
+
+      Part F (Steps 52-57) is now fully specced, built, tested, and
+      documented: `signals_read.py`'s `read_signal_snapshot(root)`
+      aggregates the latest config-referee critique, per-phase deferred-
+      model-phase counts, and total provider token spend into one typed
+      `SignalSnapshotV1`, wired additively into `verify_root_report`'s
+      `stats["signal_snapshot"]`, with no new event/record type and no
+      mid-run consumption.
+
+      ```
+      $ python -m pytest tests/test_signals_read.py tests/test_v6_verification_transactions.py tests/test_signals.py -q
+      16 passed in 3.14s
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 854 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/diff_budget.py a942f404c --ceiling 1600 --paths src/deepreason tests docs/map
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "a942f404c", "against": null, "areas": {"src/deepreason": 482, "tests": 778, "docs/map": 80}, "total_insertions": 1340, "ceiling": 1600, "verdict": "WITHIN"}
+      ```
 
 ---
 
