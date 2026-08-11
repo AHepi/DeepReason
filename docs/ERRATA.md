@@ -389,3 +389,30 @@ then-unmerged `claude/adjudication-judge-seats-optins-4nb7ov` branch,
 invisible from the tree this entry's check ran against. The dangling
 citation resolves the moment that branch merges; what stands is only
 that the preplan cited it before it was readable from main.)
+
+**E20 — `docs/RESEARCH_BACKEND.md`'s header Status line says v6 in-run
+research is gated; the code and the rest of the same document say it
+shipped.** Line 6 reads "V6 in-run enablement remains gated
+(`V6_RESEARCH_UNAVAILABLE`) and is tranche 2," written before tranche 2
+landed and never re-synced. `run_manifest.py:2869-2874` shows the gate is
+conditional — `V6_RESEARCH_UNAVAILABLE` fires only when research is
+enabled with a backend other than `web.contained.v1`, the one implemented
+backend — and the document's own later sections say tranche 2 (A, B, C1,
+C2) is complete and live-proven (lines 149-189). Confirmed live against
+the committed record, not just prose:
+`experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100`
+replays with `verify_root` reporting zero violations, three model-proposed
+research proposals, three grants, three receipts, and one consumption of
+research fetches into citable evidence, and a sibling root in the same
+campaign (`run-5a771259557378224bd68591483817be`) shows two of three
+proposals live-denied with the typed reason `requests_budget_exhausted`.
+Not corrected in `docs/RESEARCH_BACKEND.md` itself by this entry — that is
+Phase A's finding, recorded here per the errata checkpoint rule; the fix
+(updating the header Status line) is deferred to whoever next touches
+that document, since this tranche's own scope is the probe-apparatus
+SPEC, not a `RESEARCH_BACKEND.md` edit. Evidence:
+`experiments/2026-08-09-change-llm-probe-apparatus/AUDIT.md` §1-2.
+(Renumbering note, added at merge: minted as "E18" on its delivery
+branch — the third same-day "E18" against a ledger ending at E17; see
+E19's note. This ledger serializes them in merge order; the probe
+tranche's own artifacts stay as delivered.)
