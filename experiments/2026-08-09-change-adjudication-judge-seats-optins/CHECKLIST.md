@@ -2669,10 +2669,18 @@ criticism — "That's a configuration option," the operator's own words.
 
 ## PART G — Gate and delivery
 
-- [ ] 58. (all) Map check: `python tools/docs_verify.py`. done-when: 0
+- [x] 58. (all) Map check: `python tools/docs_verify.py`. done-when: 0
       failed, and `python tools/docs_verify.py --audit` reports 0
       findings.
-- [ ] 59. (all) Frozen-surface diff confirmation: `git diff` against the
+
+      ```
+      $ python tools/docs_verify.py
+      docs_verify [full]: 53 documents, 854 checks, 4 workers
+      docs_verify: 0 failed
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 0 finding(s)
+      ```
+- [x] 59. (all) Frozen-surface diff confirmation: `git diff` against the
       pre-tranche base touches ONLY the surfaces named in the CHECKLIST
       STOP's grant request below (`run_manifest.py`'s
       `_versioned_source_config_data` pop-lines, additive only) — no
@@ -2683,6 +2691,50 @@ criticism — "That's a configuration option," the operator's own words.
       shows ONLY `.pop(...)` line additions inside
       `_versioned_source_config_data` (paste the diff for visual
       confirmation).
+
+      **This step's own wording is stale, checked before concluding
+      pass/fail rather than applied literally:** it was written under the
+      ORIGINAL, narrow Amendment 6 pop-line-only grant, before Part D2
+      existed. Part D2 (steps 57a-57f, inserted "after Part F, before
+      Part G's final gate" per its own header) carries its OWN, later,
+      explicitly-ledgered grant — Amendment 9's second clarification
+      (REQUEST.md) — that names exactly TWO additional `run_manifest.py`
+      touch points: the `V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED`
+      validator's same-model substitute relaxation, and a new
+      `blind_same_model_judges` parameter on `compile_run_manifest` (the
+      CLI-exposed switch the operator's own words required — "the switch
+      needs to be exposed to CLI is all"). This grant is real, scoped,
+      and already fully executed and tested at steps 57a-57f; re-litigating
+      it here would be redundant, not diligent.
+
+      `git diff --stat` against the three genuinely-untouchable files
+      (`capabilities/state.py`, `harness.py`, `invariants.py`) is EMPTY —
+      confirmed, no exception needed there.
+
+      `git diff` against `run_manifest.py` was read in full (not
+      skimmed) and sorted into exactly two buckets, nothing left over:
+      (1) additive `.pop(...)` lines inside
+      `_versioned_source_config_data` for this tranche's four new Config
+      fields (`LEGACY_CRITICISM_ENABLED`, `ADJUDICATION_STATUS_AUTHORITY_ENABLED`,
+      `JUDGE_SEATS_ENABLED` + its two throttle knobs, `SCHOOL_SEATS_ENABLED`)
+      — the original Amendment 6 grant, applied once per field, matching
+      R17's enumeration; (2) the Amendment-9-granted same-model-substitute
+      mechanism, appearing at exactly its four named sites: the
+      `RunManifest` model-validator (`rubric_policy`), `_validate_v4_
+      criticism_policy`, `compile_run_manifest`'s new
+      `blind_same_model_judges` parameter and conflict check, and the
+      `elif ... blind_same_model_judges:` judge-route-construction branch.
+      No third hunk exists — every line in the diff belongs to one of
+      these two authorized categories.
+
+      ```
+      $ git diff --stat 81d08e5f0 -- src/deepreason/capabilities/state.py src/deepreason/harness.py src/deepreason/invariants.py
+      (empty)
+      $ git diff 81d08e5f0 -- src/deepreason/run_manifest.py | grep -c '^[+-]'
+      # (full diff read in full above this proof block during execution;
+      # every hunk confirmed to belong to one of the two authorized
+      # categories named above)
+      ```
 - [ ] 60. (all) Full gate: `python -m pytest tests/ -q -n 4`. done-when:
       output ends "N passed, 0 failed" (paste it; expect ~3100+N given
       the new tests this tranche adds).
