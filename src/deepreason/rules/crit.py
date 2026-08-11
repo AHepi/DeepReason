@@ -49,8 +49,18 @@ from deepreason.rules.warrants import (
 
 
 def _authority(config) -> str:
-    """Resolve the closed V6 argumentative-authority policy."""
-    return argumentative_authority_mode(config)
+    """Resolve the closed V6 argumentative-authority policy.
+
+    The master reachability gate (ADJUDICATION_STATUS_AUTHORITY_ENABLED)
+    is applied HERE, at the operational consumption site, not inside
+    `argumentative_authority_mode` itself -- that function's return value
+    also feeds preflight misconfiguration detection, which needs the
+    DECLARED value regardless of the gate's state.
+    """
+    mode = argumentative_authority_mode(config)
+    if not getattr(config, "ADJUDICATION_STATUS_AUTHORITY_ENABLED", False):
+        return "observe_only"
+    return mode
 
 
 # The manifest's own vocabulary (`CriticismPolicyV1.authority`), deliberately
@@ -113,9 +123,22 @@ def _critic_execution(
 
     The returned kwargs are the exact route inputs for ``LLMAdapter.call``;
     the rendered prefix is semantic conditioning only.  No field from the
-    conditioning record is interpreted as routing or authority.
+    conditioning record is interpreted as routing or authority. A route
+    with no school (Road E's legacy circuit) is a third valid combination,
+    distinct from the no-envelope and school-routed cases below.
     """
 
+    if endpoint_lease is not None and critic_school_id is None and critic_school_context is None:
+        if endpoint_lease.role != "argumentative_critic":
+            raise ValueError("criticism endpoint lease must belong to argumentative_critic")
+        return (
+            {
+                "endpoint_index": endpoint_lease.seat,
+                "endpoint_lease": endpoint_lease,
+                "school_id": None,
+            },
+            "",
+        )
     supplied = (
         endpoint_lease is not None,
         critic_school_id is not None,
@@ -258,13 +281,14 @@ def _v6_transactional_batch_call(
     run_manifest,
     *,
     endpoint_lease: EndpointLease,
-    critic_school_id: str,
+    critic_school_id: str | None = None,
     target_ids: tuple[str, ...],
     assignment_refs: tuple[str, ...],
     coverage_attempt_index: int,
     phase: str,
     caller_trigger_ref: str | None,
     pack_factory: Callable[[], str],
+    dispatch_authority: str | None = None,
     recover_existing: bool = False,
 ) -> tuple[BatchCriticOutput, object]:
     """Authorize and terminalize one v6 critic provider boundary.
@@ -296,8 +320,6 @@ def _v6_transactional_batch_call(
         raise ValueError("transactional criticism requires the exact v6 critic contract")
     if endpoint_lease.role != "argumentative_critic":
         raise ValueError("transactional criticism requires a critic route lease")
-    if not critic_school_id:
-        raise ValueError("transactional criticism requires a critic school")
     targets = tuple(dict.fromkeys(target_ids))
     if not targets or len(targets) != len(target_ids):
         raise ValueError("transactional criticism targets must be nonempty and unique")
@@ -321,6 +343,7 @@ def _v6_transactional_batch_call(
         "coverage_attempt_index": coverage_attempt_index,
         "phase": phase,
         "caller_trigger_ref": caller_trigger_ref,
+        "dispatch_authority": dispatch_authority,
     }
     service = InquiryTransactionService(harness, manifest, meter)
     aliases = AliasTable(
@@ -525,7 +548,7 @@ def _v6_transactional_atomic_critic_call(
     run_manifest,
     *,
     endpoint_lease: EndpointLease,
-    critic_school_id: str,
+    critic_school_id: str | None = None,
     target_id: str,
     transition,
     child_index: int,
@@ -1198,7 +1221,9 @@ def crit_argumentative(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
+        critic_school_id is not None
+        or argumentative_authority is not None
+        or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
     pack = render_crit_pack(
@@ -1361,17 +1386,30 @@ def crit_argumentative_batch(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
+        critic_school_id is not None
+        or argumentative_authority is not None
+        or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
+    if run_manifest is None and endpoint_lease is None and critic_school_id is None:
+        # Self-detection: the scheduler's call carries no envelope at all
+        # (SEAM-scheduler-x-rules.md forbids it choosing one); a v6-bound
+        # adapter still needs its manifest and a default route to dispatch.
+        # The lease itself is asked of the adapter, never resolved here —
+        # a rule may not import a route-resolution primitive (SEAM-llm-x-rules.md).
+        bound_manifest = adapter.bound_v6_manifest()
+        if bound_manifest is not None:
+            run_manifest = bound_manifest
+            endpoint_lease = adapter.bound_v6_default_lease("argumentative_critic")
+    dispatch_authority = authority if critic_school_id is None else None
     active_v6 = False
     if run_manifest is not None:
         from deepreason.run_manifest import RunManifest
 
         run_manifest = RunManifest.model_validate(run_manifest)
         active_v6 = run_manifest.schema_version == 6
-    if active_v6 and (endpoint_lease is None or critic_school_id is None):
-        raise ValueError("v6 criticism requires one manifest-bound school route")
+    if active_v6 and endpoint_lease is None:
+        raise ValueError("v6 criticism requires a manifest-bound route")
     target_ids = list(dict.fromkeys(target_ids))
     if not target_ids:
         return []
@@ -1430,7 +1468,6 @@ def crit_argumentative_batch(
     resuming_atomic_decomposition = False
     if active_v6:
         assert endpoint_lease is not None
-        assert critic_school_id is not None
 
         from deepreason.workflow.models import RouteLeaseRefV1
 
@@ -1448,6 +1485,7 @@ def crit_argumentative_batch(
             "coverage_attempt_index": transaction_attempt_index,
             "phase": "primary",
             "caller_trigger_ref": transaction_trigger_ref,
+            "dispatch_authority": dispatch_authority,
         }
 
         def source_root_payload(transition):
@@ -1531,6 +1569,7 @@ def crit_argumentative_batch(
                 phase=phase,
                 caller_trigger_ref=transaction_trigger_ref,
                 pack_factory=pack_factory,
+                dispatch_authority=dispatch_authority,
                 recover_existing=resuming_atomic_decomposition,
             )
 

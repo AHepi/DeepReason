@@ -335,7 +335,7 @@ def _recover_criticism_effect(
             output,
             fallback_cases,
             call,
-            critic_school_id=str(payload["critic_school_id"]),
+            critic_school_id=payload["critic_school_id"],
             llm_already_recorded=True,
             restart_safe=True,
             effect_source_call_seq=source_call_seq,
@@ -352,7 +352,7 @@ def _recover_criticism_effect(
         authority="observe_only",
         call_kwargs={},
         school_prefix="",
-        critic_school_id=str(payload["critic_school_id"]),
+        critic_school_id=payload["critic_school_id"],
         transactional_call=None,
         llm_already_recorded=True,
         restart_safe=True,
@@ -645,18 +645,39 @@ def _criticism_contract(harness, manifest, item, preparation, payload):
     _trigger(preparation, payload, "criticism:")
     versions = manifest.control_plane_policy.contract_versions
     _authority(preparation.contract_id == versions.batch_critic_contract, "critic contract differs")
-    policy = manifest.criticism_policy
-    _authority(policy is not None, "manifest does not authorize criticism")
-    _authority(policy.authority == "observe_only", "critic authority is not recoverable")
     school_id = payload.get("critic_school_id")
-    binding = next((value for value in policy.bindings if value.school_id == school_id), None)
-    _authority(binding is not None, "critic school has no manifest binding")
     lease = preparation.route_lease
-    _authority(
-        (lease.role, lease.seat, lease.endpoint_id)
-        == (binding.role, binding.seat, binding.endpoint_id),
-        "critic route differs from school binding",
-    )
+    if school_id is None:
+        # School-free (legacy) dispatch has no criticism_policy binding to
+        # recover against at all -- the route only needs to belong to the
+        # role's manifest-configured seats, and the resolved authority was
+        # frozen into the payload at dispatch time (S13i), never
+        # reconstructed from a live/manifest-derived Config (S13e).
+        routes = manifest.roles.get("argumentative_critic", ())
+        _authority(
+            lease.role == "argumentative_critic"
+            and any(
+                lease.endpoint_id == route.endpoint_id
+                and lease.route_sha256 == route_fingerprint(route)
+                for route in routes
+            ),
+            "critic route has no manifest binding",
+        )
+        _authority(
+            payload.get("dispatch_authority") == "observe_only",
+            "critic authority is not recoverable",
+        )
+    else:
+        policy = manifest.criticism_policy
+        _authority(policy is not None, "manifest does not authorize criticism")
+        _authority(policy.authority == "observe_only", "critic authority is not recoverable")
+        binding = next((value for value in policy.bindings if value.school_id == school_id), None)
+        _authority(binding is not None, "critic school has no manifest binding")
+        _authority(
+            (lease.role, lease.seat, lease.endpoint_id)
+            == (binding.role, binding.seat, binding.endpoint_id),
+            "critic route differs from school binding",
+        )
     targets = payload.get("target_ids")
     assignments = payload.get("assignment_refs")
     _authority(
@@ -688,6 +709,17 @@ def _criticism_contract(harness, manifest, item, preparation, payload):
         _authority(
             entry.content_sha256 == _artifact_digest(harness, entry.object_ref),
             "critic target bytes differ from exposure digest",
+        )
+    if school_id is None:
+        # School-free criticism has no per-target coverage obligation at
+        # all -- CriticismAssignmentV1 is inherently school-to-school
+        # bookkeeping (its own critic_school_id field is a required,
+        # pattern-constrained str) and the self-sufficient dispatch (S13i)
+        # never populates transaction_assignment_refs.
+        _authority(not assignments, "school-free criticism must carry no assignment obligation")
+        return BatchCriticWireContractV2(
+            AliasTable(expected_aliases),
+            expected_targets=preparation.target_refs,
         )
     _authority(len(assignments) == len(targets), "critic assignment cardinality differs")
     for assignment_ref, target_id in zip(assignments, targets, strict=True):

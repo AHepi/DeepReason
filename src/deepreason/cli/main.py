@@ -9,6 +9,28 @@ from deepreason.harness import Harness
 from deepreason.views.theory import theory
 from deepreason.views.why import why
 
+# Part D (S2b, R2, "judge-suspicion law"): the judge-audit evidence-review
+# tranche's findings, surfaced at opt-in rather than left for the operator
+# to discover only after enabling JUDGE_SEATS_ENABLED. A static summary of
+# already-committed evidence (experiments/2026-08-09-change-judge-evidence-
+# review/REVIEW.md), not new research -- update only if that review is
+# ever redone, never to make the opt-in read more favorably.
+JUDGE_SEATS_EVIDENCE_SUMMARY = (
+    "Judge-audit evidence (experiments/2026-08-09-change-judge-evidence-"
+    "review/REVIEW.md): the CRITIC stage is measured content-blind "
+    "(objection rate 1.0 on both clean and corrupted content, three "
+    "independent live studies). The JUDGE-gated conviction stage, under "
+    "the harness's strict default (cross-family, unanimous), has measured "
+    "sensitivity of only 11.9% against 42 planted ground-truth defects, at "
+    "0% false conviction -- it almost never convicts. Loosening to "
+    "same-family unanimous voting raises false conviction of clean work to "
+    "47.5%; either-suffices to 60%. Self-preference/verbosity bias has "
+    "zero live measurements in the committed record -- an open evidentiary "
+    "gap, not a clean bill of health. observe_only (today's default) is "
+    "already a judge-free, solo-compatible road at zero cost: enabling "
+    "judge seats means opting OUT of that already-proven-safe floor."
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -63,6 +85,65 @@ def build_parser() -> argparse.ArgumentParser:
             "default (no --seat) leaves every role on the profile above"
         ),
     )
+    setup_cmd.add_argument(
+        "--school-seat",
+        action="append",
+        default=None,
+        metavar="school-N=PATH",
+        help=(
+            "bind an existing provider profile file to a single seeded "
+            "school's conjecturer route (school-0..school-3); repeatable, "
+            "conjecture-side only -- never touches criticism. Requires "
+            "SCHOOL_SEATS_ENABLED in your config profile (this flag only "
+            "persists the binding; the master gate itself is still set "
+            "via --config). Default (no --school-seat) leaves every "
+            "school on the profile above. Caution: adding route diversity "
+            "ANYWHERE in the run's role table -- including here, on "
+            "conjecturer -- flips the whole run out of single-model "
+            "status, which can revoke the argument trial's cross-school "
+            "substitute for the (unrelated, untouched) judge role and "
+            "turn a graceful decline into a hard preflight failure there. "
+            "Cost: moving a school to a different seat changes the "
+            "qualification battery's pair inventory, which changes the "
+            "qualification subject digest -- this is a cache miss, not a "
+            "routing tweak, and reruns the full battery (minutes, "
+            "hundreds of provider calls) on the next `deepreason qualify`."
+        ),
+    )
+    setup_cmd.add_argument(
+        "--criticism-seat",
+        action="append",
+        default=None,
+        metavar="school-N=PATH",
+        help=(
+            "bind an existing provider profile file to a single seeded "
+            "school's argumentative_critic route (school-0..school-3); "
+            "repeatable, criticism-side only -- never touches conjecture "
+            "(independent of --school-seat; use both, either, or neither). "
+            "Requires SCHOOL_SEATS_ENABLED AND LEGACY_CRITICISM_ENABLED=False "
+            "already set in your config profile (criticism must already be "
+            "school-routed before a per-school distinct route is "
+            "meaningful; this flag only persists the binding, both gates "
+            "are still set via --config). Default (no --criticism-seat) "
+            "leaves every school's criticism binding on the shared default."
+        ),
+    )
+    setup_cmd.add_argument(
+        "--judge-seats",
+        action="store_true",
+        help=(
+            "acknowledge the judge-audit evidence before enabling "
+            "JUDGE_SEATS_ENABLED in your config profile (this flag only "
+            "prints the disclosure below; JUDGE_SEATS_ENABLED itself is "
+            "still set via --config). "
+            # argparse's HelpFormatter treats "%" as its own %(...)s
+            # substitution syntax, so every literal "%" in the evidence
+            # text (11.9%, 47.5%, etc.) must be doubled for --help alone;
+            # the printed setup-time disclosure below uses the unescaped
+            # constant, since print() does no such substitution.
+            + JUDGE_SEATS_EVIDENCE_SUMMARY.replace("%", "%%")
+        ),
+    )
     qualify_cmd = sub.add_parser(
         "qualify", help="explicitly qualify the configured V6 provider contract"
     )
@@ -114,6 +195,19 @@ def build_parser() -> argparse.ArgumentParser:
                              help="assign this exact concrete model route to every active role")
     compile_cmd.add_argument("--judge-family", default=None,
                              help="configured endpoint id, model id, URL, or family for seat 2")
+    compile_cmd.add_argument(
+        "--blind-same-model-judges",
+        action="store_true",
+        help=(
+            "in --single-model mode, give judge a second seat on the SAME "
+            "frozen route instead of requiring --judge-family's second, "
+            "different-family route. Relies on the judge pack's content-"
+            "blindness guarantee (never discloses author/model/school "
+            "identity, tests/test_judge_ensemble_boundary.py::"
+            "test_judge_pack_never_names_an_author_school_or_model) rather "
+            "than model diversity -- mutually exclusive with --judge-family"
+        ),
+    )
     compile_cmd.add_argument("--profile", choices=("compact", "standard", "frontier"),
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
@@ -616,6 +710,30 @@ def _main(argv: list[str] | None = None) -> int:
                 write_seat_bindings(
                     parse_seat_flags(args.seat), seat_bindings_path()
                 )
+            if getattr(args, "school_seat", None) is not None:
+                from deepreason.seat_bindings import (
+                    parse_school_seat_flags,
+                    school_seat_bindings_path,
+                    write_seat_bindings,
+                )
+
+                write_seat_bindings(
+                    parse_school_seat_flags(args.school_seat),
+                    school_seat_bindings_path(),
+                )
+            if getattr(args, "criticism_seat", None) is not None:
+                from deepreason.seat_bindings import (
+                    criticism_seat_bindings_path,
+                    parse_school_seat_flags,
+                    write_seat_bindings,
+                )
+
+                write_seat_bindings(
+                    parse_school_seat_flags(args.criticism_seat),
+                    criticism_seat_bindings_path(),
+                )
+            if getattr(args, "judge_seats", False):
+                print("\n" + JUDGE_SEATS_EVIDENCE_SUMMARY + "\n")
         except ValueError as error:
             print(str(error), file=sys.stderr)
             return 1
@@ -701,6 +819,13 @@ def _main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 1
+        if args.judge_family and args.blind_same_model_judges:
+            print(
+                "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT: pass at most one "
+                "of --judge-family, --blind-same-model-judges",
+                file=sys.stderr,
+            )
+            return 1
         control_plane_policy = None
         try:
             control_plane_policy = ControlPlanePolicyV3.model_validate_json(
@@ -716,6 +841,7 @@ def _main(argv: list[str] | None = None) -> int:
                 model_profile=args.profile,
                 single_model=args.single_model,
                 judge_family=args.judge_family,
+                blind_same_model_judges=args.blind_same_model_judges,
                 rubric_policy=args.rubric_policy,
                 concurrency=args.concurrency,
                 capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),

@@ -57,7 +57,7 @@ cries wolf.
 | The authority decision | `authority.py` | `trial_authority_for`, `argumentative_authority_mode` | surface knob → per-call mode, consulted upstream of every mint it governs |
 | Mint sites that DO consult it | `rules/crit.py`, `informal/trial.py` | `_resolve_authority`, `_coerce_trial_authority` | the LLM-mediated text paths — the only ones the policy governs |
 | Mint sites that deliberately do NOT | `skills/adoption.py`, `measures/hv.py`, `workloads/formal.py`, `informal/audits.py`, `rules/act.py`, `rules/experiment.py` | their `register_fail_warrant` calls | deterministic, execution, formal and audit paths keep their established status-changing behaviour and never consult authority |
-| Argumentative mints with no gate at all | `imports.py`, `rules/experiment.py` | `register_epistemic_import_failure`, `relevance_trial` | neither authority nor a supremacy guard — the one place "every status change is gated" is literally untrue today |
+| Argumentative mints gated by the master flag directly, not through `authority.py` | `imports.py`, `rules/experiment.py` | `register_epistemic_import_failure`, `relevance_trial` | FIXED 2026-08-10 (S2a/R1): each reads `ADJUDICATION_STATUS_AUTHORITY_ENABLED` inline — not a `workload_profile == "text"` judgement, so not routed through `trial_authority_for`/`argumentative_authority_mode` |
 | The workload exemption | `authority.py` | `trial_authority_for`'s `workload_profile` branch | a `code` or `formal` run receives `STATUS` without reading any knob |
 
 **Nothing in `adjudication/` knows authority exists.** Its whole import
@@ -82,14 +82,30 @@ move or rename fails the check instead of quietly shrinking it.
 `check: python -c "import pathlib; mods=['skills/adoption.py','measures/hv.py','workloads/formal.py','informal/audits.py','informal/trial.py','rules/act.py','rules/experiment.py','rules/crit.py']; texts={m: pathlib.Path('src/deepreason/'+m).read_text() for m in mods}; missing=[m for m,t in texts.items() if 'register_fail_warrant(' not in t]; assert not missing, missing; consult=sorted(m for m,t in texts.items() if 'deepreason.authority' in t); assert consult==['informal/trial.py','rules/crit.py'], consult"`
 
 **The policy governs text workloads only.** A `code` or `formal` run's
-rubric trial gets `STATUS` without consulting a knob, even with the
-knob set the other way and a receipt declared.
-`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f; from deepreason.config import Config; c=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'); assert f(c,'text',S.RUBRIC)==T.OBSERVE_ONLY; assert f(c,'code',S.RUBRIC)==T.STATUS and f(c,'formal',S.RUBRIC)==T.STATUS"`
+rubric trial gets `STATUS` without consulting a text-authority knob, even
+with the knob set the other way and a receipt declared -- but, like the
+text branch, only once `JUDGE_SEATS_ENABLED` (Part D's master judge-
+dispatch gate, off by default) is on; at the default `False` every
+workload gets `OBSERVE_ONLY`.
+`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f; from deepreason.config import Config; c=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'); assert f(c,'text',S.RUBRIC)==T.OBSERVE_ONLY; assert f(c,'code',S.RUBRIC)==T.OBSERVE_ONLY and f(c,'formal',S.RUBRIC)==T.OBSERVE_ONLY; c2=Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x', JUDGE_SEATS_ENABLED=True); assert f(c2,'code',S.RUBRIC)==T.STATUS and f(c2,'formal',S.RUBRIC)==T.STATUS"`
 
-**Two argumentative mint sites consult neither authority nor a supremacy
-guard.** This check pins TODAY's state, and it is expected to be updated
-— not deleted — by whatever change gates them; see `How to change it`.
-`check: python -c "import inspect; from deepreason import imports; from deepreason.rules import experiment; a=inspect.getsource(imports.register_epistemic_import_failure); b=inspect.getsource(experiment.relevance_trial); assert 'WarrantType.ARGUMENTATIVE' in a and 'WarrantType.ARGUMENTATIVE' in b; assert not any(w in a for w in ('authority','_backed')), 'imports gated'; assert not any(w in b for w in ('authority','_backed')), 'relevance_trial gated'"`
+**Two argumentative mint sites now consult the same master flag the text
+policy shares, but NOT through `trial_authority_for`/
+`argumentative_authority_mode` themselves** (adjudication-judge-seats-
+optins tranche, S2a/R1, 2026-08-10 — FIXES the "no gate at all" state
+this check used to pin). An import-plan violation and a property-
+relevance ruling are not `workload_profile == "text"` judgements — the
+two functions above stay scoped to that surface — so each site reads
+`config.ADJUDICATION_STATUS_AUTHORITY_ENABLED` directly rather than
+routing through `authority.py`. When False, `register_epistemic_import_
+failure` mints a scrutiny observation (no warrant, mirrors `crit.py`'s
+`observe_only`) and `relevance_trial` dispatches no judge and leaves the
+property's `Status` untouched (mechanically-admitted stays mechanically-
+admitted; the relevance question is left unadjudicated, not answered
+either way) — the same "target status untouched" principle as
+`observe_only`, applied without formally being one of its four text
+surfaces.
+`check: python -c "import inspect; from deepreason import imports; from deepreason.rules import experiment; a=inspect.getsource(imports.register_epistemic_import_failure); b=inspect.getsource(experiment.relevance_trial); assert 'WarrantType.ARGUMENTATIVE' in a and 'WarrantType.ARGUMENTATIVE' in b; assert 'ADJUDICATION_STATUS_AUTHORITY_ENABLED' in a, 'imports still ungated'; assert 'ADJUDICATION_STATUS_AUTHORITY_ENABLED' in b, 'relevance_trial still ungated'; assert 'deepreason.authority' not in a and 'deepreason.authority' not in b, 'these two sites read the flag directly, not through authority.py'" && python -m pytest tests/test_imports.py::test_import_failure_gated_by_adjudication_master_flag tests/test_properties.py::test_relevance_trial_gated_by_adjudication_master_flag -q`
 
 ## What is deliberately absent
 

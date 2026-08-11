@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Mapping
 from pathlib import Path
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
@@ -195,8 +196,53 @@ def engaged_bridge_source() -> dict:
     )
 
 
+def route_bound_school_execution_policy(
+    default_endpoint_id: str,
+    *,
+    seat_map: Mapping[str, tuple[int, str]] | None = None,
+) -> SchoolExecutionPolicyV1:
+    """Bind every seeded public school's conjecturer seat to a route.
+
+    Part E (S2d/R5, Amendment 11/R27, 2026-08-10): a school is a
+    CONJECTURE-side attractor-minimization tool -- this policy never
+    touches criticism routing (`engaged_criticism_policy` is the
+    independent, separately-opted-into criticism-side counterpart).
+    `seat_map` gives `school_id -> (seat, endpoint_id)` for schools
+    explicitly given a distinct route (`deepreason setup --school-seat
+    school-N=<profile>`, resolved by `preparation._conjecturer_school_
+    seat_ensemble` against the ACTUAL compiled conjecturer route list --
+    `SchoolRoleBindingV1` resolves by seat index into `manifest.roles[
+    "conjecturer"]`, so a bare endpoint_id string is not enough); every
+    other school shares seat 0, `default_endpoint_id`, same as before
+    this opt-in existed. `route_bound` mode requires a binding for every
+    seeded school (`run_manifest.py`'s `V4_SCHOOL_BINDING_INCOMPLETE`
+    check) -- there is no partial-binding shape, so every school gets an
+    explicit binding regardless of whether its route is distinct.
+    """
+
+    seat_map = seat_map or {}
+    return SchoolExecutionPolicyV1(
+        mode="route_bound",
+        bindings=tuple(
+            SchoolRoleBindingV1(
+                school_id=f"school-{index}",
+                role="conjecturer",
+                seat=seat_map.get(f"school-{index}", (0, default_endpoint_id))[0],
+                endpoint_id=seat_map.get(f"school-{index}", (0, default_endpoint_id))[1],
+            )
+            for index in range(PUBLIC_SCHOOL_COUNT)
+        ),
+        allow_shared=True,
+        require_distinct_models=False,
+        require_distinct_families=False,
+    )
+
+
 def engaged_criticism_policy(
-    endpoint_id: str, *, authority: str = "observe_only"
+    endpoint_id: str,
+    *,
+    authority: str = "observe_only",
+    seat_map: Mapping[str, tuple[int, str]] | None = None,
 ) -> CriticismPolicyV1:
     """Bind every seeded public school to the single provider critic seat.
 
@@ -206,16 +252,28 @@ def engaged_criticism_policy(
     foreign school per accepted school artifact keeps the token cost inside
     the public envelope while guaranteeing that semantic criticism actually
     runs; authority stays observe-only.
+
+    ``seat_map`` is Step 44b's criticism-side school-seat opt-in (S2d/R27,
+    Amendment 11, 2026-08-10, SPEC.md addendum S18): ``school_id -> (seat,
+    endpoint_id)`` for schools explicitly given a distinct
+    ``argumentative_critic`` route (``deepreason setup --criticism-seat
+    school-N=<profile>``, resolved by ``preparation._school_seat_route_
+    ensemble`` against the actual compiled ``argumentative_critic`` route
+    list -- like the conjecture-side lever, ``SchoolRoleBindingV1``
+    resolves by seat index, not by endpoint_id string). Every other school
+    keeps the shared seat 0 / ``endpoint_id`` default, byte-identical to
+    before this opt-in existed.
     """
 
+    seat_map = seat_map or {}
     return CriticismPolicyV1(
         minimum_foreign_school_coverage=1,
         bindings=tuple(
             SchoolRoleBindingV1(
                 school_id=f"school-{index}",
                 role="argumentative_critic",
-                seat=0,
-                endpoint_id=endpoint_id,
+                seat=seat_map.get(f"school-{index}", (0, endpoint_id))[0],
+                endpoint_id=seat_map.get(f"school-{index}", (0, endpoint_id))[1],
             )
             for index in range(PUBLIC_SCHOOL_COUNT)
         ),

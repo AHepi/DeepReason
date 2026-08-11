@@ -4,11 +4,14 @@ frontier persists across save/reload; Pareto focus reports the frontier."""
 
 import json
 
+import pytest
+
 from deepreason.config import Config
 from deepreason.harness import Harness
+from deepreason.informal.standards import register_standard
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.ontology import Commitment, Problem, ProblemProvenance
+from deepreason.ontology import Commitment, Interface, Problem, ProblemProvenance, Provenance
 from deepreason.scheduler.scheduler import Scheduler
 
 
@@ -180,3 +183,43 @@ def test_on_cycle_true_stops_the_run_early(tmp_path):
     scheduler.run(10, on_cycle=lambda s: seen.append(s._cycles) or len(seen) >= 2)
     assert seen == [1, 2]        # stopped after the 2nd cycle, not 10
     assert scheduler._cycles == 2
+
+
+def test_judge_dispatch_gated_off_even_for_nontext_workload_with_rubric_criteria(
+    tmp_path,
+):
+    """Part D (S2b, R2): JUDGE_SEATS_ENABLED is the master judge-dispatch
+    gate. Before this tranche, a non-text workload_profile bypassed the
+    text-authority layer entirely and always got TrialAuthority.STATUS
+    for its rubric trial -- the one gap SPEC.md's measurement found with
+    NO existing suppression. At the default False, no judge fires for a
+    non-text workload's rubric criterion either, even though a judge
+    role is wired and a rubric criterion exists on an ACCEPTED target."""
+
+    harness = Harness(tmp_path / "run")
+    register_standard(harness, "std-x", "must name a mechanism")
+    commitment = Commitment(id="k-rubric", eval="rubric:std-x")
+    harness.register_commitment(commitment)
+    target = harness.create_artifact(
+        "the mechanism is explicit",
+        interface=Interface(commitments=[commitment.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+
+    def _forbidden(_prompt):
+        raise AssertionError("judge dispatched with JUDGE_SEATS_ENABLED at its default False")
+
+    adapter = LLMAdapter(
+        {"judge": MockEndpoint(_forbidden, name="mock://judge", model="judge-test")},
+        harness.blobs,
+    )
+    scheduler = Scheduler(
+        harness, adapter, Config(N_SCHOOLS=0), workload_profile="code"
+    )
+
+    from deepreason.ontology import Status
+
+    scheduler._criticize(target)
+
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    assert not harness.warrants

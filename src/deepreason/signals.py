@@ -158,6 +158,12 @@ SIGNALS: dict[str, str] = {
                               "input — the crash refutes the CHECKER (its "
                               "well-formedness claim), never the candidate "
                               "(inputs: [signal, property id, error])",
+    "property-relevance-declined": "ADJUDICATION_STATUS_AUTHORITY_ENABLED is "
+                                   "False: no judge was dispatched for the "
+                                   "property's relevance trial, so it neither "
+                                   "activates this round nor is refuted "
+                                   "(inputs: [signal, property artifact id]); "
+                                   "status untouched, mirrors observe_only",
     # Vision criticism (rules/vision.py)
     "vision-crit": "vision critic looked at the target's recorded screenshots "
                    "and registered nothing (no visible fault, or dedupe)",

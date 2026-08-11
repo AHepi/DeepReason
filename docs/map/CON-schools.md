@@ -163,8 +163,15 @@ conditioning record is read as either.
 **Semantic conditioning and execution routing are supplied together or not at
 all, and must name the same school.** `Conj` rejects a lease without an
 execution school id and vice versa, and rejects a `school` dict whose `id`
-differs; `_critic_execution` applies the same pairing to criticism.
-`check: python -c "import pytest; from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; s=open('src/deepreason/rules/conj.py').read(); assert '(endpoint_lease is None) != (execution_school_id is None)' in s and 'school-routed Conj requires both endpoint_lease and execution_school_id' in s; assert 'if school is None or school.get' in s and 'execution school must match the semantic school conditioning record' in s; l=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')); c={'id':'school-3','stance_text':'x'}; assert 'requires endpoint_lease, critic_school_id' in str(pytest.raises(ValueError,X,endpoint_lease=l,critic_school_id=None,critic_school_context=None).value); assert 'must match its semantic conditioning' in str(pytest.raises(ValueError,X,endpoint_lease=l,critic_school_id='school-9',critic_school_context=c).value)"`
+differs; `_critic_execution` applies the same pairing to criticism, with one
+deliberate third combination criticism alone has (adjudication-judge-seats-
+optins tranche, S13h, 2026-08-10): an `endpoint_lease` with no school at all
+(`critic_school_id`/`critic_school_context` both `None`) is a valid,
+school-free route — Road E's legacy circuit — distinct from both the
+no-envelope and the paired school-routed cases; only a PARTIAL envelope
+(lease with exactly one of the two school fields, or a school whose `id`
+disagrees with the lease's conditioning) is rejected.
+`check: python -c "import pytest; from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; s=open('src/deepreason/rules/conj.py').read(); assert '(endpoint_lease is None) != (execution_school_id is None)' in s and 'school-routed Conj requires both endpoint_lease and execution_school_id' in s; assert 'if school is None or school.get' in s and 'execution school must match the semantic school conditioning record' in s; l=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')); c={'id':'school-3','stance_text':'x'}; kwargs, prefix = X(endpoint_lease=l,critic_school_id=None,critic_school_context=None); assert kwargs=={'endpoint_index':1,'endpoint_lease':l,'school_id':None} and prefix==''; assert 'requires endpoint_lease, critic_school_id' in str(pytest.raises(ValueError,X,endpoint_lease=l,critic_school_id='school-3',critic_school_context=None).value); assert 'must match its semantic conditioning' in str(pytest.raises(ValueError,X,endpoint_lease=l,critic_school_id='school-9',critic_school_context=c).value)"`
 
 **The recorded receipt must match every attempt on the call.** A
 `SchoolRouteReceiptV1` whose seat, endpoint, route digest or contract differs

@@ -25,6 +25,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 from deepreason import mcp_scratch_bridge as mcp
 from deepreason.bridge.events import BridgeAction
 from deepreason.capabilities.enums import CapabilityLifecycle
@@ -38,10 +40,11 @@ from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest
 from deepreason.ontology import Commitment, Problem, ProblemProvenance, Provenance, Status
+from deepreason import preparation as preparation_module
 from deepreason.preparation import _records_for_question, build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
 from deepreason.rules.conj import conj
-from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
+from deepreason.run_manifest import RunManifestError, bind_run_manifest, compile_run_manifest
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.scratch.authoring import ScratchAuthoringService
 from deepreason.scratch.proposals import (
@@ -82,7 +85,14 @@ def _profile(**updates) -> ProviderProfileV1:
     return ProviderProfileV1.create(**values)
 
 
-def test_public_manifest_enables_scratch_and_binds_all_four_schools():
+def test_public_manifest_enables_scratch_with_legacy_criticism_by_default():
+    """Amendment 11/R28 (2026-08-10): legacy (school-free) criticism is now
+    the default -- schools remain seeded for CONJECTURE (N_SCHOOLS, an
+    independent knob) but criticism_policy is None by default, not the
+    school-routed engaged policy. The full school-routed criticism shape
+    (bindings, coverage, authority) is now covered by
+    test_public_manifest_binds_all_four_schools_when_school_routed_
+    criticism_is_enabled below, under its explicit opt-back-in."""
     profile = _profile()
     manifest = build_preparation_manifest(
         profile,
@@ -101,6 +111,35 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     assert control == engaged_control_plane_policy_v3()
     assert control.scratch_authoring.enabled is True
     assert control.conjecture_context.mode == "harness_plus_model_request"
+    # Legacy (school-free) criticism by default: Road E's circuit, no
+    # manifest-owned criticism_policy at all.
+    assert manifest.criticism_policy is None
+    # The conjecture-side school roster is unaffected -- still seeded,
+    # independent of criticism's routing.
+    engine = json.loads(manifest.engine_config_json)
+    assert engine["N_SCHOOLS"] == 4
+
+
+def test_public_manifest_binds_all_four_schools_when_school_routed_criticism_is_enabled(
+    monkeypatch,
+):
+    """The pre-Amendment-11 default shape, now reachable by explicitly
+    setting LEGACY_CRITICISM_ENABLED=False -- the operator's own words:
+    "That's a configuration option." Nothing about the mechanism changed,
+    only which value ships as the default."""
+    original_config = preparation_module.Config
+
+    def _forced_school_routed_config(**kwargs):
+        return original_config(**kwargs, LEGACY_CRITICISM_ENABLED=False)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_routed_config)
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does opting back into school-routed criticism still work?",
+        compiled_at=STAMP,
+    )
+
     # Foreign-school criticism is compiled into the public manifest with one
     # binding per seeded school, all seated on the single provider endpoint.
     criticism = manifest.criticism_policy
@@ -125,6 +164,307 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     # The seeded school roster and the criticism bindings agree.
     engine = json.loads(manifest.engine_config_json)
     assert engine["N_SCHOOLS"] == len(criticism.bindings) == 4
+
+
+def test_seat_school_flag_produces_route_bound_policy(monkeypatch):
+    """Part E (S2d/R5, Amendment 11/R27) Step 44: school_seats (the
+    --school-seat CLI flag's eventual carrier) binds ONE named school's
+    conjecturer seat to a distinct route, gated on SCHOOL_SEATS_ENABLED,
+    and never touches criticism_policy at all -- proving the conjecture-
+    side lever is independent of the criticism-side one (Step 44b)."""
+
+    original_config = preparation_module.Config
+
+    def _forced_school_seats_config(**kwargs):
+        return original_config(**kwargs, SCHOOL_SEATS_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_seats_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-school-seat",
+        credential_env="DEEPREASON_SCHOOL_SEAT_TEST_KEY",
+    )
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does a school seat bind just that school's route?",
+        compiled_at=STAMP,
+        school_seats={"school-1": distinct_profile},
+    )
+
+    # The conjecturer role is now a two-seat ensemble: the default profile
+    # at seat 0, the distinct profile at seat 1.
+    conjecturer_routes = manifest.roles["conjecturer"]
+    assert len(conjecturer_routes) == 2
+    assert conjecturer_routes[0].endpoint_id == profile.endpoint_id
+    assert conjecturer_routes[1].endpoint_id == distinct_profile.endpoint_id
+
+    school_execution = manifest.control_plane_policy.school_execution
+    assert school_execution.mode == "route_bound"
+    by_school = {b.school_id: b for b in school_execution.bindings}
+    assert set(by_school) == {"school-0", "school-1", "school-2", "school-3"}
+    assert by_school["school-1"].endpoint_id == distinct_profile.endpoint_id
+    assert by_school["school-1"].seat == 1
+    assert by_school["school-1"].role == "conjecturer"
+    for school_id in ("school-0", "school-2", "school-3"):
+        assert by_school[school_id].endpoint_id == profile.endpoint_id
+        assert by_school[school_id].seat == 0
+    # Legacy (default, per Part B2) criticism is untouched by this flag.
+    assert manifest.criticism_policy is None
+
+
+def test_seat_school_flag_refuses_without_the_master_gate(monkeypatch):
+    """Defense-in-depth companion (mirrors the CLI's own gate): school_seats
+    given while SCHOOL_SEATS_ENABLED stays at its default False is a typed
+    refusal, not a silent no-op or an accidental route_bound compile."""
+
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-school-seat",
+        credential_env="DEEPREASON_SCHOOL_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(RunManifestError, match="SCHOOL_SEATS_DISABLED"):
+        build_preparation_manifest(
+            profile,
+            question="Does an ungated school seat refuse cleanly?",
+            compiled_at=STAMP,
+            school_seats={"school-0": distinct_profile},
+        )
+
+
+def test_criticism_seat_flag_produces_distinct_binding_when_school_routed(monkeypatch):
+    """Step 44b (S2d/R27, SPEC.md addendum S18): criticism_seats (the
+    --criticism-seat CLI flag's eventual carrier) binds ONE named school's
+    argumentative_critic seat to a distinct route, gated on
+    SCHOOL_SEATS_ENABLED AND LEGACY_CRITICISM_ENABLED=False, and never
+    touches control_plane_policy.school_execution at all -- proving the
+    criticism-side lever is independent of Step 44's conjecture-side one."""
+
+    original_config = preparation_module.Config
+
+    def _forced_criticism_seats_config(**kwargs):
+        return original_config(
+            **kwargs, SCHOOL_SEATS_ENABLED=True, LEGACY_CRITICISM_ENABLED=False
+        )
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_criticism_seats_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does a criticism seat bind just that school's critic route?",
+        compiled_at=STAMP,
+        criticism_seats={"school-2": distinct_profile},
+    )
+
+    # The argumentative_critic role is now a two-seat ensemble: the default
+    # profile at seat 0, the distinct profile at seat 1.
+    critic_routes = manifest.roles["argumentative_critic"]
+    assert len(critic_routes) == 2
+    assert critic_routes[0].endpoint_id == profile.endpoint_id
+    assert critic_routes[1].endpoint_id == distinct_profile.endpoint_id
+
+    criticism = manifest.criticism_policy
+    by_school = {b.school_id: b for b in criticism.bindings}
+    assert set(by_school) == {"school-0", "school-1", "school-2", "school-3"}
+    assert by_school["school-2"].endpoint_id == distinct_profile.endpoint_id
+    assert by_school["school-2"].seat == 1
+    assert by_school["school-2"].role == "argumentative_critic"
+    for school_id in ("school-0", "school-1", "school-3"):
+        assert by_school[school_id].endpoint_id == profile.endpoint_id
+        assert by_school[school_id].seat == 0
+    # Conjecture-side routing (Step 44's lever) is untouched by this flag.
+    assert manifest.control_plane_policy.school_execution.mode == "conditioning_only"
+
+
+def test_criticism_seat_flag_refuses_without_school_routed_criticism(monkeypatch):
+    """criticism_seats requires LEGACY_CRITICISM_ENABLED=False already set:
+    a per-school distinct critic route means nothing while criticism is
+    still routed through the school-free legacy circuit (Amendment 11/R28's
+    now-default). Refuses typed, not a silent no-op."""
+
+    original_config = preparation_module.Config
+
+    def _forced_school_seats_only_config(**kwargs):
+        return original_config(**kwargs, SCHOOL_SEATS_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_school_seats_only_config)
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(
+        RunManifestError, match="CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM"
+    ):
+        build_preparation_manifest(
+            profile,
+            question="Does a criticism seat refuse cleanly under legacy criticism?",
+            compiled_at=STAMP,
+            criticism_seats={"school-0": distinct_profile},
+        )
+
+
+def test_criticism_seat_flag_refuses_without_the_master_gate():
+    """Defense-in-depth companion (mirrors the CLI's own gate): criticism_seats
+    given while SCHOOL_SEATS_ENABLED stays at its default False is a typed
+    refusal -- checked ahead of the LEGACY_CRITICISM_ENABLED check, so this
+    fires even though LEGACY_CRITICISM_ENABLED is also still at its default
+    True here (both prerequisites are missing; the master gate is reported
+    first, matching Step 44's own precedent)."""
+
+    profile = _profile()
+    distinct_profile = _profile(
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-criticism-seat",
+        credential_env="DEEPREASON_CRITICISM_SEAT_TEST_KEY",
+    )
+
+    with pytest.raises(RunManifestError, match="SCHOOL_SEATS_DISABLED"):
+        build_preparation_manifest(
+            profile,
+            question="Does an ungated criticism seat refuse cleanly?",
+            compiled_at=STAMP,
+            criticism_seats={"school-0": distinct_profile},
+        )
+
+
+def test_legacy_criticism_enabled_by_default_is_byte_identical():
+    """Amendment 11/R28 (2026-08-10, supersedes Part B/R3's original
+    default): LEGACY_CRITICISM_ENABLED now defaults True -- the operator's
+    words, "Legacy, not schools, should be default for criticism" -- so
+    build_preparation_manifest's criticism_policy is None (Road E's
+    school-free circuit) at the bare default, not the school-routed
+    engaged policy."""
+
+    assert Config().LEGACY_CRITICISM_ENABLED is True
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does the default public preset stay school-free?",
+        compiled_at=STAMP,
+    )
+    assert manifest.criticism_policy is None
+
+
+def test_legacy_criticism_enabled_routes_to_school_free_circuit(monkeypatch):
+    """Part B (S2c, R3): with the flag True, build_preparation_manifest
+    passes criticism_policy=None -- Road E's school-free circuit -- instead
+    of the engaged school-routed policy. `_config_for_profile` builds its
+    own Config internally with no caller override, so the flag is forced
+    the same way any of its non-injected fields would be: by wrapping the
+    Config constructor it calls."""
+
+    original_config = preparation_module.Config
+
+    def _forced_legacy_config(**kwargs):
+        return original_config(**kwargs, LEGACY_CRITICISM_ENABLED=True)
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_legacy_config)
+    profile = _profile()
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does the legacy-enabled preset skip school routing?",
+        compiled_at=STAMP,
+    )
+
+    assert manifest.criticism_policy is None
+
+
+def test_engaged_criticism_authority_inert_without_the_master_gate(monkeypatch):
+    """Part C (S2a, R1): ENGAGED_CRITICISM_AUTHORITY is one of the six
+    knobs SPEC.md's design names explicitly ("it only permits an
+    operator to set ARGUMENTATIVE_AUTHORITY/ENGAGED_CRITICISM_AUTHORITY/
+    etc. away from observe_only") -- found missing while writing Step
+    31's map claim that "all six knobs sit behind this gate," which was
+    not yet true for this one. With ADJUDICATION_STATUS_AUTHORITY_ENABLED
+    at its default False, setting ENGAGED_CRITICISM_AUTHORITY away from
+    observe_only must not reach the compiled manifest.
+
+    Amendment 11/R28 collateral: ENGAGED_CRITICISM_AUTHORITY only matters
+    on the school-routed path (it's engaged_criticism_policy's authority=
+    argument), so this test must also opt back into school routing
+    (LEGACY_CRITICISM_ENABLED=False, now non-default) to keep exercising
+    what it actually tests -- otherwise criticism_policy is None and this
+    knob's gate is untestable, not proven inert."""
+
+    original_config = preparation_module.Config
+
+    def _forced_defended_trial_config(**kwargs):
+        return original_config(
+            **kwargs,
+            ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+            LEGACY_CRITICISM_ENABLED=False,
+        )
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
+    profile = _profile()
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does an unconsented defended_trial setting stay inert?",
+        compiled_at=STAMP,
+    )
+
+    assert manifest.criticism_policy.authority == "observe_only"
+
+
+def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch):
+    """Part C (S2a, R1) companion: with the master flag ALSO True,
+    ENGAGED_CRITICISM_AUTHORITY's configured value reaches
+    engaged_criticism_policy's authority= argument -- proving the gate
+    does not accidentally make the knob permanently unreachable, only
+    conditionally so. Checked at the argument-passing layer, not a full
+    manifest compile: `defended_trial` also requires two cross-family
+    judge seats (a separate, unrelated compile-time guard) that
+    build_preparation_manifest's single-profile broadcast cannot supply
+    regardless of this flag -- reaching that combination is Part D's
+    seat-diversity territory, not this test's concern.
+
+    Amendment 11/R28 collateral: same reasoning as the companion test
+    above -- LEGACY_CRITICISM_ENABLED=False is required to keep this
+    test on the school-routed path ENGAGED_CRITICISM_AUTHORITY actually
+    gates."""
+
+    original_config = preparation_module.Config
+
+    def _forced_defended_trial_config(**kwargs):
+        return original_config(
+            **kwargs,
+            ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+            LEGACY_CRITICISM_ENABLED=False,
+        )
+
+    monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
+    captured = {}
+    original_policy = preparation_module.engaged_criticism_policy
+
+    def _capturing_policy(endpoint_id, *, authority="observe_only", seat_map=None):
+        captured["authority"] = authority
+        return original_policy(endpoint_id, authority="observe_only", seat_map=seat_map)
+
+    monkeypatch.setattr(preparation_module, "engaged_criticism_policy", _capturing_policy)
+    profile = _profile()
+
+    build_preparation_manifest(
+        profile,
+        question="Does a consented defended_trial setting reach the call?",
+        compiled_at=STAMP,
+    )
+
+    assert captured["authority"] == "defended_trial"
 
 
 def test_public_manifest_compiles_the_grounded_two_stage_bridge():
@@ -379,6 +719,114 @@ def test_public_preset_run_dispatches_school_routed_criticism(tmp_path):
     assert debts[0].termination_reason == "coverage_complete"
     assert debts[0].completed_school_ids == (assignments[0].critic_school_id,)
     assert debts[0].outstanding_school_ids == ()
+
+
+def _legacy_criticism_mock_manifest():
+    """Compile a public-preset-shaped manifest with LEGACY_CRITICISM_ENABLED
+    True: schools stay seeded (unrelated), but criticism_policy is None --
+    Road E's school-free circuit -- exactly what build_preparation_manifest
+    now produces for this flag."""
+
+    config = Config(
+        N_SCHOOLS=4,
+        LEGACY_CRITICISM_ENABLED=True,
+        scratchpad={"enabled": True},
+        bridge=engaged_bridge_source(),
+        EMBEDDER_MODEL=None,
+        roles={
+            "conjecturer": [_route("conjecturer-route")],
+            "argumentative_critic": [_route("critic-route-0")],
+            "synthesizer": [_route("synthesizer-route")],
+            "summarizer": [_route("summarizer-route")],
+            "thesis": [_route("thesis-route")],
+            "judge": [_route("judge-route")],
+        },
+    )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=engaged_control_plane_policy_v3(),
+        criticism_policy=None,
+        inquiry_capability_policy=engaged_inquiry_capability_policy(),
+        run_input_digest="f" * 64,
+        toolchains=(engaged_local_simulation_toolchain(),),
+    )
+    return config, manifest
+
+
+def test_legacy_criticism_end_to_end_dispatches_without_a_school(tmp_path):
+    """Part B (S2c, R3): with LEGACY_CRITICISM_ENABLED True and
+    criticism_policy=None, a scheduler run's plain _arg_crit path actually
+    dispatches a live crit_argumentative_batch call through Road E's
+    contract -- not deferred, and with no school in the resulting artifact
+    or durable payload."""
+
+    config, manifest = _legacy_criticism_mock_manifest()
+    harness = Harness(tmp_path / "legacy-criticism-end-to-end")
+    _bind_classification(harness, manifest)
+    target = harness.create_artifact(
+        "a claim with no school-owned lineage",
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    critic_route = manifest.roles["argumentative_critic"][0]
+    critic_response = json.dumps(
+        {
+            "cases": [
+                {
+                    "target_alias": "SRC_001",
+                    "attack": True,
+                    "case": "the claim omits a required boundary condition",
+                }
+            ]
+        }
+    )
+    endpoints = {
+        "conjecturer": MockEndpoint(lambda _prompt: '{"candidates":[]}'),
+        "argumentative_critic": MockEndpoint(
+            lambda _prompt: critic_response,
+            name=critic_route.base_url,
+            model=critic_route.model_id,
+            max_tokens=critic_route.max_tokens,
+        ),
+    }
+    adapter = LLMAdapter(
+        endpoints,
+        harness.blobs,
+        retry_max=0,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+        meter=TokenMeter(100_000),
+    )
+    scheduler = Scheduler(harness, adapter, config, run_manifest=manifest)
+
+    scheduler._arg_crit([target.id])
+
+    assert not any(
+        event.inputs[:2] == ("v6-model-phase-deferred.v1", "argumentative-criticism")
+        for event in harness.log.read()
+    )
+    critics = [
+        artifact
+        for artifact in harness.state.artifacts.values()
+        if artifact.provenance is not None and artifact.provenance.role == "critic"
+    ]
+    assert len(critics) == 1
+    assert critics[0].provenance.school is None
+    assert "required boundary condition" in critics[0].content_ref
+    work = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.task_payload_value.get("schema")
+        == "criticism.semantic-task.v1"
+    ]
+    assert len(work) == 1
+    assert work[0].preparation.task_payload_value["critic_school_id"] is None
+    assert work[0].preparation.task_payload_value["dispatch_authority"] == "observe_only"
 
 
 def test_public_preset_permits_bounded_scratch_authoring(tmp_path):

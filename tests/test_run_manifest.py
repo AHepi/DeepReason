@@ -290,6 +290,33 @@ def test_single_model_compiles_one_exact_route_for_every_active_role(monkeypatch
     assert {row["output_mechanism"] for row in rows} == {"json_text"}
 
 
+def test_blind_same_model_judges_gives_judge_a_second_identical_seat():
+    """Part D2 (S16, Amendment 9 R24/R25): --blind-same-model-judges is the
+    CLI-reachable lever for a genuinely single-model judge ensemble --
+    today, per SPEC.md's Road C finding, no operator-facing surface can
+    construct >=2 identical-model judge routes at all. rubric_policy=
+    "forbid" here isolates route CONSTRUCTION (this step) from the
+    independence-check relaxation (a separate step)."""
+
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", blind_same_model_judges=True,
+        rubric_policy="forbid", compiled_at=STAMP,
+    )
+
+    judge_routes = manifest.roles["judge"]
+    assert len(judge_routes) == 2
+    assert judge_routes[0] == judge_routes[1]
+    assert judge_routes[0].model_id == "gemma4:31b"
+
+
+def test_blind_same_model_judges_conflicts_with_judge_family():
+    with pytest.raises(RunManifestError, match="JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT"):
+        compile_run_manifest(
+            _config(), single_model="gemma4:31b", judge_family="second-route",
+            blind_same_model_judges=True, rubric_policy="forbid", compiled_at=STAMP,
+        )
+
+
 def test_decoy_provider_is_not_resolved_or_copied_in_single_model_mode(monkeypatch):
     configured = _config().model_copy(deep=True)
     configured.roles["thesis"] = {
@@ -592,6 +619,40 @@ def test_cross_family_rubric_policy_fails_preflight_for_one_family():
     assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
 
 
+def test_blind_same_model_judges_satisfies_require_cross_family_default():
+    """Part D2 (S16, Amendment 9 R24): the structural same-model
+    substitute applies under rubric_policy="require_cross_family" (the
+    DEFAULT) itself, not just a separate policy value -- a manifest built
+    via --blind-same-model-judges' lever validates clean without needing
+    any change to the operator's chosen rubric_policy at all."""
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", blind_same_model_judges=True,
+        rubric_policy="require_cross_family", compiled_at=STAMP,
+    )
+    assert len(manifest.roles["judge"]) == 2
+    assert manifest.roles["judge"][0] == manifest.roles["judge"][1]
+
+
+def test_judge_seats_opt_in_does_not_bypass_cross_family_requirement():
+    """Part D, R2 (solo law reconciliation, SPEC.md's "Reconciliation with
+    the cross-family gate"): JUDGE_SEATS_ENABLED is the master judge-
+    dispatch gate (scheduler.py) -- an orthogonal, runtime concern from
+    require_cross_family_judges/rubric_policy="require_cross_family", the
+    compile-time judge-diversity guarantee. Turning judge seats on must
+    not, by itself, satisfy or bypass that guarantee: a genuinely single-
+    family run still refuses typed at the same compile-time layer it does
+    today, identically to test_cross_family_rubric_policy_fails_preflight_
+    for_one_family above (same config shape, plus the new opt-in flag)."""
+    config = _config()
+    config.JUDGE_SEATS_ENABLED = True
+    with pytest.raises(RunManifestError, match="SECOND_JUDGE_FAMILY_REQUIRED") as raised:
+        compile_run_manifest(
+            config, single_model="gemma4:31b",
+            rubric_policy="require_cross_family", compiled_at=STAMP,
+        )
+    assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
+
+
 def test_second_explicit_family_is_allowed_without_fallback():
     configured = _config().model_copy(deep=True)
     configured.roles["judge"] = [
@@ -854,6 +915,75 @@ def test_cli_compiles_and_inspects_only_explicit_complete_v6(tmp_path, capsys):
 
     assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 0
     assert '"schema_version": 6' in capsys.readouterr().out
+
+
+def test_cli_blind_same_model_judges_flag_reaches_the_compiled_manifest(tmp_path):
+    """Part D2 (S16, Amendment 9 R25): the switch is reachable from the
+    command line, not YAML-only -- CLI-level proof that
+    --blind-same-model-judges actually flows through `main()` into
+    compile_run_manifest's judge-route construction."""
+
+    from deepreason.cli.main import main
+    from tests.test_run_input_v6_commitments import _control
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text(_config().model_dump_json())
+    control_path = tmp_path / "control-plane-v3.json"
+    control_path.write_text(_control(6).model_dump_json())
+    manifest_path = tmp_path / "manifest.json"
+    assert main(
+        [
+            "--config", str(config_path), "config", "compile",
+            "--single-model", "gemma4:31b", "--blind-same-model-judges",
+            "--rubric-policy", "forbid", "--out", str(manifest_path),
+            "--workload-profile", "text",
+            "--control-plane-policy", str(control_path),
+            "--run-input-digest", "f" * 64,
+        ]
+    ) == 0
+    compiled = load_run_manifest(manifest_path)
+    assert len(compiled.roles["judge"]) == 2
+    assert compiled.roles["judge"][0] == compiled.roles["judge"][1]
+
+
+def test_cli_judge_family_and_blind_same_model_judges_conflict(tmp_path, capsys):
+    from deepreason.cli.main import main
+    from tests.test_run_input_v6_commitments import _control
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text(_config().model_dump_json())
+    control_path = tmp_path / "control-plane-v3.json"
+    control_path.write_text(_control(6).model_dump_json())
+    manifest_path = tmp_path / "manifest.json"
+    assert main(
+        [
+            "--config", str(config_path), "config", "compile",
+            "--single-model", "gemma4:31b", "--judge-family", "qwen",
+            "--blind-same-model-judges",
+            "--rubric-policy", "forbid", "--out", str(manifest_path),
+            "--workload-profile", "text",
+            "--control-plane-policy", str(control_path),
+            "--run-input-digest", "f" * 64,
+        ]
+    ) == 1
+    assert "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT" in capsys.readouterr().err
+    assert not manifest_path.exists()
+
+
+def test_school_seats_disabled_by_default_is_byte_identical():
+    """Part E (S2d, R5): the master flag for the schools opt-in defaults
+    False, and neither shipped v6 control-plane preset ever constructs a
+    route_bound school_execution policy -- true today, independent of
+    this flag, and pinned here so a future preset change that quietly
+    starts requesting route diversity is caught."""
+    from deepreason.v6_policy import (
+        conservative_control_plane_policy_v3,
+        engaged_control_plane_policy_v3,
+    )
+
+    assert Config().SCHOOL_SEATS_ENABLED is False
+    assert conservative_control_plane_policy_v3().school_execution.mode == "conditioning_only"
+    assert engaged_control_plane_policy_v3().school_execution.mode == "conditioning_only"
 
 
 def test_cli_make_rejects_bound_pre_v6_manifest_and_replacement(

@@ -109,7 +109,11 @@ def test_trial_required_needs_court(harness):
     """No warrant until the defender answers, every judge seat finishes, and
     the guard accepts the ruling; every non-sustained path is a logged
     trial-declined Measure with the target status unchanged."""
-    config = Config(ARGUMENTATIVE_AUTHORITY="trial_required", TRIAL_PARAPHRASE_N=2)
+    config = Config(
+        ARGUMENTATIVE_AUTHORITY="trial_required",
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        TRIAL_PARAPHRASE_N=2,
+    )
     target = art(
         harness,
         "a chorale passage with parallel fifths in bar 3",

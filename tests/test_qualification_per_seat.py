@@ -211,7 +211,21 @@ def test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4(
     before_payload = json.loads((TRANCHE_DIR / "before-qualify.json").read_text())
     assert set(payload) == set(before_payload)
     assert payload["schema"] == "deepreason-qualification-result.v1"
-    assert payload == before_payload
+    # qualification_subject_digest hashes the compiled manifest's actual
+    # content, so it legitimately moves whenever a LATER tranche changes a
+    # default that reaches the compiled manifest -- adjudication-judge-
+    # seats-optins/Amendment 11 (2026-08-10) flipped LEGACY_CRITICISM_
+    # ENABLED's default, changing criticism_policy's shape (None vs
+    # populated) for every qualification subject. before-qualify.json is
+    # this repo's permanent historical snapshot of Rung S4's own
+    # deliverable (experiments/2026-08-06-change-qualification-per-seat-
+    # s4/) and must not be edited to chase later, unrelated defaults; the
+    # digest is excluded from the byte-identical comparison for that
+    # reason, while every other field -- proving Rung S4 itself changed
+    # nothing about qualify's output shape or mechanics -- still is.
+    assert {k: v for k, v in payload.items() if k != "qualification_subject_digest"} == {
+        k: v for k, v in before_payload.items() if k != "qualification_subject_digest"
+    }
 
 
 def test_two_profile_home_qualifies_each_seat_plus_the_combination(

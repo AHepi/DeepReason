@@ -49,7 +49,7 @@ live where a reader expects it.
 | Referee seat | `referee.py` | `run_config_referee` | picks `min(binding.school_id)` off the manifest — the one school id chosen without consulting the roster |
 | Qualification inventory | `run_manifest.py`, `cli/doctor.py` | `_route_seat_behavioral_contract_assignments`, `production_contract_pairs` | which critic seats get probed comes from the criticism bindings |
 | Replay | `invariants.py` | `verify_root` (`school-route`, `foreign-criticism`) | every `SchoolRouteReceiptV1` re-derived against the bindings; coverage counted against `minimum_foreign_school_coverage` |
-| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` |
+| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` by default; an optional `seat_map` (Step 44b, Amendment 11/R27) lets named schools diverge to a distinct seat, still dormant unless `preparation.py` supplies one |
 
 Two of those rows have no test anywhere in `tests/`: nothing imports
 `resolve_conjecture_route` or `compile_criticism_assignments`, so their claims
@@ -150,7 +150,7 @@ expects to meet. `PUBLIC_SCHOOL_COUNT` and `Config().N_SCHOOLS` are two
 constants in two modules that must be equal or every public run fails at
 compile with `V4_CRITICISM_BINDING_INCOMPLETE`.
 
-`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E; assert Config().N_SCHOOLS==P; p=E('ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.role for b in p.bindings}=={'argumentative_critic'} and {b.seat for b in p.bindings}=={0}; assert p.authority=='observe_only' and p.allow_shared and p.minimum_foreign_school_coverage==1" && grep -q "criticism_policy=engaged_criticism_policy(" src/deepreason/preparation.py && grep -q "config.ENGAGED_CRITICISM_AUTHORITY" src/deepreason/preparation.py`
+`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E; assert Config().N_SCHOOLS==P; p=E('ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.role for b in p.bindings}=={'argumentative_critic'} and {b.seat for b in p.bindings}=={0}; assert p.authority=='observe_only' and p.allow_shared and p.minimum_foreign_school_coverage==1" && grep -q "else engaged_criticism_policy(" src/deepreason/preparation.py && grep -q "config.ENGAGED_CRITICISM_AUTHORITY" src/deepreason/preparation.py`
 
 ## What is deliberately absent
 
@@ -216,15 +216,41 @@ validators give you one.
 
 `check: python -c "import typing; from deepreason.run_manifest import CriticismPolicyV1 as C; assert typing.get_args(C.model_fields['authority'].annotation)==('observe_only','defended_trial')" && grep -q "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED" src/deepreason/run_manifest.py && python -m pytest tests/test_v6_manifest_defended_trial.py -q`
 
-**`route_bound` conjecturer execution has no in-tree author.** Every
-`SchoolExecutionPolicyV1` constructed anywhere in `src/` is
-`conditioning_only`. The readers, the replay validation and the tests all exist;
-only an operator-supplied `control_plane_policy` argument to
-`compile_run_manifest` can produce a route-bound run. So schools' routing
-authority is real, exercised offline, and dormant in every shipped
-configuration — do not read the dormancy as evidence the path is dead.
+**`route_bound` conjecturer execution has an in-tree author now, still
+dormant by default** (Part E, S2d/R5, Amendment 11/R27, 2026-08-10 —
+supersedes this trap's earlier "no in-tree author" finding). The two
+SHIPPED preset constructors (`conservative_control_plane_policy_v3`,
+`engaged_control_plane_policy_v3`) still always build
+`conditioning_only`, byte-identical to before this opt-in existed. A
+THIRD constructor, `v6_policy.py::route_bound_school_execution_policy`,
+builds `route_bound` — called only from
+`preparation.py::build_preparation_manifest` when its `school_seats`
+parameter is given, itself gated on `Config.SCHOOL_SEATS_ENABLED`
+(default `False`; ungated use raises `RunManifestError` typed
+`SCHOOL_SEATS_DISABLED`). So schools' routing authority is real,
+reachable through an operator-facing `--school-seat school-N=<profile>`
+CLI surface, and still dormant in every default/shipped configuration —
+do not read the default dormancy as evidence the path is unreachable.
 
-`check: python -c "import ast,pathlib; modes=[(p.name, next((k.value.value for k in n.keywords if k.arg=='mode'), None)) for p in pathlib.Path('src/deepreason').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='SchoolExecutionPolicyV1']; assert modes and all(m=='conditioning_only' for _,m in modes), modes" && grep -q 'mode: Literal\["conditioning_only", "route_bound"\]' src/deepreason/run_manifest.py`
+`check: python -c "import ast,pathlib; modes=[(p.name, next((k.value.value for k in n.keywords if k.arg=='mode'), None)) for p in pathlib.Path('src/deepreason').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='SchoolExecutionPolicyV1']; assert sorted(modes) == [('v6_policy.py','conditioning_only'),('v6_policy.py','conditioning_only'),('v6_policy.py','route_bound')], modes" && grep -q 'mode: Literal\["conditioning_only", "route_bound"\]' src/deepreason/run_manifest.py && grep -q "def route_bound_school_execution_policy" src/deepreason/v6_policy.py && grep -q "SCHOOL_SEATS_DISABLED" src/deepreason/preparation.py`
+
+**Criticism's counterpart is a parameter, not a mode — never confuse the
+two shapes.** Unlike `SchoolExecutionPolicyV1`, `CriticismPolicyV1` has
+no `mode` field to flip; there was never a `conditioning_only` to
+supersede. Step 44b's `--criticism-seat school-N=<profile>` instead
+gives `engaged_criticism_policy` an optional `seat_map` argument — every
+call site that omits it (still every SHIPPED preset) gets the
+byte-identical shared-seat-0 policy; `preparation.py::build_preparation_
+manifest` is the only caller that ever supplies one, gated on BOTH
+`Config.SCHOOL_SEATS_ENABLED` and `Config.LEGACY_CRITICISM_ENABLED is
+False` (`RunManifestError` typed `CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_
+CRITICISM` otherwise). Same dormant-by-default shape as the conjecturer
+lever above, different mechanism — do not go looking for a
+`route_bound`-style criticism mode; it does not exist and was never
+planned (Amendment 11: schools are a conjecture-side tool; criticism's
+attachment to one is always a separate, optional wire).
+
+`check: grep -q "seat_map: Mapping\[str, tuple\[int, str\]\] | None = None" src/deepreason/v6_policy.py && grep -q "def engaged_criticism_policy" src/deepreason/v6_policy.py && grep -q "CRITICISM_SEATS_REQUIRE_SCHOOL_ROUTED_CRITICISM" src/deepreason/preparation.py && python -m pytest tests/test_v6_engaged_public_defaults.py -k criticism_seat -q`
 
 **Criticism cannot demand route diversity.** `require_distinct_models` and
 `require_distinct_families` exist on the conjecturer policy only; the criticism
@@ -303,21 +329,34 @@ root is committed.
 
 ## Traps
 
-- **Grep for "school" and "RunManifest" together returns 21 files and still
-  misses a third of the agreement.** Nine files carry it: the four in `Owns:`
-  plus five downstream enforcers — `workflow/profiles.py`,
-  `workflow/nonconjecture_recovery.py`, `referee.py`, `cli/doctor.py`,
-  `invariants.py` — which this seam describes but does not own
-  (`invariants.py` belongs to `DR-INV-frozen-surfaces`). Only SIX of the nine
-  name both words. `referee.py` and `invariants.py` reach the policy through
-  `manifest.criticism_policy` without ever spelling `RunManifest`, and
-  `cli/doctor.py` projects critic seats without ever spelling `school`. The 21
-  meanwhile include files like `harness.py` and `scheduler/scheduler.py` that
-  mediate no binding at all, while `report.py`, `findings.py`, `jolts.py` and
-  `skills/adoption.py` reach schools only through `Provenance.school` or the
-  roster and do not name a manifest at all. Starting from grep costs a day and
-  still comes up short in both directions; the table above is the answer.
-`check: test "$(for f in $(grep -rl school src/deepreason --include=*.py); do grep -ql RunManifest "$f" && echo x; done | wc -l)" = 21 && test "$(for f in run_manifest.py llm/firewall.py workflow/criticism.py v6_policy.py workflow/profiles.py workflow/nonconjecture_recovery.py referee.py cli/doctor.py invariants.py; do p=src/deepreason/$f; grep -ql school $p && grep -ql RunManifest $p && echo $f; done | sort | tr '\n' ' ')" = "llm/firewall.py run_manifest.py v6_policy.py workflow/criticism.py workflow/nonconjecture_recovery.py workflow/profiles.py " && grep -q "manifest.criticism_policy" src/deepreason/referee.py && grep -q "criticism_policy.minimum_foreign_school_coverage" src/deepreason/invariants.py && grep -q "argumentative_critic" src/deepreason/cli/doctor.py`
+- **Grep for "school" and "RunManifest" together returns 23 files (was 21
+  before Part E's conjecture-side school seats, adjudication-judge-seats-
+  optins tranche, 2026-08-10, then 22 once `preparation.py` gained
+  `school_seats`, then 23 once `cli/main.py`'s `--school-seat` flag help
+  text spelled "school" next to its pre-existing "RunManifest" mentions)
+  and still misses a third of the agreement.** Ten files carry it: the
+  four in `Owns:` plus six downstream enforcers —
+  `workflow/profiles.py`, `workflow/nonconjecture_recovery.py`,
+  `referee.py`, `cli/doctor.py`, `invariants.py`, and now `preparation.py`
+  (`build_preparation_manifest`'s `school_seats` parameter constructs the
+  conjecturer route ensemble and raises `RunManifestError` when
+  `SCHOOL_SEATS_ENABLED` is off) — which this seam describes but does not
+  own (`invariants.py` belongs to `DR-INV-frozen-surfaces`). Only SEVEN of
+  the ten name both words. `referee.py` and `invariants.py` reach the
+  policy through `manifest.criticism_policy` without ever spelling
+  `RunManifest`, and `cli/doctor.py` projects critic seats without ever
+  spelling `school`. `cli/main.py` is a further miss in the OTHER
+  direction from `referee.py`/`invariants.py`: it names both words (help
+  text for `compile`/`inspect`'s "RunManifest", help text for
+  `--school-seat`'s "school") yet enforces no binding at all — it only
+  parses the flag and writes the persistence file `seat_bindings.py`
+  reads back. The 23 meanwhile include files like `harness.py` and
+  `scheduler/scheduler.py` that mediate no binding at all, while
+  `report.py`, `findings.py`, `jolts.py` and `skills/adoption.py` reach
+  schools only through `Provenance.school` or the roster and do not name a
+  manifest at all. Starting from grep costs a day and still comes up short
+  in both directions; the table above is the answer.
+`check: test "$(for f in $(grep -rl school src/deepreason --include=*.py); do grep -ql RunManifest "$f" && echo x; done | wc -l)" = 23 && test "$(for f in run_manifest.py llm/firewall.py workflow/criticism.py v6_policy.py workflow/profiles.py workflow/nonconjecture_recovery.py referee.py cli/doctor.py invariants.py preparation.py; do p=src/deepreason/$f; grep -ql school $p && grep -ql RunManifest $p && echo $f; done | sort | tr '\n' ' ')" = "llm/firewall.py preparation.py run_manifest.py v6_policy.py workflow/criticism.py workflow/nonconjecture_recovery.py workflow/profiles.py " && grep -q "manifest.criticism_policy" src/deepreason/referee.py && grep -q "criticism_policy.minimum_foreign_school_coverage" src/deepreason/invariants.py && grep -q "argumentative_critic" src/deepreason/cli/doctor.py`
 - **Reading a model and not its validator.** The recorded instance is A9 of
   `experiments/2026-08-01-change-prose-can-refute/DELIVERY.md`: a tranche read
   `SchoolRoleBindingV1`, saw that `role` accepts `judge`, designed school-bound

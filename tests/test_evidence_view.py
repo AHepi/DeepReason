@@ -156,7 +156,9 @@ def test_property_sourced_verdicts_name_their_source(harness):
         },
         harness.blobs, retry_max=2,
     )
-    props = propose_properties(harness, base, problem, adapter, Config())
+    props = propose_properties(
+        harness, base, problem, adapter, Config(ADJUDICATION_STATUS_AUTHORITY_ENABLED=True)
+    )
     assert props
     # Frozen inputs pass for the trap (len 3): fuzz needs a generator, so
     # violate via frozen-inputs of the property directly on a short list —

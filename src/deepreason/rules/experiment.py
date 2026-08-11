@@ -318,7 +318,20 @@ def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config
     activates only if both seats rule pass; otherwise a fail warrant registers
     against the PROPERTY (argumentative, attackable nu: criticize-the-critic
     reinstates it, N1). Judges never touch a candidate's status here — they
-    rule on the property artifact alone."""
+    rule on the property artifact alone.
+
+    Status-changing (activation, or the fail-warrant against the property)
+    only when ADJUDICATION_STATUS_AUTHORITY_ENABLED is True (Part C's
+    master gate); otherwise no judge is dispatched at all and the property
+    conservatively does not activate -- this was the other of the two mint
+    sites SPEC.md found consulting neither authority nor a supremacy guard.
+    """
+    if not getattr(config, "ADJUDICATION_STATUS_AUTHORITY_ENABLED", False):
+        harness.record_measure(
+            inputs=["property-relevance-declined", prop_artifact.id]
+        )
+        return False
+
     from deepreason.canonical import sha256_hex
 
     judge_seats = adapter.require_cross_family_judges()

@@ -85,9 +85,16 @@ the one exemption is the counterexample payload: application data whose keys
 belong to the domain, not to the harness.
 `check: python -c "import re,pathlib; a=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); w=pathlib.Path('src/deepreason/llm/wire.py').read_text(); assert re.search(r'candidate = repair\.candidate_from_raw\(turn, raw\)\n\s+reject_model_control_fields\(candidate\)\n\s+wire_value = wire_contract\.validate_value\(candidate\)', a); assert re.search(r'_reject_control_fields\(value\)\n\s+schema = self\.model_json_schema\(\)\n\s+_reject_unknown_fields\(value, schema, schema\)', w); from deepreason.llm.firewall import FORBIDDEN_MODEL_CONTROL_FIELDS as F, _OPAQUE_DATA_FIELDS as O; assert {'model','endpoint','route','tool','delegate','permission','spawn','guard_policy','acceptance','status','context_window_tokens'} <= F; assert O == {'counterexample'}; assert re.search(r'self\._preflight_value\(value\)\n\s+return self\.wire_model\.model_validate\(value\)', w)" && ! grep -rq "reject_model_control_fields" --include=*.py src/deepreason/rules && grep -q "^def reject_model_control_fields(" src/deepreason/llm/firewall.py && python -m pytest tests/test_model_firewall.py tests/test_wire_contracts.py::test_counterexample_payload_remains_opaque_domain_data -q`
 
-The lease travels one way. The scheduler resolves it, a rule carries it, and the
-adapter re-verifies it against the live endpoint immediately before dispatch.
-`check: ! grep -rqE "select_lease|resolve_school_role_lease" --include=*.py src/deepreason/rules && grep -q "^def select_lease(" src/deepreason/llm/firewall.py && grep -q "resolve_school_role_lease(" src/deepreason/scheduler/scheduler.py && grep -q "lease.verify(endpoint)" src/deepreason/llm/adapter.py && grep -q "school-routed calls require an explicit endpoint lease" src/deepreason/llm/adapter.py && python -m pytest tests/test_model_firewall.py::test_endpoint_lease_accepts_only_its_exact_runtime_route tests/test_model_firewall.py::test_endpoint_lease_allows_logged_process_tuning_only tests/test_criticism_school_execution_c3.py -q`
+The lease travels one way: a rule never resolves its own — it either carries
+one the scheduler resolved, or, when a v6 self-dispatching rule has no
+scheduler-supplied envelope at all (adjudication-judge-seats-optins tranche,
+S13i, 2026-08-10), asks the adapter for its own default via
+`LLMAdapter.bound_v6_default_lease`, a thin wrapper the adapter keeps around
+the SAME `select_lease` firewall carries. Either way the adapter re-verifies
+whichever lease it receives against the live endpoint immediately before
+dispatch; `select_lease`/`resolve_school_role_lease` themselves stay
+unimportable by `rules/`.
+`check: ! grep -rqE "select_lease|resolve_school_role_lease" --include=*.py src/deepreason/rules && grep -q "^def select_lease(" src/deepreason/llm/firewall.py && grep -q "resolve_school_role_lease(" src/deepreason/scheduler/scheduler.py && grep -q "def bound_v6_default_lease(" src/deepreason/llm/adapter.py && grep -q "lease.verify(endpoint)" src/deepreason/llm/adapter.py && grep -q "school-routed calls require an explicit endpoint lease" src/deepreason/llm/adapter.py && python -m pytest tests/test_model_firewall.py::test_endpoint_lease_accepts_only_its_exact_runtime_route tests/test_model_firewall.py::test_endpoint_lease_allows_logged_process_tuning_only tests/test_criticism_school_execution_c3.py -q`
 
 Presentation is read, never written: no rule passes `model_profile` or
 `output_mechanism`, and under v6 both are refused outright.

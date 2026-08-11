@@ -857,27 +857,44 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
                     expected_endpoint = binding.endpoint_id
         elif task == "criticism":
             expected_contract = versions.batch_critic_contract
-            policy = manifest.criticism_policy
-            if policy is None:
-                differences.append("criticism work is not authorized by the manifest")
-            elif payload is None or payload.get("schema") != "criticism.semantic-task.v1":
+            if payload is None or payload.get("schema") != "criticism.semantic-task.v1":
                 differences.append("criticism work has no recognized semantic task")
+            elif payload.get("critic_school_id") is None:
+                # School-free (legacy) dispatch, Road E (Part A, this
+                # tranche): there is no criticism_policy binding to check
+                # against at all -- the role only needs a manifest route,
+                # and the resolved authority was frozen into the payload
+                # at dispatch time (S13i), never reconstructed from a
+                # live/manifest-derived Config (S13e). Mirrors
+                # nonconjecture_recovery.py::_criticism_contract's
+                # identical school-free branch exactly, so the two
+                # authority checks (recovery-time, post-hoc verification)
+                # never drift apart on what "authorized" means here.
+                if not manifest.roles.get("argumentative_critic", ()):
+                    differences.append("criticism work is not authorized by the manifest")
+                elif payload.get("dispatch_authority") != "observe_only":
+                    differences.append("critic authority is not recoverable")
+                expected_role = "argumentative_critic"
             else:
-                school_id = payload.get("critic_school_id")
-                binding = next(
-                    (
-                        candidate
-                        for candidate in policy.bindings
-                        if candidate.school_id == school_id
-                    ),
-                    None,
-                )
-                if binding is None:
-                    differences.append("critic school has no frozen criticism binding")
+                policy = manifest.criticism_policy
+                if policy is None:
+                    differences.append("criticism work is not authorized by the manifest")
                 else:
-                    expected_role = binding.role
-                    expected_seat = binding.seat
-                    expected_endpoint = binding.endpoint_id
+                    school_id = payload.get("critic_school_id")
+                    binding = next(
+                        (
+                            candidate
+                            for candidate in policy.bindings
+                            if candidate.school_id == school_id
+                        ),
+                        None,
+                    )
+                    if binding is None:
+                        differences.append("critic school has no frozen criticism binding")
+                    else:
+                        expected_role = binding.role
+                        expected_seat = binding.seat
+                        expected_endpoint = binding.endpoint_id
         elif task == "bridge_ledger":
             expected_contract = versions.bridge_ledger_wire_contract
             expected_role = manifest.bridge_policy.ledger_role
@@ -1237,6 +1254,11 @@ def verify_root_report(
         "legacy_adapter_suppressed_count": 0,
         "manifest_schema_version": manifest_schema_version,
     }
+    from deepreason.signals_read import read_signal_snapshot
+
+    stats["signal_snapshot"] = read_signal_snapshot(resolved).model_dump(
+        mode="json", by_alias=True
+    )
     return VerificationReportV2(
         integrity=tuple(channels["integrity"]),
         security=tuple(channels["security"]),

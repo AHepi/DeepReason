@@ -345,6 +345,20 @@ def require_cross_family_judge_ensemble(
 
     Route family comes only from immutable leases. Runtime endpoints, model
     output, and convenience ensemble counts cannot redefine this boundary.
+
+    Accepts EITHER cross-family diversity OR a structural same-model
+    substitute (adjudication-judge-seats-optins tranche, Amendment 9/R24,
+    2026-08-10): >=2 judge seats that are ALL the exact same
+    (provider, model_id) -- narrower than same-FAMILY, so two different
+    models of one family (e.g. two distinct Gemma checkpoints) still do
+    NOT satisfy this and still raise. The substitute relies on the judge
+    pack's content-blindness guarantee (never discloses author/model/
+    school identity, pinned by tests/test_judge_ensemble_boundary.py::
+    test_judge_pack_never_names_an_author_school_or_model) rather than
+    model diversity -- reachable only via the manifest-compile CLI's
+    `--blind-same-model-judges` lever (SPEC's Road C finding: no
+    operator-facing surface could construct this shape before it), so an
+    ordinary run can never land here by accident.
     """
 
     seats = tuple(leases.get("judge", ()))
@@ -353,7 +367,15 @@ def require_cross_family_judge_ensemble(
         for lease in seats
         if lease.route.family.strip()
     }
-    if len(seats) < 2 or len(families) < 2:
+    models = {
+        f"{lease.route.provider.strip().casefold()}:"
+        f"{lease.route.model_id.strip().casefold()}"
+        for lease in seats
+        if lease.route.model_id.strip()
+    }
+    if len(seats) < 2:
+        raise JudgeEnsemblePolicyError()
+    if len(families) < 2 and len(models) != 1:
         raise JudgeEnsemblePolicyError()
     return seats
 

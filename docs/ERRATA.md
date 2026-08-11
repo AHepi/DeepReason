@@ -416,3 +416,72 @@ SPEC, not a `RESEARCH_BACKEND.md` edit. Evidence:
 branch — the third same-day "E18" against a ledger ending at E17; see
 E19's note. This ledger serializes them in merge order; the probe
 tranche's own artifacts stay as delivered.)
+## 2026-08-11 (adjudication-judge-seats-optins tranche — corrective amendments)
+
+(Renumbering note, added at merge: the two entries below were minted as
+"E18"/"E19" on their delivery branch, the fourth and fifth same-day
+collisions against a ledger that ended at E17 when the branches forked;
+this ledger serializes them in merge order as E21/E22, and the tranche's
+own DELIVERY.md stays as delivered citing the branch-time numbers.)
+
+**E21 — Amendment 10's "and" reading of the schools opt-in was recorded
+as confirmed, then found too coupled and corrected by Amendment 11.**
+`experiments/2026-08-09-change-adjudication-judge-seats-optins/
+REQUEST.md` R26 ("Amendment 10... operator's own words: 'Yes. School
+opt in. But for both criticism and conjecture.'") reads `SCHOOL_SEATS_
+ENABLED` as covering BOTH the conjecture-side route-binding mechanism
+(`SchoolExecutionPolicyV1.mode='route_bound'`) AND the criticism-side
+route-binding mechanism (`CriticismPolicyV1.bindings`'s per-school
+distinct endpoint) TOGETHER — "the operator's words resolve the
+'and/or' toward 'and'... No CHECKLIST.md step needs renumbering." This
+reading was written into `src/deepreason/config.py`'s
+`SCHOOL_SEATS_ENABLED` field comment at Step 43 ("Gates whether a
+school seat may be bound to a distinct route for BOTH conjecture-side
+routing... and criticism-side routing... together, not either in
+isolation") and into SPEC.md's original §2(d) design prose. The
+operator's next message (Amendment 11, same REQUEST.md, R27) corrected
+this directly: "School and criticism should be separate... conjecture-
+side school seats and criticism's attachment-to-a-school are two
+INDEPENDENTLY toggleable things, not one flag driving both. R26's
+reading... was too coupled." Corrected 2026-08-10/11 by rewriting Part
+E into two fully independent CLI levers (`--school-seat`, Step 44;
+`--criticism-seat`, Step 44b) and rewriting `config.py`'s
+`SCHOOL_SEATS_ENABLED` comment to name them as independent (commit
+`a8307d69b` for Step 44's config comment fix). REQUEST.md's own R26
+entry stands unedited, verbatim, per its append-only ledger rule — a
+reader stopping at Amendment 10 without reaching Amendment 11 would be
+misled about the delivered design; this entry is that pointer.
+
+**E22 — CHECKLIST.md's step-3 STOP priced Road A/Road B for Road E;
+neither shipped.** The same tranche's `CHECKLIST.md` step 3 recorded a
+STOP: `crit_argumentative_batch`'s `active_v6` branch hard-requires
+`critic_school_id`, and the step's own design note had assumed this
+guard could be widened with a bypass flag (Road A) or duplicated into a
+parallel dispatch function (Road B). Neither road was built. The
+operator's Amendment 7 ("No I need a clean separation between school
+and criticism. Although they still need to interact.") directed a
+THIRD shape — removing the coupling at its root via self-detection
+(`crit_argumentative_batch` resolves its own v6 authority, no new
+scheduler keyword) — which is what steps 4-15 actually built.
+`CHECKLIST.md` step 3 already self-corrects in place ("**STOP,
+resolved.**... Resolved by REQUEST.md Amendment 7... supersedes both
+originally-priced roads... Steps 4-14 below replace the original steps
+4-8, which are deleted"), so no committed document currently asserts
+the wrong roads as delivered; recorded here only so a reader scanning
+ERRATA for this tranche's shape of correction finds the pointer without
+having to read all of `CHECKLIST.md` to discover it was already fixed
+in place.
+
+**E23 — E19's subject citation now resolves: the adjudication tranche
+directory exists on main as of this merge.** E19 recorded
+`GATES_AND_PACKAGES_PREPLAN.md:4-5` citing
+`experiments/2026-08-09-change-adjudication-judge-seats-optins/` when no
+such directory was readable from main, with a merge-time note that the
+directory was executing on the then-unmerged branch. That branch merged
+to main 2026-08-11 (this commit); the directory and its
+REQUEST/SPEC/CHECKLIST/VALIDATION/DELIVERY artifacts are now in the
+committed tree, so the preplan's citation is no longer dangling. What
+stands from E19: the preplan cited the tranche before it was readable
+from main, and E19's own "planned but never opened" inference was wrong
+when written. No document edit needed; recorded per the operator's
+instruction to update this ledger at the adjudication merge.

@@ -127,31 +127,6 @@ def test_legacy_scheduler_keeps_ordinary_argumentative_dispatch(monkeypatch):
     assert _markers(scheduler) == []
 
 
-def test_v6_local_argumentative_criticism_becomes_completion_debt(monkeypatch):
-    scheduler = _scheduler(roles={"argumentative_critic"})
-    scheduler.config = SimpleNamespace(
-        ARG_CRIT_PER_CYCLE=None,
-        RECRIT_STANDING=False,
-        CRIT_BATCH_K=None,
-    )
-    scheduler._arg_crit_this_cycle = 0
-    scheduler.harness.state.status["A"] = Status.ACCEPTED
-    monkeypatch.setattr(
-        scheduler_module,
-        "crit_argumentative_batch",
-        lambda *_args, **_kwargs: pytest.fail("unbound v6 criticism dispatched"),
-    )
-
-    scheduler._arg_crit(["A"])
-
-    assert _markers(scheduler)[0][1:5] == (
-        "argumentative-criticism",
-        "argumentative_critic",
-        "A",
-        "-",
-    )
-
-
 def test_v6_criterion_model_checks_defer_without_dispatch(monkeypatch):
     scheduler = _scheduler()
     scheduler.config = SimpleNamespace()
@@ -189,6 +164,7 @@ def test_v6_experiment_and_property_design_defer_before_provider(monkeypatch):
         PROP_PROPOSE_PERIOD=1,
         PROP_MAX=1,
         FUZZ_N=1,
+        JUDGE_SEATS_ENABLED=True,
     )
     problem = SimpleNamespace(id="P", criteria=("C",))
     scheduler.harness.state.problems = {"P": problem}
@@ -229,6 +205,7 @@ def test_v6_audit_vision_and_lazy_hv_defer_without_dispatch(monkeypatch):
         VISION_CRIT_PER_CYCLE=1,
         HV_CONTENT_MAX_CHARS=None,
         HV_K=3,
+        JUDGE_SEATS_ENABLED=True,
     )
     scheduler._vision_done = set()
     scheduler._hv_skipped = set()
@@ -325,3 +302,95 @@ def test_v6_pairwise_discrimination_never_reaches_unbound_judge(tmp_path, monkey
         f"{first.id}|{second.id}",
         "transaction-contract-unavailable",
     ]
+
+
+def test_critic_execution_permits_endpoint_only_dispatch():
+    """S13h: an endpoint-only call (no school) is a valid combination now,
+    distinct from the pre-existing school-routed and no-envelope cases."""
+
+    from deepreason.llm.firewall import EndpointLease, Route
+    from deepreason.rules.crit import _critic_execution
+
+    lease = EndpointLease(
+        role="argumentative_critic",
+        seat=0,
+        route=Route(
+            endpoint_id="critic-mock-0",
+            base_url="mock://legacy",
+            model_id="model-legacy",
+            provider="mock",
+            family="legacy",
+            max_tokens=64,
+            context_window_tokens=1024,
+        ),
+    )
+
+    call_kwargs, prefix = _critic_execution(
+        endpoint_lease=lease,
+        critic_school_id=None,
+        critic_school_context=None,
+    )
+
+    assert call_kwargs == {
+        "endpoint_index": 0,
+        "endpoint_lease": lease,
+        "school_id": None,
+    }
+    assert prefix == ""
+
+    with pytest.raises(ValueError, match="school-routed criticism requires"):
+        _critic_execution(
+            endpoint_lease=lease,
+            critic_school_id="school-0",
+            critic_school_context=None,
+        )
+
+
+def test_llm_adapter_exposes_bound_v6_manifest(tmp_path):
+    """S13i-1: crit.py's self-detection needs a read-only accessor for the
+    manifest Scheduler.__init__ already binds via bind_v6_authority."""
+
+    harness = Harness(tmp_path / "bound-v6-manifest-accessor")
+    manifest = _manifest()
+    _bind_classification(harness, manifest)
+    adapter = LLMAdapter(
+        {"argumentative_critic": MockEndpoint(lambda _prompt: "")},
+        harness.blobs,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+    )
+
+    assert adapter.bound_v6_manifest() is None
+
+    adapter.bind_v6_authority(harness, manifest)
+
+    assert adapter.bound_v6_manifest() is manifest
+
+
+def test_legacy_argumentative_criticism_dispatches_under_v6(monkeypatch):
+    """S13i-3 (corrected Step 3): v6 + no school criticism_policy must no
+    longer defer — crit_argumentative_batch self-detects v6-ness via the
+    adapter's bound manifest and dispatches live, with the scheduler's own
+    call staying keyword-free (SEAM-scheduler-x-rules.md's checked
+    invariant: the scheduler never chooses a prose authority)."""
+
+    scheduler = _scheduler(roles={"argumentative_critic"})
+    scheduler.config = SimpleNamespace(
+        ARG_CRIT_PER_CYCLE=None,
+        RECRIT_STANDING=False,
+        CRIT_BATCH_K=None,
+    )
+    scheduler._arg_crit_this_cycle = 0
+    scheduler.harness.state.status["A"] = Status.ACCEPTED
+    calls = []
+    monkeypatch.setattr(
+        scheduler_module,
+        "crit_argumentative_batch",
+        lambda *args, **kwargs: calls.append((args, kwargs)),
+    )
+
+    scheduler._arg_crit(["A"])
+
+    assert calls == [((scheduler.harness, ["A"], scheduler.adapter, scheduler.config), {})]
+    assert _markers(scheduler) == []

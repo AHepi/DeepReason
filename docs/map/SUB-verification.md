@@ -1,7 +1,7 @@
 <!-- DR-SUB-verification -->
 Verified-at: df0fd0fd
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
-Owns: src/deepreason/invariants.py, src/deepreason/verification/
+Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
 Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
 
@@ -120,6 +120,19 @@ In-memory `stats` (event/artifact/problem counts, `logged_tokens`, profile
 totals, the workflow and capability process digests) ride out on the return
 value and are the numbers experiment reports quote.
 
+`stats["signal_snapshot"]` (Part F, R15, adjudication-judge-seats-optins
+tranche, 2026-08-11) is `signals_read.read_signal_snapshot(root)`'s typed
+output, added by `verify_root_report` alongside `stats["verification_v2"]`
+above — a pure READ aggregation, not a new report shape or a new
+`VerificationFindingV2`. It never fails closed to `{}` the way `stats`
+itself does on an unopenable root (the earlier Traps entry below): each of
+its three sub-reads (`latest_config_critique`, the per-phase deferral
+counts, the summed token spend) independently tolerates a missing or
+unreadable root and returns its own empty shape, so a caller can always
+index `stats["signal_snapshot"]["token_spend"]` without a KeyError even
+when `stats` was otherwise empty.
+`check: grep -q 'stats\["signal_snapshot"\] = read_signal_snapshot' src/deepreason/verification/report.py && grep -q "class SignalSnapshotV1" src/deepreason/signals_read.py && grep -q "def read_signal_snapshot" src/deepreason/signals_read.py && python -c "from deepreason.verification.report import verify_root_report; r = verify_root_report('/nonexistent/path/for/docs-verify', allow_missing_terminal=True); assert r.stats['signal_snapshot']['token_spend'] == {'prompt_tokens': 0, 'completion_tokens': 0, 'total': 0, 'calls': 0}"`
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -136,6 +149,7 @@ value and are the numbers experiment reports quote.
 | Let a sandboxed program call a model | `verification/llm_broker.py` and `_derive_v2` in `brokered.py` | `python -m pytest tests/test_brokered_simulation.py -q` |
 | How a code patch is applied and which checks run | `verify_code_patch` in `code.py`, `TrustedCheckRunner.run` in `runner.py` | `python -m pytest tests/test_workload_code.py -q` |
 | What `REPLAY_VALIDATION.json` binds | not here — `_fresh_replay_validation` in `runtime/terminal_authority.py`, `write_tranche_a_audits` in `capabilities/audit.py` | `python -m pytest tests/test_v6_terminal_commitment_authority.py -q` |
+| Add a new already-live signal to the read-only snapshot | `signals_read.py` (a new `_<name>` helper, threaded into `read_signal_snapshot`) — never a new `Measure`/`LLMCall` field; that would need `DR-SUB-scheduler`'s `signals.py` registry instead | `python -m pytest tests/test_signals_read.py tests/test_v6_verification_transactions.py::test_report_includes_signal_snapshot -q` |
 `check: grep -q "_SECURITY_CHECKS = frozenset(" src/deepreason/verification/report.py && grep -q "_OPERATIONAL_CHECKS = frozenset(" src/deepreason/verification/report.py && grep -q "_EPISTEMIC_CHECKS = frozenset(" src/deepreason/verification/report.py && grep -q "def write_tranche_a_audits(" src/deepreason/capabilities/audit.py`
 `check: grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/verification/simulation.py && grep -q "imports are not allowed" src/deepreason/verification/simulation.py && grep -q "def guard(source, label):" src/deepreason/verification/contained.py && grep -q "may not import or mutate scope" src/deepreason/verification/contained.py && grep -q "def _containment_limits(" src/deepreason/verification/contained.py && grep -q "def containment_prefix(cls)" src/deepreason/verification/contained.py && grep -q "def seccomp_available()" src/deepreason/verification/_sandbox.py && grep -q "def _derive_v2(source: str) -> str:" src/deepreason/verification/brokered.py`
 
@@ -161,6 +175,28 @@ value and are the numbers experiment reports quote.
   other `foreign-criticism` finding stays `integrity`. Changing that detail
   string changes the channel.
 `check: grep -q 'check == "foreign-criticism"' src/deepreason/verification/report.py && grep -q 'detail.startswith("target ")' src/deepreason/verification/report.py && grep -q '"policy requires" in detail' src/deepreason/verification/report.py`
+- **FIXED 2026-08-11 (adjudication-judge-seats-optins tranche, run
+  `run-ee9696e2161374f6597f65963a645d8a`, found by
+  `scripts/wheel_operational_smoke.py`): `_transaction_findings`'s
+  `task == "criticism"` authority check assumed `manifest.criticism_policy`
+  is always populated for real criticism work.** Road E (this tranche's
+  Part A) built a genuinely school-free legacy criticism dispatch with NO
+  `criticism_policy` binding at all, and Part B2 made that the DEFAULT
+  (`LEGACY_CRITICISM_ENABLED=True`) — so every ordinary run's legacy
+  criticism transactions were flagged `security`-invalid
+  ("criticism work is not authorized by the manifest"), 17 findings on
+  one ordinary `deepreason reason` call, confirmed live via an installed
+  wheel. `nonconjecture_recovery.py::_criticism_contract`'s RECOVERY-side
+  authority check already had the correct school-free branch (S13e, this
+  same tranche) — this POST-HOC verification check was a second,
+  independent site that needed the identical branch and was missed during
+  Part A's own frozen-surface confirmation (Step 1 checked `harness.py`/
+  `capabilities/state.py`/`invariants.py`/`run_manifest.py` contact, not
+  `verification/report.py`). Fixed by mirroring `_criticism_contract`'s
+  exact shape: `critic_school_id is None` is authorized whenever the
+  `argumentative_critic` role has a manifest route and
+  `payload["dispatch_authority"] == "observe_only"`.
+`check: python -m pytest tests/test_v6_verification_transactions.py -k "school_free_criticism" -q`
 - **An unopenable root returns empty `stats`.** `verify_root` short-circuits to
   a single `open` (or the controller-v3) finding with `"stats": {}`. Callers
   that index into `stats` unconditionally crash on exactly the roots most worth

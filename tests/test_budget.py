@@ -7,6 +7,7 @@ import pytest
 
 from deepreason.config import Config
 from deepreason.harness import Harness
+from deepreason.informal.standards import register_standard
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.budget import TokenBudgetExceeded, TokenMeter
 from deepreason.llm.contracts import ConjecturerOutput
@@ -129,6 +130,110 @@ def test_arg_crit_per_cycle_cap(tmp_path):
     config = Config(VS_K=3, N_SCHOOLS=0, FLOOR=0, ARG_CRIT_PER_CYCLE=1)
     Scheduler(harness, adapter, config).run(2)
     assert critic_calls["n"] == 2  # one per cycle despite 3 admitted per cycle
+
+
+def _rubric_trial_adapter(judge, harness):
+    """A cross-family judge ensemble (require_cross_family_judges, R2's
+    solo law reconciliation: adapter.py:673) plus the argumentative_critic/
+    defender roles run_trial also requires (informal/trial.py:239-241) --
+    without either, every trial blocks before ever reaching the judge,
+    which would make a judge-call counter measure nothing."""
+    return LLMAdapter(
+        {
+            "judge": [
+                MockEndpoint(judge, name="mock://judge-gemma", model="gemma-test"),
+                MockEndpoint(judge, name="mock://judge-qwen", model="qwen-test"),
+            ],
+            "argumentative_critic": MockEndpoint(
+                lambda p: json.dumps({"attack": True, "case": "violates clause 1"})
+            ),
+            "defender": MockEndpoint(lambda p: json.dumps({"answer": "no."})),
+        },
+        harness.blobs,
+    )
+
+
+def test_judge_summons_per_cycle_cap(tmp_path):
+    """JUDGE_SUMMONS_PER_CYCLE (Part D, R10): a static per-cycle cap on
+    judge dispatch, modeled on ARG_CRIT_PER_CYCLE above. Calls _criticize
+    directly (like test_scheduler.py's gating test) rather than driving a
+    full run(): VS_K>1 rivals on one problem spawn discrimination, which
+    dispatches judges through an unrelated, un-throttled path and would
+    contaminate the count this test means to isolate."""
+    from deepreason.ontology import Interface, Provenance
+
+    harness = Harness(tmp_path / "run")
+    register_standard(harness, "std-x", rubric="must name a mechanism")
+    commitment = Commitment(id="k-rubric", eval="rubric:std-x")
+    harness.register_commitment(commitment)
+    targets = [
+        harness.create_artifact(
+            f"the mechanism, account {i}",
+            interface=Interface(commitments=[commitment.id]),
+            provenance=Provenance(role="conjecturer"),
+        )
+        for i in range(3)
+    ]
+    judge_calls = {"n": 0}
+
+    def judge(prompt):
+        judge_calls["n"] += 1
+        return json.dumps({"verdict": "pass", "decisive_point": "x"})
+
+    adapter = _rubric_trial_adapter(judge, harness)
+    config = Config(
+        N_SCHOOLS=0, JUDGE_SEATS_ENABLED=True,
+        JUDGE_SUMMONS_PER_CYCLE=1, JUDGE_SUMMONS_COOLDOWN=0,
+    )
+    scheduler = Scheduler(harness, adapter, config, workload_profile="code")
+    for target in targets:
+        scheduler._criticize(target)  # all within the same (uncleared) cycle
+    # One trial gets through (cap=1); each trial consults both cross-family
+    # judge seats (require_cross_family_judges), so one admitted trial is 2
+    # judge calls, not 1 -- capped at that despite 3 rubric-bearing targets.
+    assert judge_calls["n"] == 2
+
+
+def test_judge_summons_cooldown(tmp_path):
+    """JUDGE_SUMMONS_COOLDOWN (Part D, R10): a static per-target cooldown,
+    modeled on DISC_COOLDOWN -- the SAME rubric target re-triggers a judge
+    summons every cycle, but the cooldown spaces its repeat summonses out
+    so one standoff cannot monopolize the whole run's judge budget. Cycle
+    advancement is simulated by hand (the same _cycles/_judge_summons_this_
+    cycle bookkeeping step() does) so the test isolates the cooldown from
+    the per-cycle cap and from unrelated dispatch (see the per-cycle-cap
+    test above for why a full run() would contaminate the count)."""
+    from deepreason.ontology import Interface, Provenance
+
+    harness = Harness(tmp_path / "run")
+    register_standard(harness, "std-x", rubric="must name a mechanism")
+    commitment = Commitment(id="k-rubric", eval="rubric:std-x")
+    harness.register_commitment(commitment)
+    target = harness.create_artifact(
+        "the mechanism is explicit",
+        interface=Interface(commitments=[commitment.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    judge_calls = {"n": 0}
+
+    def judge(prompt):
+        judge_calls["n"] += 1
+        return json.dumps({"verdict": "pass", "decisive_point": "x"})
+
+    adapter = _rubric_trial_adapter(judge, harness)
+    config = Config(
+        N_SCHOOLS=0, JUDGE_SEATS_ENABLED=True,
+        JUDGE_SUMMONS_PER_CYCLE=10, JUDGE_SUMMONS_COOLDOWN=3,
+    )
+    scheduler = Scheduler(harness, adapter, config, workload_profile="code")
+    for cycle in range(6):
+        scheduler._cycles = cycle
+        scheduler._judge_summons_this_cycle = 0  # per-cycle reset, as step() does
+        scheduler._criticize(target)
+    # Admitted at cycle 0 and again at cycle 3 (3 - 0 == COOLDOWN, no longer
+    # < it); cycles 1-2 and 4-5 fall inside the cooldown window and block.
+    # Two admitted trials x two cross-family judge seats each = 4 calls.
+    assert judge_calls["n"] == 4
 
 
 def test_truncation_hint_on_length_finish(tmp_path):

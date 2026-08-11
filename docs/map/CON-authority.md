@@ -69,6 +69,7 @@ receipt verifier exists.
 
 | Aspect | File | Symbol |
 |---|---|---|
+| The master reachability gate all six knobs below sit behind (adjudication-judge-seats-optins tranche, S2a/R1, 2026-08-10): each of the six stays independently settable, but stays observe_only-equivalent unless this is ALSO True. Applied at each knob's own operational consumption site, never inside a shared resolution function preflight also reads: `ARGUMENTATIVE_AUTHORITY`/`TEXT_RUBRIC_AUTHORITY`/`PAIRWISE_AUTHORITY`/`INFRASTRUCTURE_REVIEW_AUTHORITY` at `rules/crit.py::_authority`/`authority.py::trial_authority_for`; `ENGAGED_CRITICISM_AUTHORITY` at `preparation.py::build_preparation_manifest` (found missing and fixed while writing this row) | `src/deepreason/config.py` | `ADJUDICATION_STATUS_AUTHORITY_ENABLED` |
 | Surface-mode enum (what a surface is configured to have) | `src/deepreason/authority.py` | `TextAuthorityMode` — `observe_only`, `calibrated_status` |
 | Call-mode enum (what one trial is handed) | `src/deepreason/authority.py` | `TrialAuthority` — `observe_only`, `status` |
 | The three independently-configured surfaces | `src/deepreason/authority.py` | `AuthoritySurface`, `_SURFACE_FIELDS` |
@@ -80,6 +81,7 @@ receipt verifier exists.
 | The five per-run knobs | `src/deepreason/config.py` | `ARGUMENTATIVE_AUTHORITY`, `TEXT_RUBRIC_AUTHORITY`, `PAIRWISE_AUTHORITY`, `INFRASTRUCTURE_REVIEW_AUTHORITY`, `CALIBRATION_RECEIPT` |
 | The engaged preset's compiled criticism authority (a sixth, differently-shaped knob: mirrors the manifest's two values directly, no translation) | `src/deepreason/config.py` | `ENGAGED_CRITICISM_AUTHORITY` |
 | Where the knob is threaded into the compiled preset | `src/deepreason/v6_policy.py`, `src/deepreason/preparation.py` | `engaged_criticism_policy`, `build_preparation_manifest` |
+| Whether the engaged preset routes criticism through a school at all (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10: True compiles `criticism_policy=None`, Road E's school-free circuit, instead of `engaged_criticism_policy(...)`. **Default flipped to `True` by Amendment 11/R28, 2026-08-10** — operator's words: "Legacy, not schools, should be default for criticism"; schools are a conjecture-side tool, independently modular from criticism; set `False` to opt back into school-routed criticism) | `src/deepreason/config.py`, `src/deepreason/preparation.py` | `LEGACY_CRITICISM_ENABLED` |
 | Token budget for observe-only trials | `src/deepreason/config.py` | `ADVISORY_TRIALS_PER_CYCLE` |
 | Prose-criticism vocabulary (manifest side) | `src/deepreason/rules/crit.py` | `_POLICY_AUTHORITIES` |
 | Manifest word → Config word translation | `src/deepreason/rules/crit.py` | `_resolve_authority`, `_authority` |
@@ -93,6 +95,7 @@ receipt verifier exists.
 | Compile-time and pre-adapter preflight | `src/deepreason/run_manifest.py` | `_preflight_text_authority`, `preflight_harness` |
 | Rubric / pairwise call sites | `src/deepreason/scheduler/scheduler.py` | `Scheduler._criticize`, `Scheduler.step` |
 | Infrastructure-review call site | `src/deepreason/ops.py` | `review_infrastructure` |
+| Judge-ensemble independence: cross-family diversity, OR a structural same-model substitute (Amendment 9/R24, 2026-08-10 — narrower than same-family, so a same-family-different-model pair still fails; relies on the judge pack's content-blindness guarantee, `tests/test_judge_ensemble_boundary.py::test_judge_pack_never_names_an_author_school_or_model`; reachable only via `--blind-same-model-judges` on the manifest-compile CLI, mirrors the existing cross-school substitute's no-separate-flag shape) | `src/deepreason/llm/firewall.py`, `src/deepreason/run_manifest.py` | `require_cross_family_judge_ensemble`; `RunManifest`'s `rubric_policy` model-validator, `compile_run_manifest`'s own pre-check, `_validate_v4_criticism_policy`'s `defended_trial` branch |
 | Pilot preflight that forbids all of it | `src/deepreason/jolts.py` | `JOLT_STATUS_AUTHORITY_FORBIDDEN` |
 | Which ensemble a status trial must convene | `src/deepreason/llm/adapter.py` | `_select_judge_ensemble` |
 
@@ -174,11 +177,14 @@ with no warrants and a `["scrutiny", target, critic]` Measure. The target's
 `calibration_receipt_is_verified` returns False unconditionally: no receipt
 verifier exists, and a reference string is a claim about a receipt rather than a
 checked one.
-`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f, calibration_receipt_is_verified as v; from deepreason.config import Config; assert not v(Config(CALIBRATION_RECEIPT='sha256:x')); assert f(Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'), 'text', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(), 'code', S.RUBRIC) == T.STATUS"`
+`check: python -c "from deepreason.authority import AuthoritySurface as S, TrialAuthority as T, trial_authority_for as f, calibration_receipt_is_verified as v; from deepreason.config import Config; assert not v(Config(CALIBRATION_RECEIPT='sha256:x')); assert f(Config(TEXT_RUBRIC_AUTHORITY='calibrated_status', CALIBRATION_RECEIPT='sha256:x'), 'text', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(), 'code', S.RUBRIC) == T.OBSERVE_ONLY; assert f(Config(JUDGE_SEATS_ENABLED=True), 'code', S.RUBRIC) == T.STATUS"`
 
 **This policy governs text workloads only.** The same check above records the
 other half: for any `workload_profile` other than `"text"`,
-`trial_authority_for` returns `STATUS` without reading a knob.
+`trial_authority_for` returns `STATUS` without reading a text-authority knob
+-- but only once `JUDGE_SEATS_ENABLED` is on (Part D's master judge-dispatch
+gate, off by default); at the default `False` it returns `OBSERVE_ONLY`
+regardless of workload.
 
 **Every surface knob is a real `Config` field**, and the surface enum and the
 field map are the same size — a surface with no field would silently read the
@@ -209,6 +215,7 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
 | To change... | Edit | Test |
 |---|---|---|
 | Add a per-run authority mode | `config.py` `ARGUMENTATIVE_AUTHORITY` Literal, `authority.py` `_ARGUMENTATIVE_VALUES` + `_TRIAL_AUTHORITIES`, `rules/crit.py` `_TRIAL_MODES` | `python -m pytest tests/test_prose_refutation_boundaries.py -k "config_only or routes_to_the_same" -q` |
+| Make a mode reachable at all | Nothing — reachability is `ADJUDICATION_STATUS_AUTHORITY_ENABLED`'s job, the master gate every knob above (and `ENGAGED_CRITICISM_AUTHORITY`) sits behind; a new mode inherits it automatically at whichever consumption site it's read from | `python -m pytest tests/test_text_authority_policy.py::test_master_gate_forces_observe_only_even_when_trial_configured tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_inert_without_the_master_gate -q` |
 | Land a calibration-receipt verifier | `authority.py` `calibration_receipt_is_verified` — the single attachment point | `python -m pytest tests/test_text_authority_policy.py -k unverified_calibrated -q` |
 | Add a fourth adjudication surface | `authority.py` `AuthoritySurface` + `_SURFACE_FIELDS`, a `Config` field, `jolts.py` `authority_fields` | `python -m pytest tests/test_manifest_integration.py -k calibration_receipt -q` |
 | Change what `observe_only` files | `rules/crit.py` `_observe_case` (Measure inputs are compared against recorded roots — see Traps) | `python -m pytest tests/test_text_authority_policy.py -k scrutiny -q` |

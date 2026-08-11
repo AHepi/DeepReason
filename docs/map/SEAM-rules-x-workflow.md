@@ -173,9 +173,15 @@ a provider unbracketed are a generational fact rather than a designed absence �
 `crit.py`'s pre-v6 paths, all of which v4/v5 roots still need. Under v6 they are
 unreachable rather than authorized:
 `synthesize` is excluded by an explicit `schema_version == 6` branch in the
-scheduler, and vision, experiment authoring, property design and local
-argumentative criticism become typed completion debt through
-`_defer_untransactional_v6_phase`. The other two, D2 rev 2's
+scheduler, and vision, experiment authoring and property design become typed
+completion debt through `_defer_untransactional_v6_phase`. Local argumentative
+criticism used to join them; FIXED 2026-08-10
+(adjudication-judge-seats-optins tranche, S13i): it is now bracketed and
+dispatches live under v6 too — `crit_argumentative_batch` self-detects the
+v6-bound adapter and resolves its own manifest and route, so
+`"argumentative-criticism"` no longer appears as a deferred phase anywhere in
+the scheduler. It remains a `crit.py` site, just no longer an unbracketed one.
+The other two, D2 rev 2's
 `rules/relatedness.py::relatedness_trial` and
 `rules/encoding.py::draft_encoded_commitment`, are unbracketed for a DIFFERENT
 reason — not deferred, DORMANT: neither has any caller anywhere in `src/`
@@ -187,7 +193,7 @@ Re-enabling any of the four generational sites under v6 without a transaction
 does not degrade — the adapter's global guard fails the whole root
 (`DR-SEAM-llm-x-workflow`). `conj.py` is already clean: it has no `adapter.call`
 that omits the bundle argument.
-`check: python -c "import ast, pathlib; sites=[(p.name, n, any(k.arg=='dispatch_authorization' for k in n.keywords)) for p in sorted(pathlib.Path('src/deepreason/rules').rglob('*.py')) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr=='call' and isinstance(n.func.value, ast.Name) and n.func.value.id=='adapter']; bound=[s for s in sites if s[2]]; unbound=[s for s in sites if not s[2]]; assert len(bound)==4 and {f for f,_n,_b in bound}=={'conj.py','crit.py'}, bound; assert {f for f,_n,_b in unbound}=={'crit.py','experiment.py','synth.py','vision.py','encoding.py','relatedness.py'}, sorted(f for f,_n,_b in unbound)" && ! grep -rq "draft_encoded_commitment\|relatedness_trial" --include=*.py src/deepreason/scheduler src/deepreason/rules/conj.py && python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; T=ast.parse(textwrap.dedent(inspect.getsource(S.step))); g=[n for n in ast.walk(T) if isinstance(n, ast.If) and any('relation = synthesize(' in ast.unparse(s) for s in n.body)]; assert len(g)==1, len(g); t=ast.unparse(g[0].test); assert 'not (self.run_manifest is not None and self.run_manifest.schema_version == 6)' in t, t; W=ast.parse(textwrap.dedent(inspect.getsource(S))); phases={(c.args[0].value if c.args else [k.value for k in c.keywords if k.arg=='phase'][0].value) for c in ast.walk(W) if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr=='_defer_untransactional_v6_phase'}; assert {'vision-criticism','experiment-generator-authoring','property-design','argumentative-criticism'} <= phases, sorted(phases)" && grep -q "def _defer_untransactional_v6_phase(" src/deepreason/scheduler/scheduler.py`
+`check: python -c "import ast, pathlib; sites=[(p.name, n, any(k.arg=='dispatch_authorization' for k in n.keywords)) for p in sorted(pathlib.Path('src/deepreason/rules').rglob('*.py')) for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr=='call' and isinstance(n.func.value, ast.Name) and n.func.value.id=='adapter']; bound=[s for s in sites if s[2]]; unbound=[s for s in sites if not s[2]]; assert len(bound)==4 and {f for f,_n,_b in bound}=={'conj.py','crit.py'}, bound; assert {f for f,_n,_b in unbound}=={'crit.py','experiment.py','synth.py','vision.py','encoding.py','relatedness.py'}, sorted(f for f,_n,_b in unbound)" && ! grep -rq "draft_encoded_commitment\|relatedness_trial" --include=*.py src/deepreason/scheduler src/deepreason/rules/conj.py && python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; T=ast.parse(textwrap.dedent(inspect.getsource(S.step))); g=[n for n in ast.walk(T) if isinstance(n, ast.If) and any('relation = synthesize(' in ast.unparse(s) for s in n.body)]; assert len(g)==1, len(g); t=ast.unparse(g[0].test); assert 'not (self.run_manifest is not None and self.run_manifest.schema_version == 6)' in t, t; W=ast.parse(textwrap.dedent(inspect.getsource(S))); phases={(c.args[0].value if c.args else [k.value for k in c.keywords if k.arg=='phase'][0].value) for c in ast.walk(W) if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr=='_defer_untransactional_v6_phase'}; assert {'vision-criticism','experiment-generator-authoring','property-design'} <= phases and 'argumentative-criticism' not in phases, sorted(phases)" && grep -q "def _defer_untransactional_v6_phase(" src/deepreason/scheduler/scheduler.py`
 
 **Planning context is not exposing context, and recovery has no adapter.**
 `InquiryTransactionService.context_plan` is a `staticmethod` that appends

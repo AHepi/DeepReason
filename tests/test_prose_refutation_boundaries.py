@@ -191,9 +191,12 @@ def test_the_new_mode_routes_to_the_same_defended_trial(harness):
     from deepreason.config import Config
     from deepreason.rules import crit
 
-    assert crit._authority(Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY)) == (
-        SINGLE_FAMILY_AUTHORITY
-    )
+    assert crit._authority(
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        )
+    ) == (SINGLE_FAMILY_AUTHORITY)
     assert SINGLE_FAMILY_AUTHORITY in crit._TRIAL_MODES
     assert "trial_required" in crit._TRIAL_MODES
     assert "observe_only" not in crit._TRIAL_MODES
@@ -303,6 +306,12 @@ def _lease(family: str, role: str = "judge", seat: int = 0):
 
     The endpoint identity varies with the seat, so a binding that names the
     wrong seat's endpoint is distinguishable from one that names the right one.
+    model_id also varies with the seat (Part D2, S16, Amendment 9 R24):
+    require_cross_family_judge_ensemble gained a structural same-model
+    substitute, and two _lease("glm", seat=N) calls with the SAME model_id
+    would silently satisfy it -- this file's whole point is testing what
+    happens when family independence is NOT obtainable, so its fixture must
+    not accidentally hand model independence to same-family leases instead.
     """
 
     from deepreason.llm.firewall import EndpointLease, Route
@@ -313,7 +322,7 @@ def _lease(family: str, role: str = "judge", seat: int = 0):
         route=Route(
             endpoint_id=f"{role}-{family}-{seat}",
             base_url=f"mock://{family}",
-            model_id=f"model-{family}",
+            model_id=f"model-{family}-{seat}",
             provider="mock",
             family=family,
             max_tokens=64,
@@ -413,6 +422,12 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
     Byte-level proof that the existing gate did not move lives in `git diff`;
     this pins the behaviour that diff is protecting, so a future edit to the
     cross-family gate fails here even if the diff is never inspected again.
+
+    `one_family` uses two DIFFERENT models of the one family (seat 0 vs 1,
+    `_lease`'s model_id varies with seat) rather than two calls with
+    identical arguments: the latter would exercise Part D2's later,
+    deliberately different same-MODEL substitute (Amendment 9/R24) instead
+    of this test's actual subject, same-family-without-cross-school.
     """
 
     import pytest
@@ -421,7 +436,7 @@ def test_the_cross_family_gate_is_untouched_by_the_cross_school_sibling():
         require_cross_family_judge_ensemble,
     )
 
-    one_family = (_lease("glm"), _lease("glm"))
+    one_family = (_lease("glm", seat=0), _lease("glm", seat=1))
     with pytest.raises(JudgeEnsemblePolicyError, match="SECOND_JUDGE_FAMILY_REQUIRED"):
         require_cross_family_judge_ensemble({"judge": one_family})
 
@@ -636,7 +651,10 @@ def test_a_passing_formal_commitment_now_resists_prose(harness):
         harness,
         target.id,
         _single_family_trial_adapter(harness),
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ),
     )
 
     assert not harness.state.att
@@ -996,6 +1014,35 @@ def test_a_single_model_run_refutes_by_prose_end_to_end(harness):
     assert warrant.type == WarrantType.ARGUMENTATIVE, warrant.type
 
 
+def test_single_family_trial_reachable_under_master_gate(harness):
+    """Part C (S2a, R1) solo-law compliance: the master reachability gate
+    must not gate single_family_trial away for a genuinely single-family
+    solo run -- the exact accommodation the operator's standing solo law
+    requires (C3, "no configuration may strand solo runs").
+
+    single_family_trial's own school-routed reachability (the substitute
+    ensemble, not the bare Config-only direct-helper path, which
+    `test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee`
+    already shows structurally cannot supply a critic school) is proven
+    live by `test_a_single_model_run_refutes_by_prose_end_to_end` above,
+    unaffected by this gate since it calls the trial mechanism directly
+    with an already-resolved authority. This test proves the OTHER half:
+    the master gate itself does not silently downgrade the configured
+    value to observe_only for a single-family adapter."""
+
+    from deepreason.config import Config
+    from deepreason.llm.firewall import is_single_family_run
+
+    adapter = _single_family_trial_adapter(harness)
+    assert is_single_family_run(adapter.leases) is True
+
+    config = Config(
+        ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+    )
+    assert crit._authority(config) == SINGLE_FAMILY_AUTHORITY
+
+
 def test_the_same_run_under_the_old_mode_refutes_nothing(harness):
     """Implements S2's contrast: the mode is what changed, not the fixture.
 
@@ -1096,7 +1143,10 @@ def test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee(harness)
         harness,
         target.id,
         _substitute_adapter(harness),
-        Config(ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY),
+        Config(
+            ARGUMENTATIVE_AUTHORITY=SINGLE_FAMILY_AUTHORITY,
+            ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ),
     )
 
     assert critic is None

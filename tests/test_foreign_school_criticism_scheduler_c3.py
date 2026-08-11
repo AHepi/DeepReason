@@ -28,6 +28,7 @@ from deepreason.run_manifest import (
     compile_run_manifest,
 )
 from deepreason.scheduler.scheduler import Scheduler
+from deepreason.workflow.criticism import ForeignCriticismTargetV1, plan_foreign_criticism
 
 
 STAMP = "2026-07-16T00:00:00Z"
@@ -158,6 +159,40 @@ def _manifest(config: Config):
         compiled_at=STAMP,
         control_plane_policy=_control(),
         criticism_policy=_criticism(),
+    )
+
+
+def _shared_route_criticism() -> CriticismPolicyV1:
+    """Same three schools as `_criticism()`, but every binding shares ONE
+    seat/endpoint -- the control fixture for Step 45's regression test."""
+
+    return CriticismPolicyV1(
+        minimum_foreign_school_coverage=2,
+        bindings=tuple(
+            SchoolRoleBindingV1(
+                school_id=f"school-{seat}",
+                role="argumentative_critic",
+                seat=0,
+                endpoint_id="critic-route-0",
+            )
+            for seat in range(3)
+        ),
+        max_batch_size=4,
+        target_eligibility="accepted_school_artifacts",
+        authority="observe_only",
+        allow_shared=True,
+    )
+
+
+def _manifest_with_criticism(config: Config, criticism_policy: CriticismPolicyV1):
+    return compile_run_manifest(
+        config,
+        schema_version=4,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=_control(),
+        criticism_policy=criticism_policy,
     )
 
 
@@ -312,3 +347,71 @@ def test_batch_route_failure_is_detected_before_any_critic_dispatch(
         event.llm is not None and event.llm.role == "argumentative_critic"
         for event in harness.log.read()
     )
+
+
+def test_distinct_school_models_do_not_change_foreign_coverage_count():
+    """Step 45 (S2d, C6, Amendment 11/R27 -- school-seat conjecture/criticism
+    route diversity): `plan_foreign_criticism` selects and counts foreign
+    schools by SCHOOL ID SET ARITHMETIC alone (`foreign_schools = sorted(
+    set(bindings) - {owner})`, `coverage = len(covered_schools)`,
+    criticism.py:357-366,406) -- binding schools to distinct provider models
+    must not move that selection or count. Route/model diversity is real
+    and tracked, but in the SEPARATE `distinct_route_coverage`/
+    `distinct_model_coverage`/`route_diverse` fields, never in
+    `foreign_school_coverage` or which schools are picked. This is the
+    map's pinned invariant (`docs/map/SEAM-manifest-x-schools.md`); this
+    test is its regression coverage."""
+
+    config = _config()
+    # `_criticism()` already binds all three schools to three DISTINCT
+    # routes/models (seats 0-2, `critic-route-{0,1,2}`); `_shared_route_
+    # criticism()` binds the identical three schools to ONE shared route.
+    # Same school-id topology, only route/model diversity differs.
+    shared_manifest = _manifest_with_criticism(config, _shared_route_criticism())
+    distinct_manifest = _manifest_with_criticism(config, _criticism())
+
+    targets = tuple(
+        ForeignCriticismTargetV1(target_id=f"target-{i}", owner_school_id=f"school-{i}")
+        for i in range(3)
+    )
+
+    shared_plan = plan_foreign_criticism(shared_manifest, targets)
+    distinct_plan = plan_foreign_criticism(distinct_manifest, targets)
+
+    shared_by_target = {plan.target_id: plan for plan in shared_plan.targets}
+    distinct_by_target = {plan.target_id: plan for plan in distinct_plan.targets}
+    assert set(shared_by_target) == set(distinct_by_target) == {t.target_id for t in targets}
+
+    for target_id in shared_by_target:
+        shared_plan_entry = shared_by_target[target_id]
+        distinct_plan_entry = distinct_by_target[target_id]
+
+        # Inert (Consequence-A, must stay this way): which schools count as
+        # foreign coverage, and how many, is identical whether or not their
+        # routes/models diverge.
+        assert (
+            shared_plan_entry.foreign_school_coverage
+            == distinct_plan_entry.foreign_school_coverage
+            == 2
+        )
+        assert {
+            assignment.critic_school_id for assignment in shared_plan_entry.assignments
+        } == {
+            assignment.critic_school_id for assignment in distinct_plan_entry.assignments
+        }
+
+        # NOT inert (the documented, expected side effect -- not a
+        # regression): route/model diversity is correctly tracked in its
+        # own separate fields.
+        assert shared_plan_entry.distinct_route_coverage == 1
+        assert shared_plan_entry.distinct_model_coverage == 1
+        assert shared_plan_entry.route_diverse is False
+        assert (
+            distinct_plan_entry.distinct_route_coverage
+            == distinct_plan_entry.foreign_school_coverage
+        )
+        assert (
+            distinct_plan_entry.distinct_model_coverage
+            == distinct_plan_entry.foreign_school_coverage
+        )
+        assert distinct_plan_entry.route_diverse is True

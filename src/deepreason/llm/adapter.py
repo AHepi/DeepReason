@@ -253,6 +253,19 @@ class LLMAdapter:
         self._v6_authority_harness = None
         self._v6_authority_manifest = None
 
+    def bound_v6_manifest(self):
+        """The RunManifest bound by `bind_v6_authority`, or None if unbound."""
+
+        return self._v6_authority_manifest
+
+    def bound_v6_default_lease(self, role: str, seat: int = 0):
+        """The seat-0 lease for `role`, for a self-dispatching rule under
+        v6. Lease resolution stays inside `llm/` (SEAM-llm-x-rules.md: "a
+        rule carries it"); this is the adapter resolving its own default
+        when no scheduler-supplied lease was handed to it."""
+
+        return select_lease(self.leases, role, seat)
+
     def bind_v6_authority(self, harness, manifest) -> None:
         """Bind exact route-seat presentation to canonical v6 replay state."""
 

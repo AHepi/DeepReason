@@ -269,11 +269,17 @@ Deleting `self._recover_workflow_prefixes()` from `run()` fails
 - **Under v6 the local criticism ladder is empty, and that is not a bug.**
   `_criticize`'s HV-floor and rubric arms, pairwise discrimination, experiment
   and property design, audit, vision and lazy HV all record deferral debt
-  instead of dispatching. Argumentative criticism is a fork rather than a
-  deferral: with a manifest `criticism_policy` present, `_arg_crit` delegates
-  the entire phase to `_foreign_arg_crit` and returns — the transactional path —
-  and only a v6 manifest *without* a criticism policy falls through to
-  per-target deferral. A reader seeing "no argumentative criticism in this v6
-  run" has to tell those two apart before concluding criticism was skipped;
-  a missing critic role under a criticism policy raises rather than degrading.
-`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; a = inspect.getsource(S._arg_crit); assert a.index("manifest foreign criticism has no runtime critic role") < a.index("self._foreign_arg_crit()") < a.index("argumentative-criticism") < a.index("crit_argumentative_batch("); assert "if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return" in a' && python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_v6_local_argumentative_criticism_becomes_completion_debt tests/test_v6_scheduler_model_phase_deferral.py::test_v6_audit_vision_and_lazy_hv_defer_without_dispatch tests/test_v6_scheduler_model_phase_deferral.py::test_v6_pairwise_discrimination_never_reaches_unbound_judge -q`
+  instead of dispatching. Argumentative criticism is a genuine exception, not
+  a third case: with a manifest `criticism_policy` present, `_arg_crit`
+  delegates the entire phase to `_foreign_arg_crit` and returns — the
+  transactional path — and a v6 manifest *without* a criticism policy now
+  ALSO dispatches live (FIXED 2026-08-10, adjudication-judge-seats-optins
+  tranche, S13i: `crit_argumentative_batch` self-detects a v6-bound adapter
+  via `LLMAdapter.bound_v6_manifest()` and resolves its own default route,
+  with the scheduler's own call staying keyword-free per
+  `DR-SEAM-scheduler-x-rules`'s invariant). Before this fix, the school-free
+  case fell through to per-target deferral debt instead — that was the
+  actual defect this tranche's operator request ("why were [criticism
+  seats] disconnected") traced to. Argumentative criticism is now the ONLY
+  local-ladder phase that never defers under v6.
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; a = inspect.getsource(S._arg_crit); assert a.index("manifest foreign criticism has no runtime critic role") < a.index("self._foreign_arg_crit()") < a.index("crit_argumentative_batch("); assert "if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return" in a; assert "argumentative-criticism" not in a' && python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 tests/test_v6_scheduler_model_phase_deferral.py::test_v6_audit_vision_and_lazy_hv_defer_without_dispatch tests/test_v6_scheduler_model_phase_deferral.py::test_v6_pairwise_discrimination_never_reaches_unbound_judge -q`

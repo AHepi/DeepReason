@@ -375,6 +375,12 @@ class Config(BaseModel):
     #                    unobtainable, i.e. one route family across the run's
     #                    leases (llm/firewall.py is_single_family_run); route
     #                    topology, not this value, decides which gate applies.
+    # Master reachability gate for status-changing LLM-mediated text
+    # adjudication (Config-side; the six knobs below and the two mint
+    # sites at imports.py/rules/experiment.py all stay observe_only-
+    # equivalent unless this is True). It does not itself select a trial
+    # mode -- it only permits one of the below to take effect.
+    ADJUDICATION_STATUS_AUTHORITY_ENABLED: bool = False
     # Demonstrative outcomes (counterexamples, program/verifier failures)
     # remain status-changing under every mode.
     ARGUMENTATIVE_AUTHORITY: Literal[
@@ -391,10 +397,46 @@ class Config(BaseModel):
     # CriticismPolicyV1.authority directly; a different code path than
     # ARGUMENTATIVE_AUTHORITY above).
     ENGAGED_CRITICISM_AUTHORITY: Literal["observe_only", "defended_trial"] = "observe_only"
+    # When True, ordinary manifest-building (`build_preparation_manifest`)
+    # routes argumentative criticism through Road E's school-free circuit
+    # (`criticism_policy=None`) instead of the school-routed engaged policy.
+    # DEFAULT TRUE (Amendment 11/R28, 2026-08-10, operator's explicit
+    # words: "Legacy, not schools, should be default for criticism" --
+    # schools are a conjecture-side tool; criticism stays independently
+    # modular and does not default to school-routing). Set False to opt
+    # back into the school-routed engaged policy.
+    LEGACY_CRITICISM_ENABLED: bool = True
     # Immutable reference to the calibration receipt that authorizes a
     # calibrated text-status mode. The manifest stores this source config
     # field; preflight fails closed when a status mode omits the reference.
     CALIBRATION_RECEIPT: str | None = None
+    # Master gate for judge-role dispatch itself (distinct from
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED, which governs whether a
+    # judge's ruling may change status): when False, no judge role
+    # dispatches at all, for any workload_profile, regardless of rubric
+    # criteria or role wiring. Byte-identical to today at the default
+    # False (judge participation was already de facto closed on the
+    # common path, but as an emergent consequence of several
+    # independently-defaulted-closed gates, not one switch).
+    JUDGE_SEATS_ENABLED: bool = False
+    # Static per-cycle cap and cooldown on judge summons once seats are
+    # enabled (modeled on ADVISORY_TRIALS_PER_CYCLE/DISC_COOLDOWN's shape).
+    # Both default to preserve exactly zero judge activity until
+    # JUDGE_SEATS_ENABLED and a nonzero rate are set.
+    JUDGE_SUMMONS_PER_CYCLE: int = Field(default=0, ge=0)
+    JUDGE_SUMMONS_COOLDOWN: int = 4
+    # Master gate for the schools opt-in (Part E, S2d/R5): when False,
+    # byte-identical to today -- neither shipped v6 control-plane preset
+    # ever requests route_bound school execution. Shared prerequisite for
+    # TWO fully independent levers (Amendment 11/R27 -- a school is a
+    # conjecture-side tool; criticism's attachment to it is a separate,
+    # optional wire, never automatic): conjecture-side `--seat
+    # school-N=<profile>` (SchoolExecutionPolicyV1.mode="route_bound") and
+    # criticism-side `--criticism-seat school-N=<profile>`
+    # (CriticismPolicyV1.bindings' per-school distinct endpoint_id, and
+    # only reachable at all once LEGACY_CRITICISM_ENABLED=False). Either
+    # lever may be used alone; this flag does not couple them.
+    SCHOOL_SEATS_ENABLED: bool = False
     # Default text runs do not spend judge tokens on rubric trials.  Setting a
     # positive budget opts into bounded advisory trials only while the rubric
     # authority remains observe_only.

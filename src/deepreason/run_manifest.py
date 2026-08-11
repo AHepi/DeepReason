@@ -1514,12 +1514,22 @@ class RunManifest(BaseModel):
                         f"roles.{role}.{index}.model_id is unresolved: {route.model_id}"
                     )
         if self.rubric_policy == "require_cross_family":
+            judge_routes = self.roles.get("judge", ())
             families = {
                 route.family.strip().casefold()
-                for route in self.roles.get("judge", ())
+                for route in judge_routes
                 if route.family.strip()
             }
-            if len(families) < 2:
+            models = {
+                f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+                for route in judge_routes
+            }
+            # Structural same-model substitute (Amendment 9/R24, mirrors
+            # llm/firewall.py::require_cross_family_judge_ensemble's
+            # runtime check): >=2 judge seats that are the exact same
+            # model satisfy this, narrower than same-family so a
+            # same-family-different-model pair still fails below.
+            if len(families) < 2 and not (len(judge_routes) >= 2 and len(models) == 1):
                 raise ValueError(
                     "SECOND_JUDGE_FAMILY_REQUIRED: require_cross_family needs "
                     "at least two distinct judge families"
@@ -2165,6 +2175,33 @@ def _versioned_source_config_data(
     # unconditionally rather than tracking which versions happen to have
     # a pinned test today.
     data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
+    # LEGACY_CRITICISM_ENABLED postdates every schema version's frozen
+    # wire-byte goldens for the same reason: its effect is already visible
+    # in the compiled manifest's own criticism_policy (None vs populated),
+    # so the Config echo drops it unconditionally too.
+    data.pop("LEGACY_CRITICISM_ENABLED", None)
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED postdates every schema version's
+    # frozen wire-byte goldens too. Unlike the two knobs above, its effect
+    # is NEVER written to the manifest at all (the frozen-surfaces law:
+    # authority knobs live on Config only, consulted at mint sites) -- the
+    # Config echo drops it unconditionally for the same reason every other
+    # authority knob was never added here in the first place.
+    data.pop("ADJUDICATION_STATUS_AUTHORITY_ENABLED", None)
+    # JUDGE_SEATS_ENABLED and its throttle knobs postdate every schema
+    # version's frozen wire-byte goldens too, for the same reason as
+    # ADJUDICATION_STATUS_AUTHORITY_ENABLED above: the master judge-dispatch
+    # gate lives on Config only, consulted at scheduler dispatch sites, and
+    # is never itself written to the manifest.
+    data.pop("JUDGE_SEATS_ENABLED", None)
+    data.pop("JUDGE_SUMMONS_PER_CYCLE", None)
+    data.pop("JUDGE_SUMMONS_COOLDOWN", None)
+    # SCHOOL_SEATS_ENABLED (Part E, S2d/R5) postdates every schema
+    # version's frozen wire-byte goldens too, for the same reason as
+    # every other master gate above: it lives on Config only and is never
+    # itself written to the manifest -- its eventual effect (a school
+    # bound to a distinct route) is visible in the compiled manifest's
+    # own school_execution/criticism_policy fields, not in this echo.
+    data.pop("SCHOOL_SEATS_ENABLED", None)
     return data
 
 
@@ -2822,7 +2859,22 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
             for route in judge_routes
             if route.family.strip()
         }
-        if len(judge_routes) < 2 or len(judge_families) < 2:
+        judge_models = {
+            f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+            for route in judge_routes
+        }
+        # Structural same-model substitute (Amendment 9/R24), mirrored
+        # from the rubric_policy checks and llm/firewall.py's runtime
+        # gate: >=2 judge seats, all the exact same model, reads the same
+        # manifest.roles["judge"] shape the manifest-compile CLI's
+        # --blind-same-model-judges lever produces -- no separate lever
+        # needed for this site.
+        if len(judge_routes) < 2:
+            raise ValueError(
+                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
+                "two frozen judge seats from distinct families"
+            )
+        if len(judge_families) < 2 and len(judge_models) != 1:
             raise ValueError(
                 "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
                 "two frozen judge seats from distinct families"
@@ -2932,6 +2984,7 @@ def compile_run_manifest(
     model_profile: Literal["compact", "standard", "frontier"] | None = None,
     single_model: str | None = None,
     judge_family: str | None = None,
+    blind_same_model_judges: bool = False,
     rubric_policy: Literal["forbid", "require_cross_family"] = "require_cross_family",
     concurrency: int | None = None,
     compiled_at: str | None = None,
@@ -2960,6 +3013,12 @@ def compile_run_manifest(
     In single-model mode only the route explicitly carrying ``single_model``
     is consulted. Other provider entries are not discovered or used.
     """
+    if judge_family and blind_same_model_judges:
+        raise RunManifestError(
+            "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT",
+            "pass at most one of judge_family, blind_same_model_judges",
+            "/roles/judge",
+        )
     explicit_config_profile = (
         "model_profile" in getattr(config, "model_fields_set", set())
         if not isinstance(config, dict)
@@ -3174,6 +3233,17 @@ def compile_run_manifest(
                 exact, _route_from_spec(second_spec, capability_cache=capability_cache)
             )
             presentation_specs["judge"] = (seed, second_spec)
+        elif "judge" in configured_roles and blind_same_model_judges:
+            # R24 (adjudication-judge-seats-optins tranche, Amendment 9,
+            # 2026-08-10): a second seat on the SAME frozen route, relying
+            # on the judge pack's content-blindness guarantee
+            # (tests/test_judge_ensemble_boundary.py::
+            # test_judge_pack_never_names_an_author_school_or_model) rather
+            # than model diversity. require_cross_family_judge_ensemble and
+            # RunManifest's own rubric_policy validator both read this exact
+            # shape (>=2 seats, identical model) as a structural substitute.
+            roles["judge"] = (exact, exact)
+            presentation_specs["judge"] = (seed, seed)
     else:
         grouped: dict[str, list[Route]] = {role: [] for role in role_names}
         grouped_specs: dict[str, list[dict[str, Any]]] = {
@@ -3192,12 +3262,23 @@ def compile_run_manifest(
         }
 
     if rubric_policy == "require_cross_family":
+        judge_routes = roles.get("judge", ())
         families = {
             route.family.strip().casefold()
-            for route in roles.get("judge", ())
+            for route in judge_routes
             if route.family.strip()
         }
-        if len(families) < 2:
+        judge_models = {
+            f"{route.provider.strip().casefold()}:{route.model_id.strip().casefold()}"
+            for route in judge_routes
+        }
+        # Structural same-model substitute (Amendment 9/R24), mirrored
+        # from RunManifest's own model-validator above and
+        # llm/firewall.py::require_cross_family_judge_ensemble's runtime
+        # check: >=2 judge seats, all the exact same model.
+        if len(families) < 2 and not (
+            len(judge_routes) >= 2 and len(judge_models) == 1
+        ):
             raise RunManifestError(
                 "SECOND_JUDGE_FAMILY_REQUIRED",
                 "rubric workloads require at least two frozen judge families; "
