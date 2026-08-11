@@ -23,7 +23,9 @@ validator has no access to that state and should not pretend to.
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+import re
+
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
 from deepreason.seat_bindings import GROUP_ALIASES
@@ -145,3 +147,44 @@ class IntakeFormV1(BaseModel):
                 f"exceeds the V6 ceiling of {PUBLIC_MAX_TOKEN_BUDGET}"
             )
         return token_budget
+
+
+_LEADING_CODE = re.compile(r"^([A-Z][A-Z0-9_]{2,127}):")
+
+
+def render_intake_validation_errors(error: ValidationError) -> list[str]:
+    """Render every violation in `error` as one human-readable line.
+
+    The single shared rendering path for both the `validate-intake` CLI
+    command and the `validate_intake` MCP tool — the same function, not two
+    re-implementations, per SPEC.md's "same code path" requirement. Prefers
+    an `error_catalog` entry when a violation carries one of our own
+    `CODE: message` strings (B1a/D2/D3's field validators); falls back to
+    Pydantic's own location/message for ordinary shape errors (a missing
+    mandatory field, a wrong type).
+    """
+
+    from deepreason.error_catalog import lookup
+
+    lines = []
+    for item in error.errors():
+        loc = ".".join(str(part) for part in item["loc"]) or "(form)"
+        # Pydantic wraps a raised ValueError as "Value error, <original>" in
+        # `msg`, but keeps the original exception itself in `ctx["error"]` —
+        # use that directly so the leading CODE: prefix survives intact.
+        original = item.get("ctx", {}).get("error")
+        msg = str(original) if isinstance(original, ValueError) else str(item["msg"])
+        matched = _LEADING_CODE.match(msg)
+        if matched is not None:
+            code = matched.group(1)
+            entry = lookup(code)
+            if entry is not None:
+                lines.append(
+                    f"{loc}: {entry.summary} {entry.what_it_means} Next: {entry.next_action}"
+                )
+                continue
+        if item["type"] == "missing":
+            lines.append(f"{loc}: this field is required.")
+        else:
+            lines.append(f"{loc}: {msg}")
+    return lines

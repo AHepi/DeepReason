@@ -98,6 +98,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="print a plain-language gloss for a typed error/refusal code",
     )
     explain_error_cmd.add_argument("code", help="the UPPERCASE_CODE to explain")
+    validate_intake_cmd = sub.add_parser(
+        "validate-intake",
+        help="check a run-application file (JSON or YAML) before any token is spent",
+    )
+    validate_intake_cmd.add_argument("file", help="path to the intake file")
     config_cmd = sub.add_parser(
         "config", help="print source config, or compile/inspect a frozen RunManifest"
     )
@@ -622,6 +627,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "explain-error":
         return _cmd_explain_error(args)
+
+    if args.command == "validate-intake":
+        return _cmd_validate_intake(args)
 
     if args.command == "qualify":
         return _cmd_qualify(args)
@@ -1768,6 +1776,42 @@ def _cmd_explain_error(args) -> int:
     print(entry.summary)
     print(f"What this means: {entry.what_it_means}")
     print(f"Next: {entry.next_action}")
+    return 0
+
+
+def _load_intake_file(path: str) -> dict:
+    import json
+
+    with open(path, "rb") as handle:
+        raw = handle.read()
+    if path.endswith((".yaml", ".yml")):
+        import yaml
+
+        loaded = yaml.safe_load(raw)
+    else:
+        loaded = json.loads(raw)
+    if not isinstance(loaded, dict):
+        raise ValueError(f"INTAKE_FILE_NOT_AN_OBJECT: {path} did not parse to a JSON/YAML object")
+    return loaded
+
+
+def _cmd_validate_intake(args) -> int:
+    from pydantic import ValidationError
+
+    from deepreason.intake_form import IntakeFormV1, render_intake_validation_errors
+
+    try:
+        data = _load_intake_file(args.file)
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    try:
+        IntakeFormV1.model_validate(data)
+    except ValidationError as error:
+        for line in render_intake_validation_errors(error):
+            print(line, file=sys.stderr)
+        return 1
+    print("OK")
     return 0
 
 
