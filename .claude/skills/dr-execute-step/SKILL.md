@@ -28,10 +28,8 @@ what keeps a long change from drifting.
    the relevant lines) under the step. If it does not match expected:
    the step is NOT done — leave it unchecked, record the output and
    one line on the mismatch, and return to the orchestrator. Two
-   failures of the same step = stop condition; the stop report leads
-   with the decision needed in ONE sentence, the candidate routes
-   priced, and a recommendation with its reason — a stop that must be
-   interrogated is half a stop.
+   failures of the same step = stop condition, in the standard format
+   — canonical in `dr-drive-harness` §6's calibration note.
 5. **If this step changed behaviour, update the map in the SAME
    commit** — see "Map obligations" below. If it changed the packaging
    surface (pyproject entry points, CLI commands, MCP tools/schema,

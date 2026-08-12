@@ -409,10 +409,15 @@ operator's word (step 11), never before.
       mechanism — a net content increase in exchange for a real gate,
       not just deduplication).
 
-- [ ] 19. (S12, S13) Edit `dr-execute-step/SKILL.md`: replace the
+- [x] 19. (S12, S13) Edit `dr-execute-step/SKILL.md`: replace the
       stop-format sentence with a pointer at `dr-drive-harness`. [COMMIT]
       done-when: the stop-format paragraph is now a one-line pointer,
       confirmed by diff.
+      PROOF: item 4's stop-condition clause trimmed from a full
+      restatement to "in the standard format — canonical in
+      dr-drive-harness §6's calibration note." 147 -> 145 lines.
+      This file stays canonical for map-obligations and durable-
+      tests/checks/probes (per DESIGN.md) — those sections untouched.
 
 - [ ] 20. (S12, S13) Edit `dr-plan-steps/SKILL.md`: renumber "4b" and
       "4c" into the main list; replace the commit-every-boundary
