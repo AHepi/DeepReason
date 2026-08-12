@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=18 blockers=none
+State: next=19 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -347,7 +347,7 @@ order. One step per `dr-execute-step` invocation.
       `test_bronze_report.py::test_census_totals_internally_consistent`
       (`159 == 165`), matching SPEC §7's baseline exactly.
 
-- [ ] 18. (all) [COMMIT] Root sweep before/after comparison per
+- [x] 18. (all) [COMMIT] Root sweep before/after comparison per
       `DR-INV-frozen-surfaces`: `python tools/root_sweep.py
       after-all-configs-allowed.txt`, diff against a pre-tranche sweep
       (run one now if none exists yet from before step 1 — if it's too
@@ -355,6 +355,24 @@ order. One step per `dr-execute-step` invocation.
       rather than fabricate one).
       done-when: diff shows no root's `valid`/`att`/`module_digests`/
       `seat_digests` changed (paste the diff or "no differences").
+      DONE, with a genuine "before" rather than a fabricated one (it
+      WAS too late — 18 steps deep — to reconstruct via `git stash`; used
+      `git worktree add /tmp/before-tranche2 a9d9b31a3`, the tranche's own
+      base commit, same technique as step 15). The repo now has 103
+      openable roots, not the 42 `DR-INV-frozen-surfaces` documents — this
+      tranche did not shrink or grow that count, it is simply how much the
+      repo has grown since that document's own sweep was last run; each
+      sweep took ~67 minutes here, not the documented ~10.
+      **Process note:** the first "after" run was killed by mistake ~67
+      minutes in, misread as hung because the "before" run (identical
+      code-independent I/O cost) had just finished at almost exactly that
+      same wall-clock mark — confirming 103-root sweeps genuinely take
+      about that long in this environment, not that anything was stuck.
+      Restarted once and let it run to completion.
+      Result: `diff /tmp/sweep_before.txt /tmp/sweep_after.txt` -> NO
+      DIFFERENCES, byte-identical, both 103 lines. Saved as
+      `root-sweep-before.txt` / `root-sweep-after-all-configs-allowed.txt`
+      in this tranche directory. Worktree removed after comparison.
 
 - [ ] 19. (all) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` is empty AND
