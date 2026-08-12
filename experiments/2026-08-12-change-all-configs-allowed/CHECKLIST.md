@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=12 blockers=none
+State: next=13 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -244,13 +244,30 @@ order. One step per `dr-execute-step` invocation.
       DONE: added `test_parse_school_seat_flags_duplicate_id_last_flag_wins`;
       `tests/test_seat_bindings.py -q` -> `16 passed` (includes this new test).
 
-- [ ] 12. (S-I1) Convert `INTAKE_SEAT_CONFLICT`
-      (`IntakeFormV1._no_conflicting_role_bindings`, `intake_form.py`)
-      to the identical SPEC §4 rule 1 precedence (must match
-      `seat_bindings.py`'s rule exactly — same vocabulary, same
-      resolution). Rewrite the `tests/test_intake_form.py` assertion
-      that currently expects `INTAKE_SEAT_CONFLICT` to raise.
+- [x] 12. (S-I1) Convert `INTAKE_SEAT_CONFLICT`
+      (`IntakeFormV1._no_conflicting_role_bindings`, `intake_form.py`).
+      CORRECTION found during execution: unlike `seat_bindings.py`'s
+      `resolve_seat_bindings`, grep confirmed `IntakeFormV1.seats` has NO
+      consumer anywhere in `cli/main.py`/`mcp_server.py` that reads a
+      "resolved" projection of it — the field is purely a self-consistency
+      check on the form today (per its own docstring: "never touches
+      RunManifest... only checks whether a caller's stated intent would be
+      well-formed"). There is nothing to resolve INTO, so the validator now
+      returns `seats` exactly as given (unresolved, not silently repaired)
+      instead of computing and discarding a winner nobody reads; a future
+      caller wiring `seats` to an actual run applies
+      `seat_bindings.resolve_seat_bindings`'s own precedence rule at that
+      point. `GROUP_ALIASES` import removed (now unused).
+      Rewrote `error_catalog.py`'s `INTAKE_SEAT_CONFLICT` entry text (no
+      longer claims "the harness refuses this") and
+      `tests/test_intake_form.py::test_seat_conflict_raises_intake_seat_conflict`
+      (renamed `..._now_validates_unchanged`).
+      Verified the JSON Schema (`IntakeFormV1.model_json_schema()`) is
+      BYTE-IDENTICAL before/after (diffed directly) — only validator
+      BEHAVIOR changed, no field/type/description moved — so R9's four-pin
+      FORM_DR1 regeneration is NOT triggered by this step.
       done-when: `python -m pytest tests/test_intake_form.py tests/test_error_catalog.py -q` passes, 0 failed.
+      DONE: `17 passed`.
 
 - [ ] 13. (S-V1) [COMMIT] Convert `cli/main.py::_cmd_validate_intake`
       (:1924-1941) to advisory per R6: always print the full

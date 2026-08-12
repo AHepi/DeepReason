@@ -3,7 +3,6 @@ from pydantic import ValidationError
 
 from deepreason.intake_form import (
     INTAKE_CYCLES_CEILING_EXCEEDED,
-    INTAKE_SEAT_CONFLICT,
     IntakeFormV1,
 )
 from deepreason.preparation import PUBLIC_MAX_CYCLES
@@ -23,13 +22,17 @@ def test_missing_question_fails():
     assert any(e["loc"] == ("question",) and e["type"] == "missing" for e in errors)
 
 
-def test_seat_conflict_raises_intake_seat_conflict():
-    with pytest.raises(ValidationError) as excinfo:
-        IntakeFormV1(
-            question="Q",
-            seats={"conjecture": "profile-a", "simulation": "profile-b"},
-        )
-    assert INTAKE_SEAT_CONFLICT in str(excinfo.value)
+def test_seat_conflict_now_validates_unchanged():
+    """All-configs-allowed (2026-08-12): a conflicting seats mapping used to
+    refuse (INTAKE_SEAT_CONFLICT); the form itself has no consumer that
+    resolves a canonical winner (grep-confirmed, see intake_form.py's
+    docstring on the validator), so it now validates and the mapping passes
+    through exactly as given -- unresolved, not silently repaired."""
+    form = IntakeFormV1(
+        question="Q",
+        seats={"conjecture": "profile-a", "simulation": "profile-b"},
+    )
+    assert form.seats == {"conjecture": "profile-a", "simulation": "profile-b"}
 
 
 def test_seat_alias_same_profile_is_not_a_conflict():
