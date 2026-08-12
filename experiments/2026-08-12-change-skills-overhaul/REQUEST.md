@@ -239,4 +239,11 @@ Q3: Two skill FAMILIES exist (defect-orchestrator, change-orchestrator)
 
 ## Amendments
 
-(append-only; none yet)
+**Amendment 1** (2026-08-12, received mid-Phase-B, verbatim): "Remove
+budget cap"
+
+R24 (process): "Remove budget cap" — no `--ceiling` value is passed to
+`tools/diff_budget.py` for the remainder of this tranche; the gate still
+runs (reporting `NO_CEILING`) so its `total_insertions`/`areas` figures
+stay in the record, but no verdict can be `EXCEEDED` and no STOP fires on
+size alone. Reconciled by `dr-spec-change` — see SPEC.md Amendment 1.
