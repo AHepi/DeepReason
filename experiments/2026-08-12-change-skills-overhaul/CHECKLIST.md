@@ -535,7 +535,7 @@ operator's word (step 11), never before.
       — this tranche has touched neither, so the one failure cannot be
       attributed here by construction, not just by baseline match.
 
-- [ ] 27. (S17) docs/ERRATA.md: state explicitly "errata: none" for
+- [x] 27. (S17) docs/ERRATA.md: state explicitly "errata: none" for
       this tranche (per the reasoning in step 12's PROOF — no
       record-contradiction found, only structure/duplication defects);
       add the dr-drive-harness ungated-negation residue to PARKED.md as
@@ -544,6 +544,13 @@ operator's word (step 11), never before.
       "never generalize scope" negation, with a route (`dr-change-
       orchestrator`), a one-goal statement, and evidence pointers
       (DESIGN.md's gate table row).
+      PROOF: PARKED.md created with entry P1 — route, one-goal
+      statement (two candidate resolutions: a new lint-style gate, or
+      an operator-accepted judgment-only erratum), and two evidence
+      pointers (CENSUS.md dr-drive-harness-36, DESIGN.md's gate table
+      row). "errata: none" itself is stated formally in DELIVERY.md's
+      Errata section (step 29), matching dr-deliver-change's own
+      template rather than duplicating the statement here.
 
 - [ ] 28. (S18, S22) Final `src/`-untouched confirmation:
       `git diff origin/main...HEAD -- src/` -> empty, run one more time
