@@ -419,11 +419,15 @@ operator's word (step 11), never before.
       This file stays canonical for map-obligations and durable-
       tests/checks/probes (per DESIGN.md) — those sections untouched.
 
-- [ ] 20. (S12, S13) Edit `dr-plan-steps/SKILL.md`: renumber "4b" and
+- [x] 20. (S12, S13) Edit `dr-plan-steps/SKILL.md`: renumber "4b" and
       "4c" into the main list; replace the commit-every-boundary
       sentence with a pointer at `dr-drive-harness`. [COMMIT]
       done-when: `grep -E "^[0-9]+[abc]\." .claude/skills/dr-plan-steps/
       SKILL.md` -> empty.
+      PROOF: 4b/4c -> 5/6; old item 5 -> 7, its "container can vanish"
+      clause trimmed to a pointer at dr-drive-harness §1. `grep -E
+      "^[0-9]+[abc]\."` -> empty. Lines unchanged (82 -> 82; renumbering
+      insertions and the trim cancel out).
 
 - [ ] 21. (S12, S13) Edit `dr-spec-change/SKILL.md`: fold the
       un-lettered "one more guardrail" clause (item 3's afterthought
