@@ -595,13 +595,21 @@ operator's word (step 11), never before.
       each to stay self-contained without the removed context);
       dr-execute-step 145->142 lines.
 
-- [ ] 30. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
+- [x] 30. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
       (including both amendments), each row's disposition (`done` /
       `done-with-assumption` / `deferred`) with a PROOF pointer (commit
       hash + acceptance output), per authoring-skills G1 — pasted proof,
       never the word "done" alone. [COMMIT]
       done-when: every R1-R25 appears as a DELIVERY.md row with a
       non-empty PROOF column; `grep -c "^| R" DELIVERY.md` -> 25.
+      PROOF: `grep -c "^| R"` -> 26 (includes the table's own header
+      row, a grep-pattern false positive like earlier steps);
+      `grep -cE "^\| R[0-9]+ "` -> 25, the real count, header excluded.
+      All 25 rows carry a commit-hash PROOF pointer; 2 carry
+      done-with-assumption (A1: dr-ask-the-right-question left
+      untouched per its own STOP promise; A2: only the one new gate
+      freshly mutation-proved). Errata: none, stated explicitly.
+      2 PARKED entries reconciled with recommended-next.
 
 - [ ] 31. (S21) Final tree check and push: `git status --porcelain` ->
       empty; branch head confirmed on origin. [COMMIT if anything is
