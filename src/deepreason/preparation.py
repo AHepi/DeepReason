@@ -93,7 +93,6 @@ _MAX_RECORD_BYTES = 128 * 1024
 PUBLIC_DEFAULT_CYCLES = 6
 PUBLIC_DEFAULT_TOKEN_BUDGET = 100_000
 PUBLIC_MAX_CYCLES = 12
-PUBLIC_MAX_TOKEN_BUDGET = 200_000
 _QUALIFICATION_QUESTION = "DeepReason reusable V6 qualification subject"
 _QUALIFICATION_COMPILED_AT = "2000-01-01T00:00:00Z"
 
@@ -158,13 +157,12 @@ class RunPreparationRequestV1(BaseModel):
             or self.budget.cycles > PUBLIC_MAX_CYCLES
             or not isinstance(self.budget.token_budget, int)
             or self.budget.token_budget < 1
-            or self.budget.token_budget > PUBLIC_MAX_TOKEN_BUDGET
         ):
             raise ValueError(
                 "public budget must be finite and within the fixed V6 policy "
                 f"ceiling: cycles <= {PUBLIC_MAX_CYCLES} and token budget "
-                f"1..{PUBLIC_MAX_TOKEN_BUDGET} (requested cycles="
-                f"{self.budget.cycles}, token_budget={self.budget.token_budget})"
+                f">= 1 (requested cycles={self.budget.cycles}, "
+                f"token_budget={self.budget.token_budget})"
             )
         return self
 
@@ -983,7 +981,6 @@ __all__ = [
     "PUBLIC_DEFAULT_CYCLES",
     "PUBLIC_DEFAULT_TOKEN_BUDGET",
     "PUBLIC_MAX_CYCLES",
-    "PUBLIC_MAX_TOKEN_BUDGET",
     "SEAT_BINDINGS_SNAPSHOT_NAME",
     "PreparedRunV1",
     "RunPreparationError",

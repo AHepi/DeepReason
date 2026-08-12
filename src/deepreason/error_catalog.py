@@ -392,13 +392,6 @@ CATALOG: dict[str, ErrorCatalogEntry] = {
             "maximum the standard reasoning engine accepts.",
             "Lower `cycles` to the ceiling or below.",
         ),
-        _entry(
-            "INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED",
-            "The requested token budget exceeds the V6 ceiling.",
-            "Your intake form's `token_budget` value is higher than the "
-            "fixed maximum the standard reasoning engine accepts.",
-            "Lower `token_budget` to the ceiling or below.",
-        ),
     )
 }
 

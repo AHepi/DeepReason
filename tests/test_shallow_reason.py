@@ -107,8 +107,14 @@ def test_shallow_budget_and_cycles_flow_through_and_are_bounded(
     assert calls[0]["budget"] == 9000
     assert calls[0]["max_cycles"] == 5
 
+    # R1: the former 200k shallow-mode token ceiling is retired; a
+    # formerly-over-ceiling budget is now accepted and flows through.
+    calls.clear()
+    result = run_shallow_question("q", token_budget=10**9)
+    assert result["completed"] is True
+    assert calls[-1]["budget"] == 10**9
     with pytest.raises(ShallowReasonError, match="SHALLOW_BUDGET_INVALID"):
-        run_shallow_question("q", token_budget=10**9)
+        run_shallow_question("q", token_budget=0)
     with pytest.raises(ShallowReasonError, match="SHALLOW_CYCLES_INVALID"):
         run_shallow_question("q", cycles=0)
     with pytest.raises(ShallowReasonError, match="SHALLOW_QUESTION_REQUIRED"):

@@ -1,0 +1,186 @@
+# Checklist for: remove the 200k per-run token limit
+State: all 27 steps checked (including 13b, 23b from Amendment 1).
+  blockers=none. Route to dr-validate-change.
+Map ids: DR-CON-run-identity (preparation.py), DR-SUB-periphery (mcp_server.py),
+DR-SUB-application (intake_form.py, shallow.py — Owns: gap closed by step 21),
+DR-SUB-manifest (frozen surface 4 — confirmed NOT touched, SPEC.md S12).
+No SEAM document applies: none of the touched files appear together in any
+`SEAM-*.md` "Where it is expressed" table, and none is named in two or more
+`SUB-`/`CON-` `Owns:` headers (SCHEMA.md's isolated-vs-seam-guided triage) —
+this is an isolated multi-file change, not a seam change.
+Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
+One step per dr-execute-step invocation.
+
+- [x] 1. (S11) Capture the BEFORE `verify_root_report` snapshot on a chosen
+      committed, replay-valid root, before any src/ edit in this tranche.
+      done: `valid= True` (root:
+      `experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf`,
+      snapshot saved to `/tmp/verify_before.txt`).
+
+- [x] 2. (S1) Edited `src/deepreason/preparation.py`: deleted
+      `PUBLIC_MAX_TOKEN_BUDGET = 200_000`; `_public_budget_is_finite_and_bounded`
+      now only requires `token_budget` to be a finite int `>= 1`; removed
+      from `__all__`.
+      done: `OK` (accept command passed).
+
+- [x] 3. (S2) Edited `src/deepreason/intake_form.py`: deleted
+      `INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED` and
+      `_token_budget_within_ceiling`; import narrowed to `PUBLIC_MAX_CYCLES`.
+      done: `OK` (accept command passed).
+
+- [x] 4. (S3) Edited `src/deepreason/shallow.py`: deleted
+      `SHALLOW_MAX_TOKEN_BUDGET = 200_000`; guard narrowed to
+      `if budget < 1:`; removed from `__all__`.
+      done: `OK` (accept command passed).
+
+- [x] 5. (S4) Edited `src/deepreason/mcp_server.py`: removed
+      `"maximum": PUBLIC_MAX_TOKEN_BUDGET`; import narrowed to
+      `PUBLIC_MAX_CYCLES`.
+      done: `OK` (accept command passed).
+
+- [x] 6. (S7) Edited `src/deepreason/error_catalog.py`: removed the
+      `INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED` entry from `CATALOG`.
+      done: `OK 46` (CATALOG now has 46 entries, matching S7's predicted
+      47→46).
+
+- [x] 7. (S7) Edited `tests/test_intake_form.py`: dropped the removed
+      import and `test_token_budget_over_ceiling_raises`; replaced
+      `test_token_budget_at_ceiling_is_fine` with
+      `test_token_budget_has_no_ceiling` (asserts 200_001 accepted) and
+      added `test_token_budget_must_be_positive` (asserts 0 rejected).
+      done: verified together with step 9's full-file run.
+
+- [x] 8. (S7) Edited `tests/test_error_catalog.py`: dropped the removed
+      import/entry from `real`; `test_catalog_covers_47_entries` renamed
+      to `test_catalog_covers_46_entries`, expected count `46`.
+      done: verified together with step 9's full-file run.
+
+- [x] 9. (S7) Edited `tests/test_shallow_reason.py`: replaced the
+      `SHALLOW_BUDGET_INVALID` raise assertion for `token_budget=10**9`
+      with an assertion it is now accepted and flows through to the
+      mocked engine (`calls[-1]["budget"] == 10**9`); the invalid-budget
+      case moved to `token_budget=0`.
+      done: `python -m pytest tests/test_intake_form.py
+      tests/test_error_catalog.py tests/test_shallow_reason.py -q` ->
+      `23 passed in 0.55s`.
+
+- [x] 10. (S8) Computed the new MCP tool-schema sha.
+      done: `ebd7397074c3aa9640658e74fc0d56f16d2a11f1b6898b7887c961f79c04e17e`
+      (64 hex chars, confirmed via `len()`).
+
+- [x] 11. (S8) Edited `scripts/wheel_smoke.py`: set
+      `EXPECTED_MCP_SCHEMA_SHA256` to step 10's value.
+      done: grep confirmed present.
+
+- [x] 12. (S8) Edited `scripts/wheel_operational_smoke.py`: set its own
+      `EXPECTED_MCP_SCHEMA_SHA256` to the SAME step-10 value.
+      done: grep confirmed present.
+
+- [x] 13. (S8) [COMMIT] Ran `python scripts/wheel_smoke.py` ->
+      `wheel smoke passed: isolated V6-only contents, clean imports, exact
+      entry points, module parity, MCP registration, and exact MCP
+      schemas` (exit 0, confirms the new sha against a freshly built
+      wheel). `python -u scripts/wheel_operational_smoke.py` is a
+      separate, much longer-running full-operational build (fresh
+      venv + wheel + loopback-HTTP qualification battery); it hashes the
+      IDENTICAL `_tools()` output `wheel_smoke.py` already confirmed
+      against this same new sha, so its schema-sha assertion is not in
+      question — only its full run (steps 13b) is still pending, run in
+      the background rather than holding the whole tranche on it (this
+      session's CLAUDE.md container-rollback warning: uncommitted work
+      is at risk while a background process runs for many minutes).
+      `diff_budget.py` verdict: `WITHIN` (29 insertions vs a 70-line
+      ceiling). `blast_radius.py --against 0a53008d9`: `frozen_surface_
+      verdict: CLEAR`, no contacts, reachability `direction: null` for
+      all three symbols (no drift from SPEC.md's forecast) — committed
+      `6a488b97e`, pushed to `origin/claude/remove-token-ceiling-w8k3mf`.
+
+- [x] 13b. (S8) Paste `wheel_operational_smoke.py`'s full tail once its
+      background run finishes, confirming it too exits 0.
+      done: `wheel operational smoke passed: installed setup, explicit
+      qualification (80 qualification calls; 410 total calls), readiness,
+      question-only reasoning, replay-verified terminal retrieval, cache
+      reuse, opaque MCP restart, budget ceiling, and pre-V6 fail-closed
+      admission` / `EXIT_CODE=0`. Both wheel-smoke pins (S8) fully
+      confirmed against a freshly built wheel.
+
+- [x] 14. (S8b) Confirmed the two tool-NAME pins do NOT need edits (traced
+      contradiction of the request's named "all four pins" mechanism,
+      SPEC.md S8b).
+      done: `89 passed in 1.04s`; `git diff --stat -- tests/test_mcp.py
+      tests/test_mcp_help.py` empty.
+
+- [x] 15. (S9) Confirmed FORM_DR1 is unaffected.
+      done: `.../FORM_DR1_RUN_APPLICATION.md is fresh.` exit 0.
+
+- [x] 16. (S10) Re-confirmed no qualification-subject-digest contact.
+      done: empty output, grep exit 1.
+
+- [x] 17. (S5) Edited `docs/AGENT.md` line 82: now states the surviving
+      12-cycle ceiling and "the token budget has no ceiling — any
+      positive integer is accepted."
+      done: `grep -c "200,000" docs/AGENT.md` -> `0`.
+
+- [x] 18. (S14) Edited `docs/map/SUB-application.md`'s `Owns:` header:
+      appended `src/deepreason/intake_form.py, src/deepreason/shallow.py`.
+      `Verified-at:` left unchanged (no document-body claim re-checked).
+      done: both greps confirmed present.
+
+- [x] 19. (S14) [COMMIT] `python tools/docs_verify.py --links` -> `0
+      dangling reference(s), 53 document(s)`; committed `d4e146b55`
+      (docs/AGENT.md + SUB-application.md) and `3833f5090`/checklist
+      commits, pushed to origin.
+
+- [x] 20. (S11) Captured the AFTER `verify_root_report` snapshot, diffed
+      against step 1's BEFORE snapshot.
+      done: `byte-identical, valid=True`.
+
+- [x] 21. (all) Map check: `python tools/docs_verify.py`
+      done: `docs_verify [full]: 53 documents, 860 checks, 4 workers` ->
+      `3 failed`, all three in `CON-run-identity.md` (lines 195/197/199,
+      shallow-clone `git log`/`git show` lookups against commits not
+      present in this container's shallow history) — exactly the known
+      baseline from REQUEST.md's GATE clause. 0 new failures.
+
+- [x] 22. (all) Subsystem ring: `python -m pytest
+      tests/test_run_preparation_service.py
+      tests/test_v6_only_manifest_loading.py -q -n 4`
+      done: `32 passed in 24.60s` — corroborates S11/S12/S13's "not
+      touched" claims for `CON-run-identity` and `SUB-manifest`.
+
+- [x] 23. (all) Full gate: `python -m pytest tests/ -q -n 4`
+      done: FIRST run -> `2 failed, 3528 passed, 7 skipped in 672.96s`.
+      `test_bronze_report.py::test_census_totals_internally_consistent` =
+      the known pre-existing baseline (REQUEST.md GATE clause).
+      `test_public_v6_facade.py::test_public_budget_cannot_exceed_the_
+      fixed_ceiling[arguments1]` = a genuine NEW failure — see SPEC.md
+      Amendment 1 for the finding and fix (a literal `"200001"` in a
+      parametrize list, invisible to name-based census). Fixed in
+      `tests/test_public_v6_facade.py`; `python -m pytest
+      tests/test_public_v6_facade.py -q` -> `12 passed`. Full repo sweep
+      for other over-200k literal token_budget assertions: none found.
+      Re-running the full gate as step 23b to confirm the corrected
+      baseline.
+
+- [x] 23b. (Amendment 1) Full gate re-run after the
+      `test_public_v6_facade.py` fix.
+      done: `1 failed, 3529 passed, 7 skipped in 674.15s (0:11:14)`.
+      The sole failure is `test_bronze_report.py::
+      test_census_totals_internally_consistent` — exactly the known
+      pre-existing baseline (REQUEST.md GATE clause). 0 NEW failures.
+      3529 vs the first run's 3528 = the test-split in Amendment 1 (one
+      test became two).
+
+- [x] 24. (S6/R9) Confirmed the errata check's "none" finding against the
+      final tree.
+      done: empty stdout — no committed document both claims prior
+      removal AND is about this ceiling. "errata: none" stands (recorded
+      in DELIVERY.md, not docs/ERRATA.md, per R9's own no-claim-found
+      branch).
+
+- [x] 25. (all) [COMMIT] Final push and clean-tree confirmation.
+      done: `git status --porcelain` empty; `git rev-parse HEAD` ==
+      `git rev-parse origin/claude/remove-token-ceiling-w8k3mf` ==
+      `91801d7070bc4de3065616e49002a5949633ff61`.
+
+All steps checked. Route to dr-validate-change.

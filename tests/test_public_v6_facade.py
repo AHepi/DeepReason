@@ -320,22 +320,45 @@ def test_missing_readiness_stops_before_preparation_or_dispatch(
     assert not (tmp_path / "state" / "runs").exists()
 
 
-@pytest.mark.parametrize(
-    "arguments",
-    [
-        ["reason", "bounded", "--cycles", "13"],
-        ["reason", "bounded", "--token-budget", "200001"],
-    ],
-)
-def test_public_budget_cannot_exceed_the_fixed_ceiling(
-    tmp_path, monkeypatch, capsys, arguments
+def test_public_cycles_cannot_exceed_the_fixed_ceiling(
+    tmp_path, monkeypatch, capsys
 ):
     state, profile = _configure(monkeypatch, tmp_path)
     _qualify(state, profile)
     monkeypatch.setattr(
         "deepreason.application.TEXT_RUN_SERVICE.start",
-        lambda *_args, **_kwargs: pytest.fail("over-ceiling budget reached dispatch"),
+        lambda *_args, **_kwargs: pytest.fail("over-ceiling cycles reached dispatch"),
     )
-    assert main(arguments) == 1
+    assert main(["reason", "bounded", "--cycles", "13"]) == 1
     assert "fixed V6 policy ceiling" in capsys.readouterr().err
     assert not (state / "runs").exists()
+
+
+def test_public_token_budget_has_no_ceiling(tmp_path, monkeypatch, capsys):
+    """R1 (remove-token-ceiling tranche): the former 200k per-run token
+    ceiling is retired; a formerly-over-ceiling budget now reaches
+    dispatch instead of being refused."""
+
+    state, profile = _configure(monkeypatch, tmp_path)
+    _qualify(state, profile)
+    starts = []
+
+    def start(intent, **_kwargs):
+        starts.append(intent)
+        return RunStartedV1(root=intent.root, manifest_digest="c" * 64)
+
+    monkeypatch.setattr("deepreason.application.TEXT_RUN_SERVICE.start", start)
+    monkeypatch.setattr("deepreason.application.TEXT_RUN_SERVICE.wait", lambda *_: None)
+    monkeypatch.setattr(
+        "deepreason.application.TEXT_RUN_SERVICE.result",
+        lambda _intent: TextRunTerminalResultV1(
+            lifecycle="completed",
+            payload={
+                "schema": "deepreason-run-result-v2",
+                "state": "completed",
+                "workload": "text",
+            },
+        ),
+    )
+    assert main(["reason", "bounded", "--token-budget", "200001"]) == 0
+    assert starts[0].budget.token_budget == 200001

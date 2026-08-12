@@ -27,12 +27,11 @@ import re
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
-from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
+from deepreason.preparation import PUBLIC_MAX_CYCLES
 from deepreason.seat_bindings import GROUP_ALIASES
 
 INTAKE_SEAT_CONFLICT = "INTAKE_SEAT_CONFLICT"
 INTAKE_CYCLES_CEILING_EXCEEDED = "INTAKE_CYCLES_CEILING_EXCEEDED"
-INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED = "INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED"
 
 # Part A — filed once via `deepreason setup`, host-owned. The MCP facade's own
 # design boundary (mcp_server.py's module docstring, enforced by
@@ -160,18 +159,6 @@ class IntakeFormV1(BaseModel):
                 f"V6 ceiling of {PUBLIC_MAX_CYCLES}"
             )
         return cycles
-
-    @field_validator("token_budget")
-    @classmethod
-    def _token_budget_within_ceiling(cls, token_budget: int | None) -> int | None:
-        """D3: token budget <= the V6 ceiling."""
-
-        if token_budget is not None and token_budget > PUBLIC_MAX_TOKEN_BUDGET:
-            raise ValueError(
-                f"{INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED}: token_budget={token_budget} "
-                f"exceeds the V6 ceiling of {PUBLIC_MAX_TOKEN_BUDGET}"
-            )
-        return token_budget
 
 
 def mcp_safe_schema() -> dict:

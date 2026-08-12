@@ -78,8 +78,9 @@ present credential, never touches the qualification cache, works for both
 (no V6 qualification, transactions, or terminal commitment authority).
 
 `deepreason reason "question"` accepts an optional `--cycles` and
-`--token-budget`. The implemented defaults are 6 cycles and 100,000 tokens,
-with fixed public ceilings of 12 cycles and 200,000 tokens.
+`--token-budget`. The implemented defaults are 6 cycles and 100,000 tokens.
+Cycles carry a fixed public ceiling of 12; the token budget has no ceiling
+— any positive integer is accepted.
 
 ```bash
 deepreason reason "What mechanism best explains this observation?" \
