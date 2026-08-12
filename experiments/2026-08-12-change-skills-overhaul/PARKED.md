@@ -41,3 +41,29 @@ itself gets an authoring-skills erratum noting the accepted exception).
 **End state:** either a new, mutation-proved GATE exists and is added
 to `dr-drive-harness` + the gate table, or the operator's acceptance of
 judgment-only status is ledgered as an authoring-skills erratum.
+
+## P2 — `dr-ask-the-right-question`'s one W5 (incident-story) row is
+untrimmed
+
+**What:** CENSUS.md's Rule extraction flagged
+`dr-ask-the-right-question-16` ("the operator cannot be the
+blast-radius calculator for a 125,000-line codebase") as W5. Unlike
+the 8 rows trimmed in `dr-drive-harness`/`dr-execute-step` (checklist
+step 29 of this tranche, both files DESIGN.md had already scheduled
+for edits), `dr-ask-the-right-question` was promised "KEEP, unchanged"
+in the operator-approved keep/merge/delete table — trimming it now
+would break that specific commitment made at the Phase-B STOP.
+
+**Route:** `dr-change-orchestrator` (a small, contained wording
+DELTA — not a defect).
+
+**One-goal statement:** Trim `dr-ask-the-right-question-16` to a rule
+plus a bare citation, matching the pattern already applied to the
+other 8 W5 rows in this tranche.
+
+**Evidence pointers:**
+- `experiments/2026-08-12-change-skills-overhaul/CENSUS.md`, Rule
+  extraction, `dr-ask-the-right-question-16`.
+- This tranche's own step 29 (the trim pattern to replicate).
+
+**End state:** one file, one line changed, no other content touched.

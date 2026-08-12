@@ -562,7 +562,40 @@ operator's word (step 11), never before.
       check) — `src/` has been byte-identical to `origin/main` for the
       entire tranche, not just at this final checkpoint.
 
-- [ ] 29. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
+- [x] 29. (S14/R14, mid-step discovery, re-planned per dr-execute-step's
+      own rule rather than typed in silently) Trim the 8 W5-flagged
+      incident-story rows CENSUS.md found in the two files already
+      scheduled for edits — `dr-drive-harness` (4 rows: wheel-smoke
+      pin rot, docs_verify --fast blind spot, kill-by-pattern, no
+      concurrent gate+docs_verify) and `dr-execute-step` (4 rows:
+      diff-budget miss, frozen-surface drift, ERRATA E7 citation,
+      wall-clock scrub) — down to the rule plus a bare citation, per
+      W5's own definition ("delete the story... history lives in
+      ERRATA.md, not in instructions"). `dr-ask-the-right-question`'s
+      one W5 row (dr-ask-the-right-question-16) is NOT touched — DESIGN.md's
+      keep/merge/delete table explicitly promised that file "KEEP,
+      unchanged" at the operator-approved STOP, and touching it now
+      would break that specific commitment; parked instead (P2 below).
+      [COMMIT]
+      done-when: the 8 named rows read as rule + bare citation, not
+      rule + explanatory clause; `dr-ask-the-right-question/SKILL.md`
+      diff is empty.
+      PROOF: gap found while drafting DELIVERY.md's R14 reconciliation
+      row — CENSUS.md flagged 10 total W5 rows (4 dr-drive-harness, 4
+      dr-execute-step, 1 dr-ask-the-right-question, 1
+      dr-ask-the-right-question already counted) but DESIGN.md's Phase-C
+      step list (13-22) never scheduled trimming any of them, leaving
+      R14 ("zero narrative... in new/rewritten skills") only partly
+      satisfied. Fixed within the two files' already-approved edit
+      scope; the 9th row (dr-ask-the-right-question, a file promised
+      unchanged) parked as P2 instead of touched. `git diff --stat
+      .claude/skills/dr-ask-the-right-question/SKILL.md` -> empty,
+      confirming it. dr-drive-harness 199->204 lines (net INCREASE:
+      trimmed narrative but two rules gained one clarifying clause
+      each to stay self-contained without the removed context);
+      dr-execute-step 145->142 lines.
+
+- [ ] 30. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
       (including both amendments), each row's disposition (`done` /
       `done-with-assumption` / `deferred`) with a PROOF pointer (commit
       hash + acceptance output), per authoring-skills G1 — pasted proof,
@@ -570,7 +603,7 @@ operator's word (step 11), never before.
       done-when: every R1-R25 appears as a DELIVERY.md row with a
       non-empty PROOF column; `grep -c "^| R" DELIVERY.md` -> 25.
 
-- [ ] 30. (S21) Final tree check and push: `git status --porcelain` ->
+- [ ] 31. (S21) Final tree check and push: `git status --porcelain` ->
       empty; branch head confirmed on origin. [COMMIT if anything is
       still uncommitted; otherwise a verification-only step]
       done-when: `git status --porcelain` -> empty AND `git rev-parse

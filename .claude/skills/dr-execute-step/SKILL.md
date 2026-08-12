@@ -43,9 +43,9 @@ what keeps a long change from drifting.
    <tranche-base> --ceiling <SPEC.md's ceiling> --paths <SPEC.md's
    declared areas>` and read its `DIFF_BUDGET_RESULT_V1.verdict`.
    WITHIN/NO_CEILING: continue. EXCEEDED is a STOP in the standard
-   format (decision, priced options, recommendation), not a footnote
-   (recorded miss: 193 insertions landed against a ≤150 ceiling with
-   no stop, V1 tranche 2026-08-05). Alongside it, run
+   format (decision, priced options, recommendation), not a footnote —
+   an estimate-only ceiling trips on nothing unless read. Alongside it,
+   run
    `python tools/blast_radius.py --files <this step's actually
    git-added files> --symbols <this step's actually touched top-level
    defs, from the diff hunks> --against <tranche-base>` (Rung G6,
@@ -56,10 +56,9 @@ what keeps a long change from drifting.
    already named in SPEC.md, or any `reachability` entry whose
    `direction` is `newly_dead`/`newly_live` and was not predicted, is
    DRIFT — a STOP in the exact same format as `diff_budget.py`'s own
-   EXCEEDED, never a footnote (this is the 2026-08-09 incident's own
-   fix, mechanized: `docs/ERRATA_EXECUTOR.md`'s "the frozen-surface stop
-   did not hold" happened at exactly this commit-time gap, before this
-   checkpoint existed). No drift: continue. Then commit and push now.
+   EXCEEDED, never a footnote (`docs/ERRATA_EXECUTOR.md`, "the
+   frozen-surface stop did not hold"). No drift: continue. Then commit
+   and push now.
 
         git add <files this step touched> <map files> <tranche-dir>
         git commit -m "step <n>: <checklist line>"
@@ -97,8 +96,7 @@ true. Five rules, each paid for once already:
    only roots and fixtures that `git ls-files` knows; regression tests
    name their motivating run in the docstring. Session-local artifacts
    die with the session and take the check's meaning with them
-   (docs/ERRATA.md E7: four checks pinned to never-committed roots
-   passed on one machine and failed on every fresh clone).
+   (docs/ERRATA.md E7).
 2. **Anchor to meaning, not form.** Prefer behavior (call the function,
    compare typed outcomes), structure (AST shape, resolved-call counts),
    or counts over literal source text. When a textual marker is
@@ -116,10 +114,9 @@ true. Five rules, each paid for once already:
    catches vacuous checks; nothing catches a vacuous test but this rule.
 4. **Compare typed outcomes, and exclude wall-clock RECURSIVELY.**
    Equality over applied state and event logs, with time-dependent
-   fields scrubbed at every nesting depth — a top-level-only scrub left
-   `llm.ms` inside `attempt_trace` and a 1-in-3 flake (commit
-   `863a0fa3`). Diagnose flakes to the exact field; never widen an
-   exclusion on a guess.
+   fields scrubbed at every nesting depth — a top-level-only scrub is
+   not enough (commit `863a0fa3`). Diagnose flakes to the exact field;
+   never widen an exclusion on a guess.
 5. **Tolerate absence in old records.** Any test or sweep probe reading
    the typed record must accept every existing committed root, which
    predates your feature — assert the attribute exists before reading

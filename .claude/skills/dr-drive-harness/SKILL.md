@@ -118,15 +118,12 @@ Third instrument, which NO gate runs for you: the wheel smokes
 scripts/wheel_operational_smoke.py`) — build-and-operate checks over
 the INSTALLED package. They pin the public surface (console entry
 points, MCP tool set + schema sha, wheel layout), so any change to that
-surface updates the pins and re-runs the smoke in the SAME commit — or
-the instrument rots silently (found 2026-08-05: red for a week after an
-entry-point addition, unnoticed, because nothing named it).
+surface updates the pins and re-runs the smoke in the SAME commit, or
+the instrument rots silently and nothing else will catch it.
 `python tools/docs_verify.py` is the same gate for the map — and its
 `--fast` mode reuses cached results, so it CANNOT catch a document your
 `src/` change just broke. Iterate with `--fast`; run the FULL mode at
-least once before any commit that touches `src/` (proven at commit
-`55b16ce9`: the full run caught a fifth affected map document that
-`--fast` had passed clean).
+least once before any commit that touches `src/`.
 
 ## 5. Where to look WHEN something breaks
 
@@ -147,14 +144,12 @@ number. When the cause is located, do not fix it inline: route it.
 
 ## 5b. Process hygiene (each rule paid for in the record)
 
-- **Kill by PID, never by pattern.** `pkill -f`/`pgrep -f` match your
-  own shell's command line — the 2026-08-05 smoke tranche killed its
-  own session twice this way.
+- **Kill by PID, never by pattern.** `pkill -f`/`pgrep -f` can match
+  your own shell's command line and kill your own session.
 - **Never run the full gate concurrently with `docs_verify`** (or any
   other worker-spawning instrument): both fan out processes, and the
-  contention manufactures failures — three corrupted gate measurements
-  across two tranches (P1 verify; T2's U3), each costing a re-run and
-  a re-diagnosis. One instrument at a time, on an otherwise idle box.
+  contention manufactures failures. One instrument at a time, on an
+  otherwise idle box.
 - **A surprising measurement taken under load is not a measurement.**
   Re-run idle before recording it, and say which run you recorded.
 - **Long work launches detached** (`setsid nohup ... & disown`, §3) —
