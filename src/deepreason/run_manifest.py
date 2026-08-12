@@ -420,18 +420,10 @@ class BridgePolicy(BaseModel):
 
     @model_validator(mode="after")
     def _grounded_contract_is_complete(self):
-        if self.mode == "grounded_two_stage" and not all(
-            (
-                self.allow_partial,
-                self.allow_abstention,
-                self.require_claim_ledger,
-                self.require_claim_uses,
-            )
-        ):
-            raise ValueError(
-                "grounded_two_stage requires partial and abstention outcomes, "
-                "a claim ledger, and typed claim uses"
-            )
+        # The unresolved-success-safety combination (all-configs-allowed,
+        # 2026-08-12) is disclosed as a compile notice by
+        # _compile_bridge_policy, its only constructor with notice access;
+        # no field here has a runtime reader, so nothing needs restoring.
         if self.grounding_repair_role != self.reviewer_role:
             raise ValueError(
                 "grounding_repair_role must equal the frozen reviewer_role"
@@ -2558,7 +2550,25 @@ def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any])
     return ScratchPolicy(**values)
 
 
-def _compile_bridge_policy(source, *, model_profile: str):
+def _compile_bridge_policy(source, *, model_profile: str, notices: list[CompileNoticeV1] | None = None):
+    if source.mode == "grounded_two_stage" and notices is not None:
+        disabled = [
+            name
+            for name in ("allow_partial", "allow_abstention", "require_claim_ledger", "require_claim_uses")
+            if not getattr(source, name)
+        ]
+        if disabled:
+            # No code in src/deepreason/ reads these four fields outside this
+            # check and its frozen-manifest twin (BridgePolicy's own
+            # validator below) -- disabling one changes no run behavior
+            # today, so the operator's literal values pass through unforced.
+            _emit_compile_notice(
+                notices,
+                "BRIDGE_UNRESOLVED_SUCCESS_SAFETY_DISABLED",
+                "grounded_two_stage requires unresolved-success-safe settings: "
+                + ", ".join(disabled),
+                "/bridge",
+            )
     output_section_limit = source.output_section_limit
     if model_profile == "compact":
         output_section_limit = min(output_section_limit, 12)
@@ -3381,7 +3391,7 @@ def compile_run_manifest(
         else None
     )
     bridge_policy = (
-        _compile_bridge_policy(bridge_source, model_profile=model_profile)
+        _compile_bridge_policy(bridge_source, model_profile=model_profile, notices=notices)
         if schema_version >= 3
         else None
     )

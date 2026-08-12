@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=9 blockers=none
+State: next=10 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -164,23 +164,35 @@ order. One step per `dr-execute-step` invocation.
         BLOCK 2 -- compiled OK, schema_version = 3
           notices: ['BRIDGE_REVIEWER_ROUTE_REQUIRED', 'BRIDGE_REVIEWER_SEATS_MISMATCH']
 
-- [ ] 9. (S-C1) Convert `BridgeConfig._grounded_mode_preserves_valid_unresolved_results`
-      (`config.py` :228-244) from `raise` to a no-op pass-through — grep
-      confirmed `allow_partial`/`allow_abstention`/`require_claim_ledger`/
+- [x] 9. (S-C1) Convert `BridgeConfig._grounded_mode_preserves_valid_unresolved_results`
+      (`config.py`) from `raise` to deletion — grep-confirmed
+      `allow_partial`/`allow_abstention`/`require_claim_ledger`/
       `require_claim_uses` have NO runtime reader anywhere in
-      `src/deepreason/` outside the two validators themselves (this
-      validator and its manifest-level twin below), so no restoration is
-      needed; the literal values the operator set simply stand. Convert
-      the frozen-model twin, `BridgePolicyV1._grounded_contract_is_complete`
-      (`run_manifest.py` :421-434), the same way (frozen surface 4:
-      model and validator move together) — its notice is emitted into
-      `compile_notices` via the same `_emit_compile_notice`/`model_copy`
-      pattern as step 4. Rewrite
-      `tests/test_config_scratch_bridge.py::test_grounded_mode_cannot_disable_unresolved_success_safety`
-      to assert `Config(...)` now constructs without raising, and add a
-      manifest-level assertion that compiling with the same disabled
-      fields yields a `compile_notices` entry instead of raising.
+      `src/deepreason/` outside the two validators themselves, so no
+      restoration is needed; the literal values the operator set simply
+      stand. The frozen-model twin's OWN gate,
+      `BridgePolicy._grounded_contract_is_complete` (`run_manifest.py`),
+      had its raise removed too (its SECOND check,
+      `grounding_repair_role != reviewer_role`, is a genuine internal
+      invariant `_compile_bridge_policy` always satisfies by construction
+      and stays a hard error, unconverted). The notice is instead emitted
+      by `_compile_bridge_policy` itself (the one function with access to
+      `compile_run_manifest`'s `notices` list) BEFORE constructing
+      `BridgePolicy`, with a NEW code
+      (`BRIDGE_UNRESOLVED_SUCCESS_SAFETY_DISABLED` — the retired site had
+      no typed code of its own, only a bare message, so one was minted).
+      `_validate_v3_engine_policy_consistency`'s frozen-record re-derivation
+      call site passes no `notices` (default `None`), so R8 holds by
+      construction, not by the caller remembering to skip it.
+      Rewrote `tests/test_config_scratch_bridge.py::test_grounded_mode_cannot_disable_unresolved_success_safety`
+      (renamed `..._now_constructs`) and one incidental user of the same
+      validator in `test_nested_assignment_is_validated_and_arbitrary_roles_remain_supported`
+      (switched to a still-live structural check,
+      `max_schema_repair_attempts` range, to keep proving nested
+      `validate_assignment=True` works). Added
+      `tests/test_run_manifest_scratch_bridge.py::test_grounded_mode_disabled_unresolved_success_safety_compiles_with_a_notice`.
       done-when: `python -m pytest tests/test_config_scratch_bridge.py tests/test_run_manifest.py -q` passes, 0 failed.
+      DONE: `python -m pytest tests/test_run_manifest.py tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest_v4.py tests/test_v6_only_manifest_loading.py tests/test_config_scratch_bridge.py tests/test_config.py -q` -> `161 passed`.
 
 - [ ] 10. (S-S1, S-S2) [COMMIT] Convert `SEAT_BINDING_ROLE_CONFLICT`
       (`resolve_seat_bindings`) and `SEAT_BINDING_GROUP_DUPLICATED`

@@ -265,6 +265,22 @@ def test_grounded_review_missing_reviewer_compiles_with_a_notice(monkeypatch):
     assert notice.pointer == "/roles/judge"
 
 
+def test_grounded_mode_disabled_unresolved_success_safety_compiles_with_a_notice():
+    """All-configs-allowed (2026-08-12): manifest-level twin of
+    tests/test_config_scratch_bridge.py::test_grounded_mode_disabling_unresolved_success_safety_now_constructs
+    -- the frozen BridgePolicy's own fields carry the operator's literal
+    False values through unforced, and compile_run_manifest discloses the
+    retired refusal as a typed notice."""
+    config = _grounded_config(bridge={"mode": "grounded_two_stage", "allow_partial": False})
+    manifest = _compile(config)
+    assert manifest.bridge_policy.allow_partial is False
+    notice = next(
+        n for n in manifest.compile_notices
+        if n.code == "BRIDGE_UNRESOLVED_SUCCESS_SAFETY_DISABLED"
+    )
+    assert "allow_partial" in notice.message
+
+
 def test_grounded_review_can_freeze_seat_zero_of_cross_family_judges():
     config = _grounded_config()
     config.roles["judge"] = [
