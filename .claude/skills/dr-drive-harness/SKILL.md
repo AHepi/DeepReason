@@ -25,10 +25,16 @@ authority; the sequence is:
     ls experiments/*/env 2>/dev/null          # gitignored credentials survive?
 
 Always `python -m pytest`, never bare `pytest` (PATH shim). Credentials
-are recreated from the operator's handover, never committed. Commit and
-push at every phase boundary — work between pushes is work at risk. Then
-read, in order: CLAUDE.md, the newest `experiments/*/RESULTS.md` segments,
-`docs/ERRATA.md`.
+are recreated from the operator's handover, never committed — `env`
+files are gitignored; check with `git check-ignore <path>` before
+writing near them. Commit and push at every phase boundary — work
+between pushes is work at risk. Then read, in order: CLAUDE.md, the
+newest `experiments/*/RESULTS.md` segments, `docs/ERRATA.md`.
+
+Where the truth lives, in reading order: CLAUDE.md (law) →
+`docs/map/INDEX.md` (navigation) → `experiments/*/RESULTS.md` (what is
+proven) → `docs/ERRATA.md` (what was corrected) → each tranche's
+PARKED.md (what is deliberately not done).
 
 Re-entering mid-tranche needs no conversation history: every tranche is
 resumable from its committed artifacts alone. Read the tranche dir's
@@ -98,6 +104,11 @@ layer, and the reading order is fixed:
 4. `docs/map/SCHEMA.md` before writing or editing any map document. The
    map moves in the SAME commit as the code, or it becomes a document
    that lies.
+5. Record the resolved ids in the tranche's first artifact (GOAL.md or
+   REQUEST.md) — every later phase starts from the same map. If the map
+   has no id for something the work touches, that is a finding, not a
+   blocker: say so, and creating the missing document becomes part of
+   the tranche.
 
 Instruments that prove you broke nothing: the full gate
 (`python -m pytest tests/ -q -n 4`, 0 failed only) and the root sweep
@@ -153,8 +164,8 @@ number. When the cause is located, do not fix it inline: route it.
 ## 6. Routing to the workflows
 
 All substantive work goes through a workflow family — that is repo law
-(CLAUDE.md), not preference. `.claude/skills/README.md` is the index of
-all of them.
+(CLAUDE.md), not preference. This section is the index of all of them
+(CLAUDE.md's "Which workflow to use" carries the same summary).
 
 - Something is broken or suspicious → `deepreason-orchestrator`
   (dr-set-goal → dr-diagnose → dr-reproduce → dr-propose-fix →

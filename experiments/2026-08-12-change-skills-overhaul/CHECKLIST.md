@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=12 blockers=none (operator replied "Read and approved." — quoted below at step 11)
+State: next=14 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -275,7 +275,7 @@ operator's word (step 11), never before.
         `dr-reproduce`, `dr-set-goal`) get no step — DELTA discipline
         means touching only what SPEC/DESIGN named.
 
-- [ ] 13. (S12, S13) Edit `dr-drive-harness/SKILL.md`: confirm it
+- [x] 13. (S12, S13) Edit `dr-drive-harness/SKILL.md`: confirm it
       already states the canonical version of all 8 delegated clusters
       (map preflight, env preflight, commit-every-boundary, root
       retirement, credentials, detached-launch+monitor, typed-outcomes-
@@ -289,6 +289,19 @@ operator's word (step 11), never before.
       lives" .claude/skills/dr-drive-harness/SKILL.md` -> found; manual
       confirmation each of the 8 clusters' fullest wording is present
       in this file specifically.
+      PROOF: review found 6/8 clusters already fully canonical (env
+      preflight, commit-boundary, root retirement, detached-launch,
+      typed-outcomes-only, stop-format); 2 needed additions — map
+      preflight was missing "record resolved ids in the tranche's
+      first artifact" + the no-id-is-a-finding-not-a-blocker nuance
+      (added as §4 item 5), credentials was missing the `git
+      check-ignore` mechanic (added to §1). Absorbed README's "where
+      the truth lives" chain into §1. Removed §6's self-reference to
+      `.claude/skills/README.md` (which step 14 deletes) — replaced
+      with "this section is the index... CLAUDE.md's 'Which workflow
+      to use' carries the same summary." `grep -qi "where the truth
+      lives" SKILL.md` -> found (case-insensitive; source uses
+      sentence case).
 
 - [ ] 14. (S12, S16) Delete `.claude/skills/README.md`, and in the SAME
       commit update CLAUDE.md's "Which workflow to use" section to
