@@ -46,7 +46,7 @@ def _intake_form_schema() -> dict:
 
 
 def _run_tools() -> list[dict]:
-    from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
+    from deepreason.preparation import PUBLIC_MAX_CYCLES
 
     budget = {
         "type": "object",
@@ -55,7 +55,6 @@ def _run_tools() -> list[dict]:
             "token_budget": {
                 "type": "integer",
                 "minimum": 1,
-                "maximum": PUBLIC_MAX_TOKEN_BUDGET,
             },
         },
         "additionalProperties": False,

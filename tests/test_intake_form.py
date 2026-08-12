@@ -4,10 +4,9 @@ from pydantic import ValidationError
 from deepreason.intake_form import (
     INTAKE_CYCLES_CEILING_EXCEEDED,
     INTAKE_SEAT_CONFLICT,
-    INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED,
     IntakeFormV1,
 )
-from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
+from deepreason.preparation import PUBLIC_MAX_CYCLES
 
 
 def test_minimal_valid_form_passes():
@@ -52,15 +51,18 @@ def test_cycles_at_ceiling_is_fine():
     assert form.cycles == PUBLIC_MAX_CYCLES
 
 
-def test_token_budget_over_ceiling_raises():
-    with pytest.raises(ValidationError) as excinfo:
-        IntakeFormV1(question="Q", token_budget=PUBLIC_MAX_TOKEN_BUDGET + 1)
-    assert INTAKE_TOKEN_BUDGET_CEILING_EXCEEDED in str(excinfo.value)
+def test_token_budget_has_no_ceiling():
+    """R1: the former 200k per-run token ceiling is retired; any positive
+    token_budget is accepted."""
+
+    formerly_over_ceiling = 200_000 + 1
+    form = IntakeFormV1(question="Q", token_budget=formerly_over_ceiling)
+    assert form.token_budget == formerly_over_ceiling
 
 
-def test_token_budget_at_ceiling_is_fine():
-    form = IntakeFormV1(question="Q", token_budget=PUBLIC_MAX_TOKEN_BUDGET)
-    assert form.token_budget == PUBLIC_MAX_TOKEN_BUDGET
+def test_token_budget_must_be_positive():
+    with pytest.raises(ValidationError):
+        IntakeFormV1(question="Q", token_budget=0)
 
 
 def test_extra_fields_forbidden():

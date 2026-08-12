@@ -25,7 +25,6 @@ from deepreason.provider_profile import (
 
 SHALLOW_RESULT_SCHEMA = "deepreason-shallow-result.v1"
 SHALLOW_DEFAULT_TOKEN_BUDGET = 30_000
-SHALLOW_MAX_TOKEN_BUDGET = 200_000
 SHALLOW_DEFAULT_MAX_CYCLES = 64
 SHALLOW_DISCLAIMER = (
     "shallow reduced-engine result: generate/check/rotate only, no V6 "
@@ -78,10 +77,10 @@ def run_shallow_question(
     if not question:
         raise ShallowReasonError("SHALLOW_QUESTION_REQUIRED", "provide one question")
     budget = SHALLOW_DEFAULT_TOKEN_BUDGET if token_budget is None else int(token_budget)
-    if not 1 <= budget <= SHALLOW_MAX_TOKEN_BUDGET:
+    if budget < 1:
         raise ShallowReasonError(
             "SHALLOW_BUDGET_INVALID",
-            f"token budget must be within 1..{SHALLOW_MAX_TOKEN_BUDGET}",
+            "token budget must be positive",
         )
     max_cycles = SHALLOW_DEFAULT_MAX_CYCLES if cycles is None else int(cycles)
     if max_cycles < 1:
@@ -142,7 +141,6 @@ __all__ = [
     "SHALLOW_DEFAULT_MAX_CYCLES",
     "SHALLOW_DEFAULT_TOKEN_BUDGET",
     "SHALLOW_DISCLAIMER",
-    "SHALLOW_MAX_TOKEN_BUDGET",
     "SHALLOW_RESULT_SCHEMA",
     "ShallowReasonError",
     "run_shallow_question",
