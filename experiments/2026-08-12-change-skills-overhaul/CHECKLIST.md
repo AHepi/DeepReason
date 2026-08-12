@@ -490,7 +490,7 @@ operator's word (step 11), never before.
       needed since the mutation is expressed entirely via the
       `--ceiling` argument; no commit.
 
-- [ ] 25. (S15) L5 ship-test: using the SAME planted violation as step
+- [x] 25. (S15) L5 ship-test: using the SAME planted violation as step
       24 (a `FIX.md`-shaped budget ceiling exceeded by a diff), run it
       through the reworked `dr-implement-fix` procedure end-to-end and
       paste the catch (the STOP the mechanized gate now produces, where
@@ -498,6 +498,20 @@ operator's word (step 11), never before.
       done-when: the pasted run shows the mechanized gate firing
       (`EXCEEDED` -> STOP), demonstrating the reworked skill catches
       what the old one relied on eyeballing.
+      PROOF: scenario — a `FIX.md` states "Estimated diff: <=10 lines";
+      the actual fix diff (the real `dr-implement-fix/SKILL.md` edit
+      itself, 27 insertions) exceeds it. Running the reworked item 8's
+      exact prescribed command (step 24's proof, reused here as the
+      end-to-end run) returns `"verdict": "EXCEEDED"` — per the
+      skill's own text this "is a STOP in the standard format
+      (decision, priced options, recommendation), not a footnote."
+      Under the OLD (pre-Phase-C) item 8, this same 27-vs-10 case
+      required a human to eyeball `git diff --stat`'s output against a
+      remembered number — exactly the shape of the V1 2026-08-05 miss
+      the skill's own text cites (193 landed against <=150, unnoticed).
+      The reworked skill converts that judgment call into a string
+      compare a machine makes. Catch demonstrated; no further artifact
+      needed beyond step 24's pasted output.
 
 - [ ] 26. (S19) Full gate: `python -m pytest tests/ -q -n 4`. Compare
       against baseline (1 pre-existing `test_bronze_report` failure; 5
