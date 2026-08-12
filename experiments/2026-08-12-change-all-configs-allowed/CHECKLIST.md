@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=16 blockers=none
+State: next=18 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -329,11 +329,23 @@ order. One step per `dr-execute-step` invocation.
       baseline exactly (this run also caught and required fixing the two
       real map-doc drifts from steps 9-11, already committed).
 
-- [ ] 17. (all) Full gate: `python -m pytest tests/ -q -n 4`
+- [x] 17. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, M failed" where M equals the
       pre-existing baseline (1 `test_bronze_report` failure; isolate any
       MCP-thread failure with `-n 1` before attributing) — paste the
       final summary line.
+      First run found 2 real regressions (both fixed, already committed):
+      `test_manifest_integration.py::test_compile_bind_preflight_text_manifest`
+      (asserted the old SECOND_JUDGE_FAMILY_REQUIRED raise — rewritten to
+      assert compile-with-notice) and a `test_mcp_run.py` MCP-thread
+      failure that reproduced as flaky, not a regression (passed both in
+      isolation with `-n 1` and again under `-n 4` on a clean re-run,
+      matching REQUEST.md's disclosed "5 MCP-thread tests known-flaky
+      under -n 4" baseline).
+      DONE (re-run after the fix): `1 failed, 3535 passed, 7 skipped in
+      672.85s` — the 1 failure is exactly the pre-existing
+      `test_bronze_report.py::test_census_totals_internally_consistent`
+      (`159 == 165`), matching SPEC §7's baseline exactly.
 
 - [ ] 18. (all) [COMMIT] Root sweep before/after comparison per
       `DR-INV-frozen-surfaces`: `python tools/root_sweep.py
