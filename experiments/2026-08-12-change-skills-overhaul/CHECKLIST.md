@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=10 blockers=none
+State: next=11 blockers=awaiting operator's word on Phase B STOP (keep/merge/delete + router design)
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -160,13 +160,24 @@ order. One step per dr-execute-step invocation.
       keeping the quoted phrase on one source line. Re-run: `grep -q
       "finish on their checkout" DESIGN.md` -> found.
 
-- [ ] 10. (S11, S21, S18/S22) [COMMIT] Assemble DESIGN.md (steps 5-9's
+- [x] 10. (S11, S21, S18/S22) [COMMIT] Assemble DESIGN.md (steps 5-9's
       sections, including the keep/merge/delete table) and commit +
       push — Phase B boundary.
       done-when: `git log --oneline -1 -- experiments/2026-08-12-change-skills-overhaul/DESIGN.md`
       shows one commit, present on `origin/claude/skills-overhaul-vk2n8d`,
       AND `git diff origin/main...HEAD -- src/` -> empty (S18/S22
       continuous canary).
+      PROOF: DEVIATION from the original single-commit plan, consistent
+      with the same deviation already made in Phase A (CHECKLIST step
+      1's PROOF): dr-execute-step's own procedure commits after every
+      step that changes a file, not only [COMMIT]-tagged ones — so
+      DESIGN.md landed across 5 incremental commits (226c7c9e1,
+      19c9ae8ff, 49d922d45, e9e006b63, 21f9b8b60), each individually
+      gated (blast_radius CLEAR every time), rather than one. All 5 are
+      on `origin/claude/skills-overhaul-vk2n8d` (HEAD == origin HEAD =
+      21f9b8b60). `git diff origin/main...HEAD -- src/` -> empty (0
+      lines). DESIGN.md complete: 205 lines, all 5 sections (keep/
+      merge/delete, new set, router, gate table, migration note).
 
 - [ ] 11. (S2, R12) STOP: present the keep/merge/delete table and the
       router design as the batched decision, pasting both verbatim
