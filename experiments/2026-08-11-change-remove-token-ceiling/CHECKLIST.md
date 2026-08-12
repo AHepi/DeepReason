@@ -97,10 +97,14 @@ One step per dr-execute-step invocation.
       all three symbols (no drift from SPEC.md's forecast) — committed
       `6a488b97e`, pushed to `origin/claude/remove-token-ceiling-w8k3mf`.
 
-- [ ] 13b. (S8) Paste `wheel_operational_smoke.py`'s full tail once its
+- [x] 13b. (S8) Paste `wheel_operational_smoke.py`'s full tail once its
       background run finishes, confirming it too exits 0.
-      done-when: background log at `/tmp/wheel_op_smoke.log` contains an
-      `EXIT_CODE=0` line; paste the tail.
+      done: `wheel operational smoke passed: installed setup, explicit
+      qualification (80 qualification calls; 410 total calls), readiness,
+      question-only reasoning, replay-verified terminal retrieval, cache
+      reuse, opaque MCP restart, budget ceiling, and pre-V6 fail-closed
+      admission` / `EXIT_CODE=0`. Both wheel-smoke pins (S8) fully
+      confirmed against a freshly built wheel.
 
 - [ ] 14. (S8b) Confirm the two tool-NAME pins do NOT need edits (traced
       contradiction of the request's named "all four pins" mechanism,
