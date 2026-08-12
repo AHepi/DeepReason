@@ -28,7 +28,6 @@ import re
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from deepreason.preparation import PUBLIC_MAX_CYCLES
-from deepreason.seat_bindings import GROUP_ALIASES
 
 INTAKE_SEAT_CONFLICT = "INTAKE_SEAT_CONFLICT"
 INTAKE_CYCLES_CEILING_EXCEEDED = "INTAKE_CYCLES_CEILING_EXCEEDED"
@@ -130,22 +129,16 @@ class IntakeFormV1(BaseModel):
     @field_validator("seats")
     @classmethod
     def _no_conflicting_role_bindings(cls, seats: dict[str, str] | None) -> dict[str, str] | None:
-        """B1a: groups sharing a role may not bind conflicting profiles."""
+        """B1a: groups sharing a role used to refuse a conflicting profile
+        pair; all-configs-allowed (2026-08-12) makes this advisory instead —
+        `seats` has no consumer that resolves a canonical winner today (grep
+        confirmed no caller reads a "resolved" projection of this field), so
+        there is nothing to resolve INTO; the form is returned exactly as
+        given, and a caller wanting the resolution rule itself (a direct
+        group beats an alias, then alphabetically-later-group-wins) applies
+        it the same way `seat_bindings.resolve_seat_bindings` does once these
+        seats are actually wired to a run."""
 
-        if not seats:
-            return seats
-        role_profile: dict[str, str] = {}
-        role_group: dict[str, str] = {}
-        for group in sorted(seats):
-            canonical = GROUP_ALIASES.get(group, group)
-            profile = seats[group]
-            if canonical in role_profile and role_profile[canonical] != profile:
-                raise ValueError(
-                    f"{INTAKE_SEAT_CONFLICT}: groups {role_group[canonical]!r} and "
-                    f"{group!r} both bind role {canonical!r} to different profiles"
-                )
-            role_profile[canonical] = profile
-            role_group[canonical] = group
         return seats
 
     @field_validator("cycles")

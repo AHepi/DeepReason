@@ -3,7 +3,6 @@ from pydantic import ValidationError
 
 from deepreason.intake_form import (
     INTAKE_CYCLES_CEILING_EXCEEDED,
-    INTAKE_SEAT_CONFLICT,
     IntakeFormV1,
 )
 from deepreason.preparation import PUBLIC_MAX_CYCLES
@@ -23,13 +22,17 @@ def test_missing_question_fails():
     assert any(e["loc"] == ("question",) and e["type"] == "missing" for e in errors)
 
 
-def test_seat_conflict_raises_intake_seat_conflict():
-    with pytest.raises(ValidationError) as excinfo:
-        IntakeFormV1(
-            question="Q",
-            seats={"conjecture": "profile-a", "simulation": "profile-b"},
-        )
-    assert INTAKE_SEAT_CONFLICT in str(excinfo.value)
+def test_seat_conflict_now_validates_unchanged():
+    """All-configs-allowed (2026-08-12): a conflicting seats mapping used to
+    refuse (INTAKE_SEAT_CONFLICT); the form itself has no consumer that
+    resolves a canonical winner (grep-confirmed, see intake_form.py's
+    docstring on the validator), so it now validates and the mapping passes
+    through exactly as given -- unresolved, not silently repaired."""
+    form = IntakeFormV1(
+        question="Q",
+        seats={"conjecture": "profile-a", "simulation": "profile-b"},
+    )
+    assert form.seats == {"conjecture": "profile-a", "simulation": "profile-b"}
 
 
 def test_seat_alias_same_profile_is_not_a_conflict():
@@ -73,3 +76,46 @@ def test_extra_fields_forbidden():
 def test_json_schema_has_question_property():
     schema = IntakeFormV1.model_json_schema()
     assert "question" in schema["properties"]
+
+
+def test_cli_validate_intake_exits_zero_on_a_valid_file(tmp_path, capsys):
+    from deepreason.cli.main import main
+
+    intake_path = tmp_path / "intake.json"
+    intake_path.write_text('{"question": "Is P equal to NP?"}')
+    assert main(["validate-intake", str(intake_path)]) == 0
+    assert "OK" in capsys.readouterr().out
+
+
+def test_cli_validate_intake_is_advisory_for_a_semantic_violation(tmp_path, capsys):
+    """All-configs-allowed (2026-08-12), R6: a typed CODE: violation (here,
+    INTAKE_CYCLES_CEILING_EXCEEDED) used to exit 1; validate-intake now
+    reports it and exits 0 -- disclosure, not a gate."""
+    from deepreason.cli.main import main
+
+    intake_path = tmp_path / "intake.json"
+    intake_path.write_text(
+        f'{{"question": "Q", "cycles": {PUBLIC_MAX_CYCLES + 1}}}'
+    )
+    assert main(["validate-intake", str(intake_path)]) == 0
+    assert "cycle budget exceeds" in capsys.readouterr().err
+
+
+def test_cli_validate_intake_still_exits_nonzero_for_a_shape_error(tmp_path, capsys):
+    """A missing required field is a parse/shape error (a non-input, not a
+    configuration, per R2) -- still refused, not made advisory."""
+    from deepreason.cli.main import main
+
+    intake_path = tmp_path / "intake.json"
+    intake_path.write_text("{}")
+    assert main(["validate-intake", str(intake_path)]) == 1
+    assert "required" in capsys.readouterr().err
+
+
+def test_cli_validate_intake_still_exits_nonzero_for_an_unparseable_file(tmp_path, capsys):
+    from deepreason.cli.main import main
+
+    intake_path = tmp_path / "intake.json"
+    intake_path.write_text("[]")
+    assert main(["validate-intake", str(intake_path)]) == 1
+    assert "INTAKE_FILE_NOT_AN_OBJECT" in capsys.readouterr().err

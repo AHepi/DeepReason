@@ -225,24 +225,6 @@ class BridgeConfig(BaseModel):
     composer_role: Literal["thesis", "summarizer"] = "thesis"
     reviewer_role: Literal["judge", "grounding_reviewer"] = "judge"
 
-    @model_validator(mode="after")
-    def _grounded_mode_preserves_valid_unresolved_results(self):
-        if self.mode != "grounded_two_stage":
-            return self
-        required = {
-            "allow_partial": self.allow_partial,
-            "allow_abstention": self.allow_abstention,
-            "require_claim_ledger": self.require_claim_ledger,
-            "require_claim_uses": self.require_claim_uses,
-        }
-        disabled = [name for name, enabled in required.items() if not enabled]
-        if disabled:
-            raise ValueError(
-                "grounded_two_stage requires unresolved-success-safe settings: "
-                + ", ".join(disabled)
-            )
-        return self
-
 
 class Config(BaseModel):
     model_config = ConfigDict(

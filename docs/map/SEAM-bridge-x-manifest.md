@@ -1,5 +1,5 @@
 <!-- DR-SEAM-bridge-x-manifest -->
-Verified-at: 546544b5
+Verified-at: 47ec08a5
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/bridge/harness.py, src/deepreason/bridge/transactional_adapter.py, src/deepreason/bridge/derived.py, src/deepreason/run_manifest.py
 Sides: DR-SUB-bridge, DR-SUB-manifest
@@ -23,7 +23,7 @@ bridge's to receive: `run_manifest.py` imports `WorkflowRetryPolicyV1` and
 `BridgeWorkflowPolicy` so that a manifest can express itself in the bridge's
 types, while the bridge holds exactly one `run_manifest` symbol at module
 scope. The document is a plan, never evidence — the bridge reads eight of its
-thirty-two fields, copies none of its content into the append-only record, and
+thirty-three fields, copies none of its content into the append-only record, and
 stores only a 64-hex digest in the handful of records that name it. And the
 bridge may not assume a manifest exists or is v6: four separate fallbacks return
 a permissive default instead of refusing — a missing digest sidecar in
@@ -37,15 +37,15 @@ tolerance is for absence and age, never for corruption.
 Three of the package's sixteen modules touch `run_manifest`, and only one of
 those imports it at module scope; the reverse edge is the module-level one,
 which is why every bridge-side manifest import is function-local. Eight manifest
-attributes reach the bridge directly, out of thirty-two fields.
-`check: python -c "import ast, pathlib, re; from deepreason.run_manifest import RunManifest; B=lambda n: n.module if not n.level else '.'.join(filter(None, [{1:'deepreason.bridge',2:'deepreason'}.get(n.level,'?'), n.module])); F=lambda n: {B(n) or ''} | {'%s.%s' % (B(n), a.name) for a in n.names}; I=lambda p: {(m, n.col_offset) for n in ast.walk(ast.parse(pathlib.Path(p).read_text())) for m in ({a.name for a in n.names} if isinstance(n, ast.Import) else F(n) if isinstance(n, ast.ImportFrom) else set())}; mods=sorted(q.stem for q in pathlib.Path('src/deepreason/bridge').glob('*.py')); at=lambda m: {c for q, c in I('src/deepreason/bridge/%s.py' % m) if q == 'deepreason.run_manifest'}; touch={m for m in mods if at(m)}; assert len(mods) == 16, mods; assert touch == {'harness','derived','transactional_adapter'}, sorted(touch); assert {m for m in touch if 0 in at(m)} == {'transactional_adapter'}, sorted(m for m in touch if 0 in at(m)); assert ('deepreason.bridge.retry', 0) in I('src/deepreason/run_manifest.py'); names=set(); [names.update(re.findall(r'(?<![a-z_])(?:bound_manifest|manifest)\.([a-z_0-9]+)', pathlib.Path('src/deepreason/bridge/%s.py' % f).read_text())) for f in ('harness','derived','transactional_adapter')]; expected={'bridge_policy','control_plane_policy','model_profile','roles','schema_version','scratch_policy','sha256','workload_profile'}; assert names == expected, sorted(names ^ expected); assert len(RunManifest.model_fields) == 32" && grep -q "^from deepreason.run_manifest import resolve_route_seat_base_profile$" src/deepreason/bridge/transactional_adapter.py && grep -q "^from deepreason.bridge.retry import WorkflowRetryPolicyV1$" src/deepreason/run_manifest.py`
+attributes reach the bridge directly, out of thirty-three fields.
+`check: python -c "import ast, pathlib, re; from deepreason.run_manifest import RunManifest; B=lambda n: n.module if not n.level else '.'.join(filter(None, [{1:'deepreason.bridge',2:'deepreason'}.get(n.level,'?'), n.module])); F=lambda n: {B(n) or ''} | {'%s.%s' % (B(n), a.name) for a in n.names}; I=lambda p: {(m, n.col_offset) for n in ast.walk(ast.parse(pathlib.Path(p).read_text())) for m in ({a.name for a in n.names} if isinstance(n, ast.Import) else F(n) if isinstance(n, ast.ImportFrom) else set())}; mods=sorted(q.stem for q in pathlib.Path('src/deepreason/bridge').glob('*.py')); at=lambda m: {c for q, c in I('src/deepreason/bridge/%s.py' % m) if q == 'deepreason.run_manifest'}; touch={m for m in mods if at(m)}; assert len(mods) == 16, mods; assert touch == {'harness','derived','transactional_adapter'}, sorted(touch); assert {m for m in touch if 0 in at(m)} == {'transactional_adapter'}, sorted(m for m in touch if 0 in at(m)); assert ('deepreason.bridge.retry', 0) in I('src/deepreason/run_manifest.py'); names=set(); [names.update(re.findall(r'(?<![a-z_])(?:bound_manifest|manifest)\.([a-z_0-9]+)', pathlib.Path('src/deepreason/bridge/%s.py' % f).read_text())) for f in ('harness','derived','transactional_adapter')]; expected={'bridge_policy','control_plane_policy','model_profile','roles','schema_version','scratch_policy','sha256','workload_profile'}; assert names == expected, sorted(names ^ expected); assert len(RunManifest.model_fields) == 33" && grep -q "^from deepreason.run_manifest import resolve_route_seat_base_profile$" src/deepreason/bridge/transactional_adapter.py && grep -q "^from deepreason.bridge.retry import WorkflowRetryPolicyV1$" src/deepreason/run_manifest.py`
 
 ## Where it is expressed
 
 | Site | File | Symbol | What it enforces |
 |---|---|---|---|
 | Policy compiler | `run_manifest.py` | `BridgePolicy.workflow_policy` | the sole translation from manifest authority into `BridgeWorkflowPolicy`; composition version is derived from the ledger version, never supplied |
-| Admissibility | `run_manifest.py` | v3+ branch of `RunManifest._production_routes_are_concrete` | a grounded bridge without a route for its ledger, composer or reviewer role is not a valid manifest — three distinct `BRIDGE_*_ROUTE_REQUIRED` codes (the `BRIDGE_REVIEWER_SEATS_MISMATCH` clause beside them is unreachable; see Traps) |
+| Admissibility | `run_manifest.py` | v3+ branch of `RunManifest._production_routes_are_concrete` | a grounded bridge without a route for its ledger, composer or reviewer role compiles with a typed disclosure, not a refusal (all-configs-allowed, 2026-08-12) — three distinct `BRIDGE_*_ROUTE_REQUIRED` compile notices, `BRIDGE_REVIEWER_SEATS_MISMATCH` alongside the reviewer one (see Traps); the actual refusal moved to the bridge's own execution-time derivation below |
 | Wire vocabulary | `run_manifest.py` | `ContractVersionPolicyV1/V2/V3` | which `bridge.ledger.*` / `bridge.composition.*` contract a run may speak; v6 pins the v3/v2 pair by `Literal` default |
 | Repair grants | `run_manifest.py` | `_compile_contract_schema_repair_policy` | `bridge_policy.max_schema_repair_attempts` clamped to 0..2 and expanded into per-contract-id grants — the compile-time seed, not the runtime ceiling |
 | Decomposition edges | `run_manifest.py` | `_compile_route_seat_contract_decomposition_plan` | `bridge.ledger.v3 → bridge.ledger-batch.v1` and `bridge.composition.v2 → bridge.composition-batch.v1`, seat 0 only |
@@ -64,11 +64,15 @@ attributes reach the bridge directly, out of thirty-two fields.
 
 The compiler pairs the two contract versions and cannot express a split, the
 manifest's `BridgePolicy` is strictly narrower than the `BridgeWorkflowPolicy`
-it compiles into, and a missing route is refused on the manifest side at
-validation and again on the bridge side at derivation with two different typed
-codes. Both refusals are proved by firing them, not by finding their strings: a
-grep passes just as happily on a rule someone has disabled.
-`check: python -c "import types, pytest; from deepreason.config import Config; from deepreason.run_manifest import BridgePolicy, RunManifest, compile_run_manifest; from deepreason.bridge.workflow import BridgeWorkflowPolicy; from deepreason.bridge.harness import _derive_bridge_execution_policy as D; p=BridgePolicy(mode='grounded_two_stage',allow_partial=True,allow_abstention=True,require_claim_ledger=True,require_claim_uses=True,grounding_review=True,max_schema_repair_attempts=0,max_grounding_repair_attempts=1,output_section_limit=8,target_profile='plain',ledger_role='summarizer',composer_role='thesis',reviewer_role='judge',grounding_repair_role='judge'); assert p.workflow_policy(ledger_contract_version='v3').composition_contract_version=='v2'; assert p.workflow_policy(ledger_contract_version='v2').composition_contract_version=='v1'; assert BridgeWorkflowPolicy.model_fields['max_ledger_amendments'].annotation.__args__==(0,1); assert BridgePolicy.model_fields['max_ledger_amendments'].annotation.__args__==(1,); assert BridgePolicy.model_fields['reviewer_seats'].annotation.__args__==(1,); r={'endpoint_id':'gemma-route','endpoint':'https://models.invalid/v1','model':'gemma4:31b','provider':'fixture','family':'gemma','api_key_env':'FIXTURE_API_KEY'}; m=compile_run_manifest(Config(scratchpad={'enabled':True},bridge={'mode':'grounded_two_stage'},roles={n:r for n in ('conjecturer','synthesizer','summarizer','thesis','judge')}),schema_version=3,workload_profile='text',rubric_policy='forbid',compiled_at='2026-07-16T00:00:00Z'); d=m.model_dump(mode='json'); [pytest.raises(ValueError, RunManifest.model_validate, dict(d, roles={k:v for k,v in d['roles'].items() if k!=role})).match(code) for role, code in (('summarizer','BRIDGE_LEDGER_ROUTE_REQUIRED'),('thesis','BRIDGE_COMPOSER_ROUTE_REQUIRED'),('judge','BRIDGE_REVIEWER_ROUTE_REQUIRED'))]; c=types.SimpleNamespace(contract_versions=types.SimpleNamespace(bridge_ledger_wire_contract='bridge.ledger.v3'), workflow_retry=None); pytest.raises(ValueError, D, types.SimpleNamespace(schema_version=6, control_plane_policy=c, bridge_policy=p, roles={}), p.workflow_policy(ledger_contract_version='v1')).match('BRIDGE_LEDGER_ROUTE_REQUIRED')" && grep -q 'f"BRIDGE_{task.upper()}_ROUTE_REQUIRED: "' src/deepreason/run_manifest.py && grep -q 'raise ValueError("BRIDGE_LEDGER_ROUTE_REQUIRED")' src/deepreason/bridge/harness.py && python -m pytest tests/test_run_manifest_scratch_bridge.py -q`
+it compiles into, and a missing route is DISCLOSED on the manifest side at
+compile time (a typed `CompileNoticeV1`, not a refusal — all-configs-allowed,
+2026-08-12) and still REFUSED on the bridge side at derivation, with two
+different typed codes: the compile-time disclosure names what the retired
+gate would have said, and the execution-time refusal is the one that actually
+protects dispatch, satisfying R5's "impossibility still surfaces typed, just
+deferred to the point of use." Both are proved by firing them, not by finding
+their strings: a grep passes just as happily on a rule someone has disabled.
+`check: python -c "import types, pytest; from deepreason.config import Config; from deepreason.run_manifest import BridgePolicy, RunManifest, compile_run_manifest; from deepreason.bridge.workflow import BridgeWorkflowPolicy; from deepreason.bridge.harness import _derive_bridge_execution_policy as D; p=BridgePolicy(mode='grounded_two_stage',allow_partial=True,allow_abstention=True,require_claim_ledger=True,require_claim_uses=True,grounding_review=True,max_schema_repair_attempts=0,max_grounding_repair_attempts=1,output_section_limit=8,target_profile='plain',ledger_role='summarizer',composer_role='thesis',reviewer_role='judge',grounding_repair_role='judge'); assert p.workflow_policy(ledger_contract_version='v3').composition_contract_version=='v2'; assert p.workflow_policy(ledger_contract_version='v2').composition_contract_version=='v1'; assert BridgeWorkflowPolicy.model_fields['max_ledger_amendments'].annotation.__args__==(0,1); assert BridgePolicy.model_fields['max_ledger_amendments'].annotation.__args__==(1,); assert BridgePolicy.model_fields['reviewer_seats'].annotation.__args__==(1,); r={'endpoint_id':'gemma-route','endpoint':'https://models.invalid/v1','model':'gemma4:31b','provider':'fixture','family':'gemma','api_key_env':'FIXTURE_API_KEY'}; m=compile_run_manifest(Config(scratchpad={'enabled':True},bridge={'mode':'grounded_two_stage'},roles={n:r for n in ('conjecturer','synthesizer','summarizer','thesis','judge')}),schema_version=3,workload_profile='text',rubric_policy='forbid',compiled_at='2026-07-16T00:00:00Z'); d=m.model_dump(mode='json'); [((lambda mv: (_ for _ in ()).throw(AssertionError(code)) if code not in [n.code for n in (mv.compile_notices or ())] else None)(RunManifest.model_validate(dict(d, roles={k:v for k,v in d['roles'].items() if k!=role})))) for role, code in (('summarizer','BRIDGE_LEDGER_ROUTE_REQUIRED'),('thesis','BRIDGE_COMPOSER_ROUTE_REQUIRED'),('judge','BRIDGE_REVIEWER_ROUTE_REQUIRED'))]; c=types.SimpleNamespace(contract_versions=types.SimpleNamespace(bridge_ledger_wire_contract='bridge.ledger.v3'), workflow_retry=None); pytest.raises(ValueError, D, types.SimpleNamespace(schema_version=6, control_plane_policy=c, bridge_policy=p, roles={}), p.workflow_policy(ledger_contract_version='v1')).match('BRIDGE_LEDGER_ROUTE_REQUIRED')" && grep -q 'f"BRIDGE_{task.upper()}_ROUTE_REQUIRED"' src/deepreason/run_manifest.py && grep -q 'raise ValueError("BRIDGE_LEDGER_ROUTE_REQUIRED")' src/deepreason/bridge/harness.py && python -m pytest tests/test_run_manifest_scratch_bridge.py -q`
 
 The digest gate compares against the sidecar and refuses a mismatch, but a
 missing sidecar is a silent pass-through, and the file name is a bridge-side
@@ -256,16 +260,20 @@ projection), `tests/test_bridge_workflow_retry.py` (policy freezing), then
   for a file that no longer exists and silently accepting any digest a caller
   passes. Covered by the sidecar check above; the fix if you rename it is to
   import the constant, not to add a second literal.
-- **`BRIDGE_REVIEWER_SEATS_MISMATCH` can never fire.** The v3+ branch checks
+- **`BRIDGE_REVIEWER_SEATS_MISMATCH` used to never fire; all-configs-allowed
+  (2026-08-12) made it live.** The v3+ branch checks
   `len(reviewer_routes) < bridge.reviewer_seats` immediately after the loop that
-  already refuses an *empty* reviewer route tuple with
-  `BRIDGE_REVIEWER_ROUTE_REQUIRED` — and `reviewer_seats` is `Literal[1]`, so the
-  two conditions are the same condition and the first one always wins. The code
-  is unreachable, the string appears in no test, and deleting the branch changes
-  no observable behaviour. It is the shape a multi-seat reviewer *would* take,
-  left in place; do not read it as evidence that multi-seat review is supported.
-  Its check is the `reviewer_seats` annotation assertion above — the day that
-  literal widens, the clause becomes live and needs its own coverage.
+  also disclose an *empty* reviewer route tuple as `BRIDGE_REVIEWER_ROUTE_REQUIRED`
+  — and `reviewer_seats` is `Literal[1]`, so an empty tuple trips BOTH conditions.
+  When both were `raise`, the first one exited the function and the second line
+  never ran; now both are typed-notice disclosures (`_emit_deduped`, deduped by
+  `(code, pointer)` — see `DR-SUB-manifest`'s frozen-surface-4 notes), so control
+  flow reaches the second check and it fires alongside the first, not instead of
+  it. Reachable does not mean independently meaningful: it is still the SAME
+  underlying fact (a missing reviewer route) reported twice, in the shape a
+  multi-seat reviewer *would* need — do not read the second notice as evidence
+  that multi-seat review is supported. The day `reviewer_seats`' literal widens
+  past 1, the two notices can finally diverge and need independent coverage.
 - **Reading `bridge_policy` to predict runtime behaviour.** Two of its fields are
   seeds rather than settings: `max_schema_repair_attempts` seeds the contract
   grants (above) and `ledger_role`/`composer_role` seed a lease that

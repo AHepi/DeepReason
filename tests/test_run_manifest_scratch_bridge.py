@@ -242,7 +242,12 @@ def test_v3_policy_is_deeply_immutable():
         manifest.bridge_policy.max_grounding_repair_attempts = 0
 
 
-def test_grounded_review_requires_explicit_reviewer_before_route_resolution(monkeypatch):
+def test_grounded_review_missing_reviewer_compiles_with_a_notice(monkeypatch):
+    """All-configs-allowed (2026-08-12): a missing required bridge role used
+    to refuse before any route resolution; it now compiles (the configured
+    roles resolve normally, the missing 'judge' role stays an empty route
+    tuple -- not fabricated) with a typed notice at the same code/pointer the
+    retired gate raised."""
     config = _grounded_config(
         roles={
             "summarizer": _route(),
@@ -250,13 +255,30 @@ def test_grounded_review_requires_explicit_reviewer_before_route_resolution(monk
         }
     )
     monkeypatch.setattr(
-        "deepreason.run_manifest.resolve_model",
-        lambda *_args: pytest.fail("missing reviewer reached route resolution"),
+        "deepreason.run_manifest.resolve_model", lambda model, *_rest: model,
     )
-    with pytest.raises(RunManifestError) as raised:
-        _compile(config)
-    assert raised.value.code == "BRIDGE_REVIEWER_ROUTE_REQUIRED"
-    assert raised.value.pointer == "/roles/judge"
+    manifest = _compile(config)
+    assert manifest.roles["judge"] == ()
+    notice = next(
+        n for n in manifest.compile_notices if n.code == "BRIDGE_REVIEWER_ROUTE_REQUIRED"
+    )
+    assert notice.pointer == "/roles/judge"
+
+
+def test_grounded_mode_disabled_unresolved_success_safety_compiles_with_a_notice():
+    """All-configs-allowed (2026-08-12): manifest-level twin of
+    tests/test_config_scratch_bridge.py::test_grounded_mode_disabling_unresolved_success_safety_now_constructs
+    -- the frozen BridgePolicy's own fields carry the operator's literal
+    False values through unforced, and compile_run_manifest discloses the
+    retired refusal as a typed notice."""
+    config = _grounded_config(bridge={"mode": "grounded_two_stage", "allow_partial": False})
+    manifest = _compile(config)
+    assert manifest.bridge_policy.allow_partial is False
+    notice = next(
+        n for n in manifest.compile_notices
+        if n.code == "BRIDGE_UNRESOLVED_SUCCESS_SAFETY_DISABLED"
+    )
+    assert "allow_partial" in notice.message
 
 
 def test_grounded_review_can_freeze_seat_zero_of_cross_family_judges():
@@ -355,30 +377,41 @@ def test_v3_runtime_reconstruction_uses_only_frozen_roles(monkeypatch):
     assert loaded.provider_fallback is False
 
 
-def test_new_features_require_v3_before_any_route_resolution(monkeypatch):
+def test_new_features_below_v3_compile_with_a_notice_instead_of_refusing(monkeypatch):
+    """All-configs-allowed (2026-08-12): a v3+ feature requested below schema
+    v3 used to refuse before any route resolution; it now compiles with a
+    typed CompileNoticeV1 disclosing exactly what the retired gate said, and
+    the feature is still dropped (scratch_policy/bridge_policy stay popped
+    below v3, unchanged)."""
     monkeypatch.setattr(
         "deepreason.run_manifest.resolve_model",
-        lambda *_args: pytest.fail("v3 feature rejection reached route resolution"),
+        lambda *_args: pytest.fail("v3 feature notice path reached route resolution"),
     )
-    with pytest.raises(RunManifestError) as scratch_error:
-        compile_run_manifest(
-            Config(scratchpad={"enabled": True}),
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="forbid",
-            compiled_at=STAMP,
-        )
-    assert scratch_error.value.code == "SCRATCH_MANIFEST_V3_REQUIRED"
+    scratch_manifest = compile_run_manifest(
+        Config(scratchpad={"enabled": True}),
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    assert scratch_manifest.scratch_policy is None
+    assert [n.code for n in scratch_manifest.compile_notices] == [
+        "SCRATCH_MANIFEST_V3_REQUIRED"
+    ]
+    assert scratch_manifest.compile_notices[0].pointer == "/scratchpad/enabled"
 
-    with pytest.raises(RunManifestError) as bridge_error:
-        compile_run_manifest(
-            Config(bridge={"mode": "grounded_two_stage"}),
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="forbid",
-            compiled_at=STAMP,
-        )
-    assert bridge_error.value.code == "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"
+    bridge_manifest = compile_run_manifest(
+        Config(bridge={"mode": "grounded_two_stage"}),
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    assert bridge_manifest.bridge_policy is None
+    assert [n.code for n in bridge_manifest.compile_notices] == [
+        "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"
+    ]
+    assert bridge_manifest.compile_notices[0].pointer == "/bridge/mode"
 
 
 def test_v3_canonical_json_contains_no_runtime_route_selection_fields():

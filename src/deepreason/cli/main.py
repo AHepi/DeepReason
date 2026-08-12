@@ -819,13 +819,10 @@ def _main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 1
-        if args.judge_family and args.blind_same_model_judges:
-            print(
-                "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT: pass at most one "
-                "of --judge-family, --blind-same-model-judges",
-                file=sys.stderr,
-            )
-            return 1
+        # JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT is no longer refused here:
+        # compile_run_manifest applies the judge_family-wins precedence rule
+        # and records the drop as a compile notice (all-configs-allowed,
+        # 2026-08-12), printed below alongside every other notice.
         control_plane_policy = None
         try:
             control_plane_policy = ControlPlanePolicyV3.model_validate_json(
@@ -857,6 +854,8 @@ def _main(argv: list[str] | None = None) -> int:
             return 1
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")
+        for notice in manifest.compile_notices or ():
+            print(f"NOTICE {notice.code}: {notice.message}", file=sys.stderr)
         if not args.dry_run:
             target, digest = write_run_manifest(manifest, args.out)
             print(f"wrote {target} and {digest}")
@@ -1924,7 +1923,11 @@ def _load_intake_file(path: str) -> dict:
 def _cmd_validate_intake(args) -> int:
     from pydantic import ValidationError
 
-    from deepreason.intake_form import IntakeFormV1, render_intake_validation_errors
+    from deepreason.intake_form import (
+        _LEADING_CODE,
+        IntakeFormV1,
+        render_intake_validation_errors,
+    )
 
     try:
         data = _load_intake_file(args.file)
@@ -1936,7 +1939,17 @@ def _cmd_validate_intake(args) -> int:
     except ValidationError as error:
         for line in render_intake_validation_errors(error):
             print(line, file=sys.stderr)
-        return 1
+        # All-configs-allowed (2026-08-12), R6: a typed CODE: violation (our
+        # own semantic checks, e.g. INTAKE_CYCLES_CEILING_EXCEEDED) is now
+        # advisory -- reported, never blocking. A parse/shape error (missing
+        # field, wrong type -- a non-input, not a configuration, per R2)
+        # still exits non-zero.
+        semantic_only = all(
+            isinstance(item.get("ctx", {}).get("error"), ValueError)
+            and _LEADING_CODE.match(str(item["ctx"]["error"])) is not None
+            for item in error.errors()
+        )
+        return 0 if semantic_only else 1
     print("OK")
     return 0
 

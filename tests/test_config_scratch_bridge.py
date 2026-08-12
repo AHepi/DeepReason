@@ -79,11 +79,16 @@ def test_dotted_overrides_use_the_same_nested_validation():
         "require_claim_uses",
     ],
 )
-def test_grounded_mode_cannot_disable_unresolved_success_safety(field):
-    with pytest.raises(
-        ValidationError, match="grounded_two_stage requires unresolved-success-safe"
-    ):
-        BridgeConfig(mode="grounded_two_stage", **{field: False})
+def test_grounded_mode_disabling_unresolved_success_safety_now_constructs(field):
+    """All-configs-allowed (2026-08-12): disabling one of these four fields
+    under grounded_two_stage used to refuse Config construction outright;
+    no code in src/deepreason/ reads any of the four outside this retired
+    check and its frozen-manifest twin, so the literal value now simply
+    passes through, and compile_run_manifest discloses the old refusal as a
+    typed compile notice (see tests/test_run_manifest.py's bridge-policy
+    notice coverage)."""
+    bridge = BridgeConfig(mode="grounded_two_stage", **{field: False})
+    assert getattr(bridge, field) is False
 
     # ``legacy_thesis`` is a canonical V6 bridge policy value; inactive
     # grounded policy does not change that preserved path.
@@ -136,8 +141,8 @@ def test_nested_assignment_is_validated_and_arbitrary_roles_remain_supported():
         scratchpad.max_blocks_per_pack = 0
 
     bridge = BridgeConfig(mode="grounded_two_stage")
-    with pytest.raises(ValidationError, match="unresolved-success-safe"):
-        bridge.allow_abstention = False
+    with pytest.raises(ValidationError):
+        bridge.max_schema_repair_attempts = -1
 
     configured = Config(
         roles={

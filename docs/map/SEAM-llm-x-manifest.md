@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-manifest -->
-Verified-at: 9fa394d9
+Verified-at: 47ec08a5
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/run_manifest.py
 Sides: DR-SUB-llm, DR-SUB-manifest
@@ -141,7 +141,7 @@ would otherwise make its own prohibition vacuous.
 `check: ! grep -q "EndpointLease" src/deepreason/run_manifest.py && grep -q "^class EndpointLease:" src/deepreason/llm/firewall.py && grep -q "^def leases_from_manifest(" src/deepreason/llm/firewall.py && test "$(grep -rl "EndpointLease(" --include=*.py src/deepreason | sort | tr '\n' ' ')" = "src/deepreason/bridge/harness.py src/deepreason/cli/doctor.py src/deepreason/llm/firewall.py " && test "$(grep -c "route = manifest.roles\[pair.role\]\[pair.seat\]" src/deepreason/cli/doctor.py)" -eq 2 && grep -q "^def exercise_production_contract_case(" src/deepreason/cli/doctor.py && grep -q "^def _validate_production_contract_request_envelopes(" src/deepreason/cli/doctor.py && grep -q "routes = manifest.roles.get(effective.ledger_role, ())" src/deepreason/bridge/harness.py && ! grep -rqE "load_run_manifest|bind_run_manifest|persist_run_manifest|write_run_manifest|compile_run_manifest|MANIFEST_NAME" --include=*.py src/deepreason/llm && for s in load_run_manifest compile_run_manifest bind_run_manifest persist_run_manifest write_run_manifest; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && grep -q "^MANIFEST_NAME = " src/deepreason/run_manifest.py`
 
 **The firewall reads five manifest attributes and the adapter reads five, out of
-thirty-two fields — and they share only `schema_version`.** The firewall sees
+thirty-three fields — and they share only `schema_version`.** The firewall sees
 `roles`, `schema_version`, `control_plane_policy`, `criticism_policy` and
 `engine_config_json` (only to bound the school roster); it sees no plan, no
 profile, no contract vocabulary. The adapter sees `model_profile`, `sha256`,
@@ -155,7 +155,7 @@ plan in hand. Searching the firewall for the behavioural-grant check and finding
 nothing is the expected result. Both attribute forms are counted: a dotted read
 and a `getattr` read widen the surface identically, and enumerating only the
 first is how `schema_version` sat unrecorded in the adapter's set.
-`check: python -c "import re, pathlib; from deepreason.run_manifest import RunManifest; src=lambda p: pathlib.Path(p).read_text(); read=lambda p: set(re.findall(r'(?<![a-z_])manifest\.([a-z_0-9]+)', src(p))) | set(re.findall(r'getattr\(\s*manifest\s*,\s*[\x27\"]([a-z_0-9]+)', src(p))); assert read('src/deepreason/llm/firewall.py') == {'control_plane_policy', 'criticism_policy', 'engine_config_json', 'roles', 'schema_version'}; assert read('src/deepreason/llm/adapter.py') == {'compact_recovery_policy', 'model_profile', 'route_seat_behavioral_capability_plan', 'schema_version', 'sha256'}; assert read('src/deepreason/llm/firewall.py') & read('src/deepreason/llm/adapter.py') == {'schema_version'}; assert len(RunManifest.model_fields) == 32"`
+`check: python -c "import re, pathlib; from deepreason.run_manifest import RunManifest; src=lambda p: pathlib.Path(p).read_text(); read=lambda p: set(re.findall(r'(?<![a-z_])manifest\.([a-z_0-9]+)', src(p))) | set(re.findall(r'getattr\(\s*manifest\s*,\s*[\x27\"]([a-z_0-9]+)', src(p))); assert read('src/deepreason/llm/firewall.py') == {'control_plane_policy', 'criticism_policy', 'engine_config_json', 'roles', 'schema_version'}; assert read('src/deepreason/llm/adapter.py') == {'compact_recovery_policy', 'model_profile', 'route_seat_behavioral_capability_plan', 'schema_version', 'sha256'}; assert read('src/deepreason/llm/firewall.py') & read('src/deepreason/llm/adapter.py') == {'schema_version'}; assert len(RunManifest.model_fields) == 33"`
 
 **No credential ever reaches a lease, a digest or a record.** `Route` has an
 `api_key_env` field and no `api_key` field; the value is looked up from the

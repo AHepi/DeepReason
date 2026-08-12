@@ -250,6 +250,25 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   demands. The evidence discipline itself is unchanged — experiments
   stay pre-registered and raw-preserved, and model prose is still
   never evidence.
+- **All configurations should be allowed** (2026-08-12, operator's words
+  verbatim: "All configurations should be allowed."): compile-time
+  denial of an otherwise-parseable configuration is abolished. Any
+  input that parses into the configuration model compiles into a run;
+  what used to be a compile-time refusal (family requirements, role
+  conflicts, backend-identity gates, ceiling checks, combination
+  restrictions) becomes a typed disclosure recorded alongside the
+  compiled result, or a deterministic resolution rule when two parts of
+  one configuration conflict — never a stop. Runtime is unchanged: a
+  config naming an unreachable model, an unsatisfiable ensemble, or a
+  zero budget still fails typed at the point of use; impossibility
+  surfaces there, not at compile. Only parse/shape errors (unreadable
+  input, a string where a number goes) are not configurations at all,
+  and stay refused. An earlier statement in the same exchange — "There
+  should only be additional flags, not flat out denial" — is
+  SUPERSEDED by the operator's own final sentence above: no flags are
+  needed, nothing to override, compile never refuses. Ledgered per the
+  operator's own instruction to record both statements with the
+  supersession noted (`experiments/2026-08-12-change-all-configs-allowed/`).
 
 ## The map — `docs/map/` (read this before scoping any change)
 

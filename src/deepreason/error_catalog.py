@@ -380,10 +380,13 @@ CATALOG: dict[str, ErrorCatalogEntry] = {
             "In your intake form's `seats` mapping, two group names — one of "
             "them possibly an alias, like `simulation` for `conjecture` — "
             "resolve to the same underlying role but name different "
-            "provider profiles. The harness refuses this rather than "
-            "silently picking one ('never last-one-wins').",
-            "Give both group names the same profile, or bind only one of "
-            "them.",
+            "provider profiles. The form itself no longer refuses this "
+            "(all-configs-allowed, 2026-08-12); once seats are wired to a "
+            "run, the same precedence rule `seat_bindings.resolve_seat_bindings` "
+            "uses applies (a direct group beats an alias, then "
+            "alphabetically-later-group-wins).",
+            "Give both group names the same profile if you want the choice "
+            "to be unambiguous, or bind only one of them.",
         ),
         _entry(
             "INTAKE_CYCLES_CEILING_EXCEEDED",

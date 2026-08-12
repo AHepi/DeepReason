@@ -420,18 +420,10 @@ class BridgePolicy(BaseModel):
 
     @model_validator(mode="after")
     def _grounded_contract_is_complete(self):
-        if self.mode == "grounded_two_stage" and not all(
-            (
-                self.allow_partial,
-                self.allow_abstention,
-                self.require_claim_ledger,
-                self.require_claim_uses,
-            )
-        ):
-            raise ValueError(
-                "grounded_two_stage requires partial and abstention outcomes, "
-                "a claim ledger, and typed claim uses"
-            )
+        # The unresolved-success-safety combination (all-configs-allowed,
+        # 2026-08-12) is disclosed as a compile notice by
+        # _compile_bridge_policy, its only constructor with notice access;
+        # no field here has a runtime reader, so nothing needs restoring.
         if self.grounding_repair_role != self.reviewer_role:
             raise ValueError(
                 "grounding_repair_role must equal the frozen reviewer_role"
@@ -1172,6 +1164,32 @@ class TerminalCommitmentPolicyV1(BaseModel):
         return value
 
 
+class CompileNoticeV1(BaseModel):
+    """A configuration choice a prior gate would have refused at compile
+    time. Notices describe what the retired gate would have said; they
+    never block compilation (all-configs-allowed tranche, 2026-08-12)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    code: str = Field(min_length=1)
+    message: str = Field(min_length=1)
+    pointer: str = Field(min_length=1)
+    resolution: str | None = None
+
+
+def _emit_compile_notice(
+    sink: list[CompileNoticeV1],
+    code: str,
+    message: str,
+    pointer: str,
+    *,
+    resolution: str | None = None,
+) -> None:
+    sink.append(
+        CompileNoticeV1(code=code, message=message, pointer=pointer, resolution=resolution)
+    )
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
@@ -1212,6 +1230,7 @@ class RunManifest(BaseModel):
         RouteSeatContractDecompositionPlanV1 | None
     ) = None
     production_qualification_policy: ProductionQualificationPolicyV1 | None = None
+    compile_notices: tuple[CompileNoticeV1, ...] | None = None
     terminal_commitment_policy: TerminalCommitmentPolicyV1 | None = None
     run_input_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -1297,6 +1316,11 @@ class RunManifest(BaseModel):
             # Qualification authority is never inferred for historical v6
             # documents, and the field did not exist in v1-v5.
             payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or not self.compile_notices:
+            # Historical documents disclosed nothing merely by being loaded
+            # by a newer binary; a notice-free compile is byte-identical to
+            # every manifest compiled before this field existed.
+            payload.pop("compile_notices", None)
         if self.schema_version < 6 or self.terminal_commitment_policy is None:
             # Historical v6 documents gain no terminal authority merely by
             # being loaded by a newer binary.
@@ -1309,6 +1333,22 @@ class RunManifest(BaseModel):
 
     @model_validator(mode="after")
     def _production_routes_are_concrete(self):
+        # Notices this validator would add are deduped against notices
+        # already frozen on `self`: compile_run_manifest's own free-function
+        # checks run the identical rule before construction, so the first
+        # RunManifest(...) call and any later model_validate() round trip
+        # (schema v6's contract-decomposition/behavioral-plan passes) must
+        # never double-record the same disclosure.
+        new_notices: list[CompileNoticeV1] = []
+        existing_keys = {(n.code, n.pointer) for n in (self.compile_notices or ())}
+
+        def _emit_deduped(code: str, message: str, pointer: str) -> None:
+            key = (code, pointer)
+            if key in existing_keys:
+                return
+            existing_keys.add(key)
+            new_notices.append(CompileNoticeV1(code=code, message=message, pointer=pointer))
+
         if (
             self.schema_version < 4
             and "control_plane_policy" in self.model_fields_set
@@ -1396,16 +1436,18 @@ class RunManifest(BaseModel):
                 for task, role in required.items():
                     routes = self.roles.get(role, ())
                     if not routes:
-                        raise ValueError(
-                            f"BRIDGE_{task.upper()}_ROUTE_REQUIRED: "
-                            f"grounded bridge requires frozen role {role!r}"
+                        _emit_deduped(
+                            f"BRIDGE_{task.upper()}_ROUTE_REQUIRED",
+                            f"grounded bridge requires an explicit {role!r} route",
+                            f"/roles/{role}",
                         )
                 if bridge.grounding_review:
                     reviewer_routes = self.roles.get(bridge.reviewer_role, ())
                     if len(reviewer_routes) < bridge.reviewer_seats:
-                        raise ValueError(
-                            "BRIDGE_REVIEWER_SEATS_MISMATCH: frozen reviewer route "
-                            "count is smaller than reviewer_seats"
+                        _emit_deduped(
+                            "BRIDGE_REVIEWER_SEATS_MISMATCH",
+                            "frozen reviewer route count is smaller than reviewer_seats",
+                            f"/roles/{bridge.reviewer_role}",
                         )
             unknown_roles = set(self.roles) - set(V3_CANONICAL_ROLES)
             if unknown_roles:
@@ -1530,10 +1572,21 @@ class RunManifest(BaseModel):
             # model satisfy this, narrower than same-family so a
             # same-family-different-model pair still fails below.
             if len(families) < 2 and not (len(judge_routes) >= 2 and len(models) == 1):
-                raise ValueError(
-                    "SECOND_JUDGE_FAMILY_REQUIRED: require_cross_family needs "
-                    "at least two distinct judge families"
+                _emit_deduped(
+                    "SECOND_JUDGE_FAMILY_REQUIRED",
+                    "require_cross_family needs at least two distinct judge families",
+                    "/roles/judge",
                 )
+        if new_notices:
+            # `model_copy` from a top-level "after" validator is silently
+            # discarded when constructing via `__init__` (pydantic only
+            # honors a validator's replacement return value through
+            # `model_validate`); `object.__setattr__` bypasses this
+            # model's own `frozen=True` to set the derived field in place,
+            # which works identically through both construction paths.
+            object.__setattr__(
+                self, "compile_notices", (*(self.compile_notices or ()), *new_notices)
+            )
         return self
 
     def canonical_bytes(self) -> bytes:
@@ -1587,6 +1640,8 @@ class RunManifest(BaseModel):
             payload.pop("route_seat_contract_decomposition_plan", None)
         if self.schema_version < 6 or self.production_qualification_policy is None:
             payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or not self.compile_notices:
+            payload.pop("compile_notices", None)
         if self.schema_version < 6 or self.terminal_commitment_policy is None:
             payload.pop("terminal_commitment_policy", None)
         if self.criticism_policy is None:
@@ -2495,7 +2550,25 @@ def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any])
     return ScratchPolicy(**values)
 
 
-def _compile_bridge_policy(source, *, model_profile: str):
+def _compile_bridge_policy(source, *, model_profile: str, notices: list[CompileNoticeV1] | None = None):
+    if source.mode == "grounded_two_stage" and notices is not None:
+        disabled = [
+            name
+            for name in ("allow_partial", "allow_abstention", "require_claim_ledger", "require_claim_uses")
+            if not getattr(source, name)
+        ]
+        if disabled:
+            # No code in src/deepreason/ reads these four fields outside this
+            # check and its frozen-manifest twin (BridgePolicy's own
+            # validator below) -- disabling one changes no run behavior
+            # today, so the operator's literal values pass through unforced.
+            _emit_compile_notice(
+                notices,
+                "BRIDGE_UNRESOLVED_SUCCESS_SAFETY_DISABLED",
+                "grounded_two_stage requires unresolved-success-safe settings: "
+                + ", ".join(disabled),
+                "/bridge",
+            )
     output_section_limit = source.output_section_limit
     if model_profile == "compact":
         output_section_limit = min(output_section_limit, 12)
@@ -3013,12 +3086,19 @@ def compile_run_manifest(
     In single-model mode only the route explicitly carrying ``single_model``
     is consulted. Other provider entries are not discovered or used.
     """
+    notices: list[CompileNoticeV1] = []
     if judge_family and blind_same_model_judges:
-        raise RunManifestError(
+        # Precedence (all-configs-allowed, R4 rule 2): judge_family is an
+        # explicit request for a SPECIFIC second family, the stronger of the
+        # two diversity mechanisms; blind_same_model_judges is dropped.
+        _emit_compile_notice(
+            notices,
             "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT",
             "pass at most one of judge_family, blind_same_model_judges",
             "/roles/judge",
+            resolution="judge_family wins; blind_same_model_judges dropped",
         )
+        blind_same_model_judges = False
     explicit_config_profile = (
         "model_profile" in getattr(config, "model_fields_set", set())
         if not isinstance(config, dict)
@@ -3115,13 +3195,19 @@ def compile_run_manifest(
             "/criticism_policy",
         )
     if schema_version < 3 and scratch_source.enabled:
-        raise RunManifestError(
+        # scratch_policy is unconditionally popped below schema v3 (see
+        # _versioned_serialization); the compile proceeds without it.
+        _emit_compile_notice(
+            notices,
             "SCRATCH_MANIFEST_V3_REQUIRED",
             "scratchpad.enabled requires RunManifest schema v3",
             "/scratchpad/enabled",
         )
     if schema_version < 3 and bridge_source.mode == "grounded_two_stage":
-        raise RunManifestError(
+        # bridge_policy is unconditionally popped below schema v3; the
+        # compile proceeds with grounded-review dropped, not silently kept.
+        _emit_compile_notice(
+            notices,
             "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED",
             "grounded_two_stage requires RunManifest schema v3",
             "/bridge/mode",
@@ -3203,7 +3289,11 @@ def compile_run_manifest(
             required_roles["reviewer"] = bridge_source.reviewer_role
         for task, role in required_roles.items():
             if role not in configured_roles:
-                raise RunManifestError(
+                # The role stays absent from `roles`; the bridge policy still
+                # names it, so dispatching that stage fails typed at the
+                # first attempt (select_lease has no route for the role).
+                _emit_compile_notice(
+                    notices,
                     f"BRIDGE_{task.upper()}_ROUTE_REQUIRED",
                     f"grounded bridge requires an explicit {role!r} route",
                     f"/roles/{role}",
@@ -3279,7 +3369,8 @@ def compile_run_manifest(
         if len(families) < 2 and not (
             len(judge_routes) >= 2 and len(judge_models) == 1
         ):
-            raise RunManifestError(
+            _emit_compile_notice(
+                notices,
                 "SECOND_JUDGE_FAMILY_REQUIRED",
                 "rubric workloads require at least two frozen judge families; "
                 "supply --judge-family or use --rubric-policy forbid only for "
@@ -3300,7 +3391,7 @@ def compile_run_manifest(
         else None
     )
     bridge_policy = (
-        _compile_bridge_policy(bridge_source, model_profile=model_profile)
+        _compile_bridge_policy(bridge_source, model_profile=model_profile, notices=notices)
         if schema_version >= 3
         else None
     )
@@ -3376,6 +3467,7 @@ def compile_run_manifest(
         memory_policy=memory_policy or {},
         scratch_policy=scratch_policy,
         bridge_policy=bridge_policy,
+        compile_notices=tuple(notices) or None,
         source_config_hash=source_config_hash(data, schema_version=schema_version),
         compiled_at=stamp,
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),
