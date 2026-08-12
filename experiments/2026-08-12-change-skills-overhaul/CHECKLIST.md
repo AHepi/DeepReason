@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=14 blockers=none
+State: next=none (tranche complete, all 31 steps checked) blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -611,8 +611,13 @@ operator's word (step 11), never before.
       freshly mutation-proved). Errata: none, stated explicitly.
       2 PARKED entries reconciled with recommended-next.
 
-- [ ] 31. (S21) Final tree check and push: `git status --porcelain` ->
+- [x] 31. (S21) Final tree check and push: `git status --porcelain` ->
       empty; branch head confirmed on origin. [COMMIT if anything is
       still uncommitted; otherwise a verification-only step]
       done-when: `git status --porcelain` -> empty AND `git rev-parse
       HEAD origin/claude/skills-overhaul-vk2n8d` -> one shared hash.
+      PROOF: `git status --porcelain` -> empty. `git rev-parse HEAD` and
+      `git rev-parse origin/claude/skills-overhaul-vk2n8d` both ->
+      `8035a4ebf71a8c14af963c8debe085d7f2353a4b`. Verification-only;
+      no commit needed. Tranche complete: all 31 CHECKLIST.md steps
+      checked, DELIVERY.md's R-by-R reconciliation stands.
