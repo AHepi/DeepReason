@@ -439,8 +439,34 @@ per its own wording ("budget cap"), not the safety gates.
 
 Budget section above (S28/S29 arithmetic) stands as originally written
 for Phase A+B, which are already committed under it (838/900, 1468/2000,
-1598/2000 — all WITHIN, so the amendment changes no past verdict). Going
-forward: Phase C+D's per-commit ceiling (previously "gated by
+1598/2000 — all WITHIN, so the amendment changes no past verdict).
+
+## Amendment 2 (R25: correcting Amendment 1's referent)
+
+Reconciles REQUEST.md Amendment 2. Amendment 1 (above) read "budget
+cap" as `tools/diff_budget.py`'s `--ceiling` — the operator's immediate
+follow-up corrects this: "I meant your budget. It's imperative you do
+the best job possible. Token limits will prevent you from doing that."
+Stated plainly, per CLAUDE.md's Conventions ("say corrections plainly
+and move on"): that reading was wrong, and it was this session's own
+inference, not a defensible ambiguity the dominance test should have
+let through unchecked — logged as a miss, not defended. Correction
+applied: for the remainder of this tranche, thoroughness is not traded
+for token economy — CENSUS.md's exhaustive ~380-row rule extraction,
+the full evidence-binding pass, and this DESIGN.md's own level of
+detail are the CORRECT calibration to continue at, not a cost to trim
+going forward.
+
+No SPEC item changes as a result — R25 is a process instruction about
+HOW this tranche is executed, not a new artifact requirement, so it
+adds no new S-number. Amendment 1's mechanical action (`--ceiling`
+dropped from `tools/diff_budget.py`) is unaffected and continues
+exactly as specified above; only the JUSTIFICATION offered for it
+changes (it now stands on its own low-cost/zero-safety-loss merit,
+argued in Amendment 1's own text, rather than as an application of
+"remove budget cap").
+
+Going forward: Phase C+D's per-commit ceiling (previously "gated by
 `tools/diff_budget.py` at its own [COMMIT]") is superseded — those
 commits still run the tool for the record but are not blocked by a
 ceiling.
