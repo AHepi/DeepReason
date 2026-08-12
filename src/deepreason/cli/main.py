@@ -1923,7 +1923,11 @@ def _load_intake_file(path: str) -> dict:
 def _cmd_validate_intake(args) -> int:
     from pydantic import ValidationError
 
-    from deepreason.intake_form import IntakeFormV1, render_intake_validation_errors
+    from deepreason.intake_form import (
+        _LEADING_CODE,
+        IntakeFormV1,
+        render_intake_validation_errors,
+    )
 
     try:
         data = _load_intake_file(args.file)
@@ -1935,7 +1939,17 @@ def _cmd_validate_intake(args) -> int:
     except ValidationError as error:
         for line in render_intake_validation_errors(error):
             print(line, file=sys.stderr)
-        return 1
+        # All-configs-allowed (2026-08-12), R6: a typed CODE: violation (our
+        # own semantic checks, e.g. INTAKE_CYCLES_CEILING_EXCEEDED) is now
+        # advisory -- reported, never blocking. A parse/shape error (missing
+        # field, wrong type -- a non-input, not a configuration, per R2)
+        # still exits non-zero.
+        semantic_only = all(
+            isinstance(item.get("ctx", {}).get("error"), ValueError)
+            and _LEADING_CODE.match(str(item["ctx"]["error"])) is not None
+            for item in error.errors()
+        )
+        return 0 if semantic_only else 1
     print("OK")
     return 0
 

@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=13 blockers=none
+State: next=14 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -269,19 +269,25 @@ order. One step per `dr-execute-step` invocation.
       done-when: `python -m pytest tests/test_intake_form.py tests/test_error_catalog.py -q` passes, 0 failed.
       DONE: `17 passed`.
 
-- [ ] 13. (S-V1) [COMMIT] Convert `cli/main.py::_cmd_validate_intake`
-      (:1924-1941) to advisory per R6: always print the full
-      violation/notice report and return 0, EXCEPT when
-      `_load_intake_file` itself fails (unreadable file or non-object
-      JSON/YAML — `INTAKE_FILE_NOT_AN_OBJECT` and friends stay
-      non-zero-exit per R2, they are non-inputs not configurations).
-      Add a new CLI-level regression test (none exists today per the
-      census) asserting exit code 0 on a semantic violation and exit
-      code 1 on a parse failure. Confirm the MCP `validate_intake` tool
-      needs NO code change (already returns `{"ok": False, ...}` as
-      normal tool data — re-run `tests/test_mcp.py -k validate_intake`
-      to confirm unchanged).
+- [x] 13. (S-V1) [COMMIT] Convert `cli/main.py::_cmd_validate_intake`
+      to advisory per R6: report every violation and return 0, EXCEPT
+      when the violation set contains at least one genuine parse/shape
+      error (missing field, wrong type — a non-input per R2, still exit
+      1) or `_load_intake_file` itself fails. Implemented by classifying
+      each `ValidationError` item via `intake_form._LEADING_CODE`
+      (matches our own `"CODE: message"` raises) — all-semantic exits 0,
+      any-structural exits 1; a mixed set (one semantic, one structural)
+      correctly stays non-zero since the structural error is still real.
+      Added four CLI-level regression tests (none existed before, per the
+      census): valid file (exit 0), semantic violation — cycles ceiling —
+      (exit 0, message printed), missing required field (exit 1), and
+      unparseable file (exit 1). Confirmed MCP `validate_intake` needs no
+      change (`tests/test_mcp.py tests/test_mcp_help.py -q` all pass
+      unchanged — it already returns `{"ok": False, "violations": [...]}`
+      as ordinary tool data, per the census's own finding).
       done-when: new CLI test passes; `python -m pytest tests/test_mcp.py -q -k validate_intake` passes unchanged; commit and push.
+      DONE: `tests/test_intake_form.py tests/test_error_catalog.py -q` -> `21 passed`;
+      `tests/test_mcp.py tests/test_mcp_help.py -q` -> `89 passed`.
 
 - [ ] 14. (S-DOC) [COMMIT] Ledger REQUEST.md's two operator-verbatim
       statements (R1 and the superseded R1a) as a new standing entry in
