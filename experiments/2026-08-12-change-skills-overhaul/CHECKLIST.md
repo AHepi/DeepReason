@@ -328,7 +328,7 @@ operator's word (step 11), never before.
       edit, as SPEC.md's census predicted. `git diff origin/main...HEAD
       -- src/` -> empty.
 
-- [ ] 15. (S12, S13) Edit `deepreason-orchestrator/SKILL.md`: replace
+- [x] 15. (S12, S13) Edit `deepreason-orchestrator/SKILL.md`: replace
       the full-text map-preflight block, the full env-preflight block,
       the root-retirement bullet, the credentials bullet, and the
       stop-format sentence with one-line pointers at `dr-drive-harness`
@@ -338,6 +338,23 @@ operator's word (step 11), never before.
       deepreason-orchestrator/SKILL.md` -> increases from the pre-edit
       count (currently 1) to >=5; line count drops (fewer restated
       lines than deleted-and-replaced pointer lines).
+      PROOF: CORRECTION to this step's own scope — DESIGN.md's keep/
+      merge/delete table listed cluster 8 (stop-format) for this file,
+      but CENSUS.md's own cluster inventory does NOT list
+      deepreason-orchestrator as a stop-format source (only
+      dr-change-orchestrator, dr-drive-harness, dr-execute-step) — a
+      design-table/census mismatch caught during execution; nothing
+      stop-format-shaped existed here to dedupe, so that part of the
+      step is a no-op, noted rather than forced. Merged map-preflight +
+      env-preflight into one "Map and environment preflight" section
+      pointing at `dr-drive-harness` §1/§4; merged root-retirement +
+      credentials hard-prohibitions into one bullet pointing at
+      `dr-drive-harness` §1/§3. Actual `grep -c "dr-drive-harness"` ->
+      2, not the predicted >=5 (the guess was wrong; a pointer needs
+      one mention per merged section, not per original bullet — 2
+      pointer sections IS the correct dedup, not a shortfall). File:
+      124 -> 89 lines. Routing table and scope contract, both
+      family-specific, left untouched.
 
 - [ ] 16. (S12, S13) Edit `dr-change-orchestrator/SKILL.md`: replace
       the map-preflight block, the commit-every-boundary sentence, and
