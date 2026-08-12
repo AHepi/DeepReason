@@ -33,22 +33,25 @@ and forgotten inputs:
 Cross-routing: a defect found mid-change is PARKED, not fixed; a change
 wished for mid-defect is PARKED, not implemented. One tranche, one goal.
 
-Cutting across both families, two skills:
+Cutting across both families, three skills:
 
 - `dr-drive-harness` — the driving manual. Load it at the start of any
   session that runs, modifies, or diagnoses the harness: session
   preflight, the public CLI lifecycle, live-run ladder rules, and where
   to look before modifying (map order, frozen surfaces) or when
-  diagnosing (record first).
+  diagnosing (record first). Also the routing index for both families,
+  phase by phase, with the artifact each phase owns (§6).
 - `dr-ask-the-right-question` — question discipline. Load it before
   acting on any ambiguous or terse operator message, whenever a phase
   says "stop and ask", and whenever evidence contradicts your
   expectation: it routes each question to the cheapest authority
   (record → framework → operator) and kills false forks before they
   spend operator attention.
-
-`.claude/skills/README.md` is the index of the whole skill set — both
-families phase by phase, with the artifact each phase owns.
+- `dr-explain-to-operator` — communication discipline. Load it once per
+  session, before the first message the operator will see: worry-first,
+  technical terms glossed in-line on every intermediary message, and
+  exactly one closing analogy on every final output (detailed further
+  in Conventions below).
 
 ## Environment (cloud container — read first, every session)
 

@@ -303,7 +303,7 @@ operator's word (step 11), never before.
       lives" SKILL.md` -> found (case-insensitive; source uses
       sentence case).
 
-- [ ] 14. (S12, S16) Delete `.claude/skills/README.md`, and in the SAME
+- [x] 14. (S12, S16) Delete `.claude/skills/README.md`, and in the SAME
       commit update CLAUDE.md's "Which workflow to use" section to
       remove its now-dangling sentence naming `.claude/skills/
       README.md` as "the index of the whole skill set" (replace with a
@@ -313,6 +313,20 @@ operator's word (step 11), never before.
       "README.md" CLAUDE.md` -> false (no dangling reference); both
       changes in one commit (`git show --stat <sha>` touches both
       paths).
+      PROOF: `git rm .claude/skills/README.md` -> deleted; CLAUDE.md
+      diff confirmed entirely within "## Which workflow to use"
+      (lines 11-55, before the "## Environment" heading at 56) —
+      `git diff --cached CLAUDE.md` pasted and checked. BONUS in-scope
+      fix while editing this exact section: `dr-explain-to-operator`
+      was missing from the "Cutting across both families" list (only
+      mentioned later, in Conventions) despite being a real, evidenced,
+      heavily-used cross-cutting skill — added as the third entry,
+      directly serving R17's own purpose (this section should
+      accurately describe the current skill set). blast_radius CLEAR;
+      the one real map check on CLAUDE.md (`SUB-harness.md:33`, which
+      greps the Frozen-surfaces section) re-verified passing after the
+      edit, as SPEC.md's census predicted. `git diff origin/main...HEAD
+      -- src/` -> empty.
 
 - [ ] 15. (S12, S13) Edit `deepreason-orchestrator/SKILL.md`: replace
       the full-text map-preflight block, the full env-preflight block,
