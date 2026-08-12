@@ -164,17 +164,21 @@ One step per dr-execute-step invocation.
       Re-running the full gate as step 23b to confirm the corrected
       baseline.
 
-- [ ] 23b. (Amendment 1) Full gate re-run after the
+- [x] 23b. (Amendment 1) Full gate re-run after the
       `test_public_v6_facade.py` fix.
-      done-when: output ends "N passed, N failed" (paste it); accept bar
-      is exactly the 1 known `test_bronze_report` pre-existing failure,
-      0 others.
+      done: `1 failed, 3529 passed, 7 skipped in 674.15s (0:11:14)`.
+      The sole failure is `test_bronze_report.py::
+      test_census_totals_internally_consistent` — exactly the known
+      pre-existing baseline (REQUEST.md GATE clause). 0 NEW failures.
+      3529 vs the first run's 3528 = the test-split in Amendment 1 (one
+      test became two).
 
-- [ ] 24. (S6/R9) Confirm the errata check's "none" finding one more time
-      against the final tree (cheap re-run; SPEC.md S6 already performed
-      the search — this step is the record of having re-run it at
-      delivery time, not a new search).
-      done-when: `grep -rli "should have been removed\|already removed\|scheduled for removal" docs/ experiments/*/RESULTS.md experiments/*/DELIVERY*.md 2>/dev/null | xargs -r grep -l "200,000\|token.budget\|token_budget" 2>/dev/null` prints nothing (confirms no committed doc both claims prior removal AND is about this ceiling).
+- [x] 24. (S6/R9) Confirmed the errata check's "none" finding against the
+      final tree.
+      done: empty stdout — no committed document both claims prior
+      removal AND is about this ceiling. "errata: none" stands (recorded
+      in DELIVERY.md, not docs/ERRATA.md, per R9's own no-claim-found
+      branch).
 
 - [ ] 25. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
