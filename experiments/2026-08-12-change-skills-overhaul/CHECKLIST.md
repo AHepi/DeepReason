@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=2 blockers=none
+State: next=3 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -25,7 +25,7 @@ order. One step per dr-execute-step invocation.
       no output (all 19 files present as rows). Total 2041 lines across
       19 files (`wc -l`), tabled.
 
-- [ ] 2. (S4) Build CENSUS.md "Rule extraction" section: every
+- [x] 2. (S4) Build CENSUS.md "Rule extraction" section: every
       imperative sentence in every skill file gets an ID
       (`<skillslug>-<n>`), tabled with source file:line, flagged per
       authoring-skills S3 (duplicated across files) / W3 (negation, no
@@ -36,6 +36,16 @@ order. One step per dr-execute-step invocation.
       (`awk -F'|' '{print $1}' <rule-table-slice> | sort | uniq -d` ->
       empty) and a 5-row spot sample resolves to real `file:line`
       matches via `git grep -n`.
+      PROOF: ~380 rows across 19 files (agent-assisted extraction,
+      author-reviewed). ID-uniqueness check: `grep -oE '^\| [A-Za-z0-9_.-]+
+      \|' CENSUS.md | sed 's/| //;s/ |//' | sort | uniq -d` -> only the
+      literal table-header word "ID" repeats (19 headers, one per
+      per-file table) — zero actual rule-ID collisions. 5-row spot check
+      against real files (README.md:50, dr-diagnose:13,
+      dr-execute-step:44, dr-verify-outcome:33, dr-execute-step:4) all
+      confirmed accurate. One flag corrected on review (dr-execute-step-4:
+      S1 -> none, see CENSUS.md Method note). Ten S3 duplication clusters
+      identified and named.
 
 - [ ] 3. (S5, R6) Build CENSUS.md "Evidence binding" section: one row
       per SKILL naming committed failures it demonstrably prevents,
