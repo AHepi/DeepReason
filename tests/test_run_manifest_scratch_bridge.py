@@ -355,30 +355,41 @@ def test_v3_runtime_reconstruction_uses_only_frozen_roles(monkeypatch):
     assert loaded.provider_fallback is False
 
 
-def test_new_features_require_v3_before_any_route_resolution(monkeypatch):
+def test_new_features_below_v3_compile_with_a_notice_instead_of_refusing(monkeypatch):
+    """All-configs-allowed (2026-08-12): a v3+ feature requested below schema
+    v3 used to refuse before any route resolution; it now compiles with a
+    typed CompileNoticeV1 disclosing exactly what the retired gate said, and
+    the feature is still dropped (scratch_policy/bridge_policy stay popped
+    below v3, unchanged)."""
     monkeypatch.setattr(
         "deepreason.run_manifest.resolve_model",
-        lambda *_args: pytest.fail("v3 feature rejection reached route resolution"),
+        lambda *_args: pytest.fail("v3 feature notice path reached route resolution"),
     )
-    with pytest.raises(RunManifestError) as scratch_error:
-        compile_run_manifest(
-            Config(scratchpad={"enabled": True}),
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="forbid",
-            compiled_at=STAMP,
-        )
-    assert scratch_error.value.code == "SCRATCH_MANIFEST_V3_REQUIRED"
+    scratch_manifest = compile_run_manifest(
+        Config(scratchpad={"enabled": True}),
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    assert scratch_manifest.scratch_policy is None
+    assert [n.code for n in scratch_manifest.compile_notices] == [
+        "SCRATCH_MANIFEST_V3_REQUIRED"
+    ]
+    assert scratch_manifest.compile_notices[0].pointer == "/scratchpad/enabled"
 
-    with pytest.raises(RunManifestError) as bridge_error:
-        compile_run_manifest(
-            Config(bridge={"mode": "grounded_two_stage"}),
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="forbid",
-            compiled_at=STAMP,
-        )
-    assert bridge_error.value.code == "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"
+    bridge_manifest = compile_run_manifest(
+        Config(bridge={"mode": "grounded_two_stage"}),
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    assert bridge_manifest.bridge_policy is None
+    assert [n.code for n in bridge_manifest.compile_notices] == [
+        "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"
+    ]
+    assert bridge_manifest.compile_notices[0].pointer == "/bridge/mode"
 
 
 def test_v3_canonical_json_contains_no_runtime_route_selection_fields():

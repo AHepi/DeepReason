@@ -3150,13 +3150,19 @@ def compile_run_manifest(
             "/criticism_policy",
         )
     if schema_version < 3 and scratch_source.enabled:
-        raise RunManifestError(
+        # scratch_policy is unconditionally popped below schema v3 (see
+        # _versioned_serialization); the compile proceeds without it.
+        _emit_compile_notice(
+            notices,
             "SCRATCH_MANIFEST_V3_REQUIRED",
             "scratchpad.enabled requires RunManifest schema v3",
             "/scratchpad/enabled",
         )
     if schema_version < 3 and bridge_source.mode == "grounded_two_stage":
-        raise RunManifestError(
+        # bridge_policy is unconditionally popped below schema v3; the
+        # compile proceeds with grounded-review dropped, not silently kept.
+        _emit_compile_notice(
+            notices,
             "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED",
             "grounded_two_stage requires RunManifest schema v3",
             "/bridge/mode",

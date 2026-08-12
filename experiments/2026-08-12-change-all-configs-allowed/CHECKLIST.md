@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=2 blockers=none
+State: next=4 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -25,7 +25,7 @@ order. One step per `dr-execute-step` invocation.
       `134 passed`. No map document change needed (no caller-visible
       behavior changed yet — the field is written but nothing reads it).
 
-- [ ] 2. (S-B1) Convert `GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED`
+- [x] 2. (S-B1) Convert `GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED`
       (`compile_run_manifest` :3123) from `raise` to
       `_emit_compile_notice(notices, ...)`, no other change to control
       flow (the field is already unconditionally popped for
@@ -35,11 +35,24 @@ order. One step per `dr-execute-step` invocation.
       NOW compiles and `manifest.compile_notices[0].code ==
       "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"`.
       done-when: `python -m pytest tests/test_run_manifest_scratch_bridge.py -q` passes, 0 failed.
+      DONE (executed together with step 3, same site cluster):
+      `test_new_features_require_v3_before_any_route_resolution` renamed
+      to `test_new_features_below_v3_compile_with_a_notice_instead_of_refusing`,
+      asserts compile succeeds, `bridge_policy is None` (feature still
+      dropped, unchanged), and `compile_notices[0].code ==
+      "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED"`.
+      `tests/test_run_manifest_scratch_bridge.py -q`: `23 passed`.
 
-- [ ] 3. (S-B2) Convert `SCRATCH_MANIFEST_V3_REQUIRED`
+- [x] 3. (S-B2) Convert `SCRATCH_MANIFEST_V3_REQUIRED`
       (`compile_run_manifest` :3117) the same way. Find and rewrite its
       pinned test analogously (grep `tests/` for the code first).
       done-when: `python -m pytest tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest.py -q -k scratch` passes, 0 failed.
+      DONE (same commit as step 2 — one test guarded both codes).
+      Broader ring (`tests/test_run_manifest.py
+      tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest_v4.py
+      tests/test_v6_only_manifest_loading.py`): `134 passed`. No other
+      `tests/`/`docs/map/` reference to either code expected a raise
+      (grepped both before committing).
 
 - [ ] 4. (S-B3) Convert `BRIDGE_LEDGER_ROUTE_REQUIRED` /
       `_COMPOSER_ROUTE_REQUIRED` / `_REVIEWER_ROUTE_REQUIRED` at BOTH
