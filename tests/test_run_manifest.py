@@ -310,11 +310,31 @@ def test_blind_same_model_judges_gives_judge_a_second_identical_seat():
 
 
 def test_blind_same_model_judges_conflicts_with_judge_family():
-    with pytest.raises(RunManifestError, match="JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT"):
-        compile_run_manifest(
-            _config(), single_model="gemma4:31b", judge_family="second-route",
-            blind_same_model_judges=True, rubric_policy="forbid", compiled_at=STAMP,
-        )
+    """All-configs-allowed (2026-08-12): judge_family and
+    blind_same_model_judges used to refuse together; judge_family (the
+    explicit request for a specific second family) now wins deterministically
+    and the drop is disclosed as a compile notice, not a refusal."""
+    configured = _config().model_copy(deep=True)
+    configured.roles["judge"] = [
+        _route(),
+        {
+            "endpoint": "https://second.invalid/v1",
+            "endpoint_id": "second-route",
+            "model": "qwen3:32b",
+            "provider": "generic",
+            "family": "qwen",
+        },
+    ]
+    manifest = compile_run_manifest(
+        configured, single_model="gemma4:31b", judge_family="second-route",
+        blind_same_model_judges=True, rubric_policy="forbid", compiled_at=STAMP,
+    )
+    assert [route.family for route in manifest.roles["judge"]] == ["gemma", "qwen"]
+    notice = next(
+        n for n in manifest.compile_notices
+        if n.code == "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT"
+    )
+    assert notice.resolution == "judge_family wins; blind_same_model_judges dropped"
 
 
 def test_decoy_provider_is_not_resolved_or_copied_in_single_model_mode(monkeypatch):
@@ -610,13 +630,17 @@ def test_source_profiles_compile_orthogonally_and_reconstruct():
     assert frontier.concurrency == 4
 
 
-def test_cross_family_rubric_policy_fails_preflight_for_one_family():
-    with pytest.raises(RunManifestError, match="SECOND_JUDGE_FAMILY_REQUIRED") as raised:
-        compile_run_manifest(
-            _config(), single_model="gemma4:31b",
-            rubric_policy="require_cross_family", compiled_at=STAMP,
-        )
-    assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
+def test_cross_family_rubric_policy_compiles_with_a_notice_for_one_family():
+    """All-configs-allowed (2026-08-12): a single-family judge ensemble under
+    require_cross_family used to refuse before route resolution; it now
+    compiles (the single judge route is frozen exactly as configured) with a
+    typed notice disclosing the same code the retired gate raised."""
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b",
+        rubric_policy="require_cross_family", compiled_at=STAMP,
+    )
+    assert len(manifest.roles["judge"]) == 1
+    assert [n.code for n in manifest.compile_notices] == ["SECOND_JUDGE_FAMILY_REQUIRED"]
 
 
 def test_blind_same_model_judges_satisfies_require_cross_family_default():
@@ -640,17 +664,19 @@ def test_judge_seats_opt_in_does_not_bypass_cross_family_requirement():
     require_cross_family_judges/rubric_policy="require_cross_family", the
     compile-time judge-diversity guarantee. Turning judge seats on must
     not, by itself, satisfy or bypass that guarantee: a genuinely single-
-    family run still refuses typed at the same compile-time layer it does
-    today, identically to test_cross_family_rubric_policy_fails_preflight_
-    for_one_family above (same config shape, plus the new opt-in flag)."""
+    family run still gets the identical typed notice as
+    test_cross_family_rubric_policy_compiles_with_a_notice_for_one_family
+    above (same config shape, plus the new opt-in flag) -- the guarantee's
+    disclosure is unaffected by JUDGE_SEATS_ENABLED
+    (all-configs-allowed, 2026-08-12: was a refusal, now a notice)."""
     config = _config()
     config.JUDGE_SEATS_ENABLED = True
-    with pytest.raises(RunManifestError, match="SECOND_JUDGE_FAMILY_REQUIRED") as raised:
-        compile_run_manifest(
-            config, single_model="gemma4:31b",
-            rubric_policy="require_cross_family", compiled_at=STAMP,
-        )
-    assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
+    manifest = compile_run_manifest(
+        config, single_model="gemma4:31b",
+        rubric_policy="require_cross_family", compiled_at=STAMP,
+    )
+    assert len(manifest.roles["judge"]) == 1
+    assert [n.code for n in manifest.compile_notices] == ["SECOND_JUDGE_FAMILY_REQUIRED"]
 
 
 def test_second_explicit_family_is_allowed_without_fallback():
@@ -947,11 +973,25 @@ def test_cli_blind_same_model_judges_flag_reaches_the_compiled_manifest(tmp_path
 
 
 def test_cli_judge_family_and_blind_same_model_judges_conflict(tmp_path, capsys):
+    """All-configs-allowed (2026-08-12): the CLI no longer refuses this flag
+    pair itself; compile_run_manifest's own judge_family-wins precedence
+    resolves it and the drop is disclosed as a NOTICE line on stderr."""
     from deepreason.cli.main import main
     from tests.test_run_input_v6_commitments import _control
 
+    configured = _config().model_copy(deep=True)
+    configured.roles["judge"] = [
+        _route(),
+        {
+            "endpoint": "https://second.invalid/v1",
+            "endpoint_id": "second-route",
+            "model": "qwen3:32b",
+            "provider": "generic",
+            "family": "qwen",
+        },
+    ]
     config_path = tmp_path / "config.json"
-    config_path.write_text(_config().model_dump_json())
+    config_path.write_text(configured.model_dump_json())
     control_path = tmp_path / "control-plane-v3.json"
     control_path.write_text(_control(6).model_dump_json())
     manifest_path = tmp_path / "manifest.json"
@@ -965,9 +1005,9 @@ def test_cli_judge_family_and_blind_same_model_judges_conflict(tmp_path, capsys)
             "--control-plane-policy", str(control_path),
             "--run-input-digest", "f" * 64,
         ]
-    ) == 1
-    assert "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT" in capsys.readouterr().err
-    assert not manifest_path.exists()
+    ) == 0
+    assert "NOTICE JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT" in capsys.readouterr().err
+    assert manifest_path.exists()
 
 
 def test_school_seats_disabled_by_default_is_byte_identical():

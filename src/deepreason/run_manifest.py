@@ -1341,6 +1341,22 @@ class RunManifest(BaseModel):
 
     @model_validator(mode="after")
     def _production_routes_are_concrete(self):
+        # Notices this validator would add are deduped against notices
+        # already frozen on `self`: compile_run_manifest's own free-function
+        # checks run the identical rule before construction, so the first
+        # RunManifest(...) call and any later model_validate() round trip
+        # (schema v6's contract-decomposition/behavioral-plan passes) must
+        # never double-record the same disclosure.
+        new_notices: list[CompileNoticeV1] = []
+        existing_keys = {(n.code, n.pointer) for n in (self.compile_notices or ())}
+
+        def _emit_deduped(code: str, message: str, pointer: str) -> None:
+            key = (code, pointer)
+            if key in existing_keys:
+                return
+            existing_keys.add(key)
+            new_notices.append(CompileNoticeV1(code=code, message=message, pointer=pointer))
+
         if (
             self.schema_version < 4
             and "control_plane_policy" in self.model_fields_set
@@ -1428,16 +1444,18 @@ class RunManifest(BaseModel):
                 for task, role in required.items():
                     routes = self.roles.get(role, ())
                     if not routes:
-                        raise ValueError(
-                            f"BRIDGE_{task.upper()}_ROUTE_REQUIRED: "
-                            f"grounded bridge requires frozen role {role!r}"
+                        _emit_deduped(
+                            f"BRIDGE_{task.upper()}_ROUTE_REQUIRED",
+                            f"grounded bridge requires an explicit {role!r} route",
+                            f"/roles/{role}",
                         )
                 if bridge.grounding_review:
                     reviewer_routes = self.roles.get(bridge.reviewer_role, ())
                     if len(reviewer_routes) < bridge.reviewer_seats:
-                        raise ValueError(
-                            "BRIDGE_REVIEWER_SEATS_MISMATCH: frozen reviewer route "
-                            "count is smaller than reviewer_seats"
+                        _emit_deduped(
+                            "BRIDGE_REVIEWER_SEATS_MISMATCH",
+                            "frozen reviewer route count is smaller than reviewer_seats",
+                            f"/roles/{bridge.reviewer_role}",
                         )
             unknown_roles = set(self.roles) - set(V3_CANONICAL_ROLES)
             if unknown_roles:
@@ -1562,10 +1580,21 @@ class RunManifest(BaseModel):
             # model satisfy this, narrower than same-family so a
             # same-family-different-model pair still fails below.
             if len(families) < 2 and not (len(judge_routes) >= 2 and len(models) == 1):
-                raise ValueError(
-                    "SECOND_JUDGE_FAMILY_REQUIRED: require_cross_family needs "
-                    "at least two distinct judge families"
+                _emit_deduped(
+                    "SECOND_JUDGE_FAMILY_REQUIRED",
+                    "require_cross_family needs at least two distinct judge families",
+                    "/roles/judge",
                 )
+        if new_notices:
+            # `model_copy` from a top-level "after" validator is silently
+            # discarded when constructing via `__init__` (pydantic only
+            # honors a validator's replacement return value through
+            # `model_validate`); `object.__setattr__` bypasses this
+            # model's own `frozen=True` to set the derived field in place,
+            # which works identically through both construction paths.
+            object.__setattr__(
+                self, "compile_notices", (*(self.compile_notices or ()), *new_notices)
+            )
         return self
 
     def canonical_bytes(self) -> bytes:
@@ -3049,11 +3078,17 @@ def compile_run_manifest(
     """
     notices: list[CompileNoticeV1] = []
     if judge_family and blind_same_model_judges:
-        raise RunManifestError(
+        # Precedence (all-configs-allowed, R4 rule 2): judge_family is an
+        # explicit request for a SPECIFIC second family, the stronger of the
+        # two diversity mechanisms; blind_same_model_judges is dropped.
+        _emit_compile_notice(
+            notices,
             "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT",
             "pass at most one of judge_family, blind_same_model_judges",
             "/roles/judge",
+            resolution="judge_family wins; blind_same_model_judges dropped",
         )
+        blind_same_model_judges = False
     explicit_config_profile = (
         "model_profile" in getattr(config, "model_fields_set", set())
         if not isinstance(config, dict)
@@ -3244,7 +3279,11 @@ def compile_run_manifest(
             required_roles["reviewer"] = bridge_source.reviewer_role
         for task, role in required_roles.items():
             if role not in configured_roles:
-                raise RunManifestError(
+                # The role stays absent from `roles`; the bridge policy still
+                # names it, so dispatching that stage fails typed at the
+                # first attempt (select_lease has no route for the role).
+                _emit_compile_notice(
+                    notices,
                     f"BRIDGE_{task.upper()}_ROUTE_REQUIRED",
                     f"grounded bridge requires an explicit {role!r} route",
                     f"/roles/{role}",
@@ -3320,7 +3359,8 @@ def compile_run_manifest(
         if len(families) < 2 and not (
             len(judge_routes) >= 2 and len(judge_models) == 1
         ):
-            raise RunManifestError(
+            _emit_compile_notice(
+                notices,
                 "SECOND_JUDGE_FAMILY_REQUIRED",
                 "rubric workloads require at least two frozen judge families; "
                 "supply --judge-family or use --rubric-policy forbid only for "

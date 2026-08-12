@@ -242,7 +242,12 @@ def test_v3_policy_is_deeply_immutable():
         manifest.bridge_policy.max_grounding_repair_attempts = 0
 
 
-def test_grounded_review_requires_explicit_reviewer_before_route_resolution(monkeypatch):
+def test_grounded_review_missing_reviewer_compiles_with_a_notice(monkeypatch):
+    """All-configs-allowed (2026-08-12): a missing required bridge role used
+    to refuse before any route resolution; it now compiles (the configured
+    roles resolve normally, the missing 'judge' role stays an empty route
+    tuple -- not fabricated) with a typed notice at the same code/pointer the
+    retired gate raised."""
     config = _grounded_config(
         roles={
             "summarizer": _route(),
@@ -250,13 +255,14 @@ def test_grounded_review_requires_explicit_reviewer_before_route_resolution(monk
         }
     )
     monkeypatch.setattr(
-        "deepreason.run_manifest.resolve_model",
-        lambda *_args: pytest.fail("missing reviewer reached route resolution"),
+        "deepreason.run_manifest.resolve_model", lambda model, *_rest: model,
     )
-    with pytest.raises(RunManifestError) as raised:
-        _compile(config)
-    assert raised.value.code == "BRIDGE_REVIEWER_ROUTE_REQUIRED"
-    assert raised.value.pointer == "/roles/judge"
+    manifest = _compile(config)
+    assert manifest.roles["judge"] == ()
+    notice = next(
+        n for n in manifest.compile_notices if n.code == "BRIDGE_REVIEWER_ROUTE_REQUIRED"
+    )
+    assert notice.pointer == "/roles/judge"
 
 
 def test_grounded_review_can_freeze_seat_zero_of_cross_family_judges():

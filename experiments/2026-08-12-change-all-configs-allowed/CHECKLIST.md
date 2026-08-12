@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=4 blockers=none
+State: next=8 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -54,44 +54,94 @@ order. One step per `dr-execute-step` invocation.
       `tests/`/`docs/map/` reference to either code expected a raise
       (grepped both before committing).
 
-- [ ] 4. (S-B3) Convert `BRIDGE_LEDGER_ROUTE_REQUIRED` /
+- [x] 4. (S-B3) Convert `BRIDGE_LEDGER_ROUTE_REQUIRED` /
       `_COMPOSER_ROUTE_REQUIRED` / `_REVIEWER_ROUTE_REQUIRED` at BOTH
-      sites together: `compile_run_manifest` (:3204-3210) and the
-      frozen model's own `_production_routes_are_concrete` (:1399-1402,
-      via `self.model_copy(update={"compile_notices": ...})`, since the
-      model is frozen and an "after" validator returns a new instance
-      rather than mutating `self`). Rewrite
-      `tests/test_run_manifest_scratch_bridge.py::test_grounded_review_requires_explicit_reviewer_before_route_resolution`
-      (and any sibling ledger/composer test) to assert compile-with-notice.
+      sites together: `compile_run_manifest` and the frozen model's own
+      `_production_routes_are_concrete`.
       done-when: `python -m pytest tests/test_run_manifest_scratch_bridge.py -q` passes, 0 failed.
+      DONE, with a design correction found during execution: an "after"
+      model validator's `self.model_copy(update=...)` is SILENTLY
+      DISCARDED by pydantic when the model is constructed via `__init__`
+      (only honored via `model_validate`) — confirmed empirically (a
+      `UserWarning` fires and `compile_notices` stays `None`). Since
+      `compile_run_manifest` constructs via `RunManifest(...)` (i.e.
+      `__init__`), this would have silently dropped every notice this
+      validator alone is responsible for on any manifest NOT going
+      through `compile_run_manifest`'s own pre-check (e.g. a future
+      direct `RunManifest(...)` construction or `.model_validate()` of a
+      hand-built payload). Fixed by using `object.__setattr__(self,
+      "compile_notices", ...)` instead of `model_copy` — verified
+      correct via BOTH `RunManifest(**payload)` and
+      `RunManifest.model_validate(payload)` directly (no warning, notice
+      present in both). Renamed
+      `test_grounded_review_requires_explicit_reviewer_before_route_resolution`
+      to `test_grounded_review_missing_reviewer_compiles_with_a_notice`
+      (the "before any route resolution" guarantee is gone by design —
+      the OTHER configured roles now resolve normally; only the missing
+      role's absence and the notice are asserted).
 
-- [ ] 5. (S-B4) Convert `BRIDGE_REVIEWER_SEATS_MISMATCH`
-      (`_production_routes_are_concrete` :1406-1409) the same way.
-      Rewrite its pinned test (grep `tests/` for the code first).
+- [x] 5. (S-B4) Convert `BRIDGE_REVIEWER_SEATS_MISMATCH`
+      (`_production_routes_are_concrete`) the same way.
       done-when: `python -m pytest tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest.py -q` passes, 0 failed.
+      DONE together with step 4 (same `_emit_deduped` helper, same
+      dedup-on-(code,pointer) mechanism to avoid double-recording across
+      the schema-v6 `model_validate` round trips in
+      `_compile_route_seat_contract_decomposition_plan`/
+      `_compile_route_seat_behavioral_capability_plan`).
 
-- [ ] 6. (S-B5) Convert `SECOND_JUDGE_FAMILY_REQUIRED` at all three
-      sites together (`compile_run_manifest` :3282-3288,
-      `_production_routes_are_concrete` :1532-1536, the
-      `preflight_harness` rubric re-check :3872-3876) — they enforce one
-      rule at three call points and must move together per SPEC §3.1.
-      Rewrite `tests/test_run_manifest.py::test_cross_family_rubric_policy_fails_preflight_for_one_family`,
-      `test_judge_seats_opt_in_does_not_bypass_cross_family_requirement`,
-      and `test_materialized_rubric_reference_is_preflighted_on_resume`
-      to assert compile-with-notice at each of the three sites.
+- [x] 6. (S-B5) Convert `SECOND_JUDGE_FAMILY_REQUIRED` at the two sites
+      SPEC named that actually construct/validate a manifest
+      (`compile_run_manifest`, `_production_routes_are_concrete`).
       done-when: `python -m pytest tests/test_run_manifest.py -q -k "cross_family or rubric"` passes, 0 failed.
+      CORRECTION found during execution: SPEC's third named site
+      ("preflight_harness's rubric re-check") does not exist as
+      described — the actual third site is `preflight_payload`
+      (`RUBRIC_INPUT_FORBIDDEN` + `SECOND_JUDGE_FAMILY_REQUIRED`, called
+      against an ALREADY-COMPILED, frozen manifest with no field to
+      attach a notice to and no return-value contract for one; converting
+      it would require a signature change across every caller, out of
+      this tranche's tier-1 budget). Left as a hard error, NOT converted
+      — moved from CONVERT-T1 to STAYS-FOR-NOW in SPEC's own terms; see
+      SPEC §3.1 addendum. A FOURTH occurrence was also found mid-search
+      (`_select_second_judge_spec`, run_manifest.py — refuses when a
+      `--judge-family` selector resolves to a route sharing the primary
+      family): also NOT converted, recorded as a discovered-but-deferred
+      site rather than silently folded in.
+      Rewrote `test_cross_family_rubric_policy_fails_preflight_for_one_family`
+      (renamed `test_cross_family_rubric_policy_compiles_with_a_notice_for_one_family`)
+      and `test_judge_seats_opt_in_does_not_bypass_cross_family_requirement`
+      to assert compile-with-notice. `tests/test_run_manifest.py -q -k "cross_family or rubric"`: passed.
 
-- [ ] 7. (S-B6) [COMMIT] Convert `JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT`
-      at both its sites (`run_manifest.py::compile_run_manifest` :3016-3021
-      and `cli/main.py`'s `config compile` branch :822-828) to the
-      precedence rule in SPEC §4 rule 2: `judge_family` wins,
-      `blind_same_model_judges` is dropped, notice carries
+- [x] 7. (S-B6) [COMMIT] Convert `JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT`
+      at both its sites (`run_manifest.py::compile_run_manifest` and
+      `cli/main.py`'s `config compile` branch) to the precedence rule in
+      SPEC §4 rule 2: `judge_family` wins, `blind_same_model_judges` is
+      dropped, notice carries
       `resolution="judge_family wins; blind_same_model_judges dropped"`.
-      Rewrite `tests/test_run_manifest.py::test_blind_same_model_judges_conflicts_with_judge_family`
-      and `test_cli_judge_family_and_blind_same_model_judges_conflict`.
-      Run the subsystem ring and commit steps 1-7 together (the whole
-      `run_manifest.py`/bridge/judge-family cluster is one coherent unit).
-      done-when: `python -m pytest tests/test_run_manifest.py tests/test_run_manifest_scratch_bridge.py -q` output ends "N passed, 0 failed" (paste it), then `git add -A && git commit -m "..." && git push`.
+      The now-redundant CLI-level pre-check was removed (compile_run_manifest
+      applies the rule unconditionally); `config compile` now prints
+      `NOTICE <code>: <message>` to stderr for every notice on the
+      compiled manifest. Rewrote
+      `tests/test_run_manifest.py::test_blind_same_model_judges_conflicts_with_judge_family`
+      and `test_cli_judge_family_and_blind_same_model_judges_conflict`
+      (both needed a genuinely second-family judge route added to their
+      fixture config — the original fixture's identical judge routes
+      would otherwise hit the undiscussed 4th
+      `SECOND_JUDGE_FAMILY_REQUIRED`-adjacent site from step 6's note).
+      done-when: `python -m pytest tests/test_run_manifest.py tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest_v4.py tests/test_v6_only_manifest_loading.py -q` -> `134 passed`.
+      Additional due-diligence (not required by SPEC, run out of caution):
+      the SAME grounded/missing-judge config at `schema_version=6` (not
+      3) hits a DIFFERENT, unconverted site,
+      `V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED` in
+      `_compile_route_seat_behavioral_capability_plan` — a v6-only
+      downstream consequence of the same missing route, discovered by
+      running the scenario, not from the census. NOT converted (out of
+      scope for this tranche): recorded as a known gap in DELIVERY.md.
+      R2's "any input that parses compiles" therefore holds for a
+      grounded-bridge config missing a role at schema_version<6 today;
+      schema_version=6 with the SAME missing role still refuses at this
+      one additional, newly-identified site.
+      Ring: `python -m pytest tests/test_v6_route_seat_behavioral_capability_plan.py tests/test_v6_contract_schema_repair_policy.py tests/test_foreign_criticism_policy_c3.py tests/test_run_manifest_v5_inquiry.py -q` -> `64 passed` (no regression elsewhere from the dedup/object.__setattr__ change).
 
 - [ ] 8. (S-B7) Reproduce SPEC §1's two grounded-extension blocks against
       the now-converted code and confirm both compile clean with
