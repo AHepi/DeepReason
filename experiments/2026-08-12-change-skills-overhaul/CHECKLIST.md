@@ -233,3 +233,205 @@ order. One step per dr-execute-step invocation.
 
 Steps 13+ do not exist yet — they are authored by step 12, after the
 operator's word (step 11), never before.
+
+- [x] 12. (S12-S22, gated on step 11) Re-plan Phase C/D — this second
+      `dr-plan-steps` pass, using DESIGN.md's fixed keep/merge/delete
+      table, new-set table, router design, and gate table as input.
+      done-when: CHECKLIST.md updated with concrete numbered steps
+      (13+), each citing an S-number, committed and pushed.
+      PROOF: steps 13-31 appended below. Scope decisions made in this
+      pass, each recorded so a fresh reader does not have to re-derive
+      them:
+      - S17 (docs/ERRATA.md): Phase A/B found duplication and structure
+        defects (S3/S5/W3/W5), not a single case of a skill's prose
+        contradicting the committed record — so the honest outcome is
+        "errata: none" (step 27), not a fabricated entry. The one
+        residue found (dr-drive-harness's "never generalize scope"
+        negation has no enforcing GATE) is a design gap, not a
+        record-contradiction, so it goes to PARKED.md (step 27), not
+        ERRATA.md — building a NEW gate for it is scope beyond what
+        REQUEST asked (apply DELTAs, mutation-prove EXISTING gates,
+        ship-test), so it is parked rather than built here.
+      - S14 (mutation-prove every GATE): dominance-test decision
+        (`dr-ask-the-right-question` §4) — 10 of the gate table's 11
+        rows are pre-existing mechanisms already proven red-then-fixed
+        in the historical record CENSUS.md cites (X8, X9, the V1
+        2026-08-05 diff-budget miss); re-deriving fresh red runs for
+        unchanged mechanisms is the "needless re-derivation" R25 warns
+        against, not the thoroughness it asks for. Only the ONE
+        genuinely NEW gate wiring this tranche introduces (S14/DELTA on
+        `dr-implement-fix`: mechanizing its diff-budget check via
+        `tools/diff_budget.py`) gets a fresh mutation-proof (step 24);
+        the other 10 rows cite their existing red-run evidence from
+        CENSUS.md instead of repeating it.
+      - S15 (L5 ship-test): the planted violation is tied to the same
+        newly-wired gate (step 25) — a `FIX.md` with a stated ceiling,
+        a diff exceeding it, `tools/diff_budget.py` catching EXCEEDED —
+        so the ship-test proves the one thing Phase C actually changed
+        in behavior, not a generic unrelated scenario.
+      - Files needing NO edit under DESIGN.md's table (`authoring-
+        skills`, `dr-ask-the-right-question`, `dr-capture-request`,
+        `dr-diagnose`, `dr-explain-to-operator`, `dr-propose-fix`,
+        `dr-reproduce`, `dr-set-goal`) get no step — DELTA discipline
+        means touching only what SPEC/DESIGN named.
+
+- [ ] 13. (S12, S13) Edit `dr-drive-harness/SKILL.md`: confirm it
+      already states the canonical version of all 8 delegated clusters
+      (map preflight, env preflight, commit-every-boundary, root
+      retirement, credentials, detached-launch+monitor, typed-outcomes-
+      only, stop-format); add anything DESIGN.md found "mostly" but not
+      fully present. Also absorb README.md's one genuinely non-
+      duplicate line — the "where the truth lives" authority chain
+      (CLAUDE.md -> docs/map/INDEX.md -> RESULTS.md -> docs/ERRATA.md
+      -> PARKED.md) — before README.md is deleted in step 14, so that
+      content is not silently lost. [COMMIT]
+      done-when: `grep -q "RESULTS.md.*docs/ERRATA.md\|where the truth
+      lives" .claude/skills/dr-drive-harness/SKILL.md` -> found; manual
+      confirmation each of the 8 clusters' fullest wording is present
+      in this file specifically.
+
+- [ ] 14. (S12, S16) Delete `.claude/skills/README.md`, and in the SAME
+      commit update CLAUDE.md's "Which workflow to use" section to
+      remove its now-dangling sentence naming `.claude/skills/
+      README.md` as "the index of the whole skill set" (replace with a
+      one-line pointer at `dr-drive-harness` §6, which now carries the
+      routing summary). [COMMIT]
+      done-when: `test ! -f .claude/skills/README.md` -> true; `grep -q
+      "README.md" CLAUDE.md` -> false (no dangling reference); both
+      changes in one commit (`git show --stat <sha>` touches both
+      paths).
+
+- [ ] 15. (S12, S13) Edit `deepreason-orchestrator/SKILL.md`: replace
+      the full-text map-preflight block, the full env-preflight block,
+      the root-retirement bullet, the credentials bullet, and the
+      stop-format sentence with one-line pointers at `dr-drive-harness`
+      (matching the pattern `dr-change-orchestrator`'s own env-preflight
+      delegation already uses correctly). [COMMIT]
+      done-when: `grep -c "dr-drive-harness" .claude/skills/
+      deepreason-orchestrator/SKILL.md` -> increases from the pre-edit
+      count (currently 1) to >=5; line count drops (fewer restated
+      lines than deleted-and-replaced pointer lines).
+
+- [ ] 16. (S12, S13) Edit `dr-change-orchestrator/SKILL.md`: replace
+      the map-preflight block, the commit-every-boundary sentence, and
+      the stop-format sentence with pointers at `dr-drive-harness`;
+      leave its already-correct env-preflight delegation untouched.
+      [COMMIT]
+      done-when: `grep -c "dr-drive-harness" .claude/skills/
+      dr-change-orchestrator/SKILL.md` -> increases; map-preflight
+      section is now a pointer, not a restated block.
+
+- [ ] 17. (S12, S13) Edit `dr-deliver-change/SKILL.md`: renumber "3b"
+      and "3c" into the main numbered procedure (authoring-skills S5).
+      [COMMIT]
+      done-when: `grep -E "^[0-9]+[ab]\." .claude/skills/dr-deliver-
+      change/SKILL.md` -> empty (no more sub-lettered steps); the
+      procedure's highest integer step increased by 2.
+
+- [ ] 18. (S12, S13, S14) Edit `dr-implement-fix/SKILL.md`: replace the
+      root-retirement bullet and the "Durable tests..." pointer-adjacent
+      map-obligations restatement with pointers at `dr-execute-step`
+      (mirroring the good pattern already at dr-implement-fix-5); AND
+      mechanize its diff-budget check — replace the by-eye `git diff
+      --stat` compare with a `tools/diff_budget.py` invocation against
+      FIX.md's Estimated-diff ceiling, matching `dr-execute-step`'s own
+      procedure. [COMMIT]
+      done-when: `grep -q "tools/diff_budget.py" .claude/skills/
+      dr-implement-fix/SKILL.md` -> found (the new gate wiring);
+      `grep -q "dr-execute-step" .claude/skills/dr-implement-fix/
+      SKILL.md` -> found (the pointer).
+
+- [ ] 19. (S12, S13) Edit `dr-execute-step/SKILL.md`: replace the
+      stop-format sentence with a pointer at `dr-drive-harness`. [COMMIT]
+      done-when: the stop-format paragraph is now a one-line pointer,
+      confirmed by diff.
+
+- [ ] 20. (S12, S13) Edit `dr-plan-steps/SKILL.md`: renumber "4b" and
+      "4c" into the main list; replace the commit-every-boundary
+      sentence with a pointer at `dr-drive-harness`. [COMMIT]
+      done-when: `grep -E "^[0-9]+[abc]\." .claude/skills/dr-plan-steps/
+      SKILL.md` -> empty.
+
+- [ ] 21. (S12, S13) Edit `dr-spec-change/SKILL.md`: fold the
+      un-lettered "one more guardrail" clause (item 3's afterthought
+      sentence) into item 3's own numbered structure. [COMMIT]
+      done-when: manual diff confirms the clause reads as part of item
+      3's own enumeration, not an appended standalone sentence.
+
+- [ ] 22. (S12, S13) Edit `dr-validate-change/SKILL.md`: renumber
+      "4a2", "4a3", and "4b" into the main numbered procedure — the
+      biggest S5 offender in the set. [COMMIT]
+      done-when: `grep -E "^[0-9]+[ab][0-9]*\." .claude/skills/
+      dr-validate-change/SKILL.md` -> empty.
+
+- [ ] 23. (S19) `python tools/docs_verify.py` full run (not `--fast`)
+      after all skill edits, to confirm no map document was broken by
+      wording changes in `.claude/skills/` (expected: none, since
+      `docs/map/` covers `src/deepreason/` only, but run for the
+      record per the mandatory pre-commit discipline). [COMMIT if any
+      unrelated drift is found and fixed; otherwise no file changes,
+      no commit needed]
+      done-when: 0 failed, matching the 3 pre-existing CON-run-
+      identity.md shallow-clone-failure baseline exactly (no new
+      failures).
+
+- [ ] 24. (S14, G6) Mutation-prove the one newly-wired GATE (step 18's
+      `tools/diff_budget.py` mechanization on `dr-implement-fix`):
+      break it (a FIX.md-shaped ceiling with a diff that exceeds it),
+      run the check, paste the red (`EXCEEDED`) output, then restore.
+      No commit needed unless the mutation fixture is kept as a
+      regression artifact (if kept, [COMMIT]).
+      done-when: a pasted `tools/diff_budget.py` invocation shows
+      `"verdict": "EXCEEDED"` for the planted case, and a second
+      invocation on the real (non-exceeding) state shows `"verdict":
+      "WITHIN"` or `"NO_CEILING"` (restored).
+
+- [ ] 25. (S15) L5 ship-test: using the SAME planted violation as step
+      24 (a `FIX.md`-shaped budget ceiling exceeded by a diff), run it
+      through the reworked `dr-implement-fix` procedure end-to-end and
+      paste the catch (the STOP the mechanized gate now produces, where
+      the old by-eye check might have let it through unnoticed).
+      done-when: the pasted run shows the mechanized gate firing
+      (`EXCEEDED` -> STOP), demonstrating the reworked skill catches
+      what the old one relied on eyeballing.
+
+- [ ] 26. (S19) Full gate: `python -m pytest tests/ -q -n 4`. Compare
+      against baseline (1 pre-existing `test_bronze_report` failure; 5
+      MCP-thread tests known-flaky under `-n 4` — isolate with a serial
+      rerun before attributing any of the 5 to this tranche).
+      done-when: pasted summary line ends "N passed, M failed" with
+      M == 1 (the pre-existing failure) plus at most the known-flaky
+      set, each confirmed pre-existing by a serial isolation rerun; 0
+      NEW failures attributable to this tranche's `.claude/skills/` or
+      `CLAUDE.md` edits (which is itself confirmatory, since `src/`
+      stays byte-untouched and these are documentation-only changes).
+
+- [ ] 27. (S17) docs/ERRATA.md: state explicitly "errata: none" for
+      this tranche (per the reasoning in step 12's PROOF — no
+      record-contradiction found, only structure/duplication defects);
+      add the dr-drive-harness ungated-negation residue to PARKED.md as
+      a ready-to-send follow-up prompt instead. [COMMIT]
+      done-when: PARKED.md contains one entry for the ungated
+      "never generalize scope" negation, with a route (`dr-change-
+      orchestrator`), a one-goal statement, and evidence pointers
+      (DESIGN.md's gate table row).
+
+- [ ] 28. (S18, S22) Final `src/`-untouched confirmation:
+      `git diff origin/main...HEAD -- src/` -> empty, run one more time
+      after all Phase C edits, as the code-gate canary REQUEST.md
+      names explicitly.
+      done-when: empty output.
+
+- [ ] 29. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
+      (including both amendments), each row's disposition (`done` /
+      `done-with-assumption` / `deferred`) with a PROOF pointer (commit
+      hash + acceptance output), per authoring-skills G1 — pasted proof,
+      never the word "done" alone. [COMMIT]
+      done-when: every R1-R25 appears as a DELIVERY.md row with a
+      non-empty PROOF column; `grep -c "^| R" DELIVERY.md` -> 25.
+
+- [ ] 30. (S21) Final tree check and push: `git status --porcelain` ->
+      empty; branch head confirmed on origin. [COMMIT if anything is
+      still uncommitted; otherwise a verification-only step]
+      done-when: `git status --porcelain` -> empty AND `git rev-parse
+      HEAD origin/claude/skills-overhaul-vk2n8d` -> one shared hash.
