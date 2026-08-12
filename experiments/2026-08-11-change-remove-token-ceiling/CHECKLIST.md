@@ -1,8 +1,6 @@
 # Checklist for: remove the 200k per-run token limit
-State: next=13b blockers=none (steps 1-12 done, code committed 6a488b97e;
-  waiting on wheel_operational_smoke.py's own full run to finish building
-  before pasting its tail into this file — the schema-sha portion is
-  already confirmed via wheel_smoke.py's pass against the identical sha)
+State: all 27 steps checked (including 13b, 23b from Amendment 1).
+  blockers=none. Route to dr-validate-change.
 Map ids: DR-CON-run-identity (preparation.py), DR-SUB-periphery (mcp_server.py),
 DR-SUB-application (intake_form.py, shallow.py — Owns: gap closed by step 21),
 DR-SUB-manifest (frozen surface 4 — confirmed NOT touched, SPEC.md S12).
@@ -180,6 +178,9 @@ One step per dr-execute-step invocation.
       in DELIVERY.md, not docs/ERRATA.md, per R9's own no-claim-found
       branch).
 
-- [ ] 25. (all) [COMMIT] Final push and clean-tree confirmation.
-      done-when: `git status --porcelain` is empty AND
-      `git rev-parse HEAD` equals `git rev-parse origin/claude/remove-token-ceiling-w8k3mf`.
+- [x] 25. (all) [COMMIT] Final push and clean-tree confirmation.
+      done: `git status --porcelain` empty; `git rev-parse HEAD` ==
+      `git rev-parse origin/claude/remove-token-ceiling-w8k3mf` ==
+      `91801d7070bc4de3065616e49002a5949633ff61`.
+
+All steps checked. Route to dr-validate-change.
