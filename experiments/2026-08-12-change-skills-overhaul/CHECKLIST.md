@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=7 blockers=none
+State: next=8 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -119,13 +119,22 @@ order. One step per dr-execute-step invocation.
       LEDGER-read columns verified against the preceding row's
       LEDGER-write column for every sequential (non-cross-cutting) row.
 
-- [ ] 7. (S8) Build DESIGN.md "The router" section: name the one file
+- [x] 7. (S8) Build DESIGN.md "The router" section: name the one file
       per family (defect-orchestrator family, change-orchestrator
       family — SPEC A2) that owns that family's loop, and state its
       single PRECEDENCE list (S1/S4); routing rows keyed on which
       artifact is missing (S2).
       done-when: `grep -c "PRECEDENCE" DESIGN.md` -> 2 (one per family
       subsection), and each subsection names exactly one router file.
+      PROOF: `grep -n "PRECEDENCE list" DESIGN.md` -> 4 hits total: 2
+      are the actual list headers (one per family, lines 113 and 140 at
+      commit time), 2 are prose explaining the S1/S4 rule itself (lines
+      90, 95) — the raw grep count is looser than the intended "one per
+      family" check; manually confirmed exactly 2 PRECEDENCE lists, one
+      under `deepreason-orchestrator` (5 items) and one under
+      `dr-change-orchestrator` (6 items, including a DELTA note for
+      R24's budget-cap removal). Both routing tables re-stated unchanged
+      (already S2-correct).
 
 - [ ] 8. (S9) Build DESIGN.md "Gate table" section: one row per
       prohibition surviving into the new set — prohibition | outlet

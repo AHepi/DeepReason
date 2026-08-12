@@ -83,3 +83,76 @@ obligation is an input, not a trailing output).
 | `dr-ask-the-right-question` | an ambiguous/terse message, or a phase's "stop and ask" trigger | a decision recorded INLINE in whichever artifact the calling phase owns (e.g. SPEC.md's Assumptions section) | every question is answered-with-a-command (record), answered-with-a-citation (framework), decided-and-recorded (dominance test), or sitting in ONE batched question set | none of its own — writes into the calling phase's ledger | the calling phase's own draft + CLAUDE.md's recorded operator values |
 | `dr-drive-harness` | session start | none (a consulted manual, not a produced artifact) | self-check only ("every claim ends in a typed artifact, every plan started from INDEX.md/INV-frozen-surfaces.md") — no mechanical GATE of its own | none — this Phase B design makes it the CANONICAL SOURCE eight other files point to instead of restating (see clusters 1-8) | none (it is the read target, not a reader, for the clusters it now owns) |
 | `dr-explain-to-operator` | session start, before the first operator-facing message | none (a continuous wording discipline, not a produced artifact) | **none mechanical** — flagged honestly: the one skill in the whole set with no GATE at all, consistent with its KEEP-by-mandate evidence class (CENSUS.md) rather than KEEP-by-corrected-incident | none | none |
+
+## The router
+
+Two router files survive unchanged in identity (per SPEC.md A2: one
+PRECEDENCE list per skill set means per FAMILY, not one merged router —
+the two families have disjoint routing tables and CLAUDE.md's own
+"Which workflow to use" section names both as separate entry points).
+Each gets the DELTA edits from the keep/merge/delete table (dedup
+clusters 1/2/3/4/5/8 into pointers at `dr-drive-harness`) but keeps its
+own loop and its own PRECEDENCE list — S1 permits this because a router
+file OWNING the loop is the one place "then pick the next phase" is
+correct, not a defect.
+
+### `deepreason-orchestrator/SKILL.md` — Family 1 (defect) router
+
+Routing table (unchanged, already correct — keyed on missing artifact,
+per S2):
+
+    No GOAL.md -> dr-set-goal
+    GOAL.md, no DIAGNOSIS.md -> dr-diagnose
+    DIAGNOSIS.md, no demonstration -> dr-reproduce
+    Reproduction, no FIX.md -> dr-propose-fix
+    FIX.md, code unchanged -> dr-implement-fix
+    Code changed, outcome unverified -> dr-verify-outcome
+    dr-verify-outcome PASS -> tranche complete
+    dr-verify-outcome FAIL -> dr-diagnose (with failure evidence appended)
+
+PRECEDENCE list (highest wins; write the winner in the text now, per S4):
+
+1. Frozen-surface / hard prohibitions (never touch `capabilities/
+   state.py` digests, `harness.py` event application, replay-validation
+   formats — regardless of what any lower rule below would otherwise
+   permit).
+2. Cross-routing scope contract: one tranche = one GOAL.md; anything
+   else noticed goes to PARKED.md, never into the current work.
+3. No-phase-skipping (the routing table itself — may not implement
+   without FIX.md, may not write FIX.md without DIAGNOSIS.md, etc.).
+4. Stop conditions (command fails twice the same way; evidence
+   contradicts the goal; diff would exceed ~150 lines).
+5. `dr-ask-the-right-question`'s dominance test, before any question
+   reaches the operator.
+
+### `dr-change-orchestrator/SKILL.md` — Family 2 (change) router
+
+Routing table (unchanged, already correct):
+
+    No REQUEST.md -> dr-capture-request
+    REQUEST.md, no SPEC.md (or new requirements appended) -> dr-spec-change
+    SPEC.md approved, no CHECKLIST.md -> dr-plan-steps
+    CHECKLIST.md has an unchecked step -> dr-execute-step (exactly one)
+    All steps checked, no VALIDATION.md -> dr-validate-change
+    VALIDATION.md PASS -> dr-deliver-change
+    VALIDATION.md FAIL -> dr-plan-steps (re-plan the failing steps only)
+
+PRECEDENCE list:
+
+1. Frozen-surface / hard prohibitions (SPEC.md's mandatory forecast;
+   ANY plausible contact halts before `dr-plan-steps` runs, regardless
+   of schedule pressure).
+2. The ledger rule: REQUEST.md is the single source of authority; a new
+   operator message is APPENDED verbatim before acting on it, never
+   absorbed silently into the current step (this tranche's own
+   Amendment 1/R24 is the worked example).
+3. Scope contract: implement what REQUEST.md says; broken-but-not-
+   requested goes to PARKED.md, never fixed in passing.
+4. The routing table itself (missing-artifact order).
+5. Stop conditions (a step fails twice the same way; the estimated
+   diff exceeds SPEC.md's budget — **DELTA note**: per R24, "exceeds
+   SPEC.md's budget" no longer triggers a STOP on size alone unless
+   SPEC.md itself states an explicit ceiling; a requirement contradicts
+   the record/codebase).
+6. `dr-ask-the-right-question`'s dominance test, before any question
+   reaches the operator.
