@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -13,12 +13,17 @@ dr-plan-steps route) and needs no execution step.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
-- [ ] 1. (S3) Build CENSUS.md "Inventory" section: one row per file
+- [x] 1. (S3) Build CENSUS.md "Inventory" section: one row per file
       under .claude/skills/ (purpose | entry artifact | exit artifact
       | line count).
       done-when: `for f in $(find .claude/skills -type f); do grep -qF
       "$f" experiments/2026-08-12-change-skills-overhaul/CENSUS.md ||
       echo "MISSING $f"; done` -> no output.
+      PROOF: ran after fixing the table to use full `.claude/skills/...`
+      paths (first pass used shortened paths and failed this exact
+      check — corrected in place, same step, before marking done) ->
+      no output (all 19 files present as rows). Total 2041 lines across
+      19 files (`wc -l`), tabled.
 
 - [ ] 2. (S4) Build CENSUS.md "Rule extraction" section: every
       imperative sentence in every skill file gets an ID
