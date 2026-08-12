@@ -106,55 +106,49 @@ One step per dr-execute-step invocation.
       admission` / `EXIT_CODE=0`. Both wheel-smoke pins (S8) fully
       confirmed against a freshly built wheel.
 
-- [ ] 14. (S8b) Confirm the two tool-NAME pins do NOT need edits (traced
+- [x] 14. (S8b) Confirmed the two tool-NAME pins do NOT need edits (traced
       contradiction of the request's named "all four pins" mechanism,
-      SPEC.md S8b) — proves the claim rather than asserting it.
-      done-when: `python -m pytest tests/test_mcp.py tests/test_mcp_help.py -q` output ends "N passed, 0 failed" with `git diff --stat -- tests/test_mcp.py tests/test_mcp_help.py` empty.
+      SPEC.md S8b).
+      done: `89 passed in 1.04s`; `git diff --stat -- tests/test_mcp.py
+      tests/test_mcp_help.py` empty.
 
-- [ ] 15. (S9) Confirm FORM_DR1 is unaffected (S2 touched only the
-      validator function, not `Field(description=...)` text).
-      done-when: `python tools/render_form_dr1.py --check` exits 0.
+- [x] 15. (S9) Confirmed FORM_DR1 is unaffected.
+      done: `.../FORM_DR1_RUN_APPLICATION.md is fresh.` exit 0.
 
-- [ ] 16. (S10) Re-confirm no qualification-subject-digest contact against
-      the post-edit tree (cheap re-check of SPEC.md's S10 finding).
-      done-when: `grep -n "token_budget" src/deepreason/run_manifest.py src/deepreason/qualification.py` prints nothing (empty output, exit 1 from grep is the expected "no match" signal — paste it).
+- [x] 16. (S10) Re-confirmed no qualification-subject-digest contact.
+      done: empty output, grep exit 1.
 
-- [ ] 17. (S5) Edit `docs/AGENT.md` line 82: replace "with fixed public
-      ceilings of 12 cycles and 200,000 tokens." with prose stating the
-      surviving 12-cycle ceiling and that no token-budget ceiling remains.
-      done-when: `grep -c "200,000" docs/AGENT.md` prints `0` (or grep
-      exits 1 with no output).
+- [x] 17. (S5) Edited `docs/AGENT.md` line 82: now states the surviving
+      12-cycle ceiling and "the token budget has no ceiling — any
+      positive integer is accepted."
+      done: `grep -c "200,000" docs/AGENT.md` -> `0`.
 
-- [ ] 18. (S14) Edit `docs/map/SUB-application.md`'s `Owns:` header: append
-      `src/deepreason/intake_form.py, src/deepreason/shallow.py`. Do NOT
-      advance `Verified-at:` (no claim/check in the document body is being
-      re-checked, only the ownership header).
-      done-when: `grep -q "src/deepreason/intake_form.py" docs/map/SUB-application.md && grep -q "src/deepreason/shallow.py" docs/map/SUB-application.md` exits 0.
+- [x] 18. (S14) Edited `docs/map/SUB-application.md`'s `Owns:` header:
+      appended `src/deepreason/intake_form.py, src/deepreason/shallow.py`.
+      `Verified-at:` left unchanged (no document-body claim re-checked).
+      done: both greps confirmed present.
 
-- [ ] 19. (S14) [COMMIT] Doc-link check for step 18's edit, then commit
-      steps 17-18 together with the map-moves-with-code rule satisfied
-      (code already landed in step 13; this commit is the doc/map
-      follow-through SPEC.md scoped as its own items).
-      done-when: `python tools/docs_verify.py --links` exits 0; then
-      `git add docs/AGENT.md docs/map/SUB-application.md && git commit -m "remove-token-ceiling: docs/AGENT.md prose and SUB-application.md Owns: gap closure (R2, map preflight finding)"` and push with retry.
+- [x] 19. (S14) [COMMIT] `python tools/docs_verify.py --links` -> `0
+      dangling reference(s), 53 document(s)`; committed `d4e146b55`
+      (docs/AGENT.md + SUB-application.md) and `3833f5090`/checklist
+      commits, pushed to origin.
 
-- [ ] 20. (S11) Capture the AFTER `verify_root_report` snapshot on the SAME
-      root as step 1, now that all code edits (steps 2-13) are landed, and
-      diff byte-identical against step 1's snapshot.
-      done-when: `python -c "from deepreason.verification.report import verify_root_report; r = verify_root_report('experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'); after = repr(r.model_dump(mode='json')); before = open('/tmp/verify_before.txt').read(); assert after == before, 'DRIFT DETECTED'; assert r.valid is True; print('byte-identical, valid=True')"` prints `byte-identical, valid=True`.
+- [x] 20. (S11) Captured the AFTER `verify_root_report` snapshot, diffed
+      against step 1's BEFORE snapshot.
+      done: `byte-identical, valid=True`.
 
-- [ ] 21. (all) Map check: `python tools/docs_verify.py`
-      done-when: 0 failed (baseline note: 3 pre-existing shallow-clone
-      failures are expected/known in `CON-run-identity.md` per REQUEST.md's
-      GATE clause — paste full output and confirm no NEW failures beyond
-      that baseline).
+- [x] 21. (all) Map check: `python tools/docs_verify.py`
+      done: `docs_verify [full]: 53 documents, 860 checks, 4 workers` ->
+      `3 failed`, all three in `CON-run-identity.md` (lines 195/197/199,
+      shallow-clone `git log`/`git show` lookups against commits not
+      present in this container's shallow history) — exactly the known
+      baseline from REQUEST.md's GATE clause. 0 new failures.
 
-- [ ] 22. (all) Subsystem ring beyond step 9/14/15/16's already-run files:
-      `python -m pytest tests/test_run_preparation_service.py
+- [x] 22. (all) Subsystem ring: `python -m pytest
+      tests/test_run_preparation_service.py
       tests/test_v6_only_manifest_loading.py -q -n 4`
-      done-when: output ends "N passed, 0 failed" (paste it) — confirms
-      `CON-run-identity`'s and `SUB-manifest`'s own `Verify:` rings stay
-      green, corroborating S11/S12/S13's "not touched" claims.
+      done: `32 passed in 24.60s` — corroborates S11/S12/S13's "not
+      touched" claims for `CON-run-identity` and `SUB-manifest`.
 
 - [ ] 23. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, N failed" (paste it); compare
@@ -163,6 +157,7 @@ One step per dr-execute-step invocation.
       flaky under `-n 4` — re-run any flaky-looking failure in isolation,
       `python -m pytest <nodeid> -q`, before attributing it to this
       tranche). 0 NEW failures beyond that baseline is the accept bar.
+      (running in background, log at /tmp/full_gate.log)
 
 - [ ] 24. (S6/R9) Confirm the errata check's "none" finding one more time
       against the final tree (cheap re-run; SPEC.md S6 already performed
