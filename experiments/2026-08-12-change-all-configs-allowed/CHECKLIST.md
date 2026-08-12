@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -8,7 +8,7 @@ Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
-- [ ] 1. (S-INFRA) Add `CompileNoticeV1` model, the `compile_notices`
+- [x] 1. (S-INFRA) Add `CompileNoticeV1` model, the `compile_notices`
       field on `RunManifest`, the version-pop guard in BOTH
       `_versioned_serialization` and `canonical_bytes`, and the
       `_emit_compile_notice` helper to `src/deepreason/run_manifest.py`.
@@ -17,6 +17,13 @@ order. One step per `dr-execute-step` invocation.
       `compile_notices=tuple(notices) or None` into the final
       `RunManifest(...)` construction.
       done-when: `python -c "from deepreason.run_manifest import CompileNoticeV1, RunManifest; RunManifest.model_fields['compile_notices']"` succeeds, and `python -m pytest tests/test_run_manifest.py -q -k canonical` passes unchanged (proves no existing golden moved).
+      DONE: field annotation confirmed
+      `Union[tuple[CompileNoticeV1, ...], NoneType], default=None`; canonical
+      golden tests `2 passed, 70 deselected`; broader ring
+      (`tests/test_run_manifest.py tests/test_run_manifest_scratch_bridge.py
+      tests/test_run_manifest_v4.py tests/test_v6_only_manifest_loading.py`)
+      `134 passed`. No map document change needed (no caller-visible
+      behavior changed yet — the field is written but nothing reads it).
 
 - [ ] 2. (S-B1) Convert `GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED`
       (`compile_run_manifest` :3123) from `raise` to

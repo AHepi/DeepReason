@@ -1172,6 +1172,32 @@ class TerminalCommitmentPolicyV1(BaseModel):
         return value
 
 
+class CompileNoticeV1(BaseModel):
+    """A configuration choice a prior gate would have refused at compile
+    time. Notices describe what the retired gate would have said; they
+    never block compilation (all-configs-allowed tranche, 2026-08-12)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    code: str = Field(min_length=1)
+    message: str = Field(min_length=1)
+    pointer: str = Field(min_length=1)
+    resolution: str | None = None
+
+
+def _emit_compile_notice(
+    sink: list[CompileNoticeV1],
+    code: str,
+    message: str,
+    pointer: str,
+    *,
+    resolution: str | None = None,
+) -> None:
+    sink.append(
+        CompileNoticeV1(code=code, message=message, pointer=pointer, resolution=resolution)
+    )
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
@@ -1212,6 +1238,7 @@ class RunManifest(BaseModel):
         RouteSeatContractDecompositionPlanV1 | None
     ) = None
     production_qualification_policy: ProductionQualificationPolicyV1 | None = None
+    compile_notices: tuple[CompileNoticeV1, ...] | None = None
     terminal_commitment_policy: TerminalCommitmentPolicyV1 | None = None
     run_input_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -1297,6 +1324,11 @@ class RunManifest(BaseModel):
             # Qualification authority is never inferred for historical v6
             # documents, and the field did not exist in v1-v5.
             payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or not self.compile_notices:
+            # Historical documents disclosed nothing merely by being loaded
+            # by a newer binary; a notice-free compile is byte-identical to
+            # every manifest compiled before this field existed.
+            payload.pop("compile_notices", None)
         if self.schema_version < 6 or self.terminal_commitment_policy is None:
             # Historical v6 documents gain no terminal authority merely by
             # being loaded by a newer binary.
@@ -1587,6 +1619,8 @@ class RunManifest(BaseModel):
             payload.pop("route_seat_contract_decomposition_plan", None)
         if self.schema_version < 6 or self.production_qualification_policy is None:
             payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or not self.compile_notices:
+            payload.pop("compile_notices", None)
         if self.schema_version < 6 or self.terminal_commitment_policy is None:
             payload.pop("terminal_commitment_policy", None)
         if self.criticism_policy is None:
@@ -3013,6 +3047,7 @@ def compile_run_manifest(
     In single-model mode only the route explicitly carrying ``single_model``
     is consulted. Other provider entries are not discovered or used.
     """
+    notices: list[CompileNoticeV1] = []
     if judge_family and blind_same_model_judges:
         raise RunManifestError(
             "JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT",
@@ -3376,6 +3411,7 @@ def compile_run_manifest(
         memory_policy=memory_policy or {},
         scratch_policy=scratch_policy,
         bridge_policy=bridge_policy,
+        compile_notices=tuple(notices) or None,
         source_config_hash=source_config_hash(data, schema_version=schema_version),
         compiled_at=stamp,
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),
