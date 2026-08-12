@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=9 blockers=none
+State: next=10 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -150,10 +150,15 @@ order. One step per dr-execute-step invocation.
       per G2 rather than hidden, with a Phase-C follow-up noted (add a
       lint pass, or the operator accepts it stays judgment-only).
 
-- [ ] 9. (S10) Build DESIGN.md "Migration note" section: record the
+- [x] 9. (S10) Build DESIGN.md "Migration note" section: record the
       operator's own verbatim answer — "nothing — they finish on their
       checkout; the new set governs new windows".
       done-when: `grep -q "finish on their checkout" DESIGN.md`.
+      PROOF: first pass failed the exact-string check — the phrase wrapped
+      across two markdown source lines ("...their\ncheckout..."), so a
+      line-based grep missed it despite rendering identically; fixed by
+      keeping the quoted phrase on one source line. Re-run: `grep -q
+      "finish on their checkout" DESIGN.md` -> found.
 
 - [ ] 10. (S11, S21, S18/S22) [COMMIT] Assemble DESIGN.md (steps 5-9's
       sections, including the keep/merge/delete table) and commit +

@@ -186,3 +186,20 @@ being empty). The eleventh (never-generalize-scope) is the one
 authoring-skills W3 case this design cannot honestly claim to have
 gated — recorded per G2 ("proof of looking," not silence) rather than
 hidden.
+
+## Migration note
+
+Operator's own words (REQUEST.md, verbatim): "what happens to windows
+in flight on the old skills (answer: nothing — they finish on their checkout;
+the new set governs new windows)."
+
+Recorded as the operator's own answer, not re-derived: a session that
+already loaded an old skill file's content into its context before
+Phase C lands keeps using that content for the rest of its own window —
+its checkout is whatever it read, and a DELTA edit landing mid-session
+in another window does not retroactively change what an already-loaded
+skill file said. The new set (post-Phase-C) governs every window that
+starts fresh, or reloads a skill file, after Phase C's commits land.
+No transition shim, flag, or dual-version period is needed or built —
+the git history itself is the only "old version" that continues to
+exist, and only for sessions that already hold it in context.
