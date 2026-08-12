@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=15 blockers=none
+State: next=16 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -300,18 +300,24 @@ order. One step per `dr-execute-step` invocation.
       the agent is not", quoting R1 verbatim and noting R1a's
       supersession, pointing at this tranche directory.
 
-- [ ] 15. (S-VERIFY) Prove R8 (old roots replay byte-unchanged) with a
+- [x] 15. (S-VERIFY) Prove R8 (old roots replay byte-unchanged) with a
       targeted `verify_root_report` on a committed root that carries
-      `bridge_policy` and/or `criticism_policy` (the fields whose
-      validators moved in steps 4-9) — e.g. one of
-      `experiments/2026-08-08-change-grounded-overlay-o1/`'s roots or
-      `experiments/2026-08-01-change-prose-can-refute/`'s, whichever
-      actually carries `grounded_two_stage` or a `criticism_policy` (grep
-      its `run-manifest.json` first). Compare the report's `valid`,
-      `epistemic_checks_passed`, and `att` length against a report taken
-      BEFORE step 1 (re-run against `git stash` if not already captured)
-      — byte-identical required.
+      `bridge_policy` (grep found `grounded_two_stage` in
+      `experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c/run-manifest.json`
+      — a real committed root, not a fixture). Compared the FULL report
+      (not just `valid`/`epistemic_checks_passed`) against the identical
+      root read by the pre-tranche code, via `git worktree add
+      /tmp/before-tranche a9d9b31a3` (the tranche's own base commit) rather
+      than `git stash` (14 commits deep by this step; stash/pop across
+      that many is itself risky) — `pip install -e` was not even needed
+      since the worktree's `src/` was added to `sys.path` directly.
       done-when: `python -c "from deepreason.verification.report import verify_root_report; print(verify_root_report('<root>'))"` output pasted, matching the pre-change baseline exactly.
+      DONE: both before and after report `valid=True`,
+      `epistemic_checks_passed=False` (a pre-existing, unrelated fact about
+      this root, not something this tranche caused); the FULL
+      `model_dump(mode='json')` of both reports diffed as byte-identical.
+      Worktree removed after comparison (`git worktree remove
+      /tmp/before-tranche --force`).
 
 - [ ] 16. (all) Map check: `python tools/docs_verify.py`
       done-when: exactly the 3 pre-existing `CON-run-identity.md`
