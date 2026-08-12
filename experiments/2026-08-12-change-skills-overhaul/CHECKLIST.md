@@ -385,7 +385,7 @@ operator's word (step 11), never before.
       empty. Procedure now reads as one clean 7-step list, no bolted-on
       markers.
 
-- [ ] 18. (S12, S13, S14) Edit `dr-implement-fix/SKILL.md`: replace the
+- [x] 18. (S12, S13, S14) Edit `dr-implement-fix/SKILL.md`: replace the
       root-retirement bullet and the "Durable tests..." pointer-adjacent
       map-obligations restatement with pointers at `dr-execute-step`
       (mirroring the good pattern already at dr-implement-fix-5); AND
@@ -397,6 +397,17 @@ operator's word (step 11), never before.
       dr-implement-fix/SKILL.md` -> found (the new gate wiring);
       `grep -q "dr-execute-step" .claude/skills/dr-implement-fix/
       SKILL.md` -> found (the pointer).
+      PROOF: both greps found. Item 8 rewritten from a `git diff --stat`
+      eyeball compare to a `tools/diff_budget.py` invocation reading
+      `DIFF_BUDGET_RESULT_V1.verdict`, with the V1-2026-08-05 incident
+      kept as a one-clause citation (not a restated story, W5). "Map
+      obligations" section now points at `dr-execute-step`'s canonical
+      procedure, keeping only the one Family-1-specific addition (the
+      Traps-entry rule) in full. Root-retirement + credentials bullets
+      pointer at `dr-drive-harness` §1/§3. 104 -> 97 lines (smaller
+      shrink than other files since item 8 GREW to hold the real
+      mechanism — a net content increase in exchange for a real gate,
+      not just deduplication).
 
 - [ ] 19. (S12, S13) Edit `dr-execute-step/SKILL.md`: replace the
       stop-format sentence with a pointer at `dr-drive-harness`. [COMMIT]
