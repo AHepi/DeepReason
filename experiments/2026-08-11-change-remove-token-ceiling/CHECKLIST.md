@@ -150,14 +150,25 @@ One step per dr-execute-step invocation.
       done: `32 passed in 24.60s` — corroborates S11/S12/S13's "not
       touched" claims for `CON-run-identity` and `SUB-manifest`.
 
-- [ ] 23. (all) Full gate: `python -m pytest tests/ -q -n 4`
-      done-when: output ends "N passed, N failed" (paste it); compare
-      against REQUEST.md's known baseline (1 pre-existing
-      `test_bronze_report` failure; up to 5 MCP-thread timing tests
-      flaky under `-n 4` — re-run any flaky-looking failure in isolation,
-      `python -m pytest <nodeid> -q`, before attributing it to this
-      tranche). 0 NEW failures beyond that baseline is the accept bar.
-      (running in background, log at /tmp/full_gate.log)
+- [x] 23. (all) Full gate: `python -m pytest tests/ -q -n 4`
+      done: FIRST run -> `2 failed, 3528 passed, 7 skipped in 672.96s`.
+      `test_bronze_report.py::test_census_totals_internally_consistent` =
+      the known pre-existing baseline (REQUEST.md GATE clause).
+      `test_public_v6_facade.py::test_public_budget_cannot_exceed_the_
+      fixed_ceiling[arguments1]` = a genuine NEW failure — see SPEC.md
+      Amendment 1 for the finding and fix (a literal `"200001"` in a
+      parametrize list, invisible to name-based census). Fixed in
+      `tests/test_public_v6_facade.py`; `python -m pytest
+      tests/test_public_v6_facade.py -q` -> `12 passed`. Full repo sweep
+      for other over-200k literal token_budget assertions: none found.
+      Re-running the full gate as step 23b to confirm the corrected
+      baseline.
+
+- [ ] 23b. (Amendment 1) Full gate re-run after the
+      `test_public_v6_facade.py` fix.
+      done-when: output ends "N passed, N failed" (paste it); accept bar
+      is exactly the 1 known `test_bronze_report` pre-existing failure,
+      0 others.
 
 - [ ] 24. (S6/R9) Confirm the errata check's "none" finding one more time
       against the final tree (cheap re-run; SPEC.md S6 already performed

@@ -224,6 +224,30 @@ NOT advanced (honest-stamp rule: only advance it for claims actually
 re-checked).
     accept: `grep -q "src/deepreason/intake_form.py" docs/map/SUB-application.md && grep -q "src/deepreason/shallow.py" docs/map/SUB-application.md` exits 0; `python tools/docs_verify.py --links` still exits 0.
 
+## Amendment 1 (found at CHECKLIST step 23, full gate)
+
+`tests/test_public_v6_facade.py::test_public_budget_cannot_exceed_the_fixed_ceiling[arguments1]`
+failed: it asserted `deepreason reason --token-budget 200001` is REFUSED
+(exit 1, "fixed V6 policy ceiling" on stderr, dispatch never reached).
+This is a direct, in-scope consequence of R1 (the exact behavior R1 asks
+to change) that SPEC.md's S8/blast-radius census missed because the test
+hardcodes the literal `"200001"` in a `pytest.mark.parametrize` list
+rather than referencing `PUBLIC_MAX_TOKEN_BUDGET` by name — invisible to
+every name-based grep and to `tools/blast_radius.py`'s own symbol-name
+consumer scan (S8's own text already flagged this class of gap for the
+MCP schema-sha case; this is the same class, one file over). A repo-wide
+sweep for any other `token_budget`-adjacent literal above 200,000
+(`grep -rn "token.budget\|token_budget" tests/ | grep -E
+"20[1-9][0-9]{3}|2[1-9][0-9]{4}|[3-9][0-9]{5,}|1000000|999999"`, minus
+this one file) found none. Fix: split the parametrized test into
+`test_public_cycles_cannot_exceed_the_fixed_ceiling` (unchanged — R3
+keeps the cycles ceiling) and `test_public_token_budget_has_no_ceiling`
+(new — proves 200001 now reaches dispatch and completes, `main([...]) ==
+0`). `tests/test_public_v6_facade.py -q` → `12 passed`. This is S7's own
+scope (test fixups the ceiling removal requires), not new work; recorded
+here as an amendment because SPEC.md's original S7 item did not name this
+file.
+
 ## Process obligations (no separate code item; enforced at CHECKLIST/commit time)
 
 R10: affected-test ring while iterating (S7/S8's own accept commands),
