@@ -71,17 +71,21 @@ def test_compile_bind_preflight_text_manifest(tmp_path):
     seed_bronze(harness)
     preflight_harness(manifest, harness, config)  # must not raise
 
-    # A single-family judge matrix is rejected at compile time, before any
-    # call and before a root can even be bound.
+    # All-configs-allowed (2026-08-12): a single-family judge matrix used to
+    # be rejected at compile time; it now compiles with a typed notice
+    # disclosing the same code the retired gate raised, before any call and
+    # before a root can even be bound.
     single = _config()
     single.roles["judge"][1]["model"] = "deepseek-v4-flash"
-    with pytest.raises(RunManifestError):
-        compile_run_manifest(
-            single,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    single_manifest = compile_run_manifest(
+        single,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
+    assert [n.code for n in single_manifest.compile_notices] == [
+        "SECOND_JUDGE_FAMILY_REQUIRED"
+    ]
 
 
 def test_embedder_failure_policy_error_fails_closed(tmp_path, monkeypatch):
