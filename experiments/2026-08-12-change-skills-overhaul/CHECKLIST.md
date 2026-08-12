@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=11 blockers=awaiting operator's word on Phase B STOP (keep/merge/delete + router design)
+State: next=12 blockers=none (operator replied "Read and approved." — quoted below at step 11)
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -76,12 +76,19 @@ order. One step per dr-execute-step invocation.
       KEEP-by-mandate, dr-verify-outcome's untested errata clause)
       carry into Phase B.
 
-- [ ] 4. (S6, S21, S18/S22) [COMMIT] Commit and push CENSUS.md — Phase
+- [x] 4. (S6, S21, S18/S22) [COMMIT] Commit and push CENSUS.md — Phase
       A boundary.
       done-when: `git log --oneline -1 -- experiments/2026-08-12-change-skills-overhaul/CENSUS.md`
       shows one commit, present on `origin/claude/skills-overhaul-vk2n8d`,
       AND `git diff origin/main...HEAD -- src/` -> empty (S18/S22
       continuous canary, checked here too, not only at Phase D).
+      PROOF: bookkeeping gap — this box was left unchecked even though
+      the commit satisfying it (`c7789b125`, "step 3-4: CENSUS.md
+      evidence binding (S5/R6); Phase A boundary") landed and pushed at
+      the time. Caught on re-read before step 11/12; corrected here
+      rather than left silently wrong. Re-verified now:
+      `git log --oneline -1 -- CENSUS.md` -> `c7789b125` (still HEAD for
+      that path); `git diff origin/main...HEAD -- src/` -> empty.
 
 - [x] 5. (S11) Draft the keep/merge/delete table from CENSUS.md's
       evidence-binding column (step 3): one row per current skill file,
@@ -179,13 +186,24 @@ order. One step per dr-execute-step invocation.
       lines). DESIGN.md complete: 205 lines, all 5 sections (keep/
       merge/delete, new set, router, gate table, migration note).
 
-- [ ] 11. (S2, R12) STOP: present the keep/merge/delete table and the
+- [x] 11. (S2, R12) STOP: present the keep/merge/delete table and the
       router design as the batched decision, pasting both verbatim
       (per dr-explain-to-operator — no hand summary), and end the turn.
       done-when: the operator's affirmative reply is received and
       quoted into this file's `State:` line (blockers=<quoted reply>)
       before step 12 begins. This step cannot be marked done by the
       agent alone; that is the mechanical STOP (X2).
+      PROOF: STOP message sent pasting the full keep/merge/delete table
+      (19 rows) and both routers' routing tables + PRECEDENCE lists
+      verbatim from DESIGN.md, plus the two self-corrections (S1 flag,
+      R24/R25 budget-cap misreading) stated plainly, and one bundled
+      recommendation (approve as written, including the README delete).
+      Operator's reply, verbatim: "Read and approved." Received as a
+      new user turn (not a mid-turn interjection), so it stands as an
+      unambiguous affirmative on the whole batched decision — approving
+      the 1 DELETE candidate (README.md) and all 10 DELTA edits exactly
+      as tabled, no row-level changes requested. Quoted into this file's
+      `State:` line above.
 
 - [ ] 12. (S12-S22, gated on step 11) Re-plan Phase C/D: invoke
       `dr-plan-steps` again, using DESIGN.md's now-fixed survivor/
