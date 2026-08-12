@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=4 blockers=none
+State: next=6 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -83,7 +83,7 @@ order. One step per dr-execute-step invocation.
       AND `git diff origin/main...HEAD -- src/` -> empty (S18/S22
       continuous canary, checked here too, not only at Phase D).
 
-- [ ] 5. (S11) Draft the keep/merge/delete table from CENSUS.md's
+- [x] 5. (S11) Draft the keep/merge/delete table from CENSUS.md's
       evidence-binding column (step 3): one row per current skill file,
       verdict KEEP | MERGE-INTO:<target> | DELETE, one-line reason
       citing the CENSUS.md evidence-binding row it is drawn from.
@@ -92,6 +92,14 @@ order. One step per dr-execute-step invocation.
       (`for f in $(find .claude/skills -type f); do grep -qF "$f"
       <keep-merge-delete-table> || echo "MISSING $f"; done` -> no
       output).
+      PROOF: DESIGN.md "Keep/merge/delete table" — 19 rows, all files
+      present (verified: no MISSING output). Finding: 0 forced merges
+      (no two skills overlap enough to combine without breaking S2's
+      routing granularity), 1 DELETE candidate (README.md — a third
+      copy of the routing table already in CLAUDE.md + dr-drive-harness
+      §6), 8 unchanged, 10 get scoped DELTA edits (9 dedup the 10 S3
+      clusters from CENSUS.md, 1 also closes a genuine G3/X2 gate on
+      dr-implement-fix's budget check).
 
 - [ ] 6. (S7) Build DESIGN.md "The new set" section: for every skill
       the step-5 table marks KEEP or as a MERGE target, one row — entry
