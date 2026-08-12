@@ -411,3 +411,36 @@ Rubric: 8/8 yes
 - Budget headline equals sum of itemized per-item estimates: yes
   (arithmetic pasted above)
 - rubric pass performed as reviewer, not author: yes (this line)
+
+## Amendment 1 (R24: "Remove budget cap")
+
+Reconciles REQUEST.md Amendment 1. Reading: the operator is watching
+this tranche's own commit messages, each of which has been visibly
+re-running `tools/diff_budget.py` against a self-imposed `--ceiling`
+that was raised once already (900 -> 2000) purely to keep pace with the
+tranche's own necessarily-large documentation artifacts (CENSUS.md's
+~380-row rule extraction alone). Dominance test (per
+`dr-ask-the-right-question` §4): the operator's recorded value "tokens
+are cheap; the agent is not... build only what generated evidence
+demands" (CLAUDE.md) argues against spending agent effort re-tuning an
+arbitrary size ceiling for a documentation-only tranche that the
+frozen-surface gate (M2, re-run at every step) has already shown CLEAR
+— every reasonable operator holding that value would remove the
+ceiling rather than have it re-adjusted per step. Decided without
+asking (dominant): `--ceiling` is dropped from all `tools/diff_budget.py`
+invocations for the remainder of this tranche. The tool still runs at
+every file-changing step (unchanged instrument, unchanged discipline —
+only the ceiling argument is dropped) and reports `NO_CEILING` instead
+of `WITHIN`/`EXCEEDED`; `total_insertions`/`areas` stay in the record
+for anyone who wants the number. This does NOT relax the frozen-surface
+gate (`tools/blast_radius.py`, run unchanged at every step) or the
+`src/`-untouched canary (S18/S22) — R24 is scoped to the SIZE gate only,
+per its own wording ("budget cap"), not the safety gates.
+
+Budget section above (S28/S29 arithmetic) stands as originally written
+for Phase A+B, which are already committed under it (838/900, 1468/2000,
+1598/2000 — all WITHIN, so the amendment changes no past verdict). Going
+forward: Phase C+D's per-commit ceiling (previously "gated by
+`tools/diff_budget.py` at its own [COMMIT]") is superseded — those
+commits still run the tool for the record but are not blocked by a
+ceiling.
