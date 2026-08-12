@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=3 blockers=none
+State: next=4 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -47,7 +47,7 @@ order. One step per dr-execute-step invocation.
       S1 -> none, see CENSUS.md Method note). Ten S3 duplication clusters
       identified and named.
 
-- [ ] 3. (S5, R6) Build CENSUS.md "Evidence binding" section: one row
+- [x] 3. (S5, R6) Build CENSUS.md "Evidence binding" section: one row
       per SKILL naming committed failures it demonstrably prevents,
       sourced ONLY from docs/ERRATA.md, docs/ERRATA_EXECUTOR.md,
       tranche RESULTS.md/VALIDATION.md records, and the four named
@@ -61,6 +61,20 @@ order. One step per dr-execute-step invocation.
       empty (confirms R6 — no fresh-trial claim), and every DELETE/MERGE
       candidate marked in this section is cross-referenced by at least
       one CENSUS.md row from step 2.
+      PROOF: 19-row evidence table + summary signal, citing docs/
+      ERRATA.md E1/E6/E9/E11/E15/E16/E21 and docs/ERRATA_EXECUTOR.md
+      X1/X3/X5-E/X6/X8/X9/X11/XE1 plus the 2026-08-11 errata-checkpoint
+      compliance audit and CLAUDE.md's turmite/jolt invariant — all
+      already-committed, zero new trials run. `grep -i "ran.*baseline\|
+      three times" CENSUS.md` -> one hit, which is authoring-skills'
+      own E1 rule TEXT being quoted verbatim (not a fresh-trial claim by
+      this tranche) — the check's intent (no NEW trial claimed) holds;
+      noted as a false-positive-by-design of the grep pattern. Zero
+      skills have zero bound evidence (no automatic DELETE candidate
+      under E1's letter); README.md is the one clear MERGE-into-thin
+      candidate; two evidence-class flags (dr-explain-to-operator
+      KEEP-by-mandate, dr-verify-outcome's untested errata clause)
+      carry into Phase B.
 
 - [ ] 4. (S6, S21, S18/S22) [COMMIT] Commit and push CENSUS.md — Phase
       A boundary.

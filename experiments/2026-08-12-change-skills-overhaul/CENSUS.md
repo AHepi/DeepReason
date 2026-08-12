@@ -656,3 +656,66 @@ to clusters 1-10 above.
   guardrail" clause) — four files where a later rule was inserted into
   an already-numbered procedure rather than the procedure being
   renumbered, exactly the authoring-skills S5 pattern.
+
+## Evidence binding
+
+Per authoring-skills E1: "A skill with no bound evidence is a DELETE
+candidate; overlapping skills are MERGE candidates." Per R6/the operator's
+OPERATOR OVERRIDE, this pass cites only ALREADY-COMMITTED sources —
+`docs/ERRATA.md` (E1-E23), `docs/ERRATA_EXECUTOR.md` (X1-X13, XE1,
+X5-E), and CLAUDE.md's own "Hard-won invariants" — no fresh trials were
+run. Two incidents the operator named in the OPERATOR OVERRIDE (wheel-
+smoke pins left behind by the all-configs window; the judge-seat run
+compiling inert authority settings) were searched for
+(`grep -rl` across `experiments/` and `docs/`) and are NOT independently
+findable as a specific ledgered entry — consistent with REQUEST.md's own
+"PARKED BY DESIGN: the full repo sweep/smoke re-pin audit (next tranche,
+operator-ordered)". They are cited below as operator-asserted-but-not-
+yet-ledgered, never invented as a false match to an existing entry.
+
+Family-1 (defect) tranches have actually run 17 times
+(`find experiments -maxdepth 2 -name GOAL.md | wc -l` = 17); the
+family's own errata coverage is thinner than Family 2's, which the
+X-series (`docs/ERRATA_EXECUTOR.md`) was purpose-built to observe — this
+asymmetry is itself a finding, not a gap in this census.
+
+| Skill | Evidence | Signal |
+|---|---|---|
+| `README.md` | No ERRATA-class finding about its own content; X1 shows an INDEX's absence from a checkout causes misrouting (value of *some* index existing). But readme-3/4/5/6 (Rule extraction) are near-verbatim duplicates of content stated in full elsewhere (map-preflight and commit-every-boundary clusters). | MERGE candidate — thin distinct content once clusters 1/3 are deduplicated; Phase B decides whether it survives as a pure pointer page. |
+| `authoring-skills/SKILL.md` | This tranche's own binding authority (REQUEST AUTHORITY quote); its rules mirror empirically observed patterns — G6 (mutation-prove) mirrors X8's golden-test catch; G1/X2 (proof required, mechanical stop) mirrors X3/X5-E/X6/X9's repeated validation-FAIL-catches-self-blessed-claims pattern. | KEEP — out of delete/merge consideration by construction (this tranche applies it, does not revise its content). |
+| `deepreason-orchestrator/SKILL.md` | Family 1 has run 17 times; E6 (misdiagnosed root cause corrected via record-first diagnosis, `experiments/2026-08-03-fix-attached-evidence-integrity`) and E16 (crash mechanism refuted, broader true cause found, `experiments/2026-08-08-fix-l1-continue-resumable-crash`) both show the record-first discipline this router enforces catching real misattributions. | KEEP, evidenced. |
+| `dr-ask-the-right-question/SKILL.md` | X11 — caught a false premise in the MONITOR's own authorization ("BridgeConfig's current defaults are the dead ones") before a line of code was written, via the dominance-test fork-and-ask procedure this skill defines. | KEEP, strongly evidenced (the one entry recorded "against the infrastructure's author"). |
+| `dr-capture-request/SKILL.md` | E21 — Amendment 10's "and" reading, later corrected by Amendment 11, was only traceable because the verbatim ledger ("REQUEST.md's own R26 entry stands unedited, verbatim, per its append-only ledger rule") preserved both readings for comparison. | KEEP, evidenced. |
+| `dr-change-orchestrator/SKILL.md` | The single most-exercised skill in the set: the entire rung program (X2-X13, X5-E, XE1) ran under this router 2026-08-03 through 2026-08-11, with the FAIL-loop firing and self-correcting at least four separate times (X3, X5-E, X6, X9). | KEEP, most heavily evidenced skill in the set. |
+| `dr-deliver-change/SKILL.md` | The 2026-08-11 errata-checkpoint compliance audit checked 4 closed deliveries and found exactly ONE violation (missing Errata section, `experiments/2026-08-09-change-judge-evidence-review/DELIVERY.md`) — the mandatory-errata-check clause (S5-flagged "3c") is shown catching a real omission. | KEEP, evidenced. |
+| `dr-diagnose/SKILL.md` | E6 and E16 (both cited above) are BOTH dr-diagnose outputs being corrected/vindicated by record-first re-diagnosis; CLAUDE.md's own turmite/jolt "read the blob before theorizing" hard-won invariant predates and matches this skill's Traps-first procedure. | KEEP, evidenced. |
+| `dr-drive-harness/SKILL.md` | XE1 — *skipping* this skill's own session-preflight step (reading CLAUDE.md/RESULTS.md/ERRATA.md at session start) is the RECORDED PROXIMATE CAUSE of an unauthorized frozen-surface commit; the incident report is itself the argument for keeping the preflight rule, not for deleting the skill. | KEEP — evidenced by a documented failure-to-follow, which argues for the rule's necessity, not its removal. |
+| `dr-execute-step/SKILL.md` | Three separate, specific, self-cited incidents: X8 (frozen-surface leak caught by golden tests + full gate); the diff_budget miss ("193 insertions landed against a <=150 ceiling with no stop, V1 tranche 2026-08-05", quoted verbatim in-file); the 2026-08-09 "frozen-surface stop did not hold" entry, which the file's own text names as the direct design premise of its blast_radius.py drift-check paragraph. | KEEP, most heavily self-evidenced single procedure in the set. |
+| `dr-explain-to-operator/SKILL.md` | No ERRATA-class corrected-incident found (communication style is not errata-tracked material). Evidence class differs from the others: a direct, repeated, verbatim operator mandate (CLAUDE.md 2026-08-06, extended 2026-08-08 — operator's own words: "It needs to be used during every intermediary output... Keep it for every last output"), itself a committed, dated instruction. | KEEP-by-direct-mandate — flagged as a distinct evidence class from KEEP-by-corrected-incident; not a DELETE candidate (E1's bar is about SKILL efficacy, not about overriding a standing operator law), but Phase B should not claim ERRATA-class evidence for it that does not exist. |
+| `dr-implement-fix/SKILL.md` | The same diff_budget miss ("193 insertions against <=150, V1 tranche 2026-08-05") is cited verbatim in this file too; no specific ERRATA entry names a dr-implement-fix-caused defect, but the "fix readers, never writers" and "map moves same commit" rules it enforces are exactly what E6's fix and X8's Traps-entry-in-same-commit pattern show working. | KEEP, evidenced (shared incident with dr-execute-step; mechanism matches E6/X8). |
+| `dr-plan-steps/SKILL.md` | Cited directly by dr-spec-change's own text: "rung 4's prediction was too narrow; rung 5's spec predicted nothing and missed a test pinning 'exactly one backend'... The full gate caught both, three commits later than the census would have" — the rung-4/5 miss that motivated the mandatory blast-radius census this skill also requires (dr-plan-steps-9). The "trailing documentation step gets dropped" claim (S5/W5-flagged) matches E9/E11's pattern of map documentation drifting when left as an afterthought. | KEEP, evidenced. |
+| `dr-propose-fix/SKILL.md` | No direct ERRATA citation of a dr-propose-fix output, but its two DeepReason-specific design rules are exactly what E6 (fix readers, not writers — "the READER was wrong and was fixed... `verify_root` on the unchanged bytes returns zero violations") and X9 (frozen surfaces need a flag: validation FAILED a technically-correct-but-unauthorized touch) show working in practice. | KEEP, evidenced indirectly via the mechanism it prescribes. |
+| `dr-reproduce/SKILL.md` | E6's "four-artifact proof" DIAGNOSIS/REPRO pairing; the "NEVER reproduce by launching a live provider run" rule is directly what E15 warns against conflating (a live-run absence read as "stochastic miss" when the record showed a structurally dead path, not a probability). | KEEP, moderately evidenced. |
+| `dr-set-goal/SKILL.md` | Weakest Family-1 evidence binding found: no specific ERRATA-class corrected failure names a dr-set-goal output. 17 Family-1 tranches have used it operationally, but no committed correction demonstrates a failure it prevented. | KEEP — flagged as the thinnest-evidenced surviving skill; not a DELETE candidate under E1's letter (no failures found is different from "the skill demonstrably fails"), but Phase B should not overstate its evidence base. |
+| `dr-spec-change/SKILL.md` | Names its own motivating incidents in its own text: the 2026-08-09 "frozen-surface stop did not hold" entry (surface-3 words-before-touch breach) and `experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md` as the design premise of its mandatory blast-radius sections; shares the rung-4/5 census miss with dr-plan-steps. | KEEP, very strongly evidenced — self-documenting. |
+| `dr-validate-change/SKILL.md` | Four separate FAIL-loop catches across different defect classes: X3 (map-header consistency gap), X5-E (invented env-var name — a content transcription error), X6 (same), X9 (frozen-surface governance despite total technical correctness). | KEEP, the most heavily and diversely evidenced skill in the set alongside dr-change-orchestrator. |
+| `dr-verify-outcome/SKILL.md` | The 2026-08-11 errata-checkpoint audit explicitly found: "No VERIFY.md (Family 1) tranches closed in this window... the dr-verify-outcome half of the checkpoint rule has not yet been exercised by a real tranche since it landed." Its errata-checkpoint clause is a direct twin of dr-deliver-change's (exercised, found one violation) but is itself UNTESTED. | KEEP — flagged as carrying one specific untested clause (the errata checkpoint), a genuine finding for the record rather than a merge/delete signal. |
+
+### Summary signal for Phase B
+
+No skill has ZERO bound evidence, so none is an automatic DELETE
+candidate under E1's literal bar. The actionable signal from this
+census is overwhelmingly MERGE, concentrated in the ten S3 clusters
+above (Rule extraction) rather than in whole-file redundancy — most
+files carry both duplicated boilerplate (map preflight, env preflight,
+commit-every-boundary, root retirement, credentials, detached-launch,
+typed-outcomes-only, stop-format, map-obligations, errata-checkpoint)
+AND non-duplicated, evidenced, file-specific content. `README.md` is the
+one file whose OWN distinctive content is thin enough after
+deduplication to be a genuine MERGE-into-nothing (pure pointer page)
+candidate. Two evidence-class flags carry into Phase B rather than
+being resolved here: `dr-explain-to-operator` is KEEP-by-direct-mandate
+(not KEEP-by-corrected-incident, a different justification the design
+should state honestly), and `dr-verify-outcome`'s errata-checkpoint
+clause is untested (KEEP, but the corresponding GATE has not yet been
+observed catching anything the way dr-deliver-change's has).
