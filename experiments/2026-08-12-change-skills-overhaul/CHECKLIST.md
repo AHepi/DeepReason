@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=8 blockers=none
+State: next=9 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -136,13 +136,19 @@ order. One step per dr-execute-step invocation.
       R24's budget-cap removal). Both routing tables re-stated unchanged
       (already S2-correct).
 
-- [ ] 8. (S9) Build DESIGN.md "Gate table" section: one row per
+- [x] 8. (S9) Build DESIGN.md "Gate table" section: one row per
       prohibition surviving into the new set — prohibition | outlet
       (X1: PARK / LEDGER `not-done`+STOP / STOP-with-proving-GATE) |
       mechanical STOP trigger (X2: count/verdict-string/exit-code) |
       honest-outcome label (X3).
       done-when: no row is missing a column
       (`awk -F'|' 'NF<5{print NR}' <gate-table-rows>` -> empty).
+      PROOF: 11-row gate table; awk column-emptiness check -> no output
+      (all 4 data columns filled on every row). 10/11 rows have a real,
+      already-existing mechanical trigger; 1 (never-generalize-scope,
+      dr-drive-harness's calibration block) has none — flagged honestly
+      per G2 rather than hidden, with a Phase-C follow-up noted (add a
+      lint pass, or the operator accepts it stays judgment-only).
 
 - [ ] 9. (S10) Build DESIGN.md "Migration note" section: record the
       operator's own verbatim answer — "nothing — they finish on their

@@ -156,3 +156,33 @@ PRECEDENCE list:
    the record/codebase).
 6. `dr-ask-the-right-question`'s dominance test, before any question
    reaches the operator.
+
+## Gate table
+
+Every prohibition surviving into the new set, its outlet (X1: never an
+outlet-less "never"), its mechanical STOP trigger (X2: a count, verdict
+string, or exit code — never "seems wrong"), and its honest-outcome
+label (X3).
+
+| Prohibition | Outlet (X1) | STOP trigger (X2, mechanical) | Honest label (X3) |
+|---|---|---|---|
+| Never edit a committed run root | Retire by rename (`git mv run-<id> <state>-epochN-run-<id>`, commit the rename FIRST), then relaunch | CLI's own `RUN_ALREADY_STARTED` refusal on relaunch against an occupied identity | `blocked` if attempted anyway |
+| Never commit credential material | `git check-ignore <path>` before writing near `env` files | `git check-ignore` exit code (0 = ignored/safe, 1 = not ignored) | `blocked` |
+| Never mark a checklist step done without pasting its done-criterion output | Leave the box unchecked; record the real output + one line on the mismatch; return to the orchestrator | done-criterion command's actual output != expected (string/exit-code compare) | `not-done` |
+| Frozen-surface contact (SPEC.md's mandatory forecast) | STOP; commit SPEC.md; obtain the operator's words in REQUEST.md before `dr-plan-steps` runs | `tools/blast_radius.py`'s `frozen_surface_verdict == CONTACT`, or any `reachability` entry `UNKNOWN` | tranche blocked until resolved — no silent proceed |
+| Diff-budget exceeded (Family 1's `<=150`-line rule; Family 2's SPEC.md ceiling where one is stated) | STOP in the standard format (decision, priced options, recommendation) | `tools/diff_budget.py`'s `DIFF_BUDGET_RESULT_V1.verdict == EXCEEDED` — **DELTA per R24**: this tranche itself now runs with no `--ceiling`, so its own commits report `NO_CEILING` and cannot trigger this row; the row stays live for tranches that DO set a ceiling (Family 1's `<=150` rule, or a Family-2 SPEC.md that states one) | blocked until re-planned or the ceiling is raised with a stated reason |
+| Full gate must be 0 failed | If caused by this tranche: revert to the last green state, return to the orchestrator for re-diagnosis. If pre-existing: record it, do not "fix it while you're there," route to PARKED.md | `pytest`'s own summary line != "N passed, 0 failed" | `FAIL` verdict if caused; pre-existing-noted otherwise |
+| Errata checkpoint (`dr-deliver-change`, `dr-verify-outcome`) | State the added entry id(s), or the explicit words "errata: none" | Mechanical presence check: an `## Errata` section (or line) exists in the artifact | never silent — "errata: none" is itself the required label, an omitted section is not equivalent to it |
+| Requirement sweep: an R with neither a demonstration nor an operator-worded deferral | Route back to `dr-plan-steps` (re-plan the failing steps only) | Requirement-sweep table has a row whose "demonstrated by" and "deferred" columns are BOTH empty | `not-done` -> `FAIL` verdict |
+| No code changes outside `dr-execute-step`, no step outside `CHECKLIST.md` | PARK the finding, or route through `dr-spec-change` as an amendment if the change cannot land without it | Self-enforced by which skill file is currently loaded — not independently mechanized today | n/a (workflow-authority prohibition on the agent itself) |
+| A skill with no bound evidence (authoring-skills E1) | PARKED.md / this tranche's own keep/merge/delete table | CENSUS.md's evidence-binding column is empty for that skill | `delete-candidate` |
+| **Never generalize an instruction beyond its stated scope** (`dr-drive-harness` calibration block) | Load `dr-ask-the-right-question`; treat silence as a question, never as license to infer | **none found** — this is a behavioral instruction with no independent mechanical trigger in the current set | **flagged honestly, not fixed here**: the one W3 negation in the whole census this design could not pair with a GATE; Phase C should either add one (e.g., a lint pass over an agent's own stated scope vs. the artifact it touched) or the operator should decide it stays judgment-only |
+
+Ten of eleven rows have a real, already-existing mechanical trigger —
+tools that already exist (`tools/blast_radius.py`, `tools/diff_budget.py`,
+`git check-ignore`, `pytest`'s exit summary, the CLI's own
+`RUN_ALREADY_STARTED` refusal) or a structural check (a table column
+being empty). The eleventh (never-generalize-scope) is the one
+authoring-skills W3 case this design cannot honestly claim to have
+gated — recorded per G2 ("proof of looking," not silence) rather than
+hidden.
