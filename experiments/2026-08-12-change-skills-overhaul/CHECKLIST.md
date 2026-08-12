@@ -469,7 +469,7 @@ operator's word (step 11), never before.
       baseline). Zero new failures. Run took >120s (backgrounded,
       completed exit 0). No file changes; no commit needed.
 
-- [ ] 24. (S14, G6) Mutation-prove the one newly-wired GATE (step 18's
+- [x] 24. (S14, G6) Mutation-prove the one newly-wired GATE (step 18's
       `tools/diff_budget.py` mechanization on `dr-implement-fix`):
       break it (a FIX.md-shaped ceiling with a diff that exceeds it),
       run the check, paste the red (`EXCEEDED`) output, then restore.
@@ -479,6 +479,16 @@ operator's word (step 11), never before.
       `"verdict": "EXCEEDED"` for the planted case, and a second
       invocation on the real (non-exceeding) state shows `"verdict":
       "WITHIN"` or `"NO_CEILING"` (restored).
+      PROOF: `tools/diff_budget.py origin/main --ceiling 10 --paths
+      .claude/skills/dr-implement-fix` -> `"verdict": "EXCEEDED"` (27
+      actual insertions against an artificially low 10-line ceiling,
+      simulating a FIX.md ceiling the diff violates). Restore:
+      `--ceiling 200` against the same real diff -> `"verdict":
+      "WITHIN"`. Proves dr-implement-fix's new item 8 (mechanized via
+      this exact tool invocation shape) actually catches an
+      over-budget case and passes an in-budget one — no fixture file
+      needed since the mutation is expressed entirely via the
+      `--ceiling` argument; no commit.
 
 - [ ] 25. (S15) L5 ship-test: using the SAME planted violation as step
       24 (a `FIX.md`-shaped budget ceiling exceeded by a diff), run it
