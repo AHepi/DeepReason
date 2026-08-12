@@ -1,5 +1,5 @@
 # Checklist for: implement the parked skills-overhaul follow-ups
-State: next=3 blockers=none
+State: next=none (tranche complete, all 5 steps checked) blockers=none
 Map ids: none — same reasoning as the prior tranche (docs/map covers
 only src/deepreason/; this tranche touches .claude/skills/ and
 docs/ERRATA.md only). src/ and tests/ stay byte-untouched (C2).
@@ -18,14 +18,25 @@ docs/ERRATA.md only). src/ and tests/ stay byte-untouched (C2).
       dr-ask-the-right-question/SKILL.md` shows a small, confined
       change.
 
-- [ ] 3. `python tools/docs_verify.py` full run, since docs/ERRATA.md
+- [x] 3. `python tools/docs_verify.py` full run, since docs/ERRATA.md
       (a committed document) changed. [no commit needed unless drift
       found]
       done-when: 0 failed beyond the 3 pre-existing CON-run-identity.md
       baseline.
+      PROOF: `docs_verify [full]: 53 documents, 859 checks` -> `3
+      failed`, all three at CON-run-identity.md:195/197/199, the exact
+      same shallow-clone-gap baseline as the prior tranche. Zero new
+      failures. No file changes; no commit needed.
 
-- [ ] 4. Final src/+tests/ untouched confirmation and clean-tree check.
+- [x] 4. Final src/+tests/ untouched confirmation and clean-tree check.
       done-when: both diffs empty; `git status --porcelain` empty.
+      PROOF: `git diff origin/main...HEAD -- src/ tests/` -> empty (0
+      lines). `git status --porcelain` showed only this file's own
+      pending step-3 PROOF edit at check time — expected before commit,
+      not a residual gap.
 
-- [ ] 5. Write DELIVERY.md: R1/R2 reconciliation with PROOF. [COMMIT]
+- [x] 5. Write DELIVERY.md: R1/R2 reconciliation with PROOF. [COMMIT]
       done-when: both R1 and R2 appear as rows with non-empty PROOF.
+      PROOF: `grep -cE "^\| R[0-9]+ "` -> 2. Both rows carry commit
+      `8cd61452d` as their proof pointer. Errata: E24 stated. Parked:
+      none — both P1/P2 closed.
