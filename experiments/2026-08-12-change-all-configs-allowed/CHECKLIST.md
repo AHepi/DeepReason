@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=14 blockers=none
+State: next=15 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -289,13 +289,16 @@ order. One step per `dr-execute-step` invocation.
       DONE: `tests/test_intake_form.py tests/test_error_catalog.py -q` -> `21 passed`;
       `tests/test_mcp.py tests/test_mcp_help.py -q` -> `89 passed`.
 
-- [ ] 14. (S-DOC) [COMMIT] Ledger REQUEST.md's two operator-verbatim
+- [x] 14. (S-DOC) [COMMIT] Ledger REQUEST.md's two operator-verbatim
       statements (R1 and the superseded R1a) as a new standing entry in
       CLAUDE.md's "Operator design laws" section, quoting the operator
       verbatim, noting the supersession explicitly, in the SAME commit
       as this step (a docs-only commit is acceptable here since no code
       changes in this step).
       done-when: `grep -q "All configurations should be allowed" CLAUDE.md`, `grep -q "flat out denial" CLAUDE.md`, then commit and push.
+      DONE: both checks pass; new bullet added after "Tokens are cheap;
+      the agent is not", quoting R1 verbatim and noting R1a's
+      supersession, pointing at this tranche directory.
 
 - [ ] 15. (S-VERIFY) Prove R8 (old roots replay byte-unchanged) with a
       targeted `verify_root_report` on a committed root that carries
