@@ -552,11 +552,15 @@ operator's word (step 11), never before.
       Errata section (step 29), matching dr-deliver-change's own
       template rather than duplicating the statement here.
 
-- [ ] 28. (S18, S22) Final `src/`-untouched confirmation:
+- [x] 28. (S18, S22) Final `src/`-untouched confirmation:
       `git diff origin/main...HEAD -- src/` -> empty, run one more time
       after all Phase C edits, as the code-gate canary REQUEST.md
       names explicitly.
       done-when: empty output.
+      PROOF: empty (0 lines), the Nth confirmation across every step of
+      this tranche (steps 4, 10, 14 through 28 all re-ran this same
+      check) — `src/` has been byte-identical to `origin/main` for the
+      entire tranche, not just at this final checkpoint.
 
 - [ ] 29. (S20) Write DELIVERY.md: R-by-R reconciliation for R1-R25
       (including both amendments), each row's disposition (`done` /
