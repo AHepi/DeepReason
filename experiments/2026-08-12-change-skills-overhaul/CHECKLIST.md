@@ -452,7 +452,7 @@ operator's word (step 11), never before.
       assumption audit) -> 8/9. `grep -E "^[0-9]+[ab][0-9]*\."` ->
       empty; full 1-9 sequence contiguous. 118 -> 117 lines.
 
-- [ ] 23. (S19) `python tools/docs_verify.py` full run (not `--fast`)
+- [x] 23. (S19) `python tools/docs_verify.py` full run (not `--fast`)
       after all skill edits, to confirm no map document was broken by
       wording changes in `.claude/skills/` (expected: none, since
       `docs/map/` covers `src/deepreason/` only, but run for the
@@ -462,6 +462,12 @@ operator's word (step 11), never before.
       done-when: 0 failed, matching the 3 pre-existing CON-run-
       identity.md shallow-clone-failure baseline exactly (no new
       failures).
+      PROOF: `docs_verify [full]: 53 documents, 859 checks, 4 workers`
+      -> `docs_verify: 3 failed`, all three at `CON-run-identity.md`
+      lines 195/197/199, all `fatal: ambiguous argument ... unknown
+      revision` (shallow-clone history gaps — the exact pre-registered
+      baseline). Zero new failures. Run took >120s (backgrounded,
+      completed exit 0). No file changes; no commit needed.
 
 - [ ] 24. (S14, G6) Mutation-prove the one newly-wired GATE (step 18's
       `tools/diff_budget.py` mechanization on `dr-implement-fix`):
