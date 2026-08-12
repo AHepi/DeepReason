@@ -32,11 +32,15 @@ config = Config(
     bridge={"mode": "grounded_two_stage"},
     roles={"conjecturer": route(), "synthesizer": route(), "summarizer": route(), "thesis": route()},
 )
-compile_run_manifest(config, workload_profile="text", rubric_policy="forbid", compiled_at="2026-08-12T00:00:00Z")
+compile_run_manifest(config, schema_version=2, workload_profile="text", rubric_policy="forbid", compiled_at="2026-08-12T00:00:00Z")
 ```
 
-- **Block 1** (schema_version left at its default, which resolves below
-  3): `GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED` at `/bridge/mode` —
+- **Block 1** (`schema_version=2`, below the v3 grounded-bridge ceiling —
+  the compiler's own true default, `SCHEMA_VERSION = 1`, cannot carry
+  `workload_profile` at all and so is not a meaningful "block 1" on its
+  own; `schema_version=2` is the smallest version that isolates the
+  bridge-specific gate, and is what the codebase's own pre-existing test
+  used): `GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED` at `/bridge/mode` —
   "grounded_two_stage requires RunManifest schema v3." A schema-ceiling
   gate: the mode is unrepresentable below v3 (`bridge_policy` itself is
   popped from every v1/v2 document).
@@ -44,7 +48,21 @@ compile_run_manifest(config, workload_profile="text", rubric_policy="forbid", co
   at `/roles/judge` — "grounded bridge requires an explicit 'judge' route."
   A backend-identity/combination gate: `grounding_review` defaults `True`,
   and no role in the config's own `roles` maps to the bridge's
-  `reviewer_role` ("judge").
+  `reviewer_role` ("judge"). (`BRIDGE_REVIEWER_SEATS_MISMATCH` also fires
+  alongside it once converted — zero routes is also fewer than
+  `reviewer_seats=1` — a second, genuinely distinct fact about the same
+  missing role, not a duplicate.)
+
+**Known gap, found during conversion, not in the original census:** the
+same config at `schema_version=6` (not 3) hits a THIRD, unconverted site —
+`V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED` inside
+`_compile_route_seat_behavioral_capability_plan`, a v6-only downstream
+consequence of the same missing judge route (the v6 behavioral-plan
+compiler tries to assign the bridge's wire contract to `judge[0]` and finds
+no route there). This tranche's R2/R3 promise is proven for
+`schema_version` 2 and 3 above; it is NOT yet proven for `schema_version=6`
+with the identical missing-role configuration — recorded honestly in
+DELIVERY.md rather than silently claimed.
 
 Both are re-run at the end of `dr-validate-change` to prove they compile
 clean (notices allowed, zero denials) — see §7.

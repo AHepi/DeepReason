@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=8 blockers=none
+State: next=9 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -143,13 +143,26 @@ order. One step per `dr-execute-step` invocation.
       one additional, newly-identified site.
       Ring: `python -m pytest tests/test_v6_route_seat_behavioral_capability_plan.py tests/test_v6_contract_schema_repair_policy.py tests/test_foreign_criticism_policy_c3.py tests/test_run_manifest_v5_inquiry.py -q` -> `64 passed` (no regression elsewhere from the dedup/object.__setattr__ change).
 
-- [ ] 8. (S-B7) Reproduce SPEC §1's two grounded-extension blocks against
+- [x] 8. (S-B7) Reproduce SPEC §1's two grounded-extension blocks against
       the now-converted code and confirm both compile clean with
       notices — this is the tranche's explicit delivery proof.
       done-when: the §1 script (schema_version omitted, then with
       schema_version=3 and no judge route) now returns a compiled
       `RunManifest` with `len(manifest.compile_notices) >= 1` at each
       stage instead of raising, paste the notices' `.code` values.
+      CORRECTION found while executing: "schema_version omitted" (the
+      compiler's true default, 1) cannot carry `workload_profile` at
+      all — that was masked before conversion because
+      GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED raised first, every time,
+      regardless. Re-scoped block 1 to `schema_version=2` (matching the
+      codebase's own pre-existing `test_new_features_require_v3_...`
+      fixture) — SPEC §1 updated with this correction plus the
+      schema_version=6 known-gap note.
+      DONE:
+        BLOCK 1 -- compiled OK, schema_version = 2, bridge_policy = None
+          notices: ['GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED']
+        BLOCK 2 -- compiled OK, schema_version = 3
+          notices: ['BRIDGE_REVIEWER_ROUTE_REQUIRED', 'BRIDGE_REVIEWER_SEATS_MISMATCH']
 
 - [ ] 9. (S-C1) Convert `BridgeConfig._grounded_mode_preserves_valid_unresolved_results`
       (`config.py` :228-244) from `raise` to a no-op pass-through — grep
