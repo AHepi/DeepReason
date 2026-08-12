@@ -513,7 +513,7 @@ operator's word (step 11), never before.
       compare a machine makes. Catch demonstrated; no further artifact
       needed beyond step 24's pasted output.
 
-- [ ] 26. (S19) Full gate: `python -m pytest tests/ -q -n 4`. Compare
+- [x] 26. (S19) Full gate: `python -m pytest tests/ -q -n 4`. Compare
       against baseline (1 pre-existing `test_bronze_report` failure; 5
       MCP-thread tests known-flaky under `-n 4` — isolate with a serial
       rerun before attributing any of the 5 to this tranche).
@@ -523,6 +523,17 @@ operator's word (step 11), never before.
       NEW failures attributable to this tranche's `.claude/skills/` or
       `CLAUDE.md` edits (which is itself confirmatory, since `src/`
       stays byte-untouched and these are documentation-only changes).
+      PROOF: `1 failed, 3535 passed, 7 skipped in 1001.22s (0:16:41)`
+      (backgrounded; exceeded the 8-min estimate, ran ~16:41). The one
+      failure: `tests/test_bronze_report.py::
+      test_census_totals_internally_consistent` — matches the
+      pre-registered baseline exactly (`assert 159 == 165`, a
+      census-vs-gate-measures count mismatch unrelated to
+      `.claude/skills/`). None of the 5 named MCP-thread flaky tests
+      failed this run — no isolation rerun needed. Causation check:
+      `git diff origin/main...HEAD -- tests/` and `-- src/` both empty
+      — this tranche has touched neither, so the one failure cannot be
+      attributed here by construction, not just by baseline match.
 
 - [ ] 27. (S17) docs/ERRATA.md: state explicitly "errata: none" for
       this tranche (per the reasoning in step 12's PROOF — no
