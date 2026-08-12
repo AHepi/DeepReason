@@ -356,7 +356,7 @@ operator's word (step 11), never before.
       124 -> 89 lines. Routing table and scope contract, both
       family-specific, left untouched.
 
-- [ ] 16. (S12, S13) Edit `dr-change-orchestrator/SKILL.md`: replace
+- [x] 16. (S12, S13) Edit `dr-change-orchestrator/SKILL.md`: replace
       the map-preflight block, the commit-every-boundary sentence, and
       the stop-format sentence with pointers at `dr-drive-harness`;
       leave its already-correct env-preflight delegation untouched.
@@ -364,6 +364,14 @@ operator's word (step 11), never before.
       done-when: `grep -c "dr-drive-harness" .claude/skills/
       dr-change-orchestrator/SKILL.md` -> increases; map-preflight
       section is now a pointer, not a restated block.
+      PROOF: `grep -c "dr-drive-harness"` -> 5 (up from 1). Trimmed:
+      map-preflight full block -> pointer at §4; commit-every-boundary
+      -> pointer at §1; stop-format sentence -> pointer at §6's
+      calibration note; root-retirement/credentials hard-prohibition
+      line -> pointer at §1/§3. Env-preflight section left completely
+      untouched (already the correct delegation model, per DESIGN.md).
+      127 -> 110 lines. Routing table, ledger rule, scope contract
+      items 1-2, tranche layout: all family-specific, untouched.
 
 - [ ] 17. (S12, S13) Edit `dr-deliver-change/SKILL.md`: renumber "3b"
       and "3c" into the main numbered procedure (authoring-skills S5).
