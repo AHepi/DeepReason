@@ -1,5 +1,5 @@
 <!-- DR-CON-seats -->
-Verified-at: bdc476e8
+Verified-at: 47ec08a5
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
@@ -114,7 +114,7 @@ of information the manifest already froze at mint time.
 | Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
 | Whether the compiled manifest's criticism goes through a school seat at all — a Config-driven branch, not a seat mechanism itself (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10; full detail in `DR-CON-authority`) | `preparation.py` | `build_preparation_manifest`; `Config.LEGACY_CRITICISM_ENABLED` |
 | The setup-time provider/model/transport bundle | `provider_profile.py` | `ProviderProfileV1` |
-| Role-group -> role-name expansion, binding persistence, and the never-last-wins conflict refusal | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
+| Role-group -> role-name expansion, binding persistence, and deterministic conflict RESOLUTION (a direct group beats an alias, then alphabetically-last-group-wins — all-configs-allowed, 2026-08-12: was a refusal, "never last-one-wins"; SeatBindingError now covers only malformed/unknown-group shape errors) | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
 | Group-keyed binding view, no role expansion (Rung S5's mint-time carrier) | `seat_bindings.py` | `resolve_seat_bindings_by_group` |
 | Which provider/model sat in which seat, in the append-only record (Rung S5) | `seat_events.py`, `harness.py`, `scheduler/scheduler.py` | `SeatBindingV1`, `SeatBindingsEventPayloadV1`, `recorded_seat_bindings`, `seat_bindings_for_run`, `Harness.record_seat_bindings`, `Scheduler._record_seat_bindings` |
 | The ONE call site that bypasses `LLMAdapter.call` entirely | `cli/doctor.py` | qualification battery: `render_role_prompt` + inline `EndpointLease` construction, dispatched via `endpoint.complete` directly |
@@ -146,8 +146,26 @@ carry it (already-heterogeneous-capable, per this document's own
 `check: grep -q "seat_bindings and role in seat_bindings" src/deepreason/preparation.py`
 
 **A role bound by two different `--seat` groups with two different
-profiles refuses typed; it never silently picks the last one parsed.**
-`check: grep -q "SEAT_BINDING_ROLE_CONFLICT" src/deepreason/seat_bindings.py`
+profiles resolves deterministically; it never silently picks whichever
+group happened to sort or load first** (all-configs-allowed, 2026-08-12 —
+was a typed refusal; a direct group now outranks one reaching the role only
+through `GROUP_ALIASES`, and two equally-direct groups resolve to the
+alphabetically later group name, proved by firing the conflict both ways,
+not by grepping a retired string).
+`check: python -c "
+from unittest.mock import patch
+from deepreason.seat_bindings import resolve_seat_bindings
+from deepreason.provider_profile import ProviderProfileV1
+common = dict(provider='fixture', endpoint='https://x.invalid/v1', family='f', context_window_tokens=1024, maximum_completion_tokens=256, credential_env='K')
+a = ProviderProfileV1.create(model_id='a', **common)
+b = ProviderProfileV1.create(model_id='b', **common)
+with patch('deepreason.seat_bindings.resolve_seat_bindings_by_group', return_value={'conjecture': a, 'simulation': b}):
+    direct = resolve_seat_bindings()
+with patch('deepreason.seat_bindings.resolve_seat_bindings_by_group', return_value={'conjecture': a, 'scratch': b}):
+    tie = resolve_seat_bindings()
+assert direct['conjecturer'] == a, 'direct group must outrank its own alias'
+assert tie['conjecturer'] == b, 'alphabetically later group must win a same-directness tie'
+"`
 
 **The qualification battery never calls `select_lease`; it builds its
 own `EndpointLease` straight from the manifest's per-`(role, seat)`

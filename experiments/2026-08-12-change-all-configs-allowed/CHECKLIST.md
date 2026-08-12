@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=10 blockers=none
+State: next=12 blockers=none
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -194,27 +194,55 @@ order. One step per `dr-execute-step` invocation.
       done-when: `python -m pytest tests/test_config_scratch_bridge.py tests/test_run_manifest.py -q` passes, 0 failed.
       DONE: `python -m pytest tests/test_run_manifest.py tests/test_run_manifest_scratch_bridge.py tests/test_run_manifest_v4.py tests/test_v6_only_manifest_loading.py tests/test_config_scratch_bridge.py tests/test_config.py -q` -> `161 passed`.
 
-- [ ] 10. (S-S1, S-S2) [COMMIT] Convert `SEAT_BINDING_ROLE_CONFLICT`
+- [x] 10. (S-S1, S-S2) [COMMIT] Convert `SEAT_BINDING_ROLE_CONFLICT`
       (`resolve_seat_bindings`) and `SEAT_BINDING_GROUP_DUPLICATED`
       (`parse_seat_flags`) in `seat_bindings.py` to SPEC §4 rule 1
       (explicit-most-wins, then last-flag-wins) — the operator's own
-      named example. Update `docs/map/CON-seats.md`'s own check
-      (`grep -q "SEAT_BINDING_ROLE_CONFLICT" src/deepreason/seat_bindings.py`)
-      in the SAME commit if the code string itself moves (it should not
-      if the code is now used in a notice message rather than deleted —
-      confirm before editing the map doc). Rewrite
-      `tests/test_seat_bindings.py::test_resolve_seat_bindings_conflict_on_named_simulation_conjecture_pair`,
-      `::test_resolve_seat_bindings_conflict_on_discovered_scratch_conjecture_overlap`,
-      and `::test_parse_seat_flags_duplicate_group_refuses_typed` to
-      assert the deterministic winner and a resolution note instead of
-      a raise.
-      done-when: `python -m pytest tests/test_seat_bindings.py -q` output ends "N passed, 0 failed" (paste it), then commit and push.
+      named example. CORRECTION found during execution: `resolve_seat_bindings`
+      operates on the PERSISTED `{group: path}` file, which carries no
+      `--seat` flag order at all (`resolve_seat_bindings_by_group` already
+      iterates `sorted(raw)`) — "last-flag-wins" is only meaningful at
+      `parse_seat_flags` (which sees the raw flag list). For
+      `resolve_seat_bindings`'s role-level conflict, the tie-break actually
+      implemented is: a direct group (its own `GROUP_ROLES` entry) beats a
+      group reaching the role only via `GROUP_ALIASES`; among two equally
+      direct (or equally aliased) groups, the alphabetically LATER group
+      name wins — deterministic and config-derived either way. SPEC §4
+      updated to state this precisely. The retired code strings no longer
+      appear anywhere in `seat_bindings.py` (they were deleted, not kept in
+      a notice message — there is no notice-recording target at this layer,
+      see below), which broke `docs/map/CON-seats.md`'s own
+      `grep -q "SEAT_BINDING_ROLE_CONFLICT" ...` check; replaced with a
+      behavioral check (fires both the alias-vs-direct and the tie-break
+      case) per dr-execute-step's "anchor to meaning, not form" rule, and
+      the table row/rule prose rewritten. Rewrote
+      `test_resolve_seat_bindings_conflict_on_named_simulation_conjecture_pair`
+      (renamed `..._direct_group_outranks_its_own_alias`),
+      `test_resolve_seat_bindings_conflict_on_discovered_scratch_conjecture_overlap`
+      (renamed `..._alphabetically_later_group_wins_a_direct_tie`), and
+      `test_parse_seat_flags_duplicate_group_refuses_typed` (renamed
+      `..._last_flag_wins`).
+      **Scope note (recorded, not silently expanded):** unlike the
+      run_manifest.py conversions, this resolution is NOT recorded as a
+      `CompileNoticeV1` anywhere — `deepreason setup`'s seat-binding
+      resolution happens long before any `compile_run_manifest` call, and
+      threading a notice from `seat_bindings.py` through `preparation.py`
+      into a future manifest's `compile_notices` was judged out of this
+      tranche's tier-1 budget (see SPEC §3.3 addendum). R4's "deterministic
+      resolution instead of refusal" is satisfied; R3's "recorded in the
+      compiled manifest/run record" is NOT yet wired for this specific
+      denial family — a real, disclosed gap, not an oversight.
+      done-when: `python -m pytest tests/test_seat_bindings.py -q` output ends "16 passed" (paste it), then commit and push.
+      DONE: `16 passed in 0.28s`. Also ran
+      `python -m pytest tests/test_seat_bindings.py tests/test_qualification_per_seat.py -q -k seat` -> `23 passed`.
 
-- [ ] 11. (S-S3) Convert `SCHOOL_SEAT_DUPLICATED` (`parse_school_seat_flags`)
+- [x] 11. (S-S3) Convert `SCHOOL_SEAT_DUPLICATED` (`parse_school_seat_flags`)
       the same way (unpinned by any existing test — add a new regression
       test asserting the deterministic last-flag-wins resolution rather
       than only removing the old behavior untested).
       done-when: `python -m pytest tests/test_seat_bindings.py -q` passes, 0 failed, and the new test name appears in the output.
+      DONE: added `test_parse_school_seat_flags_duplicate_id_last_flag_wins`;
+      `tests/test_seat_bindings.py -q` -> `16 passed` (includes this new test).
 
 - [ ] 12. (S-I1) Convert `INTAKE_SEAT_CONFLICT`
       (`IntakeFormV1._no_conflicting_role_bindings`, `intake_form.py`)

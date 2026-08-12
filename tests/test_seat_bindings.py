@@ -47,10 +47,13 @@ def test_parse_seat_flags_unknown_group_refuses_typed():
     assert excinfo.value.code == "SEAT_BINDING_GROUP_UNKNOWN"
 
 
-def test_parse_seat_flags_duplicate_group_refuses_typed():
-    with pytest.raises(SeatBindingError) as excinfo:
-        parse_seat_flags(["coder=/tmp/a.yaml", "coder=/tmp/b.yaml"])
-    assert excinfo.value.code == "SEAT_BINDING_GROUP_DUPLICATED"
+def test_parse_seat_flags_duplicate_group_last_flag_wins():
+    """All-configs-allowed (2026-08-12): a repeated --seat group used to
+    refuse (SEAT_BINDING_GROUP_DUPLICATED); the last flag for that group now
+    wins deterministically instead."""
+    assert parse_seat_flags(["coder=/tmp/a.yaml", "coder=/tmp/b.yaml"]) == {
+        "coder": "/tmp/b.yaml"
+    }
 
 
 def test_parse_seat_flags_simulation_alias_parses():
@@ -60,6 +63,18 @@ def test_parse_seat_flags_simulation_alias_parses():
     assert "simulation" in GROUP_ALIASES
     assert GROUP_ALIASES["simulation"] == "conjecture"
     assert GROUP_ALIASES["simulation"] in GROUP_ROLES
+
+
+def test_parse_school_seat_flags_duplicate_id_last_flag_wins():
+    """All-configs-allowed (2026-08-12): a repeated --school-seat id used to
+    refuse (SCHOOL_SEAT_DUPLICATED, previously unpinned by any test); the
+    last flag for that id now wins deterministically, the same rule as
+    parse_seat_flags's group duplicate above."""
+    from deepreason.seat_bindings import parse_school_seat_flags
+
+    assert parse_school_seat_flags(
+        ["school-0=/tmp/a.yaml", "school-0=/tmp/b.yaml"]
+    ) == {"school-0": "/tmp/b.yaml"}
 
 
 def test_write_and_load_seat_bindings_round_trip(tmp_path):
@@ -77,11 +92,14 @@ def test_resolve_seat_bindings_no_file_is_no_bindings(tmp_path):
     assert resolve_seat_bindings(home=str(tmp_path)) == {}
 
 
-def test_resolve_seat_bindings_conflict_on_named_simulation_conjecture_pair(
+def test_resolve_seat_bindings_direct_group_outranks_its_own_alias(
     tmp_path,
 ):
-    """R8/R9: conflicting --seat values for the shared role set (simulation
-    aliases conjecture) refuse typed, never last-one-wins."""
+    """All-configs-allowed (2026-08-12), R4 rule 1: conflicting --seat values
+    for the shared role set (simulation aliases conjecture) used to refuse
+    typed (SEAT_BINDING_ROLE_CONFLICT); the DIRECT group ("conjecture") now
+    wins deterministically over the group reaching the same role only
+    through GROUP_ALIASES ("simulation"), regardless of alphabetical order."""
 
     profile_a = tmp_path / "a.yaml"
     profile_b = tmp_path / "b.yaml"
@@ -91,18 +109,19 @@ def test_resolve_seat_bindings_conflict_on_named_simulation_conjecture_pair(
         {"conjecture": str(profile_a), "simulation": str(profile_b)},
         seat_bindings_path(home=str(tmp_path)),
     )
-    with pytest.raises(SeatBindingError) as excinfo:
-        resolve_seat_bindings(home=str(tmp_path))
-    assert excinfo.value.code == "SEAT_BINDING_ROLE_CONFLICT"
-    assert "conjecturer" in str(excinfo.value)
+    resolved = resolve_seat_bindings(home=str(tmp_path))
+    assert resolved["conjecturer"].model_id == "model-a"
+    assert resolved["variator"].model_id == "model-a"
 
 
-def test_resolve_seat_bindings_conflict_on_discovered_scratch_conjecture_overlap(
+def test_resolve_seat_bindings_alphabetically_later_group_wins_a_direct_tie(
     tmp_path,
 ):
-    """A8: the same typed refusal applies to the scratch/conjecture overlap
-    (both claim "conjecturer") this tranche's spec discovered, not only the
-    operator-named simulation/conjecture pair."""
+    """All-configs-allowed (2026-08-12), R4 rule 1: the scratch/conjecture
+    overlap (both claim "conjecturer" directly, no alias on either side) used
+    to refuse typed (SEAT_BINDING_ROLE_CONFLICT); with no direct/alias
+    distinction to break the tie, the alphabetically LATER group name
+    ("scratch" > "conjecture") wins deterministically."""
 
     profile_a = tmp_path / "a.yaml"
     profile_b = tmp_path / "b.yaml"
@@ -112,9 +131,8 @@ def test_resolve_seat_bindings_conflict_on_discovered_scratch_conjecture_overlap
         {"conjecture": str(profile_a), "scratch": str(profile_b)},
         seat_bindings_path(home=str(tmp_path)),
     )
-    with pytest.raises(SeatBindingError) as excinfo:
-        resolve_seat_bindings(home=str(tmp_path))
-    assert excinfo.value.code == "SEAT_BINDING_ROLE_CONFLICT"
+    resolved = resolve_seat_bindings(home=str(tmp_path))
+    assert resolved["conjecturer"].model_id == "model-b"
 
 
 def test_resolve_seat_bindings_same_profile_is_not_a_conflict(tmp_path):

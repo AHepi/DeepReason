@@ -242,10 +242,24 @@ frozen-record) — the operator's own scope carve-outs (R2, R5, R8).
 
 | Code | Site | Decision | Conversion rule |
 |---|---|---|---|
-| `SEAT_BINDING_ROLE_CONFLICT` | `resolve_seat_bindings` | **CONVERT-T1** | **The operator's own named example.** Precedence: explicit-most-wins — a group named directly for its expanded role (e.g. `--seat conjecture=` binding `conjecturer`) outranks a group reaching that role only through `GROUP_ALIASES`/overlap (e.g. `--seat simulation=` aliasing to the same group, or `--seat scratch=` overlapping via `GROUP_ROLES`). Where BOTH bindings are equally direct (two literal groups whose OWN `GROUP_ROLES` both list the role with no alias indirection), fall back to flag order: the LAST `--seat` flag for that direct group wins (deterministic, since `parse_seat_flags` already preserves flag order) |
-| `SEAT_BINDING_GROUP_DUPLICATED` | `parse_seat_flags` | **CONVERT-T1** | Precedence: last-flag-wins (same rule applied one level earlier, before role expansion) |
+| `SEAT_BINDING_ROLE_CONFLICT` | `resolve_seat_bindings` | **CONVERT-T1** | **The operator's own named example.** Precedence: a group named directly for its own `GROUP_ROLES` entry outranks a group reaching the role only through `GROUP_ALIASES` (e.g. `--seat conjecture=` beats `--seat simulation=` for `conjecturer`); among two equally-direct groups (e.g. `--seat conjecture=` vs `--seat scratch=`, both listing `conjecturer` directly), the alphabetically LATER group name wins. **Correction from the original plan, found during execution:** `resolve_seat_bindings` reads the PERSISTED `{group: path}` file (`resolve_seat_bindings_by_group` already iterates `sorted(...)`), which carries no `--seat` flag order at all — "last-flag-wins" as a tie-break is unavailable at this layer, so the alphabetical rule is used instead of flag order for the equally-direct case. |
+| `SEAT_BINDING_GROUP_DUPLICATED` | `parse_seat_flags` | **CONVERT-T1** | Precedence: last-flag-wins (genuinely available here — this function sees the raw flag list before any file round-trip) |
 | `SCHOOL_SEAT_DUPLICATED` | `parse_school_seat_flags` | **CONVERT-T1** | Same last-flag-wins rule (unpinned by any test today — lowest risk to convert first) |
 | `SEAT_BINDING_GROUP_UNKNOWN`, `SEAT_BINDING_FLAG_MALFORMED`, `SEAT_BINDING_FILE_MALFORMED`, `SCHOOL_SEAT_FLAG_MALFORMED`, `SCHOOL_SEAT_ID_MALFORMED` | various | **STAYS** | Structural/parse — closed-enum or shape checks with no cross-field dependency |
+
+**Addendum, found during execution:** none of the three seat-binding
+conversions above record a `CompileNoticeV1` anywhere. `deepreason setup`'s
+seat-binding resolution runs long before any `compile_run_manifest` call
+(it persists a `{group: path}` file that `preparation.py` reads at manifest-
+build time), and threading a notice from `seat_bindings.py` through
+`preparation.py` into a future manifest's `compile_notices` was judged out
+of this tranche's tier-1 budget. R4 ("deterministic resolution instead of
+refusal") is satisfied for all three; R3 ("recorded in the compiled
+manifest/run record") is NOT yet wired for this specific denial family —
+disclosed here and in DELIVERY.md, not silently dropped. The retired code
+strings no longer appear anywhere in `seat_bindings.py` (there is no
+notice-message target to keep them in), which required updating
+`docs/map/CON-seats.md`'s own `grep`-based check to a behavioral one.
 
 ### 3.4 `intake_form.py` / `cli/main.py`
 
@@ -271,12 +285,15 @@ frozen-record) — the operator's own scope carve-outs (R2, R5, R8).
 
 Two rules cover every R4 conflict this tranche converts:
 
-1. **Explicit-most-wins, then last-flag-wins.** For seat/role-binding
-   conflicts (`SEAT_BINDING_ROLE_CONFLICT`, `SEAT_BINDING_GROUP_DUPLICATED`,
-   `SCHOOL_SEAT_DUPLICATED`, `INTAKE_SEAT_CONFLICT`): a group/binding that
-   names its role directly outranks one that reaches it only through an
-   alias or overlap; among equally-direct bindings, the last one given
-   wins. Same config in (same flag order) → same resolution out, always.
+1. **Explicit-most-wins, then a deterministic tie-break.** For seat/role-
+   binding conflicts (`SEAT_BINDING_ROLE_CONFLICT`, `INTAKE_SEAT_CONFLICT`):
+   a group/binding that names its role directly outranks one that reaches
+   it only through an alias; among equally-direct bindings, the
+   alphabetically later group name wins (flag order is not preserved
+   through to this layer — see §3.3's addendum). For the two flag-parsing
+   duplicates that DO see raw flag order (`SEAT_BINDING_GROUP_DUPLICATED`,
+   `SCHOOL_SEAT_DUPLICATED`), the last flag given wins. Same config in →
+   same resolution out, always, in both forms.
 2. **Stronger-diversity-request wins.** For
    `JUDGE_FAMILY_AND_BLIND_SAME_MODEL_CONFLICT` (both the `run_manifest.py`
    and `cli/main.py` sites): `--judge-family`/`judge_family` (an explicit

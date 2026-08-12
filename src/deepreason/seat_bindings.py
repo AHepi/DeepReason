@@ -105,11 +105,10 @@ def parse_seat_flags(values: list[str] | None) -> dict[str, str]:
                 f"--seat group {group!r} is not one of "
                 f"{sorted(_known_groups())}",
             )
-        if group in bindings:
-            raise SeatBindingError(
-                "SEAT_BINDING_GROUP_DUPLICATED",
-                f"--seat group {group!r} was given more than once",
-            )
+        # All-configs-allowed (2026-08-12): a repeated --seat group used to
+        # refuse; the last flag for that group now wins deterministically
+        # (dict re-assignment keeps the LAST value, which is what a caller
+        # printing "--seat {group}={path}" from these bindings will show).
         bindings[group] = path
     return bindings
 
@@ -173,33 +172,41 @@ def resolve_seat_bindings(
     environ: Mapping[str, str] | None = None,
 ) -> dict[str, ProviderProfileV1]:
     """Return ``{role_name: ProviderProfileV1}`` for every explicitly bound
-    role, expanding group aliases and role sets. Refuses typed when two
-    bound groups claim the same role with different resolved profiles —
-    "never last-one-wins" applies to any such overlap, not only the
-    operator-named simulation/conjecture pair (this module's scratch/
-    conjecture overlap, both claiming "conjecturer", is the identical
-    failure shape).
+    role, expanding group aliases and role sets. When two bound groups claim
+    the same role with different resolved profiles, a deterministic
+    precedence rule picks the winner instead of refusing (all-configs-
+    allowed, 2026-08-12; R4 rule 1): a group named directly for its own role
+    set outranks a group reaching the role only through ``GROUP_ALIASES``;
+    among two equally-direct groups (this module's scratch/conjecture
+    overlap, both claiming "conjecturer" with no alias involved on either
+    side, is the identical shape the old refusal covered), the
+    alphabetically LAST group name wins — deterministic and config-derived,
+    since the persisted ``{group: path}`` mapping carries no ``--seat`` flag
+    order to fall back on. Same bindings in, same winner out, always.
     """
 
     by_group = resolve_seat_bindings_by_group(home=home, environ=environ)
     if not by_group:
         return {}
     role_profile: dict[str, ProviderProfileV1] = {}
-    role_group: dict[str, str] = {}
+    role_priority: dict[str, tuple[bool, str]] = {}
     for group in sorted(by_group):
         canonical = GROUP_ALIASES.get(group, group)
+        # A direct group outranks one reaching the role only through an
+        # alias; among equally-direct (or equally-aliased) groups, the
+        # alphabetically later group name wins -- both halves of the
+        # priority tuple compare in the direction that makes "greater wins".
+        priority = (group not in GROUP_ALIASES, group)
         profile = by_group[group]
         for role in sorted(GROUP_ROLES[canonical]):
-            if role in role_profile:
-                if role_profile[role].profile_digest != profile.profile_digest:
-                    raise SeatBindingError(
-                        "SEAT_BINDING_ROLE_CONFLICT",
-                        f"role {role!r} is bound to different profiles by "
-                        f"{role_group[role]!r} and {group!r}",
-                    )
+            if (
+                role in role_profile
+                and role_profile[role].profile_digest != profile.profile_digest
+                and priority <= role_priority[role]
+            ):
                 continue
             role_profile[role] = profile
-            role_group[role] = group
+            role_priority[role] = priority
     return role_profile
 
 
@@ -239,11 +246,9 @@ def parse_school_seat_flags(values: list[str] | None) -> dict[str, str]:
                 "SCHOOL_SEAT_ID_MALFORMED",
                 f"--school-seat id {school_id!r} must match school-N (N >= 0)",
             )
-        if school_id in bindings:
-            raise SeatBindingError(
-                "SCHOOL_SEAT_DUPLICATED",
-                f"--school-seat {school_id!r} was given more than once",
-            )
+        # All-configs-allowed (2026-08-12): a repeated --school-seat id used
+        # to refuse; the last flag for that id now wins deterministically,
+        # the same rule as parse_seat_flags's group duplicate above.
         bindings[school_id] = path
     return bindings
 
