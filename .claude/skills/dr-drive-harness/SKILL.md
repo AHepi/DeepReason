@@ -184,7 +184,9 @@ one goal.
 points at are complete by design — execute them literally rather than
 improvising a summary of them. Never generalize an instruction beyond its
 stated scope; if a spec seems silent about your case, that is a question
-(load `dr-ask-the-right-question`), not an invitation to infer. A
+(load `dr-ask-the-right-question`), not an invitation to infer — an
+accepted, judgment-only exception to authoring-skills' GATE-every-
+negation rule, `docs/ERRATA.md` E24. A
 multi-step program (a handover, a checklist, a ladder) runs one step per
 tranche — finishing a step early is never a reason to start the next in
 the same tranche. Stop conditions and DESIGN-AND-STOP gates are hard
