@@ -66,24 +66,25 @@ interpretation happens, and it happens in writing.
    incident (same file, "the frozen-surface stop did not hold") shows a
    STOP already written in prose is not a STOP that was obeyed — the
    gate exists precisely so that finding cannot be silently outrun by
-   memory three steps later. For changes that add
-   data to the typed record, one more guardrail: the absence-tolerant
-   READER lands before the writer emits, so every existing committed
-   root stays valid with the new data absent (the rung-4 guardrail
-   generalized; X8 is the precedent for keeping new fields out of frozen
-   digests entirely). And a new typed-record OBSERVABLE (field, record
-   type, finding) needs a sweep probe proposed for it in the spec: a
-   sweep that never looks at the new data reports "byte-identical"
-   trivially while proving nothing about it. The probe change is its own
-   SEPARATE commit — extending `tools/root_sweep.py` resets the
-   byte-identity baseline, so it never rides the same commit as the
-   `src/` change it would judge, gets its own before/after capture on an
-   unchanged tree, and follows the tool's probe rule (assert the
-   attribute exists before reading it). Build every proposed test,
-   check, and probe to `dr-execute-step`'s "Durable tests, checks, and
-   probes" rules — they must survive dramatic repo changes, failing
-   only when the guarded claim stops being true.
-4. Blast-radius census — mandatory, pasted, BEFORE any fixture-drift
+   memory three steps later.
+4. Record-observable guardrails, for changes that add data to the
+   typed record: the absence-tolerant READER lands before the writer
+   emits, so every existing committed root stays valid with the new
+   data absent (the rung-4 guardrail generalized; X8 is the precedent
+   for keeping new fields out of frozen digests entirely). A new
+   typed-record OBSERVABLE (field, record type, finding) needs a sweep
+   probe proposed for it in the spec: a sweep that never looks at the
+   new data reports "byte-identical" trivially while proving nothing
+   about it. The probe change is its own SEPARATE commit — extending
+   `tools/root_sweep.py` resets the byte-identity baseline, so it never
+   rides the same commit as the `src/` change it would judge, gets its
+   own before/after capture on an unchanged tree, and follows the
+   tool's probe rule (assert the attribute exists before reading it).
+   Build every proposed test, check, and probe to `dr-execute-step`'s
+   "Durable tests, checks, and probes" rules — they must survive
+   dramatic repo changes, failing only when the guarded claim stops
+   being true.
+5. Blast-radius census — mandatory, pasted, BEFORE any fixture-drift
    prediction. Tool-backed (Rung G6): the same
    `tools/blast_radius.py` invocation step 3 already ran also reports
    `consumers` (tests, map documents, the qualification digest, the
@@ -106,7 +107,7 @@ interpretation happens, and it happens in writing.
    and missed a test pinning "exactly one backend", the exact state
    that rung existed to change. The full gate caught both, three
    commits later than the census would have.
-5. DESIGN-AND-STOP shape. When the deliverable IS the spec (a
+6. DESIGN-AND-STOP shape. When the deliverable IS the spec (a
    [DESIGN-AND-STOP] request), two more sections are mandatory, and
    their discipline is measure-don't-reason (the rung-4 M1-M5
    precedent, the one design spec that survived contact with the
@@ -117,7 +118,7 @@ interpretation happens, and it happens in writing.
    - **Options**: every considered option priced — files touched,
      frozen-surface contact, estimated lines, risk — and every
      rejection cites a measurement, not a preference.
-6. Set the budget: total estimated changed lines and commits. If over
+7. Set the budget: total estimated changed lines and commits. If over
    ~300 lines, propose a split into ordered sub-tranches (each with
    its own delivery) rather than one sprawling one. The Budget
    section's headline number(s) MUST equal the computed sum of the
@@ -128,10 +129,10 @@ interpretation happens, and it happens in writing.
    headline that contradicts its own itemization defeats the ceiling
    before the first commit (Rung S5, REQUEST.md Amendments 2/3: its
    headline said 220-300, its own itemization summed to 435).
-7. Anti-invention pass: re-read SPEC.md and delete anything that does
+8. Anti-invention pass: re-read SPEC.md and delete anything that does
    not trace to an R or C number. If it felt necessary, it is either
    an assumption (record it) or scope creep (PARKED.md).
-8. Rubric pass — the last act before committing. Re-read the finished
+9. Rubric pass — the last act before committing. Re-read the finished
    SPEC.md as a REVIEWER, not the author; any "no" routes back to that
    step before commit:
    - every R has a spec item with a machine-decidable accept?

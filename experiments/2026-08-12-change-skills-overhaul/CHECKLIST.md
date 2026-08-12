@@ -429,11 +429,19 @@ operator's word (step 11), never before.
       "^[0-9]+[abc]\."` -> empty. Lines unchanged (82 -> 82; renumbering
       insertions and the trim cancel out).
 
-- [ ] 21. (S12, S13) Edit `dr-spec-change/SKILL.md`: fold the
+- [x] 21. (S12, S13) Edit `dr-spec-change/SKILL.md`: fold the
       un-lettered "one more guardrail" clause (item 3's afterthought
       sentence) into item 3's own numbered structure. [COMMIT]
       done-when: manual diff confirms the clause reads as part of item
       3's own enumeration, not an appended standalone sentence.
+      PROOF: the clause covered a genuinely different topic
+      (record-observable/sweep-probe requirements) glued onto the end
+      of item 3 (frozen-surface contact forecast) — split into its own
+      new item 4 ("Record-observable guardrails"), renumbering old
+      items 4-8 to 5-9. Checked for stale in-file cross-references
+      (`grep -n "step [0-9]"`) -> the one hit ("step 3 already ran")
+      still correctly points at the unchanged item 3. 196 -> 197 lines
+      (one new heading line). Full 1-9 sequence verified contiguous.
 
 - [ ] 22. (S12, S13) Edit `dr-validate-change/SKILL.md`: renumber
       "4a2", "4a3", and "4b" into the main numbered procedure — the
