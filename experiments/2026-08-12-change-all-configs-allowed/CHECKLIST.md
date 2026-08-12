@@ -1,6 +1,6 @@
 # Checklist for: all configurations are allowed — compile-time denial abolished
 
-State: next=19 blockers=none
+State: all 19 steps checked. blockers=none. Next phase: dr-validate-change.
 
 Map ids: `DR-SUB-manifest` (frozen surface 4, `run_manifest.py`),
 `DR-SUB-application` (`cli/main.py`, `intake_form.py`), `DR-CON-authority`
@@ -374,7 +374,9 @@ order. One step per `dr-execute-step` invocation.
       `root-sweep-before.txt` / `root-sweep-after-all-configs-allowed.txt`
       in this tranche directory. Worktree removed after comparison.
 
-- [ ] 19. (all) [COMMIT] Final push and clean-tree check.
+- [x] 19. (all) [COMMIT] Final push and clean-tree check.
       done-when: `git status --porcelain` is empty AND
       `git log --oneline -1 origin/claude/all-configs-allowed-r54a3b`
       matches local HEAD.
+      DONE: `git status --porcelain` empty; local and remote HEAD both
+      `7fbd2786a`.
