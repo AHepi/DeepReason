@@ -373,12 +373,17 @@ operator's word (step 11), never before.
       127 -> 110 lines. Routing table, ledger rule, scope contract
       items 1-2, tranche layout: all family-specific, untouched.
 
-- [ ] 17. (S12, S13) Edit `dr-deliver-change/SKILL.md`: renumber "3b"
+- [x] 17. (S12, S13) Edit `dr-deliver-change/SKILL.md`: renumber "3b"
       and "3c" into the main numbered procedure (authoring-skills S5).
       [COMMIT]
       done-when: `grep -E "^[0-9]+[ab]\." .claude/skills/dr-deliver-
       change/SKILL.md` -> empty (no more sub-lettered steps); the
       procedure's highest integer step increased by 2.
+      PROOF: 3b/3c -> 4/5; old 4/5 shifted to 6/7; internal cross-
+      reference ("Same state-not-silence pattern as 3b's map delta")
+      updated to "step 4's map delta". `grep -E "^[0-9]+[abc]\."` ->
+      empty. Procedure now reads as one clean 7-step list, no bolted-on
+      markers.
 
 - [ ] 18. (S12, S13, S14) Edit `dr-implement-fix/SKILL.md`: replace the
       root-retirement bullet and the "Durable tests..." pointer-adjacent

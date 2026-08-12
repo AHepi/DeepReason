@@ -28,25 +28,25 @@ what was asked and what was done impossible to miss.
    ready-to-send prompt (the park-with-prompt rule), and the close
    RECOMMENDS one next item from the queue, so the operator answers
    go/no-go rather than authoring the follow-up.
-3b. **Report the map delta.** One short section: which `docs/map/`
+4. **Report the map delta.** One short section: which `docs/map/`
    documents this tranche changed or created, how many checks it added,
    and any document `--stale` still lists with the reason it was left.
    The operator needs to know whether the next reader of this subsystem
    will be told the truth. "No map change" is a legitimate answer for a
    tranche that changed no behaviour — say it rather than omitting the
    section, so its absence is never ambiguous.
-3c. **Errata check — mandatory, before DELIVERY.md is committed.** Did
+5. **Errata check — mandatory, before DELIVERY.md is committed.** Did
    this tranche find any committed document's claim (a handover, a map
    document, a RESULTS.md, a spec, CLAUDE.md — anything docs/ERRATA.md
    covers) to be wrong? If yes, the `docs/ERRATA.md` entry lands in the
    SAME commit as DELIVERY.md. If no, state "errata: none" explicitly
    in DELIVERY.md's Errata section — state it, do not omit the section.
-   Same state-not-silence pattern as 3b's map delta: an absent section
-   is ambiguous, an explicit "none" is not.
-4. Write DELIVERY.md leading with the outcome in plain sentences a
+   Same state-not-silence pattern as step 4's map delta: an absent
+   section is ambiguous, an explicit "none" is not.
+6. Write DELIVERY.md leading with the outcome in plain sentences a
    reader who saw none of the work can follow: what changed, where,
    how it is proven. No process narration ("first I read the file...").
-5. If the request touched experiments/live evidence: append the dated
+7. If the request touched experiments/live evidence: append the dated
    segment to the relevant RESULTS.md per that record's honest-ledger
    style ("accepted does not mean true"; never claim more than the
    record shows). Commit and push it.
