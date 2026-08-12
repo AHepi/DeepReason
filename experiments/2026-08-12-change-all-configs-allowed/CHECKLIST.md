@@ -319,10 +319,15 @@ order. One step per `dr-execute-step` invocation.
       Worktree removed after comparison (`git worktree remove
       /tmp/before-tranche --force`).
 
-- [ ] 16. (all) Map check: `python tools/docs_verify.py`
+- [x] 16. (all) Map check: `python tools/docs_verify.py`
       done-when: exactly the 3 pre-existing `CON-run-identity.md`
       shallow-clone failures from SPEC §7's baseline, no new failures
       (paste the output).
+      DONE: `docs_verify [full]: 53 documents, 859 checks, 4 workers` ->
+      exactly 3 failed, all `CON-run-identity.md` shallow-clone
+      `git log`/`git show` ambiguous-revision failures, matching SPEC §7's
+      baseline exactly (this run also caught and required fixing the two
+      real map-doc drifts from steps 9-11, already committed).
 
 - [ ] 17. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, M failed" where M equals the
