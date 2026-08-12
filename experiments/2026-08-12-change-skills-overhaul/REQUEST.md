@@ -247,3 +247,21 @@ R24 (process): "Remove budget cap" — no `--ceiling` value is passed to
 runs (reporting `NO_CEILING`) so its `total_insertions`/`areas` figures
 stay in the record, but no verdict can be `EXCEEDED` and no STOP fires on
 size alone. Reconciled by `dr-spec-change` — see SPEC.md Amendment 1.
+
+**Amendment 2** (2026-08-12, received immediately after Amendment 1,
+verbatim, correcting it): "I meant your budget. It's imperative you do
+the best job possible. Token limits will prevent you from doing that."
+
+R25 (process, supersedes R24's referent — not its action): Amendment
+1's "budget cap" named the AGENT's own token/effort budget for this
+session, not `tools/diff_budget.py`'s `--ceiling` argument — that
+reading was this session's own mistaken inference, stated plainly here
+rather than left standing. Reading: do not trim thoroughness, evidence
+gathering, or artifact detail to conserve tokens for the remainder of
+this tranche; prioritize doing the job completely and correctly over
+output economy. R24's mechanical action (dropping `--ceiling` from
+`tools/diff_budget.py`) is RETAINED — it was a reasonable, low-cost,
+zero-safety-loss move on its own terms (the frozen-surface and
+`src/`-untouched gates are unaffected) and nothing in Amendment 2
+reverses it — but it is no longer offered as the correct reading of
+"budget cap"; it stands on its own merit only.
