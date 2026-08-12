@@ -443,11 +443,14 @@ operator's word (step 11), never before.
       still correctly points at the unchanged item 3. 196 -> 197 lines
       (one new heading line). Full 1-9 sequence verified contiguous.
 
-- [ ] 22. (S12, S13) Edit `dr-validate-change/SKILL.md`: renumber
+- [x] 22. (S12, S13) Edit `dr-validate-change/SKILL.md`: renumber
       "4a2", "4a3", and "4b" into the main numbered procedure — the
       biggest S5 offender in the set. [COMMIT]
       done-when: `grep -E "^[0-9]+[ab][0-9]*\." .claude/skills/
       dr-validate-change/SKILL.md` -> empty.
+      PROOF: 4a2/4a3/4b -> 5/6/7; old 5/6 (requirement sweep,
+      assumption audit) -> 8/9. `grep -E "^[0-9]+[ab][0-9]*\."` ->
+      empty; full 1-9 sequence contiguous. 118 -> 117 lines.
 
 - [ ] 23. (S19) `python tools/docs_verify.py` full run (not `--fast`)
       after all skill edits, to confirm no map document was broken by
