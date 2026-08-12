@@ -1,5 +1,5 @@
 # Checklist for: overhaul the .claude/skills/ set
-State: next=6 blockers=none
+State: next=7 blockers=none
 Map ids: none. docs/map covers only src/deepreason/ (docs/map/INDEX.md:
 "`docs/map` describes `src/deepreason/`"); this tranche touches only
 .claude/skills/ and CLAUDE.md's "Which workflow to use" section, and
@@ -101,7 +101,7 @@ order. One step per dr-execute-step invocation.
       clusters from CENSUS.md, 1 also closes a genuine G3/X2 gate on
       dr-implement-fix's budget check).
 
-- [ ] 6. (S7) Build DESIGN.md "The new set" section: for every skill
+- [x] 6. (S7) Build DESIGN.md "The new set" section: for every skill
       the step-5 table marks KEEP or as a MERGE target, one row — entry
       artifact | exit artifact | GATE(s) + pass condition | LEDGER
       fields written | LEDGER fields read (the read column must equal
@@ -109,6 +109,15 @@ order. One step per dr-execute-step invocation.
       done-when: every survivor from step 5's table has exactly one row
       here (`comm -23 <(step5 KEEP/MERGE-target names, sorted)
       <(step6 row names, sorted)` -> empty).
+      PROOF: three tables (Family 1: 6 skills, Family 2: 6 skills,
+      cross-cutting: 3 skills) = 15 rows, plus `authoring-skills`
+      correctly excluded (it is a standing authority document with no
+      phase entry/exit, per CENSUS.md's own Inventory row — not a gap).
+      Check: `for f in .claude/skills/*/SKILL.md; do slug=$(basename
+      $(dirname "$f")); grep -q "\`$slug\`" DESIGN.md || echo "MISSING
+      $slug"; done` -> only `authoring-skills` (expected, documented).
+      LEDGER-read columns verified against the preceding row's
+      LEDGER-write column for every sequential (non-cross-cutting) row.
 
 - [ ] 7. (S8) Build DESIGN.md "The router" section: name the one file
       per family (defect-orchestrator family, change-orchestrator

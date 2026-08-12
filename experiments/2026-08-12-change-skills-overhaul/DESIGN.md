@@ -43,3 +43,43 @@ dr-implement-fix). This is the finding to present at the Phase-B STOP,
 not a predetermined outcome — REQUEST's phrasing anticipated
 deletions/merges; the evidence supports mostly deduplication instead,
 and that divergence is stated here rather than forced.
+
+## The new set
+
+One row per surviving skill (every KEEP row above; README.md excluded
+pending the operator's word on its DELETE candidacy). GATE = the
+mechanical pass condition this skill's own Exit criteria already state
+or, where the keep/merge/delete table calls for a DELTA, will state
+after Phase C. LEDGER write = what this skill's own artifact records;
+LEDGER read = what the PRECEDING artifact must already contain (G4: an
+obligation is an input, not a trailing output).
+
+### Family 1 — defect (`deepreason-orchestrator`)
+
+| Skill | Entry | Exit | GATE / pass condition | LEDGER write | LEDGER read |
+|---|---|---|---|---|---|
+| `dr-set-goal` | a problem statement | `GOAL.md` | every template field filled; Success criterion is a command + expected output (machine-decidable) | GOAL.md: Class, Observed, Success criterion, In/NOT-in scope, Budget | the problem statement itself (first phase, no prior ledger) |
+| `dr-diagnose` | `GOAL.md` | `DIAGNOSIS.md` | >=2 evidence pointers (>=1 non-code), a falsifiable prediction, no code modified | DIAGNOSIS.md: Primary cause, Evidence, Implicated code, Falsifiable prediction, Ruled out | GOAL.md's Observed line + Success criterion |
+| `dr-reproduce` | DIAGNOSIS.md's falsifiable prediction | `REPRO.md` + one runnable artifact | pasted output demonstrably shows the defect today; production code untouched | REPRO.md: Form, Artifact, Current output, Confirms diagnosis, Post-fix expectation | DIAGNOSIS.md's Falsifiable prediction |
+| `dr-propose-fix` | `DIAGNOSIS.md` + `REPRO.md` | `FIX.md` | approval gate: class `defect` + diff <=150 lines + no frozen surface -> proceed; else STOP for operator direction | FIX.md: Guarantee restored, Change sites, Regression artifact, Existing tests at risk, Explicitly not changed, Estimated diff | REPRO.md's Post-fix expectation + DIAGNOSIS.md's Primary cause |
+| `dr-implement-fix` | approved `FIX.md` | one pushed commit (fix + regression test + map update) | full gate 0 failed; `docs_verify` 0 failed; **(DELTA)** `tools/diff_budget.py` run against FIX.md's Estimated-diff ceiling, mirroring dr-execute-step, replacing the current by-eye `git diff --stat` compare; Traps entry added same commit | the commit itself (diff, regression test, map Traps entry) — no separate markdown ledger | FIX.md's Change sites + Regression artifact + Estimated diff (now gate-checked mechanically) |
+| `dr-verify-outcome` | GOAL.md's success criterion + the pushed fix | `VERIFY.md` | criterion command's actual output matches GOAL.md's expected output; errata line states an id or explicit "errata: none" | VERIFY.md: Criterion command+output, Historical roots re-checked, Live attempt, Verdict, Residue, Errata | GOAL.md's Success criterion (the verbatim command) |
+
+### Family 2 — change (`dr-change-orchestrator`)
+
+| Skill | Entry | Exit | GATE / pass condition | LEDGER write | LEDGER read |
+|---|---|---|---|---|---|
+| `dr-capture-request` | the operator's message(s) | `REQUEST.md` | every R/C contains a verbatim quote; zero interpretation performed | REQUEST.md: Verbatim, R1..Rn, C1..Cn, Q1..Qn, Amendments | the operator's message(s) directly (first phase) |
+| `dr-spec-change` | `REQUEST.md` | `SPEC.md` | rubric line "n/n yes" present; frozen-surface/blast-radius sections are tool output pasted verbatim, never hand-summarized; budget arithmetic pasted; every R number appears in some S item | SPEC.md: Items S1..Sn, Assumptions, Questions, Frozen-surface forecast, Blast-radius census, Budget, Rubric | REQUEST.md's R1..Rn, C1..Cn |
+| `dr-plan-steps` | `SPEC.md` | `CHECKLIST.md` | every S-number covered by >=1 step; every step has one done-criterion | CHECKLIST.md: State: line, numbered steps + done-when criteria, [COMMIT] tags | SPEC.md's S1..Sn items |
+| `dr-execute-step` | `CHECKLIST.md` with an unchecked step | one more checked step with pasted PROOF | done-criterion command's actual output matches expected, or the contradiction is recorded and the step stays unchecked | CHECKLIST.md: checked box + PROOF text + State: line advance | CHECKLIST.md's own State: line (next step) + that step's done-criterion text |
+| `dr-validate-change` | SPEC.md's acceptance checks + a fully-checked `CHECKLIST.md` | `VALIDATION.md` (PASS/FAIL) | every SPEC.md acceptance check RE-RUN (not trusted from CHECKLIST's pasted output) with real output; full gate 0 failed; frozen-surface diff pasted empty-or-explained; four `docs_verify` modes green | VALIDATION.md: per-item PASS/FAIL, gate output, requirement sweep, assumptions carried, Verdict | SPEC.md's acceptance-check text (re-run fresh) |
+| `dr-deliver-change` | a PASS `VALIDATION.md` | `DELIVERY.md` | R-by-R reconciliation covers every R (no `not-done` rows — a FAIL routes back instead); Errata section states entry-id(s) or explicit "errata: none" | DELIVERY.md: Reconciliation table, Assumptions, Map delta, Errata, Parked | REQUEST.md's R1..Rn (walked again, fresh) + VALIDATION.md's Verdict |
+
+### Cross-cutting (loaded, not phased — no sequential artifact handoff)
+
+| Skill | Entry | Exit | GATE / pass condition | LEDGER write | LEDGER read |
+|---|---|---|---|---|---|
+| `dr-ask-the-right-question` | an ambiguous/terse message, or a phase's "stop and ask" trigger | a decision recorded INLINE in whichever artifact the calling phase owns (e.g. SPEC.md's Assumptions section) | every question is answered-with-a-command (record), answered-with-a-citation (framework), decided-and-recorded (dominance test), or sitting in ONE batched question set | none of its own — writes into the calling phase's ledger | the calling phase's own draft + CLAUDE.md's recorded operator values |
+| `dr-drive-harness` | session start | none (a consulted manual, not a produced artifact) | self-check only ("every claim ends in a typed artifact, every plan started from INDEX.md/INV-frozen-surfaces.md") — no mechanical GATE of its own | none — this Phase B design makes it the CANONICAL SOURCE eight other files point to instead of restating (see clusters 1-8) | none (it is the read target, not a reader, for the clusters it now owns) |
+| `dr-explain-to-operator` | session start, before the first operator-facing message | none (a continuous wording discipline, not a produced artifact) | **none mechanical** — flagged honestly: the one skill in the whole set with no GATE at all, consistent with its KEEP-by-mandate evidence class (CENSUS.md) rather than KEEP-by-corrected-incident | none | none |
