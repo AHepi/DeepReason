@@ -1,0 +1,4 @@
+LEDGER data rows: 124 (5 activation + 6 broken + 83 dead + 9 docs-drift + 16 spec-drift + 5 goal-trace)
+proof/ files present: 1106
+distinct proof-file references in LEDGER: 189 (0 missing on disk)
+rows with empty proof-file column: 0
