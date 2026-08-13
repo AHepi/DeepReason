@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=22 blockers=none
+State: COMPLETE (all 23 steps) blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -415,13 +415,13 @@ it.
       done-when: `VALIDATION.md` exists and its verdict line reads PASS or
       FAIL.
 
-- [ ] 22. (S21, R25) Write DELIVERY.md: the R-by-R reconciliation table with
+- [x] 22. (S21, R25) Write DELIVERY.md: the R-by-R reconciliation table with
       pasted PROOF per requirement, including the `deepreason results` output
       against the grounded-extension root from step 13.
       done-when: `DELIVERY.md` contains one row per R1–R25 and the pasted
       demonstration output.
 
-- [ ] 23. (all) [COMMIT] Push and confirm a clean tree.
+- [x] 23. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` == `git rev-parse origin/claude/results-retrieval-surface-v6jmiy`.
 
