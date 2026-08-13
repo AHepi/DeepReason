@@ -1,1 +1,7 @@
 [2026-08-13T14:27:08Z] === STAGE 1: finalize (appends only; no model call) ===
+[2026-08-13T14:27:52Z] FINALIZE already done (FINALIZE_ALREADY_TERMINAL) -- continuing
+[2026-08-13T14:27:52Z] === STAGE 2: amend, admitting the six bound documents (no model call) ===
+[2026-08-13T14:29:09Z] AMEND already done (AMEND_SOURCE_ALREADY_ADMITTED) -- continuing
+[2026-08-13T14:29:09Z] === MEASURE: verify_root after the amendment epoch (skipped if already measured) ===
+[2026-08-13T14:29:09Z] verify_root already measured -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/verify_root_after_amend.json
+[2026-08-13T14:29:09Z] === STAGE 3: continue, +8 cycles, 500000 tokens ===
