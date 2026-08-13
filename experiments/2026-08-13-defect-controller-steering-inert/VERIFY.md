@@ -102,6 +102,87 @@ ceiling.
 
 (filled in below)
 
-## 9. Live run — one guarded run through the one door
+## 9. Live run — PARTIAL PASS, and the honest split
 
-(filled in below)
+Three epochs, each a fresh root compiled from byte-copies of the grounded
+tranche's `build_manifest.py` and `run-config.yaml`. All three compiled to
+`manifest_sha256 = 8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d`
+— identical to the grounded run's id — so the configuration is provably
+the one that recorded zero steering, and the code was the only variable.
+
+| epoch | budget | events | provider results | outcome |
+|---|---|---|---|---|
+| 1 | 6 cy / 150k | 64 | 4 | failed cycle 0, `operational_failure` |
+| 2 | 6 cy / 150k | 89 | 9 | failed cycle 0, `operational_failure` |
+| 3 | 12 cy / 500k | 114 | 14 | failed cycle 0, `operational_failure` |
+
+### PASS — the controller attaches with real authority, live
+
+Recorded at seq 28 of EVERY epoch, identically:
+
+    controller-authority  full
+    {"steerable":["argumentative_critic","conjecturer","defender",
+    "grounding_reviewer","judge","property_designer","summarizer",
+    "synthesizer","thesis","variator","vision_critic"],"unsteerable":{}}
+
+All ELEVEN bound roles inside a barrier the controller may move within,
+including the five that appear in no static envelope table. Against the
+same configuration, the grounded root's 12,991 events contain no such
+record and no steerable role at all. GOAL criteria (1) and (3) are met on
+live evidence, reproduced three times.
+
+`verify_root` returns `[]` on all three roots: the new record does not
+disturb replay validation on a real root.
+
+### INCONCLUSIVE — the cap trajectory
+
+No epoch emitted a policy artifact, because none reached cycle 1. A
+narrowing decision needs `CLEAN_WINDOWS=3` spotless calls for a role and
+the runs died before any role accumulated them. Per CLAUDE.md, one live
+attempt that misses a path is inconclusive for that path and the offline
+regression remains the proof — here the offline proof is
+`repro_controller_inert.py` (judge 16384 -> 10240 -> 6400 -> 4000 -> 2500,
+four policy artifacts) and
+`test_the_grounded_configuration_steers_instead_of_sitting_inert`.
+
+Recorded as an honest negative: the trajectory is proven offline and NOT
+proven live.
+
+### The failures are not this tranche's change
+
+Settled on committed evidence after the live control was blocked twice by
+provider noise (its qualification failed `REPAIR_SCOPE_VIOLATION`, then
+`alias_failures=1`, both on UNMODIFIED `origin/main` code).
+
+Comparing the first conjecturer prompt in the grounded root against
+epoch 3's:
+
+    grounded (ran 24 cycles):  criteria block EMPTY          25,544 bytes
+    epoch 3  (died cycle 0):   - reasoning-envelope-wf:      27,655 bytes
+                                 program:reasoning-envelope-wf
+
+Every candidate must now carry a pinned program commitment the grounded
+run never imposed. It lives on `origin/main`
+(`workloads/text.py:296-297`, `programs.py:296`), arrived in commit
+`20f50bbfc` from a different tranche, and:
+
+    git diff origin/main -- src/ | grep -c "reasoning-envelope-wf"   # 0
+
+Three record-level facts exonerate the controller independently of that:
+every `attempt_trace` in all three epochs records `max_tokens=16384`, the
+unmodified manifest value; zero policy artifacts exist, so `_apply_cap`
+never ran; and `verify_root` is clean on all three roots.
+
+Parked as P3 with a ready prompt carrying both the leading hypothesis and
+the rival it must kill (provider drift), and the experiment that
+separates them.
+
+### A limit worth stating, surfaced by epoch 1
+
+The conjecturer truncated at its full 16,384 cap. The controller cannot
+help there: anchoring means it may never widen past the cap the operator
+assigned, so a seat already at its ceiling and still truncating has no
+headroom. That is the safety property working as designed, not a defect —
+but it means this fix's value on the grounded configuration is the
+NARROWING direction (judge pinned at 16,384 while never exceeding 141
+completion tokens), not truncation recovery.
