@@ -15,8 +15,16 @@ recorded in SPEC.md rather than assumed away.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
-Ceiling (SPEC.md Budget): 433 lines. `python tools/diff_budget.py` runs at
-every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
+Ceiling (SPEC.md Budget, AMENDED at step 2 — REQUEST.md Amendment 1 / R26,
+operator words "Raise ceiling to 800, continue"): **800 lines** over the
+declared areas. Run the gate as:
+
+    python tools/diff_budget.py origin/main --ceiling 800 \
+      --paths src/deepreason tests docs/map .claude/skills README.md
+
+EXCEEDED is a stop, decided by the calling skill. The tranche directory's own
+artifacts are outside the ceiling — they document the change, not constitute
+it.
 
 ---
 
@@ -129,7 +137,8 @@ every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
       src/deepreason/application/results.py --symbols results_summary
       render_results` → `"frozen_surface_verdict": "CLEAR"` (the
       forecast-then-verify SPEC.md promised, now that the file exists), and
-      `python tools/diff_budget.py origin/main --ceiling 433` → not EXCEEDED,
+      `python tools/diff_budget.py origin/main --ceiling 800 --paths
+      src/deepreason tests docs/map .claude/skills README.md` → not EXCEEDED,
       and the commit exists.
 
 - [ ] 8. (S10) Add `RESULTS_ROOT_NOT_FOUND` and `RESULTS_HOME_AMBIGUOUS` raise
@@ -182,8 +191,8 @@ every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
 
 - [ ] 14. (S8–S12, S18) [COMMIT] Commit the verb, catalog, help pin, map,
       manual and README together.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 433` →
-      not EXCEEDED, and `git show --stat HEAD` lists
+      done-when: `python tools/diff_budget.py origin/main --ceiling 800 --paths
+      src/deepreason tests docs/map .claude/skills README.md` → not EXCEEDED, and `git show --stat HEAD` lists
       `cli/main.py`, `error_catalog.py`, `tests/test_error_catalog.py`,
       `tests/test_results_command.py`, `docs/map/SUB-application.md`,
       `.claude/skills/dr-drive-harness/SKILL.md`, `README.md`.

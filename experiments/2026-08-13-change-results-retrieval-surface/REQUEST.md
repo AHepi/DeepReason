@@ -239,4 +239,30 @@ does it satisfy the V6 admission gate the new verb will pass through?
 
 ## Amendments
 
-(none yet)
+**Amendment 1 (2026-08-13, at checklist step 2) — R26 (process), operator
+verbatim, in answer to a diff-budget EXCEEDED stop:**
+
+> Raise ceiling to 800, continue
+
+Question put to the operator, verbatim as asked:
+
+> The diff-budget gate (the workflow's check that actual changed lines stay
+> under the ceiling my own SPEC.md set) reports EXCEEDED: 651 lines written so
+> far against a 433 ceiling, projecting to roughly 800 when the command and
+> docs land. Nothing about the change grew — my line ESTIMATE was low (I
+> guessed 210 lines for the reader; it is 385, and its tests are 266 rather
+> than 152). How do you want me to proceed?
+
+Option chosen, with the text the operator selected it from:
+
+> Record a budget amendment in SPEC.md with the measured arithmetic and the
+> reason (estimate error, not scope growth), then finish the tranche exactly as
+> specified. Nothing is dropped: you get the command, the typed absences, the
+> read-only pin, the help-text acceptance test, the map update and the R-by-R
+> delivery. Cost: nothing beyond the work already planned.
+
+R26 (process): the SPEC.md ceiling is **800 lines** over the declared areas
+(`src/deepreason`, `tests`, `docs/map`, `.claude/skills`, `README.md`). No
+requirement R1–R25 is changed, added, or dropped by this amendment. The two
+rejected options are recorded above in the tranche's DELIVERY.md so a later
+reader can see what was priced.

@@ -462,8 +462,47 @@ Itemized estimate (changed lines, insertions + modifications):
     $ python3 -c "print(sum([210,28,22,140,12,16,5]))"
     433
 
-**Ceiling: 433 lines, 3 commits.** Frozen surfaces touched: none (gate:
-`CLEAR`).
+**Ceiling: 800 lines** (amended — see below), **3+ commits.** Frozen surfaces
+touched: none (gate: `CLEAR`).
+
+### Budget amendment (REQUEST.md Amendment 1 / R26, operator-approved)
+
+The 433 estimate was wrong, and the gate caught it at step 2 rather than at
+validation. Measured, not re-estimated:
+
+    $ python tools/diff_budget.py origin/main --ceiling 433 \
+        --paths src/deepreason tests docs/map .claude/skills README.md
+    {"areas": {"src/deepreason": 385, "tests": 266, "docs/map": 0,
+      ".claude/skills": 0, "README.md": 0},
+     "total_insertions": 651, "ceiling": 433, "verdict": "EXCEEDED"}
+
+    $ wc -l src/deepreason/application/results.py tests/test_results_command.py
+      385 src/deepreason/application/results.py     (estimated 210)
+      266 tests/test_results_command.py             (estimated 152)
+
+Revised itemization, with the two measured items replacing their estimates:
+
+| Item | File | lines |
+|---|---|---|
+| S1–S9 the reader (measured, pre-`render_results`) | `application/results.py` | 385 |
+| S8 `render_results` | same file | 60 |
+| S8, S11 the verb | `cli/main.py` | 28 |
+| S10 catalog entries | `error_catalog.py` | 22 |
+| S3–S13, S16 tests (measured) | `tests/test_results_command.py` | 266 |
+| S10 count pin + raise-site test | `tests/test_error_catalog.py` | 12 |
+| S18 map | `docs/map/SUB-application.md` | 16 |
+| S12 manual + README | `dr-drive-harness/SKILL.md`, `README.md` | 5 |
+
+    $ python3 -c "print(sum([385,60,28,22,266,12,16,5]))"
+    794
+
+Ceiling set at **800**. **Nothing about the change's SHAPE grew**: the reader
+covers exactly S1–S9 and the tests cover exactly the spec's own accepts —
+the error was in the estimate, and this section is the arithmetic that
+replaces it. The ceiling applies to the declared areas above, NOT to the
+tranche directory's own narrative artifacts (REQUEST/CENSUS/SPEC/CHECKLIST/
+VALIDATION/DELIVERY), which document the change rather than constitute it;
+`--paths` is passed at every `[COMMIT]` step accordingly.
 
 Commits: (1) the reader + its tests; (2) the CLI verb + catalog entries +
 help-text pin + map + manual + README; (3) tranche artifacts (VALIDATION,
