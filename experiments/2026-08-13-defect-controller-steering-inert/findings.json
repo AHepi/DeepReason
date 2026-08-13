@@ -172,7 +172,7 @@
     "message": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
     "state": "failed",
     "stop_reason": "operational_failure",
-    "token_limit": 150000,
+    "token_limit": 500000,
     "token_spend": 0
   },
   "schema": "deepreason-findings.v1",
