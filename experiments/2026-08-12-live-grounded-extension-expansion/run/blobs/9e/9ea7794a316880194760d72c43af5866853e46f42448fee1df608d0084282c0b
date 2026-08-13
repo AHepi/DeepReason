@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "An attack only refutes B when E is accepted (every attacker of E is out). This clause fully determines the status of the original attack A→B: when E is out, the attack does not refute B, regardless of A's status.",
+  "verdict": "pass"
+}
+```

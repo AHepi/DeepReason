@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 violates the problem's demand that proposals expand or strengthen DeepReason's grounded extension. A priority filter that removes every attack whose source priority is not strictly greater than its target can only delete attacks, never add them, so the set of accepted conjectures at the fixed point can only shrink relative to the unfiltered semantics. The target's own note that committed roots receive unique top priority and that no retained attack targets such a root does not add any new acceptance; it merely preserves an already-derived property. Because the proposal is a pure, monotone-deleting graph transformation, it does not expand the grounded extension and therefore fails the stated problem as written.
+
+TARGET:
+Priority-filtered attack relation: assign each argument a finite priority level from a configured total preorder, and retain an attack A→B only when priority(A) is strictly greater than priority(B), with committed roots given a unique top priority. This is a pure graph transformation before the grounded fixpoint, so determinism and polynomial cost are unchanged; reinstatement remains derived because the filtered graph is still an AF. Root validity is preserved because no retained attack targets a top-priority root. Weakness: priority is exogenous and cannot itself be challenged; if priorities are learned or contested, the semantics silently depends on an unadjudicated input.

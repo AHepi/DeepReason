@@ -1,0 +1,25 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Replace grounded extension with ideal semantics as the skeptical operator: the ideal extension is the maximal admissible set contained in every preferred extension — unique, skeptical, and strictly more decisive than grounded — and is computable in polynomial time via iterated grounded-extension calls on the reduced framework. Determinism is preserved; the cost is the re-derivation of reinstatement and committed-root validity as theorems of the new semantics, and the loss of the simple two-label fixpoint story.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 proposes replacing grounded extension with ideal semantics as the skeptical operator. The problem explicitly scopes the target semantics to the skeptical fixed-point semantics (spec §4, Pass 1), and ideal semantics replaces this fixpoint with an iterated admissibility computation; furthermore, reinstatement as a derived property is listed as an existing guarantee to preserve, and SRC_002 openly concedes reinstatement must be re-derived and the simple two-label fixpoint story is lost.
+
+THE DEFENCE:
+The critic's case establishes only that SRC_002's proposal involves trade-offs that SRC_002 itself openly acknowledges — it does not establish that the proposal is defective or that those trade-offs are unacceptable.
+
+1. 'Ideal semantics replaces the fixpoint with an iterated admissibility computation': This is a description, not a defect. The target explicitly states the semantics is 'computable in polynomial time via iterated grounded-extension calls on the reduced framework.' That the computation is iterated rather than a single fixpoint does not contradict the problem scope; the problem scopes the target to 'skeptical fixed-point semantics,' and the ideal extension remains a unique, well-defined skeptical semantics. The critic asserts without establishing that 'fixed-point semantics' categorically excludes any semantics whose computation involves iteration rather than a single label-fixpoint — the term 'fixed-point semantics' in argumentation literature standardly refers to the family of semantics defined via fixpoints of characteristic operators, under which ideal semantics falls via its admissibility fixpoint characterization.
+
+2. 'Reinstatement as a derived property is listed as an existing guarantee to preserve, and SRC_002 openly concedes reinstatement must be re-derived': The critic conflates 'must be preserved' with 'must be preserved in the same form.' The target does not claim reinstatement is lost — it states reinstatement must be 're-derived as a theorem of the new semantics.' That a property must be re-derived when changing semantic foundations is standard in semantics engineering; it is not established that re-derivation constitutes failure to preserve. The target openly commits to this re-derivation, which is a responsibility acceptance, not a concession of inadequacy.
+
+3. 'The simple two-label fixpoint story is lost': This is explicitly acknowledged in the target as a stated cost ('the loss of the simple two-label fixpoint story'). That a simplifying narrative is lost when adopting a more expressive semantics is a known and accepted trade-off. The critic has not established that this narrative simplicity is a requirement rather than a pedagogical convenience. The target gains strict decisiveness over grounded extension while preserving determinism and polynomial computability — the critic has not established that the lost narrative simplicity outweighs this gain or violates any stated requirement.
+
+The critic's case thus amounts to restating the target's own disclosed trade-offs as if they were objections. Nothing is established beyond what the target already openly commits to.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
