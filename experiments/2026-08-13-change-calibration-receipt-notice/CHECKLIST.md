@@ -1,5 +1,5 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=12 blockers=none
+State: next=13 blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
@@ -178,12 +178,22 @@ that lands code+tests+map together.
        individual step's own done-criterion; this run confirms nothing
        needs fixing forward.
 
-- [ ] 12. (R13) Full gate.
+- [x] 12. (R13) Full gate.
        done-when: `python -m pytest tests/ -q -n 4` -> paste full
        summary line; 0 failed beyond the documented baseline (1
        pre-existing `test_bronze_report` failure; the 5 MCP-thread
        tests are known-flaky under `-n 4` — if any fail, isolate with
        `python -m pytest <name> -q` before attributing to this change).
+       ```
+       FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+       1 failed, 3539 passed, 7 skipped in 729.58s (0:12:09)
+       ```
+       Exactly the documented baseline (CLAUDE.md: "1 pre-existing
+       test_bronze_report failure") — assertion `counts["gate_blocked"]
+       == census["streams"][stream]["gate_measures"]` (159 vs 165),
+       unrelated to authority/manifest/calibration-receipt code. 0 of
+       the 5 MCP-thread tests failed this run, so no flake isolation
+       needed.
 
 - [ ] 13. (R11) Targeted replay-validation proof on a known-good
        committed root, demonstrating byte-unchanged replay.
