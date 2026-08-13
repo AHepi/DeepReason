@@ -136,5 +136,11 @@ It needs the credential the container rebuild removed:
     printf 'OLLAMA_API_KEY=<key>\\n' > experiments/2026-08-12-live-grounded-extension-expansion/env
     cd experiments/2026-08-13-change-lifecycle-operation-parity && setsid nohup ./live_parity.sh & disown
 
-The driver is idempotent: `finalize` and `amend` both refuse typed on a
-re-run, so it reaches the continuation directly.
+**Correction to an earlier claim in this document's first version:** the
+OPERATIONS are exactly-once, but the DRIVER was not resumable — it treated
+`finalize`'s and `amend`'s typed already-done refusals as failures and
+exited on them. Fixed: the driver now reads
+`FINALIZE_ALREADY_TERMINAL` and `AMEND_SOURCE_ALREADY_ADMITTED` as "this
+stage already succeeded" and carries on to the continuation, and skips the
+5-minute post-amend `verify_root` replay when it has already been
+measured.

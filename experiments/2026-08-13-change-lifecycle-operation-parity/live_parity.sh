@@ -46,6 +46,12 @@ log "=== STAGE 1: finalize (appends only; no model call) ==="
 if python -m deepreason --root "$ROOT" finalize --json \
      > "$HERE/finalize.json" 2> "$HERE/finalize.stderr.log"; then
   log "FINALIZE OK rc=0 -- see $HERE/finalize.json"
+elif grep -q "FINALIZE_ALREADY_TERMINAL" "$HERE/finalize.stderr.log"; then
+  # The operation is exactly-once, so a re-run of this driver meets its own
+  # earlier success as a typed refusal. That is the stage having ALREADY
+  # SUCCEEDED, not a failure -- treating it as one is what made the first
+  # version of this script non-resumable.
+  log "FINALIZE already done (FINALIZE_ALREADY_TERMINAL) -- continuing"
 else
   rc=$?
   log "FINALIZE rc=$rc -- see $HERE/finalize.stderr.log"
@@ -64,13 +70,21 @@ done
 if python -m deepreason --root "$ROOT" amend "${ATTACH_ARGS[@]}" --json \
      > "$HERE/amend.json" 2> "$HERE/amend.stderr.log"; then
   log "AMEND OK rc=0 -- see $HERE/amend.json"
+elif grep -q "AMEND_SOURCE_ALREADY_ADMITTED" "$HERE/amend.stderr.log"; then
+  # Same shape: once the six ARE introduced, re-admitting them is correctly
+  # refused, and that refusal means this stage's work is already in the
+  # record.
+  log "AMEND already done (AMEND_SOURCE_ALREADY_ADMITTED) -- continuing"
 else
   rc=$?
   log "AMEND rc=$rc -- see $HERE/amend.stderr.log"
   exit "$rc"
 fi
 
-log "=== MEASURE: verify_root after the amendment epoch ==="
+log "=== MEASURE: verify_root after the amendment epoch (skipped if already measured) ==="
+if [ -s "$HERE/verify_root_after_amend.json" ]; then
+  log "verify_root already measured -- see $HERE/verify_root_after_amend.json"
+else
 python -c "
 from deepreason.invariants import verify_root
 import json
@@ -78,6 +92,7 @@ result = verify_root('$ROOT')
 print(json.dumps(result['violations'], indent=2, sort_keys=True))
 " > "$HERE/verify_root_after_amend.json" 2>&1 || true
 log "verify_root written -- see $HERE/verify_root_after_amend.json"
+fi
 
 if [ ! -f "$TARGET/env" ]; then
   log "STAGE 3 SKIPPED: $TARGET/env (OLLAMA_API_KEY) is absent -- the"
