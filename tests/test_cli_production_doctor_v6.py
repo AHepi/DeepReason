@@ -409,7 +409,6 @@ def test_doctor_preserves_different_contract_grants_in_one_manifest():
         "critic.atomic-target.v1": 2,
         "groundingrepairwirev1.direct.v1": 0,
         "groundingverdictwirev1.direct.v1": 1,
-        "judgeruling.direct.v1": 2,
         "scratch.block.compact.v1": 2,
         "scratch.block.minimal.v1": 2,
         "scratch.cluster-guide.compact.v1": 2,
@@ -547,11 +546,6 @@ def test_matrix_preserves_core_pairs_and_adds_enabled_grounding_pairs():
         ("critic.atomic-target.v1", "argumentative_critic", 0),
         ("groundingrepairwirev1.direct.v1", "judge", 0),
         ("groundingverdictwirev1.direct.v1", "judge", 0),
-        # Defended-trial provider boundary: granted unconditionally by
-        # route presence (this fixture's manifest configures a judge
-        # route) -- see run_manifest.py's
-        # _route_seat_behavioral_contract_assignments.
-        ("judgeruling.direct.v1", "judge", 0),
     ]
     assert all(item.pair_id.startswith("sha256:") for item in pairs)
     assert all(len(item.route_sha256) == 64 for item in pairs)
@@ -654,12 +648,12 @@ def test_report_computes_19_of_20_gate_and_all_metrics():
         manifest,
         case_executor=lambda _manifest, _pair, index: _case(index),
     )
-    assert report.summary.pair_count == 11
-    assert report.summary.case_count == 220
-    assert report.summary.eventual_valid_count == 209
-    assert report.summary.first_pass_valid_count == 198
-    assert report.summary.repair_count == 11
-    assert report.summary.semantic_admission_count == 209
+    assert report.summary.pair_count == 10
+    assert report.summary.case_count == 200
+    assert report.summary.eventual_valid_count == 190
+    assert report.summary.first_pass_valid_count == 180
+    assert report.summary.repair_count == 10
+    assert report.summary.semantic_admission_count == 190
     assert report.summary.alias_failures == 0
     assert report.summary.scope_violations == 0
     assert report.summary.qualified is True
@@ -814,7 +808,6 @@ def test_enabled_optional_pairs_have_exact_offline_probes_and_twenty_cases_each(
         ("critic.atomic-target.v1", "argumentative_critic", 0),
         ("groundingrepairwirev1.direct.v1", "judge", 0),
         ("groundingverdictwirev1.direct.v1", "judge", 0),
-        ("judgeruling.direct.v1", "judge", 0),
         ("scratch.block.compact.v1", "conjecturer", 0),
         ("scratch.block.minimal.v1", "conjecturer", 0),
         ("scratch.cluster-guide.compact.v1", "summarizer", 0),
@@ -854,8 +847,8 @@ def test_enabled_optional_pairs_have_exact_offline_probes_and_twenty_cases_each(
         manifest,
         case_executor=lambda _manifest, _pair, index: _case(index),
     )
-    assert report.summary.pair_count == 17
-    assert report.summary.case_count == 340
+    assert report.summary.pair_count == 16
+    assert report.summary.case_count == 320
     assert all(len(item.cases) == 20 for item in report.pairs)
     assert all(
         [case.case_id for case in item.cases]
@@ -908,7 +901,6 @@ def test_disabled_optional_families_are_omitted_instead_of_probed():
         "conjecturer.atomic-candidate.v1",
         "conjecturer.turn.v6",
         "critic.atomic-target.v1",
-        "judgeruling.direct.v1",
     ]
 
     review_only = production_contract_pairs(

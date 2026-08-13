@@ -1913,27 +1913,42 @@ def _route_seat_behavioral_contract_assignments(
 
     # Defended-trial provider boundary (informal/trial.py's defender/judge/
     # variator calls, wired through InquiryTransactionService the way the
-    # ordinary batch-critic call already is). Granted unconditionally by
-    # route presence, the same way the conjecturer's turn contract and the
-    # no-school-policy critic contract above are: `ARGUMENTATIVE_AUTHORITY`
-    # is a runtime `Config` value never written to the manifest (see
-    # DR-INV-frozen-surfaces), so whether a given run's self-detected
-    # criticism dispatch will actually reach the trial is not knowable at
-    # compile time -- only whether the operator configured the seats is.
-    # An idle granted seat costs nothing; an ungranted one turns a live
-    # trial dispatch into a render-time refusal. The exact contract id is
-    # computed through the same `wire_contract_for` the live call uses
-    # (never hand-rolled): a direct JudgeRuling contract ids as
-    # "judgeruling.direct.v1", not "judge.direct.v1" -- the alias table
-    # supplied here is a placeholder only, since every one of these
-    # contracts' ids is fixed by role/profile/output-model alone, never by
-    # alias content. Resolved PER SEAT through
-    # `resolve_route_seat_base_profile`, not the manifest-wide default: a
-    # route seat's own presentation authority (e.g. a `route_profiles`
-    # override, or a later compact-recovery source profile) can differ from
-    # `manifest.model_profile`, and only the seat's own profile decides
-    # which of the direct/compact wire-contract shapes it will actually
-    # render.
+    # ordinary batch-critic call already is). Granted exactly when
+    # criticism_policy.authority == "defended_trial" -- narrower than
+    # route presence, and deliberately so: `_compile_route_seat_
+    # behavioral_capability_plan` is recomputed from a manifest's OWN
+    # stored fields not only at fresh compile but every time an existing
+    # v6 manifest is RELOADED (`_production_routes_are_concrete` compares
+    # the recomputed plan against the stored one), so an unconditional
+    # by-route-presence grant would retroactively add a repair-authority
+    # requirement no historical manifest's frozen `contract_schema_
+    # repair_policy` satisfies -- breaking replay of every already-
+    # committed v6 root that happens to have a defender/judge/variator
+    # route configured for an unrelated reason (`judge` alone is also the
+    # rubric-trial role, unconditionally present on many roots that never
+    # touch criticism authority at all). `DR-INV-frozen-surfaces`'s own
+    # law is unconditional: fix READERS, never invalidate an existing
+    # replay-valid root. The residual gap this narrower gate leaves is the
+    # school-free self-detection dispatch path resolving `trial_required`
+    # purely from a runtime `Config` value with NO `criticism_policy` set
+    # at all (never written to the manifest -- see below): that specific,
+    # narrow combination surfaces a typed refusal at dispatch time rather
+    # than at compile time, which is exactly the accepted "impossibility
+    # surfaces at the point of use" shape the operator's all-
+    # configurations-allowed law already describes for compile-unprovable
+    # cases, not a silent gap.
+    # The exact contract id is computed through the same
+    # `wire_contract_for` the live call uses (never hand-rolled): a direct
+    # JudgeRuling contract ids as "judgeruling.direct.v1", not
+    # "judge.direct.v1" -- the alias table supplied here is a placeholder
+    # only, since every one of these contracts' ids is fixed by
+    # role/profile/output-model alone, never by alias content. Resolved
+    # PER SEAT through `resolve_route_seat_base_profile`, not the
+    # manifest-wide default: a route seat's own presentation authority
+    # (e.g. a `route_profiles` override, or a later compact-recovery
+    # source profile) can differ from `manifest.model_profile`, and only
+    # the seat's own profile decides which of the direct/compact
+    # wire-contract shapes it will actually render.
     from deepreason.llm.contracts import DefenderOutput, JudgeRuling, VariatorOutput
     from deepreason.llm.wire import AliasTable, wire_contract_for
 
@@ -1943,7 +1958,13 @@ def _route_seat_behavioral_contract_assignments(
         "variator": VariatorOutput,
     }
     _placeholder_aliases = AliasTable({"K_001": "placeholder"})
-    for trial_role, output_model in _trial_output_models.items():
+    _defended_trial_authorized = (
+        manifest.criticism_policy is not None
+        and manifest.criticism_policy.authority == "defended_trial"
+    )
+    for trial_role, output_model in (
+        _trial_output_models.items() if _defended_trial_authorized else ()
+    ):
         routes = manifest.roles.get(trial_role, ())
         for seat, route in enumerate(routes):
             seat_profile = resolve_route_seat_base_profile(
