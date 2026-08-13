@@ -68,3 +68,35 @@ enforces the distinctness, not just a convention.
 > tags (accepting the added qualification cost, and the same
 > reproducibility-hazard bookkeeping `PREREG.md`'s catalog-metadata table
 > already carries), and pre-register which of the two before compiling.
+
+## P2: the low-level `deepreason run` entry point never calls `attach_bound_evidence`, so bound dossier sources never become visible in-run
+
+Discovered at audit time (2026-08-13), `RESULTS.md`'s "Finding" section
+has the full diagnosis. This run's `verify_root` came back with 6
+violations (all `attached-evidence`, one per bound dossier source) —
+`grep`-confirmed `attach_bound_evidence`
+(`src/deepreason/evidence/render.py:89`) is called only from
+`application/text_runs.py` (`TEXT_RUN_SERVICE.start()`) and
+`amendment/apply.py`; never from `ops.run_scheduler` or `cli/main.py
+_cmd_run`. Any future ladder driving the reason phase through the
+low-level `deepreason run --run-manifest` entry point (necessary
+whenever the friendly `reason` command can't express the run's routing,
+as here) will reproduce this gap unless it is closed explicitly.
+
+Not fixed here: the root this run produced is complete, committed, and
+append-only — not this tranche's place to edit even if the fix were
+trivial, and the fix belongs to the NEXT run's ladder, not a patch to
+this one's evidence.
+
+**Ready-to-send prompt for a future change or ladder-design tranche:**
+
+> Fix the low-level `deepreason run --run-manifest` reason-phase driver
+> (or write a thin custom Python driver, following the shape of
+> `_execute_bound_run` in `cli/main.py`) to call
+> `evidence.render.attach_bound_evidence(harness, run_input=..., dossier=...,
+> problem_id=...)` after problem registration and before
+> `run_scheduler`/`Scheduler.run` dispatches its first cycle, whenever the
+> compiled manifest's `inquiry_capability_policy.attached_evidence.enabled`
+> is `True`. Add a regression test asserting `verify_root` returns zero
+> `attached-evidence` violations for a manifest+dossier combination driven
+> through the low-level `run` entry point, motivated by this run's id.

@@ -19,3 +19,4 @@
 [2026-08-13T09:33:34Z] === REASON: deepreason run --budget cycles=24 --token-budget 1000000 ===
 [2026-08-13T10:42:05Z] REASON rc=0
 [2026-08-13T10:42:05Z] === AUDIT: verify_root + findings ===
+[2026-08-13T10:46:57Z] === DONE: see /home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/{reason.log,verify_root.json,findings.json,/home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/run/run-status.json} ===
