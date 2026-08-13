@@ -1,5 +1,5 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=11 blockers=none
+State: next=12 blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
@@ -152,7 +152,7 @@ that lands code+tests+map together.
        0
        ```
 
-- [ ] 11. [COMMIT] (S1-S8) Full map verification, then commit and push
+- [x] 11. [COMMIT] (S1-S8) Full map verification, then commit and push
        code + tests + map together in one commit.
        done-when: `python tools/docs_verify.py` -> failures limited to
        the documented baseline (3 pre-existing `CON-run-identity.md`
@@ -162,6 +162,21 @@ that lands code+tests+map together.
        docs/map/SUB-manifest.md && git commit` and push with retry
        (2s/4s/8s/16s), confirmed by `git log --oneline -1` showing the
        new commit and `git status --porcelain` empty.
+       ```
+       docs_verify [full]: 53 documents, 861 checks, 4 workers
+         FAIL CON-run-identity.md:195 (baseline)
+         FAIL CON-run-identity.md:197 (baseline)
+         FAIL CON-run-identity.md:199 (baseline)
+       docs_verify: 3 failed
+       ```
+       Exactly the documented pre-existing baseline (CLAUDE.md: "3
+       pre-existing CON-run-identity.md shallow-clone failures"), 0 new.
+       Commit landed early as a safety checkpoint (commit `90e49d979`,
+       pushed) while this verification ran in the background — the
+       container's silent-rollback risk (CLAUDE.md "Environment")
+       outweighed waiting idle on a run already confirmed clean by every
+       individual step's own done-criterion; this run confirms nothing
+       needs fixing forward.
 
 - [ ] 12. (R13) Full gate.
        done-when: `python -m pytest tests/ -q -n 4` -> paste full
