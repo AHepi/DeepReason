@@ -157,6 +157,7 @@ class WorkflowTaskKind(str, Enum):
     BRIDGE_REVIEW = "bridge_review"
     REPAIR = "repair"
     SCRATCH_AUTHORING = "scratch_authoring"
+    DEFENDED_TRIAL_STEP = "defended_trial_step"
 
 
 class CapabilityOutcome(str, Enum):

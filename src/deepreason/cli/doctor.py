@@ -76,6 +76,14 @@ class ProductionContractPairV1(_DoctorRecord):
         "scratch.block.minimal.v1",
         "scratch.link.minimal.v1",
         "scratch.cluster-guide.minimal.v1",
+        # Defended-trial provider boundary (informal/trial.py's defender/
+        # judge/variator calls, wired through InquiryTransactionService).
+        "defender.direct.v1",
+        "defender.compact.v1",
+        "judgeruling.direct.v1",
+        "judge.compact.v1",
+        "variator.direct.v1",
+        "variator.compact.v1",
     ]
     role: str = Field(min_length=1, max_length=64)
     seat: int = Field(ge=0, le=1_023)
@@ -862,6 +870,52 @@ def _production_probe_contract(
         template_role = "bridge_grounding_repair"
     elif contract_id.startswith("scratch."):
         contract, task, template_role = _production_scratch_probe(contract_id)
+    elif contract_id in ("defender.direct.v1", "defender.compact.v1"):
+        from deepreason.llm.contracts import DefenderOutput
+        from deepreason.llm.wire import wire_contract_for
+
+        profile = "compact" if contract_id == "defender.compact.v1" else "standard"
+        aliases = (
+            AliasTable({"K_001": "qualification-case"}) if profile == "compact" else None
+        )
+        contract = wire_contract_for("defender", DefenderOutput, profile, aliases)
+        task = (
+            f"Qualification case {case_index + 1:03d}: THE CASE AGAINST THE "
+            "TARGET:\nqualification-case\n\nTARGET:\nqualification-target"
+        )
+        template_role = "defender"
+    elif contract_id in ("judgeruling.direct.v1", "judge.compact.v1"):
+        from deepreason.llm.contracts import JudgeRuling
+        from deepreason.llm.wire import wire_contract_for
+
+        profile = "compact" if contract_id == "judge.compact.v1" else "standard"
+        aliases = (
+            AliasTable({"K_001": "qualification-case", "K_002": "qualification-defence"})
+            if profile == "compact"
+            else None
+        )
+        contract = wire_contract_for("judge", JudgeRuling, profile, aliases)
+        task = (
+            f"Qualification case {case_index + 1:03d}: TARGET:\n"
+            "qualification-target\n\nQUESTION: does the case establish a "
+            "decisive fault in the target? verdict=fail iff it does.\n\n"
+            "THE CASE FOR FAIL:\nqualification-case\n\nTHE DEFENCE:\n"
+            "qualification-defence\n\nRule on the exchange; decisive_point "
+            "MUST quote a span of it."
+        )
+        template_role = "judge"
+    elif contract_id in ("variator.direct.v1", "variator.compact.v1"):
+        from deepreason.llm.contracts import VariatorOutput
+        from deepreason.llm.wire import wire_contract_for
+
+        profile = "compact" if contract_id == "variator.compact.v1" else "standard"
+        contract = wire_contract_for("variator", VariatorOutput, profile, None)
+        task = (
+            f"Qualification case {case_index + 1:03d}: TARGET CONTENT:\n"
+            "qualification-exchange\n\nDIRECTIVE: produce exactly 1 "
+            "meaning-preserving paraphrase of this exchange."
+        )
+        template_role = "variator"
     else:  # pragma: no cover - pair model owns the finite contract set
         raise ValueError(f"unsupported production contract {contract_id!r}")
 

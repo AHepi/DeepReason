@@ -1874,6 +1874,37 @@ def _crit_argumentative_batch_result(
             critics.append(critic)
             continue
         if authority in _TRIAL_MODES:
+            if adapter is None:
+                # Crash recovery has no provider boundary by design
+                # (SEAM-llm-x-workflow.md): a defended trial's defender and
+                # judge calls cannot be dispatched here. The case is
+                # deliberately left OPEN rather than misrecorded as
+                # observed -- a live criticism cycle, with a real adapter,
+                # will reconsider it. Mirrors
+                # Scheduler._defer_untransactional_v6_phase's "become
+                # visible completion debt" shape at the effect-application
+                # layer instead of the scheduler layer. Re-recovery must
+                # stay idempotent (same restart_safe discipline as the
+                # execution-override Measure just above): a Measure event
+                # is not content-addressed the way an artifact is, so a
+                # naive unconditional record would duplicate on every
+                # re-recovery of an already-admitted batch.
+                deferral_inputs = [
+                    "defended-trial-deferred",
+                    case.target,
+                    "recovery-no-provider",
+                ]
+                existing_deferrals = [
+                    event
+                    for event in harness.log.read()
+                    if event.rule == Rule.MEASURE
+                    and list(event.inputs) == deferral_inputs
+                ]
+                if len(existing_deferrals) > 1:
+                    raise RuntimeError("defended-trial deferral is duplicated")
+                if not restart_safe or not existing_deferrals:
+                    harness.record_measure(inputs=deferral_inputs)
+                continue
             from deepreason.informal.trial import run_argument_trial_from_case
 
             trial_critic = run_argument_trial_from_case(

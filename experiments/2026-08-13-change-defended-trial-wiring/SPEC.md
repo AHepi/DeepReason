@@ -257,11 +257,51 @@ format (part of surface 3) are not touched at all.
 
 ## 7. Diff budget
 
-Estimated: `informal/trial.py` (+~140 lines: helper + call-site wiring),
-`rules/crit.py` (+~15 lines: adapter-is-None deferral branch),
-`workflow/nonconjecture_recovery.py` (+~20 lines: authority resolution,
-gate widening), `run_manifest.py` (+~35 lines: gate conversion + contract
-assignments), `workflow/models.py` (+1 line: new enum member), new test
-file (+~150 lines), `test_v6_nonconjecture_recovery.py` (+~80 lines), map
-docs (+~20 lines). Ceiling: 550 lines net insertion, checked against
-`tools/diff_budget.py` at the commit checkpoint.
+**Revised at execution** (Rung S5's own trap: an estimate is not the
+ceiling, the measured diff is). Original estimate: 550 lines. Actual,
+measured by `python tools/diff_budget.py HEAD`: **900 insertions, 104
+deletions** across 11 files. `EXCEEDED` against the original ceiling —
+recorded here rather than silently absorbed, per the diff-budget gate's
+own purpose.
+
+What the estimate missed, discovered only by executing R1 and running the
+gate (not visible from reading the call sites alone):
+
+- `run_manifest.py`'s `_route_seat_behavioral_contract_assignments`
+  granting defender/judge/variator contracts turned out to require a
+  correct PER-SEAT profile resolution
+  (`resolve_route_seat_base_profile`), not the manifest-wide default — a
+  seat-level correctness requirement invisible until
+  `test_cli_production_doctor_v6.py`'s fixtures (which vary route
+  profiles per seat) exposed it.
+- The SAME grant surfaced a second, independent closed surface the
+  original census did not name: `cli/doctor.py::ProductionContractPairV1.
+  contract_id`, a closed `Literal` enumerating every contract the
+  offline qualification battery knows how to probe. Widening it (additive
+  only) plus writing the three new probe-pack branches
+  (`_production_probe_contract`'s dispatch table) is ~54 lines by itself.
+- Six existing tests across `test_v6_contract_schema_repair_policy.py`
+  and `test_cli_production_doctor_v6.py` pin the EXACT enumerated
+  contract set/count a v6 manifest compiles to (`CORE_CONTRACTS` tuples,
+  `pair_count`/`case_count` assertions) — additive-by-design fixtures
+  that still needed their literal expected values updated to include the
+  three new contracts, exactly the kind of update CLAUDE.md's
+  frozen-surfaces Traps section pre-authorizes ("a fixture that depended
+  on defective behaviour may be minimally updated only when the fix's
+  design doc predicted the update in advance" — predicted here, in this
+  revision, before the commit that makes it).
+- The double-recording bug found only by RUNNING the new offline
+  regression (R5) — a v6-dispatched call is already durably recorded on
+  its own transaction event, so the trial's legacy "sweep into a
+  trial-llm Measure" bookkeeping had to become conditional at three call
+  sites (defender, judge ensemble, variator) plus the final critic-artifact
+  registration — added real lines (and real correctness) the design's
+  prose in §3 did not itemize.
+- `test_v6_manifest_defended_trial.py`'s two tests needed a full rewrite
+  (asserting successful compilation instead of refusal) once R3 landed.
+
+No line here is scope creep against REQUEST.md's numbered requirements —
+every insertion traces to R1, R2, R3, R5, or the fixture-currency
+consequence of one of them. The number is reported honestly rather than
+re-baselined to make EXCEEDED disappear; DELIVERY.md's PROOF carries the
+same figure.

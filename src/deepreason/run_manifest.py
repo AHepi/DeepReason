@@ -1911,6 +1911,52 @@ def _route_seat_behavioral_contract_assignments(
             (contracts.conjecturer_turn_contract, "conjecturer", seat)
         )
 
+    # Defended-trial provider boundary (informal/trial.py's defender/judge/
+    # variator calls, wired through InquiryTransactionService the way the
+    # ordinary batch-critic call already is). Granted unconditionally by
+    # route presence, the same way the conjecturer's turn contract and the
+    # no-school-policy critic contract above are: `ARGUMENTATIVE_AUTHORITY`
+    # is a runtime `Config` value never written to the manifest (see
+    # DR-INV-frozen-surfaces), so whether a given run's self-detected
+    # criticism dispatch will actually reach the trial is not knowable at
+    # compile time -- only whether the operator configured the seats is.
+    # An idle granted seat costs nothing; an ungranted one turns a live
+    # trial dispatch into a render-time refusal. The exact contract id is
+    # computed through the same `wire_contract_for` the live call uses
+    # (never hand-rolled): a direct JudgeRuling contract ids as
+    # "judgeruling.direct.v1", not "judge.direct.v1" -- the alias table
+    # supplied here is a placeholder only, since every one of these
+    # contracts' ids is fixed by role/profile/output-model alone, never by
+    # alias content. Resolved PER SEAT through
+    # `resolve_route_seat_base_profile`, not the manifest-wide default: a
+    # route seat's own presentation authority (e.g. a `route_profiles`
+    # override, or a later compact-recovery source profile) can differ from
+    # `manifest.model_profile`, and only the seat's own profile decides
+    # which of the direct/compact wire-contract shapes it will actually
+    # render.
+    from deepreason.llm.contracts import DefenderOutput, JudgeRuling, VariatorOutput
+    from deepreason.llm.wire import AliasTable, wire_contract_for
+
+    _trial_output_models = {
+        "defender": DefenderOutput,
+        "judge": JudgeRuling,
+        "variator": VariatorOutput,
+    }
+    _placeholder_aliases = AliasTable({"K_001": "placeholder"})
+    for trial_role, output_model in _trial_output_models.items():
+        routes = manifest.roles.get(trial_role, ())
+        for seat, route in enumerate(routes):
+            seat_profile = resolve_route_seat_base_profile(
+                manifest,
+                role=trial_role,
+                seat=seat,
+                endpoint_id=route.endpoint_id,
+            )
+            contract_id = wire_contract_for(
+                trial_role, output_model, seat_profile, _placeholder_aliases
+            ).contract_id
+            assignments.add((contract_id, trial_role, seat))
+
     criticism = manifest.criticism_policy
     referee = (
         manifest.inquiry_capability_policy.config_referee
@@ -2614,6 +2660,22 @@ def _compile_contract_schema_repair_policy(
         control_plane_policy.contract_versions.conjecturer_turn_contract: (
             conjecture_ceiling
         ),
+        # Defended-trial provider boundary (informal/trial.py's defender/
+        # judge/variator calls). Granted unconditionally, the same as the
+        # three entries above: a route seat that never materializes simply
+        # never consumes this ceiling
+        # (`_route_seat_behavioral_contract_assignments` is the gate that
+        # decides whether any seat is actually granted a contract at all).
+        # Both the direct and compact wire-contract id for each role are
+        # granted, since which one a given seat resolves to is a per-seat
+        # presentation decision (`resolve_route_seat_base_profile`), not a
+        # single run-wide choice this function has visibility into.
+        "defender.direct.v1": shared_ceiling,
+        "defender.compact.v1": shared_ceiling,
+        "judgeruling.direct.v1": shared_ceiling,
+        "judge.compact.v1": shared_ceiling,
+        "variator.direct.v1": shared_ceiling,
+        "variator.compact.v1": shared_ceiling,
     }
     if control_plane_policy.scratch_authoring.enabled:
         ceilings.update(
@@ -3020,14 +3082,18 @@ def _validate_v6_capability_policy(manifest: RunManifest) -> None:
         # The referee is an ordinary critic call; without a frozen critic
         # seat there is no route that could ever carry its contract.
         raise ValueError("V6_CONFIG_REFEREE_CRITIC_SEAT_REQUIRED")
-    if (
-        manifest.criticism_policy is not None
-        and manifest.criticism_policy.authority == "defended_trial"
-    ):
-        raise ValueError(
-            "V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED: "
-            "defender and judge calls are not yet transaction-authorized"
-        )
+    # V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED retired
+    # (defended-trial-wiring tranche, 2026-08-13): informal/trial.py's
+    # defender and judge calls are now wired through
+    # InquiryTransactionService the same way the ordinary batch-critic
+    # call is (see _v6_transactional_trial_call in informal/trial.py and
+    # the defender/judge/variator grants in
+    # _route_seat_behavioral_contract_assignments above), so a
+    # defended_trial-authorized v6 manifest no longer has an unauthorized
+    # dispatch waiting to crash mid-cycle. Per the operator's
+    # all-configurations-allowed law (CLAUDE.md, 2026-08-12), a refusal
+    # this wiring makes moot is retired outright, not converted to a
+    # notice.
     policy = capabilities.simulation
     if not policy.enabled:
         return
