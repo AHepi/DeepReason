@@ -147,3 +147,71 @@ violations, and appending a "nothing found" entry would misrepresent an
 absence of evidence as a finding. The scan command + this reasoning
 chain stand as the record instead, per REQUEST.md R6's own fallback
 ("the scan command and output are the proof either way").
+
+## Step 4 — Part 3a: root_sweep.py full-tree run
+
+Done-criterion: every committed root swept (minus the excluded hang
+root), compared against the last committed sweep, verdict drift
+attributed to a named reader change or explicitly none found.
+
+**Exclusion.** `experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03`
+is excluded by a path filter in a scratch wrapper copy of
+`tools/root_sweep.py`'s exact per-root logic (not a change to the
+committed tool) — not diagnosed here, per instruction. 103 roots
+discovered on disk; 102 swept, 1 excluded.
+
+**Performance finding, not a silent workaround.** The FIRST attempt ran
+`tools/root_sweep.py`'s logic serially, exactly as committed, and was
+killed by a 45-minute wall-clock guard at 34/102 roots — individual
+roots were taking 30-125 seconds EACH (`experiments/2026-08-04-change-
+rung5-dumb-alternative-backend/ab-home` root: 47.5s; `.../overnight-
+omnibus/block-a-criticism-symmetry/...run-bf30545893...`: 125.7s), far
+slower than any documented prior run. This is a second, separate
+"instrument currency" finding beyond the one named hang root: general
+sweep throughput has degraded, which plausibly explains the operator's
+"the workflow is failing big time" as much as any pin drift does. NOT
+diagnosed or fixed here (out of this tranche's scope — pin/instrument
+currency, not `src/` performance); PARKED below (P1) as a ready-to-send
+investigation prompt. Worked around, for THIS run only, by parallelizing
+the independent, read-only per-root checks across 4 worker processes
+(each root's `verify_root_report`/`Harness(read_only=True)` touches only
+its own directory — safe to parallelize; `tools/root_sweep.py` itself is
+untouched). Completed in `SWEEP COMPLETE: 102 roots` well inside a
+50-minute budget.
+
+**Verdict comparison.**
+
+```
+11 ERROR (all UnsupportedRunManifestVersionError) — baseline: 11. MATCH.
+83 valid=True — baseline 84, minus 1 for the excluded root = 83. MATCH.
+8 valid=False — baseline: 8. MATCH.
+102 total swept (103 discovered - 1 excluded).
+```
+
+Line-by-line diff against the last COMMITTED raw sweep file
+(`experiments/2026-08-12-change-all-configs-allowed/root-sweep-after-
+all-configs-allowed.txt`, pre-dating both `85717580f` and `6e1623db2`'s
+reader changes), whitespace-normalized, hang root excluded from the old
+file:
+
+```
+$ diff <(grep -v "^experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03 " \
+    experiments/2026-08-12-change-all-configs-allowed/root-sweep-after-all-configs-allowed.txt \
+    | sed 's/  */ /g' | sort) \
+  <(sed 's/  */ /g' root-sweep-after-2026-08-13.txt | sort)
+(no output)
+$ echo $?
+0
+```
+
+**Zero bytes of difference, per-root, across every column** (valid,
+epistemic_checks_passed, att count, blind count, modules, module
+digests, seats, seat digests) for all 102 swept roots. **No verdict
+moved.** Two reader changes landed in the interim —
+`85717580f` (v6 defended-trial wiring, `run_manifest.py` +
+`rules/crit.py` + `workflow/*.py`) and `6e1623db2` (calibration-receipt
+notice, `authority.py` + `run_manifest.py`, converting a compile-time
+refusal to a disclosure notice) — and neither moved a single committed
+root's verdict. This is the complete, re-derived answer to REQUEST.md
+R7's "which reader change moved which verdict": **none did**. Raw output
+committed as `root-sweep-after-2026-08-13.txt` alongside this file.
