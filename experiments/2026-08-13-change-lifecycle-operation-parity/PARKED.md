@@ -131,3 +131,60 @@ gate at the boundary, root_sweep zero verdict drift, docs_verify full.
 Map moves in the same commit if SUB-application's state section names
 them. Commit and push at every phase boundary.
 ```
+
+---
+
+## P4 — admitted evidence is cited in prose, never in the verifiable channel
+
+**What.** The continuation proved the delivery path works: 48 of 181
+post-amendment model calls named an admitted source by handle
+(`SRC_001`…`SRC_009`), including ALL 23 argumentative-critic calls. But
+**0 of 181** emitted a structured `evidence_refs` entry — the
+`EvidenceRefClaimV1 {block, quote}` record that
+`check_candidate_citations` verifies byte-for-byte against the source.
+So the harness has quote-checking machinery and nothing to check, and
+every citation in this run rests on model prose, which CLAUDE.md says is
+never evidence. Whether this is a prompt/contract gap (the field is
+optional and never demanded) or the models simply declining it is NOT
+established by this run and must not be guessed.
+
+**Ready-to-send prompt:**
+
+```
+Fix tranche: admitted evidence is cited in prose but never in the
+verifiable channel. Route through deepreason-orchestrator.
+
+EVIDENCE (typed, from the record):
+experiments/2026-08-13-change-lifecycle-operation-parity/LIVE.md and
+PARKED.md P4. On the grounded-extension root after amendment epoch 1:
+  post-amendment model calls        181
+  calls naming a source in prose     48  (all 23 argumentative_critic)
+  calls emitting evidence_refs        0
+The dossier parsed to 296 citable blocks, so the material was there.
+
+DIAGNOSE FROM THE RECORD FIRST, not the code: open a post-amendment
+conjecturer and argumentative_critic raw under blobs/ and read what the
+model was actually asked for. Separate two hypotheses with the record:
+(a) the pack never presented the citable blocks with their block ids, so
+the model could only refer to sources by handle; (b) the blocks were
+presented and evidence_refs is simply an optional field the model
+skipped. The fix differs; the record decides.
+
+READ FIRST: src/deepreason/llm/contracts.py EvidenceRefClaimV1 and the
+candidate contract, deepreason.evidence.check_candidate_citations,
+union_citable_blocks in amendment/state.py and its callers in rules/conj.py,
+docs/map/SEAM-periphery-x-verification.md.
+
+SCOPE: make a citation VERIFIABLE, not merely present. Do not force
+formality onto conjectures -- CLAUDE.md's standing law says nothing may
+penalize an informal conjecture, so this must not become a rank or
+admission penalty for not citing. The target is that a model which DOES
+cite produces a checkable record.
+
+TESTS: a regression that a conjecture citing an admitted block emits an
+evidence_refs entry whose quote verifies via check_candidate_citations,
+and one that an uncited conjecture is neither refused nor down-ranked.
+GATE: ring while iterating, full gate at the boundary, docs_verify full,
+root_sweep zero verdict drift. Map moves in the same commit. Commit and
+push at every phase boundary.
+```
