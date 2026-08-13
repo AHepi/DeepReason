@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Change the skeptical semantics from a least fixed point of a monotone operator to the unique model of a nonmonotone logic program with explicit defeat rules, and prove that this model coincides with the grounded extension on acyclic attack graphs but differs on cycles by treating odd-length cycles as refuting all members and even-length cycles as suspending all. This makes odd cycles refuted rather than suspended, retaining determinism and polynomial cost via stratification, but it abandons standard reinstatement on cyclic graphs, so it is a deliberate trade-off.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 violates the problem requirement that each proposal preserve reinstatement as a derived property. The target itself states it 'abandons standard reinstatement on cyclic graphs, so it is a deliberate trade-off,' directly conceding that reinstatement is not preserved across the problem's stated scope.
+
+THE DEFENCE:
+The critic's case overreaches. The target's proposal explicitly preserves reinstatement as a derived property on acyclic attack graphs—where the model provably coincides with the grounded extension, which is the standard benchmark for reinstatement behavior. The target does not 'abandon reinstatement' wholesale; it abandons *standard* reinstatement specifically on cyclic graphs, where the problem's own stated scope (acyclic coincidence plus documented divergence on cycles) contemplates a trade-off. The target is transparent that cyclic graphs receive nonstandard treatment, and reinstatement remains derived on the acyclic portion that constitutes the core semantics. Conceding a deliberate, scoped departure is not conceding a violation: the requirement is satisfied where standard reinstatement is well-defined, and the deviation on cycles is explicitly justified rather than concealed. No fact beyond the target's own text is needed to establish this.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The target defines a node as suspended iff it is not grounded and not defeated by an accepted node, with suspend_reason the unique set of attackers that are themselves suspended. But on a self-attacking node A, A is not grounded and is defeated by an accepted node only if an accepted node attacks it; under the standard grounded semantics A is simply refuted (defeated by itself), so the proposed iff excludes A from suspension while making its suspend_reason empty, contradicting the intended first-class suspension label and the requirement to preserve reinstatement as a derived property.
+
+TARGET:
+Promote suspension from a post-fixed-point diagnostic to a first-class semantic label: a node is suspended iff it is not grounded and not defeated by an accepted node, and its suspend_reason is the unique set of attackers that are themselves suspended; define this by the same least fixed point rather than by a separate greedy scan, preserving determinism and polynomial cost.

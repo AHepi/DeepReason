@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Replacing the global fixed-point semantics with a local proof-tree search redefines the semantics rather than expanding it, violating the target standard. The proposal explicitly makes the fixed point a mere sanity check, undermining the requirement to preserve and strengthen the existing skeptical fixed-point semantics of spec §4.
+
+TARGET:
+Adopt a proof-theoretic grounding: define acceptance by existence of a canonical, polynomial-time-checkable dialectical proof tree whose leaves are committed roots, and treat the fixed-point labeling only as a sanity check. This changes the semantics from a global fixed point to a local proof search. Criticizable because proof-tree existence may not be monotone under edge addition unless the tree language is carefully restricted, and it may reintroduce self-support if cycles are not handled explicitly.

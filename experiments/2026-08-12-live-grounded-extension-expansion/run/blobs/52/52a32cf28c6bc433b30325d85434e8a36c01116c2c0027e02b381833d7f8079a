@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_002 scopes its Tarjan SCC recomputation to 'strongly connected components affected by the edit,' but the validity of a node can change because an attacker OUTSIDE its SCC was reinstated or invalidated by an edit elsewhere. The proposal never supplies a join/relevance propagation step that reaches those extra-SCC nodes, so nodes whose acceptance status must be revised can be omitted from the recompute set — the amortized polynomial cost and the root-validity certificate are established only for a subset of affected nodes, leaving the fixed-point result for the whole graph unproven.
+
+TARGET:
+Add an incremental 'commitment graph' that records for each accepted node the set of grounded nodes it depends on; when the argument graph is edited, recompute only the strongly connected components affected by the edit using Tarjan's algorithm, with amortized polynomial cost, and use the graph to certify that every committed root remains valid.

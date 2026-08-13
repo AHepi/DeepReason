@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target proposes incremental maintenance of the grounded extension with 'amortized polynomial time' updates, but the grounded extension of abstract argumentation is P-complete under logspace reductions and its incremental evaluation is known to require linear Omega(n) work per update in the worst case for sequential deterministic models. More critically, a single edge deletion can reinstate a previously suspended node, which in turn can cause a cascade of acceptances and refutations that propagate through the entire argumentation graph; this cascade is not bounded by the local neighborhood of the deleted edge. The target provides no argument that the update schedule's proof of equivalence to full recomputation can be carried out without, in effect, performing the full recomputation. Thus the claim that 'amortized polynomial time' survives does not hold for the problem as stated, because no such amortization bound is established for arbitrary cascades.
+
+TARGET:
+Maintain the grounded extension incrementally: design an algorithm that, on a single attack-edge insertion or deletion, updates fixed-point labels and witnesses in amortized polynomial time instead of recomputing from scratch. Preserve determinism by fixing a deterministic update schedule and proving the updated result equals a full recomputation, so the fixed-point determinism and polynomial-cost guarantees survive in the dynamic setting.

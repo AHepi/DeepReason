@@ -1,0 +1,1 @@
+{"decisive_point":"Determining whether every defense path from an IN node terminates in an unattacked IN node does not require materializing all exponentially many paths: it reduces to a standard reachability question on the defense subgraph induced by IN nodes","verdict":"pass"}

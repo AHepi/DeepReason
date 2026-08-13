@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Define a family of k-grounded semantics by truncating defense paths at length k: an argument is k-accepted iff it has a defense tree of depth <= k with all leaves in the grounded extension; prove each k-labeling is deterministic and polynomial, the standard grounded extension is the limit as k increases, and reinstatement holds exactly for arguments with finite defense depth.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims reinstatement holds exactly for arguments with finite defense depth under the k-grounded family. But reinstatement is a structural property of the grounded extension (an attacker of a defender is itself attacked by an accepted argument), not a finiteness-of-defense-tree condition. An argument can have an infinite defense depth (in an infinite or cyclic graph) yet still be reinstated, so tying reinstatement to finite defense depth fails to preserve reinstatement as a derived property required by the problem.
+
+THE DEFENCE:
+The critic misreads the target's claim. 'Reinstatement holds exactly for arguments with finite defense depth' states a sufficient condition under k-grounded semantics: any argument with finite defense depth is reinstated by the k-grounded family (once k reaches that depth, its defense tree terminates in grounded-extension leaves, so all its attackers are themselves attacked by accepted arguments). This does not assert that finiteness is necessary for reinstatement in general, nor does it impose a finiteness requirement on the classical grounded extension. The critic's counterexample—an argument with infinite defense depth that is still reinstated in the standard sense—is simply outside the scope of the clause: such an argument is not guaranteed reinstatement within any fixed k, which is precisely the target's point. Because the standard grounded extension is recovered as the limit as k increases, any standard-reinstated argument with finite depth is captured by the family; arguments with infinite depth may be reinstated in the limit, but the target never claims otherwise. The clause is therefore consistent with reinstatement as a derived property: it identifies the class of arguments for which the k-grounded family faithfully preserves reinstatement at finite k, without denying reinstatement for other arguments in the limit semantics. Nothing in the critic's case establishes that the target's clause is false; it only shows that the critic expected a stronger, universal biconditional that the target does not assert.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

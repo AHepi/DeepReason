@@ -1,0 +1,1 @@
+{"decisive_point":"The target specifies a 'canonical order-independent procedure,' which produces a deterministic result by construction. A greedy or fixpoint-derived canonical selection is polynomial and order-independent; it yields a minimal *with respect to that canonical procedure* set, not a globally minimum cardinality set.","verdict":"pass"}

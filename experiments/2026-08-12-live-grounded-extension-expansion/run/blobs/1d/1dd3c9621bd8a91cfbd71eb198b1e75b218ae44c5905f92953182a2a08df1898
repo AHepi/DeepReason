@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The stated relation is a shared mechanism plus abstraction: 'any graded relation expressible as bounded-depth auxiliary generation or bounded integer weight is the same causal mechanism of syntactic grading.' This is REFUTED IF there is a graded-attack semantics expressible in one encoding that the other cannot simulate within its bounded resources. SRC_009 integer weights can express graded attack magnitude up to a bound w in a SINGLE attacker edge, where a weight-w attack directly overpowers a weight-(w-1) defender at one node. SRC_005 bounded-depth chains cannot express single-edge graded magnitude: each auxiliary edge is binary, so magnitude must be simulated by multiple parallel auxiliary paths, and the depth bound limits total generated support/attack to a linear constant in depth. If the problem's graded-attack example uses a weight w greater than the maximum parallel-chain count the depth bound permits, the chain encoding cannot simulate that weighted attack, yielding different grounded extensions. Therefore the abstraction claim ('same causal mechanism') is false and the target fails its own REFUTED IF: a graded-attack semantics expressible by integer weights that bounded-depth chains cannot simulate within their bounded resources.",
+      "counterexample": [
+        "SRC_009 integer weights: edge A->B has weight 10, edge C->B has weight 9; with threshold tau=10, B is defeated by A alone but not by C.",
+        "SRC_005 bounded-depth chains with depth bound d=3: each auxiliary path contributes at most unit graded strength, so the maximum expressible magnitude at B is at most 3; it cannot encode a 10-vs-9 graded outcome, so B's grounded-extension status differs."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 names a substantive compatibility relation (chain support propagation is a special case of thresholded attack) and states what it is REFUTED IF: a support graph whose auxiliary-chain encoding yields a different grounded extension than direct support semantics for some tau, or a tau placement that violates the committed-root rule. The counterexample-first school must supply such a graph, and none is available: the encoding described (unit-weight auxiliary nodes with tau>1) is exactly the standard reduction of bounded-depth support chains to thresholded attack, and within the allowed tau range the deterministic grounded fixpoint is preserved because support propagation is literally a special case of the threshold rule. No tau placement in the allowed range (tau>1) violates the committed-root rule because roots are independent of auxiliary nodes by construction. Hence the REFUTED IF condition is not met and the relation stands."
+    }
+  ]
+}

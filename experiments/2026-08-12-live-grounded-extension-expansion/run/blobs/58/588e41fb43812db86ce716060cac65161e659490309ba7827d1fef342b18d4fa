@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal breaks reinstatement as a derived property. By defining acceptance as the intersection of all fixpoints respecting a total preorder, a node can be excluded from the intersection simply because, under some admissible preorder, one of its defenders is ranked low and a chain of attacks defeats it. In the standard grounded semantics that node would be reinstated once its attacker is refuted; here, the skeptical intersection over orders can leave it suspended across the entire family, so reinstatement no longer holds as a derived property of the intersection.
+
+TARGET:
+Generalize the grounded extension to a family of fixpoints indexed by a total preorder on warrants, then define the accepted set as the intersection of all fixpoints that respect the preorder—skeptical over orders. The covering principle is that strengthening is choosing a coarser preorder, never changing the underlying attack graph. Because the family is finite and the intersection is computable by a polynomial number of grounded evaluations, determinism and polynomial cost are preserved. Reinstatement and committed-root validity follow from the intersection being a subset of each admissible fixpoint.

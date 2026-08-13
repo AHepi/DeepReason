@@ -1,0 +1,1 @@
+{"decisive_point":"The proposal never supplies a join/relevance propagation step that reaches those extra-SCC nodes, so nodes whose acceptance status must be revised can be omitted from the recompute set","verdict":"fail"}

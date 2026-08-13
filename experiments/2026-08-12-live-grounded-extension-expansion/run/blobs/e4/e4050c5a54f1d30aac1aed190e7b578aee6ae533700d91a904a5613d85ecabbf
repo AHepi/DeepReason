@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The irredundancy requirement multiplies the cost of the fixed-point computation by the number of root candidates, requiring an additional full fixed-point pass per candidate. The problem context explicitly demands preserving the polynomial cost guarantee, and while the overall procedure remains polynomial, the target itself concedes this breaks the 'single-pass polynomial guarantee', violating the spirit of the efficiency constraint.
+
+TARGET:
+Strengthen the validity of committed roots by adding an irredundancy requirement: a root conjecture is committed only if deleting it and its incident attacks changes the grounded labeling of at least one other node; verify this with one additional fixed-point pass per root candidate. This is a property of the root set, not of the edge-construction layer, so it composes with any admissible enrichment (SRC_002, SRC_007) without altering the fixed-point operator. Criticizable points: it multiplies cost by the number of roots (breaking the spirit of the single-pass polynomial guarantee), and it presupposes a canonical definition of 'changes the labeling' that may itself depend on which enrichment was applied.

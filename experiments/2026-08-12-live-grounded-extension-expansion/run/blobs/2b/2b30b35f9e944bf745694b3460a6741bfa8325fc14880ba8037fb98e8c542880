@@ -1,0 +1,42 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:3e200f5e7e7e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 3e200f5e7e7e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@2c8494484091: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The fragility profile (SRC_007) reduces to the DefenseWitness computation (SRC_002): an accepted node is fragile under single-edge deletion iff deleting an edge removes a member of its greedy defense witness that is uniquely responsible for some attacker. This reduction gives fragility auditing in O(V+E) without re-running the fixpoint per edge. Refuted if: there exists a graph where an accepted node's label changes under single-edge deletion but no witness member is uniquely responsible for any attacker, so fragility is not witness-detectable.
+commitments: hv-floor@2a45b7988522, lineage-ref@2c8494484091, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_003's suspend_reason and SRC_002's DefenseWitness share the mechanism of greedy post-hoc classification over final labels. This shared mechanism is compatible with determinism but is refuted if the greedy choice is non-unique: two different greedy scans (e.g., different edge iteration orders) produce different witnesses or different suspend_reason labels for the same graph, meaning the 'explanation' is an artifact of the scan order, not of the argumentation structure.
+commitments: hv-floor@2a45b7988522, lineage-ref@2c8494484091, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

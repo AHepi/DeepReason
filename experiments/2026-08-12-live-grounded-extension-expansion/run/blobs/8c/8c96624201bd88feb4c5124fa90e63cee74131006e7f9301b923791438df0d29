@@ -1,0 +1,11 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "SRC_001 proposes a substantive abstraction relation: it reduces SRC_011's two-level semantics, SRC_005's bounded support chains, and SRC_007's standing residue to a single depth-k warrant standing predicate, unifying support and attack provenance under one reachability bound. The relation is well-formed and specifies a genuine invariant property (refuted if there exist k1<k2 such that the standing predicate labels a node standing at k2 but not at k1 while the grounded extension is unchanged), showing the abstraction is faithful only when standing is monotone in k for a fixed grounded extension. No counterexample arises from the stated content, and the deterministic commitments are machine-verified."
+    }
+  ]
+}
+```

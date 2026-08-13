@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target admits incremental correctness 'requires a stable node ordering and tie-breaking rule that the current fixpoint (09ffabcd92979168) does not specify,' meaning the proposal silently adds an order-dependence not present in the original specification.",
+  "verdict": "fail"
+}
+```

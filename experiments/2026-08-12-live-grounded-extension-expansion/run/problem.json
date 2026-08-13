@@ -1,0 +1,16 @@
+{
+  "criteria": [],
+  "problem": {
+    "description": "Propose innovative ways to expand and strengthen DeepReason's grounded extension \u2014 the skeptical fixed-point semantics (spec \u00a74, Pass 1) by which conjectures are accepted, refuted, or suspended \u2014 such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.",
+    "id": "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+  },
+  "schema": "deepreason-text-workload-v1",
+  "sources": [
+    "src-2e640db15637b4accdefca27066acfb7e31dfb48",
+    "src-8ddb400f3c2d52a681266c7cebc3b1898bac6750",
+    "src-9116c8592387ce22d436cde600d77077d2b08176",
+    "src-95e7a2acb742b1d6187b173fa9fb61c145772881",
+    "src-a79fb57bd1b49204765e85b5cf8437e94657bfe1",
+    "src-ce2f8390bf7df6463ed620e3f6c08a7c277e116f"
+  ]
+}

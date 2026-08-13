@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Minimal-witness selection requires solving a global minimization problem: for a refuted node, finding the truly minimal accepted attacker chain is an optimization problem whose cost may exceed polynomial unless P=NP (analogous to minimum-weight vertex cover). The target claims 'witness is bounded by edge count, preserving polynomial cost,' but bounding the witness size does not bound the search cost for the minimal one — searching for a minimal subgraph among exponentially many candidates is super-polynomial. This violates the 'polynomial cost' guarantee of the problem.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The co-grounded (greatest) extension is a credulous semantics, so it can commit nodes as accepted or refuted that the skeptical grounded extension suspends. When a node is in the grounded extension's undecided region but committed in the co-grounded extension, tagging it 'structurally refutable pending evidence' implicitly imports a credulous commitment into the skeptical framework. Unless the flag is proven to never conflict with the grounded extension's committed sets, root validity is undermined: a root committed under the grounded extension could be refuted under the co-grounded extension, creating a contradictory commitment. The target states this proof is required but provides no argument that the two fixed points cannot disagree on committed sets.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target admits incremental correctness 'requires a stable node ordering and tie-breaking rule that the current fixpoint (09ffabcd92979168) does not specify,' meaning the proposal silently adds an order-dependence not present in the original specification. The original fixed point is defined as a unique set of labels independent of computation order; introducing an ordering requirement for incremental maintenance changes the operational definition without verifying that every valid ordering yields the same result. The 'deterministic spot-check over a hash-selected edge subset' cannot prove full equivalence — it only samples a subset, so order-dependent divergence on un-sampled edges goes undetected, violating the determinism guarantee.",
+      "counterexample": null
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Prove an impossibility boundary: any monotone edge-construction enrichment that preserves determinism, polynomial cost, and committed-root validity cannot increase the set of accepted conjectures beyond the original grounded extension; therefore the only responsible strengthening is to enrich the vocabulary of defeat, e.g., typed attacks with side conditions, rather than the graph. Criticizable because the proof may rely on a too-restrictive definition of edge-construction and miss enrichment via annotations or proof certificates.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The impossibility boundary is too restrictive: it assumes the only graph-enrichment vector is monotone edge construction, but a non-monotone enrichment (e.g., contracting a strongly-connected defense cycle into a single macro-node) can strictly increase the accepted set while preserving determinism, polynomial cost, and committed-root validity, thereby falsifying the claim that vocabulary enrichment is the only responsible strengthening.
+
+THE DEFENCE:
+The critic's objection is a non-sequitur against the target. The target explicitly restricts its scope to monotone edge-construction enrichments and proves the impossibility boundary only for that class; it does not claim that non-monotone operations such as cycle contraction are covered by the boundary. The target's concluding recommendation—that vocabulary enrichment is the only responsible strengthening—is qualified by the same monotone-edge-construction constraint, so a non-monotone counterexample does not falsify a theorem whose antecedent it fails to satisfy. Contraction of a strongly-connected defense cycle is not an edge-construction enrichment at all but a graph-rewriting operation that reduces structure, so it lies outside the target's stated domain. Regarding the second criticizable clause, the target's boundary does not depend on excluding annotations or proof certificates; those are vocabulary enrichments (defeat-language strengthenings) and are precisely the kind of responsible strengthening the target endorses, so they are consistent with rather than missed by the proof. Thus no premise of the impossibility theorem is shown unsound: the critic has identified an operation outside the theorem's scope, not a counterexample within it.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

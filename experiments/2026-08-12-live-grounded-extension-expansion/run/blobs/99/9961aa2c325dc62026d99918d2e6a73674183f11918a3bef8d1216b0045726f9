@@ -1,0 +1,12 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target states a SUBSTANTIVE relation — 'depends on' — and provides a counterfactual refutation condition. However, it fails the school-0 'causal mechanism' stance: the content describes what the node depends on (the advisory pass and the annotation) but never explains HOW the causal mechanism operates — i.e., what process or chain of events causes the node's suspended state to be determined by the annotation over final grounded labels. The target lists dependencies (what) without specifying the mechanism (how the dependence is causally effected), so it does not meet the demanded causal-mechanism standard.",
+      "counterexample": null
+    }
+  ]
+}
+```

@@ -1,0 +1,4 @@
+{
+  "decisive_point": "Treating the fixed-point labeling as a sanity check does not demote it: it remains the semantic anchor, while the proof tree supplies a verifiable witness of membership in that fixed point.",
+  "verdict": "pass"
+}

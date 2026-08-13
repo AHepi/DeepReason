@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The critic's claim is that such a certificate is impossible to validate locally. But nothing in the spec or proposal is cited to establish that the certificate's validation scope is local — the proposal does not say the certificate is computed only from the affected region.",
+  "verdict": "fail"
+}

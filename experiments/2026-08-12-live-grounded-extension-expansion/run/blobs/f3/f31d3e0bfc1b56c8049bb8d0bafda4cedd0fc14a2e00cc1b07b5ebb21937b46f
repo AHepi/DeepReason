@@ -1,0 +1,1 @@
+{"decisive_point":"The critic's 'per query' cost claim assumes the worst case per query with no memoization benefit, but exhaustive querying is precisely the case where memoization across the query sequence helps most. Super-polynomial cost is not demonstrated.","verdict":"fail"}

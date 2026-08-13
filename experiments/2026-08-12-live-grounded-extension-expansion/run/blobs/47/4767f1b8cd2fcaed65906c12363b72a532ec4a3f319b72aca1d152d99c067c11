@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The target claims accepted nodes are those for which the proponent has a winning strategy, and that the strategy graph is computed by a single polynomial pass. But for finite argument games the proponent winning set generally equals the preferred (credulous) extension, not the skeptical grounded extension. On a simple cycle of two mutual attackers, a winning-strategy criterion declares both accepted (proponent picks one and the opponent cannot refute it without conceding the other), whereas the grounded fixed point suspends both. This contradicts reinstatement-as-derived and validity of every committed root required by the problem.
+
+TARGET:
+Make witnesses into winning strategies in a finite two-player argument game: accepted nodes are those for which the proponent has a strategy to defend against every attacker, and the strategy graph (an attractor) is computed by a single polynomial pass over the argument graph, yielding a deterministic, enumeration-independent certificate for each accepted root.

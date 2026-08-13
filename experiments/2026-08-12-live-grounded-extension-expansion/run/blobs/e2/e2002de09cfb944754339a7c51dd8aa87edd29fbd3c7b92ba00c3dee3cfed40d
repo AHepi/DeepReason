@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The critic claims 'the problem requires polynomial cost be preserved unconditionally.' That requirement is not established within the critic's case against this target; the target itself restricts the polynomial claim to bounded-width lattices and discloses a degradation mode.",
+  "verdict": "fail"
+}

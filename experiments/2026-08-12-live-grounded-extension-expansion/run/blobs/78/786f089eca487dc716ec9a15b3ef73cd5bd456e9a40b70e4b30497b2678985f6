@@ -1,0 +1,42 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:4fc07d1cf29c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 4fc07d1cf29c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@bceddf57fe41: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+SRC_009's integer weights and SRC_005's auxiliary chains share a shared mechanism: both encode graded edge strength as syntax layered on an unchanged Dung fixpoint, keeping the grounded extension deterministic and polynomial, and turning validity into a placement/threshold rule rather than a graph check. Abstracted, any graded relation expressible as bounded-depth auxiliary generation or bounded integer weight is the same causal mechanism of syntactic grading. REFUTED IF there is a graded-attack semantics expressible in one encoding that the other cannot simulate within its bounded resources, so the two encodings differ in expressive power over grounded extensions.
+commitments: hv-floor@2a45b7988522, lineage-ref@bceddf57fe41, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_009's bounded-integer thresholded labeling is compatible with SRC_005's bounded-depth auxiliary-chain support encoding: encode each auxiliary node z_i with unit weight and require τ > 1, so support propagation is a special case of thresholded attack and the deterministic fixpoint is unchanged. The causal mechanism is graded attack strength expressed syntactically rather than in the fixpoint — weights grade by magnitude-vs-τ, chains grade by depth. REFUTED IF there is a support graph whose auxiliary-chain encoding yields a different grounded extension than the direct support semantics for some τ in the allowed range, or if the chain encoding forces τ placement that violates the committed-root rule.
+commitments: hv-floor@2a45b7988522, lineage-ref@bceddf57fe41, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

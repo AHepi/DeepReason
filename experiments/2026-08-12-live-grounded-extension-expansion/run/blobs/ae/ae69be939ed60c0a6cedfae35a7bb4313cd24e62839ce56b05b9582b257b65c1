@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal maps nonempty constellations to UNDECIDED via a homomorphism. But the original grounded semantics is skeptical, not trivalent: it must distinguish REFUTED arguments from UNDECIDED. By collapsing all nonempty attacker constellations to UNDECIDED, the algebraic image loses the derived refutation status. Consequently the committed-root validity guarantee cannot be discharged — a root that is attacked by a nonempty constellation would be UNDECIDED rather than REFUTED, so the framework cannot preserve the validity of committed roots.
+
+TARGET:
+Model warrant status as the least fixed point of a monotone operator over a free idempotent semiring whose elements are minimal attacker constellations. The grounded extension is the image under a homomorphism that maps nonempty constellations to UNDECIDED. This makes the suspension boundary an algebraic invariant rather than a post-hoc diagnostic, and yields polynomial algorithms via semiring path problems. Criticizable: semiring operations may not capture defense depth unless the carrier is chosen carefully; the polynomiality claim depends on the semiring satisfying distributivity.

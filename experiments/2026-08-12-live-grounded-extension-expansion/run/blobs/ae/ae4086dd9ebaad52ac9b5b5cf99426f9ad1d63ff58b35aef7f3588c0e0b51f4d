@@ -1,0 +1,7 @@
+THE CASE AGAINST THE TARGET:
+RESIDUE's stated definition ('which attacker kept it OUT') is undefined for suspension due to cycles, where no attacker is committed, undermining deterministic auditability.
+In a mutual attack cycle, both nodes are suspended at the skeptical fixed point but no attacker is committed to root. The target's RESIDUE definition presupposes a committed attacker as the standing reason, leaving the annotation for cycle-suspended nodes undefined or misleading, violating the promised deterministic, polynomial audit of all suspensions.
+cites: 5431feda66e41c92d61607a482c76cb05bd782c10644d596f9f903e82e4e8c2f
+
+TARGET:
+Add a fourth derived label, RESIDUE, recording the standing reason a node is suspended (which attacker kept it OUT), computed as a pure annotation over the final grounded labels and the graph — not a second fixpoint. Determinism and polynomial cost are untouched because the annotation is a function of the already-unique labeling; the conjecture is that RESIDUE makes suspensions auditable and opens the door to 'standing residue' as the trigger for future re-examination without weakening the skeptical semantics.

@@ -1,0 +1,30 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target claims SRC_013's two-pass warrant filtering abstracts the family of edge-construction enrichments across SRC_004, SRC_005, SRC_008, and SRC_009, yet it fails the critic school's demand for a causal mechanism because the passage provides no shared causal process by which the inner grounded labelling acts as a generic selector that produces each enrichment. The counterexample: consider an enrichment E in SRC_008 that constructs outer-graph edges via a structural reification rule (e.g., introducing an edge-node for every attack whose warrant is undefeated) — the edge's existence in the outer graph is determined by a graph-construction operation, not by filtering a pre-existing edge set against an inner labelling's survive/drop verdict, so the 'generic selector' abstraction cannot causally produce that enrichment. A concrete pair: (inner_labelling = {a→b: provisional, c→d: committed}, enrichment_graph = {a→b, c→d, (a→b)→(c→d)}) where the meta-edge (a→b)→(c→d) is introduced by reification of the provisional edge a→b itself, which no warrant-filtered projection can emit because the filter only removes edges and never creates meta-level edges from the inner labelling's structure.",
+      "counterexample": [
+        {"inner_labelling": {"a→b": "provisional", "c→d": "committed"}, "enrichment_graph": ["a→b", "c→d", "(a→b)→(c→d)"], "reason": "meta-edge (a→b)→(c→d) arises from reification of a provisional edge, not from filtering a pre-existing edge set"}
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "The target claims SRC_012's attack edge-node scheme integrates with SRC_003's carriage closure by extending the closure rule so that attackers of a warrant's validity_node also attack the edge-node E, but it violates the critic school's demand for a causal mechanism because the text does not state the mechanism by which attacking a warrant's validity_node causally transmits to attacking E — it merely asserts the rule. More concretely, the refutation condition is internally incoherent as an integration claim: the first clause requires that every C attacking validity_node materializes C→E, while the second clause requires that the merged graph's grounded extension is unchanged relative to the un-closed expansion. These two requirements can be simultaneously unsatisfiable: the additional C→E edges introduced by the closure can change the grounded extension precisely because they add new attack paths into E that did not exist before. Counterexample: let graph G contain a single attack a→b and a warrant w carrying a→b, with validity_node(w) attacked by c. In the un-closed expansion, c attacks only validity_node(w); in the closed expansion, c also attacks edge-node E_{a→b}. If E_{a→b} is the only defender of b and c's attack on E_{a→b} knocks it out, b's label changes, so the grounded extension differs between the two graphs, satisfying the 'refuted if' condition.",
+      "counterexample": [
+        {"graph": {"attacks": ["a→b", "c→validity_node(w)"], "warrant": "w carries a→b", "edge_node": "E_{a→b} defends b"}, "un_closed_extension": {"c→validity_node(w)": true, "c→E_{a→b}": false, "label(b)": "IN"}, "closed_extension": {"c→validity_node(w)": true, "c→E_{a→b}": true, "label(b)": "OUT"}, "grounded_extension_differs": true}
+      ]
+    }
+  ]
+}
+```

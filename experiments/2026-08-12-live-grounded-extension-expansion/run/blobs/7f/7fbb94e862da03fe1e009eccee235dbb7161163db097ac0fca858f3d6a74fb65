@@ -1,0 +1,17 @@
+{
+  "candidate": {
+    "content": "The `suspend_reason` classification depends on the carriage-edge closure rule, since that rule materializes attack edges that can change which attackers are accepted for an undecided node; refuted if the closure rule never changes the acceptance status of any undecided node in any admissible graph.",
+    "typicality": 0.6,
+    "evidence_refs": [
+      {
+        "block": "3e200f5e7e7e5a22aa8ad1de1613b1dba7dcc320ef14624b05385b9bf0699fa3",
+        "quote": "Keep the grounded labels as the single authority, but add a secondary deterministic diagnostic label `suspend_reason`"
+      },
+      {
+        "block": "9f8658b0e01e3bbb26471ff384410bd4edc6256b643b1a4385e0051ebff8f31b",
+        "quote": "every attacker of a warrant's validity_node also attacks the warrant's carriage edge"
+      }
+    ],
+    "neighbours": ["SRC_001", "SRC_002"]
+  }
+}

@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+Adding defense edges from a defender to a defended node is not semantics-preserving: it introduces a direct defense edge from defender to target, but under the ordinary grounded attack-only fixpoint run on the enriched graph, a direct edge is interpreted as an attack, not a defense. This inverts the intended reinstatement structure and can cause committed roots that were previously valid to be attacked and suspended, violating committed-root validity and determinism of the intended fixed point.
+
+TARGET:
+Make reinstatement structural rather than emergent by precomputing defense chains up to a fixed depth d and adding a 'defense edge' from each defender to each node it defends through a chain of length ≤d; then run the ordinary grounded fixpoint on the enriched graph. Because d is fixed, the number of added edges is O(n^{d+1}), so polynomial cost is preserved. Reinstatement is still a derived property—of the enriched graph, not an extra decision rule—and committed-root validity is preserved because the enrichment only makes explicit already-valid defense structure.

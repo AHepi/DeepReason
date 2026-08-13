@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal claims it preserves committed-root validity because 'no committed root can be suspended.' This is a non sequitur under the stated problem: a committed root (a committed valid root) can still be suspended in the skeptical fixed-point semantics if its attackers are not themselves refuted. The RESIDUE annotation does nothing to establish committed-root validity; the target conflates 'root' with 'unattacked root' and thus fails to demonstrate that the validity of every committed root is preserved.
+
+TARGET:
+Add RESIDUE as a fourth derived label that records, for each suspended node, the lexicographically least set of attacking IN-nodes that keep it out; compute it as a pure annotation after the grounded fixed point using a polynomial-time canonical certificate algorithm. This preserves determinism because the fixed point is unchanged and the certificate is canonicalized; it strengthens explainability and gives a constructive witness for every suspension. That witness can later drive a re-examination pass without altering the semantics, and no committed root can be suspended, so committed-root validity is untouched.

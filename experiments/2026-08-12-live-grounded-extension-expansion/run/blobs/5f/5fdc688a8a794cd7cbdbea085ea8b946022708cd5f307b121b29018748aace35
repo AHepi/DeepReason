@@ -1,0 +1,12 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The conjecture that validity of every committed root reduces exactly to 'no enrichment adds an attacker to a committed root' is false, because deleting an attacker from a committed root's support chain is an equally validity-destroying move that the load-bearing check cannot catch.
+The proposal restricts admissible enrichments to functions that add attack edges monotonically with no deletions to the subgraph induced by non-committed-root nodes. But monotonicity of the attack relation (att) does not imply monotonicity of a root's supporting argument chain in the induced subgraph. A committed root r can have a non-root defender d whose own status depends on the absence of attacks against d. Adding an edge x->d (x non-root, d non-root) does not attack r directly, so it passes the single load-bearing check, yet it can turn d from IN to OUT. If r depended on d, r is no longer reinstated, so r's validity is lost even though no attacker was added on r. Thus the check is insufficient and the exact-reduction claim is false.
+cites: e093eb8611ff0d96fc197357178adfbf4e9e7c0ba8471f3c76aa9f21a3aea46a
+
+TARGET:
+Strengthen the grounded extension at the edge-construction layer, never the fixpoint: define an admissible enrichment as any polynomial-time function that adds attack edges monotonically (no deletions) to the subgraph induced by non-committed-root nodes. Because label0 is monotone in att, the unique grounded fixpoint, polynomial cost, and reinstatement-as-derived all survive unchanged; the conjecture is that the validity guarantee reduces exactly to the constraint that no enrichment adds an attacker to a committed root, making 'no new attacker on a root' the single load-bearing check.

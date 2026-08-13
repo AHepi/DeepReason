@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 claims cost stays polynomial if the policy lattice has bounded width. But the proposal evaluates the skeptical fixed point for each policy. Even with bounded lattice width, the number of policy elements can grow combinatorially with the number of policy variables. More fundamentally, the proposal admits the family may degrade to a full truth table, which is exponential in the number of atomic policy decisions. Since the problem requires polynomial cost be preserved unconditionally, the proposal violates the polynomial-cost guarantee whenever the policy representation is itself compact (e.g. O(n) policy bits yielding 2^n policies).
+
+TARGET:
+Parameterize the grounded extension by a school policy that selects which warrant-carriages count as attack edges, and make the skeptical fixpoint return not a single extension but a compact representation of the family of extensions as the policy ranges over a finite policy lattice. Determinism is preserved per policy, the policy-dependent function becomes auditable, and cost stays polynomial if the lattice has bounded width. Criticizable because the family may not be monotone in the policy order, so the compact representation may degrade to a full truth table.

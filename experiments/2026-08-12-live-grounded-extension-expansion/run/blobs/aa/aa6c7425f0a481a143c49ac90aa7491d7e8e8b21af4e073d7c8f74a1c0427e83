@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002 conjectures that the four guarantees follow from the labeling operator being monotone AND inflationary on the complete lattice of labelings, and that reinstatement and root validity are theorems of monotonicity. This is false because monotonicity and inflationarity do not entail committed-root validity. Take the lattice {IN, OUT, UNDEC} and the operator F(L)(x) = IN for every node x, regardless of the graph. F is trivially monotone and inflationary (with IN at the top of the lattice), and its unique fixpoint is the all-IN labeling. But if a committed root has an undefeated attacker, that root cannot be validly accepted, so all-IN violates committed-root validity. Thus a monotone, inflationary operator is not sufficient for the guarantees; reinstatement and root validity are not theorems of monotonicity alone.
+
+TARGET:
+Covering conjecture: the four guarantees (determinism, polynomial cost, reinstatement-as-derived, committed-root validity) all follow from one property — the labeling operator is monotone and inflationary on the complete lattice of labelings. The admissible strengthening space is exactly the set of polynomial-time, monotone, idempotent operators on that lattice; reinstatement and root validity are theorems of monotonicity, not separate design constraints. If true, any proposed expansion should be rejected iff it violates monotonicity/idempotence, which gives a single testable criterion for the whole family.

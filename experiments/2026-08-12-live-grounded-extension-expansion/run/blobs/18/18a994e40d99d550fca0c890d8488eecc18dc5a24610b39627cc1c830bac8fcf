@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal introduces an explicit defeat-priority total order computed by a 'canonical polynomial-time rule,' but the target provides no actual rule specification. The problem demands proposals that preserve determinism of the fixed point; a total order requires a tie-breaking rule, and without specifying that rule the proposal is incomplete and cannot be evaluated for determinism. Moreover, the target itself acknowledges the rule 'may be manipulable by synthetic edge ordering,' which directly undermines the determinism guarantee: if edge ordering can manipulate the priority computation, different presentations of the same argumentation graph could yield different priority orders and thus different fixed points. This is a substantive failure of the determinism requirement, not merely an omission of detail the problem never asked for — the problem explicitly requires preserving determinism, and the target concedes a mechanism by which it can be violated.
+
+TARGET:
+Strengthen the grounded extension by adding an explicit defeat-priority total order over attacks, computed by a canonical polynomial-time rule. A node is accepted if it is defended against all higher-priority attackers, and reinstatement becomes a consequence of priority order rather than an emergent property. Criticizable because any priority order introduces arbitrary tie-breaking that may not reflect evidence strength, and the rule may be manipulable by synthetic edge ordering.

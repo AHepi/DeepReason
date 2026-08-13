@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_003 conjectures that pass-composition is idempotent, but it also says a pass may commit NEW warrants (new edges). A pass that adds fresh evidence is not idempotent: running the pass once may add a new warrant and thereby defeat a previously-suspended node, but running the pass a second time on the now-expanded graph may add yet another warrant or produce a different fixpoint. Concrete counterexample: pass-1 adds a warrant W1 that defeats an attacker of a suspended node A, so A becomes IN. Pass-1 applied again to the extended graph may add a second warrant W2 that defeats a different attacker of A's opponent B, changing B from OUT to IN and thereby forcing A back to UNDEC. The output of pass-1 ◦ pass-1 differs from pass-1, so pass-composition is not idempotent in general. The claim of idempotence as stated is a real fault.
+
+TARGET:
+Suspended nodes should be re-examinable only through a fresh edge-construction pass that commits new warrants — never by relabeling an existing graph. Conjecture: pass-composition is associative and idempotent, so the overall process remains deterministic (each pass is a fresh unique fixpoint) and polynomial (passes are independent); root validity is preserved because the only route to a status change is a new committed warrant, which is exactly what a new pass adds.

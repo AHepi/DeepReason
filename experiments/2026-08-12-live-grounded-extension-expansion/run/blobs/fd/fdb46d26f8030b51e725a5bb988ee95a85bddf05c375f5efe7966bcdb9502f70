@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "The proposal explicitly preserves the four required guarantees: determinism follows from the closure being a pure graph function, polynomial cost from bounded fan-out, and reinstatement plus root validity are retained by keeping the original grounded-extension semantics after closure. The systematic generalization to all structural nodes (validity, internal consistency, coherence) is a substantive, innovative strengthening of the skeptical fixed-point semantics without violating the stated problem scope.", "counterexample": null}]}
+```

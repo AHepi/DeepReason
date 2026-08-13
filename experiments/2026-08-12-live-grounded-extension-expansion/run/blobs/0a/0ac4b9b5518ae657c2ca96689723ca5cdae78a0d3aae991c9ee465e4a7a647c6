@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_003 asserts a monotone fixed-point operator and uniqueness from finiteness, but it never proves the operator is inflationary/monotone with respect to the problem's acceptance semantics: defining D_x as the 'least set of accepted defenders satisfying closure' assumes that every accepted defender is valid without showing that satisfying closure is preserved by set enlargement under that semantics. Without that monotonicity proof the least fixed point may be empty or spurious for nodes that require defenders from later iterations, so determinism of the fixed point and polynomial cost for the strengthened extension are not established.
+
+TARGET:
+Replace the post-hoc greedy DefenseWitness construction with a canonical monotone fixed-point operator: for each accepted node x, D_x is the least set of accepted defenders satisfying closure under the defense relation; because the operator is monotone on a finite lattice, the least fixed point is unique and enumeration-order independent, so the contradiction in SRC_008 disappears while determinism and polynomial cost are retained.

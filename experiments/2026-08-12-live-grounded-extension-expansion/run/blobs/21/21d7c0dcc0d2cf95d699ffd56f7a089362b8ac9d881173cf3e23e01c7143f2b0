@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+src_001 problem requires proposals to preserve 'reinstatement as a derived property.' In standard Dung semantics, an argument a is reinstated if its attacker b is ultimately refuted by some valid sequence of arguments. By allowing a problem to declare a bounded set of exogenous anchor nodes pre-labeled OUT, src_004 permits the refutation of an attacker b via an exogenous anchor without requiring b to be defeated by other arguments in the graph. Reinstatement is no longer strictly derived from the internal attack relations among arguments; it can now be imposed externally. Thus, reinstatement fails to remain a derived property.
+
+TARGET:
+Declared exogenous anchors as structural input: allow a problem to declare a bounded set of anchor nodes (and anchor exclusions) as part of the sealed inputs, and compute the grounded extension of the graph with anchors pre-labeled IN or OUT — i.e., the least fixed point of the characteristic function restricted to non-anchor nodes. Determinism is preserved because anchors are declared sealed inputs, cost stays polynomial, and reinstatement holds within the non-anchor subgraph. This makes the LAMBDA_FLOOR exogenous-entropy idea syntactic rather than a runtime knob, and gives the defender a fixed external reference that shared-model blind spots cannot reach.

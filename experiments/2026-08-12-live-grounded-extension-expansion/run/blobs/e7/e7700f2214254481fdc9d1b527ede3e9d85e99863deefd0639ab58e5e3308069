@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "Replace eager materialization of derived artifacts (DefenseWitness, suspend_reason, standing residue) with a demand-driven justification interface: the grounded extension remains a pure function of the argument graph; every derived label is computed only when queried, and each query output is defined purely as a function of the node and the final fixed point, so results are enumeration-order independent by construction rather than by post-hoc tie-breaking. This directly answers SRC_008's determinism critique of SRC_003/SRC_004 without adding any stored state. Criticizable: adversarial query sequences may defeat memoization and break the polynomial-cost bound; caching reintroduces order dependence unless cache invalidation is itself fixed-point-relative; and 'pure function of the fixed point' is hard to make checkable for arbitrary derived predicates.",
+      "typicality": 0.15,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_008"]
+    },
+    {
+      "content": "Reformulate the skeptical semantics on an interval lattice: each node's status is a closed interval [lower, upper] of possible commitments, and the grounded extension is the least fixed point of a monotone operator on this lattice. Suspension is then a non-degenerate interval rather than a third diagnostic label, so 'undecided' carries semantic content (the range of commitments consistent with the graph) and determinism follows from the Knaster–Tarski least-fixed-point theorem rather than from enumeration discipline. Criticizable: interval semantics may fail to coincide with grounded extension on graphs with odd attack cycles; widening/abstract-interpretation machinery adds complexity that may exceed polynomial bounds; interaction with attack-defeater warrants (SRC_002) and support chains (SRC_005) is uncharacterized.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_002", "SRC_004", "SRC_005", "SRC_007"]
+    },
+    {
+      "content": "Add a compact root-validity certificate layer: for each committed root, emit a polylog-size commitment (Merkle-style hash chain over the greedy defense tree) that an external verifier can check without recomputing the fixed point. This shifts the burden from computation to verification and preserves all existing guarantees, since certificates are derived strictly post-hoc from the fixed point. Criticizable: the defense tree of an accepted node may be super-polylog in size, so the certificate is not actually polylog without compression that loses witness detail; hash-based soundness imports cryptographic assumptions foreign to the current deterministic model; certificate construction order must itself be proven canonical to avoid SRC_008-style order dependence.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_003", "SRC_006", "SRC_008"]
+    },
+    {
+      "content": "Maintain the grounded extension incrementally under a stream of attack/support insertions, reusing the previous fixed point rather than recomputing from scratch, with amortized polynomial update cost and a final result proven independent of update order. This targets practical scalability of the existing semantics without adding expressiveness or new artifacts. Criticizable: amortized bounds are fragile under adversarial insertion sequences; proving update-order independence of the final fixed point is as hard as the determinism question it inherits; intermediate (pre-commit) states may be observably inconsistent, which could violate the validity-of-committed-roots guarantee if any intermediate state is ever read.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_005"]
+    },
+    {
+      "content": "Replace primitive attack edges with a partial order on warrants interpreted as defeat-dominance: the grounded extension is the set of warrants not dominated by any accepted attacker, making reinstatement fall out of order-theoretic maximality rather than remaining a derived post-fixpoint property. This is a representation-level change to the semantics, not an added diagnostic. Criticizable: a partial order cannot capture parity or multi-attacker defeat configurations expressible as attack edges; it changes the extension's meaning on graphs where incomparable attackers jointly defeat a target; compatibility with support-chain encodings (SRC_005) and the closure rule (SRC_006) is not established, and the polynomial guarantee may not survive the dominance computation.",
+      "typicality": 0.2,
+      "neighbours": ["SRC_002", "SRC_005", "SRC_006"]
+    },
+    {
+      "content": "Commit to a suspension-stability axiom rather than any new artifact: if a node x is undecided in the grounded extension, then adding any bounded-depth support chain targeting x never flips x to accepted unless x already possesses a defense path of length ≤ k in the original graph; the axiom is checked per graph as an invariant. This turns 'suspension' from a diagnostic label into a protected semantic property. Criticizable: the axiom may block legitimate refinements that ought to turn suspension into acceptance (over-constraining expressiveness); invariant checking over all bounded-depth additions may itself be super-polynomial; the axiom may conflict with reinstatement-as-derived-property in graphs where reinstatement legitimately flips a previously undecided node.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_004", "SRC_007"]
+    }
+  ]
+}

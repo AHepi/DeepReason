@@ -1,0 +1,1 @@
+{"decisive_point":"The target states 'no committed root can be suspended' as the conclusion of an existing invariant, not as the justification for committed-root validity; the witness is introduced for explainability of suspensions, not to prove the invariant.","verdict":"pass"}

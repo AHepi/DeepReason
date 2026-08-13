@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target explicitly scopes the single-pass guarantee to the fixed-point operator and treats irredundancy as a composable property of the root set, so there is no violation of the stated efficiency constraint as defined.",
+  "verdict": "pass"
+}

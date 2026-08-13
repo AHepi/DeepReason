@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001's proposal (co-constructing witnesses during iteration) and SRC_002's proposal (materializing reinstatement edges with warrants) both require the final DefenseWitness to record edges that may be invalidated in later rounds. SRC_003 addresses determinism of the witness by fixing a total order or emitting the full accepted-defender set, but neither canonicalization handles the semantic non-uniqueness that the other proposals introduce: the full accepted-defender set at the final fixed point may still include defenders whose own warrants were defeated in earlier rounds, and a total order over such a set does not make the witness semantically correct. SRC_003's repair targets order-dependence but assumes the accepted-defender set is already the correct witness content; under the modified constructions the set itself may be inconsistent with the label fixed point, so the emitted canonical witness can be unique yet wrong, failing the committed-root validity guarantee.
+
+TARGET:
+Repair the determinism failure SRC_008 exposes: make DefenseWitness construction canonical by fixing a total order over accepted defenders derived deterministically from the artifact graph (e.g., lexicographic on stable node identifiers) and running the greedy scan in that order, so the emitted witness is unique; alternatively emit the full accepted-defender set as the canonical witness to eliminate order dependence entirely, preserving polynomial cost since that set is already computed by the fixpoint.

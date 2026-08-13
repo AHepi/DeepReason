@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Under the 'demand a causal mechanism' stance, the target asserts a 'change-propagation order that provably reaches the same fixpoint in polynomial total time' but provides no causal mechanism: the target omits the specific ordering rule, the conflict propagation invariant, or the dynamic dependency tracking procedure that would causally prevent re-processing cycles or redundant updates. Without specifying the propagation order's mechanism, the proposal cannot be evaluated to determine if it preserves the polynomial cost guarantee or avoids nontermination.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "Under the 'demand a causal mechanism' stance, the target asserts a 'constructive grounded derivation certificate' can be 'produced as a side output of the fixpoint' but provides no causal mechanism for the production process. The target omits the specific construction algorithm, the certificate's dependency on the fixpoint's internal state, or the mechanism for extracting the finite tree of attack/defense edges during the fixpoint computation. Without specifying the production mechanism, it cannot be verified that the certificate generation preserves the polynomial cost guarantee or is compatible with the skeptical fixed-point semantics.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "Under the 'demand a causal mechanism' stance, the target asserts a 'monotone invariant that blocks any later reinstatement' but provides no causal mechanism for how this invariant is defined or maintained. The target omits the specific invariant formula, the monotonicity proof obligation, or the mechanism by which the invariant is enforced during the fixpoint iteration. Reinstatement in argumentation frameworks is subtle and typically requires specific structural conditions; without specifying the invariant's mechanism, it cannot be verified that it correctly blocks reinstatement while preserving the existing fixpoint semantics.",
+      "counterexample": null
+    }
+  ]
+}
+```

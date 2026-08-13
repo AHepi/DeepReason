@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_002 proposes replacing grounded extension with ideal semantics as the skeptical operator. The problem explicitly scopes the target semantics to the skeptical fixed-point semantics (spec §4, Pass 1), and ideal semantics replaces this fixpoint with an iterated admissibility computation; furthermore, reinstatement as a derived property is listed as an existing guarantee to preserve, and SRC_002 openly concedes reinstatement must be re-derived and the simple two-label fixpoint story is lost.
+
+TARGET:
+Replace grounded extension with ideal semantics as the skeptical operator: the ideal extension is the maximal admissible set contained in every preferred extension — unique, skeptical, and strictly more decisive than grounded — and is computable in polynomial time via iterated grounded-extension calls on the reduced framework. Determinism is preserved; the cost is the re-derivation of reinstatement and committed-root validity as theorems of the new semantics, and the loss of the simple two-label fixpoint story.

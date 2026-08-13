@@ -1,0 +1,1 @@
+{"decisive_point": "The target says the witness 'is bounded by edge count, preserving polynomial cost.' This is a bound on the *size* of the emitted witness structure, which is indeed polynomial (at most the number of edges).", "verdict": "fail"}

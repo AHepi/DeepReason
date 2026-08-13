@@ -1,0 +1,42 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:07c3398912d4) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 07c3398912d4 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@aec7eb98e974: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The admissible enrichment in SRC_004 and the covering principle in SRC_009 share a shared mechanism: both are polynomial-time, monotone edge-construction functions applied before the standard grounded fixpoint, differing only in whether the enrichment is bounded by an explicit covering quantifier. Refuted if SRC_009 admits an enrichment that is not an instance of SRC_004's admissible class, or if SRC_004's class contains a function SRC_009's covering principle cannot express.
+commitments: hv-floor@2a45b7988522, lineage-ref@aec7eb98e974, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_011's committed-root checkpoint contradicts SRC_013's preservation of root validity: the checkpoint suspends any root whose only defenders are UNDEC, yet in the two-pass semantics a root can be outer-accepted precisely because its defenders were accepted through the warrant-filtered outer graph while remaining UNDEC in the inner pass, so the checkpoint re-imports the self-referential blindness SRC_013 names as its weakness. Refuted if no case exists where a root is outer-accepted while all its defenders are inner-UNDEC.
+commitments: hv-floor@2a45b7988522, lineage-ref@aec7eb98e974, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,1 @@
+{"decisive_point":"A Merkle root commitment is polylog-size by construction (logarithmic in tree depth) and does not 'lose witness detail' — the commitment is a binding digest; verification requires revealing an authentication path, not the entire tree.","verdict":"pass"}

@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Strengthen the grounded extension by making validity-node closure an intrinsic derived property of the fixpoint rather than an enforcement in att construction: add a monotone closure operator that, at each pass, treats any attacker of a validity_node as attacking the warrant carrier, so the closure is re-derived by the same skeptical rule. Determinism and polynomial cost are preserved because the operator is monotone and idempotent, and validity of committed roots becomes a theorem of the fixpoint itself.
+commitments: (none)
+
+TARGET SRC_002
+Replace grounded extension with ideal semantics as the skeptical operator: the ideal extension is the maximal admissible set contained in every preferred extension — unique, skeptical, and strictly more decisive than grounded — and is computable in polynomial time via iterated grounded-extension calls on the reduced framework. Determinism is preserved; the cost is the re-derivation of reinstatement and committed-root validity as theorems of the new semantics, and the loss of the simple two-label fixpoint story.
+commitments: (none)
+
+TARGET SRC_003
+Add a committed-root checkpoint that does not alter the fixpoint: before any root is committed, verify the set of committed roots is conflict-free and every committed root is defended by already-committed roots; any root whose only defenders are UNDEC is held suspended. Determinism and polynomial cost are untouched since this is a post-check on a subset of nodes, and committed-root validity becomes an explicit, machine-checkable invariant rather than an implicit property.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

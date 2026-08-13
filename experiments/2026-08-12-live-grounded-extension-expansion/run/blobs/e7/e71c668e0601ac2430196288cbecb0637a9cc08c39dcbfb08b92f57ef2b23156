@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 preserves the stated guarantees but does not expand or strengthen the grounded extension itself; it only regrades existing UNDECIDED nodes. The problem asks to 'expand and strengthen DeepReason's grounded extension' — the accepted/refuted/suspended fixed point — not to add a secondary diagnostic over an unchanged fixpoint. As stated, it leaves the extension identical, so it fails the problem's 'expand/strengthen' scope.
+
+TARGET:
+For every UNDECIDED node, compute its suspension margin: the minimum number of attack-edge deletions that would make it accepted under grounded semantics, using a polynomial-time sensitivity oracle over the final fixpoint rather than bounded-depth lookahead. This turns the binary suspension state into a graded diagnostic without promoting any node, thereby preserving the skeptical semantics and all guarantees.

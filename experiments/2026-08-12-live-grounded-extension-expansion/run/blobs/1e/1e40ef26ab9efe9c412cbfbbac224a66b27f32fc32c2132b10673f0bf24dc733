@@ -1,0 +1,17 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 defines fragility as 'distance to the nearest graph in which a committed root is defeated' and its own criticism admits the graph-distance metric is non-canonical. This is a substance fault under the stated problem: the fixed-point extension over a graph sequence is only deterministic relative to an unspecified distance, so the proposal does not preserve determinism as an intrinsic guarantee — it silently externalizes determinism to an undefined metric choice. Different admissible distance functions yield different nearest-neighbor graphs and thus different committed-root defeat conditions for the same input, so the limit semantics is not determined by the attack graph alone.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 preserves all required guarantees in substance: the policy is fixed before evaluation, the operator stays monotone (so the least fixed point remains deterministic and polynomial), and the policy cannot accept a node whose root is invalid, protecting committed-root validity. The noted arbitrariness concerns external justification for a chosen policy, not a failure of the stated problem's guarantees, so it does not constitute a fault against the problem as stated."
+    }
+  ]
+}
+```

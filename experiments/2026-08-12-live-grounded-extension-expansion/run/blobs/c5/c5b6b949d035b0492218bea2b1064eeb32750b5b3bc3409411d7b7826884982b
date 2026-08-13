@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The critic assumes the homomorphism sends every nonempty constellation to a single undecided value and nothing further, but the target only states that nonempty constellations map to UNDECIDED — this is the boundary condition marking where the algebraic record suspends, not the sole output of the semantic evaluation.",
+  "verdict": "pass"
+}
+```

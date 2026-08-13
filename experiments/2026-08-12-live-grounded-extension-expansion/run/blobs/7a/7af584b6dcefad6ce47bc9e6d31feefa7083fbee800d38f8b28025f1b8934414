@@ -1,0 +1,4 @@
+{
+  "decisive_point": "If A_i is an unattacked accepted root, it has no attackers to redirect, so nothing about A_i changes.",
+  "verdict": "pass"
+}

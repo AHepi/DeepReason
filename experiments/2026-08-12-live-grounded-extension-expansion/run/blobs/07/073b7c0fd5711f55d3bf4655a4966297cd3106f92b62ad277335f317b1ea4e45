@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal explicitly permits intermediate (pre-commit) states that are observably inconsistent, and it reuses the previous fixed point rather than recomputing from scratch. Under adversarial insertion sequences the intermediate state can be read before consistency is restored, and the proposal gives no mechanism that prevents a committed root from being read in an invalid state during that window. This is a concrete violation of the validity-of-every-committed-root guarantee required by the problem: the guarantee is not merely about the final fixed point but about every committed root, and an incremental scheme that exposes inconsistent intermediate states lacks the invariant needed to preserve it.
+
+TARGET:
+Maintain the grounded extension incrementally under a stream of attack/support insertions, reusing the previous fixed point rather than recomputing from scratch, with amortized polynomial update cost and a final result proven independent of update order. This targets practical scalability of the existing semantics without adding expressiveness or new artifacts. Criticizable: amortized bounds are fragile under adversarial insertion sequences; proving update-order independence of the final fixed point is as hard as the determinism question it inherits; intermediate (pre-commit) states may be observably inconsistent, which could violate the validity-of-committed-roots guarantee if any intermediate state is ever read.

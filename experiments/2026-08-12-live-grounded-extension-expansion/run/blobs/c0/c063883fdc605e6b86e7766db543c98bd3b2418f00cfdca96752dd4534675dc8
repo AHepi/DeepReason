@@ -1,0 +1,1 @@
+{"decisive_point":"The intersection only excludes a node if it is excluded from every fixpoint in the family, not from one. The claim that the node is 'suspended across the entire family' is therefore not established: it requires showing that no admissible preorder yields a fixpoint in which the attacker is refuted and the node reinstated.","verdict":"pass"}

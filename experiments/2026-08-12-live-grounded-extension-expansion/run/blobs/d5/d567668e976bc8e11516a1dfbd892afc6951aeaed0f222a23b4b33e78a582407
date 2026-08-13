@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Under the 'demand a causal mechanism' stance, the target asserts a 'change-propagation order that provably reaches the same fixpoint in polynomial total time' but provides no causal mechanism: the target omits the specific ordering rule, the conflict propagation invariant, or the dynamic dependency tracking procedure that would causally prevent re-processing cycles or redundant updates. Without specifying the propagation order's mechanism, the proposal cannot be evaluated to determine if it preserves the polynomial cost guarantee or avoids nontermination.
+
+TARGET:
+Introduce a dynamic re-computation protocol that, after an edge insertion or deletion, updates the grounded statuses incrementally by reusing the previous least fixpoint, with a change-propagation order that provably reaches the same fixpoint in polynomial total time. This makes the semantics responsive to new evidence without recomputing from scratch, and preserves determinism because the incremental result is defined as the unique least fixpoint of the updated graph.

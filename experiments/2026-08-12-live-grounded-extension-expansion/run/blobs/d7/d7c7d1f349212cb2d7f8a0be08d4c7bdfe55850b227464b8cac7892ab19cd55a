@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The structural rewrite that replaces a refuting subgraph with a single canonical 'defeater' node violates the determinism of the fixed point because it admits non-confluent rewrites under arbitrary refutation orderings, a flaw the target itself acknowledges as unproven. If applying rewrites in different orders yields distinct normalized graphs, the resulting grounded extensions will differ, destroying the determinism guarantee required by the problem context.
+
+TARGET:
+On each refutation, rewrite the graph structurally: replace the refuting subgraph with a single canonical 'defeater' node whose outgoing attacks are the union of the refuting subgraph's attacks, and define the grounded extension over the fully normalized graph. Unlike RESIDUE (SRC_005), which annotates the final labeling, this carries the reason a node stays OUT in the graph shape itself, so reinstatement still emerges from the fixed point over the normalized graph. Criticizable points: confluence of the rewrite under arbitrary refutation orderings is unproven, and the rewrite changes the graph that later edge-construction passes (SRC_002) see, so interaction with fresh-warrant re-examination (SRC_006) is underspecified.

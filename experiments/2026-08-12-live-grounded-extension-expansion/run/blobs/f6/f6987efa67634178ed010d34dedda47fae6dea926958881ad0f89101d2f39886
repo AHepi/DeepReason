@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal moves the determinism guarantee from the full-graph fixed point to a fixed traversal order, but a local on-demand traversal is inherently dependent on the entry point. In a cyclic attack graph, computing the lazy label of the target's attacker requires evaluating its defenders, which recursively depend on the target's state, causing the traversal order to depend on previously memoized node states. Thus, the 'fixed' traversal order does not guarantee a globally deterministic result unless the memoization protocol resolves cycles identically to the global fixed-point, contradicting the goal of a semantically novel lazy evaluation.
+
+TARGET:
+Compute the grounded extension lazily for a target conjecture: expand only the subgraph reachable by attack and defense edges up to the first fixpoint hit, memoize labels of visited nodes, and certify the result by a polynomial check that no omitted node can reach the target through an undefeated attacker path. This changes the cost profile (potentially sub-linear in practice) while keeping worst-case polynomial, and moves the determinism guarantee from the full-graph fixed point to a fixed traversal order. The criticizable claim is that the certification check is itself a fixed-point computation in disguise, so the 'lazy' version may merely re-derive the full extension in the worst case and add bookkeeping without a semantic strengthening.

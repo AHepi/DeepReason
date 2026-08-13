@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+Calibrating edge-construction rules against a case library does not preserve the deterministic fixed-point guarantee required by the problem; it makes the attack graph's formation dependent on external historical data rather than a pure function of the logical state, introducing an inductive, non-deterministic dependency into the semantics.
+
+TARGET:
+Anchor attack-edge construction in cases: maintain a library of committed runs whose warrant-to-attack materializations are canonical, and calibrate the edge-construction rules (the `build_att` union) per case family so that the same warrant types yield the same attack patterns as the anchors. The label function stays pure and the fixpoint math is unchanged; what is strengthened is the quality of the attack graph itself — which is where the real work lives — making committed-root validity consistent with historical precedent rather than a per-run accident.

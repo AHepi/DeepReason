@@ -1,0 +1,42 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:4fc07d1cf29c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 4fc07d1cf29c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@bceddf57fe41: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The threshold-placement rule of SRC_010 depends on SRC_009's admissible-enrichment framing: assigning bounded integer weights is an admissible enrichment that adds one auxiliary attacker per weight unit, so τ strictly exceeding the weight of every root-incident attack edge is exactly the condition that no enrichment adds an attacker to a committed root. Refuted if there is a weighted attack graph where τ exceeds all root-edge weights yet some monotone enrichment consistent with the weights adds an attacker to a committed root without exceeding τ.
+commitments: hv-floor@2a45b7988522, lineage-ref@bceddf57fe41, relation-form@578e42df713e
+
+TARGET SRC_002
+SRC_006's bounded-depth lookahead counterexample contradicts SRC_010's monotone τ-sweep fixpoint, because any promotion of UNDECIDED nodes that respects the grounded extension must be monotone in the attack graph; therefore the counterexample depends on a non-monotone edge synthesis step. Refuted if there is a monotone bounded-depth lookahead that preserves the no-new-attacker-on-root condition and changes the grounded status of a non-root node.
+commitments: hv-floor@2a45b7988522, lineage-ref@bceddf57fe41, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

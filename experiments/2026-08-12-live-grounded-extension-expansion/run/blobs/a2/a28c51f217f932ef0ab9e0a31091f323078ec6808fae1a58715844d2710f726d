@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Two-level warrant validity: split attack edges into provisional and committed based on an inner grounded labelling of a warrant graph. First compute grounded extension on the subgraph of warrants only; then construct the outer attack relation using only attacks whose warrant node is accepted; finally compute the grounded extension on that derived graph. This gives a compositional, polynomial two-pass semantics and preserves root validity because roots are untouched by warrant filtering. Weakness: the inner and outer labellings are not mutually recursive; an attack on a warrant by an argument that is only accepted in the outer labelling is invisible to the inner pass, so some self-referential challenges to warrants are missed.
+commitments: (none)
+
+TARGET SRC_002
+Add support edges as defender edges: for each support relation B supports A and each attacker C of A, add an edge B→C. This lets an accepted supporter B defeat A's attackers, strengthening A within the same grounded fixpoint. The graph remains an AF, so determinism, polynomial cost, and derived reinstatement are preserved; committed roots are untouched by the added edges. Weakness: support becomes a universal counterattack and cannot express degrees of support; a single accepted supporter can overturn many independent attacks, and the semantics depends on choosing which supports are active before the fixpoint.
+commitments: (none)
+
+TARGET SRC_003
+Add bounded defense-depth labels alongside grounded status: run the grounded fixpoint once, then compute for each accepted node the minimal length of a defense tree (or ∞ if none) and for each out node the set of attacking accepted nodes. These depth tags are derived from the final fixed point, not part of the iteration, so determinism and polynomial cost are preserved. They strengthen the semantics by exposing why a conjecture is accepted or refuted without changing any label. Committed roots get depth 0 and remain valid. Weakness: post-hoc tags cannot influence the fixpoint, so they are explanatory only; if the goal is to change acceptance, this candidate is too weak.
+commitments: (none)
+
+TARGET SRC_004
+Make attack edges first-class warrant-carrying nodes: for each attack A→B add an edge-node E with E→B, and allow any argument C to attack E (C→E). Compute the grounded extension on the expanded AF. An attack only refutes B when E is accepted (every attacker of E is out), so attacking the warrant itself defeats the refutation. This preserves determinism and polynomial cost because the expansion adds one node and at most one extra edge per existing attack and the grounded fixpoint algorithm is unchanged. Committed roots remain valid if no accepted attack-edge points at them. Weakness: accepted A and accepted E both attack B, which can double-count; a merge/identity rule is needed to decide whether the original A→B still exists when E is out.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

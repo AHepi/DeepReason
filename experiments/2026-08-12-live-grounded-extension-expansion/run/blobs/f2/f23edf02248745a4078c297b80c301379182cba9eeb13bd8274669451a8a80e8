@@ -1,0 +1,1 @@
+{"decisive_point":"The critic must show that the *target's specified construction* (canonical procedure reusing Pass 1's fixpoint defeat structure with bounded size) is not polynomial. They have shown only that a different, unbounded, globally-minimal hitting-set computation would be NP-hard.","verdict":"fail"}

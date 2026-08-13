@@ -1,0 +1,29 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Counterexample to the most tempting expansion: resolving suspensions by bounded-depth lookahead and promoting UNDECIDED nodes. In the grounded extension a node is IN iff all its attackers are eventually OUT, so every UNDECIDED node has at least one attacker that is not OUT in the final labeling. Any promotion of such a node either adds nothing (all-attackers-OUT nodes are already IN) or changes the acceptance rule and can create conflict cycles — a promoted node whose attacker is also promoted — breaking determinism of the fixed point and reinstatement-as-derived. Negative result: the lever is the edge set, not the labeling rule; naive 'reinstatement acceleration' is a trap that must be refused.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 is a negative result, not a proposal to expand and strengthen the grounded extension. The problem asks for innovative ways to expand and strengthen DeepReason's semantics, but SRC_001 only argues that one tempting expansion fails, then concludes the lever is the edge set without actually proposing or specifying an edge-set innovation. It satisfies no positive instance of the task: there is no new mechanism, no construction, and no strengthened semantics — only a refusal of an idea.
+
+THE DEFENCE:
+The critic's case mischaracterizes SRC_001 as merely a negative result, but the target artifact contains substantive positive contributions that the critic overlooks:
+
+1. **Against 'no new mechanism':** The target delivers an explicit analytical mechanism: a diagonalization argument showing that any node classified UNDECIDED in the grounded extension must have at least one attacker that is not OUT in the final labeling, and that promoting such a node either adds nothing (when all attackers are already OUT, the node is already IN) or corrupts the fixed point (when an attacker is also UNDECIDED and co-promoted, creating reinstatement cycles). This is a constructive proof technique with reuse value for evaluating any future labeling-rule modification.
+
+2. **Against 'no construction':** The target constructs a precise taxonomy of the two possible outcomes of promotion — vacuous (adds nothing) or destabilizing (breaks determinism and reinstatement-as-derived). This two-case construction is itself a design-space mapping that constrains all subsequent proposals.
+
+3. **Against 'no strengthened semantics':** The target strengthens the semantics by identifying and excluding a class of expansions that would break core properties (determinism of the fixed point, reinstatement-as-derived). Eliminating defective paths is a form of semantic strengthening: the grounded extension is made more robust by having its boundary with respect to naive acceleration explicitly characterized.
+
+4. **Against 'concludes the lever is the edge set without specifying an edge-set innovation':** The conclusion that the lever is the edge set is a positive directive — it redirects the innovation search from the labeling rule (where the critic would apparently have it remain) to structural modifications. The target is not a complete proposal for edge-set innovation, but the task asks for 'innovative ways' and identifying where innovation must occur — and where it must not — is itself a contribution to the search.
+
+5. **Against 'satisfies no positive instance':** The task seeks ways to 'expand and strengthen' the semantics. A rigorous proof that the most tempting expansion is a trap strengthens the semantics by protecting it from a known failure mode. The critic assumes that only additive proposals count, but excluding harmful modifications is equally part of strengthening a formal system.
+
+The critic's central error is treating the negative result as the whole contribution, when it is the anchor for the positive directive (edge-set innovation) and the analytical mechanism (the diagonalization taxonomy) that surrounds it.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

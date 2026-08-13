@@ -1,0 +1,25 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Add a symmetric defeat-certificate for every undecided node: a minimal deterministic set of attackers whose combined presence prevents acceptance, computed by a canonical order-independent procedure, so suspension carries an auditable justification rather than an opaque status. Preserve polynomial cost by bounding certificate size and reusing the fixpoint's defeat structure already available from Pass 1.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims that adding defeat-certificates 'preserves polynomial cost by bounding certificate size and reusing the fixpoint's defeat structure already available from Pass 1'. But computing a MINIMAL set of attackers for every undecided node is equivalent to solving a minimal hitting set problem (or minimum subset sum / vertex cover on the attack structure), which is NP-hard in general. Bounding certificate size a priori does not guarantee minimality; it only guarantees minimality within that bound, or requires exhaustive search within the bound to establish minimality. Because the problem requires preserving polynomial cost for the semantics as stated, and the proposed certificate computation violates polynomial cost, the target fails the problem. The machine can check that a *given* certificate is valid (deterministically), but it cannot mechanically verify that the target's own design claim of polynomial-cost minimality holds.
+
+THE DEFENCE:
+The critic's case conflates two distinct requirements and misattributes a claim to the target. Addressing each clause:
+
+(1) 'Computing a MINIMAL set of attackers for every undecided node is equivalent to solving a minimal hitting set problem, which is NP-hard in general.' — This is true for global minimality, but the target does not require global minimality. It specifies a 'canonical order-independent procedure,' which produces a deterministic result by construction. A greedy or fixpoint-derived canonical selection is polynomial and order-independent; it yields a minimal *with respect to that canonical procedure* set, not a globally minimum cardinality set. The critic has substituted 'minimum cardinality' for the target's 'minimal ... computed by a canonical procedure,' then attacked the substituted requirement. That is a strawman, not an established defect.
+
+(2) 'Bounding certificate size a priori does not guarantee minimality; it only guarantees minimality within that bound, or requires exhaustive search within the bound to establish minimality.' — The bound guarantees polynomial-size certificates, which is the actual cost-constraint claim. Minimality is supplied by the canonical procedure's selection rule (e.g., fixpoint-derived defeat structure from Pass 1), not by exhaustive search. The critic has not shown that the target's specific reuse of Pass 1's defeat structure requires exhaustive search; they argue from the general-case NP-hardness of an unbounded optimization problem the target does not pose.
+
+(3) 'The machine can check that a given certificate is valid, but it cannot mechanically verify that the target's own design claim of polynomial-cost minimality holds.' — The design claim is verified by construction analysis, not by the runtime checker. The critic must show that the *target's specified construction* (canonical procedure reusing Pass 1's fixpoint defeat structure with bounded size) is not polynomial. They have shown only that a different, unbounded, globally-minimal hitting-set computation would be NP-hard. That establishes nothing against the target as stated.
+
+The critic's argument depends entirely on replacing the target's bounded, canonical, fixpoint-reuse procedure with an unbounded global optimization and then attacking the replacement. No clause establishes that the target's actual procedure violates polynomial cost. The case fails.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

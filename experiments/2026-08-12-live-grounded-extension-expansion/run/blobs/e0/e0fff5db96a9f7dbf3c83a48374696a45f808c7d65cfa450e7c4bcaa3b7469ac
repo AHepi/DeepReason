@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 violates the problem requirement that each proposal preserve reinstatement as a derived property. The target itself states it 'abandons standard reinstatement on cyclic graphs, so it is a deliberate trade-off,' directly conceding that reinstatement is not preserved across the problem's stated scope.
+
+TARGET:
+Change the skeptical semantics from a least fixed point of a monotone operator to the unique model of a nonmonotone logic program with explicit defeat rules, and prove that this model coincides with the grounded extension on acyclic attack graphs but differs on cycles by treating odd-length cycles as refuting all members and even-length cycles as suspending all. This makes odd cycles refuted rather than suspended, retaining determinism and polynomial cost via stratification, but it abandons standard reinstatement on cyclic graphs, so it is a deliberate trade-off.

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The asserted relation is 'contradicts' but the target fails to exhibit the demanded causal mechanism connecting 4fc07d1cf29c to SRC_007. The text states the isolated node contradicts the advisory post-pass, yet it merely restates a downstream consequence ('breaks committed-root validity') without identifying the structural cause within 4fc07d1cf29c's neighbourhood that produces this contradiction. The refutation clause refers to a hypothetical graph where the post-pass changes accepted nodes, but this does not supply the missing mechanistic link explaining HOW the threshold rule causally generates the conflict; it only describes an observable condition. Under the school's demand for a causal mechanism, describing an outcome is not proposing a substantive causal relation."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "The target proposes a substantive 'shares mechanism' relation and supplies the demanded causal mechanism: the bounded-depth auxiliary node encoding is the shared structural cause, and the attack-on-attackers behavior is the mechanism by which diagnostic witnesses become Dung-native. The refutation clause is well-formed: producing a diagnostic witness without a bounded auxiliary chain would falsify the mechanism. This satisfies the stance and problem without omission."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "The target proposes a substantive 'reduces to' relation and supplies the demanded causal mechanism: monotonicity of the diagnostic post-pass with respect to incident attack-edge weights is the precise structural cause by which the post-pass collapses into the same grounded fixpoint read at threshold τ. The refutation clause targets the exact reduction by requiring a committed run whose ordering cannot be reproduced by any τ, which would break the monotonic reduction. This meets the school's demand for a causal mechanism and names the relation kind clearly."
+    }
+  ]
+}

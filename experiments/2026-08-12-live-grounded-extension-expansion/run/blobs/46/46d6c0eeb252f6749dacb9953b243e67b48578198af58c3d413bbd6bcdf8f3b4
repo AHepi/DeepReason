@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "No fault: target proposes a substantive integration/shared-mechanism relation connecting 3e200f5e7e7e to its neighbourhood, names the kind, and states a concrete refutation condition.", "counterexample": null}]}
+```

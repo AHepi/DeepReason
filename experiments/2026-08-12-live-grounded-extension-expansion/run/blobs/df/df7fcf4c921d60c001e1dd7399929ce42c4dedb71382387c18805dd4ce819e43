@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 is a negative result, not a proposal to expand and strengthen the grounded extension. The problem asks for innovative ways to expand and strengthen DeepReason's semantics, but SRC_001 only argues that one tempting expansion fails, then concludes the lever is the edge set without actually proposing or specifying an edge-set innovation. It satisfies no positive instance of the task: there is no new mechanism, no construction, and no strengthened semantics — only a refusal of an idea.
+
+TARGET:
+Counterexample to the most tempting expansion: resolving suspensions by bounded-depth lookahead and promoting UNDECIDED nodes. In the grounded extension a node is IN iff all its attackers are eventually OUT, so every UNDECIDED node has at least one attacker that is not OUT in the final labeling. Any promotion of such a node either adds nothing (all-attackers-OUT nodes are already IN) or changes the acceptance rule and can create conflict cycles — a promoted node whose attacker is also promoted — breaking determinism of the fixed point and reinstatement-as-derived. Negative result: the lever is the edge set, not the labeling rule; naive 'reinstatement acceleration' is a trap that must be refused.

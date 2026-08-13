@@ -1,0 +1,33 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Introduce a dynamic re-computation protocol that, after an edge insertion or deletion, updates the grounded statuses incrementally by reusing the previous least fixpoint, with a change-propagation order that provably reaches the same fixpoint in polynomial total time. This makes the semantics responsive to new evidence without recomputing from scratch, and preserves determinism because the incremental result is defined as the unique least fixpoint of the updated graph.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+Under the 'demand a causal mechanism' stance, the target asserts a 'change-propagation order that provably reaches the same fixpoint in polynomial total time' but provides no causal mechanism: the target omits the specific ordering rule, the conflict propagation invariant, or the dynamic dependency tracking procedure that would causally prevent re-processing cycles or redundant updates. Without specifying the propagation order's mechanism, the proposal cannot be evaluated to determine if it preserves the polynomial cost guarantee or avoids nontermination.
+
+THE DEFENCE:
+The target artifact's purpose is to define an incremental maintenance semantics for a knowledge graph under edge updates, not to present a full algorithm. Its claims are semantic and stated in the declarative: after an update, reusing the previous least fixpoint, the updated graph has a unique least fixpoint, and an order reaching it is said to be polynomial. The critic's clause asks for a causal mechanism: the specific ordering rule, a conflict propagation invariant, and a dynamic dependency tracking procedure that prevents cycles/redundancy, arguing that without these the cost and termination claims are unevaluable.
+
+Concession: The target does not specify these mechanisms; it states the protocol's existence and properties, not its implementation. This much is established and conceded.
+
+But the critic's further inference is not established: the critic assumes that because the artifact omits mechanism, the claims themselves are false or unverifiable in principle. That does not follow.
+
+1) The fixpoint is well-defined and unique: it is the least fixpoint of the updated graph under the same consequence operator used for the static semantics. Determinism is therefore preserved by definition, independent of any particular propagation order. This part does not require a mechanism to be true.
+
+2) Termination and 'same fixpoint': any sound propagation that only reprocesses affected nodes and fires until no further change reaches the least fixpoint of the updated graph. The least-fixpoint semantics guarantees the target; the missing mechanism is a method to realize it, not a precondition for its existence.
+
+3) Polynomial total time: the target states this as an existence claim for the change-propagation order ('an order that provably reaches ... in polynomial total time'), not as a proof. Its absence is an incompleteness of evidence, not an established false claim. The critic has not shown such an order cannot exist or cannot be given; the target may be paired with a standard affected-subgraph/worklist scheme with each vertex reprocessed at most once per grounded-status transition, yielding polynomial work in the size of the affected region.
+
+4) Causal prevention of cycles/redundant updates: this is precisely what the missing ordering/invariant/tracking would provide. The critic's point is well-taken as a request for evidence, but it does not establish that the proposal fails; it establishes that the artifact is under-specified relative to an algorithm. There is no fact in the record showing nontermination or super-polynomial cost for the described protocol.
+
+Thus the established defect is: the target gives a semantic specification without an algorithmic mechanism or proof. The critic's stronger conclusion—that the cost/termination claims cannot be evaluated and are therefore unsupported—is valid only as 'unsupported by this artifact alone,' not as 'shown false.' The defender therefore concedes under-specification and lack of internal proof, and rejects the implicit inference that the polynomial/termination properties are false or unrealizable.
+
+Recommendation: the target should be augmented with (a) the affected-set/worklist ordering rule, (b) an invariant tying each queued vertex to a prior status change, and (c) a bound on reprocessing per vertex, which together yield the stated polynomial bound and close the evidentiary gap.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

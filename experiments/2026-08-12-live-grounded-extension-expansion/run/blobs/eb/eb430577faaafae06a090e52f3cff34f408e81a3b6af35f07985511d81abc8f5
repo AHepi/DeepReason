@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target asserts that reinstatement remains a derived property, but this does not hold for the proposed intersection semantics. Under standard grounded semantics, if all of a conjecture's attackers are refuted and it has no unrefuted defenders blocking it, the conjecture is reinstated and accepted. In the graded multi-threshold scheme, a conjecture can be IN at the lowest threshold (legitimately reinstated there), have its attackers refuted at all thresholds, yet be rejected overall because it is OUT at a higher threshold due to a newly admissible high-strength attacker. This breaks reinstatement as a derived property of the composite semantics, violating a required guarantee.
+
+TARGET:
+Introduce a graded attack relation with a deterministically ordered threshold sweep: each attack edge carries strength in [0,1]; run the grounded fixpoint at k fixed thresholds in ascending order and accept a conjecture iff it is IN in every pass. The sweep order is part of the spec, so the result is deterministic and cost is k×polynomial; reinstatement is re-verified per threshold and remains derived. The open critique is that threshold choice is arbitrary and the intersection can be strictly less decisive than single-threshold grounded.

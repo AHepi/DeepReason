@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+After the skeptical fixpoint leaves some nodes suspended, run an advisory post-pass that ranks suspended nodes by defense depth: the number of distinct accepted defenders reachable via two attack steps (accepted -> attacker -> suspended). This never relabels a node, so determinism, polynomial cost, and reinstatement semantics are untouched — but it gives the loop a principled order for conjecture refinement and makes the suspended set's structure visible instead of a silent remainder. The grounded extension itself was never the problem; this targets what to do with its output.
+commitments: (none)
+
+TARGET SRC_002
+Keep the grounded extension as the pure label function over `att`, but make attack edges typed: each edge materialized from a warrant carriage carries a warrant-type tag (undercut vs. rebut vs. validity-closure), and the edge set is pre-processed by a fixed total preorder on types before the fixpoint runs. Because the preorder is total and a pure function of the graph, the resulting label assignment remains a deterministic, polynomial fixpoint; the typing adds discrimination power (e.g., a validity-closure attack outranks a rebut) without altering the uniqueness guarantee of the Dung grounded extension.
+commitments: (none)
+
+TARGET SRC_003
+Attach to every materialized attack edge its warrant-chain provenance so that each accepted node carries a traceable committed root. The carriage relation is the authority for warrant materialization; extend it with a provenance ledger recording, per attack edge, the chain of warrants and closures that produced it. Acceptance labels stay a pure function of the graph, so the fixpoint is untouched; the ledger makes 'validity of every committed root' checkable in polynomial time at commit time, converting a global invariant into a local per-edge certificate.
+commitments: (none)
+
+TARGET SRC_004
+Anchor attack-edge construction in cases: maintain a library of committed runs whose warrant-to-attack materializations are canonical, and calibrate the edge-construction rules (the `build_att` union) per case family so that the same warrant types yield the same attack patterns as the anchors. The label function stays pure and the fixpoint math is unchanged; what is strengthened is the quality of the attack graph itself — which is where the real work lives — making committed-root validity consistent with historical precedent rather than a per-run accident.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

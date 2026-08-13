@@ -1,0 +1,58 @@
+{
+  "candidates": [
+    {
+      "content": "The covering principle is a lattice-duality: every admissible enrichment (SRC_005, SRC_011) is an endofunctor on the poset of attack graphs that is monotone with respect to edge-inclusion, and the grounded labeling is the least fixed point. The four foundation artifacts (SRC_002 defense-witness, SRC_004 fragility, SRC_003/SRC_008 suspend-reason) are all instances of a single derived diagnostic functor D: G ↦ (G, annotations) whose annotations are natural transformations computed from the final labeling, never from the fixpoint. REFUTED IF there exists an admissible enrichment satisfying the neighborhood's polynomial/monotone constraints whose derived annotations cannot be expressed as a natural transformation over the final labeling, or if the grounded labeling of the enriched graph is not the least fixed point of the monotone operator.",
+      "typicality": 0.95,
+      "evidence_refs": [
+        {"block": "5c2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d", "quote": "Covering principle: any admissible strengthening of the grounded extension must be a polynomial-time, monotone edge-construction enrichment applied before the s"},
+        {"block": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a", "quote": "Add a fourth derived label, RESIDUE, recording the standing reason a node is suspended"}
+      ],
+      "neighbours": ["SRC_001", "SRC_005", "SRC_011", "SRC_008", "SRC_003"]
+    },
+    {
+      "content": "The neighbourhood's four post-hoc diagnostics (SRC_002 defense witness, SRC_004 fragility, SRC_003 suspend_reason, SRC_008 RESIDUE) are not separate: they are each a different projection of the same relation R = {(x, d): d is an accepted defender of x against some accepted attacker}. DefenseWitness greedily selects a subset of R; fragility counts which single-edge deletions break R; suspend_reason and RESIDUE classify nodes where R is empty or defeated. The covering principle is that R is the single causal invariant connecting all accepted and suspended nodes. REFUTED IF two graphs with identical relation R yield different labels for some node under grounded semantics, or if any of the four diagnostics can change while R is held fixed.",
+      "typicality": 0.85,
+      "evidence_refs": [
+        {"block": "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2", "quote": "materialize a DefenseWitness artifact for each accepted node x"},
+        {"block": "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3", "quote": "Compute a fragility profile for every accepted (IN) node by single-edge deletion"}
+      ],
+      "neighbours": ["SRC_002", "SRC_004", "SRC_003", "SRC_008"]
+    },
+    {
+      "content": "All four foundations are the same mechanism: the skeptical fixpoint leaves a residual structure of defeated attacks, and each foundation is a different polynomial lens onto that residue. SRC_002 makes the residual defense set explicit; SRC_004 probes it by deletion; SRC_003 names the local reason; SRC_008 records the standing cause. The covering principle abstracts this: the grounded extension's output is not just a labeling but a residual attack structure, and all admissible diagnostics are polynomial functions of that structure. REFUTED IF two graphs with isomorphic residual attack structures can produce different grounded labelings, or if any diagnostic is not a function of the residual structure alone.",
+      "typicality": 0.75,
+      "evidence_refs": [
+        {"block": "4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c", "quote": "After the skeptical fixpoint leaves some nodes suspended, run an advisory post-pass"},
+        {"block": "5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d", "quote": "the annotation is a function of the already-unique labeling"}
+      ],
+      "neighbours": ["SRC_002", "SRC_004", "SRC_003", "SRC_008", "SRC_010"]
+    },
+    {
+      "content": "The neighbourhood's admissible enrichments (SRC_005, SRC_006, SRC_007, SRC_011, SRC_012) and the four diagnostic foundations (SRC_002, SRC_003, SRC_004, SRC_008) integrate into one commutative pipeline: enrich edges (pre-fixpoint) → compute grounded labeling → derive annotations (post-fixpoint). The covering principle is that the fixpoint is a functor F from enriched graphs to labelings, and every diagnostic is a natural transformation η: F ⇒ D. This makes the whole system compositional: any two admissible enrichments compose, and any two diagnostics compose, without disturbing the skeptical core. REFUTED IF the pipeline is not functorial — i.e., if applying two enrichments sequentially gives a different result than applying their composition — or if a diagnostic is not natural under graph homomorphisms that preserve attack structure.",
+      "typicality": 0.6,
+      "evidence_refs": [
+        {"block": "6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5", "quote": "define an admissible enrichment as any polynomial-time function that adds"},
+        {"block": "7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6", "quote": "Computed after the fixpoint from the already-known labels and graph"}
+      ],
+      "neighbours": ["SRC_005", "SRC_006", "SRC_007", "SRC_011", "SRC_012", "SRC_002"]
+    },
+    {
+      "content": "The covering principle is information-theoretic: the grounded labeling is the maximal fixed point that preserves the attack graph's directed acyclic skeleton of defeat, and every post-hoc diagnostic (SRC_002, SRC_003, SRC_004, SRC_008) is a lossy compression of that skeleton. DefenseWitness compresses accepted defenders; fragility compresses edge-sensitivity; suspend_reason and RESIDUE compress suspended-node causality. The neighbourhood's edge-construction enrichments (SRC_005, SRC_006, SRC_011) are exactly the operations that refine this skeleton before compression. REFUTED IF a diagnostic can distinguish two graphs that share the same defeat skeleton, or if an enrichment changes the labeling without changing the skeleton.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {"block": "8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f", "quote": "one greedy polynomial set of accepted defenders that together attack all attackers"},
+        {"block": "9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a", "quote": "recording the standing reason a node is suspended"}
+      ],
+      "neighbours": ["SRC_002", "SRC_004", "SRC_008", "SRC_005", "SRC_011"]
+    },
+    {
+      "content": "Contradiction: the neighborhood's stated covering principle (SRC_011: admissible strengthening = polynomial-time monotone edge-construction enrichment before the skeptical fixpoint) is contradicted by the post-hoc diagnostic foundations (SRC_002, SRC_004, SRC_003, SRC_008), which are admissible strengthening applied AFTER the fixpoint. If the covering principle is truly universal, either the post-hoc diagnostics are outside the admissible class (and should be reclassified as observations, not strengthenings) or the principle must be revised to include post-fixpoint polynomial annotations. REFUTED IF there is a consistent reading of SRC_011 that includes post-hoc annotations as admissible strengthenings without modifying its core monotone edge-construction claim.",
+      "typicality": 0.3,
+      "evidence_refs": [
+        {"block": "a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7", "quote": "any admissible strengthening of the grounded extension must be a polynomial-time, monotone edge-construction enrichment applied before the s"},
+        {"block": "b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f", "quote": "computed as a pure annotation over the final grounded labels and the graph"}
+      ],
+      "neighbours": ["SRC_011", "SRC_002", "SRC_003", "SRC_004", "SRC_008"]
+    }
+  ]
+}

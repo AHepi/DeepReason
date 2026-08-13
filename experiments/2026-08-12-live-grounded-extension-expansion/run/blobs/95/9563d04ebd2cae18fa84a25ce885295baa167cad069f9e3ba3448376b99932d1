@@ -1,0 +1,23 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Develop an incremental algorithm that maintains the grounded extension under single-edge additions and deletions using a memoized affected region and local re-computation of the least fixed point. The semantics is unchanged, but the expansion is in operational strength: amortized polynomial updates. This is valuable for interactive conjecture refinement where edges are added as warrants evolve. Criticizable: worst-case complexity may degrade; memory overhead of dependency tracking is nontrivial; the proposal does not expand the expressiveness of the semantics.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The problem asks to expand and strengthen the grounded extension (the semantics), but SRC_004 explicitly states 'The semantics is unchanged' and restricts its contribution to an incremental maintenance algorithm. An operational optimization that changes neither which conjectures are accepted, refuted, nor suspended does not expand or strengthen the semantics; it merely reorganizes computation. The proposal therefore does not answer the problem as stated.
+
+THE DEFENCE:
+The critic's case rests on the unstated premise that 'expand and strengthen the grounded extension' refers exclusively to semantic expansion—broadening the set of accepted, refuted, or suspended conjectures. This premise is not established by the problem statement itself. The phrase 'expand and strengthen the grounded extension' admits an operational reading: strengthening the extension's maintenance machinery to support efficient incremental updates, thereby making the grounded semantics practical for interactive conjecture refinement where edges evolve incrementally.
+
+The critic asserts that 'an operational optimization that changes neither which conjectures are accepted, refuted, nor suspended does not expand or strengthen the semantics.' But this is a definitional stipulation, not an established fact. The target explicitly frames the contribution as 'expansion in operational strength: amortized polynomial updates,' which is a legitimate form of strengthening the grounded extension's computational realization. The grounded extension as a semantical object is strengthened in its applicability and tractability, even if its intensional characterization is unchanged.
+
+SRC_004's statement that 'The semantics is unchanged' is not a concession that defeats the proposal; it is a deliberate scoping clarification distinguishing semantical contribution from algorithmic contribution. The target does not misrepresent itself as offering new semantic expressiveness—it offers operational strength. Whether the problem demands semantic expansion specifically, versus operational strengthening of the extension's maintenance, is precisely what is in dispute, and the critic has not established that only the former satisfies the problem.
+
+The target's own self-criticism ('the proposal does not expand the expressiveness of the semantics') demonstrates awareness of this boundary, but acknowledging that expressiveness is not expanded is not equivalent to conceding that no relevant form of expansion or strengthening has been achieved. Amortized polynomial updates for interactive edge-level refinement constitute a genuine strengthening of the grounded extension's practical reach, which the critic's narrow reading simply assumes away rather than refutes.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

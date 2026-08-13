@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The suspension-stability axiom directly conflicts with reinstatement as a derived property, which the problem requires be preserved. Consider a graph where node x is undecided because its sole defense path is length k+1. The axiom forbids any bounded-depth support chain addition from flipping x to accepted unless x already had a defense path of length ≤ k. But reinstatement legitimately allows a previously undecided node to become accepted after arguments are added that defeat its attackers. The axiom blocks exactly those legitimate reinstatement scenarios where the new support chain is itself the mechanism by which x gains a valid defense, making reinstatement no longer derivable for that class of graphs.
+
+TARGET:
+Commit to a suspension-stability axiom rather than any new artifact: if a node x is undecided in the grounded extension, then adding any bounded-depth support chain targeting x never flips x to accepted unless x already possesses a defense path of length ≤ k in the original graph; the axiom is checked per graph as an invariant. This turns 'suspension' from a diagnostic label into a protected semantic property. Criticizable: the axiom may block legitimate refinements that ought to turn suspension into acceptance (over-constraining expressiveness); invariant checking over all bounded-depth additions may itself be super-polynomial; the axiom may conflict with reinstatement-as-derived-property in graphs where reinstatement legitimately flips a previously undecided node.

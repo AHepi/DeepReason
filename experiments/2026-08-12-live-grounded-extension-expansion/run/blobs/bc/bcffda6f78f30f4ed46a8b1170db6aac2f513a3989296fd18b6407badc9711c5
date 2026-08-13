@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 preserves all four required guarantees: each re-examination pass is a pure deterministic polynomial function of the previous graph plus the RESIDUE certificate (determinism and polynomial cost); the number of passes per conjecture is bounded by a constant (overall cost remains polynomial); reinstatement is derived because new warrants must be committed before relabeling a suspended node and the fixed point is the sole decision rule within each pass; and committed roots stay valid since only suspended nodes are relabeled through fresh edge construction, never roots themselves.", "counterexample": null}]}
+```

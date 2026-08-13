@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The critic asserts that under adversarial insertion sequences an intermediate state can be read, but no fact in the record establishes that any reader is granted access during the pre-commit window.",
+  "verdict": "pass"
+}
+```

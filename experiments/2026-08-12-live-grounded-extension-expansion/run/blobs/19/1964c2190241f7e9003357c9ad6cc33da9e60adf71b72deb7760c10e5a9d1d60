@@ -1,0 +1,15 @@
+TARGET:
+Replace the skeptical fixed-point label function with a dialectical game: Proponent claims a node, Opponent attacks with warrant-carriages, Proponent replies with an accepted counterattack; acceptance is existence of a winning strategy in a finite game. The grounded extension is then the set of nodes with a winning strategy that does not depend on order of play. Reinstatement becomes a game-theoretic derived property and the strategy tree is a natural certificate, but the game is only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 violates the requirement to preserve polynomial cost without qualification. The target states the game is 'only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens,' so the proposal as stated does not preserve the polynomial-cost guarantee on the full class of attack graphs the problem covers.
+
+THE DEFENCE:
+The critic's case establishes only a conditional limitation, not an unqualified violation. The target explicitly preserves polynomial cost under DAG attacks or bounded repetition, and its PSPACE-hardness concern is conditional ('otherwise'), not a demonstrated fact about the full class. The requirement to preserve polynomial cost 'without qualification' is the critic's framing, not an established norm the target must satisfy. Since the target does not claim unqualified polynomial cost on all attack graphs, the cited language is a disclosed scope condition, not a violation. Conceding the critic's conclusion would require establishing that the requirement truly demands polynomial cost on the full class and that the target fails that demand; neither is established by the case as stated. The target remains defensible: its polynomial guarantee holds within its stated scope, and the hardness remark is a caveat, not a failure of the proposal's core claim.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
+
+PARAPHRASED EXCHANGE:
+The claim that SRC_002 fails to meet the polynomial-cost requirement without exceptions is contested. SRC_002 explicitly maintains polynomial cost under DAG attacks or limited repetition, and only raises a PSPACE-hardness possibility as a conditional warning, not a proven issue for all cases. The requirement for unconditional polynomial cost is an interpretation by the critic, not an established standard. Since SRC_002 does not assert unconditional polynomiality across all attack graphs, the mentioned caveat is a stated boundary, not a violation. Accepting the critic's point would require proving that the requirement indeed mandates polynomial cost on every attack graph and that SRC_002 fails that, which is not shown. Thus SRC_002 remains valid: its polynomial guarantee applies within its stated scope, and the hardness remark is merely a caveat, not a flaw in its main assertion.

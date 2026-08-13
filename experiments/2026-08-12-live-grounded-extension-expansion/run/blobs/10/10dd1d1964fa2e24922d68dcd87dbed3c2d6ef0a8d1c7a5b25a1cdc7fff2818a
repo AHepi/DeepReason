@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Make attack edges first-class warrant-carrying nodes: for each attack A→B add an edge-node E with E→B, and allow any argument C to attack E (C→E). Compute the grounded extension on the expanded AF. An attack only refutes B when E is accepted (every attacker of E is out), so attacking the warrant itself defeats the refutation. This preserves determinism and polynomial cost because the expansion adds one node and at most one extra edge per existing attack and the grounded fixpoint algorithm is unchanged. Committed roots remain valid if no accepted attack-edge points at them. Weakness: accepted A and accepted E both attack B, which can double-count; a merge/identity rule is needed to decide whether the original A→B still exists when E is out.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 (contrast) aside, SRC_004's own weakness creates an ambiguity that breaks the 'determinism of the fixed point' guarantee. After expanding A→B into edge-node E→B, the proposal leaves undecided whether the original attack A→B still exists when E is out. If it remains, then B is still attacked by A even when its warrant is defeated; if it is removed, then B is reinstated. Both choices are consistent with the text, and they yield different grounded extensions for the same input. Thus the resulting fixed point is not uniquely determined by the specification, violating determinism.
+
+THE DEFENCE:
+The critic's claim of violated determinism is not established because it depends on a false reading of the specification. The target's acceptance condition is explicit and binding: "An attack only refutes B when E is accepted (every attacker of E is out)." This clause fully determines the status of the original attack A→B: when E is out, the attack does not refute B, regardless of A's status. The 'Weakness' admission is about a separate interaction—potential double-counting when both A and E are accepted—and explicitly identifies a need for a merge/identity rule in that scenario. It does not assert, and the text does not support, that the case where E is out is undecided. To the contrary, the acceptance condition settles it: E out ⟹ B not refuted by the attack. Therefore only one grounded extension is produced for a given input, the fixed point remains uniquely determined, and the determinism guarantee survives the acknowledged weakness. The critic conflates an open issue about double-counting with an alleged gap in the E-out case; the specification closes the latter.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

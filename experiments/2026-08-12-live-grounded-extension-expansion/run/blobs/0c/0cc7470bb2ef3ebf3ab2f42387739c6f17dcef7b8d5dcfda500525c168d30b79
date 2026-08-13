@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target explicitly claims they are untouched; the critic claims they are touched (B→R). The conflict is direct and irresolvable without the original problem's definition of 'committed root.' However, the target's own self-description contains the inconsistency: it asserts committed roots are untouched, yet its rule adds edges from supporters to all attackers of A, and a committed root that attacks A is such an attacker.",
+  "verdict": "fail"
+}
+```

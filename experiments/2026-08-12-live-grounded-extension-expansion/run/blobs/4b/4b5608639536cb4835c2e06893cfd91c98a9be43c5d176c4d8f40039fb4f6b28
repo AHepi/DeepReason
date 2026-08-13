@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target admits incremental correctness 'requires a stable node ordering and tie-breaking rule that the current fixpoint (09ffabcd92979168) does not specify,' meaning the proposal silently adds an order-dependence not present in the original specification. The original fixed point is defined as a unique set of labels independent of computation order; introducing an ordering requirement for incremental maintenance changes the operational definition without verifying that every valid ordering yields the same result. The 'deterministic spot-check over a hash-selected edge subset' cannot prove full equivalence — it only samples a subset, so order-dependent divergence on un-sampled edges goes undetected, violating the determinism guarantee.
+
+TARGET:
+Add an incremental maintenance layer for the grounded fixed point: when attack edges are added or removed, recompute only the affected region of the label computation rather than the whole graph, exploiting that labels are a pure function of the graph (0e806619395ec8f4). Determinism is preserved because the incremental result must equal a full recomputation, enforced by a deterministic spot-check over a hash-selected edge subset; polynomial cost becomes amortized-polynomial over a batch of edits. The criticizable claim: incremental correctness requires a stable node ordering and tie-breaking rule that the current fixpoint (09ffabcd92979168) does not specify, so the proposal silently adds an order-dependence that must be made explicit and verified.

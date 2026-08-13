@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002 violates the problem requirement to preserve reinstatement as a derived property: making IN at pass n require a fully IN defense chain of length >=2 at pass n-2 turns reinstatement into an explicit length precondition, so a node whose sole defender is IN at pass n-1 can remain OUT despite being reinstated.
+
+TARGET:
+Reformulate reinstatement as a second-order recurrence over defense depth: a node is IN at pass n iff all its attackers are OUT at pass n−1 and at least one fully IN defense chain of length ≥2 exists at pass n−2. Labels are a linear recurrence over the same graph, so determinism and polynomial cost hold, but the semantics is strictly more decisive than standard grounded in densely defended regions and is no longer Dung grounded — a genuine semantics change, not an extension.
