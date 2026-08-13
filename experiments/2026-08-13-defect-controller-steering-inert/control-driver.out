@@ -1,0 +1,19 @@
+[2026-08-13T22:20:31Z] CONTROL CONFIRMED: loaded controller has no cap_envelope (pre-fix)
+[2026-08-13T22:20:31Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/control-run ===
+{
+  "compile_notices": [],
+  "dossier_sources": [
+    "src-2e640db15637b4accdefca27066acfb7e31dfb48",
+    "src-8ddb400f3c2d52a681266c7cebc3b1898bac6750",
+    "src-9116c8592387ce22d436cde600d77077d2b08176",
+    "src-95e7a2acb742b1d6187b173fa9fb61c145772881",
+    "src-a79fb57bd1b49204765e85b5cf8437e94657bfe1",
+    "src-ce2f8390bf7df6463ed620e3f6c08a7c277e116f"
+  ],
+  "evidence_dossier_digest": "3155b3d79c781e1b0866623934de6ae7ca10ca0c9aae0f776a535c16ef505c31",
+  "manifest_sha256": "8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d",
+  "run_input_digest": "f6e488fd77c89b067283ca2bb38658e91022e9e39a27b8edb8ba7b0417d25377"
+}
+[2026-08-13T22:20:32Z] manifest sha: 8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d
+[2026-08-13T22:20:32Z] SAME CONFIG as the grounded root and all three epochs
+[2026-08-13T22:20:32Z] === QUALIFY: production-contract doctor (concurrency=2) ===
