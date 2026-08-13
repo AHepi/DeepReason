@@ -7,8 +7,8 @@
 set -u
 DRIVER="${1:-grounded_run.sh}"
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
-BRANCH="${SNAPSHOT_BRANCH:-claude/grounded-extension-run-3-ojhc4g}"
-TRANCHE_REL="experiments/2026-08-12-live-grounded-extension-expansion"
+BRANCH="${SNAPSHOT_BRANCH:-claude/controller-steering-parity-k49vte}"
+TRANCHE_REL="experiments/2026-08-13-defect-controller-steering-inert"
 
 cd "$REPO" || exit 1
 while true; do
