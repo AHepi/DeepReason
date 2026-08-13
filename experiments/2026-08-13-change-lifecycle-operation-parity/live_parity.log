@@ -10,3 +10,4 @@
 [2026-08-13T13:38:33Z] container dropped the gitignored credential. Stages 1-2 are complete
 [2026-08-13T13:38:33Z] and are the credential-free half of the proof. Recreate the file and
 [2026-08-13T13:38:33Z] re-run to continue. rc=0
+[2026-08-13T14:27:08Z] === STAGE 1: finalize (appends only; no model call) ===
