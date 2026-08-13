@@ -135,3 +135,8 @@ required.
 | SD14 | spec-drift | typed strings: credential/path-safety (9/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
 | SD15 | spec-drift | typed strings: judge-family/seats (6/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
 | SD16 | spec-drift | typed strings: remainder (35/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| L1 | goal-trace | Formalism is an option, never an obligation | pass | enforced | proof/goal-L1.txt | baseline |
+| L2 | goal-trace | Seats change GENERATED, never EVIDENCE | pass | partially-enforced | proof/goal-L2.txt | parked |
+| L3 | goal-trace | A solo run with everything on must be an option | pass | enforced | proof/goal-L3.txt | baseline |
+| L4 | goal-trace | Tokens are cheap; the agent is not | pass | process-law | proof/goal-L4.txt | baseline |
+| L5 | goal-trace | All configurations should be allowed | pass | partially-enforced | proof/goal-L5.txt | parked |
