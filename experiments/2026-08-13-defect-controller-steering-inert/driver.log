@@ -1,4 +1,4 @@
-[2026-08-13T21:47:24Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/run ===
+[2026-08-13T21:56:46Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/run ===
 {
   "compile_notices": [],
   "dossier_sources": [
@@ -13,10 +13,5 @@
   "manifest_sha256": "8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d",
   "run_input_digest": "f6e488fd77c89b067283ca2bb38658e91022e9e39a27b8edb8ba7b0417d25377"
 }
-[2026-08-13T21:47:25Z] SETUP OK rc=0
-[2026-08-13T21:47:25Z] === QUALIFY: production-contract doctor (concurrency=2) ===
-[2026-08-13T21:51:14Z] QUALIFY OK rc=0
-[2026-08-13T21:51:14Z] === REASON: deepreason run --budget cycles=6 --token-budget 150000 ===
-[2026-08-13T21:54:44Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/reason.log and /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/reason.stderr.log (a non-zero rc here can still be a typed stop; audit before treating as failure)
-[2026-08-13T21:54:44Z] === AUDIT: verify_root + findings + the steering evidence ===
-[2026-08-13T21:54:49Z] === DONE: see /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/{reason.log,verify_root.json,steering_evidence.txt} ===
+[2026-08-13T21:56:47Z] SETUP OK rc=0
+[2026-08-13T21:56:47Z] === QUALIFY: production-contract doctor (concurrency=2) ===
