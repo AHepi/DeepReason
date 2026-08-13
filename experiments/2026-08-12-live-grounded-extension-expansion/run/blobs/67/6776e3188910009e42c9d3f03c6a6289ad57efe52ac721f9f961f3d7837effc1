@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal acknowledges that adversarial query sequences may defeat memoization and break the polynomial-cost bound. The problem requires preserving polynomial cost as a guarantee, not merely avoiding additional stored state. By replacing eager materialization with demand-driven computation, a query for every derived artifact on every node at each fixed-point iteration would force recomputation proportional to the full extension size per query, yielding super-polynomial total cost (e.g., querying all DefenseWitness predicates across all nodes defeats memoization deterministically and violates the polynomial-cost guarantee the problem demands be preserved).
+
+TARGET:
+Replace eager materialization of derived artifacts (DefenseWitness, suspend_reason, standing residue) with a demand-driven justification interface: the grounded extension remains a pure function of the argument graph; every derived label is computed only when queried, and each query output is defined purely as a function of the node and the final fixed point, so results are enumeration-order independent by construction rather than by post-hoc tie-breaking. This directly answers SRC_008's determinism critique of SRC_003/SRC_004 without adding any stored state. Criticizable: adversarial query sequences may defeat memoization and break the polynomial-cost bound; caching reintroduces order dependence unless cache invalidation is itself fixed-point-relative; and 'pure function of the fixed point' is hard to make checkable for arbitrary derived predicates.

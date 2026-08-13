@@ -1,0 +1,28 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Add a compact root-validity certificate layer: for each committed root, emit a polylog-size commitment (Merkle-style hash chain over the greedy defense tree) that an external verifier can check without recomputing the fixed point. This shifts the burden from computation to verification and preserves all existing guarantees, since certificates are derived strictly post-hoc from the fixed point. Criticizable: the defense tree of an accepted node may be super-polylog in size, so the certificate is not actually polylog without compression that loses witness detail; hash-based soundness imports cryptographic assumptions foreign to the current deterministic model; certificate construction order must itself be proven canonical to avoid SRC_008-style order dependence.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The certificate layer is claimed to be polylog-size, but the defense tree of an accepted node may be super-polylog in size, so the certificate is not actually polylog without compression that loses witness detail. This undermines the stated preservation of existing guarantees: a verifier cannot check root validity without recomputing the fixed point if the witness detail needed for soundness is compressed away. Additionally, hash-based soundness imports cryptographic assumptions foreign to the current deterministic model, and certificate construction order must itself be proven canonical to avoid order dependence, none of which is established.
+
+THE DEFENCE:
+The critic's case fails to establish its central claims:
+
+1) 'Not actually polylog without compression that loses witness detail': The target specifies a Merkle-style hash commitment over the defense tree. A Merkle root commitment is polylog-size by construction (logarithmic in tree depth) and does not 'lose witness detail' — the commitment is a binding digest; verification requires revealing an authentication path, not the entire tree. The claim that compression entails witness loss is unsubstantiated given the stated design.
+
+2) 'Undermines preservation of existing guarantees / cannot check root validity without recomputing the fixed point': The target states certificates are 'derived strictly post-hoc from the fixed point,' preserving existing guarantees. The critic's objection presupposes that soundness requires uncompressed witness detail, which is not established. A cryptographic commitment can be binding without exposing all internal witness material.
+
+3) 'Hash-based soundness imports cryptographic assumptions foreign to the current deterministic model': This is a design observation, not a refutation. The target explicitly specifies 'Merkle-style hash chain,' so hash-based assumptions are intrinsic to the target by design, not foreign. Whether to accept them is a modeling choice; the critic has not shown any contradiction with existing guarantees.
+
+4) 'Certificate construction order must be proven canonical to avoid order dependence, none of which is established': This is a valid open requirement, not a dispositive defect. The target describes a 'greedy defense tree,' which provides a deterministic construction procedure; the critic has not shown that a greedy construction is non-canonical or order-dependent, only that canonicity is not explicitly proven.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
+
+PARAPHRASED EXCHANGE:
+The certificate layer's claimed polylog size is undermined by the possibility that an accepted node's defense tree exceeds polylog size, necessitating compression that discards witness details—thus the certificate isn't genuinely polylog. This breaks the promise of maintaining existing guarantees, as a verifier cannot check root validity without recomputing the fixed point if soundness-critical witness data is compressed away. Additionally, hash-based soundness relies on cryptographic assumptions alien to the deterministic framework, and the construction order's canonicity is unproven, risking order dependence. However, these criticisms fail: a Merkle commitment is polylog by construction and doesn't lose witness detail—it's a binding digest with authentication paths for verification. The target's post-hoc derivation from the fixed point preserves guarantees, and the critic's presupposition about needing uncompressed witnesses is unsupported. Hash assumptions are part of the target's explicit design choice, not foreign. The greedy defense tree yields deterministic construction, and the critic hasn't shown it's non-canonical or order-dependent—merely noting that canonicity isn't explicitly proven, which is an open requirement rather than a decisive defect.

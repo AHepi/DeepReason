@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The critic must exhibit an actual query sequence that forces super-polynomial *distinct* recomputations under such a key; none is provided.",
+  "verdict": "pass"
+}
