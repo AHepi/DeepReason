@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The critic does not show that the operator lattice has exponential height or that the selector must enumerate an exponential candidate space; absent that, no worst-case exponential lower bound follows.",
+  "verdict": "pass"
+}
+```

@@ -1,0 +1,1 @@
+{"decisive_point":"The target's core semantics—the two-dimensional (status, rank) label computed as a least fixed point of a lexicographic product—is fully deterministic. A least fixed point of a monotone operator on a complete lattice is unique; there is exactly one such fixed point.","verdict":"pass"}

@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 claims cost stays polynomial if the policy lattice has bounded width. But the proposal evaluates the skeptical fixed point for each policy. Even with bounded lattice width, the number of policy elements can grow combinatorially with the number of policy variables. More fundamentally, the proposal admits the family may degrade to a full truth table, which is exponential in the number of atomic policy decisions. Since the problem requires polynomial cost be preserved unconditionally, the proposal violates the polynomial-cost guarantee whenever the policy representation is itself compact (e.g. O(n) policy bits yielding 2^n policies).",
+      "counterexample": [
+        "Consider 10 independent binary policy decisions (lattice width = 1, bounded). There are 2^10 = 1024 policies. For 20 decisions, there are over 1 million policies. The compact representation degrades to a full truth table of size 2^n, which is not polynomial in the input size."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 states that the least fixed point must be computed as a lexicographic product and that rank-tie breaking must be canonical or confluence can fail. This concedes that without a specific canonical tie-breaking rule the semantics is non-deterministic. But the original problem requires determinism of the fixed point to be preserved. If confluence can fail, determinism is not preserved — it is only conditionally recoverable by an additional canonical tie-breaking mechanism that the proposal does not fully specify, leaving the determinism guarantee contingent rather than preserved.",
+      "counterexample": [
+        "Two defeating warrants of equal rank attack a node. The lexicographic product does not uniquely determine which attack is processed first. Without a canonical tie-breaking rule, the fixed point can diverge depending on processing order, violating determinism."
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_002 violates the requirement to preserve polynomial cost without qualification. The target states the game is 'only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens,' so the proposal as stated does not preserve the polynomial-cost guarantee on the full class of attack graphs the problem covers.
+
+TARGET:
+Replace the skeptical fixed-point label function with a dialectical game: Proponent claims a node, Opponent attacks with warrant-carriages, Proponent replies with an accepted counterattack; acceptance is existence of a winning strategy in a finite game. The grounded extension is then the set of nodes with a winning strategy that does not depend on order of play. Reinstatement becomes a game-theoretic derived property and the strategy tree is a natural certificate, but the game is only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens.

@@ -1,0 +1,22 @@
+TARGET:
+Extend the grounded extension to a two-dimensional label: each node receives (status, rank), where status is accepted/refuted/suspended and rank is an ordinal from the longest chain of defeating warrants that the skeptical fixpoint traverses. Acceptance then requires both status and a rank bound preserved under reinstatement; refutation carries the rank of the attacking root. This preserves determinism and polynomial cost if ranks are capped by graph size, but the rank component may not be monotone, so the least fixed point must be computed as a lexicographic product and rank-tie breaking must be canonical or confluence can fail.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 states that the least fixed point must be computed as a lexicographic product and that rank-tie breaking must be canonical or confluence can fail. This concedes that without a specific canonical tie-breaking rule the semantics is non-deterministic. But the original problem requires determinism of the fixed point to be preserved. If confluence can fail, determinism is not preserved — it is only conditionally recoverable by an additional canonical tie-breaking mechanism that the proposal does not fully specify, leaving the determinism guarantee contingent rather than preserved.
+
+THE DEFENCE:
+The critic's case rests on an equivocation between 'determinism' and 'confluence' and overreads a contingent caveat as a semantic defect.
+
+(1) The target's core semantics—the two-dimensional (status, rank) label computed as a least fixed point of a lexicographic product—is fully deterministic. A least fixed point of a monotone operator on a complete lattice is unique; there is exactly one such fixed point. Determinism of the fixed point is therefore preserved by construction, not merely 'conditionally recoverable.'
+
+(2) The phrase 'confluence can fail' does not refer to the fixed point itself but to the order in which a particular iterative procedure applies updates when ranks are not monotone. That is an algorithmic reachability concern, not a semantic indeterminacy: different update schedules may require canonical tie-breaking to converge to the same unique fixed point, but the fixed point they converge to is not in question.
+
+(3) The critic claims the determinism guarantee is 'contingent rather than preserved' because the canonical tie-breaking mechanism is 'not fully specified.' But the target states that tie-breaking 'must be canonical'; it does not leave tie-breaking optional at the semantic level. The existence of a constraint ('must be canonical or confluence can fail') is not the same as an admission of nondeterminism. It is a proviso naming a condition under which an implementation invariant holds. The semantic determinism of the least fixed point does not depend on the critic's demand that a specific tie-breaking rule be spelled out; it depends on the uniqueness of the least fixed point, which the lexicographic-product construction provides.
+
+(4) The critic has not established that 'preserved' requires preserving unrestricted algorithmic confluence under any evaluation order. The original problem requires determinism of the fixed point, not universal confluence of every iterative strategy. The target preserves the former; the latter is an implementation concern that the target explicitly flags and constrains.
+
+Accordingly, the critic has not shown that the semantics is nondeterministic, only that an implementation must respect a stated canonicality condition to ensure confluence—an operational caveat, not a concession of semantic indeterminacy.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

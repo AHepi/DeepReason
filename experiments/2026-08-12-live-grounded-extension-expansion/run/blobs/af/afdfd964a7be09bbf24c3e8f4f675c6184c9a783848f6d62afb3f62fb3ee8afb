@@ -1,0 +1,20 @@
+TARGET:
+Parameterize the grounded extension by a school policy that selects which warrant-carriages count as attack edges, and make the skeptical fixpoint return not a single extension but a compact representation of the family of extensions as the policy ranges over a finite policy lattice. Determinism is preserved per policy, the policy-dependent function becomes auditable, and cost stays polynomial if the lattice has bounded width. Criticizable because the family may not be monotone in the policy order, so the compact representation may degrade to a full truth table.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 claims cost stays polynomial if the policy lattice has bounded width. But the proposal evaluates the skeptical fixed point for each policy. Even with bounded lattice width, the number of policy elements can grow combinatorially with the number of policy variables. More fundamentally, the proposal admits the family may degrade to a full truth table, which is exponential in the number of atomic policy decisions. Since the problem requires polynomial cost be preserved unconditionally, the proposal violates the polynomial-cost guarantee whenever the policy representation is itself compact (e.g. O(n) policy bits yielding 2^n policies).
+
+THE DEFENCE:
+The critic's case fails because it conflates policy lattice width with policy family cardinality, and it misreads the target's own cost condition.
+
+1. Bounded-width cost condition: The target explicitly conditions polynomial cost on 'bounded width' of the policy lattice, not on the number of policy elements. Lattice width is the size of the largest antichain, a structural parameter distinct from cardinality. The critic's observation that the number of policy elements can grow combinatorially does not, by itself, establish that bounded width fails to preserve polynomial cost. What matters for the fixpoint-family computation under bounded width is the maximum size of an antichain and the cost of representing/maintaining monotone structure across comparable policies, not the raw count of lattice elements. The critic asserts a polynomial-cost violation but does not establish that bounded width is insufficient; it merely substitutes a different parameter (cardinality) for the one the target actually uses.
+
+2. Truth-table degradation: The target explicitly concedes that the compact representation may degrade to a full truth table when the family is not monotone in the policy order. The critic treats this as a violation of an unconditional polynomial-cost guarantee. But the target does not claim an unconditional guarantee; it claims polynomial cost conditional on bounded lattice width. The degradation scenario is a known limitation the target discloses, not a hidden contradiction. The critic has not shown that the bounded-width condition entails monotonicity, nor that bounded-width lattices necessarily force exponential representations. The critic's O(n)-bits-yielding-2^n-policies example shows that compact policy descriptions can denote many policies, but it does not establish that the resulting family of grounded extensions under bounded-width lattice conditions requires exponential cost to represent.
+
+3. Unconditional polynomial preservation: The critic claims 'the problem requires polynomial cost be preserved unconditionally.' That requirement is not established within the critic's case against this target; the target itself restricts the polynomial claim to bounded-width lattices and discloses a degradation mode. The critic's objection is therefore a charge against a guarantee the target does not assert.
+
+In sum: the critic identifies a real concern (non-monotone families can require full truth tables) that the target already concedes, but does not demonstrate that bounded lattice width is insufficient for the conditional polynomial-cost claim. The objection is accurate about the limitation but not probative of a violation.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

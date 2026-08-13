@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "SRC_002/TARGET explicitly predicates its exact-fixed-point preservation on decomposability with no cross-component reinstatement; it states that otherwise local recomputation can miss global reinstatement and needs a fixpoint over components.",
+  "verdict": "pass"
+}
+```

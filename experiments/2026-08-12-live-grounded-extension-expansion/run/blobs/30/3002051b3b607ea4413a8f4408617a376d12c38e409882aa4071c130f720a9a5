@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (succ:b06d99eca5e7) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate b06d99eca5e7 on question-6fcc770419da1e9c8fccb2db8ed32bbe. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Compute the grounded extension lazily for a target conjecture: expand only the subgraph reachable by attack and defense edges up to the first fixpoint hit, memoize labels of visited nodes, and certify the result by a polynomial check that no omitted node can reach the target through an undefeated attacker path. This changes the cost profile (potentially sub-linear in practice) while keeping worst-case polynomial, and moves the determinism guarantee from the full-graph fixed point to a fixed traversal order. The criticizable claim is that the certification check is itself a fixed-point computation in disguise, so the 'lazy' version may merely re-derive the full extension in the worst case and add bookkeeping without a semantic strengthening.
+commitments: (none)
+
+TARGET SRC_002
+Make the school a first-class input: parameterize the grounded extension by an explicit selector that, among a finite family of monotone fixed-point operators, picks the one whose accepted set is the maximal sub-relation satisfying the school's stance (unifier vs. skeptic), computed by a single monotone pass over the operator lattice. Determinism is preserved by committing the school as part of the input; validity of committed roots is then checked per school. The criticizable claim is that the selection rule over schools is itself non-monotone and may be non-polynomial, and that 'maximal sub-relation satisfying a stance' is not well-defined without a canonical ordering over relations — so the proposal may displace the hardness rather than removing it.
+commitments: (none)
+
+TARGET SRC_003
+Split the fixed-point computation into two passes: Pass 1 computes the skeptical labeling under a restricted rule that disallows reinstatement (a node is accepted only if directly defended by an attacked attacker); Pass 2 promotes to the full extension only if the restricted labeling's accepted set equals the intersection of all complete extensions restricted to that subgraph, i.e., reinstatement is admitted only when it introduces no new conflict. This makes reinstatement a checked, gated step rather than a purely derived one, changing the accepted/rejected boundary for cyclic cases. Determinism is preserved because both passes are deterministic; the criticizable claim is that the Pass-2 gate is not polynomial in general, and that 'no new conflict' smuggles in a second semantic commitment that may not respect the school's unifier stance (SRC_001).
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

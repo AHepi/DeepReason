@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Replace the skeptical fixed-point label function with a dialectical game: Proponent claims a node, Opponent attacks with warrant-carriages, Proponent replies with an accepted counterattack; acceptance is existence of a winning strategy in a finite game. The grounded extension is then the set of nodes with a winning strategy that does not depend on order of play. Reinstatement becomes a game-theoretic derived property and the strategy tree is a natural certificate, but the game is only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 violates the requirement to preserve polynomial cost without qualification. The target states the game is 'only polynomial if restricted to DAG attacks or bounded repetition; otherwise PSPACE-hardness threatens,' so the proposal as stated does not preserve the polynomial-cost guarantee on the full class of attack graphs the problem covers.
+
+THE DEFENCE:
+The critic's case establishes only a conditional limitation, not an unqualified violation. The target explicitly preserves polynomial cost under DAG attacks or bounded repetition, and its PSPACE-hardness concern is conditional ('otherwise'), not a demonstrated fact about the full class. The requirement to preserve polynomial cost 'without qualification' is the critic's framing, not an established norm the target must satisfy. Since the target does not claim unqualified polynomial cost on all attack graphs, the cited language is a disclosed scope condition, not a violation. Conceding the critic's conclusion would require establishing that the requirement truly demands polynomial cost on the full class and that the target fails that demand; neither is established by the case as stated. The target remains defensible: its polynomial guarantee holds within its stated scope, and the hardness remark is a caveat, not a failure of the proposal's core claim.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

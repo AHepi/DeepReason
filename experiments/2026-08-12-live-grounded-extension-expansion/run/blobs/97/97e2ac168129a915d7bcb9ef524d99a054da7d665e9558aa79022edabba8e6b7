@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The warrant-priority layer violates reinstatement as a derived property. By freezing node labels in a fixed ascending (priority, node-id) order, a high-priority attacker can lock its target OUT before the target's defenders (which have lower priority) are evaluated. The defenders are then powerless to reinstate the target because the target's status is already frozen. Standard grounded semantics derives reinstatement from the fixed point: a defender defeats an attacker, which un-defeats the original node. SRC_001's eager freezing breaks this monotonic recovery mechanism, violating a required guarantee.
+
+TARGET:
+Add a warrant-priority layer instead of any graph enrichment: rank each attack edge by the proof-depth (length of the shortest undefeated defense chain) of its source's warrant, and compute the grounded labeling by iterating defeat resolution in ascending (priority, node-id) order, freezing each decision once made. Determinism is preserved because the iteration order is canonical; cost stays polynomial because defense chains are computed once and cached. The criticizable claim is that this breaks the neighbourhood's covering principle (SRC_007): the priority ordering is a property of the iteration, not of a monotone edge-construction pass, so it is not expressible as an admissible enrichment at the edge layer and its fixed point may differ from any edge-enriched grounded extension.

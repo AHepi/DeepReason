@@ -1,0 +1,24 @@
+TARGET:
+Add a warrant-priority layer instead of any graph enrichment: rank each attack edge by the proof-depth (length of the shortest undefeated defense chain) of its source's warrant, and compute the grounded labeling by iterating defeat resolution in ascending (priority, node-id) order, freezing each decision once made. Determinism is preserved because the iteration order is canonical; cost stays polynomial because defense chains are computed once and cached. The criticizable claim is that this breaks the neighbourhood's covering principle (SRC_007): the priority ordering is a property of the iteration, not of a monotone edge-construction pass, so it is not expressible as an admissible enrichment at the edge layer and its fixed point may differ from any edge-enriched grounded extension.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The warrant-priority layer violates reinstatement as a derived property. By freezing node labels in a fixed ascending (priority, node-id) order, a high-priority attacker can lock its target OUT before the target's defenders (which have lower priority) are evaluated. The defenders are then powerless to reinstate the target because the target's status is already frozen. Standard grounded semantics derives reinstatement from the fixed point: a defender defeats an attacker, which un-defeats the original node. SRC_001's eager freezing breaks this monotonic recovery mechanism, violating a required guarantee.
+
+THE DEFENCE:
+The critic's case concedes the actual mechanism but misidentifies the violation. The target does not violate reinstatement-as-a-derived-property; it violates SRC_007's covering principle, which the target itself flags as the criticizable claim.
+
+On the critic's specific clauses:
+
+1. 'Freezing node labels in fixed ascending (priority, node-id) order lets a high-priority attacker lock its target OUT before lower-priority defenders are evaluated' — This is established by the target's own specification: it iterates defeat resolution in ascending (priority, node-id) order and freezes each decision once made. So a higher-priority attacker is indeed evaluated before lower-priority defenders.
+
+2. 'Defenders are then powerless to reinstate the target because the target's status is already frozen' — This is also established: once frozen, a decision is not revisited, so later-evaluated defenders cannot un-freeze the target's label.
+
+3. 'This violates reinstatement as a derived property; standard grounded semantics derives reinstatement from the fixed point' — The mechanism is established, but the critic does not establish that this specific consequence is the required-guarantee violation that matters. The target itself states the criticizable claim is SRC_007's covering principle, not a standalone reinstatement guarantee.
+
+4. The real, established violation is SRC_007: the priority ordering is a property of the iteration procedure, not of a monotone edge-construction pass. Under SRC_007, any modification to defeat resolution must be expressible as an admissible enrichment at the edge layer. The target's fixed-point labeling may differ from every edge-enriched grounded extension because iteration-order freezing is not representable as edge enrichment. This is the defect the target concedes, and it is established by the target's own description.
+
+In sum: the critic correctly identifies that eager freezing can prevent lower-priority defenders from reversing a higher-priority attacker's decision, but the established, required-guarantee violation is the SRC_007 covering-principle breach, not a generic reinstatement-property violation. The defender concedes the SRC_007 violation as stated by the target; the broader reinstatement framing is not independently established beyond what the mechanism already entails.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
