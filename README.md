@@ -30,7 +30,18 @@ deepreason qualify --yes
 deepreason status
 deepreason status --json
 deepreason reason "Why can independent checks improve reliability?"
+deepreason results RUN_ROOT
 ```
+
+`deepreason results <root-or-home>` reads a run's typed results — run id,
+state, stop reason, cycles, token spend against budget, artifact and survivor
+counts, defended-trial and judge-call counts, the stored `verify_root`
+verdict, and whether the root stands where `amend`/`continue` can act. It is
+read-only and never writes into a run root. `--json` emits the stable
+`deepreason-results.v1` keys; `--verify` re-derives the verification verdict
+instead of reading the stored one. Facts a root does not carry print as typed
+absences rather than being omitted. With no path it reads `$DEEPREASON_HOME`
+(else `~/.deepreason`).
 
 `deepreason setup` creates one strict provider profile. The profile contains
 provider and model identity, finite capacities, and the name of a credential

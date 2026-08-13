@@ -1,0 +1,118 @@
+{
+  "absences": [
+    "NO_CYCLE_RECORD",
+    "NO_REPLAY_VALIDATION_JSON",
+    "NO_RUN_IDENTITY_RECORD",
+    "NO_RUN_RESULT_JSON",
+    "NO_RUN_STATUS_JSON",
+    "NO_STOP_RECORD"
+  ],
+  "adjudication": {
+    "judge_calls": 238,
+    "ran": true,
+    "trial_blocked": {},
+    "trial_declined": {
+      "defence-sustained": 27,
+      "ensemble-split": 44,
+      "execution-backed": 39,
+      "paraphrase-flip": 2,
+      "referential-integrity": 7
+    },
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 215,
+    "frontier": {
+      "artifact_ids": {
+        "absent": true,
+        "reason": "NO_RUN_RESULT_JSON"
+      },
+      "count": {
+        "absent": true,
+        "reason": "NO_RUN_RESULT_JSON"
+      },
+      "problem_id": {
+        "absent": true,
+        "reason": "NO_RUN_STATUS_JSON"
+      }
+    },
+    "refuted": 12,
+    "survivor_count": {
+      "absent": true,
+      "reason": "NO_RUN_RESULT_JSON"
+    },
+    "suspended": 0
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": {
+      "absent": true,
+      "reason": "NO_RUN_IDENTITY_RECORD"
+    }
+  },
+  "question": "Propose innovative ways to expand and strengthen DeepReason's grounded extension \u2014 the skeptical fixed-point semantics (spec \u00a74, Pass 1) by which conjectures are accepted, refuted, or suspended \u2014 such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.",
+  "resolved_from": "root",
+  "root": "/home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/run",
+  "run": {
+    "cycles_completed": {
+      "absent": true,
+      "reason": "NO_CYCLE_RECORD"
+    },
+    "message": {
+      "absent": true,
+      "reason": "NO_RUN_STATUS_JSON"
+    },
+    "state": {
+      "absent": true,
+      "reason": "NO_RUN_STATUS_JSON"
+    },
+    "stop_reason": {
+      "absent": true,
+      "reason": "NO_STOP_RECORD"
+    },
+    "token_limit": {
+      "absent": true,
+      "reason": "NO_RUN_STATUS_JSON"
+    },
+    "token_spend": {
+      "absent": true,
+      "reason": "NO_RUN_STATUS_JSON"
+    }
+  },
+  "schema": "deepreason-results.v1",
+  "terminal": {
+    "amend_ready": false,
+    "stop_reason_resumable": {
+      "absent": true,
+      "reason": "NO_STOP_RECORD"
+    },
+    "terminal_epoch": {
+      "absent": true,
+      "reason": "NO_REPLAY_VALIDATION_JSON"
+    },
+    "valid_typed_terminal": false
+  },
+  "verification": {
+    "families": {
+      "absent": true,
+      "reason": "NO_REPLAY_VALIDATION_JSON"
+    },
+    "source": {
+      "absent": true,
+      "reason": "NO_REPLAY_VALIDATION_JSON"
+    },
+    "valid": {
+      "absent": true,
+      "reason": "NO_REPLAY_VALIDATION_JSON"
+    },
+    "violations": {
+      "absent": true,
+      "reason": "NO_REPLAY_VALIDATION_JSON"
+    }
+  }
+}

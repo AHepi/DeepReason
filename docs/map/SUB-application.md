@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 98a5bc8f
+Verified-at: 15498f72
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -33,10 +33,18 @@ Exactly two client families use the typed services, and neither reaches a
 scheduler, a harness or a stop policy of its own.
 `check: grep -q '^deepreason = "deepreason.cli.main:main"' pyproject.toml && ! grep -rl "TEXT_RUN_SERVICE\|GROUNDED_BRIDGE_SERVICE\|SCRATCH_QUERY_SERVICE" --include=*.py src/deepreason | grep -qvE "^src/deepreason/(application/|cli/|mcp_server\.py|mcp_scratch_bridge\.py)" && python -m pytest tests/test_application_text_runs_d0.py::test_clients_have_only_thin_service_dispatch_and_one_registry tests/test_application_scratch.py::test_cli_and_mcp_handlers_are_thin_application_adapters tests/test_application_bridge_service.py::test_bridge_clients_do_not_own_workflow_or_persistence tests/test_application_text_runs_d0.py::test_cli_and_mcp_compile_the_same_start_intent tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands -q`
 
-Admission precedes interpretation. Every CLI verb that touches an existing run
-root passes through one V6 gate — RunManifest v6, run-input manifest v2, a
-matching evidence dossier — before its own code runs, so a pre-V6 or tampered
-root fails with a typed code instead of being half-read by a view.
+Admission precedes interpretation — for every verb that INTERPRETS or MUTATES a
+run root. Those pass through one V6 gate — RunManifest v6, run-input manifest
+v2, a matching evidence dossier — before their own code runs, so a pre-V6 or
+tampered root fails with a typed code instead of being half-read by a view.
+Two pure READERS are deliberately outside the gate, `findings` and `results`:
+a reader that refused a pre-V6 root would refuse exactly the roots an operator
+most needs to inspect, so `results` reports the manifest's admission state as a
+typed fact (`identity.manifest_present`, `identity.manifest_schema_version`)
+instead of turning it into a refusal. Whether read-only verbs SHOULD be
+admitted is an open design question, not settled here
+(`experiments/2026-08-13-change-results-retrieval-surface/PARKED.md` P1).
+`check: python -c "from deepreason.cli.main import _ROOT_ADMISSION_COMMANDS as c; assert 'results' not in c and 'findings' not in c"`
 `check: grep -q "^_ROOT_ADMISSION_COMMANDS = frozenset(" src/deepreason/cli/main.py && grep -q "^def _admit_v6_root(" src/deepreason/cli/main.py && python -m pytest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_missing_manifest_before_interpretation tests/test_v6_only_cli_admission.py::test_historical_roots_with_sidecars_fail_before_command_services -q`
 
 ## Seams
@@ -79,6 +87,14 @@ No `Seams:` entries yet.
 - `application.GROUNDED_BRIDGE_SERVICE` (`GroundedBridgeApplicationService`) —
   `build`, `start`, `status`, `result`, `claims`, `inspect`, `validate` over a
   finished reasoning root (see `DR-SUB-bridge` for what a bridge is).
+- `application.results.results_summary` / `render_results` /
+  `resolve_results_root` — the ONE typed-outcome retrieval surface behind
+  `deepreason results`. A pure reader over durable sidecars, the log and the
+  amendment chain; it composes `findings.findings_summary` rather than
+  re-deriving status counts, reads the STORED verification verdict unless
+  `verify=True`, and emits `{"absent": True, "reason": <code>}` for every fact
+  a root does not carry. It writes nothing into a run root.
+`check: for s in results_summary render_results resolve_results_root; do grep -q "^def $s(" src/deepreason/application/results.py || exit 1; done; grep -q "from deepreason.findings import findings_summary" src/deepreason/application/results.py && python -m pytest tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay tests/test_results_command.py::test_top_level_help_names_the_results_verb -q`
 - `application.SCRATCH_QUERY_SERVICE.execute` — dispatches the closed scratch
   query union; every branch is read-only except the explicit record-direct-open.
 - `application.intents.start_text_run_intent` / `continue_text_run_intent` /
@@ -161,6 +177,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 
 | To change... | Edit | Test |
 |---|---|---|
+| What `deepreason results` reports, or how a fact's absence is typed | `results_summary` and `ABSENCE_REASONS` in `application/results.py`; `render_results` for the glossed human mode | `tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys` |
 | Add, rename or retire a CLI verb | `build_parser` and the matching `_main` branch in `cli/main.py`; add it to `_ROOT_ADMISSION_COMMANDS` if it reads a run root | `tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands` |
 | What a command may do to a pre-V6, unbound or tampered root | `_admit_v6_root` in `cli/main.py` | `tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest` |
 | The process exit-code contract | `run_result_exit_code` in `application/models.py` | `tests/test_r0_terminal_verification.py::test_run_result_exit_contract` |
@@ -183,6 +200,23 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 
 ## Traps
 
+- **The result-retrieval surface used to have no verb, and every session
+  reinvented it.** Operator, 2026-08-13: "When retrieving run results, Opus 5
+  keeps grepping for flags that dont exist." The facts were scattered across
+  `run-status.json`, `run-result.json`, `REPLAY_VALIDATION.json`,
+  `progress.jsonl` and `verify_root` with nothing in `deepreason --help`
+  naming them, and the two nearest verbs actively mislead: `status` is
+  PROVIDER readiness, not a run's outcome, and `findings`' help line never
+  uses the word *result*. FIXED 2026-08-13 by `deepreason results`
+  (`experiments/2026-08-13-change-results-retrieval-surface/`). Two shapes the
+  reader had to learn from the record rather than from the schema, both of
+  which a future reader will meet again: a `deepreason-run-result-v2` payload
+  for a FAILED run carries `error`/`error_type` and NO `survivors`/`frontier`
+  at all (counting the missing key as 0 states a result the record never
+  held), and `REPLAY_VALIDATION.json`'s `verification` block is the legacy
+  `{stats, violations}` shape in all 86 committed roots that carry it — the
+  five-channel `finding_counts` breakdown lives in `run-result.json`.
+`check: grep -q '"read a run.s typed results"' src/deepreason/cli/main.py && grep -q "NO_SURVIVOR_RECORD" src/deepreason/application/results.py && python -m pytest tests/test_results_command.py::test_a_failed_run_reports_no_survivor_set_rather_than_zero tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay -q`
 - **`easy.make` and the whole website execution path are tombstones, not code
   you can call.** `make`, `_make_single`, `_make_chunked` and `_run_stage` all
   raise `EasyV6PreparationRequired` (`V6_PREPARATION_REQUIRED`) before touching

@@ -1,0 +1,45 @@
+# Results for /home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/run
+  (resolved from a root)
+
+## Question
+  Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+## Run
+  run id (the deterministic identity of this run): — not recorded (NO_RUN_IDENTITY_RECORD)
+  state: — not recorded (NO_RUN_STATUS_JSON)
+  stop_reason (the typed reason it ended, never a crash): — not recorded (NO_STOP_RECORD)
+  cycles completed: — not recorded (NO_CYCLE_RECORD)
+  tokens spent vs budget: — not recorded (NO_RUN_STATUS_JSON) / — not recorded (NO_RUN_STATUS_JSON)
+  manifest (the compiled configuration the run carries) present: yes, schema version 6
+
+## Artifacts
+  accepted / refuted / suspended: 215 / 12 / 0
+  survivors (positions still standing at the end): — not recorded (NO_RUN_RESULT_JSON)
+  frontier (the open edge of the inquiry): — not recorded (NO_RUN_RESULT_JSON) artifacts, problem — not recorded (NO_RUN_STATUS_JSON)
+
+## Adjudication (defended trials — a criticism argued and judged)
+  ran: yes
+  judge calls: 238
+  trial verdicts observed: none
+  trials declined (the case did not sustain): defence-sustained=27, ensemble-split=44, execution-backed=39, paraphrase-flip=2, referential-integrity=7
+  trials blocked by a guard: none
+
+## Verification
+  verify_root verdict (the replay check that re-derives the whole run from its log and confirms nothing in the record is corrupt or altered): — not recorded (NO_REPLAY_VALIDATION_JSON)
+  read from: — not recorded (NO_REPLAY_VALIDATION_JSON) (pass --verify to re-derive it instead of reading the stored verdict)
+  violations: — not recorded (NO_REPLAY_VALIDATION_JSON)
+  finding families: — not recorded (NO_REPLAY_VALIDATION_JSON)
+
+## Amendment and terminal readiness
+  amendment epochs (later question/evidence appended without editing anything): 0
+  stands at a valid typed terminal: no (terminal epoch — not recorded (NO_REPLAY_VALIDATION_JSON))
+  stop reason is resumable: — not recorded (NO_STOP_RECORD)
+  ready for `deepreason amend` / `deepreason continue`: no
+
+## Not recorded by this root
+  NO_CYCLE_RECORD
+  NO_REPLAY_VALIDATION_JSON
+  NO_RUN_IDENTITY_RECORD
+  NO_RUN_RESULT_JSON
+  NO_RUN_STATUS_JSON
+  NO_STOP_RECORD
