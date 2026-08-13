@@ -65,7 +65,19 @@ the whole mechanism. No fixture in the repo was updated for this fix.
 ## 5. Full gate — PASS
 
     python -m pytest tests/ -q -n 4
-    -> 3591 passed, 0 failed, 7 skipped   (854s)
+    -> 3591 passed, 0 failed, 7 skipped   (849s)
+
+Run twice: once mid-implementation (854s) and again on the EXACT committed
+tree after the last three edits (`_current_caps` reading the widest seat,
+the `signals.py` registry entry, comment trims). Both 0 failed.
+
+A correction on how the first one was read: its wrapper reported exit code
+0 and it was reported here as passing, when the summary line actually said
+`2 failed`. The summary line is the verdict; the exit code was not. One of
+those two failures was the bronze baseline (deleted on the operator's
+instruction), the other was mine — an unregistered `controller-authority`
+signal, fixed. Both later gates were read off the summary line and
+cross-checked with `grep -c "^FAILED"` = 0.
 
 Zero permitted failures: the one long-standing carve-out
 (`test_bronze_report.py::test_census_totals_internally_consistent`,
