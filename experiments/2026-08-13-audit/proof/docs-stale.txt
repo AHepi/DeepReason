@@ -1,0 +1,2 @@
+docs_verify --stale: 0 document(s) worth re-reading
+exit: 0

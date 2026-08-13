@@ -110,3 +110,12 @@ required.
 | D81 | dead | workflows | pass | 9 candidate-dead, 0 dynamic-ref (see dead.md) | proof/dead-workflows-symbols.txt, proof/dead-workflows-candidates.txt | parked |
 | D82 | dead | workloads | pass | 24 candidate-dead, 0 dynamic-ref (see dead.md) | proof/dead-workloads-symbols.txt, proof/dead-workloads-candidates.txt | parked |
 | D83 | dead | dr-audit-dead methodology (outside-file-only scan misses same-file callers) | pass | 821/836 candidate-dead rows are same-file-only false positives; see dead.md Methodology finding | dead.md | parked |
+| DD1 | docs-drift | docs_verify (default, full) | pass | baseline | proof/docs-full.txt | baseline |
+| DD2 | docs-drift | docs_verify --audit | pass | baseline | proof/docs-audit.txt | baseline |
+| DD3 | docs-drift | docs_verify --links | pass | baseline | proof/docs-links.txt | baseline |
+| DD4 | docs-drift | docs_verify --stale | pass | baseline | proof/docs-stale.txt | baseline |
+| DD5 | docs-drift | docs/ADMISSION_SPEC.md Status line | pass | baseline | proof/docs-unchecked-claims.txt | baseline |
+| DD6 | docs-drift | docs/MINI_PLAN.md Status line | pass | drifted | proof/docs-unchecked-claims.txt | parked |
+| DD7 | docs-drift | docs/SMALL_MODEL_COMPATIBILITY.md header claim | pass | drifted | proof/docs-unchecked-claims.txt | parked |
+| DD8 | docs-drift | docs/RESEARCH_BACKEND.md Status line | pass | drifted (already errata E20) | proof/docs-unchecked-claims.txt | baseline |
+| DD9 | docs-drift | docs/EXPERIMENT_PROGRAM_2026-07.md claim | pass | not mechanically checkable | proof/docs-unchecked-claims.txt | noted |
