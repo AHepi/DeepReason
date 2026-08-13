@@ -301,6 +301,73 @@ def test_adjudication_absence_is_a_typed_zero_not_a_missing_key():
     assert adjudication["trial_blocked"] == {}
 
 
+def test_verification_reads_the_stored_verdict_and_does_not_replay(monkeypatch):
+    """R9: read the stored record; do not re-derive unless --verify is passed.
+
+    Re-deriving replays the whole log, which is O(run length) — the guard here
+    is that the default path never enters it, proved by making the replay
+    explode rather than by timing it.
+    """
+
+    from deepreason.application import results as results_module
+
+    root = _smallest_root_with(*_TERMINAL_FILES)
+    stored = json.loads((root / "REPLAY_VALIDATION.json").read_text())
+    published = json.loads((root / "run-result.json").read_text())
+
+    import deepreason.verification.report as report_module
+
+    def _must_not_run(*_args, **_kwargs):
+        raise AssertionError("the default path re-derived instead of reading")
+
+    monkeypatch.setattr(report_module, "verify_root_report", _must_not_run)
+    verification = results_module.results_summary(root)["verification"]
+
+    assert verification["source"] == "stored"
+    assert verification["valid"] == stored["valid"]
+    assert verification["violations"] == len(stored["verification"]["violations"])
+    assert verification["families"] == dict(
+        sorted(published["verification"]["finding_counts"].items())
+    )
+    # The two stored halves agree by construction across every committed root:
+    # the violation list is empty in exactly the roots whose verdict is valid.
+    assert verification["valid"] == (verification["violations"] == 0)
+
+
+def test_verify_flag_re_derives_the_same_five_family_shape():
+    """R9: --verify re-derives, key-identical to the stored shape."""
+
+    from deepreason.application.results import results_summary
+
+    root = _smallest_root_with(*_TERMINAL_FILES)
+    stored = results_summary(root)["verification"]
+    rederived = results_summary(root, verify=True)["verification"]
+
+    assert rederived["source"] == "rederived"
+    assert set(rederived) == set(stored)
+    assert set(rederived["families"]) == {
+        "completion",
+        "epistemic",
+        "integrity",
+        "operational",
+        "security",
+    }
+
+
+def test_verification_is_a_typed_absence_when_no_verdict_was_published():
+    """R9/R12: 21 of the committed roots carry no REPLAY_VALIDATION.json."""
+
+    from deepreason.application.results import results_summary
+
+    verification = results_summary(
+        _smallest_root_without("REPLAY_VALIDATION.json")
+    )["verification"]
+
+    for key in ("source", "valid", "violations", "families"):
+        assert _is_absence(verification[key])
+        assert verification[key]["reason"] == "NO_REPLAY_VALIDATION_JSON"
+
+
 def test_results_summary_carries_its_schema_and_resolution_provenance():
     """R5/R11: a stable, self-identifying record — nothing model-authored."""
 

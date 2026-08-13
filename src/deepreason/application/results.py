@@ -29,6 +29,7 @@ ABSENCE_REASONS = frozenset(
     {
         "AMENDMENT_CHAIN_UNREADABLE",
         "NO_CYCLE_RECORD",
+        "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
         "NO_REPLAY_VALIDATION_JSON",
         "NO_RUN_IDENTITY_RECORD",
@@ -257,12 +258,23 @@ def _adjudication(harness) -> dict[str, Any]:
     }
 
 
-def _verification(root: Path, replay: dict | None, *, verify: bool) -> dict[str, Any]:
+def _verification(
+    root: Path, replay: dict | None, result: dict | None, *, verify: bool
+) -> dict[str, Any]:
     """The `verify_root` verdict: stored by default, re-derived only on demand.
 
     Re-deriving replays the whole log, which is O(run length); the stored
     record is the run's own published verdict and is what every other reader
     already compares against.
+
+    The two halves live in different files, which is why both are read. The
+    violation LIST and the overall verdict are `REPLAY_VALIDATION.json`'s
+    (`verification.violations` is empty in exactly the roots whose `valid` is
+    true — checked across all 86 committed roots carrying the file); the
+    five-channel FAMILY breakdown is `run-result.json`'s
+    `verification.finding_counts`, the `verification.summary.v2` shape. On the
+    re-derived path both come from one report, and `violations` keeps its
+    meaning: integrity plus security findings are exactly what `valid` denies.
     """
 
     if verify:
@@ -270,27 +282,38 @@ def _verification(root: Path, replay: dict | None, *, verify: bool) -> dict[str,
         # no published terminal must still be verifiable on demand.
         from deepreason.verification.report import verify_root_report
 
-        summary = verify_root_report(root, allow_missing_terminal=True).summary_payload()
-        source = "rederived"
-    else:
-        stored = (replay or {}).get("verification")
-        if not isinstance(stored, dict):
-            missing = _absent("NO_REPLAY_VALIDATION_JSON")
-            return {
-                "source": missing,
-                "valid": missing,
-                "violations": missing,
-                "families": missing,
-            }
-        summary = stored
-        source = "stored"
+        report = verify_root_report(root, allow_missing_terminal=True)
+        summary = report.summary_payload()
+        return {
+            "source": "rederived",
+            "valid": summary["valid"],
+            "violations": len(report.integrity) + len(report.security),
+            "families": dict(sorted(summary["finding_counts"].items())),
+        }
 
-    families = summary.get("finding_counts")
-    families = dict(sorted(families.items())) if isinstance(families, dict) else {}
+    if replay is None:
+        missing = _absent("NO_REPLAY_VALIDATION_JSON")
+        return {
+            "source": missing,
+            "valid": missing,
+            "violations": missing,
+            "families": missing,
+        }
+
+    stored = replay.get("verification")
+    violations: Any = _absent("NO_REPLAY_VALIDATION_JSON")
+    if isinstance(stored, dict) and isinstance(stored.get("violations"), list):
+        violations = len(stored["violations"])
+
+    published = (result or {}).get("verification")
+    families: Any = _absent("NO_FINDING_FAMILIES")
+    if isinstance(published, dict) and isinstance(published.get("finding_counts"), dict):
+        families = dict(sorted(published["finding_counts"].items()))
+
     return {
-        "source": source,
-        "valid": bool(summary.get("valid")),
-        "violations": sum(families.values()),
+        "source": "stored",
+        "valid": bool(replay.get("valid")),
+        "violations": violations,
         "families": families,
     }
 
@@ -375,7 +398,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "run": _run(status, stop),
         "artifacts": _artifacts(positions, status, result),
         "adjudication": _adjudication(harness),
-        "verification": _verification(root, replay, verify=verify),
+        "verification": _verification(root, replay, result, verify=verify),
         "amendment": _amendment(root),
         "terminal": _terminal(replay, stop),
     }

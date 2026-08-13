@@ -148,6 +148,28 @@ accept: test asserts `results_summary(root)['verification']['source'] ==
 and that `results_summary(root, verify=True)['verification']['source'] ==
 'rederived'`.
 
+**S6a (R9, R12) — recorded refinement of S6, found at step 4 by the record.**
+S6 as written assumed `REPLAY_VALIDATION.json`'s `verification` block carried
+the `verification.summary.v2` five-family shape. Measured otherwise: across all
+86 committed roots carrying the file, that block is `{stats, violations}` —
+the LEGACY `verify_root()` shape. The five-family `finding_counts` breakdown
+lives in `run-result.json`'s `verification` block instead.
+
+    roots with REPLAY_VALIDATION: 86
+      valid != (violations empty): 0   <- the two agree in every root
+      run-result carries finding_counts: 86; does not: 0
+
+after: the stored path reads BOTH files — `valid` and the violation-list length
+from `REPLAY_VALIDATION.json`, the family breakdown from `run-result.json` —
+and emits `NO_FINDING_FAMILIES` when the second is unavailable. The re-derived
+path keeps `violations` meaning the same thing (`len(report.integrity) +
+len(report.security)`, which is exactly what `VerificationReportV2.valid`
+denies: "``valid`` ... means only that no integrity or security finding was
+observed"), so the number does not change meaning with its source.
+accept: a test asserts, on a committed root, `violations ==
+len(REPLAY_VALIDATION.verification.violations)`, `families ==
+run-result.verification.finding_counts`, and `valid == (violations == 0)`.
+
 **S7 (R10)** | same module. after: `amendment.epochs` / `.epoch_seqs` from
 `amendment.state`'s chain; `terminal.valid_typed_terminal` = stored
 `REPLAY_VALIDATION.valid` ∧ a `terminal_binding` is present;

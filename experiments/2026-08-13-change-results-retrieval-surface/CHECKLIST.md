@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=4 blockers=none
+State: next=5 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -120,13 +120,32 @@ it.
           ..                                                           [100%]
           2 passed, 7 deselected in 34.58s
 
-- [ ] 4. (S6) Add `verification` to the reader: stored
+- [x] 4. (S6) Add `verification` to the reader: stored
       `REPLAY_VALIDATION.json` by default, `verify_root_report(root,
       allow_missing_terminal=True).summary_payload()` only under
       `verify=True`, both emitting the same five-family shape plus `source`.
       done-when: a new test asserts `source == "stored"` with
       `verify_root_report` monkeypatched to fail (proving it is NOT called),
       and `source == "rederived"` under `verify=True`.
+
+      DISCOVERY, recorded as SPEC.md S6a: `REPLAY_VALIDATION.json`'s
+      `verification` block is the LEGACY `{stats, violations}` shape in all 86
+      committed roots that carry it, NOT the five-family
+      `verification.summary.v2` S6 assumed — that breakdown lives in
+      `run-result.json`. The stored path now reads both files; `violations`
+      keeps one meaning across both sources.
+
+          roots with REPLAY_VALIDATION: 86
+            valid != (violations empty): 0   <- the two agree in every root
+            run-result carries finding_counts: 86; does not: 0
+
+      The "does not re-derive by default" guard is proved by making the replay
+      EXPLODE (monkeypatched to raise) rather than by timing it.
+
+      PROOF (`python -m pytest tests/test_results_command.py -q`):
+
+          ............                                                 [100%]
+          12 passed in 61.52s (0:01:01)
 
 - [ ] 5. (S7) Add `amendment` and `terminal` to the reader: epoch count and
       seqs from `amendment.state`, `valid_typed_terminal`,
