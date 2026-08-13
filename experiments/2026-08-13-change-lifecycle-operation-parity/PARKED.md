@@ -134,57 +134,94 @@ them. Commit and push at every phase boundary.
 
 ---
 
-## P4 — admitted evidence is cited in prose, never in the verifiable channel
+## P4 — evidence admitted by `amend` is VISIBLE to the models but not CITABLE
 
-**What.** The continuation proved the delivery path works: 48 of 181
-post-amendment model calls named an admitted source by handle
-(`SRC_001`…`SRC_009`), including ALL 23 argumentative-critic calls. But
-**0 of 181** emitted a structured `evidence_refs` entry — the
-`EvidenceRefClaimV1 {block, quote}` record that
-`check_candidate_citations` verifies byte-for-byte against the source.
-So the harness has quote-checking machinery and nothing to check, and
-every citation in this run rests on model prose, which CLAUDE.md says is
-never evidence. Whether this is a prompt/contract gap (the field is
-optional and never demanded) or the models simply declining it is NOT
-established by this run and must not be guessed.
+**What.** `deepreason amend --attach` admits sources and the models do read
+them — but the amendment epoch's pack presents them as display handles
+(`SRC_001`…`SRC_008`) and shows **no dossier block ids at all**, while the
+run-start bind path shows blocks with their ids. An `evidence_refs` entry
+requires `block` matching `^[0-9a-f]{12,64}$`, so a model working from an
+amendment-epoch pack **cannot** emit a checkable citation however much it
+wants to. The instruction to cite is still in the prompt, which makes it
+worse: the model is asked for verifiable citations and handed nothing
+verifiable to cite.
+
+**Measured on the grounded-extension root** (`8e22d0431fd2b98d`), across
+every conjecturer prompt recorded via `LLMCall.prompt_ref`:
+
+    dossier blocks that COULD be cited: 296
+
+    epoch 0      : 41 conjecturer prompts |  8 contain a dossier block id
+                   | 44 distinct blocks shown
+    continuation :  8 conjecturer prompts |  0 contain a dossier block id
+                   |  0 distinct blocks shown
+
+    epoch 0 prompt      : 50 hex block ids · "block" x34 · 1 SRC_ handle
+    continuation prompt :  0 dossier block ids · "block" x8 · 8 SRC_ handles
+
+Consequence in the candidates, same four-key shape in both epochs:
+
+    epoch 0       evidence_refs = [{"block": "09ffabcd92979168"}, ...]
+    continuation  evidence_refs = []
+                  neighbours    = ["SRC_002", "SRC_005"]
+
+The continuation made 181 model calls; 48 named an admitted source in
+`neighbours` (all 23 argumentative-critic calls did), and 0 produced an
+`evidence_refs` entry. **That is not a small-sample effect.** Epoch 0's
+conjecturer emitted refs on 17 of 40 calls (42.5%), so 0 of 8 would be a
+~1-in-84 coincidence — but the prompt census removes chance from the
+question entirely: zero block ids were ever shown, so zero was the only
+possible outcome.
+
+**What it does NOT mean.** The evidence reached the seats and changed what
+they said; this is not evidence blindness. And note that epoch 0's own
+`evidence_refs` entries carry `block` with no `quote`, so its 101
+`EVIDENCE_CITATION_VERIFIED` results mean "this block exists and is
+citable", not "this quotation is accurate" — no quote was ever supplied in
+this root, and `EVIDENCE_QUOTE_MISMATCH` is 0 for that reason, not because
+quoting was accurate.
 
 **Ready-to-send prompt:**
 
 ```
-Fix tranche: admitted evidence is cited in prose but never in the
-verifiable channel. Route through deepreason-orchestrator.
+Fix tranche: evidence admitted by `amend` is visible to the models but not
+citable. Route through deepreason-orchestrator.
 
-EVIDENCE (typed, from the record):
-experiments/2026-08-13-change-lifecycle-operation-parity/LIVE.md and
-PARKED.md P4. On the grounded-extension root after amendment epoch 1:
-  post-amendment model calls        181
-  calls naming a source in prose     48  (all 23 argumentative_critic)
-  calls emitting evidence_refs        0
-The dossier parsed to 296 citable blocks, so the material was there.
+EVIDENCE (typed, already diagnosed from the record -- do NOT re-derive it,
+verify it): experiments/2026-08-13-change-lifecycle-operation-parity/
+PARKED.md P4. On the grounded-extension root 8e22d0431fd2b98d, across every
+conjecturer prompt recorded via LLMCall.prompt_ref:
+  epoch 0      41 prompts,  8 contain a dossier block id, 44 blocks shown
+  continuation  8 prompts,  0 contain a dossier block id,  0 blocks shown
+The dossier holds 296 citable blocks. EvidenceRefClaimV1.block requires
+^[0-9a-f]{12,64}$, so an amendment-epoch model cannot cite checkably.
+Candidates confirm it: evidence_refs [] with neighbours ["SRC_002","SRC_005"].
 
-DIAGNOSE FROM THE RECORD FIRST, not the code: open a post-amendment
-conjecturer and argumentative_critic raw under blobs/ and read what the
-model was actually asked for. Separate two hypotheses with the record:
-(a) the pack never presented the citable blocks with their block ids, so
-the model could only refer to sources by handle; (b) the blocks were
-presented and evidence_refs is simply an optional field the model
-skipped. The fix differs; the record decides.
+START by re-running that prompt census to confirm it still reproduces, then
+find where the run-start bind path renders citable blocks into the pack and
+why the amendment-epoch path does not. union_citable_blocks in
+amendment/state.py and the pack builders in packs/ are the first places to
+look; DR-CON-packs-and-token-economy owns the section allocation that may
+be dropping them.
 
-READ FIRST: src/deepreason/llm/contracts.py EvidenceRefClaimV1 and the
-candidate contract, deepreason.evidence.check_candidate_citations,
-union_citable_blocks in amendment/state.py and its callers in rules/conj.py,
-docs/map/SEAM-periphery-x-verification.md.
+SCOPE: an amendment epoch's pack must present its admitted blocks with the
+same citable identity the run-start bind gives them. Two guardrails:
+(1) CLAUDE.md's standing law -- nothing may penalize an informal or
+uncited conjecture, so this adds capability, never a rank or admission
+penalty; (2) token economy -- 296 blocks cannot all go in every pack, so
+decide and record in SPEC.md how blocks are selected, and make the
+selection deterministic and replayable.
 
-SCOPE: make a citation VERIFIABLE, not merely present. Do not force
-formality onto conjectures -- CLAUDE.md's standing law says nothing may
-penalize an informal conjecture, so this must not become a rank or
-admission penalty for not citing. The target is that a model which DOES
-cite produces a checkable record.
+CONSIDER ALSO, and decide explicitly rather than by omission: whether
+`quote` should be requested, not just permitted. Every evidence_refs entry
+in this root carries a block and no quote, so the byte-verifier that exists
+has never actually verified a quotation -- 101 EVIDENCE_CITATION_VERIFIED
+results all mean "block exists", and EVIDENCE_QUOTE_MISMATCH is 0 because
+nothing was quoted.
 
-TESTS: a regression that a conjecture citing an admitted block emits an
-evidence_refs entry whose quote verifies via check_candidate_citations,
-and one that an uncited conjecture is neither refused nor down-ranked.
-GATE: ring while iterating, full gate at the boundary, docs_verify full,
-root_sweep zero verdict drift. Map moves in the same commit. Commit and
-push at every phase boundary.
+TESTS: a regression that a conjecture in an amendment epoch can emit an
+evidence_refs entry resolving to an admitted block, and one that an uncited
+conjecture is neither refused nor down-ranked. GATE: ring while iterating,
+full gate at the boundary, docs_verify full, root_sweep zero verdict drift.
+Map moves in the same commit. Commit and push at every phase boundary.
 ```
