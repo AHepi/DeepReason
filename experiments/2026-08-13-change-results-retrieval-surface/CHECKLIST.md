@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=8 blockers=none
+State: next=9 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -223,7 +223,7 @@ it.
       is unchanged. Working ceiling self-revised to 1150; the final actual is
       reported plainly in DELIVERY.md.
 
-- [ ] 8. (S10) Add `RESULTS_ROOT_NOT_FOUND` and `RESULTS_HOME_AMBIGUOUS` raise
+- [x] 8. (S10) Add `RESULTS_ROOT_NOT_FOUND` and `RESULTS_HOME_AMBIGUOUS` raise
       sites to `results.py` (path resolution per SPEC.md A1/A2) and their two
       entries to `src/deepreason/error_catalog.py`; raise
       `test_catalog_covers_46_entries`' pin to 48 and add a test proving both
@@ -231,6 +231,29 @@ it.
       done-when: `python -m pytest tests/test_error_catalog.py -q` → `0
       failed`, and `python -m deepreason explain-error RESULTS_ROOT_NOT_FOUND`
       prints a non-empty gloss.
+
+      The raise sites already existed (they landed with the resolver at step
+      2); this step added the two catalog entries, the count pin 46 → 48, a
+      test proving every RESULTS_* key is byte-identical to a real raise site
+      in `results.py` (the discipline `error_catalog.py`'s own docstring
+      states), and three resolver behaviour tests for SPEC.md A1.
+
+      PROOF (`python -m pytest tests/test_results_command.py
+      tests/test_error_catalog.py -q`):
+
+          ...........................                                  [100%]
+          27 passed in 63.42s (0:01:03)
+
+      PROOF (`python -m deepreason explain-error RESULTS_ROOT_NOT_FOUND`, rc=0):
+
+          The path given to `deepreason results` holds no run.
+          What this means: `deepreason results` accepts either a run root (a
+          directory holding `log.jsonl`, the append-only record of one run) or
+          a home (a directory holding a `runs/` folder of them). The path you
+          gave is neither, so there is no run whose outcome could be reported.
+          Next: Point it at the run root itself, or at the home holding
+          `runs/` — `deepreason results <root-or-home>`. With no argument it
+          reads $DEEPREASON_HOME (or ~/.deepreason).
 
 - [ ] 9. (S11, S16-defect) Add the `results` verb to `build_parser` in
       `src/deepreason/cli/main.py` with `help="read a run's typed results"`,

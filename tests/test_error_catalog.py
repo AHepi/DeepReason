@@ -20,8 +20,8 @@ def test_catalog_keys_are_real_doctor_codes():
     assert catalog_keys <= real, catalog_keys - real
 
 
-def test_catalog_covers_46_entries():
-    assert len(CATALOG) == 46
+def test_catalog_covers_48_entries():
+    assert len(CATALOG) == 48
 
 
 def test_catalog_keys_are_real_intake_codes():
@@ -54,3 +54,15 @@ def test_every_entry_has_nonempty_fields():
         assert entry.summary.strip()
         assert entry.what_it_means.strip()
         assert entry.next_action.strip()
+
+
+def test_catalog_keys_are_real_results_codes():
+    """Implements R13: every RESULTS_* gloss names a code `results.py` really raises.
+
+    The catalog is a second, optional surface over the typed record — a key
+    with no raise site would document a refusal that cannot happen.
+    """
+
+    real = _raise_site_codes("src/deepreason/application/results.py", "RESULTS_")
+    catalog_keys = {k for k in CATALOG if k.startswith("RESULTS_")}
+    assert catalog_keys == real, catalog_keys ^ real

@@ -395,6 +395,26 @@ CATALOG: dict[str, ErrorCatalogEntry] = {
             "maximum the standard reasoning engine accepts.",
             "Lower `cycles` to the ceiling or below.",
         ),
+        _entry(
+            "RESULTS_ROOT_NOT_FOUND",
+            "The path given to `deepreason results` holds no run.",
+            "`deepreason results` accepts either a run root (a directory "
+            "holding `log.jsonl`, the append-only record of one run) or a home "
+            "(a directory holding a `runs/` folder of them). The path you gave "
+            "is neither, so there is no run whose outcome could be reported.",
+            "Point it at the run root itself, or at the home holding `runs/` — "
+            "`deepreason results <root-or-home>`. With no argument it reads "
+            "$DEEPREASON_HOME (or ~/.deepreason).",
+        ),
+        _entry(
+            "RESULTS_HOME_AMBIGUOUS",
+            "The home you named holds several runs; `results` will not guess.",
+            "A home can hold many run roots, and reporting on the wrong one is "
+            "worse than reporting on none — so the command refuses instead of "
+            "picking. The refusal message LISTS every candidate root it found.",
+            "Copy one of the listed paths and pass it directly: "
+            "`deepreason results <that-path>`.",
+        ),
     )
 }
 

@@ -469,6 +469,52 @@ def test_rendering_never_prints_an_absence_as_a_number():
             assert "not recorded" in line, line
 
 
+def test_a_home_holding_one_run_resolves_to_it(tmp_path):
+    """SPEC.md A1: `<root-or-home>` — a home with exactly one run needs no path."""
+
+    from deepreason.application.results import resolve_results_root
+
+    root = tmp_path / "runs" / "run-only"
+    root.mkdir(parents=True)
+    (root / "log.jsonl").write_text("")
+
+    resolved, how = resolve_results_root(tmp_path)
+    assert resolved == root.resolve()
+    assert how == "home"
+
+
+def test_an_ambiguous_home_refuses_and_names_every_candidate(tmp_path):
+    """R13/A1: the refusal must cost a paste, not another guess."""
+
+    from deepreason.application.results import ResultsError, resolve_results_root
+
+    for name in ("run-a", "run-b"):
+        root = tmp_path / "runs" / name
+        root.mkdir(parents=True)
+        (root / "log.jsonl").write_text("")
+
+    with pytest.raises(ResultsError) as caught:
+        resolve_results_root(tmp_path)
+
+    assert caught.value.code == "RESULTS_HOME_AMBIGUOUS"
+    for name in ("run-a", "run-b"):
+        assert name in str(caught.value), "the refusal must list every candidate"
+
+
+def test_a_path_holding_no_run_refuses_with_the_catalogued_code(tmp_path):
+    """R13: errors route through the error catalog, so explain-error covers them."""
+
+    from deepreason.application.results import ResultsError, resolve_results_root
+    from deepreason.error_catalog import lookup
+
+    with pytest.raises(ResultsError) as caught:
+        resolve_results_root(tmp_path / "nowhere")
+
+    assert caught.value.code == "RESULTS_ROOT_NOT_FOUND"
+    assert lookup("RESULTS_ROOT_NOT_FOUND") is not None
+    assert lookup("RESULTS_HOME_AMBIGUOUS") is not None
+
+
 def test_results_summary_carries_its_schema_and_resolution_provenance():
     """R5/R11: a stable, self-identifying record — nothing model-authored."""
 
