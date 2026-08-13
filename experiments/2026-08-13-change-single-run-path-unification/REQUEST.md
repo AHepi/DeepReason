@@ -308,3 +308,60 @@ sweep costs ~10 minutes.
 
 (append-only; later operator messages land here as R21... or "R4a
 supersedes R4", each with its verbatim quote)
+
+### Amendment 1 — 2026-08-13, mid-execution (after CHECKLIST step 18)
+
+Two operator messages, verbatim and in order:
+
+> The token steering controller that runs through config. Are you wiring
+> that up as well so that it runs with custom configuration setups?
+
+> Is this operating on the dynamic token allocation system as well?
+
+**Classified as QUESTIONS about existing scope, not new requirements.**
+Both ask whether something already in the tranche's scope holds; neither
+adds an obligation. Recorded verbatim per the ledger rule before being
+acted on. If the operator's intent was an obligation rather than a
+question, it becomes R21 on their word.
+
+**Answered from the record** (`dr-ask-the-right-question`: cheapest
+authority first — this one is answerable from the code, not from the
+operator):
+
+The token-steering controller is `src/deepreason/referee.py`
+(`run_config_referee`), whose own module docstring calls it "recorded
+token-steering machinery (the research allowance and its signals)", and
+whose role prompt (`llm/roles.py:51-53`) names its target as "the
+harness's dynamic token-steering configuration". It is authorized by
+manifest data: `InquiryCapabilityPolicyV1.config_referee`
+(`ConfigRefereePolicyV1`), compiled by
+`v6_policy.engaged_config_referee_policy` and defaulting to ABSENT
+unless `DEEPREASON_CONFIG_REFEREE` names a cadence.
+
+It fires from inside the scheduler, `Scheduler._maybe_config_referee`
+(`scheduler/scheduler.py:695`, called at `:1897`), gated on exactly
+three things: manifest schema 6, `policy.enabled`, and the cycle
+cadence. It is gated on NOTHING about the launch path — no CLI verb,
+no service method, no intent field appears in that gate.
+
+Consequence for this tranche, in both directions:
+
+1. **It was never launch-path-dependent**, and this tranche does not
+   change that. Both the deleted dispatch and the surviving one call
+   `run_scheduler(harness, config_from_run_manifest(manifest), ...)`.
+   Whatever the manifest authorizes, the scheduler runs.
+2. **The door must not narrow it**, and that is R2's existing
+   obligation, now proved for this specific lever rather than assumed:
+   a new acceptance test drives a manifest with `config_referee`
+   ENABLED through `start_manifest_run` and asserts the referee is
+   reached. Added under R2, not as new scope.
+3. **What DOES change for these runs is the record around it.** The
+   referee writes advice onto the log; before this tranche a
+   `run --run-manifest` root reached no terminal, so `result`,
+   `continue` and `amend` could not read what it wrote. That is R11's
+   delta, and the referee's output is one of the things it makes
+   reachable.
+
+The same three points hold for the `research` allowance and the
+`simulation` policy, which travel in the same
+`InquiryCapabilityPolicyV1` and are gated the same way.

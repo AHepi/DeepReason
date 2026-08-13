@@ -373,11 +373,21 @@ def test_reason_rejects_caller_owned_root_before_application_service(
 
 
 def test_run_requires_qualification_before_operator_lock(tmp_path, monkeypatch, capsys):
-    import deepreason.locking as locking
+    """Qualification precedes the operator lock, on the one run path.
+
+    The patch target moved 2026-08-13
+    (`experiments/2026-08-13-change-single-run-path-unification`): `run`
+    no longer locks the root itself, `TextRunApplicationService._launch`
+    does, and `text_runs` binds `operator_locks` at import. Patching
+    `deepreason.locking.operator_locks` would leave that binding
+    untouched and the test would pass over nothing.
+    """
+
+    import deepreason.application.text_runs as text_runs
 
     prepared = _prepared_v6_root(tmp_path / "run")
     monkeypatch.setattr(
-        locking,
+        text_runs,
         "operator_locks",
         lambda *_args, **_kwargs: pytest.fail("unqualified run acquired a lock"),
     )

@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -40,7 +39,7 @@ from deepreason.evidence import (
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
 from deepreason.ontology import Provenance
-from deepreason.run_manifest import bind_run_manifest
+from deepreason.run_manifest import MANIFEST_NAME, bind_run_manifest
 from deepreason.runtime.terminal_authority import derive_terminal_authority
 from deepreason.storage.blobs import BlobStore
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
@@ -124,17 +123,26 @@ def _bind_v6_root(tmp_path, *, name, question=ORIGINAL_QUESTION):
 
 
 def _launch_through_cli(root, manifest, problem_file, monkeypatch, *, cycles=1):
-    """Drive the bare `deepreason run --run-manifest` execution path."""
+    """Drive `deepreason run --run-manifest` — the one run path.
 
-    from deepreason.cli import main as cli_module
-    from deepreason.run_manifest import config_from_run_manifest
+    The verb is now a thin alias over `TEXT_RUN_SERVICE.start_manifest_run`
+    (`experiments/2026-08-13-change-single-run-path-unification`); before
+    that it was a second, scheduler-only dispatch, and this helper called
+    it directly.  Driving the verb rather than any function beneath it is
+    the point: what the operator types is what these tests exercise.
+    """
+
+    from deepreason.cli.main import main
 
     monkeypatch.setattr(
         "deepreason.ops.run_scheduler", _no_provider_scheduler()
     )
-    args = SimpleNamespace(problem=str(problem_file), token_budget=None)
-    return cli_module._execute_bound_run(
-        args, manifest, config_from_run_manifest(manifest), root, cycles
+    return main(
+        [
+            "--root", str(root), "run", "--budget", str(cycles),
+            "--problem", str(problem_file),
+            "--run-manifest", str(root / MANIFEST_NAME),
+        ]
     )
 
 

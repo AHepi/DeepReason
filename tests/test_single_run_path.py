@@ -451,3 +451,117 @@ def test_run_preflight_refusals_still_exit_one(tmp_path, capsys):
     assert main(["--root", str(root), "run", "--budget", "0"]) == 1
     assert not (root / "run-result.json").exists()
     assert "positive cycle count" in capsys.readouterr().err
+
+
+def test_the_door_carries_the_token_steering_authority(tmp_path, monkeypatch):
+    """R2, Amendment 1: the config referee reaches the scheduler unchanged.
+
+    The token-steering controller (`referee.run_config_referee` -- its role
+    prompt calls its target "the harness's dynamic token-steering
+    configuration") is authorized by manifest data alone:
+    `InquiryCapabilityPolicyV1.config_referee`, read inside
+    `Scheduler._maybe_config_referee`. No launch path appears in that gate,
+    and the one door must not become the first thing that does.
+    """
+
+    from deepreason.run_manifest import config_from_run_manifest
+    from deepreason.v6_policy import engaged_config_referee_policy
+
+    referee_policy = engaged_config_referee_policy({"DEEPREASON_CONFIG_REFEREE": "2"})
+    assert referee_policy is not None and referee_policy.enabled
+
+    root = tmp_path / "steering-root"
+    problem_id = _problem_id(RICH_QUESTION)
+    dossier, _report = admit_sources(
+        [AdmissionInput(locator="space.md", data=RICH_SOURCE.encode("utf-8"))],
+        problem_ref=problem_id,
+        provenance=AttachedSourceProvenanceV1(
+            supplied_by="single run path fixture",
+            acquisition_method="offline construction",
+        ),
+    )
+    BlobStore(root / "blobs").put(RICH_SOURCE.encode("utf-8"))
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id=problem_id, description=RICH_QUESTION, criteria=()
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    steering = engaged_inquiry_capability_policy(attached_evidence=True).model_copy(
+        update={"config_referee": referee_policy}
+    )
+    manifest = compile_run_manifest(
+        _rich_config(),
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=engaged_control_plane_policy_v3().model_copy(
+            update={
+                "school_execution": route_bound_school_execution_policy(
+                    "offline-conjecture"
+                )
+            }
+        ),
+        criticism_policy=engaged_criticism_policy(
+            "offline-critic", authority="defended_trial"
+        ),
+        inquiry_capability_policy=steering,
+        run_input_digest=run_input.run_input_digest,
+        toolchains=(engaged_simulation_toolchain(),),
+    )
+    bind_run_manifest(manifest, root)
+    _write_qualification(root, manifest)
+    (root / "problem.json").write_text(
+        json.dumps(
+            {
+                "schema": "deepreason-text-workload-v1",
+                "problem": {"id": problem_id, "description": RICH_QUESTION},
+                "criteria": [],
+                "sources": [source.id for source in dossier.sources],
+            },
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+
+    seen = {}
+
+    def capturing_scheduler(harness, config, cycles, token_budget, **kwargs):
+        seen["run_manifest"] = kwargs.get("run_manifest")
+        seen["token_budget"] = token_budget
+        seen["cycles"] = cycles
+        return _offline_scheduler(problem_id)(
+            harness, config, cycles, token_budget, **kwargs
+        )
+
+    monkeypatch.setattr("deepreason.ops.run_scheduler", capturing_scheduler)
+
+    TEXT_RUN_SERVICE.start_manifest_run(
+        root=root,
+        manifest=manifest,
+        problem_path=root / "problem.json",
+        cycles=4,
+    )
+    TEXT_RUN_SERVICE.wait(str(root))
+
+    # The scheduler receives the caller's own compiled manifest, steering
+    # authority intact -- not a reduced or re-derived one. Identity is by
+    # digest, not by object: `_launch` reconciles the passed manifest
+    # against the one bound at the root and hands the scheduler that,
+    # which is the reconciliation every launch has always performed.
+    delivered = seen["run_manifest"]
+    assert delivered.sha256 == manifest.sha256
+    assert delivered.canonical_bytes() == manifest.canonical_bytes()
+    assert delivered.inquiry_capability_policy.config_referee == referee_policy
+    assert delivered.inquiry_capability_policy.research is not None
+    assert delivered.inquiry_capability_policy.simulation is not None
+    # An absent --token-budget stays unbounded through the intent vocabulary,
+    # exactly as the deleted dispatch passed None straight to run_scheduler.
+    assert seen["token_budget"] is None
+    assert seen["cycles"] == 4
+    # And the gate the referee actually fires behind reads the manifest, not
+    # the launch path: config_from_run_manifest is what the scheduler is
+    # built from, and the policy survives that conversion.
+    assert config_from_run_manifest(delivered) is not None

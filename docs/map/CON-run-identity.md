@@ -52,7 +52,8 @@ enforced in another, extended in a third, and operated from a fourth.
 | Epoch layout and epoch-aware readers | `amendment/state.py` | `AMENDMENT_EPOCH_DIR`, `AMENDMENT_CHAIN_NAME`, `load_amendments`, `current_epoch`, `staged_amendment` |
 | Replay windowed by the epoch fence | `invariants.py` | `_amendment_epochs` |
 | Whether a run stands at a stop that may be amended | `runtime/terminal_authority.py` | `derive_terminal_authority` |
-| Every launch path's one shared route to a terminal | `application/text_runs.py` | `terminalize_text_run` (called by `_worker` AND by `cli.main._execute_bound_run`) |
+| The one route to a terminal, for the one launch path | `application/text_runs.py` | `terminalize_text_run` (called by `_worker` and by `finalize_stopped_root`; `cli/` calls no scheduler and no terminalization since 2026-08-13) |
+| Where a caller holding a compiled manifest enters | `application/text_runs.py` | `TextRunApplicationService.start_manifest_run` — resolves the manifest and the workload, then IS `start` |
 | Bringing a root that stopped without a terminal to one, by appending | `application/text_runs.py` | `finalize_stopped_root` |
 | Operator surface | `cli/main.py` | `_cmd_reason`, `_cmd_continue`, `_cmd_amend`, `_cmd_cancel`, `_cmd_finalize` |
 | Same surface over MCP, by opaque id | `mcp_server.py` | `_resolve_managed_root` |
@@ -235,10 +236,17 @@ them, including the two that were never renamed.
   did not, until 2026-08-13: grounded-extension run `8e22d0431fd2b98d`
   completed 24 cycles and then refused `AMEND_NOT_AT_TERMINAL`,
   `CONTINUE_STOP_REQUIRED` and `RUN_RESULT_NOT_READY`, because terminal
-  authority never left `current_open_uncommitted`. Both launch paths now call
-  the same `terminalize_text_run`, and `deepreason finalize` repairs a root
-  stopped before the fix — by appending, never by editing.
-`check: grep -q "terminalize_text_run(" src/deepreason/cli/main.py && grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q '"finalize"' src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py -q`
+  authority never left `current_open_uncommitted`. Fixed that morning by
+  making both launch paths call the same `terminalize_text_run`, and the
+  same day by removing the second launch path altogether
+  (`experiments/2026-08-13-change-single-run-path-unification`): `deepreason
+  run --run-manifest` is a rendering shell over
+  `TEXT_RUN_SERVICE.start_manifest_run`, so there is no longer a path that
+  COULD skip the sequence. `deepreason finalize` still repairs a root
+  stopped before the fix — by appending, never by editing. The check is a
+  negation for that reason: a scheduler call reappearing in `cli/main.py`
+  is the defect returning.
+`check: ! grep -q "run_scheduler" src/deepreason/cli/main.py && grep -q "start_manifest_run" src/deepreason/cli/main.py && grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q '"finalize"' src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py -q`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and

@@ -70,12 +70,12 @@ No `Seams:` entries yet.
 - `application.text_runs.terminalize_text_run` — the ONE stop-to-published-
   terminal sequence (stop record, `checkpoint.json`, capability audits,
   `_v6_run_result`, `finalize_terminal_result`, `run-result.json`), shared by
-  `_worker` and by `cli.main._execute_bound_run`. `ensure_lifecycle_documents`,
-  `workload_spec_for_root`, `attach_bound_evidence_once` and
-  `finalize_stopped_root` are its companions: the documents a continuation
-  reads, the workload a root can name itself by, the once-only rendering of a
-  bound dossier, and the operator-facing `deepreason finalize` that brings an
-  already-stopped root to its terminal by APPENDING (see Traps).
+  `_worker` and by `finalize_stopped_root` — and by nothing in `cli/`, which
+  since 2026-08-13 runs nothing itself. `ensure_lifecycle_documents`,
+  `workload_spec_for_root` and `finalize_stopped_root` are its companions: the
+  documents a continuation reads, the workload a root can name itself by, and
+  the operator-facing `deepreason finalize` that brings an already-stopped root
+  to its terminal by APPENDING (see Traps).
 - `application.GROUNDED_BRIDGE_SERVICE` (`GroundedBridgeApplicationService`) —
   `build`, `start`, `status`, `result`, `claims`, `inspect`, `validate` over a
   finished reasoning root (see `DR-SUB-bridge` for what a bridge is).
@@ -113,7 +113,7 @@ No `Seams:` entries yet.
 - `workflows.manifest_compiler.compile_compact_manifest` / `ManifestCompiler` and
   `workflows.website.WebsiteWorkflow` — the legacy website path, exercised only
   by its tests.
-`check: for s in main build_parser _admit_v6_root; do grep -q "^def $s(" src/deepreason/cli/main.py || exit 1; done; for s in terminalize_text_run ensure_lifecycle_documents workload_spec_for_root attach_bound_evidence_once finalize_stopped_root; do grep -q "^def $s(" src/deepreason/application/text_runs.py || exit 1; done; for s in start start_manifest_run continue_run inspect inspect_outstanding_work result cancel watch wait _launch _worker; do grep -q "    def $s(" src/deepreason/application/text_runs.py || exit 1; done; python -c "import inspect;from deepreason.application.text_runs import TextRunApplicationService as S;f=S.start_manifest_run;code=inspect.getsource(f).replace(f.__doc__, '');assert not any(t in code for t in ('judge', 'school', 'criticism', 'roles')), code" || exit 1; for s in build start status result claims inspect validate; do grep -q "    def $s(" src/deepreason/application/bridge.py || exit 1; done; grep -q "    def execute(" src/deepreason/application/scratch.py && grep -q "    def begin(" src/deepreason/application/conjecture.py && grep -q "^def run_result_exit_code(" src/deepreason/application/models.py; for s in budget_intent start_text_run_intent continue_text_run_intent; do grep -q "^def $s(" src/deepreason/application/intents.py || exit 1; done; grep -q "^TEXT_RUN_SERVICE = TextRunApplicationService()" src/deepreason/application/text_runs.py && grep -q "^GROUNDED_BRIDGE_SERVICE = GroundedBridgeApplicationService()" src/deepreason/application/bridge.py && grep -q "^SCRATCH_QUERY_SERVICE = ScratchQueryApplicationService()" src/deepreason/application/scratch.py`
+`check: for s in main build_parser _admit_v6_root; do grep -q "^def $s(" src/deepreason/cli/main.py || exit 1; done; for s in terminalize_text_run ensure_lifecycle_documents workload_spec_for_root finalize_stopped_root; do grep -q "^def $s(" src/deepreason/application/text_runs.py || exit 1; done; for s in start start_manifest_run continue_run inspect inspect_outstanding_work result cancel watch wait _launch _worker; do grep -q "    def $s(" src/deepreason/application/text_runs.py || exit 1; done; python -c "import inspect;from deepreason.application.text_runs import TextRunApplicationService as S;f=S.start_manifest_run;code=inspect.getsource(f).replace(f.__doc__, '');assert not any(t in code for t in ('judge', 'school', 'criticism', 'roles')), code" || exit 1; for s in build start status result claims inspect validate; do grep -q "    def $s(" src/deepreason/application/bridge.py || exit 1; done; grep -q "    def execute(" src/deepreason/application/scratch.py && grep -q "    def begin(" src/deepreason/application/conjecture.py && grep -q "^def run_result_exit_code(" src/deepreason/application/models.py; for s in budget_intent start_text_run_intent continue_text_run_intent; do grep -q "^def $s(" src/deepreason/application/intents.py || exit 1; done; grep -q "^TEXT_RUN_SERVICE = TextRunApplicationService()" src/deepreason/application/text_runs.py && grep -q "^GROUNDED_BRIDGE_SERVICE = GroundedBridgeApplicationService()" src/deepreason/application/bridge.py && grep -q "^SCRATCH_QUERY_SERVICE = ScratchQueryApplicationService()" src/deepreason/application/scratch.py`
 `check: for s in require_v6_launch_allowed resolve_effective_run_manifest require_v6_production_qualification; do grep -q "^def $s(" src/deepreason/runtime/launch_policy.py || exit 1; done; for s in derive_terminal_authority ensure_terminal_commitment finalize_terminal_result recover_terminal_result validate_terminal_commitment_storage; do grep -q "^def $s(" src/deepreason/runtime/terminal_authority.py || exit 1; done; grep -q "^def prepare_continuation(" src/deepreason/runtime/continuation.py && grep -q "^class ProgressSink" src/deepreason/runtime/progress.py && grep -q "^class StopController" src/deepreason/runtime/stop.py && grep -q "^def write_stop_record(" src/deepreason/runtime/stop.py && grep -q "^def parse_limit(" src/deepreason/runtime/budget.py && grep -q "^class AggregateMeter" src/deepreason/runtime/budget.py; for s in setup_wizard setup_options apply_setup load_credentials save_credential make; do grep -q "^def $s(" src/deepreason/easy.py || exit 1; done; grep -q "^def run_production_contract_doctor(" src/deepreason/cli/doctor.py && grep -q "^def load_production_contract_report(" src/deepreason/cli/doctor.py && grep -q "^def handle_bridge_command(" src/deepreason/cli/bridge.py && grep -q "^def dispatch_scratch(" src/deepreason/cli/scratch.py && grep -q "^class WebsiteWorkflow" src/deepreason/workflows/website.py && grep -q "^def compile_compact_manifest(" src/deepreason/workflows/manifest_compiler.py && grep -q "^class ManifestCompiler" src/deepreason/workflows/manifest_compiler.py`
 
 ## State it owns
@@ -173,7 +173,8 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 | What a watcher can observe | `ProgressEvent` and `ProgressSink.emit` in `runtime/progress.py` | `tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic` |
 | What a continuation may resume from | `prepare_continuation` in `runtime/continuation.py` | `tests/test_continuation.py::test_continue_rejects_tampered_stop_digest` |
 | The published terminal result envelope | `_v6_run_result` in `application/text_runs.py` and `finalize_terminal_result` in `runtime/terminal_authority.py` | `tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope` |
-| What ANY finished run writes at stop — every configuration path, managed or `run --run-manifest` | `terminalize_text_run` in `application/text_runs.py` (never one path's copy of it) | `tests/test_lifecycle_operation_parity.py::test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend` |
+| What ANY finished run writes at stop — there is one launch path, so this is every run | `terminalize_text_run` in `application/text_runs.py` (never a second path's copy of it) | `tests/test_lifecycle_operation_parity.py::test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend` |
+| How a caller holding a compiled manifest starts a run, and what `deepreason run --run-manifest` dispatches into | `TextRunApplicationService.start_manifest_run` in `application/text_runs.py`; `_dispatch_managed_run` in `cli/main.py` renders the result and owns nothing else | `tests/test_single_run_path.py::test_the_door_narrows_no_configuration_the_compiler_admits` |
 | How a root that stopped without a terminal reaches one | `finalize_stopped_root` in `application/text_runs.py` and `_cmd_finalize` in `cli/main.py` | `tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one` |
 | Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
 | Website stage order, retry scope, or design-manifest compilation | `_NEXT_STAGE` and `WebsiteStateMachine` in `workflows/website.py`; `ManifestCompiler.compile` in `workflows/manifest_compiler.py` | `tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition` |
@@ -193,17 +194,23 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   all, and both `run` and `start` refuse any manifest whose workload profile is
   not `text`.
 `check: grep -q "V6_PREPARATION_REQUIRED" src/deepreason/easy.py && ! grep -rq "deepreason.workflows\|WebsiteWorkflow\|run_website_workflow" --include=*.py src/deepreason/cli src/deepreason/application src/deepreason/runtime && test "$(grep -roh "workflow_class()" --include=*.py src/deepreason tests | wc -l)" -eq 1 && grep -q "    def workflow_class():" src/deepreason/workloads/website.py && grep -q 'f"run requires text, got {manifest.workload_profile}"' src/deepreason/cli/main.py && grep -q "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest" src/deepreason/application/text_runs.py && python -m pytest tests/test_easy.py::test_easy_make_requires_future_v6_preparation_before_any_side_effect tests/test_easy.py::test_internal_easy_execution_facades_are_fail_closed_tombstones -q`
-- **A configuration path that runs the scheduler and does not call
-  `terminalize_text_run` produces a root no operation can touch.** The bare
-  `deepreason run --run-manifest` path called `ops.run_scheduler` and then
-  printed. Grounded-extension run `8e22d0431fd2b98d` (2026-08-13) completed 24
-  real cycles that way and could not be amended, continued, cancelled, or read
-  as a result: terminal authority stayed `current_open_uncommitted`, so `amend`
-  refused `AMEND_NOT_AT_TERMINAL`, `continue` refused `CONTINUE_STOP_REQUIRED`,
-  and `result` refused `RUN_RESULT_NOT_READY` — ten missing writers, no reader
-  defect anywhere. FIXED 2026-08-13 by making the sequence one shared function
-  both paths call; a copy of it in a second path is the same defect again.
-`check: grep -q "^def terminalize_text_run(" src/deepreason/application/text_runs.py && grep -q "terminalize_text_run(" src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend tests/test_lifecycle_operation_parity.py::test_interrupted_run_still_refuses_amend_not_at_terminal -q`
+- **There is ONE run path, and `cli/` is not allowed to be a second one.**
+  The bare `deepreason run --run-manifest` path used to call
+  `ops.run_scheduler` and then print. Grounded-extension run
+  `8e22d0431fd2b98d` (2026-08-13) completed 24 real cycles that way and could
+  not be amended, continued, cancelled, or read as a result: terminal
+  authority stayed `current_open_uncommitted`, so `amend` refused
+  `AMEND_NOT_AT_TERMINAL`, `continue` refused `CONTINUE_STOP_REQUIRED`, and
+  `result` refused `RUN_RESULT_NOT_READY` — ten missing writers, no reader
+  defect anywhere. First fixed 2026-08-13 by making the terminalization one
+  shared function both paths called; SUPERSEDED the same day by deleting the
+  second path outright (`experiments/2026-08-13-change-single-run-path-
+  unification`), because two paths calling one function is still two places
+  a lifecycle step can be forgotten. `deepreason run` is now a rendering
+  shell over `TEXT_RUN_SERVICE.start_manifest_run`. The check below is
+  therefore a NEGATION: `cli/main.py` must not name the scheduler at all.
+  Reintroducing a scheduler call there is the same defect a third time.
+`check: grep -q "^def terminalize_text_run(" src/deepreason/application/text_runs.py && ! grep -q "run_scheduler" src/deepreason/cli/main.py && grep -q "start_manifest_run" src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend tests/test_lifecycle_operation_parity.py::test_interrupted_run_still_refuses_amend_not_at_terminal -q`
 - **`finalize` appends; it never edits.** A committed run root is immutable, so
   the only legitimate route from "stopped without a terminal" to "amendable" is
   new events and new files. `finalize_stopped_root` re-derives the frontier

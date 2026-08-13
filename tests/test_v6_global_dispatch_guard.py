@@ -1038,28 +1038,44 @@ def test_cli_v6_launch_policy_precedes_qualification_and_lock(
     assert _root_snapshot(root) == before
 
 
-def test_execute_bound_run_v6_launch_policy_precedes_harness(
+def test_run_v6_launch_policy_precedes_harness_and_dispatch(
     tmp_path, monkeypatch, capsys
 ):
+    """The launch kill switch stops `run` before any record is touched.
+
+    Migrated 2026-08-13 from `test_execute_bound_run_v6_launch_policy_
+    precedes_harness`, which drove `cli.main._execute_bound_run` — the
+    second, scheduler-only dispatch deleted by
+    `experiments/2026-08-13-change-single-run-path-unification`. The
+    property is unchanged and asserted one layer higher, where the
+    operator actually stands: V6_LAUNCH_DISABLED reaches stderr before a
+    Harness is constructed anywhere, before the managed service is
+    entered, and without a byte of the root moving.
+    """
+
+    import deepreason.harness as harness_module
+    from deepreason.application import TEXT_RUN_SERVICE
     from deepreason.cli import main as cli_module
 
     _disable_v6(monkeypatch)
     root = tmp_path / "blocked-direct-cli-root"
+    _manifest, _harness, _config, _report = _bound_qualified_v6_scheduler_root(
+        root
+    )
+    before = _root_snapshot(root)
     calls = []
     monkeypatch.setattr(cli_module, "Harness", _forbid(calls, "harness"))
-
-    result = cli_module._execute_bound_run(
-        SimpleNamespace(problem=None, experimental_v5=False, token_budget=1),
-        SimpleNamespace(schema_version=6),
-        SimpleNamespace(),
-        root,
-        1,
+    monkeypatch.setattr(harness_module, "Harness", _forbid(calls, "harness"))
+    monkeypatch.setattr(
+        TEXT_RUN_SERVICE,
+        "start_manifest_run",
+        _forbid(calls, "managed dispatch"),
     )
 
-    assert result == 1
+    assert cli_module._cmd_run(_cli_args(root, dry_run=False)) == 1
     assert "V6_LAUNCH_DISABLED" in capsys.readouterr().err
     assert calls == []
-    assert not root.exists()
+    assert _root_snapshot(root) == before
 
 
 def test_cli_dry_run_remains_available_while_v6_is_disabled(

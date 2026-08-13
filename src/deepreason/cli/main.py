@@ -2718,15 +2718,11 @@ def _cmd_simulate(args) -> int:
 
 
 def _cmd_run(args) -> int:
-    from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
+    from deepreason.locking import ProcessLockError
     from deepreason.ops import require_full_engine
-    from deepreason.runtime.launch_policy import (
-        require_v6_launch_allowed,
-        require_v6_production_qualification,
-    )
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
     from deepreason.run_manifest import (
         RunManifestError,
-        config_from_run_manifest,
         load_run_manifest,
         preflight_payload,
         render_role_matrix,
@@ -2734,7 +2730,6 @@ def _cmd_run(args) -> int:
     from deepreason.workloads.text import ReasoningWorkloadSpec
 
     run_root = Path(args.root)
-    operator_lock = None
     try:
         cycles = (
             int(args.budget.split("=", 1)[1])
@@ -2760,7 +2755,6 @@ def _cmd_run(args) -> int:
                 f"run requires text, got {manifest.workload_profile}",
                 "/workload_profile",
             )
-        config = config_from_run_manifest(manifest)
         if not args.dry_run:
             require_v6_launch_allowed(manifest, operation="full scheduler")
         require_full_engine(manifest, workload="full scheduler")
@@ -2769,153 +2763,58 @@ def _cmd_run(args) -> int:
             spec = ReasoningWorkloadSpec.model_validate(payload)
             _require_v6_workload_match(run_input, dossier, spec)
             preflight_payload(manifest, payload)
-        if not args.dry_run:
-            require_v6_production_qualification(
-                manifest,
-                root=run_root,
-                operation="full scheduler",
-            )
-            try:
-                operator_lock = operator_locks(
-                    run_root, owner="run", blocking=False
-                )
-            except ProcessLockBusy as error:
-                raise ValueError(
-                    "RUN_ALREADY_RUNNING: another operator owns this run root"
-                ) from error
     except (ProcessLockError, ValueError) as error:
-        if operator_lock is not None:
-            operator_lock.release()
         print(str(error), file=sys.stderr)
         return 1
     if args.dry_run:
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")
         return 0
+    return _dispatch_managed_run(args, manifest, run_root, cycles)
+
+
+def _dispatch_managed_run(args, manifest, run_root: Path, cycles: int) -> int:
+    """Render one managed run; the service owns every step of running it.
+
+    This verb qualifies nothing and locks nothing of its own: production
+    qualification and the operator lock both live in
+    `TextRunApplicationService._launch`, in that order, for EVERY
+    configuration path. Re-acquiring the lock here would make the
+    service's own non-blocking acquisition fail RUN_ALREADY_RUNNING
+    against this very process.
+    """
+
+    from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
+
     try:
-        return _execute_bound_run(args, manifest, config, run_root, cycles)
-    finally:
-        assert operator_lock is not None
-        operator_lock.release()
-
-
-def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> int:
-    """Execute a preflighted run while its caller retains operator locks."""
-
-    from deepreason.runtime.launch_policy import require_v6_launch_allowed
-
-    try:
-        require_v6_launch_allowed(manifest, operation="full scheduler")
-    except ValueError as error:
+        accepted = TEXT_RUN_SERVICE.start_manifest_run(
+            root=run_root,
+            manifest=manifest,
+            problem_path=Path(args.problem) if args.problem else None,
+            cycles=cycles,
+            token_budget=args.token_budget,
+        )
+        TEXT_RUN_SERVICE.wait(accepted.root)
+        terminal = TEXT_RUN_SERVICE.result(
+            InspectTextRunIntentV1(root=accepted.root)
+        )
+    except (OSError, ValueError) as error:
         print(str(error), file=sys.stderr)
         return 1
-
-    from deepreason.application.text_runs import (
-        attach_bound_evidence_once,
-        completed_cycles,
-        ensure_lifecycle_documents,
-        terminalize_text_run,
-        workload_spec_for_root,
-    )
-    from deepreason.ops import run_scheduler
-    from deepreason.run_manifest import preflight_payload
-
-    # A compiled-config launch is a full lifecycle citizen or it is a root no
-    # operation can touch: amend, continue, cancel and result all read records
-    # only the terminalization sequence writes (grounded-extension run
-    # 8e22d0431fd2b98d).
-    lifecycle = getattr(manifest, "schema_version", None) == 6
-    harness = Harness(run_root)
-    if args.problem:
-        _load_problem_file(harness, Path(args.problem))
-    elif manifest.rubric_policy == "forbid":
-        # A resumed root can already contain rubric criteria. Detect the
-        # conflict before an adapter/model call rather than midway through.
-        rubric_commitments = [
-            commitment.model_dump(mode="json")
-            for commitment in harness.commitments.values()
-            if commitment.eval.startswith("rubric:")
-        ]
-        if rubric_commitments:
-            try:
-                preflight_payload(manifest, {"commitments": rubric_commitments})
-            except ValueError as error:
-                print(str(error), file=sys.stderr)
-                return 1
-    if not harness.state.problems:
-        print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
-        return 1
-    progress = None
-    spec = None
-    if lifecycle:
-        from deepreason.runtime.progress import ProgressSink
-
-        try:
-            spec = workload_spec_for_root(
-                run_root,
-                problem_path=Path(args.problem) if args.problem else None,
-                harness=harness,
-            )
-            ensure_lifecycle_documents(run_root, spec=spec)
-            attach_bound_evidence_once(
-                harness, run_root, problem_id=spec.problem.id
-            )
-        except ValueError as error:
-            print(str(error), file=sys.stderr)
-            return 1
-        progress = ProgressSink(
-            run_root, run_id=manifest.sha256, workload="text"
-        )
-        progress.clear_cancellation()
-        progress.emit(
-            state="running",
-            phase="workload",
-            activity="loaded",
-            problem_id=spec.problem.id,
-            token_limit=args.token_budget,
-            determinate=False,
-            message="bound manifest run started",
-        )
-    try:
-        result, meter, accounting = run_scheduler(
-            harness, config, cycles, args.token_budget, run_manifest=manifest
-        )
-    except ValueError as e:
-        print(str(e), file=sys.stderr)
-        return 1
-    if lifecycle:
-        payload = terminalize_text_run(
-            harness,
-            manifest,
-            root=run_root,
-            result=result,
-            accounting=accounting,
-            problem_id=spec.problem.id,
-            cancelled=progress.cancellation_requested(),
-            latest_cycle=completed_cycles(harness),
-        )
-        progress.emit(
-            state=payload["state"],
-            phase="stop",
-            activity=payload["stop"]["reason"],
-            problem_id=spec.problem.id,
-            determinate=False,
-            stop_reason=payload["stop"]["reason"],
-        )
-    if accounting["delta"]:
+    payload = terminal.presentation_payload()
+    accounting = payload.get("accounting") or {}
+    if accounting.get("delta"):
         print(f"[accounting] WARNING: {accounting['delta']} metered tokens are "
               "not on the log — investigate before trusting metrics", file=sys.stderr)
-    print(f"survivors ({len(result['survivors'])}):")
-    for aid in result["frontier"]:
-        print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")
-    for note in result["diagnostics"]:
-        print(f"  [note] {note}")
-    if meter is not None:
-        print(json.dumps(meter.snapshot(), sort_keys=True))
-    if result["frontier"]:
+    frontier = payload.get("frontier") or []
+    print(f"survivors ({len(payload.get('survivors') or [])}):")
+    if frontier:
+        harness = Harness(run_root, read_only=True)
+        for aid in frontier:
+            print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")
         print()
-        print(theory(result["frontier"][0], harness.state, harness.blobs, log=harness.log))
-    return 0
+        print(theory(frontier[0], harness.state, harness.blobs, log=harness.log))
+    return terminal.exit_code()
 
 
 if __name__ == "__main__":

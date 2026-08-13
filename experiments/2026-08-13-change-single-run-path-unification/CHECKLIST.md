@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=11 blockers=none
+State: next=20 blockers=none
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -197,7 +197,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       (`FileNotFoundError: .../exit-failed/run-result.json`); on the one
       path it publishes `state=failed` and exits 4.
 
-- [ ] 11. (S2.1, S2.2) Rewrite `_cmd_run`'s dispatch tail in
+- [x] 11. (S2.1, S2.2) Rewrite `_cmd_run`'s dispatch tail in
       `src/deepreason/cli/main.py`: keep budget parse, `_admit_v6_root`,
       `--run-manifest` conflict, workload-profile check,
       `require_v6_launch_allowed`, `require_full_engine`, `--problem`
@@ -212,12 +212,30 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       AND `! grep -q "require_v6_production_qualification" src/deepreason/cli/main.py`
       (both exit 0)
 
-- [ ] 12. (S3.1) Delete `_execute_bound_run` from
+      PROOF:
+      ```
+      ALIAS OK
+      QUALIFICATION RELOCATED OK
+      ```
+      The rendering moved into a named `_dispatch_managed_run`, which
+      qualifies nothing and locks nothing: both live in `_launch`, in that
+      order, for every configuration. `config_from_run_manifest` also left
+      `_cmd_run` -- the worker builds the config it runs from.
+
+- [x] 12. (S3.1) Delete `_execute_bound_run` from
       `src/deepreason/cli/main.py` in full.
       done-when: `! grep -q "_execute_bound_run" src/deepreason/cli/main.py`
       exits 0
 
-- [ ] 13. (S3.3) Migrate `tests/test_lifecycle_operation_parity.py`'s
+      PROOF:
+      ```
+      removing lines 2818..2938 (121 lines)
+      DELETED OK
+      IMPORT OK
+      COMPILE OK
+      ```
+
+- [x] 13. (S3.3) Migrate `tests/test_lifecycle_operation_parity.py`'s
       `_launch_through_cli` helper from `cli_module._execute_bound_run(...)`
       to the `run` verb through `main([...])`, keeping every one of its
       test functions and their assertions.
@@ -225,7 +243,16 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       ends `0 failed` AND `grep -c "^def test_" tests/test_lifecycle_operation_parity.py`
       is unchanged from its pre-step value (both pasted)
 
-- [ ] 14. (S3.3) Migrate
+      PROOF:
+      ```
+      11 passed in 29.99s
+      test count before: 11   after: 11
+      ```
+      The helper now drives `main(["--root", ..., "run", "--budget", ...,
+      "--problem", ..., "--run-manifest", ...])`. Nothing was deleted; the
+      now-unused `SimpleNamespace` import went with the direct call.
+
+- [x] 14. (S3.3) Migrate
       `tests/test_v6_global_dispatch_guard.py::test_execute_bound_run_v6_launch_policy_precedes_harness`
       to assert the same property (V6_LAUNCH_DISABLED before any
       `Harness`, root untouched) through `_cmd_run`.
@@ -233,7 +260,18 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       ends `0 failed` AND `grep -c "^def test_" tests/test_v6_global_dispatch_guard.py`
       is unchanged (pasted)
 
-- [ ] 15. (S3.3) Migrate
+      PROOF:
+      ```
+      30 passed in 60.68s
+      test count: 23 (was 23)
+      ```
+      Renamed to `test_run_v6_launch_policy_precedes_harness_and_dispatch`
+      and STRENGTHENED: it now forbids `Harness` in both the cli module and
+      `deepreason.harness`, forbids `TEXT_RUN_SERVICE.start_manifest_run`,
+      and asserts a byte-identical root snapshot on a REAL bound root
+      (the old version used a bare nonexistent path).
+
+- [x] 15. (S3.3) Migrate
       `tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock`
       to patch `deepreason.application.text_runs.operator_locks` — the
       binding the service actually calls.
@@ -242,14 +280,41 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       stubbed out, and PASSES as migrated; both runs pasted (a pin that
       cannot fail is not a pin)
 
-- [ ] 16. (S3.2) Dead-census SCAN 2, after the deletion: same symbols,
+      PROOF:
+      ```
+      === migrated: expect PASS ===         1 passed in 0.40s
+      === mutation: stub qualification ===  1 failed in 0.54s
+                                            tests/...:395: Failed
+      === restored: expect PASS ===         1 passed in 0.40s
+      ```
+      The mutation removes the qualification gate so the lock IS reached;
+      the forbid fires. That proves the new patch target
+      (`deepreason.application.text_runs.operator_locks`) is the live
+      binding, which the old target
+      (`deepreason.locking.operator_locks`) no longer is -- `text_runs`
+      binds `operator_locks` at import.
+
+- [x] 16. (S3.2) Dead-census SCAN 2, after the deletion: same symbols,
       same command, appended to `proof/dead-census.txt` as a `SCAN 2`
       section, plus a verdict line per symbol.
       done-when: `grep -q "SCAN 2" experiments/2026-08-13-change-single-run-path-unification/proof/dead-census.txt`
       AND every non-target symbol shows ≥1 surviving caller (any symbol
       that does not is a STOP, not a deletion)
 
-- [ ] 17. (S5.3) Update `docs/map/SUB-application.md` in this same commit:
+      PROOF: `proof/dead-census.txt` SCAN 2 + SCAN 3 + a per-symbol
+      VERDICT block. The census DID find one orphan, which is why it
+      exists: `attach_bound_evidence_once` fell to src 2 (its own def and
+      its `__all__` entry) and tests 0 -- its only caller in the entire
+      tree was the deleted `_execute_bound_run`. It is the lifecycle
+      tranche's bare-path retrofit, which R7 authorizes removing by name,
+      and the managed worker attaches bound evidence directly through
+      `evidence.render.attach_bound_evidence`. Deleted, and
+      `test_manifest_launched_root_renders_its_bound_evidence` still
+      passes through the alias without it. SCAN 3 records the result:
+      src 4 -> 2 -> 0. Every other censused symbol keeps callers, listed
+      file:line.
+
+- [x] 17. (S5.3) Update `docs/map/SUB-application.md` in this same commit:
       entry-points list gains `start_manifest_run` and drops
       `cli.main._execute_bound_run`; the "What ANY finished run writes at
       stop" row restated for one path; the bare-path Trap REWRITTEN (never
@@ -261,7 +326,15 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       NEW failure for `SUB-application.md` versus the
       `docs/AUDIT_BASELINES.md` baseline (pasted)
 
-- [ ] 18. (S5.3) Update `docs/map/CON-run-identity.md` in this same
+      PROOF: all 44 checks in the two edited documents re-run directly
+      (the same way `docs_verify` runs them); 3 failed, all three the
+      `CON-run-identity.md` git-history checks that need an unshallowed
+      clone -- the exact AUDIT_BASELINES baseline. Delta 0. The new
+      one-path check is a NEGATION and was mutation-proved: reinstating an
+      `ops.run_scheduler` import in `cli/main.py` takes it to rc=1,
+      removing it returns rc=0.
+
+- [x] 18. (S5.3) Update `docs/map/CON-run-identity.md` in this same
       commit: the "Every launch path's one shared route to a terminal" row
       loses "(called by `_worker` AND by `cli.main._execute_bound_run`)";
       the "Assuming a root that ran real cycles can be continued" Trap
@@ -271,10 +344,33 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       failures == baseline (3 `CON-run-identity.md` git-history failures
       on this shallow clone, 0 others), pasted
 
-- [ ] 19. (S2, S3) Ring green across everything the alias and the deletion
+      PROOF: same 44-check run as step 17 -- `3 failed`, all git-history.
+      The document's own "one shared route to a terminal" row now names
+      `_worker` and `finalize_stopped_root` and states that `cli/` calls
+      neither a scheduler nor a terminalization; its trap gains the
+      supersession and its check became the same negation.
+
+- [x] 19. (S2, S3) Ring green across everything the alias and the deletion
       touch.
       done-when: `python -m pytest tests/test_single_run_path.py tests/test_lifecycle_operation_parity.py tests/test_v6_global_dispatch_guard.py tests/test_v6_only_cli_admission.py tests/test_run_manifest.py tests/test_workload_text.py tests/test_engine_profile_dispatch.py tests/test_application_text_runs_d0.py -q`
       ends `0 failed` (pasted)
+
+      PROOF:
+      ```
+      236 passed in 132.15s (0:02:12)
+      ```
+
+      ALSO IN THIS COMMIT, under REQUEST.md Amendment 1 (the operator's
+      two mid-execution questions about the token-steering controller and
+      the dynamic token allocation): a ninth test,
+      `test_the_door_carries_the_token_steering_authority`, drives a
+      manifest with `config_referee` ENABLED through the door and asserts
+      the scheduler receives it byte-identically, with `research` and
+      `simulation` intact, an absent `--token-budget` still unbounded, and
+      the cycle count intact. Mutation-proved: a door that strips
+      `config_referee` fails it. This is R2's existing obligation ("no
+      narrowing") proved for the specific lever the operator asked about,
+      not new scope.
 
 - [ ] 20. (S2, S3) [COMMIT] Commit and push commit 2 (alias + deletion +
       migrations + BOTH map documents in one commit, per CLAUDE.md's

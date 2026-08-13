@@ -87,3 +87,123 @@
     src/deepreason/application/text_runs.py:1448:            payload = terminalize_text_run(
     src/deepreason/application/text_runs.py:1586:    "terminalize_text_run",
 
+
+## SCAN 2 — after the deletion (working tree at c996870ef + step 11/12)
+
+### _execute_bound_run
+  src:    0
+  tests:  1
+  scripts:0
+  docs:   2
+  src callers (file:line):
+
+### run_scheduler
+  src:    4
+  tests:  58
+  scripts:3
+  docs:   8
+  src callers (file:line):
+    src/deepreason/config.py:515:    # envelopes. Default ON for every run built through ops.run_scheduler —
+    src/deepreason/application/text_runs.py:1345:        from deepreason.ops import run_scheduler
+    src/deepreason/application/text_runs.py:1438:            result, _meter, accounting = run_scheduler(
+    src/deepreason/ops.py:328:def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
+
+### attach_bound_evidence_once
+  src:    2
+  tests:  0
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/application/text_runs.py:592:def attach_bound_evidence_once(harness, root: Path | str, *, problem_id: str) -> bool:
+    src/deepreason/application/text_runs.py:1581:    "attach_bound_evidence_once",
+
+### ensure_lifecycle_documents
+  src:    3
+  tests:  3
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/application/text_runs.py:468:def ensure_lifecycle_documents(root: Path | str, *, spec) -> None:
+    src/deepreason/application/text_runs.py:561:        ensure_lifecycle_documents(root, spec=spec)
+    src/deepreason/application/text_runs.py:1583:    "ensure_lifecycle_documents",
+
+### completed_cycles
+  src:    3
+  tests:  0
+  scripts:0
+  docs:   0
+  src callers (file:line):
+    src/deepreason/application/text_runs.py:394:def completed_cycles(harness) -> int:
+    src/deepreason/application/text_runs.py:586:            latest_cycle=completed_cycles(harness),
+    src/deepreason/application/text_runs.py:1582:    "completed_cycles",
+
+### workload_spec_for_root
+  src:    4
+  tests:  4
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/application/text_runs.py:416:def workload_spec_for_root(root: Path | str, *, problem_path=None, harness=None):
+    src/deepreason/application/text_runs.py:560:        spec = workload_spec_for_root(root, harness=harness)
+    src/deepreason/application/text_runs.py:823:        spec = workload_spec_for_root(
+    src/deepreason/application/text_runs.py:1587:    "workload_spec_for_root",
+
+### terminalize_text_run
+  src:    4
+  tests:  0
+  scripts:0
+  docs:   9
+  src callers (file:line):
+    src/deepreason/application/text_runs.py:290:def terminalize_text_run(
+    src/deepreason/application/text_runs.py:569:        return terminalize_text_run(
+    src/deepreason/application/text_runs.py:1448:            payload = terminalize_text_run(
+    src/deepreason/application/text_runs.py:1586:    "terminalize_text_run",
+
+
+## SCAN 3 — after removing the orphaned retrofit helper
+
+### _execute_bound_run
+  src:    0
+  tests:  1
+  docs:   2
+### attach_bound_evidence_once
+  src:    0
+  tests:  0
+  docs:   2
+
+## VERDICT (per symbol)
+
+_execute_bound_run          DELETED. src 2 -> 0. The one remaining tests/
+                            hit is a migration note in a docstring, not a
+                            call; the two docs/ hits are map lines updated
+                            in this same commit (R7, R16).
+attach_bound_evidence_once  DELETED. src 4 -> 2 -> 0. It was the lifecycle
+                            tranche's bare-path retrofit and had exactly
+                            one caller in the whole tree: the deleted
+                            _execute_bound_run. R7 authorizes removing
+                            "the bare-path lifecycle retrofit the
+                            lifecycle tranche added to it" by name. The
+                            managed worker attaches bound evidence through
+                            evidence.render.attach_bound_evidence directly
+                            (text_runs.py _worker), which is why
+                            test_manifest_launched_root_renders_its_bound_
+                            evidence still passes through the alias with
+                            the helper gone. Leaving an uncalled function
+                            behind would be the drift this tranche exists
+                            to remove.
+run_scheduler               KEPT. src 6 -> 4. Surviving callers:
+                            application/text_runs.py:1345 (import) and
+                            :1438 (the one call), ops.py:328 (its own def).
+ensure_lifecycle_documents  KEPT. src 3, all in text_runs.py: its def, its
+                            call from finalize_stopped_root:561, __all__.
+completed_cycles            KEPT. src 3: def, the call from
+                            finalize_stopped_root:586, __all__.
+workload_spec_for_root      KEPT and now MORE used: def, finalize_stopped_
+                            root:560, start_manifest_run:823, __all__.
+terminalize_text_run        KEPT. src 4: def, finalize_stopped_root:569,
+                            _worker:1448, __all__. Its cli/main.py caller
+                            is gone because the CLI no longer runs
+                            anything itself -- that is the point of the
+                            tranche, not a loss of coverage.
+
+No symbol was left unreferenced without a decision.

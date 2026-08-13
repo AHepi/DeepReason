@@ -589,35 +589,6 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         locks.release()
 
 
-def attach_bound_evidence_once(harness, root: Path | str, *, problem_id: str) -> bool:
-    """Render this root's bound dossier into source records, at most once.
-
-    Idempotent on the record itself rather than on a flag: a second call
-    would introduce each source twice, which replay validation rejects.
-    """
-
-    from deepreason.evidence.render import attach_bound_evidence
-    from deepreason.evidence.state import load_evidence_dossier, load_run_input
-
-    root = Path(root)
-    dossier = load_evidence_dossier(root)
-    if not dossier.sources:
-        return False
-    for artifact in harness.state.artifacts.values():
-        provenance = artifact.provenance
-        if provenance is not None and getattr(
-            provenance.role, "value", provenance.role
-        ) == "import":
-            return False
-    attach_bound_evidence(
-        harness,
-        run_input=load_run_input(root),
-        dossier=dossier,
-        problem_id=problem_id,
-    )
-    return True
-
-
 def missing_manifest_credentials(manifest) -> list[str]:
     return sorted(
         {
@@ -1578,7 +1549,6 @@ __all__ = [
     "TextRunApplicationService",
     "TextRunWorkerRegistry",
     "_v6_run_result",
-    "attach_bound_evidence_once",
     "completed_cycles",
     "ensure_lifecycle_documents",
     "finalize_stopped_root",
