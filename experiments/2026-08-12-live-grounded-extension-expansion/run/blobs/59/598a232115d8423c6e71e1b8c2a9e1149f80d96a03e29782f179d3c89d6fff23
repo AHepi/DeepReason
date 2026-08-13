@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The critic provides neither [a demonstrated input sequence and a demonstrated read that returns an invalid committed root]. The case rests on 'can be read' and 'could violate,' which are modal claims about possibility, not demonstrations.",
+  "verdict": "pass"
+}
