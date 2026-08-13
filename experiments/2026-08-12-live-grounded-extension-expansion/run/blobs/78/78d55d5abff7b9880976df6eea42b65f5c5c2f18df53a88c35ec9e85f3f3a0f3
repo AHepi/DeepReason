@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}
+```

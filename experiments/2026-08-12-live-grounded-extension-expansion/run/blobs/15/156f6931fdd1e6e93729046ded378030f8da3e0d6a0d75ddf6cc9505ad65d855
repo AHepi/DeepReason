@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "SRC_002's registered attack-defeater warrant pre-pass depends on SRC_013's two-level warrant validity: a defeater's carriage edge is only meaningful once the inner grounded labelling has separated provisional from committed attacks, because the defeater must know which attack edges are warrant-supported before targeting them. Refuted if the defeater pre-pass yields a different surviving attack graph when applied to a single-pass flat warrant graph than when applied after SRC_013's inner labelling.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_002", "SRC_013"]
+    },
+    {
+      "content": "SRC_011's committed-root checkpoint contradicts SRC_013's preservation of root validity: the checkpoint suspends any root whose only defenders are UNDEC, yet in the two-pass semantics a root can be outer-accepted precisely because its defenders were accepted through the warrant-filtered outer graph while remaining UNDEC in the inner pass, so the checkpoint re-imports the self-referential blindness SRC_013 names as its weakness. Refuted if no case exists where a root is outer-accepted while all its defenders are inner-UNDEC.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_011", "SRC_013"]
+    },
+    {
+      "content": "The admissible enrichment in SRC_004 and the covering principle in SRC_009 share a shared mechanism: both are polynomial-time, monotone edge-construction functions applied before the standard grounded fixpoint, differing only in whether the enrichment is bounded by an explicit covering quantifier. Refuted if SRC_009 admits an enrichment that is not an instance of SRC_004's admissible class, or if SRC_004's class contains a function SRC_009's covering principle cannot express.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_004", "SRC_009", "SRC_013"]
+    },
+    {
+      "content": "SRC_012's attack edge-node scheme integrates with SRC_003's carriage closure: extend the closure rule so every attacker of a warrant's validity_node also attacks the edge-node E of the attack the warrant carries, so refutation-by-warrant and refutation-by-edge-node cohere in one graph. Refuted if there exists an attack C→E where C attacks the warrant's validity_node but the closure rule fails to materialize C→E, or if the merged graph changes the grounded extension relative to the un-closed expansion.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_012", "SRC_003"]
+    },
+    {
+      "content": "SRC_010's bounded-integer weighted operator reduces to SRC_006's threshold-τ labeling: the least fixed point of the weighted operator on the finite lattice of (label, weight) pairs equals the family of grounded labelings obtained by scanning SRC_006's threshold from τ=0 upward, so the weighted fixpoint is an abstraction of the threshold sweep. Refuted if there exists a weighted attack graph whose least fixed point differs from every threshold-τ grounded labeling of SRC_006.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_010", "SRC_006", "SRC_013"]
+    },
+    {
+      "content": "SRC_013's two-pass warrant filtering abstracts the family of edge-construction enrichments in SRC_004, SRC_005, SRC_008, and SRC_009: each enrichment is a particular choice of which edges survive into the outer graph, and the inner grounded labelling is the generic selector. Refuted if any of those enrichments produces an outer graph that cannot be represented as the warrant-filtered projection of SRC_013 for some inner labelling.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_013", "SRC_004", "SRC_005", "SRC_008", "SRC_009"]
+    }
+  ]
+}

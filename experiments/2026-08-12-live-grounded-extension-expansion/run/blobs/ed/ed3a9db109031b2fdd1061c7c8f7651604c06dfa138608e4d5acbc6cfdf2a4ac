@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts a substantive contradiction between 07c3398912d4 and SRC_004's determinism: greedy enumeration order changes which undecided nodes are labelled suspended. But the stated refutation condition (two enumeration orders yielding identical suspend_reason sets) fails to isolate the contradiction, because identical suspend_reason sets can still arise from different individual labels that merely cancel out over the whole set. A correct refutation would demand identical per-node suspend_reason under both orders; requiring only set equality is compatible with exactly the nondeterminism the relation claims to expose, leaving the contradiction unsupported."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 claims integration of SRC_006's carriage closure with SRC_011's inner/outer split by materializing every attacker-of-validity_node as an attacker of the carriage edge before the inner pass. But this ordering is incompatible with the inner labelling feeding outer acceptance: an attacker whose validity node is not yet accepted (or is undecided) at inner-fixpoint time cannot be consistently materialized as a live carriage attacker without anticipating the outer pass. The refutation condition (an outer-only attacker needed for carriage survival) is therefore not an edge case but the normal feedback the integration ignores, so the relation fails by incoherent phase ordering."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_003 claims shared mechanism with SRC_010 via first-class warrant-carrying attack nodes with unchanged grounded fixpoint, and offers a refutation only for double-counting (two accepted attackers with one 'out'). But the deeper compatibility failure is unaddressed: promoting an edge into a node can invert the grounding of the original target when the warrant node's own attackers form a grounding path that the edge-only semantics never considered. Because the refutation omits this label-inversion pathway, the shared-mechanism claim is not actually protected by the stated counterexample guard."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": true,
+      "case": "SRC_004 frames the dependence on SRC_011 as a clean two-level split: inner validity governs force, outer acceptance governs activation, and the refutation targets an outer-accepted argument attacking a warrant. But a warrant node can also be attacked by an argument that is itself only accepted because of the warrant's current 'out' status — a self-referential loop spanning both levels that the refutation's condition (outer-accepted attacker changing inner) mischaracterizes as merely outer-only. Since the actual feedback can originate at the inner level through a warrant-dependent path, the stated refutation does not catch the two-pass defect it claims to."
+    }
+  ]
+}
