@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=14 blockers=none
+State: next=22 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -360,7 +360,7 @@ it.
       PROOF: both written (45 and 118 lines); `json.load` on the second
       succeeds. Pasted in full in DELIVERY.md per R25.
 
-- [ ] 14. (S8–S12, S18) [COMMIT] Commit the verb, catalog, help pin, map,
+- [x] 14. (S8–S12, S18) [COMMIT] Commit the verb, catalog, help pin, map,
       manual and README together.
       done-when: `python tools/diff_budget.py origin/main --ceiling 1300 --paths
       src/deepreason tests docs/map .claude/skills README.md` → not EXCEEDED, and `git show --stat HEAD` lists
@@ -368,18 +368,18 @@ it.
       `tests/test_results_command.py`, `docs/map/SUB-application.md`,
       `.claude/skills/dr-drive-harness/SKILL.md`, `README.md`.
 
-- [ ] 15. (S15) Prove the MCP surface and console entry points did not move.
+- [x] 15. (S15) Prove the MCP surface and console entry points did not move.
       done-when: `git diff --stat origin/main -- scripts/wheel_smoke.py
       scripts/wheel_operational_smoke.py src/deepreason/mcp_server.py
       pyproject.toml` → empty output.
 
-- [ ] 16. (S19) Re-run R23's errata trigger grep at validation time.
+- [x] 16. (S19) Re-run R23's errata trigger grep at validation time.
       done-when: `grep -rn "deepreason results" docs/ README.md
       .claude/skills/ | grep -v "dr-drive-harness"` returns only hits this
       tranche introduced (i.e. no PRE-EXISTING document names a nonexistent
       results command) — pasted into VALIDATION.md either way.
 
-- [ ] 17. (S16, R20) Prove old roots are untouched.
+- [x] 17. (S16, R20) Prove old roots are untouched.
       done-when: `git status --porcelain experiments/ | grep -v
       "2026-08-13-change-results-retrieval-surface"` → empty, AND the S13
       tree-unchanged test passes. (SPEC.md's Record-observable guardrails
@@ -387,7 +387,7 @@ it.
       42-root sweep: no reader this tranche touches was MODIFIED — every
       reader it uses is called, not changed — and no writer or format moved.)
 
-- [ ] 18. (all) Map check: `python tools/docs_verify.py` (FULL, not `--fast`
+- [x] 18. (all) Map check: `python tools/docs_verify.py` (FULL, not `--fast`
       — `--fast` reuses cached results and cannot catch a document this
       `src/` change just broke).
       done-when: failures ≤ the 3 pre-existing `CON-run-identity.md`
@@ -395,7 +395,7 @@ it.
       output pasted; and `python tools/docs_verify.py --audit` reports no new
       finding.
 
-- [ ] 19. (all) Full gate: `python -m pytest tests/ -q -n 4`, run on an
+- [x] 19. (all) Full gate: `python -m pytest tests/ -q -n 4`, run on an
       otherwise idle box, never concurrently with step 18.
       done-when: output pasted, and failures ≤ the baseline recorded in
       `docs/AUDIT_BASELINES.md` (1 pre-existing:
@@ -404,13 +404,13 @@ it.
       and `tests/test_mcp_scratch_bridge.py`, which must go green on a serial
       re-run if they appear).
 
-- [ ] 20. (all) Wheel smoke: `python scripts/wheel_smoke.py`.
+- [x] 20. (all) Wheel smoke: `python scripts/wheel_smoke.py`.
       done-when: exit code compared against
       `docs/AUDIT_BASELINES.md`'s KNOWN STALE note and the verdict pasted —
       an MCP-pin failure is baseline, any OTHER failure is a finding and a
       stop.
 
-- [ ] 21. (all) Write VALIDATION.md: every SPEC.md accept command run and its
+- [x] 21. (all) Write VALIDATION.md: every SPEC.md accept command run and its
       output pasted, with the PASS/FAIL verdict.
       done-when: `VALIDATION.md` exists and its verdict line reads PASS or
       FAIL.
@@ -424,3 +424,32 @@ it.
 - [ ] 23. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` == `git rev-parse origin/claude/results-retrieval-surface-v6jmiy`.
+
+
+---
+
+## Instrument results (steps 15-21), pasted
+
+- **15 (S15)** `git diff --stat origin/main -- scripts/wheel_smoke.py
+  scripts/wheel_operational_smoke.py src/deepreason/mcp_server.py
+  pyproject.toml` → **empty**. The MCP surface and console entry points did
+  not move, as S15 decided.
+- **16 (S19)** R23's errata grep re-run: every `deepreason results` hit is one
+  this tranche introduced. No pre-existing document named a command that did
+  not exist. Trigger does not fire; recorded as a negative result.
+- **17 (S16/R20)** `git status --porcelain experiments/` minus this tranche →
+  **empty**. No committed root moved.
+- **18** `python tools/docs_verify.py` (FULL): `3 failed` == baseline exactly
+  (the three `CON-run-identity.md` git-history checks needing an unshallowed
+  clone). `--audit`: `0 finding(s)`.
+- **19** `python -m pytest tests/ -q -n 4`:
+  `1 failed, 3562 passed, 7 skipped in 797.15s (0:13:17)` — the one failure is
+  `tests/test_bronze_report.py::test_census_totals_internally_consistent`
+  (`assert 159 == 165`), the baselined pre-existing failure, verbatim. No known
+  flake appeared.
+- **20** `python scripts/wheel_smoke.py`: exit 0 — "isolated V6-only contents,
+  clean imports, exact entry points, module parity, MCP registration, and exact
+  MCP schemas". Better than the baseline's KNOWN STALE allowance.
+  `wheel_operational_smoke.py` NOT run: it drives a live provider and this
+  container has no `env` credential file. Stated as a gap, not a pass.
+- **21** VALIDATION.md written; verdict **PASS**.
