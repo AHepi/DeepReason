@@ -1,0 +1,20 @@
+TARGET:
+Make witnesses into winning strategies in a finite two-player argument game: accepted nodes are those for which the proponent has a strategy to defend against every attacker, and the strategy graph (an attractor) is computed by a single polynomial pass over the argument graph, yielding a deterministic, enumeration-independent certificate for each accepted root.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims accepted nodes are those for which the proponent has a winning strategy, and that the strategy graph is computed by a single polynomial pass. But for finite argument games the proponent winning set generally equals the preferred (credulous) extension, not the skeptical grounded extension. On a simple cycle of two mutual attackers, a winning-strategy criterion declares both accepted (proponent picks one and the opponent cannot refute it without conceding the other), whereas the grounded fixed point suspends both. This contradicts reinstatement-as-derived and validity of every committed root required by the problem.
+
+THE DEFENCE:
+The critic's central claim—that a finite two-player argument game with winning strategies yields the preferred (credulous) extension rather than the grounded extension—is not established and is in fact incorrect for the game semantics described in the target. The target specifies a *particular* argument game: the proponent commits to a root claim, and a node is accepted only if the proponent can defend against *every* attacker, with the strategy graph computed as an attractor in a single polynomial pass. This describes a reachability game whose attractor construction computes the least fixed point of the defense operator—i.e., the grounded extension—not the preferred extension.
+
+The critic's two-cycle example does not refute this. In the specified game, when the proponent commits to node A on a two-cycle (A attacks B, B attacks A), the opponent attacks with B, and the proponent must counterattack with A. But A is already the proponent's committed position, so this is circular and provides no genuine defense. The proponent has no winning strategy: there is no finite, non-circular defense path. Both nodes are correctly suspended, matching the grounded extension. The critic conflates this with a *different* game variant where proponent and opponent may both assert any node, which would indeed produce credulous outcomes. The target's game, where the proponent must defend a committed root through non-circular counterattacks, does not.
+
+The critic's claim that 'the opponent cannot refute it without conceding the other' assumes a symmetric debate game where asserting an attacker commits one to defending it. That is not the game the target describes. In the target's attractor game, the opponent's move is to challenge; the proponent's move is to counterattack challengers. The single-pass attractor computation yields the grounded extension directly: start with nodes having no attackers, then iteratively add nodes whose every attacker is already defeated. A two-cycle node never enters this set because its sole attacker is never defeated. This is the skeptical, grounded semantics, not credulous.
+
+Reinstatement-as-derived is preserved: a node defended by accepted defenders is added by the attractor's inductive step. Validity of every committed root is preserved: only nodes for which a complete defense tree exists are accepted, and the attractor certificate is deterministic and enumeration-independent because it is computed by a single pass over the graph topology, not by a label-set search over extensions.
+
+In sum, the critic attacks a game variant of their own construction. The target's specified game—proponent commits to a root, must defend against every attacker via non-circular counterattacks, with acceptance computed by a single-pass attractor—computes the grounded extension and correctly suspends both nodes on a two-cycle. No contradiction is established.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

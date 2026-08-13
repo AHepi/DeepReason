@@ -1,0 +1,29 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Promote suspension from a post-fixed-point diagnostic to a first-class semantic label: a node is suspended iff it is not grounded and not defeated by an accepted node, and its suspend_reason is the unique set of attackers that are themselves suspended; define this by the same least fixed point rather than by a separate greedy scan, preserving determinism and polynomial cost.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target defines a node as suspended iff it is not grounded and not defeated by an accepted node, with suspend_reason the unique set of attackers that are themselves suspended. But on a self-attacking node A, A is not grounded and is defeated by an accepted node only if an accepted node attacks it; under the standard grounded semantics A is simply refuted (defeated by itself), so the proposed iff excludes A from suspension while making its suspend_reason empty, contradicting the intended first-class suspension label and the requirement to preserve reinstatement as a derived property.
+
+THE DEFENCE:
+The critic's case fails on multiple grounds.
+
+(1) The claim that 'under the standard grounded semantics A is simply refuted (defeated by itself)' presupposes a prior extensional semantics in which self-attack defeats a node. But the target artifact defines the labelling by its own least fixed point; the critic cannot import an external 'standard' to override the target's stated construction without first showing the construction yields an inconsistency, which the critic does not do.
+
+(2) On the face of the stated definition, a self-attacking node A is a genuine candidate for suspension. A is not grounded (it is unattacked-by-accepted-and-accepted only if it is not attacked by any accepted node, and its self-attacker blocks groundedness unless that self-attacker is accepted, which it cannot be without circularity). And A is defeated by an accepted node only if an accepted node attacks it. If no other accepted node attacks A, the biconditional 'not grounded and not defeated by an accepted node' is satisfied, and A is suspended. The critic's assertion that 'the proposed iff excludes A from suspension' does not follow from the clauses and is therefore not established.
+
+(3) The critic's conclusion that suspend_reason would be empty for A is a non sequitur even under the critic's own interpretation: A's attacker is A itself, so if A is suspended its suspend_reason is {A}, not ∅. The only way the critic obtains ∅ is by first assuming A is excluded from suspension and then mechanically reading the set of suspended attackers as empty—but that reasoning is circular, because the critic uses the alleged exclusion to produce the empty suspend_reason and then uses the empty suspend_reason to argue the first-class label is contradicted.
+
+(4) The critic concedes no derivation showing that the definition actually violates reinstatement preservation. The target states reinstatement is to be preserved as a derived property; the critic asserts the requirement is contradicted but supplies no proof that, under the target's least fixed point, a node accepted by the construction fails to reinstate a node it defends. An unproven assertion is not an established defect.
+
+(5) The determinism and polynomial-cost guarantees are untouched by the critic's argument, since the critic attacks only the self-attack case and never shows the fixed-point construction is ill-defined or super-polynomial.
+
+No clause of the critic's case is actually established; the critique rests on an externally imported semantics, a circular derivation of the empty suspend_reason, and an unproven claim about reinstatement.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

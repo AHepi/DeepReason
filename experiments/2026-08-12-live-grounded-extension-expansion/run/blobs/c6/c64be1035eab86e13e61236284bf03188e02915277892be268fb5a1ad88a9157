@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target merely labels the attacker rule as 'discharges an attack when the attacker is refuted', but in a Horn setting this discharge is not a negation-as-failure or deletion operation; it is just another derivation step.",
+  "verdict": "fail"
+}

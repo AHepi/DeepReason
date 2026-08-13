@@ -1,0 +1,1 @@
+{"decisive_point":"The critic posits that 'the lattice only grows — it never re-allocates' and from this infers that a different allocation may be required but unavailable; but this inference depends on an implementation detail (persistent resource consumption) that the target does not mandate.","verdict":"fail"}

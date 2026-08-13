@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 defines fragility as 'distance to the nearest graph in which a committed root is defeated' and its own criticism admits the graph-distance metric is non-canonical. This is a substance fault under the stated problem: the fixed-point extension over a graph sequence is only deterministic relative to an unspecified distance, so the proposal does not preserve determinism as an intrinsic guarantee — it silently externalizes determinism to an undefined metric choice. Different admissible distance functions yield different nearest-neighbor graphs and thus different committed-root defeat conditions for the same input, so the limit semantics is not determined by the attack graph alone.
+
+TARGET:
+Introduce a temporal dimension: define the grounded extension over a sequence of attack graphs where each step adds or removes edges, and require that the extension is the unique limit of the monotone fixed-point iterations over the sequence. This makes change first-class and allows a semantic definition of 'fragility' as the distance to the nearest graph in which a committed root is defeated; the cost is polynomial because each step uses the previous label as a warm start and the operator is monotone. This makes incremental caching a semantic, not merely an implementation, property. Criticism: the definition of distance between graphs is non-canonical and may affect the resulting extension.

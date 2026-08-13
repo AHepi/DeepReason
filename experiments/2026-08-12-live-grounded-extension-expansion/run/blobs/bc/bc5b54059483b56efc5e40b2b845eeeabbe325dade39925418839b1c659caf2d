@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The fixed-point extension over a graph sequence is deterministic and uniquely determined by the attack-graph sequence plus the monotone iteration operator — this is intrinsic and requires no distance metric whatsoever.",
+  "verdict": "pass"
+}
+```

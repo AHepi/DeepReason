@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The target claims reinstatement holds exactly for arguments with finite defense depth under the k-grounded family. But reinstatement is a structural property of the grounded extension (an attacker of a defender is itself attacked by an accepted argument), not a finiteness-of-defense-tree condition. An argument can have an infinite defense depth (in an infinite or cyclic graph) yet still be reinstated, so tying reinstatement to finite defense depth fails to preserve reinstatement as a derived property required by the problem.
+
+TARGET:
+Define a family of k-grounded semantics by truncating defense paths at length k: an argument is k-accepted iff it has a defense tree of depth <= k with all leaves in the grounded extension; prove each k-labeling is deterministic and polynomial, the standard grounded extension is the limit as k increases, and reinstatement holds exactly for arguments with finite defense depth.
