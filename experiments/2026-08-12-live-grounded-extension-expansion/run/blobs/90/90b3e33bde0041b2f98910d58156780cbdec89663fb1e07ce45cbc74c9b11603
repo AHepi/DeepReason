@@ -1,0 +1,21 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 computes the intersection of per-school grounded extensions and commits only that intersection, claiming reinstatement survives. Consider two projections where node C is attacked only by A and A is attacked only by B. In projection 1, an extra attacker E attacks B, so B is refuted, A is reinstated, and C is reinstated. In projection 2, B has no extra attacker, so B is accepted, A is refuted, and C is suspended. The intersection suspends C. Yet every individual projection either reinstates C (projection 1) or refutes its sole attacker A (projection 2), and in the latter C's suspension is a non-derived artifact. The proposal's refutation-union rule commits C as refuted only when it is outside the union, but C is outside neither projection's grounded extension, so it remains suspended in the intersection while being reinstated in projection 1. Reinstatement is therefore not merely re-derived; it fails for a node that is reinstated in at least one projection, directly violating the reinstatement guarantee the problem requires be preserved."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's depth label depends on a node-id tie-break, which the target itself flags as non-invariant under isomorphic relabelling. The problem demands proposals that preserve determinism of the fixed point and the validity of committed roots. Although the accept/refute/suspend status may remain deterministic, the derived refutation-depth grading is presented as meaningful evidence while being an artifact of arbitrary identifier ordering: two isomorphic graphs differing only in node-id assignment yield different depth labels for corresponding nodes. This is a substance defect: the grading is not a semantic invariant and can mislead, so the extension does not preserve the intended validity of the derived evidence despite preserving the core fixed point."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "SRC_001 adds carriage-closure edges (every attacker of a carrier becomes an attacker of the warrant) and claims the existing fixed point is unchanged with all guarantees surviving verbatim. But closure is not necessarily confluent in the presence of chained carriage: if artifact a1 carries warrant w1 naming target t, and artifact a2 carries warrant w2 naming target a1, then attackers of a2 become attackers of w2, and w2 attacks a1, which can newly expose a1 to self-attacking cycles through w1. The order in which closure edges are added can determine whether a self-attack on a carrier appears before the carrier's own warrant edges are resolved, so the committed edge set is order-dependent unless confluence is proven. The target explicitly admits closure can manufacture self-attack cycles that newly refute previously accepted carriers, which means reinstatement-as-derived and root validity can fail for those carriers."
+    }
+  ]
+}
+```

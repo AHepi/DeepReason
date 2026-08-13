@@ -1,0 +1,1 @@
+{"decisive_point":"The target's 'minimal witness' is built alongside the fixed-point computation, not selected from an exponential family; it is the specific chain produced under a deterministic tie-break, with a size at most the edge count.","verdict":"pass"}

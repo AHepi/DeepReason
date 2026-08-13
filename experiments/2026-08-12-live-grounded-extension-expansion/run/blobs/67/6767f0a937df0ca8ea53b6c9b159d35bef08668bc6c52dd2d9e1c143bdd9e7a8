@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Strengthen skepticism across conditioning regimes by computing the grounded extension on a family of school-projected attack subgraphs — each projection a deterministic function of the graph per registered school (1958b39701612057) — and committing only the intersection of all grounded extensions; refutation then commits only for nodes outside the union. Determinism and polynomial cost hold if the school set is fixed and each projection is linear in edge count. The criticizable point: the intersection of several grounded extensions is not itself a Dung grounded extension, so reinstatement must be re-derived and may fail on nodes that are reinstated in every projection yet suspended in the intersection, weakening the very guarantee being extended.
+commitments: (none)
+
+TARGET SRC_002
+Derive a refutation-depth label alongside accept/refute/suspend without changing the skeptical semantics: a node is refuted at depth k when it is attacked by a node accepted at depth k-1, depths resolved by node-id tie-break so the computation remains a pure deterministic function of the graph and stays polynomial. The criticizable claim: depth is not invariant under isomorphic relabelling because the tie-break depends on node ids, and on cyclic attack chains the depth labels may be unstable or misleading, so the derived grading could be presented as meaningful evidence when it is an artifact of ordering.
+commitments: (none)
+
+TARGET SRC_003
+Maintain carriage-closure as an explicit invariant that expands the edge set the grounded semantics sees without touching the fixpoint algorithm: whenever an artifact carries a warrant naming a target, every attacker of the carrier becomes an attacker of the warrant, enforced at att-construction time (0974daebd1665965, 0378275f89478d38). Because closure is a deterministic, linear-time expansion of the attack relation, the existing fixed point is unchanged and determinism, polynomial cost, reinstatement-as-derived, and root validity all survive verbatim. The criticizable claim: closure can manufacture self-attack cycles that newly refute previously accepted carriers, and the rule must be shown to be confluent — independent of the order in which edges are added — or it introduces an order-dependence into the committed edge set.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

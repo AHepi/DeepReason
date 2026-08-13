@@ -1,0 +1,1 @@
+{"decisive_point":"The target claims 'witness is bounded by edge count, preserving polynomial cost,' but bounding the witness size does not bound the search cost for the minimal one — searching for a minimal subgraph among exponentially many candidates is super-polynomial.","verdict":"fail"}

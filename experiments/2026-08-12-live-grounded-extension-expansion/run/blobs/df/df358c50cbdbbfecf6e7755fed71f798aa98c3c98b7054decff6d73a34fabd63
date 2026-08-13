@@ -1,0 +1,86 @@
+{
+  "candidates": [
+    {
+      "content": "Stratified well-founded commitment: recompute the grounded fixpoint over the SCC condensation of the attack graph (Tarjan decomposition, polynomial), and require that a committed root's acceptance be witnessed within its own or strictly lower strata. Acceptance that depends on nodes inside the same SCC (i.e., cycle-borne) is demoted to a 'cycle-suspended' status that cannot ground a commitment. The base least-fixpoint characterization is preserved on the acyclic skeleton, determinism holds as a pure function of the graph, and cost stays polynomial. This strengthens root validity by excluding self-support-through-cycle from the class of valid commitments.",
+      "typicality": 0.35,
+      "evidence_refs": [
+        {"block": "09ffabcd92979168", "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"},
+        {"block": "0c302d11d621778b", "quote": "The grounded extension itself was never the problem:"}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Defense-witness certificates as derived obligations: keep the grounded fixpoint byte-identical (determinism, polynomial cost, reinstatement untouched) and add a post-pass that, for each committed root labeled IN, extracts a finite defense tree — every attacker attacked by an IN node, recursively, with no infinite regress — from the fixpoint and stores it as a derived artifact under a program check. This converts the root-validity guarantee from 'the label says IN' to 'here is the exhibited winning strategy', giving argumentative_critic and judge a concrete, attackable object rather than a bare label.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {"block": "1dd041117ca8c54a", "quote": "Nothing in this system is refuted by being disliked."},
+        {"block": "0e806619395ec8f4", "quote": "**Labels are a pure function of the graph.**"},
+        {"block": "0378275f89478d38", "quote": "**Carriage is a relation, not a field.**"}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Acyclic-defense suspension refinement: after the grounded fixpoint, run a second deterministic pure-function pass that marks each IN node as either acyclic-defended (every defense path terminates in an unattacked IN node) or cycle-dependent (IN-ness essentially depends on a cycle). Committed roots that are cycle-dependent are flagged 'suspended (cycle-dependent)' at the commitment layer only — the base IN label is preserved, so Pass 1 determinism and the least-fixpoint characterization are untouched. This adds a conservative distinction the Dung semantics deliberately flattens, and gives the scheduler a principled reason to withhold commitment until an exogenous anchor breaks the cycle.",
+      "typicality": 0.4,
+      "evidence_refs": [
+        {"block": "0c302d11d621778b", "quote": "The grounded extension itself was never the problem:"},
+        {"block": "09ffabcd92979168", "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"},
+        {"block": "2046e9fefd13f60a", "quote": "Conj is gated on `Π ≠ ∅`"}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Declared exogenous anchors as structural input: allow a problem to declare a bounded set of anchor nodes (and anchor exclusions) as part of the sealed inputs, and compute the grounded extension of the graph with anchors pre-labeled IN or OUT — i.e., the least fixed point of the characteristic function restricted to non-anchor nodes. Determinism is preserved because anchors are declared sealed inputs, cost stays polynomial, and reinstatement holds within the non-anchor subgraph. This makes the LAMBDA_FLOOR exogenous-entropy idea syntactic rather than a runtime knob, and gives the defender a fixed external reference that shared-model blind spots cannot reach.",
+      "typicality": 0.3,
+      "evidence_refs": [
+        {"block": "0e806619395ec8f4", "quote": "**Labels are a pure function of the graph.**"},
+        {"block": "1e2811a698f6d3f3", "quote": "**Brake 1 — HV floor as criterion, never as gate.**"},
+        {"block": "2046e9fefd13f60a", "quote": "Conj is gated on `Π ≠ ∅`"}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Carriage-closure of attack edges: strengthen graph construction so every attacker of a validity_node also attacks the warrant (hence its carrier's attack edge), per the stated closure rule. Enforce this as a pure function of the artifact set in att construction — the fixpoint algorithm is untouched, so determinism and polynomial cost are inherited; the grounded extension is computed over a denser, more discriminating edge set. This makes the 'only route to REFUTED' chain complete: a warrant whose validity_node is attacked can never survive as a committed root.",
+      "typicality": 0.55,
+      "evidence_refs": [
+        {"block": "0974daebd1665965", "quote": "- **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge)."},
+        {"block": "0378275f89478d38", "quote": "**Carriage is a relation, not a field.**"},
+        {"block": "1dd041117ca8c54a", "quote": "Nothing in this system is refuted by being disliked."}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Skeptical intersection over bounded edge-deletion variants: define a derived operator where an argument is 'robustly IN' iff it is IN in the grounded extension of the original graph and in the grounded extension of every variant obtained by deleting a single attack edge from a bounded, problem-declared set of suspect edges. The robust set is a pure function of (graph, suspect set), computable in polynomial time (|suspect|+1 grounded runs). This strengthens skepticism at the commitment layer without touching Pass 1, and hands the defender a concrete target: exhibit the single-edge deletion that would flip a root to non-IN, or concede the root is fragile.",
+      "typicality": 0.25,
+      "evidence_refs": [
+        {"block": "09ffabcd92979168", "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"},
+        {"block": "0c302d11d621778b", "quote": "The grounded extension itself was never the problem:"},
+        {"block": "1b2d5ddadda17971", "quote": "*Flags:* **lineage stagnation**"}
+      ],
+      "neighbours": ["SRC_001"]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The grounded extension's determinism comes from being the least fixed point of a monotone operator. Strengthenings that stay inside that operator family — stratification (candidate 1), anchors-as-inputs (candidate 4), edge closure (candidate 5) — preserve determinism and polynomial cost trivially, but buy discrimination at the price of changing what the fixpoint sees. Strengthenings that step outside the operator — intersection over variants (candidate 6), witness extraction with size bounds (candidate 2), acyclic-suspension refinement (candidate 3) — buy skepticism only by introducing new, un-adjudicated commitments (choice of suspect set, witness selection, the privilege of acyclic defense). The deepest unresolved question: where to draw the boundary so 'validity of every committed root' remains a property of the fixpoint rather than of an opaque post-pass.",
+          "why_keep_this": "Captures the design tension all six candidates trade off, and names the meta-criterion a critic should apply to any extension proposal.",
+          "possible_next_move": "Formally characterize which candidate families are expressible as monotone operators over an extended state, and which require a second pass; then attack each family on its own terms.",
+          "unfinished": "No formal operator-theoretic statement yet; the IN/OUT/UNDEC vs. suspended distinction is still informal."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Can a witness-extraction pass (candidate 2) be guaranteed to find a polynomial-size defense witness whenever one exists, or is exponential witness size an inherent cost of grounded acceptance in general finite argumentation frameworks?",
+        "related_refs": []
+      },
+      {
+        "question": "Is the intersection of grounded extensions over a bounded edge-deletion set (candidate 6) ever itself the grounded extension of some derived graph — and if not, which of the four guarantees (determinism, polynomial cost, reinstatement, root validity) must be consciously dropped at the robust layer?",
+        "related_refs": []
+      }
+    ]
+  }
+}

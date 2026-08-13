@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+src_001 introduces a second post-fixpoint pass that must trace 'every defense path' to classify each IN node as acyclic-defended or cycle-dependent. In an abstract argumentation framework, the set of defense paths to an IN node can be exponential in the size of the graph (consider a layered graph where an argument is defended by two arguments, each of which is defended by two arguments, etc.). Determining whether every such path terminates in an unattacked IN node requires evaluating all of them. Therefore, this proposed second pass is not polynomial cost, violating the problem's requirement that each proposal preserve polynomial cost.
+
+TARGET:
+Acyclic-defense suspension refinement: after the grounded fixpoint, run a second deterministic pure-function pass that marks each IN node as either acyclic-defended (every defense path terminates in an unattacked IN node) or cycle-dependent (IN-ness essentially depends on a cycle). Committed roots that are cycle-dependent are flagged 'suspended (cycle-dependent)' at the commitment layer only — the base IN label is preserved, so Pass 1 determinism and the least-fixpoint characterization are untouched. This adds a conservative distinction the Dung semantics deliberately flattens, and gives the scheduler a principled reason to withhold commitment until an exogenous anchor breaks the cycle.

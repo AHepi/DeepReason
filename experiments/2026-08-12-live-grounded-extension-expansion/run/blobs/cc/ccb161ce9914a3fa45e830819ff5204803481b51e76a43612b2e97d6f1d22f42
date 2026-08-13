@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Minimal-witness selection requires solving a global minimization problem: for a refuted node, finding the truly minimal accepted attacker chain is an optimization problem whose cost may exceed polynomial unless P=NP (analogous to minimum-weight vertex cover). The target claims 'witness is bounded by edge count, preserving polynomial cost,' but bounding the witness size does not bound the search cost for the minimal one — searching for a minimal subgraph among exponentially many candidates is super-polynomial. This violates the 'polynomial cost' guarantee of the problem.
+
+TARGET:
+Emit, in the same pass as the fixed point, a minimal witness subgraph for every committed label: for a refuted node, the accepted attacker chain; for an accepted node, the absence of any accepted attacker within the extension; for a suspended node, the vacuous empty witness. Witness choice uses a deterministic tie-break so the whole computation stays a pure function of the graph and each witness is bounded by edge count, preserving polynomial cost. The criticizable point: minimal-witness selection may require a global minimization that breaks locality and cannot be computed incrementally, and vacuous witnesses for suspended nodes invite a false reading that suspension is evidenced when it is precisely the absence of a decision.

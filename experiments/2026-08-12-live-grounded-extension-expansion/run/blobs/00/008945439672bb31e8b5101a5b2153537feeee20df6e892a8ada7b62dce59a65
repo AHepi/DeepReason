@@ -1,0 +1,21 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Declared exogenous anchors as structural input: allow a problem to declare a bounded set of anchor nodes (and anchor exclusions) as part of the sealed inputs, and compute the grounded extension of the graph with anchors pre-labeled IN or OUT — i.e., the least fixed point of the characteristic function restricted to non-anchor nodes. Determinism is preserved because anchors are declared sealed inputs, cost stays polynomial, and reinstatement holds within the non-anchor subgraph. This makes the LAMBDA_FLOOR exogenous-entropy idea syntactic rather than a runtime knob, and gives the defender a fixed external reference that shared-model blind spots cannot reach.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+src_001 problem requires proposals to preserve 'reinstatement as a derived property.' In standard Dung semantics, an argument a is reinstated if its attacker b is ultimately refuted by some valid sequence of arguments. By allowing a problem to declare a bounded set of exogenous anchor nodes pre-labeled OUT, src_004 permits the refutation of an attacker b via an exogenous anchor without requiring b to be defeated by other arguments in the graph. Reinstatement is no longer strictly derived from the internal attack relations among arguments; it can now be imposed externally. Thus, reinstatement fails to remain a derived property.
+
+THE DEFENCE:
+The critic's case rests on an unstated and unsupported premise: that src_001's requirement to preserve 'reinstatement as a derived property' demands derivation exclusively from internal attack relations. No clause in the case establishes this exclusivity. Reinstatement being 'derived' means it is computed by the semantics' fixed-point procedure rather than asserted ad hoc per argument — and the target satisfies exactly that.
+
+The target declares anchors as structural, sealed inputs. The grounded extension is then computed as the least fixed point of the characteristic function restricted to non-anchor nodes. Every non-anchor argument's label — including reinstatement of an argument whose attacker is refuted — is still derived by iterating the characteristic function over the attack graph. The fixed-point mechanism is not bypassed; it is applied to the subgraph with anchor labels as boundary conditions, exactly as standard grounded semantics already applies IN/OUT propagation from accepted arguments to defeat their attackers. An accepted argument a defeating an attacker b is not 'exogenous defeat' — it is the normal characteristic-function rule. Anchors merely provide initial labels that the fixed-point process propagates.
+
+The critic's claim that reinstatement 'can now be imposed externally' conflates boundary-condition propagation with direct label assignment. Anchors are pre-labeled, but no non-anchor node is pre-labeled; every non-anchor label is derived. Reinstatement of non-anchor arguments therefore remains a derived property within the computational graph. The critic identifies no clause showing that sealed structural inputs are prohibited, nor that derivation must exclude all boundary conditions. The target's own clause explicitly states 'reinstatement holds within the non-anchor subgraph,' which is precisely the domain where derivation occurs. Nothing in the case demonstrates this to be insufficient or non-compliant with src_001.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
