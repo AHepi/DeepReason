@@ -89,3 +89,45 @@ GATE: python tools/docs_verify.py (0 failed), --audit (no check that
 cannot fail), --links (every DR- reference resolves). Commit and push at
 every phase boundary.
 ```
+
+---
+
+## P3 — operator lock files are committed inside run roots
+
+**What.** `.run-operator.lock`, `.make-operator.lock`, `.run-input.lock`
+and `.run-manifest.lock` are tracked in git inside
+`experiments/2026-08-12-live-grounded-extension-expansion/run/`. They are
+mutable single-owner locks — `DR-SUB-application`'s own "State it owns"
+section classes every such file as control, not record — so any operation
+that legitimately takes the lock shows up as a modification to a committed
+root. That is cosmetically indistinguishable, in `git status`, from
+editing the record, which is precisely the distinction the append-only law
+turns on. Observed while finalizing the grounded root: the only real
+change was `log.jsonl | 1 insertion, 0 deletions`, but two lock files
+showed as `M` beside it.
+
+**Ready-to-send prompt:**
+
+```
+Fix tranche: operator lock files must not be committed inside run roots.
+Route through deepreason-orchestrator.
+
+EVIDENCE: experiments/2026-08-13-change-lifecycle-operation-parity/PARKED.md
+P3. `git diff --numstat` on a run root after a legitimate lock acquire
+shows `.run-operator.lock` and `.make-operator.lock` as modified beside
+`log.jsonl | 1 0`. Locks are control files (docs/map/SUB-application.md,
+"State it owns"), never record content, so a reader auditing whether a
+committed root was edited cannot tell the two apart at a glance.
+
+READ FIRST: docs/map/SUB-application.md "State it owns",
+src/deepreason/locking.py (OPERATOR_LOCK_NAMES), .gitignore.
+
+SCOPE: add the operator lock names to .gitignore and `git rm --cached`
+the tracked ones, so a run root's tracked contents are record and
+documents only. Decide and record whether removing them from the index
+changes any committed root's replay verdict -- it must not, and
+`python tools/root_sweep.py` is the instrument that says so. GATE: full
+gate at the boundary, root_sweep zero verdict drift, docs_verify full.
+Map moves in the same commit if SUB-application's state section names
+them. Commit and push at every phase boundary.
+```
