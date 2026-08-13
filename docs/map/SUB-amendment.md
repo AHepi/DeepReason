@@ -163,8 +163,15 @@ the chain is well shaped, and whether the ledger obeys the fences it declares is
   a subset being admitted, because silently dropping part of what the operator
   pointed at misrepresents the evidence base. The duplicate test is content
   digest against every dossier in `dossier_union`, so an earlier amendment's
-  sources count too.
-`check: python -m pytest "tests/test_amendment_epochs.py::test_amend_refuses_a_source_already_admitted_to_this_run" "tests/test_amendment_epochs.py::test_amend_refuses_content_admitted_by_an_earlier_amendment" -q`
+  sources count too — but only for a source the record shows was actually
+  INTRODUCED (`_introduced_source_ids`: a typed `attached-source-record.v1`
+  artifact exists for it). Binding and introducing came apart on the
+  grounded-extension run `8e22d0431fd2b98d`, which bound six sources and
+  rendered none; the refusal's own rationale — "a second introduction that
+  replay validation rejects" — needs a first introduction to exist, so a
+  bound-but-never-rendered source is admitted and the amendment epoch is
+  where it finally enters the record.
+`check: grep -q "^def _introduced_source_ids(" src/deepreason/amendment/apply.py && grep -q "if source.id in introduced" src/deepreason/amendment/apply.py && python -m pytest "tests/test_amendment_epochs.py::test_amend_refuses_a_source_already_admitted_to_this_run" "tests/test_amendment_epochs.py::test_amend_refuses_content_admitted_by_an_earlier_amendment" "tests/test_lifecycle_operation_parity.py::test_amend_refuses_a_source_already_on_the_log" "tests/test_lifecycle_operation_parity.py::test_amend_admits_a_bound_but_unintroduced_source" -q`
 - **`successor_manifest_digest` always equals `parent_manifest_digest`.** An
   amendment supersedes the question and the evidence, never routing, policy or
   budget authority — the controller's process state is bound to one manifest

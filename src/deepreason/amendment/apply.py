@@ -134,6 +134,40 @@ def _require_terminal_stop(root: Path, manifest) -> None:
     )
 
 
+def _introduced_source_ids(root: Path) -> frozenset[str]:
+    """The bound sources this root actually INTRODUCED to its models.
+
+    Binding a dossier into a run's identity and introducing its sources to
+    the run are two different acts, and only the second leaves a typed
+    ``attached-source-record.v1`` artifact.  A configuration path that
+    bound evidence and never rendered it produced roots where the two came
+    apart (grounded-extension run ``8e22d0431fd2b98d``: six bound sources,
+    zero source records), which is exactly the case the duplicate refusal
+    below must not treat as a re-admission.
+    """
+
+    import json as _json
+
+    from deepreason.harness import Harness
+
+    found = set()
+    for artifact in Harness(root, read_only=True).state.artifacts.values():
+        if not artifact.content_ref.startswith("inline:"):
+            continue
+        try:
+            payload = _json.loads(artifact.content_ref.removeprefix("inline:"))
+        except (TypeError, ValueError):
+            continue
+        if (
+            isinstance(payload, dict)
+            and payload.get("schema") == "attached-source-record.v1"
+        ):
+            source_id = (payload.get("source") or {}).get("id")
+            if isinstance(source_id, str) and source_id:
+                found.add(source_id)
+    return frozenset(found)
+
+
 def _admit_supplement(
     root: Path,
     *,
@@ -157,8 +191,12 @@ def _admit_supplement(
             "AMEND_NO_SOURCES", "supply at least one readable file to attach"
         )
     # Refused here, before any parse, blob write, or staging: a source is
-    # admitted to a run exactly once, and re-admitting one adds no evidence
-    # while producing a second introduction that replay validation rejects.
+    # introduced to a run exactly once, and re-introducing one adds no
+    # evidence while producing a second introduction that replay validation
+    # rejects. Both halves of that rationale need a FIRST introduction to
+    # exist, which is why the caller filters to sources the record actually
+    # carries: a source that was bound and never rendered has none, so
+    # admitting it adds evidence rather than duplicating any.
     # The whole invocation fails rather than a subset being admitted —
     # silently dropping some of what the operator pointed at would
     # misrepresent the evidence base just as an unreadable path would.
@@ -403,6 +441,7 @@ def _amend_locked(
     report = None
     if attach:
         bound = dossier_union(root)
+        introduced = _introduced_source_ids(root)
         supplement, report = _admit_supplement(
             root,
             paths=attach,
@@ -413,6 +452,7 @@ def _amend_locked(
                 source.content_sha256: source.id
                 for dossier in bound
                 for source in dossier.sources
+                if source.id in introduced
             },
         )
         _check_evidence_budget(parent_manifest, (*bound, supplement))
