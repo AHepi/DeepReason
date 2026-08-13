@@ -134,94 +134,112 @@ them. Commit and push at every phase boundary.
 
 ---
 
-## P4 — evidence admitted by `amend` is VISIBLE to the models but not CITABLE
+## P4 — citable evidence reaches SEED conjectures only, and quotes are asked for as optional
 
-**What.** `deepreason amend --attach` admits sources and the models do read
-them — but the amendment epoch's pack presents them as display handles
-(`SRC_001`…`SRC_008`) and shows **no dossier block ids at all**, while the
-run-start bind path shows blocks with their ids. An `evidence_refs` entry
-requires `block` matching `^[0-9a-f]{12,64}$`, so a model working from an
-amendment-epoch pack **cannot** emit a checkable citation however much it
-wants to. The instruction to cite is still in the prompt, which makes it
-worse: the model is asked for verifiable citations and handed nothing
-verifiable to cite.
+**Two findings, both from the record, and both correcting earlier claims
+of mine that are retracted below.**
 
-**Measured on the grounded-extension root** (`8e22d0431fd2b98d`), across
-every conjecturer prompt recorded via `LLMCall.prompt_ref`:
+### P4a — evidence blocks are offered only on the seed problem
 
-    dossier blocks that COULD be cited: 296
+Every conjecturer prompt on this root, classified by the problem it was
+working and whether the pack carried the `CITABLE EVIDENCE BLOCKS`
+section:
 
-    epoch 0      : 41 conjecturer prompts |  8 contain a dossier block id
-                   | 44 distinct blocks shown
-    continuation :  8 conjecturer prompts |  0 contain a dossier block id
-                   |  0 distinct blocks shown
+    epoch 0       SEED          FULL-evidence     8
+    epoch 0       SEED          alias-only        5
+    epoch 0       sub-problem   alias-only       28
+    continuation  sub-problem   alias-only        8
 
-    epoch 0 prompt      : 50 hex block ids · "block" x34 · 1 SRC_ handle
-    continuation prompt :  0 dossier block ids · "block" x8 · 8 SRC_ handles
+The evidence section appears ONLY on the seed problem — **0 of 36
+sub-problem prompts in epoch 0**, and 0 of 8 in the continuation. A
+spawned sub-problem's conjecturer is shown `LOCAL REFERENCES (copy
+aliases, not identifiers)` — bare `SRC_001…SRC_008` aliases with no
+source ids, no titles and no block ids — so it cannot emit a citation
+that resolves: `EvidenceRefClaimV1.block` requires
+`^[0-9a-f]{12,64}$`, and the seed-problem instruction itself says "Only
+ids from this list resolve — artifact hashes and any other handles are
+rejected as unknown."
 
-Consequence in the candidates, same four-key shape in both epochs:
+Sub-problems are where most conjecture happens: 36 of 49 conjecturer
+calls on this root. So most of the run's conjecture is structurally
+unable to ground itself in admitted evidence.
 
-    epoch 0       evidence_refs = [{"block": "09ffabcd92979168"}, ...]
-    continuation  evidence_refs = []
-                  neighbours    = ["SRC_002", "SRC_005"]
+**RETRACTION.** An earlier version of this entry claimed the AMENDMENT
+path fails to present block ids while the run-start bind path presents
+them. That is false. The variable is the PROBLEM being worked, not the
+epoch: the continuation's 8 conjecture calls all happened to land on
+sub-problems, which never carry the section in either epoch. Two prior
+readings of the same 8-call sample — first "probably chance", then
+"structural, not chance" — were both wrong; the operator's challenge is
+what forced the classification above, and it is the only one supported by
+the record.
 
-The continuation made 181 model calls; 48 named an admitted source in
-`neighbours` (all 23 argumentative-critic calls did), and 0 produced an
-`evidence_refs` entry. **That is not a small-sample effect.** Epoch 0's
-conjecturer emitted refs on 17 of 40 calls (42.5%), so 0 of 8 would be a
-~1-in-84 coincidence — but the prompt census removes chance from the
-question entirely: zero block ids were ever shown, so zero was the only
-possible outcome.
+### P4b — the quote is requested as optional, and is therefore never given
 
-**What it does NOT mean.** The evidence reached the seats and changed what
-they said; this is not evidence blindness. And note that epoch 0's own
-`evidence_refs` entries carry `block` with no `quote`, so its 101
-`EVIDENCE_CITATION_VERIFIED` results mean "this block exists and is
-citable", not "this quotation is accurate" — no quote was ever supplied in
-this root, and `EVIDENCE_QUOTE_MISMATCH` is 0 for that reason, not because
-quoting was accurate.
+The seed-problem instruction, verbatim from a recorded prompt:
 
-**Ready-to-send prompt:**
+    CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+    evidence, name these block ids in its evidence_refs (optionally
+    with an exact quote from the block; quotes are byte-checked
+    against the recorded bytes). Only ids from this list resolve —
+    artifact hashes and any other handles are rejected as unknown.
+
+`quote` is parenthesised and marked optional. Outcome on this root:
+**101 `EVIDENCE_CITATION_VERIFIED`, 0 quotes, 0
+`EVIDENCE_QUOTE_MISMATCH`.** Every verified citation carries a block and
+no quote, so each one means "this block exists and is citable", never
+"this quotation is accurate". The byte-verifier in
+`evidence/citations.py` has never in this root been given a byte to
+check — not because quoting was accurate, but because none was asked for
+in a way models act on.
+
+### Ready-to-send prompt
 
 ```
-Fix tranche: evidence admitted by `amend` is visible to the models but not
-citable. Route through deepreason-orchestrator.
+Fix tranche: citable evidence reaches SEED conjectures only, and quotes
+are requested as optional so they are never supplied. Route through
+deepreason-orchestrator.
 
-EVIDENCE (typed, already diagnosed from the record -- do NOT re-derive it,
-verify it): experiments/2026-08-13-change-lifecycle-operation-parity/
-PARKED.md P4. On the grounded-extension root 8e22d0431fd2b98d, across every
-conjecturer prompt recorded via LLMCall.prompt_ref:
-  epoch 0      41 prompts,  8 contain a dossier block id, 44 blocks shown
-  continuation  8 prompts,  0 contain a dossier block id,  0 blocks shown
-The dossier holds 296 citable blocks. EvidenceRefClaimV1.block requires
-^[0-9a-f]{12,64}$, so an amendment-epoch model cannot cite checkably.
-Candidates confirm it: evidence_refs [] with neighbours ["SRC_002","SRC_005"].
+EVIDENCE (typed, already diagnosed -- verify, do not re-derive):
+experiments/2026-08-13-change-lifecycle-operation-parity/PARKED.md P4.
+Classifying every conjecturer prompt on grounded-extension root
+8e22d0431fd2b98d by problem and pack form (LLMCall.prompt_ref):
+  epoch 0      SEED        FULL-evidence   8
+  epoch 0      SEED        alias-only      5
+  epoch 0      sub-problem alias-only     28
+  continuation sub-problem alias-only      8
+0 of 36 sub-problem prompts carried CITABLE EVIDENCE BLOCKS. The dossier
+holds 296 blocks. Sub-problems are 36 of 49 conjecturer calls.
+And: 101 EVIDENCE_CITATION_VERIFIED, 0 quotes, 0 QUOTE_MISMATCH -- the
+instruction says "(optionally with an exact quote...)".
 
-START by re-running that prompt census to confirm it still reproduces, then
-find where the run-start bind path renders citable blocks into the pack and
-why the amendment-epoch path does not. union_citable_blocks in
-amendment/state.py and the pack builders in packs/ are the first places to
-look; DR-CON-packs-and-token-economy owns the section allocation that may
-be dropping them.
+START by reproducing that classification, then find what decides whether
+the CITABLE EVIDENCE BLOCKS section is rendered. Look at the pack
+builders in packs/ and DR-CON-packs-and-token-economy's section
+allocation, and at how attached evidence is scoped to a problem --
+whether a spawned sub-problem inherits its parent's citable set is the
+crux.
 
-SCOPE: an amendment epoch's pack must present its admitted blocks with the
-same citable identity the run-start bind gives them. Two guardrails:
-(1) CLAUDE.md's standing law -- nothing may penalize an informal or
-uncited conjecture, so this adds capability, never a rank or admission
-penalty; (2) token economy -- 296 blocks cannot all go in every pack, so
-decide and record in SPEC.md how blocks are selected, and make the
-selection deterministic and replayable.
+SCOPE, two parts, and decide each explicitly:
+(1) whether a sub-problem descended from a problem with attached evidence
+    should be able to cite that evidence. If yes, make the citable set
+    inheritable and deterministic; 296 blocks cannot all go in every
+    pack, so record the selection rule in SPEC.md and make it replayable.
+(2) whether `quote` should be requested rather than permitted -- e.g.
+    "name the block id AND quote the sentence you rely on" instead of a
+    parenthetical "optionally". This is a prompt-wording change with a
+    measurable outcome: quotes supplied, and QUOTE_MISMATCH becoming a
+    finding that can actually fire.
 
-CONSIDER ALSO, and decide explicitly rather than by omission: whether
-`quote` should be requested, not just permitted. Every evidence_refs entry
-in this root carries a block and no quote, so the byte-verifier that exists
-has never actually verified a quotation -- 101 EVIDENCE_CITATION_VERIFIED
-results all mean "block exists", and EVIDENCE_QUOTE_MISMATCH is 0 because
-nothing was quoted.
+GUARDRAIL: CLAUDE.md's standing law -- nothing may penalize an informal
+or uncited conjecture. This adds capability and asks more clearly; it
+must not become a rank, admission or acceptance penalty for not citing.
 
-TESTS: a regression that a conjecture in an amendment epoch can emit an
-evidence_refs entry resolving to an admitted block, and one that an uncited
-conjecture is neither refused nor down-ranked. GATE: ring while iterating,
-full gate at the boundary, docs_verify full, root_sweep zero verdict drift.
-Map moves in the same commit. Commit and push at every phase boundary.
+TESTS: a sub-problem conjecture can emit an evidence_refs entry that
+resolves against an inherited citable block; a candidate quoting text
+that is NOT in the block produces EVIDENCE_QUOTE_MISMATCH (the verifier
+proven live, not just present); an uncited conjecture is neither refused
+nor down-ranked. GATE: ring while iterating, full gate at the boundary,
+docs_verify full, root_sweep zero verdict drift. Map moves in the same
+commit. Commit and push at every phase boundary.
 ```
