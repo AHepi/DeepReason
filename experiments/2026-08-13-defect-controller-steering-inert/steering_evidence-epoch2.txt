@@ -1,0 +1,17 @@
+root                : experiments/2026-08-13-defect-controller-steering-inert/run
+run_id              : 8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d
+state / stop_reason : failed / operational_failure
+cycles / tokens     : 0 / 0 of 150000
+events              : 79
+rule census         : {'Control': 38, 'Register': 23, 'Spawn': 8, 'Measure': 6, 'Refl': 4}
+
+controller-authority records : 1
+  seq 28: scope=full
+    {"steerable":["argumentative_critic","conjecturer","defender","grounding_reviewer","judge","property_designer","summarizer","synthesizer","thesis","variator","vision_critic"],"unsteerable":{}}
+
+controller policy artifacts  : 0
+
+cap trajectory (per knob, in policy order):
+  (none — no knob moved)
+
+rule=Control events are workflow transactions, NOT steering: {'work_transition': 28, 'provider_result': 7, 'classification_bound': 1, 'contract_decomposition_activated': 1, 'terminal_committed': 1}
