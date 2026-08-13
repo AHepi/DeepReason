@@ -170,6 +170,59 @@ def stable_component_spec(problem, endpoints: tuple[str, ...]) -> str:
     )
 
 
+def run_report(harness, config, *, diagnostics=()) -> dict:
+    """The Pareto-retained frontier over one replayed root (§11.7).
+
+    A pure read over replayed state, deliberately callable without a
+    Scheduler: constructing one seeds schools, which appends events, and a
+    caller that only wants the report (terminalizing a stopped root) must
+    not mutate the record to obtain it.
+    """
+
+    from deepreason import programs
+
+    state = harness.state
+    survivors = sorted(
+        {aid for aid, _ in state.addr if state.status.get(aid) == Status.ACCEPTED}
+    )
+    scored = []
+    for aid in survivors:
+        commitments = [
+            c
+            for c in state.artifacts[aid].interface.commitments
+            if c in harness.commitments and programs.evaluable(harness.commitments[c])
+        ]
+        coverage = (
+            sum(
+                1
+                for c in commitments
+                if programs.evaluate(
+                    harness.commitments[c], state.artifacts[aid], harness.blobs
+                )[0]
+                == programs.PASS
+            )
+            / len(commitments)
+            if commitments
+            else 0.0
+        )
+        scored.append(
+            (
+                aid,
+                {
+                    "hv": state.hv.get(aid, 0.0),
+                    "reach": state.reach.get(aid, 0.0),
+                    "coverage": coverage,
+                },
+            )
+        )
+    return {
+        "survivors": survivors,
+        "frontier": frontier(scored, config.PARETO_AXES),
+        "problems": sorted(state.problems),
+        "diagnostics": diagnostics,
+    }
+
+
 class Scheduler:
     def __init__(
         self,
@@ -2853,45 +2906,4 @@ class Scheduler:
     def report(self) -> dict:
         """Pareto retention (§11.7): focus/reporting keeps the frontier over
         (HV, reach, coverage) — attention only, never a status."""
-        from deepreason import programs
-
-        state = self.harness.state
-        survivors = sorted(
-            {aid for aid, _ in state.addr if state.status.get(aid) == Status.ACCEPTED}
-        )
-        scored = []
-        for aid in survivors:
-            commitments = [
-                c
-                for c in state.artifacts[aid].interface.commitments
-                if c in self.harness.commitments and programs.evaluable(self.harness.commitments[c])
-            ]
-            coverage = (
-                sum(
-                    1
-                    for c in commitments
-                    if programs.evaluate(
-                        self.harness.commitments[c], state.artifacts[aid], self.harness.blobs
-                    )[0]
-                    == programs.PASS
-                )
-                / len(commitments)
-                if commitments
-                else 0.0
-            )
-            scored.append(
-                (
-                    aid,
-                    {
-                        "hv": state.hv.get(aid, 0.0),
-                        "reach": state.reach.get(aid, 0.0),
-                        "coverage": coverage,
-                    },
-                )
-            )
-        return {
-            "survivors": survivors,
-            "frontier": frontier(scored, self.config.PARETO_AXES),
-            "problems": sorted(state.problems),
-            "diagnostics": self.diagnostics,
-        }
+        return run_report(self.harness, self.config, diagnostics=self.diagnostics)

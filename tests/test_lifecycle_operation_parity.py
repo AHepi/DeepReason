@@ -335,6 +335,57 @@ def test_finalize_reaches_terminal_on_a_root_that_stopped_without_one(
     assert set(before) <= set(after)
 
 
+def test_finalize_resumes_after_an_interrupted_terminalization(
+    tmp_path, monkeypatch
+):
+    """Regression (grounded-extension root, 2026-08-13): a container snapshot
+    killed `finalize` between its typed STOPPED receipt and its terminal
+    commitment. The re-run must complete that stop, never record a second.
+    """
+
+    from deepreason.application.text_runs import (
+        _record_exhaustion_lifecycle_stop,
+    )
+    from deepreason.ontology import Rule
+    from deepreason.runtime.stop import StopMetrics, StopPolicy
+
+    root, manifest, spec, problem_file = _bind_v6_root(
+        tmp_path, name="interrupted-finalize-root"
+    )
+    from deepreason.cli import main as cli_module
+
+    harness = Harness(root)
+    cli_module._load_problem_file(harness, problem_file)
+    _no_provider_scheduler()(harness, None, 1, None)
+    # Exactly the state the killed process left: a durable typed stop, no
+    # terminal commitment, no result.
+    stop = _record_exhaustion_lifecycle_stop(
+        harness, manifest, policy=StopPolicy(), metrics=StopMetrics(cycle=1)
+    )
+    assert stop is not None
+    assert not (root / "run-result.json").exists()
+
+    def _stop_events(base):
+        return [
+            event
+            for event in Harness(base, read_only=True).log.read()
+            if event.rule == Rule.MEASURE
+            and tuple(event.inputs)[:1] == ("run-stop",)
+        ]
+
+    before = len(_stop_events(root))
+
+    payload = finalize_stopped_root(root)
+
+    assert payload["stop"]["digest"] == stop["digest"]
+    assert payload["stop"]["event_seq"] == stop["event_seq"]
+    assert len(_stop_events(root)) == before
+    assert (
+        derive_terminal_authority(root, manifest=manifest).status
+        == "current_valid_committed"
+    )
+
+
 def test_finalize_refuses_a_root_that_already_holds_a_terminal(
     tmp_path, monkeypatch
 ):

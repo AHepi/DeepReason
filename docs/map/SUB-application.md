@@ -202,11 +202,32 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 - **`finalize` appends; it never edits.** A committed run root is immutable, so
   the only legitimate route from "stopped without a terminal" to "amendable" is
   new events and new files. `finalize_stopped_root` re-derives the frontier
-  read-only through `Scheduler(harness, None, config).report()` — no adapter is
-  built and no model is called — then appends the typed stop receipt and the
-  terminal commitment. It refuses `FINALIZE_ALREADY_TERMINAL` on a root that
-  already committed one, so it can never republish over settled history.
+  read-only through `scheduler.run_report` — no adapter is built and no model is
+  called — then appends the typed stop receipt and the terminal commitment. It
+  refuses `FINALIZE_ALREADY_TERMINAL` on a root that already committed one, so
+  it can never republish over settled history.
 `check: grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q "FINALIZE_ALREADY_TERMINAL" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one tests/test_lifecycle_operation_parity.py::test_finalize_refuses_a_root_that_already_holds_a_terminal -q`
+- **Deriving a report is not free of the record: constructing a `Scheduler`
+  SEEDS SCHOOLS, which appends events.** Four of them, on a root whose schools
+  are not yet seeded. Inside a live run that is correct; inside `finalize` it is
+  not, because those events land past the reasoning horizon of a stop that
+  already exists, and the root's own terminal check then fails
+  `TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`. `finalize_stopped_root` therefore
+  calls the module-level `scheduler.run_report`, which is the same Pareto
+  retention with no constructor. `Scheduler.report` delegates to it, so the two
+  can never disagree. Measured 2026-08-13 while finalizing the
+  grounded-extension root: `events before Scheduler(): 3 after: 7`.
+`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "report = run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && ! grep -q "Scheduler(" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
+- **Terminalization is not atomic, so a killed process leaves a stop with no
+  commitment — and the re-run must COMPLETE it, not restart it.** A container
+  snapshot killed `finalize` on the grounded-extension root between its typed
+  STOPPED receipt (event seq 9947) and its terminal commitment.
+  `_recoverable_typed_stop` reuses that durable stop when
+  `terminal_lifecycle_decision` exists, no commitment does, and `run-stop.json`
+  agrees with it on digest, sequence and reason; anything less returns `None`
+  and the ordinary path records a fresh stop. Without it, the re-run writes a
+  SECOND stop on one epoch.
+`check: grep -q "^def _recoverable_typed_stop(" src/deepreason/application/text_runs.py && grep -q "elif (recovered := _recoverable_typed_stop(harness, root)) is not None:" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
 - **`result()` re-derives the terminal; it does not read a file.** For a v6
   root it replays and calls `recover_terminal_result`, rewriting
   `run-result.json` when the durable authority disagrees with it. Two guards

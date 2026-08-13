@@ -52,9 +52,15 @@ behind it; the cheap deterministic work is deliberately not rationed.
   spawn scan, problem selection, the cycle heartbeat, school allocation, gamma
   (conjecture, or synthesis for connection/integration problems), per-candidate
   criticism, then the sweep tail.
-- `Scheduler.report()` — survivors, the Pareto `frontier` over (hv, reach,
-  coverage), problems, and the in-memory diagnostics list. Attention and
-  reporting only, never a status.
+- `run_report(harness, config, *, diagnostics=())` — survivors, the Pareto
+  `frontier` over (hv, reach, coverage), problems, and the diagnostics passed
+  in. Attention and reporting only, never a status. It is module-level on
+  purpose: constructing a `Scheduler` seeds schools, which APPENDS events, so a
+  caller that only wants the report over a stopped root (`finalize_stopped_root`
+  in `DR-SUB-application`) would otherwise have to mutate the record to read it.
+- `Scheduler.report()` — the same report, delegating to `run_report` so the two
+  can never disagree.
+`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
 - `Scheduler.activate_interventions(names)` — the response ladder's only lever;
   turns named interventions on for `CAPTURE_W` cycles.
 - `reflexive_problems(state)` — the meta-work set, following lineage: a

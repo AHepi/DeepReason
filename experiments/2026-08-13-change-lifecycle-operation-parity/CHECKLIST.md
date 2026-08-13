@@ -1,6 +1,6 @@
 # Checklist for: lifecycle-operation parity — "The flags and operations available to the newer reason runs should be available to all configurations"
 
-State: next=1 blockers=none
+State: next=34 blockers=OLLAMA_API_KEY absent (blocks step 29-30 only)
 Map ids (scoped before planning, per dr-plan-steps §5): `DR-SUB-application`
 (owns `application/`, `cli/`, `runtime/` — both changed paths sit inside
 this ONE document), `DR-SUB-amendment` (owns `amendment/`),
@@ -258,3 +258,41 @@ order. One step per dr-execute-step invocation.
 S1→3,5 · S2→6,7,9 · S3→10,11,12,13 · S4→4,5 · S5→6,9 · S6→14,15 ·
 S7→(proved by 26 and 29) · S8→19,32 · S9→8,9 · S10→1,2 · S11→18,20 ·
 S12→3,10,14,17 · S13→16 · S14→21-31
+
+
+---
+
+## Re-plan (appended after a validation failure; checked steps keep their outputs)
+
+Step 24's first attempt was killed mid-flight by a container snapshot,
+between the typed STOPPED receipt and the terminal commitment. That
+interruption was evidence, not noise: it proved `finalize` was not
+re-runnable, and re-running it would have recorded a SECOND stop on one
+epoch. Two defects in this tranche's own new code, both found by it:
+
+- [x] 34. (S3) `terminalize_text_run` reuses a durable typed stop that was
+      recorded but never committed (`_recoverable_typed_stop`), instead of
+      recording another.
+      done-when: `test_finalize_resumes_after_an_interrupted_terminalization`
+      asserts the stop digest/seq are the recovered ones and the count of
+      `run-stop` MEASURE events is unchanged -> PASSED
+
+- [x] 35. (S3) `finalize_stopped_root` derives the frontier through the new
+      module-level `scheduler.run_report` instead of constructing a
+      Scheduler. Constructing one SEEDS SCHOOLS, which appends four events;
+      past a recovered stop's horizon those are unauthorized and the root's
+      own terminal check fails `TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`.
+      done-when: `python -m pytest tests/test_lifecycle_operation_parity.py -q`
+      -> `11 passed`
+
+- [ ] 36. (S3, S14) Re-run `finalize` on the REAL grounded root, which now
+      stands at the interrupted state (typed stop at seq 9947, no
+      commitment).
+      done-when: `derive_terminal_authority(...).status ==
+      "current_valid_committed"` and the `run-stop` MEASURE count is
+      unchanged
+
+- [ ] 37. (S12) `docs/map/SUB-application.md` and
+      `docs/map/SUB-scheduler.md` record `run_report` and the
+      recovered-stop rule, in the same commit as the code.
+      done-when: `python tools/docs_verify.py` -> 0 failed

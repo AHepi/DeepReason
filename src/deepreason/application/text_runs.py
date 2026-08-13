@@ -252,6 +252,41 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
     return stop
 
 
+def _recoverable_typed_stop(harness, root: Path):
+    """This root's own typed stop, when one was recorded but never committed.
+
+    Terminalization is not atomic: the stop receipt lands as an event, the
+    terminal commitment lands as a later one, and a process can die between
+    them (observed 2026-08-13 — a container snapshot killed a `finalize`
+    on the grounded-extension root after its STOPPED receipt and before its
+    commitment). Recording a SECOND stop on the re-run would put two
+    terminal claims on one epoch, so the durable one is reused instead.
+    Returns ``None`` whenever the two records do not agree exactly, which
+    keeps the ordinary path fail-closed.
+    """
+
+    from deepreason.runtime.stop import validate_stop_record
+
+    state = harness.workflow_state
+    decision = state.terminal_lifecycle_decision
+    if decision is None or state.current_terminal_commitment is not None:
+        return None
+    path = Path(root) / "run-stop.json"
+    if not path.exists():
+        return None
+    try:
+        stop = validate_stop_record(json.loads(path.read_text(encoding="utf-8")))
+    except (OSError, ValueError, json.JSONDecodeError):
+        return None
+    if (
+        stop["digest"] != decision.stop_record_digest
+        or stop["event_seq"] != decision.stop_event_seq
+        or stop["reason"] != decision.deterministic_decision.reason
+    ):
+        return None
+    return stop
+
+
 def terminalize_text_run(
     harness,
     manifest,
@@ -288,6 +323,8 @@ def terminalize_text_run(
     )
     if scheduler_reason and not cancelled:
         stop = json.loads((root / "run-stop.json").read_text())
+    elif (recovered := _recoverable_typed_stop(harness, root)) is not None:
+        stop = recovered
     else:
         policy = StopPolicy()
         metrics = StopMetrics(cycle=latest_cycle)
@@ -491,7 +528,7 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         load_run_manifest,
     )
     from deepreason.runtime.terminal_authority import derive_terminal_authority
-    from deepreason.scheduler.scheduler import Scheduler
+    from deepreason.scheduler.scheduler import run_report
 
     root = Path(root).resolve()
     manifest = load_run_manifest(root / MANIFEST_NAME)
@@ -522,11 +559,12 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         harness = Harness(root)
         spec = workload_spec_for_root(root, harness=harness)
         ensure_lifecycle_documents(root, spec=spec)
-        # The scheduler's own report is a pure function of replayed state and
-        # config; no adapter is constructed and no model is called.
-        report = Scheduler(
-            harness, None, config_from_run_manifest(manifest)
-        ).report()
+        # run_report rather than Scheduler(...).report(): constructing a
+        # Scheduler seeds schools, which appends events. Past a recovered
+        # stop's horizon those are unauthorized and the root's own terminal
+        # check fails TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED. Finalization
+        # appends the terminal records and nothing else.
+        report = run_report(harness, config_from_run_manifest(manifest))
         return terminalize_text_run(
             harness,
             manifest,
