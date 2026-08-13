@@ -564,6 +564,47 @@ Itemized insertions, and the headline is their computed sum:
 **~373 insertions, ceiling 400, 4 commits.** Frozen surfaces touched:
 none (gate verdict `CLEAR`).
 
+### Budget revision, 2026-08-13, measured at CHECKLIST step 1
+
+The estimate above was wrong and is superseded — recorded here rather
+than edited away, because a revised ceiling with its old estimate hidden
+is the Rung S5 failure in a different costume. `tools/diff_budget.py`
+after step 1 measured the ONE new test file at
+
+    {"areas": {"src": 0, "tests": 302, ...}, "total_insertions": 302,
+     "ceiling": 400, "verdict": "WITHIN"}
+
+against an itemized estimate of 130 for it. The gap is fixture weight,
+and it is load-bearing rather than padding: proving R2 needs a manifest
+that actually carries a two-seat judge ensemble, `route_bound` school
+execution and a `criticism_policy`, which is ~180 lines of construction
+(`_seat`, `_rich_config`, `_rich_manifest`, `_bind_rich_root`,
+`_offline_scheduler`, `_load_grounded_builder`) before the first
+assertion. Trimming it to fit a pre-measurement guess would trade the
+tranche's own evidence for its estimate.
+
+Re-itemized against the measurement:
+
+      302  tests/test_single_run_path.py (MEASURED at step 1)
+      120  tests: steps 2, 9, 10, 21 (four more tests)
+       40  R9 migrations in 3 existing test files
+       55  src text_runs.py start_manifest_run
+       55  src cli/main.py alias body
+       35  map SUB-application.md
+       20  map CON-run-identity.md
+       28  docs/ERRATA.md E26
+        8  CLAUDE.md mechanism sentence
+      ----
+      663  insertions total
+
+    $ python3 -c "print(sum([302,120,40,55,55,35,20,28,8]))"
+    663
+
+**Revised: ~663 insertions, ceiling 700, 4 commits.** Production code is
+unchanged at ~110 insertions of the total; the growth is entirely test
+and documentation weight, neither of which ships in the wheel. Frozen
+surfaces touched: still none.
+
 Over the ~300-line split threshold, and a split is explicitly REJECTED
 with its reason: S3 cannot land without S2, S2 cannot land without S1,
 and the two map `check:` greps at `SUB-application.md:201` /

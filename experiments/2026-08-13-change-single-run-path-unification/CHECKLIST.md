@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -15,7 +15,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
 
 ## Commit 1 — S1, the door (both paths still exist and both still pass)
 
-- [ ] 1. (S1.2, S1.3) Create `tests/test_single_run_path.py` with the two
+- [x] 1. (S1.2, S1.3) Create `tests/test_single_run_path.py` with the two
       configuration-space tests RED:
       `test_the_door_narrows_no_configuration_the_compiler_admits` (a
       manifest carrying a judge role ensemble + school-routed conjecture +
@@ -27,6 +27,20 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `python -m pytest tests/test_single_run_path.py -q` ends
       `2 failed` with `AttributeError` naming `start_manifest_run` in both
       (RED for the intended reason, pasted)
+
+      PROOF:
+      ```
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      tests/test_single_run_path.py:257: AttributeError
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      tests/test_single_run_path.py:295: AttributeError
+      2 failed in 1.57s
+      ```
+      Both RED at the intended line, not at fixture construction. One
+      fixture correction was needed inside this step to get there: the
+      rich manifest earned `V6_SIMULATION_TOOLCHAIN_REQUIRED` until
+      `toolchains=(engaged_simulation_toolchain(),)` was supplied, the
+      same argument `build_manifest.py:165` supplies.
 
 - [ ] 2. (S1.1) Add
       `test_service_entry_accepts_a_precompiled_manifest_object_and_a_manifest_path`
