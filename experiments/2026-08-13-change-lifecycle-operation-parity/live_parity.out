@@ -3,3 +3,8 @@
 [2026-08-13T13:31:00Z] === STAGE 2: amend, admitting the six bound documents (no model call) ===
 [2026-08-13T13:33:22Z] AMEND OK rc=0 -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/amend.json
 [2026-08-13T13:33:22Z] === MEASURE: verify_root after the amendment epoch ===
+[2026-08-13T13:38:33Z] verify_root written -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/verify_root_after_amend.json
+[2026-08-13T13:38:33Z] STAGE 3 SKIPPED: /home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/env (OLLAMA_API_KEY) is absent -- the
+[2026-08-13T13:38:33Z] container dropped the gitignored credential. Stages 1-2 are complete
+[2026-08-13T13:38:33Z] and are the credential-free half of the proof. Recreate the file and
+[2026-08-13T13:38:33Z] re-run to continue. rc=0
