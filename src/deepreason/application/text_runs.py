@@ -559,11 +559,12 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         harness = Harness(root)
         spec = workload_spec_for_root(root, harness=harness)
         ensure_lifecycle_documents(root, spec=spec)
-        # run_report rather than Scheduler(...).report(): constructing a
-        # Scheduler seeds schools, which appends events. Past a recovered
-        # stop's horizon those are unauthorized and the root's own terminal
-        # check fails TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED. Finalization
-        # appends the terminal records and nothing else.
+        # run_report, never the Scheduler's own method: constructing a
+        # scheduler performs setup writes that append events (DR-SUB-scheduler
+        # names them). Past a recovered stop's horizon those are unauthorized
+        # and the root's own terminal check fails
+        # TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED. Finalization appends the
+        # terminal records and nothing else.
         report = run_report(harness, config_from_run_manifest(manifest))
         return terminalize_text_run(
             harness,

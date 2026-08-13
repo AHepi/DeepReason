@@ -217,7 +217,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   retention with no constructor. `Scheduler.report` delegates to it, so the two
   can never disagree. Measured 2026-08-13 while finalizing the
   grounded-extension root: `events before Scheduler(): 3 after: 7`.
-`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "report = run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && ! grep -q "Scheduler(" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
+`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "report = run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && ! grep -q "import Scheduler" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
 - **Terminalization is not atomic, so a killed process leaves a stop with no
   commitment — and the re-run must COMPLETE it, not restart it.** A container
   snapshot killed `finalize` on the grounded-extension root between its typed

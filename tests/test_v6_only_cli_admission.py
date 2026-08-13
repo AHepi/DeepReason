@@ -112,6 +112,7 @@ ROOT_COMMANDS = {
     "docket": ("docket",),
     "evidence": ("evidence", "id"),
     "export": ("export", "--out", "unused"),
+    "finalize": ("finalize",),
     "frontier": ("frontier",),
     "merge": ("merge", "other-root"),
     "narrate": ("narrate",),
