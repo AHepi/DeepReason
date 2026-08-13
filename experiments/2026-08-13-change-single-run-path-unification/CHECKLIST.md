@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=8 blockers=none
+State: next=11 blockers=none
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -148,7 +148,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
 
 ## Commit 2 — S2 + S3, the alias, the deletion, the migrations, the map
 
-- [ ] 8. (S3.2) Dead-census SCAN 1, taken BEFORE any deletion: repo-wide
+- [x] 8. (S3.2) Dead-census SCAN 1, taken BEFORE any deletion: repo-wide
       reference counts for `_execute_bound_run` and for every symbol that
       loses its `cli/main.py` caller (`ops.run_scheduler`,
       `attach_bound_evidence_once`, `ensure_lifecycle_documents`,
@@ -158,7 +158,13 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `test -s experiments/2026-08-13-change-single-run-path-unification/proof/dead-census.txt`
       AND the file contains a `SCAN 1` section with one line per symbol
 
-- [ ] 9. (S2.1) Add `test_run_verb_parser_surface_is_byte_identical` to
+      PROOF: `proof/dead-census.txt`, 89 lines, `SCAN 1` at HEAD c9a476130.
+      `_execute_bound_run` src=2 (its own def and its one call site),
+      tests=2, docs=2. Every other censused symbol has src callers
+      besides `cli/main.py` recorded verbatim, which is what SCAN 2 will
+      be compared against.
+
+- [x] 9. (S2.1) Add `test_run_verb_parser_surface_is_byte_identical` to
       `tests/test_single_run_path.py` — pins the `run` subparser's option
       strings, defaults and `required` flags against a literal expected
       table, so a later edit to `build_parser` fails loudly.
@@ -166,11 +172,30 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       ends `1 passed` against the UNCHANGED parser (it is a pin, green
       before and after)
 
-- [ ] 10. (S2.2) Add `test_run_exit_code_contract_is_run_result_exit_code`
+      PROOF: green as part of the 7-test file run below. The pin is the
+      full introspected action table -- option strings, dest, default,
+      required, action class -- so removing a flag, changing a default or
+      making one required fails it.
+
+- [x] 10. (S2.2) Add `test_run_exit_code_contract_is_run_result_exit_code`
       and `test_run_preflight_refusals_still_exit_one` RED.
       done-when: `python -m pytest tests/test_single_run_path.py -q` shows
       the exit-code test failing and the preflight test PASSING (the
       refusal path is already `1`; pasted)
+
+      PROOF:
+      ```
+      FAILED tests/test_single_run_path.py::test_run_exit_code_contract_is_run_result_exit_code[failed]
+      1 failed, 7 passed in 27.65s
+      ```
+      DEVIATION recorded, not silently absorbed: the test as first written
+      (completed -> 0 only) PASSED against the old path, because a
+      completed run maps to 0 under both behaviors. A pin that cannot fail
+      is not a pin (dr-execute-step rule 3), so it was parametrized to add
+      the discriminating case -- a scheduler that DIES mid-run. On the old
+      path that leaves exit 1 and NO published terminal
+      (`FileNotFoundError: .../exit-failed/run-result.json`); on the one
+      path it publishes `state=failed` and exits 4.
 
 - [ ] 11. (S2.1, S2.2) Rewrite `_cmd_run`'s dispatch tail in
       `src/deepreason/cli/main.py`: keep budget parse, `_admit_v6_root`,

@@ -1,0 +1,89 @@
+# Dead census — two-scan (dr-audit-dead discipline)
+# Tranche: 2026-08-13-change-single-run-path-unification
+# Base: origin/main fc0d75473
+
+## SCAN 1 — before any deletion (HEAD c9a476130)
+
+### _execute_bound_run
+  src:    2
+  tests:  2
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/cli/main.py:2796:        return _execute_bound_run(args, manifest, config, run_root, cycles)
+    src/deepreason/cli/main.py:2802:def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> int:
+
+### run_scheduler
+  src:    6
+  tests:  57
+  scripts:3
+  docs:   8
+  src callers (file:line):
+    src/deepreason/config.py:515:    # envelopes. Default ON for every run built through ops.run_scheduler —
+    src/deepreason/cli/main.py:2820:    from deepreason.ops import run_scheduler
+    src/deepreason/cli/main.py:2880:        result, meter, accounting = run_scheduler(
+    src/deepreason/application/text_runs.py:1345:        from deepreason.ops import run_scheduler
+    src/deepreason/application/text_runs.py:1438:            result, _meter, accounting = run_scheduler(
+    src/deepreason/ops.py:328:def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
+
+### attach_bound_evidence_once
+  src:    4
+  tests:  0
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/cli/main.py:2814:        attach_bound_evidence_once,
+    src/deepreason/cli/main.py:2860:            attach_bound_evidence_once(
+    src/deepreason/application/text_runs.py:592:def attach_bound_evidence_once(harness, root: Path | str, *, problem_id: str) -> bool:
+    src/deepreason/application/text_runs.py:1581:    "attach_bound_evidence_once",
+
+### ensure_lifecycle_documents
+  src:    5
+  tests:  3
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/cli/main.py:2816:        ensure_lifecycle_documents,
+    src/deepreason/cli/main.py:2859:            ensure_lifecycle_documents(run_root, spec=spec)
+    src/deepreason/application/text_runs.py:468:def ensure_lifecycle_documents(root: Path | str, *, spec) -> None:
+    src/deepreason/application/text_runs.py:561:        ensure_lifecycle_documents(root, spec=spec)
+    src/deepreason/application/text_runs.py:1583:    "ensure_lifecycle_documents",
+
+### completed_cycles
+  src:    5
+  tests:  0
+  scripts:0
+  docs:   0
+  src callers (file:line):
+    src/deepreason/cli/main.py:2815:        completed_cycles,
+    src/deepreason/cli/main.py:2895:            latest_cycle=completed_cycles(harness),
+    src/deepreason/application/text_runs.py:394:def completed_cycles(harness) -> int:
+    src/deepreason/application/text_runs.py:586:            latest_cycle=completed_cycles(harness),
+    src/deepreason/application/text_runs.py:1582:    "completed_cycles",
+
+### workload_spec_for_root
+  src:    6
+  tests:  4
+  scripts:0
+  docs:   2
+  src callers (file:line):
+    src/deepreason/cli/main.py:2818:        workload_spec_for_root,
+    src/deepreason/cli/main.py:2854:            spec = workload_spec_for_root(
+    src/deepreason/application/text_runs.py:416:def workload_spec_for_root(root: Path | str, *, problem_path=None, harness=None):
+    src/deepreason/application/text_runs.py:560:        spec = workload_spec_for_root(root, harness=harness)
+    src/deepreason/application/text_runs.py:823:        spec = workload_spec_for_root(
+    src/deepreason/application/text_runs.py:1587:    "workload_spec_for_root",
+
+### terminalize_text_run
+  src:    6
+  tests:  0
+  scripts:0
+  docs:   9
+  src callers (file:line):
+    src/deepreason/cli/main.py:2817:        terminalize_text_run,
+    src/deepreason/cli/main.py:2887:        payload = terminalize_text_run(
+    src/deepreason/application/text_runs.py:290:def terminalize_text_run(
+    src/deepreason/application/text_runs.py:569:        return terminalize_text_run(
+    src/deepreason/application/text_runs.py:1448:            payload = terminalize_text_run(
+    src/deepreason/application/text_runs.py:1586:    "terminalize_text_run",
+

@@ -332,3 +332,122 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     )
 
     assert _terminal_state(root) == "completed"
+
+
+def _run_subparser():
+    from deepreason.cli.main import build_parser
+
+    parser = build_parser()
+    verbs = [
+        action
+        for action in parser._actions
+        if getattr(action, "choices", None) and "run" in action.choices
+    ]
+    assert len(verbs) == 1, "the run verb must be reachable exactly once"
+    return verbs[0].choices["run"]
+
+
+def test_run_verb_parser_surface_is_byte_identical():
+    """R4: the alias keeps the verb's exact CLI surface.
+
+    Ladders and scripts call `deepreason run` unmodified across this
+    unification, so the option strings, their defaults, whether each is
+    required, and the action each takes are the contract -- not an
+    implementation detail of whichever code the verb dispatches into.
+    """
+
+    observed = tuple(
+        (
+            tuple(action.option_strings),
+            action.dest,
+            action.default,
+            action.required,
+            type(action).__name__,
+        )
+        for action in _run_subparser()._actions
+    )
+
+    assert observed == (
+        (("-h", "--help"), "help", "==SUPPRESS==", False, "_HelpAction"),
+        (("--budget",), "budget", None, True, "_StoreAction"),
+        (("--problem",), "problem", None, False, "_StoreAction"),
+        (("--token-budget",), "token_budget", None, False, "_StoreAction"),
+        (("--run-manifest",), "run_manifest", None, False, "_StoreAction"),
+        (("--dry-run",), "dry_run", False, False, "_StoreTrueAction"),
+    )
+
+
+def _failing_scheduler(problem_id: str):
+    """A scheduler stand-in that dies mid-run, after real events exist."""
+
+    def run(harness, _config, _cycles, _token_budget, **_kwargs):
+        harness.create_artifact(
+            "A conjecture recorded before the engine failed.",
+            provenance=Provenance(role="conjecturer"),
+            problem_id=problem_id,
+        )
+        raise ValueError("SCHEDULER_FIXTURE_FAILURE: provider unreachable")
+
+    return run
+
+
+@pytest.mark.parametrize(
+    ("scheduler", "expected_state", "expected_code"),
+    (
+        (_offline_scheduler, "completed", 0),
+        (_failing_scheduler, "failed", 4),
+    ),
+    ids=("completed", "failed"),
+)
+def test_run_exit_code_contract_is_run_result_exit_code(
+    tmp_path, monkeypatch, scheduler, expected_state, expected_code
+):
+    """R5: terminal outcomes exit through application.models.
+
+    The deleted dispatch returned 0 for any scheduler completion and 1 for
+    everything else, so a run that DIED left exit code 1 and no published
+    terminal at all -- indistinguishable at the process boundary from a
+    manifest that failed preflight.  The one path publishes a terminal
+    whatever happened, and `run_result_exit_code` maps it: 0 completed,
+    3 cancelled, 4 failed, 5 integrity-invalid.  The `failed` case is what
+    makes this a pin rather than a coincidence -- `completed` maps to 0
+    under both the old behavior and the new.
+    """
+
+    from deepreason.application.models import run_result_exit_code
+    from deepreason.cli.main import main
+
+    root, _manifest, problem_id, problem_file = _bind_rich_root(
+        tmp_path, name=f"exit-{expected_state}"
+    )
+    monkeypatch.setattr("deepreason.ops.run_scheduler", scheduler(problem_id))
+
+    code = main(
+        [
+            "--root", str(root), "run", "--budget", "1",
+            "--problem", str(problem_file),
+        ]
+    )
+
+    published = json.loads((root / "run-result.json").read_text(encoding="utf-8"))
+    assert published["state"] == expected_state
+    assert code == run_result_exit_code(published) == expected_code
+
+
+def test_run_preflight_refusals_still_exit_one(tmp_path, capsys):
+    """R5: a refusal raised before any terminal exists keeps exiting 1.
+
+    `run_result_exit_code` maps a published terminal; a root that never
+    reached one has no terminal to map, so the typed refusal keeps the
+    exit code every ladder already branches on.
+    """
+
+    from deepreason.cli.main import main
+
+    root, _manifest, _problem_id, _problem_file = _bind_rich_root(
+        tmp_path, name="refusal-root"
+    )
+
+    assert main(["--root", str(root), "run", "--budget", "0"]) == 1
+    assert not (root / "run-result.json").exists()
+    assert "positive cycle count" in capsys.readouterr().err
