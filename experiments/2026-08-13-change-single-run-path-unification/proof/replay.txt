@@ -1,0 +1,90 @@
+# R12 — old committed roots replay byte-unchanged
+# Tranche: 2026-08-13-change-single-run-path-unification
+# Base: origin/main fc0d75473
+
+## 1. Structural proof: no reader changed
+
+    $ git diff --stat origin/main -- src/deepreason/invariants.py \
+        src/deepreason/verification/ src/deepreason/harness.py \
+        src/deepreason/capabilities/state.py src/deepreason/run_manifest.py
+    (empty)
+
+Every replay reader and every frozen surface is byte-unchanged. This
+change deletes a WRITER path and reuses the surviving writer; CLAUDE.md's
+own rule is that a committed root's verdict can move only if the READER
+moved. That is why the 42-root sweep is not re-run here (~10 min, and the
+previous sweep IS the current answer when no reader moved) and a targeted
+report is the instrument instead.
+
+## 2. verify_root — the instrument the committed prior verdict used
+
+Prior recorded verdict, committed by the lifecycle-parity tranche after
+its amendment epoch:
+
+    $ cat experiments/2026-08-13-change-lifecycle-operation-parity/verify_root_after_amend.json
+    []
+
+After this tranche, same root, same instrument:
+
+    $ python -c "from deepreason.invariants import verify_root; ..."
+    elapsed 468.2s
+    root: experiments/2026-08-12-live-grounded-extension-expansion/run
+    violations: []
+    stats.events: 12991
+    stats.artifacts: 304
+    stats.problems: 2894
+    stats.warrants: 16
+    stats.accepted: 287
+    stats.refuted: 16
+    stats.logged_tokens: 1244594
+    stats.process.manifest_sha256:
+      8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d
+
+UNCHANGED. Zero violations before, zero after, on the largest committed
+root in the tree (12 991 events: 24 real cycles, an amendment epoch, and
+an 8-cycle continuation carrying 666 model calls and 1.24M tokens). Its
+manifest digest is also the one this tranche's acceptance fixture
+recompiles from the operator's committed run-config.yaml, so the same
+number anchors R3, R10 and R12.
+
+## 3. verify_root_report — a DIFFERENT instrument, recorded not compared
+
+CLAUDE.md: "Two instruments can disagree and both be right (verify_root
+vs verify_root_report vs the sweep) — always cite the instrument with the
+number." These channel counts have no committed prior for these roots, so
+they are recorded as observations for the next reader to compare against,
+NOT presented as a before/after:
+
+    verify_root_report(root, allow_missing_terminal=True)
+
+    experiments/2026-08-12-live-grounded-extension-expansion/run
+      valid=False  integrity_valid=True  security_valid=False
+      finding_counts={'integrity': 0, 'security': 495, 'completion': 356,
+                      'epistemic': 0, 'operational': 9}
+
+    experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752
+      valid=True   integrity_valid=True  security_valid=True
+      finding_counts={'integrity': 0, 'security': 0, 'completion': 30,
+                      'epistemic': 2, 'operational': 19}
+
+    experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc
+      valid=False  integrity_valid=False security_valid=True
+      finding_counts={'integrity': 1, 'security': 0, 'completion': 91,
+                      'epistemic': 0, 'operational': 6}
+
+The grounded root's 495 security findings are the report channel's view of
+history this tranche did not create and did not touch: the original
+epoch's attached-evidence violations are recorded in that tranche's own
+committed verify_root.json ("bound source src-... has no unique source
+record", six of them), and its RESULTS.md states they REMAIN as recorded
+history by design. verify_root — the instrument with the committed prior
+verdict — reports zero violations on the same root, because the amendment
+epoch superseded them behind its fence. Both numbers are true; they are
+answers to different questions.
+
+## Residue
+
+Two of the three roots above have no committed prior verdict under EITHER
+instrument, so for them this file establishes a baseline rather than
+proving invariance. What is proven for them is section 1: no reader they
+are read by changed.

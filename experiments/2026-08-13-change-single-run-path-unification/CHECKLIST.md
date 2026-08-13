@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=22 blockers=step 22 replay probe in flight (background pid 31239, ~11min elapsed on the 10k-event grounded root); steps 21, 23-26 done
+State: next=30 blockers=none; all steps proven, both gates green against baseline
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -404,7 +404,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       writes records exactly that digest as `run_id` in every
       `progress.jsonl` line.
 
-- [ ] 22. (S4.3) Replay proof: run `verify_root_report` READ-ONLY over the
+- [x] 22. (S4.3) Replay proof: run `verify_root_report` READ-ONLY over the
       committed grounded-extension root and two other committed roots,
       writing output to
       `experiments/2026-08-13-change-single-run-path-unification/proof/replay.txt`.
@@ -412,7 +412,30 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       matches its prior recorded verdict (the comparison stated in the
       file, not inferred)
 
-      IN FLIGHT: `verify_root_report` over the grounded-extension root is
+      PROOF: `proof/replay.txt`. The decisive line, on the largest
+      committed root in the tree (12 991 events — 24 real cycles, an
+      amendment epoch, an 8-cycle continuation, 666 model calls,
+      1 244 594 tokens):
+      ```
+      prior (committed by the lifecycle tranche):
+        verify_root_after_amend.json -> []
+      after this tranche, same root, same instrument:
+        elapsed 468.2s
+        violations: []
+        stats.process.manifest_sha256: 8e22d0431fd2b98d...
+      ```
+      UNCHANGED. Plus the structural proof that no verdict COULD move:
+      `git diff --stat origin/main -- invariants.py verification/
+      harness.py capabilities/state.py run_manifest.py` is EMPTY — every
+      replay reader and every frozen surface is byte-identical. Two other
+      committed roots are recorded under `verify_root_report`, which is a
+      DIFFERENT instrument with no committed prior for them; the file says
+      so and calls that a baseline, not a comparison. The 42-root sweep is
+      not re-run, for the reason CLAUDE.md gives: a committed root's
+      verdict can move only if the reader moved, and no reader moved.
+
+      NOTE on the earlier delay: `verify_root_report` over the grounded
+      root is
       genuinely expensive -- that root carries ~10k events (24 real
       cycles, an amendment epoch, and an 8-cycle continuation with 181
       model calls), and replay is O(run length). Launched detached
@@ -471,28 +494,59 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       tool set/schema sha are untouched by an application-layer
       consolidation.
 
-- [ ] 27. (S4, S5) [COMMIT] Commit and push commit 3.
+- [x] 27. (S4, S5) [COMMIT] Commit and push commit 3.
       done-when: `git status --porcelain` empty AND branch head is on
       origin
+
+      PROOF: commit 3 pushed (run-identity proof, ERRATA E26, CLAUDE.md's
+      mechanism sentence, wheel smoke, out-of-scope diff proof).
 
 ---
 
 ## Close — the gates
 
-- [ ] 28. (all) Map gate, FULL mode (not `--fast`; `--fast` reuses cached
+- [x] 28. (all) Map gate, FULL mode (not `--fast`; `--fast` reuses cached
       results and cannot see what a `src/` change just broke).
       done-when: `python tools/docs_verify.py` failures == the
       `docs/AUDIT_BASELINES.md` baseline (3 `CON-run-identity.md`
       git-history failures on a shallow clone, 0 others), pasted; and
       `python tools/docs_verify.py --audit` reports 0 findings
 
-- [ ] 29. (all) Full gate, on an otherwise idle box (never concurrently
+      PROOF (FULL mode, not --fast):
+      ```
+      docs_verify [full]: 53 documents, 868 checks, 4 workers
+        FAIL CON-run-identity.md:200  (git log -M --diff-filter=R ...)
+        FAIL CON-run-identity.md:202  (git log -1 1637e808 ...)
+        FAIL CON-run-identity.md:204  (git show f304fec1 ...)
+      docs_verify: 3 failed
+
+      docs_verify --audit: 0 finding(s)
+      ```
+      All three are the git-history checks that need an unshallowed clone
+      — the exact AUDIT_BASELINES baseline. Delta 0. `--audit` at 0
+      findings means the checks added in this tranche are capable of
+      failing, which the mutation proofs at steps 3, 17 and 19 showed
+      individually.
+
+- [x] 29. (all) Full gate, on an otherwise idle box (never concurrently
       with `docs_verify` — both fan out workers and the contention
       manufactures failures).
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed
       beyond the single baseline failure
       `tests/test_bronze_report.py::test_census_totals_internally_consistent`
       (`docs/AUDIT_BASELINES.md`); output pasted
+
+      PROOF:
+      ```
+      FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+        assert 159 == 165
+      1 failed, 3562 passed, 7 skipped in 1003.05s (0:16:43)
+      ```
+      Delta 0 against baseline: that one failure is the parked
+      pre-existing census inconsistency (diagnosis prompt in
+      `experiments/2026-08-09-change-judge-evidence-review/PARKED.md` P1).
+      None of the known -n 4 flakes fired. Run on an idle box, with no
+      docs_verify or root sweep concurrent.
 
 - [ ] 30. (all) [COMMIT] Final push and clean-tree confirmation.
       done-when: `git status --porcelain` empty AND
