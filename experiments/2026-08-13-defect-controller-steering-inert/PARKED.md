@@ -118,3 +118,112 @@ refuses checks that cannot fail), and run `python tools/docs_verify.py`
 full plus `--links` and `--audit`. Read docs/map/SCHEMA.md before writing.
 No src/ change is expected; if one is needed, that is a stop.
 ```
+
+## P3 — a criterion added to main after 2026-08-12 may be starving cycle-0 conjecture
+
+WHAT: three live epochs of the grounded configuration, launched today,
+all died at cycle 0 with `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` — the
+conjecturer seat exhausting its contract decomposition ladder. The same
+compiled configuration (identical `manifest_sha256`
+`8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d`) ran
+24 cycles on 2026-08-12.
+
+The prompts explain it, and the difference is NOT this tranche's change.
+Comparing the first conjecturer prompt in each root:
+
+    grounded root (2026-08-12, ran 24 cycles) — 25,544 bytes:
+        ## criteria
+        CRITERIA (commitments every candidate will carry and face):
+                                        <-- EMPTY
+
+    epoch-3 root (2026-08-13, died cycle 0) — 27,655 bytes:
+        ## criteria
+        CRITERIA (commitments every candidate will carry and face):
+        - reasoning-envelope-wf: program:reasoning-envelope-wf
+
+Every candidate must now carry an extra pinned program commitment that
+did not exist for the grounded run. `reasoning-envelope-wf` is defined on
+`origin/main` (`src/deepreason/workloads/text.py:296-297`,
+`src/deepreason/programs.py:296`, evaluated via
+`workloads/text.py::reasoning_wf_program`) and was introduced by commit
+`20f50bbfc`, a different tranche. This tranche's diff against
+`origin/main` contains ZERO occurrences of it:
+
+    git diff origin/main -- src/ | grep -c "reasoning-envelope-wf"   # 0
+
+Contract outcomes, grounded vs here — the deviation is sharp:
+
+    grounded root:  conjecturer.atomic-candidate.v1  n=6   invalid=0
+                    conjecturer.turn.v6              n=43  invalid=2
+    epochs 1-3:     conjecturer.atomic-candidate.v1  invalid on EVERY attempt
+
+Also observed, same window: the production-contract doctor failed
+qualification twice in a row on pre-fix code
+(`REPAIR_SCOPE_VIOLATION`, then `alias_failures=1`) while passing three
+times on the fixed code. Both are model-output failures; together they
+say the whole provider surface is noisier than on 2026-08-12, so
+`reasoning-envelope-wf` is a HYPOTHESIS the record supports, not a
+proven cause. Distinguishing "harder criterion" from "provider drift"
+is exactly what the parked tranche must do first.
+
+Why parked: this tranche's one goal is that the steering loop fires,
+which is proven. A regression in another tranche's committed change is a
+separate defect with a separate blast radius. One tranche, one goal.
+
+### Ready-to-send prompt
+
+```
+Defect tranche: the grounded configuration no longer survives cycle 0.
+Three live epochs on 2026-08-13 died with
+V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY on a configuration that ran 24
+cycles on 2026-08-12. Route through deepreason-orchestrator; diagnosis
+from the typed record BEFORE code.
+
+SETUP (fresh container): git fetch origin main && git checkout -B
+claude/cycle-zero-conjecture-starvation-<slug> origin/main; pip install
+-e . --break-system-packages -q; pip install pytest pytest-xdist
+jsonschema --break-system-packages -q. Use `python -m pytest`, never
+bare pytest. Read CLAUDE.md in full; load dr-drive-harness,
+dr-explain-to-operator. An OLLAMA_API_KEY in a gitignored
+experiments/*/env is required for the live half.
+
+EVIDENCE (committed, verify then extend): four roots, same
+manifest_sha256 8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013
+a80989d.
+  survived 24 cycles: experiments/2026-08-12-live-grounded-extension-
+    expansion/run
+  died at cycle 0:    experiments/2026-08-13-defect-controller-steering-
+    inert/failed-epoch{1,2,3}-run-8e22d0431fd2b98d
+Read the diagnostic blobs FIRST (CLAUDE.md's cycle-0 rule — both recorded
+cycle-0 deaths so far were misattributed by readers who skipped them).
+The epoch blobs say: conjecturer.turn.v6 truncated at the full 16384 cap
+'CUT OFF mid-JSON'; the compact retry returned {} 'requires at least one
+meaningful outcome'; conjecturer.atomic-candidate.v1 then failed with
+'no complete top-level JSON value at offset 0' and 'atomic reasoning
+conjecture requires exactly one candidate or abstention'.
+
+LEADING HYPOTHESIS, not yet proven: the first conjecturer prompt gained a
+pinned commitment between the two dates —
+'- reasoning-envelope-wf: program:reasoning-envelope-wf' — where the
+grounded run's criteria block was empty. Introduced by commit 20f50bbfc
+(src/deepreason/workloads/text.py:296, programs.py:296). Reproduce the
+prompt diff before trusting this sentence.
+
+RIVAL HYPOTHESIS you must kill or confirm: provider drift. In the same
+window the production-contract doctor failed qualification twice on
+UNMODIFIED origin/main code (REPAIR_SCOPE_VIOLATION; alias_failures=1).
+A run of the grounded config on the 2026-08-12 commit, today,
+distinguishes the two: if it also dies, the cause is the provider, not
+the criterion.
+
+SCOPE LINE: the token-steering controller is OUT of scope — fixed in
+experiments/2026-08-13-defect-controller-steering-inert/, and ruled out
+here by the record (every attempt_trace at max_tokens=16384, zero policy
+artifacts, verify_root [] on all three roots).
+
+ONE GOAL: the grounded configuration reaches cycle 1 again, or the record
+says in typed form why it may not.
+
+TESTS: regression naming the epoch run ids; ring while iterating, full
+gate at the boundary; docs_verify full; map moves same-commit.
+```
