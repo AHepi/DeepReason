@@ -17,3 +17,6 @@
 [2026-08-13T21:47:25Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-13T21:51:14Z] QUALIFY OK rc=0
 [2026-08-13T21:51:14Z] === REASON: deepreason run --budget cycles=6 --token-budget 150000 ===
+[2026-08-13T21:54:44Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/reason.log and /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/reason.stderr.log (a non-zero rc here can still be a typed stop; audit before treating as failure)
+[2026-08-13T21:54:44Z] === AUDIT: verify_root + findings + the steering evidence ===
+[2026-08-13T21:54:49Z] === DONE: see /home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/{reason.log,verify_root.json,steering_evidence.txt} ===

@@ -1,0 +1,188 @@
+{
+  "branches": [
+    {
+      "description": "connect isolated 04b7f1fde03d to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:04b7f1fde03d",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 0abd8390992c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:0abd8390992c",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 52b7f9c67b79 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:52b7f9c67b79",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 6706bba0f1c6 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:6706bba0f1c6",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated cbd544306348 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:cbd544306348",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated ebd6461c4c88 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:ebd6461c4c88",
+      "trigger": "connection"
+    },
+    {
+      "description": "discriminate between 12 surviving rivals for question-6fcc770419da1e9c8fccb2db8ed32bbe",
+      "positions_addressing": 0,
+      "problem": "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe",
+      "trigger": "discrimination"
+    },
+    {
+      "description": "Propose innovative ways to expand and strengthen DeepReason's grounded extension \u2014 the skeptical fixed-point semantics (spec \u00a74, Pass 1) by which conjectures are accepted, refuted, or suspended \u2014 such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.",
+      "positions_addressing": 12,
+      "problem": "question-6fcc770419da1e9c8fccb2db8ed32bbe",
+      "trigger": "seed"
+    }
+  ],
+  "capabilities": {
+    "citations": {},
+    "consumed_packages": 0,
+    "fetched": [],
+    "proposals": []
+  },
+  "criticism": {
+    "attacks_on_refuted": 0,
+    "attacks_recorded": 0,
+    "coverage_debt_records": 0,
+    "criticism_attempts": 0
+  },
+  "positions": {
+    "accepted": [
+      {
+        "claim": "source-reliability: attached source src-2e640db15637b4accdefca27066acfb7e31dfb48 at /home/user/DeepReason/experiments/2026-08-08-corpus-enrichment-patrol-pilot/PATROL_DETERMINISM_REPORT.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "2659074fb578",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "2e640db15637b4accdefca27066acfb7e31dfb489fb762fcc177e1d8cf6f0c7f",
+        "id": "2b692ac9c8a2",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "source-reliability: attached source src-8ddb400f3c2d52a681266c7cebc3b1898bac6750 at /home/user/DeepReason/docs/map/CON-warrants-and-attacks.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "e71838dd527c",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "8ddb400f3c2d52a681266c7cebc3b1898bac67501aeb85afa4a794417f6642a6",
+        "id": "0c06128933f9",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "source-reliability: attached source src-9116c8592387ce22d436cde600d77077d2b08176 at /home/user/DeepReason/docs/harness-spec-v1.3.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "794d63f1076e",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "9116c8592387ce22d436cde600d77077d2b08176225f49d1c01613eb8dfb5ca8",
+        "id": "ec8dd8c3293b",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "source-reliability: attached source src-95e7a2acb742b1d6187b173fa9fb61c145772881 at /home/user/DeepReason/docs/STATE_OF_THE_THEORY.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "699bc8acf57d",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "95e7a2acb742b1d6187b173fa9fb61c1457728816dff522eaf0d466714121247",
+        "id": "1b06927182b5",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "source-reliability: attached source src-a79fb57bd1b49204765e85b5cf8437e94657bfe1 at /home/user/DeepReason/docs/map/SUB-adjudication.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "efcb7a54b6df",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "a79fb57bd1b49204765e85b5cf8437e94657bfe15f9daa7d3e374a0f485322a9",
+        "id": "45165c12b67a",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "source-reliability: attached source src-ce2f8390bf7df6463ed620e3f6c08a7c277e116f at /home/user/DeepReason/docs/proposals/GROUNDED_OVERLAY_PREPLAN.md is a sound source for evidence on question-6fcc770419da1e9c8fccb2db8ed32bbe; this assertion is attackable and attachment does not establish it",
+        "id": "9833979ac2ca",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "ce2f8390bf7df6463ed620e3f6c08a7c277e116fbdd3fc01fa76624efd83aef7",
+        "id": "828baef655cb",
+        "problems": [
+          "question-6fcc770419da1e9c8fccb2db8ed32bbe"
+        ],
+        "role": "import"
+      }
+    ],
+    "refuted": [],
+    "suspended": []
+  },
+  "question": "Propose innovative ways to expand and strengthen DeepReason's grounded extension \u2014 the skeptical fixed-point semantics (spec \u00a74, Pass 1) by which conjectures are accepted, refuted, or suspended \u2014 such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.",
+  "rivalries": [
+    {
+      "problem": "question-6fcc770419da1e9c8fccb2db8ed32bbe",
+      "rival_count": 6,
+      "rivals": [
+        "2b692ac9c8a2",
+        "0c06128933f9",
+        "ec8dd8c3293b",
+        "1b06927182b5",
+        "45165c12b67a",
+        "828baef655cb"
+      ]
+    }
+  ],
+  "root": "/home/user/DeepReason/experiments/2026-08-13-defect-controller-steering-inert/run",
+  "run": {
+    "cycle": 0,
+    "message": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 150000,
+    "token_spend": 0
+  },
+  "schema": "deepreason-findings.v1",
+  "starved_branches": [
+    "conn:04b7f1fde03d",
+    "conn:0abd8390992c",
+    "conn:52b7f9c67b79",
+    "conn:6706bba0f1c6",
+    "conn:cbd544306348",
+    "conn:ebd6461c4c88",
+    "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe"
+  ]
+}
