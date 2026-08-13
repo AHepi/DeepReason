@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "SRC_009's threshold-placement validity rule contradicts SRC_008's 'no new accepted attacker on a root' reduction: with bounded integer attack weights, SRC_009 guarantees committed-root validity iff τ strictly exceeds the weight of every attack edge incident to the root, while SRC_008's single load-bearing check is label-based and weight-blind. The causal mechanism diverges because enrichment among non-root nodes can flip a weight-<τ attacker to accepted in the grounded extension, so SRC_009's guarantee fails while SRC_008's check passes — the two foundations disagree on the same run. REFUTED IF there exists a weighted graph and an admissible enrichment where every attack edge incident to a committed root has weight < τ yet the root's validity flips to invalid, or where SRC_008's check certifies a run SRC_009's rule rejects.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_009", "SRC_008"]
+    },
+    {
+      "content": "SRC_011's case-calibrated attack-edge construction reduces to SRC_008's admissible enrichment: the library of committed runs and per-case-family calibration of build_att is exactly a policy for choosing one admissible enrichment among many, and the validity guarantee is a corollary of SRC_008's 'no new accepted attacker on a root' check. The causal mechanism is shared — both are pure, deterministic, polynomial monotone functions on the non-committed-root subgraph; the case library selects which enrichment, never the fixpoint. REFUTED IF a case family in SRC_011 requires adding an edge incident to a committed root (outside SRC_008's allowed enrichment domain), or if two anchors in the library force conflicting edge constructions on the same graph so the enrichment is not a pure function.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_011", "SRC_008"]
+    },
+    {
+      "content": "SRC_009's bounded-integer thresholded labeling is compatible with SRC_005's bounded-depth auxiliary-chain support encoding: encode each auxiliary node z_i with unit weight and require τ > 1, so support propagation is a special case of thresholded attack and the deterministic fixpoint is unchanged. The causal mechanism is graded attack strength expressed syntactically rather than in the fixpoint — weights grade by magnitude-vs-τ, chains grade by depth. REFUTED IF there is a support graph whose auxiliary-chain encoding yields a different grounded extension than the direct support semantics for some τ in the allowed range, or if the chain encoding forces τ placement that violates the committed-root rule.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_009", "SRC_005"]
+    },
+    {
+      "content": "SRC_004's suspend_reason diagnostic depends on SRC_008's monotone-enrichment invariance to be well-defined: the diagnostic labels each undecided node's reason after the grounded fixpoint, and that label is graph-determined only if admissible enrichment cannot change the undecided set. The causal mechanism is fixpoint invariance under monotone edge addition among non-root nodes — the diagnostic inherits its determinism from the fixpoint, not from the greedy scan, which is exactly the target of SRC_012's order-dependence objection. REFUTED IF there exist two admissible enrichments of the same graph producing different undecided sets, or if SRC_012's enumeration-order counterexample already shows suspend_reason is not graph-determined.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_004", "SRC_008", "SRC_012"]
+    },
+    {
+      "content": "SRC_009's integer weights and SRC_005's auxiliary chains share a shared mechanism: both encode graded edge strength as syntax layered on an unchanged Dung fixpoint, keeping the grounded extension deterministic and polynomial, and turning validity into a placement/threshold rule rather than a graph check. Abstracted, any graded relation expressible as bounded-depth auxiliary generation or bounded integer weight is the same causal mechanism of syntactic grading. REFUTED IF there is a graded-attack semantics expressible in one encoding that the other cannot simulate within its bounded resources, so the two encodings differ in expressive power over grounded extensions.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_009", "SRC_005"]
+    },
+    {
+      "content": "SRC_010's structural closure family, SRC_005's support chains, and SRC_008's admissible enrichment abstracts to one mechanism: monotone, pure, polynomial graph transformations that add attack edges or nodes among non-committed-root material and leave the grounded fixpoint provenance-blind. The causal mechanism is that all three are pre-fixpoint syntactic expansions whose only load-bearing validity constraint is that no accepted attacker reaches a committed root. REFUTED IF the grounded extension distinguishes an edge or node by provenance (auxiliary vs primitive vs enrichment-generated), or if any of the three transformations generates an edge incident to a committed root, breaking the shared abstraction.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_010", "SRC_008", "SRC_005"]
+    }
+  ]
+}

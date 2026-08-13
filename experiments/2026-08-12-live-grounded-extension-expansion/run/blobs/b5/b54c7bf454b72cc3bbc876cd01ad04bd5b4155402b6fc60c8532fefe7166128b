@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 claims every admissible derived diagnostic is a polynomial-time total function of the unique final grounded labeling and the admitted graph. The refutation condition it specifies — existence of a diagnostic needing a pre-fixpoint label, non-final labeling, or absent edge — is too narrow to defend the covering principle. A diagnostic can be a deterministic polynomial-time function of the final (labels, edges) pair yet fail to be a post-fixpoint annotation of that pair (e.g., it could inspect the final labels but compute something that is not an annotation on the admitted graph's nodes). By formulating the refutation clause around impurity (dependence on pre-fixpoint or absent-edge data) rather than around failing to be an annotation, the abstraction fails to establish its stated covering principle: post-fixpoint determinism does not imply post-fixpoint annotationhood.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

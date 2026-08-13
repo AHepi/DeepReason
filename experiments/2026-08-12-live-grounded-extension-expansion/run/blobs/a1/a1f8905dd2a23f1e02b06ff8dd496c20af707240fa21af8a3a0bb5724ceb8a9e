@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "SRC_001 proposes a substantive dependence relation: the threshold-placement rule of SRC_010 depends on SRC_009's admissible-enrichment framing. It states what the relation is (bounded integer weights = admissible enrichment adding one attacker per weight unit; τ > every root-edge weight ⟺ no enrichment adds an attacker to a committed root) and gives a concrete refutation condition (a weighted graph where τ exceeds all root-edge weights yet some monotone enrichment adds an attacker without exceeding τ). It is not a summary of endpoints; it names the kind (dependence) and the failure condition."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 proposes a substantive contradiction relation: SRC_006's bounded-depth lookahead counterexample contradicts SRC_010's monotone τ-sweep fixpoint. It states what the relation is (any grounded-extension-respecting promotion of UNDECIDED nodes is monotone, so the counterexample depends on a non-monotone edge synthesis step) and gives a concrete refutation condition (a monotone bounded-depth lookahead preserving the no-new-attacker-on-root condition that changes the grounded status of a non-root node). It is not a summary of endpoints; it names the kind (contradiction) and the failure condition."
+    }
+  ]
+}
+```
