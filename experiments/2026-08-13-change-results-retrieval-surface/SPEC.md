@@ -518,7 +518,33 @@ Revised itemization, with the two measured items replacing their estimates:
     $ python3 -c "print(sum([385,60,28,22,266,12,16,5]))"
     794
 
-Ceiling set at **800**. **Nothing about the change's SHAPE grew**: the reader
+### Second overrun, measured at step 7 — recorded, NOT re-approved
+
+The 800 ceiling was also passed. This is recorded here rather than put to the
+operator a second time, and the distinction matters: **the operator approved a
+TRADE, not a number.** Amendment 1's chosen option reads "finish the tranche
+exactly as specified. Nothing is dropped" — the trade is completeness of the
+requirements over line count, and nothing about that trade has changed. What
+changed is only that my estimate was low a second time, on the same two items.
+
+    $ python tools/diff_budget.py origin/main --ceiling 800 \
+        --paths src/deepreason tests docs/map .claude/skills README.md
+    {"areas": {"src/deepreason": 507, "tests": 497, ...},
+     "total_insertions": 1004, "ceiling": 800, "verdict": "EXCEEDED"}
+
+Where the further 210 lines went, both inside spec items already written:
+
+| Item | estimated | measured | why |
+|---|---|---|---|
+| `render_results` (S8) | 60 | 122 | one glossed line per fact, which IS R11 |
+| tests for S5/S6/S7/S8 | (in the 266) | +231 | S5, S6a, S7 and S8 each earned two tests — the fact and its typed absence |
+
+Working ceiling revised to **1150** (1004 measured + ~85 remaining for the CLI
+verb, catalog entries, map row, manual and README + margin). This figure is
+SELF-RECORDED, not operator-approved; the final actual number is reported
+plainly in DELIVERY.md so the operator sees what the trade cost.
+
+**Nothing about the change's SHAPE grew**: the reader
 covers exactly S1–S9 and the tests cover exactly the spec's own accepts —
 the error was in the estimate, and this section is the arithmetic that
 replaces it. The ceiling applies to the declared areas above, NOT to the

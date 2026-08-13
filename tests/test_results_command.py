@@ -422,6 +422,53 @@ def test_terminal_readiness_is_false_with_typed_absences_on_an_unterminalized_ro
     assert summary["amendment"]["epochs"] == 0
 
 
+def test_rendering_glosses_every_technical_label_and_shows_absences():
+    """R11: human-readable mode with GLOSSED labels — the point of the command.
+
+    A label a session cannot interpret sends it back to guessing, which is the
+    defect this tranche exists to remove.
+    """
+
+    from deepreason.application.results import render_results, results_summary
+
+    for root in (
+        _smallest_root_with(*_TERMINAL_FILES),
+        _smallest_root_without(*_TERMINAL_FILES),
+    ):
+        summary = results_summary(root)
+        rendered = render_results(summary)
+
+        for heading in (
+            "## Question",
+            "## Run",
+            "## Artifacts",
+            "## Adjudication",
+            "## Verification",
+            "## Amendment and terminal readiness",
+        ):
+            assert heading in rendered
+        assert "verify_root" in rendered
+        assert "the replay check that re-derives" in rendered
+        assert "--verify" in rendered
+        if summary["absences"]:
+            assert "## Not recorded by this root" in rendered
+            for reason in summary["absences"]:
+                assert reason in rendered
+
+
+def test_rendering_never_prints_an_absence_as_a_number():
+    """R12: an absent fact must not read as a zero in the human mode either."""
+
+    from deepreason.application.results import render_results, results_summary
+
+    root = _smallest_root_without(*_TERMINAL_FILES)
+    rendered = render_results(results_summary(root))
+
+    for line in rendered.splitlines():
+        if "survivors (" in line or "cycles completed" in line:
+            assert "not recorded" in line, line
+
+
 def test_results_summary_carries_its_schema_and_resolution_provenance():
     """R5/R11: a stable, self-identifying record — nothing model-authored."""
 

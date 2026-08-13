@@ -360,6 +360,105 @@ def _terminal(replay: dict | None, stop: dict | None) -> dict[str, Any]:
     }
 
 
+def _show(value: Any) -> str:
+    """One fact, rendered so an absence reads as an absence rather than a zero."""
+
+    if _is_absent(value):
+        return f"— not recorded ({value['reason']})"
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, dict):
+        return ", ".join(f"{k}={v}" for k, v in value.items()) if value else "none"
+    return str(value)
+
+
+def render_results(summary: dict[str, Any]) -> str:
+    """The summary as reader-facing text, every technical label glossed in place.
+
+    The gloss is the point, not decoration: this command exists because a
+    session confronted with scattered root files invents an interface instead
+    of reading one. A label nobody can interpret sends them back to guessing.
+    """
+
+    run = summary["run"]
+    artifacts = summary["artifacts"]
+    verification = summary["verification"]
+    terminal = summary["terminal"]
+    adjudication = summary["adjudication"]
+
+    lines = [
+        f"# Results for {summary['root']}",
+        f"  (resolved from a {summary['resolved_from']})",
+        "",
+        "## Question",
+        f"  {_show(summary['question'])}",
+        "",
+        "## Run",
+        f"  run id (the deterministic identity of this run): "
+        f"{_show(summary['identity']['run_id'])}",
+        f"  state: {_show(run['state'])}",
+        f"  stop_reason (the typed reason it ended, never a crash): "
+        f"{_show(run['stop_reason'])}",
+        f"  cycles completed: {_show(run['cycles_completed'])}",
+        f"  tokens spent vs budget: {_show(run['token_spend'])} / "
+        f"{_show(run['token_limit'])}",
+        f"  manifest (the compiled configuration the run carries) present: "
+        f"{_show(summary['identity']['manifest_present'])}, schema version "
+        f"{_show(summary['identity']['manifest_schema_version'])}",
+        "",
+        "## Artifacts",
+        f"  accepted / refuted / suspended: {_show(artifacts['accepted'])} / "
+        f"{_show(artifacts['refuted'])} / {_show(artifacts['suspended'])}",
+        f"  survivors (positions still standing at the end): "
+        f"{_show(artifacts['survivor_count'])}",
+        f"  frontier (the open edge of the inquiry): "
+        f"{_show(artifacts['frontier']['count'])} artifacts, problem "
+        f"{_show(artifacts['frontier']['problem_id'])}",
+    ]
+    ids = artifacts["frontier"]["artifact_ids"]
+    if isinstance(ids, list) and ids:
+        preview = ", ".join(entry[:12] for entry in ids[:_FRONTIER_PREVIEW])
+        more = len(ids) - _FRONTIER_PREVIEW
+        lines.append(f"    {preview}" + (f" (+{more} more)" if more > 0 else ""))
+
+    lines += [
+        "",
+        "## Adjudication (defended trials — a criticism argued and judged)",
+        f"  ran: {_show(adjudication['ran'])}",
+        f"  judge calls: {_show(adjudication['judge_calls'])}",
+        f"  trial verdicts observed: {_show(adjudication['trial_observations'])}",
+        f"  trials declined (the case did not sustain): "
+        f"{_show(adjudication['trial_declined'])}",
+        f"  trials blocked by a guard: {_show(adjudication['trial_blocked'])}",
+        "",
+        "## Verification",
+        f"  verify_root verdict (the replay check that re-derives the whole run "
+        f"from its log and confirms nothing in the record is corrupt or "
+        f"altered): {_show(verification['valid'])}",
+        f"  read from: {_show(verification['source'])} "
+        f"(pass --verify to re-derive it instead of reading the stored verdict)",
+        f"  violations: {_show(verification['violations'])}",
+        f"  finding families: {_show(verification['families'])}",
+        "",
+        "## Amendment and terminal readiness",
+        f"  amendment epochs (later question/evidence appended without editing "
+        f"anything): {_show(summary['amendment']['epochs'])}",
+        f"  stands at a valid typed terminal: "
+        f"{_show(terminal['valid_typed_terminal'])} (terminal epoch "
+        f"{_show(terminal['terminal_epoch'])})",
+        f"  stop reason is resumable: {_show(terminal['stop_reason_resumable'])}",
+        f"  ready for `deepreason amend` / `deepreason continue`: "
+        f"{_show(terminal['amend_ready'])}",
+    ]
+    if summary["absences"]:
+        lines += [
+            "",
+            "## Not recorded by this root",
+            *(f"  {reason}" for reason in summary["absences"]),
+        ]
+    return "\n".join(lines)
+
+
 def _collect_absences(value: Any, into: set[str]) -> None:
     if _is_absent(value):
         into.add(str(value.get("reason")))
