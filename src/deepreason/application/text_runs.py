@@ -778,6 +778,68 @@ class TextRunApplicationService:
             credential_checker=credential_checker,
         )
 
+    def start_manifest_run(
+        self,
+        *,
+        root: Path | str,
+        manifest,
+        problem_path: Path | str | None = None,
+        cycles,
+        token_budget=None,
+        progress_callback: Callable[[dict], None] | None = None,
+        credential_checker: Callable[[Any], list[str]] = missing_manifest_credentials,
+    ) -> RunStartedV1:
+        """Start a run from a manifest and a root the caller already holds.
+
+        The entry for every configuration a compiled manifest can express
+        — role ensembles, route-bound seats, adjudication policy — none of
+        which this method or ``_launch``
+        inspects.  That is why no configuration the compiler emits can be
+        refused here for its SHAPE: whatever ``start`` refuses this
+        refuses identically, because it IS ``start``.  A second entry that
+        validated manifests of its own would be the second admission gate
+        this consolidation exists to remove.
+        """
+
+        from deepreason.application.intents import start_text_run_intent
+        from deepreason.run_manifest import (
+            MANIFEST_NAME,
+            RunManifest,
+            load_run_manifest,
+        )
+
+        root = Path(root).resolve()
+        held = isinstance(manifest, RunManifest)
+        resolved = manifest if held else load_run_manifest(manifest)
+        # Reconstructing a spec from the frozen run input needs the
+        # registered commitments, and read-only is the only admissible
+        # way to read them here: `_launch`, not this method, decides
+        # whether the root may be written to at all.
+        harness = None
+        if (root / "log.jsonl").exists():
+            from deepreason.harness import Harness
+
+            harness = Harness(root, read_only=True)
+        spec = workload_spec_for_root(
+            root,
+            problem_path=None if problem_path is None else Path(problem_path),
+            harness=harness,
+        )
+        return self.start(
+            start_text_run_intent(
+                root=str(root),
+                workload=spec,
+                run_manifest_ref=str(root / MANIFEST_NAME if held else manifest),
+                cycles=cycles,
+                # An absent ceiling is "unlimited" in the intent
+                # vocabulary; `run --token-budget` spells it as None.
+                token_budget="unlimited" if token_budget is None else token_budget,
+            ),
+            progress_callback=progress_callback,
+            credential_checker=credential_checker,
+            manifest_override=resolved,
+        )
+
     def continue_run(
         self,
         intent: ContinueTextRunIntentV1,

@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=3 blockers=none
+State: next=8 blockers=none
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -60,7 +60,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       4 failed in 2.81s
       ```
 
-- [ ] 3. (S1.1) Implement `TextRunApplicationService.start_manifest_run`
+- [x] 3. (S1.1) Implement `TextRunApplicationService.start_manifest_run`
       in `src/deepreason/application/text_runs.py` per SPEC.md S1.1
       (manifest object OR path; `workload_spec_for_root` with a read-only
       harness only when `log.jsonl` exists per A7; `token_budget=None` →
@@ -70,7 +70,19 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       exits 0 AND `python -c "from deepreason.application.text_runs import TextRunApplicationService as S; assert hasattr(S, 'start_manifest_run')"`
       exits 0
 
-- [ ] 4. (S1.1) Export `start_manifest_run` reachability from
+      PROOF:
+      ```
+      GREP OK
+      ATTR OK
+      ```
+      The method resolves the manifest (object or path), resolves the
+      workload read-only, translates an absent ceiling, and delegates to
+      `start`. It inspects nothing about the manifest -- pinned by a new
+      `check:` in `docs/map/SUB-application.md`, mutation-proved:
+      injecting `manifest.criticism_policy` into the method body takes the
+      check to rc=1, removing it returns rc=0.
+
+- [x] 4. (S1.1) Export `start_manifest_run` reachability from
       `src/deepreason/application/__init__.py` — no new name is exported
       if the service object already carries the method; confirm which,
       and if `__all__` there needs no change, record that as the
@@ -78,19 +90,59 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `python -c "from deepreason.application import TEXT_RUN_SERVICE; assert callable(TEXT_RUN_SERVICE.start_manifest_run)"`
       exits 0
 
-- [ ] 5. (S1) Ring green for the new door.
+      PROOF:
+      ```
+      SERVICE OK
+      ```
+      `src/deepreason/application/__init__.py` needed NO edit: the method
+      hangs off the already-exported `TEXT_RUN_SERVICE` singleton, so
+      there is no new module-level name to export. Recorded rather than
+      edited, per the step's own instruction.
+
+- [x] 5. (S1) Ring green for the new door.
       done-when: `python -m pytest tests/test_single_run_path.py -q` ends
       `4 passed` (pasted)
 
-- [ ] 6. (S1) Ring green for the existing managed path — the new entry
+      PROOF:
+      ```
+      ....                                    [100%]
+      4 passed in 22.65s
+      ```
+
+- [x] 6. (S1) Ring green for the existing managed path — the new entry
       must not have disturbed it.
       done-when: `python -m pytest tests/test_application_text_runs_d0.py tests/test_v6_only_application_admission.py tests/test_lifecycle_operation_parity.py -q`
       ends `0 failed` (pasted)
 
-- [ ] 7. (S1) [COMMIT] Commit and push commit 1 (the door, its tests, no
+      PROOF:
+      ```
+      ..................................................    [100%]
+      50 passed in 28.49s
+      ```
+
+- [x] 7. (S1) [COMMIT] Commit and push commit 1 (the door, its tests, no
       deletion yet).
       done-when: `git status --porcelain` empty AND
       `git rev-parse HEAD` == `git rev-parse origin/claude/single-run-path-unification-bhn2ob`
+
+      PROOF: see the commit below. Map moved in this same commit
+      (`docs/map/SUB-application.md`) because step 3 added a public entry
+      point, which is a surface change, not a later documentation chore.
+
+      One map-gate incident inside this step, recorded because it is the
+      form-brittleness `SCHEMA.md` warns about: the new method's DOCSTRING
+      contained the word "school", which moved
+      `SEAM-manifest-x-schools.md`'s coupling census from 24 to 25 files
+      and failed that document's check. Fixed by rewording the docstring
+      (role ensembles / route-bound seats / adjudication policy), NOT by
+      editing another subsystem's expected count -- a prose word must not
+      be able to change a coupling measurement.
+      ```
+      $ python -u tools/docs_verify.py --failed
+      docs_verify: 3 failed
+      # all three CON-run-identity.md git-history checks, the exact
+      # docs/AUDIT_BASELINES.md baseline for a shallow clone. Delta = 0.
+      ```
 
 ---
 
