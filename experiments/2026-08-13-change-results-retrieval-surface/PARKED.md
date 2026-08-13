@@ -115,3 +115,80 @@ tools/docs_verify.py full (3 pre-existing CON-run-identity git-history failures
 are baseline on a shallow clone — docs/AUDIT_BASELINES.md), plus --links and
 --audit.
 ```
+
+---
+
+## P3 — `results_summary` replays the log twice per call
+
+**What.** Found 2026-08-13 answering an operator question after delivery, by
+counting `Harness.__init__` calls:
+
+```
+python - <<'PY'
+import deepreason.harness as H
+calls = []
+orig = H.Harness.__init__
+def counting(self, *a, **k):
+    calls.append((str(a[0])[-30:], k.get("read_only"))); return orig(self, *a, **k)
+H.Harness.__init__ = counting
+from deepreason.application.results import results_summary
+results_summary("<any committed root>")
+print(len(calls), calls)
+PY
+```
+
+→ `2 Harness opens`. `results_summary` opens one read-only harness for the
+adjudication walk, and `findings.findings_summary` opens a second for the
+status counts. Each open is a full replay, O(run length).
+
+Two consequences, neither a correctness bug on a FINISHED root (which is
+immutable, so both replays see identical bytes):
+
+1. **Cost.** Two full replays where one would do. On the largest committed root
+   (6.5 MB log) that is the difference between one and two multi-second reads.
+2. **Snapshot skew on a LIVE root.** Against a run still appending, the two
+   replays and the sidecar reads happen at different instants, so the reported
+   numbers can straddle a cycle boundary. Nothing crashes and nothing is
+   corrupt — the figures are each true of the moment they were read, but not
+   necessarily of one single moment.
+
+This was not a requirement of the results-retrieval tranche and is not a defect
+in what it delivered; R4 asked that `findings_summary` be COMPOSED rather than
+duplicated, and composing it via its public function is what produced the
+second open.
+
+**Prompt to send:**
+
+```
+Change tranche: make `deepreason results` replay a run's log once, not twice.
+Route through dr-change-orchestrator.
+
+AUTHORITY: no operator words yet — found 2026-08-13 answering a question after
+the results-retrieval tranche closed
+(experiments/2026-08-13-change-results-retrieval-surface/PARKED.md P3). Capture
+that provenance in REQUEST.md.
+
+The fact: results_summary opens Harness(root, read_only=True) for its
+adjudication walk, and findings.findings_summary opens a second one for the
+status counts — two full O(run length) replays per call. Re-derive the count
+with the script in P3 of that PARKED.md before scoping. Harmless on a finished
+root (immutable, so both replays agree); on a live root the two replays plus
+the sidecar reads happen at different instants, so the reported figures can
+straddle a cycle boundary.
+
+Deliver ONE replay per call while keeping R4's composition rule intact — the
+status counts must still come from findings.py's derivation, not a second copy
+of it. The likely shape is an internal findings entry point that accepts an
+already-open read-only harness, with the existing public findings_summary(root)
+kept byte-identical for its own callers; price that against alternatives before
+choosing. Add a test that counts Harness opens per results_summary call and
+pins it at 1 — the same instrumentation used to find this.
+
+RAILS: `deepreason findings` output must not change by one byte (pin it).
+Read-only against roots stays absolute — tests/test_results_command.py::
+test_results_summary_writes_nothing_into_a_committed_root must keep passing
+unchanged. Frozen surfaces: none expected (readers only). GATE: ring
+(tests/test_results_command.py tests/test_findings_command.py) while iterating;
+full gate at the boundary; docs_verify full against docs/AUDIT_BASELINES.md.
+Map moves in the same commit (docs/map/SUB-application.md).
+```
