@@ -126,15 +126,20 @@ def test_embedder_failure_policy_error_fails_closed(tmp_path, monkeypatch):
     ],
 )
 def test_text_status_authority_requires_calibration_receipt(field, value):
+    """All-configs-allowed (2026-08-13): a missing calibration receipt used
+    to be refused at compile time; it now compiles with a typed notice
+    disclosing the same code the retired gate raised."""
     config = apply_overrides(_config(), {field: value})
 
-    with pytest.raises(RunManifestError, match="CALIBRATION_RECEIPT_REQUIRED"):
-        compile_run_manifest(
-            config,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
+    assert [n.code for n in manifest.compile_notices] == [
+        "CALIBRATION_RECEIPT_REQUIRED"
+    ]
 
 
 @pytest.mark.parametrize(
@@ -147,6 +152,9 @@ def test_text_status_authority_requires_calibration_receipt(field, value):
     ],
 )
 def test_arbitrary_calibration_receipt_is_unverified(field, value):
+    """All-configs-allowed (2026-08-13): an unverifiable calibration
+    receipt used to be refused at compile time; it now compiles with a
+    typed notice disclosing the same code the retired gate raised."""
     config = apply_overrides(
         _config(),
         {
@@ -155,16 +163,21 @@ def test_arbitrary_calibration_receipt_is_unverified(field, value):
         },
     )
 
-    with pytest.raises(RunManifestError, match="CALIBRATION_RECEIPT_UNVERIFIED"):
-        compile_run_manifest(
-            config,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
+    assert [n.code for n in manifest.compile_notices] == [
+        "CALIBRATION_RECEIPT_UNVERIFIED"
+    ]
 
 
 def test_blank_calibration_receipt_is_missing():
+    """All-configs-allowed (2026-08-13): a blank receipt counts as
+    missing, and now compiles with a typed CALIBRATION_RECEIPT_REQUIRED
+    notice instead of raising."""
     config = apply_overrides(
         _config(),
         {
@@ -173,47 +186,58 @@ def test_blank_calibration_receipt_is_missing():
         },
     )
 
-    with pytest.raises(RunManifestError, match="CALIBRATION_RECEIPT_REQUIRED"):
-        compile_run_manifest(
-            config,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
+    assert [n.code for n in manifest.compile_notices] == [
+        "CALIBRATION_RECEIPT_REQUIRED"
+    ]
 
 
 def test_materialized_text_status_authority_is_rechecked_before_adapter_build(tmp_path):
+    """All-configs-allowed (2026-08-13): preflight_harness's own recheck
+    independently reproduces the same disclosure notice compile_run_manifest
+    would have, instead of refusing. The config is unchanged between compile
+    and recheck (rather than the prior test's compile-default/recheck-unsafe
+    shape) so this exercises the recheck itself without also tripping the
+    separate, untouched TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH guard below
+    (SPEC.md Addendum 1, experiments/2026-08-13-change-calibration-receipt-notice/)."""
+    config = apply_overrides(
+        _config(), {"TEXT_RUBRIC_AUTHORITY": "calibrated_status"}
+    )
     manifest = compile_run_manifest(
-        _config(),
+        config,
         schema_version=2,
         workload_profile="text",
         rubric_policy="require_cross_family",
     )
-    unsafe = apply_overrides(
-        _config(), {"TEXT_RUBRIC_AUTHORITY": "calibrated_status"}
-    )
 
-    with pytest.raises(RunManifestError, match="CALIBRATION_RECEIPT_REQUIRED"):
-        preflight_harness(manifest, Harness(tmp_path / "run"), unsafe)
+    notices = preflight_harness(manifest, Harness(tmp_path / "run"), config)
+    assert [n.code for n in notices] == ["CALIBRATION_RECEIPT_REQUIRED"]
 
 
 def test_runtime_calibrated_status_is_unverified_before_adapter_build(tmp_path):
-    manifest = compile_run_manifest(
-        _config(),
-        schema_version=2,
-        workload_profile="text",
-        rubric_policy="require_cross_family",
-    )
-    upgraded = apply_overrides(
+    """All-configs-allowed (2026-08-13): same as above, for the unverified
+    (receipt present but never verifiable) code."""
+    config = apply_overrides(
         _config(),
         {
             "TEXT_RUBRIC_AUTHORITY": "calibrated_status",
             "CALIBRATION_RECEIPT": "sha256:unfrozen-runtime-upgrade",
         },
     )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
 
-    with pytest.raises(RunManifestError, match="CALIBRATION_RECEIPT_UNVERIFIED"):
-        preflight_harness(manifest, Harness(tmp_path / "run"), upgraded)
+    notices = preflight_harness(manifest, Harness(tmp_path / "run"), config)
+    assert [n.code for n in notices] == ["CALIBRATION_RECEIPT_UNVERIFIED"]
 
 
 def test_runtime_cannot_mutate_frozen_text_authority_policy(tmp_path):

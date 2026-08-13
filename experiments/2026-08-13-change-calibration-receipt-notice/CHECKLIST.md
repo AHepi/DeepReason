@@ -1,5 +1,5 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=2 blockers=none
+State: next=11 blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
@@ -50,13 +50,16 @@ that lands code+tests+map together.
       OK
       ```
 
-- [ ] 2. (S4) Edit `src/deepreason/authority.py`: update
+- [x] 2. (S4) Edit `src/deepreason/authority.py`: update
       `text_status_authority_issues`'s docstring to describe disclosure
       instead of a fail-closed refusal (SPEC.md S4). Do not touch
       `calibration_receipt_is_verified` (Assumption A2).
       done-when: `python -c "import inspect; from deepreason import authority; assert 'fail-closed' not in inspect.getsource(authority.text_status_authority_issues); print('OK')"` -> `OK`
+      ```
+      OK
+      ```
 
-- [ ] 3. (S5) Edit `tests/test_manifest_integration.py`: flip
+- [x] 3. (S5) Edit `tests/test_manifest_integration.py`: flip
       `test_text_status_authority_requires_calibration_receipt` (all 4
       parametrized cases) from `pytest.raises(RunManifestError,
       match="CALIBRATION_RECEIPT_REQUIRED")` to calling
@@ -64,19 +67,28 @@ that lands code+tests+map together.
       `[n.code for n in manifest.compile_notices] ==
       ["CALIBRATION_RECEIPT_REQUIRED"]`.
       done-when: `python -m pytest tests/test_manifest_integration.py::test_text_status_authority_requires_calibration_receipt -q` -> `4 passed`
+      ```
+      4 passed in 0.08s
+      ```
 
-- [ ] 4. (S5) Edit `tests/test_manifest_integration.py`: flip
+- [x] 4. (S5) Edit `tests/test_manifest_integration.py`: flip
       `test_arbitrary_calibration_receipt_is_unverified` (all 4
       parametrized cases) the same way, asserting
       `CALIBRATION_RECEIPT_UNVERIFIED`.
       done-when: `python -m pytest tests/test_manifest_integration.py::test_arbitrary_calibration_receipt_is_unverified -q` -> `4 passed`
+      ```
+      4 passed in 0.09s
+      ```
 
-- [ ] 5. (S5) Edit `tests/test_manifest_integration.py`: flip
+- [x] 5. (S5) Edit `tests/test_manifest_integration.py`: flip
       `test_blank_calibration_receipt_is_missing` the same way, asserting
       `CALIBRATION_RECEIPT_REQUIRED` (a blank string counts as missing).
       done-when: `python -m pytest tests/test_manifest_integration.py::test_blank_calibration_receipt_is_missing -q` -> `1 passed`
+      ```
+      1 passed in 0.07s
+      ```
 
-- [ ] 6. (S5) Edit `tests/test_manifest_integration.py`: flip
+- [x] 6. (S5) Edit `tests/test_manifest_integration.py`: flip
       `test_materialized_text_status_authority_is_rechecked_before_adapter_build`
       and `test_runtime_calibrated_status_is_unverified_before_adapter_build`
       from `pytest.raises(...)` around `preflight_harness(...)` to calling
@@ -92,32 +104,53 @@ that lands code+tests+map together.
       untouched — it already covers the manifest-divergence scenario via
       `CALIBRATION_RECEIPT` instead.
       done-when: `python -m pytest tests/test_manifest_integration.py::test_materialized_text_status_authority_is_rechecked_before_adapter_build tests/test_manifest_integration.py::test_runtime_calibrated_status_is_unverified_before_adapter_build tests/test_manifest_integration.py::test_runtime_cannot_mutate_frozen_text_authority_policy -q` -> `3 passed`
+      ```
+      3 passed in 0.08s
+      ```
 
-- [ ] 7. (S1-S5) Ring: full file plus the two other
+- [x] 7. (S1-S5) Ring: full file plus the two other
       `preflight_harness`/`compile_run_manifest` test files the
       blast-radius census flagged as MUST NOT MOVE, confirming they
       still pass unchanged. No commit yet — map edits land first so the
       whole tranche lands in one commit.
       done-when: `python -m pytest tests/test_manifest_integration.py tests/test_run_manifest.py tests/test_v6_global_dispatch_guard.py tests/test_runtime_workload_integration.py -q` -> ends `N passed` with `0 failed` (paste N).
+      ```
+      132 passed in 46.50s
+      ```
 
-- [ ] 8. (S6) Edit `docs/map/CON-authority.md`: rewrite the "Manifest-
+- [x] 8. (S6) Edit `docs/map/CON-authority.md`: rewrite the "Manifest-
       mediated runs fail closed twice" paragraph (lines ~194-199) to
       describe the notice instead of the retired refusal, correct the
       Traps entry (lines ~242-248, "the function that used to refuse an
       unverified receipt"), and add/adjust the check line per SPEC.md S6.
       done-when: `grep -q "used to refuse" docs/map/CON-authority.md && ! grep -q "fail closed twice" docs/map/CON-authority.md`
+      ```
+      PASS
+      ```
+      (one added `check:` line initially collided with the unrelated
+      `SECOND_JUDGE_FAMILY_REQUIRED` notice on a bare default `Config()`
+      — fixed by adding `rubric_policy='forbid'`, same class of mistake
+      as the step-1 collision, caught before commit this time.)
 
-- [ ] 9. (S7) Edit `docs/map/SUB-manifest.md`: narrow the "What is
+- [x] 9. (S7) Edit `docs/map/SUB-manifest.md`: narrow the "What is
       refused before the first provider call" row (line ~159) to name
       only the still-refusing checks, with a forward pointer to
       `DR-CON-authority` for the calibration-receipt codes' new
       disclosure behavior.
       done-when: `grep -n "What is refused before the first provider call" docs/map/SUB-manifest.md` shows the edited row (manual read to confirm it no longer claims `_preflight_text_authority` refuses)
+      ```
+      159:| What is refused before the first provider call (rubric input, a rubric-reaching property path, or a live `Config` whose authority policy has drifted from the frozen manifest) | `preflight_payload`, `preflight_harness` | ... |
+      160:| What is DISCLOSED (not refused) before the first provider call — an unsatisfiable calibration-receipt requirement | `_preflight_text_authority` — see `DR-CON-authority` for why (2026-08-13, converted from a refusal) | ... |
+      ```
+      Row's own test references re-verified: `test_property_proposal_rubric_path_fails_before_any_model_call` -> `1 passed`; `tests/test_manifest_integration.py -k calibration_receipt` -> `9 passed, 8 deselected`.
 
-- [ ] 10. (S8) Confirm `docs/map/SUB-adjudication.md` needs no edit
+- [x] 10. (S8) Confirm `docs/map/SUB-adjudication.md` needs no edit
        (already checked in SPEC.md §S8) — no file change, re-verify the
        grep still returns zero before closing this item.
        done-when: `grep -c "calibrat\|text_status_authority\|preflight_harness" docs/map/SUB-adjudication.md` -> `0`
+       ```
+       0
+       ```
 
 - [ ] 11. [COMMIT] (S1-S8) Full map verification, then commit and push
        code + tests + map together in one commit.

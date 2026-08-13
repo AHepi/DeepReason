@@ -170,12 +170,16 @@ def calibration_receipt(config) -> str | None:
 def text_status_authority_issues(
     config, workload_profile: str | None
 ) -> tuple[AuthorityPolicyIssue, ...]:
-    """Return prospective schema-v2 text authority violations.
-
-    A receipt reference is a fail-closed gate for this tranche.  Receipt
-    matching (domain, routes, prompts, and calibration metrics) belongs to
-    the receipt verifier; this policy layer never treats cross-family judging
-    alone as authority.
+    """Return prospective schema-v2 text authority issues, for the caller
+    to DISCLOSE rather than refuse on (2026-08-13: run_manifest.py's two
+    manifest-preflight call sites convert every returned issue into a
+    typed notice instead of raising -- no `CALIBRATION_RECEIPT` value can
+    ever clear one, since `calibration_receipt_is_verified` has no
+    verifier, so refusing here was a dead end no configuration could
+    resolve, not a real point-of-use failure).  Receipt matching (domain,
+    routes, prompts, and calibration metrics) belongs to the receipt
+    verifier; this policy layer never treats cross-family judging alone
+    as authority.
     """
 
     if workload_profile != "text":
