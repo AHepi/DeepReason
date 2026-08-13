@@ -12,6 +12,7 @@ never criticism). Blocked rulings are logged as Measure events; a streak
 of blocks is a critic-gaming signal.
 """
 
+import hashlib
 import json
 
 from deepreason.authority import TrialAuthority
@@ -23,7 +24,10 @@ from deepreason.llm.contracts import (
     PairwiseRuling,
     VariatorOutput,
 )
+from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import route_fingerprint
 from deepreason.llm.packs import aliases_for_values
+from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import wire_contract_for
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
@@ -33,6 +37,234 @@ from deepreason.rules.warrants import (
     formally_backed,
     register_fail_warrant,
 )
+
+
+def _v6_trial_manifest(adapter):
+    """The bound v6 manifest, or None outside RunManifest v6 authority.
+
+    Mirrors ``rules/crit.py``'s own self-detection
+    (``adapter.bound_v6_manifest()``): lease resolution stays inside
+    ``llm/`` (SEAM-llm-x-rules.md), this module only asks the adapter
+    whether it is currently bound.
+    """
+
+    if not getattr(adapter, "transaction_authority_required", False):
+        return None
+    return adapter.bound_v6_manifest()
+
+
+def _v6_transactional_trial_call(
+    harness,
+    adapter,
+    manifest,
+    *,
+    role: str,
+    target_id: str,
+    step: str,
+    pack: str,
+    output_model,
+    seat: int = 0,
+    aliases=None,
+):
+    """Authorize and terminalize one v6 defended-trial provider boundary.
+
+    Mirrors ``rules/crit.py::_v6_transactional_batch_call`` (the same-
+    package precedent) and ``bridge/transactional_adapter.py``'s generic
+    single-call wrapper: one durable preparation, a call-local context
+    plan, one atomic issue, and a typed provider/admission/terminal
+    sequence. ``step`` uniquely identifies this exact call within one
+    trial invocation (``"defender"``, ``"judge:0"``, ...), folded into the
+    trigger digest exactly as ``phase`` is for the batch-critic call.
+    """
+
+    from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
+    from deepreason.workflow.transaction import (
+        ContextNamespace,
+        VisibleContextItemV1,
+        WorkBudgetDenied,
+    )
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    meter = getattr(adapter, "meter", None)
+    if meter is None:
+        raise ValueError("v6 trial dispatch requires a provider token meter")
+    lease = adapter.bound_v6_default_lease(role, seat)
+    route_ref = RouteLeaseRefV1(
+        role=role,
+        seat=lease.seat,
+        endpoint_id=lease.route.endpoint_id,
+        route_sha256=route_fingerprint(lease.route),
+    )
+    profile = adapter.profile_for(role, lease.seat, endpoint_lease=lease)
+    contract = wire_contract_for(role, output_model, profile, aliases)
+    payload = {
+        "schema": "defended-trial-step.v1",
+        "role": role,
+        "target_id": target_id,
+        "step": step,
+    }
+    service = InquiryTransactionService(harness, manifest, meter)
+    fence = max(0, harness._next_seq - 1)
+    trigger_ref = "trial:" + hashlib.sha256(canonical_json(payload)).hexdigest()
+    preparation = service.prepare(
+        task_kind=WorkflowTaskKind.DEFENDED_TRIAL_STEP,
+        attempt_index=0,
+        route_lease=route_ref,
+        contract_id=contract.contract_id,
+        trigger_ref=trigger_ref,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+        target_refs=(target_id,),
+        input_refs=(),
+        task_payload_value=payload,
+    )
+    authorized = None
+
+    def abandon(*, issued: bool, reason_code: str) -> None:
+        if authorized is not None and authorized.reservation.is_open:
+            authorized.release()
+        service.terminate(
+            work_id=preparation.id,
+            attempt_index=preparation.attempt_index,
+            status="abandoned",
+            reason_code=reason_code,
+            usage_status=("unknown" if issued else "exact"),
+            prompt_tokens=(None if issued else 0),
+            completion_tokens=(None if issued else 0),
+        )
+
+    try:
+        rendered_bytes = len(pack.encode("utf-8"))
+        digest = hashlib.sha256(pack.encode("utf-8")).hexdigest()
+        object_ref = harness.blobs.put(pack.encode("utf-8"))
+        items = (
+            VisibleContextItemV1(
+                namespace=ContextNamespace.SOURCE,
+                alias="SRC_001",
+                object_ref=object_ref,
+                content_sha256=digest,
+                planned_bytes=rendered_bytes,
+            ),
+        )
+        plan = service.context_plan(
+            preparation,
+            plan_kind="dossier",
+            items=items,
+            maximum_bytes=rendered_bytes,
+            rendered_bytes=rendered_bytes,
+        )
+        prompt, preview_contract, preview_lease, maximum_tokens = adapter.preview_request(
+            role,
+            pack,
+            output_model,
+            endpoint_index=lease.seat,
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=lease,
+        )
+        if preview_contract is not contract or preview_lease != lease:
+            raise ValueError("v6 trial preview changed frozen call authority")
+        authorized = service.issue(
+            preparation,
+            plans=(plan,),
+            prompt=prompt,
+            max_tokens=maximum_tokens,
+        )
+    except WorkBudgetDenied:
+        raise
+    except Exception:
+        abandon(issued=False, reason_code="trial_preissue_failure")
+        raise
+
+    provider = None
+    try:
+        output, llm_call = adapter.call(
+            role,
+            pack,
+            output_model,
+            endpoint_index=lease.seat,
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=lease,
+            dispatch_authorization=authorized,
+        )
+    except EndpointError as error:
+        spend = getattr(error, "spend", None)
+        if spend is None:
+            abandon(issued=True, reason_code="trial_transport_result_unknown")
+        else:
+            diagnostic_ref = (
+                spend.attempt_trace[-1].diagnostic_ref
+                if spend.attempt_trace
+                else harness.blobs.put(str(error).encode("utf-8"))
+            )
+            provider = service.record_provider_attempt(
+                authorized,
+                call=spend,
+                outcome="transport_failure",
+                usage_status="unknown",
+                diagnostic_ref=diagnostic_ref,
+            )
+            service.terminate(
+                work_id=preparation.id,
+                attempt_index=preparation.attempt_index,
+                status="transport_failed",
+                reason_code="trial_transport_failure",
+                usage_status="unknown",
+                provider_attempt=provider,
+            )
+            error.spend = None
+        error.transaction_terminalized = True
+        raise
+    except SchemaRepairError as error:
+        repaired = service.repair_schema_failure(
+            adapter=adapter,
+            authorized=authorized,
+            error=error,
+            role=role,
+            pack=pack,
+            output_model=output_model,
+            wire_contract=contract,
+            endpoint_index=lease.seat,
+            endpoint_lease=lease,
+            reason_prefix="trial",
+        )
+        output = repaired.output
+        llm_call = repaired.llm_call
+        preparation = repaired.preparation
+        authorized = repaired.authorized
+        provider = repaired.provider_attempt
+    except Exception:
+        abandon(issued=True, reason_code="trial_authority_failure")
+        raise
+
+    if provider is None:
+        provider = service.record_provider_attempt(
+            authorized,
+            call=llm_call,
+            outcome="provider_result",
+            usage_status="exact",
+        )
+    admitted_ref = harness.blobs.put(
+        canonical_json(output.model_dump(mode="json", exclude_none=True))
+    )
+    admission = service.record_semantic_admission(
+        provider,
+        outcome="admitted",
+        admitted_refs=(admitted_ref,),
+    )
+    service.terminate(
+        work_id=preparation.id,
+        attempt_index=preparation.attempt_index,
+        status="completed",
+        reason_code="trial_output_admitted",
+        usage_status="exact",
+        prompt_tokens=llm_call.prompt_tokens,
+        completion_tokens=llm_call.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+    return output, llm_call
 
 
 def conforming_transcript(blobs, trace_ref: str) -> bool:
@@ -202,21 +434,55 @@ def _judge_all(
     target_id,
     calls: list,
     aliases,
+    *,
+    manifest=None,
+    step_prefix: str = "judge",
 ):
     """Rule with the full ensemble; disagreement blocks (never averaged).
     Appends every seat's LLMCall to the CALLER's list as it lands — a local
     list dropped seat 1's completed spend whenever a later seat raised
-    (found by the mock accounting sweep: judge2-storm leaked seat 1)."""
+    (found by the mock accounting sweep: judge2-storm leaked seat 1).
+
+    ``manifest`` is the bound v6 manifest (or None outside v6 authority,
+    the default — the rubric/pairwise call sites never pass it, so their
+    behavior is unchanged): when set, every seat's call is authorized
+    through ``_v6_transactional_trial_call`` instead of the legacy
+    ``adapter.call``, and is NOT appended to ``calls`` — a v6 call is
+    already durably recorded on its own PROVIDER_RESULT transaction event
+    (harness.py: "only provider_result may carry an LLM call"), so folding
+    it into the caller's own ``trial-llm`` Measure sweep too would attach
+    the same LLMCall to a second control-plane action, which
+    ``WorkflowReplayState.observe_event`` correctly refuses
+    ("transactional provider call lacks live issued authority")."""
     judge_seats = adapter.judge_seats()
-    ruling, first = adapter.call("judge", pack, JudgeRuling, aliases=aliases)
-    calls.append(first)
+
+    def _dispatch(index: int):
+        if manifest is not None:
+            return _v6_transactional_trial_call(
+                harness,
+                adapter,
+                manifest,
+                role="judge",
+                target_id=target_id,
+                step=f"{step_prefix}:{index}",
+                pack=pack,
+                output_model=JudgeRuling,
+                seat=index,
+                aliases=aliases,
+            )
+        return adapter.call(
+            "judge", pack, JudgeRuling, endpoint_index=index, aliases=aliases
+        )
+
+    ruling, first = _dispatch(0)
+    if manifest is None:
+        calls.append(first)
     seat_calls = [first]
     seat_rulings = [ruling]
     for index in range(1, len(judge_seats)):
-        other, call = adapter.call(
-            "judge", pack, JudgeRuling, endpoint_index=index, aliases=aliases
-        )
-        calls.append(call)
+        other, call = _dispatch(index)
+        if manifest is None:
+            calls.append(call)
         seat_calls.append(call)
         seat_rulings.append(other)
         if other.verdict != ruling.verdict:
@@ -512,23 +778,44 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
 
 def _paraphrase_screen(
     harness, adapter, config, pack: str, exchange: str, target_id: str,
-    diagnostics, calls: list,
+    diagnostics, calls: list, *, manifest=None,
 ):
     """Shared paraphrase spot-check. Returns (checks_value, block_reason):
     block_reason is None when the fail ruling survived every meaning-
-    preserving paraphrase (or the variator role is absent)."""
+    preserving paraphrase (or the variator role is absent).
+
+    ``manifest`` is the bound v6 manifest (or None, the default — the
+    rubric call site never passes it): when set, the variator call and
+    every re-ruling's judge-ensemble calls are authorized through
+    ``_v6_transactional_trial_call``."""
     if not adapter.has_role("variator"):
         return "skipped", None
     n = config.TRIAL_PARAPHRASE_N
-    para_out, call = adapter.call(
-        "variator",
-        f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly {n} "
-        "meaning-preserving paraphrases of this exchange.",
-        VariatorOutput,
-    )
-    calls.append(call)
+    if manifest is not None:
+        para_out, call = _v6_transactional_trial_call(
+            harness,
+            adapter,
+            manifest,
+            role="variator",
+            target_id=target_id,
+            step="variator",
+            pack=(
+                f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly {n} "
+                "meaning-preserving paraphrases of this exchange."
+            ),
+            output_model=VariatorOutput,
+        )
+    else:
+        para_out, call = adapter.call(
+            "variator",
+            f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly {n} "
+            "meaning-preserving paraphrases of this exchange.",
+            VariatorOutput,
+        )
+    if manifest is None:
+        calls.append(call)
     flips = 0
-    for paraphrase in [e.content for e in para_out.edits[:n]]:
+    for index, paraphrase in enumerate([e.content for e in para_out.edits[:n]]):
         repack = pack.replace(exchange, paraphrase) if exchange in pack else (
             pack + "\n\nPARAPHRASED EXCHANGE:\n" + paraphrase)
         paraphrase_aliases = aliases_for_values([paraphrase], prefix="K")
@@ -540,6 +827,8 @@ def _paraphrase_screen(
             target_id,
             calls,
             paraphrase_aliases,
+            manifest=manifest,
+            step_prefix=f"judge:paraphrase:{index}",
         )
         if reruling is None:
             return None, "ensemble-split"
@@ -642,16 +931,36 @@ def _argument_trial_steps(
     if not case_text.strip():
         return _decline(harness, target_id, "empty-case", diagnostics)
     target_text = content_text(target, harness.blobs)
+    manifest = _v6_trial_manifest(adapter)
 
     # 1. The defender answers the precomputed case.
     defence_pack = f"THE CASE AGAINST THE TARGET:\n{case_text}\n\nTARGET:\n{target_text}"
-    defence, call = adapter.call(
-        "defender",
-        defence_pack,
-        DefenderOutput,
-        aliases=aliases_for_values([case_text], prefix="K"),
-    )
-    calls.append(call)
+    defender_aliases = aliases_for_values([case_text], prefix="K")
+    if manifest is not None:
+        defence, call = _v6_transactional_trial_call(
+            harness,
+            adapter,
+            manifest,
+            role="defender",
+            target_id=target_id,
+            step="defender",
+            pack=defence_pack,
+            output_model=DefenderOutput,
+            aliases=defender_aliases,
+        )
+    else:
+        defence, call = adapter.call(
+            "defender",
+            defence_pack,
+            DefenderOutput,
+            aliases=defender_aliases,
+        )
+    # A v6-dispatched call is already durably recorded on its own
+    # PROVIDER_RESULT transaction event (see _judge_all's docstring for the
+    # full "only provider_result may carry an LLM call" rationale); only
+    # the legacy path needs it swept into the trial-llm Measure below.
+    if manifest is None:
+        calls.append(call)
 
     # 2. The judge ensemble rules on the exchange.
     pack = "\n".join([
@@ -663,7 +972,8 @@ def _argument_trial_steps(
     ])
     judge_aliases = aliases_for_values([case_text, defence.answer], prefix="K")
     ruling, judge_calls, judge_rulings = _judge_all(
-        harness, adapter, pack, diagnostics, target_id, calls, judge_aliases
+        harness, adapter, pack, diagnostics, target_id, calls, judge_aliases,
+        manifest=manifest, step_prefix="judge",
     )
     if ruling is None:
         return _decline(harness, target_id, "ensemble-split", diagnostics)
@@ -680,7 +990,8 @@ def _argument_trial_steps(
 
     # 4. Paraphrase spot-check (same screen as the rubric trial).
     paraphrase_result, block_reason = _paraphrase_screen(
-        harness, adapter, config, pack, exchange, target_id, diagnostics, calls
+        harness, adapter, config, pack, exchange, target_id, diagnostics, calls,
+        manifest=manifest,
     )
     if block_reason is not None:
         return _decline(harness, target_id, block_reason, diagnostics)
@@ -712,11 +1023,17 @@ def _argument_trial_steps(
         provenance=Provenance(role="critic", school=critic_school_id),
         warrants=[warrant],
         rule=Rule.CRIT,
-        llm=judge_llm,
+        # A v6-dispatched judge_llm is already durably recorded on its own
+        # PROVIDER_RESULT transaction event; attaching it again here would
+        # be a second control-plane action carrying the same call
+        # ("only provider_result may carry an LLM call"). The legacy path
+        # rides it on the critic event instead, exactly as before.
+        llm=(None if manifest is not None else judge_llm),
     )
     # The decisive ruling rides the critic event only when one actually
     # committed; a deduped critic keeps the call in ``calls`` (trial-llm).
-    if critic.id not in before:
+    # Not applicable under v6: judge_llm was never appended to ``calls``.
+    if manifest is None and critic.id not in before:
         calls.remove(judge_llm)
     return critic
 

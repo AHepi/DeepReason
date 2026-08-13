@@ -279,6 +279,28 @@ def _complete_admitted(
     return admission
 
 
+def _recovered_criticism_authority(manifest, payload) -> str:
+    """Resolve the run's REAL criticism authority for recovery.
+
+    Mirrors ``rules/crit.py::_resolve_authority``'s own mapping exactly
+    (``"defended_trial"`` -> ``"trial_required"``), sourced from the same
+    frozen-at-mint-time authority ``_criticism_contract`` already validated
+    as recoverable -- never a hardcoded ``"observe_only"``, and never a
+    live/manifest-reconstructed ``Config`` (``ARGUMENTATIVE_AUTHORITY`` is
+    not a manifest field). A resumed defended-trial-authorized run
+    therefore resumes as defended_trial, not silently downgraded; whether a
+    specific pending case can actually be tried here depends on whether an
+    adapter is available (see ``rules/crit.py``'s ``_crit_argumentative_
+    batch_result``, which defers -- never observes -- a trial-worthy case
+    when it is not).
+    """
+
+    if payload.get("critic_school_id") is None:
+        return str(payload["dispatch_authority"])
+    policy = manifest.criticism_policy
+    return "trial_required" if policy.authority == "defended_trial" else "observe_only"
+
+
 def _recover_criticism_effect(
     harness,
     manifest,
@@ -349,7 +371,7 @@ def _recover_criticism_effect(
         config_from_run_manifest(manifest),
         output,
         call,
-        authority="observe_only",
+        authority=_recovered_criticism_authority(manifest, payload),
         call_kwargs={},
         school_prefix="",
         critic_school_id=payload["critic_school_id"],
@@ -663,14 +685,24 @@ def _criticism_contract(harness, manifest, item, preparation, payload):
             ),
             "critic route has no manifest binding",
         )
+        # observe_only recovers by replaying the recorded observation;
+        # trial_required/single_family_trial recover too, but a case that
+        # would need the trial itself is deferred rather than dispatched
+        # (recovery has no provider boundary -- see
+        # _recover_criticism_effect and rules/crit.py's adapter-is-None
+        # branch).
         _authority(
-            payload.get("dispatch_authority") == "observe_only",
+            payload.get("dispatch_authority")
+            in ("observe_only", "trial_required", "single_family_trial"),
             "critic authority is not recoverable",
         )
     else:
         policy = manifest.criticism_policy
         _authority(policy is not None, "manifest does not authorize criticism")
-        _authority(policy.authority == "observe_only", "critic authority is not recoverable")
+        _authority(
+            policy.authority in ("observe_only", "defended_trial"),
+            "critic authority is not recoverable",
+        )
         binding = next((value for value in policy.bindings if value.school_id == school_id), None)
         _authority(binding is not None, "critic school has no manifest binding")
         _authority(

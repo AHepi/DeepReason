@@ -172,6 +172,31 @@ def _manifest():
     return config, manifest
 
 
+def _defended_trial_manifest():
+    """A v6 manifest whose criticism policy authorizes the defended trial
+    (V4_CRITICISM_DEFENDER_REQUIRED needs a configured defender route, and
+    V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED needs two distinct-family
+    judge seats -- both of which the shared `_config()` fixture above
+    deliberately omits for its other, non-trial scenarios)."""
+
+    config = _config()
+    config.roles["defender"] = [_route("defender")]
+    config.roles["judge"] = [_route("judge", 0), _route("judge", 1)]
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=_control(),
+        criticism_policy=_criticism_policy().model_copy(
+            update={"authority": "defended_trial"}
+        ),
+        run_input_digest="f" * 64,
+    )
+    return config, manifest
+
+
 def _lease(manifest, role: str, seat: int = 0) -> RouteLeaseRefV1:
     route = manifest.roles[role][seat]
     return RouteLeaseRefV1(
@@ -520,30 +545,131 @@ def test_criticism_contract_recovers_without_a_school(tmp_path):
     assert preparation.target_refs == (target.id,)
 
 
-def test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only(
+def test_criticism_contract_recovers_a_trial_authorized_dispatch_without_a_school(
     tmp_path,
 ):
-    """S13e: mirrors the school-routed branch's own 'critic authority is
-    not recoverable' fail-closed shape, sourced from the frozen payload
-    field instead of criticism_policy.authority."""
+    """S13e, corrected by the defended-trial-wiring tranche (2026-08-13):
+    this case used to refuse recovery outright for any dispatch_authority
+    other than observe_only ('critic authority is not recoverable'). That
+    was the operator-diagnosed hardcode's mirror image -- a run authorized
+    for a defended trial could not resume AT ALL, rather than silently
+    losing its authority. Recovery of the CRITIC's own output is possible
+    regardless of authority (no provider needed to admit an already-durable
+    result); only a DOWNSTREAM case that would need the trial itself has to
+    wait for a live cycle (see
+    test_recovered_defended_trial_criticism_defers_an_attacking_case_
+    instead_of_downgrading_to_observe_only for that half, and
+    rules/crit.py's adapter-is-None deferral branch)."""
 
     _config_value, manifest = _manifest()
-    root = tmp_path / "criticism-school-free-unrecoverable"
+    root = tmp_path / "criticism-school-free-trial-authorized"
     _preparation, provider, _target = _criticism_prefix_school_free(
         root, manifest, dispatch_authority="trial_required"
     )
-    reopened = Harness(root)
+
+    reopened, item, admission = _recover(root, manifest, provider)
+
+    assert item.terminal.status == "completed"
+    assert admission.outcome == "admitted"
+    # No cases in this fixture's raw output, so nothing to observe or defer.
+    assert not [
+        artifact
+        for artifact in reopened.state.artifacts.values()
+        if artifact.provenance.role == "critic"
+    ]
+
+
+def test_recovered_observe_only_criticism_resumes_observe_only(tmp_path):
+    """R2/R4 (defended-trial-wiring tranche): the observe_only direction --
+    unaffected by the authority-resolution fix, since observe_only was
+    already what _recover_criticism_effect hardcoded. Recorded explicitly
+    so both directions have a named regression, per REQUEST.md R4."""
+
+    _config_value, manifest = _manifest()
+    assert manifest.criticism_policy.authority == "observe_only"
+    root = tmp_path / "criticism-observe-only-resumes-observe-only"
+    _preparation, provider, target, _assignment = _criticism_prefix(
+        root,
+        manifest,
+        raw=(
+            b'{"cases":[{"target_alias":"SRC_001","attack":true,'
+            b'"case":"the mechanism omits a required boundary"}]}'
+        ),
+    )
+
+    reopened, item, admission = _recover(root, manifest, provider)
+
+    assert item.terminal.status == "completed"
+    assert admission.outcome == "admitted"
+    critics = [
+        artifact
+        for artifact in reopened.state.artifacts.values()
+        if artifact.provenance.role == "critic"
+    ]
+    assert len(critics) == 1
+    assert not critics[0].warrants  # observed, not tried: no warrant minted
+    assert not any(
+        event.inputs and event.inputs[0] == "defended-trial-deferred"
+        for event in reopened.log.read()
+    )
+
+
+def test_recovered_defended_trial_criticism_defers_an_attacking_case_instead_of_downgrading_to_observe_only(
+    tmp_path,
+):
+    """R2/R4 (defended-trial-wiring tranche): the operator's own words --
+    'a resumed defended trial doesn't silently become observe-only'.
+    Before this fix, _recover_criticism_effect hardcoded
+    authority="observe_only" regardless of manifest.criticism_policy.
+    authority, so an attacking case under a defended_trial-authorized
+    manifest would have been silently recorded as an _observe_case (no
+    warrant, downgraded to advisory forever). Recovery has no provider
+    boundary by design (SEAM-llm-x-workflow.md), so the case cannot
+    actually be TRIED here either -- the correct typed outcome is neither
+    "tried" nor "observed": a deferral Measure, leaving the target open for
+    a live criticism cycle to reconsider with a real adapter."""
+
+    _config_value, trial_manifest = _defended_trial_manifest()
+    root = tmp_path / "criticism-defended-trial-defers"
+    _preparation, provider, target, _assignment = _criticism_prefix(
+        root,
+        trial_manifest,
+        raw=(
+            b'{"cases":[{"target_alias":"SRC_001","attack":true,'
+            b'"case":"the mechanism omits a required boundary"}]}'
+        ),
+    )
+
+    reopened, item, admission = _recover(root, trial_manifest, provider)
+
+    assert item.terminal.status == "completed"
+    assert admission.outcome == "admitted"
+    # No critic artifact at all: neither observed (wrong authority) nor
+    # tried (no provider available in recovery).
+    assert not [
+        artifact
+        for artifact in reopened.state.artifacts.values()
+        if artifact.provenance.role == "critic"
+    ]
+    deferrals = [
+        event
+        for event in reopened.log.read()
+        if event.inputs and event.inputs[0] == "defended-trial-deferred"
+    ]
+    assert len(deferrals) == 1
+    assert list(deferrals[0].inputs) == [
+        "defended-trial-deferred",
+        target.id,
+        "recovery-no-provider",
+    ]
+    # Re-recovering the same durable result is still exactly-once: no
+    # second deferral marker.
     before = tuple(reopened.log.read())
-
-    with pytest.raises(NonConjectureRecoveryAuthorityError, match="critic authority is not recoverable"):
-        recover_nonconjecture_admission(
-            reopened,
-            manifest,
-            TokenMeter(100_000),
-            provider,
-        )
-
-    assert tuple(reopened.log.read()) == before
+    rerecovered, _repeated_item, repeated_admission = _recover(
+        root, trial_manifest, provider
+    )
+    assert tuple(rerecovered.log.read()) == before
+    assert repeated_admission == admission
 
 
 def test_v6_transactional_batch_call_freezes_dispatch_authority_for_school_free_calls(

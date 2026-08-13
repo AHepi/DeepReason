@@ -37,6 +37,19 @@ CORE_CONTRACTS = (
     "conjecturer.atomic-candidate.v1",
     "conjecturer.turn.v6",
     "critic.atomic-target.v1",
+    # Defended-trial provider boundary (informal/trial.py's defender/judge/
+    # variator calls, wired through InquiryTransactionService): granted
+    # unconditionally, same as the four above -- both the direct and
+    # compact wire-contract id, since which one a given seat resolves to
+    # is a per-seat presentation decision this ceiling function has no
+    # per-seat visibility into (see run_manifest.py's
+    # _compile_contract_schema_repair_policy).
+    "defender.compact.v1",
+    "defender.direct.v1",
+    "judge.compact.v1",
+    "judgeruling.direct.v1",
+    "variator.compact.v1",
+    "variator.direct.v1",
 )
 # One patch repairs one pointer; the conjecture family (strong turn plus its
 # atomic decomposition child) is granted double the shared ceiling, capped at

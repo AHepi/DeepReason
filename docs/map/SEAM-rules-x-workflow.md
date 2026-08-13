@@ -156,13 +156,13 @@ constructs no transaction record type at all — the only workflow record types 
 rule builds are `RouteLeaseRefV1`, `VisibleContextItemV1`, `GuardFindingV1` and
 `ConjectureWorkAssignmentV1`, none of them a transaction record. Each
 side can refuse the other; neither can forge the other's record. The same
-boundary explains why rules name two of the seven
+boundary explains why rules name two of the eight
 `WorkflowTaskKind` values and why `CONJECTURE` is excluded from
 `_RECOVERABLE_TASKS`: conjecture recovery needs the embedder and the
 anti-relapse gate that the generic recovery path deliberately does not carry.
 Adding `CONJECTURE` to that set to "unify" recovery routes conjecture through a
 path with no gate at all.
-`check: grep -q "^class WorkPreparationV1(" src/deepreason/workflow/transaction.py && grep -q "    def _apply_transaction(" src/deepreason/workflow/replay.py && grep -q "^def state_after_transition(" src/deepreason/workflow/state.py && grep -q "^def reduce_conjecture(" src/deepreason/workflow/reducer.py && ! grep -qE "harness\.state|harness\.commitments|register_batch|register_commitment|create_artifact|record_measure" src/deepreason/workflow/transaction_service.py src/deepreason/workflow/transaction.py src/deepreason/workflow/replay.py src/deepreason/workflow/state.py src/deepreason/workflow/reducer.py && ! grep -rqE "record_transaction_transition|recover_incomplete|WorkPreparationV1\(|WorkTerminalV1\(|DispatchAuthorizationBundleV1\(|TokenReservationV2\(|ContextExposureReceiptV2\(|ContextPackPlanV1\(|WorkLifecycleTransitionV1\(|ProviderAttemptV1\(|SemanticAdmissionV1\(|CompactRecoveryTransitionV1\(|RouteSeatInsufficientCapabilityV1\(|ContractDecompositionTransitionV1\(|ContractDecompositionCompletionV1\(" --include=*.py src/deepreason/rules && grep -q "harness.register_batch(" src/deepreason/workflow/conjecture_recovery.py && grep -q "harness.state.artifacts.get(target_id)" src/deepreason/workflow/nonconjecture_recovery.py && test "$(grep -c "self.harness.record_transaction_transition(" src/deepreason/workflow/transaction_service.py)" -eq 6 && test "$(grep -rlE "RouteLeaseRefV1\(|VisibleContextItemV1\(" --include=*.py src/deepreason/rules | sort | paste -sd,)" = "src/deepreason/rules/conj.py,src/deepreason/rules/crit.py" && python -c "import ast, re, pathlib; T={p: ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')}; W={p: {a.asname or a.name for n in ast.walk(t) if isinstance(n, ast.ImportFrom) and n.module and (n.module=='deepreason.workflow' or n.module.startswith('deepreason.workflow.')) for a in n.names} for p, t in T.items()}; built={n.func.id for p, t in T.items() for n in ast.walk(t) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in W[p] and re.search(r'V\d+$', n.func.id)}; assert built=={'RouteLeaseRefV1','VisibleContextItemV1','GuardFindingV1','ConjectureWorkAssignmentV1'}, sorted(built)" && python -c "import re, pathlib; from deepreason.workflow.nonconjecture_recovery import _RECOVERABLE_TASKS; from deepreason.workflow.models import WorkflowTaskKind as K; s=pathlib.Path('src/deepreason/rules/conj.py').read_text()+pathlib.Path('src/deepreason/rules/crit.py').read_text(); assert set(re.findall(r'WorkflowTaskKind\.([A-Z_]+)', s))=={'CONJECTURE','CRITICISM'}; assert K.CONJECTURE not in _RECOVERABLE_TASKS and K.CRITICISM in _RECOVERABLE_TASKS; assert len(_RECOVERABLE_TASKS)==6 and len(list(K))==7"`
+`check: grep -q "^class WorkPreparationV1(" src/deepreason/workflow/transaction.py && grep -q "    def _apply_transaction(" src/deepreason/workflow/replay.py && grep -q "^def state_after_transition(" src/deepreason/workflow/state.py && grep -q "^def reduce_conjecture(" src/deepreason/workflow/reducer.py && ! grep -qE "harness\.state|harness\.commitments|register_batch|register_commitment|create_artifact|record_measure" src/deepreason/workflow/transaction_service.py src/deepreason/workflow/transaction.py src/deepreason/workflow/replay.py src/deepreason/workflow/state.py src/deepreason/workflow/reducer.py && ! grep -rqE "record_transaction_transition|recover_incomplete|WorkPreparationV1\(|WorkTerminalV1\(|DispatchAuthorizationBundleV1\(|TokenReservationV2\(|ContextExposureReceiptV2\(|ContextPackPlanV1\(|WorkLifecycleTransitionV1\(|ProviderAttemptV1\(|SemanticAdmissionV1\(|CompactRecoveryTransitionV1\(|RouteSeatInsufficientCapabilityV1\(|ContractDecompositionTransitionV1\(|ContractDecompositionCompletionV1\(" --include=*.py src/deepreason/rules && grep -q "harness.register_batch(" src/deepreason/workflow/conjecture_recovery.py && grep -q "harness.state.artifacts.get(target_id)" src/deepreason/workflow/nonconjecture_recovery.py && test "$(grep -c "self.harness.record_transaction_transition(" src/deepreason/workflow/transaction_service.py)" -eq 6 && test "$(grep -rlE "RouteLeaseRefV1\(|VisibleContextItemV1\(" --include=*.py src/deepreason/rules | sort | paste -sd,)" = "src/deepreason/rules/conj.py,src/deepreason/rules/crit.py" && python -c "import ast, re, pathlib; T={p: ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')}; W={p: {a.asname or a.name for n in ast.walk(t) if isinstance(n, ast.ImportFrom) and n.module and (n.module=='deepreason.workflow' or n.module.startswith('deepreason.workflow.')) for a in n.names} for p, t in T.items()}; built={n.func.id for p, t in T.items() for n in ast.walk(t) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in W[p] and re.search(r'V\d+$', n.func.id)}; assert built=={'RouteLeaseRefV1','VisibleContextItemV1','GuardFindingV1','ConjectureWorkAssignmentV1'}, sorted(built)" && python -c "import re, pathlib; from deepreason.workflow.nonconjecture_recovery import _RECOVERABLE_TASKS; from deepreason.workflow.models import WorkflowTaskKind as K; s=pathlib.Path('src/deepreason/rules/conj.py').read_text()+pathlib.Path('src/deepreason/rules/crit.py').read_text(); assert set(re.findall(r'WorkflowTaskKind\.([A-Z_]+)', s))=={'CONJECTURE','CRITICISM'}; assert K.CONJECTURE not in _RECOVERABLE_TASKS and K.CRITICISM in _RECOVERABLE_TASKS; assert len(_RECOVERABLE_TASKS)==6 and len(list(K))==8"`
 
 **The deterministic rules have no transaction because they have no provider.**
 `crit_program`, `crit_fuzz`, `try_counterexample`, `spawn`, `scan_spawns`,
@@ -311,16 +311,26 @@ of a canonical controller-v3 history).
   a different transaction. The structural check is in "Where it is expressed";
   `test_identical_critic_effects_remain_isolated_by_source_transaction` is the
   behavioural half.
-- **Recovery downgrades prose authority to `observe_only`, and nothing tests it.**
-  `_recover_criticism_effect` passes `authority="observe_only"` unconditionally
-  while the live path passes the resolved authority, so a manifest with
-  `criticism_policy.authority == "defended_trial"` that crashes mid-criticism
-  recovers the case as scrutiny evidence rather than as a trial. **Residue: no
-  test in `tests/test_v6_nonconjecture_recovery.py` uses `defended_trial`, so the
-  divergence is held by this note and the structural check alone.** Whether it is
-  a deliberate refusal to re-derive a status change or an oversight is not settled
-  by the code, and the code is the only evidence here.
-`check: python -c "import inspect; from deepreason.workflow import nonconjecture_recovery as N; from deepreason.rules import crit as R; assert 'authority=\"observe_only\",' in inspect.getsource(N._recover_criticism_effect); assert 'authority=authority,' in inspect.getsource(R.crit_argumentative_batch); assert 'trial_required' in inspect.getsource(R._resolve_authority)" && grep -q "defended_trial" src/deepreason/run_manifest.py && grep -q "def test_recovered_criticism_applies_canonical_effect_exactly_once" tests/test_v6_nonconjecture_recovery.py && ! grep -q "defended_trial" tests/test_v6_nonconjecture_recovery.py`
+- **Recovery downgraded prose authority to `observe_only` unconditionally —
+  FIXED (defended-trial-wiring tranche, 2026-08-13).** `_recover_criticism_
+  effect` used to pass `authority="observe_only"` unconditionally while the
+  live path passed the resolved authority, so a manifest with `criticism_
+  policy.authority == "defended_trial"` that crashed mid-criticism would have
+  recovered the case as scrutiny evidence rather than as a trial-worthy case
+  — exactly the operator's own diagnosed defect. Fixed by
+  `_recovered_criticism_authority`, which resolves the run's real authority
+  (`"defended_trial"` -> `"trial_required"`, mirroring `crit.py`'s own
+  `_resolve_authority` mapping) instead of hardcoding. Recovery still cannot
+  DISPATCH the trial itself (no provider boundary — see this document's own
+  seam agreement and `DR-SUB-workflow`'s Traps entry on `DEFENDED_TRIAL_
+  STEP`), so `rules/crit.py::_crit_argumentative_batch_result` defers a
+  trial-worthy case (a typed, restart-safe `"defended-trial-deferred"`
+  Measure) rather than either downgrading it to observed or crashing.
+  Regression: `tests/test_v6_nonconjecture_recovery.py::
+  test_recovered_observe_only_criticism_resumes_observe_only` and
+  `::test_recovered_defended_trial_criticism_defers_an_attacking_case_
+  instead_of_downgrading_to_observe_only`.
+`check: python -c "import inspect; from deepreason.workflow import nonconjecture_recovery as N; from deepreason.rules import crit as R; assert 'authority=_recovered_criticism_authority(manifest, payload),' in inspect.getsource(N._recover_criticism_effect); assert 'authority=authority,' in inspect.getsource(R.crit_argumentative_batch); assert 'trial_required' in inspect.getsource(R._resolve_authority); assert 'defended_trial' in inspect.getsource(N._recovered_criticism_authority)" && grep -q "defended_trial" src/deepreason/run_manifest.py && grep -q "def test_recovered_observe_only_criticism_resumes_observe_only" tests/test_v6_nonconjecture_recovery.py && grep -q "def test_recovered_defended_trial_criticism_defers_an_attacking_case_instead_of_downgrading_to_observe_only" tests/test_v6_nonconjecture_recovery.py && python -m pytest tests/test_v6_nonconjecture_recovery.py::test_recovered_observe_only_criticism_resumes_observe_only tests/test_v6_nonconjecture_recovery.py::test_recovered_defended_trial_criticism_defers_an_attacking_case_instead_of_downgrading_to_observe_only -q`
 - **Residue: hoisting a rule's workflow import to module scope is not an
   `ImportError`.** Re-measured at `9fa394d9`: adding
   `from deepreason.workflow.transaction_service import InquiryTransactionService`
