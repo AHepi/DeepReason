@@ -1,0 +1,10 @@
+=== symbol: ScratchRelatedBlockV1  defined: src/deepreason/application/scratch.py ===
+--- reference scan: rg -l -w 'ScratchRelatedBlockV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ScratchRelatedBlockV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ScratchRelatedBlockV1' pyproject.toml ---
+
+(above blank = zero hits)

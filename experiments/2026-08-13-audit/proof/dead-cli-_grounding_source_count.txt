@@ -1,0 +1,10 @@
+=== symbol: _grounding_source_count  defined: src/deepreason/cli/bridge.py ===
+--- reference scan: rg -l -w '_grounding_source_count' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_grounding_source_count['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_grounding_source_count' pyproject.toml ---
+
+(above blank = zero hits)

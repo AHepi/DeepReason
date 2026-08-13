@@ -1,0 +1,10 @@
+=== symbol: BranchSpec  defined: src/deepreason/jolts.py ===
+--- reference scan: rg -l -w 'BranchSpec' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BranchSpec['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'BranchSpec' pyproject.toml ---
+
+(above blank = zero hits)

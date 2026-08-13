@@ -1,0 +1,4 @@
+src/deepreason/signals_read.py:22:class SignalSnapshotV1(BaseModel):
+src/deepreason/signals_read.py:35:def _deferred_model_phase_counts(root: Path) -> dict[str, int]:
+src/deepreason/signals_read.py:61:def _token_spend(root: Path) -> dict:
+src/deepreason/signals_read.py:87:def read_signal_snapshot(root: Path | str) -> SignalSnapshotV1:

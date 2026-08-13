@@ -1,0 +1,3 @@
+src/deepreason/harness.py:73:class WellFormednessError(ValueError):
+src/deepreason/harness.py:77:class ReadOnlyHarnessError(RuntimeError):
+src/deepreason/harness.py:81:class Harness:

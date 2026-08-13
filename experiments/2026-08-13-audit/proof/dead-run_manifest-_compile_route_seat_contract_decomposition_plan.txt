@@ -1,0 +1,10 @@
+=== symbol: _compile_route_seat_contract_decomposition_plan  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w '_compile_route_seat_contract_decomposition_plan' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_compile_route_seat_contract_decomposition_plan['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_compile_route_seat_contract_decomposition_plan' pyproject.toml ---
+
+(above blank = zero hits)

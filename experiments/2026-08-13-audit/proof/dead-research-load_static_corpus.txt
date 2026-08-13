@@ -1,0 +1,10 @@
+=== symbol: load_static_corpus  defined: src/deepreason/research/backends.py ===
+--- reference scan: rg -l -w 'load_static_corpus' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]load_static_corpus['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'load_static_corpus' pyproject.toml ---
+
+(above blank = zero hits)

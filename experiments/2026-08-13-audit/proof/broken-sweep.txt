@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/user/DeepReason/tools/root_sweep.py", line 15, in <module>
+    out = pathlib.Path(sys.argv[1])
+                       ~~~~~~~~^^^
+IndexError: list index out of range
+exit: 1
+
+=== second invocation, with required output-path argument ===
+timeout 900 python tools/root_sweep.py experiments/2026-08-13-audit/proof/broken-sweep.txt
+result: exit 124 (killed by timeout after 900s) -- root_sweep.py writes its
+output file only after ALL roots finish (single out.write_text() call at
+end of the loop), so a hang on any one root loses output for every root,
+not just the hanging one.
+
+=== reader-immutability check (CLAUDE.md: "a committed root is immutable,
+so its verdict can only move if the READER moved") ===
+git log -1 --format='%H %ad' -- tools/root_sweep.py
+  -> 48506b4e0 2026-08-11 (last change)
+git diff 074ef1549 HEAD -- tools/root_sweep.py
+  -> empty (root_sweep.py unchanged since the baseline was recorded at
+     main 074ef1549, 2026-08-12)
+Conclusion: the reader has not moved since the last committed sweep
+(experiments/2026-08-12-change-all-configs-allowed/
+root-sweep-after-all-configs-allowed.txt, copied here as
+proof/broken-sweep-comparison-2026-08-12.txt). Per CLAUDE.md's own rule,
+that sweep IS the current answer; re-deriving it from scratch is not
+required, and the timeout observed above independently confirms (does
+not contradict) the still-live known hang at
+experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03
+named in docs/AUDIT_BASELINES.md.

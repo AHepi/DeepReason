@@ -1,0 +1,10 @@
+=== symbol: _payload_dict  defined: src/deepreason/workflow/conjecture_recovery.py ===
+--- reference scan: rg -l -w '_payload_dict' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_payload_dict['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_payload_dict' pyproject.toml ---
+
+(above blank = zero hits)

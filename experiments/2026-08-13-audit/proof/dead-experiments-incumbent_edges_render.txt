@@ -1,0 +1,10 @@
+=== symbol: incumbent_edges_render  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'incumbent_edges_render' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]incumbent_edges_render['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'incumbent_edges_render' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,7 @@
+=== symbol: ReusableQualificationBundleV1  defined: src/deepreason/qualification.py ===
+--- reference scan: rg -l -w 'ReusableQualificationBundleV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ReusableQualificationBundleV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/qualification.py
+(above blank = zero hits)

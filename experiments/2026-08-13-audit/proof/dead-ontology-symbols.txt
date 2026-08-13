@@ -1,0 +1,23 @@
+src/deepreason/ontology/artifact.py:16:class RefRole(str, Enum):
+src/deepreason/ontology/artifact.py:26:class Ref(FrozenRecord):
+src/deepreason/ontology/artifact.py:31:class Interface(FrozenRecord):
+src/deepreason/ontology/artifact.py:43:class ProvenanceRole(str, Enum):
+src/deepreason/ontology/artifact.py:63:class Provenance(FrozenRecord):
+src/deepreason/ontology/artifact.py:78:class Artifact(FrozenRecord):
+src/deepreason/ontology/commitment.py:17:class Verdict(str, Enum):
+src/deepreason/ontology/commitment.py:23:class Budget(FrozenRecord):
+src/deepreason/ontology/commitment.py:41:class Commitment(FrozenRecord):
+src/deepreason/ontology/event.py:116:class ConjectureContextCallReceiptV1(FrozenRecord):
+src/deepreason/ontology/event.py:217:class LLMCall(FrozenRecord):
+src/deepreason/ontology/event.py:29:class Rule(str, Enum):
+src/deepreason/ontology/event.py:318:class StateDiff(FrozenRecord):
+src/deepreason/ontology/event.py:354:class Event(FrozenRecord):
+src/deepreason/ontology/event.py:47:class LLMAttempt(FrozenRecord):
+src/deepreason/ontology/event.py:98:class SchoolRouteReceiptV1(FrozenRecord):
+src/deepreason/ontology/problem.py:20:class SpawnTrigger(str, Enum):
+src/deepreason/ontology/problem.py:32:class ProblemProvenance(FrozenRecord):
+src/deepreason/ontology/problem.py:44:class Problem(FrozenRecord):
+src/deepreason/ontology/state.py:16:class Status(str, Enum):
+src/deepreason/ontology/state.py:25:class EpistemicState(BaseModel):
+src/deepreason/ontology/warrant.py:15:class WarrantType(str, Enum):
+src/deepreason/ontology/warrant.py:20:class Warrant(FrozenRecord):

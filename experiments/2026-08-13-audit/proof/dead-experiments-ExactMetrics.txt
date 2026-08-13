@@ -1,0 +1,10 @@
+=== symbol: ExactMetrics  defined: src/deepreason/experiments/criticism_voting.py ===
+--- reference scan: rg -l -w 'ExactMetrics' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ExactMetrics['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ExactMetrics' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,7 @@
+=== symbol: installed_mcp_executable  defined: src/deepreason/mcp_registration.py ===
+--- reference scan: rg -l -w 'installed_mcp_executable' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]installed_mcp_executable['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/mcp_registration.py
+(above blank = zero hits)

@@ -1,0 +1,15 @@
+=== L1: Formalism is an option, never an obligation ===
+--- mechanism scan ---
+rg -li 'prose.immunity' src/deepreason/
+src/deepreason/rules/warrants.py
+grep -n 'def formally_backed' src/deepreason/rules/warrants.py
+61:def formally_backed(harness, target_id: str) -> bool:
+--- mechanism, all call sites ---
+src/deepreason/oracle.py
+src/deepreason/rules/relatedness.py
+src/deepreason/rules/warrants.py
+src/deepreason/informal/trial.py
+--- test scan ---
+tests/test_oracle.py
+tests/test_prose_refutation_boundaries.py
+verdict: enforced

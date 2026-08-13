@@ -1,0 +1,10 @@
+=== symbol: _simulation_contract_note  defined: src/deepreason/llm/packs.py ===
+--- reference scan: rg -l -w '_simulation_contract_note' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_simulation_contract_note['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_simulation_contract_note' pyproject.toml ---
+
+(above blank = zero hits)

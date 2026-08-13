@@ -1,0 +1,9 @@
+src/deepreason/indexes.py:104:def _category_document(
+src/deepreason/indexes.py:119:def rebuild_indexes(root: Path | str) -> Path:
+src/deepreason/indexes.py:232:def load_indexes(root: Path | str) -> dict[str, list[dict[str, Any]]]:
+src/deepreason/indexes.py:30:class DerivedIndexError(ValueError):
+src/deepreason/indexes.py:34:def _sha256(data: bytes) -> str:
+src/deepreason/indexes.py:38:def _generation_key(source_digest: str) -> str:
+src/deepreason/indexes.py:44:def _io_path(path: Path) -> Path:
+src/deepreason/indexes.py:60:def _write_atomic(path: Path, payload: bytes) -> None:
+src/deepreason/indexes.py:78:def _event_rows(log_bytes: bytes) -> tuple[list[tuple[int, int, Event]], list[dict]]:

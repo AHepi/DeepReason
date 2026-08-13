@@ -1,0 +1,10 @@
+=== symbol: _text_vector  defined: src/deepreason/measures/hv.py ===
+--- reference scan: rg -l -w '_text_vector' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_text_vector['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_text_vector' pyproject.toml ---
+
+(above blank = zero hits)

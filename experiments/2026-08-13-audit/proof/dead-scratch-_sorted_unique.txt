@@ -1,0 +1,10 @@
+=== symbol: _sorted_unique  defined: src/deepreason/scratch/models.py ===
+--- reference scan: rg -l -w '_sorted_unique' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_sorted_unique['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_sorted_unique' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,6 @@
+CANDIDATE-DEAD: _conjecture_stream (src/deepreason/capture/detection.py) -- proof: dead-capture-_conjecture_stream.txt
+CANDIDATE-DEAD: _mean_pairwise (src/deepreason/capture/detection.py) -- proof: dead-capture-_mean_pairwise.txt
+CANDIDATE-DEAD: _with_cross_examiner (src/deepreason/capture/schools.py) -- proof: dead-capture-_with_cross_examiner.txt
+CANDIDATE-DEAD: SchoolPopulationRegistration (src/deepreason/capture/schools.py) -- proof: dead-capture-SchoolPopulationRegistration.txt
+DYNAMIC-REF: SchoolPopulationBackend (src/deepreason/capture/schools.py) -- string hits: src/deepreason/capture/schools.py  -- proof: dead-capture-SchoolPopulationBackend.txt
+CANDIDATE-DEAD: _policy_content (src/deepreason/capture/schools.py) -- proof: dead-capture-_policy_content.txt

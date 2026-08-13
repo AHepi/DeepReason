@@ -1,0 +1,10 @@
+=== symbol: RunStopReceiptV1  defined: src/deepreason/application/models.py ===
+--- reference scan: rg -l -w 'RunStopReceiptV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]RunStopReceiptV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'RunStopReceiptV1' pyproject.toml ---
+
+(above blank = zero hits)

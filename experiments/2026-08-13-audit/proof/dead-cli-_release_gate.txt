@@ -1,0 +1,10 @@
+=== symbol: _release_gate  defined: src/deepreason/cli/doctor.py ===
+--- reference scan: rg -l -w '_release_gate' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_release_gate['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_release_gate' pyproject.toml ---
+
+(above blank = zero hits)

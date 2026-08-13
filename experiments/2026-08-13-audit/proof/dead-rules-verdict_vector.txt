@@ -1,0 +1,10 @@
+=== symbol: verdict_vector  defined: src/deepreason/rules/guards/anti_relapse.py ===
+--- reference scan: rg -l -w 'verdict_vector' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]verdict_vector['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'verdict_vector' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,25 @@
+=== L3: A solo run with everything on must be an option ===
+--- test scan: explicit solo-law naming ---
+
+
+def test_single_family_trial_reachable_under_master_gate(harness):
+    """Part C (S2a, R1) solo-law compliance: the master reachability gate
+    must not gate single_family_trial away for a genuinely single-family
+    solo run -- the exact accommodation the operator's standing solo law
+    requires (C3, "no configuration may strand solo runs").
+
+    single_family_trial's own school-routed reachability (the substitute
+    ensemble, not the bare Config-only direct-helper path, which
+    `test_the_config_only_path_cannot_satisfy_the_cross_school_guarantee`
+--- mechanism scan: single_model ---
+src/deepreason/compat_eval.py
+src/deepreason/cli/main.py
+src/deepreason/run_manifest.py
+--- test scan: single_model ---
+tests/test_v6_contract_schema_repair_policy.py
+tests/test_model_firewall.py
+tests/test_small_model_end_to_end.py
+tests/test_run_manifest.py
+tests/test_continuation.py
+tests/test_verify_workload_roots.py
+verdict: enforced

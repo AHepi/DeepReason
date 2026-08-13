@@ -1,0 +1,10 @@
+=== symbol: _open_result_values  defined: src/deepreason/application/scratch.py ===
+--- reference scan: rg -l -w '_open_result_values' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_open_result_values['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_open_result_values' pyproject.toml ---
+
+(above blank = zero hits)

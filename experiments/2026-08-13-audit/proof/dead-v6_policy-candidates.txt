@@ -1,0 +1,3 @@
+CANDIDATE-DEAD: _contained_runner_opted (src/deepreason/v6_policy.py) -- proof: dead-v6_policy-_contained_runner_opted.txt
+DYNAMIC-REF: engaged_config_referee_policy (src/deepreason/v6_policy.py) -- string hits: src/deepreason/v6_policy.py  -- proof: dead-v6_policy-engaged_config_referee_policy.txt
+DYNAMIC-REF: engaged_contained_simulation_toolchain (src/deepreason/v6_policy.py) -- string hits: src/deepreason/v6_policy.py  -- proof: dead-v6_policy-engaged_contained_simulation_toolchain.txt

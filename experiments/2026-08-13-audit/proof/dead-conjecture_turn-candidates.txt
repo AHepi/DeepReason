@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _TurnRecord (src/deepreason/conjecture_turn.py) -- proof: dead-conjecture_turn-_TurnRecord.txt
+DYNAMIC-REF: ConjectureTurnAuthorityV1 (src/deepreason/conjecture_turn.py) -- string hits: src/deepreason/conjecture_turn.py  -- proof: dead-conjecture_turn-ConjectureTurnAuthorityV1.txt

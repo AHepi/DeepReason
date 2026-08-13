@@ -1,0 +1,1 @@
+CANDIDATE-DEAD: ErrorCatalogEntry (src/deepreason/error_catalog.py) -- proof: dead-error_catalog-ErrorCatalogEntry.txt

@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _requirement_entries (src/deepreason/mcp_help.py) -- proof: dead-mcp_help-_requirement_entries.txt
+CANDIDATE-DEAD: capabilities_payload (src/deepreason/mcp_help.py) -- proof: dead-mcp_help-capabilities_payload.txt

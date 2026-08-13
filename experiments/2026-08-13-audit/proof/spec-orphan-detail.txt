@@ -1,0 +1,59 @@
+=== SD1: ContextRequest ===
+rg -l -w 'ContextRequest' src/deepreason/  -> (zero hits)
+rg -o 'ContextRequest[A-Za-z0-9_]*' src/deepreason/conjecture_turn.py | sort -u
+ContextRequestV1
+src/deepreason/conjecture_turn.py
+src/deepreason/scratch/conjecture.py
+src/deepreason/llm/wire.py
+src/deepreason/rules/conj.py
+src/deepreason/harness.py
+src/deepreason/invariants.py
+
+=== SD2: R_t (covered as 'reach') ===
+rg -l -w 'R_t' src/deepreason/  -> (zero hits)
+rg -w 'reach' src/deepreason/harness.py | head -3
+        reach: dict[str, float] | None = None,
+        status — they land in state.hv/state.reach only. ``addr`` carries the
+        reach amendment (Def 3.7): full cross-problem survival registers the
+
+=== SD3: codec:json ===
+rg -l -- 'codec:json' src/ docs/map/  -> (zero hits)
+rg -w 'codec' src/deepreason/ontology/artifact.py
+opaque bytes + codec (Sigma*, Def 3.1); meaning is imposed by conjecture and
+    """id = sha256(canonical(content_ref, codec, interface)) — content-addressed."""
+    codec: str = "utf8"
+    def compute_id(content_ref: str, codec: str, interface: Interface) -> str:
+        """sha256 over canonical JSON of (content_ref, codec, interface)."""
+            "codec": codec,
+
+=== SD4: deepreason.config.load (covered) ===
+rg -l -- 'deepreason.config.load' src/  -> (zero hits, literal dotted string not written anywhere)
+grep -n 'def load' src/deepreason/config.py
+grep -n 'from deepreason.config import load' src/deepreason/compat_eval.py
+578:def load(path: Path | None = None) -> Config:
+1100:    from deepreason.config import load
+
+=== SD5: novel-case ===
+rg -i 'novel.case' src/  -> (zero hits)
+
+=== SD6: positions.accepted (covered) ===
+rg -l -- 'positions.accepted' src/  -> (zero hits, no literal dotted path)
+rg -n 'positions' src/deepreason/findings.py | head -5
+121:                f"{len(accepted)} positions stand formally accepted. Where "
+251:    recorded attackers, suspended positions, every spawned side branch
+319:    summary["positions"] = by_status
+321:    # Competitors: problems where several accepted positions stand as
+384:            "positions_addressing": worked_by_problem.get(problem_id, 0),
+
+=== SD7: workflow-resume-decision.v1 (3-way spelling drift) ===
+spec:    workflow-resume-decision.v1
+code A:  "workflow-resume-decision"       (storage/objects.py, workflow/replay.py, harness.py)
+code B:  "workflow.resume-decision.v1"    (workflow/models.py)
+src/deepreason/storage/objects.py:161:    "workflow-resume-decision": WorkflowResumeDecisionV1,
+src/deepreason/workflow/replay.py:80:    "workflow-resume-decision": WorkflowResumeDecisionV1,
+src/deepreason/workflow/replay.py:2207:            "workflow-resume-decision",
+src/deepreason/workflow/replay.py:2218:            if schema == "workflow-resume-decision"
+src/deepreason/workflow/replay.py:2752:        if decision_entry is not None and decision_entry[0] == "workflow-resume-decision":
+src/deepreason/workflow/models.py:936:    _identity_domain = "workflow.resume-decision.v1"
+src/deepreason/workflow/models.py:938:    schema_: Literal["workflow.resume-decision.v1"] = Field(
+src/deepreason/workflow/models.py:939:        "workflow.resume-decision.v1", alias="schema"

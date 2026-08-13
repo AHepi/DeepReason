@@ -1,0 +1,24 @@
+src/deepreason/jolts.py:181:def build_jolt_action(
+src/deepreason/jolts.py:265:def problem_for_post_trigger_call(action: JoltAction, call_index: int) -> str:
+src/deepreason/jolts.py:275:def suppressible_lineage_exemplars(harness, refuted_target_id: str) -> tuple[str, ...]:
+src/deepreason/jolts.py:293:def validate_action_against_state(harness, action: JoltAction) -> None:
+src/deepreason/jolts.py:30:class JoltError(ValueError):
+src/deepreason/jolts.py:322:def record_jolt_action(harness, action: JoltAction):
+src/deepreason/jolts.py:332:def record_false_trigger_sample(
+src/deepreason/jolts.py:347:class BranchBudget(BaseModel):
+src/deepreason/jolts.py:34:class JoltArm(str, Enum):
+src/deepreason/jolts.py:355:class BranchSpec(BaseModel):
+src/deepreason/jolts.py:365:class MatchedBranchPlan(BaseModel):
+src/deepreason/jolts.py:415:def _file_digest(path: Path) -> str:
+src/deepreason/jolts.py:419:def _tree_digest(path: Path) -> str:
+src/deepreason/jolts.py:430:def root_state_digest(root: Path | str) -> str:
+src/deepreason/jolts.py:45:class JoltDiagnosis(str, Enum):
+src/deepreason/jolts.py:463:def _stable_order(arms: tuple[JoltArm, ...], seed: str) -> list[JoltArm]:
+src/deepreason/jolts.py:470:def plan_matched_branches(
+src/deepreason/jolts.py:51:class PublicVerifierFailure(BaseModel):
+src/deepreason/jolts.py:555:def materialize_matched_branches(
+src/deepreason/jolts.py:603:class PilotPreflightReceipt(BaseModel):
+src/deepreason/jolts.py:615:def _mode_value(value) -> str:
+src/deepreason/jolts.py:619:def preflight_pilot_runtime(
+src/deepreason/jolts.py:685:def re_full_digest(value: str) -> bool:
+src/deepreason/jolts.py:76:class JoltAction(BaseModel):

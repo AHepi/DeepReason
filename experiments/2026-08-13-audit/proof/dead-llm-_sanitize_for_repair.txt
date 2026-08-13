@@ -1,0 +1,10 @@
+=== symbol: _sanitize_for_repair  defined: src/deepreason/llm/firewall.py ===
+--- reference scan: rg -l -w '_sanitize_for_repair' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_sanitize_for_repair['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_sanitize_for_repair' pyproject.toml ---
+
+(above blank = zero hits)

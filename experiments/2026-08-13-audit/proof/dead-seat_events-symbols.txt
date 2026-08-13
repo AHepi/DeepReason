@@ -1,0 +1,4 @@
+src/deepreason/seat_events.py:101:def seat_bindings_for_run(harness, manifest) -> tuple[SeatBindingV1, ...]:
+src/deepreason/seat_events.py:27:class SeatBindingV1(FrozenRecord):
+src/deepreason/seat_events.py:56:class SeatBindingsEventPayloadV1(FrozenRecord):
+src/deepreason/seat_events.py:85:def recorded_seat_bindings(harness) -> tuple[SeatBindingsEventPayloadV1, ...]:

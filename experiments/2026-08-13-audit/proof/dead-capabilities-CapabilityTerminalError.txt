@@ -1,0 +1,7 @@
+=== symbol: CapabilityTerminalError  defined: src/deepreason/capabilities/simulation.py ===
+--- reference scan: rg -l -w 'CapabilityTerminalError' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CapabilityTerminalError['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/capabilities/simulation.py
+(above blank = zero hits)

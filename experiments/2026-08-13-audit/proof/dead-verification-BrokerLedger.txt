@@ -1,0 +1,7 @@
+=== symbol: BrokerLedger  defined: src/deepreason/verification/llm_broker.py ===
+--- reference scan: rg -l -w 'BrokerLedger' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BrokerLedger['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/verification/llm_broker.py
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: ContinuationRequest  defined: src/deepreason/runtime/continuation.py ===
+--- reference scan: rg -l -w 'ContinuationRequest' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ContinuationRequest['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ContinuationRequest' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _render_inspect  defined: src/deepreason/cli/bridge.py ===
+--- reference scan: rg -l -w '_render_inspect' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_render_inspect['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_render_inspect' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: make_inclusion_proofs  defined: src/deepreason/brain/receipts.py ===
+--- reference scan: rg -l -w 'make_inclusion_proofs' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]make_inclusion_proofs['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'make_inclusion_proofs' pyproject.toml ---
+
+(above blank = zero hits)

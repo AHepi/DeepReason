@@ -1,0 +1,10 @@
+=== symbol: DerivationStep  defined: src/deepreason/workloads/text.py ===
+--- reference scan: rg -l -w 'DerivationStep' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]DerivationStep['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'DerivationStep' pyproject.toml ---
+
+(above blank = zero hits)

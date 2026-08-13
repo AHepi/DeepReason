@@ -1,0 +1,8 @@
+src/deepreason/packs/allocate.py:12:def approximate_tokens(text: str) -> int:
+src/deepreason/packs/allocate.py:16:def _bounded_view(text: str, tokens: int) -> str:
+src/deepreason/packs/allocate.py:29:class AllocatedSection:
+src/deepreason/packs/allocate.py:40:class AllocationResult:
+src/deepreason/packs/allocate.py:64:def _resolve(section: PackSection, resolver: Callable[[str], str] | None) -> str:
+src/deepreason/packs/allocate.py:72:def allocate_pack(
+src/deepreason/packs/ir.py:26:class PackIR(BaseModel):
+src/deepreason/packs/ir.py:6:class PackSection(BaseModel):

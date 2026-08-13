@@ -1,0 +1,10 @@
+=== symbol: EncoderTestCase  defined: src/deepreason/llm/contracts.py ===
+--- reference scan: rg -l -w 'EncoderTestCase' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]EncoderTestCase['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'EncoderTestCase' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: LedgerAmendmentWireV1  defined: src/deepreason/bridge/compose.py ===
+--- reference scan: rg -l -w 'LedgerAmendmentWireV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]LedgerAmendmentWireV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'LedgerAmendmentWireV1' pyproject.toml ---
+
+(above blank = zero hits)

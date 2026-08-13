@@ -1,0 +1,10 @@
+=== symbol: _safe_rate  defined: src/deepreason/compat_eval.py ===
+--- reference scan: rg -l -w '_safe_rate' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_safe_rate['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_safe_rate' pyproject.toml ---
+
+(above blank = zero hits)

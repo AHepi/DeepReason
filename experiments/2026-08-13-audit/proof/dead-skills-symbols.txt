@@ -1,0 +1,55 @@
+src/deepreason/skills/adoption.py:19:class CapsuleDependenceError(ValueError):
+src/deepreason/skills/adoption.py:23:def capsule_ref(capsule_artifact_id: str, role: RefRole | str = RefRole.MENTION) -> Ref:
+src/deepreason/skills/adoption.py:30:def validate_capsule_refs(artifact_or_interface, capsule_artifact_ids: Iterable[str]) -> None:
+src/deepreason/skills/adoption.py:44:def import_capsule(harness, capsule: SkillCapsule) -> Artifact:
+src/deepreason/skills/adoption.py:56:def _check_toolchain(harness, capsule: SkillCapsule, commitment) -> None:
+src/deepreason/skills/adoption.py:76:def adopt_commitments(
+src/deepreason/skills/distill.py:110:def distill_capsule(
+src/deepreason/skills/distill.py:148:def distill_lesson(
+src/deepreason/skills/distill.py:19:class NegativeCaseLawError(ValueError):
+src/deepreason/skills/distill.py:42:def _semantic_texts(value) -> tuple[str, ...]:
+src/deepreason/skills/distill.py:60:def _words(text: str) -> tuple[str, ...]:
+src/deepreason/skills/distill.py:64:def _ngrams(text: str, size: int = 8) -> set[tuple[str, ...]]:
+src/deepreason/skills/distill.py:69:def _negative_ngrams(source: VerifiedDistillationSource) -> set[tuple[str, ...]]:
+src/deepreason/skills/distill.py:80:def validate_positive_material(
+src/deepreason/skills/metrics.py:15:def skill_metrics(
+src/deepreason/skills/models.py:107:class SkillCapsule(BaseModel):
+src/deepreason/skills/models.py:152:class LessonMemory(BaseModel):
+src/deepreason/skills/models.py:167:class SkillCatalogEntry(BaseModel):
+src/deepreason/skills/models.py:176:class SkillLibrarySnapshot(BaseModel):
+src/deepreason/skills/models.py:197:class RawEmbedding(BaseModel):
+src/deepreason/skills/models.py:204:class RankedSkill(BaseModel):
+src/deepreason/skills/models.py:212:class SchoolSkillSlice(BaseModel):
+src/deepreason/skills/models.py:226:class RevoicedSkill(BaseModel):
+src/deepreason/skills/models.py:22:class ToolchainCoordinate(BaseModel):
+src/deepreason/skills/models.py:238:class SkillRetrievalReceipt(BaseModel):
+src/deepreason/skills/models.py:294:class AdoptionEvaluation(BaseModel):
+src/deepreason/skills/models.py:302:class AdoptionResult(BaseModel):
+src/deepreason/skills/models.py:314:class SkillMetrics(BaseModel):
+src/deepreason/skills/models.py:33:class PackageCoordinate(BaseModel):
+src/deepreason/skills/models.py:44:class PassedCommitmentDefinition(BaseModel):
+src/deepreason/skills/models.py:57:class DependencyLink(BaseModel):
+src/deepreason/skills/models.py:64:class VerifiedDistillationSource(BaseModel):
+src/deepreason/skills/models.py:94:class CapsuleDraft(BaseModel):
+src/deepreason/skills/retrieve.py:168:def replay_retrieval(receipt: SkillRetrievalReceipt, blobs) -> dict[str, bytes]:
+src/deepreason/skills/retrieve.py:185:def render_school_slice(
+src/deepreason/skills/retrieve.py:22:def _retrieval_text(capsule) -> str:
+src/deepreason/skills/retrieve.py:35:def _fingerprint(embedder) -> tuple[str, ...]:
+src/deepreason/skills/retrieve.py:45:def _school_slices(
+src/deepreason/skills/retrieve.py:76:def retrieve_skills(
+src/deepreason/skills/revoice.py:15:class RevoiceOverlapError(ValueError):
+src/deepreason/skills/revoice.py:19:class _SummaryMaterial(BaseModel):
+src/deepreason/skills/revoice.py:23:def _words(text: str) -> tuple[str, ...]:
+src/deepreason/skills/revoice.py:27:def _voice_text(capsule: SkillCapsule) -> str:
+src/deepreason/skills/revoice.py:41:def _overlap(source: str, output: str, n: int = 5) -> tuple[int, int]:
+src/deepreason/skills/revoice.py:66:def revoice_capsule(
+src/deepreason/skills/snapshot.py:11:def capsule_bytes(capsule: SkillCapsule) -> bytes:
+src/deepreason/skills/snapshot.py:15:def snapshot_library(
+src/deepreason/skills/snapshot.py:61:def load_capsule(entry: SkillCatalogEntry, blobs) -> SkillCapsule:
+src/deepreason/skills/validate.py:124:def validate_distillation_source(
+src/deepreason/skills/validate.py:23:class DistillationSourceError(ValueError):
+src/deepreason/skills/validate.py:27:def _content_bytes(harness: Harness, artifact) -> bytes:
+src/deepreason/skills/validate.py:38:def _positive_dependency_closure(harness: Harness, artifact_id: str) -> tuple[str, ...]:
+src/deepreason/skills/validate.py:61:def _toolchains(root: Path) -> tuple[ToolchainCoordinate, ...]:
+src/deepreason/skills/validate.py:77:def _config_provenance(root: Path) -> tuple[str, ...]:
+src/deepreason/skills/validate.py:88:def _packages(harness: Harness, artifacts: tuple[str, ...]) -> tuple[PackageCoordinate, ...]:

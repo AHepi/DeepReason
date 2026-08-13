@@ -1,0 +1,6 @@
+src/deepreason/assets/__init__.py:112:def _read(name: str) -> str:
+src/deepreason/assets/__init__.py:116:def baseline() -> str:
+src/deepreason/assets/__init__.py:121:def catalog() -> dict[str, str]:
+src/deepreason/assets/__init__.py:126:def catalog_names() -> set[str]:
+src/deepreason/assets/__init__.py:130:def runtime_catalog() -> dict[str, dict]:
+src/deepreason/assets/__init__.py:140:def capability_catalog() -> dict[str, dict]:

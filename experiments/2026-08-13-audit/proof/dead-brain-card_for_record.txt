@@ -1,0 +1,10 @@
+=== symbol: card_for_record  defined: src/deepreason/brain/cards.py ===
+--- reference scan: rg -l -w 'card_for_record' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]card_for_record['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'card_for_record' pyproject.toml ---
+
+(above blank = zero hits)

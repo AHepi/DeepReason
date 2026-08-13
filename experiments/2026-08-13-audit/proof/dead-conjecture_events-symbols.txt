@@ -1,0 +1,2 @@
+src/deepreason/conjecture_events.py:18:class ConjectureTurnAction(str, Enum):
+src/deepreason/conjecture_events.py:25:class ConjectureTurnEventPayloadV1(FrozenRecord):

@@ -1,0 +1,10 @@
+=== symbol: _profile_endpoint  defined: src/deepreason/shallow_fitness.py ===
+--- reference scan: rg -l -w '_profile_endpoint' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_profile_endpoint['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_profile_endpoint' pyproject.toml ---
+
+(above blank = zero hits)

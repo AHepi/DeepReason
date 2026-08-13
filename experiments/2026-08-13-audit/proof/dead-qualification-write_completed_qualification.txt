@@ -1,0 +1,7 @@
+=== symbol: write_completed_qualification  defined: src/deepreason/qualification.py ===
+--- reference scan: rg -l -w 'write_completed_qualification' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]write_completed_qualification['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/qualification.py
+(above blank = zero hits)

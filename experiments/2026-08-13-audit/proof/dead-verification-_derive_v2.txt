@@ -1,0 +1,10 @@
+=== symbol: _derive_v2  defined: src/deepreason/verification/brokered.py ===
+--- reference scan: rg -l -w '_derive_v2' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_derive_v2['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_derive_v2' pyproject.toml ---
+
+(above blank = zero hits)

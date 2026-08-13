@@ -1,0 +1,10 @@
+=== symbol: domain_log_input  defined: src/deepreason/rules/guards/anti_relapse.py ===
+--- reference scan: rg -l -w 'domain_log_input' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]domain_log_input['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'domain_log_input' pyproject.toml ---
+
+(above blank = zero hits)

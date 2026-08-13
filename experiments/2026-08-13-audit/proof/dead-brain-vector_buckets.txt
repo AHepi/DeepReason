@@ -1,0 +1,10 @@
+=== symbol: vector_buckets  defined: src/deepreason/brain/index.py ===
+--- reference scan: rg -l -w 'vector_buckets' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]vector_buckets['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'vector_buckets' pyproject.toml ---
+
+(above blank = zero hits)

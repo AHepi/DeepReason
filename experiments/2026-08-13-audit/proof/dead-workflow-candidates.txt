@@ -1,0 +1,43 @@
+CANDIDATE-DEAD: _catalogs (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_catalogs.txt
+CANDIDATE-DEAD: _validate_authority (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_validate_authority.txt
+CANDIDATE-DEAD: _mandatory_interface (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_mandatory_interface.txt
+CANDIDATE-DEAD: _existing_conjecture_artifacts (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_existing_conjecture_artifacts.txt
+DYNAMIC-REF: ConjectureRecoverySemanticError (src/deepreason/workflow/conjecture_recovery.py) -- string hits: src/deepreason/workflow/conjecture_recovery.py  -- proof: dead-workflow-ConjectureRecoverySemanticError.txt
+CANDIDATE-DEAD: _terminal_failure (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_terminal_failure.txt
+CANDIDATE-DEAD: _payload_dict (src/deepreason/workflow/conjecture_recovery.py) -- proof: dead-workflow-_payload_dict.txt
+DYNAMIC-REF: ForeignCriticismPlanV1 (src/deepreason/workflow/criticism.py) -- string hits: src/deepreason/workflow/criticism.py  -- proof: dead-workflow-ForeignCriticismPlanV1.txt
+CANDIDATE-DEAD: _route_hash (src/deepreason/workflow/criticism.py) -- proof: dead-workflow-_route_hash.txt
+CANDIDATE-DEAD: _model_identity_hash (src/deepreason/workflow/criticism.py) -- proof: dead-workflow-_model_identity_hash.txt
+DYNAMIC-REF: ForeignCriticAssignmentV1 (src/deepreason/workflow/criticism.py) -- string hits: src/deepreason/workflow/criticism.py  -- proof: dead-workflow-ForeignCriticAssignmentV1.txt
+DYNAMIC-REF: ForeignCriticismTargetPlanV1 (src/deepreason/workflow/criticism.py) -- string hits: src/deepreason/workflow/criticism.py  -- proof: dead-workflow-ForeignCriticismTargetPlanV1.txt
+DYNAMIC-REF: ForeignCriticismBatchV1 (src/deepreason/workflow/criticism.py) -- string hits: src/deepreason/workflow/criticism.py  -- proof: dead-workflow-ForeignCriticismBatchV1.txt
+CANDIDATE-DEAD: _diagnostic (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_diagnostic.txt
+CANDIDATE-DEAD: _terminalize (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_terminalize.txt
+CANDIDATE-DEAD: _existing_admission (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_existing_admission.txt
+CANDIDATE-DEAD: _complete_admitted (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_complete_admitted.txt
+CANDIDATE-DEAD: _recovered_criticism_authority (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_recovered_criticism_authority.txt
+CANDIDATE-DEAD: _criticism_retry_fallback_cases (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_criticism_retry_fallback_cases.txt
+CANDIDATE-DEAD: _unapplied (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_unapplied.txt
+CANDIDATE-DEAD: _artifact_digest (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_artifact_digest.txt
+CANDIDATE-DEAD: _config_referee_contract (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_config_referee_contract.txt
+CANDIDATE-DEAD: _recover_config_referee_effect (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_recover_config_referee_effect.txt
+CANDIDATE-DEAD: _bridge_authority (src/deepreason/workflow/nonconjecture_recovery.py) -- proof: dead-workflow-_bridge_authority.txt
+CANDIDATE-DEAD: _decide (src/deepreason/workflow/reducer.py) -- proof: dead-workflow-_decide.txt
+CANDIDATE-DEAD: _validate_boundary (src/deepreason/workflow/reducer.py) -- proof: dead-workflow-_validate_boundary.txt
+CANDIDATE-DEAD: _raise_exhausted (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_raise_exhausted.txt
+CANDIDATE-DEAD: _PointerValidationError (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_PointerValidationError.txt
+CANDIDATE-DEAD: _finite_error (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_finite_error.txt
+CANDIDATE-DEAD: _record_bytes (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_record_bytes.txt
+CANDIDATE-DEAD: _diagnostic_refs (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_diagnostic_refs.txt
+CANDIDATE-DEAD: _raw_text (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_raw_text.txt
+CANDIDATE-DEAD: _assess (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_assess.txt
+CANDIDATE-DEAD: _terminalize_invalid (src/deepreason/workflow/repair_transaction.py) -- proof: dead-workflow-_terminalize_invalid.txt
+CANDIDATE-DEAD: _PlannedApply (src/deepreason/workflow/replay.py) -- proof: dead-workflow-_PlannedApply.txt
+CANDIDATE-DEAD: _record_map (src/deepreason/workflow/replay.py) -- proof: dead-workflow-_record_map.txt
+CANDIDATE-DEAD: _call_index (src/deepreason/workflow/replay.py) -- proof: dead-workflow-_call_index.txt
+CANDIDATE-DEAD: TransactionReplayItem (src/deepreason/workflow/replay.py) -- proof: dead-workflow-TransactionReplayItem.txt
+CANDIDATE-DEAD: _meter_snapshot (src/deepreason/workflow/shadow.py) -- proof: dead-workflow-_meter_snapshot.txt
+CANDIDATE-DEAD: _gate_findings (src/deepreason/workflow/shadow.py) -- proof: dead-workflow-_gate_findings.txt
+CANDIDATE-DEAD: _synthetic_candidate_ref (src/deepreason/workflow/shadow.py) -- proof: dead-workflow-_synthetic_candidate_ref.txt
+CANDIDATE-DEAD: _diagnostic_seq (src/deepreason/workflow/shadow.py) -- proof: dead-workflow-_diagnostic_seq.txt
+CANDIDATE-DEAD: ReservedDispatch (src/deepreason/workflow/transaction_service.py) -- proof: dead-workflow-ReservedDispatch.txt

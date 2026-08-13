@@ -1,0 +1,10 @@
+=== symbol: materialize_run_config  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w 'materialize_run_config' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]materialize_run_config['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'materialize_run_config' pyproject.toml ---
+
+(above blank = zero hits)

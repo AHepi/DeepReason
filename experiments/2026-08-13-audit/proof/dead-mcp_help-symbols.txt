@@ -1,0 +1,4 @@
+src/deepreason/mcp_help.py:261:def tool_definitions() -> list[dict[str, Any]]:
+src/deepreason/mcp_help.py:304:def _requirement_entries(entries: tuple[tuple[str, str], ...]) -> list[dict[str, str]]:
+src/deepreason/mcp_help.py:308:def capabilities_payload(active_tool_names: set[str]) -> dict[str, Any]:
+src/deepreason/mcp_help.py:329:def call_tool(

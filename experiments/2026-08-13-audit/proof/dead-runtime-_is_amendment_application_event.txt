@@ -1,0 +1,10 @@
+=== symbol: _is_amendment_application_event  defined: src/deepreason/runtime/terminal_authority.py ===
+--- reference scan: rg -l -w '_is_amendment_application_event' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_is_amendment_application_event['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_is_amendment_application_event' pyproject.toml ---
+
+(above blank = zero hits)

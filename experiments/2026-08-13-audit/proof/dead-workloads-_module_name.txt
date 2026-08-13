@@ -1,0 +1,10 @@
+=== symbol: _module_name  defined: src/deepreason/workloads/code.py ===
+--- reference scan: rg -l -w '_module_name' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_module_name['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_module_name' pyproject.toml ---
+
+(above blank = zero hits)

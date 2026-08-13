@@ -1,0 +1,10 @@
+=== symbol: _max_share  defined: src/deepreason/views/jolt_signals.py ===
+--- reference scan: rg -l -w '_max_share' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_max_share['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_max_share' pyproject.toml ---
+
+(above blank = zero hits)

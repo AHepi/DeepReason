@@ -1,0 +1,10 @@
+=== symbol: CampaignRunRecord  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'CampaignRunRecord' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CampaignRunRecord['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CampaignRunRecord' pyproject.toml ---
+
+(above blank = zero hits)

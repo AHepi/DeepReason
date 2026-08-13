@@ -1,0 +1,111 @@
+src/deepreason/experiments/campaign.py:1002:def _command_manifest_paths(run: CampaignRunPlan) -> tuple[Path, ...]:
+src/deepreason/experiments/campaign.py:1031:def _launch_manifest_paths(run: CampaignRunPlan) -> tuple[Path, ...]:
+src/deepreason/experiments/campaign.py:1044:def _load_launch_manifests(
+src/deepreason/experiments/campaign.py:107:class AuditDimensions:
+src/deepreason/experiments/campaign.py:1095:def _bound_manifest_authority_findings(
+src/deepreason/experiments/campaign.py:1137:def _strict_report_json(raw: bytes, *, gate: str) -> Mapping[str, Any]:
+src/deepreason/experiments/campaign.py:1162:def _verify_qualification_report(
+src/deepreason/experiments/campaign.py:1283:def _new_qualification_gate(
+src/deepreason/experiments/campaign.py:1346:def _invoke(
+src/deepreason/experiments/campaign.py:1358:def _foreign_root_scan_failure(run_id: str, detail: str) -> CampaignFinding:
+src/deepreason/experiments/campaign.py:1367:def _decoded_json_string_values(value: Any) -> Iterator[str]:
+src/deepreason/experiments/campaign.py:1381:def _normalized_log_path(value: str, *, base: Path) -> str | None:
+src/deepreason/experiments/campaign.py:1391:def _path_is_at_or_below(candidate: str, root: str) -> bool:
+src/deepreason/experiments/campaign.py:1398:def _foreign_root_path_findings(
+src/deepreason/experiments/campaign.py:1491:class CampaignCoordinator:
+src/deepreason/experiments/campaign.py:161:def classify_dimensions(dimensions: AuditDimensions) -> RootClassification:
+src/deepreason/experiments/campaign.py:1707:def _apply_findings(
+src/deepreason/experiments/campaign.py:1715:def write_campaign_index(path: Path | str, index: CampaignIndex) -> None:
+src/deepreason/experiments/campaign.py:186:class RootAudit:
+src/deepreason/experiments/campaign.py:228:def _mapping(value: Any) -> dict[str, Any]:
+src/deepreason/experiments/campaign.py:236:def _finding(channel: str, raw: Any, *, fallback_source: str) -> CampaignFinding:
+src/deepreason/experiments/campaign.py:256:def normalize_verification_report(report: Any) -> AuditDimensions:
+src/deepreason/experiments/campaign.py:294:def read_reasoning_terminal(root: Path | str) -> tuple[PhaseTerminal, dict[str, Any] | None]:
+src/deepreason/experiments/campaign.py:344:def _root_manifest_schema_version(root: Path) -> int | None:
+src/deepreason/experiments/campaign.py:358:def _canonical_bridge_eligible(
+src/deepreason/experiments/campaign.py:379:def inspect_bridge_terminal(
+src/deepreason/experiments/campaign.py:48:class RootClassification(str, Enum):
+src/deepreason/experiments/campaign.py:496:def _default_verifier(root: Path) -> Any:
+src/deepreason/experiments/campaign.py:502:def audit_root(
+src/deepreason/experiments/campaign.py:629:class QualificationReportRef:
+src/deepreason/experiments/campaign.py:638:class CampaignRunPlan:
+src/deepreason/experiments/campaign.py:648:class CampaignWavePlan:
+src/deepreason/experiments/campaign.py:654:class CampaignPlan:
+src/deepreason/experiments/campaign.py:661:def _normalized_campaign_root(root: Path | str) -> str:
+src/deepreason/experiments/campaign.py:66:class CampaignFinding:
+src/deepreason/experiments/campaign.py:671:def _campaign_roots_overlap(left: str, right: str) -> bool:
+src/deepreason/experiments/campaign.py:681:def _validate_campaign_plan(plan: CampaignPlan) -> None:
+src/deepreason/experiments/campaign.py:725:def campaign_plan_from_mapping(
+src/deepreason/experiments/campaign.py:84:class PhaseTerminal:
+src/deepreason/experiments/campaign.py:857:def load_campaign_plan(path: Path | str) -> CampaignPlan:
+src/deepreason/experiments/campaign.py:866:class CommandOutcome:
+src/deepreason/experiments/campaign.py:877:def _subprocess_runner(command: Sequence[str], cwd: Path | None) -> int:
+src/deepreason/experiments/campaign.py:882:class CampaignRunRecord:
+src/deepreason/experiments/campaign.py:906:class CampaignWaveRecord:
+src/deepreason/experiments/campaign.py:922:class QualificationReportBinding:
+src/deepreason/experiments/campaign.py:940:class RunManifestAuthorityBinding:
+src/deepreason/experiments/campaign.py:957:class CampaignQualificationGate:
+src/deepreason/experiments/campaign.py:986:class CampaignIndex:
+src/deepreason/experiments/campaign_cli.py:22:def build_parser() -> argparse.ArgumentParser:
+src/deepreason/experiments/campaign_cli.py:37:def main(argv: list[str] | None = None) -> int:
+src/deepreason/experiments/criticism_voting.py:107:class RemoveAllFlagged:
+src/deepreason/experiments/criticism_voting.py:112:class RemoveOneFlagged:
+src/deepreason/experiments/criticism_voting.py:117:class AbstainIfAnyFlag:
+src/deepreason/experiments/criticism_voting.py:122:class Reweight:
+src/deepreason/experiments/criticism_voting.py:134:def _vote(weight_correct, weight_wrong, tie_rule: str, prefilter) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:154:def _post_weights(q: Question, policy: Policy):
+src/deepreason/experiments/criticism_voting.py:182:def outcome_before(q: Question, tie_rule: str) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:187:def outcome_after(q: Question, policy: Policy, tie_rule: str) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:196:def repaired(q: Question, policy: Policy, tie_rule: str) -> bool:
+src/deepreason/experiments/criticism_voting.py:201:def broken(q: Question, policy: Policy, tie_rule: str) -> bool:
+src/deepreason/experiments/criticism_voting.py:206:def repair_break_probs(q: Question, policy: Policy, tie_rule: str):
+src/deepreason/experiments/criticism_voting.py:228:def realized_outcome_before(q: Question, tie_rule: str, rng: random.Random) -> bool:
+src/deepreason/experiments/criticism_voting.py:237:def realized_outcome_after(
+src/deepreason/experiments/criticism_voting.py:259:def aggregate_metrics(questions) -> dict:
+src/deepreason/experiments/criticism_voting.py:286:def population_eval(questions, policy: Policy, tie_rule: str) -> dict:
+src/deepreason/experiments/criticism_voting.py:321:class IndependentErrors:
+src/deepreason/experiments/criticism_voting.py:344:class DifficultyMixture:
+src/deepreason/experiments/criticism_voting.py:384:class HomogeneousCritic:
+src/deepreason/experiments/criticism_voting.py:399:class MajorityConditionalCritic:
+src/deepreason/experiments/criticism_voting.py:419:class MarginConditionalCritic:
+src/deepreason/experiments/criticism_voting.py:453:def flag_vector_prob(critic: Critic, correct, flags) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:463:def sample_flags(critic: Critic, correct, rng: random.Random):
+src/deepreason/experiments/criticism_voting.py:475:class ExactMetrics:
+src/deepreason/experiments/criticism_voting.py:526:def enumerate_joint(k: int, error_model, critic: Critic) -> Iterator[tuple]:
+src/deepreason/experiments/criticism_voting.py:537:def _count_branches(policy: Policy, nc: int, m: int, fc: int, fw: int):
+src/deepreason/experiments/criticism_voting.py:566:def _accumulate(acc: dict, weight: Fraction, b: Fraction, branches, tie_rule: str):
+src/deepreason/experiments/criticism_voting.py:588:def _exact_by_counts(k, error_model, critic, policy, tie_rule) -> ExactMetrics:
+src/deepreason/experiments/criticism_voting.py:60:def _frac(x) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:639:def _exact_by_full_enumeration(k, error_model, critic, policy, tie_rule) -> ExactMetrics:
+src/deepreason/experiments/criticism_voting.py:689:def exact_metrics(k, error_model, critic, policy, tie_rule, method="counts") -> ExactMetrics:
+src/deepreason/experiments/criticism_voting.py:68:def _check_prob(x: Fraction, name: str) -> Fraction:
+src/deepreason/experiments/criticism_voting.py:708:def simulate_metrics(k, n_questions, error_model, critic, policy, tie_rule, seed) -> dict:
+src/deepreason/experiments/criticism_voting.py:80:class Question:
+src/deepreason/experiments/jolt_tsp.py:107:def edge_set(tour: Iterable[str]) -> frozenset[tuple[str, str]]:
+src/deepreason/experiments/jolt_tsp.py:113:def tour_distance(instance: dict, tour: Iterable[str]) -> int:
+src/deepreason/experiments/jolt_tsp.py:123:def retained_edge_fraction(tour: Iterable[str], incumbent: Iterable[str]) -> float:
+src/deepreason/experiments/jolt_tsp.py:127:def held_karp(instance: dict) -> dict:
+src/deepreason/experiments/jolt_tsp.py:170:def brute_force(instance: dict) -> tuple[int, tuple[str, ...]]:
+src/deepreason/experiments/jolt_tsp.py:182:def instance_problem_description(instance: dict) -> str:
+src/deepreason/experiments/jolt_tsp.py:195:def score_feedback(history: list[dict]) -> str:
+src/deepreason/experiments/jolt_tsp.py:211:def ordinary_history_render(history: list[dict]) -> str:
+src/deepreason/experiments/jolt_tsp.py:224:def matrix_render(instance: dict) -> str:
+src/deepreason/experiments/jolt_tsp.py:231:def incumbent_edges_render(incumbent: tuple[str, ...]) -> str:
+src/deepreason/experiments/jolt_tsp.py:238:def recent_edge_differences(history: list[dict], incumbent: tuple[str, ...]) -> str:
+src/deepreason/experiments/jolt_tsp.py:253:def treatment_context(
+src/deepreason/experiments/jolt_tsp.py:296:def branch_order(instance_seed: int, source_digest: str, prereg_digest: str) -> tuple[str, ...]:
+src/deepreason/experiments/jolt_tsp.py:304:def trigger_window(
+src/deepreason/experiments/jolt_tsp.py:350:def calibration_thresholds(
+src/deepreason/experiments/jolt_tsp.py:421:class Checkpoint:
+src/deepreason/experiments/jolt_tsp.py:42:def generate_instance(seed: int) -> dict:
+src/deepreason/experiments/jolt_tsp.py:60:def coordinates(instance: dict) -> dict[str, tuple[int, int]]:
+src/deepreason/experiments/jolt_tsp.py:64:def instance_ids(instance: dict) -> tuple[str, ...]:
+src/deepreason/experiments/jolt_tsp.py:68:def distance_matrix(instance: dict) -> tuple[tuple[int, ...], ...]:
+src/deepreason/experiments/jolt_tsp.py:80:def validate_tour(value) -> tuple[str, ...] | None:
+src/deepreason/experiments/jolt_tsp.py:91:def parse_tour(text: str) -> tuple[str, ...] | None:
+src/deepreason/experiments/jolt_tsp.py:99:def canonical_tour(tour: Iterable[str]) -> tuple[str, ...]:
+src/deepreason/experiments/lambda_run.py:104:def _distribution(values: list[float | None]) -> dict:
+src/deepreason/experiments/lambda_run.py:117:def summarize(arm_results: dict[str, list[dict]]) -> dict:
+src/deepreason/experiments/lambda_run.py:142:def verdict(summary: dict, preregistration_path: Path) -> dict:
+src/deepreason/experiments/lambda_run.py:170:def record(report_path: Path, summary: dict, verdict_result: dict) -> None:
+src/deepreason/experiments/lambda_run.py:29:def run_arm(

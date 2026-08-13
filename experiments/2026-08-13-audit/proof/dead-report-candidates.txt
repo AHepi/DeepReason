@@ -1,0 +1,4 @@
+CANDIDATE-DEAD: _process_report (src/deepreason/report.py) -- proof: dead-report-_process_report.txt
+CANDIDATE-DEAD: _mean_pairwise_texts (src/deepreason/report.py) -- proof: dead-report-_mean_pairwise_texts.txt
+CANDIDATE-DEAD: _latest_tagged (src/deepreason/report.py) -- proof: dead-report-_latest_tagged.txt
+CANDIDATE-DEAD: _program_grounding_breakdown (src/deepreason/report.py) -- proof: dead-report-_program_grounding_breakdown.txt

@@ -1,0 +1,10 @@
+=== symbol: _AmendmentRecord  defined: src/deepreason/amendment/models.py ===
+--- reference scan: rg -l -w '_AmendmentRecord' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_AmendmentRecord['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_AmendmentRecord' pyproject.toml ---
+
+(above blank = zero hits)

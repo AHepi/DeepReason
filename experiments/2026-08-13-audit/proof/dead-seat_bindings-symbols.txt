@@ -1,0 +1,13 @@
+src/deepreason/seat_bindings.py:116:def write_seat_bindings(bindings: Mapping[str, str], target) -> Path:
+src/deepreason/seat_bindings.py:133:def load_seat_bindings(path) -> dict[str, str]:
+src/deepreason/seat_bindings.py:148:def resolve_seat_bindings_by_group(
+src/deepreason/seat_bindings.py:169:def resolve_seat_bindings(
+src/deepreason/seat_bindings.py:213:def school_seat_bindings_path(
+src/deepreason/seat_bindings.py:221:def parse_school_seat_flags(values: list[str] | None) -> dict[str, str]:
+src/deepreason/seat_bindings.py:256:def resolve_school_seats(
+src/deepreason/seat_bindings.py:274:def criticism_seat_bindings_path(
+src/deepreason/seat_bindings.py:282:def resolve_criticism_seats(
+src/deepreason/seat_bindings.py:63:class SeatBindingError(ValueError):
+src/deepreason/seat_bindings.py:71:def _known_groups() -> frozenset[str]:
+src/deepreason/seat_bindings.py:75:def seat_bindings_path(
+src/deepreason/seat_bindings.py:83:def parse_seat_flags(values: list[str] | None) -> dict[str, str]:

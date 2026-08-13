@@ -1,0 +1,10 @@
+=== symbol: CorruptLogError  defined: src/deepreason/log/event_log.py ===
+--- reference scan: rg -l -w 'CorruptLogError' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CorruptLogError['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CorruptLogError' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,7 @@
+CANDIDATE-DEAD: _variator_pack (src/deepreason/measures/hv.py) -- proof: dead-measures-_variator_pack.txt
+CANDIDATE-DEAD: _sample_edits (src/deepreason/measures/hv.py) -- proof: dead-measures-_sample_edits.txt
+CANDIDATE-DEAD: _survival (src/deepreason/measures/hv.py) -- proof: dead-measures-_survival.txt
+CANDIDATE-DEAD: _normalize (src/deepreason/measures/hv.py) -- proof: dead-measures-_normalize.txt
+CANDIDATE-DEAD: _text_vector (src/deepreason/measures/hv.py) -- proof: dead-measures-_text_vector.txt
+CANDIDATE-DEAD: _evaluable_battery (src/deepreason/measures/hv.py) -- proof: dead-measures-_evaluable_battery.txt
+CANDIDATE-DEAD: _verdict (src/deepreason/measures/reach.py) -- proof: dead-measures-_verdict.txt

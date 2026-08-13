@@ -1,0 +1,2 @@
+DYNAMIC-REF: lineage_endpoints (src/deepreason/scheduler/scheduler.py) -- string hits: src/deepreason/scheduler/scheduler.py  -- proof: dead-scheduler-lineage_endpoints.txt
+CANDIDATE-DEAD: stable_component_spec (src/deepreason/scheduler/scheduler.py) -- proof: dead-scheduler-stable_component_spec.txt

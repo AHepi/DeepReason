@@ -1,0 +1,10 @@
+=== symbol: json_pointer  defined: src/deepreason/llm/repair.py ===
+--- reference scan: rg -l -w 'json_pointer' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]json_pointer['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'json_pointer' pyproject.toml ---
+
+(above blank = zero hits)

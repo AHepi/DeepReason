@@ -1,0 +1,10 @@
+=== symbol: ErrorCatalogEntry  defined: src/deepreason/error_catalog.py ===
+--- reference scan: rg -l -w 'ErrorCatalogEntry' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ErrorCatalogEntry['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ErrorCatalogEntry' pyproject.toml ---
+
+(above blank = zero hits)

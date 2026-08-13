@@ -1,0 +1,10 @@
+=== symbol: _get  defined: src/deepreason/authority.py ===
+--- reference scan: rg -l -w '_get' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_get['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_get' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: ExpectedCallOutcome  defined: src/deepreason/invariants.py ===
+--- reference scan: rg -l -w 'ExpectedCallOutcome' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ExpectedCallOutcome['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ExpectedCallOutcome' pyproject.toml ---
+
+(above blank = zero hits)

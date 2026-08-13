@@ -1,0 +1,4 @@
+CANDIDATE-DEAD: _read_clipped (src/deepreason/referee.py) -- proof: dead-referee-_read_clipped.txt
+CANDIDATE-DEAD: _wire_contract_class (src/deepreason/referee.py) -- proof: dead-referee-_wire_contract_class.txt
+DYNAMIC-REF: render_config_review_pack (src/deepreason/referee.py) -- string hits: src/deepreason/referee.py  -- proof: dead-referee-render_config_review_pack.txt
+DYNAMIC-REF: ConfigObservationV1 (src/deepreason/referee.py) -- string hits: src/deepreason/referee.py  -- proof: dead-referee-ConfigObservationV1.txt

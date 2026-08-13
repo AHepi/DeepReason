@@ -1,0 +1,120 @@
+src/deepreason/scratch/attention.py:145:class GuideSelectionV1(ScratchRecord):
+src/deepreason/scratch/attention.py:150:class AttentionPackV1(ScratchRecord):
+src/deepreason/scratch/attention.py:184:def _dedupe(values: list[str]) -> list[str]:
+src/deepreason/scratch/attention.py:188:class AttentionPlanner:
+src/deepreason/scratch/attention.py:33:class AttentionPolicyV1(ScratchRecord):
+src/deepreason/scratch/attention.py:95:class AttentionRequestV1(ScratchRecord):
+src/deepreason/scratch/authoring.py:101:class ScratchAuthoringService:
+src/deepreason/scratch/authoring.py:70:class ScratchAuthoringError(RuntimeError):
+src/deepreason/scratch/authoring.py:77:class _ScratchModelResult:
+src/deepreason/scratch/conjecture.py:180:def _bounded_attention_policy(
+src/deepreason/scratch/conjecture.py:211:def _expanded_attention_policy(
+src/deepreason/scratch/conjecture.py:237:def _focus_blocks(
+src/deepreason/scratch/conjecture.py:266:def _seed(
+src/deepreason/scratch/conjecture.py:285:def _expansion_seed(
+src/deepreason/scratch/conjecture.py:304:def plan_conjecture_context(
+src/deepreason/scratch/conjecture.py:39:class ConjectureContextStale(RuntimeError):
+src/deepreason/scratch/conjecture.py:413:def prepare_conjecture_context_call(
+src/deepreason/scratch/conjecture.py:48:def _v6_aliases_for_render_receipt(
+src/deepreason/scratch/conjecture.py:495:def commit_conjecture_context(
+src/deepreason/scratch/conjecture.py:538:def validate_conjecture_context_call(
+src/deepreason/scratch/conjecture.py:627:def plan_conjecture_context_expansion(
+src/deepreason/scratch/conjecture.py:68:def _replace_local_handles(text: str, replacements: Mapping[str, str]) -> str:
+src/deepreason/scratch/conjecture.py:77:def render_v6_conjecture_context(
+src/deepreason/scratch/conjecture.py:89:class PlannedConjectureContextV1(ScratchRecord):
+src/deepreason/scratch/contracts.py:104:def _require_one_reference_per_endpoint(link) -> None:
+src/deepreason/scratch/contracts.py:132:class ScratchBlockMinimalWireV1(ScratchWireModel):
+src/deepreason/scratch/contracts.py:143:class ScratchLinkWireV1(ScratchWireModel):
+src/deepreason/scratch/contracts.py:188:class ScratchLinkMinimalWireV1(ScratchWireModel):
+src/deepreason/scratch/contracts.py:227:class ClusterGuideWireV1(ScratchWireModel):
+src/deepreason/scratch/contracts.py:266:class ClusterGuideMinimalWireV1(ScratchWireModel):
+src/deepreason/scratch/contracts.py:276:class ClusterGuideDraftV1(FrozenRecord):
+src/deepreason/scratch/contracts.py:292:class ScratchWireReferenceError(ValueError):
+src/deepreason/scratch/contracts.py:314:class ScratchBlockWireContract(WireContract[ScratchBlockBodyV1]):
+src/deepreason/scratch/contracts.py:327:class ScratchBlockMinimalWireContract(WireContract[ScratchBlockBodyV1]):
+src/deepreason/scratch/contracts.py:340:class _ReferenceCompiler:
+src/deepreason/scratch/contracts.py:443:class ScratchLinkWireContract(_ReferenceCompiler, WireContract[ScratchLinkBodyV1]):
+src/deepreason/scratch/contracts.py:486:class ScratchLinkMinimalWireContract(
+src/deepreason/scratch/contracts.py:527:class ClusterGuideWireContract(_ReferenceCompiler, WireContract[ClusterGuideDraftV1]):
+src/deepreason/scratch/contracts.py:53:class ScratchWireModel(BaseModel):
+src/deepreason/scratch/contracts.py:558:class ClusterGuideMinimalWireContract(
+src/deepreason/scratch/contracts.py:57:def _nonblank(value: str | None) -> str | None:
+src/deepreason/scratch/contracts.py:63:def _local_handle(value: str) -> str:
+src/deepreason/scratch/contracts.py:80:class ScratchBlockWireV1(ScratchWireModel):
+src/deepreason/scratch/coverage.py:12:class CoveragePolicy(Protocol):
+src/deepreason/scratch/coverage.py:17:class CoverageController:
+src/deepreason/scratch/errors.py:36:class ScratchBlockNotFound(ScratchServiceError):
+src/deepreason/scratch/errors.py:40:class ScratchBlockPrefixAmbiguous(ScratchServiceError):
+src/deepreason/scratch/errors.py:44:class ScratchLinkNotFound(ScratchServiceError):
+src/deepreason/scratch/errors.py:48:class ScratchLinkPrefixAmbiguous(ScratchServiceError):
+src/deepreason/scratch/errors.py:52:class ScratchClusterNotFound(ScratchServiceError):
+src/deepreason/scratch/errors.py:56:class ScratchClusterPrefixAmbiguous(ScratchServiceError):
+src/deepreason/scratch/errors.py:60:class ScratchAlreadyMember(ScratchServiceError):
+src/deepreason/scratch/errors.py:64:class ScratchNotMember(ScratchServiceError):
+src/deepreason/scratch/errors.py:68:class ScratchLinkRetired(ScratchServiceError):
+src/deepreason/scratch/errors.py:72:class ScratchReadOnly(ScratchServiceError):
+src/deepreason/scratch/errors.py:76:class ScratchRootBusy(ScratchServiceError):
+src/deepreason/scratch/errors.py:80:class ScratchLimitInvalid(ScratchServiceError):
+src/deepreason/scratch/errors.py:8:class ScratchServiceError(ValueError):
+src/deepreason/scratch/events.py:14:class ScratchAction(str, Enum):
+src/deepreason/scratch/events.py:44:class ScratchEventPayloadV1(ScratchRecord):
+src/deepreason/scratch/models.py:101:def _without_none(**values) -> dict:
+src/deepreason/scratch/models.py:105:def _require_nonblank(value: str | None) -> str | None:
+src/deepreason/scratch/models.py:111:def _freeze_list(value):
+src/deepreason/scratch/models.py:115:def _sorted_unique(values: list[str], field: str) -> FrozenList:
+src/deepreason/scratch/models.py:122:class ScratchRecord(FrozenRecord):
+src/deepreason/scratch/models.py:128:class ScratchActor(str, Enum):
+src/deepreason/scratch/models.py:134:class LinkDirection(str, Enum):
+src/deepreason/scratch/models.py:139:class MembershipAction(str, Enum):
+src/deepreason/scratch/models.py:144:class CoverageState(str, Enum):
+src/deepreason/scratch/models.py:149:class RetrievalChannel(str, Enum):
+src/deepreason/scratch/models.py:164:class InstanceRef(ScratchRecord):
+src/deepreason/scratch/models.py:169:class ScratchProvenanceV1(ScratchRecord):
+src/deepreason/scratch/models.py:190:class ScratchBlockBodyV1(ScratchRecord):
+src/deepreason/scratch/models.py:223:class ScratchBlockV1(ScratchRecord):
+src/deepreason/scratch/models.py:288:class ScratchLinkBodyV1(ScratchRecord):
+src/deepreason/scratch/models.py:304:class ScratchLinkV1(ScratchRecord):
+src/deepreason/scratch/models.py:332:class ScratchClusterV1(ScratchRecord):
+src/deepreason/scratch/models.py:366:class ClusterMembershipV1(ScratchRecord):
+src/deepreason/scratch/models.py:432:class ClusterSnapshotV1(ScratchRecord):
+src/deepreason/scratch/models.py:485:class LLMCallRef(ScratchRecord):
+src/deepreason/scratch/models.py:498:class ClusterGuideV1(ScratchRecord):
+src/deepreason/scratch/models.py:590:class SimilarityHitV1(ScratchRecord):
+src/deepreason/scratch/models.py:641:class AttentionReceiptV1(ScratchRecord):
+src/deepreason/scratch/models.py:698:class VisibilityRecordV1(ScratchRecord):
+src/deepreason/scratch/models.py:70:def _canonical_value(value):
+src/deepreason/scratch/models.py:747:class CoverageCycleV1(ScratchRecord):
+src/deepreason/scratch/models.py:807:class AdvisoryContextV1(ScratchRecord):
+src/deepreason/scratch/models.py:92:def domain_hash(domain: str, value) -> str:
+src/deepreason/scratch/proposals.py:101:class ScratchProposalLinkV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:122:class ScratchQuestionDraftV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:140:class ScratchClusterSuggestionV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:158:class ScratchProposalV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:45:class ScratchProposalModel(BaseModel):
+src/deepreason/scratch/proposals.py:50:class ScratchBlockDraftBodyV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:91:class ScratchNewBlockDraftV1(ScratchProposalModel):
+src/deepreason/scratch/proposals.py:96:class ScratchRevisionDraftV1(ScratchProposalModel):
+src/deepreason/scratch/render.py:146:class RenderedScratchPackV1(ScratchRecord):
+src/deepreason/scratch/render.py:152:class ScratchRenderer:
+src/deepreason/scratch/render.py:29:class ScratchRenderError(ValueError):
+src/deepreason/scratch/render.py:37:class ScratchRenderReceiptV1(ScratchRecord):
+src/deepreason/scratch/search.py:11:def normalize_search_text(value: str) -> str:
+src/deepreason/scratch/search.py:17:def search_tokens(value: str) -> tuple[str, ...]:
+src/deepreason/scratch/search.py:22:class LiteralSearchHit:
+src/deepreason/scratch/search.py:28:def literal_search(
+src/deepreason/scratch/service.py:53:class ScratchService:
+src/deepreason/scratch/similarity.py:130:def embedding_text(block: ScratchBlockV1) -> str:
+src/deepreason/scratch/similarity.py:136:def _json_safe(value: Any, pointer: str = "/fingerprint") -> Any:
+src/deepreason/scratch/similarity.py:163:def _finite_vector(raw: Sequence[Any], pointer: str) -> list[float]:
+src/deepreason/scratch/similarity.py:187:def _engine_fingerprint(engine: Any) -> dict[str, Any]:
+src/deepreason/scratch/similarity.py:214:def _identity(selection: EmbedderSelection, fingerprint: Mapping[str, Any]) -> tuple[str, str]:
+src/deepreason/scratch/similarity.py:240:class ScratchSimilarityService:
+src/deepreason/scratch/similarity.py:379:def record_similarity_pair(
+src/deepreason/scratch/similarity.py:38:class ScratchSimilarityError(ValueError):
+src/deepreason/scratch/similarity.py:49:class EmbedderSelection:
+src/deepreason/scratch/similarity.py:58:class ScratchEmbeddingInputV1(ScratchRecord):
+src/deepreason/scratch/similarity.py:81:def select_embedder(
+src/deepreason/scratch/state.py:35:class LinkState(str, Enum):
+src/deepreason/scratch/state.py:437:def rebuild_scratch_state(objects: ObjectStore, events: Iterable[Event]) -> ScratchState:
+src/deepreason/scratch/state.py:43:class CoverageProgress:
+src/deepreason/scratch/state.py:60:class ScratchState:

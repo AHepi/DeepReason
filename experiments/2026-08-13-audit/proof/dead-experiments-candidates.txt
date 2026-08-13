@@ -1,0 +1,54 @@
+CANDIDATE-DEAD: _command_manifest_paths (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_command_manifest_paths.txt
+CANDIDATE-DEAD: _launch_manifest_paths (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_launch_manifest_paths.txt
+CANDIDATE-DEAD: _load_launch_manifests (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_load_launch_manifests.txt
+DYNAMIC-REF: AuditDimensions (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-AuditDimensions.txt
+CANDIDATE-DEAD: _bound_manifest_authority_findings (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_bound_manifest_authority_findings.txt
+CANDIDATE-DEAD: _strict_report_json (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_strict_report_json.txt
+CANDIDATE-DEAD: _verify_qualification_report (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_verify_qualification_report.txt
+CANDIDATE-DEAD: _new_qualification_gate (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_new_qualification_gate.txt
+CANDIDATE-DEAD: _foreign_root_scan_failure (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_foreign_root_scan_failure.txt
+CANDIDATE-DEAD: _decoded_json_string_values (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_decoded_json_string_values.txt
+CANDIDATE-DEAD: _normalized_log_path (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_normalized_log_path.txt
+CANDIDATE-DEAD: _path_is_at_or_below (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_path_is_at_or_below.txt
+CANDIDATE-DEAD: _foreign_root_path_findings (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_foreign_root_path_findings.txt
+DYNAMIC-REF: classify_dimensions (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-classify_dimensions.txt
+CANDIDATE-DEAD: _apply_findings (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_apply_findings.txt
+DYNAMIC-REF: RootAudit (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-RootAudit.txt
+DYNAMIC-REF: normalize_verification_report (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-normalize_verification_report.txt
+DYNAMIC-REF: read_reasoning_terminal (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-read_reasoning_terminal.txt
+CANDIDATE-DEAD: _root_manifest_schema_version (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_root_manifest_schema_version.txt
+CANDIDATE-DEAD: _canonical_bridge_eligible (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_canonical_bridge_eligible.txt
+CANDIDATE-DEAD: _default_verifier (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_default_verifier.txt
+CANDIDATE-DEAD: _normalized_campaign_root (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_normalized_campaign_root.txt
+DYNAMIC-REF: CampaignFinding (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-CampaignFinding.txt
+CANDIDATE-DEAD: _campaign_roots_overlap (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_campaign_roots_overlap.txt
+CANDIDATE-DEAD: _validate_campaign_plan (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_validate_campaign_plan.txt
+DYNAMIC-REF: PhaseTerminal (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-PhaseTerminal.txt
+CANDIDATE-DEAD: CommandOutcome (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-CommandOutcome.txt
+CANDIDATE-DEAD: _subprocess_runner (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-_subprocess_runner.txt
+CANDIDATE-DEAD: CampaignRunRecord (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-CampaignRunRecord.txt
+CANDIDATE-DEAD: CampaignWaveRecord (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-CampaignWaveRecord.txt
+CANDIDATE-DEAD: QualificationReportBinding (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-QualificationReportBinding.txt
+CANDIDATE-DEAD: RunManifestAuthorityBinding (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-RunManifestAuthorityBinding.txt
+CANDIDATE-DEAD: CampaignQualificationGate (src/deepreason/experiments/campaign.py) -- proof: dead-experiments-CampaignQualificationGate.txt
+DYNAMIC-REF: CampaignIndex (src/deepreason/experiments/campaign.py) -- string hits: src/deepreason/experiments/campaign.py  -- proof: dead-experiments-CampaignIndex.txt
+CANDIDATE-DEAD: _vote (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_vote.txt
+CANDIDATE-DEAD: _post_weights (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_post_weights.txt
+CANDIDATE-DEAD: realized_outcome_before (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-realized_outcome_before.txt
+CANDIDATE-DEAD: realized_outcome_after (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-realized_outcome_after.txt
+CANDIDATE-DEAD: flag_vector_prob (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-flag_vector_prob.txt
+CANDIDATE-DEAD: sample_flags (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-sample_flags.txt
+CANDIDATE-DEAD: ExactMetrics (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-ExactMetrics.txt
+CANDIDATE-DEAD: _count_branches (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_count_branches.txt
+CANDIDATE-DEAD: _accumulate (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_accumulate.txt
+CANDIDATE-DEAD: _exact_by_counts (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_exact_by_counts.txt
+CANDIDATE-DEAD: _frac (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_frac.txt
+CANDIDATE-DEAD: _exact_by_full_enumeration (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_exact_by_full_enumeration.txt
+CANDIDATE-DEAD: _check_prob (src/deepreason/experiments/criticism_voting.py) -- proof: dead-experiments-_check_prob.txt
+CANDIDATE-DEAD: ordinary_history_render (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-ordinary_history_render.txt
+CANDIDATE-DEAD: matrix_render (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-matrix_render.txt
+CANDIDATE-DEAD: incumbent_edges_render (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-incumbent_edges_render.txt
+CANDIDATE-DEAD: recent_edge_differences (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-recent_edge_differences.txt
+CANDIDATE-DEAD: instance_ids (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-instance_ids.txt
+CANDIDATE-DEAD: distance_matrix (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-distance_matrix.txt
+CANDIDATE-DEAD: validate_tour (src/deepreason/experiments/jolt_tsp.py) -- proof: dead-experiments-validate_tour.txt

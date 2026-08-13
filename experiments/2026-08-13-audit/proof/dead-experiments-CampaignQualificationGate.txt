@@ -1,0 +1,10 @@
+=== symbol: CampaignQualificationGate  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'CampaignQualificationGate' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CampaignQualificationGate['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CampaignQualificationGate' pyproject.toml ---
+
+(above blank = zero hits)

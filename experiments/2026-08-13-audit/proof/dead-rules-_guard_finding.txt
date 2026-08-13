@@ -1,0 +1,10 @@
+=== symbol: _guard_finding  defined: src/deepreason/rules/conj.py ===
+--- reference scan: rg -l -w '_guard_finding' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_guard_finding['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_guard_finding' pyproject.toml ---
+
+(above blank = zero hits)

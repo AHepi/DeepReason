@@ -1,0 +1,16 @@
+CANDIDATE-DEAD: _standards_for (src/deepreason/informal/appellate.py) -- proof: dead-informal-_standards_for.txt
+CANDIDATE-DEAD: _log_calls (src/deepreason/informal/audits.py) -- proof: dead-informal-_log_calls.txt
+CANDIDATE-DEAD: _rubric_warrants (src/deepreason/informal/audits.py) -- proof: dead-informal-_rubric_warrants.txt
+CANDIDATE-DEAD: _audit_warrant (src/deepreason/informal/audits.py) -- proof: dead-informal-_audit_warrant.txt
+CANDIDATE-DEAD: _ensemble_call (src/deepreason/informal/audits.py) -- proof: dead-informal-_ensemble_call.txt
+CANDIDATE-DEAD: _judge_exchange (src/deepreason/informal/audits.py) -- proof: dead-informal-_judge_exchange.txt
+CANDIDATE-DEAD: _body (src/deepreason/informal/standards.py) -- proof: dead-informal-_body.txt
+CANDIDATE-DEAD: _record_pairwise_observation (src/deepreason/informal/trial.py) -- proof: dead-informal-_record_pairwise_observation.txt
+CANDIDATE-DEAD: _advisory_pairwise_result (src/deepreason/informal/trial.py) -- proof: dead-informal-_advisory_pairwise_result.txt
+CANDIDATE-DEAD: _pairwise_steps (src/deepreason/informal/trial.py) -- proof: dead-informal-_pairwise_steps.txt
+CANDIDATE-DEAD: _coerce_trial_authority (src/deepreason/informal/trial.py) -- proof: dead-informal-_coerce_trial_authority.txt
+CANDIDATE-DEAD: _record_trial_observation (src/deepreason/informal/trial.py) -- proof: dead-informal-_record_trial_observation.txt
+CANDIDATE-DEAD: _advisory_trial_result (src/deepreason/informal/trial.py) -- proof: dead-informal-_advisory_trial_result.txt
+CANDIDATE-DEAD: _v6_trial_manifest (src/deepreason/informal/trial.py) -- proof: dead-informal-_v6_trial_manifest.txt
+CANDIDATE-DEAD: _trial_steps (src/deepreason/informal/trial.py) -- proof: dead-informal-_trial_steps.txt
+CANDIDATE-DEAD: _paraphrase_screen (src/deepreason/informal/trial.py) -- proof: dead-informal-_paraphrase_screen.txt

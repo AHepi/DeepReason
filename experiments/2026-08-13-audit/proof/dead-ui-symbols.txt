@@ -1,0 +1,4 @@
+src/deepreason/ui/status.py:11:def _events(path: Path) -> list[ProgressEvent]:
+src/deepreason/ui/status.py:25:def read_run_status(root: Path | str, *, since_seq: int = -1) -> dict:
+src/deepreason/ui/terminal.py:16:def render_terminal_status(status: dict, *, pulse: int = 0) -> str:
+src/deepreason/ui/terminal.py:49:def watch_run(

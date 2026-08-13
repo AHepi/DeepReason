@@ -1,0 +1,10 @@
+=== symbol: TransactionReplayItem  defined: src/deepreason/workflow/replay.py ===
+--- reference scan: rg -l -w 'TransactionReplayItem' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]TransactionReplayItem['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'TransactionReplayItem' pyproject.toml ---
+
+(above blank = zero hits)

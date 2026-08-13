@@ -1,0 +1,10 @@
+=== symbol: SimulationWorkflowArtifacts  defined: src/deepreason/workloads/simulation.py ===
+--- reference scan: rg -l -w 'SimulationWorkflowArtifacts' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]SimulationWorkflowArtifacts['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'SimulationWorkflowArtifacts' pyproject.toml ---
+
+(above blank = zero hits)

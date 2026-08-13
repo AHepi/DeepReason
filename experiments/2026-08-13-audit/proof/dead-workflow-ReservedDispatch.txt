@@ -1,0 +1,10 @@
+=== symbol: ReservedDispatch  defined: src/deepreason/workflow/transaction_service.py ===
+--- reference scan: rg -l -w 'ReservedDispatch' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ReservedDispatch['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ReservedDispatch' pyproject.toml ---
+
+(above blank = zero hits)

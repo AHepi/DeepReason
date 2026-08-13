@@ -1,0 +1,10 @@
+=== symbol: RouteSeatContractDecompositionGrantV1  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w 'RouteSeatContractDecompositionGrantV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]RouteSeatContractDecompositionGrantV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'RouteSeatContractDecompositionGrantV1' pyproject.toml ---
+
+(above blank = zero hits)

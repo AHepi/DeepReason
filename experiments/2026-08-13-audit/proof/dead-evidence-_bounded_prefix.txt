@@ -1,0 +1,10 @@
+=== symbol: _bounded_prefix  defined: src/deepreason/evidence/dossier.py ===
+--- reference scan: rg -l -w '_bounded_prefix' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_bounded_prefix['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_bounded_prefix' pyproject.toml ---
+
+(above blank = zero hits)

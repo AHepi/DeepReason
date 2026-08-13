@@ -1,0 +1,18 @@
+=== L5: All configurations should be allowed ===
+--- mechanism: CompileNoticeV1 / compile_notices ---
+src/deepreason/run_manifest.py
+--- test scan (sample) ---
+tests/test_run_manifest_scratch_bridge.py
+tests/test_run_manifest.py
+tests/test_manifest_integration.py
+--- P1: remaining unconverted sites, from the delivering tranche's own PARKED.md ---
+## P1 — convert the remaining CONVERT-SPEC'D denials
+
+> Route through dr-change-orchestrator. REQUEST.md context: the
+> 2026-08-12 all-configs-allowed tranche
+> (`experiments/2026-08-12-change-all-configs-allowed/`) converted a
+> tier-1 subset of compile-time semantic denials to typed compile
+> notices (bridge-route requirements, judge-family conflicts,
+> seat-binding conflicts, grounded-bridge unresolved-success-safety,
+> INTAKE_SEAT_CONFLICT, validate-intake advisory). Its SPEC.md §3
+verdict: partially-enforced (~13 sites converted to typed CompileNoticeV1 + tests; ~20 more sites census-complete but not code-complete per that tranche's own P1, so the law is not yet fully realized)

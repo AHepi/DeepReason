@@ -1,0 +1,7 @@
+=== symbol: normalize_search_text  defined: src/deepreason/scratch/search.py ===
+--- reference scan: rg -l -w 'normalize_search_text' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]normalize_search_text['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/scratch/search.py
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _handle_type  defined: src/deepreason/bridge/ledger.py ===
+--- reference scan: rg -l -w '_handle_type' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_handle_type['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_handle_type' pyproject.toml ---
+
+(above blank = zero hits)

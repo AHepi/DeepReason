@@ -1,0 +1,10 @@
+=== symbol: RepairDiagnostic  defined: src/deepreason/llm/repair.py ===
+--- reference scan: rg -l -w 'RepairDiagnostic' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]RepairDiagnostic['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'RepairDiagnostic' pyproject.toml ---
+
+(above blank = zero hits)

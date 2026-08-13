@@ -1,0 +1,10 @@
+=== symbol: BlobStoreLike  defined: src/deepreason/brain/snapshot.py ===
+--- reference scan: rg -l -w 'BlobStoreLike' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BlobStoreLike['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'BlobStoreLike' pyproject.toml ---
+
+(above blank = zero hits)

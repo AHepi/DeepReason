@@ -1,0 +1,81 @@
+src/deepreason/rules/act.py:41:def browser_rid(commitment_id: str, target_id: str) -> str:
+src/deepreason/rules/act.py:47:def browser_evidence(harness, target_id: str) -> list[dict]:
+src/deepreason/rules/act.py:71:def needs_browser_run(harness, target_id: str) -> bool:
+src/deepreason/rules/act.py:87:def run_browser_evidence(harness, target_id: str, browser, config) -> Artifact | None:
+src/deepreason/rules/conj.py:166:def _guard_finding(candidate_ref: str, outcome: str, reason: str):
+src/deepreason/rules/conj.py:195:def _v6_component_diagnostic(
+src/deepreason/rules/conj.py:222:def _v6_scratch_effect_refs(harness, context_ref: str) -> tuple[str, ...]:
+src/deepreason/rules/conj.py:233:def _v6_capability_effect_refs(
+src/deepreason/rules/conj.py:253:def _v6_simulation_effect_refs(
+src/deepreason/rules/conj.py:269:def _v6_research_effect_refs(
+src/deepreason/rules/conj.py:285:def _validate_v6_context_continuation(
+src/deepreason/rules/conj.py:380:def _v6_context_continuation_input_refs(binding) -> tuple[str, ...]:
+src/deepreason/rules/conj.py:398:def _v6_no_context_reason(scratch_policy, context_policy, prior_plan) -> str:
+src/deepreason/rules/conj.py:420:def _v6_atomic_conjecture_fallback(
+src/deepreason/rules/conj.py:59:def _resolve_ref(target: str, artifacts: dict) -> str | None:
+src/deepreason/rules/conj.py:658:def conj(
+src/deepreason/rules/conj.py:69:def _union_blocks(dossiers) -> tuple:
+src/deepreason/rules/conj.py:83:def root_problem_family(state, problem_id: str) -> str:
+src/deepreason/rules/conj.py:95:def _active_control_trace(
+src/deepreason/rules/crit.py:1038:def _refute_crashing_property(harness, prop_id: str, detail: dict) -> None:
+src/deepreason/rules/crit.py:1080:def _crit_proposed_properties(
+src/deepreason/rules/crit.py:116:def _critic_execution(
+src/deepreason/rules/crit.py:1198:def crit_argumentative(
+src/deepreason/rules/crit.py:1361:def crit_argumentative_batch(
+src/deepreason/rules/crit.py:1723:def _apply_counterexample_retry_result(
+src/deepreason/rules/crit.py:1778:def _crit_argumentative_batch_result(
+src/deepreason/rules/crit.py:184:def _conditioned_budget(token_budget: int, prefix: str) -> int:
+src/deepreason/rules/crit.py:195:def _condition_pack(pack: str, prefix: str) -> str:
+src/deepreason/rules/crit.py:199:def _simulation_enabled(harness) -> bool:
+src/deepreason/rules/crit.py:207:def _filed_simulations(harness) -> tuple[tuple[str, str, str, str], ...]:
+src/deepreason/rules/crit.py:237:def _llm_event_seq(harness, llm_call) -> int | None:
+src/deepreason/rules/crit.py:246:def _observe_coverage(
+src/deepreason/rules/crit.py:263:def _artifact_context_digest(harness, target_id: str) -> str:
+src/deepreason/rules/crit.py:278:def _v6_transactional_batch_call(
+src/deepreason/rules/crit.py:51:def _authority(config) -> str:
+src/deepreason/rules/crit.py:545:def _v6_transactional_atomic_critic_call(
+src/deepreason/rules/crit.py:755:def _observe_case(
+src/deepreason/rules/crit.py:798:def _has_property_oracle(harness, target_id: str) -> bool:
+src/deepreason/rules/crit.py:814:def try_counterexample(
+src/deepreason/rules/crit.py:82:def _authority_value(value: object) -> str:
+src/deepreason/rules/crit.py:88:def _resolve_authority(
+src/deepreason/rules/crit.py:918:def crit_program(harness, target_id: str) -> list[Artifact]:
+src/deepreason/rules/crit.py:956:def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
+src/deepreason/rules/encoding.py:17:def draft_encoded_commitment(harness, adapter, conjecture_claim: str, conjecture_mechanism: str) -> dict | None:
+src/deepreason/rules/experiment.py:107:def _survivor_heads(harness, base_commitment_id: str, cap: int = 3) -> list[str]:
+src/deepreason/rules/experiment.py:128:def propose_generators(harness, base, adapter, config) -> list:
+src/deepreason/rules/experiment.py:188:def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, str]]:
+src/deepreason/rules/experiment.py:223:def promoted_properties(harness, base_commitment_id: str, config) -> set[str]:
+src/deepreason/rules/experiment.py:274:def population_supports(harness, base, property_source: str, target_id: str) -> bool:
+src/deepreason/rules/experiment.py:313:def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config) -> bool:
+src/deepreason/rules/experiment.py:402:def _prop_text(harness, artifact) -> str:
+src/deepreason/rules/experiment.py:408:def checker_crashed(detail: dict) -> bool:
+src/deepreason/rules/experiment.py:420:def crash_probe(harness, base, checker_source: str, limit: int = 8) -> dict | None:
+src/deepreason/rules/experiment.py:446:def propose_properties(harness, base, problem, adapter, config) -> list:
+src/deepreason/rules/experiment.py:49:def _oracle_ready(harness, artifact) -> bool:
+src/deepreason/rules/experiment.py:83:def accepted_generators(harness, base_commitment_id: str) -> list[tuple[str, str]]:
+src/deepreason/rules/guards/anti_relapse.py:112:def relapse_domain(
+src/deepreason/rules/guards/anti_relapse.py:156:def _append_operational(harness, payload: dict) -> None:
+src/deepreason/rules/guards/anti_relapse.py:168:def record_domain(harness, artifact_id: str, domain: RelapseDomain) -> None:
+src/deepreason/rules/guards/anti_relapse.py:180:def domain_log_input(artifact_id: str, domain: RelapseDomain) -> str:
+src/deepreason/rules/guards/anti_relapse.py:192:def recorded_domains(harness) -> dict[str, RelapseDomain]:
+src/deepreason/rules/guards/anti_relapse.py:231:def _record_scope_diagnostic(
+src/deepreason/rules/guards/anti_relapse.py:245:def _battery(candidate: Artifact, prior: Artifact, commitments) -> list[str]:
+src/deepreason/rules/guards/anti_relapse.py:253:def verdict_vector(
+src/deepreason/rules/guards/anti_relapse.py:263:def _embedder_fingerprint(embedder) -> dict:
+src/deepreason/rules/guards/anti_relapse.py:276:def check(
+src/deepreason/rules/guards/anti_relapse.py:46:def _digest(value) -> str:
+src/deepreason/rules/guards/anti_relapse.py:53:class RelapseDomain(BaseModel):
+src/deepreason/rules/refl.py:9:def refl(content: bytes, codec: str, state):
+src/deepreason/rules/relatedness.py:25:def mint_relatedness_claim(
+src/deepreason/rules/relatedness.py:52:def relatedness_claim_holds(harness, conjecture_id: str, commitment_id: str) -> bool:
+src/deepreason/rules/relatedness.py:82:def relatedness_trial(harness, claim_artifact, conjecture_text: str, adapter, config) -> bool:
+src/deepreason/rules/spawn.py:23:def spawn(
+src/deepreason/rules/spawn.py:46:def scan_spawns(harness, config) -> list[Problem]:
+src/deepreason/rules/synth.py:16:def synthesize(
+src/deepreason/rules/vision.py:30:def _screenshots(harness, target_id: str) -> tuple[list[str], list[bytes], list[dict]]:
+src/deepreason/rules/vision.py:51:def crit_vision(harness, target_id: str, adapter, config) -> Artifact | None:
+src/deepreason/rules/warrants.py:119:def register_fail_warrant(
+src/deepreason/rules/warrants.py:15:def verdict_on_record(harness, commitment_id: str, target_id: str) -> bool:
+src/deepreason/rules/warrants.py:24:def execution_backed(harness, target_id: str) -> bool:
+src/deepreason/rules/warrants.py:61:def formally_backed(harness, target_id: str) -> bool:

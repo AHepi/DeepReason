@@ -1,0 +1,10 @@
+=== symbol: expected_trial_keys  defined: src/deepreason/compat_eval.py ===
+--- reference scan: rg -l -w 'expected_trial_keys' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]expected_trial_keys['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'expected_trial_keys' pyproject.toml ---
+
+(above blank = zero hits)

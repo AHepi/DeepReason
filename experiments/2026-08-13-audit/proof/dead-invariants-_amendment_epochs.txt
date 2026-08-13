@@ -1,0 +1,10 @@
+=== symbol: _amendment_epochs  defined: src/deepreason/invariants.py ===
+--- reference scan: rg -l -w '_amendment_epochs' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_amendment_epochs['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_amendment_epochs' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _read_cache  defined: src/deepreason/qualification.py ===
+--- reference scan: rg -l -w '_read_cache' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_read_cache['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_read_cache' pyproject.toml ---
+
+(above blank = zero hits)

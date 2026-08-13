@@ -1,0 +1,15 @@
+src/deepreason/ops.py:101:def review_infrastructure(harness, adapter, config, artifact_id: str):
+src/deepreason/ops.py:152:def make_embedder(harness, config):
+src/deepreason/ops.py:15:class EngineProfileError(ValueError):
+src/deepreason/ops.py:178:def make_research_service(harness, config):
+src/deepreason/ops.py:188:def _research_events(harness):
+src/deepreason/ops.py:213:def open_research_problems(harness) -> list:
+src/deepreason/ops.py:229:def _escalated_research(harness) -> set[str]:
+src/deepreason/ops.py:243:def research_docket(harness, config, cycle: int | None = None) -> list[dict]:
+src/deepreason/ops.py:275:def submit_evidence(harness, problem_id: str, source: str, content: str | bytes,
+src/deepreason/ops.py:28:def require_full_engine(subject, *, workload: str) -> None:
+src/deepreason/ops.py:315:def report_research_failure(harness, problem_id: str, source: str, reason: str,
+src/deepreason/ops.py:328:def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
+src/deepreason/ops.py:46:def require_website_transaction_contracts(subject) -> None:
+src/deepreason/ops.py:65:def resolve_prefix(harness, prefix: str) -> str:
+src/deepreason/ops.py:75:def seed_problem_payload(harness, data: dict) -> Problem:

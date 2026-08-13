@@ -1,0 +1,10 @@
+=== symbol: _js_identifier  defined: src/deepreason/workflows/manifest_compiler.py ===
+--- reference scan: rg -l -w '_js_identifier' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_js_identifier['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_js_identifier' pyproject.toml ---
+
+(above blank = zero hits)

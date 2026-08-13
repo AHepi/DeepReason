@@ -1,0 +1,10 @@
+=== symbol: _assert_amendment_committed  defined: src/deepreason/runtime/continuation.py ===
+--- reference scan: rg -l -w '_assert_amendment_committed' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_assert_amendment_committed['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_assert_amendment_committed' pyproject.toml ---
+
+(above blank = zero hits)

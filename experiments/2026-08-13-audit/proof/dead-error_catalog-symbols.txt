@@ -1,0 +1,3 @@
+src/deepreason/error_catalog.py:23:class ErrorCatalogEntry(BaseModel):
+src/deepreason/error_catalog.py:34:def _entry(code: str, summary: str, what_it_means: str, next_action: str) -> ErrorCatalogEntry:
+src/deepreason/error_catalog.py:402:def lookup(code: str) -> ErrorCatalogEntry | None:

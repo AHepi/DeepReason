@@ -1,0 +1,10 @@
+=== symbol: ThesisSection  defined: src/deepreason/llm/contracts.py ===
+--- reference scan: rg -l -w 'ThesisSection' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ThesisSection['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ThesisSection' pyproject.toml ---
+
+(above blank = zero hits)

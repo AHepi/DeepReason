@@ -1,0 +1,10 @@
+=== symbol: _prop_text  defined: src/deepreason/rules/experiment.py ===
+--- reference scan: rg -l -w '_prop_text' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_prop_text['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_prop_text' pyproject.toml ---
+
+(above blank = zero hits)

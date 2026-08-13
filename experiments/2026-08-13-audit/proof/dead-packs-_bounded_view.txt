@@ -1,0 +1,10 @@
+=== symbol: _bounded_view  defined: src/deepreason/packs/allocate.py ===
+--- reference scan: rg -l -w '_bounded_view' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_bounded_view['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_bounded_view' pyproject.toml ---
+
+(above blank = zero hits)

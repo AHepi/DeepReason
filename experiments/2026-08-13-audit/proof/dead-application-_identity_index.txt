@@ -1,0 +1,10 @@
+=== symbol: _identity_index  defined: src/deepreason/application/scratch.py ===
+--- reference scan: rg -l -w '_identity_index' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_identity_index['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_identity_index' pyproject.toml ---
+
+(above blank = zero hits)

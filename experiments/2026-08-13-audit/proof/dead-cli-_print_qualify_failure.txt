@@ -1,0 +1,10 @@
+=== symbol: _print_qualify_failure  defined: src/deepreason/cli/main.py ===
+--- reference scan: rg -l -w '_print_qualify_failure' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_print_qualify_failure['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_print_qualify_failure' pyproject.toml ---
+
+(above blank = zero hits)

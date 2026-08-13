@@ -1,0 +1,10 @@
+CANDIDATE-DEAD: base_dir (src/deepreason/easy.py) -- proof: dead-easy-base_dir.txt
+CANDIDATE-DEAD: _stored_credential_present (src/deepreason/easy.py) -- proof: dead-easy-_stored_credential_present.txt
+CANDIDATE-DEAD: _preparation_required (src/deepreason/easy.py) -- proof: dead-easy-_preparation_required.txt
+CANDIDATE-DEAD: _positive_capacity (src/deepreason/easy.py) -- proof: dead-easy-_positive_capacity.txt
+CANDIDATE-DEAD: _stage_gate (src/deepreason/easy.py) -- proof: dead-easy-_stage_gate.txt
+CANDIDATE-DEAD: _page_text (src/deepreason/easy.py) -- proof: dead-easy-_page_text.txt
+CANDIDATE-DEAD: _slug (src/deepreason/easy.py) -- proof: dead-easy-_slug.txt
+CANDIDATE-DEAD: _fresh (src/deepreason/easy.py) -- proof: dead-easy-_fresh.txt
+CANDIDATE-DEAD: _echo (src/deepreason/easy.py) -- proof: dead-easy-_echo.txt
+CANDIDATE-DEAD: _first_line (src/deepreason/easy.py) -- proof: dead-easy-_first_line.txt

@@ -1,0 +1,10 @@
+=== symbol: ThesisRival  defined: src/deepreason/llm/contracts.py ===
+--- reference scan: rg -l -w 'ThesisRival' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ThesisRival['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ThesisRival' pyproject.toml ---
+
+(above blank = zero hits)

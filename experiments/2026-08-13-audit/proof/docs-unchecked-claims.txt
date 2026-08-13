@@ -1,0 +1,96 @@
+=== step 5: unchecked-claims census, docs/*.md (top level only) ===
+
+--- rg -c 'check:' <file>, one line per docs/*.md file ---
+docs/ADMISSION_SPEC.md: 0
+docs/AGENT.md: 0
+docs/AUDIT_BASELINES.md: 0
+docs/AUTONOMICS_REPORT.md: 0
+docs/AUTONOMOUS_SIMULATION_MIGRATION.md: 0
+docs/BASIN_REPORT.md: 0
+docs/CACHE_DESIGN.md: 0
+docs/CAN_LLMS_EXPLORE.md: 0
+docs/CONTROLLER_SPEC.md: 0
+docs/ERRATA.md: 0
+docs/ERRATA_EXECUTOR.md: 4
+docs/EXPERIMENT_PROGRAM_2026-07.md: 0
+docs/FORM_DR1_RUN_APPLICATION.md: 0
+docs/HANDOVER_2026-07-27.md: 0
+docs/HANDOVER_2026-08-02.md: 0
+docs/HANDOVER_2026-08-03.md: 0
+docs/HANDOVER_MONITOR_2026-08-06.md: 0
+docs/HANDOVER_MONITOR_2026-08-10.md: 0
+docs/HIDDEN_LEGACY_INVENTORY.md: 0
+docs/INDEX.md: 0
+docs/JOLT_CONTROL_PLANE_MIGRATION.md: 0
+docs/MINI_PLAN.md: 0
+docs/MINI_STRESS_REPORT.md: 0
+docs/OLLAMA_CLOUD_OPERATIONS.md: 0
+docs/OPERATOR_DIAGNOSIS.md: 0
+docs/REPORT.md: 0
+docs/RESEARCH_BACKEND.md: 0
+docs/RUNTIME_IMPORTS.md: 0
+docs/RUN_PLAN_TEMPLATE.md: 0
+docs/SCRATCHPAD_GROUNDED_BRIDGE.md: 0
+docs/SELF_IMPROVEMENT.md: 0
+docs/SMALL_MODEL_COMPATIBILITY.md: 0
+docs/STATE_OF_THE_THEORY.md: 0
+docs/STRESS_INSIGHTS.md: 0
+docs/TOKEN_ECONOMY.md: 0
+docs/TRANCHE_A_AUTONOMOUS_SIMULATION.md: 0
+docs/harness-spec-v1.3.md: 1
+docs/harness-spec-v1.4-amendment.md: 0
+docs/harness-spec-v1.5-amendment.md: 0
+docs/harness-spec-v1.6-amendment.md: 0
+docs/harness-spec-v1.7-amendment.md: 0
+
+35 files have zero check: lines. Each was read for a header/Status-line
+current-state claim; files below asserted one that a grep could verify.
+
+--- DD5: docs/ADMISSION_SPEC.md line 3 Status claim ---
+Status: v1 IMPLEMENTED (2026-07-28) -- names src/deepreason/admission/,
+tests/test_admission.py
+__init__.py
+__pycache__
+adapter_host.py
+adapters.py
+adapters_epub.py
+adapters_pdf.py
+attach.py
+parse.py
+store.py
+tests/test_admission.py
+verdict: baseline (both exist)
+
+--- DD6: docs/MINI_PLAN.md lines 3-6 Status claim ---
+"BUILT AND LIVE-VERIFIED -- see mini/ ... experiments/results/mini_smoke_report.json ... experiments/results/mini_seat_certification.json"
+README.md
+minireason
+scripts
+tests
+--- find mini_smoke_report / mini_seat_certification anywhere in tree ---
+(blank above = neither file exists anywhere in the tree)
+verdict: drifted (mini/ exists; the two cited evidence files do not)
+
+--- DD7: docs/SMALL_MODEL_COMPATIBILITY.md lines 1-4 header claim ---
+"The deepreason-small-model-compat-v1 compatibility kernel ... are implemented"
+--- rg -l 'deepreason-small-model-compat-v1' src/ tests/ ---
+(blank above = zero hits)
+--- rg -l 'small-model-compat|small_model_compat' src/ tests/ ---
+(blank above = zero hits)
+verdict: drifted (identifier not found anywhere in src/ or tests/)
+
+--- DD8: docs/RESEARCH_BACKEND.md line 6 Status claim ---
+"V6 in-run enablement remains gated (V6_RESEARCH_UNAVAILABLE) and is tranche 2"
+Already recorded as docs/ERRATA.md E20 (2026-07-28 tranche note never
+re-synced; run_manifest.py's gate is conditional and tranche 2 shipped,
+confirmed live via experiments/live_research_2026-07-29/wide/runs/
+run-0c3ce902cc5bca75a709b04e2473d100 verify_root replay).
+verdict: drifted (pre-existing, already ledgered -- confirmed still true,
+not re-parked)
+
+--- DD9: docs/EXPERIMENT_PROGRAM_2026-07.md line 3 claim ---
+"Nothing here has been run" -- a negative existential over every named
+experiment in the program; not verifiable by a single targeted grep
+without a full program-vs-experiments/ cross-check (deep-prose scope,
+out of this worker's "row only the header/Status claim" limit).
+verdict: not mechanically checkable -- noted, not parked.

@@ -1,0 +1,81 @@
+src/deepreason/run_manifest.py:100:class UnsupportedRunManifestVersionError(RunManifestError):
+src/deepreason/run_manifest.py:1011:class RouteSeatBehavioralCapabilityGrantV1(BaseModel):
+src/deepreason/run_manifest.py:1059:class RouteSeatBehavioralCapabilityPlanV1(BaseModel):
+src/deepreason/run_manifest.py:1091:class ProductionQualificationPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:1128:class TerminalCommitmentPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:113:class RouteSecretError(RuntimeError):
+src/deepreason/run_manifest.py:1167:class CompileNoticeV1(BaseModel):
+src/deepreason/run_manifest.py:1180:def _emit_compile_notice(
+src/deepreason/run_manifest.py:1193:class RunManifest(BaseModel):
+src/deepreason/run_manifest.py:130:def validate_route_base_url(value: str) -> str:
+src/deepreason/run_manifest.py:148:class _FrozenDict(dict):
+src/deepreason/run_manifest.py:164:class Route(BaseModel):
+src/deepreason/run_manifest.py:1656:def resolve_route_seat_base_profile(
+src/deepreason/run_manifest.py:1714:def _compile_route_seat_contract_decomposition_plan(
+src/deepreason/run_manifest.py:1842:def resolve_route_seat_contract_decomposition(
+src/deepreason/run_manifest.py:1883:def _route_seat_behavioral_contract_assignments(
+src/deepreason/run_manifest.py:2082:def _compile_route_seat_behavioral_capability_plan(
+src/deepreason/run_manifest.py:2206:def resolve_route_seat_behavioral_capability(
+src/deepreason/run_manifest.py:2264:def _canonical_json(value: Any) -> bytes:
+src/deepreason/run_manifest.py:2270:def _source_config_data(config) -> dict[str, Any]:
+src/deepreason/run_manifest.py:2278:def _versioned_source_config_data(
+src/deepreason/run_manifest.py:2330:def source_config_hash(
+src/deepreason/run_manifest.py:2339:def infer_model_family(model_id: str, provider: str) -> str:
+src/deepreason/run_manifest.py:2367:def _endpoint_identifier(spec: dict[str, Any], provider: str) -> str:
+src/deepreason/run_manifest.py:2376:def _route_from_spec(
+src/deepreason/run_manifest.py:2432:def _configured_seats(config_data: dict[str, Any]):
+src/deepreason/run_manifest.py:2442:def _compile_route_seat_presentation_plan(
+src/deepreason/run_manifest.py:2478:def _select_single_model_seed(
+src/deepreason/run_manifest.py:2522:def _select_second_judge_spec(
+src/deepreason/run_manifest.py:252:class ToolchainEntry(BaseModel):
+src/deepreason/run_manifest.py:2552:def _source_feature_policies(data: dict[str, Any]):
+src/deepreason/run_manifest.py:2563:def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any]):
+src/deepreason/run_manifest.py:2620:def _compile_bridge_policy(source, *, model_profile: str, notices: list[CompileNoticeV1] | None = None):
+src/deepreason/run_manifest.py:2659:def _compile_contract_schema_repair_policy(
+src/deepreason/run_manifest.py:2756:def _effective_source_policy(policy: ScratchPolicy | BridgePolicy) -> dict[str, Any]:
+src/deepreason/run_manifest.py:2779:def _validate_v3_engine_policy_consistency(manifest: RunManifest) -> None:
+src/deepreason/run_manifest.py:2838:def _normalized_model_identity(route: Route) -> tuple[str, str, str]:
+src/deepreason/run_manifest.py:2846:def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
+src/deepreason/run_manifest.py:286:class ScratchPolicy(BaseModel):
+src/deepreason/run_manifest.py:2933:def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
+src/deepreason/run_manifest.py:3040:def _validate_v5_capability_policy(manifest: RunManifest) -> None:
+src/deepreason/run_manifest.py:3079:def _validate_v6_capability_policy(manifest: RunManifest) -> None:
+src/deepreason/run_manifest.py:3140:def compile_run_manifest(
+src/deepreason/run_manifest.py:3579:def write_run_manifest(manifest: RunManifest, path: Path | str) -> tuple[Path, Path]:
+src/deepreason/run_manifest.py:3594:def _atomic_write(target: Path, payload: bytes) -> None:
+src/deepreason/run_manifest.py:3621:def _read_bounded_regular(
+src/deepreason/run_manifest.py:3699:def _manifest_sidecar_digest(path: Path) -> str | None:
+src/deepreason/run_manifest.py:3726:def _run_manifest_lock(root: Path):
+src/deepreason/run_manifest.py:3737:def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Path]:
+src/deepreason/run_manifest.py:3856:def persist_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Path]:
+src/deepreason/run_manifest.py:3861:def _discriminate_raw_run_manifest_version(raw: bytes) -> None:
+src/deepreason/run_manifest.py:3899:def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManifest:
+src/deepreason/run_manifest.py:3936:def config_from_run_manifest(manifest: RunManifest):
+src/deepreason/run_manifest.py:394:class BridgePolicy(BaseModel):
+src/deepreason/run_manifest.py:3969:def materialize_run_config(manifest: RunManifest, root: Path | str) -> Path:
+src/deepreason/run_manifest.py:3978:def role_matrix(manifest: RunManifest) -> list[dict[str, Any]]:
+src/deepreason/run_manifest.py:3999:def render_role_matrix(manifest: RunManifest) -> str:
+src/deepreason/run_manifest.py:4013:def payload_has_rubric(payload: dict[str, Any]) -> bool:
+src/deepreason/run_manifest.py:4023:def _preflight_text_authority(
+src/deepreason/run_manifest.py:4060:def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
+src/deepreason/run_manifest.py:4078:def preflight_harness(
+src/deepreason/run_manifest.py:459:class SchoolRoleBindingV1(BaseModel):
+src/deepreason/run_manifest.py:478:class SchoolExecutionPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:514:class CriticismPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:544:class ConjectureContextPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:607:class ContractVersionPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:619:class ContractVersionPolicyV2(BaseModel):
+src/deepreason/run_manifest.py:635:class ContractVersionPolicyV3(BaseModel):
+src/deepreason/run_manifest.py:663:class ScratchAuthoringPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:704:class ControlPlanePolicyV1(BaseModel):
+src/deepreason/run_manifest.py:767:class ControlPlanePolicyV2(BaseModel):
+src/deepreason/run_manifest.py:782:class ControlPlanePolicyV3(BaseModel):
+src/deepreason/run_manifest.py:800:class CompactRecoveryPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:823:class ContractSchemaRepairGrantV1(BaseModel):
+src/deepreason/run_manifest.py:853:class ContractSchemaRepairPolicyV1(BaseModel):
+src/deepreason/run_manifest.py:879:class RouteSeatContractDecompositionGrantV1(BaseModel):
+src/deepreason/run_manifest.py:90:class RunManifestError(ValueError):
+src/deepreason/run_manifest.py:915:class RouteSeatContractDecompositionPlanV1(BaseModel):
+src/deepreason/run_manifest.py:942:class RouteSeatPresentationGrantV1(BaseModel):
+src/deepreason/run_manifest.py:954:class RouteSeatPresentationPlanV1(BaseModel):
+src/deepreason/run_manifest.py:980:class RouteSeatBehavioralContractGrantV1(BaseModel):

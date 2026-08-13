@@ -1,0 +1,7 @@
+=== symbol: ConjectureRecoverySemanticError  defined: src/deepreason/workflow/conjecture_recovery.py ===
+--- reference scan: rg -l -w 'ConjectureRecoverySemanticError' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ConjectureRecoverySemanticError['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/workflow/conjecture_recovery.py
+(above blank = zero hits)

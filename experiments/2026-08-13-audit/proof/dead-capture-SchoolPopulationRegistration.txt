@@ -1,0 +1,10 @@
+=== symbol: SchoolPopulationRegistration  defined: src/deepreason/capture/schools.py ===
+--- reference scan: rg -l -w 'SchoolPopulationRegistration' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]SchoolPopulationRegistration['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'SchoolPopulationRegistration' pyproject.toml ---
+
+(above blank = zero hits)

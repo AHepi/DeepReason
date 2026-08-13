@@ -1,0 +1,9 @@
+CANDIDATE-DEAD: _write_running_record (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_write_running_record.txt
+CANDIDATE-DEAD: expected_trial_keys (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-expected_trial_keys.txt
+CANDIDATE-DEAD: _stage_rows (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_stage_rows.txt
+CANDIDATE-DEAD: _terminal_summary (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_terminal_summary.txt
+CANDIDATE-DEAD: _terminal_summary_complete (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_terminal_summary_complete.txt
+CANDIDATE-DEAD: _quality_counts (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_quality_counts.txt
+CANDIDATE-DEAD: _terminal_records (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_terminal_records.txt
+CANDIDATE-DEAD: _safe_rate (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_safe_rate.txt
+CANDIDATE-DEAD: _frontier_quality (src/deepreason/compat_eval.py) -- proof: dead-compat_eval-_frontier_quality.txt

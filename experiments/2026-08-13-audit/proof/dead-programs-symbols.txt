@@ -1,0 +1,27 @@
+src/deepreason/programs.py:133:def _json_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:141:def _tsp14_tour_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:152:def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:158:def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:167:def _candidate_checker(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:177:def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:188:def _generator_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:199:def _checker_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:210:def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:237:def _manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:243:def _component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:249:def _integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:255:def _reasoning_envelope_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:261:def _reasoning_observation_pending(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:265:def _lean_external_check(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/programs.py:317:def programs_by_class() -> dict[ProgramClass, tuple[str, ...]]:
+src/deepreason/programs.py:332:def external_toolchains() -> dict[str, tuple[str, ...]]:
+src/deepreason/programs.py:342:def _dataset_oracle(text: str, budget, artifact, blobs) -> tuple[str, dict]:
+src/deepreason/programs.py:356:def program_class(commitment: Commitment) -> ProgramClass | None:
+src/deepreason/programs.py:36:class ProgramSpec:
+src/deepreason/programs.py:372:def evaluable(commitment: Commitment) -> bool:
+src/deepreason/programs.py:379:def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, dict]:
+src/deepreason/programs.py:54:class UnsafePredicate(ValueError):
+src/deepreason/programs.py:59:def _validate_predicate(expr: str) -> None:
+src/deepreason/programs.py:83:class NotEvaluable(ValueError):
+src/deepreason/programs.py:87:def content_text(artifact: Artifact, blobs) -> str:
+src/deepreason/programs.py:99:def is_pure_code(text: str) -> bool:

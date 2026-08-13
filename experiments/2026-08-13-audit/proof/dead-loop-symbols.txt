@@ -1,0 +1,1 @@
+src/deepreason/loop.py:17:def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> dict:

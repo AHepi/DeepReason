@@ -1,0 +1,10 @@
+=== symbol: crash_probe  defined: src/deepreason/rules/experiment.py ===
+--- reference scan: rg -l -w 'crash_probe' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]crash_probe['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'crash_probe' pyproject.toml ---
+
+(above blank = zero hits)

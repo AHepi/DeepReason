@@ -1,0 +1,3 @@
+src/deepreason/frozen.py:12:class FrozenDict(dict):
+src/deepreason/frozen.py:36:class FrozenList(list):
+src/deepreason/frozen.py:6:class FrozenRecord(BaseModel):

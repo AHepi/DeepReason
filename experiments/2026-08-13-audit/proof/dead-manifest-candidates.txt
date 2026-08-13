@@ -1,0 +1,6 @@
+CANDIDATE-DEAD: _ids_in (src/deepreason/manifest.py) -- proof: dead-manifest-_ids_in.txt
+CANDIDATE-DEAD: _style_blocks (src/deepreason/manifest.py) -- proof: dead-manifest-_style_blocks.txt
+CANDIDATE-DEAD: _script_blocks (src/deepreason/manifest.py) -- proof: dead-manifest-_script_blocks.txt
+CANDIDATE-DEAD: _css_violations (src/deepreason/manifest.py) -- proof: dead-manifest-_css_violations.txt
+CANDIDATE-DEAD: _js_violations (src/deepreason/manifest.py) -- proof: dead-manifest-_js_violations.txt
+CANDIDATE-DEAD: ImportBudget (src/deepreason/manifest.py) -- proof: dead-manifest-ImportBudget.txt

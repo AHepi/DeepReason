@@ -1,0 +1,10 @@
+=== symbol: CompactVariator  defined: src/deepreason/llm/wire.py ===
+--- reference scan: rg -l -w 'CompactVariator' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CompactVariator['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CompactVariator' pyproject.toml ---
+
+(above blank = zero hits)

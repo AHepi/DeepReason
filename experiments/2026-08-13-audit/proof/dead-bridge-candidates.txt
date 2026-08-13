@@ -1,0 +1,99 @@
+DYNAMIC-REF: LedgerAmendmentNeededV1 (src/deepreason/bridge/compose.py) -- string hits: src/deepreason/bridge/compose.py  -- proof: dead-bridge-LedgerAmendmentNeededV1.txt
+DYNAMIC-REF: CompositionFailureV1 (src/deepreason/bridge/compose.py) -- string hits: src/deepreason/bridge/compose.py  -- proof: dead-bridge-CompositionFailureV1.txt
+CANDIDATE-DEAD: LedgerAmendmentWireV1 (src/deepreason/bridge/compose.py) -- proof: dead-bridge-LedgerAmendmentWireV1.txt
+DYNAMIC-REF: BridgeCompositionWireContract (src/deepreason/bridge/compose.py) -- string hits: src/deepreason/bridge/compose.py  -- proof: dead-bridge-BridgeCompositionWireContract.txt
+CANDIDATE-DEAD: _exact_statement_detail (src/deepreason/bridge/compose.py) -- proof: dead-bridge-_exact_statement_detail.txt
+CANDIDATE-DEAD: _VerifiedBlobView (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_VerifiedBlobView.txt
+CANDIDATE-DEAD: _holdout_marker_exists (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_holdout_marker_exists.txt
+CANDIDATE-DEAD: _sealed_blob_refs (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_sealed_blob_refs.txt
+CANDIDATE-DEAD: _required_blob_refs (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_required_blob_refs.txt
+CANDIDATE-DEAD: _absolute (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_absolute.txt
+CANDIDATE-DEAD: _reject_symlink_components (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_reject_symlink_components.txt
+CANDIDATE-DEAD: _validate_roots (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_validate_roots.txt
+CANDIDATE-DEAD: _is_link_like (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_is_link_like.txt
+CANDIDATE-DEAD: _checked_directory (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_checked_directory.txt
+CANDIDATE-DEAD: _read_verified_blob (src/deepreason/bridge/derived.py) -- proof: dead-bridge-_read_verified_blob.txt
+DYNAMIC-REF: ArguedRefutationV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-ArguedRefutationV1.txt
+DYNAMIC-REF: PairwiseRulingV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-PairwiseRulingV1.txt
+DYNAMIC-REF: OpenRivalryV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-OpenRivalryV1.txt
+DYNAMIC-REF: EvidencePackOmissionsV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-EvidencePackOmissionsV1.txt
+CANDIDATE-DEAD: _claim_line (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_claim_line.txt
+CANDIDATE-DEAD: _is_source_artifact (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_is_source_artifact.txt
+CANDIDATE-DEAD: _artifact_content_available (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_artifact_content_available.txt
+CANDIDATE-DEAD: _is_evidence_artifact (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_is_evidence_artifact.txt
+CANDIDATE-DEAD: _evidence_sources (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_evidence_sources.txt
+CANDIDATE-DEAD: _lineage (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_lineage.txt
+CANDIDATE-DEAD: _decisive_from_warrants (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_decisive_from_warrants.txt
+CANDIDATE-DEAD: _bounded_structured_text (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_bounded_structured_text.txt
+CANDIDATE-DEAD: _advisory_catalog_inputs (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_advisory_catalog_inputs.txt
+CANDIDATE-DEAD: _catalog_excerpt (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_catalog_excerpt.txt
+CANDIDATE-DEAD: _catalog_items (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_catalog_items.txt
+CANDIDATE-DEAD: _freeze (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_freeze.txt
+CANDIDATE-DEAD: _validate_formal_seq (src/deepreason/bridge/evidence_pack.py) -- proof: dead-bridge-_validate_formal_seq.txt
+DYNAMIC-REF: EvidenceLineageV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-EvidenceLineageV1.txt
+DYNAMIC-REF: SurvivorEvidenceV1 (src/deepreason/bridge/evidence_pack.py) -- string hits: src/deepreason/bridge/evidence_pack.py  -- proof: dead-bridge-SurvivorEvidenceV1.txt
+CANDIDATE-DEAD: _BridgeExecutionSnapshot (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_BridgeExecutionSnapshot.txt
+CANDIDATE-DEAD: _snapshot_model_value (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_snapshot_model_value.txt
+CANDIDATE-DEAD: _attention_pack_id (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_attention_pack_id.txt
+CANDIDATE-DEAD: _snapshot_error (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_snapshot_error.txt
+CANDIDATE-DEAD: _load_bridge_execution_snapshot (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_load_bridge_execution_snapshot.txt
+CANDIDATE-DEAD: _write_bridge_execution_snapshot (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_write_bridge_execution_snapshot.txt
+CANDIDATE-DEAD: _find_bridge_execution_snapshot (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_find_bridge_execution_snapshot.txt
+CANDIDATE-DEAD: _transactional_bridge_adapters (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_transactional_bridge_adapters.txt
+CANDIDATE-DEAD: _transactional_v6_manifest_required (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_transactional_v6_manifest_required.txt
+CANDIDATE-DEAD: _transactional_source_terminal_commitment_ref (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_transactional_source_terminal_commitment_ref.txt
+CANDIDATE-DEAD: _assert_snapshot_matches_invocation (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_assert_snapshot_matches_invocation.txt
+CANDIDATE-DEAD: _bound_manifest_digest (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_bound_manifest_digest.txt
+CANDIDATE-DEAD: _bound_scratch_attention_policy (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_bound_scratch_attention_policy.txt
+CANDIDATE-DEAD: _derive_bridge_execution_policy (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_derive_bridge_execution_policy.txt
+CANDIDATE-DEAD: _assert_adapter_matches_retry_lease (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_assert_adapter_matches_retry_lease.txt
+CANDIDATE-DEAD: _terminal_record (src/deepreason/bridge/harness.py) -- proof: dead-bridge-_terminal_record.txt
+CANDIDATE-DEAD: _lexical_handle_kind (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_lexical_handle_kind.txt
+CANDIDATE-DEAD: _array_schema (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_array_schema.txt
+CANDIDATE-DEAD: _bind_schema_enum (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_bind_schema_enum.txt
+DYNAMIC-REF: ClaimLedgerStageAFailureV1 (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-ClaimLedgerStageAFailureV1.txt
+CANDIDATE-DEAD: _namespaced_handle (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_namespaced_handle.txt
+CANDIDATE-DEAD: _coerce_amendment_request (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_coerce_amendment_request.txt
+DYNAMIC-REF: ClaimLedgerCallReceiptV1 (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-ClaimLedgerCallReceiptV1.txt
+CANDIDATE-DEAD: _handle_type (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_handle_type.txt
+CANDIDATE-DEAD: _fallback_ledger (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_fallback_ledger.txt
+CANDIDATE-DEAD: _failure_message (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_failure_message.txt
+CANDIDATE-DEAD: LedgerFrozenRecord (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-LedgerFrozenRecord.txt
+CANDIDATE-DEAD: _coerce_catalog (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_coerce_catalog.txt
+CANDIDATE-DEAD: LedgerWireModel (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-LedgerWireModel.txt
+DYNAMIC-REF: SourceConflictWireV2 (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-SourceConflictWireV2.txt
+DYNAMIC-REF: UncoveredRequirementWireV2 (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-UncoveredRequirementWireV2.txt
+DYNAMIC-REF: LedgerCatalogKind (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-LedgerCatalogKind.txt
+DYNAMIC-REF: ClaimLedgerDraftInvalid (src/deepreason/bridge/ledger.py) -- string hits: src/deepreason/bridge/ledger.py  -- proof: dead-bridge-ClaimLedgerDraftInvalid.txt
+CANDIDATE-DEAD: _prior_entry_keys (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_prior_entry_keys.txt
+CANDIDATE-DEAD: _prior_conflict_keys (src/deepreason/bridge/ledger.py) -- proof: dead-bridge-_prior_conflict_keys.txt
+CANDIDATE-DEAD: _safe_remove (src/deepreason/bridge/operations.py) -- proof: dead-bridge-_safe_remove.txt
+CANDIDATE-DEAD: _safe_read (src/deepreason/bridge/operations.py) -- proof: dead-bridge-_safe_read.txt
+CANDIDATE-DEAD: _sanitized_detail (src/deepreason/bridge/operations.py) -- proof: dead-bridge-_sanitized_detail.txt
+DYNAMIC-REF: read_result (src/deepreason/bridge/operations.py) -- string hits: src/deepreason/bridge/operations.py  -- proof: dead-bridge-read_result.txt
+DYNAMIC-REF: BridgeOperationStatusV1 (src/deepreason/bridge/operations.py) -- string hits: src/deepreason/bridge/operations.py  -- proof: dead-bridge-BridgeOperationStatusV1.txt
+DYNAMIC-REF: BridgeOperationResultV1 (src/deepreason/bridge/operations.py) -- string hits: src/deepreason/bridge/operations.py  -- proof: dead-bridge-BridgeOperationResultV1.txt
+CANDIDATE-DEAD: _ensure_write_target (src/deepreason/bridge/operations.py) -- proof: dead-bridge-_ensure_write_target.txt
+DYNAMIC-REF: BridgeRepairDiagnostic (src/deepreason/bridge/repair.py) -- string hits: src/deepreason/bridge/repair.py  -- proof: dead-bridge-BridgeRepairDiagnostic.txt
+CANDIDATE-DEAD: _make_output (src/deepreason/bridge/repair.py) -- proof: dead-bridge-_make_output.txt
+CANDIDATE-DEAD: _quarantine_span (src/deepreason/bridge/repair.py) -- proof: dead-bridge-_quarantine_span.txt
+CANDIDATE-DEAD: _assert_failed_call_matches_fence (src/deepreason/bridge/retry.py) -- proof: dead-bridge-_assert_failed_call_matches_fence.txt
+CANDIDATE-DEAD: _bounded_materials (src/deepreason/bridge/review.py) -- proof: dead-bridge-_bounded_materials.txt
+CANDIDATE-DEAD: _entry_refs (src/deepreason/bridge/review.py) -- proof: dead-bridge-_entry_refs.txt
+CANDIDATE-DEAD: _entry_for_review (src/deepreason/bridge/review.py) -- proof: dead-bridge-_entry_for_review.txt
+DYNAMIC-REF: TerminalBridgeHistory (src/deepreason/bridge/state.py) -- string hits: src/deepreason/bridge/state.py  -- proof: dead-bridge-TerminalBridgeHistory.txt
+CANDIDATE-DEAD: _semantic_bytes (src/deepreason/bridge/transactional_adapter.py) -- proof: dead-bridge-_semantic_bytes.txt
+CANDIDATE-DEAD: _namespace_for (src/deepreason/bridge/transactional_adapter.py) -- proof: dead-bridge-_namespace_for.txt
+CANDIDATE-DEAD: _context_seeds (src/deepreason/bridge/transactional_adapter.py) -- proof: dead-bridge-_context_seeds.txt
+CANDIDATE-DEAD: _context_items (src/deepreason/bridge/transactional_adapter.py) -- proof: dead-bridge-_context_items.txt
+CANDIDATE-DEAD: _require_durable_model_classification (src/deepreason/bridge/transactional_adapter.py) -- proof: dead-bridge-_require_durable_model_classification.txt
+DYNAMIC-REF: ledger_findings (src/deepreason/bridge/validate.py) -- string hits: src/deepreason/bridge/validate.py  -- proof: dead-bridge-ledger_findings.txt
+CANDIDATE-DEAD: _allowed_modes (src/deepreason/bridge/validate.py) -- proof: dead-bridge-_allowed_modes.txt
+DYNAMIC-REF: output_findings (src/deepreason/bridge/validate.py) -- string hits: src/deepreason/bridge/validate.py  -- proof: dead-bridge-output_findings.txt
+CANDIDATE-DEAD: _entry_grounding_findings (src/deepreason/bridge/validate.py) -- proof: dead-bridge-_entry_grounding_findings.txt
+CANDIDATE-DEAD: _validation_records (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_validation_records.txt
+CANDIDATE-DEAD: _output_records (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_output_records.txt
+CANDIDATE-DEAD: _review_records (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_review_records.txt
+CANDIDATE-DEAD: _stable_error_code (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_stable_error_code.txt
+CANDIDATE-DEAD: _error_calls (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_error_calls.txt
+CANDIDATE-DEAD: _stage_a_failure_error (src/deepreason/bridge/workflow.py) -- proof: dead-bridge-_stage_a_failure_error.txt

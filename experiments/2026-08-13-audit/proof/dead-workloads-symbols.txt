@@ -1,0 +1,77 @@
+src/deepreason/workloads/code.py:133:class CodeExport(_FrozenModel):
+src/deepreason/workloads/code.py:146:class SimulationSpec(_FrozenModel):
+src/deepreason/workloads/code.py:179:class CodeWorkloadSpec(_FrozenModel):
+src/deepreason/workloads/code.py:207:class SymbolRecord(_FrozenModel):
+src/deepreason/workloads/code.py:214:class DependencyEdge(_FrozenModel):
+src/deepreason/workloads/code.py:220:class WorkspaceFile(_FrozenModel):
+src/deepreason/workloads/code.py:229:class WorkspaceSnapshot(_FrozenModel):
+src/deepreason/workloads/code.py:250:class CodePatchProposal(_FrozenModel):
+src/deepreason/workloads/code.py:258:class CodePatchCandidate(_FrozenModel):
+src/deepreason/workloads/code.py:264:class PatchEdit(_FrozenModel):
+src/deepreason/workloads/code.py:277:class CodePatch(_FrozenModel):
+src/deepreason/workloads/code.py:293:class AppliedCodeArtifact(_FrozenModel):
+src/deepreason/workloads/code.py:309:class CodeCard(_FrozenModel):
+src/deepreason/workloads/code.py:320:class PatchApplicationError(ValueError):
+src/deepreason/workloads/code.py:330:def _normal_relative(value: str, *, field: str, allow_dot: bool = False) -> str:
+src/deepreason/workloads/code.py:341:def _allowed(path: str, patterns: Iterable[str]) -> bool:
+src/deepreason/workloads/code.py:345:def _python_metadata(relative: str, data: bytes) -> tuple[tuple[SymbolRecord, ...], tuple[DependencyEdge, ...]]:
+src/deepreason/workloads/code.py:385:def _tree_digest(files: Iterable[WorkspaceFile]) -> str:
+src/deepreason/workloads/code.py:400:def _module_name(path: str) -> str | None:
+src/deepreason/workloads/code.py:412:def snapshot_workspace(
+src/deepreason/workloads/code.py:45:class _FrozenModel(BaseModel):
+src/deepreason/workloads/code.py:491:def compile_patch_candidate(
+src/deepreason/workloads/code.py:531:def _safe_target(root: Path, relative: str) -> Path:
+src/deepreason/workloads/code.py:551:def _replace_occurrence(text: str, edit: PatchEdit) -> str:
+src/deepreason/workloads/code.py:571:def apply_code_patch(
+src/deepreason/workloads/code.py:64:class CodeProblem(_FrozenModel):
+src/deepreason/workloads/code.py:676:def build_code_cards(
+src/deepreason/workloads/code.py:69:class WorkspaceSpec(_FrozenModel):
+src/deepreason/workloads/code.py:737:def declared_root_digest(root: str | Path, allowed_paths: Iterable[str]) -> str:
+src/deepreason/workloads/code.py:95:class CheckSpec(_FrozenModel):
+src/deepreason/workloads/formal.py:111:class FormalWorkloadSpec(_FormalModel):
+src/deepreason/workloads/formal.py:129:class FormalWorkflowError(RuntimeError):
+src/deepreason/workloads/formal.py:134:class FormalWorkflowArtifacts:
+src/deepreason/workloads/formal.py:142:def _request_commitment(request: PinnedLeanRequest) -> Commitment:
+src/deepreason/workloads/formal.py:158:def _validate_receipt(
+src/deepreason/workloads/formal.py:185:def register_formal_workflow(
+src/deepreason/workloads/formal.py:27:class _FormalModel(BaseModel):
+src/deepreason/workloads/formal.py:41:class PinnedLeanRequest(VerificationRequest):
+src/deepreason/workloads/formal.py:51:class FormalClaim(_FormalModel):
+src/deepreason/workloads/formal.py:67:class AssumptionMapping(_FormalModel):
+src/deepreason/workloads/formal.py:73:class FormalMismatchTest(_FormalModel):
+src/deepreason/workloads/formal.py:82:class FormalizationRelation(_FormalModel):
+src/deepreason/workloads/models.py:148:def compile_interface(
+src/deepreason/workloads/models.py:18:class MandatoryRef:
+src/deepreason/workloads/models.py:34:class MandatoryInterface:
+src/deepreason/workloads/models.py:65:def _resolve_ref(target: str, artifacts: dict) -> str | None:
+src/deepreason/workloads/models.py:72:def compile_interface_draft(
+src/deepreason/workloads/registry.py:14:class WorkloadRegistry:
+src/deepreason/workloads/registry.py:8:class WorkloadAdapter(Protocol):
+src/deepreason/workloads/simulation.py:21:class _SimulationModel(BaseModel):
+src/deepreason/workloads/simulation.py:27:class SimulationClaim(_SimulationModel):
+src/deepreason/workloads/simulation.py:34:class SimulationMismatchTest(_SimulationModel):
+src/deepreason/workloads/simulation.py:41:class SimulationRelevanceRelation(_SimulationModel):
+src/deepreason/workloads/simulation.py:61:class SimulationWorkflowArtifacts:
+src/deepreason/workloads/simulation.py:67:def register_simulation_workflow(
+src/deepreason/workloads/text.py:104:class ReasoningEnvelopeV1(BaseModel):
+src/deepreason/workloads/text.py:134:class OperationalSidecar(BaseModel):
+src/deepreason/workloads/text.py:142:class ReasoningCandidateProposal(BaseModel):
+src/deepreason/workloads/text.py:16:class WorkloadProblem(BaseModel):
+src/deepreason/workloads/text.py:180:class ReasoningConjecturerOutput(BaseModel):
+src/deepreason/workloads/text.py:185:def proposal_envelope(candidate: ReasoningCandidateProposal) -> ReasoningEnvelopeV1:
+src/deepreason/workloads/text.py:200:def envelope_json(envelope: ReasoningEnvelopeV1) -> str:
+src/deepreason/workloads/text.py:208:def draft_countercondition_commitments(envelope: ReasoningEnvelopeV1) -> list[Commitment]:
+src/deepreason/workloads/text.py:23:class BrainRequest(BaseModel):
+src/deepreason/workloads/text.py:255:def compile_countercondition_commitments(harness, envelope: ReasoningEnvelopeV1) -> list[str]:
+src/deepreason/workloads/text.py:264:def reasoning_wf_program(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/workloads/text.py:288:def seed_reasoning_workload(harness, spec: ReasoningWorkloadSpec) -> Problem:
+src/deepreason/workloads/text.py:30:class ReasoningWorkloadSpec(BaseModel):
+src/deepreason/workloads/text.py:314:def spec_from_text(text: str) -> ReasoningWorkloadSpec:
+src/deepreason/workloads/text.py:322:class TextWorkloadAdapter:
+src/deepreason/workloads/text.py:45:class Definition(BaseModel):
+src/deepreason/workloads/text.py:51:class Premise(BaseModel):
+src/deepreason/workloads/text.py:57:class DerivationStep(BaseModel):
+src/deepreason/workloads/text.py:63:class Scope(BaseModel):
+src/deepreason/workloads/text.py:69:class Countercondition(BaseModel):
+src/deepreason/workloads/text.py:94:class AnalogyClaim(BaseModel):
+src/deepreason/workloads/website.py:7:class WebsiteWorkloadAdapter:

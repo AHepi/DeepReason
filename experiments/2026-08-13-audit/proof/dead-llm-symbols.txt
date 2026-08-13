@@ -1,0 +1,258 @@
+src/deepreason/llm/adapter.py:105:class V6ModelProfileOverrideForbidden(RuntimeError):
+src/deepreason/llm/adapter.py:118:def _enforce_request_envelope(role: str, prompt: str, lease: EndpointLease) -> None:
+src/deepreason/llm/adapter.py:1421:def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
+src/deepreason/llm/adapter.py:142:def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
+src/deepreason/llm/adapter.py:1459:def build_adapter(
+src/deepreason/llm/adapter.py:210:def _extract_json(raw: str) -> str:
+src/deepreason/llm/adapter.py:221:class LLMAdapter:
+src/deepreason/llm/adapter.py:68:class WorkflowAuthorizationError(RuntimeError):
+src/deepreason/llm/adapter.py:76:class RequestEnvelopeExceeded(RuntimeError):
+src/deepreason/llm/budget.py:35:class TokenBudgetExceeded(RuntimeError):
+src/deepreason/llm/budget.py:39:def conservative_prompt_bound(text: str) -> int:
+src/deepreason/llm/budget.py:50:class Reservation:
+src/deepreason/llm/budget.py:85:class TokenMeter:
+src/deepreason/llm/capabilities.py:133:class ProbeCase:
+src/deepreason/llm/capabilities.py:141:def _json_value(raw: str):
+src/deepreason/llm/capabilities.py:150:def deterministic_probe_cases() -> tuple[ProbeCase, ...]:
+src/deepreason/llm/capabilities.py:18:def _validated_endpoint(value: str) -> str:
+src/deepreason/llm/capabilities.py:244:def probe_capabilities(
+src/deepreason/llm/capabilities.py:27:class ProbeEndpoint(Protocol):
+src/deepreason/llm/capabilities.py:38:class ModelCapabilities:
+src/deepreason/llm/capabilities.py:71:class CapabilityCache:
+src/deepreason/llm/contracts.py:106:class PropertyProposal(BaseModel):
+src/deepreason/llm/contracts.py:116:class PropertyDesignerOutput(BaseModel):
+src/deepreason/llm/contracts.py:120:class EncoderTestCase(BaseModel):
+src/deepreason/llm/contracts.py:131:class EncoderOutput(BaseModel):
+src/deepreason/llm/contracts.py:143:class VariatorEdit(BaseModel):
+src/deepreason/llm/contracts.py:147:class VariatorOutput(BaseModel):
+src/deepreason/llm/contracts.py:14:class CandidateRef(BaseModel):
+src/deepreason/llm/contracts.py:155:class SynthesizerOutput(BaseModel):
+src/deepreason/llm/contracts.py:163:class DefenderOutput(BaseModel):
+src/deepreason/llm/contracts.py:167:class JudgeRuling(BaseModel):
+src/deepreason/llm/contracts.py:175:class PairwiseRuling(BaseModel):
+src/deepreason/llm/contracts.py:183:class ProseOutput(BaseModel):
+src/deepreason/llm/contracts.py:187:class ThesisSection(BaseModel):
+src/deepreason/llm/contracts.py:196:class ThesisRival(BaseModel):
+src/deepreason/llm/contracts.py:19:class EvidenceRefClaimV1(BaseModel):
+src/deepreason/llm/contracts.py:205:class ThesisOutput(BaseModel):
+src/deepreason/llm/contracts.py:35:class ConjectureCandidate(BaseModel):
+src/deepreason/llm/contracts.py:55:class ConjecturerOutput(BaseModel):
+src/deepreason/llm/contracts.py:59:class ArgumentativeCriticOutput(BaseModel):
+src/deepreason/llm/contracts.py:70:class BatchCase(BaseModel):
+src/deepreason/llm/contracts.py:81:class BatchCriticOutput(BaseModel):
+src/deepreason/llm/contracts.py:85:class ExperimenterOutput(BaseModel):
+src/deepreason/llm/contracts.py:95:class VisionCriticOutput(BaseModel):
+src/deepreason/llm/embedder.py:140:def _library_versions() -> str:
+src/deepreason/llm/embedder.py:152:def _sentinel_hash(embedder) -> str:
+src/deepreason/llm/embedder.py:162:def build_embedder(model: str | None):
+src/deepreason/llm/embedder.py:171:def cosine(u: list[float], v: list[float]) -> float:
+src/deepreason/llm/embedder.py:175:def distance(u: list[float], v: list[float]) -> float:
+src/deepreason/llm/embedder.py:47:class EmbedderUnavailable(RuntimeError):
+src/deepreason/llm/embedder.py:53:def _tokens(text: str) -> list[str]:
+src/deepreason/llm/embedder.py:58:class HashingEmbedder:
+src/deepreason/llm/embedder.py:94:class NeuralEmbedder:
+src/deepreason/llm/endpoints.py:110:def resolve_model(model: str, base_url: str, api_key: str | None) -> str:
+src/deepreason/llm/endpoints.py:126:def mean_surprisal(logprobs_block: dict | None) -> float | None:
+src/deepreason/llm/endpoints.py:139:class MockEndpoint:
+src/deepreason/llm/endpoints.py:188:class OpenAICompatEndpoint:
+src/deepreason/llm/endpoints.py:42:class EndpointError(RuntimeError):
+src/deepreason/llm/endpoints.py:46:class _TransientBody(OSError):
+src/deepreason/llm/endpoints.py:51:def request_with_retries(fn):
+src/deepreason/llm/endpoints.py:73:def list_models(base_url: str, api_key: str | None) -> list[str]:
+src/deepreason/llm/endpoints.py:88:def _pick_primary(available: list[str]) -> str:
+src/deepreason/llm/endpoints.py:98:def _pick_alt(available: list[str], primary: str) -> str:
+src/deepreason/llm/firewall.py:105:class ModelControlFieldError(ValueError):
+src/deepreason/llm/firewall.py:115:def route_fingerprint(route: Route) -> str:
+src/deepreason/llm/firewall.py:126:def _json_pointer_part(value: str) -> str:
+src/deepreason/llm/firewall.py:130:def reject_model_control_fields(value: Any, pointer: str = "") -> None:
+src/deepreason/llm/firewall.py:145:def _strings_in(value: Any) -> set[str]:
+src/deepreason/llm/firewall.py:155:def _control_value_strings(value: Any) -> set[str]:
+src/deepreason/llm/firewall.py:170:def _sanitize_for_repair(value: Any, sensitive_strings: set[str]) -> Any:
+src/deepreason/llm/firewall.py:193:def _redact_strings(value: Any, sensitive_strings: set[str]) -> Any:
+src/deepreason/llm/firewall.py:209:def sanitize_model_control_fields_for_repair(value: Any) -> Any:
+src/deepreason/llm/firewall.py:223:class EndpointLease:
+src/deepreason/llm/firewall.py:283:def _lease_families(leases: Mapping[str, tuple[EndpointLease, ...]]) -> set[str]:
+src/deepreason/llm/firewall.py:299:def is_single_family_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> bool:
+src/deepreason/llm/firewall.py:311:def _lease_models(leases: Mapping[str, tuple[EndpointLease, ...]]) -> set[str]:
+src/deepreason/llm/firewall.py:328:def is_single_model_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> bool:
+src/deepreason/llm/firewall.py:341:def require_cross_family_judge_ensemble(
+src/deepreason/llm/firewall.py:383:def require_cross_school_judge_ensemble(
+src/deepreason/llm/firewall.py:416:def route_from_endpoint(endpoint: object) -> Route:
+src/deepreason/llm/firewall.py:446:def leases_from_endpoints(
+src/deepreason/llm/firewall.py:460:def leases_from_manifest(manifest: RunManifest) -> dict[str, tuple[EndpointLease, ...]]:
+src/deepreason/llm/firewall.py:471:def select_lease(
+src/deepreason/llm/firewall.py:486:def resolve_school_role_lease(
+src/deepreason/llm/firewall.py:63:class RouteFirewallError(RuntimeError):
+src/deepreason/llm/firewall.py:67:class SchoolRouteResolutionError(RouteFirewallError):
+src/deepreason/llm/firewall.py:75:class JudgeEnsemblePolicyError(RuntimeError):
+src/deepreason/llm/firewall.py:88:class JudgeSchoolEnsemblePolicyError(RuntimeError):
+src/deepreason/llm/packs.py:119:def _lineage_foundation(
+src/deepreason/llm/packs.py:158:def _carries_execution_oracle(artifact, commitments: dict[str, Commitment]) -> bool:
+src/deepreason/llm/packs.py:165:def _execution_spec_lines(kappa: Commitment) -> list[str]:
+src/deepreason/llm/packs.py:197:def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> str:
+src/deepreason/llm/packs.py:202:def _clip(text: str, token_budget: int) -> str:
+src/deepreason/llm/packs.py:206:def _pack_section(
+src/deepreason/llm/packs.py:230:def _allocate_sections(
+src/deepreason/llm/packs.py:245:def _document_excerpt(text: str, char_budget: int) -> str:
+src/deepreason/llm/packs.py:267:def apply_model_profile(
+src/deepreason/llm/packs.py:276:def alias_references(
+src/deepreason/llm/packs.py:286:def aliases_for_values(values, *, prefix: str = "A") -> AliasTable:
+src/deepreason/llm/packs.py:292:def aliases_for_pack(
+src/deepreason/llm/packs.py:309:def render_conj_pack(
+src/deepreason/llm/packs.py:36:class AllocatedPack(str):
+src/deepreason/llm/packs.py:39:def _simulation_contract_note() -> str:
+src/deepreason/llm/packs.py:558:def render_batch_crit_pack(
+src/deepreason/llm/packs.py:629:def render_experiment_pack(
+src/deepreason/llm/packs.py:691:def render_property_pack(
+src/deepreason/llm/packs.py:736:def render_cx_retry_pack(
+src/deepreason/llm/packs.py:776:def _problem_context(
+src/deepreason/llm/packs.py:806:def render_crit_pack(
+src/deepreason/llm/packs.py:90:def _active_property_claims(state: EpistemicState, blobs, criteria: list[str]) -> list[str]:
+src/deepreason/llm/profiles.py:103:def select_profile(capabilities: ModelCapabilities) -> ProfileSpec:
+src/deepreason/llm/profiles.py:121:def clip_pack(
+src/deepreason/llm/profiles.py:131:def apply_profile_to_config(config, profile: str | ModelProfile | ProfileSpec):
+src/deepreason/llm/profiles.py:15:class ModelProfile(StrEnum):
+src/deepreason/llm/profiles.py:22:class ProfileSpec:
+src/deepreason/llm/profiles.py:92:def get_profile(profile: str | ModelProfile | ProfileSpec | None) -> ProfileSpec:
+src/deepreason/llm/providers.py:104:def infer_provider(base_url: str) -> str:
+src/deepreason/llm/providers.py:118:def reasoning_body(provider: str, value) -> dict:
+src/deepreason/llm/providers.py:23:def _deepseek_reasoning(value) -> dict:
+src/deepreason/llm/providers.py:41:def _openai_reasoning(value) -> dict:
+src/deepreason/llm/providers.py:50:def _ollama_reasoning(value) -> dict:
+src/deepreason/llm/providers.py:63:def _no_reasoning_knob(value) -> dict:
+src/deepreason/llm/providers.py:73:def reasoning_knob_available(provider: str) -> bool:
+src/deepreason/llm/providers.py:84:def reasoning_disabled(value) -> bool:
+src/deepreason/llm/repair.py:108:class RepairPatchV1(BaseModel):
+src/deepreason/llm/repair.py:1090:def _received_for_diagnostic(value: Any) -> Any:
+src/deepreason/llm/repair.py:1098:def _allowed_at_pointer(schema: dict[str, Any], pointer: str) -> str:
+src/deepreason/llm/repair.py:1116:def diagnostic_envelope_from_error(
+src/deepreason/llm/repair.py:1237:def repair_patch_response_schema(
+src/deepreason/llm/repair.py:1265:def patch_repair_prompt(
+src/deepreason/llm/repair.py:1284:def whole_object_repair_prompt(
+src/deepreason/llm/repair.py:1299:def subtree_repair_prompt(
+src/deepreason/llm/repair.py:1315:class V6RepairTurn:
+src/deepreason/llm/repair.py:1336:class V6PatchRepairSession:
+src/deepreason/llm/repair.py:148:class RepairDiagnosticV2(BaseModel):
+src/deepreason/llm/repair.py:1598:class BoundedRepairSession:
+src/deepreason/llm/repair.py:177:class FrozenSubtreeHashV1(BaseModel):
+src/deepreason/llm/repair.py:192:class RepairDiagnosticEnvelopeV2(BaseModel):
+src/deepreason/llm/repair.py:236:def select_output_mechanism(capabilities) -> OutputMechanism:
+src/deepreason/llm/repair.py:245:class RepairDiagnostic(BaseModel):
+src/deepreason/llm/repair.py:264:class ParsedJSON:
+src/deepreason/llm/repair.py:270:class RepairTurn:
+src/deepreason/llm/repair.py:297:def strip_json_fence(raw: str) -> str:
+src/deepreason/llm/repair.py:29:class OutputMechanism(StrEnum):
+src/deepreason/llm/repair.py:303:def _contains_json_value(segment: str) -> bool:
+src/deepreason/llm/repair.py:327:def _sole_fenced_json_value(text: str) -> ParsedJSON | None:
+src/deepreason/llm/repair.py:358:def parse_one_json_value(raw: str) -> ParsedJSON:
+src/deepreason/llm/repair.py:35:class SchemaRepairError(RuntimeError):
+src/deepreason/llm/repair.py:406:def _pointer_token(value: Any) -> str:
+src/deepreason/llm/repair.py:410:def json_pointer(loc: tuple[Any, ...] | list[Any]) -> str:
+src/deepreason/llm/repair.py:414:def _unescape_pointer_token(token: str) -> str:
+src/deepreason/llm/repair.py:418:def pointer_parts(pointer: str) -> list[str]:
+src/deepreason/llm/repair.py:426:def _validate_json_pointer(pointer: str, *, allow_root: bool) -> None:
+src/deepreason/llm/repair.py:43:class RepairScopeViolation(ValueError):
+src/deepreason/llm/repair.py:444:def pointer_get(value: Any, pointer: str) -> Any:
+src/deepreason/llm/repair.py:459:def _subtree_hash(value: Any) -> str:
+src/deepreason/llm/repair.py:463:def _frozen_subtree_hashes(
+src/deepreason/llm/repair.py:525:def _verify_repair_envelope_baseline(
+src/deepreason/llm/repair.py:540:def _patch_parent(value: Any, pointer: str) -> tuple[Any, str]:
+src/deepreason/llm/repair.py:547:def apply_repair_patch(
+src/deepreason/llm/repair.py:58:class UnrepairableDiagnosticError(ValueError):
+src/deepreason/llm/repair.py:615:def merge_subtree(value: Any, pointer: str, replacement: Any) -> Any:
+src/deepreason/llm/repair.py:644:def _json_differences(
+src/deepreason/llm/repair.py:64:class SchemaExhaustedError(SchemaRepairError):
+src/deepreason/llm/repair.py:680:def enforce_repair_subtree(
+src/deepreason/llm/repair.py:715:def _resolve_schema_node(node: Any, root: dict, *, array: bool) -> dict:
+src/deepreason/llm/repair.py:73:def tolerant_patch_value(value):
+src/deepreason/llm/repair.py:762:def _schema_at(schema: dict, loc: tuple[Any, ...]) -> dict:
+src/deepreason/llm/repair.py:775:def schema_at_pointer(schema: dict, pointer: str) -> dict:
+src/deepreason/llm/repair.py:782:def minimal_skeleton(schema: dict, _root: dict | None = None) -> Any:
+src/deepreason/llm/repair.py:832:def _scratch_handle_kind(handle: str) -> str:
+src/deepreason/llm/repair.py:840:def _handle_fields_from_error(error: Exception) -> dict[str, Any]:
+src/deepreason/llm/repair.py:861:def _scratch_reference_guidance(
+src/deepreason/llm/repair.py:933:def diagnostic_from_error(
+src/deepreason/llm/roles.py:375:def render_role_prompt(
+src/deepreason/llm/specs.py:25:class SpecsOutput(BaseModel):
+src/deepreason/llm/specs.py:29:def generate_specs(harness, adapter, problem: Problem, config) -> tuple[list[str], LLMCall]:
+src/deepreason/llm/specs.py:47:def transmission_score(specs: list[str], contents: list[str], embedder) -> float | None:
+src/deepreason/llm/wire.py:1001:class CompactConjectureCandidate(StrictWireModel):
+src/deepreason/llm/wire.py:100:class CriticTargetRequiredError(ValueError):
+src/deepreason/llm/wire.py:1011:class CompactConjecturer(StrictWireModel):
+src/deepreason/llm/wire.py:1015:class ConjecturerWireContract(WireContract[ConjecturerOutput]):
+src/deepreason/llm/wire.py:1039:class AtomicConjectureCandidateWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:104:class V6WireReferenceError(UnknownAliasError):
+src/deepreason/llm/wire.py:1063:class AtomicReasoningConjectureCandidateWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:1087:class AtomicConjectureWireContractV1(WireContract[BaseModel]):
+src/deepreason/llm/wire.py:1203:class ReferenceFreeConjectureCandidate(StrictWireModel):
+src/deepreason/llm/wire.py:1210:class ReferenceFreeConjecturer(StrictWireModel):
+src/deepreason/llm/wire.py:1214:class ReferenceFreeConjecturerWireContract(WireContract[ConjecturerOutput]):
+src/deepreason/llm/wire.py:1242:class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput]):
+src/deepreason/llm/wire.py:124:class AliasTable:
+src/deepreason/llm/wire.py:1305:class ContextRequestWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:1358:class ContextRequestWireV2(StrictWireModel):
+src/deepreason/llm/wire.py:1437:class ConjecturerTurnWireV4(StrictWireModel):
+src/deepreason/llm/wire.py:1458:class ReasoningConjecturerTurnWireV4(StrictWireModel):
+src/deepreason/llm/wire.py:1479:class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
+src/deepreason/llm/wire.py:1624:class SimulationParameterSetWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:1631:class SimulationProposalWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:1676:class ResearchFetchProposalWireV1(StrictWireModel):
+src/deepreason/llm/wire.py:1708:class ConjecturerTurnWireV5(ConjecturerTurnWireV4):
+src/deepreason/llm/wire.py:1729:class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
+src/deepreason/llm/wire.py:172:class StrictWireModel(BaseModel):
+src/deepreason/llm/wire.py:1750:class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
+src/deepreason/llm/wire.py:176:def _resolve_ref(node: dict, root: dict) -> dict:
+src/deepreason/llm/wire.py:1791:class ReasoningConjecturerTurnWireV6(ReasoningConjecturerTurnWireV5):
+src/deepreason/llm/wire.py:1826:class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
+src/deepreason/llm/wire.py:186:def exclusive_fields_schema(*groups: tuple[str, ...]):
+src/deepreason/llm/wire.py:1900:class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
+src/deepreason/llm/wire.py:2338:class BatchCriticCaseWireV2(StrictWireModel):
+src/deepreason/llm/wire.py:2345:class BatchCriticWireV2(StrictWireModel):
+src/deepreason/llm/wire.py:2356:class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
+src/deepreason/llm/wire.py:237:def _concrete_options(field: Mapping[str, Any]) -> list[dict]:
+src/deepreason/llm/wire.py:2448:class CompactCritic(StrictWireModel):
+src/deepreason/llm/wire.py:2457:class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
+src/deepreason/llm/wire.py:2502:class AtomicCriticWireContractV1(CriticWireContract):
+src/deepreason/llm/wire.py:250:def _renders_as(field: Mapping[str, Any], kind: str) -> bool:
+src/deepreason/llm/wire.py:2511:class ResponseClause(StrictWireModel):
+src/deepreason/llm/wire.py:2516:class CompactDefender(StrictWireModel):
+src/deepreason/llm/wire.py:2520:class DefenderWireContract(WireContract[DefenderOutput]):
+src/deepreason/llm/wire.py:2540:class CompactJudge(StrictWireModel):
+src/deepreason/llm/wire.py:2546:class JudgeWireContract(WireContract[JudgeRuling]):
+src/deepreason/llm/wire.py:2567:class CompactPairwiseJudge(StrictWireModel):
+src/deepreason/llm/wire.py:2591:class PairwiseJudgeWireContract(WireContract[PairwiseRuling]):
+src/deepreason/llm/wire.py:2612:class CompactEdit(StrictWireModel):
+src/deepreason/llm/wire.py:2617:class CompactVariator(StrictWireModel):
+src/deepreason/llm/wire.py:2621:class VariatorWireContract(WireContract[VariatorOutput]):
+src/deepreason/llm/wire.py:2634:class CompactSynthesizer(StrictWireModel):
+src/deepreason/llm/wire.py:2639:class SynthesizerWireContract(WireContract[SynthesizerOutput]):
+src/deepreason/llm/wire.py:263:def present_and_nonempty(name: str, properties: dict, *, minimum: int = 1) -> dict:
+src/deepreason/llm/wire.py:2658:def wire_contract_for(
+src/deepreason/llm/wire.py:2722:def minimal_example(contract: WireContract) -> str:
+src/deepreason/llm/wire.py:297:def absent_or_empty(name: str, properties: dict) -> dict:
+src/deepreason/llm/wire.py:330:def require_absent(name: str) -> dict:
+src/deepreason/llm/wire.py:336:def _names_mentioned(node: Any) -> set[str]:
+src/deepreason/llm/wire.py:356:def _without_property(clause: Any, name: str) -> Any | None:
+src/deepreason/llm/wire.py:410:def prune_property(node: dict[str, Any], name: str) -> None:
+src/deepreason/llm/wire.py:438:def outcome_shape_schema(
+src/deepreason/llm/wire.py:485:class FieldIn:
+src/deepreason/llm/wire.py:493:class FieldPresent:
+src/deepreason/llm/wire.py:500:class ShapeClause:
+src/deepreason/llm/wire.py:519:def _clause_branch(entry: str | tuple[str, int], properties: dict) -> dict:
+src/deepreason/llm/wire.py:524:def discriminated_shape_schema(*clauses: ShapeClause):
+src/deepreason/llm/wire.py:572:def _declared_enum(
+src/deepreason/llm/wire.py:591:def _clause_condition(
+src/deepreason/llm/wire.py:614:def _clause_consequent(clause: ShapeClause, properties: dict) -> dict | None:
+src/deepreason/llm/wire.py:650:def restrict_discriminator_values(
+src/deepreason/llm/wire.py:703:def _ref_users(node: Any, ref: str) -> int:
+src/deepreason/llm/wire.py:713:def _branch_is_unsatisfiable(branch: dict, properties: dict) -> bool:
+src/deepreason/llm/wire.py:727:def narrow_unsatisfiable_discriminator_values(node: dict, discriminator: str) -> None:
+src/deepreason/llm/wire.py:774:def _consequent_groups(consequent: dict) -> list[list[dict]]:
+src/deepreason/llm/wire.py:789:def _strict_schema(node: Any, root: dict | None = None) -> Any:
+src/deepreason/llm/wire.py:823:def _reject_control_fields(value: Any, path: str = "") -> None:
+src/deepreason/llm/wire.py:831:def _reject_unknown_fields(value: Any, schema: dict, root: dict, path: str = "") -> None:
+src/deepreason/llm/wire.py:858:class WireContract(Generic[CanonicalOutput]):
+src/deepreason/llm/wire.py:92:class UnknownAliasError(ValueError):
+src/deepreason/llm/wire.py:962:class DirectWireContract(WireContract[CanonicalOutput]):
+src/deepreason/llm/wire.py:967:class RepairPatchWireContract(WireContract[RepairPatchV1]):
+src/deepreason/llm/wire.py:96:class AliasTableRequiredError(ValueError):

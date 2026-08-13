@@ -1,0 +1,74 @@
+src/deepreason/runtime/budget.py:15:class Limit(BaseModel):
+src/deepreason/runtime/budget.py:38:def parse_limit(
+src/deepreason/runtime/budget.py:66:class LimitExceeded(RuntimeError):
+src/deepreason/runtime/budget.py:70:class AggregateMeter:
+src/deepreason/runtime/continuation.py:139:def _assert_amendment_committed(root: Path) -> None:
+src/deepreason/runtime/continuation.py:159:def _assert_no_live_lock(root: Path) -> None:
+src/deepreason/runtime/continuation.py:167:def _append_continuation_record(path: Path, record: dict) -> None:
+src/deepreason/runtime/continuation.py:174:def _emit_resume_progress(root: Path, manifest, stop_digest: str) -> None:
+src/deepreason/runtime/continuation.py:186:def _prepare_owned_v4_continuation(
+src/deepreason/runtime/continuation.py:19:class ContinuationRequest(BaseModel):
+src/deepreason/runtime/continuation.py:26:def _digest(value: dict) -> str:
+src/deepreason/runtime/continuation.py:32:def _owned_v4_control(manifest):
+src/deepreason/runtime/continuation.py:360:def prepare_continuation(
+src/deepreason/runtime/continuation.py:59:def _canonical_file(path: Path, *, error_code: str) -> tuple[dict, str]:
+src/deepreason/runtime/continuation.py:75:def _continuation_history(path: Path, manifest_digest: str) -> list[dict]:
+src/deepreason/runtime/continuation.py:96:def _validate_typed_history(records: list[dict], workflow_state) -> None:
+src/deepreason/runtime/launch_policy.py:120:def resolve_effective_run_manifest(
+src/deepreason/runtime/launch_policy.py:176:def require_v6_production_qualification(
+src/deepreason/runtime/launch_policy.py:33:def _invalid(detail: str) -> ValueError:
+src/deepreason/runtime/launch_policy.py:37:def _disabled(operation: str, source: str) -> ValueError:
+src/deepreason/runtime/launch_policy.py:44:def _read_policy(path: Path) -> Mapping[str, Any]:
+src/deepreason/runtime/launch_policy.py:87:def require_v6_launch_allowed(subject: Any, *, operation: str) -> None:
+src/deepreason/runtime/progress.py:17:def _io_path(path: Path) -> Path:
+src/deepreason/runtime/progress.py:34:class ProgressEvent(BaseModel):
+src/deepreason/runtime/progress.py:64:def _atomic_json(path: Path, value: dict) -> None:
+src/deepreason/runtime/progress.py:94:class ProgressSink:
+src/deepreason/runtime/stop.py:114:class StopController:
+src/deepreason/runtime/stop.py:213:def write_stop_record(
+src/deepreason/runtime/stop.py:230:def build_stop_record(
+src/deepreason/runtime/stop.py:257:def persist_stop_record(root: Path | str, record: dict) -> dict:
+src/deepreason/runtime/stop.py:278:def validate_stop_record(record: dict) -> dict:
+src/deepreason/runtime/stop.py:27:class StopPolicy(BaseModel):
+src/deepreason/runtime/stop.py:55:class StopMetrics(BaseModel):
+src/deepreason/runtime/stop.py:72:class StopDecision(BaseModel):
+src/deepreason/runtime/stop.py:80:class StopControllerStateV1(BaseModel):
+src/deepreason/runtime/terminal_authority.py:1013:def _current_epoch_orphans(harness, manifest) -> tuple[RunTerminalCommitmentV1, ...]:
+src/deepreason/runtime/terminal_authority.py:1042:def ensure_terminal_commitment(
+src/deepreason/runtime/terminal_authority.py:1105:def _write_generic_terminal_checkpoint(harness, manifest, stop: dict[str, Any]) -> None:
+src/deepreason/runtime/terminal_authority.py:1117:def _seal_terminal_commitment_checkpoint(harness, manifest, commitment) -> None:
+src/deepreason/runtime/terminal_authority.py:1161:def _expected_terminal_result(harness, manifest, commitment):
+src/deepreason/runtime/terminal_authority.py:1192:def _fresh_replay_validation(root: Path) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:1210:def _post_commit_result(expected: dict[str, Any], report) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:1230:def _current_projection_is_fresh(
+src/deepreason/runtime/terminal_authority.py:1262:def _publish_current_replay_projection(
+src/deepreason/runtime/terminal_authority.py:1342:def _prepare_terminal_result_locked(
+src/deepreason/runtime/terminal_authority.py:1375:def finalize_terminal_result(
+src/deepreason/runtime/terminal_authority.py:1418:def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
+src/deepreason/runtime/terminal_authority.py:147:def _terminal_projection(
+src/deepreason/runtime/terminal_authority.py:162:def _read_current_result(root: Path) -> dict[str, Any] | None:
+src/deepreason/runtime/terminal_authority.py:182:def _result_without_projection(payload: dict[str, Any]) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:190:def _result_projection(payload: dict[str, Any]) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:203:def _result_projection_digest(payload: dict[str, Any]) -> str:
+src/deepreason/runtime/terminal_authority.py:207:def _pending_terminal_result(expected: dict[str, Any]) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:239:def _read_replay_validation(root: Path) -> dict[str, Any] | None:
+src/deepreason/runtime/terminal_authority.py:264:def _public_terminal_projection_required(draft: RunTerminalResultDraftV1) -> bool:
+src/deepreason/runtime/terminal_authority.py:275:def _same_epoch_commitment_objects(harness, manifest, epoch: int):
+src/deepreason/runtime/terminal_authority.py:297:def _validate_commitment_checkpoint(root: Path, harness, commitment) -> None:
+src/deepreason/runtime/terminal_authority.py:320:def _replay_validation_base(payload: dict[str, Any]) -> dict[str, Any]:
+src/deepreason/runtime/terminal_authority.py:33:class TerminalReplayValidationBindingV1(BaseModel):
+src/deepreason/runtime/terminal_authority.py:348:def _evaluated_replay_horizon(
+src/deepreason/runtime/terminal_authority.py:391:def _expected_replay_binding(
+src/deepreason/runtime/terminal_authority.py:430:def _validate_result_projection_binding(
+src/deepreason/runtime/terminal_authority.py:456:def is_commitment_bound_bridge_work(
+src/deepreason/runtime/terminal_authority.py:511:def _amendment_application_window(root: Path) -> tuple[int, frozenset[str]] | None:
+src/deepreason/runtime/terminal_authority.py:545:def _is_amendment_application_event(harness, event, problem_ids) -> bool:
+src/deepreason/runtime/terminal_authority.py:572:def _validate_post_terminal_descendants(harness, commitment) -> None:
+src/deepreason/runtime/terminal_authority.py:703:def derive_terminal_authority(
+src/deepreason/runtime/terminal_authority.py:80:class TerminalAuthorityDerivationV1(BaseModel):
+src/deepreason/runtime/terminal_authority.py:842:def validate_application_stop_source(
+src/deepreason/runtime/terminal_authority.py:873:def _terminal_commitment_lock(harness) -> ProcessLock:
+src/deepreason/runtime/terminal_authority.py:881:def model_execution_summary_digest(summary: BaseModel | dict[str, Any]) -> str:
+src/deepreason/runtime/terminal_authority.py:894:def _validate_stop_history(root: Path, stop: dict[str, Any]) -> None:
+src/deepreason/runtime/terminal_authority.py:910:def validate_terminal_commitment_storage(root: Path | str, workflow_state) -> None:
+src/deepreason/runtime/terminal_authority.py:934:def _expected_commitment(

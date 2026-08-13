@@ -1,0 +1,10 @@
+=== symbol: ScratchLinkSummaryV1  defined: src/deepreason/application/scratch.py ===
+--- reference scan: rg -l -w 'ScratchLinkSummaryV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ScratchLinkSummaryV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ScratchLinkSummaryV1' pyproject.toml ---
+
+(above blank = zero hits)

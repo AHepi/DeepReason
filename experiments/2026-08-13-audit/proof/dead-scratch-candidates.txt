@@ -1,0 +1,23 @@
+CANDIDATE-DEAD: _dedupe (src/deepreason/scratch/attention.py) -- proof: dead-scratch-_dedupe.txt
+CANDIDATE-DEAD: _ScratchModelResult (src/deepreason/scratch/authoring.py) -- proof: dead-scratch-_ScratchModelResult.txt
+CANDIDATE-DEAD: _bounded_attention_policy (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_bounded_attention_policy.txt
+CANDIDATE-DEAD: _expanded_attention_policy (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_expanded_attention_policy.txt
+CANDIDATE-DEAD: _focus_blocks (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_focus_blocks.txt
+CANDIDATE-DEAD: _expansion_seed (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_expansion_seed.txt
+CANDIDATE-DEAD: _v6_aliases_for_render_receipt (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_v6_aliases_for_render_receipt.txt
+CANDIDATE-DEAD: _replace_local_handles (src/deepreason/scratch/conjecture.py) -- proof: dead-scratch-_replace_local_handles.txt
+CANDIDATE-DEAD: _ReferenceCompiler (src/deepreason/scratch/contracts.py) -- proof: dead-scratch-_ReferenceCompiler.txt
+CANDIDATE-DEAD: ScratchWireModel (src/deepreason/scratch/contracts.py) -- proof: dead-scratch-ScratchWireModel.txt
+DYNAMIC-REF: CoveragePolicy (src/deepreason/scratch/coverage.py) -- string hits: src/deepreason/scratch/coverage.py  -- proof: dead-scratch-CoveragePolicy.txt
+CANDIDATE-DEAD: _without_none (src/deepreason/scratch/models.py) -- proof: dead-scratch-_without_none.txt
+CANDIDATE-DEAD: _require_nonblank (src/deepreason/scratch/models.py) -- proof: dead-scratch-_require_nonblank.txt
+CANDIDATE-DEAD: _freeze_list (src/deepreason/scratch/models.py) -- proof: dead-scratch-_freeze_list.txt
+CANDIDATE-DEAD: _sorted_unique (src/deepreason/scratch/models.py) -- proof: dead-scratch-_sorted_unique.txt
+CANDIDATE-DEAD: ScratchProposalModel (src/deepreason/scratch/proposals.py) -- proof: dead-scratch-ScratchProposalModel.txt
+DYNAMIC-REF: normalize_search_text (src/deepreason/scratch/search.py) -- string hits: src/deepreason/scratch/search.py  -- proof: dead-scratch-normalize_search_text.txt
+DYNAMIC-REF: LiteralSearchHit (src/deepreason/scratch/search.py) -- string hits: src/deepreason/scratch/search.py  -- proof: dead-scratch-LiteralSearchHit.txt
+DYNAMIC-REF: embedding_text (src/deepreason/scratch/similarity.py) -- string hits: src/deepreason/scratch/similarity.py  -- proof: dead-scratch-embedding_text.txt
+CANDIDATE-DEAD: _finite_vector (src/deepreason/scratch/similarity.py) -- proof: dead-scratch-_finite_vector.txt
+CANDIDATE-DEAD: _engine_fingerprint (src/deepreason/scratch/similarity.py) -- proof: dead-scratch-_engine_fingerprint.txt
+DYNAMIC-REF: record_similarity_pair (src/deepreason/scratch/similarity.py) -- string hits: src/deepreason/scratch/similarity.py  -- proof: dead-scratch-record_similarity_pair.txt
+DYNAMIC-REF: EmbedderSelection (src/deepreason/scratch/similarity.py) -- string hits: src/deepreason/scratch/similarity.py  -- proof: dead-scratch-EmbedderSelection.txt

@@ -1,0 +1,10 @@
+=== symbol: _pick_primary  defined: src/deepreason/llm/endpoints.py ===
+--- reference scan: rg -l -w '_pick_primary' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_pick_primary['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_pick_primary' pyproject.toml ---
+
+(above blank = zero hits)

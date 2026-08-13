@@ -1,0 +1,51 @@
+CANDIDATE-DEAD: _model_json (src/deepreason/application/bridge.py) -- proof: dead-application-_model_json.txt
+CANDIDATE-DEAD: _json_item (src/deepreason/application/bridge.py) -- proof: dead-application-_json_item.txt
+CANDIDATE-DEAD: _page_model_field (src/deepreason/application/bridge.py) -- proof: dead-application-_page_model_field.txt
+CANDIDATE-DEAD: _bounded_json_text (src/deepreason/application/bridge.py) -- proof: dead-application-_bounded_json_text.txt
+CANDIDATE-DEAD: _finish_bounded_payload (src/deepreason/application/bridge.py) -- proof: dead-application-_finish_bounded_payload.txt
+CANDIDATE-DEAD: _notify (src/deepreason/application/bridge.py) -- proof: dead-application-_notify.txt
+CANDIDATE-DEAD: _start_result (src/deepreason/application/bridge.py) -- proof: dead-application-_start_result.txt
+CANDIDATE-DEAD: _GroundedBridgePageIntentV1 (src/deepreason/application/bridge.py) -- proof: dead-application-_GroundedBridgePageIntentV1.txt
+CANDIDATE-DEAD: _PreparedBridge (src/deepreason/application/bridge.py) -- proof: dead-application-_PreparedBridge.txt
+DYNAMIC-REF: read_bounded_json (src/deepreason/application/bridge.py) -- string hits: src/deepreason/application/bridge.py  -- proof: dead-application-read_bounded_json.txt
+CANDIDATE-DEAD: validate_reference (src/deepreason/application/bridge.py) -- proof: dead-application-validate_reference.txt
+DYNAMIC-REF: bounded_focus (src/deepreason/application/bridge.py) -- string hits: src/deepreason/application/bridge.py  -- proof: dead-application-bounded_focus.txt
+DYNAMIC-REF: resolve_problem (src/deepreason/application/bridge.py) -- string hits: src/deepreason/application/bridge.py  -- proof: dead-application-resolve_problem.txt
+CANDIDATE-DEAD: _validate_manifest_files (src/deepreason/application/bridge.py) -- proof: dead-application-_validate_manifest_files.txt
+CANDIDATE-DEAD: _load_manifest_without_echo (src/deepreason/application/bridge.py) -- proof: dead-application-_load_manifest_without_echo.txt
+DYNAMIC-REF: reasoning_run_state (src/deepreason/application/bridge.py) -- string hits: src/deepreason/application/bridge.py  -- proof: dead-application-reasoning_run_state.txt
+DYNAMIC-REF: preflight_focus (src/deepreason/application/bridge.py) -- string hits: src/deepreason/application/bridge.py  -- proof: dead-application-preflight_focus.txt
+CANDIDATE-DEAD: _build_canonical (src/deepreason/application/bridge.py) -- proof: dead-application-_build_canonical.txt
+CANDIDATE-DEAD: _build_derived (src/deepreason/application/bridge.py) -- proof: dead-application-_build_derived.txt
+CANDIDATE-DEAD: _load_result_manifest (src/deepreason/application/bridge.py) -- proof: dead-application-_load_result_manifest.txt
+CANDIDATE-DEAD: _shared_meter_snapshot (src/deepreason/application/conjecture.py) -- proof: dead-application-_shared_meter_snapshot.txt
+CANDIDATE-DEAD: CompactRecoveryLanguageV1 (src/deepreason/application/models.py) -- proof: dead-application-CompactRecoveryLanguageV1.txt
+CANDIDATE-DEAD: RouteSeatBaseProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-RouteSeatBaseProjectionV1.txt
+CANDIDATE-DEAD: CompactRecoveryRouteProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-CompactRecoveryRouteProjectionV1.txt
+CANDIDATE-DEAD: RouteSeatModelClassificationProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-RouteSeatModelClassificationProjectionV1.txt
+CANDIDATE-DEAD: AtomicWorkAttemptProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-AtomicWorkAttemptProjectionV1.txt
+CANDIDATE-DEAD: ContractDecompositionProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-ContractDecompositionProjectionV1.txt
+CANDIDATE-DEAD: RouteSeatInsufficientCapabilityProjectionV1 (src/deepreason/application/models.py) -- proof: dead-application-RouteSeatInsufficientCapabilityProjectionV1.txt
+CANDIDATE-DEAD: RunStopReceiptV1 (src/deepreason/application/models.py) -- proof: dead-application-RunStopReceiptV1.txt
+CANDIDATE-DEAD: ScratchIdentityIndexV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchIdentityIndexV1.txt
+CANDIDATE-DEAD: ScratchBlockSummaryV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchBlockSummaryV1.txt
+CANDIDATE-DEAD: ScratchLinkSummaryV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchLinkSummaryV1.txt
+CANDIDATE-DEAD: ScratchClusterMapItemV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchClusterMapItemV1.txt
+CANDIDATE-DEAD: ScratchRelatedClusterV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchRelatedClusterV1.txt
+CANDIDATE-DEAD: ScratchSimilaritySummaryV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchSimilaritySummaryV1.txt
+CANDIDATE-DEAD: ScratchRelatedBlockV1 (src/deepreason/application/scratch.py) -- proof: dead-application-ScratchRelatedBlockV1.txt
+CANDIDATE-DEAD: _ResultBase (src/deepreason/application/scratch.py) -- proof: dead-application-_ResultBase.txt
+CANDIDATE-DEAD: _ScratchOpenResultBase (src/deepreason/application/scratch.py) -- proof: dead-application-_ScratchOpenResultBase.txt
+CANDIDATE-DEAD: _identity_index (src/deepreason/application/scratch.py) -- proof: dead-application-_identity_index.txt
+CANDIDATE-DEAD: _open_result_values (src/deepreason/application/scratch.py) -- proof: dead-application-_open_result_values.txt
+CANDIDATE-DEAD: _QueryBase (src/deepreason/application/scratch.py) -- proof: dead-application-_QueryBase.txt
+CANDIDATE-DEAD: _HistoricalQueryBase (src/deepreason/application/scratch.py) -- proof: dead-application-_HistoricalQueryBase.txt
+CANDIDATE-DEAD: _BlockQueryBase (src/deepreason/application/scratch.py) -- proof: dead-application-_BlockQueryBase.txt
+CANDIDATE-DEAD: _record_exhaustion_lifecycle_stop (src/deepreason/application/text_runs.py) -- proof: dead-application-_record_exhaustion_lifecycle_stop.txt
+CANDIDATE-DEAD: _budget_values (src/deepreason/application/text_runs.py) -- proof: dead-application-_budget_values.txt
+CANDIDATE-DEAD: _request_path (src/deepreason/application/text_runs.py) -- proof: dead-application-_request_path.txt
+CANDIDATE-DEAD: _request_for_intent (src/deepreason/application/text_runs.py) -- proof: dead-application-_request_for_intent.txt
+CANDIDATE-DEAD: _read_request (src/deepreason/application/text_runs.py) -- proof: dead-application-_read_request.txt
+CANDIDATE-DEAD: _spec_from_request (src/deepreason/application/text_runs.py) -- proof: dead-application-_spec_from_request.txt
+CANDIDATE-DEAD: _run_input_matches_spec (src/deepreason/application/text_runs.py) -- proof: dead-application-_run_input_matches_spec.txt
+CANDIDATE-DEAD: _require_v6_manifest (src/deepreason/application/text_runs.py) -- proof: dead-application-_require_v6_manifest.txt

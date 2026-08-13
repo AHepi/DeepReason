@@ -1,0 +1,10 @@
+=== symbol: PilotSignalPolicy  defined: src/deepreason/views/jolt_signals.py ===
+--- reference scan: rg -l -w 'PilotSignalPolicy' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]PilotSignalPolicy['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'PilotSignalPolicy' pyproject.toml ---
+
+(above blank = zero hits)

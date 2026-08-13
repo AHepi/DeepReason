@@ -1,0 +1,7 @@
+src/deepreason/browser.py:103:def browser_commitment(script: list[dict], viewport: dict | None = None) -> Commitment:
+src/deepreason/browser.py:120:def load_spec(budget) -> dict:
+src/deepreason/browser.py:127:class PlaywrightBrowser:
+src/deepreason/browser.py:58:class BrowserUnavailable(RuntimeError):
+src/deepreason/browser.py:62:def chromium_executable() -> str | None:
+src/deepreason/browser.py:84:def chromium_launch_args() -> list[str]:
+src/deepreason/browser.py:97:class BrowserResult:

@@ -1,0 +1,1 @@
+CANDIDATE-DEAD: _escalated_research (src/deepreason/ops.py) -- proof: dead-ops-_escalated_research.txt

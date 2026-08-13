@@ -1,0 +1,10 @@
+=== symbol: capsule_bytes  defined: src/deepreason/skills/snapshot.py ===
+--- reference scan: rg -l -w 'capsule_bytes' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]capsule_bytes['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'capsule_bytes' pyproject.toml ---
+
+(above blank = zero hits)

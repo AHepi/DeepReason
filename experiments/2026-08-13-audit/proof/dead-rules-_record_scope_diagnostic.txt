@@ -1,0 +1,10 @@
+=== symbol: _record_scope_diagnostic  defined: src/deepreason/rules/guards/anti_relapse.py ===
+--- reference scan: rg -l -w '_record_scope_diagnostic' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_record_scope_diagnostic['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_record_scope_diagnostic' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,5 @@
+src/deepreason/shallow_fitness.py:46:def shallow_fitness_maximum_provider_calls() -> int:
+src/deepreason/shallow_fitness.py:52:def _case_prompt(case_index: int) -> str:
+src/deepreason/shallow_fitness.py:72:def _failure_code(error: BaseException) -> str:
+src/deepreason/shallow_fitness.py:85:def _profile_endpoint(profile: ProviderProfileV1, environment: Mapping[str, str]):
+src/deepreason/shallow_fitness.py:96:def run_shallow_fitness_battery(

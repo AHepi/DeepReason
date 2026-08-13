@@ -1,0 +1,10 @@
+=== symbol: _with_cross_examiner  defined: src/deepreason/capture/schools.py ===
+--- reference scan: rg -l -w '_with_cross_examiner' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_with_cross_examiner['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_with_cross_examiner' pyproject.toml ---
+
+(above blank = zero hits)

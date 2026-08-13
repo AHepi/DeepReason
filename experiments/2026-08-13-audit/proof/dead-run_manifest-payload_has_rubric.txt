@@ -1,0 +1,10 @@
+=== symbol: payload_has_rubric  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w 'payload_has_rubric' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]payload_has_rubric['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'payload_has_rubric' pyproject.toml ---
+
+(above blank = zero hits)

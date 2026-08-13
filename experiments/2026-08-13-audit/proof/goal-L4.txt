@@ -1,0 +1,11 @@
+=== L4: Tokens are cheap; the agent is not ===
+This governs AGENT/OPERATOR WORKING STYLE during a session (preferring
+live-run evidence over hand-built machinery, running the targeted test
+ring instead of repeated full-gate runs), not a runtime code path --
+there is no "violation" a test can catch at import/run time.
+verdict: process-law -- enforced by CLAUDE.md itself ("Build and test"
+section: "Iterate on the RING, gate at the BOUNDARY"; the recorded
+44-minute four-full-gate-runs mistake as the standing cautionary
+example) and by the dr-drive-harness skill (the driving manual loaded
+at the start of every harness session), which both agents and the
+dr-audit-orchestrator family (this very audit) are required to follow.

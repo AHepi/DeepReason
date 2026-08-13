@@ -1,0 +1,10 @@
+=== symbol: recent_edge_differences  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'recent_edge_differences' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]recent_edge_differences['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'recent_edge_differences' pyproject.toml ---
+
+(above blank = zero hits)

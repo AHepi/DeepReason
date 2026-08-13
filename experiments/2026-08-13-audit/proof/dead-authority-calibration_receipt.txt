@@ -1,0 +1,10 @@
+=== symbol: calibration_receipt  defined: src/deepreason/authority.py ===
+--- reference scan: rg -l -w 'calibration_receipt' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]calibration_receipt['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'calibration_receipt' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,21 @@
+src/deepreason/research/backends.py:108:class ResearchService:
+src/deepreason/research/backends.py:128:def load_static_corpus(path: str) -> dict[str, tuple[str, str]]:
+src/deepreason/research/backends.py:148:def build_service(config) -> ResearchService:
+src/deepreason/research/backends.py:180:def _readable(harness, artifact) -> bool:
+src/deepreason/research/backends.py:190:def _evidence_for(harness, research_problem_id: str):
+src/deepreason/research/backends.py:199:def covered(harness, research_problem_id: str) -> bool:
+src/deepreason/research/backends.py:213:def pending(harness, research_problem_id: str) -> bool:
+src/deepreason/research/backends.py:223:def register_evidence(
+src/deepreason/research/backends.py:276:def _record_fetch_receipts(harness, problem_id: str, backend) -> None:
+src/deepreason/research/backends.py:296:def run_research(harness, problem, backend) -> Artifact | None:
+src/deepreason/research/backends.py:37:class StaticBackend:
+src/deepreason/research/backends.py:52:class AskUserBackend:
+src/deepreason/research/backends.py:67:class WebBackend:
+src/deepreason/research/fetch.py:101:class FetchReceiptV1(BaseModel):
+src/deepreason/research/fetch.py:131:class FetchOutcome(BaseModel):
+src/deepreason/research/fetch.py:139:class _TextCollector(HTMLParser):
+src/deepreason/research/fetch.py:172:def html_to_text(body: bytes) -> str:
+src/deepreason/research/fetch.py:182:def _urllib_transport(
+src/deepreason/research/fetch.py:217:class ContainedFetcher:
+src/deepreason/research/fetch.py:46:class WebResearchConfigV1(BaseModel):
+src/deepreason/research/fetch.py:84:def load_web_config(path: str | Path) -> WebResearchConfigV1:

@@ -1,0 +1,10 @@
+=== symbol: _existing_admission  defined: src/deepreason/workflow/nonconjecture_recovery.py ===
+--- reference scan: rg -l -w '_existing_admission' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_existing_admission['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_existing_admission' pyproject.toml ---
+
+(above blank = zero hits)

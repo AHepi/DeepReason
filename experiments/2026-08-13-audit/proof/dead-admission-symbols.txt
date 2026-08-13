@@ -1,0 +1,34 @@
+src/deepreason/admission/adapter_host.py:18:def main(argv: list[str] | None = None) -> int:
+src/deepreason/admission/adapters.py:102:def registered_adapters(
+src/deepreason/admission/adapters.py:130:def adapter_for(
+src/deepreason/admission/adapters.py:139:def sandbox_available() -> bool:
+src/deepreason/admission/adapters.py:145:def run_adapter(
+src/deepreason/admission/adapters.py:28:class AdapterManifestV1(BaseModel):
+src/deepreason/admission/adapters.py:61:class AdapterBlockWireV1(BaseModel):
+src/deepreason/admission/adapters.py:70:class AdapterResultWireV1(BaseModel):
+src/deepreason/admission/adapters.py:81:class AdapterError(ValueError):
+src/deepreason/admission/adapters.py:87:def _first_party_manifests() -> tuple[AdapterManifestV1, ...]:
+src/deepreason/admission/adapters_epub.py:103:def _spine_order(archive) -> list[str]:
+src/deepreason/admission/adapters_epub.py:144:def extract(data: bytes) -> AdapterResultWireV1:
+src/deepreason/admission/adapters_epub.py:61:class _TextCollector(HTMLParser):
+src/deepreason/admission/adapters_pdf.py:35:def extract(data: bytes) -> AdapterResultWireV1:
+src/deepreason/admission/attach.py:148:def admit_attachment_paths(
+src/deepreason/admission/attach.py:31:class AdmittedAttachments:
+src/deepreason/admission/attach.py:53:def collect_attachment_inputs(paths) -> list[AdmissionInput]:
+src/deepreason/admission/attach.py:95:def admit_attachments(
+src/deepreason/admission/parse.py:119:def _line_offsets(data: bytes) -> list[int]:
+src/deepreason/admission/parse.py:129:def _mint_span_block(
+src/deepreason/admission/parse.py:151:def _segment_text(
+src/deepreason/admission/parse.py:240:def _format_number(value: float | int) -> str:
+src/deepreason/admission/parse.py:246:def _csv_projections(
+src/deepreason/admission/parse.py:358:def _first_heading(data: bytes) -> str | None:
+src/deepreason/admission/parse.py:370:def _adapter_blocks(
+src/deepreason/admission/parse.py:401:def admit_sources(
+src/deepreason/admission/parse.py:54:class AdmissionError(ValueError):
+src/deepreason/admission/parse.py:63:class AdmissionInput:
+src/deepreason/admission/parse.py:71:class AdmissionReport:
+src/deepreason/admission/parse.py:81:def sniff_media_type(data: bytes) -> tuple[str, str | None]:
+src/deepreason/admission/store.py:135:def admission_store(base: Path | str | None = None) -> AdmissionStore:
+src/deepreason/admission/store.py:24:class AdmissionStoreError(ValueError):
+src/deepreason/admission/store.py:30:def _state_home() -> Path:
+src/deepreason/admission/store.py:36:class AdmissionStore:

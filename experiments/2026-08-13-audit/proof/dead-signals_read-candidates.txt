@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _deferred_model_phase_counts (src/deepreason/signals_read.py) -- proof: dead-signals_read-_deferred_model_phase_counts.txt
+CANDIDATE-DEAD: _token_spend (src/deepreason/signals_read.py) -- proof: dead-signals_read-_token_spend.txt

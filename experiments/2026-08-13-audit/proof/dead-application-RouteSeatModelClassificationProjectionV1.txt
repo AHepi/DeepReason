@@ -1,0 +1,10 @@
+=== symbol: RouteSeatModelClassificationProjectionV1  defined: src/deepreason/application/models.py ===
+--- reference scan: rg -l -w 'RouteSeatModelClassificationProjectionV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]RouteSeatModelClassificationProjectionV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'RouteSeatModelClassificationProjectionV1' pyproject.toml ---
+
+(above blank = zero hits)

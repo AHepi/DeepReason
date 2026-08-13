@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _bounded_view (src/deepreason/packs/allocate.py) -- proof: dead-packs-_bounded_view.txt
+CANDIDATE-DEAD: AllocatedSection (src/deepreason/packs/allocate.py) -- proof: dead-packs-AllocatedSection.txt

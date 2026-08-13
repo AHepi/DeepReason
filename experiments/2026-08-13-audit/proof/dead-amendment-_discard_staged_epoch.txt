@@ -1,0 +1,10 @@
+=== symbol: _discard_staged_epoch  defined: src/deepreason/amendment/apply.py ===
+--- reference scan: rg -l -w '_discard_staged_epoch' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_discard_staged_epoch['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_discard_staged_epoch' pyproject.toml ---
+
+(above blank = zero hits)

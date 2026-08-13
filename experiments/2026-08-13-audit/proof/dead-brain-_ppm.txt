@@ -1,0 +1,10 @@
+=== symbol: _ppm  defined: src/deepreason/brain/retrieve.py ===
+--- reference scan: rg -l -w '_ppm' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_ppm['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_ppm' pyproject.toml ---
+
+(above blank = zero hits)

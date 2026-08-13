@@ -1,0 +1,7 @@
+=== symbol: ConfigObservationV1  defined: src/deepreason/referee.py ===
+--- reference scan: rg -l -w 'ConfigObservationV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ConfigObservationV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/referee.py
+(above blank = zero hits)

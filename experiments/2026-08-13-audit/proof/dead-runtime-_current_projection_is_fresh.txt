@@ -1,0 +1,10 @@
+=== symbol: _current_projection_is_fresh  defined: src/deepreason/runtime/terminal_authority.py ===
+--- reference scan: rg -l -w '_current_projection_is_fresh' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_current_projection_is_fresh['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_current_projection_is_fresh' pyproject.toml ---
+
+(above blank = zero hits)

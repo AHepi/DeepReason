@@ -1,0 +1,7 @@
+=== symbol: lineage_endpoints  defined: src/deepreason/scheduler/scheduler.py ===
+--- reference scan: rg -l -w 'lineage_endpoints' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]lineage_endpoints['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/scheduler/scheduler.py
+(above blank = zero hits)

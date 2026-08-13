@@ -1,0 +1,3 @@
+src/deepreason/intake_form.py:157:def mcp_safe_schema() -> dict:
+src/deepreason/intake_form.py:180:def render_intake_validation_errors(error: ValidationError) -> list[str]:
+src/deepreason/intake_form.py:61:class IntakeFormV1(BaseModel):

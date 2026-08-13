@@ -1,0 +1,10 @@
+=== symbol: _simulation_enabled  defined: src/deepreason/rules/crit.py ===
+--- reference scan: rg -l -w '_simulation_enabled' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_simulation_enabled['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_simulation_enabled' pyproject.toml ---
+
+(above blank = zero hits)

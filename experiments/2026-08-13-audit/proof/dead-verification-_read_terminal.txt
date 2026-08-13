@@ -1,0 +1,10 @@
+=== symbol: _read_terminal  defined: src/deepreason/verification/report.py ===
+--- reference scan: rg -l -w '_read_terminal' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_read_terminal['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_read_terminal' pyproject.toml ---
+
+(above blank = zero hits)

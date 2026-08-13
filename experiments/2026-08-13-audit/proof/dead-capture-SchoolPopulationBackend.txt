@@ -1,0 +1,7 @@
+=== symbol: SchoolPopulationBackend  defined: src/deepreason/capture/schools.py ===
+--- reference scan: rg -l -w 'SchoolPopulationBackend' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]SchoolPopulationBackend['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/capture/schools.py
+(above blank = zero hits)

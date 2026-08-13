@@ -1,0 +1,10 @@
+=== symbol: _deferred_model_phase_counts  defined: src/deepreason/signals_read.py ===
+--- reference scan: rg -l -w '_deferred_model_phase_counts' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_deferred_model_phase_counts['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_deferred_model_phase_counts' pyproject.toml ---
+
+(above blank = zero hits)

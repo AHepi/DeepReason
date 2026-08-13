@@ -1,0 +1,2 @@
+src/deepreason/canonical.py:12:def canonical_json(obj) -> bytes:
+src/deepreason/canonical.py:16:def sha256_hex(data: bytes) -> str:

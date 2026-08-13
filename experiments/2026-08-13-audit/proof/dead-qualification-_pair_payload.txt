@@ -1,0 +1,10 @@
+=== symbol: _pair_payload  defined: src/deepreason/qualification.py ===
+--- reference scan: rg -l -w '_pair_payload' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_pair_payload['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_pair_payload' pyproject.toml ---
+
+(above blank = zero hits)

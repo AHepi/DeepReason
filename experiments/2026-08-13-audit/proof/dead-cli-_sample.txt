@@ -1,0 +1,10 @@
+=== symbol: _sample  defined: src/deepreason/cli/scratch.py ===
+--- reference scan: rg -l -w '_sample' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_sample['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_sample' pyproject.toml ---
+
+(above blank = zero hits)

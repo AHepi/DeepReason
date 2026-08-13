@@ -1,0 +1,10 @@
+=== symbol: _write_bridge_execution_snapshot  defined: src/deepreason/bridge/harness.py ===
+--- reference scan: rg -l -w '_write_bridge_execution_snapshot' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_write_bridge_execution_snapshot['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_write_bridge_execution_snapshot' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,3 @@
+src/deepreason/control_events.py:108:class ControlEventPayloadV3(FrozenRecord):
+src/deepreason/control_events.py:21:class ControlEventPayloadV1(FrozenRecord):
+src/deepreason/control_events.py:70:class ControlEventPayloadV2(FrozenRecord):

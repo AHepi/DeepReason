@@ -1,0 +1,17 @@
+src/deepreason/measures/demarcation.py:13:def crit(artifact) -> bool:
+src/deepreason/measures/demarcation.py:17:def mod(artifact, variator) -> bool:
+src/deepreason/measures/hv.py:109:def _variator_pack(text: str, battery_desc: list[str], k: int, struct: bool) -> str:
+src/deepreason/measures/hv.py:124:def _sample_edits(harness, adapter, artifact: Artifact, k: int):
+src/deepreason/measures/hv.py:140:def _survival(harness, artifact, text, battery, edits, embedder) -> tuple[float, list[dict]]:
+src/deepreason/measures/hv.py:170:def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> float | None:
+src/deepreason/measures/hv.py:186:def hv_floor_commitment(config) -> Commitment:
+src/deepreason/measures/hv.py:198:def is_hv_floor(commitment: Commitment) -> bool:
+src/deepreason/measures/hv.py:202:def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embedder=None) -> str:
+src/deepreason/measures/hv.py:40:def _normalize(text: str) -> str:
+src/deepreason/measures/hv.py:47:def _equivalence_battery(harness, artifact) -> list[str]:
+src/deepreason/measures/hv.py:59:def _text_vector(harness, battery: list[str], text: str) -> tuple:
+src/deepreason/measures/hv.py:71:def _equivalent(a: str, b: str, embedder=None, harness=None,
+src/deepreason/measures/hv.py:99:def _evaluable_battery(artifact: Artifact, commitments: dict) -> list[str]:
+src/deepreason/measures/reach.py:42:def _substantive(commitment) -> bool:
+src/deepreason/measures/reach.py:49:def _verdict(harness, cid: str, aid: str, artifact) -> str:
+src/deepreason/measures/reach.py:66:def reach_sweep(harness, coverage_min: float = 0.5) -> list[tuple[str, str]]:

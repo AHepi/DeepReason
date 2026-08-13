@@ -1,0 +1,7 @@
+=== symbol: ArguedRefutationV1  defined: src/deepreason/bridge/evidence_pack.py ===
+--- reference scan: rg -l -w 'ArguedRefutationV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ArguedRefutationV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/evidence_pack.py
+(above blank = zero hits)

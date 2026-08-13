@@ -1,0 +1,10 @@
+=== symbol: _effective_source_policy  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w '_effective_source_policy' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_effective_source_policy['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_effective_source_policy' pyproject.toml ---
+
+(above blank = zero hits)

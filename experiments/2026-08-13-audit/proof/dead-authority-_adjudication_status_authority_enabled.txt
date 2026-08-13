@@ -1,0 +1,10 @@
+=== symbol: _adjudication_status_authority_enabled  defined: src/deepreason/authority.py ===
+--- reference scan: rg -l -w '_adjudication_status_authority_enabled' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_adjudication_status_authority_enabled['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_adjudication_status_authority_enabled' pyproject.toml ---
+
+(above blank = zero hits)

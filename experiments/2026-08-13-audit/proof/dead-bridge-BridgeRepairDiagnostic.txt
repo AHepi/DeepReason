@@ -1,0 +1,7 @@
+=== symbol: BridgeRepairDiagnostic  defined: src/deepreason/bridge/repair.py ===
+--- reference scan: rg -l -w 'BridgeRepairDiagnostic' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BridgeRepairDiagnostic['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/repair.py
+(above blank = zero hits)

@@ -1,0 +1,29 @@
+src/deepreason/qualification.py:126:class ReusableQualificationBundleV1(BaseModel):
+src/deepreason/qualification.py:177:def production_qualification_maximum_provider_calls(manifest: RunManifest) -> int:
+src/deepreason/qualification.py:210:def qualification_executor_options(
+src/deepreason/qualification.py:226:def default_qualification_executor(
+src/deepreason/qualification.py:240:def _pair_payload(pair: ProductionContractPairV1) -> dict:
+src/deepreason/qualification.py:244:def _pair_subject_digest(payload: dict) -> str:
+src/deepreason/qualification.py:248:def qualification_subject_payload(
+src/deepreason/qualification.py:285:def qualification_subject_digest(
+src/deepreason/qualification.py:294:def qualification_cache_path(cache_dir: Path | str, subject_digest: str) -> Path:
+src/deepreason/qualification.py:304:def _read_cache(path: Path) -> bytes:
+src/deepreason/qualification.py:357:class _DuplicateCacheKey(ValueError):
+src/deepreason/qualification.py:361:def load_completed_qualification(
+src/deepreason/qualification.py:414:def write_completed_qualification(
+src/deepreason/qualification.py:444:class ShallowFitnessCaseResultV1(BaseModel):
+src/deepreason/qualification.py:471:class QualificationTierRecordV1(BaseModel):
+src/deepreason/qualification.py:540:def shallow_tier_record_from_cases(
+src/deepreason/qualification.py:564:def qualification_tier_path(cache_dir: Path | str, subject_digest: str) -> Path:
+src/deepreason/qualification.py:569:def load_qualification_tier(
+src/deepreason/qualification.py:623:def write_qualification_tier(
+src/deepreason/qualification.py:651:def resolve_qualification_tier(
+src/deepreason/qualification.py:671:def _reusable_pair(report: ProductionContractPairReportV1) -> ReusableQualificationPairV1:
+src/deepreason/qualification.py:67:class QualificationError(ValueError):
+src/deepreason/qualification.py:680:def completed_bundle_from_report(
+src/deepreason/qualification.py:701:def _pair_report(
+src/deepreason/qualification.py:728:def project_qualification_report(
+src/deepreason/qualification.py:75:class ReusableQualificationPairV1(BaseModel):
+src/deepreason/qualification.py:787:def resolve_completed_qualification(
+src/deepreason/qualification.py:848:def unqualified_report_path(cache_dir: Path | str, subject_digest: str) -> Path:
+src/deepreason/qualification.py:854:def _write_unqualified_report(

@@ -1,0 +1,10 @@
+=== symbol: CommandOutcome  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'CommandOutcome' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CommandOutcome['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CommandOutcome' pyproject.toml ---
+
+(above blank = zero hits)

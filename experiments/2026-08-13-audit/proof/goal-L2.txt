@@ -1,0 +1,19 @@
+=== L2: Seats change GENERATED, never EVIDENCE ===
+--- mechanism scan: generation vs criticism seat separation ---
+42:CRITICISM_SEAT_BINDINGS_FILENAME = "criticism-seat-bindings.yaml"
+46:# `property_designer`: `rules/experiment.py`'s generator-authoring call
+274:def criticism_seat_bindings_path(
+279:    return provider_state_dir(home=home, environ=environ) / CRITICISM_SEAT_BINDINGS_FILENAME
+282:def resolve_criticism_seats(
+289:    ``preparation.build_preparation_manifest``'s ``criticism_seats``
+296:    raw = load_seat_bindings(criticism_seat_bindings_path(home=home, environ=environ))
+--- test scan ---
+tests/test_reusable_qualification.py
+tests/test_seat_bindings.py
+tests/test_run_preparation_service.py
+tests/test_qualification_per_seat.py
+tests/test_seat_bindings_record.py
+tests/test_cli_setup_seats.py
+--- notice: docs/proposals/ROLE_SEAT_SEPARATION_PLAN.md S7 'packages' rung marked NOT YET BUILT (after S3-S6) ---
+149:### Rung S7 — packages  [after S3-S6; joins BEHAVIOR_MODES_PREPLAN]
+verdict: partially-enforced (seat generation/criticism separation exists and is tested; no specific adversarial test pins 'a generation seat cannot skip criticism' as its own invariant, and the S7 packages rung this law explicitly cites is still a preplan, not shipped)

@@ -1,0 +1,17 @@
+src/deepreason/v6_policy.py:104:def engaged_control_plane_policy_v3() -> ControlPlanePolicyV3:
+src/deepreason/v6_policy.py:153:def engaged_scratchpad_source() -> dict:
+src/deepreason/v6_policy.py:165:def engaged_bridge_source() -> dict:
+src/deepreason/v6_policy.py:199:def route_bound_school_execution_policy(
+src/deepreason/v6_policy.py:241:def engaged_criticism_policy(
+src/deepreason/v6_policy.py:298:def _contained_runner_opted(environ=None) -> bool:
+src/deepreason/v6_policy.py:310:def engaged_simulation_policy(environ=None) -> SimulationCapabilityPolicyV1:
+src/deepreason/v6_policy.py:377:def engaged_research_policy(environ=None) -> ResearchCapabilityPolicyV1:
+src/deepreason/v6_policy.py:411:def engaged_config_referee_policy(environ=None) -> ConfigRefereePolicyV1 | None:
+src/deepreason/v6_policy.py:434:def engaged_attached_evidence_policy(
+src/deepreason/v6_policy.py:458:def engaged_inquiry_capability_policy(
+src/deepreason/v6_policy.py:474:def engaged_local_simulation_toolchain() -> ToolchainEntry:
+src/deepreason/v6_policy.py:497:def engaged_contained_simulation_toolchain() -> ToolchainEntry:
+src/deepreason/v6_policy.py:519:def engaged_simulation_toolchain(environ=None) -> ToolchainEntry:
+src/deepreason/v6_policy.py:527:def engaged_policy_digest() -> str:
+src/deepreason/v6_policy.py:62:def conservative_control_plane_policy_v3() -> ControlPlanePolicyV3:
+src/deepreason/v6_policy.py:89:def conservative_policy_digest() -> str:

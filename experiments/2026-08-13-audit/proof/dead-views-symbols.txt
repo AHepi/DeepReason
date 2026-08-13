@@ -1,0 +1,59 @@
+src/deepreason/views/basin.py:105:def windowed(series: list[dict], harness, embedder, w: int = 12) -> list[dict]:
+src/deepreason/views/basin.py:140:def survivorship(harness, embedder) -> dict:
+src/deepreason/views/basin.py:160:def embedder_calibration(harness, embedder, cap: int = 400) -> dict:
+src/deepreason/views/basin.py:241:def _quantiles(xs: list[float]) -> dict | None:
+src/deepreason/views/basin.py:252:def threshold_calibration(harness, embedder,
+src/deepreason/views/basin.py:303:def basin_onset(series: list[dict], w: int = 8, floor_frac: float = 0.5) -> dict:
+src/deepreason/views/basin.py:33:def _conjectures(harness) -> list:
+src/deepreason/views/basin.py:42:def _pack_exemplars(harness, log: list, seq: int) -> list[str]:
+src/deepreason/views/basin.py:55:def conjecture_series(harness, embedder, stance_decay: float = 20.0) -> list[dict]:
+src/deepreason/views/evidence.py:14:def _status(harness, some_id: str) -> str:
+src/deepreason/views/evidence.py:19:def _head(harness, artifact_id: str, limit: int = 72) -> str:
+src/deepreason/views/evidence.py:29:def _spec_summary(kappa) -> str:
+src/deepreason/views/evidence.py:50:def evidence(harness, artifact_id: str) -> str:
+src/deepreason/views/export.py:125:def render_export_summary(paths: list[Path]) -> str:
+src/deepreason/views/export.py:22:def _raw(harness, artifact) -> bytes:
+src/deepreason/views/export.py:28:def _extension(codec: str, content: bytes = b"") -> str:
+src/deepreason/views/export.py:38:def _carries_browser_oracle(harness, artifact) -> bool:
+src/deepreason/views/export.py:48:def _deliverables(harness, artifact_id: str | None) -> list:
+src/deepreason/views/export.py:66:def export_run(harness, out_dir: str | Path, artifact_id: str | None = None) -> list[Path]:
+src/deepreason/views/jolt_signals.py:111:class ObservationReceipt(BaseModel):
+src/deepreason/views/jolt_signals.py:118:class PilotSignalPolicy(BaseModel):
+src/deepreason/views/jolt_signals.py:132:class HardOrbitSnapshot(BaseModel):
+src/deepreason/views/jolt_signals.py:154:class SoftExhaustionSnapshot(BaseModel):
+src/deepreason/views/jolt_signals.py:179:class Diagnosis(str, Enum):
+src/deepreason/views/jolt_signals.py:187:class DiagnosisResult(BaseModel):
+src/deepreason/views/jolt_signals.py:202:class _GateBlock(BaseModel):
+src/deepreason/views/jolt_signals.py:212:class _ConjecturerCall(BaseModel):
+src/deepreason/views/jolt_signals.py:223:def record_functional_observation(harness, observation: FunctionalObservation):
+src/deepreason/views/jolt_signals.py:243:def functional_observations(harness) -> tuple[ObservationReceipt, ...]:
+src/deepreason/views/jolt_signals.py:268:def require_embedder_fingerprint(embedder, expected: dict[str, str]) -> dict[str, str]:
+src/deepreason/views/jolt_signals.py:287:def _resolve_prefix(prefix: str | None, artifact_ids) -> str | None:
+src/deepreason/views/jolt_signals.py:296:def _gate_block(event, harness) -> _GateBlock:
+src/deepreason/views/jolt_signals.py:313:def _conjecturer_calls(harness) -> tuple[_ConjecturerCall, ...]:
+src/deepreason/views/jolt_signals.py:31:class JoltSignalError(ValueError):
+src/deepreason/views/jolt_signals.py:35:class StatusSource(str, Enum):
+src/deepreason/views/jolt_signals.py:363:def _max_share(values: list[str | None], denominator: int) -> tuple[float, str | None]:
+src/deepreason/views/jolt_signals.py:371:def _calls_since(calls: tuple[_ConjecturerCall, ...], predicate) -> int:
+src/deepreason/views/jolt_signals.py:378:def hard_orbit_snapshot(
+src/deepreason/views/jolt_signals.py:46:class VerifierMetricKind(str, Enum):
+src/deepreason/views/jolt_signals.py:496:def _novelty_rows(harness, receipts: tuple[ObservationReceipt, ...], embedder):
+src/deepreason/views/jolt_signals.py:514:def soft_exhaustion_snapshot(
+src/deepreason/views/jolt_signals.py:55:class VerifierMetric(BaseModel):
+src/deepreason/views/jolt_signals.py:663:def diagnose(hard: HardOrbitSnapshot, soft: SoftExhaustionSnapshot) -> DiagnosisResult:
+src/deepreason/views/jolt_signals.py:686:def record_trigger_decision(harness, result: DiagnosisResult):
+src/deepreason/views/jolt_signals.py:69:class FunctionalObservation(BaseModel):
+src/deepreason/views/narrate.py:109:def _school(harness, aid: str) -> str:
+src/deepreason/views/narrate.py:115:class _Prose:
+src/deepreason/views/narrate.py:158:def narrate(harness, *, upto_seq: int | None = None, window: int | None = None) -> str:
+src/deepreason/views/narrate.py:190:def _narrate_event(harness, event, prose: _Prose) -> None:
+src/deepreason/views/narrate.py:96:def _snippet(harness, aid: str, limit: int = 90) -> str:
+src/deepreason/views/prose.py:14:def prose(artifact_id: str, state: EpistemicState, blobs, adapter=None) -> str:
+src/deepreason/views/theory.py:13:def theory(artifact_id: str, state: EpistemicState, blobs, log=None) -> str:
+src/deepreason/views/thesis.py:120:def render_thesis(result: dict) -> str:
+src/deepreason/views/thesis.py:26:def evidence_pack(harness, problem_id: str | None = None,
+src/deepreason/views/thesis.py:32:def _resolve_problem(harness, problem_id: str | None) -> str:
+src/deepreason/views/thesis.py:43:def check_citations(output: ThesisOutput, pack_ids: set[str]) -> list[str]:
+src/deepreason/views/thesis.py:61:def thesis(harness, adapter, problem_id: str | None = None,
+src/deepreason/views/why.py:12:def _head(state: EpistemicState, artifact_id: str) -> str:
+src/deepreason/views/why.py:20:def why(artifact_id: str, state: EpistemicState, warrants: dict | None = None) -> str:

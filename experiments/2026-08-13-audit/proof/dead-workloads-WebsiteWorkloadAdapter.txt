@@ -1,0 +1,10 @@
+=== symbol: WebsiteWorkloadAdapter  defined: src/deepreason/workloads/website.py ===
+--- reference scan: rg -l -w 'WebsiteWorkloadAdapter' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]WebsiteWorkloadAdapter['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'WebsiteWorkloadAdapter' pyproject.toml ---
+
+(above blank = zero hits)

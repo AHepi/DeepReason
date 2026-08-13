@@ -1,0 +1,55 @@
+src/deepreason/capabilities/audit.py:25:def _atomic_write(path: Path, data: bytes) -> None:
+src/deepreason/capabilities/audit.py:34:def _write_markdown(path: Path, title: str, lines: list[str]) -> None:
+src/deepreason/capabilities/audit.py:39:def _transition_chains(harness: Harness) -> dict[str, list[Any]]:
+src/deepreason/capabilities/audit.py:51:def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
+src/deepreason/capabilities/enums.py:6:class CapabilityLifecycle(str, Enum):
+src/deepreason/capabilities/events.py:15:class CapabilityEventPayloadV1(FrozenRecord):
+src/deepreason/capabilities/evidence.py:10:def attach_frozen_evidence(harness, manifest, *, problem_id: str) -> dict[str, str]:
+src/deepreason/capabilities/evidence.py:47:def render_frozen_evidence(manifest) -> str | None:
+src/deepreason/capabilities/models.py:124:class SimulationParameterSetV1(_FrozenModel):
+src/deepreason/capabilities/models.py:139:class SimulationProposalDraftV1(_FrozenModel):
+src/deepreason/capabilities/models.py:220:class SimulationProposalV1(SimulationProposalDraftV1, _IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:241:class CapabilityBudgetDeltaV1(_FrozenModel):
+src/deepreason/capabilities/models.py:253:def capability_next_process_digest(
+src/deepreason/capabilities/models.py:279:class CapabilityTransitionV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:348:class SimulationGrantV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:367:class CompiledSimulationSpecV1(_FrozenModel):
+src/deepreason/capabilities/models.py:382:class CompiledSimulationV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:403:class SimulationWorkOrderV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:434:class SimulationAttemptV1(_FrozenModel):
+src/deepreason/capabilities/models.py:453:class SimulationExecutionReceiptV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:507:class SimulationResultPackageV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:525:class SimulationConsumptionV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:546:class ResearchFetchProposalDraftV1(_FrozenModel):
+src/deepreason/capabilities/models.py:55:def _bounded_json(value: Any, *, depth: int = 0) -> Any:
+src/deepreason/capabilities/models.py:575:class ResearchFetchProposalV1(ResearchFetchProposalDraftV1, _IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:593:class ResearchGrantV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:612:class CompiledResearchFetchV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:629:class ResearchWorkOrderV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:648:class ResearchFetchAttemptV1(_FrozenModel):
+src/deepreason/capabilities/models.py:666:class ResearchExecutionReceiptV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:700:class ResearchFetchedItemV1(_FrozenModel):
+src/deepreason/capabilities/models.py:707:class ResearchResultPackageV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:719:class ResearchConsumptionV1(_IdentifiedCapabilityRecord):
+src/deepreason/capabilities/models.py:80:class _FrozenModel(BaseModel):
+src/deepreason/capabilities/models.py:86:class _IdentifiedCapabilityRecord(_FrozenModel):
+src/deepreason/capabilities/policy.py:16:class _PolicyModel(BaseModel):
+src/deepreason/capabilities/policy.py:172:class FrozenEvidenceItemV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:196:class FrozenEvidencePolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:22:def _finite_json(value: Any, depth: int = 0) -> Any:
+src/deepreason/capabilities/policy.py:250:class AttachedEvidencePolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:286:class FormalizationCapabilityPolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:304:class ResearchCapabilityPolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:380:class ConfigRefereePolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:40:class SimulationInputBindingV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:417:class InquiryCapabilityPolicyV1(_PolicyModel):
+src/deepreason/capabilities/policy.py:59:class SimulationCapabilityPolicyV1(_PolicyModel):
+src/deepreason/capabilities/research.py:151:class ResearchCapabilityController:
+src/deepreason/capabilities/research.py:40:def dynamic_research_allowance(harness, policy) -> tuple[int, dict]:
+src/deepreason/capabilities/research.py:835:def _host(url: str) -> str:
+src/deepreason/capabilities/research.py:841:def blocks_for_fetched_text(text: str):
+src/deepreason/capabilities/research.py:866:def consumed_research_blocks(harness):
+src/deepreason/capabilities/simulation.py:35:class CapabilityTerminalError(RuntimeError):
+src/deepreason/capabilities/simulation.py:39:def _utc_now() -> str:
+src/deepreason/capabilities/simulation.py:43:class SimulationCapabilityController:
+src/deepreason/capabilities/state.py:85:class CapabilityReplayState:

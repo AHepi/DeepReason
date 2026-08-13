@@ -1,0 +1,19 @@
+src/deepreason/manifest.py:137:class AnimationLifecycle(BaseModel):
+src/deepreason/manifest.py:164:class ComponentSpec(BaseModel):
+src/deepreason/manifest.py:200:class Manifest(BaseModel):
+src/deepreason/manifest.py:331:def parse_manifest(text: str, known_libs: set[str] | None = None
+src/deepreason/manifest.py:366:def manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/manifest.py:377:def _ids_in(content: str) -> list[str]:
+src/deepreason/manifest.py:381:def _style_blocks(content: str) -> list[str]:
+src/deepreason/manifest.py:385:def _script_blocks(content: str) -> list[str]:
+src/deepreason/manifest.py:389:def _css_violations(css: str, element_id: str, css_prefix: str) -> list[str]:
+src/deepreason/manifest.py:409:def _js_violations(js: str, spec: ComponentSpec, allowed_uses: set[str]) -> list[str]:
+src/deepreason/manifest.py:458:def component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/manifest.py:509:def integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+src/deepreason/manifest.py:593:def manifest_commitment(known_libs: set[str]) -> Commitment:
+src/deepreason/manifest.py:603:def component_commitment(spec: ComponentSpec, max_chars: int,
+src/deepreason/manifest.py:620:def integration_commitment(manifest: Manifest) -> Commitment:
+src/deepreason/manifest.py:634:def assemble_html(manifest: Manifest, fragments: dict[str, str],
+src/deepreason/manifest.py:69:class ArtDirection(BaseModel):
+src/deepreason/manifest.py:83:class ImportBudget(BaseModel):
+src/deepreason/manifest.py:90:class DependencyRequest(BaseModel):

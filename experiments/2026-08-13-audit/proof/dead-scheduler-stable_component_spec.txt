@@ -1,0 +1,10 @@
+=== symbol: stable_component_spec  defined: src/deepreason/scheduler/scheduler.py ===
+--- reference scan: rg -l -w 'stable_component_spec' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]stable_component_spec['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'stable_component_spec' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,5 @@
+CANDIDATE-DEAD: _Budget (src/deepreason/simulation/compiler.py) -- proof: dead-simulation-_Budget.txt
+CANDIDATE-DEAD: _exact_keys (src/deepreason/simulation/compiler.py) -- proof: dead-simulation-_exact_keys.txt
+CANDIDATE-DEAD: _constant (src/deepreason/simulation/compiler.py) -- proof: dead-simulation-_constant.txt
+CANDIDATE-DEAD: _input_path (src/deepreason/simulation/compiler.py) -- proof: dead-simulation-_input_path.txt
+CANDIDATE-DEAD: _compile_expression (src/deepreason/simulation/compiler.py) -- proof: dead-simulation-_compile_expression.txt

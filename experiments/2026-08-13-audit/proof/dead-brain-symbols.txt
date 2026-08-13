@@ -1,0 +1,70 @@
+src/deepreason/brain/activation.py:153:def normalized_strength_ppm(strength: float, policy: MemoryPolicy) -> int:
+src/deepreason/brain/activation.py:17:def _calendar_age(query_day: date, event_day: date) -> int:
+src/deepreason/brain/activation.py:21:def _logical_age(query_seq: int, event_seq: int) -> int:
+src/deepreason/brain/activation.py:25:def activation_strength(
+src/deepreason/brain/activation.py:52:def activation_strengths(
+src/deepreason/brain/cards.py:140:def card_path(store: BrainStore, root_digest: str, record_id: str) -> Path:
+src/deepreason/brain/cards.py:156:def load_card(store: BrainStore, root_digest: str, record_id: str) -> MemoryCard:
+src/deepreason/brain/cards.py:16:def records_digest(record_ids: tuple[str, ...]) -> str:
+src/deepreason/brain/cards.py:20:def _bounded(text: str) -> str:
+src/deepreason/brain/cards.py:27:def card_for_record(store: BrainStore, record_id: str) -> MemoryCard:
+src/deepreason/brain/cards.py:59:def _atomic_write(path: Path, data: bytes) -> None:
+src/deepreason/brain/cards.py:69:def _projection_manifest(path: Path) -> dict | None:
+src/deepreason/brain/cards.py:79:def _compatible_base(version_root: Path, digest: str) -> str | None:
+src/deepreason/brain/cards.py:89:def build_cards(store: BrainStore, *, force: bool = False) -> Path:
+src/deepreason/brain/distill.py:20:def distill_lesson(
+src/deepreason/brain/index.py:101:def _index_source_digest(store: BrainStore, record_ids: tuple[str, ...]) -> str:
+src/deepreason/brain/index.py:110:def _connect(path: Path, *, read_only: bool = False) -> sqlite3.Connection:
+src/deepreason/brain/index.py:119:def build_index(store: BrainStore, *, force: bool = False) -> Path:
+src/deepreason/brain/index.py:23:def normalize_query(text: str) -> str:
+src/deepreason/brain/index.py:249:def index_database(store: BrainStore, root_digest: str) -> Path:
+src/deepreason/brain/index.py:262:def candidate_ids(
+src/deepreason/brain/index.py:28:def tokens(text: str) -> tuple[str, ...]:
+src/deepreason/brain/index.py:299:def graph_neighbors(
+src/deepreason/brain/index.py:317:def collections(store: BrainStore, root_digest: str, ids: Iterable[str]) -> dict[str, str]:
+src/deepreason/brain/index.py:32:def card_text(card: object) -> str:
+src/deepreason/brain/index.py:330:def indexed_activation_events(
+src/deepreason/brain/index.py:382:def indexed_record_events(
+src/deepreason/brain/index.py:47:def hashed_vector(text: str) -> tuple[float, ...]:
+src/deepreason/brain/index.py:61:def vector_buckets(vector: tuple[float, ...]) -> tuple[str, ...]:
+src/deepreason/brain/index.py:69:def cosine(left: tuple[float, ...], right: tuple[float, ...]) -> float:
+src/deepreason/brain/index.py:73:def _projection_manifest(path: Path) -> dict | None:
+src/deepreason/brain/index.py:80:def _compatible_projection(version_root: Path, digest: str) -> tuple[str, str] | None:
+src/deepreason/brain/ingest.py:21:def ingest_file(
+src/deepreason/brain/ingest.py:77:def ingest_files(store: BrainStore, paths: Iterable[str | Path], **kwargs: object) -> tuple[str, ...]:
+src/deepreason/brain/log.py:19:def event_root(events: list[BrainEvent] | tuple[BrainEvent, ...]) -> str:
+src/deepreason/brain/log.py:34:def iter_log(path: Path) -> Iterator[BrainEvent]:
+src/deepreason/brain/log.py:60:def read_log(path: Path) -> list[BrainEvent]:
+src/deepreason/brain/log.py:64:def append_lines(path: Path, events: list[BrainEvent]) -> None:
+src/deepreason/brain/log.py:77:def brain_lock(path: Path) -> Iterator[None]:
+src/deepreason/brain/log.py:84:def last_json_line(path: Path) -> dict | None:
+src/deepreason/brain/metrics.py:8:def retrieval_metrics(result: RetrievalResult) -> dict[str, int]:
+src/deepreason/brain/models.py:113:class LessonRecord(BrainModel):
+src/deepreason/brain/models.py:126:class BrainManifest(BrainModel):
+src/deepreason/brain/models.py:138:class BrainEvent(BrainModel):
+src/deepreason/brain/models.py:183:class MemoryCard(BrainModel):
+src/deepreason/brain/models.py:198:class TopicCard(BrainModel):
+src/deepreason/brain/models.py:208:class MemoryPolicy(BrainModel):
+src/deepreason/brain/models.py:246:class CandidateScore(BrainModel):
+src/deepreason/brain/models.py:255:class RetrievalReceipt(BrainModel):
+src/deepreason/brain/models.py:288:class RetrievalResult(BrainModel):
+src/deepreason/brain/models.py:295:class RunLocalBrainSnapshot(BrainModel):
+src/deepreason/brain/models.py:307:def utc_day() -> date:
+src/deepreason/brain/models.py:35:class BrainModel(BaseModel):
+src/deepreason/brain/models.py:44:class MemoryRef(BrainModel):
+src/deepreason/brain/models.py:49:class MemoryProvenance(BrainModel):
+src/deepreason/brain/models.py:57:class ActivationSpec(BrainModel):
+src/deepreason/brain/models.py:63:def memory_identity(fields: dict[str, Any]) -> str:
+src/deepreason/brain/models.py:71:def _jsonable(value: Any) -> Any:
+src/deepreason/brain/models.py:83:class MemoryRecord(BrainModel):
+src/deepreason/brain/receipts.py:10:def make_inclusion_proofs(store: BrainStore, record_ids: tuple[str, ...]) -> str:
+src/deepreason/brain/receipts.py:41:def make_receipt(
+src/deepreason/brain/retrieve.py:27:def _ppm(value: float) -> int:
+src/deepreason/brain/retrieve.py:31:def _novelty_ppm(root: str, query: str, record_id: str) -> int:
+src/deepreason/brain/retrieve.py:36:def _weighted_score(policy: MemoryPolicy, components: tuple[int, int, int, int, int]) -> int:
+src/deepreason/brain/retrieve.py:47:def _quota_select(
+src/deepreason/brain/retrieve.py:76:def retrieve(
+src/deepreason/brain/snapshot.py:17:class BlobStoreLike(Protocol):
+src/deepreason/brain/snapshot.py:23:def snapshot_retrieval(
+src/deepreason/brain/snapshot.py:54:def replay_snapshot(snapshot: RunLocalBrainSnapshot, run_blobs: BlobStoreLike) -> RetrievalResult:
+src/deepreason/brain/store.py:23:class BrainStore:

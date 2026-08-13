@@ -1,0 +1,10 @@
+=== symbol: _admit_supplement  defined: src/deepreason/amendment/apply.py ===
+--- reference scan: rg -l -w '_admit_supplement' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_admit_supplement['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_admit_supplement' pyproject.toml ---
+
+(above blank = zero hits)
