@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Proof forests are at least as large as the skeptical fixed-point state they describe: a single accepted node may have exponentially many minimal proof trees (one distinct attacker-subset per combination of attackers-defeated-by-defenders), so the per-node label set can blow up even when the underlying grounded extension is polynomial-size. Because SRC_001 defines the extension itself as exactly those nodes carrying a non-empty proof-tree set and makes every accepted node carry its full minimal-proof set first-class, the construction does not just record a polynomial witness per node — it commits to materializing a potentially exponential object per node. This violates the stated requirement that the proposal preserve polynomial cost: the output representation alone can be exponential, independent of any later use.
+
+TARGET:
+Make warrant-chain provenance first-class in the label assignment: each accepted node is labelled with a set of minimal proof trees derived from committed roots, and the extension is the set of nodes having at least one such proof. This is a proof-theoretic reformulation of the grounded extension. Criticizable: the set of minimal proofs may be exponential; the definition of minimality may be ambiguous.

@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (succ:e2a71196cb02) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate e2a71196cb02 on succ:18df3647b4c8. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Develop a persistent incremental algorithm that, after each variator edit, updates the skeptical fixpoint by recomputing only the affected subgraph, with a worst-case amortized polynomial bound and a formal proof of correctness. This builds on the caching idea but provides a rigorous complexity analysis and handles deletions and insertions uniformly. Criticism: the dependency tracking may introduce overhead and bugs; memory usage could be high for large graphs.
+commitments: (none)
+
+TARGET SRC_002
+Introduce a higher-order attack graph where attack edges are reified as nodes, and the skeptical fixpoint is extended to these attack-nodes. This allows attacks on attacks, enabling a node to be reinstated when all its attackers are themselves attacked. To preserve determinism and polynomial cost, we restrict the order to at most 2 and define a monotone operator on the extended graph. Criticism: this may break the derived property of reinstatement unless the operator is carefully designed; also the graph size grows quadratically, potentially affecting polynomial bounds.
+commitments: (none)
+
+TARGET SRC_003
+Create a meta-language for specifying closure rules (e.g., 'any attacker of validity_node attacks the warrant') and automatically compile a set of axioms into attack-edge construction rules, with a proof that any consistent axiom set preserves the guarantees (determinism, polynomial cost, reinstatement, committed-root validity). This systematizes SRC_005. Criticizable: the meta-language may be undecidable; checking consistency of axiom sets could be expensive.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

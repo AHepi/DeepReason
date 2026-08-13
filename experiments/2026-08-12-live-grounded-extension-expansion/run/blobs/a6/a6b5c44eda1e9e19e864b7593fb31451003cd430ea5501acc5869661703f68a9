@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "Consider a framework with three arguments A→B, B→C, C→A (cycle), all pairwise attacks, and a priority preorder that ranks C→A higher than A→B and B→C higher than C→A (acyclic as a total preorder on edges, but the deletion is cyclic... The interleaving of deletion and acceptance is not shown to terminate at a unique result."}

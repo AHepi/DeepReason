@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Re-scope the commitments: keep determinism and polynomial cost, but demote reinstatement from a derived guarantee to a monitored invariant, with a polynomial-time checker that flags any accepted node whose acceptance cannot be reconstructed from the fixpoint labels; the checker output becomes a new observable. This directly challenges the stated guarantee set and is criticizable for weakening the spec's commitments, and for the checker being able to report violations only after the fact rather than preventing them.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 demotes reinstatement from a derived guarantee to a merely monitored invariant whose checker can only flag violations post-hoc. The problem statement requires preserving reinstatement as a 'derived property'; a checker that reports violations after acceptance does not preserve reinstatement as a derived property — it instead admits that reinstatement can fail and merely makes the failure observable. This is a weakening of the commitment set the problem explicitly demands be preserved, not an expansion or strengthening of the semantics.
+
+THE DEFENCE:
+The target is transparent, not deceptive: it openly announces the demotion and concedes the critic's exact objection. But conceding a criticism is not answering it. On the merits: (a) The problem statement frames reinstatement as a 'derived property' — a property that follows from the fixpoint computation, not an independently enforced guarantee. The target preserves the fixpoint labels and makes reconstructability checkable in polynomial time; it does not delete reinstatement, it relocates the evidence for it. (b) 'Preserve reinstatement as a derived property' is ambiguous between 'keep it derivable' and 'keep it guaranteed'; the target keeps it derivable (the labels still exist and the checker uses them), so the demotion is a defensible reading, not a concession-free violation. (c) The critic's strongest point stands unmet: a checker that flags violations only after acceptance does not prevent reinstatement failure, so if 'preserve' is read as 'guarantee at acceptance time,' the target genuinely weakens the commitment and its self-acknowledgment does not rebut that. (d) No fact is invented: the target's polynomial-time checker and new observable are stipulated by the target itself. Net: the target survives the 'deletion' charge but not the 'weakening' charge.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

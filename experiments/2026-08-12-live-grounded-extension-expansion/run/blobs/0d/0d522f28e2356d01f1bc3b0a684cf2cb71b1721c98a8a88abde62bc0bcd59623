@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002 proposes stripping UNDECIDED to a derived state, but the skeptical fixed-point semantics (spec §4) is three-valued: the fixed-point operator is defined over IN/OUT/UNDECIDED jointly, and determinism of the fixed point depends on the monotone iteration that converges precisely because UNDECIDED is a first-class lattice value absorbing unresolved conflicts. Collapsing the semantics to IN/OUT-only with UNDECIDED derived does not obviously preserve the fixed point's determinism: without UNDECIDED as a lattice element, the stripped two-valued operator has no canonical absorbing value for cyclic attack structures, so a node attacked by its own attacker (odd-length cycle) no longer has a unique limiting assignment — the iteration can oscillate or require an external tie-break that reintroduces exactly the algorithmic artifact SRC_002 sought to eliminate. Thus the claim 'keeps all four guarantees' is unsupported for at least the determinism guarantee.
+
+TARGET:
+Minimal-core extraction: conjecture that the suspension boundary (SRC_002) is epiphenomenal, not constitutive — an artifact of the Pass 1 algorithm's tie-break, not a semantic primitive. If so, strip it: define the semantics purely by which nodes are IN (accepted) and OUT (refuted), with UNDECIDED as a derived, non-first-class state. The stripped semantics keeps all four guarantees, has fewer concepts, and forces any genuine extension to justify itself against the smaller core. This is the contraction opposite to the neighbourhood's expansionist direction; it predicts every proposed extension (SRC_004, SRC_006, SRC_007) can be re-expressed, and re-criticized, in the stripped language.

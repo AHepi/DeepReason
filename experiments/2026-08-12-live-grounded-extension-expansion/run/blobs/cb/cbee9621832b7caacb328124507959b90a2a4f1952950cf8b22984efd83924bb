@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The proposal changes the fixed-point carrier from node labels to finite sets of support trees... and the proposal itself admits this lattice has exponential width.",
+  "verdict": "fail"
+}

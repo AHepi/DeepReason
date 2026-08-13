@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The proposed three-edge cycle A→B, B→C, C→A with priorities C→A > A→B and B→C > C→A is not actually a total preorder on the edges: it imposes C→A > A→B > B→C > C→A, a strict cycle in the priority relation. But the target *requires* the preorder to be acyclic (e.g., derived from a deterministic timestamp). An acyclic total preorder cannot yield a cyclic strict priority chain, so the example violates the stated applicability condition.",
+  "verdict": "fail"
+}
+```

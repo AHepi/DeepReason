@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (succ:e2a71196cb02) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate e2a71196cb02 on succ:18df3647b4c8. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Leave the fixpoint untouched and add an interface-level guarantee: for every committed root, emit a short certificate (defender set plus defeat chain) that any external party can verify in polynomial time. Committed-root validity becomes externally auditable without changing the skeptical semantics at all. Criticizable because certificates are themselves artifacts and add storage and serialization cost, and because verifying a certificate does not strengthen the semantics — it only makes the existing validity claim checkable by parties who do not trust the prover.
+commitments: (none)
+
+TARGET SRC_002
+Reformulate the skeptical fixed point as evaluation of a monotone boolean circuit of depth O(log n) and size O(n^2), preserving determinism and polynomial cost while reducing worst-case depth. This is a complexity-theoretic strengthening that makes the extension cheaper to compute at scale without new semantic artifacts, but is criticizable because the skeptical semantics' non-monotone defeat structure may not admit such a shallow monotone circuit, and the claimed size bound may fail for dense attack graphs.
+commitments: (none)
+
+TARGET SRC_003
+Replace the primitive acceptance test with a derived, polynomial-time skeptical-defeat pre-order over attackers: a node is accepted iff no attacker strictly precedes it in the pre-order and is itself undefeated. On well-founded graphs this coincides with the grounded extension; on cyclic graphs it extends it while preserving determinism and polynomial cost, at the price of reinstatement becoming primitive rather than derived. This is criticizable for potentially breaking the committed-root validity guarantee on mixed cyclic/acyclic graphs, and for requiring a new proof that the pre-order is well-defined and consistent across the fixpoint.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

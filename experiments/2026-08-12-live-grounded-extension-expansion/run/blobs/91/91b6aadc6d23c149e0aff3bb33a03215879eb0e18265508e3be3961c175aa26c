@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002's Horn encoding with a rule of the form accepted(X) :- not attacked_by_undefeated(X) introduces negation-as-failure that is not genuinely Horn. Standard Horn logic is definite and monotonic, so encoding the non-monotonic, fixed-point nature of the skeptical grounded semantics requires either stratified negation or auxiliary predicates that do not correspond to a least model in the Horn sense. The least model of a definite Horn program is monotonic and cannot directly represent a semantics where the acceptance of a conjecture depends on the non-acceptance of its attackers. The target itself acknowledges this ('may not preserve the exact grounded semantics unless carefully stratified'), meaning the proposal as written does not preserve the existing semantics guarantee, a core requirement of the problem.
+
+TARGET:
+Reframe grounded semantics as the least model of a Horn program whose predicates are `accepted/1`, `defeated/1`, and `attacks/2`, with rules such as `defeated(A) :- accepted(D), attacks(D,A)` and `accepted(X) :- not attacked_by_undefeated(X)` encoded via auxiliary predicates. Then compute the least model using unit propagation in polynomial time. Strengthen the extension by adding integrity constraints that reject any model where a committed root lacks a derivation; these constraints are checked during propagation, not after, so no invalid root is ever committed. Criticism: Horn encodings of non-monotonic defeat require extra negated predicates and may not preserve the exact grounded semantics unless carefully stratified.

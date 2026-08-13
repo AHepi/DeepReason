@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 proposes a 'warrant tree' of polynomial size that summarizes all defense chains for an accepted node, but it does not establish how this structure can be constructed in polynomial time. In skeptical argumentation semantics, the number of distinct defense chains can be exponential in the size of the argumentation framework (consider a lattice of attackers and defenders with branching factor b and depth d). Enumerating or summarizing these chains into a single polynomial-size tree requires either an algorithm that can compress these chains without losing soundness — which is non-trivial and not specified — or a restriction on the attack relation that is not stated. Without a construction proof or a complexity bound on the synthesis of the warrant tree itself, the claim that this proposal preserves the 'polynomial cost' guarantee of the original semantics is unsubstantiated. The target asserts the *existence* of such a tree but never demonstrates it is *computable* within the required cost bound.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 correctly identifies a soundness violation: accepting arguments defended solely by even-length cycles (parity defense) means an argument can be accepted without a finite, well-founded defense chain terminating in unattacked arguments. In the standard grounded semantics, reinstatement is a *derived* property — an argument is accepted because it is ultimately defended by a valid root — but parity-based acceptance severs this link, allowing arguments to be accepted on the basis of cyclic structures that do not reduce to valid defense chains. This directly violates the problem's requirement that 'reinstatement as a derived property' be preserved. The target's reasoning is sound and its conclusion (the expansion is unsound) is correct."
+    }
+  ]
+}

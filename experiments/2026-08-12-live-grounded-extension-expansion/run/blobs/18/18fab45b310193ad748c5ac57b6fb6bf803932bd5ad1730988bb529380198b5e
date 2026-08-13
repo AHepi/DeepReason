@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002 makes attack success depend on whether the attacker's warrant is newer than the defender's support chain's maximum timestamp. This breaks reinstatement as a derived property: a node A defeated by attacker B, where B is in turn defeated by C, need no longer be reinstated when C succeeds, because even after C's defeat the timestamp comparison between B and A's support chain can still decide A's status independently of B's acceptance. Thus a node's status can change solely due to timestamp comparisons, contradicting the required reinstatement guarantee. The target further admits timestamps may not be bounded by a polynomial of graph size, jeopardizing polynomial cost.
+
+TARGET:
+Attach a monotonically increasing timestamp to every warrant and define attack success as depending on whether the attacker's warrant is newer than the defender's support chain's maximum timestamp; the grounded extension is the least fixed point of a monotone operator over timestamped labels. This allows strengthening by adding newer warrants without relabeling older decisions. Criticizable because it breaks reinstatement as a derived property, since a node's status can change solely due to timestamp comparisons, and it may not be polynomial unless timestamps are bounded by a polynomial of graph size.

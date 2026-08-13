@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target explicitly states pruning is a function of the original graph, not the pruned graph. Committed roots are input to the pruning function, not output of a fixed-point computation over the pruned graph.",
+  "verdict": "pass"
+}
+```

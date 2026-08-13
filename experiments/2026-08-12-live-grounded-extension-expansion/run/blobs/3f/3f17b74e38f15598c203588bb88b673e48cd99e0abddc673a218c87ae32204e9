@@ -1,0 +1,1 @@
+{"decisive_point":"a node A defeated by attacker B, where B is in turn defeated by C, need no longer be reinstated when C succeeds, because even after C's defeat the timestamp comparison between B and A's support chain can still decide A's status independently of B's acceptance","verdict":"fail"}

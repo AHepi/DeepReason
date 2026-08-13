@@ -1,0 +1,12 @@
+TARGET:
+Instead of a sequential witness scan, produce a root-ledger using reduced ordered binary decision diagrams (BDDs) where each committed root's full defense condition is represented as a canonical BDD. Because BDD reduction is canonical, the resulting witness is independent of enumeration order, and for the class of defense conditions expressible as read-once formulas the BDD size is polynomial. The ledger records only the BDD for each root, and verification is by checking that the BDD is non-empty under the grounded labels. Criticism: BDD blow-up is possible outside the read-once fragment, and importing BDD machinery may violate the spirit of the original lightweight spec.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 only guarantees polynomial BDD size for the read-once fragment but explicitly concedes BDD blow-up outside that fragment. The problem context demands that any proposal preserve polynomial cost for the semantics as stated, not merely for a syntactic restriction. Because the grounded extension can encode arbitrary defense conditions (including non-read-once formulas), there exist inputs where the BDD representation is exponentially large, violating the polynomial-cost guarantee required by the problem.
+
+THE DEFENCE:
+The target explicitly scopes its polynomial-size guarantee to 'the class of defense conditions expressible as read-once formulas,' and the critic concedes this fragment is handled. The claim that the problem context demands polynomial cost for the *full* grounded extension is an external requirement not established in the target text itself; the target does not assert polynomiality outside read-once. The existence of non-read-once grounded inputs causing BDD blow-up does not refute the target's stated, bounded guarantee—it only refutes a broader guarantee the target never makes. The 'lightweight spec' objection is aesthetic; the target's purpose is to trade sequential-scan ordering sensitivity for canonical, order-independent witnesses, which BDDs provide. Unless polynomial cost for arbitrary grounded inputs is a documented, binding constraint the target explicitly violated, no established defect is shown beyond a known scope boundary the target discloses.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

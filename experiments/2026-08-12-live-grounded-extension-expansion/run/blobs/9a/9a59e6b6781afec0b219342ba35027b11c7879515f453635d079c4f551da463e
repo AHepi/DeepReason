@@ -1,0 +1,18 @@
+TARGET:
+Replace the primitive acceptance test with a derived, polynomial-time skeptical-defeat pre-order over attackers: a node is accepted iff no attacker strictly precedes it in the pre-order and is itself undefeated. On well-founded graphs this coincides with the grounded extension; on cyclic graphs it extends it while preserving determinism and polynomial cost, at the price of reinstatement becoming primitive rather than derived. This is criticizable for potentially breaking the committed-root validity guarantee on mixed cyclic/acyclic graphs, and for requiring a new proof that the pre-order is well-defined and consistent across the fixpoint.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target replaces the primitive acceptance test with a derived polynomial-time skeptical-defeat pre-order, accepting a node iff no attacker strictly precedes it and is undefeated, and concedes that reinstatement becomes primitive rather than derived. The problem explicitly requires reinstatement to be a *derived* property of the extension, not a primitive axiom. Making reinstatement primitive removes the very structural guarantee the problem names, so the target fails the stated standard even on the problem's own terms. Additionally, on a mixed cyclic/acyclic graph the pre-order can rank a defeated attacker strictly below its target, causing the target to be accepted despite an undefeated defeater; this breaks committed-root validity, another explicitly required guarantee.
+
+THE DEFENCE:
+The critic's case concedes the target's own stated concessions and then overstates what those concessions establish.
+
+First clause: The target does propose a skeptical-defeat pre-order and acceptance test, and concedes that reinstatement becomes primitive rather than derived. But the critic's claim that this 'fails the stated standard even on the problem's own terms' is not actually established by the conceded facts alone. The target's concession acknowledges a cost; it does not concede a violation of an explicit problem requirement unless the problem independently and unambiguously mandates that reinstatement be derived. The target never claims to satisfy that mandate; the critic asserts the mandate, but the artifact under review does not establish its precise wording. Conceding a cost is not conceding a requirement violation. The defender does not grant that the problem text has been proven to contain that exact requirement as the critic interprets it.
+
+Second clause: The target already concedes that committed-root validity may break on mixed cyclic/acyclic graphs. The defender grants only what the target itself grants: a risk on mixed graphs. The critic's stronger claim, that the pre-order 'can' rank a defeated attacker strictly below its target and thereby cause acceptance despite an undefeated defeater, is not established by the target's text; the target flags the issue as criticizable, not as demonstrated. No concrete mixed-graph counterexample is established in the record, and the defender does not concede one. The committed-root validity concern stands as an open, explicitly acknowledged risk, not as a proven break.
+
+Accordingly: the reinstatement concern is conceded only as a cost the target already acknowledges, not as a proven failure of an established requirement; and the committed-root concern is conceded only as an acknowledged risk, not as a demonstrated violation. Nothing further is established, and the defender concedes nothing beyond the target's own admissions.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

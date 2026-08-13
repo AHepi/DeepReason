@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal adds a bilattice component with a monotone operator to distinguish two kinds of undecidedness, but the self-criticism concedes that proving the operator monotone in both lattice orders is nontrivial. This concession is fatal to the problem's explicit guarantee of polynomial cost: a bilattice-based construction whose monotonicity (and hence the polynomial fixed-point bound) does not already come for free is precisely the kind of mechanism that risks losing the cost guarantee, and the target does not give any argument, reduction, or construction showing the new operator preserves the polynomial fixed-point complexity of the original grounded extension. Thus the strongest substance-level failure is that the proposal as stated does not substantiate the polynomial-cost preservation it is required to guarantee.
+
+TARGET:
+Extend the three-valued grounded labels to four values by adding a bilattice component that distinguishes 'undecided by lack of evidence' from 'undecided by conflict', while keeping the accepted/refuted projections equal to the original extension. The fourth label is computed by a monotone operator on the bilattice, so the overall fixed point remains deterministic and polynomial. This gives richer diagnostics without changing committed roots. Criticism: the new truth value may not correspond to any intended argumentation semantics, and proving the operator is monotone in both lattice orders is nontrivial.

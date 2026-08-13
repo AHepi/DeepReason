@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposal explicitly acknowledges that reinstatement as a derived property is broken: the criticism notes lexicographic stratification 'introduces a non-obvious sensitivity to stratum ordering that the flat semantics never had.' Under the original flat skeptical fixed-point semantics, reinstatement of a node follows from the graph structure alone. Once a higher stratum can contain meta-conjectures like 'node y is OUT,' the lexicographic order can let a meta-conjecture in stratum k+1 suppress (or fail to reinstate) a node that stratum k would have reinstated, so reinstatement is no longer a derived property of the argument graph but an artifact of the chosen stratum ordering. That is a direct violation of the problem's requirement to preserve 'reinstatement as a derived property,' and it is independent of the other acknowledged concerns (self-reference expressiveness, polynomial cost).",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The proposal self-reports the fatal guarantee break: 'the monotonicity of the sequence across stages (reopening is not monotone) breaks the fixed-point determinism guarantee.' The original grounded extension is defined as a deterministic fixed point; the problem requires preserving 'determinism of the fixed point.' SRC_002 replaces it with a staged limit where suspended nodes can be reopened in later stages via fresh edge-construction warrants. Reopening is non-monotone by construction, so the stage sequence is not guaranteed to converge to a single fixed point independent of stage ordering/timing; determinism becomes contingent on an a-priori bound and monotonicity that the proposal itself says is absent. This is a direct violation of the stated problem requirement, independent of the polynomial-cost concern.",
+      "counterexample": null
+    }
+  ]
+}
+```

@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The diameter-bound claim fails on graphs with long defeat chains through undecided intermediaries: a node A0 attacked by A1 attacked by A2 ... attacked by Ad (length d) can reinstate A0 only after d fixpoint iterations, so the bound is tight only when each intermediary is itself accepted; if any intermediary is suspended or refuted, the chain does not shorten and reinstatement propagation can exceed the static diameter, breaking the termination-bound guarantee.
+
+TARGET:
+Strengthen the fixpoint without adding artifacts: prove that reinstatement is derivable in the same pass by bounding the number of fixpoint iterations by the attack-graph diameter, and record for each accepted node the minimal defending set computed during that pass. The guarantee becomes a sharper termination bound plus a reconstruction invariant, rather than a new materialized label. Criticizable because the diameter bound may fail on graphs where defeat chains lengthen through undecided intermediaries, and the minimal-defender claim could require an NP-hard choice unless the greedy is carefully staged.

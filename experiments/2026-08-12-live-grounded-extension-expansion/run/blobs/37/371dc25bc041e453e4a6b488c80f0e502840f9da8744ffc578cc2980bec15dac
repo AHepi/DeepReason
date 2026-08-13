@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts non-compositionality using 'overlapping attacks' between disjoint argument sets, which is contradictory: if the argument sets are disjoint, an attack from F1 cannot target an argument in F2, so attacks cannot 'overlap' across frameworks in the stated sense. The proper non-compositionality phenomenon arises from inter-framework attacks (edges crossing between F1 and F2), not from 'overlapping' attacks among disjoint arguments. Thus the stated reason for non-compositionality is ill-defined and does not demonstrate the claimed property.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 correctly characterizes that preference-based reduction to maximal attacks preserves the grounded extension only under a total preorder consistent with the attack structure, and that otherwise the reduced framework may yield a different fixpoint; defining the extension on the original framework preserves determinism, which is consistent with the problem's requirement to preserve the fixed-point guarantees.",
+      "counterexample": null
+    }
+  ]
+}
+```

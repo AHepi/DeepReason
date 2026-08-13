@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "If such an ABSTAIN node's defenders are all labeled 'out' after phase one, phase two has no way to keep the node from being defeated (its support is gone), forcing it to 'out' and contradicting committed-root validity.",
+  "verdict": "fail"
+}
+```

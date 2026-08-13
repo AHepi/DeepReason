@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target explicitly confines determinism and polynomial cost to 'each fixed alpha'—it does not claim uniform determinism across the entire parametric family",
+  "verdict": "pass"
+}
+```

@@ -1,0 +1,22 @@
+TARGET:
+Self-applicability: the extension mechanism is itself governed by the same skeptical fixed point. Candidate extensions are nodes in a meta-framework; an extension is accepted only if it survives the Pass 1 rules applied to that meta-framework, where attacks are 'violates guarantee G' and defenses are 'preserves G by argument A'. This makes the semantics closed under its own acceptance policy — no extension can be adopted that would not itself be IN in the grounded extension of the meta-framework. Open question: does the meta-fixpoint reach a fixed point in one level (idempotence), or does it oscillate or require transfinite iteration — and does idempotence itself decide which extensions are legitimate?
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 explicitly flags an open question — whether the meta-fixpoint is idempotent, oscillates, or requires transfinite iteration — yet proposes no resolution. The problem requires proposals that 'preserve the existing guarantees,' including 'determinism of the fixed point' and 'polynomial cost.' If the meta-fixpoint oscillates or requires transfinite iteration, both determinism and polynomial cost can fail. Because the target itself leaves this guarantee-preserving question unanswered, it does not deliver a complete, guarantee-preserving proposal as the problem demands.
+
+THE DEFENCE:
+The critic's case conflates an explicitly acknowledged open question with a failure to satisfy the problem's requirements, but the inference is not established.
+
+First, the target does propose a resolution mechanism: the meta-framework applies the same Pass 1 rules, with attacks as 'violates guarantee G' and defenses as 'preserves G by argument A,' and acceptance is determined by membership in the grounded extension of that meta-framework. This is a concrete semantic construction, not an absence of proposal. The target is therefore a complete proposal that specifies exactly how extension legitimacy is decided.
+
+Second, the open question concerns whether the meta-fixpoint is idempotent, oscillates, or requires transfinite iteration — but the target has already specified that acceptance is governed by the grounded extension. Grounded semantics is itself a determinate, polynomially-computable construction; the open question is about whether additional simplification (idempotence) holds, not about whether the specified semantics is indeterminate. The critic asserts that oscillation or transfinite iteration would break determinism and polynomial cost, but the target does not rely on unbounded iteration — it relies on the grounded extension, whose computation is already polynomial under standard Dung-style argumentation semantics.
+
+Third, the critic does not establish that the open question is a 'guarantee-preserving question' that must be fully resolved to deliver a guarantee-preserving proposal. The target preserves guarantees by construction: no extension is accepted unless it is IN in the grounded extension of the meta-framework, and the attack relation is explicitly about guarantee violation. Whether the meta-fixpoint collapses in one level or not is a structural simplification question, not a gap in the guarantee-preservation mechanism itself.
+
+Fourth, the critic's claim that the target 'leaves this guarantee-preserving question unanswered' is only partially accurate: the target explicitly flags the idempotence question as open, but flagging an open question about a property of the construction is not the same as failing to preserve the guarantees the construction is designed to enforce. The guarantees are preserved by the acceptance policy (grounded-extension membership with guarantee-violation attacks), not by idempotence per se.
+
+Accordingly, the critic has not established that the target fails to deliver a complete, guarantee-preserving proposal. The target specifies a determinate acceptance semantics, preserves guarantees by construction, and acknowledges an open structural question whose resolution is not required for the guarantees to hold.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

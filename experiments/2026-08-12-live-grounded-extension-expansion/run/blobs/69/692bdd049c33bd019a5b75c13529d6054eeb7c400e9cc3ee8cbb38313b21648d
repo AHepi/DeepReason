@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal explicitly states that 'reinstatement becomes preference-dependent rather than a purely structural derived property.' The problem context requires preserving 'reinstatement as a derived property.' If reinstatement is now conditional on the chosen preorder (an external input), it is no longer a structural derived property of the framework itself. The proposal concedes this breaks the guarantee, yet the problem requires the proposal to preserve reinstatement as a derived property.
+
+TARGET:
+Replace integer weights and thresholds with a polynomial-time computable total preorder over attackers, and define the grounded labeling as the fixed point of a monotone operator on the product order where a node is IN iff its most-preferred undefeated attacker is absent. This preserves determinism and polynomial cost, but reinstatement becomes preference-dependent rather than a purely structural derived property, and the choice of preorder is itself an extra commitment that must be validated against the rootedness guarantee.

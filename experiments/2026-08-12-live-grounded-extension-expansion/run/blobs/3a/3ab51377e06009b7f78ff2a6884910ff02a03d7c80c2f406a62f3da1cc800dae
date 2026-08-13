@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target states pruning is a function of 'committed roots' (committed warrants), but computing the committed set IS the fixed point the semantics is trying to define. Making pruning depend on committed roots creates a circularity: you need the committed set to prune, but you need the pruned graph to compute the committed set. The target never specifies how this circularity is resolved (e.g., a simultaneous fixed-point operator over the pruned graph and the committed set). Without such a specification the operator is not well-defined, so determinism of the fixed point — a required guarantee — is not actually established.
+
+TARGET:
+Replace edge-addition enrichment with edge-pruning enrichment: a polynomial-time function deletes an attack A→B when there exists a committed warrant W and a rebuttal hyperedge (W,A) that is itself undefeated in the original graph; the grounded extension is then computed on the pruned graph. Determinism is preserved by making pruning a deterministic function of the original graph and committed roots; reinstatement remains derived because pruning only removes attacks, never labels. Criticizable because pruning can remove the only attack keeping an uncommitted node out, so validity of committed roots must be separately verified.

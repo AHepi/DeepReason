@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal's skeptical combination (intersection of label sets across contexts) is incompatible with the demand to preserve reinstatement as a derived property. In standard argumentation semantics, reinstatement says a non-defeated argument is always accepted, but under an intersection-of-contexts skeptical rule, a root r that is valid in context C1 yet attacked in a different context C2 will be excluded from the intersection whenever C2's local environment happens to be unfavorable. r thus fails to be reinstated even when no globally committed root refutes it; reinstatement becomes a merely context-local accident rather than a derived property of the combined extension. Since the problem context requires reinstatement to be preserved, this is a substantive fault.
+
+TARGET:
+Reframe commitment as case-relative: each committed root is associated with a set of contextual assumptions, and the extension is the set of nodes accepted in at least one context, with a skeptical combination (e.g., intersection of label sets across contexts). This extends SRC_008 into a multi-context framework. Criticizable: may lead to exponential contexts; determinism may be lost unless contexts are totally ordered.

@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "the lexicographic order can let a meta-conjecture in stratum k+1 suppress (or fail to reinstate) a node that stratum k would have reinstated, so reinstatement is no longer a derived property of the argument graph but an artifact of the chosen stratum ordering",
+  "verdict": "fail"
+}
+```

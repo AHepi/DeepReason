@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_001 requires computing minimal entailment sets, which is generally NP-hard, and uses a maximal fixed point; this directly loses the 'polynomial cost' guarantee and can violate skeptical minimality of the grounded extension, contradicting the problem's preservation requirements.
+
+TARGET:
+Augment the grounded extension so that every accepted conjecture carries a minimal set of committed root nodes that entail it, and define acceptance as membership in the maximal fixed point whose per-node provenance sets are all root-valid. This turns validity into a per-node, checkable certificate and strengthens the 'validity of every committed root' guarantee into a constructive provenance property. The criticism: computing minimal entailment sets is generally NP-hard, so the polynomial-cost guarantee is lost unless the provenance computation is restricted to a tractable fragment, and the maximal-fixed-point choice may violate the skeptical minimality that grounded semantics guarantees.

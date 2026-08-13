@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target explicitly flags only that preserving the grounded extension as a special case requires careful choice of the identity element; it does not concede that committed-root validity is actually violated, only that the proposal does not by itself guarantee it.",
+  "verdict": "fail"
+}
+```

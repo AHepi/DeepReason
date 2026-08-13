@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "The stored witness may certify a node whose acceptance depends on a defender that is only accepted because the node itself is accepted, which violates the validity of committed roots because the defender's acceptance is not independent of the defended node."}

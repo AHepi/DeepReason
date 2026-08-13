@@ -1,0 +1,1 @@
+{"decisive_point":"The criticism: computing minimal entailment sets is generally NP-hard, so the polynomial-cost guarantee is lost unless the provenance computation is restricted to a tractable fragment, and the maximal-fixed-point choice may violate the skeptical minimality that grounded semantics guarantees.","verdict":"fail"}

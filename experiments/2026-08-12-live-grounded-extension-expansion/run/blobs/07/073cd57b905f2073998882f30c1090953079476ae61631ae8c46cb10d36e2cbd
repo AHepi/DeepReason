@@ -1,0 +1,39 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (succ:4bdcc8b0c28d) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate 4bdcc8b0c28d on succ:e2a71196cb02. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+When the standard grounded operator is not confluent under an enrichment, do not compute a least fixed point; instead order all grounded extensions by a polynomial-time computable lexicographic priority on committed roots and select the first. This strengthens the semantics by making choices explicit while preserving determinism and validity of committed roots. Criticizable because it abandons skeptical agreement and reintroduces a choice principle, so reinstatement is no longer derived but selected, and polynomial cost only holds if the number of extensions is polynomially bounded.
+commitments: (none)
+
+TARGET SRC_002
+Replace edge-addition enrichment with edge-pruning enrichment: a polynomial-time function deletes an attack A→B when there exists a committed warrant W and a rebuttal hyperedge (W,A) that is itself undefeated in the original graph; the grounded extension is then computed on the pruned graph. Determinism is preserved by making pruning a deterministic function of the original graph and committed roots; reinstatement remains derived because pruning only removes attacks, never labels. Criticizable because pruning can remove the only attack keeping an uncommitted node out, so validity of committed roots must be separately verified.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal explicitly acknowledges that reinstatement as a derived property is broken: the criticism notes lexicographic stratification 'introduces a non-obvious sensitivity to stratum ordering that the flat semantics never had.' Under the original flat skeptical fixed-point semantics, reinstatement of a node follows from the graph structure alone. Once a higher stratum can contain meta-conjectures like 'node y is OUT,' the lexicographic order can let a meta-conjecture in stratum k+1 suppress (or fail to reinstate) a node that stratum k would have reinstated, so reinstatement is no longer a derived property of the argument graph but an artifact of the chosen stratum ordering. That is a direct violation of the problem's requirement to preserve 'reinstatement as a derived property,' and it is independent of the other acknowledged concerns (self-reference expressiveness, polynomial cost).
+
+TARGET:
+Allow meta-conjectures about the grounded extension itself (e.g., 'node x is IN', 'node y is OUT') to be embedded as ordinary nodes in a higher stratum, computed by a lexicographic fixed point that runs the base extension first and then the meta-level. Determinism and polynomial cost hold per stratum and the validity of every committed root is preserved by construction; the criticism is that a finite stratification cannot express self-reference or iterated reflection without an infinite hierarchy, and the lexicographic order introduces a non-obvious sensitivity to stratum ordering that the flat semantics never had.

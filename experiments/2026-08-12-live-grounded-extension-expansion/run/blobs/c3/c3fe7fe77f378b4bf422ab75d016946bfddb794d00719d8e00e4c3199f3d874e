@@ -1,0 +1,40 @@
+{
+  "candidates": [
+    {
+      "content": "Introduce a higher-order attack graph where attack edges are reified as nodes, and the skeptical fixpoint is extended to these attack-nodes. This allows attacks on attacks, enabling a node to be reinstated when all its attackers are themselves attacked. To preserve determinism and polynomial cost, we restrict the order to at most 2 and define a monotone operator on the extended graph. Criticism: this may break the derived property of reinstatement unless the operator is carefully designed; also the graph size grows quadratically, potentially affecting polynomial bounds.",
+      "typicality": 0.2,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Parameterize the skeptical semantics with a rational weight alpha in [0,1] that interpolates between the current skeptical fixed point (alpha=0) and a credulous one (alpha=1), using weighted attack strengths derived from warrant counts. For each fixed alpha, the operator is continuous and deterministic, preserving polynomial cost. Criticizable: requires calibration of attack strengths (cf. SRC_007) and may lose reinstatement for alpha>0; the exact definition of the operator is non-trivial.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_002", "SRC_007"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Develop a persistent incremental algorithm that, after each variator edit, updates the skeptical fixpoint by recomputing only the affected subgraph, with a worst-case amortized polynomial bound and a formal proof of correctness. This builds on the caching idea but provides a rigorous complexity analysis and handles deletions and insertions uniformly. Criticism: the dependency tracking may introduce overhead and bugs; memory usage could be high for large graphs.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_006"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Create a meta-language for specifying closure rules (e.g., 'any attacker of validity_node attacks the warrant') and automatically compile a set of axioms into attack-edge construction rules, with a proof that any consistent axiom set preserves the guarantees (determinism, polynomial cost, reinstatement, committed-root validity). This systematizes SRC_005. Criticizable: the meta-language may be undecidable; checking consistency of axiom sets could be expensive.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_005"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Reframe commitment as case-relative: each committed root is associated with a set of contextual assumptions, and the extension is the set of nodes accepted in at least one context, with a skeptical combination (e.g., intersection of label sets across contexts). This extends SRC_008 into a multi-context framework. Criticizable: may lead to exponential contexts; determinism may be lost unless contexts are totally ordered.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_008"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Make warrant-chain provenance first-class in the label assignment: each accepted node is labelled with a set of minimal proof trees derived from committed roots, and the extension is the set of nodes having at least one such proof. This is a proof-theoretic reformulation of the grounded extension. Criticizable: the set of minimal proofs may be exponential; the definition of minimality may be ambiguous.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_003"],
+      "evidence_refs": []
+    }
+  ]
+}

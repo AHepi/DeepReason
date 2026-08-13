@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "Extend the grounded extension to a credal semantics: each node carries a probability interval [lo, hi] rather than a Boolean label, and the fixed point is the least fixed point of a monotone operator on a finite lattice of intervals, with acceptance defined as lo > τ for a rational threshold τ. Determinism and polynomial cost hold if the operator is componentwise monotone and each update is arithmetic; but reinstatement becomes a derived inequality that can fail to be monotone across thresholds, and the interval semantics may admit multiple fixed points when the lattice is not a complete lattice, so the skeptical choice must be proven unique.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_004", "SRC_008"]
+    },
+    {
+      "content": "Define a staged grounded extension parameterized by a discrete clock t: at each stage, suspended nodes may be reopened only if a fresh edge-construction warrant was committed in the previous stage, and the extension is the limit of the stage sequence. This makes suspension a dynamic, revisable state rather than a terminal label, and preserves determinism per stage. The criticism: the limit may not be reached in polynomial time unless the stage count is bounded a priori, and the monotonicity of the sequence across stages (reopening is not monotone) breaks the fixed-point determinism guarantee.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_006", "SRC_005"]
+    },
+    {
+      "content": "Replace the Boolean suspended label with a proof-object: a suspended node is accompanied by the finite set of defeating arguments that kept it OUT, and any reconsideration must be a polynomial proof-search over that certificate set rather than a relabeling or a fresh edge-construction pass. This strengthens the epistemic status of suspension without altering the fixed point's label set, but it imposes a proof-theoretic obligation that may not be decidable in polynomial time for arbitrary attacker sets, and it makes validity a property of certificates rather than of committed roots.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_005", "SRC_006"]
+    },
+    {
+      "content": "Allow meta-conjectures about the grounded extension itself (e.g., 'node x is IN', 'node y is OUT') to be embedded as ordinary nodes in a higher stratum, computed by a lexicographic fixed point that runs the base extension first and then the meta-level. Determinism and polynomial cost hold per stratum and the validity of every committed root is preserved by construction; the criticism is that a finite stratification cannot express self-reference or iterated reflection without an infinite hierarchy, and the lexicographic order introduces a non-obvious sensitivity to stratum ordering that the flat semantics never had.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_007"]
+    },
+    {
+      "content": "Replace integer weights and thresholds with a polynomial-time computable total preorder over attackers, and define the grounded labeling as the fixed point of a monotone operator on the product order where a node is IN iff its most-preferred undefeated attacker is absent. This preserves determinism and polynomial cost, but reinstatement becomes preference-dependent rather than a purely structural derived property, and the choice of preorder is itself an extra commitment that must be validated against the rootedness guarantee.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_008"]
+    },
+    {
+      "content": "Augment the grounded extension so that every accepted conjecture carries a minimal set of committed root nodes that entail it, and define acceptance as membership in the maximal fixed point whose per-node provenance sets are all root-valid. This turns validity into a per-node, checkable certificate and strengthens the 'validity of every committed root' guarantee into a constructive provenance property. The criticism: computing minimal entailment sets is generally NP-hard, so the polynomial-cost guarantee is lost unless the provenance computation is restricted to a tractable fragment, and the maximal-fixed-point choice may violate the skeptical minimality that grounded semantics guarantees.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_002", "SRC_007"]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal self-reports the fatal guarantee break: 'the monotonicity of the sequence across stages (reopening is not monotone) breaks the fixed-point determinism guarantee.' The original grounded extension is defined as a deterministic fixed point; the problem requires preserving 'determinism of the fixed point.' SRC_002 replaces it with a staged limit where suspended nodes can be reopened in later stages via fresh edge-construction warrants. Reopening is non-monotone by construction, so the stage sequence is not guaranteed to converge to a single fixed point independent of stage ordering/timing; determinism becomes contingent on an a-priori bound and monotonicity that the proposal itself says is absent. This is a direct violation of the stated problem requirement, independent of the polynomial-cost concern.
+
+TARGET:
+Define a staged grounded extension parameterized by a discrete clock t: at each stage, suspended nodes may be reopened only if a fresh edge-construction warrant was committed in the previous stage, and the extension is the limit of the stage sequence. This makes suspension a dynamic, revisable state rather than a terminal label, and preserves determinism per stage. The criticism: the limit may not be reached in polynomial time unless the stage count is bounded a priori, and the monotonicity of the sequence across stages (reopening is not monotone) breaks the fixed-point determinism guarantee.

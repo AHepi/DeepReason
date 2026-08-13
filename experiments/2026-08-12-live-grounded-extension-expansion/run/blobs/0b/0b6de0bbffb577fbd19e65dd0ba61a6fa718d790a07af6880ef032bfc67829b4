@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target mandates auxiliary predicates to encode `accepted(X) :- not attacked_by_undefeated(X)` via Horn-compatible rules, which is precisely the stratified-negation-in-disguise approach the criticism concedes would preserve the semantics.",
+  "verdict": "pass"
+}
+```

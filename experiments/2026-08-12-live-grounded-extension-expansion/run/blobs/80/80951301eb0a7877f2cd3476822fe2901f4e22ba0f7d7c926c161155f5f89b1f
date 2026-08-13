@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_001 asserts non-compositionality using 'overlapping attacks' between disjoint argument sets, which is contradictory: if the argument sets are disjoint, an attack from F1 cannot target an argument in F2, so attacks cannot 'overlap' across frameworks in the stated sense. The proper non-compositionality phenomenon arises from inter-framework attacks (edges crossing between F1 and F2), not from 'overlapping' attacks among disjoint arguments. Thus the stated reason for non-compositionality is ill-defined and does not demonstrate the claimed property.
+
+TARGET:
+The grounded extension is not compositional with respect to the union of sub-frameworks: there exist two frameworks F1 and F2 with disjoint arguments but overlapping attacks such that the grounded extension of their union is not the union of the grounded extensions, even when the frameworks are independent. This implies any modular expansion must explicitly handle inter-framework attacks.

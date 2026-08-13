@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The no-extension ceiling theorem is stated without proof or formal derivation: it merely asserts that 'for any monotone operator T properly extending the Pass 1 operator' a violating framework exists. The problem asks to 'propose innovative ways to expand and strengthen' the semantics; SRC_001 instead declares expansion a dead end while offering no machine-checkable construction, no commitment schema, and no formal argument substantiating the universal claim. The target thus fails to answer the problem as stated because it neither proposes an innovation nor provides a refutation backed by verifiable substance.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 explicitly flags an open question — whether the meta-fixpoint is idempotent, oscillates, or requires transfinite iteration — yet proposes no resolution. The problem requires proposals that 'preserve the existing guarantees,' including 'determinism of the fixed point' and 'polynomial cost.' If the meta-fixpoint oscillates or requires transfinite iteration, both determinism and polynomial cost can fail. Because the target itself leaves this guarantee-preserving question unanswered, it does not deliver a complete, guarantee-preserving proposal as the problem demands.",
+      "counterexample": null
+    }
+  ]
+}
+```

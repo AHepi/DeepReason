@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_001 proposes a 'warrant tree' of polynomial size that summarizes all defense chains for an accepted node, but it does not establish how this structure can be constructed in polynomial time. In skeptical argumentation semantics, the number of distinct defense chains can be exponential in the size of the argumentation framework (consider a lattice of attackers and defenders with branching factor b and depth d). Enumerating or summarizing these chains into a single polynomial-size tree requires either an algorithm that can compress these chains without losing soundness — which is non-trivial and not specified — or a restriction on the attack relation that is not stated. Without a construction proof or a complexity bound on the synthesis of the warrant tree itself, the claim that this proposal preserves the 'polynomial cost' guarantee of the original semantics is unsubstantiated. The target asserts the *existence* of such a tree but never demonstrates it is *computable* within the required cost bound.
+
+TARGET:
+For any accepted node, the set of all its defense chains can be summarized by a single 'warrant tree' of polynomial size, such that the node's acceptance can be verified by checking the tree against the attack relation in linear time; this enables parallel verification without recomputing the fixpoint.

@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target explicitly defines two sequential deterministic fixpoints; it does not claim to compute a single global fixpoint over the combined attack-and-defeat framework, so the charge that 'the single fixpoint guarantee is lost' presupposes a guarantee the target never asserts.",
+  "verdict": "fail"
+}

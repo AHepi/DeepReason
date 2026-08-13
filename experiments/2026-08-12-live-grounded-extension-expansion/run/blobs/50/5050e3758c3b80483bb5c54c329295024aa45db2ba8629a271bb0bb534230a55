@@ -1,0 +1,67 @@
+{
+  "abstention": null,
+  "context_request": null,
+  "simulation_proposals": [],
+  "candidates": [
+    {
+      "content": "No-extension ceiling theorem: the grounded extension is the unique maximal skeptical semantics preserving all four guarantees (deterministic fixpoint, polynomial cost, reinstatement as derived, valid committed roots). For any monotone operator T properly extending the Pass 1 operator, there exists a finite argumentation framework where T either resolves a suspension the grounded extension keeps UNDECIDED (violating reinstatement-as-derived or determinism) or suspends a node the grounded extension accepts (violating skeptical minimality). This generalizes the SRC_005 counterexample from bounded-depth lookahead to every proper extension, making further expansion a dead end unless a guarantee is deliberately relaxed or reparameterized.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "Self-applicability: the extension mechanism is itself governed by the same skeptical fixed point. Candidate extensions are nodes in a meta-framework; an extension is accepted only if it survives the Pass 1 rules applied to that meta-framework, where attacks are 'violates guarantee G' and defenses are 'preserves G by argument A'. This makes the semantics closed under its own acceptance policy — no extension can be adopted that would not itself be IN in the grounded extension of the meta-framework. Open question: does the meta-fixpoint reach a fixed point in one level (idempotence), or does it oscillate or require transfinite iteration — and does idempotence itself decide which extensions are legitimate?",
+      "typicality": 0.12,
+      "neighbours": ["SRC_001", "SRC_005"]
+    },
+    {
+      "content": "Stance-parametric semantics: replace the fixed skeptical stance (SRC_001) with a one-parameter family GS_k, k in [0,1], where k=0 accepts iff any admissible defense exists (credulous) and k=1 is the current grounded extension. Claim: (a) the fixpoint is deterministic and polynomial for every k; (b) reinstatement is derived only at k=1 — for k<1 it must be axiomatized, and the axiomatization gap is exactly what SRC_005 exploits; (c) the valid-committed-root guarantee holds iff k is rational with bounded denominator, giving a precise complexity/validity boundary. This turns 'skeptic' from a stance into a dial, and forces each proposed expansion to state which k it targets.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "Per-root commit certificates: without altering the fixpoint, change what a commit carries. Each accepted (IN) node gets a compact certificate — the minimal grounded subframework witnessing its IN status in Pass 1 — so a root's validity is checkable by replaying only O(|witness|) nodes rather than the whole framework. All four guarantees are untouched (the operator is unchanged), but 'validity of every committed root' becomes a local, per-root proof rather than a global invariant. This complements SRC_003's fragility profile (single-edge deletion analysis) with a constructive witness, and makes commits independently auditable by a third party holding only the certificate.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_003", "SRC_009"]
+    },
+    {
+      "content": "Minimal-core extraction: conjecture that the suspension boundary (SRC_002) is epiphenomenal, not constitutive — an artifact of the Pass 1 algorithm's tie-break, not a semantic primitive. If so, strip it: define the semantics purely by which nodes are IN (accepted) and OUT (refuted), with UNDECIDED as a derived, non-first-class state. The stripped semantics keeps all four guarantees, has fewer concepts, and forces any genuine extension to justify itself against the smaller core. This is the contraction opposite to the neighbourhood's expansionist direction; it predicts every proposed extension (SRC_004, SRC_006, SRC_007) can be re-expressed, and re-criticized, in the stripped language.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_002", "SRC_004"]
+    },
+    {
+      "content": "Meet-of-schools skeptical fixpoint: when multiple school policies coexist (SRC_001-style), define the global semantics as the meet (pointwise intersection) of school-local grounded extensions. Claim: (a) the meet is itself a grounded extension of a derived framework iff the local operators are monotone and the policies form a chain under skepticism; (b) determinism is preserved, cost is polynomial in the number of schools; (c) the meet is strictly more skeptical than any single school, so committed roots remain valid for every school. This extends SRC_006's 'two genuinely different school families' to an arbitrary finite family and asks whether the meet, not any union, is the right multi-stakeholder semantics.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_001", "SRC_006"]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Rough fragment: the four guarantees may not be independent. Determinism + polynomial cost smells like a monotone/antitone pair; reinstatement-as-derived is a structural property; valid committed roots is a soundness property. If determinism and polynomial cost jointly force the operator to be a monotone closure operator, then the no-extension theorem reduces to: the grounded operator is the unique monotone closure operator on finite argumentation frameworks that is skeptical-minimal. That would be a clean proof target for candidate 1.",
+          "bears_on_refs": ["SRC_005"],
+          "why_keep_this": "Captures the reduction that would make the ceiling theorem provable rather than conjectural."
+        }
+      },
+      {
+        "local_key": "NEW_003",
+        "body": {
+          "content": "Counterfactual: if the school stance is a dial (candidate 3), then SRC_001's 'skeptic' is just one setting, and the whole neighbourhood's expansions (SRC_002-007) are implicitly about the k=1 setting. Would the same expansions be meaningful at k=0.5? If yes, the expansions are stance-independent machinery; if no, they secretly depend on skeptical tie-breaks and should be re-derived per stance.",
+          "bears_on_refs": ["SRC_001", "SRC_002"],
+          "why_keep_this": "Tests whether the neighbourhood's machinery is stance-robust or stance-locked."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is there an information-theoretic or complexity-theoretic obstruction proving the no-extension ceiling theorem, or is the class of extensions rich enough that no single counterexample family covers it? Does the polynomial-cost guarantee force the fixed point to be a closure operator, and if so does that immediately bound every extension?",
+        "related_refs": ["NEW_001"]
+      },
+      {
+        "question": "If stance parameterization is coherent, which stances k are actually realizable by school policies, and does the valid-roots guarantee fail gracefully (suspended rather than invalid) for irrational k?",
+        "related_refs": ["NEW_003"]
+      }
+    ]
+  }
+}

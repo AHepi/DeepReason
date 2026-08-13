@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The problem statement requires preserving reinstatement as a 'derived property'; a checker that reports violations after acceptance does not preserve reinstatement as a derived property — it instead admits that reinstatement can fail and merely makes the failure observable.",
+  "verdict": "fail"
+}
+```

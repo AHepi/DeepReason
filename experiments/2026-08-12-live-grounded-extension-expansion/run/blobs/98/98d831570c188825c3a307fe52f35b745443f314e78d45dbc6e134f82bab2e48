@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target replaces the primitive acceptance test with a derived polynomial-time skeptical-defeat pre-order, accepting a node iff no attacker strictly precedes it and is undefeated, and concedes that reinstatement becomes primitive rather than derived. The problem explicitly requires reinstatement to be a *derived* property of the extension, not a primitive axiom. Making reinstatement primitive removes the very structural guarantee the problem names, so the target fails the stated standard even on the problem's own terms. Additionally, on a mixed cyclic/acyclic graph the pre-order can rank a defeated attacker strictly below its target, causing the target to be accepted despite an undefeated defeater; this breaks committed-root validity, another explicitly required guarantee.
+
+TARGET:
+Replace the primitive acceptance test with a derived, polynomial-time skeptical-defeat pre-order over attackers: a node is accepted iff no attacker strictly precedes it in the pre-order and is itself undefeated. On well-founded graphs this coincides with the grounded extension; on cyclic graphs it extends it while preserving determinism and polynomial cost, at the price of reinstatement becoming primitive rather than derived. This is criticizable for potentially breaking the committed-root validity guarantee on mixed cyclic/acyclic graphs, and for requiring a new proof that the pre-order is well-defined and consistent across the fixpoint.

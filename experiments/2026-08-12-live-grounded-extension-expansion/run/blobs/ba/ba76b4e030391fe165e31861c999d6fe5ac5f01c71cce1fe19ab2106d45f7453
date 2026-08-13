@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_001 demotes reinstatement from a derived guarantee to a merely monitored invariant whose checker can only flag violations post-hoc. The problem statement requires preserving reinstatement as a 'derived property'; a checker that reports violations after acceptance does not preserve reinstatement as a derived property — it instead admits that reinstatement can fail and merely makes the failure observable. This is a weakening of the commitment set the problem explicitly demands be preserved, not an expansion or strengthening of the semantics.
+
+TARGET:
+Re-scope the commitments: keep determinism and polynomial cost, but demote reinstatement from a derived guarantee to a monitored invariant, with a polynomial-time checker that flags any accepted node whose acceptance cannot be reconstructed from the fixpoint labels; the checker output becomes a new observable. This directly challenges the stated guarantee set and is criticizable for weakening the spec's commitments, and for the checker being able to report violations only after the fact rather than preventing them.

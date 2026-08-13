@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The no-extension ceiling theorem is stated without proof or formal derivation: it merely asserts that 'for any monotone operator T properly extending the Pass 1 operator' a violating framework exists. The problem asks to 'propose innovative ways to expand and strengthen' the semantics; SRC_001 instead declares expansion a dead end while offering no machine-checkable construction, no commitment schema, and no formal argument substantiating the universal claim. The target thus fails to answer the problem as stated because it neither proposes an innovation nor provides a refutation backed by verifiable substance.
+
+TARGET:
+No-extension ceiling theorem: the grounded extension is the unique maximal skeptical semantics preserving all four guarantees (deterministic fixpoint, polynomial cost, reinstatement as derived, valid committed roots). For any monotone operator T properly extending the Pass 1 operator, there exists a finite argumentation framework where T either resolves a suspension the grounded extension keeps UNDECIDED (violating reinstatement-as-derived or determinism) or suspends a node the grounded extension accepts (violating skeptical minimality). This generalizes the SRC_005 counterexample from bounded-depth lookahead to every proper extension, making further expansion a dead end unless a guarantee is deliberately relaxed or reparameterized.

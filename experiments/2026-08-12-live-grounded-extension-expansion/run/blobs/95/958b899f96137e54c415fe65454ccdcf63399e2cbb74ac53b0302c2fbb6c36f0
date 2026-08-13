@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_001 changes the semantic label of a suspended node from a Boolean to a finite proof-object certificate, contradicting the problem's requirement to preserve the existing 'label set' of the fixed point. Even if the underlying fixed-point construction is unchanged, the target's own description says 'validity [becomes] a property of certificates rather than of committed roots,' contradicting the problem's explicit guarantee on the 'validity of every committed root.'
+
+TARGET:
+Replace the Boolean suspended label with a proof-object: a suspended node is accompanied by the finite set of defeating arguments that kept it OUT, and any reconsideration must be a polynomial proof-search over that certificate set rather than a relabeling or a fresh edge-construction pass. This strengthens the epistemic status of suspension without altering the fixed point's label set, but it imposes a proof-theoretic obligation that may not be decidable in polynomial time for arbitrary attacker sets, and it makes validity a property of certificates rather than of committed roots.

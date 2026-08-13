@@ -1,0 +1,1 @@
+{"decisive_point":"a checker that flags violations only after acceptance does not prevent reinstatement failure, so if 'preserve' is taken to mean 'guarantee at acceptance time,' the target genuinely weakens the commitment","verdict":"fail"}

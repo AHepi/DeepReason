@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 claims reinstatement is preserved because the meet is strictly more skeptical than any single school, but the meet-of-schools construction violates the reinstatement-as-derived-property guarantee. In Dung-style semantics, reinstatement requires that if an argument A is defeated and B (which defeats A's sole attacker) is accepted, then A is reinstated (accepted). Under pointwise meet, B may be accepted in the global meet while A is rejected because A is not accepted by at least one school — even though that school accepts B. For a concrete counterexample: consider two arguments A and B with a single attacker C, where B attacks C. School 1's grounded extension is {B, A} (B defeats C, reinstating A), and School 2's grounded extension is {B} (accepts B but rejects A due to a policy that is more skeptical about reinstatement). The meet is {B}: A is rejected globally despite its attacker C being defeated by an accepted argument B. Reinstatement is not derived — it is violated. This is a direct failure of the reinstatement guarantee the problem requires.",
+      "counterexample": [
+        "Arguments: A, B, C",
+        "Attack relation: C attacks A; B attacks C",
+        "School 1 grounded extension: {B, A} — B defeats C, so A is reinstated",
+        "School 2 grounded extension: {B} — B is accepted but A is not reinstated under School 2's policy",
+        "Meet (pointwise intersection): {B}",
+        "Result: A is rejected in the meet even though its only attacker C is defeated by accepted B — reinstatement fails"
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false
+    }
+  ]
+}

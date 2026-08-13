@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+SRC_002 admits multiple fixed points on interval lattices and concedes reinstatement can fail to be monotone across thresholds, which violates the problem's requirement to preserve reinstatement as a derived property and determinism of the fixed point; the target only says uniqueness 'must be proven,' not that it holds, so the guarantee is not preserved.
+
+TARGET:
+Extend the grounded extension to a credal semantics: each node carries a probability interval [lo, hi] rather than a Boolean label, and the fixed point is the least fixed point of a monotone operator on a finite lattice of intervals, with acceptance defined as lo > τ for a rational threshold τ. Determinism and polynomial cost hold if the operator is componentwise monotone and each update is arithmetic; but reinstatement becomes a derived inequality that can fail to be monotone across thresholds, and the interval semantics may admit multiple fixed points when the lattice is not a complete lattice, so the skeptical choice must be proven unique.

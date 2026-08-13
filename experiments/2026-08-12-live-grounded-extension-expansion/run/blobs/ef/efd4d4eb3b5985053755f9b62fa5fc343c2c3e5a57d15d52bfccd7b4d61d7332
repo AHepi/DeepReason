@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "In abstract argumentation, 'overlapping' need not imply that an attack crosses from one framework to another; rather, it can denote a structural correspondence between attack relations. For instance, if F1 has an attack (a1,b1) and F2 has an attack (a2,b2) such that a1↔a2 and b1↔b2 under an isomorphism, these attacks are 'overlapping' in the relevant sense.",
+  "verdict": "pass"
+}
+```

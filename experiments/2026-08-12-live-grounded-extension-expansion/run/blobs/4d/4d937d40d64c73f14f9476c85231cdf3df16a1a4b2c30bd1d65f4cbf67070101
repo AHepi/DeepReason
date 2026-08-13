@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "The grounded extension of any finite argumentation framework can be computed by repeatedly applying a single monotone operator that simultaneously eliminates unattacked and unattackable arguments, and the number of iterations is bounded by the diameter of the attack graph; this yields an O(|E| log |V|) algorithm.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "Introducing a strict partial order over attack edges (preference-based AF) and taking the grounded extension of the reduced framework (keeping only maximal attacks) preserves the original grounded extension when the order is a total preorder consistent with the attack structure; otherwise it may produce a different fixpoint, so the extension must be defined on the original framework to preserve determinism.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_002", "SRC_005"]
+    },
+    {
+      "content": "For any accepted node, the set of all its defense chains can be summarized by a single 'warrant tree' of polynomial size, such that the node's acceptance can be verified by checking the tree against the attack relation in linear time; this enables parallel verification without recomputing the fixpoint.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_003", "SRC_007"]
+    },
+    {
+      "content": "The grounded extension is not compositional with respect to the union of sub-frameworks: there exist two frameworks F1 and F2 with disjoint arguments but overlapping attacks such that the grounded extension of their union is not the union of the grounded extensions, even when the frameworks are independent. This implies any modular expansion must explicitly handle inter-framework attacks.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_004", "SRC_009"]
+    },
+    {
+      "content": "Extending the grounded semantics to allow 'reinstatement' of an argument if it is defended by an even-length cycle (a 'parity' defense) yields a deterministic fixpoint but breaks the property of reinstatement as a derived property, because some arguments become accepted without a valid defense chain; hence this expansion is unsound.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_005", "SRC_006"]
+    },
+    {
+      "content": "There exists a class of frameworks where the grounded extension is empty but a 'probabilistic' acceptance (based on random selection of attackers) yields a stable distribution; proposing to use this distribution as a soft acceptance criterion introduces nondeterminism and violates the determinism guarantee.",
+      "typicality": 0.2,
+      "neighbours": ["SRC_001", "SRC_008"]
+    }
+  ]
+}

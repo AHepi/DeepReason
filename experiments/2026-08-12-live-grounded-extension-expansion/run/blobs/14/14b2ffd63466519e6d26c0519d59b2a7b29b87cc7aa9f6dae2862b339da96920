@@ -1,0 +1,39 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (succ:e2a71196cb02) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate e2a71196cb02 on succ:18df3647b4c8. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Meet-of-schools skeptical fixpoint: when multiple school policies coexist (SRC_001-style), define the global semantics as the meet (pointwise intersection) of school-local grounded extensions. Claim: (a) the meet is itself a grounded extension of a derived framework iff the local operators are monotone and the policies form a chain under skepticism; (b) determinism is preserved, cost is polynomial in the number of schools; (c) the meet is strictly more skeptical than any single school, so committed roots remain valid for every school. This extends SRC_006's 'two genuinely different school families' to an arbitrary finite family and asks whether the meet, not any union, is the right multi-stakeholder semantics.
+commitments: (none)
+
+TARGET SRC_002
+Stance-parametric semantics: replace the fixed skeptical stance (SRC_001) with a one-parameter family GS_k, k in [0,1], where k=0 accepts iff any admissible defense exists (credulous) and k=1 is the current grounded extension. Claim: (a) the fixpoint is deterministic and polynomial for every k; (b) reinstatement is derived only at k=1 — for k<1 it must be axiomatized, and the axiomatization gap is exactly what SRC_005 exploits; (c) the valid-committed-root guarantee holds iff k is rational with bounded denominator, giving a precise complexity/validity boundary. This turns 'skeptic' from a stance into a dial, and forces each proposed expansion to state which k it targets.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
