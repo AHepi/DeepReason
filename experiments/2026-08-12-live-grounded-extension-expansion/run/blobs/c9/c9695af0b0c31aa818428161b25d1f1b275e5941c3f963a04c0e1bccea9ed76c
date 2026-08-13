@@ -1,0 +1,1 @@
+{"decisive_point":"the post-hoc demotion of accepted nodes lacking a minimal defeat tree whose leaves are committed roots alters the least fixpoint computed in Pass 1, so the semantics is no longer the skeptical fixed point of spec §4","verdict":"fail"}

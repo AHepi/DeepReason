@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (succ:4bdcc8b0c28d) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate 4bdcc8b0c28d on succ:e2a71196cb02. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Replace the single-pass skeptical fixpoint with a two-phase 'commit-then-explain' semantics: after the least fixpoint stabilizes, run a polynomial-time traversal that requires every accepted node to have at least one minimal defeat tree whose leaves are committed roots, and every refuted node to have a defeat tree explaining the defeat. Nodes failing the explanation check are demoted to suspended. This preserves determinism and polynomial cost because the traversal is on the already-computed labels, and it makes reinstatement a constructive by-product rather than an implicit label.
+commitments: (none)
+
+TARGET SRC_002
+Introduce a horizon parameter k on attack edges: an edge is active only if its warrant chain has length at most k. Compute the grounded extension for each k and define the eventual skeptical status as the stable value for all sufficiently large k. This yields a graded notion of groundedness that can be decided in polynomial time by iterating k up to the node count, preserves determinism, and makes reinstatement a property of eventual stabilization; it can be criticized for changing the fixed point on cycles and for possibly requiring large k.
+commitments: (none)
+
+TARGET SRC_003
+Add a second-order consistency layer: after the skeptical fixpoint, encode the admissible extensions consistent with the labels as a polynomial-size propositional formula, and require that the least model of that formula under a fixed variable order matches the fixpoint. This gives a logical characterization that exposes hidden dependencies and preserves determinism and polynomial cost, but it adds no new inferential power and may be criticized as an expensive verification step with limited strengthening.
+commitments: (none)
+
+TARGET SRC_004
+Reformulate the skeptical semantics as a finite two-player dialectical game: a conjecture is accepted iff the proponent has a winning strategy in a DAG game where opponent attacks are answered by defeat trees rooted at committed roots; solve by backward induction in polynomial time. This preserves determinism and polynomial cost, makes reinstatement a natural game-theoretic consequence, and enforces committed-root validity by construction, but it may be criticized for being a notational variant of the fixpoint rather than an expansion.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

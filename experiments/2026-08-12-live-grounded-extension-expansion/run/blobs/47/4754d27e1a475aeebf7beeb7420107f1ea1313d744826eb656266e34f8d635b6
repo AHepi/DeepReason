@@ -1,0 +1,4 @@
+{
+  "decisive_point": "the traversal operates only on labels already computed; it does not recompute support or re-run reinstatement, so no cascade occurs",
+  "verdict": "pass"
+}

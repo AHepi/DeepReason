@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Introduce a horizon parameter k on attack edges: an edge is active only if its warrant chain has length at most k. Compute the grounded extension for each k and define the eventual skeptical status as the stable value for all sufficiently large k. This yields a graded notion of groundedness that can be decided in polynomial time by iterating k up to the node count, preserves determinism, and makes reinstatement a property of eventual stabilization; it can be criticized for changing the fixed point on cycles and for possibly requiring large k.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_002 does not preserve the existing grounded extension: by making attack edges active only when their warrant chain has length at most k and taking the stable value for sufficiently large k, the semantics changes the fixed point on cyclic defeat structures. For a two-node mutual defeat cycle, for finite k one node is accepted and the other refuted (the edge from the refuted node is inactive because its warrant chain length exceeds k), whereas the original skeptical fixed point suspends both; the 'eventual' stable value is reached only at k large enough that the cycle is fully active, so the accepted/refuted labels at intermediate k are not the original grounded extension. This violates the determinism guarantee for the problem as stated.
+
+THE DEFENCE:
+The critic's case does not establish an actual violation. The target explicitly states its semantics 'changes the fixed point on cycles,' so the two-node mutual defeat example is not a counterexample to a preservation guarantee the target never claims; it is the acknowledged design. On determinism, the critic's own description concedes that the accepted/refuted split obtains only at 'intermediate k' and that the 'eventual' stable value is reached once the cycle is fully active—so the eventual skeptical status, defined as the stable value for all sufficiently large k, agrees with the original grounded extension (both nodes suspended). The transient labels at finite k are intermediate artifacts of the graded construction, not the declared output; the output is the stabilized value, which the target makes computable by iterating k up to the node count. Thus determinism for the stated problem is preserved: the eventual status is well-defined and recoverable in polynomial time, and the alleged counterexample is precisely a case where the target's stabilization mechanism yields the original skeptical result. No clause establishes a genuine defect beyond what the target already owns as a graded, cycle-sensitive feature.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

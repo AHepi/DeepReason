@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+SRC_002 does not preserve the existing grounded extension: by making attack edges active only when their warrant chain has length at most k and taking the stable value for sufficiently large k, the semantics changes the fixed point on cyclic defeat structures. For a two-node mutual defeat cycle, for finite k one node is accepted and the other refuted (the edge from the refuted node is inactive because its warrant chain length exceeds k), whereas the original skeptical fixed point suspends both; the 'eventual' stable value is reached only at k large enough that the cycle is fully active, so the accepted/refuted labels at intermediate k are not the original grounded extension. This violates the determinism guarantee for the problem as stated.
+
+TARGET:
+Introduce a horizon parameter k on attack edges: an edge is active only if its warrant chain has length at most k. Compute the grounded extension for each k and define the eventual skeptical status as the stable value for all sufficiently large k. This yields a graded notion of groundedness that can be decided in polynomial time by iterating k up to the node count, preserves determinism, and makes reinstatement a property of eventual stabilization; it can be criticized for changing the fixed point on cycles and for possibly requiring large k.

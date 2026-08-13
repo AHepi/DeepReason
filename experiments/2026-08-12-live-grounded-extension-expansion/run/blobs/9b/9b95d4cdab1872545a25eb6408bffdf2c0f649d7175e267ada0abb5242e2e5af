@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The proposal computes the skeptical fixed point as the meet over all warrant contexts, requiring acceptance to survive every context. But if two contexts assign conflicting labels to the same argument — one context admissible, another defeated — the meet collapses to defeat. The argument is suspended in the joined result even though it was admissible in a context the system explicitly partitions out. That discards context-specific evidence the proposal itself admits should be admissible. The counterexample: a two-argument graph where A→B, with contexts {w1: A undefeated, B defeated by A; w2: A defeated, B undefeated}. Meet gives both suspended, yet B was admissible in w2 and A was admissible in w1. The strengthening thus contradicts the proposal's own scope by making admissibility non-recoverable across contexts.
+
+TARGET:
+Make the grounded extension context-sensitive by partitioning attack edges into warrant contexts and computing the skeptical fixpoint as the meet over all contexts, using a shared label vector to keep cost polynomial. Acceptance must survive every context, which strengthens the skeptical commitment and preserves determinism, but it is conservative and may be criticized for discarding context-specific evidence that should be admissible.
