@@ -29,7 +29,8 @@ broken; this worker adds no judgment of its own (G3).
 4. `python scripts/wheel_smoke.py` then
    `python -u scripts/wheel_operational_smoke.py` — any non-zero exit
    → verdict `broken`, target = the pin named in the output.
-5. `timeout 900 python tools/root_sweep.py > proof/broken-sweep.txt`;
+5. `timeout 900 python tools/root_sweep.py proof/broken-sweep.txt`
+   (the instrument takes its output path as an argument);
    compare ERROR-line count and per-root verdicts to baseline. New
    ERROR line or moved verdict → verdict `broken`. Timeout firing on a
    root not baseline-listed as a known hang → verdict `broken`.

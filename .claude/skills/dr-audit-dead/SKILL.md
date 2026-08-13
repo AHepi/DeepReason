@@ -22,7 +22,12 @@ On first invocation, write the package list into `dead.md`:
    file:
    `rg -l -w 'NAME' src/ tests/ scripts/ tools/ | grep -v <defining-file>`
    Hits ≥ 1 → verdict `referenced` (no LEDGER row; tally only).
-   Hits = 0 → step 3.
+   Hits = 0 → step 2b.
+2b. Intra-file use check (a symbol called only from its own file is
+   wired, not dead):
+   `rg -c -w 'NAME' <defining-file>`
+   Count ≥ 2 (the definition line plus at least one use) → verdict
+   `referenced`, note `intra-file` (tally only). Count = 1 → step 3.
 3. String-reference scan (dynamic dispatch, registries, config
    strings):
    `rg -l "['\"]NAME['\"]" src/ tests/ scripts/ tools/`
