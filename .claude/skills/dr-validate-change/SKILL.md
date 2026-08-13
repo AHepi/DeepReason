@@ -28,7 +28,7 @@ invalidates the checklist's audit trail.
    or validator of the append-only record, re-run `verify_root` on
    one known-good committed root and one defect-era root — prior
    verdicts must be unchanged except where SPEC.md says otherwise.
-4a2. **Frozen-surface diff — paste it, empty or explained:**
+5. **Frozen-surface diff — paste it, empty or explained:**
 
         git diff --stat <tranche-base>..HEAD -- \
           src/deepreason/capabilities/state.py src/deepreason/harness.py \
@@ -40,7 +40,7 @@ invalidates the checklist's audit trail.
    exact surface — convention guards these files at design time, but this
    paste is the one MECHANICAL tripwire on the path, so it is not optional.
 
-4a3. **Packaging-surface check.** If the change touched pyproject.toml,
+6. **Packaging-surface check.** If the change touched pyproject.toml,
    CLI entry points, the MCP server surface, or the wheel layout: run
    `python scripts/wheel_smoke.py` (plus `python -u
    scripts/wheel_operational_smoke.py` when the operational
@@ -50,7 +50,7 @@ invalidates the checklist's audit trail.
    "packaging surface untouched — smoke not owed": the skip must be a
    recorded decision, not an omission.
 
-4b. **Map validation — the documentation half of the gate:**
+7. **Map validation — the documentation half of the gate:**
 
         python tools/docs_verify.py          # must report 0 failed
         python tools/docs_verify.py --audit  # must report 0 findings
@@ -71,11 +71,11 @@ invalidates the checklist's audit trail.
    or is specced as its own follow-up commit — "sweep byte-identical"
    is trivially true for data the sweep never reads, so an observable
    with no probe and no written justification is a FAIL.
-5. Requirement sweep: for every R in REQUEST.md, one line — which
+8. Requirement sweep: for every R in REQUEST.md, one line — which
    acceptance output demonstrates it, or why it is legitimately
    deferred (operator's words required). An R with neither is a FAIL:
    the work is incomplete no matter how green the gate is.
-6. Assumption audit: list SPEC.md's assumptions A1..An in
+9. Assumption audit: list SPEC.md's assumptions A1..An in
    VALIDATION.md so the delivery surfaces them to the operator.
 
 ## VALIDATION.md template

@@ -485,3 +485,26 @@ stands from E19: the preplan cited the tranche before it was readable
 from main, and E19's own "planned but never opened" inference was wrong
 when written. No document edit needed; recorded per the operator's
 instruction to update this ledger at the adjudication merge.
+
+**E24 — `dr-drive-harness/SKILL.md`'s "never generalize instruction
+scope" rule is an accepted, permanent exception to `authoring-skills`'s
+own W3 ("each surviving 'never' must be enforced by a GATE").** The
+2026-08-12 skills-overhaul census (`experiments/2026-08-12-change-
+skills-overhaul/CENSUS.md`, `dr-drive-harness-36`) flagged this rule —
+"Never generalize an instruction beyond its stated scope; if a spec
+seems silent about your case, that is a question... not an invitation
+to infer" — as the one negation in the whole `.claude/skills/` set with
+no mechanical trigger. `DESIGN.md`'s gate table recorded the gap
+honestly rather than building an unproven check to close it, and parked
+the choice (`PARKED.md` P1): a new lint-style checker comparing an
+agent's stated scope against files touched, or an operator-accepted
+judgment-only status. The operator's answer, 2026-08-12: "judgement
+only and approved to continue." Reason recorded in
+`experiments/2026-08-12-change-skills-parked-followups/SPEC.md`
+(Q1): a mechanical scope-checker would need the same judgment it is
+meant to replace, and would likely have flagged the skills-overhaul
+tranche's own DELTA edits as false positives (each touched more files
+than the single one named in its own CHECKLIST step, for good reason).
+No document is wrong here — this entry exists so a future reader
+auditing the set against `authoring-skills`'s W3 finds the accepted
+exception on record, rather than re-discovering and re-litigating it.

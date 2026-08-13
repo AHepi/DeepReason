@@ -25,10 +25,16 @@ authority; the sequence is:
     ls experiments/*/env 2>/dev/null          # gitignored credentials survive?
 
 Always `python -m pytest`, never bare `pytest` (PATH shim). Credentials
-are recreated from the operator's handover, never committed. Commit and
-push at every phase boundary — work between pushes is work at risk. Then
-read, in order: CLAUDE.md, the newest `experiments/*/RESULTS.md` segments,
-`docs/ERRATA.md`.
+are recreated from the operator's handover, never committed — `env`
+files are gitignored; check with `git check-ignore <path>` before
+writing near them. Commit and push at every phase boundary — work
+between pushes is work at risk. Then read, in order: CLAUDE.md, the
+newest `experiments/*/RESULTS.md` segments, `docs/ERRATA.md`.
+
+Where the truth lives, in reading order: CLAUDE.md (law) →
+`docs/map/INDEX.md` (navigation) → `experiments/*/RESULTS.md` (what is
+proven) → `docs/ERRATA.md` (what was corrected) → each tranche's
+PARKED.md (what is deliberately not done).
 
 Re-entering mid-tranche needs no conversation history: every tranche is
 resumable from its committed artifacts alone. Read the tranche dir's
@@ -98,6 +104,11 @@ layer, and the reading order is fixed:
 4. `docs/map/SCHEMA.md` before writing or editing any map document. The
    map moves in the SAME commit as the code, or it becomes a document
    that lies.
+5. Record the resolved ids in the tranche's first artifact (GOAL.md or
+   REQUEST.md) — every later phase starts from the same map. If the map
+   has no id for something the work touches, that is a finding, not a
+   blocker: say so, and creating the missing document becomes part of
+   the tranche.
 
 Instruments that prove you broke nothing: the full gate
 (`python -m pytest tests/ -q -n 4`, 0 failed only) and the root sweep
@@ -107,15 +118,12 @@ Third instrument, which NO gate runs for you: the wheel smokes
 scripts/wheel_operational_smoke.py`) — build-and-operate checks over
 the INSTALLED package. They pin the public surface (console entry
 points, MCP tool set + schema sha, wheel layout), so any change to that
-surface updates the pins and re-runs the smoke in the SAME commit — or
-the instrument rots silently (found 2026-08-05: red for a week after an
-entry-point addition, unnoticed, because nothing named it).
+surface updates the pins and re-runs the smoke in the SAME commit, or
+the instrument rots silently and nothing else will catch it.
 `python tools/docs_verify.py` is the same gate for the map — and its
 `--fast` mode reuses cached results, so it CANNOT catch a document your
 `src/` change just broke. Iterate with `--fast`; run the FULL mode at
-least once before any commit that touches `src/` (proven at commit
-`55b16ce9`: the full run caught a fifth affected map document that
-`--fast` had passed clean).
+least once before any commit that touches `src/`.
 
 ## 5. Where to look WHEN something breaks
 
@@ -136,14 +144,12 @@ number. When the cause is located, do not fix it inline: route it.
 
 ## 5b. Process hygiene (each rule paid for in the record)
 
-- **Kill by PID, never by pattern.** `pkill -f`/`pgrep -f` match your
-  own shell's command line — the 2026-08-05 smoke tranche killed its
-  own session twice this way.
+- **Kill by PID, never by pattern.** `pkill -f`/`pgrep -f` can match
+  your own shell's command line and kill your own session.
 - **Never run the full gate concurrently with `docs_verify`** (or any
   other worker-spawning instrument): both fan out processes, and the
-  contention manufactures failures — three corrupted gate measurements
-  across two tranches (P1 verify; T2's U3), each costing a re-run and
-  a re-diagnosis. One instrument at a time, on an otherwise idle box.
+  contention manufactures failures. One instrument at a time, on an
+  otherwise idle box.
 - **A surprising measurement taken under load is not a measurement.**
   Re-run idle before recording it, and say which run you recorded.
 - **Long work launches detached** (`setsid nohup ... & disown`, §3) —
@@ -153,8 +159,8 @@ number. When the cause is located, do not fix it inline: route it.
 ## 6. Routing to the workflows
 
 All substantive work goes through a workflow family — that is repo law
-(CLAUDE.md), not preference. `.claude/skills/README.md` is the index of
-all of them.
+(CLAUDE.md), not preference. This section is the index of all of them
+(CLAUDE.md's "Which workflow to use" carries the same summary).
 
 - Something is broken or suspicious → `deepreason-orchestrator`
   (dr-set-goal → dr-diagnose → dr-reproduce → dr-propose-fix →
@@ -178,7 +184,9 @@ one goal.
 points at are complete by design — execute them literally rather than
 improvising a summary of them. Never generalize an instruction beyond its
 stated scope; if a spec seems silent about your case, that is a question
-(load `dr-ask-the-right-question`), not an invitation to infer. A
+(load `dr-ask-the-right-question`), not an invitation to infer — an
+accepted, judgment-only exception to authoring-skills' GATE-every-
+negation rule, `docs/ERRATA.md` E24. A
 multi-step program (a handover, a checklist, a ladder) runs one step per
 tranche — finishing a step early is never a reason to start the next in
 the same tranche. Stop conditions and DESIGN-AND-STOP gates are hard

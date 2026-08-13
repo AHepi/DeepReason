@@ -106,12 +106,11 @@ the earning reason is frozen-surface contact, the question MUST embed
 `tools/blast_radius.py`'s `BLAST_RADIUS_RESULT_V1` result — this is
 section 1's own "cite the instrument with the number" rule, applied to
 this specific instrument (Rung G6,
-`docs/map/INV-frozen-surfaces.md`). The 2026-08-09 incident
-(`docs/ERRATA_EXECUTOR.md`) shows why: a STOP that DESCRIBES contact
-without PASTING the gate's own computed list is words given over an
-inferred surface, not a disclosed one, and the operator cannot be the
-blast-radius calculator for a 125,000-line codebase
-(`experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md`).
+`docs/map/INV-frozen-surfaces.md`). A STOP that describes contact
+without pasting the gate's own computed list is words given over an
+inferred surface, not a disclosed one (`docs/ERRATA_EXECUTOR.md`, the
+2026-08-09 entry; design premise:
+`experiments/2026-08-10-change-blast-radius-analysis/REQUEST.md`).
 
 ## 5. Frame forks falsifiably
 

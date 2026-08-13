@@ -36,52 +36,19 @@ to select the next. You never blend phases.
    first, and ask only what survives the dominance test — batched, with
    a recommendation.
 
-## Map preflight (do this before routing, every time)
+## Map and environment preflight (do this before routing, every time)
 
-`docs/map/` is the navigation layer over 125k lines of source. Scoping
-from grep instead of from the map is how a change misses a call site.
-
-1. Read `docs/map/INDEX.md` and resolve the work to ids:
-   `DR-SUB-<pkg>`, `DR-CON-<concept>`, `DR-SEAM-<a>-x-<b>`.
-2. If the work spans two things, **read the SEAM document first**. It
-   says which fraction of each side is actually involved, which is
-   usually small. Reading both subsystem documents first is reading ten
-   times more than you need. The file is `docs/map/SEAM-<a>-x-<b>.md`,
-   sides in alphabetical order; the worked recipe for changing one is
-   `docs/map/REC-change-a-seam.md`.
-3. Read `docs/map/INV-frozen-surfaces.md` BEFORE designing anything.
-   Discovering a frozen surface after the code is written is the
-   expensive order to discover it in.
-4. Record the resolved ids in the tranche's first artifact (GOAL.md or
-   REQUEST.md). Every later phase starts from the same map.
-
-If the map has no id for something the work touches, that is a finding,
-not a blocker: say so, and creating the missing document becomes part of
-the tranche. `docs/map/SCHEMA.md` is the contract for writing one.
+Full procedure, canonical: `dr-drive-harness` §1 (session/environment
+preflight — branch resync, `deepreason` importable, credential check)
+and §4 (map preflight — `docs/map/INDEX.md` → `INV-frozen-surfaces.md`
+→ seam document → record the resolved ids in GOAL.md). Load it if this
+session has not run the harness before. Also load
+`dr-explain-to-operator` once per session, BEFORE your first message
+the operator will see.
 
 The map is maintained by the phases that change code, in the same
 commit — see `dr-execute-step` and `dr-implement-fix`. Nothing else may
 advance a `Verified-at:` stamp.
-
-## Environment preflight (run once per session, before routing)
-
-The full driving manual — preflight, CLI lifecycle, ladders, where to
-look — is `dr-drive-harness`; load it if this session has not run the
-harness before. Also load `dr-explain-to-operator` once per session,
-BEFORE your first message the operator will see: it binds every
-operator-facing message (intermediary status reports included, not
-just the final one) — worry first, technical terms glossed in plain
-language as you go, one closing analogy on the final output. The
-cloud container rolls back silently. Verify, in order:
-
-    git log --oneline -1                # expected branch head, not stale
-    git status --porcelain | head       # know what is uncommitted
-    which deepreason || pip install -e . --break-system-packages -q
-    ls experiments/live_research_*/env  # credential file survives rollback? if listed in the goal, recreate per its README/handover
-
-If anything was stale: resync the working branch
-(`git fetch origin <branch> && git checkout -B <branch> origin/<branch>`)
-before any other action.
 
 ## Routing table
 
@@ -112,12 +79,9 @@ every phase boundary (the container can vanish at any time):
 
 ## Hard prohibitions (apply to every subskill)
 
-- Never modify a committed run root's contents. Run roots are retired,
-  never edited: `git mv run-<id> <state>-epochN-run-<id>` and commit
-  the rename BEFORE any relaunch (deterministic identity otherwise
-  refuses with RUN_ALREADY_STARTED).
-- Never commit credential material. `env` files are gitignored; check
-  with `git check-ignore` before writing near them.
+- Never modify a committed run root's contents; never commit credential
+  material — both procedures (retire-by-rename, `git check-ignore`) are
+  canonical in `dr-drive-harness` §1/§3.
 - Never run the full live ladder to test a code hypothesis — that is
   `dr-verify-outcome`'s final step only, and only when the goal calls
   for live proof.

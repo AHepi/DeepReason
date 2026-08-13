@@ -49,33 +49,15 @@ operator's suggestion VERBATIM, split into numbered requirements
    event application, replay formats, qualification subjects); the
    estimated diff exceeds SPEC.md's budget; or a requirement
    contradicts the record/codebase (report the contradiction, do not
-   pick a side silently). Every stop presented to the operator leads
-   with the decision needed in ONE sentence, the options priced, and a
-   recommendation with its reason — a stop the operator must
-   interrogate is half a stop.
+   pick a side silently). Every stop follows the standard format —
+   decision in ONE sentence, options priced, a recommendation with its
+   reason — canonical in `dr-drive-harness` §6's calibration note.
 
 ## Map preflight (do this before routing, every time)
 
-`docs/map/` is the navigation layer over 125k lines of source. Scoping
-from grep instead of from the map is how a change misses a call site.
-
-1. Read `docs/map/INDEX.md` and resolve the work to ids:
-   `DR-SUB-<pkg>`, `DR-CON-<concept>`, `DR-SEAM-<a>-x-<b>`.
-2. If the work spans two things, **read the SEAM document first**. It
-   says which fraction of each side is actually involved, which is
-   usually small. Reading both subsystem documents first is reading ten
-   times more than you need. The file is `docs/map/SEAM-<a>-x-<b>.md`,
-   sides in alphabetical order; the worked recipe for changing one is
-   `docs/map/REC-change-a-seam.md`.
-3. Read `docs/map/INV-frozen-surfaces.md` BEFORE designing anything.
-   Discovering a frozen surface after the code is written is the
-   expensive order to discover it in.
-4. Record the resolved ids in the tranche's first artifact (GOAL.md or
-   REQUEST.md). Every later phase starts from the same map.
-
-If the map has no id for something the work touches, that is a finding,
-not a blocker: say so, and creating the missing document becomes part of
-the tranche. `docs/map/SCHEMA.md` is the contract for writing one.
+Full procedure, canonical: `dr-drive-harness` §4 — `docs/map/INDEX.md`
+→ `INV-frozen-surfaces.md` → seam document (before either subsystem) →
+record the resolved ids in the tranche's first artifact.
 
 The map is maintained by the phases that change code, in the same
 commit — see `dr-execute-step` and `dr-implement-fix`. Nothing else may
@@ -108,7 +90,7 @@ language as you go, one closing analogy on the final output.
 | VALIDATION.md verdict FAIL | back to `dr-plan-steps` with the failure appended (re-plan the failing steps only) |
 
 After EVERY phase (and every executed step): commit and push the
-tranche directory. The container can vanish at any time.
+tranche directory — canonical rationale in `dr-drive-harness` §1.
 
 ## Tranche layout
 
@@ -120,7 +102,8 @@ One directory per suggestion, e.g. `experiments/<date>-change-<slug>/`:
 
 - No code changes outside `dr-execute-step`, and no step outside
   CHECKLIST.md.
-- Never edit committed run roots; never commit `env`/credential files.
+- Never edit committed run roots; never commit `env`/credential files —
+  both procedures canonical in `dr-drive-harness` §1/§3.
 - Never mark a checklist step done without pasting its done-criterion
   output.
 - Never report the change complete without the R-by-R reconciliation
