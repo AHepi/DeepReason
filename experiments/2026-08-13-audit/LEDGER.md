@@ -21,3 +21,9 @@ required.
 | A3 | activation/docs-drift | `docs/map/SUB-scheduler.md:97` (planted) | pass (blind, valid per spec) | baseline (planted, restored) | proof/activation-docs-drift.txt | activation |
 | A4 | activation/spec-drift | `FAKE_NONEXISTENT_SPEC_TERM_XYZ` (planted) | pass | spec-orphan (planted, removed) | proof/activation-spec-drift.txt | activation |
 | A5 | activation/goal-trace | "all conjectures must rhyme" (planted) | pass | unenforced (planted, removed) | proof/activation-goal-trace.txt | activation |
+| B1 | broken | full pytest gate | pass | baseline | proof/broken-pytest.txt | baseline |
+| B2 | broken | docs_verify (default) | pass | baseline | proof/broken-docsverify.txt | baseline |
+| B3 | broken | wheel_smoke.py | pass | baseline | proof/broken-wheelsmoke.txt | baseline |
+| B4 | broken | wheel_operational_smoke.py | pass | baseline | proof/broken-wheeloperational.txt | baseline |
+| B5 | broken | root_sweep.py census | pass | baseline (unchanged reader) | proof/broken-sweep-comparison-2026-08-12.txt | baseline |
+| B6 | broken | root_sweep.py CLI vs dr-audit-broken's documented invocation | pass | broken | proof/broken-sweep.txt | parked |
