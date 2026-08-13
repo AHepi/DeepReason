@@ -1,0 +1,1 @@
+{"decisive_point":"the target's commitment graph is precisely the mechanism designed to propagate relevance beyond SCC boundaries: if node A depends on grounded node G (recorded in the commitment graph), and G's status changes, the dependency record identifies A as affected regardless of SCC membership.","verdict":"pass"}

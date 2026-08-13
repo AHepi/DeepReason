@@ -1,0 +1,1 @@
+{"decisive_point":"the target defines D_x as the least set of accepted defenders satisfying closure; this is a least-closed-set construction on a finite powerset lattice, whose existence and uniqueness follow from finiteness and closure-system structure (intersection of closed sets is closed), not from any assumption that 'every accepted defender is valid.'","verdict":"pass"}

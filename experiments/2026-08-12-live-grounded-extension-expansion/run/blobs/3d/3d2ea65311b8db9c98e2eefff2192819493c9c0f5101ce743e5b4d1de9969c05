@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "SRC_003 asserts a monotone fixed-point operator and uniqueness from finiteness, but it never proves the operator is inflationary/monotone with respect to the problem's acceptance semantics"}
