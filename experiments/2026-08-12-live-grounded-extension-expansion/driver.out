@@ -15,3 +15,5 @@
 }
 [2026-08-13T09:29:17Z] SETUP OK rc=0
 [2026-08-13T09:29:17Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-13T09:33:34Z] QUALIFY OK rc=0
+[2026-08-13T09:33:34Z] === REASON: deepreason run --budget cycles=24 --token-budget 1000000 ===
