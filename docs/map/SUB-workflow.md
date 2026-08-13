@@ -291,4 +291,32 @@ model or the reducer — it materializes only what the records already say.
   provider work family that ever needs a THIRD partial-envelope shape
   must gate on its own discriminator the same explicit way, not assume
   "school missing" is the only alternative to "school present."
-`check: python -c "import inspect; from deepreason.workflow.nonconjecture_recovery import _criticism_contract as C; s = inspect.getsource(C); assert 'if school_id is None:' in s and 'dispatch_authority' in s and 'manifest does not authorize criticism' in s" && python -m pytest tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_refuses_recovery_without_a_school_when_dispatch_authority_is_not_observe_only -q`
+`check: python -c "import inspect; from deepreason.workflow.nonconjecture_recovery import _criticism_contract as C; s = inspect.getsource(C); assert 'if school_id is None:' in s and 'dispatch_authority' in s and 'manifest does not authorize criticism' in s" && python -m pytest tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_without_a_school tests/test_v6_nonconjecture_recovery.py::test_criticism_contract_recovers_a_trial_authorized_dispatch_without_a_school -q`
+- **A durable output being recoverable is not the same as its DOWNSTREAM
+  effect being dispatchable (defended-trial-wiring tranche, 2026-08-13).**
+  Once `informal/trial.py`'s defender/judge calls were wired through
+  `InquiryTransactionService`
+  (`WorkflowTaskKind.DEFENDED_TRIAL_STEP`, `_v6_transactional_trial_call`),
+  the two gates above were widened to admit `defended_trial`/
+  `trial_required`/`single_family_trial` as recoverable — but recovering
+  the CRITIC's own admitted output is not the same as being able to run
+  the TRIAL that output's authority calls for: recovery has no provider
+  boundary by design (this document's own "Recovery has no provider
+  boundary" entry under `DR-SEAM-llm-x-workflow`), so a case whose
+  criticism authority resolves to a trial mode and whose case attacks
+  cannot actually be tried here. `_recovered_criticism_authority`
+  resolves the run's REAL authority (never a hardcoded `observe_only`),
+  and `rules/crit.py::_crit_argumentative_batch_result` defers — a typed,
+  restart-safe `"defended-trial-deferred"` Measure — rather than either
+  crashing (no adapter to call `has_role` on) or silently downgrading the
+  case to `_observe_case` (which would misrecord a status-changing
+  authority as merely advisory, permanently). `DEFENDED_TRIAL_STEP`
+  itself is deliberately NOT added to `nonconjecture_recovery.py`'s
+  `_RECOVERABLE_TASKS`: an interrupted defender/judge exchange has no
+  "admit the stored result" recovery path the way criticism/bridge/repair
+  do (their whole point is a caller-owned DOMAIN effect over an
+  already-durable provider result) — it is simply abandoned by
+  `InquiryTransactionService.recover_incomplete`'s generic unissued/
+  issued-but-unanswered sweep, the same as any other in-flight work a
+  crash interrupts before its own result lands.
+`check: python -c "from deepreason.workflow.models import WorkflowTaskKind as K; from deepreason.workflow.nonconjecture_recovery import _RECOVERABLE_TASKS; assert K.DEFENDED_TRIAL_STEP not in _RECOVERABLE_TASKS" && grep -q "_recovered_criticism_authority" src/deepreason/workflow/nonconjecture_recovery.py && grep -q "defended-trial-deferred" src/deepreason/rules/crit.py && python -m pytest tests/test_v6_defended_trial_transaction_wiring.py tests/test_v6_nonconjecture_recovery.py::test_recovered_observe_only_criticism_resumes_observe_only tests/test_v6_nonconjecture_recovery.py::test_recovered_defended_trial_criticism_defers_an_attacking_case_instead_of_downgrading_to_observe_only -q`
