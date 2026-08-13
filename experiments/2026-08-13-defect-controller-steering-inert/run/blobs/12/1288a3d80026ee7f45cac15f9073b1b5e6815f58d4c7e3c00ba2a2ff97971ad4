@@ -1,0 +1,69 @@
+{
+  "candidate": {
+    "claim": "We can extend DeepReason's grounded extension semantics to support attacks on attacks (meta-attacks) by reifying each attack edge as a node in a polynomially larger Dung framework, while preserving the unique skeptical grounded extension, polynomial cost, reinstatement, and validity of committed roots.",
+    "mechanism": "Given the original argument graph G=(A, Att), construct G'=(A', Att') where A' = A ∪ {e_{a,b} : (a,b) ∈ Att} and Att' = {(e_{a,b}, b) : (a,b) ∈ Att} ∪ {(c, e_{a,b}) : c attacks the attack (a,b)} ∪ {(a, b) : (a,b) ∈ Att}. In other words, each attack edge becomes a node that itself attacks the target, and meta-attacks are represented as attacks on these new nodes. The grounded extension of G' is computed with the same polynomial algorithm. The original arguments' statuses are read off directly. Committed roots are represented as arguments with no incoming attacks, so they remain in the grounded extension. The expansion is linear in the number of attacks plus meta-attacks, so polynomial cost is preserved.",
+    "mechanism": "The reification of attack edges as nodes is a standard technique in extended argumentation frameworks. The grounded extension of the expanded graph is unique and computable in polynomial time (e.g., by the standard iterative labeling algorithm). Since the expansion only adds nodes and edges that encode the original attack structure plus explicit meta-attacks, the semantics of the original arguments is preserved when no meta-attacks are present. When meta-attacks are present, they are handled uniformly by the same grounded semantics, so reinstatement (i.e., an argument is accepted if all its attackers are defeated) still holds by construction. Committed roots are arguments with no attackers; they remain unattacked in the expansion, so they stay in the grounded extension.",
+    "counterconditions": [
+      "If the set of meta-attacks is not explicitly bounded and can be generated recursively (e.g., attacks on attacks on attacks), the expansion may not be finite, breaking polynomial cost.",
+      "If the original semantics is not the grounded extension but some other semantics (e.g., preferred or stable), the reification may not preserve the intended outcome, so this proposal is specific to grounded semantics.",
+      "If the system relies on the exact identity of attack edges for explanation or provenance, reifying them as nodes changes the ontology and may require changes to downstream components."
+    ],
+    "typicality": 0.6,
+    "analogy": {
+      "source_memory_refs": ["SRC_001"],
+      "shared_structure": [
+        "Both the original Dung argumentation framework and the extended framework with meta-attacks are directed graphs with a notion of defeat.",
+        "The grounded extension is defined by a least fixed point of a characteristic function in both cases.",
+        "Reification of edges as nodes is a standard technique in argumentation theory (e.g., Modgil's extended argumentation frameworks)."
+      ],
+      "disanalogies": [
+        "In standard extended argumentation frameworks, meta-attacks are often handled with a different semantics (e.g., ideal or preferred), not necessarily grounded.",
+        "The reification may introduce new arguments that are not part of the original domain, which could affect the interpretation of 'validity of committed roots' if those roots are supposed to be only original arguments."
+      ],
+      "overturn_conditions": [
+        "If it is shown that the grounded extension of the reified graph does not coincide with the intended semantics of the original framework for some cyclic meta-attack structure.",
+        "If the polynomial cost guarantee is violated because the number of meta-attacks is not bounded by a polynomial in the original input size."
+      ],
+      "adopted_commitments": []
+    },
+    "counterconditions": [
+      "If the original graph contains cycles of meta-attacks (e.g., an attack edge attacks itself), the reification may produce a graph where the grounded extension is not well-defined or differs from the intended semantics.",
+      "If the system requires that the set of arguments remains unchanged (e.g., for user-facing explanations), adding reified nodes changes the ontology and may break compatibility.",
+      "If the input includes an explicit set of committed roots that are not arguments but rather attack edges, the encoding would need to handle them differently, potentially violating the validity guarantee."
+    ],
+    "mechanism": "The reification is a polynomial-time transformation: for each attack edge (a,b) in the original graph, add a new node e_{a,b} and an edge e_{a,b} -> b. For each meta-attack (c, (a,b)) where c attacks the attack edge, add an edge c -> e_{a,b}. Then compute the grounded extension of the resulting graph using the standard algorithm. The status of each original argument a is its label in the grounded extension of G'. This preserves the unique grounded extension because the transformation is a standard encoding of higher-order attacks into a flat Dung framework. Polynomial cost holds because the number of new nodes is at most the number of original attack edges, and the grounded extension algorithm is polynomial in the size of the expanded graph.",
+    "typicality": 0.7,
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92969168",
+        "quote": null
+      }
+    ],
+    "optional_refs": [],
+    "analogy": {
+      "shared_structure": [
+        "Both the original Dung framework and the extended framework with meta-attacks are directed graphs where nodes are arguments and edges represent attack relations.",
+        "The grounded extension is defined by a least fixed point of a characteristic function in both cases.",
+        "Reification of edges as nodes is a standard technique to encode higher-order attacks within a first-order attack graph."
+      ],
+      "disanalogies": [
+        "In standard Dung frameworks, only arguments are nodes; here we add nodes for attacks, which changes the graph's ontology.",
+        "The grounded extension of the extended graph may include meta-argument nodes that are not part of the original domain, requiring a projection back to the original arguments."
+      ],
+      "overturn_conditions": [
+        "If it is shown that the grounded extension of the reified graph does not correspond to the intended semantics of the original system (e.g., because meta-attacks should be handled with a different principle such as reinstatement of attacks).",
+        "If the polynomial cost guarantee is violated because the number of meta-attacks is not polynomially bounded in the input size."
+      ],
+      "adopted_commitments": []
+    },
+    "evidence_refs": [
+      {
+        "block": "0c302d11d6217787",
+        "quote": null
+      }
+    ],
+    "optional_refs": [],
+    "search_signal": "productive",
+    "requested_context_aliases": []
+  }
+}
