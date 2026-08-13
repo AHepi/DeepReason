@@ -1,0 +1,125 @@
+# Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
+State: next=1 blockers=none
+Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
+DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
+CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
+Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
+One step per dr-execute-step invocation.
+
+- [ ] 1. (S1,S2,S3) Edit `src/deepreason/run_manifest.py`: rewrite
+      `_preflight_text_authority` to accept an optional `notices:
+      list[CompileNoticeV1] | None = None` keyword parameter and emit a
+      `CompileNoticeV1` per issue via `_emit_compile_notice` (with the
+      `resolution` string from SPEC.md S1) instead of raising; update
+      `compile_run_manifest`'s call site (line ~3310) to pass
+      `notices=notices`; widen `preflight_harness`'s return type to
+      `tuple[CompileNoticeV1, ...]`, build a local `notices` list, pass it
+      through, and `return tuple(notices)` at the function's end; update
+      both functions' docstrings per SPEC.md S1/S3.
+      done-when: `python -c "
+      from deepreason.config import Config
+      from deepreason.harness import Harness
+      from deepreason.run_manifest import compile_run_manifest, preflight_harness
+      import tempfile, pathlib
+      m = compile_run_manifest(Config(ARGUMENTATIVE_AUTHORITY='trial_required'), schema_version=2, workload_profile='text')
+      assert [n.code for n in m.compile_notices] == ['CALIBRATION_RECEIPT_REQUIRED'], m.compile_notices
+      unsafe = Config(TEXT_RUBRIC_AUTHORITY='calibrated_status')
+      base = compile_run_manifest(Config(), schema_version=2, workload_profile='text')
+      h = Harness(pathlib.Path(tempfile.mkdtemp())/'run')
+      notices = preflight_harness(base, h, unsafe)
+      assert [n.code for n in notices] == ['CALIBRATION_RECEIPT_REQUIRED'], notices
+      print('OK')
+      "` -> `OK`
+
+- [ ] 2. (S4) Edit `src/deepreason/authority.py`: update
+      `text_status_authority_issues`'s docstring to describe disclosure
+      instead of a fail-closed refusal (SPEC.md S4). Do not touch
+      `calibration_receipt_is_verified` (Assumption A2).
+      done-when: `python -c "import inspect; from deepreason import authority; assert 'fail-closed' not in inspect.getsource(authority.text_status_authority_issues); print('OK')"` -> `OK`
+
+- [ ] 3. (S5) Edit `tests/test_manifest_integration.py`: flip
+      `test_text_status_authority_requires_calibration_receipt` (all 4
+      parametrized cases) from `pytest.raises(RunManifestError,
+      match="CALIBRATION_RECEIPT_REQUIRED")` to calling
+      `compile_run_manifest` normally and asserting
+      `[n.code for n in manifest.compile_notices] ==
+      ["CALIBRATION_RECEIPT_REQUIRED"]`.
+      done-when: `python -m pytest tests/test_manifest_integration.py::test_text_status_authority_requires_calibration_receipt -q` -> `4 passed`
+
+- [ ] 4. (S5) Edit `tests/test_manifest_integration.py`: flip
+      `test_arbitrary_calibration_receipt_is_unverified` (all 4
+      parametrized cases) the same way, asserting
+      `CALIBRATION_RECEIPT_UNVERIFIED`.
+      done-when: `python -m pytest tests/test_manifest_integration.py::test_arbitrary_calibration_receipt_is_unverified -q` -> `4 passed`
+
+- [ ] 5. (S5) Edit `tests/test_manifest_integration.py`: flip
+      `test_blank_calibration_receipt_is_missing` the same way, asserting
+      `CALIBRATION_RECEIPT_REQUIRED` (a blank string counts as missing).
+      done-when: `python -m pytest tests/test_manifest_integration.py::test_blank_calibration_receipt_is_missing -q` -> `1 passed`
+
+- [ ] 6. (S5) Edit `tests/test_manifest_integration.py`: flip
+      `test_materialized_text_status_authority_is_rechecked_before_adapter_build`
+      and `test_runtime_calibrated_status_is_unverified_before_adapter_build`
+      from `pytest.raises(...)` around `preflight_harness(...)` to calling
+      it normally and asserting `[n.code for n in notices] ==
+      [<CALIBRATION_RECEIPT_REQUIRED|_UNVERIFIED>]` on its returned tuple.
+      Leave `test_runtime_cannot_mutate_frozen_text_authority_policy`
+      (`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`) untouched.
+      done-when: `python -m pytest tests/test_manifest_integration.py::test_materialized_text_status_authority_is_rechecked_before_adapter_build tests/test_manifest_integration.py::test_runtime_calibrated_status_is_unverified_before_adapter_build tests/test_manifest_integration.py::test_runtime_cannot_mutate_frozen_text_authority_policy -q` -> `3 passed`
+
+- [ ] 7. [COMMIT] (S1-S5) Ring: full file plus the two other
+      `preflight_harness`/`compile_run_manifest` test files the
+      blast-radius census flagged as MUST NOT MOVE, confirming they
+      still pass unchanged.
+      done-when: `python -m pytest tests/test_manifest_integration.py tests/test_run_manifest.py tests/test_v6_global_dispatch_guard.py tests/test_runtime_workload_integration.py -q` -> ends `N passed` with `0 failed` (paste N); then `git add src/deepreason/run_manifest.py src/deepreason/authority.py tests/test_manifest_integration.py && git commit` and push with retry (2s/4s/8s/16s), confirmed by `git log --oneline -1` showing the new commit and `git status --porcelain` empty for these files.
+
+- [ ] 8. (S6) Edit `docs/map/CON-authority.md`: rewrite the "Manifest-
+      mediated runs fail closed twice" paragraph (lines ~194-199) to
+      describe the notice instead of the retired refusal, correct the
+      Traps entry (lines ~242-248, "the function that used to refuse an
+      unverified receipt"), and add/adjust the check line per SPEC.md S6.
+      done-when: `grep -q "used to refuse" docs/map/CON-authority.md && ! grep -q "fail closed twice" docs/map/CON-authority.md`
+
+- [ ] 9. (S7) Edit `docs/map/SUB-manifest.md`: narrow the "What is
+      refused before the first provider call" row (line ~159) to name
+      only the still-refusing checks, with a forward pointer to
+      `DR-CON-authority` for the calibration-receipt codes' new
+      disclosure behavior.
+      done-when: `grep -n "What is refused before the first provider call" docs/map/SUB-manifest.md` shows the edited row (manual read to confirm it no longer claims `_preflight_text_authority` refuses)
+
+- [ ] 10. (S8) Confirm `docs/map/SUB-adjudication.md` needs no edit
+       (already checked in SPEC.md §S8) — no file change, re-verify the
+       grep still returns zero before closing this item.
+       done-when: `grep -c "calibrat\|text_status_authority\|preflight_harness" docs/map/SUB-adjudication.md` -> `0`
+
+- [ ] 11. [COMMIT] (S6,S7,S8) Full map verification and commit.
+       done-when: `python tools/docs_verify.py` -> failures limited to
+       the documented baseline (3 pre-existing `CON-run-identity.md`
+       shallow-clone failures; paste full output); then
+       `git add docs/map/CON-authority.md docs/map/SUB-manifest.md &&
+       git commit` and push with retry, `git status --porcelain` empty.
+
+- [ ] 12. (R13) Full gate.
+       done-when: `python -m pytest tests/ -q -n 4` -> paste full
+       summary line; 0 failed beyond the documented baseline (1
+       pre-existing `test_bronze_report` failure; the 5 MCP-thread
+       tests are known-flaky under `-n 4` — if any fail, isolate with
+       `python -m pytest <name> -q` before attributing to this change).
+
+- [ ] 13. (R11) Targeted replay-validation proof on a known-good
+       committed root, demonstrating byte-unchanged replay.
+       done-when: `python -c "
+       from deepreason.verification.report import verify_root_report
+       import json
+       r = verify_root_report('experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a')
+       print(json.dumps({k: r[k] for k in ('valid', 'epistemic_checks_passed')}, default=str))
+       "` -> paste output, `valid` is `true` (or matches this root's pre-existing documented status if not `true` — cross-check against `tools/root_sweep.py`'s existing baseline before treating any `false` as new)
+
+- [ ] 14. (R12) Re-confirm the errata scan is still empty at validation
+       time (SPEC.md §3 ran it at spec time; re-run after the code
+       change lands in case a later edit introduced a new claim).
+       done-when: `grep -rln "calibration.receipt\|CALIBRATION_RECEIPT" docs/ | sort` and `grep -rln "trial_required" docs/ | sort` both paste output identical to SPEC.md §3's lists (no new hits from this tranche's own doc edits claiming the mechanism now "works" — it still doesn't; only the refusal changed)
+
+- [ ] 15. [COMMIT] (all) Final push and clean-tree confirmation.
+       done-when: `git status --porcelain` is empty AND `git log
+       --oneline -1` matches `git log --oneline -1 origin/claude/calibration-receipt-notice-b6wp3k`
