@@ -238,6 +238,59 @@ def test_results_summary_writes_nothing_into_a_committed_root():
     }
 
 
+def test_top_level_help_names_the_results_verb():
+    """Implements R16 — the acceptance test for the reported defect itself.
+
+    The operator's words, 2026-08-13: "When retrieving run results, Opus 5
+    keeps grepping for flags that dont exist." A session that has only
+    `deepreason --help` in front of it must be able to NAME the verb that
+    retrieves results, without opening a single source file. Nothing else in
+    the top-level help says the words "results" and "run" together — `status`
+    is provider readiness, and `findings`' line never uses the word.
+    """
+
+    from deepreason.cli.main import build_parser
+
+    help_text = build_parser().format_help()
+
+    assert "results" in help_text
+    assert "read a run's typed results" in help_text
+
+
+def test_results_is_reachable_without_the_global_root_option():
+    """R1/R16: the path is a plain positional, so `--root` cannot be misplaced.
+
+    `--root` is a GLOBAL option that must precede the verb; a session writing
+    `deepreason findings --root R` gets an argparse error, which is the
+    guessing loop this command exists to end.
+    """
+
+    from deepreason.cli.main import build_parser
+
+    parsed = build_parser().parse_args(["results", "/some/root", "--json"])
+    assert parsed.command == "results"
+    assert parsed.path == "/some/root"
+    assert parsed.json is True
+    assert parsed.verify is False
+
+    bare = build_parser().parse_args(["results"])
+    assert bare.path is None, "the path is optional; the home is the default"
+
+
+def test_results_is_not_a_root_admission_command():
+    """SPEC.md A8: a reader must not refuse the pre-V6 roots most worth reading.
+
+    11 committed roots raise `UnsupportedRunManifestVersionError`
+    (docs/AUDIT_BASELINES.md). Admitting `results` would refuse them; instead
+    the manifest's state is reported as a typed fact.
+    """
+
+    from deepreason.cli.main import _ROOT_ADMISSION_COMMANDS
+
+    assert "results" not in _ROOT_ADMISSION_COMMANDS
+    assert "findings" not in _ROOT_ADMISSION_COMMANDS
+
+
 def _root_by_adjudication(*, ran: bool) -> Path:
     """Smallest committed root that did (or did not) run a defended trial.
 

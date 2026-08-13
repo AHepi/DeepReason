@@ -539,10 +539,32 @@ Where the further 210 lines went, both inside spec items already written:
 | `render_results` (S8) | 60 | 122 | one glossed line per fact, which IS R11 |
 | tests for S5/S6/S7/S8 | (in the 266) | +231 | S5, S6a, S7 and S8 each earned two tests — the fact and its typed absence |
 
-Working ceiling revised to **1150** (1004 measured + ~85 remaining for the CLI
-verb, catalog entries, map row, manual and README + margin). This figure is
-SELF-RECORDED, not operator-approved; the final actual number is reported
-plainly in DELIVERY.md so the operator sees what the trade cost.
+Working ceiling revised to **1150** (1004 measured + ~85 remaining + margin).
+This figure is SELF-RECORDED, not operator-approved.
+
+**Third and final measurement, at step 14 — 1150 was passed too, by 92.** I
+stopped re-guessing at that point; the number below is measured, not
+projected, and it is the figure DELIVERY.md reports:
+
+    $ python tools/diff_budget.py origin/main --ceiling 1150 \
+        --paths src/deepreason tests docs/map .claude/skills README.md
+    {"areas": {"src/deepreason": 565, "tests": 610, "docs/map": 42,
+      ".claude/skills": 14, "README.md": 11},
+     "total_insertions": 1242, "ceiling": 1150, "verdict": "EXCEEDED"}
+
+**1242 lines is the actual cost of this change**, against a 433 first estimate
+— tests are 610 of it, nearly half, and that is where the estimate was most
+wrong: 20 tests, because every fact this command reports earned both a
+presence test and a typed-absence test, and R16/R17 each earned a
+mutation-proved pin. The remaining checklist steps add no further `src/` or
+`tests/` lines (they run instruments and write tranche artifacts), so 1242 is
+final for the declared areas. The gate ceiling is set to 1300 for the
+remaining `[COMMIT]` steps so it still guards against unnoticed growth, which
+is its purpose; it is not a claim that 1300 was ever approved.
+
+The honest summary for the operator, stated in DELIVERY.md and not buried
+here: **I under-estimated this change by a factor of nearly three, three times
+in a row, and each time it was the tests.**
 
 **Nothing about the change's SHAPE grew**: the reader
 covers exactly S1–S9 and the tests cover exactly the spec's own accepts —

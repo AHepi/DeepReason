@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=9 blockers=none
+State: next=14 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -17,7 +17,8 @@ One step per dr-execute-step invocation.
 
 Ceiling (SPEC.md Budget, AMENDED at step 2 — REQUEST.md Amendment 1 / R26,
 operator words "Raise ceiling to 800, continue"; self-revised to 1150 at
-step 7, see SPEC.md "Second overrun"): **1150 lines** over the
+step 7 and to 1300 at step 14, see SPEC.md "Second overrun" / "Third and
+final measurement"): **1300 lines** over the
 declared areas. Run the gate as:
 
     python tools/diff_budget.py origin/main --ceiling 800 \
@@ -191,7 +192,7 @@ it.
       src/deepreason/application/results.py --symbols results_summary
       render_results` → `"frozen_surface_verdict": "CLEAR"` (the
       forecast-then-verify SPEC.md promised, now that the file exists), and
-      `python tools/diff_budget.py origin/main --ceiling 1150 --paths
+      `python tools/diff_budget.py origin/main --ceiling 1300 --paths
       src/deepreason tests docs/map .claude/skills README.md` → not EXCEEDED,
       and the commit exists.
 
@@ -255,7 +256,7 @@ it.
           `runs/` — `deepreason results <root-or-home>`. With no argument it
           reads $DEEPREASON_HOME (or ~/.deepreason).
 
-- [ ] 9. (S11, S16-defect) Add the `results` verb to `build_parser` in
+- [x] 9. (S11, S16-defect) Add the `results` verb to `build_parser` in
       `src/deepreason/cli/main.py` with `help="read a run's typed results"`,
       an optional positional, `--json` and `--verify`; add the `_main`
       dispatch branch. Do NOT add it to `_ROOT_ADMISSION_COMMANDS` (SPEC.md
@@ -265,14 +266,39 @@ it.
       tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands
       -q` → `1 passed`.
 
-- [ ] 10. (S11, R16) Add
+      PROOF:
+
+          $ python -m deepreason --help | grep -c "read a run's typed results"
+          1
+          $ python -m deepreason --help | grep -A2 "^    results"
+              results             read a run's typed results
+              findings            reader-facing findings summary: rivalries,
+          $ python -m pytest ...::test_public_parser_omits_make_and_unqualified_advanced_commands -q
+          1 passed in 0.25s
+
+      End-to-end smoke: the verb renders the grounded-extension root (rc=0),
+      `--json` parses to the 12 documented top-level keys, and an unknown path
+      refuses `RESULTS_ROOT_NOT_FOUND: /tmp/nowhere-at-all is neither a run
+      root (no log.jsonl) nor a home holding one` with rc=1.
+
+- [x] 10. (S11, R16) Add
       `tests/test_results_command.py::test_top_level_help_names_the_results_verb`
       — the acceptance test for the defect itself: a session given only
       `deepreason --help` can name the verb that retrieves results.
       done-when: that test passes, and it FAILS if the help string is removed
       (prove by temporary edit, revert before proceeding).
 
-- [ ] 11. (S18) Update `docs/map/SUB-application.md` in the SAME commit as the
+      PROOF — 4 tests pass (help text, positional parsing, and A8's
+      not-admitted pin). MUTATION PROOF: replacing the help string with
+      `help="reader"` turned the acceptance test red —
+
+          tests/test_results_command.py:257: AssertionError
+          FAILED ...::test_top_level_help_names_the_results_verb
+          1 failed in 0.22s
+
+      — restored, and all 4 pass again.
+
+- [x] 11. (S18) Update `docs/map/SUB-application.md` in the SAME commit as the
       verb: Entry points row for `results_summary`/`render_results` with a
       `check:`, a "Where to change what" row, the corrected admission sentence
       naming the reader exception, and a `Traps` entry naming this tranche.
@@ -280,23 +306,63 @@ it.
       no NEW failure for `SUB-application.md`, and
       `grep -q "results_summary" docs/map/SUB-application.md` → exit 0.
 
-- [ ] 12. (S12) Add the retrieval line to
+      DRIFT CAUGHT AND FIXED IN THIS COMMIT, which SPEC.md's blast-radius
+      census did NOT predict: `SEAM-harness-x-workflow.md`'s check counts files
+      under `src/deepreason` naming both sides, pinned at 58. The new reader
+      legitimately names both (`deepreason.harness` for a read-only open,
+      `deepreason.workflow.lifecycle` for `RESUMABLE_STOP_REASONS`), moving it
+      to 59. The gate's `consumers.map_checks` returned `[]` for `results.py`
+      because that check keys off a shell grep COUNT, not a symbol name —
+      exactly the class SPEC.md said the manual cross-check is retained for,
+      and here the manual cross-check missed it too; `docs_verify` is what
+      caught it. Count re-derived (not incremented) and both the check and its
+      prose set to 59.
+
+      Also found: that document's prose said "Fifty-seven" while its own check
+      pinned 58 — already one behind before this tranche touched it. Recorded
+      as `docs/ERRATA.md` E25 (next free number, ledger tail was E24).
+
+      `Verified-at:` advanced to `15498f72` on both `SUB-application.md` and
+      `SEAM-harness-x-workflow.md` — the only two documents whose checks were
+      actually re-run.
+
+      PROOF (`python tools/docs_verify.py --fast`, after the fix):
+
+          docs_verify [fast]: 53 documents, 864 checks, 863 reused, 4 workers
+            FAIL CON-run-identity.md:195 ...
+            FAIL CON-run-identity.md:197 ...
+            FAIL CON-run-identity.md:199 ...
+          docs_verify: 3 failed
+
+      3 failed == the docs/AUDIT_BASELINES.md baseline exactly (all three are
+      the `CON-run-identity.md` git-history checks that need an unshallowed
+      clone). The full — not `--fast` — run happens at step 18.
+
+- [x] 12. (S12) Add the retrieval line to
       `.claude/skills/dr-drive-harness/SKILL.md` §2 (the public CLI lifecycle
       block) and to `README.md`'s CLI list, in the SAME commit as step 9/11.
       done-when: `grep -q "deepreason results"
       .claude/skills/dr-drive-harness/SKILL.md && grep -q "deepreason results"
       README.md` → exit 0.
 
-- [ ] 13. (S8, S21) Run the demonstration R25 requires and capture it:
+      The manual's §2 entry also corrects the trap the census found: `status`
+      now carries "NB: provider readiness, NOT a run's outcome — for that,
+      `results` below", and the `results` entry ends "This is the ONE retrieval
+      surface — do not go hunting through root files for it."
+
+- [x] 13. (S8, S21) Run the demonstration R25 requires and capture it:
       `deepreason results
       experiments/2026-08-12-live-grounded-extension-expansion/run` and the
       same with `--json`, output saved to the tranche's `proof/` directory.
       done-when: `proof/results-grounded-extension.txt` and
       `proof/results-grounded-extension.json` exist and the JSON parses.
 
+      PROOF: both written (45 and 118 lines); `json.load` on the second
+      succeeds. Pasted in full in DELIVERY.md per R25.
+
 - [ ] 14. (S8–S12, S18) [COMMIT] Commit the verb, catalog, help pin, map,
       manual and README together.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 1150 --paths
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1300 --paths
       src/deepreason tests docs/map .claude/skills README.md` → not EXCEEDED, and `git show --stat HEAD` lists
       `cli/main.py`, `error_catalog.py`, `tests/test_error_catalog.py`,
       `tests/test_results_command.py`, `docs/map/SUB-application.md`,

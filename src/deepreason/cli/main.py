@@ -519,6 +519,19 @@ def build_parser() -> argparse.ArgumentParser:
              "else the hashing embedder)")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
+    results_cmd = sub.add_parser("results", help="read a run's typed results")
+    results_cmd.add_argument(
+        "path",
+        nargs="?",
+        help="run root or home (default: $DEEPREASON_HOME, else ~/.deepreason)",
+    )
+    results_cmd.add_argument("--json", action="store_true",
+                             help="emit the typed summary as JSON")
+    results_cmd.add_argument(
+        "--verify",
+        action="store_true",
+        help="re-derive the verify_root verdict instead of reading the stored one",
+    )
     findings_parser = sub.add_parser(
         "findings",
         help="reader-facing findings summary: rivalries, refutations, "
@@ -1120,6 +1133,31 @@ def _main(argv: list[str] | None = None) -> int:
         harness = Harness(Path(args.root))
         config = load_config(Path(args.config) if args.config else None)
         print(json.dumps(eval_report(harness, config), indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "results":
+        from deepreason.application.results import (
+            ResultsError,
+            render_results,
+            results_summary,
+        )
+        from deepreason.easy import base_dir
+
+        # Deliberately NOT in _ROOT_ADMISSION_COMMANDS: a reader that refused a
+        # pre-V6 root would refuse exactly the roots an operator most needs to
+        # inspect. The manifest's admission state is reported as a typed fact
+        # instead of being turned into a refusal.
+        try:
+            summary = results_summary(
+                args.path if args.path else base_dir(), verify=args.verify
+            )
+        except ResultsError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        if args.json:
+            print(json.dumps(summary, indent=2, sort_keys=True))
+        else:
+            print(render_results(summary))
         return 0
 
     if args.command == "findings":

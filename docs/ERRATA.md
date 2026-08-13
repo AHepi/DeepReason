@@ -508,3 +508,22 @@ than the single one named in its own CHECKLIST step, for good reason).
 No document is wrong here — this entry exists so a future reader
 auditing the set against `authoring-skills`'s W3 finds the accepted
 exception on record, rather than re-discovering and re-litigating it.
+
+**E25 — `docs/map/SEAM-harness-x-workflow.md`'s "Fifty-seven files
+under `src/deepreason` name both sides" was already one behind its own
+`check:` before this correction touched it.** The prose said 57 while
+the executable check on the very next line pinned 58, so one of the two
+had been stale since some earlier commit and nothing forced them to
+agree — a `check:` authenticates the CLAIM it guards, not the sentence
+beside it, and here the sentence and the check were two different
+claims. Found 2026-08-13 by the results-retrieval tranche
+(`experiments/2026-08-13-change-results-retrieval-surface/`), whose new
+reader `src/deepreason/application/results.py` legitimately names both
+sides (it imports `deepreason.harness` for a read-only open and
+`deepreason.workflow.lifecycle` for `RESUMABLE_STOP_REASONS`) and so
+moved the true count to 59. Both prose and check now read 59, and the
+count was re-derived rather than incremented. Nothing about the seam's
+AGREEMENT changed; only its population census did. The general lesson,
+recorded because it will recur: a prose number beside a pinned number
+is a second, unguarded copy — when you move one, re-derive the other
+rather than trusting it.

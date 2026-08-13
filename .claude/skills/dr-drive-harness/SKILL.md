@@ -50,6 +50,20 @@ The supported product surface (authority: `README.md`):
     deepreason setup                 # one strict provider profile
     deepreason qualify --yes         # explicit; tier ladder full/shallow/unqualified
     deepreason status [--json]       # readiness + the one next action
+                                     # NB: provider readiness, NOT a run's
+                                     # outcome — for that, `results` below
+    deepreason results ROOT-OR-HOME [--json] [--verify]
+                                     # read a run's typed results: id, state,
+                                     # stop_reason, cycles, tokens vs budget,
+                                     # artifact/survivor/frontier counts,
+                                     # defended-trial + judge-call counts, the
+                                     # STORED verify_root verdict (--verify
+                                     # re-derives), amendment epochs, and
+                                     # whether the root is amend-ready.
+                                     # Read-only; absent facts print as typed
+                                     # absences, never omitted. This is the
+                                     # ONE retrieval surface — do not go
+                                     # hunting through root files for it.
     deepreason reason "QUESTION" [--cycles N] [--token-budget N]
     deepreason reason "Q" --attach file.pdf        # frozen evidence, dossier digest
     deepreason --root ROOT amend --attach f --reshape-question "Q2"
