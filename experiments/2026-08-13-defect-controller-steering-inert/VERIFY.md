@@ -98,9 +98,52 @@ It read `EXCEEDED` twice before this (165, then 152) and both were fixed by
 removing narration and one duplicated derivation, never by raising the
 ceiling.
 
-## 8. Root sweep — the frozen-surface proof obligation
+## 8. Root sweep — PASS, obligation discharged
 
-(filled in below)
+The operator's approval of the `invariants.py` change was conditional on
+this: no committed root's verdict may move.
+
+Compared against the committed baseline swept from `main` earlier the same
+day, `experiments/2026-08-13-change-smoke-currency-audit/root-sweep-after-2026-08-13.txt`:
+
+    baseline roots      : 102
+    swept roots         : 107
+    common roots        : 102
+    VERDICTS MOVED      : 0
+    ERROR rows          : 11   (baseline: 11, all UnsupportedRunManifestVersionError)
+    in baseline, unswept: 0
+
+Every root in the baseline was re-swept and every one produced a
+byte-identical row. The 5 rows absent from the baseline are additions, not
+changes: the grounded root, this tranche's three retired live epochs, and
+the `live_tri` root the baseline records as hanging (swept here as an
+explicit `SKIPPED` row rather than silently omitted, per
+`docs/AUDIT_BASELINES.md`).
+
+Output committed as `root-sweep-after-2026-08-13.txt`.
+
+This is the empirical half of the safety argument; the structural half is
+that no committed root can even reach the changed branch — zero of the
+104 committed logs contain a controller policy body, so
+`authorized_controller_limits` is empty in all of them:
+
+    for f in $(find experiments -name log.jsonl); do
+      n=$(grep -c '"knobs"' "$f"); [ "$n" != 0 ] && echo "$n $f"; done
+    # -> no output
+
+### How the sweep was run, and one tooling failure worth recording
+
+`tools/root_sweep.py` writes its output only after the final root. Run
+under `timeout 2400` it was killed at 40 minutes having produced NOTHING
+— 40 minutes of work lost to a save-at-the-end design. Re-run as a
+restartable variant that flushes each row as it completes, then sharded
+four ways once the live runs freed the box (~0.8 roots/min single-process
+became ~4x that). Each shard uses `root_sweep.py`'s per-root probe logic
+verbatim, so the rows stay comparable to the committed baseline; shards
+write separate files and are concatenated, so nothing interleaves.
+
+Worth fixing upstream: a sweep that cannot survive its own timeout is an
+instrument that punishes the operator for bounding it.
 
 ## 9. Live run — PARTIAL PASS, and the honest split
 
