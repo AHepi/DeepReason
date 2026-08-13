@@ -508,3 +508,29 @@ than the single one named in its own CHECKLIST step, for good reason).
 No document is wrong here — this entry exists so a future reader
 auditing the set against `authoring-skills`'s W3 finds the accepted
 exception on record, rather than re-discovering and re-litigating it.
+
+**E25 — README's "`deepreason amend` adds to a stopped run" was true of
+managed runs only; a run stopped by `deepreason run --run-manifest` could
+not be amended at all.** The claim (`README.md`, "Changing the question,
+or adding evidence, after a run has stopped") described the operation
+correctly and the precondition correctly two paragraphs later — "`amend`
+refuses, with a typed reason, unless the run is standing at a real
+terminal stop" — but nothing said that whether a stopped run *had* such a
+stop depended on which launch path started it. It did. The managed
+`TEXT_RUN_SERVICE` path wrote the terminal records at stop; the bare
+`deepreason run --run-manifest` path called the scheduler and printed.
+Grounded-extension run `8e22d0431fd2b98d`
+(`experiments/2026-08-12-live-grounded-extension-expansion`) completed 24
+real cycles that way and refused `AMEND_NOT_AT_TERMINAL`,
+`CONTINUE_STOP_REQUIRED` and `RUN_RESULT_NOT_READY` — terminal authority
+never left `current_open_uncommitted`. The census behind this entry
+(`experiments/2026-08-13-change-lifecycle-operation-parity`, CHECKLIST
+step 16) found no committed document that stated the launch-path
+dependency and none that denied it: the gap was silence, not a false
+sentence, which is why it survived. **The claim is now true as written**
+— both launch paths call one shared
+`application/text_runs.py::terminalize_text_run`, and `deepreason
+finalize` repairs a root stopped before the fix by appending. This entry
+exists so a reader auditing that README sentence against the pre-2026-08-13
+record finds the discrepancy explained rather than re-deriving it, and so
+the newly-true state is on the ledger with the run that paid for it.

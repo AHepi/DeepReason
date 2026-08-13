@@ -134,6 +134,16 @@ deepreason --root RUN_ROOT amend \
 deepreason --root RUN_ROOT continue --budget cycles=4
 ```
 
+This works on a run started from any configuration path, including a
+precompiled role matrix run through `deepreason run --run-manifest`. A run
+that stopped before that was true — its scheduler finished, but no terminal
+was ever written — is repaired in place, by appending records rather than
+editing any:
+
+```bash
+deepreason --root RUN_ROOT finalize
+```
+
 The reshaped question enters as a new problem and gets first claim on the
 next continuation's budget. Everything the run already established stays:
 the old question keeps its record, its rival positions, its accepted
