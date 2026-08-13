@@ -295,10 +295,18 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   cycles and that no operation can touch (grounded-extension run
   `8e22d0431fd2b98d` stopped at `current_open_uncommitted` and refused
   `AMEND_NOT_AT_TERMINAL` after 24 completed cycles). The mechanism is
-  therefore ONE shared implementation both paths call —
-  `application/text_runs.py::terminalize_text_run` — never a copy,
-  because a copy is how the paths drifted in the first place
-  (`experiments/2026-08-13-change-lifecycle-operation-parity/`).
+  therefore ONE RUN PATH, not two paths kept in agreement: every
+  configuration — including a precompiled manifest with judge ensembles,
+  route-bound seats and a criticism policy — enters through
+  `application/text_runs.py::TextRunApplicationService.start_manifest_run`,
+  and `deepreason run --run-manifest` keeps its exact CLI surface as a
+  rendering shell over it, owning no scheduler, no lock and no
+  terminalization of its own. Parity by construction: there is nothing
+  left to diverge (`experiments/2026-08-13-change-lifecycle-operation-
+  parity/` fixed the drift by sharing `terminalize_text_run`;
+  `experiments/2026-08-13-change-single-run-path-unification/` removed
+  the second path the same day, on the operator's instruction — "Get rid
+  of the old one." See `docs/ERRATA.md` E26).
 
 ## The map — `docs/map/` (read this before scoping any change)
 

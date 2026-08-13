@@ -565,3 +565,50 @@ def test_the_door_carries_the_token_steering_authority(tmp_path, monkeypatch):
     # the launch path: config_from_run_manifest is what the scheduler is
     # built from, and the policy survives that conversion.
     assert config_from_run_manifest(delivered) is not None
+
+
+def test_run_identity_is_deterministic_through_the_one_road(tmp_path, monkeypatch):
+    """R10: same configuration, same run id, through the surviving path.
+
+    `DR-CON-run-identity`: a manifest-launched root records
+    `run_id == manifest.sha256` in `progress.jsonl`, and the manifest
+    digest is a pure function of the compiled configuration.  The check
+    that matters after deleting a launch path is that BOTH halves still
+    hold on the survivor -- compiling twice must agree, and the root the
+    one path writes must carry that same digest.
+    """
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("OLLAMA_API_KEY", "offline-fixture-key")
+    builder = _load_grounded_builder()
+
+    first = builder.build(tmp_path / "identity-a")
+    second = builder.build(tmp_path / "identity-b")
+    assert first["manifest_sha256"] == second["manifest_sha256"]
+    assert first["manifest_sha256"] == GROUNDED_MANIFEST_SHA256
+    assert first["run_input_digest"] == second["run_input_digest"]
+
+    root = tmp_path / "identity-a"
+    from deepreason.run_manifest import load_run_manifest
+
+    manifest = load_run_manifest(root / MANIFEST_NAME)
+    _write_qualification(root, manifest)
+    spec = workload_spec_for_root(root, problem_path=root / "problem.json")
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler", _offline_scheduler(spec.problem.id)
+    )
+
+    TEXT_RUN_SERVICE.start_manifest_run(
+        root=root,
+        manifest=manifest,
+        problem_path=root / "problem.json",
+        cycles=1,
+    )
+    assert _terminal_state(root) == "completed"
+
+    recorded = {
+        json.loads(line)["run_id"]
+        for line in (root / "progress.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    }
+    assert recorded == {GROUNDED_MANIFEST_SHA256}

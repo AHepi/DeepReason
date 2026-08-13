@@ -534,3 +534,33 @@ finalize` repairs a root stopped before the fix by appending. This entry
 exists so a reader auditing that README sentence against the pre-2026-08-13
 record finds the discrepancy explained rather than re-deriving it, and so
 the newly-true state is on the ledger with the run that paid for it.
+**E26 — two committed statements describe `terminalize_text_run` as the
+sequence "both paths" call; after 2026-08-13 there is one path.** Neither
+was false when written, which is exactly why an entry is owed rather than
+a silent edit: a reader auditing them afterwards finds two launch paths
+described where one exists, and has no way to tell whether the document
+or the code moved. The two statements are `CLAUDE.md`'s operations-parity
+law — "The mechanism is therefore ONE shared implementation both paths
+call — `application/text_runs.py::terminalize_text_run` — never a copy,
+because a copy is how the paths drifted in the first place" — and
+`docs/map/CON-run-identity.md`'s row "`terminalize_text_run` (called by
+`_worker` AND by `cli.main._execute_bound_run`)". Both were written by
+`experiments/2026-08-13-change-lifecycle-operation-parity`, which fixed
+the drift by making the two paths share the sequence. The SAME DAY,
+`experiments/2026-08-13-change-single-run-path-unification` removed the
+second path outright on the operator's instruction ("Why not retrofit the
+newer reason path? Get rid of the old one. The new one has a lot of
+machinery that needs to work every run."): `deepreason run --run-manifest`
+keeps its exact parser surface and became a rendering shell over
+`TextRunApplicationService.start_manifest_run`, and
+`cli.main._execute_bound_run` was deleted with its bare-path retrofit
+`attach_bound_evidence_once`. **What stands unchanged is the LAW** —
+"The flags and operations available to the newer reason runs should be
+available to all configurations" — and its reason; only its stated
+mechanism moved, from parity-by-agreement to parity-by-construction. Both
+documents were updated in the deleting commit, and both of their
+`check:` lines were inverted to negations (`cli/main.py` must NOT name a
+scheduler) so a reappearing second path fails the map gate rather than
+merely contradicting its prose. Recorded per that tranche's R18: any
+committed document describing the two-path split as permanent design, or
+the bare path as lifecycle-complete, earns an entry.

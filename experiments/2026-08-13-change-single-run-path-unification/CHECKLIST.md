@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=20 blockers=none
+State: next=22 blockers=step 22 replay probe in flight (background pid 31239, ~11min elapsed on the 10k-event grounded root); steps 21, 23-26 done
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -372,7 +372,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       narrowing") proved for the specific lever the operator asked about,
       not new scope.
 
-- [ ] 20. (S2, S3) [COMMIT] Commit and push commit 2 (alias + deletion +
+- [x] 20. (S2, S3) [COMMIT] Commit and push commit 2 (alias + deletion +
       migrations + BOTH map documents in one commit, per CLAUDE.md's
       same-commit rule and SPEC.md's split rejection).
       done-when: `git status --porcelain` empty AND
@@ -383,7 +383,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
 
 ## Commit 3 — S4 proofs, errata, the law's mechanism sentence
 
-- [ ] 21. (S4.1) Add
+- [x] 21. (S4.1) Add
       `test_run_identity_is_deterministic_through_the_one_road` to
       `tests/test_single_run_path.py`: compiling the acceptance fixture
       twice yields manifest sha256
@@ -393,6 +393,17 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `python -m pytest tests/test_single_run_path.py::test_run_identity_is_deterministic_through_the_one_road -q`
       ends `1 passed` (pasted)
 
+      PROOF:
+      ```
+      ..........      [100%]
+      10 passed in 41.87s
+      ```
+      Both halves of `DR-CON-run-identity`'s rule asserted on the
+      survivor: compiling the grounded config twice agrees on
+      manifest_sha256 8e22d0431fd2b98d..., and the root the one path
+      writes records exactly that digest as `run_id` in every
+      `progress.jsonl` line.
+
 - [ ] 22. (S4.3) Replay proof: run `verify_root_report` READ-ONLY over the
       committed grounded-extension root and two other committed roots,
       writing output to
@@ -401,11 +412,23 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       matches its prior recorded verdict (the comparison stated in the
       file, not inferred)
 
-- [ ] 23. (S4.4) Prove the out-of-scope surfaces are untouched.
+      IN FLIGHT: `verify_root_report` over the grounded-extension root is
+      genuinely expensive -- that root carries ~10k events (24 real
+      cycles, an amendment epoch, and an 8-cycle continuation with 181
+      model calls), and replay is O(run length). Launched detached
+      (pid 31239, 2400s cap) rather than run in the foreground, per
+      dr-drive-harness 5b. Not run concurrently with the full gate: both
+      would contend and a measurement taken under load is not a
+      measurement.
+
+- [x] 23. (S4.4) Prove the out-of-scope surfaces are untouched.
       done-when: `git diff --stat origin/main -- src/deepreason/mcp_server.py src/deepreason/qualification.py scripts/ experiments/2026-08-12-live-grounded-extension-expansion/grounded_run.sh`
       prints nothing
 
-- [ ] 24. (S5.5) Append **E26** to `docs/ERRATA.md` recording the two
+      PROOF: printed nothing. MCP `start_run`, the qualification battery,
+      every script, and the grounded ladder are byte-unchanged (R13, R6).
+
+- [x] 24. (S5.5) Append **E26** to `docs/ERRATA.md` recording the two
       committed statements that describe two launch paths calling one
       terminalization (`CLAUDE.md`'s operations-parity law mechanism
       sentence; `docs/map/CON-run-identity.md:55`), what remains true (the
@@ -413,16 +436,40 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `grep -q "E26" docs/ERRATA.md` exits 0 AND the entry
       names `experiments/2026-08-13-change-single-run-path-unification`
 
-- [ ] 25. (S5.5) Update `CLAUDE.md`'s operations-parity law mechanism
+      PROOF: E26 appended, ledger tail now E24/E25/E26. It records BOTH
+      statements (CLAUDE.md's mechanism sentence and
+      CON-run-identity.md:55), says what stands unchanged -- the law
+      itself -- and names the tranche.
+
+- [x] 25. (S5.5) Update `CLAUDE.md`'s operations-parity law mechanism
       sentence for one path, leaving the operator's verbatim quote
       untouched.
       done-when: `! grep -q "both paths call" CLAUDE.md` AND
       `grep -q "available to all configurations." CLAUDE.md` (both exit 0)
 
-- [ ] 26. (S5.4) Wheel smoke — the third instrument no gate runs.
+      PROOF:
+      ```
+      MECHANISM UPDATED OK
+      OPERATOR QUOTE INTACT OK
+      ```
+      The law now reads "The mechanism is therefore ONE RUN PATH, not two
+      paths kept in agreement". The operator's verbatim quote at the head
+      of the law is untouched.
+
+- [x] 26. (S5.4) Wheel smoke — the third instrument no gate runs.
       done-when: `python scripts/wheel_smoke.py` exits 0 AND
       `git diff --stat origin/main -- scripts/` prints nothing (no pin
       moved)
+
+      PROOF:
+      ```
+      wheel smoke passed: isolated V6-only contents, clean imports, exact
+      entry points, module parity, MCP registration, and exact MCP schemas
+      rc=0
+      ```
+      No pin moved, as R17 predicted: the console entry point and the MCP
+      tool set/schema sha are untouched by an application-layer
+      consolidation.
 
 - [ ] 27. (S4, S5) [COMMIT] Commit and push commit 3.
       done-when: `git status --porcelain` empty AND branch head is on
