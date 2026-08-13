@@ -281,6 +281,24 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   needed, nothing to override, compile never refuses. Ledgered per the
   operator's own instruction to record both statements with the
   supersession noted (`experiments/2026-08-12-change-all-configs-allowed/`).
+- **Operations are available to every configuration** (2026-08-13,
+  operator's words verbatim: "The flags and operations available to the
+  newer reason runs should be available to all configurations."): the
+  operations-parity sibling of the all-configurations law above. That law
+  says every configuration COMPILES; this one says every configuration
+  that compiles gets the same LIFECYCLE. A run launched from any path —
+  the managed `deepreason reason`, a compiled `deepreason run
+  --run-manifest`, a ladder — must reach the same typed terminal and
+  accept the same operations: amend, continue, cancel, result, finalize.
+  A lifecycle step written on one launch path and not the other is a
+  defect, not a difference in surface: it produces a root that ran real
+  cycles and that no operation can touch (grounded-extension run
+  `8e22d0431fd2b98d` stopped at `current_open_uncommitted` and refused
+  `AMEND_NOT_AT_TERMINAL` after 24 completed cycles). The mechanism is
+  therefore ONE shared implementation both paths call —
+  `application/text_runs.py::terminalize_text_run` — never a copy,
+  because a copy is how the paths drifted in the first place
+  (`experiments/2026-08-13-change-lifecycle-operation-parity/`).
 
 ## The map — `docs/map/` (read this before scoping any change)
 

@@ -170,6 +170,27 @@ def _open_root(tmp_path, monkeypatch, *, name="open-root"):
     return root, manifest, spec
 
 
+def _source_records(root) -> tuple[str, ...]:
+    """Every bound source this root actually introduced, in record order.
+
+    The verifier's own discriminator: an inline artifact carrying an
+    ``attached-source-record.v1`` payload. Counting import-role artifacts
+    instead would count the dossier's blocks too.
+    """
+
+    found = []
+    for artifact in Harness(root, read_only=True).state.artifacts.values():
+        if not artifact.content_ref.startswith("inline:"):
+            continue
+        try:
+            payload = json.loads(artifact.content_ref.removeprefix("inline:"))
+        except (TypeError, json.JSONDecodeError):
+            continue
+        if payload.get("schema") == "attached-source-record.v1":
+            found.append(str((payload.get("source") or {}).get("id") or ""))
+    return tuple(sorted(found))
+
+
 def _supplement(tmp_path, name="sampled.md", text=SUPPLEMENT_TEXT):
     path = tmp_path / name
     path.write_text(text, encoding="utf-8")
@@ -237,15 +258,9 @@ def test_manifest_launched_root_renders_its_bound_evidence(
         tmp_path, monkeypatch, name="evidence-root"
     )
 
-    replayed = Harness(root, read_only=True)
-    imports = [
-        artifact
-        for artifact in replayed.state.artifacts.values()
-        if artifact.provenance is not None
-        and getattr(artifact.provenance.role, "value", artifact.provenance.role)
-        == "import"
-    ]
-    assert len(imports) == len(load_evidence_dossier(root).sources)
+    assert _source_records(root) == tuple(
+        source.id for source in load_evidence_dossier(root).sources
+    )
     assert verify_root(root)["violations"] == []
 
 
@@ -365,26 +380,14 @@ def test_amend_admits_a_bound_but_unintroduced_source(tmp_path, monkeypatch):
     _no_provider_scheduler()(harness, None, 1, None)
     finalize_stopped_root(root, render_bound_evidence=False)
 
-    replayed = Harness(root, read_only=True)
-    assert not [
-        artifact
-        for artifact in replayed.state.artifacts.values()
-        if artifact.provenance is not None
-        and getattr(artifact.provenance.role, "value", artifact.provenance.role)
-        == "import"
-    ]
+    assert _source_records(root) == ()
 
     result = amend_run(root, attach=(str(_source_text_file(tmp_path)),))
 
     assert result["admission"]["sources_admitted"] == 1
-    epoch_imports = [
-        artifact
-        for artifact in Harness(root, read_only=True).state.artifacts.values()
-        if artifact.provenance is not None
-        and getattr(artifact.provenance.role, "value", artifact.provenance.role)
-        == "import"
-    ]
-    assert len(epoch_imports) == 1
+    assert _source_records(root) == tuple(
+        source.id for source in load_evidence_dossier(root).sources
+    )
 
 
 # --- lifecycle documents (S4) -------------------------------------------

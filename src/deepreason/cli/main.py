@@ -2776,9 +2776,21 @@ def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> i
         print(str(error), file=sys.stderr)
         return 1
 
+    from deepreason.application.text_runs import (
+        attach_bound_evidence_once,
+        completed_cycles,
+        ensure_lifecycle_documents,
+        terminalize_text_run,
+        workload_spec_for_root,
+    )
     from deepreason.ops import run_scheduler
     from deepreason.run_manifest import preflight_payload
 
+    # A compiled-config launch is a full lifecycle citizen or it is a root no
+    # operation can touch: amend, continue, cancel and result all read records
+    # only the terminalization sequence writes (grounded-extension run
+    # 8e22d0431fd2b98d).
+    lifecycle = getattr(manifest, "schema_version", None) == 6
     harness = Harness(run_root)
     if args.problem:
         _load_problem_file(harness, Path(args.problem))
@@ -2799,6 +2811,37 @@ def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> i
     if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
+    progress = None
+    spec = None
+    if lifecycle:
+        from deepreason.runtime.progress import ProgressSink
+
+        try:
+            spec = workload_spec_for_root(
+                run_root,
+                problem_path=Path(args.problem) if args.problem else None,
+                harness=harness,
+            )
+            ensure_lifecycle_documents(run_root, spec=spec)
+            attach_bound_evidence_once(
+                harness, run_root, problem_id=spec.problem.id
+            )
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        progress = ProgressSink(
+            run_root, run_id=manifest.sha256, workload="text"
+        )
+        progress.clear_cancellation()
+        progress.emit(
+            state="running",
+            phase="workload",
+            activity="loaded",
+            problem_id=spec.problem.id,
+            token_limit=args.token_budget,
+            determinate=False,
+            message="bound manifest run started",
+        )
     try:
         result, meter, accounting = run_scheduler(
             harness, config, cycles, args.token_budget, run_manifest=manifest
@@ -2806,6 +2849,25 @@ def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> i
     except ValueError as e:
         print(str(e), file=sys.stderr)
         return 1
+    if lifecycle:
+        payload = terminalize_text_run(
+            harness,
+            manifest,
+            root=run_root,
+            result=result,
+            accounting=accounting,
+            problem_id=spec.problem.id,
+            cancelled=progress.cancellation_requested(),
+            latest_cycle=completed_cycles(harness),
+        )
+        progress.emit(
+            state=payload["state"],
+            phase="stop",
+            activity=payload["stop"]["reason"],
+            problem_id=spec.problem.id,
+            determinate=False,
+            stop_reason=payload["stop"]["reason"],
+        )
     if accounting["delta"]:
         print(f"[accounting] WARNING: {accounting['delta']} metered tokens are "
               "not on the log — investigate before trusting metrics", file=sys.stderr)

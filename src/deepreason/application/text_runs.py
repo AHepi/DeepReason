@@ -354,6 +354,28 @@ def terminalize_text_run(
     return payload
 
 
+def completed_cycles(harness) -> int:
+    """How many scheduler cycles a root's own record says it completed.
+
+    Derived from the log rather than from `progress.jsonl`, so a root that
+    never had a progress stream still reports an honest stop metric.
+    """
+
+    from deepreason.ontology import Rule
+
+    highest = -1
+    for event in harness.log.read():
+        inputs = tuple(event.inputs)
+        if (
+            event.rule == Rule.MEASURE
+            and len(inputs) >= 2
+            and inputs[0] == "cycle"
+            and inputs[1].isdigit()
+        ):
+            highest = max(highest, int(inputs[1]))
+    return highest + 1
+
+
 def workload_spec_for_root(root: Path | str, *, problem_path=None, harness=None):
     """The frozen workload a root's lifecycle documents must describe.
 
@@ -460,7 +482,6 @@ def finalize_stopped_root(
     """
 
     from deepreason.harness import Harness
-    from deepreason.ontology import Rule
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         config_from_run_manifest,
@@ -505,14 +526,6 @@ def finalize_stopped_root(
         report = Scheduler(
             harness, None, config_from_run_manifest(manifest)
         ).report()
-        cycles = [
-            int(event.inputs[1])
-            for event in harness.log.read()
-            if event.rule == Rule.MEASURE
-            and len(event.inputs) >= 2
-            and event.inputs[0] == "cycle"
-            and event.inputs[1].isdigit()
-        ]
         return terminalize_text_run(
             harness,
             manifest,
@@ -530,7 +543,7 @@ def finalize_stopped_root(
                         "no model call",
             },
             problem_id=spec.problem.id,
-            latest_cycle=max(cycles) + 1 if cycles else 0,
+            latest_cycle=completed_cycles(harness),
         )
     finally:
         locks.release()
@@ -1464,6 +1477,7 @@ __all__ = [
     "TextRunWorkerRegistry",
     "_v6_run_result",
     "attach_bound_evidence_once",
+    "completed_cycles",
     "ensure_lifecycle_documents",
     "finalize_stopped_root",
     "missing_manifest_credentials",
