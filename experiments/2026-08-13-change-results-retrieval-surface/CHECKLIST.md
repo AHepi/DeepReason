@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=5 blockers=none
+State: next=6 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -147,7 +147,7 @@ it.
           ............                                                 [100%]
           12 passed in 61.52s (0:01:01)
 
-- [ ] 5. (S7) Add `amendment` and `terminal` to the reader: epoch count and
+- [x] 5. (S7) Add `amendment` and `terminal` to the reader: epoch count and
       seqs from `amendment.state`, `valid_typed_terminal`,
       `stop_reason_resumable` against `runtime.stop.RESUMABLE_STOP_REASONS`,
       and `amend_ready`.
@@ -155,6 +155,17 @@ it.
       `amendment` keys exist on a root with a terminal, and that
       `amend_ready is False` with typed absences on the grounded-extension
       root.
+
+      `amend_ready` needs BOTH halves and they answer different questions: the
+      replay verdict says the record is sound, the stop reason says the
+      lifecycle will resume from it. The test derives each expected value from
+      the root's own stored records rather than restating a constant, so it
+      cannot pass by agreeing with itself.
+
+      PROOF (`python -m pytest tests/test_results_command.py -q -k terminal`):
+
+          ..                                                           [100%]
+          2 passed, 12 deselected in 1.74s
 
 - [ ] 6. (S8) Add `render_results(summary) -> str` — the human-readable mode
       with a plain-language gloss in-line on every technical label.

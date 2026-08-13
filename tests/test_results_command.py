@@ -368,6 +368,60 @@ def test_verification_is_a_typed_absence_when_no_verdict_was_published():
         assert verification[key]["reason"] == "NO_REPLAY_VALIDATION_JSON"
 
 
+def test_terminal_readiness_answers_the_amend_question():
+    """R10: amendment epochs, and whether the root stands at a valid typed terminal.
+
+    The two halves answer different questions and both are required: the replay
+    verdict says the record is sound, the stop reason says the lifecycle will
+    resume from it.
+    """
+
+    from deepreason.application.results import results_summary
+    from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
+
+    root = _smallest_root_with(*_TERMINAL_FILES)
+    summary = results_summary(root)
+    stored = json.loads((root / "REPLAY_VALIDATION.json").read_text())
+    stop = json.loads((root / "run-stop.json").read_text())
+
+    terminal = summary["terminal"]
+    assert set(terminal) == {
+        "valid_typed_terminal",
+        "stop_reason_resumable",
+        "amend_ready",
+        "terminal_epoch",
+    }
+    assert terminal["valid_typed_terminal"] == bool(
+        stored["valid"] and isinstance(stored.get("terminal_binding"), dict)
+    )
+    assert terminal["stop_reason_resumable"] == (
+        stop["reason"] in RESUMABLE_STOP_REASONS
+    )
+    assert terminal["amend_ready"] == (
+        terminal["valid_typed_terminal"] and terminal["stop_reason_resumable"]
+    )
+    assert terminal["terminal_epoch"] == stored["terminal_binding"]["terminal_epoch"]
+
+    assert set(summary["amendment"]) == {"epochs", "epoch_seqs"}
+    assert summary["amendment"]["epochs"] == len(summary["amendment"]["epoch_seqs"])
+
+
+def test_terminal_readiness_is_false_with_typed_absences_on_an_unterminalized_root():
+    """R10/R12: a root that never published a terminal says so, and says why."""
+
+    from deepreason.application.results import results_summary
+
+    summary = results_summary(_smallest_root_without(*_TERMINAL_FILES))
+    terminal = summary["terminal"]
+
+    assert terminal["valid_typed_terminal"] is False
+    assert terminal["amend_ready"] is False
+    assert _is_absence(terminal["stop_reason_resumable"])
+    assert _is_absence(terminal["terminal_epoch"])
+    # An absent amendment chain is an empty one, not an unreadable one.
+    assert summary["amendment"]["epochs"] == 0
+
+
 def test_results_summary_carries_its_schema_and_resolution_provenance():
     """R5/R11: a stable, self-identifying record — nothing model-authored."""
 
