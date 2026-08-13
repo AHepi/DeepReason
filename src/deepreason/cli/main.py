@@ -447,6 +447,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--token-budget", default="unlimited", help="positive integer or unlimited"
     )
     continue_cmd.add_argument("--expected-manifest-digest", default=None)
+    finalize_cmd = sub.add_parser(
+        "finalize",
+        help=(
+            "bring a run that stopped without a terminal to its typed "
+            "terminal, by appending records only — never editing any"
+        ),
+    )
+    finalize_cmd.add_argument("--json", action="store_true")
     watch_cmd = sub.add_parser("watch", help="watch read-only structured run progress")
     watch_cmd.add_argument("--once", action="store_true", help="render one snapshot and exit")
     watch_cmd.add_argument("--interval", type=float, default=0.25)
@@ -564,6 +572,7 @@ _ROOT_ADMISSION_COMMANDS = frozenset(
         "docket",
         "evidence",
         "export",
+        "finalize",
         "frontier",
         "merge",
         "narrate",
@@ -908,6 +917,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "continue":
         return _cmd_continue(args)
+
+    if args.command == "finalize":
+        return _cmd_finalize(args)
 
     if args.command == "watch":
         from deepreason.application import TEXT_RUN_SERVICE, WatchTextRunIntentV1
@@ -2432,6 +2444,28 @@ def _cmd_amend(args) -> int:
         "amendment committed; continue the run with "
         f"`deepreason --root {args.root} continue --budget cycles=<N>`",
         file=sys.stderr,
+    )
+    return 0
+
+
+def _cmd_finalize(args) -> int:
+    """Terminalize a stopped run by appending; every refusal is typed."""
+
+    from deepreason.application.text_runs import finalize_stopped_root
+
+    try:
+        payload = finalize_stopped_root(args.root)
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+    print(
+        f"terminal committed: {payload['terminal_commitment_ref']}\n"
+        f"state: {payload['state']}  stop: {payload['stop']['reason']}  "
+        f"survivors: {len(payload.get('survivors') or ())}\n"
+        f"amend it with `deepreason --root {args.root} amend --attach <file>`"
     )
     return 0
 

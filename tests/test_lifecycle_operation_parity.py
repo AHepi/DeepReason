@@ -378,7 +378,7 @@ def test_amend_admits_a_bound_but_unintroduced_source(tmp_path, monkeypatch):
     harness = Harness(root)
     cli_module._load_problem_file(harness, problem_file)
     _no_provider_scheduler()(harness, None, 1, None)
-    finalize_stopped_root(root, render_bound_evidence=False)
+    finalize_stopped_root(root)
 
     assert _source_records(root) == ()
 

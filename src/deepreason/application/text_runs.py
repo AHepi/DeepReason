@@ -466,11 +466,7 @@ def ensure_lifecycle_documents(root: Path | str, *, spec) -> None:
         _atomic_json(target, payload)
 
 
-def finalize_stopped_root(
-    root: Path | str,
-    *,
-    render_bound_evidence: bool = True,
-) -> dict[str, Any]:
+def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
     """Terminalize a root whose run ended without writing a terminal.
 
     Appends only.  The run's own frontier is re-derived read-only from the
@@ -479,6 +475,13 @@ def finalize_stopped_root(
     root did not have.  Nothing already on disk is opened for modification —
     a committed root is immutable, and this is the operation that lets one
     reach ``amend`` without violating that.
+
+    It deliberately does NOT render a bound dossier that the run never
+    introduced.  Attached evidence is admissible only ahead of the epoch's
+    first model call, so introducing it after the reasoning has happened
+    would record a false claim about what the models could see; the honest
+    route for a root in that state is an amendment epoch, whose own window
+    the records would legitimately precede.
     """
 
     from deepreason.harness import Harness
@@ -519,8 +522,6 @@ def finalize_stopped_root(
         harness = Harness(root)
         spec = workload_spec_for_root(root, harness=harness)
         ensure_lifecycle_documents(root, spec=spec)
-        if render_bound_evidence:
-            attach_bound_evidence_once(harness, root, problem_id=spec.problem.id)
         # The scheduler's own report is a pure function of replayed state and
         # config; no adapter is constructed and no model is called.
         report = Scheduler(

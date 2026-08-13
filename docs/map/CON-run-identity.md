@@ -17,6 +17,8 @@ on the same directory on any machine, at any hour. Everything the run will
 ever produce accumulates inside that one directory as an append-only record,
 and nothing in it is ever edited. The lifecycle that follows has exactly four
 legal moves: **start** it, **continue** it, **amend** it, or **retire** it.
+A fifth exists only for a root that ran and never wrote a terminal —
+**finalize** it — and it is a repair, not a move the lifecycle plans for.
 Determinism is what makes the fourth move necessary: a relaunch cannot pick a
 fresh root by accident, so a leftover root must be deliberately renamed out of
 the way. This concept is spread across `preparation.py`, `application/`,
@@ -50,7 +52,9 @@ enforced in another, extended in a third, and operated from a fourth.
 | Epoch layout and epoch-aware readers | `amendment/state.py` | `AMENDMENT_EPOCH_DIR`, `AMENDMENT_CHAIN_NAME`, `load_amendments`, `current_epoch`, `staged_amendment` |
 | Replay windowed by the epoch fence | `invariants.py` | `_amendment_epochs` |
 | Whether a run stands at a stop that may be amended | `runtime/terminal_authority.py` | `derive_terminal_authority` |
-| Operator surface | `cli/main.py` | `_cmd_reason`, `_cmd_continue`, `_cmd_amend`, `_cmd_cancel` |
+| Every launch path's one shared route to a terminal | `application/text_runs.py` | `terminalize_text_run` (called by `_worker` AND by `cli.main._execute_bound_run`) |
+| Bringing a root that stopped without a terminal to one, by appending | `application/text_runs.py` | `finalize_stopped_root` |
+| Operator surface | `cli/main.py` | `_cmd_reason`, `_cmd_continue`, `_cmd_amend`, `_cmd_cancel`, `_cmd_finalize` |
 | Same surface over MCP, by opaque id | `mcp_server.py` | `_resolve_managed_root` |
 
 ## The rules it obeys
@@ -226,6 +230,15 @@ them, including the two that were never renamed.
   `progress.jsonl` or `run-result.json` already exists in the root — which is
   the normal state of a finished or crashed run, and the signal to retire,
   continue, or amend.
+- **Assuming a root that ran real cycles can be continued or amended.** It can
+  only if its launch path wrote a terminal. `deepreason run --run-manifest`
+  did not, until 2026-08-13: grounded-extension run `8e22d0431fd2b98d`
+  completed 24 cycles and then refused `AMEND_NOT_AT_TERMINAL`,
+  `CONTINUE_STOP_REQUIRED` and `RUN_RESULT_NOT_READY`, because terminal
+  authority never left `current_open_uncommitted`. Both launch paths now call
+  the same `terminalize_text_run`, and `deepreason finalize` repairs a root
+  stopped before the fix — by appending, never by editing.
+`check: grep -q "terminalize_text_run(" src/deepreason/cli/main.py && grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q '"finalize"' src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py -q`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and
