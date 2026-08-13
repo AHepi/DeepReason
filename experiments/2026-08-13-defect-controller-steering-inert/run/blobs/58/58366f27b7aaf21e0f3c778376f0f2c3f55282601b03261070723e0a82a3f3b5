@@ -1,0 +1,103 @@
+{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the evidence block that justifies it. REFUTED remains a derived status, but the derivation is now auditable and context-dependent, preserving the commitment that REFUTED is never stored.",
+      "counterconditions": [
+        "If provenance records reference commitments that are later revised, the derived status may become inconsistent unless the derivation is recomputed.",
+        "If the provenance graph becomes cyclic (warrant A justifies an attack on B, and B justifies an attack on A), the fixed-point computation may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Both treat status as a function of a graph of dependencies, not as a stored fact.",
+          "Both require that every derived conclusion has a traceable justification."
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the verification is static and monotonic; here, warrants can be attacked and defeated, so the derivation is non-monotonic.",
+          "The system's artifacts are not executable, so the provenance is a logical record rather than a machine-checkable proof."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is derived, not stored",
+          "commitment: attack edges are the only route to REFUTED"
+        ],
+        "overturn_conditions": [
+          "If provenance records are incomplete or inconsistent, the derived status may be unreliable.",
+          "If the commitment set changes, the derivation must be re-run, which may be computationally expensive."
+        ]
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "Introduce 'constructive refutation' as a first-class artifact: a REFUTED status must be accompanied by a concrete counterexample object that is itself subject to the same warrant rules. This ensures that every refutation is backed by a tangible witness, preserving the derived property because the counterexample is part of the artifact graph.",
+      "counterconditions": [
+        "If counterexamples can be attacked, the system needs a second-level derivation to determine which counterexamples are themselves valid.",
+        "If counterexamples are not required, the system may allow vacuous refutations that do not correspond to any concrete object."
+      ],
+      "analogy": {
+        "source_memory_refs": [],
+        "shared_structure": [
+          "Both use a witness to justify a status change",
+          "Both require the witness to be independently verifiable"
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the witness is a proof of safety; here, the witness is a counterexample to a claim.",
+          "Proof-carrying code assumes a fixed verification algorithm; here, the verification is itself defeasible."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored"],
+        "overturn_conditions": [
+          "If a counterexample is later invalidated by a new warrant, the derived REFUTED status may need to be retracted.",
+          "If the system allows self-referential counterexamples, the derivation may not converge."
+        ]
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "Introduce time-indexed warrants: each warrant has a validity interval, and REFUTED is derived only from warrants that are valid at the current time. This preserves the derived property because the derivation function takes time as an input, but it introduces a dependency on the system clock.",
+      "counterconditions": [
+        "If the clock is not monotonic or if warrants can be retroactively invalidated, the derived status may be unstable.",
+        "If the validity intervals overlap in complex ways, the derivation may require a temporal logic that is not currently implemented."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_002"],
+        "shared_structure": [
+          "Both use a notion of 'current state' to determine which rules apply.",
+          "Both preserve the idea that REFUTED is a function of the current state, not a stored fact."
+        ],
+        "disanalogies": [
+          "Temporal logic typically assumes a linear time; the system may have branching or non-monotonic updates.",
+          "The commitment set is not necessarily time-ordered, so assigning timestamps may be artificial."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored"],
+        "overturn_conditions": [
+          "If the clock is not monotonic or if warrants can be backdated, the derivation may be inconsistent.",
+          "If the system allows warrants to be valid only at certain times, the derivation becomes time-dependent and may require temporal reasoning."
+        ]
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "Introduce a two-level argumentation framework: artifacts are attacked via edges, and warrants themselves can be attacked by other warrants. REFUTED is derived from the grounded extension of the warrant-level attack graph, preserving the derived property while allowing for more nuanced reasoning.",
+      "counterconditions": [
+        "If the warrant-level graph has cycles, the grounded extension may be empty or ambiguous.",
+        "If the number of warrants is large, computing the grounded extension may be computationally expensive."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_002"],
+        "shared_structure": [
+          "Both use Dung-style argumentation semantics",
+          "Both treat status as a fixed point of an attack relation"
+        ],
+        "disanalogies": [
+          "In standard Dung frameworks, arguments are atomic; here, warrants are structured and can be attacked by other warrants.",
+          "The system's artifacts are not arguments but claims, so the mapping is not direct."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored"],
+        "overturn_conditions": [
+          "If the grounded extension is not unique, the derived status may be ambiguous.",
+          "If the attack graph is not well-founded, the grounded extension may not exist."
+        ]
+      },
+      "typicality": 0.6
+    }
+  ]
+}

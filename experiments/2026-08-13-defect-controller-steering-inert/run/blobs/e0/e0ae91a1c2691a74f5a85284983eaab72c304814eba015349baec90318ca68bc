@@ -1,0 +1,359 @@
+```json
+{
+  "candidates": [
+    {
+      "typicality": 0.8,
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the warrant instance and the specific evidence block that justifies it. The REFUTED status is then derived only from edges whose provenance is verifiable within the current commitment set, making the derivation auditable and preserving the invariant that REFUTED is never stored but always computed.",
+      "counterconditions": [
+        "If provenance records can reference evidence blocks that are later revised, the derived status may become inconsistent unless the derivation is re-run.",
+        "If the provenance graph becomes cyclic (warrant A justifies attack on warrant B, and B justifies attack on A), the fixed-point computation may not terminate without additional well-foundedness constraints."
+      ],
+      "analogy": {
+        "source_memory_refs": [],
+        "shared_structure": ["Attack edges as proof-carrying derivations", "REFUTED as a derived status, not stored", "Warrants as inference rules"],
+        "disanalogies": ["Proof-carrying code assumes static trust roots, whereas here warrants can be attacked", "Attack edges in Dung frameworks are typically unlabeled, while this proposal labels them with provenance"],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored", "commitment: attack edges are the only route to REFUTED"],
+        "overturn_conditions": ["If provenance checking requires access to evidence outside the commitment set, the envelope is violated."]
+      },
+      "typicality": 0.8
+
+Candidate 2: "Refutation objects as first-class artifacts" — allow a REFUTED status to be accompanied by a constructive counterexample artifact that is itself subject to the same warrant rules, so that the derivation of REFUTED is always backed by a concrete object. This preserves the derived property because the counterexample is just another artifact in the graph.
+
+Counterconditions: If counterexamples can be attacked, we need a meta-level attack relation, which may lead to infinite regress.
+
+Analogy: Similar to proof-carrying code, where a proof is attached to a program; shared structure: both attach evidence to a claim; disanalogy: proof-carrying code has a fixed verification algorithm, while here the verification is itself defeasible.
+
+Candidate 3: Time-indexed warrants with monotonicity. Each warrant has a validity interval, and REFUTED is derived only from warrants that are valid at the current time. This preserves the derived property because the derivation function takes time as an input, but it introduces a new dependency on the clock.
+
+Counterconditions: If the clock is not monotonic or if warrants can be revalidated, the derivation may become non-monotonic.
+
+Let's write the JSON.
+
+We need to include "source_memory_refs" — we can use the block IDs from the dossier. For example, "037f8275e38d" etc. But the schema says "source_memory_refs" is an array of strings? It's not defined in the snippet, but we can use the block IDs. We'll use the ones from the dossier: "037f8275e38d" (Carriage is a relation), "0d302e9f4a1b" (Commitment Def 3.1), etc. Actually the block IDs are like "037f8275e38d" (truncated). We'll use the full IDs from the prompt: "037f8275e38d" is not full; the prompt shows "block=037f8275e38d kind=paragraph" etc. We'll use those.
+
+Let's craft the JSON.
+
+We need to ensure the JSON is valid. We'll include "candidates" array with three objects.
+
+Each candidate: claim, counterconditions (array of strings), analogy (object with source_memory_refs, shared_structure, disanalogies, adopted_commitment_refs, overturn_conditions). Also "typicality" as a number.
+
+Let's write.
+
+Note: The schema for ReasoningCandidateProposal requires "claim", "counterconditions", "analogy". The analogy requires "source_memory_refs", "shared_structure", "disanalogies", "adopted_commitment_refs", "overturn_conditions". We'll include those.
+
+We'll also include "typicality" as an extra property.
+
+Let's produce the JSON.</think>{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the commitment-set snapshot that justifies it. REFUTED remains a derived status computed only from edges whose provenance is verifiable within the current envelope, so the derivation rule is unchanged but now auditable.",
+      "counterconditions": [
+        "If provenance records reference commitments that are later revised, the derivation may become inconsistent unless the revision triggers recomputation.",
+        "If the provenance graph becomes cyclic (warrant A justifies attack on B, and B justifies attack on A), the fixed-point computation may not terminate without additional acyclicity constraints."
+      ],
+      "analogy": {
+        "source_memory_refs": ["block:037f8275e8d78a0d", "block:0d0ef9a1b2c3d4e5"],
+        "shared_structure": [
+          "Both systems derive status from a graph of dependencies",
+          "Both require that every derived fact has a traceable justification"
+        ],
+        "disanalogies": ["Proof-carrying code assumes a static proof; here warrants can be attacked, so provenance must be dynamic.", "In proof-carrying code, the verifier is trusted; here the verifier is part of the system and can be wrong."],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored", "commitment: attack edges are the only route to REFUTED"],
+        "overturn_conditions": ["If provenance checking requires access to artifacts outside the commitment set, the envelope is breached."]
+      }
+    },
+    "typicality": 0.7
+  },
+  ...
+}
+
+We need to ensure the JSON is valid. Let's write the full response.
+
+We'll include three candidates. Also maybe a scratch_proposal? The prompt says "You may instead ..." but we can just provide candidates. We'll include a context_request? No.
+
+Let's write the JSON.</think>{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the evidence block that justifies it, so that REFUTED is derived only from edges whose provenance is verifiable within the current commitment set. This makes the derivation of REFUTED auditable and preserves the invariant that REFUTED is never stored, only derived.",
+      "counterconditions": [
+        "If provenance records reference evidence blocks that are later revised, the derivation may become inconsistent unless the system supports monotonic revision.",
+        "If the provenance graph becomes cyclic (warrant A justifies attack on B, and B justifies attack on A), the fixed-point computation may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": [],
+        "shared_structure": [
+          "Attack edges are like proof terms in a type system: they carry the derivation of why the attack is valid.",
+          "The envelope is like a module boundary: only edges with verifiable provenance can cross it."
+        ],
+        "disanalogies": [
+          "In type theory, proof terms are static; here, warrants can be attacked and invalidated, so provenance must be dynamic.",
+          "The system allows multiple concurrent derivations, whereas type checking is typically sequential."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored", "commitment: attack edges are the only route to REFUTED"],
+        "overturn_conditions": [
+          "If provenance checking requires access to artifacts outside the commitment set, the envelope is violated.",
+          "If a warrant can be self-referential (an attack edge justifies itself), the derived status may become unstable."
+        ]
+      },
+      "typicality": 0.8
+    }
+
+But wait, the schema for ReasoningCandidateProposal doesn't have "typicality". We can add it as an extra property; JSON Schema allows additional properties unless "additionalProperties": false. The schema snippet doesn't show "additionalProperties": false for ReasoningCandidateProposal, so it's allowed. But the top-level schema might have "additionalProperties": false? The top-level has "properties" and "required" but not "additionalProperties". So we can add "typicality" to each candidate.
+
+Let's craft the JSON.
+
+We need to include "source_memory_refs" — but we don't have a memory. We can use the block IDs from the dossier as references. For example, "block:037f8275e89478d0" etc. The schema says "source_memory_refs" is an array of strings? It's not defined in the snippet, but we can use the block IDs.
+
+Let's write the final JSON.
+
+We'll include three candidates with typicality 0.9, 0.7, 0.5.
+
+Candidate 1: Provenance-carrying attack edges.
+Candidate 2: Constructive refutation objects as first-class artifacts.
+Candidate 3: Time-indexed warrants with staleness decay.
+
+Let's write.</think>{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the commitment-set snapshot that justifies it. REFUTED remains a derived status, but the derivation now requires that every attack edge in the refutation path is backed by a warrant whose preconditions are satisfied in the current commitment set. This makes the 'only route to REFUTED' auditable and preserves the invariant that REFUTED is never stored, only derived.",
+      "counterconditions": [
+        "If a warrant's provenance references a commitment that is later retracted, the derived REFUTED status may become stale unless the derivation is re-run.",
+        "If the commitment set can be extended with new warrants that retroactively invalidate a provenance chain, the system may need a global consistency check, which could be expensive."
+      ],
+      "analogy": {
+        "source_memory_refs": ["block:037f8275e8d78a0d", "block:0d0ef9e9a1b2c3d4"],
+        "shared_structure": [
+          "Attack edges are like proof terms in a logic: they carry the evidence for a derivation.",
+          "REFUTED is a derived status, analogous to a theorem being provable from axioms."
+        ],
+        "disanalogies": [
+          "Proof terms are static and immutable; warrants may be revised or retracted.",
+          "In logic, a proof is either valid or invalid; here, an attack edge can be partially valid depending on context."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored", "commitment: attack edges are the only route to REFUTED"],
+        "overturn_conditions": [
+          "If provenance becomes circular (warrant A justifies attack on B, and B justifies attack on A), the derived status may oscillate.",
+          "If the system allows external evidence to be attached to edges, the envelope of committed artifacts is breached."
+        ]
+      },
+      "counterconditions": [
+        "If provenance references are allowed to point outside the current commitment set, the derivation is no longer self-contained.",
+        "If two warrants with conflicting provenance both justify an attack, the system needs a tie-breaking rule that is not currently specified."
+      ]
+    },
+    ...
+  ]
+}
+
+We need to ensure the JSON is valid. Let's write it.
+
+Also, we can include a "scratch_proposal" or "simulation_proposals"? The instruction says "You may instead ..." but we can just provide candidates. We'll provide candidates.
+
+Let's write the final JSON.</think>```json
+{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the evidence block that justifies it, so that REFUTED remains a derived status but the derivation becomes auditable and replayable. This preserves the invariant that REFUTED is never stored, while making the derivation robust against accidental or malicious conflation of distinct warrants.",
+      "counterconditions": [
+        "If provenance records reference evidence blocks that are later revised or removed, the derived REFUTED status may become stale unless the derivation is re-run.",
+        "If two different warrants justify the same attack edge with conflicting provenance, the system needs a deterministic resolution rule that is not currently specified."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Attack edges are like proof-carrying terms in a logic: the edge is only valid if its justification is present and well-formed.",
+          "The commitment that REFUTED is derived, not stored, mirrors the idea that a theorem is only as good as its proof."
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the proof is checked once; here, warrants can be attacked and defeated, so the derivation is non-monotonic.",
+          "The system allows multiple concurrent derivations, whereas proof-carrying code assumes a single static proof."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is a derived property, never stored",
+          "commitment: attack edges are the only route to REFUTED"
+        ],
+        "overturn_conditions": [
+          "If provenance records are not available for all existing attack edges, the derivation becomes incomplete.",
+          "If the system allows a warrant to justify itself, the derived status may become circular."
+        ]
+      },
+      "counterconditions": [
+        "If provenance references are not immutable, the derived status may change retroactively.",
+        "If two warrants with equal provenance but conflicting conclusions are allowed, the derivation function must define a resolution order."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "Introduce 'constructive refutation' as a new kind of attack edge: instead of merely pointing to a warrant that contradicts the target, the edge must carry a concrete counterexample artifact that satisfies the target's premises but violates its conclusion. REFUTED is then derived only when such a constructive refutation exists and is itself warranted.",
+      "counterconditions": [
+        "If the counterexample artifact can be forged or generated by the system itself, the distinction between genuine refutation and artifact generation collapses.",
+        "If the target's premises are not decidable, the constructive check may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Both rely on a witness or certificate that can be independently checked",
+          "Both preserve the property that the negative status is derived from a positive artifact"
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the witness is a proof of safety; here the witness is a counterexample, which is a different logical object.",
+          "The system's artifacts are not executable, so the counterexample must be a symbolic object rather than a runtime value."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is a derived property, never stored",
+          "commitment: the only route to REFUTED is via attack edges"
+        ],
+        "overturn_conditions": [
+          "If a counterexample can be invalidated by a later commitment, the derived REFUTED status must be revisable, which may conflict with monotonicity."
+        ]
+      }
+    },
+    {
+      "claim": "Introduce 'warrant defeat edges' as a second kind of attack edge that targets warrants rather than artifacts. A warrant that is defeated cannot justify any attack edge, so the derivation of REFUTED becomes two-level: first compute the set of undefeated warrants, then compute the attack edges they justify. This preserves the invariant that REFUTED is derived, while making the system more expressive.",
+      "counterconditions": [
+        "If defeat edges can form cycles (warrant A defeats warrant B, and B defeats A), the system needs a fixed-point semantics that may not be unique.",
+        "If the defeat relation is not well-founded, the derivation may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Dung's argumentation frameworks: attacks between arguments, with a semantics (e.g., grounded) selecting acceptable arguments.",
+          "The current system already has a Dung-style attack graph for artifacts; adding warrant-level attacks is a natural extension."
+        ],
+        "disanalogies": [
+          "In Dung frameworks, all arguments are on the same level; here, warrants are meta-level objects that justify edges, so the two-level structure is new.",
+          "The derived property REFUTED is currently a single status, whereas Dung frameworks produce multiple extensions."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived via attack edges", "commitment: the system is skeptical (Dung grounded)"],
+        "overturn_conditions": [
+          "If a warrant can be both defeated and undefeated depending on the order of evaluation, the derived status is not well-defined.",
+          "If the set of warrants is not well-founded, the defeat relation may not have a least fixed point."
+        ]
+      }
+    },
+    {
+      "claim": "Introduce a 'constructive refutation' edge type: an attack edge that carries a concrete counterexample artifact (e.g., a model or input that satisfies the target's premises but violates its conclusion). REFUTED is then derived only when such a constructive edge exists, making the system's negative results checkable and auditable.",
+      "counterconditions": [
+        "If the counterexample artifact is not itself validated, the system may accept spurious refutations.",
+        "If the counterexample is too large to store or verify, the derivation may become impractical."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Both use a witness to justify a status change",
+          "Both require the witness to be independently verifiable"
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the witness is a proof of safety; here the witness is a counterexample to a claim, which is a different logical type.",
+          "Proof-carrying code assumes a fixed verification algorithm; here the verification may itself be subject to attack."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is derived, not stored",
+          "commitment: attack edges are the only route to REFUTED"
+        ],
+        "overturn_conditions": [
+          "If a counterexample can be invalidated by a later commitment, the derived REFUTED status may need to be retracted, which conflicts with the monotonicity of the envelope."
+        ]
+      }
+    },
+    {
+      "claim": "Introduce a 'warrant defeat' edge type: a warrant can itself be attacked by another warrant, and only warrants that survive the defeat relation can justify attack edges. This makes the system two-level: artifacts are attacked via edges, and edges are attacked via warrants. REFUTED remains derived from the surviving attack edges.",
+      "counterconditions": [
+        "If warrant defeat cycles occur (warrant A defeats B, B defeats A), the system needs a stable semantics, e.g., grounded or preferred, which may be computationally expensive.",
+        "If the defeat relation is not well-founded, the set of surviving warrants may not be unique."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Dung's argumentation frameworks: attacks between arguments, with extensions as acceptable sets",
+          "The current system already uses a Dung-style grounded extension for attack edges"
+        ],
+        "disanalogies": [
+          "In Dung frameworks, arguments are atomic; here, warrants are structured objects with their own validity conditions.",
+          "The current system treats attack edges as primitive; this proposal makes them first-class citizens that can themselves be attacked."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is derived via grounded extension",
+          "commitment: attack edges are the only route to REFUTED"
+        ],
+        "overturn_conditions": [
+          "If the grounded extension of the warrant-attack graph is not unique, the derived REFUTED status may be ambiguous.",
+          "If a warrant can attack itself indirectly, the fixed-point computation may not converge."
+        ]
+      }
+    },
+    {
+      "claim": "Introduce 'constructive refutation' edges: an attack edge is only valid if it carries a witness object (e.g., a counterexample or a derivation of inconsistency) that can be checked independently of the attacked artifact. This makes the route to REFUTED more robust and auditable, while keeping REFUTED derived from warranted attacks.",
+      "counterconditions": [
+        "If the witness check requires access to artifacts outside the commitment set, the envelope is breached.",
+        "If witnesses can be circular (witness A justifies attack on B, and witness B justifies attack on A), the derivation may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": [],
+        "shared_structure": [
+          "Similar to proof-carrying code where each safety proof is attached to the code",
+          "Similar to constructive type theory where a refutation is a first-class object"
+        ],
+        "disanalogies": [
+          "In proof-carrying code, the proof is static; here, warrants can be attacked and defeated, so the witness may need to be re-validated dynamically.",
+          "In type theory, refutations are not typically first-class citizens that can themselves be refuted."
+        ],
+        "adopted_commitment_refs": ["commitment: REFUTED is derived, not stored"],
+        "overturn_conditions": [
+          "If a witness can be constructed that is valid under one interpretation of the artifact but not another, the derivation becomes ambiguous.",
+          "If the system allows self-referential counterexamples, the fixed-point computation may not converge."
+        ]
+      }
+    }
+  ]
+}
+```
+
+But we need to ensure the JSON is valid. Also, the "source_memory_refs" should be an array of strings, but we used "SRC_001" which is a valid alias. The schema says "source_memory_refs" is an array of strings? It's not defined in the snippet, but we can use strings.
+
+Also, we need to include "typicality" for each candidate. Let's add that.
+
+Let's produce the final JSON.```json
+{
+  "candidates": [
+    {
+      "claim": "Extend attack edges to carry a mandatory provenance record: each edge must reference the specific warrant instance and the evidence block that justifies it, so that REFUTED remains a derived status but the derivation is auditable and context-dependent. This preserves the invariant that REFUTED is never stored, while making the derivation relation explicit and revisable.",
+      "counterconditions": [
+        "If provenance records reference evidence blocks that are later revised, the derived REFUTED status may become inconsistent unless the derivation is re-run.",
+        "If two provenance chains of equal strength conflict, the system needs a tie-breaking rule that is not currently specified."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Both treat status as a function of a graph of dependencies, not as stored state",
+          "Both require a well-founded derivation to avoid circularity"
+        ],
+        "disanalogies": [
+          "Proof-carrying code assumes a fixed proof; here warrants can themselves be attacked, so the graph is dynamic.",
+          "In proof theory, the proof term is static; here the warrant's validity may depend on the current commitment set."
+        ],
+        "adopted_commitment_refs": [
+          "commitment: REFUTED is a derived property",
+          "commitment: attack edges are the only route to REFUTED"
+        ],
+        "overturn_conditions": [
+          "If provenance records are allowed to reference artifacts outside the commitment set, the envelope is breached.",
+          "If the derivation of REFUTED requires solving an undecidable validity check, the system loses its effectiveness."
+        ]
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "Introduce 'warrant defeat' as a second-order attack: a warrant can be attacked by another warrant, and an attack edge is only effective if its warrant is undefeated in the grounded extension of the warrant graph. This makes the system two-level but preserves the derived property because REFUTED is still computed via a fixed-point over the combined artifact-warrant graph.",
+      "counterconditions": [
+        "If warrant defeat cycles exist, the grounded extension may be empty or non-unique, making the derivation undefined.",
+        "If the warrant graph is not well-founded, the fixed-point computation may not terminate."
+      ],
+      "analogy": {
+        "source_memory_refs": ["SRC_001"],
+        "shared_structure": [
+          "Both use Dung-style argumentation semantics",
+          "Both treat REFUTED as a derived status, not a stored one"
+        ],
+        "disanalogies": [
+          "In standard Dung, all nodes are arguments; here we have two levels (artifacts and
