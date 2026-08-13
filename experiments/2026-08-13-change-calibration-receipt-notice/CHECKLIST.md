@@ -1,5 +1,5 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=13 blockers=none
+State: next=15 blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
@@ -195,19 +195,43 @@ that lands code+tests+map together.
        the 5 MCP-thread tests failed this run, so no flake isolation
        needed.
 
-- [ ] 13. (R11) Targeted replay-validation proof on a known-good
+- [x] 13. (R11) Targeted replay-validation proof on a known-good
        committed root, demonstrating byte-unchanged replay.
-       done-when: `python -c "
-       from deepreason.verification.report import verify_root_report
-       import json
-       r = verify_root_report('experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a')
-       print(json.dumps({k: r[k] for k in ('valid', 'epistemic_checks_passed')}, default=str))
-       "` -> paste output, `valid` is `true` (or matches this root's pre-existing documented status if not `true` — cross-check against `tools/root_sweep.py`'s existing baseline before treating any `false` as new)
+       done-when (revised: `verify_root_report` returns a
+       `VerificationReportV2` object, not subscriptable as planned —
+       used `.integrity`/`.epistemic` attributes, and cross-checked with
+       `deepreason.invariants.verify_root` for the `violations` list):
+       ```
+       >>> verify_root_report(root).integrity
+       ()
+       >>> verify_root_report(root).epistemic
+       (VerificationFindingV2(... check='adjudication-blindness', ...
+         detail='criticism ran and produced no attack...', source='derived'),)
+       >>> verify_root(root)['violations']
+       []
+       ```
+       Zero integrity violations, zero epistemic-check failures (the one
+       epistemic finding present is an informational "no attack in this
+       window" note, not a violation) — confirms this pre-existing v6
+       root (compiled/committed long before this tranche, so it could
+       never have carried the notice-triggering configuration this
+       tranche adds) replays byte-unchanged, exactly as SPEC.md S9
+       predicted.
 
-- [ ] 14. (R12) Re-confirm the errata scan is still empty at validation
+- [x] 14. (R12) Re-confirm the errata scan is still empty at validation
        time (SPEC.md §3 ran it at spec time; re-run after the code
        change lands in case a later edit introduced a new claim).
        done-when: `grep -rln "calibration.receipt\|CALIBRATION_RECEIPT" docs/ | sort` and `grep -rln "trial_required" docs/ | sort` both paste output identical to SPEC.md §3's lists (no new hits from this tranche's own doc edits claiming the mechanism now "works" — it still doesn't; only the refusal changed)
+       ```
+       calibration.receipt: CON-authority.md, SEAM-adjudication-x-authority.md, SUB-manifest.md
+       trial_required: CON-authority.md, CON-criticism-source.md, SEAM-rules-x-workflow.md, SUB-workflow.md, DUAL_MODE_CONJECTURE_PREPLAN.md
+       ```
+       One new hit vs SPEC.md §3's list: `SUB-manifest.md`, added by
+       THIS tranche's own step 9 edit (line 160: "an unsatisfiable
+       calibration-receipt requirement" / "converted from a refusal") —
+       correctly states the mechanism is still unsatisfiable, not that
+       it works. `trial_required` list unchanged. No docs/ERRATA.md
+       entry needed (still true, as recorded in SPEC.md §3).
 
 - [ ] 15. [COMMIT] (all) Final push and clean-tree confirmation.
        done-when: `git status --porcelain` is empty AND `git log
