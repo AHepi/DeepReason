@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The 'registered attack-defeater' pre-pass operates over defeater edges using a least-fixpoint semantics that is defined independently of the Dung grounded-extension fixed point. When an attack edge is targeted by a defeater warrant whose carrier is not itself attacked by any surviving edge, the edge is removed in a monotone least-fixpoint over the defeater subgraph; only afterward does the standard Dung grounded extension run on the surviving graph. This composes TWO fixed points (defeater-pre-pass + grounded extension) rather than deriving reinstatement from a single skeptical fixed-point semantics. The problem requires that proposals preserve reinstatement as 'a derived property of the same fixpoint'; here reinstatement of an argument whose attacker was defeated arises from the separate defeater pre-pass, not from the grounded-extension fixpoint itself, so the guarantee is not preserved as stated.",
+      "counterexample": null
+    }
+  ]
+}

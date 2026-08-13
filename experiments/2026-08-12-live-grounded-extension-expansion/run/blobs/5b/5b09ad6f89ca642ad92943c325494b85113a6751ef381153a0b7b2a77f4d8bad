@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The recurrence—'an attack edge is removed iff it is targeted by a defeater warrant whose carrier is not itself attacked by any surviving attack edge'—is self-referential: an edge's survival depends on its defeater's carrier's survival, which depends on that carrier's attackers' survival, recursively through the defeater subgraph. This is one connected monotone operator whose least fixpoint simultaneously determines which edges survive and which arguments are reinstated",
+  "verdict": "pass"
+}
+```

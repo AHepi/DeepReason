@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target's core determinism claim — 'deterministic as a pure function of the graph' — is stated independently and stands on its own: a pure function of a finite graph yields a unique output regardless of cycle structure.",
+  "verdict": "pass"
+}
+```
