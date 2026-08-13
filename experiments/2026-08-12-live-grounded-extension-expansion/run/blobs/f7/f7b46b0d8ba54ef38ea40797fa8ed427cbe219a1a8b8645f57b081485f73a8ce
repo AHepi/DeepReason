@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The shortest-defense-path requirement breaks reinstatement as a derived property: an argument A reinstated by B (where B defends A) may be assigned a shorter witness-minimal path through an unrelated attacker C whose shortest path to a committed root is shorter than the path through B, so the oracle can reject A's reinstatement even though B is the genuine defender — meaning reinstatement is no longer derived from the grounded extension but is overridden by the canonical path ordering.
+
+TARGET:
+Introduce a commitment-root validity oracle: require every accepted node to have a shortest defense path to a committed root, and strengthen acceptance by requiring the path to be witness-minimal under a polynomial-time canonical ordering. This gives a graded notion of commitment and makes reinstatement a property of path-minimality. Criticizable because shortest paths may not capture argumentative reinstatement, and the canonical ordering may be manipulable by adding redundant defense paths.

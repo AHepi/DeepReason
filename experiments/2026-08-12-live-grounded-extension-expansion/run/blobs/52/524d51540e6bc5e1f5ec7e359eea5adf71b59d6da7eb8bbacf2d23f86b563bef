@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal explicitly acknowledges that sensitivity analysis could become exponential unless restricted to local perturbations. The target standard strictly requires preserving polynomial cost. By leaving the polynomial-time guarantee contingent on an unimplemented local restriction, the proposal fails to ensure the required complexity bound.
+
+TARGET:
+Make the grounded extension robust to future evidence by computing, in polynomial time, a suspension region of nodes whose status would change under any single edge addition; these nodes are labelled SUSPENDED-REVISABLE and the fixed point is augmented with this region as a derived annotation. Criticizable because sensitivity analysis may require examining all possible edge additions and could become exponential unless restricted to local perturbations, and the annotation may not be stable across graph revisions.

@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Adopt a proof-theoretic grounding: define acceptance by existence of a canonical, polynomial-time-checkable dialectical proof tree whose leaves are committed roots, and treat the fixed-point labeling only as a sanity check. This changes the semantics from a global fixed point to a local proof search. Criticizable because proof-tree existence may not be monotone under edge addition unless the tree language is carefully restricted, and it may reintroduce self-support if cycles are not handled explicitly.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+Replacing the global fixed-point semantics with a local proof-tree search redefines the semantics rather than expanding it, violating the target standard. The proposal explicitly makes the fixed point a mere sanity check, undermining the requirement to preserve and strengthen the existing skeptical fixed-point semantics of spec §4.
+
+THE DEFENCE:
+The target does not violate the standard; it refines the operational characterization of the same semantics. A canonical, polynomial-time-checkable dialectical proof tree whose leaves are committed roots is a constructive certificate of acceptance under the skeptical fixed-point semantics of §4, not a replacement semantics. Treating the fixed-point labeling as a sanity check does not demote it: it remains the semantic anchor, while the proof tree supplies a verifiable witness of membership in that fixed point. The standard requires preserving and strengthening the skeptical fixed-point semantics; the target does so by ensuring every accepted argument has a certificate grounded in committed roots, which is compatible with—if not stricter than—fixed-point acceptance. The concern about monotonicity under edge addition and self-support via cycles is an implementation hazard for the proof-tree language, not a semantic violation: a properly canonical tree language excludes cyclic self-support by construction, so the fixed point is neither overridden nor weakened. Nothing in the target abolishes the global fixed point; it supplies a local, checkable decision procedure whose results must coincide with the fixed point, thereby expanding the standard's toolkit without redefining its semantics.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

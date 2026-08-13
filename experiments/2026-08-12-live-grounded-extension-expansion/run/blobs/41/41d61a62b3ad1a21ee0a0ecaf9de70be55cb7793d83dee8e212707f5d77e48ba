@@ -1,0 +1,12 @@
+TARGET:
+For every UNDECIDED node, compute its suspension margin: the minimum number of attack-edge deletions that would make it accepted under grounded semantics, using a polynomial-time sensitivity oracle over the final fixpoint rather than bounded-depth lookahead. This turns the binary suspension state into a graded diagnostic without promoting any node, thereby preserving the skeptical semantics and all guarantees.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 preserves the stated guarantees but does not expand or strengthen the grounded extension itself; it only regrades existing UNDECIDED nodes. The problem asks to 'expand and strengthen DeepReason's grounded extension' — the accepted/refuted/suspended fixed point — not to add a secondary diagnostic over an unchanged fixpoint. As stated, it leaves the extension identical, so it fails the problem's 'expand/strengthen' scope.
+
+THE DEFENCE:
+The critic's case rests on a stipulation that 'expand and strengthen the grounded extension' must necessarily mean enlarging the set of accepted nodes or modifying the accepted/refuted/suspended fixed point. This is not actually established by the problem statement as quoted. The phrase 'expand and strengthen' can equally well refer to enriching the analytical structure of the extension itself—transforming a coarse binary classification into a graded diagnostic while preserving all skeptical guarantees. The target's design is deliberately conservative: it preserves the grounded extension's status assignments while expanding the informational content associated with each UNDECIDED node via a polynomial-time sensitivity oracle. This constitutes a strengthening of the extension's diagnostic power without risking the semantic guarantees that a reckless promotion of nodes would violate. The critic asserts that 'it leaves the extension identical,' but this conflates the node-status mapping with the extension as an analytical object. The extension's status assignments are preserved by design; its diagnostic granularity is expanded. Whether the problem intended enlargement of the accepted set or enrichment of the extension's structure is not settled by the quoted language, so the critic's scope claim is an unproven interpretation, not an established requirement. Without that interpretation being established, the failure charge does not hold.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

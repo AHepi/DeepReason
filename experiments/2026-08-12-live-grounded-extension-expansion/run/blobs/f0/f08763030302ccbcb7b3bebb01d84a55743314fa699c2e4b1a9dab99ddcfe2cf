@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+Under the 'demand a causal mechanism' stance, the target asserts a 'constructive grounded derivation certificate' can be 'produced as a side output of the fixpoint' but provides no causal mechanism for the production process. The target omits the specific construction algorithm, the certificate's dependency on the fixpoint's internal state, or the mechanism for extracting the finite tree of attack/defense edges during the fixpoint computation. Without specifying the production mechanism, it cannot be verified that the certificate generation preserves the polynomial cost guarantee or is compatible with the skeptical fixed-point semantics.
+
+TARGET:
+Require every accepted node to carry a constructive grounded derivation certificate — a finite tree of attack/defense edges whose leaves are committed roots and whose internal nodes are IN by the grounded rules. The certificate is produced as a side output of the fixpoint and can be independently verified in polynomial time. This strengthens trust in committed roots without altering the semantics.

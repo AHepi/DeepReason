@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Make the grounded extension robust to future evidence by computing, in polynomial time, a suspension region of nodes whose status would change under any single edge addition; these nodes are labelled SUSPENDED-REVISABLE and the fixed point is augmented with this region as a derived annotation. Criticizable because sensitivity analysis may require examining all possible edge additions and could become exponential unless restricted to local perturbations, and the annotation may not be stable across graph revisions.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The proposal explicitly acknowledges that sensitivity analysis could become exponential unless restricted to local perturbations. The target standard strictly requires preserving polynomial cost. By leaving the polynomial-time guarantee contingent on an unimplemented local restriction, the proposal fails to ensure the required complexity bound.
+
+THE DEFENCE:
+The critic's case conflates an acknowledged risk with an established failure, and misattributes the exponential concern to the target itself. First, the target expressly requires computing the suspension region 'in polynomial time'; this is a strict, self-contained complexity mandate, not a guarantee left contingent on an external restriction. Second, the exponential concern is identified in the TARGET's own self-critique, not demonstrated as an actual property of the proposed computation; absent any established proof that polynomial-time computation is unattainable here, the case rests on speculation rather than fact. Third, the local-perturbation restriction is mentioned only as a possible mitigating design choice within the self-critique; the target's polynomial-time clause is stated unconditionally, so citing the unimplemented restriction does not establish that the standard is violated. Fourth, the instability-across-revisions objection is asserted without any argument or evidence that the annotation actually fails to stabilize; a bare 'may not be stable' is not an established defect. Accordingly, neither clause establishes non-compliance: the polynomial bound is explicitly required, the exponential risk is hypothetical and acknowledged rather than proven, and no fact shows the requirement is unmet.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

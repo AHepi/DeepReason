@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The impossibility boundary is too restrictive: it assumes the only graph-enrichment vector is monotone edge construction, but a non-monotone enrichment (e.g., contracting a strongly-connected defense cycle into a single macro-node) can strictly increase the accepted set while preserving determinism, polynomial cost, and committed-root validity, thereby falsifying the claim that vocabulary enrichment is the only responsible strengthening.
+
+TARGET:
+Prove an impossibility boundary: any monotone edge-construction enrichment that preserves determinism, polynomial cost, and committed-root validity cannot increase the set of accepted conjectures beyond the original grounded extension; therefore the only responsible strengthening is to enrich the vocabulary of defeat, e.g., typed attacks with side conditions, rather than the graph. Criticizable because the proof may rely on a too-restrictive definition of edge-construction and miss enrichment via annotations or proof certificates.

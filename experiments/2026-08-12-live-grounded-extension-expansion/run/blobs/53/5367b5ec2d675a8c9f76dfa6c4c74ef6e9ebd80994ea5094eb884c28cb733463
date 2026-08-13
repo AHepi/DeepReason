@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal explicitly acknowledges that reinstatement may become non-structural under a semiring of evidence. Since the target standard mandates preserving reinstatement as a derived property, this admitted failure means the proposal violates the core requirements of the problem.
+
+TARGET:
+Use a semiring of evidence, e.g., tropical or fuzzy, to assign each attack a weight and each defense a contribution; acceptance is determined by solving a polynomial-time system of equations over the semiring, with the grounded extension as the least solution. This generalizes integer weights but changes the algebraic structure. Criticizable because the choice of semiring is not uniquely justified and may make reinstatement non-structural or require an additional fixpoint that breaks polynomial cost.

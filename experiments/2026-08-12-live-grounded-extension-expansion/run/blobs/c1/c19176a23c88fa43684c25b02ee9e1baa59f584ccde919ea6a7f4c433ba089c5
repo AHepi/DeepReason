@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (succ:18df3647b4c8) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate 18df3647b4c8 on succ:b06d99eca5e7. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Adopt a proof-theoretic grounding: define acceptance by existence of a canonical, polynomial-time-checkable dialectical proof tree whose leaves are committed roots, and treat the fixed-point labeling only as a sanity check. This changes the semantics from a global fixed point to a local proof search. Criticizable because proof-tree existence may not be monotone under edge addition unless the tree language is carefully restricted, and it may reintroduce self-support if cycles are not handled explicitly.
+commitments: (none)
+
+TARGET SRC_002
+Use a semiring of evidence, e.g., tropical or fuzzy, to assign each attack a weight and each defense a contribution; acceptance is determined by solving a polynomial-time system of equations over the semiring, with the grounded extension as the least solution. This generalizes integer weights but changes the algebraic structure. Criticizable because the choice of semiring is not uniquely justified and may make reinstatement non-structural or require an additional fixpoint that breaks polynomial cost.
+commitments: (none)
+
+TARGET SRC_003
+Make the grounded extension robust to future evidence by computing, in polynomial time, a suspension region of nodes whose status would change under any single edge addition; these nodes are labelled SUSPENDED-REVISABLE and the fixed point is augmented with this region as a derived annotation. Criticizable because sensitivity analysis may require examining all possible edge additions and could become exponential unless restricted to local perturbations, and the annotation may not be stable across graph revisions.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

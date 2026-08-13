@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "the target asserts a 'change-propagation order that provably reaches the same fixpoint in polynomial total time' but provides no causal mechanism: the target omits the specific ordering rule, the conflict propagation invariant, or the dynamic dependency tracking procedure that would causally prevent re-processing cycles or redundant updates",
+  "verdict": "fail"
+}
+```

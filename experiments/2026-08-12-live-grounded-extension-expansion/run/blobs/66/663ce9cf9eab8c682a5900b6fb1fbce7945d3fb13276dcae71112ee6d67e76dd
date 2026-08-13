@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+Under the 'demand a causal mechanism' stance, the target asserts a 'monotone invariant that blocks any later reinstatement' but provides no causal mechanism for how this invariant is defined or maintained. The target omits the specific invariant formula, the monotonicity proof obligation, or the mechanism by which the invariant is enforced during the fixpoint iteration. Reinstatement in argumentation frameworks is subtle and typically requires specific structural conditions; without specifying the invariant's mechanism, it cannot be verified that it correctly blocks reinstatement while preserving the existing fixpoint semantics.
+
+TARGET:
+Define a refutation witness for each REFUTED node: a finite set of attacking chains such that no grounded defense can exist, certified by the absence of an IN defender at the fixpoint and by a monotone invariant that blocks any later reinstatement. This makes refutations checkable and supports a stronger external audit trail while preserving the existing fixpoint.

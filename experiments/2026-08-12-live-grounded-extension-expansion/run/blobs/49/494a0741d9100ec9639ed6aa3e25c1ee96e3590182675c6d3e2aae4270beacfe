@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target explicitly states that the invariant is 'monotone' and 'blocks any later reinstatement'; this is a design specification, not an assertion requiring a fully expanded proof within the same artifact.",
+  "verdict": "pass"
+}
