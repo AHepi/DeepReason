@@ -234,3 +234,98 @@ well-evidenced.
   `AMEND_SOURCE_ALREADY_ADMITTED` (correctly now — the six ARE
   introduced), so restoring the credential and re-running reaches the
   continuation directly.
+
+
+## 2026-08-13 (later) — the continuation ran, and the six documents were used
+
+### What the record shows
+
+`deepreason continue --budget cycles=8 --token-budget 500000` completed on
+this root — the first continuation ever run on a compiled-config
+(`--run-manifest`) root, and the operation that refused
+`CONTINUE_STOP_REQUIRED` the same morning.
+
+**Terminal (typed).**
+
+    state                   completed
+    stop                    cycle 8, event_seq 12989,
+                            digest 036a85c590e03e97
+    terminal_commitment_ref sha256:9a39933cfaf7a05d0193af1a709c688b69a04858a61513686b582f9d32f45258
+    survivors               245        frontier 87
+    completion_status       incomplete
+    verification            integrity 0, epistemic 0, security 494,
+                            completion 355, operational 8
+                            integrity_valid: TRUE
+    accounting              metered 263240 == logged 263240, delta 0
+
+This is a SECOND terminal commitment, at epoch 1: the continuation opened
+its own epoch and closed it. `integrity: 0` with `integrity_valid: true`
+means the record is clean — the six historical `attached-evidence`
+violations are gone and the continuation introduced none. `delta: 0`
+means every token the meter charged is on the log; no silent spend.
+
+**Work done.** 3 023 events past the amendment fence, 181 real model
+calls, 263 240 of the 500 000 authorized tokens. By role: judge 104,
+defender 38, argumentative_critic 23, conjecturer 8, variator 8. The
+heavy judge share is consistent with `ENGAGED_CRITICISM_AUTHORITY=
+defended_trial` routing criticism through real defended trials.
+
+**The six documents were used.** Counted from the model raws under
+`blobs/`:
+
+    post-amendment model calls        181
+    calls naming an admitted source     48   (27%)
+      argumentative_critic  23  (ALL of them)
+      defender               9
+      conjecturer            8
+      variator               7
+      judge                  1
+    handles cited   SRC_001x62  SRC_002x60  SRC_003x29  SRC_005x19
+                    SRC_006x14  SRC_007x14  SRC_008x13  SRC_004x13
+                    SRC_009x2
+
+Every argumentative-critic call cited a source. A representative
+conjecturer output, verbatim: *"Make the greedy acceptance and
+DefenseWitness scans canonical by fixing a total order on arguments
+(lexicographic over content hash) as part of the semantics, so every
+polynomial scan is enumeration-order independent by construction; the
+contradiction in SRC_008 dissolves…"* — a model arguing against a
+specific admitted document. This is model prose and therefore not
+evidence of correctness; it IS evidence that the delivery path works and
+that the seats had the documents in front of them, which the 2026-08-13
+segment above recorded as false for epoch 0.
+
+### Finding — the citations are prose, not verifiable records
+
+    calls emitting structured evidence_refs   0 of 181
+
+`EvidenceRefClaimV1 {block, quote}` is the channel
+`check_candidate_citations` verifies byte-for-byte against the source.
+Not one call emitted one, though the dossier parsed to 296 citable
+blocks. So the harness has quote-checking machinery and nothing to check,
+and every citation above rests on prose. Whether that is a prompt/contract
+gap or the models declining an optional field is NOT established by this
+run; parked as P4 in
+`experiments/2026-08-13-change-lifecycle-operation-parity/PARKED.md` with
+a record-first diagnosis rather than guessed at here.
+
+### Residue — what remains unproven
+
+- **No survivor is shown to have been refuted BY a document.** Refuted
+  went 12 → 16 across the continuation, and 48 calls cited sources, but
+  this segment does not claim any specific refutation was caused by
+  admitted evidence. Establishing that needs the warrant chain per
+  refutation, not a citation count.
+- **The citations are unverified.** Per P4, no structured claim exists to
+  check, so "cited SRC_003" means the model wrote that, not that the
+  quoted content is in SRC_003.
+- Epoch 0 remains what the earlier segment said it was: 485 model calls
+  made before any of these documents existed in the record. The
+  continuation does not retroactively inform it.
+- Whether any of the five proposals quoted in the first 2026-08-13
+  segment preserves determinism / polynomial cost / reinstatement /
+  root-validity is still not established, and nothing here bears on it.
+- `security 494` and `completion 355` findings are unexamined by this
+  tranche. They are not new (the same channels read 344 / 305 at
+  finalize, before any continuation cycle) and no claim is made about
+  them either way.
