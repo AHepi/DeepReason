@@ -257,6 +257,22 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   makes every bridged run uncontinuable; setting it unconditionally lets an
   unvalidated tail resume.
 `check: grep -q "validated_post_terminal_drift = True" src/deepreason/runtime/continuation.py && grep -q "CONTINUE_TYPED_STOP_MISMATCH" src/deepreason/runtime/continuation.py && grep -q ") and not validated_post_terminal_drift:" src/deepreason/workflow/lifecycle.py && python -m pytest tests/test_continuation.py -q`
+- **The RECOVERY branch needs that same tolerance, and did not have it.**
+  `prepare_continuation` has two paths: the terminal branch (first
+  continuation) and the `current_resume is not None` branch (completing a
+  crashed one). The terminal branch validates post-terminal drift; the
+  recovery branch demanded `fence.event_seq == resume.resume_event_seq`,
+  which is a FRESHNESS assertion that only holds when nothing was appended
+  between the terminal and the resume. An amendment epoch appends exactly
+  there, so a continuation crashed on an amended root was permanently
+  unrecoverable — `CONTINUE_RESUME_RECOVERY_MISMATCH` forever, with every
+  other field matching. Measured on grounded-extension run
+  `8e22d0431fd2b98d`: fence 9949, resume 9967, stop digest and requested
+  budget identical. Exact fence identity is carried by
+  `run_checkpoint_digest`, which pins the file's bytes; the sequence check
+  is now `fence_seq > resume_event_seq` (a fence AHEAD is still refused)
+  rather than inequality. FIXED 2026-08-13.
+`check: grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q 'or fence.get("event_seq") != current_resume.resume_event_seq' src/deepreason/runtime/continuation.py && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q`
 - **A budget-exhausted run must end with a typed STOPPED receipt, or it can
   never be continued.** `_record_exhaustion_lifecycle_stop` gives the exhaustion
   a lifecycle receipt so `budget_exhausted` counts as resumable; a root that

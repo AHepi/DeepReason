@@ -313,9 +313,21 @@ def _prepare_owned_v4_continuation(
         # Crash recovery is idempotent only before any post-resume work order.
         if harness.workflow_state.post_resume_work_started:
             raise ValueError("CONTINUE_ALREADY_RESUMED")
+        fence_seq = fence.get("event_seq")
         if (
             stop_digest != current_resume.prior_stop_digest
-            or fence.get("event_seq") != current_resume.resume_event_seq
+            # The fence may legitimately sit BEHIND the resume it authorized:
+            # an amendment epoch appends between the terminal and the
+            # continuation, and the terminal branch above already validates
+            # that drift. Exact fence identity is carried by
+            # run_checkpoint_digest on the next line, which pins the file's
+            # bytes; demanding equality here additionally required the fence
+            # to have been current, which made a crashed continuation on an
+            # amended root permanently unrecoverable (grounded-extension run
+            # 8e22d0431fd2b98d: fence 9949, resume 9967). A fence AHEAD of the
+            # resume is still refused.
+            or type(fence_seq) is not int
+            or fence_seq > current_resume.resume_event_seq
             or current_resume.run_checkpoint_digest != run_checkpoint_digest
             or current_resume.manifest_digest != manifest.sha256
             or current_resume.controller_version != control.controller_version
