@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -20,7 +20,7 @@ every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
 
 ---
 
-- [ ] 1. (S13, S9, S3) Write the reader's tests FIRST, in
+- [x] 1. (S13, S9, S3) Write the reader's tests FIRST, in
       `tests/test_results_command.py`: the read-only tree-unchanged snapshot
       test (S13/R17), the typed-absence key-set test over the
       grounded-extension root (S9/R12), and the fact-presence tests for
@@ -29,6 +29,24 @@ every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
       done-when: `python -m pytest tests/test_results_command.py -q 2>&1 | tail -3`
       reports collection/import errors naming
       `deepreason.application.results` — not a syntax error in the test file.
+
+      PROOF (`python -m pytest tests/test_results_command.py -q`):
+
+          >       from deepreason.application.results import results_summary
+          E       ModuleNotFoundError: No module named 'deepreason.application.results'
+          tests/test_results_command.py:202: ModuleNotFoundError
+          FAILED ...::test_results_summary_reports_run_identity_state_and_budget
+          FAILED ...::test_results_summary_reports_artifact_survivor_and_frontier_counts
+          FAILED ...::test_absent_facts_are_typed_absences_not_omitted_keys
+          FAILED ...::test_every_absence_reason_is_reachable_from_the_declared_set
+          FAILED ...::test_results_summary_writes_nothing_into_a_committed_root
+          FAILED ...::test_results_summary_carries_its_schema_and_resolution_provenance
+          6 failed in 0.20s
+
+      Six tests, all failing on the missing module — the right reason. Fixtures
+      are selected by PROPERTY over `git ls-files` (smallest root carrying all
+      four terminal files; smallest carrying none), never by hard path, so a
+      legitimate root rename cannot break them.
 
 - [ ] 2. (S1, S2, S3, S4) Create `src/deepreason/application/results.py` with
       `results_summary(path, *, verify=False)` covering the schema's `schema`,
