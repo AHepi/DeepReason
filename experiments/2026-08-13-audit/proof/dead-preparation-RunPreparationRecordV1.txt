@@ -1,0 +1,7 @@
+=== symbol: RunPreparationRecordV1  defined: src/deepreason/preparation.py ===
+--- reference scan: rg -l -w 'RunPreparationRecordV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]RunPreparationRecordV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/preparation.py
+(above blank = zero hits)

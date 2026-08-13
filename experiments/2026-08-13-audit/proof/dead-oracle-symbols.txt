@@ -1,0 +1,36 @@
+src/deepreason/oracle.py:115:def _short(value: object, limit: int = 120) -> str:
+src/deepreason/oracle.py:120:def _compile(source: str, entry: str):
+src/deepreason/oracle.py:143:def _sandbox_abort_verdict(error: OracleSandboxAborted) -> tuple[str, dict]:
+src/deepreason/oracle.py:150:def _run_local(
+src/deepreason/oracle.py:185:def run(source: str, entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+src/deepreason/oracle.py:197:def run_from_spec(source: str, budget) -> tuple:
+src/deepreason/oracle.py:206:def run_from_full_spec(budget) -> tuple:
+src/deepreason/oracle.py:219:def exec_oracle_commitment(entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT) -> Commitment:
+src/deepreason/oracle.py:234:def candidate_checker_commitment(
+src/deepreason/oracle.py:270:def _run_property_local(
+src/deepreason/oracle.py:328:def run_property(
+src/deepreason/oracle.py:352:def run_property_from_spec(source: str, budget) -> tuple:
+src/deepreason/oracle.py:363:def _load_spec(budget) -> dict:
+src/deepreason/oracle.py:370:def property_oracle_commitment(
+src/deepreason/oracle.py:405:def _gate_local(source: str, args: list, step_limit: int) -> tuple[str, str]:
+src/deepreason/oracle.py:421:def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str]:
+src/deepreason/oracle.py:472:def counterexample_commitment(base: Commitment, args) -> Commitment | None:
+src/deepreason/oracle.py:477:def _fuzz_property_local(
+src/deepreason/oracle.py:533:def fuzz_property(
+src/deepreason/oracle.py:609:def _check_generator_local(
+src/deepreason/oracle.py:665:def check_generator(
+src/deepreason/oracle.py:68:class _StepExceeded(Exception):
+src/deepreason/oracle.py:692:def check_generator_from_spec(source: str, budget) -> tuple:
+src/deepreason/oracle.py:736:def _check_checker_local(
+src/deepreason/oracle.py:73:def _step_budget(step_limit: int):
+src/deepreason/oracle.py:779:def check_checker(
+src/deepreason/oracle.py:801:def check_checker_from_spec(source: str, budget) -> tuple:
+src/deepreason/oracle.py:811:def checker_wf_commitment(base: Commitment) -> Commitment | None:
+src/deepreason/oracle.py:833:def property_violation_commitment(
+src/deepreason/oracle.py:864:def generator_wf_commitment(
+src/deepreason/oracle.py:916:def _run_dataset_local(check: str, rows: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+src/deepreason/oracle.py:92:def _guard(tree: ast.AST) -> None:
+src/deepreason/oracle.py:936:def dataset_rows(data: bytes, delimiter: str) -> list:
+src/deepreason/oracle.py:963:def run_dataset(check: str, rows: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+src/deepreason/oracle.py:975:def dataset_oracle_commitment(
+src/deepreason/oracle.py:995:def dataset_from_spec(source: str, budget, artifact, blobs) -> tuple:

@@ -1,0 +1,19 @@
+src/deepreason/mcp_server.py:257:def _tools() -> list[dict]:
+src/deepreason/mcp_server.py:264:class _MCPInputSchemaError(ValueError):
+src/deepreason/mcp_server.py:268:def _schema_ref(root_schema: dict, reference: str) -> dict:
+src/deepreason/mcp_server.py:281:def _validate_mcp_input(
+src/deepreason/mcp_server.py:36:def _intake_form_schema() -> dict:
+src/deepreason/mcp_server.py:427:def _missing_manifest_credentials(manifest) -> list[str]:
+src/deepreason/mcp_server.py:439:def _resolve_managed_root(run_id: str):
+src/deepreason/mcp_server.py:445:def _public_budget(arguments: dict):
+src/deepreason/mcp_server.py:456:def _plain_readiness_guidance(readiness) -> str:
+src/deepreason/mcp_server.py:48:def _run_tools() -> list[dict]:
+src/deepreason/mcp_server.py:503:def _require_readiness():
+src/deepreason/mcp_server.py:512:def _preparation_service():
+src/deepreason/mcp_server.py:518:def _start_run(
+src/deepreason/mcp_server.py:592:def _read_run_result(root) -> dict:
+src/deepreason/mcp_server.py:600:def _managed_response(run_id: str, payload: dict) -> dict:
+src/deepreason/mcp_server.py:610:def _safe_tool_error(error: Exception) -> str:
+src/deepreason/mcp_server.py:638:def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
+src/deepreason/mcp_server.py:810:def handle(message: dict, *, notification_sink=None) -> dict | None:
+src/deepreason/mcp_server.py:913:def main() -> int:

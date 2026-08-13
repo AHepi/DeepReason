@@ -1,0 +1,10 @@
+=== symbol: record_trigger_decision  defined: src/deepreason/views/jolt_signals.py ===
+--- reference scan: rg -l -w 'record_trigger_decision' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]record_trigger_decision['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'record_trigger_decision' pyproject.toml ---
+
+(above blank = zero hits)

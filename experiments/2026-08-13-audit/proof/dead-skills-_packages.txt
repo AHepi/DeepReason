@@ -1,0 +1,10 @@
+=== symbol: _packages  defined: src/deepreason/skills/validate.py ===
+--- reference scan: rg -l -w '_packages' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_packages['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_packages' pyproject.toml ---
+
+(above blank = zero hits)

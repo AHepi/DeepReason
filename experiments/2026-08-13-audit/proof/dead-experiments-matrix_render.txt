@@ -1,0 +1,10 @@
+=== symbol: matrix_render  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'matrix_render' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]matrix_render['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'matrix_render' pyproject.toml ---
+
+(above blank = zero hits)

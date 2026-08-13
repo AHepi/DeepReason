@@ -1,0 +1,10 @@
+=== symbol: pointer_get  defined: src/deepreason/llm/repair.py ===
+--- reference scan: rg -l -w 'pointer_get' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]pointer_get['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'pointer_get' pyproject.toml ---
+
+(above blank = zero hits)

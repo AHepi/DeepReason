@@ -1,0 +1,10 @@
+CANDIDATE-DEAD: suppressible_lineage_exemplars (src/deepreason/jolts.py) -- proof: dead-jolts-suppressible_lineage_exemplars.txt
+CANDIDATE-DEAD: validate_action_against_state (src/deepreason/jolts.py) -- proof: dead-jolts-validate_action_against_state.txt
+CANDIDATE-DEAD: BranchBudget (src/deepreason/jolts.py) -- proof: dead-jolts-BranchBudget.txt
+CANDIDATE-DEAD: BranchSpec (src/deepreason/jolts.py) -- proof: dead-jolts-BranchSpec.txt
+CANDIDATE-DEAD: MatchedBranchPlan (src/deepreason/jolts.py) -- proof: dead-jolts-MatchedBranchPlan.txt
+CANDIDATE-DEAD: _file_digest (src/deepreason/jolts.py) -- proof: dead-jolts-_file_digest.txt
+CANDIDATE-DEAD: _stable_order (src/deepreason/jolts.py) -- proof: dead-jolts-_stable_order.txt
+CANDIDATE-DEAD: PilotPreflightReceipt (src/deepreason/jolts.py) -- proof: dead-jolts-PilotPreflightReceipt.txt
+CANDIDATE-DEAD: _mode_value (src/deepreason/jolts.py) -- proof: dead-jolts-_mode_value.txt
+CANDIDATE-DEAD: re_full_digest (src/deepreason/jolts.py) -- proof: dead-jolts-re_full_digest.txt

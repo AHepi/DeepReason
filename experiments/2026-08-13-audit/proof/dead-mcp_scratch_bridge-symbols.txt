@@ -1,0 +1,29 @@
+src/deepreason/mcp_scratch_bridge.py:101:class ScratchOpenInput(_BlockInput):
+src/deepreason/mcp_scratch_bridge.py:105:class ScratchRelatedInput(_BlockInput):
+src/deepreason/mcp_scratch_bridge.py:109:class ScratchAttentionInput(_Input):
+src/deepreason/mcp_scratch_bridge.py:138:class BridgeStartBudget(BaseModel):
+src/deepreason/mcp_scratch_bridge.py:144:class StartBridgeInput(_Input):
+src/deepreason/mcp_scratch_bridge.py:181:class BridgeStatusInput(_Input):
+src/deepreason/mcp_scratch_bridge.py:185:class _BridgePage(_Input):
+src/deepreason/mcp_scratch_bridge.py:190:class BridgeResultInput(_BridgePage):
+src/deepreason/mcp_scratch_bridge.py:194:class BridgeClaimsInput(_BridgePage):
+src/deepreason/mcp_scratch_bridge.py:228:def tool_definitions() -> list[dict[str, Any]]:
+src/deepreason/mcp_scratch_bridge.py:241:def _bounded_scratch_payload(payload: dict[str, Any]) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:284:def _scratch_map(value: ScratchMapInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:297:def _scratch_search(value: ScratchSearchInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:310:def _scratch_open(value: ScratchOpenInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:324:def _scratch_related(value: ScratchRelatedInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:338:def _scratch_attention(value: ScratchAttentionInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:358:def _managed_root(run_id: str) -> Path:
+src/deepreason/mcp_scratch_bridge.py:364:def _bridge_intent(value: StartBridgeInput) -> GroundedBridgeBuildIntentV1:
+src/deepreason/mcp_scratch_bridge.py:382:def _start_bridge(
+src/deepreason/mcp_scratch_bridge.py:392:def _bridge_status(value: BridgeStatusInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:399:def _bridge_result(value: BridgeResultInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:410:def _bridge_claims(value: BridgeClaimsInput) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:434:def call_tool(name: str, arguments: dict[str, Any], *, progress_callback=None) -> dict[str, Any]:
+src/deepreason/mcp_scratch_bridge.py:467:def call_tool_text(
+src/deepreason/mcp_scratch_bridge.py:63:class _Input(BaseModel):
+src/deepreason/mcp_scratch_bridge.py:76:class _HistoricalPage(_Input):
+src/deepreason/mcp_scratch_bridge.py:81:class ScratchMapInput(_HistoricalPage):
+src/deepreason/mcp_scratch_bridge.py:85:class ScratchSearchInput(_HistoricalPage):
+src/deepreason/mcp_scratch_bridge.py:89:class _BlockInput(_HistoricalPage):

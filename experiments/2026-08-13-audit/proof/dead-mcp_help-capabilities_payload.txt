@@ -1,0 +1,10 @@
+=== symbol: capabilities_payload  defined: src/deepreason/mcp_help.py ===
+--- reference scan: rg -l -w 'capabilities_payload' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]capabilities_payload['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'capabilities_payload' pyproject.toml ---
+
+(above blank = zero hits)

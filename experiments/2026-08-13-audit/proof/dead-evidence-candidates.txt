@@ -1,0 +1,8 @@
+CANDIDATE-DEAD: _whitespace_folded (src/deepreason/evidence/citations.py) -- proof: dead-evidence-_whitespace_folded.txt
+CANDIDATE-DEAD: _bounded_prefix (src/deepreason/evidence/dossier.py) -- proof: dead-evidence-_bounded_prefix.txt
+CANDIDATE-DEAD: _InputRecord (src/deepreason/evidence/models.py) -- proof: dead-evidence-_InputRecord.txt
+CANDIDATE-DEAD: _read_regular (src/deepreason/evidence/state.py) -- proof: dead-evidence-_read_regular.txt
+CANDIDATE-DEAD: _read_digest (src/deepreason/evidence/state.py) -- proof: dead-evidence-_read_digest.txt
+CANDIDATE-DEAD: _input_lock (src/deepreason/evidence/state.py) -- proof: dead-evidence-_input_lock.txt
+CANDIDATE-DEAD: _bind_record (src/deepreason/evidence/state.py) -- proof: dead-evidence-_bind_record.txt
+CANDIDATE-DEAD: _resolve_record_path (src/deepreason/evidence/state.py) -- proof: dead-evidence-_resolve_record_path.txt

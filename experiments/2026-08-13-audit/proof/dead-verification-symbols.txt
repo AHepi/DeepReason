@@ -1,0 +1,73 @@
+src/deepreason/verification/__init__.py:75:def __getattr__(name: str):
+src/deepreason/verification/_sandbox.py:22:def seccomp_available() -> bool:
+src/deepreason/verification/_sandbox.py:30:def _deny_network() -> None:
+src/deepreason/verification/_sandbox.py:80:def _limit(kind: int, value: int) -> None:
+src/deepreason/verification/_sandbox.py:88:def main(argv: list[str] | None = None) -> int:
+src/deepreason/verification/brokered.py:108:def _derive_v2(source: str) -> str:
+src/deepreason/verification/brokered.py:37:def _broker_call(socket_path, request, budget):
+src/deepreason/verification/brokered.py:66:def make_llm(socket_path, model, budget):
+src/deepreason/verification/code.py:21:class CodeVerificationResult(BaseModel):
+src/deepreason/verification/code.py:32:def verify_code_patch(
+src/deepreason/verification/contained.py:111:def json_safe(value):
+src/deepreason/verification/contained.py:128:def resolve_observable(output, name):
+src/deepreason/verification/contained.py:145:def run(job):
+src/deepreason/verification/contained.py:306:def main():
+src/deepreason/verification/contained.py:357:class ContainmentUnavailableError(RuntimeError):
+src/deepreason/verification/contained.py:361:def _contained_environment(scratch: str) -> dict[str, str]:
+src/deepreason/verification/contained.py:374:def _containment_limits(
+src/deepreason/verification/contained.py:386:def _apply_containment_limits(limits: dict[str, int]) -> None:
+src/deepreason/verification/contained.py:411:def _kill_group(process: subprocess.Popen[bytes]) -> None:
+src/deepreason/verification/contained.py:421:class ContainedSimulationBackend:
+src/deepreason/verification/contained.py:76:class StepExceeded(Exception):
+src/deepreason/verification/contained.py:80:def guard(source, label):
+src/deepreason/verification/contained.py:90:def load_function(source, entry, label, namespace_extras):
+src/deepreason/verification/lean.py:30:class LeanBackend:
+src/deepreason/verification/llm_broker.py:270:def _digest_prefix(text: str) -> str:
+src/deepreason/verification/llm_broker.py:42:class BrokerRefusal(Exception):
+src/deepreason/verification/llm_broker.py:47:class BrokerLimits:
+src/deepreason/verification/llm_broker.py:64:class BrokerLedger:
+src/deepreason/verification/llm_broker.py:80:class LLMBroker:
+src/deepreason/verification/models.py:107:class VerifierBackend(Protocol):
+src/deepreason/verification/models.py:16:class VerificationRequest(BaseModel):
+src/deepreason/verification/models.py:75:class VerificationResult(BaseModel):
+src/deepreason/verification/registry.py:15:class VerifierRegistryError(ValueError):
+src/deepreason/verification/registry.py:19:class UnknownVerifier(VerifierRegistryError, KeyError):
+src/deepreason/verification/registry.py:24:class VerifierRegistration:
+src/deepreason/verification/registry.py:30:class VerifierRegistry:
+src/deepreason/verification/report.py:1045:def _adjudication_blindness_findings(
+src/deepreason/verification/report.py:1091:def _deferred_model_phase_findings(
+src/deepreason/verification/report.py:1133:def verify_root_report(
+src/deepreason/verification/report.py:1272:def verify_post_commit_report(
+src/deepreason/verification/report.py:141:def _legacy_channel(check: str, detail: str) -> VerificationChannel:
+src/deepreason/verification/report.py:159:def _finding(
+src/deepreason/verification/report.py:174:def _read_terminal(root: Path) -> tuple[dict[str, Any] | None, VerificationFindingV2 | None]:
+src/deepreason/verification/report.py:22:class VerificationFindingV2(BaseModel):
+src/deepreason/verification/report.py:251:def _terminal_findings(
+src/deepreason/verification/report.py:335:def _manifest_schema_version(root: Path) -> int | None:
+src/deepreason/verification/report.py:347:def _model_execution_findings(
+src/deepreason/verification/report.py:34:class VerificationReportV2(BaseModel):
+src/deepreason/verification/report.py:662:def _terminal_authority_findings(
+src/deepreason/verification/report.py:709:def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
+src/deepreason/verification/runner.py:269:class VerifierOperationalError(RuntimeError):
+src/deepreason/verification/runner.py:273:class VerificationRunner:
+src/deepreason/verification/runner.py:29:class CheckResult(BaseModel):
+src/deepreason/verification/runner.py:45:def _minimal_environment(workspace: Path, declared: dict[str, str]) -> dict[str, str]:
+src/deepreason/verification/runner.py:58:def _limit_child() -> None:
+src/deepreason/verification/runner.py:70:def _kill(process: subprocess.Popen[bytes]) -> None:
+src/deepreason/verification/runner.py:80:def _output_items(stdout: bytes, stderr: bytes) -> int:
+src/deepreason/verification/runner.py:94:class TrustedCheckRunner:
+src/deepreason/verification/simulation.py:101:def _guard(tree: ast.AST) -> None:
+src/deepreason/verification/simulation.py:121:def _compile(source: str, entry: str, label: str):
+src/deepreason/verification/simulation.py:142:def _json_safe(value: Any) -> bool:
+src/deepreason/verification/simulation.py:157:def _resolve_observable(output: dict, name: str) -> Any:
+src/deepreason/verification/simulation.py:175:def _local_run(
+src/deepreason/verification/simulation.py:314:def _worker_environment() -> dict[str, str]:
+src/deepreason/verification/simulation.py:326:def _kill(process: subprocess.Popen[bytes]) -> None:
+src/deepreason/verification/simulation.py:336:def _run_worker(
+src/deepreason/verification/simulation.py:397:def _apply_worker_limits(*, memory_bytes: int, cpu_seconds: int) -> None:
+src/deepreason/verification/simulation.py:407:def _worker_main() -> int:
+src/deepreason/verification/simulation.py:452:class SimulationBackend:
+src/deepreason/verification/simulation.py:53:class SimulationRequest(BaseModel):
+src/deepreason/verification/simulation.py:65:class SimulationVerificationResult(VerificationResult):
+src/deepreason/verification/simulation.py:78:class _StepExceeded(Exception):
+src/deepreason/verification/simulation.py:83:def _step_budget(limit: int):

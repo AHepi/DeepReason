@@ -1,0 +1,10 @@
+=== symbol: _catalogs  defined: src/deepreason/workflow/conjecture_recovery.py ===
+--- reference scan: rg -l -w '_catalogs' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_catalogs['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_catalogs' pyproject.toml ---
+
+(above blank = zero hits)

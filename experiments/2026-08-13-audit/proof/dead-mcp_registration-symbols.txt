@@ -1,0 +1,4 @@
+src/deepreason/mcp_registration.py:12:class MCPRegistrationError(ValueError):
+src/deepreason/mcp_registration.py:16:def installed_mcp_executable(
+src/deepreason/mcp_registration.py:40:def registration_payload(
+src/deepreason/mcp_registration.py:56:def registration_json(

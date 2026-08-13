@@ -1,0 +1,7 @@
+=== symbol: CampaignFinding  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'CampaignFinding' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CampaignFinding['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/experiments/campaign.py
+(above blank = zero hits)

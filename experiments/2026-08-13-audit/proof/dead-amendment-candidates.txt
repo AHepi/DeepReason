@@ -1,0 +1,17 @@
+CANDIDATE-DEAD: _reshaped_problem_id (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_reshaped_problem_id.txt
+CANDIDATE-DEAD: _require_terminal_stop (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_require_terminal_stop.txt
+CANDIDATE-DEAD: _admit_supplement (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_admit_supplement.txt
+CANDIDATE-DEAD: _check_evidence_budget (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_check_evidence_budget.txt
+CANDIDATE-DEAD: _successor_workload (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_successor_workload.txt
+CANDIDATE-DEAD: _parent_workload (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_parent_workload.txt
+CANDIDATE-DEAD: _amend_locked (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_amend_locked.txt
+CANDIDATE-DEAD: _stage_epoch_documents (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_stage_epoch_documents.txt
+CANDIDATE-DEAD: _now (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_now.txt
+CANDIDATE-DEAD: _write_once (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_write_once.txt
+CANDIDATE-DEAD: _discard_staged_epoch (src/deepreason/amendment/apply.py) -- proof: dead-amendment-_discard_staged_epoch.txt
+CANDIDATE-DEAD: _AmendmentRecord (src/deepreason/amendment/models.py) -- proof: dead-amendment-_AmendmentRecord.txt
+CANDIDATE-DEAD: _epoch_root (src/deepreason/amendment/state.py) -- proof: dead-amendment-_epoch_root.txt
+CANDIDATE-DEAD: _epoch_manifest_path (src/deepreason/amendment/state.py) -- proof: dead-amendment-_epoch_manifest_path.txt
+CANDIDATE-DEAD: _chain_path (src/deepreason/amendment/state.py) -- proof: dead-amendment-_chain_path.txt
+CANDIDATE-DEAD: _read_chain_lines (src/deepreason/amendment/state.py) -- proof: dead-amendment-_read_chain_lines.txt
+CANDIDATE-DEAD: _decode_record (src/deepreason/amendment/state.py) -- proof: dead-amendment-_decode_record.txt

@@ -1,0 +1,13 @@
+src/deepreason/locking.py:129:def _posix_acquire(stream: BinaryIO, *, blocking: bool) -> None:
+src/deepreason/locking.py:145:def _posix_release(stream: BinaryIO) -> None:
+src/deepreason/locking.py:151:def _windows_acquire(stream: BinaryIO, *, blocking: bool) -> None:
+src/deepreason/locking.py:169:def _windows_release(stream: BinaryIO) -> None:
+src/deepreason/locking.py:176:class ProcessLock:
+src/deepreason/locking.py:323:class ProcessLockSet:
+src/deepreason/locking.py:35:class ProcessLockError(RuntimeError):
+src/deepreason/locking.py:362:def operator_locks(
+src/deepreason/locking.py:39:class ProcessLockBusy(ProcessLockError):
+src/deepreason/locking.py:43:class ProcessLockUnavailable(ProcessLockError):
+src/deepreason/locking.py:47:def _validated_owner(owner: str) -> str:
+src/deepreason/locking.py:60:def _metadata(owner: str) -> bytes:
+src/deepreason/locking.py:71:def _open_lock_file(path: Path) -> BinaryIO:

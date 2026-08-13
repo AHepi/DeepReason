@@ -1,0 +1,10 @@
+=== symbol: _voice_text  defined: src/deepreason/skills/revoice.py ===
+--- reference scan: rg -l -w '_voice_text' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_voice_text['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_voice_text' pyproject.toml ---
+
+(above blank = zero hits)

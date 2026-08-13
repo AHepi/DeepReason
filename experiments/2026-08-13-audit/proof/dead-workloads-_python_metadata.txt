@@ -1,0 +1,10 @@
+=== symbol: _python_metadata  defined: src/deepreason/workloads/code.py ===
+--- reference scan: rg -l -w '_python_metadata' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_python_metadata['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_python_metadata' pyproject.toml ---
+
+(above blank = zero hits)

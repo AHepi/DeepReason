@@ -1,0 +1,10 @@
+=== symbol: validate_tour  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'validate_tour' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]validate_tour['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'validate_tour' pyproject.toml ---
+
+(above blank = zero hits)

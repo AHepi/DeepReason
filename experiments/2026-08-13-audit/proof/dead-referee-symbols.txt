@@ -1,0 +1,16 @@
+src/deepreason/referee.py:118:def _read_clipped(path: Path, limit: int) -> str:
+src/deepreason/referee.py:128:def build_config_review_view(
+src/deepreason/referee.py:212:class ConfigRefereeVerdictV1(_FrozenModel):
+src/deepreason/referee.py:250:def validate_config_referee_verdict(
+src/deepreason/referee.py:264:def record_config_critique(
+src/deepreason/referee.py:290:def record_rejected_config_critique(
+src/deepreason/referee.py:314:def latest_config_critique(harness) -> dict | None:
+src/deepreason/referee.py:335:def _wire_contract_class():
+src/deepreason/referee.py:430:def config_referee_wire_contract(aliases=None):
+src/deepreason/referee.py:434:def render_config_review_pack(view: ConfigReviewViewV1) -> str:
+src/deepreason/referee.py:455:def run_config_referee(
+src/deepreason/referee.py:68:class ConfigRefereeError(ValueError):
+src/deepreason/referee.py:72:class _FrozenModel(BaseModel):
+src/deepreason/referee.py:732:def parse_config_referee_verdict(payload: str | bytes) -> ConfigRefereeVerdictV1:
+src/deepreason/referee.py:78:class ConfigObservationV1(_FrozenModel):
+src/deepreason/referee.py:86:class ConfigReviewViewV1(_FrozenModel):

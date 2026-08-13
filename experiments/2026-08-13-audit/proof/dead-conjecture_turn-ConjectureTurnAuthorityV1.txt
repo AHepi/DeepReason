@@ -1,0 +1,7 @@
+=== symbol: ConjectureTurnAuthorityV1  defined: src/deepreason/conjecture_turn.py ===
+--- reference scan: rg -l -w 'ConjectureTurnAuthorityV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ConjectureTurnAuthorityV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/conjecture_turn.py
+(above blank = zero hits)

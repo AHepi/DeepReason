@@ -1,0 +1,10 @@
+=== symbol: _bounded_json  defined: src/deepreason/capabilities/models.py ===
+--- reference scan: rg -l -w '_bounded_json' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_bounded_json['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_bounded_json' pyproject.toml ---
+
+(above blank = zero hits)

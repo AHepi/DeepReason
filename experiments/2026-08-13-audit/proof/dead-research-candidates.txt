@@ -1,0 +1,6 @@
+CANDIDATE-DEAD: load_static_corpus (src/deepreason/research/backends.py) -- proof: dead-research-load_static_corpus.txt
+CANDIDATE-DEAD: _evidence_for (src/deepreason/research/backends.py) -- proof: dead-research-_evidence_for.txt
+CANDIDATE-DEAD: _record_fetch_receipts (src/deepreason/research/backends.py) -- proof: dead-research-_record_fetch_receipts.txt
+CANDIDATE-DEAD: AskUserBackend (src/deepreason/research/backends.py) -- proof: dead-research-AskUserBackend.txt
+DYNAMIC-REF: FetchReceiptV1 (src/deepreason/research/fetch.py) -- string hits: src/deepreason/research/fetch.py  -- proof: dead-research-FetchReceiptV1.txt
+DYNAMIC-REF: FetchOutcome (src/deepreason/research/fetch.py) -- string hits: src/deepreason/research/fetch.py  -- proof: dead-research-FetchOutcome.txt

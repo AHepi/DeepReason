@@ -1,0 +1,10 @@
+=== symbol: _known  defined: src/deepreason/storage/merge.py ===
+--- reference scan: rg -l -w '_known' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_known['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_known' pyproject.toml ---
+
+(above blank = zero hits)

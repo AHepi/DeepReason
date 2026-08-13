@@ -1,0 +1,10 @@
+=== symbol: _frontier_quality  defined: src/deepreason/compat_eval.py ===
+--- reference scan: rg -l -w '_frontier_quality' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_frontier_quality['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_frontier_quality' pyproject.toml ---
+
+(above blank = zero hits)

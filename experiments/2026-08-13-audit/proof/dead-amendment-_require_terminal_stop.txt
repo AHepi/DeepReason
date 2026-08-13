@@ -1,0 +1,10 @@
+=== symbol: _require_terminal_stop  defined: src/deepreason/amendment/apply.py ===
+--- reference scan: rg -l -w '_require_terminal_stop' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_require_terminal_stop['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_require_terminal_stop' pyproject.toml ---
+
+(above blank = zero hits)

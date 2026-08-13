@@ -1,0 +1,10 @@
+=== symbol: BrainModel  defined: src/deepreason/brain/models.py ===
+--- reference scan: rg -l -w 'BrainModel' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BrainModel['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'BrainModel' pyproject.toml ---
+
+(above blank = zero hits)

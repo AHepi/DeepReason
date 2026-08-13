@@ -1,0 +1,9 @@
+CANDIDATE-DEAD: _pointer (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_pointer.txt
+CANDIDATE-DEAD: _slug_identifier (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_slug_identifier.txt
+CANDIDATE-DEAD: _js_identifier (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_js_identifier.txt
+CANDIDATE-DEAD: _component_alias_for_index (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_component_alias_for_index.txt
+CANDIDATE-DEAD: _error_code (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_error_code.txt
+CANDIDATE-DEAD: _validation_diagnostics (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_validation_diagnostics.txt
+CANDIDATE-DEAD: _cycle_aliases (src/deepreason/workflows/manifest_compiler.py) -- proof: dead-workflows-_cycle_aliases.txt
+CANDIDATE-DEAD: WorkflowCheckpoint (src/deepreason/workflows/website.py) -- proof: dead-workflows-WorkflowCheckpoint.txt
+CANDIDATE-DEAD: _LockedBlobStore (src/deepreason/workflows/website.py) -- proof: dead-workflows-_LockedBlobStore.txt

@@ -1,0 +1,9 @@
+src/deepreason/invariants.py:118:def _expected_call_outcome(
+src/deepreason/invariants.py:142:def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
+src/deepreason/invariants.py:32:class ExpectedCallOutcome(str, Enum):
+src/deepreason/invariants.py:4161:def verify_root_report(root: Path, meter_total: int | None = None):
+src/deepreason/invariants.py:46:def _is_typed_bridge_failure(event) -> bool:
+src/deepreason/invariants.py:57:def _legacy_bridge_failure_call_seqs(events, bridge_state) -> set[int]:
+src/deepreason/invariants.py:806:def _amendment_epochs(
+src/deepreason/invariants.py:909:def _epoch_input_for_dossier(root: Path, epochs, dossier):
+src/deepreason/invariants.py:920:def verify_root(root: Path, meter_total: int | None = None) -> dict:

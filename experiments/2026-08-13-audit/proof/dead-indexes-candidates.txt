@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _generation_key (src/deepreason/indexes.py) -- proof: dead-indexes-_generation_key.txt
+CANDIDATE-DEAD: _event_rows (src/deepreason/indexes.py) -- proof: dead-indexes-_event_rows.txt

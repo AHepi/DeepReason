@@ -1,0 +1,15 @@
+CANDIDATE-DEAD: _check_toolchain (src/deepreason/skills/adoption.py) -- proof: dead-skills-_check_toolchain.txt
+CANDIDATE-DEAD: _semantic_texts (src/deepreason/skills/distill.py) -- proof: dead-skills-_semantic_texts.txt
+CANDIDATE-DEAD: _ngrams (src/deepreason/skills/distill.py) -- proof: dead-skills-_ngrams.txt
+CANDIDATE-DEAD: _negative_ngrams (src/deepreason/skills/distill.py) -- proof: dead-skills-_negative_ngrams.txt
+CANDIDATE-DEAD: _retrieval_text (src/deepreason/skills/retrieve.py) -- proof: dead-skills-_retrieval_text.txt
+CANDIDATE-DEAD: _school_slices (src/deepreason/skills/retrieve.py) -- proof: dead-skills-_school_slices.txt
+CANDIDATE-DEAD: _SummaryMaterial (src/deepreason/skills/revoice.py) -- proof: dead-skills-_SummaryMaterial.txt
+CANDIDATE-DEAD: _voice_text (src/deepreason/skills/revoice.py) -- proof: dead-skills-_voice_text.txt
+CANDIDATE-DEAD: _overlap (src/deepreason/skills/revoice.py) -- proof: dead-skills-_overlap.txt
+CANDIDATE-DEAD: capsule_bytes (src/deepreason/skills/snapshot.py) -- proof: dead-skills-capsule_bytes.txt
+CANDIDATE-DEAD: _content_bytes (src/deepreason/skills/validate.py) -- proof: dead-skills-_content_bytes.txt
+CANDIDATE-DEAD: _positive_dependency_closure (src/deepreason/skills/validate.py) -- proof: dead-skills-_positive_dependency_closure.txt
+CANDIDATE-DEAD: _toolchains (src/deepreason/skills/validate.py) -- proof: dead-skills-_toolchains.txt
+CANDIDATE-DEAD: _config_provenance (src/deepreason/skills/validate.py) -- proof: dead-skills-_config_provenance.txt
+CANDIDATE-DEAD: _packages (src/deepreason/skills/validate.py) -- proof: dead-skills-_packages.txt

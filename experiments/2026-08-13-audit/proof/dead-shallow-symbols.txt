@@ -1,0 +1,5 @@
+src/deepreason/shallow.py:35:class ShallowReasonError(ValueError):
+src/deepreason/shallow.py:43:def _shallow_runs_dir(environ: Mapping[str, str] | None = None) -> Path:
+src/deepreason/shallow.py:47:def _mint_run_id(question: str, *, now: str) -> str:
+src/deepreason/shallow.py:55:def _endpoint(profile: ProviderProfileV1, key: str):
+src/deepreason/shallow.py:66:def run_shallow_question(

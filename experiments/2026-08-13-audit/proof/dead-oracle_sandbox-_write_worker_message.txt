@@ -1,0 +1,10 @@
+=== symbol: _write_worker_message  defined: src/deepreason/oracle_sandbox.py ===
+--- reference scan: rg -l -w '_write_worker_message' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_write_worker_message['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_write_worker_message' pyproject.toml ---
+
+(above blank = zero hits)

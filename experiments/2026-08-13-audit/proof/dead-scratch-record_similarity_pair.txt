@@ -1,0 +1,7 @@
+=== symbol: record_similarity_pair  defined: src/deepreason/scratch/similarity.py ===
+--- reference scan: rg -l -w 'record_similarity_pair' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]record_similarity_pair['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/scratch/similarity.py
+(above blank = zero hits)

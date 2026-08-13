@@ -1,0 +1,10 @@
+=== symbol: _transition_chains  defined: src/deepreason/capabilities/audit.py ===
+--- reference scan: rg -l -w '_transition_chains' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_transition_chains['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_transition_chains' pyproject.toml ---
+
+(above blank = zero hits)

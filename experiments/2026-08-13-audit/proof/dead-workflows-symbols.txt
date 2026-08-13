@@ -1,0 +1,27 @@
+src/deepreason/workflows/manifest_compiler.py:109:class CompactArtDirection(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:128:class ManifestDiagnostic(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:158:class ManifestCompileResult(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:180:def _pointer(parts: Sequence[Any]) -> str:
+src/deepreason/workflows/manifest_compiler.py:187:def _slug_identifier(value: str, fallback: str) -> str:
+src/deepreason/workflows/manifest_compiler.py:195:def _js_identifier(component_id: str, local: str) -> str:
+src/deepreason/workflows/manifest_compiler.py:200:def _component_alias_for_index(
+src/deepreason/workflows/manifest_compiler.py:209:def _error_code(message: str) -> str:
+src/deepreason/workflows/manifest_compiler.py:228:def _validation_diagnostics(
+src/deepreason/workflows/manifest_compiler.py:251:def _cycle_aliases(contracts: Mapping[str, CompactComponentContract]) -> set[str]:
+src/deepreason/workflows/manifest_compiler.py:278:class ManifestCompiler:
+src/deepreason/workflows/manifest_compiler.py:40:class CompactOutlineComponent(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:49:class CompactDesignOutline(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:65:class CompactComponentContract(BaseModel):
+src/deepreason/workflows/manifest_compiler.py:710:def compile_compact_manifest(
+src/deepreason/workflows/website.py:105:class StageResult(BaseModel):
+src/deepreason/workflows/website.py:118:class TerminalSummary(BaseModel):
+src/deepreason/workflows/website.py:136:class WorkflowCheckpoint(BaseModel):
+src/deepreason/workflows/website.py:162:class WebsiteCheckpointError(ValueError):
+src/deepreason/workflows/website.py:1794:def run_website_workflow(
+src/deepreason/workflows/website.py:180:class WebsiteStateMachine:
+src/deepreason/workflows/website.py:259:class WebsiteWorkflow:
+src/deepreason/workflows/website.py:42:class _CompactCallResult:
+src/deepreason/workflows/website.py:54:class _LockedBlobStore:
+src/deepreason/workflows/website.py:78:class WebsiteStage(str, Enum):
+src/deepreason/workflows/website.py:90:class StageOutcome(str, Enum):
+src/deepreason/workflows/website.py:96:class NextAction(str, Enum):

@@ -1,0 +1,10 @@
+=== symbol: _lineage  defined: src/deepreason/bridge/evidence_pack.py ===
+--- reference scan: rg -l -w '_lineage' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_lineage['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_lineage' pyproject.toml ---
+
+(above blank = zero hits)

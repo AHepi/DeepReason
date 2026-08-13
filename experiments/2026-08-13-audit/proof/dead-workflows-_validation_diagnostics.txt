@@ -1,0 +1,10 @@
+=== symbol: _validation_diagnostics  defined: src/deepreason/workflows/manifest_compiler.py ===
+--- reference scan: rg -l -w '_validation_diagnostics' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_validation_diagnostics['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_validation_diagnostics' pyproject.toml ---
+
+(above blank = zero hits)

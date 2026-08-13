@@ -1,0 +1,7 @@
+=== symbol: LedgerCatalogKind  defined: src/deepreason/bridge/ledger.py ===
+--- reference scan: rg -l -w 'LedgerCatalogKind' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]LedgerCatalogKind['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/ledger.py
+(above blank = zero hits)

@@ -1,0 +1,4 @@
+CANDIDATE-DEAD: _link_like (src/deepreason/storage/blobs.py) -- proof: dead-storage-_link_like.txt
+CANDIDATE-DEAD: _known (src/deepreason/storage/merge.py) -- proof: dead-storage-_known.txt
+CANDIDATE-DEAD: _signature (src/deepreason/storage/merge.py) -- proof: dead-storage-_signature.txt
+CANDIDATE-DEAD: _object_data (src/deepreason/storage/objects.py) -- proof: dead-storage-_object_data.txt

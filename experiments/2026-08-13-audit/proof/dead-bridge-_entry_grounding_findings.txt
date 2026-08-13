@@ -1,0 +1,10 @@
+=== symbol: _entry_grounding_findings  defined: src/deepreason/bridge/validate.py ===
+--- reference scan: rg -l -w '_entry_grounding_findings' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_entry_grounding_findings['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_entry_grounding_findings' pyproject.toml ---
+
+(above blank = zero hits)

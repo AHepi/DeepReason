@@ -1,0 +1,8 @@
+DYNAMIC-REF: ReusableQualificationBundleV1 (src/deepreason/qualification.py) -- string hits: src/deepreason/qualification.py  -- proof: dead-qualification-ReusableQualificationBundleV1.txt
+CANDIDATE-DEAD: _pair_payload (src/deepreason/qualification.py) -- proof: dead-qualification-_pair_payload.txt
+CANDIDATE-DEAD: _pair_subject_digest (src/deepreason/qualification.py) -- proof: dead-qualification-_pair_subject_digest.txt
+CANDIDATE-DEAD: _read_cache (src/deepreason/qualification.py) -- proof: dead-qualification-_read_cache.txt
+CANDIDATE-DEAD: _DuplicateCacheKey (src/deepreason/qualification.py) -- proof: dead-qualification-_DuplicateCacheKey.txt
+DYNAMIC-REF: write_completed_qualification (src/deepreason/qualification.py) -- string hits: src/deepreason/qualification.py  -- proof: dead-qualification-write_completed_qualification.txt
+CANDIDATE-DEAD: _reusable_pair (src/deepreason/qualification.py) -- proof: dead-qualification-_reusable_pair.txt
+CANDIDATE-DEAD: _write_unqualified_report (src/deepreason/qualification.py) -- proof: dead-qualification-_write_unqualified_report.txt

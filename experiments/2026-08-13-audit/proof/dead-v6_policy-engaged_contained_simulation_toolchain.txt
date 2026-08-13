@@ -1,0 +1,7 @@
+=== symbol: engaged_contained_simulation_toolchain  defined: src/deepreason/v6_policy.py ===
+--- reference scan: rg -l -w 'engaged_contained_simulation_toolchain' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]engaged_contained_simulation_toolchain['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/v6_policy.py
+(above blank = zero hits)

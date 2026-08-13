@@ -1,0 +1,10 @@
+=== symbol: PropertyProposal  defined: src/deepreason/llm/contracts.py ===
+--- reference scan: rg -l -w 'PropertyProposal' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]PropertyProposal['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'PropertyProposal' pyproject.toml ---
+
+(above blank = zero hits)

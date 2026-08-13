@@ -1,0 +1,10 @@
+=== symbol: _lineage_foundation  defined: src/deepreason/llm/packs.py ===
+--- reference scan: rg -l -w '_lineage_foundation' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_lineage_foundation['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_lineage_foundation' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: BridgeResultInput  defined: src/deepreason/mcp_scratch_bridge.py ===
+--- reference scan: rg -l -w 'BridgeResultInput' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BridgeResultInput['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'BridgeResultInput' pyproject.toml ---
+
+(above blank = zero hits)

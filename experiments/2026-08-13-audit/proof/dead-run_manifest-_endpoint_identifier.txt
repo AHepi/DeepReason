@@ -1,0 +1,10 @@
+=== symbol: _endpoint_identifier  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w '_endpoint_identifier' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_endpoint_identifier['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_endpoint_identifier' pyproject.toml ---
+
+(above blank = zero hits)

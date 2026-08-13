@@ -1,0 +1,10 @@
+=== symbol: ParsedJSON  defined: src/deepreason/llm/repair.py ===
+--- reference scan: rg -l -w 'ParsedJSON' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ParsedJSON['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ParsedJSON' pyproject.toml ---
+
+(above blank = zero hits)

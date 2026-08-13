@@ -1,0 +1,10 @@
+=== symbol: _active_control_trace  defined: src/deepreason/rules/conj.py ===
+--- reference scan: rg -l -w '_active_control_trace' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_active_control_trace['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_active_control_trace' pyproject.toml ---
+
+(above blank = zero hits)

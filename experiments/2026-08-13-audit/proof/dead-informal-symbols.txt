@@ -1,0 +1,51 @@
+src/deepreason/informal/appellate.py:125:def spawn_audit_problem(harness, reason: str) -> None:
+src/deepreason/informal/appellate.py:20:def docket(harness, config) -> list[dict]:
+src/deepreason/informal/appellate.py:60:def _standards_for(harness, case: str) -> list[str]:
+src/deepreason/informal/appellate.py:96:def rule(harness, case_id: str, holding: str, spec_id: str):
+src/deepreason/informal/audits.py:110:def _log_calls(harness, calls) -> None:
+src/deepreason/informal/audits.py:116:def paraphrase_invariance_audit(harness, adapter, config) -> list:
+src/deepreason/informal/audits.py:184:def premise_deletion_audit(harness, adapter, config) -> list:
+src/deepreason/informal/audits.py:228:def planted_flaw_calibration(
+src/deepreason/informal/audits.py:25:def _rubric_warrants(harness):
+src/deepreason/informal/audits.py:273:def bias_probes(
+src/deepreason/informal/audits.py:37:def _audit_warrant(harness, audit_commitment, nu_target: str, finding: dict, llm=None):
+src/deepreason/informal/audits.py:61:def _ensemble_call(
+src/deepreason/informal/audits.py:92:def _judge_exchange(adapter, seats, exchange: str, calls: list):
+src/deepreason/informal/holdout.py:18:def seal(harness, data: bytes, *, codec: str = "utf8", problem_id: str | None = None) -> Artifact:
+src/deepreason/informal/holdout.py:35:def is_sealed(harness, artifact: Artifact) -> bool:
+src/deepreason/informal/holdout.py:45:def reveal(harness, artifact_id: str) -> None:
+src/deepreason/informal/skeleton.py:106:def skeleton_wf_program(text: str, budget) -> tuple[str, dict]:
+src/deepreason/informal/skeleton.py:124:def skeleton_wf_commitment() -> Commitment:
+src/deepreason/informal/skeleton.py:128:def forbidden_commitment(case: ForbiddenCase) -> Commitment:
+src/deepreason/informal/skeleton.py:155:def draft_forbidden_commitments(skeleton: Skeleton) -> list[Commitment]:
+src/deepreason/informal/skeleton.py:167:def compile_forbidden_commitments(harness, skeleton: Skeleton) -> list[str]:
+src/deepreason/informal/skeleton.py:25:class ForbiddenCase(BaseModel):
+src/deepreason/informal/skeleton.py:80:class Scope(BaseModel):
+src/deepreason/informal/skeleton.py:85:class Skeleton(BaseModel):
+src/deepreason/informal/skeleton.py:93:def parse_skeleton(text: str) -> Skeleton | None:
+src/deepreason/informal/standards.py:19:def register_standard(
+src/deepreason/informal/standards.py:47:def _body(artifact: Artifact, harness) -> dict | None:
+src/deepreason/informal/standards.py:58:def resolve_standard(harness, spec_id: str) -> Artifact | None:
+src/deepreason/informal/standards.py:68:def registered_specs(harness) -> list[str]:
+src/deepreason/informal/standards.py:81:def standard_body(harness, artifact: Artifact) -> dict:
+src/deepreason/informal/standards.py:88:def precedent_slice(harness, standard_id: str, k: int) -> list[dict]:
+src/deepreason/informal/trial.py:1041:def _record_pairwise_observation(
+src/deepreason/informal/trial.py:1092:def _advisory_pairwise_result(
+src/deepreason/informal/trial.py:1127:def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, config,
+src/deepreason/informal/trial.py:1156:def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
+src/deepreason/informal/trial.py:270:def conforming_transcript(blobs, trace_ref: str) -> bool:
+src/deepreason/informal/trial.py:291:def transcript_blob(harness, *, case: str, answer: str, decisive_point: str,
+src/deepreason/informal/trial.py:300:def _block(harness, reason: str, target_id: str, diagnostics) -> None:
+src/deepreason/informal/trial.py:307:def _decline(harness, target_id: str, reason: str, diagnostics) -> None:
+src/deepreason/informal/trial.py:316:def _coerce_trial_authority(authority: TrialAuthority | str) -> TrialAuthority:
+src/deepreason/informal/trial.py:320:def _record_trial_observation(
+src/deepreason/informal/trial.py:369:def _advisory_trial_result(
+src/deepreason/informal/trial.py:406:def _judge_pack(harness, config, body, target_text, case, answer,
+src/deepreason/informal/trial.py:429:def _judge_all(
+src/deepreason/informal/trial.py:42:def _v6_trial_manifest(adapter):
+src/deepreason/informal/trial.py:493:def run_trial(harness, target_id: str, commitment, adapter, config,
+src/deepreason/informal/trial.py:527:def _trial_steps(harness, target_id: str, commitment, adapter, config,
+src/deepreason/informal/trial.py:56:def _v6_transactional_trial_call(
+src/deepreason/informal/trial.py:779:def _paraphrase_screen(
+src/deepreason/informal/trial.py:842:def run_argument_trial_from_case(
+src/deepreason/informal/trial.py:890:def _argument_trial_steps(

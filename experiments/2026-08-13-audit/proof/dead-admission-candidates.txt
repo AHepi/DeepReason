@@ -1,0 +1,12 @@
+CANDIDATE-DEAD: _first_party_manifests (src/deepreason/admission/adapters.py) -- proof: dead-admission-_first_party_manifests.txt
+CANDIDATE-DEAD: _spine_order (src/deepreason/admission/adapters_epub.py) -- proof: dead-admission-_spine_order.txt
+DYNAMIC-REF: AdmittedAttachments (src/deepreason/admission/attach.py) -- string hits: src/deepreason/admission/attach.py  -- proof: dead-admission-AdmittedAttachments.txt
+DYNAMIC-REF: admit_attachments (src/deepreason/admission/attach.py) -- string hits: src/deepreason/admission/attach.py  -- proof: dead-admission-admit_attachments.txt
+CANDIDATE-DEAD: _line_offsets (src/deepreason/admission/parse.py) -- proof: dead-admission-_line_offsets.txt
+CANDIDATE-DEAD: _mint_span_block (src/deepreason/admission/parse.py) -- proof: dead-admission-_mint_span_block.txt
+CANDIDATE-DEAD: _segment_text (src/deepreason/admission/parse.py) -- proof: dead-admission-_segment_text.txt
+CANDIDATE-DEAD: _format_number (src/deepreason/admission/parse.py) -- proof: dead-admission-_format_number.txt
+CANDIDATE-DEAD: _csv_projections (src/deepreason/admission/parse.py) -- proof: dead-admission-_csv_projections.txt
+CANDIDATE-DEAD: _first_heading (src/deepreason/admission/parse.py) -- proof: dead-admission-_first_heading.txt
+CANDIDATE-DEAD: _adapter_blocks (src/deepreason/admission/parse.py) -- proof: dead-admission-_adapter_blocks.txt
+CANDIDATE-DEAD: _state_home (src/deepreason/admission/store.py) -- proof: dead-admission-_state_home.txt

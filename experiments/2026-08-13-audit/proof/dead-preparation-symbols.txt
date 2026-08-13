@@ -1,0 +1,19 @@
+src/deepreason/preparation.py:100:class RunPreparationError(ValueError):
+src/deepreason/preparation.py:108:class RunPreparationRequestV1(BaseModel):
+src/deepreason/preparation.py:170:class RunPreparationRecordV1(BaseModel):
+src/deepreason/preparation.py:225:class PreparedRunV1(BaseModel):
+src/deepreason/preparation.py:243:def _question_digest(question: str) -> str:
+src/deepreason/preparation.py:247:def _qualification_report_sha256(report) -> str:
+src/deepreason/preparation.py:254:def _request_digest(
+src/deepreason/preparation.py:273:def _school_seat_route_ensemble(
+src/deepreason/preparation.py:308:def _config_for_profile(
+src/deepreason/preparation.py:352:def _records_for_question(
+src/deepreason/preparation.py:385:def _records_for_admitted_dossier(
+src/deepreason/preparation.py:416:def build_preparation_manifest(
+src/deepreason/preparation.py:519:def qualification_subject_manifest(
+src/deepreason/preparation.py:542:def resolve_managed_run_root(
+src/deepreason/preparation.py:570:def _compiled_at(clock: Callable[[], datetime]) -> str:
+src/deepreason/preparation.py:579:def _read_record(path: Path) -> bytes:
+src/deepreason/preparation.py:632:def load_preparation_record(root: Path | str) -> RunPreparationRecordV1:
+src/deepreason/preparation.py:660:def _write_preparation_record(record: RunPreparationRecordV1, root: Path) -> None:
+src/deepreason/preparation.py:666:class RunPreparationService:

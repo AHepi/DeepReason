@@ -1,0 +1,10 @@
+=== symbol: text_authority_mode  defined: src/deepreason/authority.py ===
+--- reference scan: rg -l -w 'text_authority_mode' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]text_authority_mode['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'text_authority_mode' pyproject.toml ---
+
+(above blank = zero hits)

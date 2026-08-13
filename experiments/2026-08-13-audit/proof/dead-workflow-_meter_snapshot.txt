@@ -1,0 +1,10 @@
+=== symbol: _meter_snapshot  defined: src/deepreason/workflow/shadow.py ===
+--- reference scan: rg -l -w '_meter_snapshot' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_meter_snapshot['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_meter_snapshot' pyproject.toml ---
+
+(above blank = zero hits)

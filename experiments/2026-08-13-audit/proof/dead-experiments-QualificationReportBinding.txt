@@ -1,0 +1,10 @@
+=== symbol: QualificationReportBinding  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'QualificationReportBinding' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]QualificationReportBinding['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'QualificationReportBinding' pyproject.toml ---
+
+(above blank = zero hits)

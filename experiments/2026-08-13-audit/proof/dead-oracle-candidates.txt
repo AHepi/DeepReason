@@ -1,0 +1,9 @@
+CANDIDATE-DEAD: _short (src/deepreason/oracle.py) -- proof: dead-oracle-_short.txt
+CANDIDATE-DEAD: _sandbox_abort_verdict (src/deepreason/oracle.py) -- proof: dead-oracle-_sandbox_abort_verdict.txt
+CANDIDATE-DEAD: _run_local (src/deepreason/oracle.py) -- proof: dead-oracle-_run_local.txt
+CANDIDATE-DEAD: _run_property_local (src/deepreason/oracle.py) -- proof: dead-oracle-_run_property_local.txt
+CANDIDATE-DEAD: _gate_local (src/deepreason/oracle.py) -- proof: dead-oracle-_gate_local.txt
+CANDIDATE-DEAD: _fuzz_property_local (src/deepreason/oracle.py) -- proof: dead-oracle-_fuzz_property_local.txt
+CANDIDATE-DEAD: _check_generator_local (src/deepreason/oracle.py) -- proof: dead-oracle-_check_generator_local.txt
+CANDIDATE-DEAD: _check_checker_local (src/deepreason/oracle.py) -- proof: dead-oracle-_check_checker_local.txt
+CANDIDATE-DEAD: _run_dataset_local (src/deepreason/oracle.py) -- proof: dead-oracle-_run_dataset_local.txt

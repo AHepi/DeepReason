@@ -1,0 +1,4 @@
+src/deepreason/log/event_log.py:19:class CorruptLogError(Exception):
+src/deepreason/log/event_log.py:23:class ConcurrentWriterError(RuntimeError):
+src/deepreason/log/event_log.py:27:class EventSequenceError(CorruptLogError):
+src/deepreason/log/event_log.py:31:class EventLog:

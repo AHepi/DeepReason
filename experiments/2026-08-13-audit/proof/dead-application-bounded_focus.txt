@@ -1,0 +1,7 @@
+=== symbol: bounded_focus  defined: src/deepreason/application/bridge.py ===
+--- reference scan: rg -l -w 'bounded_focus' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]bounded_focus['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/application/bridge.py
+(above blank = zero hits)

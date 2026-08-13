@@ -1,0 +1,10 @@
+=== symbol: _candidate_checker  defined: src/deepreason/programs.py ===
+--- reference scan: rg -l -w '_candidate_checker' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_candidate_checker['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_candidate_checker' pyproject.toml ---
+
+(above blank = zero hits)

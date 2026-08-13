@@ -1,0 +1,10 @@
+=== symbol: grounded_extension  defined: src/deepreason/adjudication/grounded.py ===
+--- reference scan: rg -l -w 'grounded_extension' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]grounded_extension['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'grounded_extension' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: ScratchSearchInput  defined: src/deepreason/mcp_scratch_bridge.py ===
+--- reference scan: rg -l -w 'ScratchSearchInput' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ScratchSearchInput['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ScratchSearchInput' pyproject.toml ---
+
+(above blank = zero hits)

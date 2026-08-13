@@ -1,0 +1,6 @@
+src/deepreason/report.py:115:def _process_report(harness, events) -> dict:
+src/deepreason/report.py:25:def _distribution(values: list[float]) -> dict:
+src/deepreason/report.py:260:def eval_report(harness, config, embedder=None) -> dict:
+src/deepreason/report.py:36:def _mean_pairwise_texts(texts: list[str], embedder) -> float | None:
+src/deepreason/report.py:48:def _latest_tagged(events, prefix: str) -> float | None:
+src/deepreason/report.py:60:def _program_grounding_breakdown(harness) -> dict:

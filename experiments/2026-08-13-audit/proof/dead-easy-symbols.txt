@@ -1,0 +1,32 @@
+src/deepreason/easy.py:1002:def _make_single(harness, cfg, description: str, out_dir: Path, cycles: int,
+src/deepreason/easy.py:26:class EasyV6PreparationRequired(RuntimeError):
+src/deepreason/easy.py:324:def _seat(base, model, env, temperature, max_tokens, provider=None,
+src/deepreason/easy.py:337:def base_dir() -> Path:
+src/deepreason/easy.py:341:def credentials_path() -> Path:
+src/deepreason/easy.py:345:def config_path() -> Path:
+src/deepreason/easy.py:349:def load_credentials() -> int:
+src/deepreason/easy.py:367:def save_credential(name: str, key: str) -> Path:
+src/deepreason/easy.py:387:def _stored_credential_present(name: str) -> bool:
+src/deepreason/easy.py:38:def _preparation_required() -> None:
+src/deepreason/easy.py:398:def _positive_capacity(value, *, label: str) -> int:
+src/deepreason/easy.py:408:def setup_wizard(
+src/deepreason/easy.py:514:def setup_options() -> list[dict]:
+src/deepreason/easy.py:533:def apply_setup(
+src/deepreason/easy.py:598:def seed_website(harness, description: str):
+src/deepreason/easy.py:614:def _stage_gate(name: str, expr: str):
+src/deepreason/easy.py:629:def seed_plan(harness, description: str):
+src/deepreason/easy.py:645:def seed_design(harness, description: str, plan_id: str):
+src/deepreason/easy.py:667:def seed_build(harness, description: str, design_id: str):
+src/deepreason/easy.py:689:def seed_design_chunked(harness, description: str, plan_id: str):
+src/deepreason/easy.py:717:def seed_component(harness, description: str, design_id: str, manifest,
+src/deepreason/easy.py:777:def register_assembly(harness, design_id: str, manifest, chosen: dict,
+src/deepreason/easy.py:889:def integration_criticism(harness, assembled_id: str, manifest, cfg,
+src/deepreason/easy.py:923:def _page_text(harness, aid: str) -> str:
+src/deepreason/easy.py:929:def pick_survivor(harness, root_pid: str) -> str | None:
+src/deepreason/easy.py:955:def _slug(text: str) -> str:
+src/deepreason/easy.py:960:def _fresh(path: Path) -> Path:
+src/deepreason/easy.py:969:def _echo(message: str) -> None:
+src/deepreason/easy.py:973:def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
+src/deepreason/easy.py:980:def _first_line(harness, aid: str, limit: int = 100) -> str:
+src/deepreason/easy.py:988:def make(description: str, out: str | None = None, cycles: int = 10,
+src/deepreason/easy.py:996:def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,

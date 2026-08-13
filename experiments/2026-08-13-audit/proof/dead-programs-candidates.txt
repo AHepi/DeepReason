@@ -1,0 +1,15 @@
+CANDIDATE-DEAD: _json_wf (src/deepreason/programs.py) -- proof: dead-programs-_json_wf.txt
+CANDIDATE-DEAD: _tsp14_tour_wf (src/deepreason/programs.py) -- proof: dead-programs-_tsp14_tour_wf.txt
+CANDIDATE-DEAD: _skeleton_wf (src/deepreason/programs.py) -- proof: dead-programs-_skeleton_wf.txt
+CANDIDATE-DEAD: _exec_oracle (src/deepreason/programs.py) -- proof: dead-programs-_exec_oracle.txt
+CANDIDATE-DEAD: _candidate_checker (src/deepreason/programs.py) -- proof: dead-programs-_candidate_checker.txt
+CANDIDATE-DEAD: _property_oracle (src/deepreason/programs.py) -- proof: dead-programs-_property_oracle.txt
+CANDIDATE-DEAD: _generator_wf (src/deepreason/programs.py) -- proof: dead-programs-_generator_wf.txt
+CANDIDATE-DEAD: _checker_wf (src/deepreason/programs.py) -- proof: dead-programs-_checker_wf.txt
+CANDIDATE-DEAD: _lineage_ref (src/deepreason/programs.py) -- proof: dead-programs-_lineage_ref.txt
+CANDIDATE-DEAD: _manifest_wf (src/deepreason/programs.py) -- proof: dead-programs-_manifest_wf.txt
+CANDIDATE-DEAD: _component_wf (src/deepreason/programs.py) -- proof: dead-programs-_component_wf.txt
+CANDIDATE-DEAD: _integration_wf (src/deepreason/programs.py) -- proof: dead-programs-_integration_wf.txt
+CANDIDATE-DEAD: _reasoning_observation_pending (src/deepreason/programs.py) -- proof: dead-programs-_reasoning_observation_pending.txt
+CANDIDATE-DEAD: _lean_external_check (src/deepreason/programs.py) -- proof: dead-programs-_lean_external_check.txt
+CANDIDATE-DEAD: _dataset_oracle (src/deepreason/programs.py) -- proof: dead-programs-_dataset_oracle.txt

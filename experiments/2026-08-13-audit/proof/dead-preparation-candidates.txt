@@ -1,0 +1,8 @@
+DYNAMIC-REF: RunPreparationRecordV1 (src/deepreason/preparation.py) -- string hits: src/deepreason/preparation.py  -- proof: dead-preparation-RunPreparationRecordV1.txt
+DYNAMIC-REF: PreparedRunV1 (src/deepreason/preparation.py) -- string hits: src/deepreason/preparation.py  -- proof: dead-preparation-PreparedRunV1.txt
+CANDIDATE-DEAD: _qualification_report_sha256 (src/deepreason/preparation.py) -- proof: dead-preparation-_qualification_report_sha256.txt
+CANDIDATE-DEAD: _request_digest (src/deepreason/preparation.py) -- proof: dead-preparation-_request_digest.txt
+CANDIDATE-DEAD: _school_seat_route_ensemble (src/deepreason/preparation.py) -- proof: dead-preparation-_school_seat_route_ensemble.txt
+CANDIDATE-DEAD: _records_for_admitted_dossier (src/deepreason/preparation.py) -- proof: dead-preparation-_records_for_admitted_dossier.txt
+CANDIDATE-DEAD: _compiled_at (src/deepreason/preparation.py) -- proof: dead-preparation-_compiled_at.txt
+CANDIDATE-DEAD: _write_preparation_record (src/deepreason/preparation.py) -- proof: dead-preparation-_write_preparation_record.txt

@@ -1,0 +1,5 @@
+CANDIDATE-DEAD: _write_worker_message (src/deepreason/oracle_sandbox.py) -- proof: dead-oracle_sandbox-_write_worker_message.txt
+CANDIDATE-DEAD: _ResourceAbort (src/deepreason/oracle_sandbox.py) -- proof: dead-oracle_sandbox-_ResourceAbort.txt
+CANDIDATE-DEAD: WorkerError (src/deepreason/oracle_sandbox.py) -- proof: dead-oracle_sandbox-WorkerError.txt
+CANDIDATE-DEAD: _cpu_seconds (src/deepreason/oracle_sandbox.py) -- proof: dead-oracle_sandbox-_cpu_seconds.txt
+CANDIDATE-DEAD: _kill_worker (src/deepreason/oracle_sandbox.py) -- proof: dead-oracle_sandbox-_kill_worker.txt

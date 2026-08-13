@@ -1,0 +1,10 @@
+=== symbol: _qualify_one_profile  defined: src/deepreason/cli/main.py ===
+--- reference scan: rg -l -w '_qualify_one_profile' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_qualify_one_profile['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_qualify_one_profile' pyproject.toml ---
+
+(above blank = zero hits)

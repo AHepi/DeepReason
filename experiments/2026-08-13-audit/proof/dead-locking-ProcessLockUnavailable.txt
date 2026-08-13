@@ -1,0 +1,7 @@
+=== symbol: ProcessLockUnavailable  defined: src/deepreason/locking.py ===
+--- reference scan: rg -l -w 'ProcessLockUnavailable' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ProcessLockUnavailable['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/locking.py
+(above blank = zero hits)

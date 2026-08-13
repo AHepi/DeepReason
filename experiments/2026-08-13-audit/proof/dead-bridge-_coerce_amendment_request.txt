@@ -1,0 +1,10 @@
+=== symbol: _coerce_amendment_request  defined: src/deepreason/bridge/ledger.py ===
+--- reference scan: rg -l -w '_coerce_amendment_request' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_coerce_amendment_request['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_coerce_amendment_request' pyproject.toml ---
+
+(above blank = zero hits)

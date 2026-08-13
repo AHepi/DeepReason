@@ -1,0 +1,10 @@
+=== symbol: realized_outcome_before  defined: src/deepreason/experiments/criticism_voting.py ===
+--- reference scan: rg -l -w 'realized_outcome_before' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]realized_outcome_before['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'realized_outcome_before' pyproject.toml ---
+
+(above blank = zero hits)

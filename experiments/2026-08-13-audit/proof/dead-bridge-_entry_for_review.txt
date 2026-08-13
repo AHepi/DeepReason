@@ -1,0 +1,10 @@
+=== symbol: _entry_for_review  defined: src/deepreason/bridge/review.py ===
+--- reference scan: rg -l -w '_entry_for_review' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_entry_for_review['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_entry_for_review' pyproject.toml ---
+
+(above blank = zero hits)

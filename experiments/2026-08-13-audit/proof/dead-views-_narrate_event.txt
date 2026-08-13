@@ -1,0 +1,10 @@
+=== symbol: _narrate_event  defined: src/deepreason/views/narrate.py ===
+--- reference scan: rg -l -w '_narrate_event' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_narrate_event['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_narrate_event' pyproject.toml ---
+
+(above blank = zero hits)

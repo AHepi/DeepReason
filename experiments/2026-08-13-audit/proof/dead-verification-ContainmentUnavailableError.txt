@@ -1,0 +1,7 @@
+=== symbol: ContainmentUnavailableError  defined: src/deepreason/verification/contained.py ===
+--- reference scan: rg -l -w 'ContainmentUnavailableError' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ContainmentUnavailableError['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/verification/contained.py
+(above blank = zero hits)

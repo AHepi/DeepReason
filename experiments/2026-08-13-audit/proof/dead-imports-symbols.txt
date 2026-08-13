@@ -1,0 +1,13 @@
+src/deepreason/imports.py:101:def _integrity_matches(data: bytes, expected: str) -> bool:
+src/deepreason/imports.py:109:def shared_lifecycle_source(manifest: Manifest) -> str:
+src/deepreason/imports.py:144:def _archive_manifest(data: bytes) -> tuple[dict[str, Any], str, bool]:
+src/deepreason/imports.py:170:def _safe_extract(data: bytes, destination: Path) -> None:
+src/deepreason/imports.py:200:class ImportService:
+src/deepreason/imports.py:37:class OperationalImportError(RuntimeError):
+src/deepreason/imports.py:46:class ImportPlanError(ValueError):
+src/deepreason/imports.py:57:class BundleResult:
+src/deepreason/imports.py:66:class ResolvedImportSet:
+src/deepreason/imports.py:822:def register_epistemic_import_failure(
+src/deepreason/imports.py:865:def resolve_for_design(harness, design_id: str, manifest: Manifest, config) -> ResolvedImportSet | None:
+src/deepreason/imports.py:87:def _exact_ref(value: str) -> tuple[str, str]:
+src/deepreason/imports.py:94:def _artifact_bytes(harness, artifact_id: str) -> bytes:

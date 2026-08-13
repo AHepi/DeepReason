@@ -1,0 +1,10 @@
+=== symbol: _requirement_entries  defined: src/deepreason/mcp_help.py ===
+--- reference scan: rg -l -w '_requirement_entries' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_requirement_entries['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_requirement_entries' pyproject.toml ---
+
+(above blank = zero hits)

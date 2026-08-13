@@ -1,0 +1,7 @@
+=== symbol: CompositionFailureV1  defined: src/deepreason/bridge/compose.py ===
+--- reference scan: rg -l -w 'CompositionFailureV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CompositionFailureV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/compose.py
+(above blank = zero hits)

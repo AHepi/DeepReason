@@ -1,0 +1,226 @@
+src/deepreason/bridge/__init__.py:119:def __getattr__(name: str):
+src/deepreason/bridge/compose.py:105:class CompositionStatus(str, Enum):
+src/deepreason/bridge/compose.py:111:class CompositionRequestV1(BridgeRecord):
+src/deepreason/bridge/compose.py:131:class LedgerAmendmentNeededV1(BridgeRecord):
+src/deepreason/bridge/compose.py:146:class CompositionFailureV1(BridgeRecord):
+src/deepreason/bridge/compose.py:152:class CompositionResultV1:
+src/deepreason/bridge/compose.py:189:class CompositionSpanWireV1(StrictWireModel):
+src/deepreason/bridge/compose.py:221:class CompositionSpanWireV2(StrictWireModel):
+src/deepreason/bridge/compose.py:247:class CompositionUnresolvedWireV1(StrictWireModel):
+src/deepreason/bridge/compose.py:270:class LedgerAmendmentWireV1(StrictWireModel):
+src/deepreason/bridge/compose.py:305:class BridgeCompositionWireV1(StrictWireModel):
+src/deepreason/bridge/compose.py:352:class BridgeCompositionWireV2(StrictWireModel):
+src/deepreason/bridge/compose.py:399:class CompositionDraftV1(BridgeRecord):
+src/deepreason/bridge/compose.py:412:class BridgeCompositionWireContract(WireContract[CompositionDraftV1]):
+src/deepreason/bridge/compose.py:547:def _exact_statement_detail(handles, process_entries) -> str:
+src/deepreason/bridge/compose.py:587:class BridgeCompositionWireContractV2(BridgeCompositionWireContract):
+src/deepreason/bridge/compose.py:64:class CompositionContractError(ValueError):
+src/deepreason/bridge/compose.py:756:class BridgeCompositionBatchWireContractV1(BridgeCompositionWireContractV2):
+src/deepreason/bridge/compose.py:780:def _composition_pack(
+src/deepreason/bridge/compose.py:837:class BridgeComposer:
+src/deepreason/bridge/derived.py:188:class _VerifiedBlobView:
+src/deepreason/bridge/derived.py:219:class _DerivedSourceIntegrityError(RuntimeError):
+src/deepreason/bridge/derived.py:223:def _verified_source_view(
+src/deepreason/bridge/derived.py:234:def _holdout_marker_exists(harness: Harness, ref: str) -> bool:
+src/deepreason/bridge/derived.py:262:def _sealed_blob_refs(harness: Harness, events) -> set[str]:
+src/deepreason/bridge/derived.py:281:def _required_blob_refs(
+src/deepreason/bridge/derived.py:30:class DerivedBridgeError(ValueError):
+src/deepreason/bridge/derived.py:314:def _absolute(path: Path | str) -> Path:
+src/deepreason/bridge/derived.py:319:def _reject_symlink_components(path: Path) -> None:
+src/deepreason/bridge/derived.py:337:def _validate_roots(
+src/deepreason/bridge/derived.py:35:class DerivedBridgeSource:
+src/deepreason/bridge/derived.py:377:def _source_snapshot(harness: Harness) -> tuple[str, frozenset[str]]:
+src/deepreason/bridge/derived.py:459:def source_snapshot_digest(harness: Harness) -> str:
+src/deepreason/bridge/derived.py:45:def _is_link_like(path: Path, observed: os.stat_result) -> bool:
+src/deepreason/bridge/derived.py:465:def open_derived_source(
+src/deepreason/bridge/derived.py:490:def reserve_derived_destination(source: DerivedBridgeSource) -> Path:
+src/deepreason/bridge/derived.py:515:def build_derived_bridge(
+src/deepreason/bridge/derived.py:57:def _same_identity(before: os.stat_result, after: os.stat_result) -> bool:
+src/deepreason/bridge/derived.py:76:def _checked_directory(path: Path) -> os.stat_result:
+src/deepreason/bridge/derived.py:86:def _read_verified_blob(store, ref: str) -> bytes:
+src/deepreason/bridge/events.py:12:class BridgeAction(str, Enum):
+src/deepreason/bridge/events.py:28:class BridgeEventPayloadV1(FrozenRecord):
+src/deepreason/bridge/evidence_pack.py:1014:def legacy_pack(
+src/deepreason/bridge/evidence_pack.py:121:class ArguedRefutationV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:135:class PairwiseRulingV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:143:class OpenRivalryV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:156:class EvidencePackOmissionsV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:164:class EvidencePackV1(CanonicalBridgeRecord):
+src/deepreason/bridge/evidence_pack.py:284:def problem_family(state, problem_id: str) -> list[str]:
+src/deepreason/bridge/evidence_pack.py:308:def _claim_line(text: str) -> str:
+src/deepreason/bridge/evidence_pack.py:313:def _append_unique(values: list[str], value: str | None) -> None:
+src/deepreason/bridge/evidence_pack.py:318:def _is_source_artifact(harness, artifact_id: str) -> bool:
+src/deepreason/bridge/evidence_pack.py:325:def _artifact_content_available(harness, artifact_id: str) -> bool:
+src/deepreason/bridge/evidence_pack.py:335:def _is_evidence_artifact(harness, artifact_id: str) -> bool:
+src/deepreason/bridge/evidence_pack.py:345:def _evidence_sources(harness, evidence_ref: str) -> list[str]:
+src/deepreason/bridge/evidence_pack.py:374:def _lineage(harness, artifact_ref: str) -> EvidenceLineageV1:
+src/deepreason/bridge/evidence_pack.py:430:def _decisive_from_warrants(harness, attacker) -> tuple[str, str | None, str | None]:
+src/deepreason/bridge/evidence_pack.py:451:def _bounded_structured_text(value: str, maximum: int = MAX_STRUCTURED_TEXT) -> str:
+src/deepreason/bridge/evidence_pack.py:456:def _advisory_catalog_inputs(
+src/deepreason/bridge/evidence_pack.py:501:def _catalog_excerpt(harness, ref: str, fallback: str) -> str:
+src/deepreason/bridge/evidence_pack.py:511:def _catalog_items(
+src/deepreason/bridge/evidence_pack.py:65:def _freeze(value):
+src/deepreason/bridge/evidence_pack.py:692:def _validate_formal_seq(harness, formal_seq: int | None) -> int:
+src/deepreason/bridge/evidence_pack.py:69:class EvidenceLineageV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:708:def assemble_evidence_pack(
+src/deepreason/bridge/evidence_pack.py:97:class SurvivorEvidenceV1(BridgeRecord):
+src/deepreason/bridge/evidence_pack.py:995:def build_claim_ledger_catalog(
+src/deepreason/bridge/harness.py:147:class _BridgeExecutionSnapshot:
+src/deepreason/bridge/harness.py:165:def _snapshot_model_value(value):
+src/deepreason/bridge/harness.py:169:def _attention_pack_id(attention_pack) -> str | None:
+src/deepreason/bridge/harness.py:174:def _snapshot_error(code: str) -> ValueError:
+src/deepreason/bridge/harness.py:178:def _load_bridge_execution_snapshot(
+src/deepreason/bridge/harness.py:276:def _write_bridge_execution_snapshot(
+src/deepreason/bridge/harness.py:319:def _find_bridge_execution_snapshot(
+src/deepreason/bridge/harness.py:379:def _transactional_bridge_adapters(*adapters):
+src/deepreason/bridge/harness.py:391:def _transactional_v6_manifest_required(*adapters) -> bool:
+src/deepreason/bridge/harness.py:403:def _transactional_source_terminal_commitment_ref(*adapters) -> str | None:
+src/deepreason/bridge/harness.py:415:def _assert_snapshot_matches_invocation(
+src/deepreason/bridge/harness.py:441:def _read_existing_bridge_terminal(
+src/deepreason/bridge/harness.py:480:class _HarnessBridgeSink:
+src/deepreason/bridge/harness.py:51:class BridgeTerminalResultV1(FrozenRecord):
+src/deepreason/bridge/harness.py:621:def _bound_manifest_digest(root, supplied: str) -> str:
+src/deepreason/bridge/harness.py:634:def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
+src/deepreason/bridge/harness.py:660:def _derive_bridge_execution_policy(manifest, supplied_policy):
+src/deepreason/bridge/harness.py:693:def preflight_bound_bridge_policy(*, policy, run_manifest):
+src/deepreason/bridge/harness.py:703:def _bound_bridge_execution(
+src/deepreason/bridge/harness.py:736:def _assert_adapter_matches_retry_lease(adapter, expected) -> None:
+src/deepreason/bridge/harness.py:760:def _terminal_record(
+src/deepreason/bridge/harness.py:798:def build_grounded_bridge(
+src/deepreason/bridge/ledger.py:111:def _lexical_handle_kind(handle: str) -> str:
+src/deepreason/bridge/ledger.py:1269:def _array_schema(node: dict) -> dict:
+src/deepreason/bridge/ledger.py:1278:def _bind_schema_enum(node: dict, values: Sequence[str]) -> None:
+src/deepreason/bridge/ledger.py:1289:class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
+src/deepreason/bridge/ledger.py:148:def _local_handle(value: object) -> str:
+src/deepreason/bridge/ledger.py:1578:class ClaimLedgerWireContractV3(ClaimLedgerWireContractV2):
+src/deepreason/bridge/ledger.py:1660:class ClaimLedgerBatchWireContractV1(ClaimLedgerWireContractV3):
+src/deepreason/bridge/ledger.py:1677:class ClaimLedgerStageAFailureV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:1689:class ClaimLedgerAmendmentRequestV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:169:def _namespaced_handle(
+src/deepreason/bridge/ledger.py:1702:def _coerce_amendment_request(value) -> ClaimLedgerAmendmentRequestV1:
+src/deepreason/bridge/ledger.py:1712:class ClaimLedgerCallReceiptV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:1724:class ClaimLedgerStageAResultV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:181:def _handle_type(pattern: str, label: str):
+src/deepreason/bridge/ledger.py:1831:def render_claim_ledger_stage_a_pack(
+src/deepreason/bridge/ledger.py:1947:def _fallback_ledger(
+src/deepreason/bridge/ledger.py:1962:def _failure_message(error: SchemaRepairError) -> str:
+src/deepreason/bridge/ledger.py:1967:def build_claim_ledger_stage_a(
+src/deepreason/bridge/ledger.py:2026:def amend_claim_ledger_stage_a(
+src/deepreason/bridge/ledger.py:235:def _nonblank(value: str | None) -> str | None:
+src/deepreason/bridge/ledger.py:241:def _freeze_unique(value, field_name: str):
+src/deepreason/bridge/ledger.py:249:class LedgerFrozenRecord(FrozenRecord):
+src/deepreason/bridge/ledger.py:258:class ClaimLedgerCatalogItemV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:284:class ClaimLedgerInputCatalogV1(LedgerFrozenRecord):
+src/deepreason/bridge/ledger.py:416:class ClaimLedgerInputCatalogV3(ClaimLedgerInputCatalogV1):
+src/deepreason/bridge/ledger.py:477:def staged_catalog_batches(
+src/deepreason/bridge/ledger.py:520:def _coerce_catalog(value) -> ClaimLedgerCatalog:
+src/deepreason/bridge/ledger.py:530:class LedgerWireModel(FrozenRecord):
+src/deepreason/bridge/ledger.py:576:class ClaimLedgerEntryWireV1(LedgerWireModel):
+src/deepreason/bridge/ledger.py:696:class SourceConflictWireV1(LedgerWireModel):
+src/deepreason/bridge/ledger.py:719:class UncoveredRequirementWireV1(LedgerWireModel):
+src/deepreason/bridge/ledger.py:742:class ClaimLedgerWireV1(LedgerWireModel):
+src/deepreason/bridge/ledger.py:773:class ClaimLedgerEntryWireV2(ClaimLedgerEntryWireV1):
+src/deepreason/bridge/ledger.py:823:class SourceConflictWireV2(SourceConflictWireV1):
+src/deepreason/bridge/ledger.py:835:class UncoveredRequirementWireV2(UncoveredRequirementWireV1):
+src/deepreason/bridge/ledger.py:846:class ClaimLedgerWireV2(ClaimLedgerWireV1):
+src/deepreason/bridge/ledger.py:85:class LedgerCatalogKind(str, Enum):
+src/deepreason/bridge/ledger.py:860:class ClaimLedgerWireReferenceError(ValueError):
+src/deepreason/bridge/ledger.py:884:class ClaimLedgerDraftInvalid(ValueError):
+src/deepreason/bridge/ledger.py:896:def _prior_entry_keys(ledger: ClaimLedgerV1 | None) -> dict[str, str]:
+src/deepreason/bridge/ledger.py:902:def _prior_conflict_keys(ledger: ClaimLedgerV1 | None) -> dict[str, str]:
+src/deepreason/bridge/ledger.py:911:class ClaimLedgerWireContract(WireContract[ClaimLedgerV1]):
+src/deepreason/bridge/models.py:101:class BridgeRecord(FrozenRecord):
+src/deepreason/bridge/models.py:105:class CanonicalBridgeRecord(BridgeRecord):
+src/deepreason/bridge/models.py:142:class BridgeFailureDiagnosticV1(BridgeRecord):
+src/deepreason/bridge/models.py:156:class BridgeFailureV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:221:class ClaimLedgerEntryV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:279:class ProcessObservationV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:32:class ClaimClass(str, Enum):
+src/deepreason/bridge/models.py:394:class UncoveredRequirementV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:418:class SourceConflictV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:42:class BridgeResolution(str, Enum):
+src/deepreason/bridge/models.py:439:class ClaimLedgerV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:474:class ClaimUseV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:504:class UnresolvedItemV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:51:class RenderingMode(str, Enum):
+src/deepreason/bridge/models.py:525:class BridgeOutputV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:557:class BridgeValidationFindingV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:598:class BridgeValidationReportV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:61:class CorrectionMode(str, Enum):
+src/deepreason/bridge/models.py:624:class GroundingFindingV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:649:class GroundingReviewV1(CanonicalBridgeRecord):
+src/deepreason/bridge/models.py:69:class GroundingStatus(str, Enum):
+src/deepreason/bridge/models.py:78:def _nonblank(value: str | None) -> str | None:
+src/deepreason/bridge/models.py:84:def _bounded_text(value: str | None, *, maximum: int = MAX_BRIDGE_TEXT) -> str | None:
+src/deepreason/bridge/models.py:91:def _freeze_unique(value, field_name: str):
+src/deepreason/bridge/operations.py:101:def _safe_remove(path: Path) -> None:
+src/deepreason/bridge/operations.py:111:def _safe_read(path: Path, model):
+src/deepreason/bridge/operations.py:149:def write_running(root: Path | str, manifest_sha256: str) -> None:
+src/deepreason/bridge/operations.py:166:def _sanitized_detail(detail: str | None) -> str | None:
+src/deepreason/bridge/operations.py:186:def write_failure(
+src/deepreason/bridge/operations.py:228:def clear(root: Path | str) -> None:
+src/deepreason/bridge/operations.py:233:def read_status(root: Path | str) -> BridgeOperationStatusV1 | None:
+src/deepreason/bridge/operations.py:239:def read_result(root: Path | str) -> BridgeOperationResultV1 | None:
+src/deepreason/bridge/operations.py:245:def read_failure(root: Path | str) -> BridgeOperationResultV1 | None:
+src/deepreason/bridge/operations.py:27:class BridgeOperationStatusV1(BaseModel):
+src/deepreason/bridge/operations.py:65:class BridgeOperationResultV1(BaseModel):
+src/deepreason/bridge/operations.py:88:def _path(root: Path | str, name: str) -> Path:
+src/deepreason/bridge/operations.py:92:def _ensure_write_target(path: Path) -> None:
+src/deepreason/bridge/repair.py:131:class GroundingRepairWireV1(BaseModel):
+src/deepreason/bridge/repair.py:168:class GroundingRepairWireContractV1(DirectWireContract[GroundingRepairWireV1]):
+src/deepreason/bridge/repair.py:220:class BridgeRepairDiagnostic(FrozenRecord):
+src/deepreason/bridge/repair.py:229:class BridgeRepairResult(FrozenRecord):
+src/deepreason/bridge/repair.py:245:class GroundingRepairError(RuntimeError):
+src/deepreason/bridge/repair.py:251:def _make_output(
+src/deepreason/bridge/repair.py:269:def _quarantine_span(
+src/deepreason/bridge/repair.py:298:def assert_safe_repair_diff(
+src/deepreason/bridge/repair.py:342:def _repair_pack(section, finding, entries, allowed) -> str:
+src/deepreason/bridge/repair.py:402:class GroundingRepairService:
+src/deepreason/bridge/repair.py:96:class RepairDisposition(str, Enum):
+src/deepreason/bridge/retry.py:130:class WorkflowRetryBoundaryError(RuntimeError):
+src/deepreason/bridge/retry.py:134:def authorize_workflow_retry(
+src/deepreason/bridge/retry.py:172:def authorize_operator_workflow_retry(
+src/deepreason/bridge/retry.py:240:def bridge_prompt_policy_digest(workflow_policy, composition_request) -> str:
+src/deepreason/bridge/retry.py:259:def _assert_failed_call_matches_fence(result, fence: BridgeWorkflowAttemptFenceV1) -> None:
+src/deepreason/bridge/retry.py:279:def run_bridge_workflow_with_retries(
+src/deepreason/bridge/retry.py:27:class WorkflowRetryPolicyV1(FrozenRecord):
+src/deepreason/bridge/retry.py:70:class BridgeWorkflowAttemptFenceV1(FrozenRecord):
+src/deepreason/bridge/retry.py:91:class BridgeWorkflowRetryV1(CanonicalBridgeRecord):
+src/deepreason/bridge/review.py:128:def _bounded_materials(
+src/deepreason/bridge/review.py:152:def _review_pack(
+src/deepreason/bridge/review.py:222:class GroundingReviewService:
+src/deepreason/bridge/review.py:57:class GroundingReviewError(RuntimeError):
+src/deepreason/bridge/review.py:66:class GroundingVerdictWireV1(BaseModel):
+src/deepreason/bridge/review.py:86:class GroundingReviewResult:
+src/deepreason/bridge/review.py:91:def _entry_refs(entry: ClaimLedgerEntryV1) -> list[str]:
+src/deepreason/bridge/review.py:98:def _entry_for_review(
+src/deepreason/bridge/state.py:1030:def rebuild_bridge_state(objects: ObjectStore, events: Iterable[Event]) -> BridgeState:
+src/deepreason/bridge/state.py:801:class TerminalBridgeHistory:
+src/deepreason/bridge/state.py:80:def _ids(values) -> set[str]:
+src/deepreason/bridge/state.py:85:class BridgeState:
+src/deepreason/bridge/state.py:995:def validate_terminal_bridge_history(
+src/deepreason/bridge/transactional_adapter.py:111:def _semantic_bytes(value: Any) -> bytes:
+src/deepreason/bridge/transactional_adapter.py:117:def _namespace_for(*, handle: str | None = None, kind: str | None = None):
+src/deepreason/bridge/transactional_adapter.py:126:def _context_seeds(contract, pack: str):
+src/deepreason/bridge/transactional_adapter.py:185:def _context_items(harness, contract, pack: str):
+src/deepreason/bridge/transactional_adapter.py:215:class TransactionalBridgeAdapter:
+src/deepreason/bridge/transactional_adapter.py:60:class BridgeRecoveryError(RuntimeError):
+src/deepreason/bridge/transactional_adapter.py:69:def _require_durable_model_classification(harness, manifest, qualification) -> None:
+src/deepreason/bridge/validate.py:171:def ledger_findings(ledger: ClaimLedgerV1) -> list[BridgeValidationFindingV1]:
+src/deepreason/bridge/validate.py:214:def validate_claim_ledger(ledger: ClaimLedgerV1) -> BridgeValidationReportV1:
+src/deepreason/bridge/validate.py:224:def _allowed_modes(
+src/deepreason/bridge/validate.py:259:def output_findings(
+src/deepreason/bridge/validate.py:402:def validate_bridge_output(
+src/deepreason/bridge/validate.py:47:def _finding(
+src/deepreason/bridge/validate.py:66:def _entry_grounding_findings(
+src/deepreason/bridge/workflow.py:152:def _ledger_records(
+src/deepreason/bridge/workflow.py:173:def _validation_records(
+src/deepreason/bridge/workflow.py:182:def _output_records(output: BridgeOutputV1) -> tuple[tuple[str, BaseModel], ...]:
+src/deepreason/bridge/workflow.py:190:def _review_records(review: GroundingReviewV1) -> tuple[tuple[str, BaseModel], ...]:
+src/deepreason/bridge/workflow.py:197:def _stable_error_code(error: Exception, default: str) -> str:
+src/deepreason/bridge/workflow.py:202:def _error_calls(error: Exception) -> list[LLMCall]:
+src/deepreason/bridge/workflow.py:210:def _stage_a_failure_error(failure) -> RuntimeError:
+src/deepreason/bridge/workflow.py:218:class BridgeWorkflow:
+src/deepreason/bridge/workflow.py:47:class BridgeWorkflowPolicy(FrozenRecord):
+src/deepreason/bridge/workflow.py:73:class BridgePersistenceBatch:
+src/deepreason/bridge/workflow.py:88:class BridgeWorkflowResultV1(FrozenRecord):

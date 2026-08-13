@@ -1,0 +1,10 @@
+=== symbol: SymbolRecord  defined: src/deepreason/workloads/code.py ===
+--- reference scan: rg -l -w 'SymbolRecord' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]SymbolRecord['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'SymbolRecord' pyproject.toml ---
+
+(above blank = zero hits)

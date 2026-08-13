@@ -1,0 +1,10 @@
+=== symbol: V6RepairTurn  defined: src/deepreason/llm/repair.py ===
+--- reference scan: rg -l -w 'V6RepairTurn' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]V6RepairTurn['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'V6RepairTurn' pyproject.toml ---
+
+(above blank = zero hits)

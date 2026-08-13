@@ -1,0 +1,7 @@
+=== symbol: ledger_findings  defined: src/deepreason/bridge/validate.py ===
+--- reference scan: rg -l -w 'ledger_findings' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ledger_findings['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/validate.py
+(above blank = zero hits)

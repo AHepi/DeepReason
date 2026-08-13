@@ -1,0 +1,10 @@
+=== symbol: _v6_aliases_for_render_receipt  defined: src/deepreason/scratch/conjecture.py ===
+--- reference scan: rg -l -w '_v6_aliases_for_render_receipt' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_v6_aliases_for_render_receipt['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_v6_aliases_for_render_receipt' pyproject.toml ---
+
+(above blank = zero hits)

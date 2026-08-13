@@ -1,0 +1,10 @@
+=== symbol: _v6_trial_manifest  defined: src/deepreason/informal/trial.py ===
+--- reference scan: rg -l -w '_v6_trial_manifest' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_v6_trial_manifest['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_v6_trial_manifest' pyproject.toml ---
+
+(above blank = zero hits)

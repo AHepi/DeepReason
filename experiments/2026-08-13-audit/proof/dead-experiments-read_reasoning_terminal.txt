@@ -1,0 +1,7 @@
+=== symbol: read_reasoning_terminal  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'read_reasoning_terminal' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]read_reasoning_terminal['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/experiments/campaign.py
+(above blank = zero hits)

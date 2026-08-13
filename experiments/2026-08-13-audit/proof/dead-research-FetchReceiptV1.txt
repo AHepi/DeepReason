@@ -1,0 +1,7 @@
+=== symbol: FetchReceiptV1  defined: src/deepreason/research/fetch.py ===
+--- reference scan: rg -l -w 'FetchReceiptV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]FetchReceiptV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/research/fetch.py
+(above blank = zero hits)

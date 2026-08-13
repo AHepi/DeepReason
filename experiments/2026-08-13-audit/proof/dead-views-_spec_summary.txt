@@ -1,0 +1,10 @@
+=== symbol: _spec_summary  defined: src/deepreason/views/evidence.py ===
+--- reference scan: rg -l -w '_spec_summary' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_spec_summary['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_spec_summary' pyproject.toml ---
+
+(above blank = zero hits)

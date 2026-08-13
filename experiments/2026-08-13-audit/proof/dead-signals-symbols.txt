@@ -1,0 +1,4 @@
+src/deepreason/signals.py:338:def describe(signal: str) -> str:
+src/deepreason/signals.py:349:def is_known(signal: str) -> bool:
+src/deepreason/signals.py:353:def family(signal: str) -> str:
+src/deepreason/signals.py:364:def event_signal(event) -> str | None:

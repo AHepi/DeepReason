@@ -1,0 +1,7 @@
+CANDIDATE-DEAD: _expected_call_outcome (src/deepreason/invariants.py) -- proof: dead-invariants-_expected_call_outcome.txt
+CANDIDATE-DEAD: _controller_v3_history (src/deepreason/invariants.py) -- proof: dead-invariants-_controller_v3_history.txt
+CANDIDATE-DEAD: ExpectedCallOutcome (src/deepreason/invariants.py) -- proof: dead-invariants-ExpectedCallOutcome.txt
+CANDIDATE-DEAD: _is_typed_bridge_failure (src/deepreason/invariants.py) -- proof: dead-invariants-_is_typed_bridge_failure.txt
+CANDIDATE-DEAD: _legacy_bridge_failure_call_seqs (src/deepreason/invariants.py) -- proof: dead-invariants-_legacy_bridge_failure_call_seqs.txt
+CANDIDATE-DEAD: _amendment_epochs (src/deepreason/invariants.py) -- proof: dead-invariants-_amendment_epochs.txt
+CANDIDATE-DEAD: _epoch_input_for_dossier (src/deepreason/invariants.py) -- proof: dead-invariants-_epoch_input_for_dossier.txt

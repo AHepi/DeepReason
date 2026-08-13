@@ -1,0 +1,10 @@
+=== symbol: refl  defined: src/deepreason/rules/refl.py ===
+--- reference scan: rg -l -w 'refl' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]refl['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'refl' pyproject.toml ---
+
+(above blank = zero hits)

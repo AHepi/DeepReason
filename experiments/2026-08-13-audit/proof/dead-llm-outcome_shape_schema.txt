@@ -1,0 +1,10 @@
+=== symbol: outcome_shape_schema  defined: src/deepreason/llm/wire.py ===
+--- reference scan: rg -l -w 'outcome_shape_schema' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]outcome_shape_schema['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'outcome_shape_schema' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _is_link_like  defined: src/deepreason/bridge/derived.py ===
+--- reference scan: rg -l -w '_is_link_like' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_is_link_like['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_is_link_like' pyproject.toml ---
+
+(above blank = zero hits)

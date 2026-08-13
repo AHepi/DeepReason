@@ -1,0 +1,7 @@
+=== symbol: render_config_review_pack  defined: src/deepreason/referee.py ===
+--- reference scan: rg -l -w 'render_config_review_pack' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]render_config_review_pack['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/referee.py
+(above blank = zero hits)

@@ -1,0 +1,2 @@
+CANDIDATE-DEAD: _case_prompt (src/deepreason/shallow_fitness.py) -- proof: dead-shallow_fitness-_case_prompt.txt
+CANDIDATE-DEAD: _profile_endpoint (src/deepreason/shallow_fitness.py) -- proof: dead-shallow_fitness-_profile_endpoint.txt

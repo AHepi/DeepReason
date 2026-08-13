@@ -1,0 +1,7 @@
+=== symbol: ForeignCriticAssignmentV1  defined: src/deepreason/workflow/criticism.py ===
+--- reference scan: rg -l -w 'ForeignCriticAssignmentV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ForeignCriticAssignmentV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/workflow/criticism.py
+(above blank = zero hits)

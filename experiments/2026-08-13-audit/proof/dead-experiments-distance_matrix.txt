@@ -1,0 +1,10 @@
+=== symbol: distance_matrix  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'distance_matrix' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]distance_matrix['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'distance_matrix' pyproject.toml ---
+
+(above blank = zero hits)

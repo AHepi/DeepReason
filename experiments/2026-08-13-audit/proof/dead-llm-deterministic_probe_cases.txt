@@ -1,0 +1,10 @@
+=== symbol: deterministic_probe_cases  defined: src/deepreason/llm/capabilities.py ===
+--- reference scan: rg -l -w 'deterministic_probe_cases' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]deterministic_probe_cases['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'deterministic_probe_cases' pyproject.toml ---
+
+(above blank = zero hits)

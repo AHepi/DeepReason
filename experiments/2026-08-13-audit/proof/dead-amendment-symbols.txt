@@ -1,0 +1,39 @@
+src/deepreason/amendment/apply.py:105:def _reshaped_problem_id(question: str) -> str:
+src/deepreason/amendment/apply.py:111:def _require_terminal_stop(root: Path, manifest) -> None:
+src/deepreason/amendment/apply.py:137:def _admit_supplement(
+src/deepreason/amendment/apply.py:214:def _check_evidence_budget(manifest, dossiers) -> None:
+src/deepreason/amendment/apply.py:235:def _successor_workload(parent_spec, *, problem_id: str, description: str):
+src/deepreason/amendment/apply.py:246:def _parent_workload(root: Path, epoch: int, run_input):
+src/deepreason/amendment/apply.py:263:def _apply_ledger_chain(root: Path, record: RunAmendmentV1, *, supplement) -> None:
+src/deepreason/amendment/apply.py:307:def amend_run(
+src/deepreason/amendment/apply.py:359:def _amend_locked(
+src/deepreason/amendment/apply.py:528:def _stage_epoch_documents(
+src/deepreason/amendment/apply.py:567:def _commit_chain_line(root: Path, record: RunAmendmentV1) -> None:
+src/deepreason/amendment/apply.py:58:def _now() -> str:
+src/deepreason/amendment/apply.py:62:def _atomic_write(target: Path, payload: bytes) -> None:
+src/deepreason/amendment/apply.py:79:def _write_once(target: Path, payload: bytes) -> None:
+src/deepreason/amendment/apply.py:92:def _discard_staged_epoch(directory: Path) -> None:
+src/deepreason/amendment/models.py:24:def _canonical_digest(domain: str, payload: dict) -> str:
+src/deepreason/amendment/models.py:28:class _AmendmentRecord(FrozenRecord):
+src/deepreason/amendment/models.py:37:class RunAmendmentV1(_AmendmentRecord):
+src/deepreason/amendment/state.py:104:def record_bytes(record: RunAmendmentV1) -> bytes:
+src/deepreason/amendment/state.py:110:def load_amendments(root: Path | str) -> tuple[RunAmendmentV1, ...]:
+src/deepreason/amendment/state.py:145:def staged_amendment(root: Path | str) -> RunAmendmentV1 | None:
+src/deepreason/amendment/state.py:166:def require_no_partial_amendment(root: Path | str, *, code: str) -> None:
+src/deepreason/amendment/state.py:177:def current_epoch(root: Path | str) -> int:
+src/deepreason/amendment/state.py:181:def _epoch_root(root: Path | str, epoch: int) -> Path:
+src/deepreason/amendment/state.py:185:def _epoch_manifest_path(root: Path | str, epoch: int) -> Path:
+src/deepreason/amendment/state.py:191:def load_epoch_manifest(root: Path | str, epoch: int):
+src/deepreason/amendment/state.py:197:def load_epoch_run_input(root: Path | str, epoch: int) -> RunInputManifest:
+src/deepreason/amendment/state.py:201:def load_epoch_dossier(root: Path | str, epoch: int) -> EvidenceDossier:
+src/deepreason/amendment/state.py:205:def verify_epoch_run_input(root: Path | str, epoch: int) -> dict:
+src/deepreason/amendment/state.py:235:def epoch_problem_ids(root: Path | str) -> frozenset[str]:
+src/deepreason/amendment/state.py:252:def dossier_union(root: Path | str) -> tuple[EvidenceDossier, ...]:
+src/deepreason/amendment/state.py:275:def union_citable_blocks(root: Path | str) -> tuple:
+src/deepreason/amendment/state.py:289:def epoch_workload_path(root: Path | str, epoch: int) -> Path:
+src/deepreason/amendment/state.py:40:class AmendmentError(ValueError):
+src/deepreason/amendment/state.py:49:def amendment_lock(root: Path):
+src/deepreason/amendment/state.py:56:def epoch_directory(root: Path | str, seq: int) -> Path:
+src/deepreason/amendment/state.py:66:def _chain_path(root: Path | str) -> Path:
+src/deepreason/amendment/state.py:70:def _read_chain_lines(root: Path | str) -> list[str]:
+src/deepreason/amendment/state.py:87:def _decode_record(line: str) -> RunAmendmentV1:

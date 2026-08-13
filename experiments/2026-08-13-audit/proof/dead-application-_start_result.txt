@@ -1,0 +1,10 @@
+=== symbol: _start_result  defined: src/deepreason/application/bridge.py ===
+--- reference scan: rg -l -w '_start_result' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_start_result['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_start_result' pyproject.toml ---
+
+(above blank = zero hits)

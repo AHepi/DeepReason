@@ -1,0 +1,10 @@
+=== symbol: ConjecturerTurnWireV5  defined: src/deepreason/llm/wire.py ===
+--- reference scan: rg -l -w 'ConjecturerTurnWireV5' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]ConjecturerTurnWireV5['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'ConjecturerTurnWireV5' pyproject.toml ---
+
+(above blank = zero hits)

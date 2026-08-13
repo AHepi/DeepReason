@@ -1,0 +1,10 @@
+=== symbol: _dormant_threshold  defined: src/deepreason/cli/scratch.py ===
+--- reference scan: rg -l -w '_dormant_threshold' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_dormant_threshold['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_dormant_threshold' pyproject.toml ---
+
+(above blank = zero hits)

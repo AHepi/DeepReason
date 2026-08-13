@@ -1,0 +1,10 @@
+=== symbol: _select_single_model_seed  defined: src/deepreason/run_manifest.py ===
+--- reference scan: rg -l -w '_select_single_model_seed' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_select_single_model_seed['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_select_single_model_seed' pyproject.toml ---
+
+(above blank = zero hits)

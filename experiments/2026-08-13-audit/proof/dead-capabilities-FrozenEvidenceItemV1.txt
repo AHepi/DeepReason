@@ -1,0 +1,7 @@
+=== symbol: FrozenEvidenceItemV1  defined: src/deepreason/capabilities/policy.py ===
+--- reference scan: rg -l -w 'FrozenEvidenceItemV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]FrozenEvidenceItemV1['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/capabilities/policy.py
+(above blank = zero hits)

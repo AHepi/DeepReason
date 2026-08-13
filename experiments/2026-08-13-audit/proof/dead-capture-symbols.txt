@@ -1,0 +1,33 @@
+src/deepreason/capture/atlas.py:15:class RefutedIndex:
+src/deepreason/capture/detection.py:105:def school_novelty(harness, embedder, window: int) -> dict[str, float]:
+src/deepreason/capture/detection.py:122:def school_centroids(harness, embedder, window: int) -> dict[str, list[float]]:
+src/deepreason/capture/detection.py:133:def most_distant_school(harness, embedder, window: int, of: str) -> str | None:
+src/deepreason/capture/detection.py:147:def adjudicator_metrics(harness, window: int) -> dict:
+src/deepreason/capture/detection.py:19:def _conjecture_stream(harness) -> list[str]:
+src/deepreason/capture/detection.py:201:def grounding_lambda(harness, window: int) -> float:
+src/deepreason/capture/detection.py:223:def evidence_lambda(harness, window: int | None = None) -> float | None:
+src/deepreason/capture/detection.py:259:def gate_block_count(harness, window: int) -> int:
+src/deepreason/capture/detection.py:272:def orbit_attractor_school(harness, window: int) -> str | None:
+src/deepreason/capture/detection.py:27:def _mean_pairwise(vectors: list[list[float]]) -> float | None:
+src/deepreason/capture/detection.py:296:def raw_flags(harness, embedder, config) -> dict[str, bool]:
+src/deepreason/capture/detection.py:38:def generator_metrics(harness, embedder, window: int) -> dict:
+src/deepreason/capture/ladder.py:13:def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
+src/deepreason/capture/pareto.py:9:def frontier(scored: list[tuple[object, dict[str, float]]], axes: list[str]) -> list[object]:
+src/deepreason/capture/schools.py:108:def crossover_exemplars(harness, school_id: str, k: int = 3) -> list[str]:
+src/deepreason/capture/schools.py:130:def lineage_size(harness, school_id: str) -> int:
+src/deepreason/capture/schools.py:139:def stance_weight(harness, school_id: str, config) -> float:
+src/deepreason/capture/schools.py:145:def _with_cross_examiner(harness, assigned: list[str], schools: dict, config) -> list[str]:
+src/deepreason/capture/schools.py:172:def allocate(harness, problem, schools: dict[str, dict], config) -> list[str]:
+src/deepreason/capture/schools.py:201:class SchoolPopulationRegistryError(ValueError):
+src/deepreason/capture/schools.py:205:class UnknownSchoolPopulationBackend(SchoolPopulationRegistryError, KeyError):
+src/deepreason/capture/schools.py:210:class SchoolPopulationRegistration:
+src/deepreason/capture/schools.py:216:class SchoolPopulationBackend(Protocol):
+src/deepreason/capture/schools.py:231:class SchoolPopulationRegistry:
+src/deepreason/capture/schools.py:302:class DefaultSchoolPopulationBackend:
+src/deepreason/capture/schools.py:324:class RoundRobinSchoolPopulationBackend:
+src/deepreason/capture/schools.py:374:def active_backend() -> SchoolPopulationBackend:
+src/deepreason/capture/schools.py:381:def population_backend(backend_id: str):
+src/deepreason/capture/schools.py:38:def _policy_content(
+src/deepreason/capture/schools.py:52:def roster(harness) -> dict[str, dict]:
+src/deepreason/capture/schools.py:68:def init_schools(harness, config) -> dict[str, dict]:
+src/deepreason/capture/schools.py:85:def reseed(

@@ -1,0 +1,10 @@
+=== symbol: _evaluable_battery  defined: src/deepreason/measures/hv.py ===
+--- reference scan: rg -l -w '_evaluable_battery' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_evaluable_battery['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_evaluable_battery' pyproject.toml ---
+
+(above blank = zero hits)

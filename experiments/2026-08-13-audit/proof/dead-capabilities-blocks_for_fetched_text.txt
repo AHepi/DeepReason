@@ -1,0 +1,7 @@
+=== symbol: blocks_for_fetched_text  defined: src/deepreason/capabilities/research.py ===
+--- reference scan: rg -l -w 'blocks_for_fetched_text' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]blocks_for_fetched_text['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/capabilities/research.py
+(above blank = zero hits)

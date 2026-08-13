@@ -1,0 +1,10 @@
+=== symbol: _cmd_simulate  defined: src/deepreason/cli/main.py ===
+--- reference scan: rg -l -w '_cmd_simulate' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_cmd_simulate['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_cmd_simulate' pyproject.toml ---
+
+(above blank = zero hits)

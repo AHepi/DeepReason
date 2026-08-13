@@ -1,0 +1,10 @@
+=== symbol: sample_flags  defined: src/deepreason/experiments/criticism_voting.py ===
+--- reference scan: rg -l -w 'sample_flags' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]sample_flags['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'sample_flags' pyproject.toml ---
+
+(above blank = zero hits)

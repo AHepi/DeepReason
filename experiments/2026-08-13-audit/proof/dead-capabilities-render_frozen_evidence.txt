@@ -1,0 +1,7 @@
+=== symbol: render_frozen_evidence  defined: src/deepreason/capabilities/evidence.py ===
+--- reference scan: rg -l -w 'render_frozen_evidence' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]render_frozen_evidence['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/capabilities/evidence.py
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _snapshot_model_value  defined: src/deepreason/bridge/harness.py ===
+--- reference scan: rg -l -w '_snapshot_model_value' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_snapshot_model_value['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_snapshot_model_value' pyproject.toml ---
+
+(above blank = zero hits)

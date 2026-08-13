@@ -1,0 +1,10 @@
+=== symbol: last_json_line  defined: src/deepreason/brain/log.py ===
+--- reference scan: rg -l -w 'last_json_line' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]last_json_line['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'last_json_line' pyproject.toml ---
+
+(above blank = zero hits)

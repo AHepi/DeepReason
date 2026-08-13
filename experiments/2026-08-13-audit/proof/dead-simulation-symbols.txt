@@ -1,0 +1,8 @@
+src/deepreason/simulation/compiler.py:147:def compile_declarative_numeric(
+src/deepreason/simulation/compiler.py:218:def validate_sandboxed_python_source(source: str) -> None:
+src/deepreason/simulation/compiler.py:40:class DeclarativeSimulationError(ValueError):
+src/deepreason/simulation/compiler.py:45:class _Budget:
+src/deepreason/simulation/compiler.py:56:def _exact_keys(value: dict[str, Any], expected: set[str], label: str) -> None:
+src/deepreason/simulation/compiler.py:63:def _constant(value: Any) -> str:
+src/deepreason/simulation/compiler.py:77:def _input_path(value: Any) -> str:
+src/deepreason/simulation/compiler.py:93:def _compile_expression(value: Any, *, budget: _Budget, depth: int) -> str:

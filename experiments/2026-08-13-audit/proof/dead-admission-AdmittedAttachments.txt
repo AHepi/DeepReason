@@ -1,0 +1,7 @@
+=== symbol: AdmittedAttachments  defined: src/deepreason/admission/attach.py ===
+--- reference scan: rg -l -w 'AdmittedAttachments' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]AdmittedAttachments['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/admission/attach.py
+(above blank = zero hits)

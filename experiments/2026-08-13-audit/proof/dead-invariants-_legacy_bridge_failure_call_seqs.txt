@@ -1,0 +1,10 @@
+=== symbol: _legacy_bridge_failure_call_seqs  defined: src/deepreason/invariants.py ===
+--- reference scan: rg -l -w '_legacy_bridge_failure_call_seqs' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_legacy_bridge_failure_call_seqs['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_legacy_bridge_failure_call_seqs' pyproject.toml ---
+
+(above blank = zero hits)

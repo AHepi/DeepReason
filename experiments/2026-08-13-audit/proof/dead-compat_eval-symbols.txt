@@ -1,0 +1,32 @@
+src/deepreason/compat_eval.py:100:def load_matrix(path: Path | str) -> dict[str, Any]:
+src/deepreason/compat_eval.py:1063:def _write_running_record(
+src/deepreason/compat_eval.py:1084:def run_live_matrix(
+src/deepreason/compat_eval.py:1183:def import_offline_observations(
+src/deepreason/compat_eval.py:1211:def load_optional_report(path: Path | str | None) -> dict[str, Any] | None:
+src/deepreason/compat_eval.py:1220:def write_report(path: Path | str, report: dict[str, Any]) -> None:
+src/deepreason/compat_eval.py:169:def matrix_digest(matrix: dict[str, Any]) -> str:
+src/deepreason/compat_eval.py:175:def trial_key(prompt_id: str, seed: int, profile: str) -> str:
+src/deepreason/compat_eval.py:181:def new_checkpoint(
+src/deepreason/compat_eval.py:199:def load_checkpoint(
+src/deepreason/compat_eval.py:227:def save_checkpoint(path: Path | str, checkpoint: dict[str, Any]) -> None:
+src/deepreason/compat_eval.py:232:def expected_trial_keys(matrix: dict[str, Any], profile: str) -> set[str]:
+src/deepreason/compat_eval.py:240:def _stage_rows(events: Iterable[Any]) -> list[dict[str, Any]]:
+src/deepreason/compat_eval.py:271:def _terminal_summary(root: Path) -> dict[str, Any] | None:
+src/deepreason/compat_eval.py:279:def _terminal_summary_complete(summary: dict[str, Any] | None) -> bool:
+src/deepreason/compat_eval.py:305:def _is_compact_recovery_signal(inputs: Iterable[str]) -> bool:
+src/deepreason/compat_eval.py:313:def _quality_counts(harness, events: list[Any], stage_rows: list[dict[str, Any]]) -> dict[str, Any]:
+src/deepreason/compat_eval.py:359:def collect_trial_record(
+src/deepreason/compat_eval.py:568:def _terminal_records(checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
+src/deepreason/compat_eval.py:56:class CompatibilityEvaluationError(ValueError):
+src/deepreason/compat_eval.py:576:def frontier_family_coverage(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
+src/deepreason/compat_eval.py:593:def aggregate_role_metrics(records: Iterable[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+src/deepreason/compat_eval.py:60:def _utc_now() -> str:
+src/deepreason/compat_eval.py:621:def _safe_rate(numerator: int | float, denominator: int | float) -> float | None:
+src/deepreason/compat_eval.py:625:def _frontier_quality(records: Iterable[dict[str, Any]]) -> dict[str, float | None]:
+src/deepreason/compat_eval.py:64:def _canonical_bytes(value: Any) -> bytes:
+src/deepreason/compat_eval.py:650:def threshold_verdict(
+src/deepreason/compat_eval.py:671:def compare_frontier_baseline(
+src/deepreason/compat_eval.py:70:def _sha256(value: Any) -> str:
+src/deepreason/compat_eval.py:733:def aggregate_report(
+src/deepreason/compat_eval.py:74:def _read_json(path: Path | str) -> Any:
+src/deepreason/compat_eval.py:81:def _atomic_json(path: Path | str, value: Any) -> None:

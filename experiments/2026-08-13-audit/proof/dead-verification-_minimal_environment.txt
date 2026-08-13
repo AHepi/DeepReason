@@ -1,0 +1,10 @@
+=== symbol: _minimal_environment  defined: src/deepreason/verification/runner.py ===
+--- reference scan: rg -l -w '_minimal_environment' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_minimal_environment['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_minimal_environment' pyproject.toml ---
+
+(above blank = zero hits)

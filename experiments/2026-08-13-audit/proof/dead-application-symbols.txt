@@ -1,0 +1,130 @@
+src/deepreason/application/bridge.py:1166:def _model_json(value):
+src/deepreason/application/bridge.py:1174:def _json_item(value):
+src/deepreason/application/bridge.py:1178:def page_bounds(limit: int, offset: int) -> tuple[int, int]:
+src/deepreason/application/bridge.py:1188:def _page_values(values, *, limit: int, offset: int):
+src/deepreason/application/bridge.py:1203:def _page_model_field(
+src/deepreason/application/bridge.py:1224:def _bounded_json_text(value, *, pointer: str = "", truncated=None):
+src/deepreason/application/bridge.py:1266:def _finish_bounded_payload(
+src/deepreason/application/bridge.py:1289:def result_payload(
+src/deepreason/application/bridge.py:1350:def claims_payload(
+src/deepreason/application/bridge.py:1389:def inspect_payload(
+src/deepreason/application/bridge.py:1470:def validate_payload(
+src/deepreason/application/bridge.py:149:class GroundedBridgeStatusIntentV1(_StrictModel):
+src/deepreason/application/bridge.py:1520:def status_payload(root: Path) -> dict[str, Any]:
+src/deepreason/application/bridge.py:1587:def _notify(progress_callback, event: dict[str, Any]) -> None:
+src/deepreason/application/bridge.py:1597:def _existing_terminal(root: Path) -> BridgeTerminalResultV1 | None:
+src/deepreason/application/bridge.py:1604:def _start_result(
+src/deepreason/application/bridge.py:1621:class GroundedBridgeApplicationService:
+src/deepreason/application/bridge.py:163:class _GroundedBridgePageIntentV1(_StrictModel):
+src/deepreason/application/bridge.py:176:class GroundedBridgeResultIntentV1(_GroundedBridgePageIntentV1):
+src/deepreason/application/bridge.py:182:class GroundedBridgeClaimsIntentV1(_GroundedBridgePageIntentV1):
+src/deepreason/application/bridge.py:188:class GroundedBridgeInspectIntentV1(_GroundedBridgePageIntentV1):
+src/deepreason/application/bridge.py:194:class GroundedBridgeValidateIntentV1(_GroundedBridgePageIntentV1):
+src/deepreason/application/bridge.py:200:class BridgeCLIStatusV1(BaseModel):
+src/deepreason/application/bridge.py:251:class GroundedBridgeSnapshotV1:
+src/deepreason/application/bridge.py:263:class GroundedBridgeBuildResultV1(_StrictModel):
+src/deepreason/application/bridge.py:271:class GroundedBridgeStartResultV1(_StrictModel):
+src/deepreason/application/bridge.py:294:class GroundedBridgeViewResultV1(_StrictModel):
+src/deepreason/application/bridge.py:309:class _PreparedBridge:
+src/deepreason/application/bridge.py:322:class GroundedBridgeWorkerRegistry:
+src/deepreason/application/bridge.py:340:def read_bounded_json(path: Path) -> dict[str, Any]:
+src/deepreason/application/bridge.py:358:def validate_reference(value: str, *, field: str, require_hash: bool = False) -> str:
+src/deepreason/application/bridge.py:368:def bounded_focus(values: list[str] | tuple[str, ...], field: str) -> list[str]:
+src/deepreason/application/bridge.py:377:def resolve_problem(harness, value: str) -> str:
+src/deepreason/application/bridge.py:393:def _validate_manifest_files(path: Path) -> None:
+src/deepreason/application/bridge.py:426:def _load_manifest_without_echo(path: Path):
+src/deepreason/application/bridge.py:439:def load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
+src/deepreason/application/bridge.py:481:def reasoning_run_state(root: Path, manifest=None) -> str | None:
+src/deepreason/application/bridge.py:525:def preflight_canonical_bridge(root: Path, manifest):
+src/deepreason/application/bridge.py:578:def _build_bridge_adapter(manifest, harness, *, terminal_authority=None):
+src/deepreason/application/bridge.py:58:class _StrictModel(BaseModel):
+src/deepreason/application/bridge.py:634:def _historical_bridge_caller_policy(manifest):
+src/deepreason/application/bridge.py:640:def _preflight_bridge_caller_policy(harness, manifest) -> None:
+src/deepreason/application/bridge.py:651:def preflight_focus(
+src/deepreason/application/bridge.py:678:def attention_pack(
+src/deepreason/application/bridge.py:68:class GroundedBridgeBuildIntentV1(_StrictModel):
+src/deepreason/application/bridge.py:709:def _unique_short_ids(values) -> dict[str, str]:
+src/deepreason/application/bridge.py:722:def _prepare_bridge(
+src/deepreason/application/bridge.py:763:def _execute_bridge(prepared: _PreparedBridge) -> BridgeTerminalResultV1:
+src/deepreason/application/bridge.py:789:def _build_canonical(
+src/deepreason/application/bridge.py:852:def _build_derived(
+src/deepreason/application/bridge.py:947:def load_terminal(root: Path) -> BridgeTerminalResultV1:
+src/deepreason/application/bridge.py:956:def _load_result_manifest(root: Path):
+src/deepreason/application/bridge.py:967:def load_snapshot(
+src/deepreason/application/conjecture.py:26:def _shared_meter_snapshot(value: Mapping[str, int] | None):
+src/deepreason/application/conjecture.py:39:class ConjectureApplicationBoundary:
+src/deepreason/application/intents.py:12:def budget_intent(cycles, token_budget) -> RunBudgetIntentV1:
+src/deepreason/application/intents.py:29:def start_text_run_intent(
+src/deepreason/application/intents.py:40:def continue_text_run_intent(
+src/deepreason/application/models.py:105:class RunStartedV1(_StrictModel):
+src/deepreason/application/models.py:1200:class RunResultV2(BaseModel):
+src/deepreason/application/models.py:1258:def run_result_exit_code(payload: dict[str, Any]) -> int:
+src/deepreason/application/models.py:125:class RunProgressResultV1(_StrictModel):
+src/deepreason/application/models.py:1279:class RunCancellationAcceptedV1(_StrictModel):
+src/deepreason/application/models.py:1295:class OperatorCancellationIntentV1(_StrictModel):
+src/deepreason/application/models.py:136:class OutstandingWorkItemProjectionV1(_StrictModel):
+src/deepreason/application/models.py:153:class OutstandingWorkResultV1(_StrictModel):
+src/deepreason/application/models.py:165:class TextRunTerminalResultV1(_StrictModel):
+src/deepreason/application/models.py:179:class RunVerificationSummaryV2(_StrictModel):
+src/deepreason/application/models.py:222:class CompactRecoveryLanguageV1(_StrictModel):
+src/deepreason/application/models.py:239:class RouteSeatBaseProjectionV1(_StrictModel):
+src/deepreason/application/models.py:257:class CompactRecoveryRouteProjectionV1(_StrictModel):
+src/deepreason/application/models.py:30:class _StrictModel(BaseModel):
+src/deepreason/application/models.py:34:class RunBudgetIntentV1(_StrictModel):
+src/deepreason/application/models.py:350:class RouteSeatModelClassificationProjectionV1(_StrictModel):
+src/deepreason/application/models.py:397:class AtomicWorkAttemptProjectionV1(_StrictModel):
+src/deepreason/application/models.py:442:class ContractDecompositionProjectionV1(_StrictModel):
+src/deepreason/application/models.py:53:class StartTextRunIntentV1(_StrictModel):
+src/deepreason/application/models.py:556:class RouteSeatInsufficientCapabilityProjectionV1(_StrictModel):
+src/deepreason/application/models.py:629:class ModelExecutionSummaryV1(_StrictModel):
+src/deepreason/application/models.py:70:class ContinueTextRunIntentV1(_StrictModel):
+src/deepreason/application/models.py:803:class RunStopReceiptV1(_StrictModel):
+src/deepreason/application/models.py:81:class InspectTextRunIntentV1(_StrictModel):
+src/deepreason/application/models.py:827:def derive_model_execution_summary(
+src/deepreason/application/models.py:89:class WatchTextRunIntentV1(_StrictModel):
+src/deepreason/application/models.py:98:class CancelTextRunIntentV1(_StrictModel):
+src/deepreason/application/scratch.py:100:class ScratchOpenPreviewQueryV1(_BlockQueryBase):
+src/deepreason/application/scratch.py:104:class ScratchRecordDirectOpenQueryV1(_QueryBase):
+src/deepreason/application/scratch.py:120:class ScratchRelatedQueryV1(_BlockQueryBase):
+src/deepreason/application/scratch.py:124:class ScratchAttentionPreviewQueryV1(_QueryBase):
+src/deepreason/application/scratch.py:156:class ScratchIdentityIndexV1(_StrictModel):
+src/deepreason/application/scratch.py:165:class ScratchBlockSummaryV1(_StrictModel):
+src/deepreason/application/scratch.py:177:class ScratchLinkSummaryV1(_StrictModel):
+src/deepreason/application/scratch.py:189:class ScratchClusterMapItemV1(_StrictModel):
+src/deepreason/application/scratch.py:203:class ScratchRelatedClusterV1(_StrictModel):
+src/deepreason/application/scratch.py:209:class ScratchSimilaritySummaryV1(_StrictModel):
+src/deepreason/application/scratch.py:218:class ScratchRelatedBlockV1(ScratchBlockSummaryV1):
+src/deepreason/application/scratch.py:225:class _ResultBase(_StrictModel):
+src/deepreason/application/scratch.py:229:class ScratchMapResultV1(_ResultBase):
+src/deepreason/application/scratch.py:249:class ScratchSearchResultV1(_ResultBase):
+src/deepreason/application/scratch.py:263:class _ScratchOpenResultBase(_ResultBase):
+src/deepreason/application/scratch.py:296:class ScratchOpenPreviewResultV1(_ScratchOpenResultBase):
+src/deepreason/application/scratch.py:302:class ScratchRecordDirectOpenResultV1(_ScratchOpenResultBase):
+src/deepreason/application/scratch.py:308:class ScratchRelatedResultV1(_ResultBase):
+src/deepreason/application/scratch.py:338:class ScratchAttentionPreviewResultV1(_ResultBase):
+src/deepreason/application/scratch.py:376:def _terminal_safe(value: str) -> str:
+src/deepreason/application/scratch.py:388:def _preview(value: str, limit: int = PREVIEW_CHARS) -> str:
+src/deepreason/application/scratch.py:393:def _identity_index(service: ScratchService) -> ScratchIdentityIndexV1:
+src/deepreason/application/scratch.py:402:def _block_summary(service: ScratchService, block) -> ScratchBlockSummaryV1:
+src/deepreason/application/scratch.py:414:def _link_summary(service: ScratchService, link) -> ScratchLinkSummaryV1:
+src/deepreason/application/scratch.py:427:def _read_service(root: str, at_seq: int | None) -> ScratchService:
+src/deepreason/application/scratch.py:433:def _open_result_values(
+src/deepreason/application/scratch.py:457:class ScratchQueryApplicationService:
+src/deepreason/application/scratch.py:46:class _StrictModel(BaseModel):
+src/deepreason/application/scratch.py:55:class _QueryBase(_StrictModel):
+src/deepreason/application/scratch.py:66:class _HistoricalQueryBase(_QueryBase):
+src/deepreason/application/scratch.py:71:class ScratchMapQueryV1(_HistoricalQueryBase):
+src/deepreason/application/scratch.py:76:class ScratchSearchQueryV1(_HistoricalQueryBase):
+src/deepreason/application/scratch.py:88:class _BlockQueryBase(_HistoricalQueryBase):
+src/deepreason/application/text_runs.py:190:def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
+src/deepreason/application/text_runs.py:255:def missing_manifest_credentials(manifest) -> list[str]:
+src/deepreason/application/text_runs.py:266:def _budget_values(budget: RunBudgetIntentV1):
+src/deepreason/application/text_runs.py:276:def _request_path(root: Path) -> Path:
+src/deepreason/application/text_runs.py:280:def _request_for_intent(intent: StartTextRunIntentV1) -> dict[str, Any]:
+src/deepreason/application/text_runs.py:292:def _read_request(root: Path) -> dict[str, Any]:
+src/deepreason/application/text_runs.py:329:def _spec_from_request(request: dict[str, Any]):
+src/deepreason/application/text_runs.py:34:class TextRunWorkerRegistry:
+src/deepreason/application/text_runs.py:358:def _run_input_matches_spec(run_input, spec) -> bool:
+src/deepreason/application/text_runs.py:379:class TextRunApplicationService:
+src/deepreason/application/text_runs.py:61:def _require_v6_manifest(manifest, *, operation: str) -> None:
+src/deepreason/application/text_runs.py:75:def _v6_run_result(

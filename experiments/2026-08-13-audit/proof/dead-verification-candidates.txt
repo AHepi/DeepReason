@@ -1,0 +1,21 @@
+CANDIDATE-DEAD: _deny_network (src/deepreason/verification/_sandbox.py) -- proof: dead-verification-_deny_network.txt
+CANDIDATE-DEAD: _derive_v2 (src/deepreason/verification/brokered.py) -- proof: dead-verification-_derive_v2.txt
+CANDIDATE-DEAD: _broker_call (src/deepreason/verification/brokered.py) -- proof: dead-verification-_broker_call.txt
+CANDIDATE-DEAD: json_safe (src/deepreason/verification/contained.py) -- proof: dead-verification-json_safe.txt
+DYNAMIC-REF: ContainmentUnavailableError (src/deepreason/verification/contained.py) -- string hits: src/deepreason/verification/contained.py  -- proof: dead-verification-ContainmentUnavailableError.txt
+CANDIDATE-DEAD: _kill_group (src/deepreason/verification/contained.py) -- proof: dead-verification-_kill_group.txt
+CANDIDATE-DEAD: _digest_prefix (src/deepreason/verification/llm_broker.py) -- proof: dead-verification-_digest_prefix.txt
+DYNAMIC-REF: BrokerRefusal (src/deepreason/verification/llm_broker.py) -- string hits: src/deepreason/verification/llm_broker.py  -- proof: dead-verification-BrokerRefusal.txt
+DYNAMIC-REF: BrokerLedger (src/deepreason/verification/llm_broker.py) -- string hits: src/deepreason/verification/llm_broker.py  -- proof: dead-verification-BrokerLedger.txt
+CANDIDATE-DEAD: VerifierRegistration (src/deepreason/verification/registry.py) -- proof: dead-verification-VerifierRegistration.txt
+CANDIDATE-DEAD: _adjudication_blindness_findings (src/deepreason/verification/report.py) -- proof: dead-verification-_adjudication_blindness_findings.txt
+CANDIDATE-DEAD: _legacy_channel (src/deepreason/verification/report.py) -- proof: dead-verification-_legacy_channel.txt
+CANDIDATE-DEAD: _read_terminal (src/deepreason/verification/report.py) -- proof: dead-verification-_read_terminal.txt
+CANDIDATE-DEAD: _terminal_findings (src/deepreason/verification/report.py) -- proof: dead-verification-_terminal_findings.txt
+CANDIDATE-DEAD: _model_execution_findings (src/deepreason/verification/report.py) -- proof: dead-verification-_model_execution_findings.txt
+CANDIDATE-DEAD: _terminal_authority_findings (src/deepreason/verification/report.py) -- proof: dead-verification-_terminal_authority_findings.txt
+CANDIDATE-DEAD: _minimal_environment (src/deepreason/verification/runner.py) -- proof: dead-verification-_minimal_environment.txt
+CANDIDATE-DEAD: _limit_child (src/deepreason/verification/runner.py) -- proof: dead-verification-_limit_child.txt
+CANDIDATE-DEAD: _output_items (src/deepreason/verification/runner.py) -- proof: dead-verification-_output_items.txt
+CANDIDATE-DEAD: _local_run (src/deepreason/verification/simulation.py) -- proof: dead-verification-_local_run.txt
+CANDIDATE-DEAD: _run_worker (src/deepreason/verification/simulation.py) -- proof: dead-verification-_run_worker.txt

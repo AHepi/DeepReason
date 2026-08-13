@@ -1,0 +1,14 @@
+src/deepreason/authority.py:102:def trial_authority_for(
+src/deepreason/authority.py:140:def calibration_receipt_is_verified(config) -> bool:
+src/deepreason/authority.py:160:def calibration_receipt(config) -> str | None:
+src/deepreason/authority.py:16:class TextAuthorityMode(str, Enum):
+src/deepreason/authority.py:170:def text_status_authority_issues(
+src/deepreason/authority.py:232:def authority_policy_snapshot(config) -> dict[str, str | None]:
+src/deepreason/authority.py:23:class TrialAuthority(str, Enum):
+src/deepreason/authority.py:30:class AuthoritySurface(str, Enum):
+src/deepreason/authority.py:53:class AuthorityPolicyIssue:
+src/deepreason/authority.py:61:def _value(value) -> str:
+src/deepreason/authority.py:65:def _get(config, field: str, default):
+src/deepreason/authority.py:71:def text_authority_mode(config, surface: AuthoritySurface | str) -> TextAuthorityMode:
+src/deepreason/authority.py:79:def _adjudication_status_authority_enabled(config) -> bool:
+src/deepreason/authority.py:83:def argumentative_authority_mode(config) -> str:

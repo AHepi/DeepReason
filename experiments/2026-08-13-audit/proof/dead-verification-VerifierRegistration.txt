@@ -1,0 +1,10 @@
+=== symbol: VerifierRegistration  defined: src/deepreason/verification/registry.py ===
+--- reference scan: rg -l -w 'VerifierRegistration' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]VerifierRegistration['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'VerifierRegistration' pyproject.toml ---
+
+(above blank = zero hits)

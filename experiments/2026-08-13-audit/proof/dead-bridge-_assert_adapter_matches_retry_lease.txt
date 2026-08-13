@@ -1,0 +1,10 @@
+=== symbol: _assert_adapter_matches_retry_lease  defined: src/deepreason/bridge/harness.py ===
+--- reference scan: rg -l -w '_assert_adapter_matches_retry_lease' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_assert_adapter_matches_retry_lease['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_assert_adapter_matches_retry_lease' pyproject.toml ---
+
+(above blank = zero hits)

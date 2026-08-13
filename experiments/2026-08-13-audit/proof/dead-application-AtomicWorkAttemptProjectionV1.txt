@@ -1,0 +1,10 @@
+=== symbol: AtomicWorkAttemptProjectionV1  defined: src/deepreason/application/models.py ===
+--- reference scan: rg -l -w 'AtomicWorkAttemptProjectionV1' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]AtomicWorkAttemptProjectionV1['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'AtomicWorkAttemptProjectionV1' pyproject.toml ---
+
+(above blank = zero hits)

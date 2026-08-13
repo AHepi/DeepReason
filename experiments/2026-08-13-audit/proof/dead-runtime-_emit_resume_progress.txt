@@ -1,0 +1,10 @@
+=== symbol: _emit_resume_progress  defined: src/deepreason/runtime/continuation.py ===
+--- reference scan: rg -l -w '_emit_resume_progress' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_emit_resume_progress['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_emit_resume_progress' pyproject.toml ---
+
+(above blank = zero hits)

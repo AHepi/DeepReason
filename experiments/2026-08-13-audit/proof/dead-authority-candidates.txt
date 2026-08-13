@@ -1,0 +1,5 @@
+CANDIDATE-DEAD: calibration_receipt (src/deepreason/authority.py) -- proof: dead-authority-calibration_receipt.txt
+CANDIDATE-DEAD: AuthorityPolicyIssue (src/deepreason/authority.py) -- proof: dead-authority-AuthorityPolicyIssue.txt
+CANDIDATE-DEAD: _get (src/deepreason/authority.py) -- proof: dead-authority-_get.txt
+CANDIDATE-DEAD: text_authority_mode (src/deepreason/authority.py) -- proof: dead-authority-text_authority_mode.txt
+CANDIDATE-DEAD: _adjudication_status_authority_enabled (src/deepreason/authority.py) -- proof: dead-authority-_adjudication_status_authority_enabled.txt

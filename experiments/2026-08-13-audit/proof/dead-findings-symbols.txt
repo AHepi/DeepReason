@@ -1,0 +1,6 @@
+src/deepreason/findings.py:21:def _clip(text: str) -> str:
+src/deepreason/findings.py:246:def findings_summary(root: Path | str) -> dict:
+src/deepreason/findings.py:28:def _claim_text(artifact) -> str:
+src/deepreason/findings.py:438:def render_findings(summary: dict) -> str:
+src/deepreason/findings.py:47:def _atomic_write(path: Path, body: str) -> None:
+src/deepreason/findings.py:53:def write_findings_report(root: Path | str) -> Path | None:

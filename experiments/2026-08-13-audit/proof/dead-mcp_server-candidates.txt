@@ -1,0 +1,9 @@
+CANDIDATE-DEAD: _MCPInputSchemaError (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_MCPInputSchemaError.txt
+CANDIDATE-DEAD: _schema_ref (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_schema_ref.txt
+CANDIDATE-DEAD: _validate_mcp_input (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_validate_mcp_input.txt
+CANDIDATE-DEAD: _intake_form_schema (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_intake_form_schema.txt
+CANDIDATE-DEAD: _missing_manifest_credentials (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_missing_manifest_credentials.txt
+CANDIDATE-DEAD: _public_budget (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_public_budget.txt
+CANDIDATE-DEAD: _plain_readiness_guidance (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_plain_readiness_guidance.txt
+CANDIDATE-DEAD: _run_tools (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_run_tools.txt
+CANDIDATE-DEAD: _read_run_result (src/deepreason/mcp_server.py) -- proof: dead-mcp_server-_read_run_result.txt

@@ -1,0 +1,6 @@
+CANDIDATE-DEAD: _integrity_matches (src/deepreason/imports.py) -- proof: dead-imports-_integrity_matches.txt
+CANDIDATE-DEAD: _archive_manifest (src/deepreason/imports.py) -- proof: dead-imports-_archive_manifest.txt
+CANDIDATE-DEAD: _safe_extract (src/deepreason/imports.py) -- proof: dead-imports-_safe_extract.txt
+CANDIDATE-DEAD: BundleResult (src/deepreason/imports.py) -- proof: dead-imports-BundleResult.txt
+CANDIDATE-DEAD: _exact_ref (src/deepreason/imports.py) -- proof: dead-imports-_exact_ref.txt
+CANDIDATE-DEAD: _artifact_bytes (src/deepreason/imports.py) -- proof: dead-imports-_artifact_bytes.txt

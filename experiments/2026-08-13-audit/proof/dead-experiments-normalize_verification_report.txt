@@ -1,0 +1,7 @@
+=== symbol: normalize_verification_report  defined: src/deepreason/experiments/campaign.py ===
+--- reference scan: rg -l -w 'normalize_verification_report' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]normalize_verification_report['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/experiments/campaign.py
+(above blank = zero hits)

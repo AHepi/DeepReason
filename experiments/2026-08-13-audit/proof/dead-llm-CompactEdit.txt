@@ -1,0 +1,10 @@
+=== symbol: CompactEdit  defined: src/deepreason/llm/wire.py ===
+--- reference scan: rg -l -w 'CompactEdit' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CompactEdit['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'CompactEdit' pyproject.toml ---
+
+(above blank = zero hits)

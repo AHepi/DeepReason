@@ -1,0 +1,3 @@
+src/deepreason/status_display.py:10:def _status_value(status: Status | str) -> str:
+src/deepreason/status_display.py:14:def display_status(
+src/deepreason/status_display.py:32:def display_status_counts(

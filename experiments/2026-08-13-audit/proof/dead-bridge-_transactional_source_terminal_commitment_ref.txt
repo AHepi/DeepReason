@@ -1,0 +1,10 @@
+=== symbol: _transactional_source_terminal_commitment_ref  defined: src/deepreason/bridge/harness.py ===
+--- reference scan: rg -l -w '_transactional_source_terminal_commitment_ref' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_transactional_source_terminal_commitment_ref['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_transactional_source_terminal_commitment_ref' pyproject.toml ---
+
+(above blank = zero hits)

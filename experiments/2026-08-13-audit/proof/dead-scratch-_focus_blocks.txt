@@ -1,0 +1,10 @@
+=== symbol: _focus_blocks  defined: src/deepreason/scratch/conjecture.py ===
+--- reference scan: rg -l -w '_focus_blocks' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_focus_blocks['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_focus_blocks' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,124 @@
+src/deepreason/cli/bridge.py:167:def _add_page_arguments(parser) -> None:
+src/deepreason/cli/bridge.py:182:def _safe_human(value: object, *, maximum: int = 4_096) -> str:
+src/deepreason/cli/bridge.py:200:def _build_intent(args) -> GroundedBridgeBuildIntentV1:
+src/deepreason/cli/bridge.py:226:def _build(args) -> tuple[_BridgeSnapshot, int]:
+src/deepreason/cli/bridge.py:231:def _unique_short_ids(values) -> dict[str, str]:
+src/deepreason/cli/bridge.py:246:def _grounding_source_count(ledger) -> int:
+src/deepreason/cli/bridge.py:260:def _render_result(
+src/deepreason/cli/bridge.py:331:def _render_claims(
+src/deepreason/cli/bridge.py:380:def _render_inspect(snapshot: _BridgeSnapshot) -> str:
+src/deepreason/cli/bridge.py:409:def _handle_bridge_command(args) -> int:
+src/deepreason/cli/bridge.py:543:def handle_bridge_command(args) -> int:
+src/deepreason/cli/bridge.py:88:def register_bridge_commands(subparsers) -> None:
+src/deepreason/cli/doctor.py:1024:def derive_route_seat_model_classification(
+src/deepreason/cli/doctor.py:1105:def _qualification_concurrency(explicit: int | None = None) -> int:
+src/deepreason/cli/doctor.py:1121:def run_production_contract_doctor(
+src/deepreason/cli/doctor.py:1259:def _atomic_write_report(target: Path, payload: bytes) -> None:
+src/deepreason/cli/doctor.py:1274:def write_production_contract_report(
+src/deepreason/cli/doctor.py:1286:class _DuplicateDoctorReportKey(ValueError):
+src/deepreason/cli/doctor.py:1290:def _read_production_contract_report(path: Path) -> bytes:
+src/deepreason/cli/doctor.py:137:def _release_gate(cases: tuple[ProductionContractCaseResultV1, ...]) -> bool:
+src/deepreason/cli/doctor.py:1388:def load_production_contract_report(
+src/deepreason/cli/doctor.py:1432:def validate_production_contract_qualification(
+src/deepreason/cli/doctor.py:1521:def run_production_contract_doctor_cli(
+src/deepreason/cli/doctor.py:152:class ProductionContractPairReportV1(_DoctorRecord):
+src/deepreason/cli/doctor.py:213:class ProductionContractDoctorSummaryV1(_DoctorRecord):
+src/deepreason/cli/doctor.py:229:class ProductionContractDoctorReportV1(_DoctorRecord):
+src/deepreason/cli/doctor.py:288:def _pair_id(
+src/deepreason/cli/doctor.py:310:def production_contract_pairs(
+src/deepreason/cli/doctor.py:374:def _contract_schema_repair_grant(
+src/deepreason/cli/doctor.py:382:def _behavioral_contract_grant(
+src/deepreason/cli/doctor.py:403:def _require_constructed_contract_identity(
+src/deepreason/cli/doctor.py:415:def _failure_code(error: BaseException) -> str:
+src/deepreason/cli/doctor.py:428:def _is_alias_failure(error: BaseException) -> bool:
+src/deepreason/cli/doctor.py:439:def _is_scope_violation(error: BaseException) -> bool:
+src/deepreason/cli/doctor.py:453:def _admit_production_probe_output(
+src/deepreason/cli/doctor.py:470:def exercise_production_contract_case(
+src/deepreason/cli/doctor.py:53:class _DoctorRecord(BaseModel):
+src/deepreason/cli/doctor.py:57:class ProductionContractPairV1(_DoctorRecord):
+src/deepreason/cli/doctor.py:584:def _production_bridge_ledger_probe(*, batched: bool = False):
+src/deepreason/cli/doctor.py:615:def _production_bridge_composition_probe(*, batched: bool = False):
+src/deepreason/cli/doctor.py:658:def _production_grounding_probe(*, repair: bool):
+src/deepreason/cli/doctor.py:722:def _production_scratch_probe(contract_id: str):
+src/deepreason/cli/doctor.py:780:def _production_probe_contract(
+src/deepreason/cli/doctor.py:941:def _validate_production_contract_request_envelopes(
+src/deepreason/cli/doctor.py:974:def _pair_report(
+src/deepreason/cli/doctor.py:995:def _production_qualification_evidence_sha256(
+src/deepreason/cli/doctor.py:99:class ProductionContractCaseResultV1(_DoctorRecord):
+src/deepreason/cli/main.py:1243:def _read_problem_file(path: Path) -> dict:
+src/deepreason/cli/main.py:1256:def _cmd_input(args) -> int:
+src/deepreason/cli/main.py:1330:def _doctor_role_seats(configured, role: str) -> dict:
+src/deepreason/cli/main.py:1353:def _doctor_policy_readiness(configured) -> dict:
+src/deepreason/cli/main.py:1455:def _cmd_doctor(args) -> int:
+src/deepreason/cli/main.py:1646:def _load_problem_file(harness: Harness, path: Path) -> str:
+src/deepreason/cli/main.py:1652:def _cmd_status(args) -> int:
+src/deepreason/cli/main.py:1695:def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | None:
+src/deepreason/cli/main.py:1865:def _print_qualify_failure(error: ValueError) -> None:
+src/deepreason/cli/main.py:1888:def _cmd_explain_error(args) -> int:
+src/deepreason/cli/main.py:1907:def _load_intake_file(path: str) -> dict:
+src/deepreason/cli/main.py:1923:def _cmd_validate_intake(args) -> int:
+src/deepreason/cli/main.py:1957:def _print_qualify_headline(payload: dict, *, indent: str = "") -> None:
+src/deepreason/cli/main.py:1974:def _cmd_qualify(args) -> int:
+src/deepreason/cli/main.py:2035:def _cmd_reason_shallow(args) -> int:
+src/deepreason/cli/main.py:2064:def _cmd_admit(args) -> int:
+src/deepreason/cli/main.py:2148:def _reasoning_disabled_refusal(provider_profile) -> str | None:
+src/deepreason/cli/main.py:2183:def _cmd_reason(args) -> int:
+src/deepreason/cli/main.py:2271:def _cmd_skills(args) -> int:
+src/deepreason/cli/main.py:2303:def _cmd_distill(args) -> int:
+src/deepreason/cli/main.py:2331:def _cmd_brain(args) -> int:
+src/deepreason/cli/main.py:2414:def _cmd_amend(args) -> int:
+src/deepreason/cli/main.py:2439:def _cmd_continue(args) -> int:
+src/deepreason/cli/main.py:2470:def _cmd_cancel(args) -> int:
+src/deepreason/cli/main.py:2487:def _cmd_check_proof(args) -> int:
+src/deepreason/cli/main.py:2570:def _bind_cli_manifest(root: Path, requested_path: str, *, workload: str):
+src/deepreason/cli/main.py:2595:def _cmd_code(args) -> int:
+src/deepreason/cli/main.py:2632:def _cmd_simulate(args) -> int:
+src/deepreason/cli/main.py:2686:def _cmd_run(args) -> int:
+src/deepreason/cli/main.py:2768:def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> int:
+src/deepreason/cli/main.py:35:def build_parser() -> argparse.ArgumentParser:
+src/deepreason/cli/main.py:547:def _resolve(harness: Harness, prefix: str) -> str:
+src/deepreason/cli/main.py:588:def _admit_v6_root(root: Path | str, *, operation: str):
+src/deepreason/cli/main.py:641:def _require_v6_workload_match(run_input, dossier, spec) -> None:
+src/deepreason/cli/main.py:664:def main(argv: list[str] | None = None) -> int:
+src/deepreason/cli/main.py:677:def _main(argv: list[str] | None = None) -> int:
+src/deepreason/cli/scratch.py:195:def _canonical(model) -> dict[str, Any]:
+src/deepreason/cli/scratch.py:199:def _terminal_safe(value: str) -> str:
+src/deepreason/cli/scratch.py:213:def _preview(value: str, limit: int = PREVIEW_CHARS) -> str:
+src/deepreason/cli/scratch.py:218:def _short_id(value: str, candidates: Iterable[str]) -> str:
+src/deepreason/cli/scratch.py:230:def _label(service: ScratchService, kind: str, value: str) -> str:
+src/deepreason/cli/scratch.py:240:def _query_label(result, kind: str, value: str) -> str:
+src/deepreason/cli/scratch.py:250:def _bounded_limit(value: int) -> int:
+src/deepreason/cli/scratch.py:258:def _bounded_text(value: str, *, location: str, maximum: int = MAX_INPUT_CHARS) -> str:
+src/deepreason/cli/scratch.py:268:def _read_explicit_file(value: str) -> str:
+src/deepreason/cli/scratch.py:290:def _read_stdin(stdin: TextIO) -> str:
+src/deepreason/cli/scratch.py:314:def _block_body(args, stdin: TextIO) -> dict[str, str]:
+src/deepreason/cli/scratch.py:329:def _provenance(operation: str) -> ScratchProvenanceV1:
+src/deepreason/cli/scratch.py:333:def _writable_service(args) -> ScratchService:
+src/deepreason/cli/scratch.py:337:def _read_service(args) -> ScratchService:
+src/deepreason/cli/scratch.py:348:def _query_sequence(args) -> int | None:
+src/deepreason/cli/scratch.py:357:def _block_summary(service: ScratchService, block) -> dict[str, Any]:
+src/deepreason/cli/scratch.py:373:def _link_summary(service: ScratchService, link) -> dict[str, Any]:
+src/deepreason/cli/scratch.py:384:def _emit(args, result: dict[str, Any], human: str, stdout: TextIO) -> int:
+src/deepreason/cli/scratch.py:402:def _error_payload(error: Exception) -> dict[str, Any]:
+src/deepreason/cli/scratch.py:40:class ScratchCliInputError(ValueError):
+src/deepreason/cli/scratch.py:423:def _emit_error(args, error: Exception, stderr: TextIO) -> int:
+src/deepreason/cli/scratch.py:443:def _add(args, stdin: TextIO) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:449:def _revise(args, stdin: TextIO) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:460:def _create_link(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:489:def _retire_link(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:501:def _cluster(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:50:def _add_json(parser: argparse.ArgumentParser) -> None:
+src/deepreason/cli/scratch.py:536:def _show(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:56:def _add_limit(parser: argparse.ArgumentParser) -> None:
+src/deepreason/cli/scratch.py:578:def _search(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:598:def _related(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:625:def _map(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:646:def _dormant_threshold(args) -> int:
+src/deepreason/cli/scratch.py:65:def _add_history(parser: argparse.ArgumentParser) -> None:
+src/deepreason/cli/scratch.py:668:def _dormant(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:687:def _underexposed(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:702:def _sample(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:719:def _coverage(args) -> tuple[dict[str, Any], str]:
+src/deepreason/cli/scratch.py:74:def _add_content_input(parser: argparse.ArgumentParser) -> None:
+src/deepreason/cli/scratch.py:752:def dispatch_scratch(
+src/deepreason/cli/scratch.py:83:def register_scratch_parser(subparsers) -> argparse.ArgumentParser:

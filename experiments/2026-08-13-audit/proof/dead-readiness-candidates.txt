@@ -1,0 +1,3 @@
+DYNAMIC-REF: ReadinessV1 (src/deepreason/readiness.py) -- string hits: src/deepreason/readiness.py  -- proof: dead-readiness-ReadinessV1.txt
+DYNAMIC-REF: package_version (src/deepreason/readiness.py) -- string hits: src/deepreason/readiness.py  -- proof: dead-readiness-package_version.txt
+CANDIDATE-DEAD: _readiness_fields (src/deepreason/readiness.py) -- proof: dead-readiness-_readiness_fields.txt

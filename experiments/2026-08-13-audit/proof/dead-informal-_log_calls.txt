@@ -1,0 +1,10 @@
+=== symbol: _log_calls  defined: src/deepreason/informal/audits.py ===
+--- reference scan: rg -l -w '_log_calls' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_log_calls['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_log_calls' pyproject.toml ---
+
+(above blank = zero hits)

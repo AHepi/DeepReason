@@ -1,0 +1,10 @@
+=== symbol: _same_epoch_commitment_objects  defined: src/deepreason/runtime/terminal_authority.py ===
+--- reference scan: rg -l -w '_same_epoch_commitment_objects' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_same_epoch_commitment_objects['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_same_epoch_commitment_objects' pyproject.toml ---
+
+(above blank = zero hits)

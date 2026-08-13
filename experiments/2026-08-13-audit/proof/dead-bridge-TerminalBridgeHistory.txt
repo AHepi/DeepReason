@@ -1,0 +1,7 @@
+=== symbol: TerminalBridgeHistory  defined: src/deepreason/bridge/state.py ===
+--- reference scan: rg -l -w 'TerminalBridgeHistory' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]TerminalBridgeHistory['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/state.py
+(above blank = zero hits)

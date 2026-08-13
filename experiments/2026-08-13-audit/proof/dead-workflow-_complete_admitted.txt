@@ -1,0 +1,10 @@
+=== symbol: _complete_admitted  defined: src/deepreason/workflow/nonconjecture_recovery.py ===
+--- reference scan: rg -l -w '_complete_admitted' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_complete_admitted['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_complete_admitted' pyproject.toml ---
+
+(above blank = zero hits)

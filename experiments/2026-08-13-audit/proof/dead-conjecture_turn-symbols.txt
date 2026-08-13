@@ -1,0 +1,10 @@
+src/deepreason/conjecture_turn.py:102:class ReasoningConjecturerTurnV4(_TurnRecord):
+src/deepreason/conjecture_turn.py:120:class ConjecturerTurnV5(_TurnRecord):
+src/deepreason/conjecture_turn.py:146:class ReasoningConjecturerTurnV5(_TurnRecord):
+src/deepreason/conjecture_turn.py:172:class ConjectureTurnV6(_TurnRecord):
+src/deepreason/conjecture_turn.py:209:class ReasoningConjecturerTurnV6(_TurnRecord):
+src/deepreason/conjecture_turn.py:21:class _TurnRecord(BaseModel):
+src/deepreason/conjecture_turn.py:250:class ConjectureTurnAuthorityV1(_TurnRecord):
+src/deepreason/conjecture_turn.py:25:class ContextRequestV1(_TurnRecord):
+src/deepreason/conjecture_turn.py:68:class ConjectureAbstentionV1(_TurnRecord):
+src/deepreason/conjecture_turn.py:86:class ConjecturerTurnV4(_TurnRecord):

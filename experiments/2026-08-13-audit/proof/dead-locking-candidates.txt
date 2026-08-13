@@ -1,0 +1,8 @@
+CANDIDATE-DEAD: _posix_acquire (src/deepreason/locking.py) -- proof: dead-locking-_posix_acquire.txt
+CANDIDATE-DEAD: _posix_release (src/deepreason/locking.py) -- proof: dead-locking-_posix_release.txt
+CANDIDATE-DEAD: _windows_acquire (src/deepreason/locking.py) -- proof: dead-locking-_windows_acquire.txt
+CANDIDATE-DEAD: _windows_release (src/deepreason/locking.py) -- proof: dead-locking-_windows_release.txt
+DYNAMIC-REF: ProcessLockSet (src/deepreason/locking.py) -- string hits: src/deepreason/locking.py  -- proof: dead-locking-ProcessLockSet.txt
+DYNAMIC-REF: ProcessLockUnavailable (src/deepreason/locking.py) -- string hits: src/deepreason/locking.py  -- proof: dead-locking-ProcessLockUnavailable.txt
+CANDIDATE-DEAD: _validated_owner (src/deepreason/locking.py) -- proof: dead-locking-_validated_owner.txt
+CANDIDATE-DEAD: _open_lock_file (src/deepreason/locking.py) -- proof: dead-locking-_open_lock_file.txt

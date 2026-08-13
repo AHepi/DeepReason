@@ -1,0 +1,7 @@
+=== symbol: CoveragePolicy  defined: src/deepreason/scratch/coverage.py ===
+--- reference scan: rg -l -w 'CoveragePolicy' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]CoveragePolicy['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/scratch/coverage.py
+(above blank = zero hits)

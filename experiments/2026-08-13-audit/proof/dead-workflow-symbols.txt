@@ -1,0 +1,171 @@
+src/deepreason/workflow/atomic_recovery.py:18:def recover_atomic_child_output(harness, manifest, service, root_item, contract):
+src/deepreason/workflow/conjecture_recovery.py:102:def _catalogs(
+src/deepreason/workflow/conjecture_recovery.py:149:def _validate_authority(
+src/deepreason/workflow/conjecture_recovery.py:293:def _wire_output(
+src/deepreason/workflow/conjecture_recovery.py:361:def _mandatory_interface(payload: Mapping[str, Any]) -> MandatoryInterface:
+src/deepreason/workflow/conjecture_recovery.py:401:def _existing_conjecture_artifacts(
+src/deepreason/workflow/conjecture_recovery.py:419:def _materialize_formal(
+src/deepreason/workflow/conjecture_recovery.py:55:class ConjectureRecoveryAuthorityError(RuntimeError):
+src/deepreason/workflow/conjecture_recovery.py:59:class ConjectureRecoverySemanticError(RuntimeError):
+src/deepreason/workflow/conjecture_recovery.py:629:def _diagnostic_ref(
+src/deepreason/workflow/conjecture_recovery.py:63:def _authority(condition: bool, message: str) -> None:
+src/deepreason/workflow/conjecture_recovery.py:648:def _terminal_failure(
+src/deepreason/workflow/conjecture_recovery.py:680:def recover_conjecture_admission(
+src/deepreason/workflow/conjecture_recovery.py:68:def _payload_dict(value: Any) -> dict[str, Any]:
+src/deepreason/workflow/conjecture_recovery.py:76:def _source_call(harness, provider: ProviderAttemptV1):
+src/deepreason/workflow/context_continuation.py:155:def context_plan_sha256(plan) -> str | None:
+src/deepreason/workflow/context_continuation.py:26:class ContextContinuationEligibility(str, Enum):
+src/deepreason/workflow/context_continuation.py:33:class ConjectureContextContinuationV1(FrozenRecord):
+src/deepreason/workflow/criticism.py:107:class ForeignCriticismPlanV1(BaseModel):
+src/deepreason/workflow/criticism.py:116:class CriticismAssignmentV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/criticism.py:157:class CriticismAttemptV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/criticism.py:189:def record_completed_criticism_attempt(
+src/deepreason/workflow/criticism.py:21:class ForeignCriticismTargetV1(BaseModel):
+src/deepreason/workflow/criticism.py:258:class CoverageDebtV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/criticism.py:307:def _route_hash(route: Route) -> str:
+src/deepreason/workflow/criticism.py:317:def _model_identity_hash(route: Route) -> str:
+src/deepreason/workflow/criticism.py:327:def plan_foreign_criticism(
+src/deepreason/workflow/criticism.py:443:def compile_criticism_assignments(
+src/deepreason/workflow/criticism.py:47:class ForeignCriticAssignmentV1(BaseModel):
+src/deepreason/workflow/criticism.py:62:class ForeignCriticismTargetPlanV1(BaseModel):
+src/deepreason/workflow/criticism.py:87:class ForeignCriticismBatchV1(BaseModel):
+src/deepreason/workflow/events.py:26:class WorkflowSignalKind(str, Enum):
+src/deepreason/workflow/events.py:41:class ConjectureWorkAssignmentV1(WorkflowRecord):
+src/deepreason/workflow/events.py:80:class WorkflowSignalV1(WorkflowRecord):
+src/deepreason/workflow/lifecycle.py:129:def _is_runtime_exhaustion(decision: StopDecision) -> bool:
+src/deepreason/workflow/lifecycle.py:139:def build_stopped_lifecycle(
+src/deepreason/workflow/lifecycle.py:243:def build_resumed_lifecycle(
+src/deepreason/workflow/lifecycle.py:31:def outstanding_work_snapshot(
+src/deepreason/workflow/models.py:109:class IdentifiedWorkflowRecord(WorkflowRecord):
+src/deepreason/workflow/models.py:152:class WorkflowTaskKind(str, Enum):
+src/deepreason/workflow/models.py:163:class CapabilityOutcome(str, Enum):
+src/deepreason/workflow/models.py:172:class ProposalValidationOutcome(str, Enum):
+src/deepreason/workflow/models.py:179:class GuardFindingOutcome(str, Enum):
+src/deepreason/workflow/models.py:185:class GuardFindingCode(str, Enum):
+src/deepreason/workflow/models.py:194:class TransitionKind(str, Enum):
+src/deepreason/workflow/models.py:210:class TriggerKind(str, Enum):
+src/deepreason/workflow/models.py:220:class RouteLeaseRefV1(WorkflowRecord):
+src/deepreason/workflow/models.py:227:class BudgetDeltaV1(WorkflowRecord):
+src/deepreason/workflow/models.py:233:class LocalRepairPolicyV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:260:class CapabilityGrantV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:318:class WorkOrderEnvelopeV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:383:class RepairWorkOrderV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:40:def freeze_workflow_json(value: Any) -> Any:
+src/deepreason/workflow/models.py:426:class ProposalReceiptV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:487:class GuardFindingV1(WorkflowRecord):
+src/deepreason/workflow/models.py:515:class GuardResultV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:553:class TransitionDecisionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:57:def repair_attempt_trigger_ref(attempt: int, diagnostic_ref: str) -> str:
+src/deepreason/workflow/models.py:644:class WorkflowStopDecisionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:664:class LifecycleTransitionKind(str, Enum):
+src/deepreason/workflow/models.py:676:class OutstandingWorkItemV1(WorkflowRecord):
+src/deepreason/workflow/models.py:709:class WorkflowLifecycleSnapshotV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:752:class StopMetricsObservationV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:796:class WorkflowLifecycleDecisionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:80:def _validate_json_pointer(value: str) -> str:
+src/deepreason/workflow/models.py:842:class RunTerminalCommitmentV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:900:class RunTerminalResultDraftV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:933:class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/models.py:99:class WorkflowRecord(BaseModel):
+src/deepreason/workflow/nonconjecture_recovery.py:1027:def recover_nonconjecture_admission(
+src/deepreason/workflow/nonconjecture_recovery.py:111:def _common_authority(harness, manifest: RunManifest, provider: ProviderAttemptV1):
+src/deepreason/workflow/nonconjecture_recovery.py:160:def _trigger(preparation, payload: Mapping[str, Any], prefix: str) -> None:
+src/deepreason/workflow/nonconjecture_recovery.py:165:def _raw_bytes(harness, provider: ProviderAttemptV1) -> bytes:
+src/deepreason/workflow/nonconjecture_recovery.py:175:def _diagnostic(harness, *, code: str, task: str, detail: str, **extra: Any) -> str:
+src/deepreason/workflow/nonconjecture_recovery.py:189:def _terminalize(
+src/deepreason/workflow/nonconjecture_recovery.py:218:def _schema_exhausted(
+src/deepreason/workflow/nonconjecture_recovery.py:240:def _existing_admission(item, provider: ProviderAttemptV1):
+src/deepreason/workflow/nonconjecture_recovery.py:256:def _complete_admitted(
+src/deepreason/workflow/nonconjecture_recovery.py:282:def _recovered_criticism_authority(manifest, payload) -> str:
+src/deepreason/workflow/nonconjecture_recovery.py:304:def _recover_criticism_effect(
+src/deepreason/workflow/nonconjecture_recovery.py:398:def _criticism_retry_fallback_cases(
+src/deepreason/workflow/nonconjecture_recovery.py:471:def _recover_scratch_effect(
+src/deepreason/workflow/nonconjecture_recovery.py:513:def _unapplied(
+src/deepreason/workflow/nonconjecture_recovery.py:547:def _artifact_digest(harness, target_id: str) -> str:
+src/deepreason/workflow/nonconjecture_recovery.py:560:def _config_referee_contract(manifest, preparation, payload):
+src/deepreason/workflow/nonconjecture_recovery.py:600:def _recover_config_referee_effect(
+src/deepreason/workflow/nonconjecture_recovery.py:62:class NonConjectureRecoveryAuthorityError(RuntimeError):
+src/deepreason/workflow/nonconjecture_recovery.py:665:def _criticism_contract(harness, manifest, item, preparation, payload):
+src/deepreason/workflow/nonconjecture_recovery.py:66:def _authority(condition: bool, message: str) -> None:
+src/deepreason/workflow/nonconjecture_recovery.py:71:def _mapping(value: Any, label: str) -> dict[str, Any]:
+src/deepreason/workflow/nonconjecture_recovery.py:76:def _source_call(harness, provider: ProviderAttemptV1):
+src/deepreason/workflow/nonconjecture_recovery.py:785:def _scratch_contract(harness, manifest, item, preparation, payload):
+src/deepreason/workflow/nonconjecture_recovery.py:887:def _bridge_authority(harness, manifest, item, preparation, payload) -> str:
+src/deepreason/workflow/nonconjecture_recovery.py:95:def _route(manifest: RunManifest, preparation, call):
+src/deepreason/workflow/nonconjecture_recovery.py:968:def _repair_authority(harness, item, preparation, payload, raw_value):
+src/deepreason/workflow/profiles.py:224:def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfileV1:
+src/deepreason/workflow/profiles.py:289:def route_lease_reference(lease: EndpointLease) -> RouteLeaseRefV1:
+src/deepreason/workflow/profiles.py:300:def resolve_conjecture_route(
+src/deepreason/workflow/profiles.py:50:class WorkflowProfileError(ValueError):
+src/deepreason/workflow/profiles.py:67:class ConjectureWorkflowProfileV1(FrozenRecord):
+src/deepreason/workflow/reducer.py:116:def _decide(
+src/deepreason/workflow/reducer.py:172:def plan_conjecture_batch(
+src/deepreason/workflow/reducer.py:260:def _guard_transition(signal: WorkflowSignalV1) -> tuple[TransitionKind, tuple[str, ...]]:
+src/deepreason/workflow/reducer.py:272:def reduce_conjecture(
+src/deepreason/workflow/reducer.py:38:def _canonical_revalidate(model_type: type[_ModelT], value: Any) -> _ModelT:
+src/deepreason/workflow/reducer.py:49:def plan_conjecture_work(
+src/deepreason/workflow/reducer.py:95:def _validate_boundary(
+src/deepreason/workflow/repair_transaction.py:134:def _raise_exhausted(
+src/deepreason/workflow/repair_transaction.py:149:def repair_schema_failure(
+src/deepreason/workflow/repair_transaction.py:31:class _PointerValidationError(ValueError):
+src/deepreason/workflow/repair_transaction.py:43:def _finite_error(error: Exception) -> Exception:
+src/deepreason/workflow/repair_transaction.py:54:def _record_bytes(harness, value: BaseModel | dict[str, Any]) -> tuple[str, bytes]:
+src/deepreason/workflow/repair_transaction.py:64:def _diagnostic_refs(*values: str | None) -> tuple[str, ...]:
+src/deepreason/workflow/repair_transaction.py:68:def _raw_text(harness, call) -> str:
+src/deepreason/workflow/repair_transaction.py:74:def _assess(
+src/deepreason/workflow/repair_transaction.py:95:def _terminalize_invalid(
+src/deepreason/workflow/replay.py:126:class WorkflowRecoveryStatus(str, Enum):
+src/deepreason/workflow/replay.py:137:class WorkflowBranchState:
+src/deepreason/workflow/replay.py:146:class _PlannedApply:
+src/deepreason/workflow/replay.py:157:def _canonical(model_type, value):
+src/deepreason/workflow/replay.py:166:def _record_map(
+src/deepreason/workflow/replay.py:182:def _call_index(values: Any) -> dict[int, Any]:
+src/deepreason/workflow/replay.py:196:def _guard_transition(
+src/deepreason/workflow/replay.py:208:class TransactionReplayItem:
+src/deepreason/workflow/replay.py:233:class WorkflowReplayState:
+src/deepreason/workflow/replay.py:3030:def replay_workflow(
+src/deepreason/workflow/shadow.py:109:class ShadowTicketV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/shadow.py:142:class ShadowComparisonV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/shadow.py:259:def _meter_snapshot(value: Mapping[str, int] | None) -> MeterSnapshotV1 | None:
+src/deepreason/workflow/shadow.py:263:def _gate_findings(
+src/deepreason/workflow/shadow.py:304:def _synthetic_candidate_ref(call) -> str:
+src/deepreason/workflow/shadow.py:311:class ConjectureShadowObserver:
+src/deepreason/workflow/shadow.py:45:class ShadowMismatchCode(str, Enum):
+src/deepreason/workflow/shadow.py:59:class ShadowTerminationKind(str, Enum):
+src/deepreason/workflow/shadow.py:69:def _diagnostic_ref(value: object, *, max_length: int = 512) -> str:
+src/deepreason/workflow/shadow.py:90:def _diagnostic_seq(value: object) -> int:
+src/deepreason/workflow/shadow.py:94:class MeterSnapshotV1(WorkflowRecord):
+src/deepreason/workflow/state.py:109:class WorkflowProcessStateV1(WorkflowRecord):
+src/deepreason/workflow/state.py:203:class ReductionV1(WorkflowRecord):
+src/deepreason/workflow/state.py:24:def _canonical_revalidate(model_type: type[_ModelT], value: Any) -> _ModelT:
+src/deepreason/workflow/state.py:286:def state_after_transition(
+src/deepreason/workflow/state.py:35:class WorkItemStatus(str, Enum):
+src/deepreason/workflow/state.py:418:def apply_decision(
+src/deepreason/workflow/state.py:45:class WorkOutcome(str, Enum):
+src/deepreason/workflow/state.py:53:class ConjectureWorkStateV1(WorkflowRecord):
+src/deepreason/workflow/trace.py:44:class ConjectureControlTrace:
+src/deepreason/workflow/trace.py:777:def build_capability_follow_up_trace(
+src/deepreason/workflow/transaction.py:100:class ModelClassificationBindingV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:117:class WorkTransitionKind(str, Enum):
+src/deepreason/workflow/transaction.py:126:class VisibleContextItemV1(WorkflowRecord):
+src/deepreason/workflow/transaction.py:145:class WorkPreparationV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:198:class ContextPackPlanV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:237:class TokenReservationV2(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:263:class ContextExposureReceiptV2(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:296:class WorkLifecycleTransitionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:312:class DispatchAuthorizationBundleV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:33:class ContextNamespace(str, Enum):
+src/deepreason/workflow/transaction.py:359:class ProviderAttemptV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:394:class SemanticAdmissionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:39:class RouteSeatModelClassificationV1(WorkflowRecord):
+src/deepreason/workflow/transaction.py:424:class CompactRecoveryTransitionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:453:class ContractDecompositionTransitionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:501:class ContractDecompositionCompletionV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:531:class RouteSeatInsufficientCapabilityV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:606:class WorkTerminalV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction.py:671:class AuthorizedDispatch:
+src/deepreason/workflow/transaction.py:684:class WorkBudgetDenied(RuntimeError):
+src/deepreason/workflow/transaction.py:71:class RouteSeatModelClassificationPlanV1(IdentifiedWorkflowRecord):
+src/deepreason/workflow/transaction_service.py:45:class TransactionRepairResult:
+src/deepreason/workflow/transaction_service.py:56:class ReservedDispatch:
+src/deepreason/workflow/transaction_service.py:68:class InquiryTransactionService:

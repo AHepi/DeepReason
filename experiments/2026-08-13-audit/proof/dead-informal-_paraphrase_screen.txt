@@ -1,0 +1,10 @@
+=== symbol: _paraphrase_screen  defined: src/deepreason/informal/trial.py ===
+--- reference scan: rg -l -w '_paraphrase_screen' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_paraphrase_screen['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_paraphrase_screen' pyproject.toml ---
+
+(above blank = zero hits)

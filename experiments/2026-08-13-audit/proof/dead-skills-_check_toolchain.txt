@@ -1,0 +1,10 @@
+=== symbol: _check_toolchain  defined: src/deepreason/skills/adoption.py ===
+--- reference scan: rg -l -w '_check_toolchain' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_check_toolchain['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_check_toolchain' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: _DuplicateCacheKey  defined: src/deepreason/qualification.py ===
+--- reference scan: rg -l -w '_DuplicateCacheKey' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_DuplicateCacheKey['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_DuplicateCacheKey' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: AskUserBackend  defined: src/deepreason/research/backends.py ===
+--- reference scan: rg -l -w 'AskUserBackend' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]AskUserBackend['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'AskUserBackend' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,10 @@
+=== symbol: PilotPreflightReceipt  defined: src/deepreason/jolts.py ===
+--- reference scan: rg -l -w 'PilotPreflightReceipt' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]PilotPreflightReceipt['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'PilotPreflightReceipt' pyproject.toml ---
+
+(above blank = zero hits)

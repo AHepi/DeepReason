@@ -1,0 +1,10 @@
+=== symbol: flag_vector_prob  defined: src/deepreason/experiments/criticism_voting.py ===
+--- reference scan: rg -l -w 'flag_vector_prob' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]flag_vector_prob['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'flag_vector_prob' pyproject.toml ---
+
+(above blank = zero hits)

@@ -1,0 +1,7 @@
+=== symbol: BridgeCompositionWireContract  defined: src/deepreason/bridge/compose.py ===
+--- reference scan: rg -l -w 'BridgeCompositionWireContract' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]BridgeCompositionWireContract['\"]" src/ tests/ scripts/ tools/ ---
+src/deepreason/bridge/compose.py
+(above blank = zero hits)

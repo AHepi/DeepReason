@@ -1,0 +1,10 @@
+src/deepreason/oracle_sandbox.py:135:def _apply_worker_limits(cpu_seconds: int) -> None:
+src/deepreason/oracle_sandbox.py:168:def _write_worker_message(message: dict) -> None:
+src/deepreason/oracle_sandbox.py:179:def _worker_main() -> int:
+src/deepreason/oracle_sandbox.py:26:class _ResourceAbort(Exception):
+src/deepreason/oracle_sandbox.py:30:class SandboxAborted(RuntimeError):
+src/deepreason/oracle_sandbox.py:34:class WorkerError(RuntimeError):
+src/deepreason/oracle_sandbox.py:38:def _cpu_seconds(step_limit: int, units: int) -> int:
+src/deepreason/oracle_sandbox.py:43:def _worker_environment() -> dict[str, str]:
+src/deepreason/oracle_sandbox.py:70:def _kill_worker(process: subprocess.Popen) -> None:
+src/deepreason/oracle_sandbox.py:80:def run_isolated(

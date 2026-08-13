@@ -1,0 +1,10 @@
+=== symbol: _coerce_catalog  defined: src/deepreason/bridge/ledger.py ===
+--- reference scan: rg -l -w '_coerce_catalog' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_coerce_catalog['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_coerce_catalog' pyproject.toml ---
+
+(above blank = zero hits)

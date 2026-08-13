@@ -1,0 +1,10 @@
+=== symbol: instance_ids  defined: src/deepreason/experiments/jolt_tsp.py ===
+--- reference scan: rg -l -w 'instance_ids' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]instance_ids['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l 'instance_ids' pyproject.toml ---
+
+(above blank = zero hits)

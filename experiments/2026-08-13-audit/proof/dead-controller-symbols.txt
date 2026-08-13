@@ -1,0 +1,2 @@
+src/deepreason/controller.py:101:def clamp(knob: str, value: int) -> int:
+src/deepreason/controller.py:106:class Controller:

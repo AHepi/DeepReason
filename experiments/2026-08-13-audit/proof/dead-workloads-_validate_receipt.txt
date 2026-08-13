@@ -1,0 +1,10 @@
+=== symbol: _validate_receipt  defined: src/deepreason/workloads/formal.py ===
+--- reference scan: rg -l -w '_validate_receipt' src/ tests/ scripts/ tools/ (excluding defining file) ---
+
+(above blank = zero hits)
+--- string-reference scan: rg -l "['\"]_validate_receipt['\"]" src/ tests/ scripts/ tools/ ---
+
+(above blank = zero hits)
+--- entry-point scan: rg -l '_validate_receipt' pyproject.toml ---
+
+(above blank = zero hits)
