@@ -12,10 +12,13 @@ Recorded 2026-08-12 at main 074ef1549.
 ## Instruments
 
 - **Full pytest gate** (`python -m pytest tests/ -q -n 4`):
-  1 pre-existing failure —
+  **0 failed.** The one long-standing pre-existing failure,
   `tests/test_bronze_report.py::test_census_totals_internally_consistent`
-  (`assert 159 == 165`; parked, diagnosis prompt in
-  `experiments/2026-08-09-change-judge-evidence-review/PARKED.md` P1).
+  (`assert 159 == 165`), is gone: the operator ruled the Bronze Flat v1
+  census baseline irrelevant on 2026-08-13 and the test was deleted
+  rather than re-baselined. The diagnosis prompt parked against it in
+  `experiments/2026-08-09-change-judge-evidence-review/PARKED.md` P1 is
+  therefore obsolete — do not pick it up.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
