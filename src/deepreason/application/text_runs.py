@@ -252,6 +252,319 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
     return stop
 
 
+def terminalize_text_run(
+    harness,
+    manifest,
+    *,
+    root,
+    result,
+    accounting,
+    problem_id,
+    cancelled: bool = False,
+    latest_cycle: int = 0,
+) -> dict[str, Any]:
+    """Take one finished text run from its last event to a published terminal.
+
+    Every configuration path that runs the scheduler ends here, because a
+    second copy of this sequence is a second copy that drifts: the bare
+    ``deepreason run --run-manifest`` path had no counterpart at all, so its
+    roots could never be amended, continued, or read as results
+    (grounded-extension run 8e22d0431fd2b98d).
+    """
+
+    from deepreason.capabilities.audit import write_tranche_a_audits
+    from deepreason.capabilities.simulation import SimulationCapabilityController
+    from deepreason.runtime.progress import _atomic_json
+    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+    from deepreason.runtime.terminal_authority import finalize_terminal_result
+    from deepreason.status_display import display_status_counts
+
+    root = Path(root)
+    scheduler_reason = result.get("stop_reason")
+    stop_reason = (
+        "operator_cancelled"
+        if cancelled
+        else scheduler_reason or "budget_exhausted"
+    )
+    if scheduler_reason and not cancelled:
+        stop = json.loads((root / "run-stop.json").read_text())
+    else:
+        policy = StopPolicy()
+        metrics = StopMetrics(cycle=latest_cycle)
+        stop = None
+        if stop_reason == "budget_exhausted":
+            # A typed STOPPED lifecycle receipt makes the exhaustion a
+            # continuable terminal (owner decision: budget stops on public
+            # runs are resumable).  A root that cannot take the receipt (no
+            # owned control plane, unfinished workflow authority) keeps the
+            # bare fail-closed stop.
+            stop = _record_exhaustion_lifecycle_stop(
+                harness, manifest, policy=policy, metrics=metrics
+            )
+        if stop is None:
+            harness.record_measure(
+                inputs=[
+                    "run-stop",
+                    policy.digest,
+                    json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+                    stop_reason,
+                    str(harness._next_seq),
+                ]
+            )
+            stop = write_stop_record(
+                root,
+                reason=stop_reason,
+                policy=policy,
+                metrics=metrics,
+                event_seq=max(0, harness._next_seq - 1),
+            )
+    _atomic_json(
+        root / "checkpoint.json",
+        {
+            "schema": "deepreason-checkpoint-v1",
+            "manifest_digest": manifest.sha256,
+            "stop_digest": stop["digest"],
+            "event_seq": harness._next_seq,
+        },
+    )
+    capability_audits = (
+        write_tranche_a_audits(root) if manifest.schema_version >= 5 else {}
+    )
+    payload = _v6_run_result(root, manifest, {
+        "schema": "deepreason-run-result-v1",
+        "state": "cancelled" if cancelled else "completed",
+        "workload": "text",
+        "problem_id": problem_id,
+        "frontier": result["frontier"],
+        "survivors": result["survivors"],
+        "display": {
+            "status_counts": display_status_counts(harness, manifest),
+        },
+        "accounting": accounting,
+        "capability_accounting": (
+            SimulationCapabilityController(harness, manifest).accounting()
+            if manifest.schema_version >= 5
+            else None
+        ),
+        "capability_audits": capability_audits,
+        "stop": stop,
+    }, harness=harness)
+    payload = finalize_terminal_result(harness, manifest, payload)
+    _atomic_json(root / "run-result.json", payload)
+    return payload
+
+
+def workload_spec_for_root(root: Path | str, *, problem_path=None, harness=None):
+    """The frozen workload a root's lifecycle documents must describe.
+
+    Preference order is deliberate: an explicit ``--problem`` file, then the
+    documents a run root already carries, then a reconstruction from the
+    immutable run input.  The reconstruction needs the harness because
+    run-input records a commitment's definition, not the registered
+    Commitment object the workload spec holds.
+    """
+
+    from deepreason.evidence.state import load_evidence_dossier, load_run_input
+    from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
+
+    root = Path(root)
+    for candidate in (
+        problem_path,
+        root / "text-workload.json",
+        root / "problem.json",
+    ):
+        if candidate is None or not Path(candidate).exists():
+            continue
+        payload = json.loads(Path(candidate).read_text(encoding="utf-8"))
+        if (
+            isinstance(payload, dict)
+            and payload.get("schema") == "deepreason-text-workload-v1"
+        ):
+            return ReasoningWorkloadSpec.model_validate(payload)
+    run_input = load_run_input(root)
+    criteria = []
+    for item in run_input.problem.criteria:
+        commitment = (
+            harness.commitments.get(item.id) if harness is not None else None
+        )
+        if commitment is None:
+            raise ValueError(
+                "RUN_WORKLOAD_UNRESOLVED: this root records commitment "
+                f"{item.id} in its run input but carries no workload document "
+                "and no registered commitment to rebuild it from"
+            )
+        criteria.append(commitment)
+    return ReasoningWorkloadSpec(
+        problem=WorkloadProblem(
+            id=run_input.problem.id, description=run_input.problem.description
+        ),
+        criteria=tuple(criteria),
+        sources=tuple(
+            source.id for source in load_evidence_dossier(root).sources
+        ),
+        allow_rubric=False,
+    )
+
+
+def ensure_lifecycle_documents(root: Path | str, *, spec) -> None:
+    """Write the two documents a continuation reads, when they are absent.
+
+    ``continue`` reads ``run-request.json`` and the workload beside it; a
+    root that never wrote them refuses with ``RUN_REQUEST_MISSING`` however
+    complete the rest of its record is.  Existing bytes are never replaced —
+    a differing document is a typed conflict, not an overwrite.
+    """
+
+    from deepreason.evidence.state import load_run_input
+    from deepreason.runtime.progress import _atomic_json
+
+    root = Path(root)
+    request = {
+        "schema": "deepreason-run-request-v1",
+        "workload": "text",
+        "problem": {
+            "id": spec.problem.id,
+            "description": spec.problem.description,
+        },
+        "run_input_digest": load_run_input(root).run_input_digest,
+    }
+    documents = {
+        _request_path(root): request,
+        root / "text-workload.json": spec.model_dump(mode="json", by_alias=True),
+    }
+    for target, payload in documents.items():
+        if target.exists():
+            existing = json.loads(target.read_text(encoding="utf-8"))
+            if existing != payload:
+                raise ValueError(
+                    f"RUN_REQUEST_CONFLICT: {target.name} already binds a "
+                    "different workload"
+                )
+            continue
+        _atomic_json(target, payload)
+
+
+def finalize_stopped_root(
+    root: Path | str,
+    *,
+    render_bound_evidence: bool = True,
+) -> dict[str, Any]:
+    """Terminalize a root whose run ended without writing a terminal.
+
+    Appends only.  The run's own frontier is re-derived read-only from the
+    replayed state, the typed stop receipt and the terminal commitment are
+    appended as new events, and every document this writes is a file the
+    root did not have.  Nothing already on disk is opened for modification —
+    a committed root is immutable, and this is the operation that lets one
+    reach ``amend`` without violating that.
+    """
+
+    from deepreason.harness import Harness
+    from deepreason.ontology import Rule
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        config_from_run_manifest,
+        load_run_manifest,
+    )
+    from deepreason.runtime.terminal_authority import derive_terminal_authority
+    from deepreason.scheduler.scheduler import Scheduler
+
+    root = Path(root).resolve()
+    manifest = load_run_manifest(root / MANIFEST_NAME)
+    if manifest.schema_version != 6:
+        raise ValueError(
+            "FINALIZE_MANIFEST_UNSUPPORTED: finalization requires a "
+            "RunManifest v6 root"
+        )
+    authority = derive_terminal_authority(root, manifest=manifest)
+    if authority.current_valid:
+        raise ValueError(
+            "FINALIZE_ALREADY_TERMINAL: this root already stands at a valid "
+            "typed terminal stop"
+        )
+    if authority.status != "current_open_uncommitted":
+        raise ValueError(
+            "FINALIZE_AUTHORITY_UNAVAILABLE: terminal authority is "
+            f"{authority.status}"
+            f"{f', {authority.detail_code}' if authority.detail_code else ''}"
+        )
+    try:
+        locks = operator_locks(root, owner="finalize", blocking=False)
+    except ProcessLockBusy as error:
+        raise ValueError(
+            "FINALIZE_RUN_ACTIVE: another operator owns this run root"
+        ) from error
+    try:
+        harness = Harness(root)
+        spec = workload_spec_for_root(root, harness=harness)
+        ensure_lifecycle_documents(root, spec=spec)
+        if render_bound_evidence:
+            attach_bound_evidence_once(harness, root, problem_id=spec.problem.id)
+        # The scheduler's own report is a pure function of replayed state and
+        # config; no adapter is constructed and no model is called.
+        report = Scheduler(
+            harness, None, config_from_run_manifest(manifest)
+        ).report()
+        cycles = [
+            int(event.inputs[1])
+            for event in harness.log.read()
+            if event.rule == Rule.MEASURE
+            and len(event.inputs) >= 2
+            and event.inputs[0] == "cycle"
+            and event.inputs[1].isdigit()
+        ]
+        return terminalize_text_run(
+            harness,
+            manifest,
+            root=root,
+            result={
+                "frontier": report["frontier"],
+                "survivors": report["survivors"],
+                "stop_reason": None,
+            },
+            accounting={
+                "metered_tokens": None,
+                "logged_tokens_this_run": 0,
+                "delta": None,
+                "note": "finalization metered nothing; this invocation made "
+                        "no model call",
+            },
+            problem_id=spec.problem.id,
+            latest_cycle=max(cycles) + 1 if cycles else 0,
+        )
+    finally:
+        locks.release()
+
+
+def attach_bound_evidence_once(harness, root: Path | str, *, problem_id: str) -> bool:
+    """Render this root's bound dossier into source records, at most once.
+
+    Idempotent on the record itself rather than on a flag: a second call
+    would introduce each source twice, which replay validation rejects.
+    """
+
+    from deepreason.evidence.render import attach_bound_evidence
+    from deepreason.evidence.state import load_evidence_dossier, load_run_input
+
+    root = Path(root)
+    dossier = load_evidence_dossier(root)
+    if not dossier.sources:
+        return False
+    for artifact in harness.state.artifacts.values():
+        provenance = artifact.provenance
+        if provenance is not None and getattr(
+            provenance.role, "value", provenance.role
+        ) == "import":
+            return False
+    attach_bound_evidence(
+        harness,
+        run_input=load_run_input(root),
+        dossier=dossier,
+        problem_id=problem_id,
+    )
+    return True
+
+
 def missing_manifest_credentials(manifest) -> list[str]:
     return sorted(
         {
@@ -921,8 +1234,6 @@ class TextRunApplicationService:
         from deepreason.runtime.terminal_authority import finalize_terminal_result
         from deepreason.status_display import display_status_counts
         from deepreason.workloads.text import seed_reasoning_workload
-        from deepreason.capabilities.audit import write_tranche_a_audits
-        from deepreason.capabilities.simulation import SimulationCapabilityController
 
         harness = None
         latest_cycle = 0
@@ -1019,79 +1330,17 @@ class TextRunApplicationService:
                 progress_sink=progress,
             )
             cancelled = progress.cancellation_requested()
-            scheduler_reason = result.get("stop_reason")
-            stop_reason = (
-                "operator_cancelled"
-                if cancelled
-                else scheduler_reason or "budget_exhausted"
+            payload = terminalize_text_run(
+                harness,
+                manifest,
+                root=root,
+                result=result,
+                accounting=accounting,
+                problem_id=spec.problem.id,
+                cancelled=cancelled,
+                latest_cycle=latest_cycle,
             )
-            if scheduler_reason and not cancelled:
-                stop = json.loads((root / "run-stop.json").read_text())
-            else:
-                policy = StopPolicy()
-                metrics = StopMetrics(cycle=latest_cycle)
-                stop = None
-                if stop_reason == "budget_exhausted":
-                    # A typed STOPPED lifecycle receipt makes the exhaustion
-                    # a continuable terminal (owner decision: budget stops
-                    # on public runs are resumable).  A root that cannot
-                    # take the receipt (no owned control plane, unfinished
-                    # workflow authority) keeps the bare fail-closed stop.
-                    stop = _record_exhaustion_lifecycle_stop(
-                        harness, manifest, policy=policy, metrics=metrics
-                    )
-                if stop is None:
-                    harness.record_measure(
-                        inputs=[
-                            "run-stop",
-                            policy.digest,
-                            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
-                            stop_reason,
-                            str(harness._next_seq),
-                        ]
-                    )
-                    stop = write_stop_record(
-                        root,
-                        reason=stop_reason,
-                        policy=policy,
-                        metrics=metrics,
-                        event_seq=max(0, harness._next_seq - 1),
-                    )
-            _atomic_json(
-                root / "checkpoint.json",
-                {
-                    "schema": "deepreason-checkpoint-v1",
-                    "manifest_digest": manifest.sha256,
-                    "stop_digest": stop["digest"],
-                    "event_seq": harness._next_seq,
-                },
-            )
-            capability_audits = (
-                write_tranche_a_audits(root)
-                if manifest.schema_version >= 5
-                else {}
-            )
-            payload = _v6_run_result(root, manifest, {
-                "schema": "deepreason-run-result-v1",
-                "state": "cancelled" if cancelled else "completed",
-                "workload": "text",
-                "problem_id": spec.problem.id,
-                "frontier": result["frontier"],
-                "survivors": result["survivors"],
-                "display": {
-                    "status_counts": display_status_counts(harness, manifest),
-                },
-                "accounting": accounting,
-                "capability_accounting": (
-                    SimulationCapabilityController(harness, manifest).accounting()
-                    if manifest.schema_version >= 5
-                    else None
-                ),
-                "capability_audits": capability_audits,
-                "stop": stop,
-            }, harness=harness)
-            payload = finalize_terminal_result(harness, manifest, payload)
-            _atomic_json(root / "run-result.json", payload)
+            stop_reason = payload["stop"]["reason"]
             terminal = progress.emit(
                 state=payload["state"],
                 phase="stop",
@@ -1214,5 +1463,10 @@ __all__ = [
     "TextRunApplicationService",
     "TextRunWorkerRegistry",
     "_v6_run_result",
+    "attach_bound_evidence_once",
+    "ensure_lifecycle_documents",
+    "finalize_stopped_root",
     "missing_manifest_credentials",
+    "terminalize_text_run",
+    "workload_spec_for_root",
 ]
