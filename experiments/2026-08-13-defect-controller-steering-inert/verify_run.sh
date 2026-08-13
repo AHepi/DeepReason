@@ -63,12 +63,20 @@ else
   exit "$rc"
 fi
 
-log "=== REASON: deepreason run --budget cycles=6 --token-budget 150000 ==="
+# Defaults are the tranche brief's. Raised for a later epoch only to give
+# the cap trajectory room to appear: a narrowing decision needs
+# CLEAN_WINDOWS=3 spotless calls for a role, which six cycles may never
+# accumulate. The COMPILED CONFIG is never varied -- that is what makes
+# these epochs comparable to the grounded root.
+CYCLES="${CYCLES:-6}"
+TOKEN_BUDGET="${TOKEN_BUDGET:-150000}"
+
+log "=== REASON: deepreason run --budget cycles=$CYCLES --token-budget $TOKEN_BUDGET ==="
 if python -m deepreason --root "$ROOT" run \
     --run-manifest "$ROOT/run-manifest.json" \
     --problem "$ROOT/problem.json" \
-    --budget cycles=6 \
-    --token-budget 150000 \
+    --budget "cycles=$CYCLES" \
+    --token-budget "$TOKEN_BUDGET" \
     > "$HERE/reason.log" 2> "$HERE/reason.stderr.log"; then
   log "REASON rc=0"
 else
