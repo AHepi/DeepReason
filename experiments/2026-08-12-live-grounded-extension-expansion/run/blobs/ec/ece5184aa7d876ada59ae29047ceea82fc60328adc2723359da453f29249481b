@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Keep the grounded labels as the single authority, but add a secondary deterministic diagnostic label `suspend_reason` for every undecided node, computed after the fixpoint from the already-known labels and graph: direct_attack if any attacker is accepted, mutual_attack if the node attacks an accepted node that also attacks it, otherwise insufficient_defense. Because this is a pure function of final labels and edges, determinism and polynomial cost (O(V+E)) are inherited, and the primary accepted/refuted/suspended semantics are unchanged. The causal mechanism is a local classification of why defense failed, which strengthens the extension by making suspension actionable without ever altering reinstatement or root validity.
+commitments: (none)
+
+TARGET SRC_002
+Enforce the closure rule already sketched for validity_node in `att` construction: every attacker of a warrant's validity_node also attacks the warrant's carriage edge (and hence the target artifact), and make carriage a first-class relation so attack edges carry warrant provenance. This strengthens the refutation route from 'attacker attacks artifact' to 'attacker attacks the warrant that makes the artifact a target', which is more causally precise and auditable. The construction remains a deterministic local closure over registered warrants (O(W+E) with W warrant count), so the grounded fixpoint's determinism and polynomial cost are untouched; reinstatement remains derived because labels are still a pure function of the resulting graph. Committed roots are unaffected because no new warrant is invented, only edges implied by existing warrants are materialized.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
