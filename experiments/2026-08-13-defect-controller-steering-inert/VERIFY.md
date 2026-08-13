@@ -241,3 +241,40 @@ headroom. That is the safety property working as designed, not a defect —
 but it means this fix's value on the grounded configuration is the
 NARROWING direction (judge pinned at 16,384 while never exceeding 141
 completion tokens), not truncation recovery.
+
+## Verdict
+
+**PASS on GOAL.md's success criterion.** Every machine-decidable check the
+goal named is green:
+
+| GOAL criterion | Result |
+|---|---|
+| `pytest tests/test_controller_steering_parity.py` passes, four assertions | 12 passed, mutation-proved both halves |
+| `pytest tests/ -q -n 4` -> 0 failed | 3591 passed, 0 failed, 7 skipped |
+| `tools/docs_verify.py` -> 0 failed | 3 failed, all the recorded `CON-run-identity.md` shallow-clone baseline; `--audit` 0, `--links` 0 |
+| root sweep -> no committed root's verdict moves | 102/102 re-swept, 0 moved |
+
+**What is proven, and where.** The steering loop fires: offline, the
+grounded configuration now moves five roles across four policy artifacts
+(judge 16384 -> 10240 -> 6400 -> 4000 -> 2500) where it previously moved
+nothing in 12,991 events. Live, on three independent runs of a
+byte-identical configuration, the controller records
+`controller-authority scope=full` over all eleven bound roles — the
+attachment and coverage half of the goal, reproduced three times, on a
+configuration that previously had no steerable role at all.
+
+**What is NOT proven.** The cap trajectory has never been observed live.
+All three epochs died at cycle 0 on a failure this tranche did not cause
+(section 9), so no role reached `CLEAN_WINDOWS=3`. In the entire committed
+history of this repo the controller has still never emitted a policy
+artifact in a live run. That is the residue, and it is the honest state:
+the mechanism is proven to be ABLE to steer, and proven to steer offline,
+but its live trajectory awaits a run that survives cycle 0 — which P3
+blocks until diagnosed.
+
+**Accepted does not mean true.** The offline proof rests on fixtures that
+mirror the manifest's roles and caps exactly; the live proof rests on
+three runs that agree with each other. Neither establishes that the
+narrowing direction improves any epistemic outcome — only that the
+controller now has, and exercises, authority it previously did not. Judge
+that the mechanism FIRED, not that the run got better.
