@@ -17,3 +17,4 @@
 [2026-08-13T22:29:15Z] manifest sha: 8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d
 [2026-08-13T22:29:15Z] SAME CONFIG as the grounded root and all three epochs
 [2026-08-13T22:29:15Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-13T22:42:10Z] QUALIFY FAILED rc=1 
