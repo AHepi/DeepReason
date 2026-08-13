@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "Covering principle: any admissible strengthening of the grounded extension must be a polynomial-time, monotone edge-construction enrichment applied before the skeptical fixed point, never a modification of the fixed-point operator or its derived labels. Weights, bounded defense precomputation, RESIDUE annotations, and re-examination passes all become projections of, or inputs to, this single enrichment layer. Because the enrichment is monotone and polynomial, the fixed point remains deterministic and polynomial; reinstatement remains a theorem about the enriched graph; and committed-root validity is preserved because enrichment is conservative over committed roots—it can add warrants but never deletes or relabels a committed root outside the same fixpoint.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"]
+    },
+    {
+      "content": "Replace Boolean attack with bounded integer weights and define the grounded labeling as the least fixed point of a monotone operator on a finite lattice of (label, weight) pairs, with threshold τ controlling acceptance. Since the lattice is finite and the operator is monotone, the least fixed point is unique and reachable in polynomially many iterations; reinstatement becomes the derived property that a node defended by a chain of sufficiently strong counter-attacks crosses τ. The map from τ to labels is itself monotone, enabling sensitivity analysis without recomputation. Commit only roots whose IN-status is stable under small τ perturbation, preserving committed-root validity.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_006"]
+    },
+    {
+      "content": "Add RESIDUE as a fourth derived label that records, for each suspended node, the lexicographically least set of attacking IN-nodes that keep it out; compute it as a pure annotation after the grounded fixed point using a polynomial-time canonical certificate algorithm. This preserves determinism because the fixed point is unchanged and the certificate is canonicalized; it strengthens explainability and gives a constructive witness for every suspension. That witness can later drive a re-examination pass without altering the semantics, and no committed root can be suspended, so committed-root validity is untouched.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_007"]
+    },
+    {
+      "content": "Make reinstatement structural rather than emergent by precomputing defense chains up to a fixed depth d and adding a 'defense edge' from each defender to each node it defends through a chain of length ≤d; then run the ordinary grounded fixpoint on the enriched graph. Because d is fixed, the number of added edges is O(n^{d+1}), so polynomial cost is preserved. Reinstatement is still a derived property—of the enriched graph, not an extra decision rule—and committed-root validity is preserved because the enrichment only makes explicit already-valid defense structure.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "Allow suspended nodes to be re-examined only through a fresh edge-construction pass that commits new warrants, and make each pass a deterministic polynomial function of the previous graph plus the RESIDUE certificate of the queried node. Bound the number of passes per conjecture by a constant; overall cost remains polynomial, and determinism holds because each pass is a pure function. This unifies SRC_008 with the edge-construction principle: the fixpoint remains the sole decision rule within each pass, and committed roots stay valid because new warrants must themselves be committed before they can relabel a suspended node.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_008"]
+    },
+    {
+      "content": "Generalize the grounded extension to a family of fixpoints indexed by a total preorder on warrants, then define the accepted set as the intersection of all fixpoints that respect the preorder—skeptical over orders. The covering principle is that strengthening is choosing a coarser preorder, never changing the underlying attack graph. Because the family is finite and the intersection is computable by a polynomial number of grounded evaluations, determinism and polynomial cost are preserved. Reinstatement and committed-root validity follow from the intersection being a subset of each admissible fixpoint.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_006"]
+    }
+  ]
+}

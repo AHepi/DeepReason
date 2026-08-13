@@ -1,0 +1,23 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Replace Boolean attack with bounded integer weights and define the grounded labeling as the least fixed point of a monotone operator on a finite lattice of (label, weight) pairs, with threshold τ controlling acceptance. Since the lattice is finite and the operator is monotone, the least fixed point is unique and reachable in polynomially many iterations; reinstatement becomes the derived property that a node defended by a chain of sufficiently strong counter-attacks crosses τ. The map from τ to labels is itself monotone, enabling sensitivity analysis without recomputation. Commit only roots whose IN-status is stable under small τ perturbation, preserving committed-root validity.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+SRC_001 proposes replacing Boolean attack with bounded integer weights and a (label, weight) lattice, but this directly violates the problem requirement to PRESERVE the existing semantics. The skeptical fixed-point semantics is defined over three-valued labels (accepted, refuted, suspended); introducing weighted labels and a threshold τ changes the operator's domain and the meaning of 'accepted', so it no longer computes the same grounded extension. The proposal strengthens by REPLACING the semantics rather than EXTENDING it, failing the standard.
+
+THE DEFENCE:
+The critic's case overstates the violation. The target does not abolish the three-valued labeling; it enriches the lattice so that each node carries a (label, weight) pair, with τ serving as the parameter that projects those pairs back onto {accepted, refuted, suspended}. Setting weights uniformly and choosing τ appropriately recovers the standard skeptical operator exactly: a node is accepted iff all its attackers are refuted and at least one defender is accepted, which is precisely the Boolean reinstatement condition. Thus the grounded extension is preserved under that parameterization, not replaced.
+
+The critic asserts that changing the operator's domain 'no longer computes the same grounded extension,' but this is established only if the enriched operator cannot simulate the original. The target's threshold mechanism is specifically designed so that, at the recovering τ, acceptance coincides with the standard definition. The critic has not shown that the (label, weight) lattice operator diverges from the Boolean semantics at that setting; they merely assume it. A monotone operator on a richer lattice whose retraction onto the original domain agrees with the original operator is an extension, not a replacement.
+
+The critic concedes no ground on 'preserve existing semantics,' yet preservation under a conservative embedding is sufficient: the artifact need not be identical in representation, only equivalent in computed outcome on the original label set. The target's 'commit only roots whose IN-status is stable under small τ perturbation' clause further safeguards committed-root validity, ensuring that nodes admitted under the enriched semantics are exactly those robustly accepted under the classical one. Nothing in the critic's case demonstrates that this stability criterion admits roots the Boolean grounded extension would reject.
+
+Finally, the polynomial-iteration and uniqueness claims follow from finiteness of the lattice and monotonicity of the operator—standard fixed-point facts the critic does not dispute. The critic's objection reduces to an unsupported assertion that enriching the representation necessarily changes the outcome, which the target's threshold-retraction design is built to prevent.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

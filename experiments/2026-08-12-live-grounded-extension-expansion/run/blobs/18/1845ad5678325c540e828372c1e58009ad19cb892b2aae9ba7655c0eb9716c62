@@ -1,0 +1,40 @@
+{
+  "candidates": [
+    {
+      "content": "The isolated node 21256139649b shares mechanism with SRC_012's case-anchored edge construction: it is a canonical committed run whose warrant-to-attack materialization calibrates edge weights, so its acceptance or suspension is a calibration case rather than a bare label. REFUTED IF: the node's run is not reproducible as a committed warrant chain, so no canonical materialization can be extracted from it.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_012", "SRC_009", "SRC_007", "SRC_008"],
+      "evidence_refs": []
+    },
+    {
+      "content": "The isolated node 21256139649b depends on the advisory defense-depth post-pass and the residue annotation: it is a suspended node whose standing reason (which accepted attacker kept it OUT) is computed by the pure annotation over final grounded labels, giving the refinement loop a principled rank. REFUTED IF: the fixpoint labels the node accepted or refuted rather than undecided, so no residue or defense depth applies to it.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_009", "SRC_006", "SRC_004"],
+      "evidence_refs": []
+    },
+    {
+      "content": "The isolated node 21256139649b reduces to a fragility profile case: single-edge deletion of one attack edge targeting or defending it flips its label, so it rests on exactly one edge and becomes a priority target for additional defense warrants under SRC_005's robust/fragile spectrum. REFUTED IF: the node is invariant to every single-edge deletion, i.e. robust, so no fragility-driven warrant is warranted.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_005", "SRC_003", "SRC_001"],
+      "evidence_refs": []
+    },
+    {
+      "content": "The isolated node 21256139649b inherits warrant-chain provenance from the typed-attack carriage: each materialized attack edge it participates in carries a warrant, and its accepted status is traceable to a committed root through the DefenseWitness set. REFUTED IF: the node's attacks are not materialized from warrant carriage, so no provenance or defense witness can be attached to it.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_007", "SRC_008", "SRC_003"],
+      "evidence_refs": []
+    },
+    {
+      "content": "The isolated node 21256139649b contradicts the locality assumption behind SRC_011's incremental recomputation: because it is isolated, its label is a global fixed point whose acceptance depends on edges far from any cached affected subgraph, so the cache must be invalidated across the whole graph rather than recomputed locally. REFUTED IF: the node's label is invariant to edges outside its immediate neighbourhood, so the affected-subgraph bound holds and the cache is sound.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_011", "SRC_004", "SRC_009"],
+      "evidence_refs": []
+    },
+    {
+      "content": "The isolated node 21256139649b abstracts the diagnostic post-pass family (defense depth, residue, fragility, defense witnesses) into a case-relative commitment: the empiric stance anchors suspension in cases, so a pure structural ranking can misorder actual repair value when the node's case history differs from the graph's topology. REFUTED IF: for every case in the committed run library, the defense-depth ranking agrees with the empirically observed repair priority, so the abstraction is redundant.",
+      "typicality": 0.15,
+      "neighbours": ["SRC_012", "SRC_009", "SRC_005", "SRC_002", "SRC_001"],
+      "evidence_refs": []
+    }
+  ]
+}

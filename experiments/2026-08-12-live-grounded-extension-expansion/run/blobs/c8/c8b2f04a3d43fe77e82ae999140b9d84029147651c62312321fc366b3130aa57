@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "SRC_001 names a compatibility relation with a clear counterexample condition: refuted if applying 21256139649b before RESIDUE changes the residue value on any graph. This meets the problem's requirement to propose a substantive relation (compatibility), state its kind, and state what refutes it. The target is valid.", "counterexample": null}]}
+```

@@ -1,0 +1,27 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Make reinstatement structural rather than emergent by precomputing defense chains up to a fixed depth d and adding a 'defense edge' from each defender to each node it defends through a chain of length ≤d; then run the ordinary grounded fixpoint on the enriched graph. Because d is fixed, the number of added edges is O(n^{d+1}), so polynomial cost is preserved. Reinstatement is still a derived property—of the enriched graph, not an extra decision rule—and committed-root validity is preserved because the enrichment only makes explicit already-valid defense structure.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+Adding defense edges from a defender to a defended node is not semantics-preserving: it introduces a direct defense edge from defender to target, but under the ordinary grounded attack-only fixpoint run on the enriched graph, a direct edge is interpreted as an attack, not a defense. This inverts the intended reinstatement structure and can cause committed roots that were previously valid to be attacked and suspended, violating committed-root validity and determinism of the intended fixed point.
+
+THE DEFENCE:
+The critic's argument is not established and rests on an unsupported reading that the target specification must be read in the most injurious possible way.
+
+The critic asserts that under the ordinary grounded attack-only fixpoint run on the enriched graph, a direct edge from defender to defended node is interpreted as an attack. But this is not actually established: the target describes the added edges as 'defense edges,' a distinct label, and explicitly says reinstatement becomes a derived property 'of the enriched graph, not an extra decision rule.' A defense edge is a different structural relation from an attack edge, and the critic cites no clause in the target requiring that these edges be passed to the attack-only fixpoint as if they were attacks. Reading the spec as feeding the enriched graph to an *unmodified* attack-only fixpoint directly contradicts the explicit labeling and structural intent of the target. It is the critic, not the target, who is smuggling in the interpretation that defense edges are processed as attacks.
+
+The critic claims committed roots that were previously valid can be attacked and suspended. For this to happen, the critic would have to show that the ordinary grounded fixpoint applied to the enriched graph actually treats the new edges as attacks. That is the very point in dispute and has not been established. Given that the edges are defense edges, not attack edges, there is no basis for concluding that any previously valid committed root is attacked or suspended by them. Without that premise, the critic's downstream conclusions about committed-root validity and determinism violations are unsupported.
+
+The critic does not identify any clause in the target stating that the attack-only fixpoint must be run on a graph where defense edges are indistinguishable from attack edges. Nothing in the target says the enriched graph's edge type is collapsed to a single attack relation. The critic is effectively inserting an unstated requirement—untyped/collapsed edges—and then attacking the target for violating committed-root validity under that unstated requirement. That is a construction of the critic, not an established fact.
+
+The target's own claim that 'enrichment only makes explicit already-valid defense structure' is consistent with the natural reading: the added defense edges encode reinstatement support structurally, and the ordinary grounded fixpoint applies to the enriched graph as a structure with both attack and defense relations. Under that reading, no previously valid committed root is newly attacked, and committed-root validity is preserved. Determinism is also preserved: the fixpoint is still uniquely grounded, and the added edges are a function of the input graph and fixed depth d.
+
+In short: the critic has not established that the target specifies defense edges to be interpreted as attacks. That is the critic's imposed misreading, not an established clause. None of the alleged consequences—reinstatement inversion, suspension of valid committed roots, committed-root validity violation, determinism violation—follow without that unestablished premise.
+
+Rule on the exchange; decisive_point MUST quote a span of it.
