@@ -1,5 +1,5 @@
 <!-- DR-SUB-verification -->
-Verified-at: df0fd0fd
+Verified-at: e6badeead
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
@@ -155,6 +155,23 @@ when `stats` was otherwise empty.
 
 ## Traps
 
+- **`attempt-limits` must re-derive the SAME control barrier the controller
+  wrote against, or every steered run verifies as invalid.** A per-attempt
+  `max_tokens` differing from its route's is authorized only by a prior
+  controller policy whose value sits inside that knob's barrier. That barrier is
+  anchored per run to the cap the manifest assigned the role, so the check calls
+  `cap_envelope(knob, _configured_role_cap(knob))`; reading the static
+  `ENVELOPES` table instead restores the pre-2026-08-13 state where the widest
+  ceiling was 5,000 and a production run that actually steered — every one of
+  them pins 16,384 — would fail replay. The asymmetry to respect when touching
+  this: the predicate may only ever ADD authorized values, never remove one, or
+  a committed root changes meaning. The 2026-08-13 widening
+  (`experiments/2026-08-13-defect-controller-steering-inert/`) was measurably a
+  no-op on the past — zero of 104 committed logs contain a controller policy
+  body, so `authorized_controller_limits` is empty in all of them — and the
+  42-root sweep is the instrument that must confirm that before any future
+  change here.
+`check: grep -q "cap_envelope(knob, _configured_role_cap(knob))" src/deepreason/invariants.py && grep -q "def _configured_role_cap" src/deepreason/invariants.py && python -m pytest tests/test_controller_steering_parity.py::test_replay_authorizes_a_cap_the_controller_could_legitimately_set tests/test_controller_steering_parity.py::test_replay_still_rejects_a_cap_beyond_the_anchored_barrier tests/test_process_metadata.py::test_invariants_reject_unlogged_effective_transport_limit -q`
 - **A new `fail()` name defaults to integrity, and integrity decides `valid`.**
   `_legacy_channel` routes anything it does not recognise to `integrity`, and
   `valid` is `integrity_valid and security_valid`. Adding a check without

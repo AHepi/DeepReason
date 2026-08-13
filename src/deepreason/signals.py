@@ -92,6 +92,12 @@ SIGNALS: dict[str, str] = {
                          "process-health signals (inputs: [signal, canonical "
                          "JSON with knob deltas and evidence]); a Measure "
                          "only, never an artifact, warrant, or status",
+    "controller-authority": "the self-calibration controller stated which "
+                            "roles it may steer and why not for the rest "
+                            "(inputs: [signal, full|partial|none, canonical "
+                            "JSON of steerable roles and blocked roles with "
+                            "typed reasons]); re-emitted only when that set "
+                            "changes, so an inert controller is never silent",
     "controller-rehydration": "resume restored the latest accepted bounded "
                               "controller limits onto freshly constructed "
                               "endpoints (inputs: [signal, policy artifact "

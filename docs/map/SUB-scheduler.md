@@ -1,7 +1,7 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 546544b5
-Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py -q
-Owns: src/deepreason/scheduler/
+Verified-at: e6badeead
+Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
+Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler
 Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, scheduler x scratch
 
@@ -148,6 +148,40 @@ cell names a symbol the check greps for.
 
 ## Traps
 
+- **The steering controller was attached to every run and could move nothing on
+  any of them.** `ops.run_scheduler` builds `Controller(harness, adapter)`
+  whenever `config.CONTROLLER` is true, and `Scheduler` steps it once per cycle,
+  so every check anyone had written — "is it wired?" — passed. The barrier it
+  steers WITHIN was the defect: a static table naming six roles with a widest
+  ceiling of 5,000, against a compiled v6 manifest that binds eleven roles and
+  pins `max_tokens=16384` on every one. Both guards in `_propose` (no envelope
+  for the role; current cap outside the envelope) then skipped in silence and
+  `step()` returned `None` forever. Grounded-extension run `8e22d0431fd2b98d`
+  recorded 12,991 events with zero steering artifacts while `judge` — whose
+  largest completion in 342 calls was 141 tokens — stayed pinned at 16,384
+  throughout. Two traps inside the trap: that root's 3,380 `rule="Control"`
+  events are `control.event.v3` WORKFLOW TRANSACTIONS, not steering, and
+  `cap:conjecturer`'s static ceiling of 5,000 sits BELOW that run's median
+  conjecturer completion of 4,968 — so "move the cap into the static envelope"
+  is not the fix, it pins the seat where half its calls truncate and the widen
+  path clamps back to the same number. FIXED 2026-08-13
+  (`experiments/2026-08-13-defect-controller-steering-inert/`): barriers are
+  derived per run by `cap_envelope(knob, configured_cap)`, anchored so a role's
+  assigned cap may only WIDEN the barrier and the controller can never move a
+  cap past the operator's own setting. Coverage is derived rather than
+  enumerated, so a twelfth role cannot silently reintroduce this.
+`check: grep -q "^def cap_envelope" src/deepreason/controller.py && grep -q "^def is_generator_knob" src/deepreason/controller.py && python -m pytest tests/test_controller_steering_parity.py::test_every_manifest_bound_role_gets_a_barrier_containing_its_cap tests/test_controller_steering_parity.py::test_the_grounded_configuration_steers_instead_of_sitting_inert tests/test_controller.py::test_controller_does_not_normalize_an_explicit_cap_outside_its_envelope -q`
+- **A role the controller cannot steer must be named, not skipped.** Silence was
+  the whole reason the defect above survived two live epochs: an inert
+  controller and a healthy one wrote the same thing — nothing. `step()` now
+  appends one `controller-authority` Measure record stating `full`/`partial`/
+  `none`, the steerable roles, and every unsteerable role with a typed reason,
+  episode-deduplicated the way `research-awaiting-agent` is (re-emitted only
+  when the authority set changes, never once per cycle). A role-assigned limit
+  is OPTIONAL — a manifest may bind a role with no `max_tokens` at all, which is
+  a configuration and not a fault; the controller does not invent a limit the
+  operator declined to assign, it records `no-assigned-limit`.
+`check: grep -q "controller-authority" src/deepreason/controller.py && python -m pytest tests/test_controller_steering_parity.py::test_a_controller_with_nothing_to_steer_records_that_it_has_nothing tests/test_controller_steering_parity.py::test_partial_authority_names_which_roles_are_out_of_reach tests/test_controller_steering_parity.py::test_the_authority_record_is_episode_deduplicated -q`
 - **Cycle 0 fell to the bare id tie-break, and "solved" counted bookkeeping.**
   In `selfstudy run-9175f0ec` an attach-spawned `conn:<id>` sorted before
   `question-<digest>`, and evidence admission had already auto-accepted

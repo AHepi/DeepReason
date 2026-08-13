@@ -69,3 +69,33 @@ Post-fix expectation:
     widens envelopes does not break ordinary in-envelope steering.
 
 Production code untouched by this phase.
+
+## Post-fix re-run (added by dr-implement-fix, 2026-08-13)
+
+The artifact inverted. It now exits **1** — "NOT REPRODUCED" — which is
+the passing state for a fixed defect, exactly as the expectation above
+specified. Verbatim:
+
+    PART A — grounded manifest reproduced offline
+      roles bound                 : 11
+      every endpoint max_tokens   : [2500, 16384]
+      roles with clean signal     : ['argumentative_critic', 'conjecturer', 'defender', 'judge', 'variator']
+      controller.step() over 8 cy : [{'cap:judge': 10240, 'cap:argumentative_critic': 10240, 'cap:defender': 10240, 'cap:conjecturer': 10240, 'cap:variator': 10240}, None, {'cap:judge': 6400, ...}, None, {'cap:judge': 4000, ...}, None, {'cap:judge': 2500, ...}, None]
+      policy artifacts emitted    : 4
+      controller-* records in log : [['controller-authority', 'full', '{"steerable":["argumentative_critic","conjecturer","defender","grounding_reviewer","judge","property_designer","summarizer","synthesizer","thesis","variator","vision_critic"],"unsteerable":{}}']]
+      => inert, and SILENT        : False
+
+Read against the pre-fix output: eight `None`s became four real
+proposals over five roles (damped to alternate cycles by `dwell=2`,
+which is the design working, not a miss), zero policy artifacts became
+four, and the empty record now carries one `controller-authority`
+statement naming all eleven bound roles as steerable. Part B's
+conjecturer still lands on exactly **1875** — the value DIAGNOSIS.md
+predicted — while the other ten roles, which pre-fix were frozen at
+16,384, now steer alongside it. Part B's `first == {"cap:conjecturer":
+1875}` equality is therefore obsolete BY THE FIX rather than broken by
+it: the whole point was that the other roles stop being excluded.
+
+The artifact is kept unmodified as the dated record of the defect. Its
+regression successor, which asserts the post-fix expectations and is run
+by the gate, is `tests/test_controller_steering_parity.py`.

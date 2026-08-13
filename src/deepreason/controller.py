@@ -92,14 +92,58 @@ ENVELOPES = {
 TRANSPORT_DROP_TAG = "dropped-call"
 TRANSPORT_REASONS = ("timed out", "timeout", "transport failed")
 
+# The shape (floor, step, dwell) a role the static table never named
+# inherits; its ceiling comes from the cap the run assigned it.
+DEFAULT_CAP_ENVELOPE = {"min": 500, "max": 2500, "step": 1.6, "dwell": 2}
+
+
+def is_generator_knob(knob: str) -> bool:
+    """A per-role completion cap is a generation parameter no adjudication
+    input reads, so `cap:<role>` is generator-ledger for ANY role a manifest
+    binds — a frozenset cannot enumerate roles a later manifest adds. Every
+    other knob must be named in GENERATOR_LEDGER; nothing in TRIBUNAL_LEDGER
+    ever qualifies."""
+    if knob in TRIBUNAL_LEDGER:
+        return False
+    return knob in GENERATOR_LEDGER or (
+        knob.startswith("cap:") and len(knob) > len("cap:")
+    )
+
+
+def cap_envelope(knob: str, configured_cap: int | None) -> dict | None:
+    """The control barrier for one knob, anchored to the cap the run assigned
+    that role. The writer and replay validation MUST derive it through this
+    one function, or a steered run cannot verify.
+
+    Each bound moves one way only — a configured cap may widen the barrier,
+    never narrow it — so the controller calibrates inside the operator's own
+    setting and can never move a cap past it. An assigned limit is OPTIONAL:
+    `configured_cap=None` yields the unanchored static shape.
+    """
+    base = ENVELOPES.get(knob)
+    if base is None:
+        if not (knob.startswith("cap:") and len(knob) > len("cap:")):
+            return None
+        base = DEFAULT_CAP_ENVELOPE
+    envelope = dict(base)
+    if configured_cap is None:
+        return envelope
+    envelope["min"] = min(envelope["min"], int(configured_cap))
+    envelope["max"] = max(envelope["max"], int(configured_cap))
+    return envelope
+
+
 TRUNC_HI = 0.25          # widen when >25% of recent calls truncated
 CLEAN_WINDOWS = 3        # narrow only after this many spotless windows
 MIN_SAMPLES = 2          # never act on fewer than this many calls for a role
 WINDOW_CALLS = 6         # per-role signal window (most recent N calls)
 
 
-def clamp(knob: str, value: int) -> int:
-    env = ENVELOPES[knob]
+def clamp(knob: str, value: int, envelope: dict | None = None) -> int:
+    # The caller's anchored envelope wins: clamping to the static table
+    # would pull an anchored cap back outside the barrier it was measured
+    # against, and would KeyError on a role the table never named.
+    env = envelope if envelope is not None else ENVELOPES[knob]
     return max(env["min"], min(env["max"], int(value)))
 
 
@@ -113,12 +157,69 @@ class Controller:
     def __init__(self, harness, adapter, envelopes=None):
         self.harness = harness
         self.adapter = adapter
-        self.envelopes = envelopes or ENVELOPES
+        # Deep-copied: anchoring in place would leak one run's ceilings into
+        # every later Controller in the process.
+        self.envelopes = {
+            knob: dict(envelope)
+            for knob, envelope in (envelopes or ENVELOPES).items()
+        }
         self._last_move: dict[str, int] = {}  # knob -> cycle it last moved
         self._policies: list[str] = []  # policy artifact ids, in emission order
         self._cycle = 0
         self._drops_seen = 0  # transport-drop events already consumed
+        self._authority_stated: str | None = None
+        # Anchoring precedes rehydration, which validates stored policy knobs
+        # against the envelopes: the barrier must be final first.
+        self._anchor_envelopes()
         self._rehydrate_process_state()
+
+    def _anchor_envelopes(self) -> None:
+        """Give every bound role a barrier containing the cap it was assigned.
+        A role with no assigned limit keeps the unanchored shape — an assigned
+        limit is optional, and its absence is a configuration, not a fault."""
+        configured = self._current_caps()
+        for role in self.adapter.endpoints:
+            envelope = cap_envelope(f"cap:{role}", configured.get(role))
+            if envelope is not None and is_generator_knob(f"cap:{role}"):
+                self.envelopes[f"cap:{role}"] = envelope
+
+    def _authority(self) -> tuple[list[str], dict[str, str]]:
+        """Which roles this controller may actually move, and why not for the
+        rest. An unsteerable role that says nothing is indistinguishable from
+        a healthy one, so the reasons are reported, never inferred."""
+        caps = self._current_caps()
+        steerable: list[str] = []
+        blocked: dict[str, str] = {}
+        for role in sorted(self.adapter.endpoints):
+            envelope = self.envelopes.get(f"cap:{role}")
+            if role not in caps:
+                blocked[role] = "no-assigned-limit"
+            elif envelope is None:
+                blocked[role] = "no-envelope"
+            elif envelope["min"] <= caps[role] <= envelope["max"]:
+                steerable.append(role)
+            else:
+                blocked[role] = "outside-envelope"
+        return steerable, blocked
+
+    def _state_authority(self) -> None:
+        """State this controller's authority over the run, once, and again
+        only when it changes — episode-deduplicated the way
+        `research-awaiting-agent` is. Silence must never be the only record
+        of a controller that can steer nothing."""
+        steerable, blocked = self._authority()
+        scope = "full" if not blocked else ("none" if not steerable else "partial")
+        payload = json.dumps(
+            {"steerable": steerable, "unsteerable": blocked},
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        if self._authority_stated == f"{scope}{payload}":
+            return
+        self._authority_stated = f"{scope}{payload}"
+        self.harness.record_measure(
+            inputs=["controller-authority", scope, payload]
+        )
 
     def _policy_payload(self, artifact_id: str) -> dict | None:
         artifact = self.harness.state.artifacts.get(artifact_id)
@@ -139,7 +240,7 @@ class Controller:
     def _validated_policy_knobs(self, body: dict) -> dict[str, int]:
         knobs: dict[str, int] = {}
         for knob, value in body.get("knobs", {}).items():
-            if knob not in GENERATOR_LEDGER or knob not in self.envelopes:
+            if not is_generator_knob(knob) or knob not in self.envelopes:
                 continue
             if type(value) is not int:  # bool is not a transport limit
                 continue
@@ -176,6 +277,9 @@ class Controller:
             int(bool(event.inputs) and event.inputs[0] == TRANSPORT_DROP_TAG)
             for event in events
         )
+        for event in events:
+            if event.inputs and event.inputs[0] == "controller-authority":
+                self._authority_stated = "".join(event.inputs[1:3])
         for event in events:
             if event.rule != Rule.REFL:
                 continue
@@ -242,13 +346,17 @@ class Controller:
         return out
 
     def _current_caps(self) -> dict[str, int]:
+        # The WIDEST cap in force, not the first seat's: replay validation
+        # anchors to the widest route, and the two must agree to verify.
         caps = {}
-        for role in self.adapter.endpoints:
-            ep = self.adapter.endpoints[role]
-            ep = ep[0] if isinstance(ep, (list, tuple)) else ep
-            cap = getattr(ep, "max_tokens", None)
-            if cap is not None:
-                caps[role] = cap
+        for role, entry in self.adapter.endpoints.items():
+            values = [
+                cap
+                for ep in (entry if isinstance(entry, (list, tuple)) else [entry])
+                if (cap := getattr(ep, "max_tokens", None)) is not None
+            ]
+            if values:
+                caps[role] = max(values)
         return caps
 
     # -- update rule: process signals -> bounded knob deltas -------------- #
@@ -270,14 +378,14 @@ class Controller:
             if not envelope["min"] <= cur <= envelope["max"]:
                 continue
             if sig["truncation_rate"] > TRUNC_HI:
-                new = clamp(knob, round(cur * self.envelopes[knob]["step"]))
+                new = clamp(knob, round(cur * envelope["step"]), envelope)
                 if new != cur:
                     deltas[knob] = new
             elif sig["truncation_rate"] == 0 and sig["repair_rate"] == 0:
                 # Efficiency direction: settle a wasteful cap down, but only
                 # after CLEAN_WINDOWS of spotless signal and never below floor.
                 if self._clean_streak(role) >= CLEAN_WINDOWS:
-                    new = clamp(knob, round(cur / self.envelopes[knob]["step"]))
+                    new = clamp(knob, round(cur / envelope["step"]), envelope)
                     if new != cur:
                         deltas[knob] = new
         return deltas
@@ -359,6 +467,7 @@ class Controller:
             self.harness.record_measure(inputs=["controller-hold:fail-static", last])
             return None
 
+        self._state_authority()
         signals = self._process_signals()
         caps = self._current_caps()
         deltas = self._propose(caps, signals)
@@ -368,7 +477,7 @@ class Controller:
             return None
 
         for knob, value in deltas.items():
-            assert knob in GENERATOR_LEDGER, f"controller touched non-generator knob {knob}"
+            assert is_generator_knob(knob), f"controller touched non-generator knob {knob}"
             assert knob not in TRIBUNAL_LEDGER, f"controller touched tribunal knob {knob}"
             self._apply_cap(knob, value)
             self._last_move[knob] = self._cycle

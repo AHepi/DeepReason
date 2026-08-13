@@ -1,0 +1,114 @@
+# Grounded-extension-expansion tranche: full Config-shaped source.
+#
+# Loaded by a hand-written compile script (build_manifest.py), NOT by
+# `deepreason config compile` directly — that CLI subcommand cannot express
+# a judge role ensemble, school-routed conjecture, or a criticism_policy at
+# all (verified against cli/main.py:795-863; none of those three are among
+# its exposed flags). build_manifest.py calls `compile_run_manifest` the
+# same way the CLI does, with the additional parameters the CLI doesn't
+# expose. See PREREG.md "Launch mechanics" (revised) for the full reasoning.
+#
+# Every V3_CANONICAL_ROLE is populated explicitly: Config.roles defaults to
+# {} and any role omitted here gets zero routes.
+#
+# Explicit endpoint_id per role: all four models share one base URL
+# (https://ollama.com/v1), and the auto-derived endpoint_id is a hash of
+# the base URL alone — leaving it implicit would give every role the
+# SAME endpoint_id despite carrying different models. Naming it explicitly
+# keeps each role's route (and the school/criticism seat bindings that
+# reference it by endpoint_id) unambiguous.
+
+roles:
+  # Default profile (glm-5.2): every role the roster leaves unbound,
+  # including the shared criticism seat (see ENGAGED_CRITICISM_AUTHORITY
+  # below — every school's argumentative_critic route stays this one).
+  argumentative_critic: &default_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 16384
+    reasoning: "none"
+    timeout_s: 120
+    output_mode: json_object
+  defender: *default_glm
+  summarizer: *default_glm
+  synthesizer: *default_glm
+  vision_critic: *default_glm
+  property_designer: *default_glm
+  thesis: *default_glm
+  grounding_reviewer: *default_glm
+
+  # Conjecture seat: deepseek-v4-flash:0731, moderate (medium) thinking.
+  # Also the shared school-routed conjecturer seat (SCHOOL_SEATS_ENABLED
+  # below) — every school's conjecturer route is this same model.
+  conjecturer: &conjecture_deepseek
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-deepseek-v4-flash-0731
+    provider: ollama
+    model: deepseek-v4-flash:0731
+    model_revision: deepseek-v4-flash:0731
+    family: deepseek
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 16384
+    reasoning: "medium"
+    timeout_s: 120
+    output_mode: json_object
+  variator: *conjecture_deepseek
+
+  # Judge seats (2, unanimous rule at frozen default): genuinely distinct
+  # families, per operator instruction — no --blind-same-model-judges.
+  judge:
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-qwen3.5-397b
+      provider: ollama
+      model: qwen3.5:397b
+      model_revision: qwen3.5:397b
+      family: qwen
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 16384
+      reasoning: "none"
+      timeout_s: 120
+      output_mode: json_object
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-mistral-large-3-675b
+      provider: ollama
+      model: mistral-large-3:675b
+      model_revision: mistral-large-3:675b
+      family: mistral
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 16384
+      reasoning: "none"
+      timeout_s: 120
+      output_mode: json_object
+
+# Authority (revised per operator direction, 2026-08-12): the ARGUMENTATIVE_
+# AUTHORITY path is left at its shipped default (observe_only) because
+# declaring it "trial_required" trips a compile-time wall for ANY text
+# workload (CALIBRATION_RECEIPT_REQUIRED, authority.py::
+# _preflight_text_authority) whose verifier is a permanent stub that can
+# never pass. Real judge authority for this run instead comes through the
+# schools-routed criticism engine, which that wall never inspects:
+JUDGE_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+ARGUMENTATIVE_AUTHORITY: observe_only   # shipped default; see note above
+ENGAGED_CRITICISM_AUTHORITY: defended_trial   # now the ACTIVE mechanism
+LEGACY_CRITICISM_ENABLED: false   # was the shipped default (true); flipped
+                                   # so the engaged/foreign-criticism engine
+                                   # (and ENGAGED_CRITICISM_AUTHORITY) runs
+SCHOOL_SEATS_ENABLED: true   # was the shipped default (false); operator
+                              # direction 2026-08-12: exercise real school
+                              # seats for both conjecture and criticism,
+                              # each seat bound to the seat's existing model
+                              # (no new model diversity introduced)
+
+# Research backend OFF (roster: "research backend OFF"). The Config field's
+# own shipped default is "agent" (ON), so this must be set explicitly.
+RESEARCH_BACKEND: null

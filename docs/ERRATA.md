@@ -585,3 +585,40 @@ rather than trusting it.
 (Renumbering note, added at merge: minted as "E25" on its delivery
 branch, colliding with the unification tranche's E25; serialized in
 merge order per this ledger's convention.)
+**E28 — `docs/CONTROLLER_SPEC.md`'s "Does it work? Yes, on what it
+controls" was proven only on a cap that happened to lie INSIDE the
+static envelope, and has been read ever since as evidence that the
+controller steers real runs.** The 2026-07-05 live A/B starved
+`cap:conjecturer` to **1200** — comfortably inside that knob's static
+barrier of `[800, 5000]` — and the controller duly widened it 1200 →
+1920 → 3072. That result is real and the spec's report of it is
+accurate. What it does not license is the belief the sentence invites:
+that the mechanism runs "automatically, with no human" on the runs the
+harness actually launches. A compiled v6 manifest pins
+`max_tokens=16384` on every role it binds, which was outside every
+static ceiling in the table, so `_propose` skipped every knob in
+silence and the controller had authority over nothing. Measured on the
+committed record, not inferred: grounded-extension run
+`8e22d0431fd2b98d` carries 12,991 events with zero steering artifacts,
+and **zero of the 104 committed logs in `experiments/` contain a
+controller policy body at all** — in the whole recorded history of this
+repo the controller has never once steered a real run. Two further
+sentences in the same section are corrected by the same finding: "the
+savings direction (narrowing wasteful caps...) lives in the deferred
+half" is wrong about the code — the narrowing branch IS implemented
+(`_clean_streak` + `CLEAN_WINDOWS`) and simply never reached a knob it
+was allowed to move; and the A/B's framing of the controller as "not
+yet a token saver" was measured on a starved 1200-token cap, the one
+configuration where saving is impossible. The savings were sitting in
+plain sight in the other direction: that same grounded root pinned
+`judge` at 16,384 for 342 calls whose largest completion was **141
+tokens**. Found and fixed 2026-08-13 by
+`experiments/2026-08-13-defect-controller-steering-inert/`; the barrier
+is now derived per run from the cap the manifest assigned each role,
+and a controller that cannot steer something says so in a typed
+`controller-authority` record instead of returning `None`. The general
+lesson, recorded because it is the reusable half: an A/B that fixes the
+one parameter which gates the mechanism proves the mechanism works
+*where it was already allowed to act*, and says nothing about whether
+it is ever allowed to act. State the configuration a live result was
+measured under, in the sentence that reports the result.

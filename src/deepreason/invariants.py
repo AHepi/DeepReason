@@ -15,7 +15,7 @@ from pathlib import Path
 from deepreason.adjudication.edges import DependenceCycleError, build_dep, toposort
 from deepreason.bridge.events import BridgeAction
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.controller import ENVELOPES, GENERATOR_LEDGER
+from deepreason.controller import cap_envelope, is_generator_knob
 from deepreason.harness import Harness
 from deepreason.llm.firewall import route_fingerprint
 from deepreason.ontology.state import Status
@@ -3583,6 +3583,20 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     continue
                 compact_transition_seq_by_route_seat[key] = event.seq
 
+    def _configured_role_cap(knob: str) -> int | None:
+        """The widest cap the manifest assigned this knob's role — the same
+        anchor `Controller._current_caps` reads off the live adapter. None for
+        a role with no assigned limit (optional by design) and for every
+        non-cap knob, which are never anchored."""
+        if manifest is None or not knob.startswith("cap:"):
+            return None
+        caps = [
+            route.max_tokens
+            for route in (manifest.roles.get(knob[len("cap:"):], ()) or ())
+            if getattr(route, "max_tokens", None) is not None
+        ]
+        return max(caps) if caps else None
+
     for e in events:
         validate_school_route(e)
         validate_conjecture_context(e)
@@ -3608,9 +3622,13 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             if not isinstance(knobs, dict):
                 continue
             for knob, value in knobs.items():
-                envelope = ENVELOPES.get(knob)
+                # The barrier is anchored to the cap the run assigned that
+                # role, so it must be re-derived here exactly as the
+                # controller derived it — a static table rejects every
+                # policy a compiled manifest could authorize.
+                envelope = cap_envelope(knob, _configured_role_cap(knob))
                 if (
-                    knob in GENERATOR_LEDGER
+                    is_generator_knob(knob)
                     and type(value) is int
                     and envelope is not None
                     and envelope["min"] <= value <= envelope["max"]
