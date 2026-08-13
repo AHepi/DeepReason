@@ -142,3 +142,95 @@ trivial.
 ### Compile notices
 
 Zero, matching the pre-registered expectation in `PREREG.md`.
+
+
+## 2026-08-13 — the root reaches a typed terminal, and the six documents enter the record
+
+### What the record shows
+
+This root could not be amended, continued, cancelled, or read as a
+result. The cause was not the reader: `deepreason run --run-manifest`
+called the scheduler and then **printed**, while the managed
+`TEXT_RUN_SERVICE` path calls the same scheduler and then writes ten
+further records. Terminal authority therefore never left
+`current_open_uncommitted`, and every lifecycle operation refused
+correctly against a record that had nothing to read:
+
+    AMEND_NOT_AT_TERMINAL      amendment requires a run standing at a valid
+                               typed terminal stop (terminal authority is
+                               current_open_uncommitted)
+    CONTINUE_STOP_REQUIRED
+    RUN_RESULT_NOT_READY       current terminalization is not-started
+
+Fixed by `experiments/2026-08-13-change-lifecycle-operation-parity`: both
+launch paths now call one shared `terminalize_text_run`, and a new
+`deepreason finalize` brings a root stopped before that fix to its
+terminal by APPENDING.
+
+**Finalization (rc=0).** The root now stands at
+`current_valid_committed`, terminal epoch 0, reasoning horizon 9947,
+commitment `sha256:8c414d5b9af96087e6769b5f2aadc43cb624ce53a7087d8f4ddf0c3312cb0d75`,
+stop `budget_exhausted` at cycle 24. Its frontier was re-derived read-only
+from the replayed record and reproduces this document's own earlier
+numbers exactly: **191 survivors, 87 on the Pareto frontier**, head
+`013723d2dbc5`.
+
+**Amendment epoch 1 (rc=0, 2m22s).** The six documents this run bound and
+never introduced are now in the record: **6 sources admitted, 0
+refusals**, 296 evidence blocks (232 paragraph, 56 section, 8 table),
+supplemental dossier
+`119e6b8691d3136da887c7215c571a211851697d4bb63148cd16395bd28fc45e`, fence
+at seq 9949. All six were verified byte-identical to the frozen dossier
+before admission. The question is unchanged — this is an evidence-only
+amendment.
+
+**Nothing was edited.** Over both operations, from git:
+
+    git diff --numstat .../run/    ->    log.jsonl   20   0
+
+Twenty appended lines, zero deletions. Every other pre-existing byte of
+this root is unchanged; everything else the operations produced is a file
+that did not exist before.
+
+**`verify_root` now returns `[]` — zero violations.** The six
+`attached-evidence` violations this document reported on 2026-08-13 are
+gone. The change tranche predicted they would REMAIN, and that prediction
+was wrong; it is corrected here rather than quietly dropped. The
+mechanism is that `verify_root`'s attached-evidence check is a UNION check
+across epochs (`invariants.py:2157-2161`): it asks whether SOME epoch
+introduced each bound source, and epoch 1 introduced all six.
+
+### What this does NOT change about the run above
+
+**Epoch 0 was still not an evidence-informed run.** 485 model calls
+happened before any of those six documents existed in this record. The
+2026-08-13 finding stands verbatim: that epoch should be read as having
+answered the seed question from the question text and the models' own
+training knowledge alone. A clean `verify_root` measures the record's
+internal consistency — that every source the run's identity binds has been
+introduced in some epoch — not the epistemic quality of any epoch. A
+reader who wants the latter must look at WHICH epoch introduced a source,
+which the record still says exactly.
+
+The 191 survivors are unchanged and uncriticized against the documents.
+"Accepted does not mean true," and now also: replay-valid does not mean
+well-evidenced.
+
+### Residue — what remains unproven
+
+- **The continuation has not run.** `deepreason continue --budget
+  cycles=8 --token-budget 500000` requires real model calls, and the
+  container rebuild removed this tranche's gitignored `env`
+  (`OLLAMA_API_KEY`). The amendment made the six documents CITABLE; it did
+  not make them CITED. Whether criticism engages them, and whether any of
+  the 191 survivors survives contact with them, is entirely open.
+- Whether any of the five proposals quoted in the 2026-08-13 segment
+  actually preserves determinism / polynomial cost / reinstatement /
+  root-validity is still not established, and this segment adds nothing
+  to that question.
+- The driver `experiments/2026-08-13-change-lifecycle-operation-parity/
+  live_parity.sh` is idempotent from here: `finalize` refuses
+  `FINALIZE_ALREADY_TERMINAL`, `amend` refuses
+  `AMEND_SOURCE_ALREADY_ADMITTED` (correctly now — the six ARE
+  introduced), so restoring the credential and re-running reaches the
+  continuation directly.

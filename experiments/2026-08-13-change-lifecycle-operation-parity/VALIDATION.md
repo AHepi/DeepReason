@@ -154,7 +154,24 @@ The targeted `verify_root_report` R14 asks for, run against the verdicts
 recorded in the last committed sweep
 (`experiments/2026-08-13-change-smoke-currency-audit/root-sweep-after-2026-08-13.txt`):
 
-<!-- R14-RESULT -->
+    MATCH experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752
+           sweep 2026-08-13 {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+           now              {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+    MATCH experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829
+           sweep 2026-08-13 {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+           now              {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+    MATCH experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+           sweep 2026-08-13 {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+           now              {'valid': True, 'epistemic_passed': False, 'att': 0, 'blind': 1}
+    MATCH experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc
+           sweep 2026-08-13 {'valid': False, 'epistemic_passed': True, 'att': 1, 'blind': 0}
+           now              {'valid': False, 'epistemic_passed': True, 'att': 1, 'blind': 0}
+
+**4 of 4 MATCH, zero drift.** Deliberately including one root whose
+recorded verdict is `valid=False` — a check that only ever confirmed
+green verdicts could not detect a reader that started passing everything.
+
+**PASS.**
 
 **One committed root's verdict DID move, deliberately and by design:**
 `experiments/2026-08-12-live-grounded-extension-expansion/run` — the
