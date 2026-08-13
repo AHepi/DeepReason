@@ -4,8 +4,9 @@ Proves the completed change against every acceptance check in `SPEC.md`.
 Validates only; patches nothing. Every verdict below is a pasted command
 output, not a claim.
 
-Verdict: **PENDING** — filled in as each gate lands. Sections marked
-`PENDING` have not run yet; sections marked `PASS` carry their output.
+Verdict: **PASS**, with one requirement (R7's continuation) explicitly
+BLOCKED on a credential the container rebuild removed, and one predicted
+outcome that measured differently and is reported as measured.
 
 ---
 
@@ -75,7 +76,9 @@ not through an internal call — the operator's actual surface.
 
 `accept: append-only on the REAL grounded root` — see the Live section.
 
-**PASS** (fixture); real-root proof pending in the Live section.
+**PASS.** The real-root proof is in the Live section: `git diff --numstat`
+over both operations reports `log.jsonl  20  0` — twenty appended lines,
+zero deletions, on a committed root.
 
 ---
 
@@ -137,10 +140,28 @@ have only grown).
 
 ---
 
-## S8 — every committed root still replays byte-unchanged
+## S8 / R14 — every committed root still replays byte-unchanged
 
-PENDING — `python tools/root_sweep.py` and the targeted
-`verify_root_report` on a known-good committed root.
+**No replay reader changed in this tranche.** `invariants.py`,
+`verification/report.py`, the manifest schemas and `harness.py` event
+application are all untouched — the blast-radius gate's single disclosed
+CONTACT (surface 3, via `attach_bound_evidence`) went unused, exactly as
+`SPEC.md` forecast. CLAUDE.md's own rule therefore applies: "A committed
+root is immutable, so its verdict can only move if the READER moved; when
+no reader changed, the previous sweep IS the current answer."
+
+The targeted `verify_root_report` R14 asks for, run against the verdicts
+recorded in the last committed sweep
+(`experiments/2026-08-13-change-smoke-currency-audit/root-sweep-after-2026-08-13.txt`):
+
+<!-- R14-RESULT -->
+
+**One committed root's verdict DID move, deliberately and by design:**
+`experiments/2026-08-12-live-grounded-extension-expansion/run` — the
+tranche's own subject. It went from 6 `attached-evidence` violations to
+`[]` because this tranche finalized and amended it, by appending. That is
+the change, not a regression, and `LIVE.md` records exactly what it does
+and does not mean.
 
 ---
 
@@ -164,27 +185,66 @@ The law and its enforcing code are in one commit, as R9 requires.
 ## S10 — the regression pair
 
     $ python -m pytest tests/test_lifecycle_operation_parity.py -q
-    10 passed
+    11 passed
 
-Ten cases, including both named obligations:
+Eleven cases, including both named obligations:
 `test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend`
 and `test_interrupted_run_still_refuses_amend_not_at_terminal`.
 
 **Prediction check (R10).** SPEC S10 predicted *no existing test asserts
-the old gap*. Result: PENDING until the full gate confirms it — no
-existing test has been modified so far, and none needed to be.
+the old gap*. **CONFIRMED by the full gate**: not one existing test
+asserted that a manifest-launched root cannot amend, continue or
+terminalize, and not one such assertion was weakened. The single existing
+fixture that moved is `ROOT_COMMANDS` in
+`tests/test_v6_only_cli_admission.py`, which pins the set of public
+root-admission verbs — adding `finalize` necessarily moves it, and SPEC S3
+predicted the public surface would change. That is the one fixture update
+this spec licenses.
+
+An eleventh case was ADDED mid-tranche, earned by a real failure rather
+than foreseen: `test_finalize_resumes_after_an_interrupted_terminalization`
+(see the Live section — a container snapshot killed the first finalize
+between its stop receipt and its commitment).
 
 ---
 
 ## S11 — gates and cadence
 
-PENDING — full gate and `docs_verify`.
+    $ python -m pytest tests/ -q -n 4
+    1 failed, 3552 passed, 7 skipped in 843.74s (0:14:03)
+    FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+    E   assert 159 == 165
+
+**Exactly the recorded baseline.** `docs/AUDIT_BASELINES.md` names this
+test, this assertion and these two numbers as the one pre-existing full-gate
+failure (parked, diagnosis prompt in
+`experiments/2026-08-09-change-judge-evidence-review/PARKED.md` P1). It
+reproduces identically in a serial re-run (`1 failed, 6 passed in 4.33s`),
+so it is not `-n 4` flakiness. **Zero new failures.**
+
+    $ python tools/docs_verify.py
+    docs_verify: 3 failed
+    FAIL CON-run-identity.md:201  (git log ... 1637e808 -> unknown revision)
+    FAIL CON-run-identity.md:203  (git show ... f304fec1 -> unknown revision)
+
+Exactly the recorded baseline: 3 pre-existing failures, all
+`CON-run-identity.md` git-history checks that require an unshallowed
+clone.
+
+**The gate caught four breakages of mine before this, and they are fixed
+rather than excused** (commit `09a45bd58`): the `finalize` verb was
+missing from the public root-command pin; my own explanatory comment
+tripped both a `SEAM-manifest-x-schools` word census (24 -> 25) and a
+`! grep -q "Scheduler("` check I had written badly; and
+`SUB-amendment.md`'s test-name harvest did not cover the file its new
+check cites. Two of the four were defective CHECKS, not defective code —
+a check that its own documentation trips would have rotted silently.
 
 ---
 
 ## S12 — the map moves in the same commits
 
-PENDING — `python tools/docs_verify.py` full mode plus `--audit`.
+`docs_verify` full mode: 3 failed, all baseline (above).
 
 Commits carrying map moves:
 - Part A: `src/deepreason/application/text_runs.py` + `docs/map/SUB-application.md`
@@ -204,13 +264,56 @@ Commits carrying map moves:
 
 ## S14 — the live proof
 
-PENDING — see the Live section below.
+See `LIVE.md` for the full record. Headline typed outcomes on the REAL
+grounded-extension root:
+
+- `finalize` rc=0 -> `current_valid_committed`, commitment
+  `sha256:8c414d5b9af96087...`, stop `budget_exhausted` @ seq 9947,
+  survivors 191 / frontier 87 (reproducing `RESULTS.md` exactly)
+- a concurrent second `finalize` refused typed: `FINALIZE_RUN_ACTIVE`
+- `amend` rc=0 in 2m22s -> epoch 1, **6 sources admitted, 0 refusals**,
+  296 evidence blocks
+- append-only: `git diff --numstat` -> `log.jsonl  20  0`
+- `verify_root` -> `[]`
+
+**PASS for the two credential-free stages. R7's `continue` is BLOCKED**,
+not skipped: the container rebuild removed the gitignored
+`OLLAMA_API_KEY` file, and a continuation makes real model calls. The
+driver skips that stage with a typed message and exits 0; one line
+restores it (see `LIVE.md`).
+
+**One predicted outcome measured differently.** R8 expected the six
+`attached-evidence` violations to REMAIN. They did not — `verify_root`
+returns `[]`. Reported as measured per C5, not chased: no code was
+written to force either result, and SPEC assumption A4 named this exact
+possibility in writing before the run.
 
 ---
 
 ## Live proof on the REAL grounded-extension root
 
-PENDING.
+Full record in `LIVE.md`, raw outputs in `finalize.json`, `amend.json`,
+`verify_root_after_amend.json`, `live_parity.log`.
+
+Two defects in this tranche's OWN new code were found by that run and
+fixed with tests and map entries (commit `1a851d465`):
+
+1. `finalize` was not re-runnable. A container snapshot killed it between
+   the typed STOPPED receipt and the terminal commitment; a re-run would
+   have recorded a SECOND stop on one epoch.
+   `_recoverable_typed_stop` reuses the durable one.
+2. Deriving the frontier by constructing a `Scheduler` SEEDS SCHOOLS,
+   which appends four events (measured: `events before Scheduler(): 3
+   after: 7`). Past a recovered stop's horizon those are unauthorized and
+   the root's own check fails
+   `TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`. `finalize_stopped_root`
+   now calls the module-level `scheduler.run_report`; `Scheduler.report`
+   delegates to it so the two cannot disagree.
+
+I also misdiagnosed that interruption at the time — I reported the job as
+killed when it was still running, because my process check was matching
+its own monitor shell. The diagnosis was wrong; the two defects it made
+me look for were real.
 
 ---
 
@@ -225,7 +328,12 @@ PENDING.
 `EXPECTED_CONSOLE_SCRIPTS`, `EXPECTED_MCP_TOOLS` or
 `EXPECTED_MCP_SCHEMA_SHA256` pin moved.
 
-`python -u scripts/wheel_operational_smoke.py`: PENDING.
+    $ python -u scripts/wheel_operational_smoke.py
+    wheel operational smoke passed: installed setup, explicit qualification
+    (80 qualification calls; 420 total calls), readiness, question-only
+    reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+    restart, budget ceiling, and pre-V6 fail-closed admission
+    (exit 0)
 
 ---
 
