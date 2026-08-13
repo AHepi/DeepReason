@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The target proposes a post-pass advisory ranking of suspended nodes, but this does not expand or strengthen the grounded extension's semantics as required by the problem. Ranking the suspended remainder is an external downstream heuristic that leaves the skeptical fixed-point semantics (the actual subject of the problem) completely untouched; it fails to propose a semantic innovation to the extension itself.
+
+TARGET:
+After the skeptical fixpoint leaves some nodes suspended, run an advisory post-pass that ranks suspended nodes by defense depth: the number of distinct accepted defenders reachable via two attack steps (accepted -> attacker -> suspended). This never relabels a node, so determinism, polynomial cost, and reinstatement semantics are untouched — but it gives the loop a principled order for conjecture refinement and makes the suspended set's structure visible instead of a silent remainder. The grounded extension itself was never the problem; this targets what to do with its output.

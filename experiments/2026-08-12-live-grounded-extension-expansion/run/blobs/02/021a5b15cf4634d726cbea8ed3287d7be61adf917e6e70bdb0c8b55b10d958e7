@@ -1,0 +1,31 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+Strengthen the grounded extension at the edge-construction layer, never the fixpoint: define an admissible enrichment as any polynomial-time function that adds attack edges monotonically (no deletions) to the subgraph induced by non-committed-root nodes. Because label0 is monotone in att, the unique grounded fixpoint, polynomial cost, and reinstatement-as-derived all survive unchanged; the conjecture is that the validity guarantee reduces exactly to the constraint that no enrichment adds an attacker to a committed root, making 'no new attacker on a root' the single load-bearing check.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The conjecture that validity of every committed root reduces exactly to 'no enrichment adds an attacker to a committed root' is false, because deleting an attacker from a committed root's support chain is an equally validity-destroying move that the load-bearing check cannot catch.
+The proposal restricts admissible enrichments to functions that add attack edges monotonically with no deletions to the subgraph induced by non-committed-root nodes. But monotonicity of the attack relation (att) does not imply monotonicity of a root's supporting argument chain in the induced subgraph. A committed root r can have a non-root defender d whose own status depends on the absence of attacks against d. Adding an edge x->d (x non-root, d non-root) does not attack r directly, so it passes the single load-bearing check, yet it can turn d from IN to OUT. If r depended on d, r is no longer reinstated, so r's validity is lost even though no attacker was added on r. Thus the check is insufficient and the exact-reduction claim is false.
+cites: e093eb8611ff0d96fc197357178adfbf4e9e7c0ba8471f3c76aa9f21a3aea46a
+
+THE DEFENCE:
+The critic's case does not refute the exact-reduction conjecture as stated and conflates two distinct notions of monotonicity.
+
+1. The conjecture scopes monotonicity to the attack relation (att) over the induced subgraph on non-committed-root nodes. The critic's counterexample respects that scope: x->d (x non-root, d non-root) is exactly the kind of monotone edge addition the proposal permits, and it does pass the 'no new attacker on a root' check.
+
+2. The critic's alleged reduction failure depends on d's status depending on the *absence* of attacks against d. But in grounded semantics, IN status is derived from the absence of unblocked attackers, and monotone addition of attack edges can only add attackers or eliminate defenders, never reinstate a previously defeated node. Therefore adding x->d can indeed flip d from IN to OUT.
+
+3. However, the conjecture states validity reduces to 'no enrichment adds an attacker to a committed root.' The critic's scenario implicitly assumes r depends on d and that losing d destroys r's validity. This is an enrichment *indirectly* undermining r by defeating a defender. But the conjecture's 'single load-bearing check' is precisely about direct attackers on roots, not indirect support. The critic has shown the check misses *indirect* validity loss via defender defeat, not that the check fails on its own terms.
+
+4. Critic has not established that the proposal permits r to depend on non-root defender d in a way that makes r's committed-root validity *independent* of root-directed attacks. If committed-root validity is by definition grounded in direct reinstatement only, the conjecture holds. Critic has not shown otherwise from the target or cited artifact.
+
+5. Critic's clause that monotonicity of att 'does not imply monotonicity of a root's supporting argument chain' is a non sequitur against the conjecture: the conjecture never claims supporting-chain monotonicity; it claims the *validity guarantee* reduces to the no-new-root-attacker check. Critic has not shown what the validity guarantee actually entails per the cited artifact, so the insufficiency claim is unestablished.
+
+The case fails to establish the conjecture is false from the cited artifact and target statement; it relies on an unstated assumption about indirect-dependency validity that is not shown to be part of the target's validity guarantee.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

@@ -1,0 +1,1 @@
+{"decisive_point":"The target says the process 'remains deterministic (each pass is a fresh unique fixpoint).' On the critic's own account, pass-1 applied to the graph extended by pass-1 yields a different fixpoint than pass-1 alone. That is exactly a violation of 'each pass is a fresh unique fixpoint.'","verdict":"fail"}

@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The target explicitly defines the grounded labeling as a function of threshold τ, invoking grounded semantics—the least fixed point of the characteristic function, not an arbitrary fixed point of a threshold map.",
+  "verdict": "pass"
+}
+```

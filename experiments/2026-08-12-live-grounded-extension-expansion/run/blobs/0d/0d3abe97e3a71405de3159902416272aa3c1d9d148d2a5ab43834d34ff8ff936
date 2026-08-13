@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target's explicit 'fresh unique fixpoint' clause requires that a pass applied to the graph it produced must return that same fixpoint, ruling out the W2 scenario.",
+  "verdict": "pass"
+}

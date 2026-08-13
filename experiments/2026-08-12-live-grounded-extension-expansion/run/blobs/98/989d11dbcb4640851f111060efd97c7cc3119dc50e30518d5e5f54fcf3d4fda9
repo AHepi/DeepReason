@@ -1,0 +1,18 @@
+TARGET:
+Anchor attack-edge construction in cases: maintain a library of committed runs whose warrant-to-attack materializations are canonical, and calibrate the edge-construction rules (the `build_att` union) per case family so that the same warrant types yield the same attack patterns as the anchors. The label function stays pure and the fixpoint math is unchanged; what is strengthened is the quality of the attack graph itself — which is where the real work lives — making committed-root validity consistent with historical precedent rather than a per-run accident.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+Calibrating edge-construction rules against a case library does not preserve the deterministic fixed-point guarantee required by the problem; it makes the attack graph's formation dependent on external historical data rather than a pure function of the logical state, introducing an inductive, non-deterministic dependency into the semantics.
+
+THE DEFENCE:
+The critic's case conflates two distinct semantic layers and misattributes a dependency. The Target explicitly partitions the architecture: the label function remains a pure function of the logical state, and the fixpoint mathematics is expressly unchanged. The critic does not contest these claims; the Target asserts them and the critic offers no counter-evidence.
+
+The case library calibrates `build_att` — the edge-construction rules — per case family. This is a static, design-time configuration step, not a dynamic runtime input. Once calibrated, the union of edge-construction rules is fixed; for any given logical state, the same rules apply, yielding the same attack graph. The rules are deterministic relative to the logical state. The critic's assertion that formation becomes 'dependent on external historical data' mischaracterizes the library's role: the library informs how the rules are authored, but the committed rules then operate as a fixed function. This is no more 'non-deterministic' than any other principled rule-design methodology.
+
+The phrase 'inductive, non-deterministic dependency' packs an unsupported double charge. 'Inductive' is a label, not an argument: drawing on canonical precedent to shape rule families is a design discipline, not a semantic indeterminacy. And 'non-deterministic' is directly contradicted by the Target's stipulation that the fixpoint math is unchanged and the label function stays pure. If the fixpoint is preserved and the function is pure, the guarantee the problem requires is intact by the Target's own construction. The critic has not shown that calibration alters the function's extensionality across runs; the burden to establish that leakage exists — that two identical logical states produce different graphs under the same calibrated rules — is the critic's, and it is not discharged.
+
+Finally, 'does not preserve the deterministic fixed-point guarantee' is asserted but not demonstrated. The Target states the guarantee is unchanged. To defeat this, the critic must exhibit a mechanism by which calibration re-introduces dependence into the fixpoint iteration itself. No such mechanism is identified; the critic only points to the *existence* of a library and infers contamination. That inference is unwarranted: a rule author consulting precedents to decide that warrant-type W yields attack pattern P does not make P's application at runtime history-dependent — it makes it rule-dependent, which is the intended semantics.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

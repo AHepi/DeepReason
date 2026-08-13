@@ -1,0 +1,44 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-6fcc770419da1e9c8fccb2db8ed32bbe) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Replace Boolean att with bounded integer weights and define the grounded labeling as a function of threshold τ; because the labeling map is monotone in τ, each τ yields the unique deterministic fixpoint and a single sweep over τ stays polynomial. Conjecture: committed-root validity is preserved iff τ strictly exceeds the weight of every attack edge incident to a committed root — turning the validity guarantee into a threshold-placement rule rather than a graph check.
+commitments: (none)
+
+TARGET SRC_002
+Covering conjecture: the four guarantees (determinism, polynomial cost, reinstatement-as-derived, committed-root validity) all follow from one property — the labeling operator is monotone and inflationary on the complete lattice of labelings. The admissible strengthening space is exactly the set of polynomial-time, monotone, idempotent operators on that lattice; reinstatement and root validity are theorems of monotonicity, not separate design constraints. If true, any proposed expansion should be rejected iff it violates monotonicity/idempotence, which gives a single testable criterion for the whole family.
+commitments: (none)
+
+TARGET SRC_003
+Suspended nodes should be re-examinable only through a fresh edge-construction pass that commits new warrants — never by relabeling an existing graph. Conjecture: pass-composition is associative and idempotent, so the overall process remains deterministic (each pass is a fresh unique fixpoint) and polynomial (passes are independent); root validity is preserved because the only route to a status change is a new committed warrant, which is exactly what a new pass adds.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
