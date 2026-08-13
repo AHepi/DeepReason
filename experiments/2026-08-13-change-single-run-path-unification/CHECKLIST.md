@@ -1,6 +1,6 @@
 # Checklist for: one run path — "Get rid of the old one"
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 Map ids: `DR-SUB-application` (owns both `application/` and `cli/` — the
 single covering document for both sides), `DR-CON-run-identity`,
 `DR-INV-frozen-surfaces` (read; verdict CLEAR). No `DR-SEAM-` id applies:
@@ -42,7 +42,7 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       `toolchains=(engaged_simulation_toolchain(),)` was supplied, the
       same argument `build_manifest.py:165` supplies.
 
-- [ ] 2. (S1.1) Add
+- [x] 2. (S1.1) Add
       `test_service_entry_accepts_a_precompiled_manifest_object_and_a_manifest_path`
       to `tests/test_single_run_path.py` — parametrized over a
       `RunManifest` object and a path string, both reaching a published
@@ -50,6 +50,15 @@ Push with 2s/4s/8s/16s retry at every `[COMMIT]`.
       done-when: `python -m pytest tests/test_single_run_path.py -q` ends
       `4 failed` (2 params × 1 test + the 2 from step 1), all
       `AttributeError: start_manifest_run` (pasted)
+
+      PROOF:
+      ```
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      E  AttributeError: 'TextRunApplicationService' object has no attribute 'start_manifest_run'
+      4 failed in 2.81s
+      ```
 
 - [ ] 3. (S1.1) Implement `TextRunApplicationService.start_manifest_run`
       in `src/deepreason/application/text_runs.py` per SPEC.md S1.1

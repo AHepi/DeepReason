@@ -233,6 +233,38 @@ def _terminal_state(root) -> str:
     return terminal.presentation_payload()["state"]
 
 
+@pytest.mark.parametrize("reference", ("object", "path"))
+def test_service_entry_accepts_a_precompiled_manifest_object_and_a_manifest_path(
+    tmp_path, monkeypatch, reference
+):
+    """R1: the door takes a manifest a caller already holds, either shape.
+
+    A caller of `deepreason run --run-manifest` holds a RunManifest bound
+    at the root; a ladder holds a path to one.  Neither could reach the
+    managed service before, because `start` accepts only an intent whose
+    workload spec and budget the caller must have built already.
+    """
+
+    root, manifest, problem_id, problem_file = _bind_rich_root(
+        tmp_path, name=f"entry-{reference}"
+    )
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler", _offline_scheduler(problem_id)
+    )
+
+    TEXT_RUN_SERVICE.start_manifest_run(
+        root=root,
+        manifest=manifest if reference == "object" else root / MANIFEST_NAME,
+        problem_path=problem_file,
+        cycles=1,
+        # `run --token-budget` defaults to absent; the intent vocabulary
+        # spells that "unlimited", and the door is what translates.
+        token_budget=None,
+    )
+
+    assert _terminal_state(root) == "completed"
+
+
 def test_the_door_narrows_no_configuration_the_compiler_admits(
     tmp_path, monkeypatch
 ):
