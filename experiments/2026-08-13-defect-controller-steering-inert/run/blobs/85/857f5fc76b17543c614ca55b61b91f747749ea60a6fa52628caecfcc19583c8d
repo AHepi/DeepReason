@@ -1,0 +1,107 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 5 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-6fcc770419da1e9c8fccb2db8ed32bbe
+Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[0378275f89478d38] **Carriage is a relation, not a field.** `state.carries` is the authority; `Artifact.warrants` is the legacy on-record encoding and `build_att` unions both. Thi
+[0909868ae3d22218] ## IV. Standing residue
+[0974daebd1665965] - **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension 
+[09ffabcd92979168] # Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)
+[0a6dd2576c1bf4cb] | Aspect | File | Symbol | |---|---|---| | The warrant record and its two types | `src/deepreason/ontology/warrant.py` | `Warrant`, `WarrantType` — `DEMONSTRATI
+[0c302d11d621778b] The grounded extension itself was never the problem: given the edges, the label computation is already a pure deterministic fixpoint. The whole question lives i
+[0d20320ff9938143] **Commitment** (Def 3.1)
+[0e369810250bde64] ## What CP1-M settles (why it is the right next experiment for
+[0e806619395ec8f4] **Labels are a pure function of the graph.** `label0` takes nodes and `att`; `final_labels` takes those labels and `dep`. No measure, provenance role, school, n
+[0eea1165c3c87de1] ## State it owns
+[0efee9d35ff76f87] ``` variator emits k bounded edits {a'} via µ(·|a) s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only HV_B(a) = 1 - s(a) ```
+[0f670de69de9021d] `conjecturer (Verbalized-Sampling contract, §11.6), argumentative_critic, defender, variator(µ, µ_struct), judge(rubric verdicts under trial protocol), summariz
+[104e65041f02d759] Three layers + guardrails. Correction from v1: Def 4.2 coupling and Prop 4.1 reach are **not** the same parameter — coupling is a property of γ, reach a measure
+[12680856aa1384a9] So the current theory of the Gulf of Mexico's single daily tide is: *the semidiurnal constituent is suppressed wholesale near an amphidromic node, letting the d
+[12e3502ca378276c] ## 8. Views (not types)
+[1401526e86196288] - **Anchored rubric mode.** A standard artifact (10.3) may declare `mode: anchored` with anchor exemplar refs. The judge's question per commitment: "does the ca
+[146e021253b0932f] What makes this artifact interesting is what it *stands on*. It declares a dependence on a second accepted artifact — a correction the system's own critic produ
+[15134e0610653477] The sharpest question the spec asks about itself: if you take away every program check and let the loop run on LLM criticism alone (λ = 0), do outcomes actually
+[174dcccf9f7813e6] Blocking occurs **only** for relapse onto refuted-equivalents. Near-duplicates of *accepted* artifacts are never blocked — they register normally; the scheduler
+[181ab596196aa5ce] **10.4 Judge audits (program-checked attacks on rubric infrastructure).**
+[1854133175700580] **Storage:** schema-namespaced content-addressed JSON files (`objects/<schema>/<sha256(id)>.json`) + an append-only JSONL log, git-native. Legacy flat object re
+[1958b39701612057] A **school** is a persistent conditioning regime for γ-calls: `(endpoint/family, stance_seed, lineage exemplar slice, render weights)`, registered as a school-p
+[196b48fb5a4aaa6f] *Monitor report, 2026-08-09. Compiled at the operator's request from the consistency-patrol window's committed work (`experiments/2026-08-08-corpus-enrichment-p
+[1a603ea16494ee32] 1. **Phase 1 — corpus enrichment.** 10 live dual-mode-era runs on hard-tier questions, all committed, all replay-valid after the continue-to-clean recipe (RESUL
+[1b2d5ddadda17971] *Flags:* **lineage stagnation** = conjecture-stream contraction ∧ flat progress (no status changes, no problems retired, no oracle delta where present) sustaine
+[1db4330a298ff138] ## 15. Config knobs (single typed schema, optional profile)
+[1dd041117ca8c54a] Nothing in this system is refuted by being disliked. An artifact reaches `Status.REFUTED` through one chain and no other: some artifact CARRIES a registered `Wa
+[1e01f5cafa294011] *The surviving theories of DeepReason's live runs, presented as they stand on 2026-07-05. Everything below is the current content of three replayable knowledge 
+[1e2811a698f6d3f3] **Brake 1 — HV floor as criterion, never as gate.** At Spawn, every connection problem pins into its `criteria` (alongside the auto-pinned Popper battery) the c
+[200e5f89606fa77e] Emergent: raw uninterpreted data is maximally isolated ⇒ the isolation signal drives interpretation of numeric/opaque content by the same mechanism as unificati
+[2046e9fefd13f60a] Conj is gated on `Π ≠ ∅` — D1 made structural. No problem, no conjecture.
+[213e1b897ed959a5] - **Generator capture** (variation collapse): the conjecture stream contracts to near-duplicates of one idea. Population structure *prevents* this; embedding di
+(+264 further citable blocks not shown)
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=01a8bd19a8025d42146184a9192c3ab443b81739c18c77e0902ab0b1b9007c0a
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[src-8ddb400f3c2d52a681266c7cebc3b1898bac6750] Warrants and attack edges — the only route to REFUTED
+class=other; locator=/home/user/DeepReason/docs/map/CON-warrants-and-attacks.md; source_sha256=8ddb400f3c2d52a681266c7cebc3b1898bac67501aeb85afa4a794417f6642a6; excerpt_sha256=8ddb400f3c2d52a681266c7cebc3b1898bac67501aeb85afa4a794417f6642a6
+citable_blocks:
+  block=0378275f89478d38 kind=paragraph title=The rules it obeys
+  block=0a6dd2576c1bf4cb kind=table title=Where it lives
+  block=0e806619395ec8f4 kind=paragraph title=The rules it obeys
+  block=1dd041117ca8c54a kind=paragraph title=What it is
+  block=262c00cd6eeb002b kind=paragraph title=Traps
+  block=47bb50803a6ec8d0 kind=section title=What it is
+  block=49b226d807da0dd0 kind=paragraph title=The rules it obeys
+  block=5391cbc7ff217492 kind=section title=Where to change what
+  block=5c34c618fb7d14d3 kind=paragraph title=The rules it obeys
+  block=5ef79a6d201e1835 kind=paragraph title=The rules it obeys
+  block=5f43663e7882a980 kind=section title=Where it lives
+  block=661f2665680edfb9 kind=paragraph title=The rules it obeys
+  block=672127ac6fa56639 kind=paragraph title=The rules it obeys
+  block=7961a95ec2766e41 kind=paragraph
+  block=7bc481446ea76c6d kind=paragraph title=The rules it obeys
+  block=7d96e5faa89eec97 kind=section title=Warrants and attack edges — the only route to REFUTED
+  (+12 more admitted blocks not listed)
+BEGIN UNTRUSTED SOURCE DATA
+<!-- DR-CON-warrants-and-attacks -->
+Verified-at: 69f89d21
+Verify: python tools/docs_verify.py
+Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/ontology/warrant.py
+Seams: 
+Seams-undocumented: adjudication x warrants-and-attacks, harness x warrants-and-attacks, ontology x warrants-and-attacks, rules x warrants-and-attacks, verification x warrants-and-attacks
+
+# Warrants and attack edges — the only route to REFUTED
+
+## What it is
+
+Nothing in this system is refuted by being disliked. An artifact reaches
+`Status.REFUTED` through one chain and no other: some artifact CARRIES a
+registered `Warrant` naming it as target, that carriage materializes an attack
+ed
+…[section compressed]…
+ed around a shared blind spot is invisible from inside, and only the exogenous anchors bear on it — hence `LAMBDA_FLOOR` is load-bearing, not decorative. The stance library is one act of global curation, declared. School count, all thresholds, windows, and hysteresis widths are empirical per model family and domain; transfer is not assumed. Embedding-space metrics inherit the embedder's biases; the embedder is a configured role, swappable and logged, but not itself adjudicated. Negative-atlas entries and school geometry are model-version-specific: revalidate on upgrade. The fixed response policy caps but does not solve the meta-attractor regress (a learned controller is deferred for exactly this reason). Schools mitigate shared-model gravity best when families genuinely differ; if all configured endpoints converge on the same modal answer, inter-school distance collapses honestly and the reseed rule can only rotate among the same basins — exogenous entropy (§12, appellate) is the remaining lever.
+
+Text-only model + raw perceptual bytes (image/audio/embeddings) is inert without a multimodal interpreter or a program that computes a verdict. Leave a clean interpreter seam; assume text+numeric+code as target.
+
+The unification band is empirically tuned, not analytically guaranteed.
+
+END UNTRUSTED SOURCE DATA
+
+## school-stance
+SCHOOL STANCE (weight 1.00): demand a causal mechanism
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
