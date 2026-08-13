@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "SRC_001 proposes a substantive relation of abstraction: the diagnostic overlay program (SRC_003, SRC_012, SRC_005) abstracts to the principle that every grounded-extension outcome has a local, deterministic, polynomial explanation. It names the relation kind ('abstracts') and states what it is refuted if: there exists an undecided node whose suspension reason is genuinely global, such as a node suspended only because of an O(V)-length cycle of mutual attacks where no bounded local neighborhood determines the suspension. This satisfies the conn:3e200f5e7e7e standard by going beyond a summary of endpoints and providing a concrete, named relation with its refutation condition.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "SRC_002 proposes a substantive relation of dependence: the standing residue (SRC_005) depends on the empirical parameter k, and the set of standing nodes is not k-invariant, meaning a node with a defense path of length k+1 is 'standing' at depth k but not at depth k+1. It names the relation kind ('depends on') and states what it is refuted if: for every graph, the standing residue set is identical for all k ≥ 0. This satisfies the conn:3e200f5e7e7e standard by proposing a concrete dependence relation and specifying the condition under which it fails, rather than merely summarizing the endpoints.",
+      "counterexample": null
+    }
+  ]
+}

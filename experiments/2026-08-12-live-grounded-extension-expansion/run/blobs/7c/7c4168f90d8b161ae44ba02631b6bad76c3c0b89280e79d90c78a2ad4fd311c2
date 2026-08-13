@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's refutation condition is too weak to guard the asserted contradiction. The claim is that materializing carriage attacks 'can flip a previously accepted node to undecided,' but the refutation test only demands set-identity of the grounded EXTENSION between the closed and original graphs. A materialization can leave the extension set unchanged while altering the attack relation in ways that affect derivation order, status assignments at intermediate stages, or non-extension properties the skeptical semantics relies on. The endpoints (closed graph extension = original graph extension) do not ensure that no label transitions, so the relation is asserted but not protected by its refutation condition.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's refutation condition is mismatched to the asserted contradiction. The claim is that RESIDUE labels promote re-argumentation by naming fixable causes for suspension, making suspension 'actionable.' But the refutation test only checks whether RESIDUE is a pure function of grounded labels and edges (isomorphism invariance). A RESIDUE scheme can be a pure, isomorphic function and still name actionable fixable causes — functionally of structure does not rule out semantic content that triggers re-examination. Thus the refutation condition does not protect the claimed contradiction, leaving the relation between RESIDUE and skeptical semantics unsubstantiated.",
+      "counterexample": null
+    }
+  ]
+}
+```

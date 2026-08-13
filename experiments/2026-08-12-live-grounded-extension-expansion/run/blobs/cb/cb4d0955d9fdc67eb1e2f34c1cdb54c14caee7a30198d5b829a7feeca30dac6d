@@ -1,0 +1,47 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:3e200f5e7e7e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 3e200f5e7e7e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@2c8494484091: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+3e200f5e7e7e integrates with the RESIDUE and standing-residue artifacts as one causal diagnostic overlay: suspend_reason classifies why defense failed, RESIDUE records which attacker kept the node out, and standing residue marks structural isolation from accepted defenders; this integration is refuted if any suspended node has a suspend_reason of insufficient_defense while RESIDUE names an accepted attacker, because those labels would then disagree about the same final grounded labeling.
+commitments: hv-floor@2a45b7988522, lineage-ref@2c8494484091, relation-form@578e42df713e
+
+TARGET SRC_002
+The `suspend_reason` classification depends on the carriage-edge closure rule, since that rule materializes attack edges that can change which attackers are accepted for an undecided node; refuted if the closure rule never changes the acceptance status of any undecided node in any admissible graph.
+commitments: hv-floor@2a45b7988522, lineage-ref@2c8494484091, relation-form@578e42df713e
+
+TARGET SRC_003
+The relation is an abstraction: 3e200f5e7e7e abstracts over the RESIDUE and standing-residue annotations by compressing the post-fixpoint explanation of an undecided node into three classes (direct_attack, mutual_attack, insufficient_defense), while RESIDUE records the specific attacker and the standing report records structural isolation from accepted defenders; all three are pure functions of the same final grounded labels and graph. Refuted if any undecided node can receive different suspend_reason classes under identical final labels and graph, or if RESIDUE names an attacker for a node whose suspend_reason is insufficient_defense, or if a standing node (no defender within k) is classified direct_attack.
+commitments: hv-floor@2a45b7988522, lineage-ref@2c8494484091, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
