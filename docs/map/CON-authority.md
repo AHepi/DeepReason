@@ -191,12 +191,23 @@ field map are the same size — a surface with no field would silently read the
 `observe_only` default forever.
 `check: python -c "from deepreason.authority import _SURFACE_FIELDS, AuthoritySurface; from deepreason.config import Config; assert len(_SURFACE_FIELDS) == len(AuthoritySurface) == 3; assert set(_SURFACE_FIELDS.values()) <= set(Config.model_fields)"`
 
-**Manifest-mediated runs fail closed twice**: at compile, and again before the
-adapter is built. A status mode without a receipt is `CALIBRATION_RECEIPT_REQUIRED`;
-with an unverified reference it is `CALIBRATION_RECEIPT_UNVERIFIED`; a runtime
-`Config` whose authority snapshot differs from the frozen manifest's is
-`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`.
+**Manifest-mediated runs DISCLOSE the calibration-receipt gap, twice, and
+refuse only the unrelated policy-drift case.** At compile, and again before
+the adapter is built, a status mode without a receipt is recorded as a
+`CALIBRATION_RECEIPT_REQUIRED` notice; with an unverified reference it is
+`CALIBRATION_RECEIPT_UNVERIFIED` (converted from a compile/preflight refusal
+to a `CompileNoticeV1` notice 2026-08-13 — no `CALIBRATION_RECEIPT` value
+could ever clear the old refusal, since `calibration_receipt_is_verified`
+below has no verifier, so it was a dead end no configuration could resolve,
+not a real point-of-use failure; the run proceeds, and the safe
+`observe_only` fallback `trial_authority_for` already applies is unchanged).
+A runtime `Config` whose authority snapshot differs from the frozen
+manifest's STILL refuses outright as `TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`
+— that guard protects an already-bound manifest from a caller silently
+swapping its authority policy, an unrelated concern this conversion does not
+touch.
 `check: python -m pytest tests/test_manifest_integration.py -k 'calibration_receipt or frozen_text_authority' -q`
+`check: python -c "from deepreason.config import Config; from deepreason.run_manifest import compile_run_manifest; m = compile_run_manifest(Config(ARGUMENTATIVE_AUTHORITY='trial_required'), schema_version=2, workload_profile='text', rubric_policy='forbid'); assert [n.code for n in m.compile_notices] == ['CALIBRATION_RECEIPT_REQUIRED'], m.compile_notices"`
 
 **V6 refuses `defended_trial` at manifest compile**, not during dispatch: the
 mode has no transactional dispatch contract, so the failure belongs to
@@ -242,10 +253,13 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
 - **Assuming the manifest preflight covers every path.** It does not.
   `ops.review_infrastructure` and both scheduler call sites reach
   `trial_authority_for` with no manifest in play, so
-  `text_status_authority_issues` — the function that refuses an unverified
-  receipt — never runs for them. On those three paths
-  `calibration_receipt_is_verified` is the entire gate between a reference
-  string in a config file and live status authority.
+  `text_status_authority_issues` — the function that used to refuse an
+  unverified receipt, and now discloses it as a notice instead
+  (2026-08-13, `used to` because the manifest-preflight call sites no
+  longer raise on its output at all) — never runs for them. On those
+  three paths `calibration_receipt_is_verified` is the entire gate
+  between a reference string in a config file and live status authority,
+  unchanged by that conversion.
 - **Treating a receipt reference as a receipt.** `calibration_receipt` only
   strips whitespace and rejects blanks. A declared reference upgrades the
   refusal from `CALIBRATION_RECEIPT_REQUIRED` to `CALIBRATION_RECEIPT_UNVERIFIED`;

@@ -3307,7 +3307,7 @@ def compile_run_manifest(
         )
     # This must precede route resolution: a rejected authority policy cannot
     # spend an endpoint/model-discovery call merely to learn that it is unsafe.
-    _preflight_text_authority(config, schema_version, workload_profile)
+    _preflight_text_authority(config, schema_version, workload_profile, notices=notices)
     engine_profile = engine_profile or data.get("engine_profile") or "full"
     if model_profile is None:
         model_profile = data.get("model_profile") or "standard"
@@ -4024,17 +4024,37 @@ def _preflight_text_authority(
     config,
     schema_version: int,
     workload_profile: str | None,
+    *,
+    notices: list[CompileNoticeV1] | None = None,
 ) -> None:
-    """Fail closed before any endpoint exists for text status authority."""
+    """Disclose text status authority issues instead of refusing.
+
+    Retired as a refusal 2026-08-13 (all-configs-allowed follow-up):
+    `calibration_receipt_is_verified` has no verifier and can never be
+    satisfied, so failing closed here was a dead end no configuration
+    could resolve, not a real point-of-use failure. The run proceeds;
+    every issue the old gate would have refused on is recorded as a
+    notice instead, with the safe runtime fallback `trial_authority_for`
+    already applies named as the resolution.
+    """
 
     if schema_version not in {2, 3, 4, 5, 6} or workload_profile != "text":
         return
+    if notices is None:
+        return
     from deepreason.authority import text_status_authority_issues
 
-    issues = text_status_authority_issues(config, workload_profile)
-    if issues:
-        issue = issues[0]
-        raise RunManifestError(issue.code, issue.message, issue.pointer)
+    for issue in text_status_authority_issues(config, workload_profile):
+        _emit_compile_notice(
+            notices,
+            issue.code,
+            issue.message,
+            issue.pointer,
+            resolution=(
+                "status authority stays observe_only for this surface "
+                "until a calibration-receipt verifier exists"
+            ),
+        )
 
 
 def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
@@ -4055,18 +4075,28 @@ def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
             )
 
 
-def preflight_harness(manifest: RunManifest, harness, config) -> None:
+def preflight_harness(
+    manifest: RunManifest, harness, config
+) -> tuple[CompileNoticeV1, ...]:
     """Reject materialized workload/policy conflicts before an endpoint call.
 
     Payload preflight cannot see criteria that reference commitments already
     present in a resumed root, nor scheduler features that can introduce a
     rubric trial later.  This check operates on the replayed canonical state
     and the frozen engine config, while remaining purely read-only.
+
+    Returns any text-status-authority disclosure notices found on this
+    re-check (2026-08-13): the manifest is already frozen by this point, so
+    a fresh notice cannot be appended to ``manifest.compile_notices`` -- the
+    caller inspects this return value for the run record instead of a
+    refusal, mirroring what `compile_run_manifest` records at compile time.
     """
+    notices: list[CompileNoticeV1] = []
     _preflight_text_authority(
         config,
         manifest.schema_version,
         manifest.workload_profile,
+        notices=notices,
     )
     if (
         manifest.schema_version in {2, 3, 4, 5, 6}
@@ -4128,3 +4158,4 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
                 "a require_cross_family manifest",
                 "/engine_config/PROP_PROPOSE_PERIOD",
             )
+    return tuple(notices)
