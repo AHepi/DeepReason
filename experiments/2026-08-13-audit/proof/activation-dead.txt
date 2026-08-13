@@ -1,0 +1,19 @@
+=== plant: attempt to mark 'lookup' (imported symbol) as candidate-dead ===
+--- reference scan (step 2) ---
+scripts/e02_adversary.py
+src/deepreason/config.py
+scripts/e31_benchmark/constructions.py
+scripts/e31_benchmark/axiom_domains.py
+src/deepreason/research/backends.py
+src/deepreason/intake_form.py
+src/deepreason/capture/schools.py
+src/deepreason/rules/guards/anti_relapse.py
+src/deepreason/cli/main.py
+src/deepreason/rules/conj.py
+tests/test_v6_only_application_admission.py
+tests/test_e31_benchmark.py
+tests/test_error_catalog.py
+--- verdict: hits found above -> verdict is 'referenced', NOT candidate-dead ---
+--- GATE check: a candidate-dead row requires proof/dead-<id>.txt containing BOTH empty scans (rg -l -w and rg string-ref) ---
+--- this symbol's scan is non-empty (shown above), so any planted candidate-dead row for it is REFUSED by the GATE ---
+--- planted row removed; no entry added to dead.md ---

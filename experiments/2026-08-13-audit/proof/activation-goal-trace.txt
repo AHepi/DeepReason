@@ -1,0 +1,8 @@
+=== plant: fabricated operator design law appended to a scratch copy of the law census ===
+**Fabricated law: all conjectures must rhyme** (nonexistent, planted for activation)
+--- mechanism scan: rg -l -i 'must rhyme' src/deepreason/ ---
+(exit 1, empty = no hits)
+--- test scan: rg -l -i 'must rhyme' tests/ ---
+(exit 1, empty = no hits)
+--- verdict: unenforced (both scans empty, as expected for a fabricated law) ---
+--- fabricated row removed; not carried into goal-trace.md ---

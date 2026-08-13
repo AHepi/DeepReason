@@ -16,3 +16,8 @@ required.
 
 | id | dimension | target | gate | verdict | proof file | disposition |
 |---|---|---|---|---|---|---|
+| A1 | activation/broken | `test_catalog_covers_46_entries` (planted) | pass | broken (planted, restored) | proof/activation-broken-red.txt | activation |
+| A2 | activation/dead | `lookup` (planted candidate-dead) | pass (refused) | referenced (planted refused) | proof/activation-dead.txt | activation |
+| A3 | activation/docs-drift | `docs/map/SUB-scheduler.md:97` (planted) | pass (blind, valid per spec) | baseline (planted, restored) | proof/activation-docs-drift.txt | activation |
+| A4 | activation/spec-drift | `FAKE_NONEXISTENT_SPEC_TERM_XYZ` (planted) | pass | spec-orphan (planted, removed) | proof/activation-spec-drift.txt | activation |
+| A5 | activation/goal-trace | "all conjectures must rhyme" (planted) | pass | unenforced (planted, removed) | proof/activation-goal-trace.txt | activation |

@@ -1,0 +1,6 @@
+=== plant: fabricated SPEC term appended to a scratch copy ===
+FAKE_NONEXISTENT_SPEC_TERM_XYZ
+--- step 2 scan: rg -l -w 'FAKE_NONEXISTENT_SPEC_TERM_XYZ' src/deepreason/ ---
+(exit code: 1, empty output above = zero hits)
+--- verdict: spec-orphan (as expected for a fabricated term) ---
+--- fabricated row removed; not carried into spec-drift.md ---
