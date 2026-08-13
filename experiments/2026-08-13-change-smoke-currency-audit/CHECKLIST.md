@@ -1,6 +1,6 @@
 # Checklist: wheel-smoke re-pin + instrument currency audit
 
-State: executing.
+State: complete. See DELIVERY.md for the reconciliation and final report.
 
 ## Step 1 — Part 1: run both smokes as-is, capture output
 
@@ -215,3 +215,81 @@ refusal to a disclosure notice) — and neither moved a single committed
 root's verdict. This is the complete, re-derived answer to REQUEST.md
 R7's "which reader change moved which verdict": **none did**. Raw output
 committed as `root-sweep-after-2026-08-13.txt` alongside this file.
+
+## Step 5 — Part 3b: docs_verify full, --audit, --links
+
+Done-criterion: all three modes run, compared against the documented
+baseline.
+
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 53 documents, 861 checks, 4 workers
+  FAIL CON-run-identity.md:195: ... (shallow-clone git log check)
+  FAIL CON-run-identity.md:197: ... fatal: ambiguous argument '1637e808'
+  FAIL CON-run-identity.md:199: ... fatal: ambiguous argument 'f304fec1'
+docs_verify: 3 failed
+EXIT: 1
+```
+
+```
+$ python tools/docs_verify.py --audit
+docs_verify --audit: 0 finding(s)
+EXIT: 0
+```
+
+```
+$ python tools/docs_verify.py --links
+docs_verify --links: 0 dangling reference(s), 53 document(s)
+EXIT: 0
+```
+
+**Verdict: matches the documented baseline exactly** (CLAUDE.md: "3
+pre-existing CON-run-identity.md shallow-clone failures") — all three
+failures are the same shallow-clone `git log`/`git show` checks over
+commits this container's clone does not carry, named identically to the
+2026-08-13-change-defended-trial-wiring tranche's own baseline run.
+`--audit` and `--links` both clean. **0 unexplained deviation.**
+
+## Step 6 — Part 3c: full pytest gate, once
+
+Done-criterion: one run, compared against the documented baseline,
+MCP-thread failures isolated before attribution.
+
+```
+$ python -m pytest tests/ -q -n 4
+FAILED tests/test_bronze_report.py::test_census_totals_internally_consistent
+  assert counts["gate_blocked"] == census["streams"][stream]["gate_measures"]
+  assert 159 == 165
+1 failed, 3539 passed, 7 skipped in 775.26s (0:12:55)
+EXIT: 1
+```
+
+**Verdict: matches the documented baseline exactly** (CLAUDE.md: "1
+pre-existing test_bronze_report failure"; same `159 == 165` assertion as
+the 2026-08-13-change-calibration-receipt-notice tranche's own
+VALIDATION.md run). Grepped the full log for any MCP/thread-named
+failure: zero matches — none of the 5 documented known-flaky
+MCP-thread tests failed this run, so no isolation re-run was needed.
+**0 unexplained deviation.**
+
+## Summary — what moved, what did not, what was excluded
+
+| Instrument | Result | vs. baseline |
+|---|---|---|
+| `wheel_smoke.py` | passed, first try | no re-pin needed |
+| `wheel_operational_smoke.py` | passed, first try | no re-pin needed |
+| 4-location pin reconciliation (direct extraction) | all agree | no drift found |
+| same-commit attribution scan (`a9d9b31a3`..HEAD) | 1 touching commit, not a violation | 0 violations |
+| `root_sweep.py` (102/103 roots, 1 excluded) | byte-identical to last committed sweep | 0 verdicts moved |
+| `docs_verify` full/--audit/--links | 3/0/0 | matches documented baseline |
+| full pytest gate | 1 failed/3539 passed/7 skipped | matches documented baseline |
+
+**Excluded:** `experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03`
+(pre-existing parked performance defect — not diagnosed).
+
+**What moved:** nothing verdict-wise. The one thing that DID change is
+process, not outcome: `root_sweep.py`'s serial per-root cost is now high
+enough (30-125s/root) that a straight re-run needs either a much longer
+budget or parallelization — parked as P1 in `PARKED.md`.
+
+State: all steps complete.
