@@ -1,12 +1,19 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
-- [ ] 1. (S1,S2,S3) Edit `src/deepreason/run_manifest.py`: rewrite
+Reordered after step 1 (see SPEC.md Addendum 1, and dr-execute-step's own
+map-obligation rule: "a step that changes ... updates the covering
+document in the SAME commit"). The original plan split code+tests
+(commit at old step 7) from the map delta (commit at old step 11) — that
+violated the same-commit rule. Map edits now land BEFORE the one commit
+that lands code+tests+map together.
+
+- [x] 1. (S1,S2,S3) Edit `src/deepreason/run_manifest.py`: rewrite
       `_preflight_text_authority` to accept an optional `notices:
       list[CompileNoticeV1] | None = None` keyword parameter and emit a
       `CompileNoticeV1` per issue via `_emit_compile_notice` (with the
@@ -16,20 +23,32 @@ One step per dr-execute-step invocation.
       `tuple[CompileNoticeV1, ...]`, build a local `notices` list, pass it
       through, and `return tuple(notices)` at the function's end; update
       both functions' docstrings per SPEC.md S1/S3.
-      done-when: `python -c "
-      from deepreason.config import Config
+      done-when (revised per SPEC.md Addendum 1 — a diverging-config
+      scenario collides with the separate, untouched
+      TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH guard; verified instead
+      with a same-config recheck, proving preflight_harness's own
+      recheck independently reproduces the notice):
+      `python -c "
+      import sys; sys.path.insert(0, 'tests')
+      from test_manifest_integration import _config
+      from deepreason.config import apply_overrides
       from deepreason.harness import Harness
       from deepreason.run_manifest import compile_run_manifest, preflight_harness
       import tempfile, pathlib
-      m = compile_run_manifest(Config(ARGUMENTATIVE_AUTHORITY='trial_required'), schema_version=2, workload_profile='text')
-      assert [n.code for n in m.compile_notices] == ['CALIBRATION_RECEIPT_REQUIRED'], m.compile_notices
-      unsafe = Config(TEXT_RUBRIC_AUTHORITY='calibrated_status')
-      base = compile_run_manifest(Config(), schema_version=2, workload_profile='text')
+      config = apply_overrides(_config(), {'TEXT_RUBRIC_AUTHORITY': 'calibrated_status'})
+      manifest = compile_run_manifest(config, schema_version=2, workload_profile='text', rubric_policy='require_cross_family')
+      assert [n.code for n in manifest.compile_notices] == ['CALIBRATION_RECEIPT_REQUIRED'], manifest.compile_notices
       h = Harness(pathlib.Path(tempfile.mkdtemp())/'run')
-      notices = preflight_harness(base, h, unsafe)
+      notices = preflight_harness(manifest, h, config)
       assert [n.code for n in notices] == ['CALIBRATION_RECEIPT_REQUIRED'], notices
       print('OK')
-      "` -> `OK`
+      "` -> `OK` (pasted output below)
+
+      ```
+      compile_notices: ['CALIBRATION_RECEIPT_REQUIRED']
+      preflight notices: ['CALIBRATION_RECEIPT_REQUIRED']
+      OK
+      ```
 
 - [ ] 2. (S4) Edit `src/deepreason/authority.py`: update
       `text_status_authority_issues`'s docstring to describe disclosure
@@ -63,15 +82,23 @@ One step per dr-execute-step invocation.
       from `pytest.raises(...)` around `preflight_harness(...)` to calling
       it normally and asserting `[n.code for n in notices] ==
       [<CALIBRATION_RECEIPT_REQUIRED|_UNVERIFIED>]` on its returned tuple.
-      Leave `test_runtime_cannot_mutate_frozen_text_authority_policy`
-      (`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`) untouched.
+      Per SPEC.md Addendum 1: change each test's SCENARIO from "compile
+      with the default config, recheck with a diverging one" to "compile
+      with the SAME already-triggering config used for the recheck" (no
+      `authority_policy_snapshot` divergence), so the untouched
+      `TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH` guard stays silent and the
+      test proves `preflight_harness`'s own recheck, not that unrelated
+      guard. Leave `test_runtime_cannot_mutate_frozen_text_authority_policy`
+      untouched — it already covers the manifest-divergence scenario via
+      `CALIBRATION_RECEIPT` instead.
       done-when: `python -m pytest tests/test_manifest_integration.py::test_materialized_text_status_authority_is_rechecked_before_adapter_build tests/test_manifest_integration.py::test_runtime_calibrated_status_is_unverified_before_adapter_build tests/test_manifest_integration.py::test_runtime_cannot_mutate_frozen_text_authority_policy -q` -> `3 passed`
 
-- [ ] 7. [COMMIT] (S1-S5) Ring: full file plus the two other
+- [ ] 7. (S1-S5) Ring: full file plus the two other
       `preflight_harness`/`compile_run_manifest` test files the
       blast-radius census flagged as MUST NOT MOVE, confirming they
-      still pass unchanged.
-      done-when: `python -m pytest tests/test_manifest_integration.py tests/test_run_manifest.py tests/test_v6_global_dispatch_guard.py tests/test_runtime_workload_integration.py -q` -> ends `N passed` with `0 failed` (paste N); then `git add src/deepreason/run_manifest.py src/deepreason/authority.py tests/test_manifest_integration.py && git commit` and push with retry (2s/4s/8s/16s), confirmed by `git log --oneline -1` showing the new commit and `git status --porcelain` empty for these files.
+      still pass unchanged. No commit yet — map edits land first so the
+      whole tranche lands in one commit.
+      done-when: `python -m pytest tests/test_manifest_integration.py tests/test_run_manifest.py tests/test_v6_global_dispatch_guard.py tests/test_runtime_workload_integration.py -q` -> ends `N passed` with `0 failed` (paste N).
 
 - [ ] 8. (S6) Edit `docs/map/CON-authority.md`: rewrite the "Manifest-
       mediated runs fail closed twice" paragraph (lines ~194-199) to
@@ -92,12 +119,16 @@ One step per dr-execute-step invocation.
        grep still returns zero before closing this item.
        done-when: `grep -c "calibrat\|text_status_authority\|preflight_harness" docs/map/SUB-adjudication.md` -> `0`
 
-- [ ] 11. [COMMIT] (S6,S7,S8) Full map verification and commit.
+- [ ] 11. [COMMIT] (S1-S8) Full map verification, then commit and push
+       code + tests + map together in one commit.
        done-when: `python tools/docs_verify.py` -> failures limited to
        the documented baseline (3 pre-existing `CON-run-identity.md`
-       shallow-clone failures; paste full output); then
-       `git add docs/map/CON-authority.md docs/map/SUB-manifest.md &&
-       git commit` and push with retry, `git status --porcelain` empty.
+       shallow-clone failures; paste full output); then `git add
+       src/deepreason/run_manifest.py src/deepreason/authority.py
+       tests/test_manifest_integration.py docs/map/CON-authority.md
+       docs/map/SUB-manifest.md && git commit` and push with retry
+       (2s/4s/8s/16s), confirmed by `git log --oneline -1` showing the
+       new commit and `git status --porcelain` empty.
 
 - [ ] 12. (R13) Full gate.
        done-when: `python -m pytest tests/ -q -n 4` -> paste full

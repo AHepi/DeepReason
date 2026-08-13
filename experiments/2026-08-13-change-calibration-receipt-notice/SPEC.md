@@ -519,3 +519,65 @@ of `docs/ERRATA.md` re-read in full this session, last entry is E24.)
   every item and assumption above cites at least one R/C number.
 
 Rubric: 5/5 yes
+
+## Addendum 1 — execution discovery: the two `preflight_harness` tests' original scenario collides with an out-of-scope check
+
+Found executing step 1 of CHECKLIST.md (code lands correctly; the
+discovery is about the two tests S5/S3 planned to flip, not about the
+code). Verbatim contradiction: `preflight_harness`'s body runs
+`_preflight_text_authority` FIRST, then the separate
+`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH` check (`authority_policy_snapshot(config)
+!= authority_policy_snapshot(frozen_config)`) SECOND. The two pre-existing
+tests this SPEC planned to flip
+(`test_materialized_text_status_authority_is_rechecked_before_adapter_build`,
+`test_runtime_calibrated_status_is_unverified_before_adapter_build`) both
+construct their `unsafe` config by overriding a text-authority field
+(`TEXT_RUBRIC_AUTHORITY`) AWAY from what the manifest was compiled with.
+`authority_policy_snapshot` includes that same field, so this scenario
+was ALWAYS a manifest-vs-runtime mismatch too — before this tranche, the
+calibration-receipt raise fired first and permanently masked the
+mismatch check for this exact input; the mismatch branch was live code
+but dead for this specific test shape. Converting the calibration check
+to a non-raising notice UNMASKS the mismatch check: run against the real
+code,
+```
+$ python -c "... unsafe = apply_overrides(_config(), {'TEXT_RUBRIC_AUTHORITY': 'calibrated_status'}); preflight_harness(manifest_compiled_with_default_config, harness, unsafe) ..."
+RunManifestError: TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH at /engine_config: runtime text authority policy differs from the frozen manifest
+```
+i.e. the literal flip SPEC S5 planned (raise -> success + notice) is
+FALSE for this exact scenario — it is now raise -> a DIFFERENT, still
+in-scope-to-KEEP raise (C3: `TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`
+stays a hard refusal, frozen-record protection, untouched by this
+tranche).
+
+**Resolution (smallest change, no new files, no budget growth):** these
+two tests' SCENARIO changes from "compile with the default config, then
+recheck with a diverging config" to "compile with the SAME
+already-triggering config used for the recheck" — i.e. no
+`authority_policy_snapshot` divergence, so the mismatch guard stays
+silent and the recheck exercises exactly what S3 claims: `preflight_harness`
+independently reproduces the notice from a live, non-frozen
+`text_status_authority_issues` call, not merely by inheriting
+`manifest.compile_notices`. Verified directly:
+```
+config = apply_overrides(_config(), {'TEXT_RUBRIC_AUTHORITY': 'calibrated_status'})
+manifest = compile_run_manifest(config, schema_version=2, workload_profile='text', rubric_policy='require_cross_family')
+# compile_notices: ['CALIBRATION_RECEIPT_REQUIRED']
+notices = preflight_harness(manifest, Harness(...), config)  # SAME config
+# preflight notices: ['CALIBRATION_RECEIPT_REQUIRED']
+```
+No coverage is lost: the "runtime config diverges unsafely from the
+frozen manifest" scenario these two tests used to exercise incidentally
+remains fully covered by the untouched
+`test_runtime_cannot_mutate_frozen_text_authority_policy`, which
+diverges on `CALIBRATION_RECEIPT` specifically to prove exactly that
+mismatch path — this tranche does not touch it and does not need a
+second test proving the same guard.
+
+S3 and S5's items above are amended in place by this addendum (their
+accept-checks and CHECKLIST.md step 6/1 are updated to the same-config
+scenario); no other item changes. Not a material fork requiring the
+operator (dominance test: the alternative — asserting
+`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH` instead of a notice for these
+two tests — would silently drop the very coverage S5/R10 exists to keep,
+so it is not a live option, not a 50/50 choice).
