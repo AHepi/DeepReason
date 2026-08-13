@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -48,13 +48,49 @@ every `[COMMIT]` step; EXCEEDED is a stop, decided by the calling skill.
       four terminal files; smallest carrying none), never by hard path, so a
       legitimate root rename cannot break them.
 
-- [ ] 2. (S1, S2, S3, S4) Create `src/deepreason/application/results.py` with
+- [x] 2. (S1, S2, S3, S4) Create `src/deepreason/application/results.py` with
       `results_summary(path, *, verify=False)` covering the schema's `schema`,
       `root`, `resolved_from`, `question`, `identity`, `run`, `artifacts`,
       `absences` keys, composing `findings.findings_summary` for status counts
       and the question (S2/R4).
       done-when: `python -m pytest tests/test_results_command.py -q` → the
       S3/S4/S9/S13 tests pass (the S5–S7 tests are not written yet).
+
+      RE-SCOPE, recorded not improvised: step 1's own schema test (written to
+      S1's accept) asserts the FULL top-level key set, so a module carrying
+      only steps 2's sections cannot satisfy step 2's own done-criterion. The
+      module therefore lands complete here; steps 3-5 are narrowed to adding
+      their dedicated TESTS, which is what their own done-criteria already
+      assert. No S-number moved.
+
+      DISCOVERY, recorded as SPEC.md S4a: a `deepreason-run-result-v2` payload
+      for a FAILED run carries `error`/`error_type` and NO
+      `survivors`/`frontier` — the five smallest committed roots with all four
+      terminal files are all of that shape. `survivor_count` and `frontier`
+      therefore emit typed absences (`NO_SURVIVOR_RECORD`,
+      `NO_FRONTIER_RECORD`) instead of the false zero `len(None or ())` would
+      produce, and the S4 equality test now selects its fixture by the property
+      "publishes a survivor set" rather than "has run-result.json".
+
+      CORRECTION to step 5's text: `RESUMABLE_STOP_REASONS` lives in
+      `deepreason.workflow.lifecycle`, not `runtime/stop.py`.
+
+      PROOF (`python -m pytest tests/test_results_command.py -q`):
+
+          .......                                                      [100%]
+          7 passed in 18.41s
+
+      MUTATION PROOF for the R17 read-only test (rule 3 — a test nobody has
+      watched fail is not evidence): inserting a single
+      `(root / "MUTATION_PROBE.tmp").write_text("x")` into `results_summary`
+      turned it red —
+
+          tests/test_results_command.py:234: AssertionError
+          FAILED ...::test_results_summary_writes_nothing_into_a_committed_root
+          1 failed in 9.67s
+
+      — and the probe was reverted, the stray file deleted, and all 7 tests
+      re-run green.
 
 - [ ] 3. (S5) Add `adjudication` to the reader: `judge_calls` from
       `event.llm.role == "judge"`, and the `trial-observation` /

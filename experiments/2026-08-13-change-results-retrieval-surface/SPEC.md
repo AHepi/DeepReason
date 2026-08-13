@@ -104,6 +104,31 @@ accept: a test asserting all six keys exist on a root WITH `run-status.json`
 accept: test asserts `survivor_count == len(json.load(run-result.json)['survivors'])`
 on a committed root carrying that file.
 
+**S4a (R7, R12) — recorded refinement of S4, found at step 2 by the record.**
+S4 as written assumed every root carrying `run-result.json` publishes
+`survivors` and `frontier`. Measured otherwise:
+
+    $ # every committed root with all four terminal files, smallest first
+    experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/
+      home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2
+      schema: deepreason-run-result-v2 | has survivors: False
+      keys: ['canonical_bridge_eligible','completion_status','error',
+             'error_type','model_execution','schema','state','stop']
+    (same for the next four smallest — every one an `error`/`error_type`
+     result, i.e. a run that failed before publishing a survivor set)
+
+A `deepreason-run-result-v2` payload for a FAILED run carries `error` and
+`error_type` and no `survivors`/`frontier` at all. after: those two facts
+become typed absences with their own reasons — `NO_SURVIVOR_RECORD` and
+`NO_FRONTIER_RECORD` — rather than the false zero `len(None or ()) == 0` would
+produce. This is R12 applied to a case S4 did not foresee, not new scope: the
+requirement ("Unknown/absent facts print as typed absences, never omitted")
+already governs it.
+accept: a test asserts `survivor_count` is a typed absence with reason
+`NO_SURVIVOR_RECORD` on a root whose `run-result.json` lacks the key, and the
+S4 equality holds on a root that carries it (both selected by property, not by
+path).
+
 **S5 (R8)** | same module. after: `adjudication.judge_calls` = count of logged
 events whose `event.llm.role == "judge"`; `trial_observations` / `trial_declined`
 / `trial_blocked` = counts keyed by the outcome/reason carried in the Measure

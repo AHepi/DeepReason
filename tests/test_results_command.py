@@ -59,6 +59,23 @@ def _smallest_root_with(*names: str) -> Path:
     pytest.skip(f"no committed root carries all of {names}")
 
 
+def _smallest_root_publishing(key: str) -> Path:
+    """Smallest committed root whose `run-result.json` carries ``key``.
+
+    A FAILED run publishes a `deepreason-run-result-v2` payload with
+    `error`/`error_type` and no survivor or frontier set, so "has
+    run-result.json" is not the same property as "published a survivor set".
+    """
+
+    for root in _tracked_roots():
+        payload = root / "run-result.json"
+        if not payload.exists():
+            continue
+        if key in json.loads(payload.read_text()):
+            return root
+    pytest.skip(f"no committed root publishes run-result.json[{key!r}]")
+
+
 def _smallest_root_without(*names: str) -> Path:
     for root in _tracked_roots():
         if not any((root / name).exists() for name in names):
@@ -129,17 +146,42 @@ def test_results_summary_reports_artifact_survivor_and_frontier_counts():
 
     from deepreason.application.results import results_summary
 
-    root = _smallest_root_with(*_TERMINAL_FILES)
+    root = _smallest_root_publishing("survivors")
     summary = results_summary(root)
     result = json.loads((root / "run-result.json").read_text())
-    status = json.loads((root / "run-status.json").read_text())
 
     assert summary["artifacts"]["survivor_count"] == len(result["survivors"])
     assert summary["artifacts"]["frontier"]["count"] == len(result["frontier"])
     assert summary["artifacts"]["frontier"]["artifact_ids"] == list(result["frontier"])
-    assert summary["artifacts"]["frontier"]["problem_id"] == status["problem_id"]
+    if (root / "run-status.json").exists():
+        status = json.loads((root / "run-status.json").read_text())
+        assert summary["artifacts"]["frontier"]["problem_id"] == status["problem_id"]
     for label in ("accepted", "refuted", "suspended"):
         assert isinstance(summary["artifacts"][label], int)
+
+
+def test_a_failed_run_reports_no_survivor_set_rather_than_zero(tmp_path):
+    """S4a/R12: a missing survivor set is an absence, never a false zero.
+
+    A `deepreason-run-result-v2` payload for a run that failed before
+    publication carries `error`/`error_type` and no `survivors`/`frontier` —
+    counting that as 0 would state a result the record never held.
+    """
+
+    from deepreason.application.results import results_summary
+
+    for root in _tracked_roots():
+        payload = root / "run-result.json"
+        if not payload.exists():
+            continue
+        if "survivors" in json.loads(payload.read_text()):
+            continue
+        summary = results_summary(root)
+        assert _is_absence(summary["artifacts"]["survivor_count"])
+        assert summary["artifacts"]["survivor_count"]["reason"] == "NO_SURVIVOR_RECORD"
+        assert "NO_SURVIVOR_RECORD" in summary["absences"]
+        return
+    pytest.skip("every committed run-result.json publishes a survivor set")
 
 
 def test_absent_facts_are_typed_absences_not_omitted_keys():
