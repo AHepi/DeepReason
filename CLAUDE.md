@@ -30,8 +30,17 @@ and forgotten inputs:
   dr-deliver-change). Authority is the operator's verbatim words,
   ledgered in REQUEST.md; every artifact traces to requirement numbers.
 
+- **The operator asks what is broken / unused / out of date** →
+  `dr-audit-orchestrator` (dimensions: broken, dead, docs-drift,
+  spec-drift, goal-trace). Read-only: produces AUDIT_REPORT.md plus a
+  ready-to-send fix prompt per finding; every verdict compares against
+  `docs/AUDIT_BASELINES.md`. Rated for inexpensive models — every step
+  is a command, a paste, or a baseline comparison.
+
 Cross-routing: a defect found mid-change is PARKED, not fixed; a change
 wished for mid-defect is PARKED, not implemented. One tranche, one goal.
+The audit family never fixes anything anywhere — findings become parked
+prompts for the other two families.
 
 Cutting across both families, three skills:
 

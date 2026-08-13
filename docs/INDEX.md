@@ -109,6 +109,9 @@ showed to be wrong. Never edits the original claim in place.
 - [`RUN_PLAN_TEMPLATE.md`](RUN_PLAN_TEMPLATE.md),
   [`SMALL_MODEL_COMPATIBILITY.md`](SMALL_MODEL_COMPATIBILITY.md),
   [`RESEARCH_BACKEND.md`](RESEARCH_BACKEND.md).
+- [`AUDIT_BASELINES.md`](AUDIT_BASELINES.md) — expected instrument
+  outputs the dr-audit skill family compares against; moves only in
+  the same commit as whatever moved a value.
 - [`OLLAMA_CLOUD_OPERATIONS.md`](OLLAMA_CLOUD_OPERATIONS.md) —
   operator-supplied provider intelligence (2026-08-12): plan-gated
   account concurrency, 429 disambiguation (queue vs quota), mid-stream
