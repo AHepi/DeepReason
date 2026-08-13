@@ -119,3 +119,19 @@ required.
 | DD7 | docs-drift | docs/SMALL_MODEL_COMPATIBILITY.md header claim | pass | drifted | proof/docs-unchecked-claims.txt | parked |
 | DD8 | docs-drift | docs/RESEARCH_BACKEND.md Status line | pass | drifted (already errata E20) | proof/docs-unchecked-claims.txt | baseline |
 | DD9 | docs-drift | docs/EXPERIMENT_PROGRAM_2026-07.md claim | pass | not mechanically checkable | proof/docs-unchecked-claims.txt | noted |
+| SD1 | spec-drift | ContextRequest (spec) vs ContextRequestV1 (code) | pass | spec-orphan | proof/spec-orphan-detail.txt | parked |
+| SD2 | spec-drift | R_t (spec notation) | pass | covered | proof/spec-orphan-detail.txt | baseline |
+| SD3 | spec-drift | codec:json | pass | spec-orphan | proof/spec-orphan-detail.txt | parked |
+| SD4 | spec-drift | deepreason.config.load | pass | covered | proof/spec-orphan-detail.txt | baseline |
+| SD5 | spec-drift | novel-case | pass | spec-orphan | proof/spec-orphan-detail.txt | parked |
+| SD6 | spec-drift | positions.accepted | pass | covered | proof/spec-orphan-detail.txt | baseline |
+| SD7 | spec-drift | workflow-resume-decision.v1 (3-way spelling drift) | pass | spec-orphan | proof/spec-orphan-detail.txt | parked |
+| SD8 | spec-drift | CLI flags (34/75 spec-silent) | pass | spec-silent, batched | proof/tree-cli-flags.txt | parked |
+| SD9 | spec-drift | config fields (51/75 spec-silent) | pass | spec-silent, batched | proof/tree-config-fields.txt | parked |
+| SD10 | spec-drift | typed strings: manifest-generation V3-V6 (28/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD11 | spec-drift | typed strings: preparation/managed-run (20/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD12 | spec-drift | typed strings: run-input/manifest-file (11/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD13 | spec-drift | typed strings: routing/bridge presentation (9/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD14 | spec-drift | typed strings: credential/path-safety (9/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD15 | spec-drift | typed strings: judge-family/seats (6/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |
+| SD16 | spec-drift | typed strings: remainder (35/118) | pass | spec-silent, batched | proof/tree-typed-strings.txt | parked |

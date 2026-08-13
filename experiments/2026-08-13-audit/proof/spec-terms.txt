@@ -1,0 +1,244 @@
+docs/harness-spec-v1.3.md:`AUDIT_PERIOD`
+docs/harness-spec-v1.3.md:`A`
+docs/harness-spec-v1.3.md:`CAPTURE_W`
+docs/harness-spec-v1.3.md:`FLOOR`
+docs/harness-spec-v1.3.md:`HOLDOUT_SHARE`
+docs/harness-spec-v1.3.md:`HV_B`
+docs/harness-spec-v1.3.md:`HV_K`
+docs/harness-spec-v1.3.md:`HV_MIN`
+docs/harness-spec-v1.3.md:`INTEGRATION_BUDGET_SHARE`
+docs/harness-spec-v1.3.md:`JUDGE_ERR_MAX`
+docs/harness-spec-v1.3.md:`K`
+docs/harness-spec-v1.3.md:`LAMBDA_FLOOR`
+docs/harness-spec-v1.3.md:`NEAR_DUP_EPS`
+docs/harness-spec-v1.3.md:`N_SCHOOLS`
+docs/harness-spec-v1.3.md:`PACK_TOKEN_BUDGET`
+docs/harness-spec-v1.3.md:`PARETO_AXES`
+docs/harness-spec-v1.3.md:`PRECEDENT_K`
+docs/harness-spec-v1.3.md:`RESEED_DIST_MIN`
+docs/harness-spec-v1.3.md:`RETRY_MAX`
+docs/harness-spec-v1.3.md:`R_t`
+docs/harness-spec-v1.3.md:`Reseed`
+docs/harness-spec-v1.3.md:`Reveal`
+docs/harness-spec-v1.3.md:`STANCE_DECAY`
+docs/harness-spec-v1.3.md:`TRIAL_PARAPHRASE_N`
+docs/harness-spec-v1.3.md:`USER_RULINGS_BUDGET`
+docs/harness-spec-v1.3.md:`VS_K`
+docs/harness-spec-v1.3.md:`V`
+docs/harness-spec-v1.3.md:`XEXAM_SHARE`
+docs/harness-spec-v1.3.md:`a`
+docs/harness-spec-v1.3.md:`accepted`
+docs/harness-spec-v1.3.md:`addr`
+docs/harness-spec-v1.3.md:`artifact.warrants`
+docs/harness-spec-v1.3.md:`ask-user`
+docs/harness-spec-v1.3.md:`att`
+docs/harness-spec-v1.3.md:`budget`
+docs/harness-spec-v1.3.md:`capture`
+docs/harness-spec-v1.3.md:`carry`
+docs/harness-spec-v1.3.md:`codec:json`
+docs/harness-spec-v1.3.md:`crit`
+docs/harness-spec-v1.3.md:`criteria`
+docs/harness-spec-v1.3.md:`decisive_point`
+docs/harness-spec-v1.3.md:`deepreason.config.Config`
+docs/harness-spec-v1.3.md:`deepreason.config.load`
+docs/harness-spec-v1.3.md:`deepreason.llm.adapter.build_adapter`
+docs/harness-spec-v1.3.md:`defender`
+docs/harness-spec-v1.3.md:`dep`
+docs/harness-spec-v1.3.md:`dependence`
+docs/harness-spec-v1.3.md:`discrimination`
+docs/harness-spec-v1.3.md:`docket`
+docs/harness-spec-v1.3.md:`embedder`
+docs/harness-spec-v1.3.md:`eval:program`
+docs/harness-spec-v1.3.md:`eval:rubric`
+docs/harness-spec-v1.3.md:`evidence`
+docs/harness-spec-v1.3.md:`expand`
+docs/harness-spec-v1.3.md:`fail`
+docs/harness-spec-v1.3.md:`frontier`
+docs/harness-spec-v1.3.md:`hv-floor`
+docs/harness-spec-v1.3.md:`id`
+docs/harness-spec-v1.3.md:`integration`
+docs/harness-spec-v1.3.md:`j`
+docs/harness-spec-v1.3.md:`k`
+docs/harness-spec-v1.3.md:`kind`
+docs/harness-spec-v1.3.md:`mention`
+docs/harness-spec-v1.3.md:`novel-case`
+docs/harness-spec-v1.3.md:`observation_valued`
+docs/harness-spec-v1.3.md:`observation`
+docs/harness-spec-v1.3.md:`overrun`
+docs/harness-spec-v1.3.md:`pass`
+docs/harness-spec-v1.3.md:`per_edit_steps`
+docs/harness-spec-v1.3.md:`program`
+docs/harness-spec-v1.3.md:`provenance.school`
+docs/harness-spec-v1.3.md:`refuted`
+docs/harness-spec-v1.3.md:`remove-arbitrariness`
+docs/harness-spec-v1.3.md:`rubric`
+docs/harness-spec-v1.3.md:`sandbox_abort`
+docs/harness-spec-v1.3.md:`schools`
+docs/harness-spec-v1.3.md:`seed`
+docs/harness-spec-v1.3.md:`seq`
+docs/harness-spec-v1.3.md:`skeleton-wf`
+docs/harness-spec-v1.3.md:`step`
+docs/harness-spec-v1.3.md:`steps`
+docs/harness-spec-v1.3.md:`successor`
+docs/harness-spec-v1.3.md:`suspended_unsupported`
+docs/harness-spec-v1.3.md:`suspended`
+docs/harness-spec-v1.3.md:`time_ms`
+docs/harness-spec-v1.3.md:`trace_ref`
+docs/harness-spec-v1.3.md:`validity_node`
+docs/harness-spec-v1.3.md:`w`
+docs/harness-spec-v1.3.md:`why`
+docs/harness-spec-v1.3.md:`x`
+docs/harness-spec-v1.4-amendment.md:`AGENT.md`
+docs/harness-spec-v1.4-amendment.md:`A`
+docs/harness-spec-v1.4-amendment.md:`addr`
+docs/harness-spec-v1.4-amendment.md:`answered`
+docs/harness-spec-v1.4-amendment.md:`att`
+docs/harness-spec-v1.4-amendment.md:`carry`
+docs/harness-spec-v1.4-amendment.md:`conflicting_evidence`
+docs/harness-spec-v1.4-amendment.md:`dep`
+docs/harness-spec-v1.4-amendment.md:`fcntl`
+docs/harness-spec-v1.4-amendment.md:`harness-spec-v1.3.md`
+docs/harness-spec-v1.4-amendment.md:`insufficient_evidence`
+docs/harness-spec-v1.4-amendment.md:`outside_scope`
+docs/harness-spec-v1.4-amendment.md:`partially_answered`
+docs/harness-spec-v1.4-amendment.md:`possible_next_move`
+docs/harness-spec-v1.4-amendment.md:`underdetermined`
+docs/harness-spec-v1.4-amendment.md:`unfinished`
+docs/harness-spec-v1.4-amendment.md:`why_keep_this`
+docs/harness-spec-v1.5-amendment.md:`ContextRequest`
+docs/harness-spec-v1.5-amendment.md:`ControlEventPayloadV1`
+docs/harness-spec-v1.5-amendment.md:`GuardResultV1`
+docs/harness-spec-v1.5-amendment.md:`PAUSED`
+docs/harness-spec-v1.5-amendment.md:`ProposalReceiptV1`
+docs/harness-spec-v1.5-amendment.md:`RESUMED`
+docs/harness-spec-v1.5-amendment.md:`RepairWorkOrderV1`
+docs/harness-spec-v1.5-amendment.md:`Rule.CONTROL`
+docs/harness-spec-v1.5-amendment.md:`RunManifest`
+docs/harness-spec-v1.5-amendment.md:`STOPPED`
+docs/harness-spec-v1.5-amendment.md:`SchoolRouteReceiptV1`
+docs/harness-spec-v1.5-amendment.md:`StateDiff`
+docs/harness-spec-v1.5-amendment.md:`StopController`
+docs/harness-spec-v1.5-amendment.md:`TextRunApplicationService`
+docs/harness-spec-v1.5-amendment.md:`TransitionDecisionV1`
+docs/harness-spec-v1.5-amendment.md:`WORKFLOW_RETRY_STARTED`
+docs/harness-spec-v1.5-amendment.md:`WorkOrderEnvelopeV1`
+docs/harness-spec-v1.5-amendment.md:`active_conjecture`
+docs/harness-spec-v1.5-amendment.md:`capability_mismatch`
+docs/harness-spec-v1.5-amendment.md:`complete`
+docs/harness-spec-v1.5-amendment.md:`conditioning_only`
+docs/harness-spec-v1.5-amendment.md:`harness-spec-v1.3.md`
+docs/harness-spec-v1.5-amendment.md:`harness-spec-v1.4-amendment.md`
+docs/harness-spec-v1.5-amendment.md:`legacy`
+docs/harness-spec-v1.5-amendment.md:`need_context`
+docs/harness-spec-v1.5-amendment.md:`observe_only`
+docs/harness-spec-v1.5-amendment.md:`route_bound`
+docs/harness-spec-v1.5-amendment.md:`run-stop.json`
+docs/harness-spec-v1.5-amendment.md:`shadow`
+docs/harness-spec-v1.5-amendment.md:`stuck`
+docs/harness-spec-v1.5-amendment.md:`workflow-lifecycle-decision`
+docs/harness-spec-v1.5-amendment.md:`workflow-lifecycle-snapshot`
+docs/harness-spec-v1.5-amendment.md:`workflow-resume-decision.v1`
+docs/harness-spec-v1.5-amendment.md:`workflow-stop-metrics-observation`
+docs/harness-spec-v1.6-amendment.md:`CONSUMED`
+docs/harness-spec-v1.6-amendment.md:`DISPATCHED`
+docs/harness-spec-v1.6-amendment.md:`InquiryCapabilityPolicyV1`
+docs/harness-spec-v1.6-amendment.md:`PROPOSED`
+docs/harness-spec-v1.6-amendment.md:`SimulationProposalV1`
+docs/harness-spec-v1.6-amendment.md:`SimulationWorkOrderV1`
+docs/harness-spec-v1.6-amendment.md:`active_inquiry`
+docs/harness-spec-v1.6-amendment.md:`conjecturer.turn.v5`
+docs/harness-spec-v1.6-amendment.md:`control.event.v2`
+docs/harness-spec-v1.6-amendment.md:`declarative_numeric_v1`
+docs/harness-spec-v1.6-amendment.md:`dispatch_interrupted`
+docs/harness-spec-v1.6-amendment.md:`dossier-pack-receipt.v1`
+docs/harness-spec-v1.6-amendment.md:`inquiry-capabilities.v1`
+docs/harness-spec-v1.6-amendment.md:`inquiry.active.v1`
+docs/harness-spec-v1.6-amendment.md:`parameters`
+docs/harness-spec-v1.6-amendment.md:`run-input-manifest.v1`
+docs/harness-spec-v1.6-amendment.md:`run-manifest.json`
+docs/harness-spec-v1.6-amendment.md:`sandboxed_python_v1`
+docs/harness-spec-v1.6-amendment.md:`sealed_inputs`
+docs/harness-spec-v1.6-amendment.md:`workflow.controller.v2`
+docs/harness-spec-v1.7-amendment.md:`CLAUDE.md`
+docs/harness-spec-v1.7-amendment.md:`LEGACY_CRITICISM_ENABLED`
+docs/harness-spec-v1.7-amendment.md:`Literal`
+docs/harness-spec-v1.7-amendment.md:`RunManifest`
+docs/harness-spec-v1.7-amendment.md:`SCHOOL_ROUTE_LEASE_MISMATCH`
+docs/harness-spec-v1.7-amendment.md:`SCHOOL_SEATS_ENABLED`
+docs/harness-spec-v1.7-amendment.md:`SeatBindingsEventPayloadV1`
+docs/harness-spec-v1.7-amendment.md:`adjudication-blindness`
+docs/harness-spec-v1.7-amendment.md:`bridge-epistemic`
+docs/harness-spec-v1.7-amendment.md:`bridge-grounding`
+docs/harness-spec-v1.7-amendment.md:`candidate_checker`
+docs/harness-spec-v1.7-amendment.md:`coder`
+docs/harness-spec-v1.7-amendment.md:`config-referee.v1`
+docs/harness-spec-v1.7-amendment.md:`config_referee`
+docs/harness-spec-v1.7-amendment.md:`conjecture`
+docs/harness-spec-v1.7-amendment.md:`conjecturer.turn.v7`
+docs/harness-spec-v1.7-amendment.md:`conjecturer_turn_contract`
+docs/harness-spec-v1.7-amendment.md:`detection-total`
+docs/harness-spec-v1.7-amendment.md:`grounding-review`
+docs/harness-spec-v1.7-amendment.md:`harness-spec-v1.3.md`
+docs/harness-spec-v1.7-amendment.md:`harness-spec-v1.4-amendment.md`
+docs/harness-spec-v1.7-amendment.md:`harness-spec-v1.5-amendment.md`
+docs/harness-spec-v1.7-amendment.md:`harness-spec-v1.6-amendment.md`
+docs/harness-spec-v1.7-amendment.md:`main`
+docs/harness-spec-v1.7-amendment.md:`manifest.criticism_policy.bindings`
+docs/harness-spec-v1.7-amendment.md:`observe_only`
+docs/harness-spec-v1.7-amendment.md:`positions.accepted`
+docs/harness-spec-v1.7-amendment.md:`program:candidate_checker`
+docs/harness-spec-v1.7-amendment.md:`recorded_seat_bindings`
+docs/harness-spec-v1.7-amendment.md:`resolve_school_role_lease`
+docs/harness-spec-v1.7-amendment.md:`resolve_seat_bindings_by_group`
+docs/harness-spec-v1.7-amendment.md:`resolve_seat_bindings`
+docs/harness-spec-v1.7-amendment.md:`scratch`
+docs/harness-spec-v1.7-amendment.md:`seat-bindings.v1`
+docs/harness-spec-v1.7-amendment.md:`simulation`
+docs/harness-spec-v1.7-amendment.md:`time-travel`
+docs/harness-spec-v1.3.md:27:## 0. Core invariant (do not violate)
+docs/harness-spec-v1.3.md:35:## 1. Ontology (one schema)
+docs/harness-spec-v1.3.md:155:## 2. Formation rules (well-formedness; §3.2)
+docs/harness-spec-v1.3.md:165:## 3. Transition rules (§3.3)
+docs/harness-spec-v1.3.md:206:## 4. Adjudication — two-pass (normative pseudocode)
+docs/harness-spec-v1.3.md:231:## 5. Fallibilism axioms (§3.5) — enforce as invariants
+docs/harness-spec-v1.3.md:239:## 6. Measures (§3.4)
+docs/harness-spec-v1.3.md:271:## 7. Unification reflex (coupling → reach → unification)
+docs/harness-spec-v1.3.md:326:## 8. Views (not types)
+docs/harness-spec-v1.3.md:332:## 9. LLM adapter
+docs/harness-spec-v1.3.md:348:## 10. Informal domains
+docs/harness-spec-v1.3.md:405:## 11. Capture control (two surfaces)
+docs/harness-spec-v1.3.md:484:## 12. Research
+docs/harness-spec-v1.3.md:495:## 13. Interface (CLI first)
+docs/harness-spec-v1.3.md:499:## 14. Scheduler & stack
+docs/harness-spec-v1.3.md:523:## 15. Config knobs (single typed schema, optional profile)
+docs/harness-spec-v1.3.md:562:## 16. Phases & acceptance tests
+docs/harness-spec-v1.3.md:576:## 17. Non-goals & residue (state honestly; do not paper over)
+docs/harness-spec-v1.4-amendment.md:10:## A. Control and authority boundary
+docs/harness-spec-v1.4-amendment.md:36:## B. Advisory scratch ontology
+docs/harness-spec-v1.4-amendment.md:62:## C. Similarity, retrieval, and attention
+docs/harness-spec-v1.4-amendment.md:90:## D. Grounded final-output bridge
+docs/harness-spec-v1.4-amendment.md:134:## E. Manifest, compatibility, and interfaces
+docs/harness-spec-v1.5-amendment.md:15:## A. School lineage and route topology
+docs/harness-spec-v1.5-amendment.md:44:## B. Scratch attention and bounded model recourse
+docs/harness-spec-v1.5-amendment.md:75:## C. Authority envelope and control replay
+docs/harness-spec-v1.5-amendment.md:109:## D. Shadow and active scope
+docs/harness-spec-v1.5-amendment.md:134:## E. Foreign-school criticism
+docs/harness-spec-v1.5-amendment.md:149:## F. Local repair and workflow retry
+docs/harness-spec-v1.5-amendment.md:177:## G. Failed calls and accounting
+docs/harness-spec-v1.5-amendment.md:189:## H. Stop, cancellation, and continuation boundary
+docs/harness-spec-v1.5-amendment.md:218:## I. Interfaces and compatibility
+docs/harness-spec-v1.6-amendment.md:3:## Status and scope
+docs/harness-spec-v1.6-amendment.md:14:## Frozen run input
+docs/harness-spec-v1.6-amendment.md:35:## Manifest v5 authority
+docs/harness-spec-v1.6-amendment.md:56:## Model-facing simulation request
+docs/harness-spec-v1.6-amendment.md:80:## Capability process
+docs/harness-spec-v1.6-amendment.md:110:## Execution and epistemic status
+docs/harness-spec-v1.6-amendment.md:124:## Fresh result work
+docs/harness-spec-v1.6-amendment.md:136:## Replay and verification
+docs/harness-spec-v1.7-amendment.md:25:## A. Seats and `seat-bindings.v1`
+docs/harness-spec-v1.7-amendment.md:46:## B. `conjecturer.turn.v7` (dual-mode conjecture, additive)
+docs/harness-spec-v1.7-amendment.md:59:## C. `candidate_checker`
+docs/harness-spec-v1.7-amendment.md:69:## D. School-seat routing
+docs/harness-spec-v1.7-amendment.md:81:## E. Adjudication-blindness (blind-judge structure)
+docs/harness-spec-v1.7-amendment.md:95:## F. Config referee
+docs/harness-spec-v1.7-amendment.md:110:## Standing statutes (unchanged, restated for this amendment's scope)
