@@ -238,6 +238,69 @@ def test_results_summary_writes_nothing_into_a_committed_root():
     }
 
 
+def _root_by_adjudication(*, ran: bool) -> Path:
+    """Smallest committed root that did (or did not) run a defended trial.
+
+    Selected by the PROPERTY that produces the fact — a judge call or a
+    `trial-*` signal in the log — so reclassifying either empties the witness
+    set and skips loudly rather than passing over nothing.
+    """
+
+    from deepreason.harness import Harness
+
+    for root in _tracked_roots():
+        try:
+            events = tuple(Harness(root, read_only=True).log.read())
+        except Exception:  # noqa: BLE001 - a legacy root may defeat the reader
+            continue
+        judges = sum(
+            1 for event in events
+            if event.llm is not None and event.llm.role == "judge"
+        )
+        trials = sum(
+            1 for event in events
+            if event.inputs and str(event.inputs[0]).startswith("trial-")
+        )
+        if ran and judges and trials:
+            return root
+        if not ran and not judges and not trials:
+            return root
+    pytest.skip(f"no committed root with adjudication ran={ran}")
+
+
+def test_adjudication_counts_judge_calls_and_trial_verdicts():
+    """R8: defended-trial verdict counts and judge-call count when adjudication ran."""
+
+    from deepreason.application.results import results_summary
+
+    summary = results_summary(_root_by_adjudication(ran=True))
+    adjudication = summary["adjudication"]
+
+    assert adjudication["ran"] is True
+    assert adjudication["judge_calls"] > 0
+    verdicts = (
+        adjudication["trial_observations"]
+        | adjudication["trial_declined"]
+        | adjudication["trial_blocked"]
+    )
+    assert verdicts, "a root carrying trial-* signals must report some verdict"
+    assert all(isinstance(count, int) for count in verdicts.values())
+
+
+def test_adjudication_absence_is_a_typed_zero_not_a_missing_key():
+    """R8/R12: 'no trial ran' is a fact worth stating, not a gap."""
+
+    from deepreason.application.results import results_summary
+
+    adjudication = results_summary(_root_by_adjudication(ran=False))["adjudication"]
+
+    assert adjudication["ran"] is False
+    assert adjudication["judge_calls"] == 0
+    assert adjudication["trial_observations"] == {}
+    assert adjudication["trial_declined"] == {}
+    assert adjudication["trial_blocked"] == {}
+
+
 def test_results_summary_carries_its_schema_and_resolution_provenance():
     """R5/R11: a stable, self-identifying record — nothing model-authored."""
 

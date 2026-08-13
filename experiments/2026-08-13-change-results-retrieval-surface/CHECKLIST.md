@@ -1,6 +1,6 @@
 # Checklist for: one discoverable way to retrieve run results — `deepreason results`
 
-State: next=3 blockers=none
+State: next=4 blockers=none
 Map ids this plan was scoped from: `DR-SUB-application` (owns
 `src/deepreason/application/` and `src/deepreason/cli/` — the covering document
 for both the reader and the verb), `DR-SUB-verification` (read-only use of
@@ -100,12 +100,25 @@ it.
       — and the probe was reverted, the stray file deleted, and all 7 tests
       re-run green.
 
-- [ ] 3. (S5) Add `adjudication` to the reader: `judge_calls` from
+- [x] 3. (S5) Add `adjudication` to the reader: `judge_calls` from
       `event.llm.role == "judge"`, and the `trial-observation` /
       `trial-declined` / `trial-blocked:<reason>` Measure counts.
       done-when: a new test in `tests/test_results_command.py` asserts
       `ran is True` and `judge_calls > 0` on a committed root carrying
       `trial-declined` events, and a typed-zero `ran is False` on one without.
+
+      Both fixtures are selected by the PROPERTY that produces the fact (a
+      judge-role LLM call and a `trial-*` signal in the log), so reclassifying
+      either empties the witness set and skips loudly rather than passing over
+      nothing. Witnesses found today: `experiments/bronze_flat_2026-07-13/
+      qwen3_5_397b` (8 judge calls, 19 trial signals) and
+      `experiments/live_compare_2026-07-28/deepseek/shallow-runs/
+      shallow-dc6fe3f9c26cede686906a16` (neither).
+
+      PROOF (`python -m pytest tests/test_results_command.py -q -k adjudication`):
+
+          ..                                                           [100%]
+          2 passed, 7 deselected in 34.58s
 
 - [ ] 4. (S6) Add `verification` to the reader: stored
       `REPLAY_VALIDATION.json` by default, `verify_root_report(root,
