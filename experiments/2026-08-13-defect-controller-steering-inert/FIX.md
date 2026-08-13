@@ -1,11 +1,48 @@
 # Fix: anchor each role's control-barrier envelope to the cap the run was actually configured with, and make an unsteerable controller say so
 
-**STATUS: STOPPED FOR OPERATOR APPROVAL.** The correct fix requires a
+**STATUS: APPROVED 2026-08-13 — Road A.** The operator was presented the
+fork below and selected "Approve Road A", authorizing the ~12-line change
+to the authorization predicate in `src/deepreason/invariants.py` (frozen
+surface #3) on the stated conditions: the change is strictly widening, it
+is provably a no-op on all 104 committed logs, and the 42-root sweep is a
+proof obligation before the commit lands. That authorization covers
+`invariants.py:3609-3620` and nothing else frozen; any further frozen
+surface encountered during implementation is a fresh stop.
+
+Original gate text, kept for the record:
+
+**STOPPED FOR OPERATOR APPROVAL.** The correct fix requires a
 change inside `src/deepreason/invariants.py`, which
 `docs/map/INV-frozen-surfaces.md` names as frozen surface #3. GOAL.md and
 the tranche brief both expected "frozen surfaces: none". This document
 states the fork, prices it, proves the safety claim from the record, and
 recommends. No production code has been changed.
+
+## Added condition (operator, 2026-08-13, verbatim)
+
+> "With the added condition that role assigned limits are optional"
+
+Binding on this fix. A role's assigned limit (its `max_tokens` pin) is
+OPTIONAL: a manifest may bind a role with no cap assigned at all, and that
+is a supported configuration, never an error and never a denial (the
+operator's standing "all configurations should be allowed" law). Two
+consequences the implementation must honour:
+
+  - Nothing in this fix may REQUIRE a role to carry an assigned limit.
+    `cap_envelope(knob, None)` falls back to the static/default shape;
+    no anchoring, no refusal, no exception.
+  - A role with no assigned limit must not be SILENTLY skipped either —
+    that is the same defect shape in a new place. The controller does not
+    invent a limit the operator declined to assign; it records the role as
+    unsteerable with the typed reason `no-assigned-limit`.
+
+This widens the typed record from "fires only when the controller can
+steer nothing" to "the controller states its authority over this run
+once, and again whenever that authority changes": one
+`controller-authority` Measure record carrying `full` / `partial` /
+`none`, the steerable roles, and every unsteerable role with its reason.
+An empty steerable set is the `none` case the original requirement asked
+for; the partial case is the one this added condition exposes.
 
 Guarantee restored: **a role the run binds is a role the controller may
 calibrate — within the range the operator configured, never outside it —
@@ -133,9 +170,24 @@ that it has none.
     and imports one more name from `deepreason.controller`, which
     `invariants.py:18` already imports from.
 
-Estimated diff: ~86 production lines across 2 files (74 controller, 12
-invariants), plus a new test file and the map documents. Within the
-<=150 budget.
+### Amendment 1 (2026-08-13, during implementation) — a third change site
+
+`src/deepreason/signals.py` — the signal registry. FIX.md missed it and
+the full gate caught it:
+`tests/test_signals.py::test_every_emitted_signal_is_registered` failed
+with `unregistered signals emitted by the source tree:
+['controller-authority']`. Every Measure tag the source tree emits must
+carry a registry entry describing it; `controller-update`,
+`controller-rehydration` and `controller-hold:` are already there, so
+`controller-authority` joining them is the registry working exactly as
+designed, not a new obligation. Recorded as an amendment rather than
+absorbed silently, per this workflow's rule that an unlisted change site
+stops and amends before it is edited. One dictionary entry, no logic.
+
+Estimated diff: ~86 production lines across 3 files (74 controller, 12
+invariants, 1 signals registry entry), plus a new test file and the map
+documents. Ceiling for the mechanized budget gate: **<=150 insertions**
+over those three paths.
 
 ## Safety of the frozen-surface change — proved from the record, not argued
 
