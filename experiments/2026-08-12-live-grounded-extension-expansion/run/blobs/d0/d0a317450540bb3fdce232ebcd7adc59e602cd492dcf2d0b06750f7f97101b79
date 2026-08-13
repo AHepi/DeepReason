@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The problem asks to expand and strengthen the grounded extension (the semantics), but SRC_004 explicitly states 'The semantics is unchanged' and restricts its contribution to an incremental maintenance algorithm. An operational optimization that changes neither which conjectures are accepted, refuted, nor suspended does not expand or strengthen the semantics; it merely reorganizes computation. The proposal therefore does not answer the problem as stated.
+
+TARGET:
+Develop an incremental algorithm that maintains the grounded extension under single-edge additions and deletions using a memoized affected region and local re-computation of the least fixed point. The semantics is unchanged, but the expansion is in operational strength: amortized polynomial updates. This is valuable for interactive conjecture refinement where edges are added as warrants evolve. Criticizable: worst-case complexity may degrade; memory overhead of dependency tracking is nontrivial; the proposal does not expand the expressiveness of the semantics.

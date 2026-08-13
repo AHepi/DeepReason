@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The critic's technical objection—that witness selection is non-monotonic because 'an accepted defender chosen at round k to justify node x may itself be defeated at round k+1, so the witness component for x can decrease while the label component is non-decreasing'",
+  "verdict": "fail"
+}
+```

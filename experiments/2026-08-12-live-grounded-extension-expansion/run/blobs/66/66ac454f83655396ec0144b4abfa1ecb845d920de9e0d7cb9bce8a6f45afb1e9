@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target explicitly requires that final labels align with the grounded fixed-point, meaning the explicit edges are constrained to reproduce the semantically derived result, which is precisely what makes them a materialization of the derivation.",
+  "verdict": "pass"
+}

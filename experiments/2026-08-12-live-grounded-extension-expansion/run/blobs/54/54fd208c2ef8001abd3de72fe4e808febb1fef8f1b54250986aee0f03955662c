@@ -1,0 +1,6 @@
+```json
+{
+  "decisive_point": "The problem asks to expand and strengthen the grounded extension (the semantics), but SRC_004 explicitly states 'The semantics is unchanged' and restricts its contribution to an incremental maintenance algorithm.",
+  "verdict": "fail"
+}
+```

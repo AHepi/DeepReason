@@ -1,0 +1,5 @@
+THE CASE AGAINST THE TARGET:
+The proposal's defense-level rule assigns a defended argument a ground level equal to the meet of its defenders' levels. But the meet on a distributive lattice is monotone decreasing, so adding more defenders can only lower (or equal) the defended argument's ground level. This is the opposite of reinstatement: a newly added defender should restore or raise acceptance, not lower it. Reinstatement is therefore not a derived property of the lattice order as claimed; the guarantee fails.
+
+TARGET:
+Replace the Boolean status assignment with a finite distributive lattice of epistemic grounding levels. The transition operator is monotone over the lattice product; the grounded extension is the least fixed point projected to Boolean acceptance. Determinism and polynomial cost hold because the lattice is finite and the operator is polynomial-time computable. Reinstatement is a derived property of the lattice order: a defended argument's ground level is at least the meet of its defenders' levels. Criticizable: the choice of lattice levels is external and may smuggle in preference; root validity must be verified for the projection.

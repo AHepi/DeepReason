@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (succ:b06d99eca5e7) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate b06d99eca5e7 on question-6fcc770419da1e9c8fccb2db8ed32bbe. Original problem: Propose innovative ways to expand and strengthen DeepReason's grounded extension — the skeptical fixed-point semantics (spec §4, Pass 1) by which conjectures are accepted, refuted, or suspended — such that each proposal preserves the existing guarantees: determinism of the fixed point, polynomial cost, reinstatement as a derived property, and the validity of every committed root.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Model warrant status as the least fixed point of a monotone operator over a free idempotent semiring whose elements are minimal attacker constellations. The grounded extension is the image under a homomorphism that maps nonempty constellations to UNDECIDED. This makes the suspension boundary an algebraic invariant rather than a post-hoc diagnostic, and yields polynomial algorithms via semiring path problems. Criticizable: semiring operations may not capture defense depth unless the carrier is chosen carefully; the polynomiality claim depends on the semiring satisfying distributivity.
+commitments: (none)
+
+TARGET SRC_002
+Replace the Boolean status assignment with a finite distributive lattice of epistemic grounding levels. The transition operator is monotone over the lattice product; the grounded extension is the least fixed point projected to Boolean acceptance. Determinism and polynomial cost hold because the lattice is finite and the operator is polynomial-time computable. Reinstatement is a derived property of the lattice order: a defended argument's ground level is at least the meet of its defenders' levels. Criticizable: the choice of lattice levels is external and may smuggle in preference; root validity must be verified for the projection.
+commitments: (none)
+
+TARGET SRC_003
+Parameterize grounded semantics by a well-founded partial order on warrants. Each attack edge is effective only if the attacking warrant is not strictly dominated by a defending warrant that is accepted; otherwise it is ignored. For each fixed order, the resulting framework's grounded extension is deterministic and polynomial. Reinstatement remains derived because the order is static. This expands the semantics to priority-based conflicts without abandoning skepticism. Criticizable: the source of the order is unconstrained; if the order is not well-founded or inconsistent, the guarantees fail; this may be a preference-based argumentation variant rather than an extension of the original.
+commitments: (none)
+
+TARGET SRC_004
+Develop an incremental algorithm that maintains the grounded extension under single-edge additions and deletions using a memoized affected region and local re-computation of the least fixed point. The semantics is unchanged, but the expansion is in operational strength: amortized polynomial updates. This is valuable for interactive conjecture refinement where edges are added as warrants evolve. Criticizable: worst-case complexity may degrade; memory overhead of dependency tracking is nontrivial; the proposal does not expand the expressiveness of the semantics.
+commitments: (none)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
