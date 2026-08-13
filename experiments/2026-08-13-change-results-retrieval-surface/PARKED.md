@@ -40,13 +40,30 @@ UnsupportedRunManifestVersionError — docs/AUDIT_BASELINES.md records that as
 baseline). docs/map/SUB-application.md now names the exception rather than
 denying it.
 
-Decide, in writing, ONE of: (a) admission is for verbs that INTERPRET or MUTATE
-a root, and pure readers are correctly outside it — in which case make that the
-stated rule in SUB-application.md, and add a test that every verb NOT in
-_ROOT_ADMISSION_COMMANDS is provably read-only; or (b) readers belong inside
-too — in which case admission must gain a read-only tier that reports the
-manifest state instead of refusing, and both `findings` and `results` move into
-it. Price both before choosing.
+CORRECTION to an earlier draft of this prompt: do NOT propose "a test that
+every verb NOT in _ROOT_ADMISSION_COMMANDS is provably read-only". That test is
+false on its face — 20 verbs sit outside the gate and most of them write
+(`run`, `reason`, `setup`, `admit`, `brain`, `config`, `input`, `doctor`,
+`scratch`, `bridge`, `web`). The gate's actual scope is verbs that touch an
+EXISTING root; verbs that CREATE one are a different category and are correctly
+outside it. Re-derive the two lists before scoping:
+
+    python -c "import argparse; from deepreason.cli.main import build_parser, \
+      _ROOT_ADMISSION_COMMANDS as g; p=build_parser(); \
+      s=[a for a in p._actions if isinstance(a,argparse._SubParsersAction)][0]; \
+      print(sorted(set(s.choices)-g))"
+
+Decide, in writing, ONE of: (a) the gate is for verbs that INTERPRET or MUTATE
+an existing root, and pure readers are correctly outside it — in which case make
+that the stated rule in SUB-application.md and pin the READER set explicitly
+(`findings`, `results`) with a test that each is read-only, rather than pinning
+the complement; or (b) readers belong inside too — in which case admission gains
+a read-only tier that REPORTS the manifest state instead of refusing, both
+readers move into it, and all 26 existing gated verbs need regression cover
+proving their behaviour did not change; or (c) readers go inside and refuse
+pre-V6 roots outright — price this one honestly, because it makes `results`
+unusable on 11 committed roots and re-creates the retrieval problem the
+2026-08-13 tranche was opened to fix. Price all three before choosing.
 
 RAILS: no behaviour change to `findings`' current output without the operator's
 words. Frozen surfaces: none expected (cli/ dispatch + map). GATE: ring while
