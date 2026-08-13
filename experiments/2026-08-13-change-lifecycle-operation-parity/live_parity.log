@@ -1,3 +1,7 @@
 [2026-08-13T12:56:45Z] === STAGE 1: finalize (appends only; no model call) ===
 [2026-08-13T13:10:06Z] === STAGE 1: finalize (appends only; no model call) ===
 [2026-08-13T13:10:39Z] FINALIZE rc=1 -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/finalize.stderr.log
+[2026-08-13T13:31:00Z] FINALIZE OK rc=0 -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/finalize.json
+[2026-08-13T13:31:00Z] === STAGE 2: amend, admitting the six bound documents (no model call) ===
+[2026-08-13T13:33:22Z] AMEND OK rc=0 -- see /home/user/DeepReason/experiments/2026-08-13-change-lifecycle-operation-parity/amend.json
+[2026-08-13T13:33:22Z] === MEASURE: verify_root after the amendment epoch ===
