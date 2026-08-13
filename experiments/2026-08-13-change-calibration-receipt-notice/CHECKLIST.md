@@ -1,5 +1,5 @@
 # Checklist for: retire the calibration-receipt dead-end gate on argumentative status authority
-State: next=15 blockers=none
+State: all steps complete blockers=none
 Map ids: DR-CON-authority, DR-SUB-manifest, DR-INV-frozen-surfaces (surface 4).
 DR-SEAM-authority-x-manifest does not exist (pre-existing undocumented pair,
 CON-authority.md's own header; not created this tranche — SPEC.md "Out of scope").
@@ -233,6 +233,11 @@ that lands code+tests+map together.
        it works. `trial_required` list unchanged. No docs/ERRATA.md
        entry needed (still true, as recorded in SPEC.md §3).
 
-- [ ] 15. [COMMIT] (all) Final push and clean-tree confirmation.
+- [x] 15. [COMMIT] (all) Final push and clean-tree confirmation.
        done-when: `git status --porcelain` is empty AND `git log
        --oneline -1` matches `git log --oneline -1 origin/claude/calibration-receipt-notice-b6wp3k`
+       ```
+       git status --porcelain -> (empty)
+       git log --oneline -1                                        -> 1c598e560 steps 13-14: replay-validation proof and errata re-scan
+       git log --oneline -1 origin/claude/calibration-receipt-notice-b6wp3k -> 1c598e560 steps 13-14: replay-validation proof and errata re-scan
+       ```
