@@ -153,6 +153,26 @@ recorded in REQUEST.md §3 as the second map gap; updates to
   ⟨problem-id, premise-artifact-id⟩, passes iff both resolve and the parsed
   premise is the artifact the attribution `mention`s. Registered as an ordinary
   artifact (P6/Refl) — **no `kind` field anywhere** (C3).
+- **The premise rent battery** (added by REQUEST.md Amendment 1, R27). A premise
+  artifact carries a demarcation criterion at registration — the rent §9.3
+  charges a candidate background, applied to premises — so that a premise
+  forbidding nothing is refuted **by program**, demonstratively, with no judge
+  and no second model family. This is what makes the operator's siren case
+  executable on a solo run under the shipped default authority posture. Two
+  constraints, both from existing code: the criterion must require a
+  **SUBSTANTIVE** commitment, reusing `measures/reach.py::_substantive`
+  (structural checks like `json-wf`/`skeleton_wf` prove nothing about the
+  subject and must not satisfy it — the self-immunisation trap
+  `rules/warrants.py::formally_backed` already documents); and `crit`/`mod`/
+  `active` are **unimplemented stubs** today (`RECONCILIATION.md` M-1,
+  corrected), so Rung 2 builds the `crit` half it needs and Rung 5 completes
+  `active`.
+- **Scope boundary, from drift row W-1 and `DECISIONS.md` D-8:** Rung 2 ships
+  the channel for premises that fall by demarcation or by a failing formal
+  commitment. A premise that is contentful and wrong *by argument alone* needs an
+  argumentative-authority road that does not exist in any solo configuration
+  today; Rung 2's SPEC.md must state that boundary explicitly rather than let a
+  green gate imply the channel is complete.
 - The mention-law well-formedness check, generalized (Law 9.4′): an attribution
   carrying a `dependence` ref on its premise FAILS `presupposition-wf`. This is
   the one check that makes the cascade unable to disarm itself.
@@ -179,13 +199,22 @@ recorded in REQUEST.md §3 as the second map gap; updates to
 - **A-3 at the problem layer:** a premise-orphaned problem's candidates keep
   their own labels — orphaned ≠ false, one level up.
 - **C4:** the marks are recomputed from the log, never stored.
+- **The operator's siren sequence, end to end, offline and on a SOLO
+  configuration** — π₁ posed, X registered, ρ consulted, X refuted by the
+  demarcation criterion (a demonstrative verdict, status-changing under every
+  authority mode), π₁ marked, retired; then ν attacked, X reinstated, the
+  retirement attacked, π₁ back on the frontier. **No conjecture is proposed on
+  π₁ at any point** (R28) and no observation, evidence artifact or judge seat
+  appears anywhere in the run.
 - **Live-run gate (L-6):** one siren-shaped live run on the existing ladder,
   judged only on typed outcomes — the mark appears, a resolution registers,
   `verify_root` green.
 
-**Estimated size:** 600–900 lines. This is the rung to split if the diff-budget
-gate says EXCEEDED; the natural split is (2a) channel + predicate, (2b)
-resolutions + scheduler.
+**Estimated size:** 700–1 000 lines (raised from 600–900 by Amendment 1: the
+premise rent battery and the `crit` half of demarcation are new work this rung
+now owns). This is the rung to split if the diff-budget gate says EXCEEDED; the
+natural split is (2a) channel + predicate + rent battery, (2b) resolutions +
+scheduler.
 
 **Frozen-surface forecast:**
 - Surface 3 — **forecast contact, additive**: `verify_root` should learn to
@@ -314,6 +343,15 @@ evaluation path).
   problems.
 - Pin the mechanism-load-bearing criterion into the root battery for empirical
   scopes, reusing `µ_struct` (P-4). **As a criterion, never a gate** (C5).
+- **Complete `active(a)` = `crit(a) ∧ mod(a)`** (drift row M-1, corrected):
+  §9.3's rent law is written in terms of `active(b)`, and today
+  `measures/demarcation.py` holds two stubs that raise `NotImplementedError`
+  with no importers. Rung 2 builds the `crit` half for premises; this rung
+  completes `mod` over the existing variator kernel and wires `active` into the
+  promotion criteria. If `mod` proves too costly to evaluate per promotion, the
+  alternative — rent defined on `crit` plus observation-valuedness alone — is a
+  SPEC.md decision for this rung, recorded with its reason, not a silent
+  omission.
 
 **Gate proves:**
 - **Remark 9.5:** a frame assertion registered outside a promotion problem is an

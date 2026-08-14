@@ -194,4 +194,29 @@ creates.
 
 ## 4. Amendments
 
-(none yet)
+### Amendment 1 — 2026-08-14, operator's answer to D-2 (Road B)
+
+Received after `DECISIONS.md` was delivered; appended verbatim BEFORE acting on
+it, per the ledger rule.
+
+> D-2: Road B. The original example, operator verbatim (2026-08-13): "What
+> is the colour of a siren. It's a question that could be interpreted as a
+> problem, but it's fundamentally flawed before even receiving an answer...
+> In this case, the problem itself is the subject of criticism, which is
+> summarily refuted. Not a conjecture, a problem." The presupposition X =
+> "a siren is the kind of thing that has a colour" — a category error, no
+> instrument or measurement anywhere. The eight-move sequence must work
+> with X refuted by argument alone.
+
+| # | Requirement | Source |
+|---|---|---|
+| R25 | The siren example is the operator's own, quoted above. The Doppler reconstruction is SUPERSEDED and must be replaced, not annotated. | Amendment 1 |
+| R26 | X = "a siren is the kind of thing that has a colour". A category error: **no instrument or measurement anywhere.** The sequence may not route through an observation, an evidence artifact, or the faulty-instrument reinstatement. | Amendment 1 |
+| R27 | The move sequence must work **with X refuted by argument alone.** | Amendment 1 |
+| R28 | "Not a conjecture, a problem" — the criticised object is the PROBLEM, and it is "fundamentally flawed before even receiving an answer". The sequence must reach retirement without any conjecture on π having been proposed or having failed. | Amendment 1 |
+
+**Supersession note.** R10's deliverable (a complete legal move sequence for the
+siren case) is unchanged; only its subject matter is replaced. `DECISIONS.md`
+D-2 is ANSWERED and closed. The remaining six decisions (D-1, D-3 … D-7) are
+still open, and Amendment 1 adds a seventh, D-8, whose necessity was discovered
+in the course of satisfying R27.

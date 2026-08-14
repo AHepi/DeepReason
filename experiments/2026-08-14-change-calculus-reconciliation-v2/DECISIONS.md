@@ -12,7 +12,9 @@ recommendation with its reason. **Every item can be answered with a word.**
 
 | Decision | Blocks | Can wait until |
 |---|---|---|
-| D-2 siren, D-7 signal park | Rung 1 (documentation only) | Rung 1's REQUEST.md |
+| ~~D-2 siren~~ **ANSWERED** — Road B, 2026-08-14 | — | closed |
+| D-7 signal park | Rung 1 (documentation only) | Rung 1's REQUEST.md |
+| **D-8** premise refutation by argument | nothing, on the recommended answer (D) — Rung 2 ships for category errors and formal falsity either way | before Rung 2 **only if** the answer is A |
 | D-3 derived vs stored premises | **Rung 2** — the largest rung | before Rung 2 starts |
 | D-1 crisis problem | Rung 3, then Rung 7 | before Rung 3 |
 | D-5 scope predicate language | **Rung 4** | before Rung 4 |
@@ -44,24 +46,30 @@ it. Choosing B first would be choosing it without one.
 
 ---
 
-## D-2 — Confirm the reconstructed siren case, or supply the original
+## D-2 — ANSWERED (2026-08-14): Road B
 
-**Why it needs a word.** Your doctrine names the siren example; the tranche brief
-does not quote it, and it appears nowhere in this repository
-(`grep -rni siren --include=*.md .` returns nothing outside this tranche).
-`RECONCILIATION.md` §1/H2 reconstructs the canonical Doppler-shaped case —
-π₁ = *"Why does the siren's pitch drop as the ambulance passes?"*, presupposing
-X = *"the emitted pitch falls"*, X refuted by a source recording, π₁ then
-retired / translated / found independent — and marks it a reconstruction.
+The original is ledgered in REQUEST.md Amendment 1 (R25–R28). π₁ = *"What is the
+colour of a siren?"*, X = *"a siren is the kind of thing that has a colour"* — a
+category error, no instrument or measurement anywhere, X refuted by argument
+alone, and **no conjecture on π₁ ever proposed**.
 
-| Road | Cost |
-|---|---|
-| **A. Confirm the reconstruction** | zero |
-| **B. Supply the original** | one paste; the eight-move sequence is unchanged, only the content of X moves |
-| **C. Drop the named example** | zero, and nothing is lost mechanically — the move sequence is example-independent — but the doctrine loses its worked case |
+The Doppler reconstruction is superseded and has been replaced, not annotated
+(`RECONCILIATION.md` §1/H2). Two things changed beyond the example's content:
 
-**Recommendation: A or B, whichever is less work for you.** The design does not
-depend on it; the documentation does.
+1. **The sequence lost a move and gained a stronger claim.** It no longer needs
+   a candidate to be proposed on π₁ at all — which is what "fundamentally flawed
+   before even receiving an answer" requires — and it no longer routes through
+   an observation, an evidence artifact, or the faulty-instrument reinstatement.
+   Move 4 refutes X for **explanatory emptiness**: a category error forbids
+   nothing, so the demarcation criterion fails by program, and the critic's
+   category-error argument is carried as the content of the warrant's validity
+   node. The argument does real work without ever becoming a self-certifying
+   prose warrant.
+2. **It surfaced D-8.** Your example runs on a solo configuration under the
+   shipped defaults — but only because "refuted by argument" and "refuted by
+   demarcation" coincide for a category error. For a premise that is contentful
+   and merely wrong, they do not, and the harness has no solo road. That is the
+   new item below.
 
 ---
 
@@ -167,6 +175,48 @@ REGISTRY.
 **Recommendation: tell us which, in a word.** Rung 1 proceeds on (i) meanwhile,
 because it is the cheap half and it is certainly required either way — a new
 signal that is not registered fails the existing test.
+
+---
+
+## D-8 — What refutes a premise that is wrong by argument, but is not a category error?
+
+*(Added by Amendment 1. Drift row W-1.)*
+
+**Why it needs a word.** Your siren case is safe: a category error forbids
+nothing, so demarcation kills it by program, and **demonstrative outcomes are
+status-changing under every authority mode** (`rules/crit.py`). But the premise
+channel's general case is a premise that *does* forbid something and is simply
+false — and there, the shipped harness has no solo road:
+
+- `ADJUDICATION_STATUS_AUTHORITY_ENABLED` defaults **False**, and
+  `ARGUMENTATIVE_AUTHORITY` defaults **`observe_only`** — an argued case records
+  scrutiny and creates no attack edge.
+- `trial_required` works, but routes through the **defended cross-family
+  trial** — two model families, so not a solo run.
+- `single_family_trial` exists as a config value and **cannot complete a
+  trial**: the direct-helper path supplies no critic school, and the v4 envelope
+  demands a manifest-bound authority value. It is parked as dead weight
+  (`CON-schools.md` Traps).
+
+So today, on a solo run, a false-but-contentful premise cannot be refuted at
+all, and the cascade never fires for it. This is not a code accident: it is the
+deliberate suspicion of prose verdicts that runs through §10, the
+`adjudication-blindness` check, and your own standing wariness of judges.
+
+| Road | What you get | Cost | Risk |
+|---|---|---|---|
+| **A. Revive `single_family_trial`** — the defended trial, critic and defender drawn from the same family, order-swap and decisive-point checks intact | Argument-only refutation on a solo run, through the existing trial guard; the cascade works for every premise, not only category errors | The park calls it "a behavior decision, not a refactor": wire `critic_school_id` on the direct-helper path, or admit the mode through the envelope. Estimate ~150–250 lines, its own tranche before Rung 2 | A same-family critic and defender share the model's blind spots — the trial is procedurally real but the adversary is the defendant's twin |
+| **B. Leave it demonstrative-only** — premises fall by demarcation, by a failing formal commitment, or not at all | Nothing to build; the strictest possible reading of "no self-certifying prose warrant" | zero | The premise channel works for category errors and formal falsity, and is inert for ordinary substantive error — which is most of it. Your "problems are first-class subjects of criticism" doctrine then holds only for the flawed-before-answering case |
+| **C. Require cross-family** (`trial_required`) for premise refutation | The strongest adversary the harness can field | zero to build | Locks solo out of the premise channel — a direct collision with your standing law that a solo run with everything on must be an option |
+| **D. Defer** — ship Rung 2 for category errors and formal falsity, measure how often a live run wants to refute a premise by argument, then decide | Rung 2 is unblocked immediately; the decision gets evidence | zero now | The channel ships knowingly partial, and "partial" is easy to forget once it is green |
+
+**Recommendation: D now, A next.** Rung 2 does not need this answered to ship
+the operator's own example, and deciding it without evidence would be guessing
+at how often premises fail by argument rather than by emptiness — a number a
+live run produces cheaply. But A is the road I expect the evidence to point to,
+because it is the only one that keeps both of your standing laws intact at once:
+a solo run can do everything, and no prose verdict certifies itself. If you
+would rather not wait, answer **A** and it becomes a tranche before Rung 2.
 
 ---
 

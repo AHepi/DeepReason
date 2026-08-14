@@ -206,36 +206,66 @@ is the reason the generalization is not merely cheaper but *necessary*:
    stores presupposition in provenance and then reminds the reader it is
    "epistemically inert". Deriving it removes the need for the reminder.
 
-**The siren case — a complete legal move sequence (R10).**
+**The siren case — a complete legal move sequence (R10, R25–R28).**
 
-> **Reconstruction notice.** The siren example is named in the operator's
-> doctrine but is not quoted in the tranche brief and appears nowhere in this
-> repository (`grep -rni siren --include=*.md .` returns nothing outside this
-> tranche). What follows is the canonical Doppler-shaped reconstruction, marked
-> as a reconstruction. `DECISIONS.md` D-2 asks the operator to confirm it or
-> supply the original. The MOVE SEQUENCE is what matters and is
-> example-independent; only the content of X would change.
+The operator's own example, supplied 2026-08-14 (REQUEST.md Amendment 1):
 
-Seed problem **π₁**: *"Why does the siren's pitch drop as the ambulance passes?"*
+> "What is the colour of a siren. It's a question that could be interpreted as a
+> problem, but it's fundamentally flawed before even receiving an answer… In
+> this case, the problem itself is the subject of criticism, which is summarily
+> refuted. Not a conjecture, a problem."
+
+Seed problem **π₁**: *"What is the colour of a siren?"*
+Presupposition **X**: *"a siren is the kind of thing that has a colour."*
+A category error — **no instrument or measurement anywhere** (R26), so the
+sequence may not route through an observation, an evidence artifact, or the
+faulty-instrument reinstatement, and X must fall **by argument alone** (R27).
 
 | # | Rule | Move |
 |---|---|---|
-| 1 | `Spawn(seed)` | π₁ registered. No attribution yet. |
-| 2 | `Conj` | candidates c₁, c₂ on π₁ — accounts of a mechanism by which the emitted pitch falls. Both may stand unrefuted for a long time. |
-| 3 | `Conj`/`Register` | a critic registers **X** = "the siren's emitted pitch falls as the ambulance passes", with an observation-valued commitment ("a recording at the source shows a falling emitted frequency"). |
-| 4 | `Register` | **ρ** = "π₁ presupposes X": `mention` → X (Law 9.4′), `dependence` → its case (that every candidate on π₁ assumes it, and that π₁'s own criteria quote the falling pitch). ρ passes `presupposition-wf` ⇒ consulted. |
-| 5 | `Crit` | a demonstrative warrant against X: the observation-valued commitment FAILS — the source recording shows a constant emitted frequency. Carried by a critic artifact with validity node ν asserting the test was sound and relevant; ν carries an `evidence` ref to the recording (Closure 3). |
-| 6 | `Adj` | Pass 1: X is **refuted**. Pass 2: ρ is untouched — it only mentions X (Law 9.4′). So `premise_orphaned(π₁)` = true, grade **premise refuted**. The mark is lazy; π₁ is deprioritized in scheduling (C5). |
-| 7a | orphan resolution — **retire** | holding: "there is no fall in *emitted* pitch to explain." π₁ leaves the frontier, logged, never deleted (P8). c₁ and c₂ keep their own labels: **orphaned ≠ false**, at the problem layer exactly as at the artifact layer. |
-| 7b | orphan resolution — **translate** | successor problem **π₂**: *"Why does the OBSERVED pitch fall as the ambulance passes?"* — posed in the succeeding vocabulary (source frequency vs. observed frequency), provenance recording the lineage from π₁ and ρ. **This is the only way a successor problem is minted in v2** (H1). |
-| 7c | orphan resolution — **independence** | holding: π₁ never needed X — it always meant "why does the SOUND change as it passes". The orphan closes; the scheduler thereafter treats π₁ as unorphaned, computed from the resolution. π₁'s own record is never mutated. |
-| 8 | `Crit` — the **faulty instrument**, the operator's other named example | attack the RECORDING, or anything in its transitive `dependence` lineage: "the source microphone clipped." Accepted ⇒ ν falls ⇒ the warrant falls ⇒ **X reinstates** (Lemma 6.1, Closure 3) ⇒ `premise_orphaned(π₁)` becomes false by the same computed predicate. If π₁ had already been retired, the retirement closure is itself an ordinary artifact and is attacked on the ground that its premise reinstated; π₁ returns to the frontier. |
+| 1 | `Spawn(seed)` | π₁ registered. **No conjecture is ever proposed on it** — the flaw is prior to any answer (R28). |
+| 2 | `Register` | a critic registers **X** = "a siren is the kind of thing that has a colour" as an ordinary artifact, carrying the **premise rent battery** (below): a premise is a claim like any other and pays demarcation rent. |
+| 3 | `Register` | **ρ** = "π₁ presupposes X": `mention` → X (Law 9.4′), `dependence` → its case (that π₁'s question form is unanswerable without X). ρ passes `presupposition-wf` ⇒ consulted. |
+| 4 | `Crit` — **the whole weight of the example rests here** | X is refuted for **explanatory emptiness**, by program, with no observation and no judge. The rent battery's demarcation criterion asks whether X carries a SUBSTANTIVE commitment — anything X forbids. A category error forbids nothing: there is no state of affairs whose obtaining would count against it, which is precisely the operator's "no instrument or measurement anywhere". The criterion FAILS ⇒ ordinary demonstrative warrant (commitment, verdict, trace), carried by a critic artifact with validity node ν. **The critic's category-error argument is the content of ν** — it asserts the test was sound and relevant, i.e. that colour-attribution to a sound event is the kind of thing that forbids nothing. The argument therefore does real work and is fully attackable, without ever being a self-certifying prose warrant. |
+| 5 | `Adj` | Pass 1: X is **refuted**. Pass 2: ρ is untouched — it only mentions X (Law 9.4′). So `premise_orphaned(π₁)` = true, grade **premise refuted**. The mark is lazy; π₁ is deprioritized in scheduling (C5). |
+| 6a | orphan resolution — **retire** | holding: "a siren is not a colour-bearer; there is nothing here to answer." π₁ leaves the frontier, logged, never deleted (P8). **This is the operator's "summarily refuted": the problem died before any conjecture on it was ever proposed.** |
+| 6b | orphan resolution — **translate** | successor problem **π₂**: e.g. *"What colour is the housing of a siren unit?"* or *"What is the conventional colour coding of emergency sirens?"* — a different question, posed in a vocabulary where the property has a bearer, provenance recording the lineage from π₁ and ρ. **This is the only way a successor problem is minted in v2** (H1). |
+| 6c | orphan resolution — **independence** | holding: π₁ never needed X — it was always about the housing, and the colour question was well-posed all along. The orphan closes; the scheduler thereafter treats π₁ as unorphaned, computed from the resolution. π₁'s own record is never mutated. |
+| 7 | `Crit` on **ν** — the argument-only counterpart of the faulty instrument | there is no recording to impeach, so reinstatement runs through N1's other exits: attack ν directly ("a siren is individuated by its housing, which does bear a colour; the category error is the critic's, not the question's"). Accepted ⇒ ν falls ⇒ the warrant falls ⇒ **X reinstates** (Lemma 6.1) ⇒ `premise_orphaned(π₁)` becomes false by the same computed predicate. If the warrant had been rubric-derived, Closure 2 gives a second exit: refute the standard and every verdict under it falls. |
+| 8 | `Crit` on the **retirement** | if π₁ was already retired, the retirement closure is itself an ordinary artifact and is attacked on the ground that its premise reinstated; π₁ returns to the frontier. **No absorbing state anywhere in the sequence** (N1, N3). |
+
+**The premise rent battery (design consequence of R27).** For move 4 to be a
+program verdict rather than a prose verdict, a premise artifact must carry a
+demarcation criterion at registration — the same rent §9.3 charges a candidate
+background ("a candidate background must be `active(b)`"), applied to premises.
+Two implementation constraints, both from existing code:
+
+- **Substantive, not merely non-empty.** `crit(a) ⇔ commitments ≠ ∅` is
+  satisfiable by attaching a structural check, which is the exact
+  self-immunisation trap `rules/warrants.py::formally_backed` already guards
+  ("`program:json-wf` … passes for anything well-formed, and immunise itself
+  against criticism. Structural well-formedness proves nothing about the
+  subject, so it protects nothing about the subject"). The premise criterion
+  must reuse the existing `_substantive` notion
+  (`measures/reach.py`, which excludes `json-wf`, `skeleton_wf`, `lineage_ref`,
+  `checker_wf`), not re-derive it.
+- **`active(a)` does not exist yet** — see the corrected row M-1 below.
+
+**Why this sequence is stronger than the harness's general position on
+argument.** It needs no observation, no evidence, no judge seat, and no model
+family beyond the one already running: the refutation is a program verdict, and
+**demonstrative outcomes are status-changing under every authority mode**
+(`src/deepreason/rules/crit.py`). So the operator's own example runs on a solo
+configuration under the shipped default posture — but only because a category
+error is the case where "refuted by argument" and "refuted by demarcation"
+coincide. The general case does not, and that gap is the new row W-1 and the
+new decision **D-8**.
 
 **Where the operator's sentence lands.** *"The problem itself is the subject of
-criticism, which is summarily refuted"* is move 7a: the problem died **without
-any conjecture on it having to fail** — directly, by an attack on what it
-presupposed. That is what "summarily" buys. And it happens without putting
-problems into `att` (§0).
+criticism, which is summarily refuted. Not a conjecture, a problem."* is moves
+1 → 4 → 6a with **step 2 of the old reading deleted**: no conjecture is
+proposed, none fails, and π₁ still dies — directly, by an attack on what it
+presupposed. And it happens without putting problems into `att` (§0).
 
 **N3 keeps its force (R11).** No step above asserts π₁ is insoluble. Retirement
 is a finding about the PREMISE, not about solubility; it is an ordinary
@@ -284,7 +314,7 @@ surface where it is read, at zero cost to the record.
 | P-1 | P1 fallibilism: every status admits an exit; nothing is ever verified | v1.3 §5 N1, verbatim in substance | two-pass labels recompute after every registration; no terminal certification | **adopt** — already true; no work |
 | P-2 | P2 no induction: no confirmation relation; evidence grounds only attacks | v1.3 §0 + §12; evidence enters as an artifact, warrants declare `evidence` refs | `RefRole.EVIDENCE` is permitted only on validity nodes and only lifts ATTACKERS | **adopt** — already true |
 | P-3 | P3 criticism is the sole selector | v1.3 §0/§4: inputs to adjudication are `att`/`dep` ONLY | `build_att` + two-pass; measures never enter | **adopt** — already true |
-| P-4 | P4 explanatory demarcation, BOTH halves: forbids something AND explains; a non-load-bearing mechanism is refuted by program, untested | v1.3 §6 `crit ∧ mod`; §10.1 `skeleton-wf` requires `forbidden ≠ ∅` | `measures/demarcation.py`; `skeleton_wf`. **The mechanism-load-bearing half — "role-level substitution or deletion of it flips verdicts" as a ROOT-BATTERY criterion — is not pinned into every problem**; it exists only as `hv-floor` on connection problems (v1.3 §7 Brake 1) | **adapt** — Rung 4 pins a mechanism-load-bearing criterion into the root battery for empirical scopes, reusing `µ_struct`, which already does role-level substitution. Guardrail: it is a CRITERION, never a gate (C5) |
+| P-4 | P4 explanatory demarcation, BOTH halves: forbids something AND explains; a non-load-bearing mechanism is refuted by program, untested | v1.3 §6 `crit ∧ mod`; §10.1 `skeleton-wf` requires `forbidden ≠ ∅` | `skeleton_wf` only, and only for skeleton-codec candidates (see the corrected M-1: `demarcation.py` is an unimported stub). **The mechanism-load-bearing half — "role-level substitution or deletion of it flips verdicts" as a ROOT-BATTERY criterion — is not pinned into every problem**; it exists only as `hv-floor` on connection problems (v1.3 §7 Brake 1) | **adapt** — Rung 5 pins a mechanism-load-bearing criterion into the root battery for empirical scopes, reusing `µ_struct`, which already does role-level substitution. Guardrail: it is a CRITERION, never a gate (C5). The siren sequence's move 4 depends on the *first* half being available to premises (§1 H2, premise rent battery) |
 | P-5 | P5 theory-ladenness: observations are conjectures; an observation refutes only while it survives criticism | v1.3 §1 evidence closure | Closure 3 implemented in `adjudication/edges.py` | **adopt** — already true; it is the faulty-instrument move of the siren sequence |
 | P-6 | P6 no authority: rule-objects are artifacts, attackable; authority may exist only as attention | v1.3 §3 `Refl`; §10.6 "authority is pack ordering, never status privilege" | `rules/refl.py` exists; the audit's dead-symbol census flags `refl` as unreferenced (`experiments/2026-08-13-audit/PARKED.md` P2) | **adapt** — Rung 1 must establish that every NEW rule-object the v2 program introduces (`presupposition-wf`, promotion criteria, scope predicates, render policy) is a registered artifact. The pre-existing `refl` question is P6-adjacent and is NOT absorbed here — it stays parked |
 | P-7 | P7 problems first: P₁ → TT → EE → P₂; growth is the succession of PROBLEMS | v1.3 §3: "Conj is gated on `Π ≠ ∅` — D1 made structural" | enforced | **adopt** — and H1 sharpens it: succession of problems now happens on the problem layer, which is where P7 always said it happens |
@@ -312,7 +342,8 @@ surface where it is read, at zero cost to the record.
 | O-2 | `carry ⊆ A × W` explicit, not part of artifact identity | v1.3 §1 identical | `carries` in `EpistemicState`, unioned with the legacy `artifact.warrants` encoding so old roots replay | **adopt** |
 | O-3 | ref roles: dependence / mention / evidence | v1.3 §1 identical | `RefRole` identical | **adopt** — H2 needs no new role: `mention` + `dependence` carry Law 9.4′ |
 | O-4 | Def 3.3 commitment ⟨eval, budget, observation_valued⟩ | v1.3 §1 identical | identical | **adopt** |
-| O-5 | Def 3.4 warrant + validity node + **three** closures (validity, case-law, evidence) | v1.3 §1: all three | all three in `adjudication/edges.py`, computed as a fixpoint | **adopt** |
+| O-5 | Def 3.4 warrant + validity node + **three** closures (validity, case-law, evidence) | v1.3 §1: all three | all three in `adjudication/edges.py`, computed as a fixpoint | **adopt** — but see W-1 for the argumentative half of Def 3.4 |
+| **W-1** *(added by Amendment 1)* | **Def 3.4: a warrant is "demonstrative … **or argumentative (a case)**", and both make attack edges.** The calculus grants an argued case full status authority, subject only to its ν being attackable | v1.3 §1 same on paper; but v1.3 §3's rubric-verdict guard, §10's whole design, and v1.7 §E's `adjudication-blindness` check all treat prose verdicts as suspect, and v1.7 §E names `observe_only` "v1.3's default posture: critics file scrutiny, prose changes no status" | **An argued case changes no status in the shipped default configuration**, and cannot be made to in any solo one: `ADJUDICATION_STATUS_AUTHORITY_ENABLED` defaults **False** (`config.py`) and `ARGUMENTATIVE_AUTHORITY` defaults **`observe_only`** (`config.py`; consumed at `rules/crit.py::_authority`). `trial_required` routes the case through the **defended cross-family trial** — two families, so not solo. The third value, `single_family_trial`, **cannot complete a trial**: the `Config` direct-helper path passes no `critic_school_id`, and the v4 envelope demands a manifest-bound authority value — "parked as dead weight, not removed" (`docs/map/CON-schools.md` Traps; `experiments/2026-08-04-change-rung7-authority-as-declared-policy/PARKED.md` P5). Separately, `rules/warrants.py::formally_backed` makes any target carrying a passing substantive commitment prose-immune | **conflict-needs-word → `DECISIONS.md` D-8.** The operator's siren case escapes it — a category error is refuted by DEMARCATION, which is demonstrative and status-changing under every mode (§1 H2, move 4) — but a premise that is contentful and merely wrong-by-argument does not. Note the collision is with the operator's own values, not merely with the code: prose-immunity is the formalism-optional law's protection half, and cross-family trials are the judge machinery the solo law is wary of |
 | O-6 | **Def 3.5 problem provenance carries `frame`** | silent | `ProblemProvenance = {trigger, from}` | **already-decided (H2)** — generalized to derived premise attributions |
 | O-7 | Def 3.5 root battery pinned into EVERY problem: internal consistency + both halves of P4 | v1.3 §1 "Popper battery auto-pinned" | `harness.register_problem` appends `POPPER_BATTERY` unconditionally | **adapt** — see P-4: the mechanism-load-bearing half is not in the root battery today |
 | O-8 | Remark: "commitments are counterfactuals… what an artifact is, epistemically, is what it rules out" | implicit | implicit | **adopt** — no work; it is the reading that makes the interface the artifact's content |
@@ -354,7 +385,7 @@ surface where it is read, at zero cost to the record.
 
 | id | CALCULUS | SPEC | CODE | Disposition |
 |---|---|---|---|---|
-| M-1 | demarcation `crit ∧ mod` | v1.3 §6 identical | `measures/demarcation.py` | **adopt** |
+| M-1 **(corrected 2026-08-14)** | demarcation `crit ∧ mod`, `active = crit ∧ mod` | v1.3 §6 identical | **`crit` and `mod` in `src/deepreason/measures/demarcation.py` are stubs that `raise NotImplementedError`, and nothing imports the module.** What ships is `skeleton_wf` (`programs.py` → `informal/skeleton.py`), which enforces `forbidden ≠ ∅` for skeleton-codec candidates and is registered as a **structural** program — so passing it grants no prose-immunity and grounds no reach | **adapt.** An earlier version of this row said "adopt — already true" and cited `demarcation.py`; that was wrong, and it matters: §9.3's rent law is written in terms of `active(b)`, so Rung 5 has nothing to lean on and must BUILD `crit`/`mod`/`active`, or define rent without `mod`. Rung 2's premise rent battery has the same dependency |
 | M-2 | hardness-to-vary with role-level `µ` where content parses; estimating battery excludes HV-type commitments | v1.3 §6/§7 identical, incl. stratification | `measures/hv.py` | **adopt** |
 | M-3 | reach: budgeted cross-evaluation; a hit is "the strongest currency the calculus mints"; held-out material where available | v1.3 §6/§10.5 same | `measures/reach.py` — cross-problem SURVIVAL with qualifying/coverage discipline from the Bronze Age postmortem | **adopt** — the code is STRICTER than both documents; the strictness stays |
 | M-4 | **reach as the promotion signal: hits spanning ≥ K_frame distinct problem LINEAGES over a coherent scope** | silent | reach counts hits; no lineage-spanning aggregate, no scope coherence | **adopt** — Rung 4; it is a measure-rule over the log, channel (a) of C5 |
@@ -483,9 +514,10 @@ each with priced options and one recommendation. Titles only, here:
 | # | One-line decision |
 |---|---|
 | D-1 | Under H1, is the §9.6 crisis a render state only, or does it get its own standing-layer spawn trigger? |
-| D-2 | Confirm the reconstructed siren case, or supply the original. |
+| D-2 | ~~Confirm the reconstructed siren case, or supply the original.~~ **ANSWERED 2026-08-14 — Road B; the original is in REQUEST.md Amendment 1 and the sequence is rewritten.** |
 | D-3 | Is `provenance.frame` derived (v2's recommendation) or stored as the calculus literally writes it? |
 | D-4 | Does the harness ship `knowledge(a)` (Def 8.1) as a user-facing view? |
 | D-5 | What language expresses a scope predicate σ — a fixed finite DSL or an arbitrary program artifact? |
 | D-6 | Succession is comparative; the operator distrusts judges. Program-first `accounts-for`, or a judge ensemble? |
 | D-7 | Which park was "the signal-contract park"? |
+| **D-8** *(added by Amendment 1)* | **When a premise is contentful but wrong-by-argument — not a category error — what refutes it, given that prose changes no status by default and the one trial mode that would is cross-family?** (drift row W-1) |
