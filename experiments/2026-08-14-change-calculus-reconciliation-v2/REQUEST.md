@@ -220,3 +220,50 @@ siren case) is unchanged; only its subject matter is replaced. `DECISIONS.md`
 D-2 is ANSWERED and closed. The remaining six decisions (D-1, D-3 … D-7) are
 still open, and Amendment 1 adds a seventh, D-8, whose necessity was discovered
 in the course of satisfying R27.
+
+### Amendment 2 — 2026-08-14, operator's answer to D-7 (option iii)
+
+Appended verbatim BEFORE acting on it, per the ledger rule.
+
+> D-7: (iii), content follows — the operator-parked signal-contract design
+> (ledgered with the monitor, 2026-08-13), absorbed as its own rung or
+> folded into Rungs 1+4 as the drift table prefers:
+> (1) The signal REGISTRY is a CONTRACT, not a wiring: a signal is anything
+> declaring name, unit, producer-agnostic semantics, and a staleness bound;
+> new setups add signals by declaration through this typed channel, never
+> by teaching a consumer about a subsystem. (i) is therefore included.
+> (2) Signals are keyed by SEAT INSTANCE, not role — operator's requirement
+> verbatim: a conjecturer sitting in "multiple structurally asymmetric
+> seats that may need throttling independently."
+> (3) The allocation controller consumes ONLY the signal interface — pinned
+> by an architecture test that fails if controller.py imports
+> schools/rules/criticism internals.
+> (4) Topology-independence is a compiled matrix test: every configuration
+> class (solo, no-schools, judges-off, legacy-on...) compiles, the
+> controller attaches, every policy-referenced signal has a producer.
+> (5) A topology that cannot produce a signal compiles with a typed
+> "allocation open-loop for signal X" notice — disclose, never die.
+> (6) Layering: FROZEN = the change protocol (decisions typed+recorded,
+> interface-only consumption, envelope bounds, allocation touches
+> efficiency never evidence); VERSIONED = the registry and policy
+> algorithm (policy-as-recorded-artifact, referee-reviewed); FREE =
+> parameter values within envelopes. Ledger as a CLAUDE.md design law +
+> INV- map doc with checks + two REC- recipes (add-signal,
+> revise-allocation-policy); a future dedicated workflow only after two
+> recorded recipe failures (authoring-skills E1 tripwire).
+
+| # | Requirement | Source |
+|---|---|---|
+| R29 | The signal registry becomes a typed CONTRACT: every signal declares **name, unit, producer-agnostic semantics, staleness bound**. New setups add signals **by declaration through this channel**, never by teaching a consumer about a subsystem. The existing registry (`src/deepreason/signals.py`, candidate (i)) is included, not superseded. | Amendment 2 (1) |
+| R30 | Signals are keyed by **seat instance, not role** — one conjecturer may sit in "multiple structurally asymmetric seats that may need throttling independently". | Amendment 2 (2) |
+| R31 | The allocation controller consumes **only** the signal interface, pinned by an architecture test that FAILS if `controller.py` imports schools / rules / criticism internals. | Amendment 2 (3) |
+| R32 | Topology-independence is a **compiled matrix test**: every configuration class (solo, no-schools, judges-off, legacy-on, …) compiles, the controller attaches, and every policy-referenced signal has a producer. | Amendment 2 (4) |
+| R33 | A topology that cannot produce a signal **compiles**, carrying a typed `allocation open-loop for signal X` notice. **Disclose, never die.** | Amendment 2 (5) |
+| R34 | Three layers, and they are not interchangeable. **FROZEN** = the change protocol (decisions typed and recorded, interface-only consumption, envelope bounds, allocation touches efficiency never evidence). **VERSIONED** = the registry and the policy algorithm (policy-as-recorded-artifact, referee-reviewed). **FREE** = parameter values within envelopes. | Amendment 2 (6) |
+| R35 | Ledger as a **CLAUDE.md design law** + an **INV- map document with checks** + **two REC- recipes** (`add-signal`, `revise-allocation-policy`). **No dedicated workflow/skill** until two recipe failures are recorded (the `authoring-skills` E1 tripwire). | Amendment 2 (6) |
+| R36 | Placement — its own rung, or folded into Rungs 1+4 — is **delegated to the drift table's preference**, and must be argued from it. | Amendment 2 preamble |
+
+**Note.** D-7's option (iii) was "something not in the tree — paste it and it
+gets a rung". The search recorded in `RECONCILIATION.md` §5 was therefore
+correct and is left standing as the reason this design was not found: it was
+never committed here.

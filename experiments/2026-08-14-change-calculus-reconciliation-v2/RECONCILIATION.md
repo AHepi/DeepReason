@@ -466,6 +466,57 @@ columns are collapsed for readability. This is the bulk of the v2 build.
 | L-5 | **Seats change how content is GENERATED, never what counts as EVIDENCE** | **Honored.** The frame slice (§9.5) is the strongest conditioning the calculus applies and it is *render only*: it changes what γ is shown, never what may refute. Obligation: Rung 5's gate proves a frame slice cannot alter any label |
 | L-6 | **Tokens are cheap; the agent is not** — prefer live-run evidence over hand-built machinery | **Honored by the ladder's shape.** Rungs 2, 4 and 6 each carry a live-run gate over the existing ladders rather than a synthetic fixture, and the census work reuses the committed root `8e22d0431fd2b98d` instead of minting new evidence |
 
+### 2L. The signal contract (operator-parked design, supplied 2026-08-14)
+
+REQUEST.md Amendment 2, R29–R36. This is not a calculus row-set — the calculus
+is silent on allocation, because allocation is efficiency and the calculus
+adjudicates evidence. It is reconciled here because it governs the channel
+through which **every signal the v2 program emits** must be declared, and
+because three of its six clauses restate C-invariants and operator laws in the
+allocation controller's own terms.
+
+| id | Clause | SPEC | CODE | Disposition |
+|---|---|---|---|---|
+| SC-1 | **(1)** the registry is a CONTRACT — name, unit, producer-agnostic semantics, staleness bound; new setups add signals by declaration, never by teaching a consumer about a subsystem | silent | `src/deepreason/signals.py` is a registry of **89** measure tags as prose docstrings, AST-enforced by `tests/test_signals.py` so an unregistered tag fails the gate. Enforcement exists; the CONTRACT does not — no unit, no declared semantics, no staleness bound, and nothing typed | **adopt.** The 89 existing entries migrate to the typed record; the AST test keeps its job. Bulk of the rung's size |
+| SC-2 | **(2)** keyed by SEAT INSTANCE, not role | silent | role-keyed throughout: `controller.py::_clean_streak(role)`, `_propose` over role caps. E28's own evidence is role-shaped — "`judge` pinned at 16 384 for 342 calls whose largest completion was 141 tokens" — and could not have distinguished two judge seats behaving differently | **adopt.** Seat identity already exists and is already in the record: `seat-bindings.v1` (v1.7 §A) carries resolved `group → provider/model/profile-digest` into the log, and `tools/root_sweep.py` already reads it. Keying signals by seat instance consumes identity that is already there — **it adds no role**, so qualification subject digests do not move |
+| SC-3 | **(3)** the controller consumes ONLY the signal interface, pinned by an architecture test that fails on imports of schools / rules / criticism internals | silent | **the boundary already holds**: `controller.py`'s only `deepreason` import is `deepreason.ontology` (`Provenance, Rule, Status`). The test would pass on the tree as it stands | **adopt — cheap and high value.** It pins an existing boundary rather than forcing a refactor. One migration item is real though: the controller reads graph state directly (`harness.state.status.get(...)` at three sites) rather than through a signal. Under R29's "interface-only consumption" those reads become declared signals |
+| SC-4 | **(4)** compiled matrix test over configuration classes | silent | no such matrix exists | **adopt.** This is the operator's all-configurations law (L-1) made executable for the allocation controller — the same law, with a test behind it |
+| SC-5 | **(5)** a topology that cannot produce a signal compiles, with a typed `allocation open-loop for signal X` notice | silent | E28's fix already established the shape: "a controller that cannot steer something says so in a typed `controller-authority` record instead of returning `None`" | **adopt.** Consistent with L-1 verbatim ("a typed disclosure recorded alongside the compiled result … never a stop") and with the precedent the controller already sets. Low cost, because the record type it extends exists |
+| SC-6 | **(6)** FROZEN change protocol / VERSIONED registry + policy algorithm / FREE parameters, ledgered as a CLAUDE.md law + INV doc + two REC recipes; no workflow until two recorded recipe failures | silent | **two of the three layers are already implemented in substance**: `cap_envelope`/`clamp` are the FREE layer's envelope bounds, and `_policy_payload` reads the policy from a registered ARTIFACT — which is already "policy-as-recorded-artifact". `config_referee` (v1.7 §F) is the referee the VERSIONED layer names, already opt-in and contract-bound. What is missing is the LAYERING as a stated, checkable protocol | **adopt.** Note the connection to P-6: "policy-as-recorded-artifact, referee-reviewed" is exactly the `Refl` door — a rule-object that is a registered artifact and therefore attackable — which the drift table flagged as adapt because `refl` itself is inert. This clause gives that door a live user |
+
+**Where it lands (R36), argued from the table.** Its own rung, **Rung 1b**,
+immediately after Rung 1 — with the *ledger* half of clause (6) folded into
+Rung 1. Three reasons, in order of weight:
+
+1. **SC-1 must precede every rung that emits a signal.** The v2 program emits
+   new signals from Rung 2 onward — orphan marks, standing consultations, and
+   in Rung 8 the promotion event's before/after conditioning diagnostics that
+   G-5 requires. If the registry becomes a contract *after* those exist, every
+   one of them is a retrofit. The operator's own clause says new setups add
+   signals "by declaration through this typed channel" — that only holds if the
+   channel is there first.
+2. **Its blast radius is disjoint from the standing layer's.** Folding it into
+   Rung 4 (frame assertions) would put two unrelated frozen-surface forecasts
+   and two unrelated gates in one tranche — the same objection that earned the
+   spawn-trigger deletion its own rung. Rung 4's gate proves axis independence;
+   an import-boundary test and a configuration matrix have nothing to do with
+   it and would dilute it.
+3. **The operator's "fold into 1+4" is half right, and it is the ledger half.**
+   Clause (6)'s CLAUDE.md design law is documentation of a stated operator law
+   and belongs with Rung 1's map work. But the INV- document's **checks** cannot
+   be written before the mechanism exists — `python tools/docs_verify.py
+   --audit` "refuses checks that cannot fail", so an INV document about an
+   unbuilt mechanism would ship vacuous checks. So: **law text in Rung 1; INV
+   document, both REC recipes, and the mechanism in Rung 1b.**
+
+**Vocabulary hazard, recorded for Rung 1 (H3).** `controller.py` already has
+`_under_standing_attack`, where "standing" means *currently under an unresolved
+attack*. The calculus's `standing` (§9.1) means *frame role in the economy of
+generation* — a different thing entirely. Two meanings of one word in one
+codebase is exactly the drift H3 exists to prevent, and the collision predates
+the calculus. Rung 1 renames the controller's predicate (a private method with
+no stored string behind it, so nothing in any root moves).
+
 ---
 
 ## 3. Errata entry candidates (R22)
@@ -502,7 +553,7 @@ minting rather than trusting the number below.
 | **P4 — evidence citability** | `experiments/2026-08-13-change-lifecycle-operation-parity/PARKED.md` P4 | Citable evidence blocks reach SEED conjectures only (0 of 36 sub-problem prompts), and the quote is requested as optional (101 verified citations, 0 quotes) | **Rung 5** (render semantics) | The frame slice forces the general question P4 raises — what a pack deterministically carries for a problem that INHERITED its context. Rung 5's deterministic section allocation covers inherited citable sets in the same pass as the frame slice, because both are "what does a derived problem see". **Only the render half is absorbed**; the quote-wording half (P4b) is a separate prompt change and stays parked |
 | **P5 — conviction criteria** | same file, P5 | Should a refutation tighten what the next conjecture must satisfy? Four options priced (A–D); the operator's framing: knowledge growth should shrink the space of REACHABLE conjectures | **Rung 2** (spawn-trigger deletion + premise channel) — **answered, with option C** | v2 answers P5 directly: criteria do NOT accrete from convictions (that would mint obligations from failures, which is what H1 deletes). Reachability narrows on the problem layer instead — through premise-criticism (a refuted premise removes whole families of posable problems) and through the anti-relapse gate's negative case law (P5's own option C, "already specified, needs no new semantics"). Rung 2's SPEC must record this as P5's answer, with A/B/D rejected and the reason stated |
 | **P6 — anti-relapse degradation** | same file, P6 | The relapse gate ran degraded for a whole run (250 candidates, embedder fallback, zero blocks), and nothing in the typed result said so | **Rung 2** | Rung 2 leans on the negative-case-law gate as half of P5's answer, so it cannot ship on a gate that can be silently inert. Rung 2's gate includes a typed operational finding when the relapse gate is unarmed. The policy question P6 raised — whether to REFUSE to start — stays with P6's own tranche |
-| **the signal-contract park** | **NOT FOUND** | — | — | Named in the brief; no park by that name exists in the tree. Searched: every `experiments/*/PARKED.md` heading; every `.md` for `signal[- _]contract`, `signals contract`, `contract of signals`; the model-signal contract of v1.5 §H (`stuck`/`complete`/`need_context`/`capability_mismatch`); the signal REGISTRY (`src/deepreason/signals.py`, whose docstring is "every measure tag the harness emits, documented once", AST-enforced by `tests/test_signals.py`). Nearest candidates: (i) that registry — every new v2 signal must be registered there, which Rung 1 would own; (ii) `experiments/2026-08-13-change-results-retrieval-surface/PARKED.md` P2, which names `signals.py` among readers the map does not own. **`DECISIONS.md` D-7 asks the operator which was meant.** Until then, Rung 1 carries the registry obligation on the assumption it is (i) — the cheap, certainly-correct half |
+| **the signal-contract park** | **not in the tree** — supplied by the operator 2026-08-14 (REQUEST.md Amendment 2), "ledgered with the monitor, 2026-08-13" | The six-clause signal-contract design: registry-as-contract, seat-instance keying, interface-only controller consumption, a compiled topology matrix, open-loop disclosure, and the FROZEN/VERSIONED/FREE change protocol | **Rung 1** (the CLAUDE.md design law) + **Rung 1b** (everything else) | Fully absorbed; the six clauses are drift rows SC-1 … SC-6 in §2L, and the placement argument is there. The earlier "NOT FOUND" entry was correct on its facts — the design was never committed to this repository — and the searches it recorded are what established that, rather than a guess. Candidate (i), the existing 89-tag registry, is **included** by the operator's own clause (1) rather than superseded |
 
 ---
 
@@ -519,5 +570,5 @@ each with priced options and one recommendation. Titles only, here:
 | D-4 | Does the harness ship `knowledge(a)` (Def 8.1) as a user-facing view? |
 | D-5 | What language expresses a scope predicate σ — a fixed finite DSL or an arbitrary program artifact? |
 | D-6 | Succession is comparative; the operator distrusts judges. Program-first `accounts-for`, or a judge ensemble? |
-| D-7 | Which park was "the signal-contract park"? |
+| D-7 | ~~Which park was "the signal-contract park"?~~ **ANSWERED 2026-08-14 — option (iii); the design is in REQUEST.md Amendment 2, reconciled as §2L, placed at Rungs 1 + 1b.** |
 | **D-8** *(added by Amendment 1)* | **When a premise is contentful but wrong-by-argument — not a category error — what refutes it, given that prose changes no status by default and the one trial mode that would is cross-family?** (drift row W-1) |

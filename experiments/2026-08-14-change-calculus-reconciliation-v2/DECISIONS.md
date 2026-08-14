@@ -13,7 +13,7 @@ recommendation with its reason. **Every item can be answered with a word.**
 | Decision | Blocks | Can wait until |
 |---|---|---|
 | ~~D-2 siren~~ **ANSWERED** — Road B, 2026-08-14 | — | closed |
-| D-7 signal park | Rung 1 (documentation only) | Rung 1's REQUEST.md |
+| ~~D-7 signal park~~ **ANSWERED** — option (iii), 2026-08-14; placed at Rungs 1 + 1b | — | closed |
 | **D-8** premise refutation by argument | nothing, on the recommended answer (D) — Rung 2 ships for category errors and formal falsity either way | before Rung 2 **only if** the answer is A |
 | D-3 derived vs stored premises | **Rung 2** — the largest rung | before Rung 2 starts |
 | D-1 crisis problem | Rung 3, then Rung 7 | before Rung 3 |
@@ -21,7 +21,10 @@ recommendation with its reason. **Every item can be answered with a word.**
 | D-6 succession instrument | Rung 5 (criterion 5), Rung 7 | before Rung 5 |
 | D-4 `knowledge` view | Rung 5 | before Rung 5 |
 
-Rung 1 can start on D-2 and D-7 alone. Nothing is blocked on all seven.
+**Status, 2026-08-14: D-2 and D-7 are both answered and closed, so Rungs 1 and
+1b are unblocked and can start now.** Five of the original seven remain (D-1,
+D-3, D-4, D-5, D-6), plus D-8 which Amendment 1 added. Nothing is blocked on all
+of them.
 
 ---
 
@@ -155,7 +158,48 @@ over `eval:rubric` wherever content is formal", v1.3 §9).
 
 ---
 
-## D-7 — Which park was "the signal-contract park"?
+## D-7 — ANSWERED (2026-08-14): option (iii), design supplied
+
+The signal-contract design was never in this repository — which is why the
+search below could not find it, and why the honest answer at the time was
+"not found" rather than a guess at one of the two near-misses.
+
+The six clauses are ledgered verbatim in REQUEST.md Amendment 2 (R29–R36),
+reconciled as drift rows **SC-1 … SC-6** in `RECONCILIATION.md` §2L, and placed
+on the ladder.
+
+**Placement, which you delegated to the drift table (R36): its own rung —
+Rung 1b — with clause (6)'s CLAUDE.md design law folded into Rung 1.** Your
+"fold into 1+4" was half right, and it is the *ledger* half that folds. Three
+reasons, argued in full in §2L:
+
+1. The registry must become a contract **before** the rungs that emit new
+   signals — Rung 2 onward, and Rung 8's promotion diagnostics. Your own clause
+   (1) says new setups add signals by declaration through the channel; that only
+   holds if the channel exists first. Placed at Rung 4, every v2 signal would be
+   a retrofit.
+2. Its blast radius is disjoint from the standing layer's. Folding it into Rung
+   4 would put two unrelated gates in one tranche — the same objection that
+   earned the spawn-trigger deletion its own rung.
+3. The INV document's **checks** cannot precede the mechanism:
+   `docs_verify --audit` refuses checks that cannot fail, so an INV document
+   about an unbuilt mechanism ships vacuous checks. Law text in Rung 1;
+   document, both recipes, and the mechanism in Rung 1b.
+
+**Three things in your design are already substantially built**, which is why
+the rung is 450–650 lines rather than a rewrite: `cap_envelope`/`clamp` are the
+FREE layer's envelope bounds; `_policy_payload` already reads the policy from a
+registered artifact, which *is* policy-as-recorded-artifact; and `config_referee`
+(v1.7 §F) is the referee the VERSIONED layer names. Clause (3)'s boundary also
+already holds — `controller.py` imports only `deepreason.ontology` — so the
+architecture test pins it rather than forcing a refactor.
+
+**One thing your design will collide with, flagged not decided:**
+`controller.py` already uses "standing" to mean *under unresolved attack*
+(`_under_standing_attack`), while the calculus uses it for *frame role*. Rung 1
+renames the controller's private predicate; nothing stored moves.
+
+### The original question, retained for the record
 
 **Why it needs a word.** The brief names four parks the v2 program should
 absorb. Three resolve exactly (P4, P5, P6, all in
@@ -172,9 +216,9 @@ REGISTRY.
 | **(ii)** `experiments/2026-08-13-change-results-retrieval-surface/PARKED.md` P2 — the map owns no top-level reader module, and names `signals.py` among them | The v2 program would owe a map document covering the reader modules |
 | **(iii) something not in the tree** | Paste it and it gets a rung |
 
-**Recommendation: tell us which, in a word.** Rung 1 proceeds on (i) meanwhile,
-because it is the cheap half and it is certainly required either way — a new
-signal that is not registered fails the existing test.
+*(Answered above: (iii). Candidate (i), the existing 89-tag registry, turns out
+to be **included** by clause (1) rather than superseded, so the provisional
+assumption Rung 1 was proceeding on was compatible with the real answer.)*
 
 ---
 

@@ -48,6 +48,7 @@ Net: **eight rungs**, mapping onto the operator's seven stages as follows.
 | Operator's suggested stage | Rung(s) |
 |---|---|
 | groundwork / vocabulary | **1** |
+| *(signal contract — added by Amendment 2, placement argued in `RECONCILIATION.md` §2L)* | **1b**, with clause (6)'s design law in **1** |
 | premise channel + spawn-trigger deletion | **2** (channel + cascade) and **3** (deletion) |
 | frame assertions + standing view | **4** |
 | promotion problems + programs | **5** |
@@ -129,6 +130,82 @@ that every root's stored `status` strings are still `accepted`.
 **Estimated size:** 150–250 lines (mostly renderers + tests + one map doc).
 
 **Frozen-surface forecast:** none. Public surface unchanged (no new command).
+
+---
+
+### Rung 1b — The signal contract
+
+Added by REQUEST.md Amendment 2 (R29–R36). Numbered `1b` rather than renumbering
+the program: the suffix marks POSITION, not size — this is a full tranche, and
+the repo has the precedent (`experiments/2026-08-03-change-rung3b-...`).
+
+**Why here and not folded into Rung 4:** argued from the drift table in
+`RECONCILIATION.md` §2L. In short — the registry must become a contract BEFORE
+the rungs that emit new signals (Rung 2 onward, and G-5's promotion diagnostics
+at Rung 8), or every one of them is a retrofit; and its blast radius is disjoint
+from the standing layer's.
+
+**Discharges:** SC-1 … SC-6, and the operator's all-configurations law (L-1) in
+executable form for the allocation controller.
+
+**Entry artifacts:** Rung 1's DELIVERY, including the CLAUDE.md design law text
+for the FROZEN/VERSIONED/FREE layering (clause 6's ledger half).
+
+**Exit artifacts:** the five tranche artifacts; `docs/map/INV-signal-contract.md`
+with checks that can fail; **two** REC recipes — `REC-add-signal.md` and
+`REC-revise-allocation-policy.md`. **No new skill or workflow** — the operator's
+tripwire is explicit: a dedicated workflow only after two recorded recipe
+failures (`authoring-skills` E1).
+
+**Work:**
+- **The typed signal record** (SC-1): name, unit, producer-agnostic semantics,
+  staleness bound. The 89 existing entries in `src/deepreason/signals.py` migrate
+  into it; `tests/test_signals.py`'s AST scan keeps its job, now checking
+  declaration completeness rather than mere presence.
+- **Seat-instance keying** (SC-2): signals key on the seat identity already in
+  the record (`seat-bindings.v1`, v1.7 §A — resolved `group →
+  provider/model/profile-digest`, already read by `tools/root_sweep.py`), so two
+  structurally asymmetric seats filled by one conjecturer throttle
+  independently. **Adds no role**, therefore moves no qualification digest.
+- **Interface-only consumption** (SC-3): the architecture test — which passes on
+  the tree as it stands, since `controller.py`'s only `deepreason` import is
+  `deepreason.ontology`. The real migration is the controller's three direct
+  `harness.state.status.get(...)` reads, which become declared signals.
+- **The compiled topology matrix** (SC-4): solo, no-schools, judges-off,
+  legacy-on and the rest each compile, the controller attaches, and every
+  policy-referenced signal has a producer.
+- **Open-loop disclosure** (SC-5): a typed `allocation open-loop for signal X`
+  notice, extending the `controller-authority` record E28's fix already
+  established. **Disclose, never die.**
+- **The layering** (SC-6) made checkable: FROZEN change protocol, VERSIONED
+  registry + policy algorithm (policy-as-recorded-artifact, referee-reviewed via
+  the existing `config_referee`), FREE parameter values inside the existing
+  `cap_envelope`/`clamp` bounds.
+
+**Gate proves:**
+- **L-1 executably:** every configuration class in the matrix compiles; a
+  topology missing a producer compiles WITH the open-loop notice and without a
+  refusal.
+- **SC-3's boundary holds** — and, because it holds today, the test's value is
+  that it fails the day someone breaks it, not that it turns anything green now.
+- **The FROZEN layer's own clause — "allocation touches efficiency never
+  evidence"** — is C5 and L-5 in the controller's terms: a test proves no signal
+  and no allocation decision reaches a label. This is the row to be strictest
+  about, because seat identity in a signal key is provenance-shaped, and
+  provenance that reaches adjudication is the one thing the harness forbids by
+  construction.
+- Root sweep byte-identical: the migration is a reader/declaration change, and
+  signal STRINGS in committed roots keep their spelling (`INV-frozen-surfaces`'s
+  own trap: "Renaming a typed reason string" — decline reasons and Measure
+  inputs are compared against recorded roots).
+
+**Estimated size:** 450–650 lines, of which the 89-entry migration is the bulk
+and is mechanical.
+
+**Frozen-surface forecast:** surfaces 1–5 zero. Surface 5 explicitly zero
+because SC-2 adds no role. The one genuine hazard is not a frozen surface but a
+frozen *string*: no existing signal name may change spelling during the
+migration.
 
 ---
 
@@ -519,6 +596,7 @@ named, with its evidence or with an explicit "unmeasured".
 | Rung | S1 digests | S2 harness | S3 verification | S4 manifest | S5 qualification | Public surface |
 |---|---|---|---|---|---|---|
 | 1 vocabulary | — | — | — | — | — | — |
+| 1b signal contract | — | — | — | — | — (adds no role) | — |
 | 2 premise channel | — | — | **additive** | — (Config only) | — | — |
 | 3 deletion | — | — | — | — | — | — |
 | 4 frame assertions | — | — | **additive** | — (Config only) | — | **changes** |
@@ -565,4 +643,4 @@ and after, compared byte-for-byte.
 | P4 — evidence citability | 6 | render half (what an inherited-context problem may cite). P4b's quote wording stays parked |
 | P5 — conviction criteria | 2 | **answered** — option C, reachability narrows via premise-criticism and negative case law; A/B/D rejected in Rung 2's SPEC with reasons |
 | P6 — anti-relapse degradation | 2 | typed operational finding when the gate is unarmed. The refuse-to-start policy question stays with P6 |
-| the signal-contract park | 1 (provisionally) | the signal-registry obligation only — see `DECISIONS.md` D-7; no park by that name exists in the tree |
+| the signal-contract design | 1 + **1b** | **fully absorbed.** Clause (6)'s CLAUDE.md design law lands in Rung 1; the typed registry, seat-instance keying, interface pin, topology matrix, open-loop notice, INV document and both REC recipes land in Rung 1b. Supplied by the operator 2026-08-14 (REQUEST.md Amendment 2); it was never in this repository, which is why the original search could not find it |
