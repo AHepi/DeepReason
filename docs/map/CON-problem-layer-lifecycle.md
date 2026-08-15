@@ -159,6 +159,16 @@ label.
   role check, v6 transaction deferral, caller-owned cache, typed drop on
   transport failure. A sweep that re-sampled every cycle would burn tokens and
   churn the record with verdicts that are samples rather than fixed points.
+- **A filed premise must never ADDRESS its problem, and the reason is H1.**
+  `scan_spawns` mints a SUCCESSOR problem for every REFUTED artifact that
+  addresses a problem. A premise is refuted by design — that is the channel
+  working — so registering one with a `problem_id` would make every successful
+  premise criticism spawn a successor question, which is the exact doctrine
+  defect H1 exists to delete. `file_premise` passes no `problem_id`, so a
+  premise never enters `addr`. This holds until Rung 3 removes the loop, and it
+  is worth keeping afterwards: the premise is not an answer to the problem.
+`check: python -c "import inspect; from deepreason.premises import file_premise; src = inspect.getsource(file_premise); assert 'problem_id' not in src.split('harness.create_artifact')[1]"`
+`check: python -m pytest tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation -q`
 - **The invitation is offered inside the RULE, not passed by the scheduler.**
   `_arg_crit`'s call to `crit_argumentative_batch` is keyword-free by seam
   invariant (`DR-SEAM-scheduler-x-rules`), so the rule computes the invitation

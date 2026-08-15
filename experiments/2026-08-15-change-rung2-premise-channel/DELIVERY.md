@@ -32,6 +32,16 @@ authorities. Six commits:
 
 ## The one thing not delivered, and why
 
+**UPDATED 2026-08-15 by RIDER 5 (R62): the live run is now DEFERRED BY POLICY,
+not only blocked by a missing credential — and the policy is the better
+reason.** The external implementation advice requires that no live pilot judge
+premise extraction before P4's citable-evidence flow lands, and A19 is exactly
+such a pilot. Without P4, a live miss would be uninterpretable: nobody could
+tell a critic that DECLINED the invitation from one that never had the evidence
+to take it up. So the operator should NOT be asked for a key to run this yet.
+The credential paragraph below stands as the record of the original block and
+of what closing A19 will need when P4 has landed.
+
 **M19 / A19 — the guarded live run — was never attempted.** `experiments/*/env`
 does not exist in this container and `OLLAMA_API_KEY` is unset, so no ladder
 can reach a provider. This is not the "live MISS is inconclusive" case the

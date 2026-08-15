@@ -693,7 +693,11 @@ reason rather than resolved by seniority.
 
 **R63 / item (6).** Checked against the tree, not against memory:
 
-`check: grep -q "SpawnTrigger.SUCCESSOR" src/deepreason/rules/spawn.py`
+    grep -q "SpawnTrigger.SUCCESSOR" src/deepreason/rules/spawn.py   # PASS, 2026-08-15
+
+(Run by hand. `docs_verify` scans `docs/map/` only, so a `check:` line in this
+document would be decorative — it is written as a command with its result and
+its date instead, which is honest about what authenticates it.)
 
 The refuted⇒successor loop is **still in `scan_spawns`**, gated on
 `status.get(aid) != Status.REFUTED`, and no frontier-unchanged-under-refutation
@@ -711,8 +715,9 @@ is not live for what Rung 2 shipped, because the loop fires on artifacts that
 ADDRESS a problem, and a filed premise is registered with no `problem_id` — it
 never enters `addr`, so refuting it spawns nothing.
 
-`check: python -c "import ast, inspect; from deepreason.premises import file_premise; src = inspect.getsource(file_premise); assert 'problem_id' not in src.split('harness.create_artifact')[1]"`
-`check: python -m pytest tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation -q`
+Both halves of that claim are now pinned WHERE THEY ARE RE-RUN — as two
+`check:` lines in `DR-CON-problem-layer-lifecycle`, whose Traps section carries
+the invariant and the reason it exists. Ran green on addition, 2026-08-15.
 
 That is a reprieve, not a licence: the advice's concern binds fully the moment
 problem-SUBJECT artifacts exist (R59), which is exactly why it sequences H1
