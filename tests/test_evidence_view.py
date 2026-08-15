@@ -41,7 +41,7 @@ def test_dossier_shows_the_full_refutation_chain(harness):
     assert "WARRANTS AGAINST IT" in out
     assert "demonstrative · commitment browser@" in out
     assert "verdict fail" in out
-    assert "nu " in out and "[accepted]" in out       # the attackable ν + status
+    assert "nu " in out and "[unrefuted]" in out      # the attackable ν + status
     assert "trace " in out                            # the trace_ref pointer
     assert "BROWSER EVIDENCE" in out
     assert "verdict fail · failed step 0" in out
@@ -55,7 +55,7 @@ def test_dossier_shows_reinstatement_visibility(harness):
     attack(harness, w.validity_node, "the-render-lied")  # criticize the critic
 
     out = evidence(harness, app.id)
-    assert "status accepted" in out                   # reinstated
+    assert "status unrefuted" in out                  # reinstated
     assert f"nu {w.validity_node[:12]} [refuted]" in out  # and the reader sees WHY
 
 

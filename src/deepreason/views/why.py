@@ -7,6 +7,7 @@ unresolved attacker. Deterministic function of the graph.
 
 from deepreason.ontology import Status
 from deepreason.ontology.state import EpistemicState
+from deepreason.status_display import display_status, status_gloss
 
 
 def _head(state: EpistemicState, artifact_id: str) -> str:
@@ -45,13 +46,13 @@ def why(artifact_id: str, state: EpistemicState, warrants: dict | None = None) -
                 + (f" · commitment {w.commitment}" if w.commitment else "")
                 + (f" · verdict {w.verdict}" if w.verdict else "")
                 + f" · nu {w.validity_node[:12]}"
-                  f" [{nu_status.value if nu_status else '?'}]"
+                  f" [{display_status(nu_status) if nu_status else '?'}]"
                 + (f" · trace {w.trace_ref[:12]}" if w.trace_ref else "")
             )
 
     def visit(aid: str, depth: int, seen: frozenset[str]) -> None:
         status = state.status.get(aid)
-        label = status.value if status is not None else "unregistered"
+        label = display_status(status) if status is not None else "unregistered"
         prefix = "  " * depth + ("<- attacked by " if depth else "")
         lines.append(f"{prefix}{aid[:12]} [{label}]{_head(state, aid)}")
         if aid in seen:
@@ -77,6 +78,13 @@ def why(artifact_id: str, state: EpistemicState, warrants: dict | None = None) -
             "the validity node (nu) of its warrant above, or seed a problem "
             "targeting the critic's weakness, then fund cycles. If that attack "
             "survives adjudication the target is REINSTATED, computed — never granted."
+        )
+    elif status == Status.ACCEPTED:
+        lines.append("")
+        lines.append(
+            f"Rendered {display_status(status)!r} (stored {status.value!r}): "
+            f"{status_gloss(status)}. N1 — no status is final; a fresh "
+            "warranted attack moves it."
         )
     elif status in (Status.SUSPENDED, Status.SUSPENDED_UNSUPPORTED):
         lines.append("")

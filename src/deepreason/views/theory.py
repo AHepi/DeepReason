@@ -8,6 +8,7 @@ a Harness.at() state/log.
 
 from deepreason.ontology.state import EpistemicState
 from deepreason.programs import content_text
+from deepreason.status_display import display_status
 
 
 def theory(artifact_id: str, state: EpistemicState, blobs, log=None) -> str:
@@ -31,7 +32,7 @@ def theory(artifact_id: str, state: EpistemicState, blobs, log=None) -> str:
         artifact = state.artifacts[node]
         status = state.status.get(node)
         lines += [
-            f"## {node[:12]} [{status.value if status else '?'}]",
+            f"## {node[:12]} [{display_status(status) if status else '?'}]",
             "",
             content_text(artifact, blobs)[:400],
             "",

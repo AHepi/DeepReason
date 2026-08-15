@@ -412,14 +412,14 @@ def test_legacy_trial_authority_is_rejected_before_provider_use(harness):
     assert not [event for event in harness.log.read() if event.llm]
 
 
-def test_text_display_says_standing_without_mutating_internal_status(harness):
+def test_text_display_says_unrefuted_without_mutating_internal_status(harness):
     artifact = harness.create_artifact("a still-live text claim")
 
     assert harness.state.status[artifact.id] == Status.ACCEPTED
-    assert display_status(Status.ACCEPTED, "text") == "standing"
-    assert display_status(Status.ACCEPTED, "formal") == "accepted"
+    assert display_status(Status.ACCEPTED, "text") == "unrefuted"
+    assert display_status(Status.ACCEPTED, "formal") == "unrefuted"
     counts = display_status_counts(harness, workload_profile="text")
-    assert counts == {"standing": 1}
+    assert counts == {"unrefuted": 1}
     progress = ProgressSink(harness.root, run_id="text-status", workload="text")
     event = progress.emit(
         state="running",
@@ -427,8 +427,8 @@ def test_text_display_says_standing_without_mutating_internal_status(harness):
         activity="cycle complete",
         display_status_counts=counts,
     )
-    assert event.display_status_counts == {"standing": 1}
-    assert "standing:1" in render_terminal_status(event.model_dump(mode="json"))
+    assert event.display_status_counts == {"unrefuted": 1}
+    assert "unrefuted:1" in render_terminal_status(event.model_dump(mode="json"))
 
 
 def test_scheduler_progress_uses_text_display_statuses(harness):
@@ -446,4 +446,4 @@ def test_scheduler_progress_uses_text_display_statuses(harness):
         SimpleNamespace(cycle=1, pending_deterministic_checks=0), None
     )
 
-    assert progress.read_since(-1)[-1].display_status_counts == {"standing": 1}
+    assert progress.read_since(-1)[-1].display_status_counts == {"unrefuted": 1}

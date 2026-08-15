@@ -450,7 +450,7 @@ class Controller:
     def _last_policy(self):
         return self._policies[-1] if self._policies else None
 
-    def _under_standing_attack(self, aid) -> bool:
+    def _under_unresolved_attack(self, aid) -> bool:
         return self.harness.state.status.get(aid) in (
             Status.REFUTED, Status.SUSPENDED_UNSUPPORTED,
         )
@@ -460,7 +460,7 @@ class Controller:
         controller held (no change proposed, or fail-static)."""
         self._cycle += 1
         last = self._last_policy()
-        if last is not None and self._under_standing_attack(last):
+        if last is not None and self._under_unresolved_attack(last):
             # Fail-static: a contested policy freezes the controller and the
             # caps revert to the last ACCEPTED policy (forbidden #6).
             self._revert_to_last_accepted()

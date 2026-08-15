@@ -9,11 +9,12 @@ trace <id>` lists the touching events.
 import json
 
 from deepreason.programs import content_text
+from deepreason.status_display import display_status
 
 
 def _status(harness, some_id: str) -> str:
     status = harness.state.status.get(some_id)
-    return status.value if status is not None else "unregistered"
+    return display_status(status) if status is not None else "unregistered"
 
 
 def _head(harness, artifact_id: str, limit: int = 72) -> str:

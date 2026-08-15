@@ -239,7 +239,7 @@ def test_operator_question_outranks_spawns_at_cycle_zero(tmp_path):
 
 
 # --- #6: fail-static — no policy while the last is under standing attack - #
-def test_forbidden6_fail_static_holds_under_standing_attack(tmp_path):
+def test_forbidden6_fail_static_holds_under_unresolved_attack(tmp_path):
     from deepreason.ontology import Provenance, Rule, Warrant, WarrantType
 
     h = _harness_with_problem(tmp_path)
@@ -271,7 +271,7 @@ def test_forbidden6_fail_static_holds_under_standing_attack(tmp_path):
                           type=WarrantType.ARGUMENTATIVE, validity_node=attack_nu.id)],
         rule=Rule.CRIT,
     )
-    assert c._under_standing_attack(policy)
+    assert c._under_unresolved_attack(policy)
     result = c.step()  # must HOLD
     assert result is None
     n_policies_after = sum(1 for a in h.state.artifacts.values()

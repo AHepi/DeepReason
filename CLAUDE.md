@@ -330,6 +330,29 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   ("the record is the only admissible evidence") and is not touched by
   this law.
 
+- **The signal registry is a CONTRACT, and allocation changes are layered**
+  (2026-08-14, operator's words verbatim: "The signal REGISTRY is a
+  CONTRACT, not a wiring: a signal is anything declaring name, unit,
+  producer-agnostic semantics, and a staleness bound; new setups add
+  signals by declaration through this typed channel, never by teaching a
+  consumer about a subsystem."): signals are keyed by SEAT INSTANCE, not
+  role — one conjecturer may sit in "multiple structurally asymmetric
+  seats that may need throttling independently". The allocation
+  controller consumes ONLY the signal interface. A topology that cannot
+  produce a signal COMPILES, carrying a typed "allocation open-loop for
+  signal X" notice — disclose, never die (the all-configurations law,
+  applied to allocation). Three layers, not interchangeable: **FROZEN**
+  is the change protocol itself — decisions typed and recorded,
+  interface-only consumption, envelope bounds, and allocation touches
+  EFFICIENCY NEVER EVIDENCE; **VERSIONED** is the registry and the
+  policy algorithm, with policy as a recorded artifact, referee-reviewed;
+  **FREE** is parameter values within envelopes. Governed by an `INV-`
+  map document with checks and two `REC-` recipes (add-signal,
+  revise-allocation-policy); a dedicated workflow only after TWO recorded
+  recipe failures (the `authoring-skills` E1 tripwire). Ledgered by
+  `experiments/2026-08-14-change-calculus-reconciliation-v2/` REQUEST.md
+  Amendment 2; the mechanism lands at that program's Rung 1b.
+
 ## The map — `docs/map/` (read this before scoping any change)
 
 125 000 lines across 34 packages. Do not scope a change by grepping; scope it

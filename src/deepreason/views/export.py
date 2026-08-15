@@ -7,6 +7,7 @@ from pathlib import Path
 
 from deepreason.ontology.state import Status
 from deepreason.rules.act import browser_evidence
+from deepreason.status_display import display_status
 from deepreason.views.why import why
 
 _EXTENSIONS = {
@@ -86,7 +87,7 @@ def export_run(harness, out_dir: str | Path, artifact_id: str | None = None) -> 
         readme += [f"## {path.name}", ""]
         if problem is not None:
             readme += ["**Problem:**", "", problem.description.strip(), ""]
-        readme.append(f"**Status:** {status.value if status else 'unknown'}")
+        readme.append(f"**Status:** {display_status(status) if status else 'unknown'}")
         for payload in browser_evidence(harness, aid):
             readme.append(
                 f"**Browser verdict:** {payload['verdict']} "
