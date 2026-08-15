@@ -26,6 +26,13 @@ Recorded 2026-08-12 at main 074ef1549.
   failures, all `CON-run-identity.md` git-history checks — they
   require an unshallowed clone; on a full clone the expected value
   is 0 failed.
+- **Sweep scope under the 2026-08-14 law** (CLAUDE.md, "Old runs owe
+  the future nothing"): the sweep's obligation is CURRENT-VERSION roots
+  only — a committed root's verdict may not move while current readers
+  don't change. Rows for prior-version roots are historical; new ERROR
+  lines appearing because a format moved on are the law working, not a
+  finding. Replay-byte-unchanged proofs over historical roots are no
+  longer gate obligations anywhere.
 - **root_sweep** (`python tools/root_sweep.py`): 11 ERROR lines, all
   `UnsupportedRunManifestVersionError`. Known hang (pre-existing,
   parked): `experiments/live_tri_2026-07-27/
