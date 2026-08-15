@@ -161,6 +161,18 @@ def _premise_resolution_wf(text: str, budget, artifact=None) -> tuple[str, dict]
     return premise_resolution_wf_program(text, budget, artifact)
 
 
+def _problem_subject_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.calculus.programs import problem_subject_wf
+
+    return problem_subject_wf(text, budget, artifact)
+
+
+def _premise_attribution_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.calculus.programs import premise_attribution_wf
+
+    return premise_attribution_wf(text, budget, artifact)
+
+
 def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
@@ -299,6 +311,15 @@ PROGRAMS: dict[str, ProgramSpec] = {
     "presupposition_wf": ProgramSpec("presupposition_wf", _presupposition_wf, "structural"),
     "premise_resolution_wf": ProgramSpec(
         "premise_resolution_wf", _premise_resolution_wf, "structural"
+    ),
+    # The typed claim substrate (calculus/, Rung 3c). STRUCTURAL: passing says
+    # the body is well formed and controller-compiled, never that its claim
+    # holds -- so they ground no reach and immunise nothing.
+    "problem_subject_wf": ProgramSpec(
+        "problem_subject_wf", _problem_subject_wf, "structural"
+    ),
+    "premise_attribution_wf": ProgramSpec(
+        "premise_attribution_wf", _premise_attribution_wf, "structural"
     ),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),

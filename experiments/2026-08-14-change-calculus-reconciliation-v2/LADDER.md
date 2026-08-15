@@ -119,6 +119,23 @@ seat decides evidence (L-5).
 
 ## 3. The rungs
 
+**Execution order ≠ listing order, as of 2026-08-15.** The rungs below are
+listed in DEPENDENCY order. Execution now follows the operator's own board —
+"Rung 3 next, alone; then problem subjects; P4 before any live judgment; A19
+queued behind it" — which agrees with the external advice's recommended tranche
+order. Concretely:
+
+| # | Tranche | State |
+|---|---|---|
+| 1 | **Rung 3a** — H1's deletion, alone | **DELIVERED** 2026-08-15 |
+| 2 | **Rung 3c** — the claim substrate + companion problem subjects (R59, R60) | next |
+| 3 | **P4** — three-layer citable evidence (R62) | after 3c |
+| 4 | **Rung 3b** — frame-separation | immediately before Rung 4, because its subject (a consulted frame assertion) does not exist until then |
+| 5 | Rungs 4–8, then Rung D | as listed |
+
+`A19` — Rung 2's live pilot — sits behind P4 by R62 and is not scheduled here.
+
+
 ---
 
 ### Rung 1 — Groundwork and vocabulary

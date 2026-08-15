@@ -39,7 +39,8 @@ _STRUCTURAL_PROGRAMS = frozenset(
     # is WELL FORMED, never that its claim holds -- structural like the rest, so
     # passing one grounds no reach and immunises nothing (rules/warrants.py).
     {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf",
-     "presupposition_wf", "premise_resolution_wf"}
+     "presupposition_wf", "premise_resolution_wf",
+     "problem_subject_wf", "premise_attribution_wf"}
 )
 
 
