@@ -267,3 +267,46 @@ Appended verbatim BEFORE acting on it, per the ledger rule.
 gets a rung". The search recorded in `RECONCILIATION.md` §5 was therefore
 correct and is left standing as the reason this design was not found: it was
 never committed here.
+
+### Amendment 3 — 2026-08-15, the attribution-priority directive
+
+Operator, verbatim, on being told the premise channel has no producer:
+
+> Also, the gap needs to be filled by upgrading the token optimisation system.
+> This is going to require extensive testing. My guess is multiple different
+> forms. Each prioritising attribution creation differently.
+> There will need to be signals specifically designed to detect when particular
+> forms are necessary. This will probably be routed through config with options
+> for users to adjust sensitivity: a depth vs breadth sort of setup.
+> Whatever the setup, this system needs dials that can function automatically,
+> but still be adaptable for user needs.
+
+| # | Requirement | Lands at |
+|---|---|---|
+| R37 | The producer gap is filled by the ALLOCATION layer, not by a fixed rule: what motivates a premise attribution is the token-optimisation system deciding it is worth spending on. | Rung 2 (hook) + Rung 1b-ii (policy) |
+| R38 | **Multiple forms**, each prioritising attribution creation differently — not one policy. | post-evidence rung |
+| R39 | **Signals designed to detect when a particular form is necessary** — declared through the signal contract (Rung 1b-i), never by teaching the controller about a subsystem. | Rung 1b-ii |
+| R40 | Routed through **config**, with a user-adjustable **sensitivity** dial on a **depth vs breadth** axis. | Rung 1b-ii |
+| R41 | The dials **function automatically by default** and remain **adaptable for user needs**. | Rung 1b-ii |
+| R42 | **Extensive testing**: the forms are experiment arms, pre-registered and oracle-scored, not chosen by argument. | its own experiment program |
+
+**Guardrails this directive inherits, stated so no rung can quietly drop them:**
+
+- **Allocation touches EFFICIENCY, NEVER EVIDENCE** (the operator's own FROZEN
+  layer). A policy may decide how often a critic is ASKED for a premise. It may
+  never influence whether a premise stands, nor weight any label.
+- **H1 is not reopened.** A run thrashing on a problem may redirect ATTENTION
+  toward premise work; it may not mint a problem from that failure. Failure →
+  attention is legal; failure → problem is what H1 deleted.
+- **Formalism-optional applies.** No conjecture may be ranked, admitted or
+  accepted differently for having, or lacking, an attribution.
+- **All configurations compile.** A topology that cannot produce an
+  attribution-priority signal compiles with the typed open-loop notice.
+
+**Sequencing recommendation, recorded for the operator's decision:** ship the
+channel and ONE deliberately dumb producer first (Rung 2), with the detection
+signals declared alongside it, and only then tune multiple forms against live
+data. The reverse order repeats the E28 pattern — a controller holding authority
+over something that never happens — and the harness has two recorded instances
+of exactly that (the controller that never steered; the reach trigger that never
+fired).
