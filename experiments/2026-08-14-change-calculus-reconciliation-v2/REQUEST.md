@@ -439,3 +439,46 @@ R57 also CONVERGES with R46 rather than adding to it: Rider 2 already routed
 §3.5's strict clause — "at least one of recovery, criticism survival, or
 rigidity is strict" — is exactly the strictness witness R57 names. Two
 authorities, one requirement, recorded once.
+
+### Amendment 8 — 2026-08-15, RIDER 5: the external implementation advice
+
+Operator, verbatim:
+
+> RIDER 5 (append to REQUEST.md): docs/proposals/CALCULUS_IMPLEMENTATION_ADVICE.md
+> is on main — an operator-supplied external review, advisory not binding, to be
+> reconciled against the delivered rungs and the remaining ladder. Adopt unless a
+> delivered rung already contradicts it with reasons: (1) attack-producing derived
+> judgments wire their derivation manifest to the warrant's VALIDITY NODE as
+> EVIDENCE (not dependence alone), so manifest attacks disable the attack before
+> pass one — pin with the advice's regression (target refuted → manifest item
+> attacked → critic loses validity pre-grounded → target reinstated → replay
+> identical); (2) problems become criticizable via deterministic COMPANION
+> subject artifacts (poietic.problem-subject.v1 shape), two-step idempotent
+> registration, no fields added to Problem/EpistemicState/Event; (3) claim
+> bodies are a CLOSED discriminated union compiled to interfaces ONLY by the
+> controller — models never choose mention/dependence/evidence; the generic
+> synthesizer is not retrofitted; (4) programs consume frozen fence-stamped
+> input artifacts (ReachCertificate, IncumbentWoundLedger, ScopeEnvironment,
+> CaptureWindow), never live graph state; (5) P4 gains the advice's three-layer
+> acceptance (bytes in the exposure receipt → ID+exact quote returned →
+> byte-checked at admission → interface depends on the evidence record), via a
+> non-null-quote SUBTYPE, old V1 unmutated — and NO live pilot judges premise
+> extraction, localization, or succession before P4 lands; (6) confirm the
+> delivered Rung 2 removed scan_spawns' refuted⇒successor loop and carries the
+> frontier-unchanged-under-refutation regression with its mutation proof — if
+> absent, it is the next step, alone; (7) frame-separation violations make a
+> frame UNCONSULTABLE with a typed diagnostic — never a manufactured refutation.
+> Embedder note, binding on that pending tranche: dependency lands at install
+> time, warmup in doctor, absence is a typed capability disclosure — nothing
+> installs inside a reasoning transaction.
+
+| # | Requirement | Status | Lands |
+|---|---|---|---|
+| R58 | Attack-producing derived judgments wire their derivation manifest to the warrant's VALIDITY NODE as **evidence**, not dependence alone, so a manifest attack disables the attack **before pass one**. Pinned by the advice's own regression: target refuted → manifest item attacked → critic loses validity pre-grounded → target reinstated → replay identical. | adopt | Rung D (E-1, proof debt) |
+| R59 | Problems become criticizable through deterministic **companion subject artifacts** (`poietic.problem-subject.v1`), two-step idempotent registration, **no fields added** to `Problem` / `EpistemicState` / `Event`. | adopt | Rung 3's successor (claim substrate) |
+| R60 | Claim bodies are a **CLOSED discriminated union**, compiled to interfaces **only by the controller**. Models never choose `mention` / `dependence` / `evidence`. The generic synthesizer is not retrofitted. | adopt | claim substrate |
+| R61 | Programs consume **frozen, fence-stamped input artifacts** (`ReachCertificate`, `IncumbentWoundLedger`, `ScopeEnvironment`, `CaptureWindow`), never live graph state. | adopt | Rungs 5, 7, 8 |
+| R62 | **P4 gains three-layer acceptance** — bytes in the exposure receipt → id + exact quote returned → byte-checked at admission → interface DEPENDS on the evidence record — via a **non-null-quote SUBTYPE**, old V1 unmutated. **And NO live pilot judges premise extraction, localization or succession before P4 lands.** | adopt | P4 tranche; **binds the pending live run** |
+| R63 | Confirm Rung 2 removed `scan_spawns`' refuted⇒successor loop and carries the frontier-unchanged-under-refutation regression with its mutation proof. **If absent, it is the next step, ALONE.** | **CHECKED — ABSENT** | Rung 3, alone, next |
+| R64 | Frame-separation violations make a frame **UNCONSULTABLE with a typed diagnostic** — never a manufactured refutation. | adopt; refines R43 | Rungs 3/4 |
+| R65 | **Embedder, binding on that pending tranche:** the dependency lands at INSTALL time, warmup in `doctor`, absence is a typed capability disclosure. **Nothing installs inside a reasoning transaction.** | adopt | the embedder tranche |

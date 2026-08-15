@@ -681,6 +681,74 @@ yet carry manifests, and a criticism layer that cannot localize blame within a
 bundle. Both absences are now nameable, which is the difference between a
 limitation and a defect.
 
+### 2P. The external implementation advice, reconciled (R58–R65)
+
+REQUEST.md Amendment 8. **Advisory, not binding** — the operator's own framing —
+and the test they set is "adopt unless a delivered rung already contradicts it
+with reasons". So each item is checked against what was actually delivered, and
+where the advice and this program disagree the disagreement is recorded with the
+reason rather than resolved by seniority.
+
+#### The one item that is a check on delivered work — and it comes back ABSENT
+
+**R63 / item (6).** Checked against the tree, not against memory:
+
+`check: grep -q "SpawnTrigger.SUCCESSOR" src/deepreason/rules/spawn.py`
+
+The refuted⇒successor loop is **still in `scan_spawns`**, gated on
+`status.get(aid) != Status.REFUTED`, and no frontier-unchanged-under-refutation
+regression exists. Rung 2 did not remove it and never claimed to: the ladder
+assigns H1's deletion to **Rung 3**, and Rung 2 shipped the replacement channel
+first precisely because *translate* had to exist before the successor trigger
+could go. So the advice's finding is correct about the tree and correct about
+what must happen next, and the operator's own disposition applies: **Rung 3 is
+the next step, alone.**
+
+**One thing the advice's ordering worry does NOT apply to, checked rather than
+assumed.** The advice warns that with the loop live, "refuting a malformed
+question would itself automatically spawn a successor question". That pathology
+is not live for what Rung 2 shipped, because the loop fires on artifacts that
+ADDRESS a problem, and a filed premise is registered with no `problem_id` — it
+never enters `addr`, so refuting it spawns nothing.
+
+`check: python -c "import ast, inspect; from deepreason.premises import file_premise; src = inspect.getsource(file_premise); assert 'problem_id' not in src.split('harness.create_artifact')[1]"`
+`check: python -m pytest tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation -q`
+
+That is a reprieve, not a licence: the advice's concern binds fully the moment
+problem-SUBJECT artifacts exist (R59), which is exactly why it sequences H1
+before them, and why R63 stands.
+
+#### Item by item
+
+| # | Advice | Verdict | Where |
+|---|---|---|---|
+| R58 | manifest → validity node as EVIDENCE, so manifest attacks disable the attack pre-grounded | **adopt.** Nothing delivered contradicts it. Rung 2's rent warrant already carries its sample in the trace blob and declares it in ν, which is the same instinct one step short of the mechanism: a blob is readable, an evidence ref is ATTACKABLE | Rung D (E-1) |
+| R59 | companion problem-subject artifacts; no fields added to `Problem`/`EpistemicState`/`Event` | **adopt**, and it is already this program's instinct — Rung 2 added no field to any of the three. The advice's "no new relation table in `EpistemicState`" rejection agrees with the same reasoning | claim substrate, after Rung 3 |
+| R60 | closed discriminated claim union; the CONTROLLER compiles interfaces; models never choose ref roles | **adopt, and it retro-justifies a delivered choice.** Rung 2's critic contract carries a `premise` STRING and `rules/crit.py` builds the `mention` ref itself — the model never named a role. The advice would have this generalised into a typed union rather than one bespoke field | claim substrate |
+| R61 | programs consume frozen fence-stamped inputs, never live graph state | **adopt, with one delivered tension named.** Rung 2's `premise_rent_sweep` and `demarcation.load` read LIVE state (the current battery, the current registry). They are not `program:` commitments — the rent battery is deliberately not evaluable — so the letter does not bind them, but the spirit does, and Rung 8's re-founding of the diagnostics is where this gets settled for the whole surface | Rungs 5, 7, 8 |
+| R62 | P4's three-layer acceptance; **no live pilot before P4** | **adopt — and it DEFERS the pending live run.** See below | P4 tranche |
+| R63 | confirm the successor loop is gone | **ABSENT — next step, alone** | Rung 3 |
+| R64 | frame-separation violation ⇒ UNCONSULTABLE + typed diagnostic, never a manufactured refutation | **adopt**, refining R43. The distinction is the whole point: an unmet invariant is a reason to STOP TRUSTING a frame, never a reason to invent a defeat for it. Manufacturing a refutation would put an epistemic verdict on the graph to record an engineering fault | Rungs 3/4 |
+| R65 | embedder: install-time dependency, doctor warmup, typed capability disclosure; nothing installs inside a reasoning transaction | **adopt, binding on that tranche.** It is the all-configurations law in a new place: an absent capability is a typed disclosure, not a stop and not a silent self-repair | the embedder tranche |
+
+#### R62 defers the pending live run, and that changes what the operator is owed
+
+Rung 2's A19 — one guarded live run asking whether a real critic ever files an
+attribution — is exactly "a live pilot judging premise extraction". Under R62 it
+**must not run until P4 lands**. It was already blocked on a missing credential;
+it is now ALSO deferred by policy, and the policy is the better reason: without
+P4's citable-evidence flow, a live miss would be uninterpretable — nobody could
+tell a critic that declined the invitation from a critic that never had the
+evidence to take it up. Recorded so the operator is not asked for a key to run
+something this program has just agreed not to run yet.
+
+#### Where the advice and this program DISAGREE, with the reason
+
+| Point | Advice | This program | Resolution |
+|---|---|---|---|
+| The `SUCCESSOR` enum member | KEEP as a legacy parser value; deleting "risks making already-recorded `ProblemProvenance` records unparsable for little functional benefit" | Rung 3 DELETES the member | **This program's answer stands, on the operator's own law.** The 2026-08-14 law retired exactly the compatibility obligation the advice is protecting: old roots are artifacts of their own version and are owed neither validity nor readability. The advice's cost — old records stop parsing — is real and is precisely what the law accepted. An advisory review cannot outrank a standing design law, and the reason is recorded here rather than left as a silent divergence |
+| Tranche ordering | premise channel comes AFTER claim substrate, P4, and proof debt | premise channel was Rung 2, already delivered | **Not reopened.** The advice's ordering is better on one axis (evidence flow before live evaluation) and this program's is better on another (translate must exist before H1 deletes the successor trigger). The disagreement is resolved by R62 rather than by re-ordering: the channel ships, and the LIVE JUDGEMENT of it waits for P4 |
+
 ---
 
 ## 3. Errata entry candidates (R22)

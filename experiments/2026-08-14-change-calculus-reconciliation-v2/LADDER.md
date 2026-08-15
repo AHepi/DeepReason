@@ -355,6 +355,42 @@ the v2 trigger vocabulary then says what v2 actually does, and a reader of the
 enum is not left wondering which members are live. Old roots stop parsing under
 v2 readers, and that is the law working.
 
+**The external advice DISAGREES here and is overruled, with the reason recorded**
+(`RECONCILIATION.md` §2P): it would keep the member as a legacy parser value,
+because deleting it "risks making already-recorded `ProblemProvenance` records
+unparsable for little functional benefit". That cost is real and is exactly what
+the 2026-08-14 law accepted — old roots are artifacts of their own version and
+are owed neither validity nor readability. An advisory review does not outrank a
+standing design law. If the operator wants the member kept, that is one word and
+this paragraph inverts.
+
+**ADDED 2026-08-15 by RIDER 5 (R63) — this rung is NEXT, and ALONE.** The
+external advice checked the tree and found the refuted⇒successor loop still in
+`scan_spawns` with no frontier regression; the operator's disposition for that
+finding is "it is the next step, alone" (`RECONCILIATION.md` §2P). Nothing else
+rides in this tranche.
+
+**The decisive regression, from the advice verbatim, plus its mutation proof:**
+
+```python
+before = set(h.state.problems)
+refute(candidate)
+scan_spawns(h, config)
+assert set(h.state.problems) == before
+```
+
+Restoring the old loop must FAIL this test — a mutation proof, not an
+assertion, because a deletion is exactly the change whose test can pass
+vacuously. The gate also proves every OTHER structural spawn trigger still
+fires, so "nothing spawns" cannot masquerade as success.
+
+**ALSO ADDED (R64), for the frame-separation invariant this rung introduces:** a
+violation makes the frame **UNCONSULTABLE, with a typed diagnostic — never a
+manufactured refutation.** An unmet engineering invariant is a reason to stop
+trusting a frame, never a reason to invent a defeat for it; putting a fabricated
+verdict on the graph to record a code fault would make the record lie about
+epistemics to report a bug.
+
 **Gate proves:** no calculus proposition — a deletion proves absence of loss:
 - **the frontier-delta measurement** on root `8e22d0431fd2b98d`: the 16 SUCCESSOR
   problems disappear from a re-run's shape and nothing else moves;
