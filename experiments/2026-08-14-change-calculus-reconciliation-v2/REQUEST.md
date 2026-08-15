@@ -310,3 +310,65 @@ data. The reverse order repeats the E28 pattern — a controller holding authori
 over something that never happens — and the harness has two recorded instances
 of exactly that (the controller that never steered; the reach trigger that never
 fired).
+
+---
+
+### Amendment 4 — 2026-08-15, RIDER 2: the Formalization as companion authority
+
+Operator, verbatim:
+
+> RIDER 2 (append to REQUEST.md as an amendment): a companion authority is
+> now on main — docs/POIETIC_CALCULUS_FORMALIZED.md, a formal
+> reconstruction that repairs the Computable Calculus. Absorb into the
+> drift table and ladder at the current rung boundary:
+> (1) Rung 3 gains a REQUIRED invariant: frame-separation (§7) — the
+> mention law alone does not secure wound persistence; the design enforces
+> component-separation and its gate proves Theorem 7.3's precondition.
+> (2) Rung 6 gains the third exit grade: premise-contested (§8.2) — do NOT
+> adopt the FrameDecisive axiom; three grades, honestly.
+> (3) New decision ND-2 for the operator's sheet: restored-premise
+> resolution — recommend orphanhood-as-derived-view deactivating on
+> reinstatement with the exit episode retained (consistent with D-3's
+> derived-premises answer and C4), over a fourth revalidate resolution.
+> (4) D-6's program-first succession adopts §3.5's Superseded criteria
+> (recovery, rigidity, non-immunization) as the program-checkable forms;
+> refuted and superseded are distinct derived relations (§1's split).
+> (5) The A1-A10 axiom set (§17) becomes the backbone of the v2 INV- map
+> document; each rung's gate names which axioms it proves or preserves.
+> (6) The capture rung adopts §14's formulas (SC, ATH, Debt, RR, VAR, EGR)
+> as the diagnostic definitions.
+
+| # | Requirement | Lands |
+|---|---|---|
+| R43 | **Rung 3 gains a REQUIRED invariant: frame-separation (§7.2).** The mention law is necessary but NOT sufficient for wound persistence; the design enforces component-separation over the undirected `att ∪ dep` graph (mention edges excluded), and the rung's gate proves Theorem 7.3's precondition rather than assuming it. | Rung 3 |
+| R44 | **Rung 6 gains the third exit grade: contestation (§8.2).** Three grades — fall (`R`), revocation (`SU`), contestation (`S`). The `FrameDecisive` axiom is NOT adopted, so "exactly two exits" is not claimed. | Rung 6 |
+| R45 | **ND-2 joins the decision sheet**: restored-premise resolution. Recommendation — orphanhood as a derived view that DEACTIVATES on reinstatement with the exit episode retained, over a fourth `revalidate` resolution. | DECISIONS.md |
+| R46 | **D-6's program-first succession adopts §3.5's `Superseded` criteria** — recovery, rigidity, non-immunization — as the program-checkable forms. **`Refuted` and `Superseded` are distinct derived relations** (§1's split): unilateral defeat vs comparative theory choice. | Rungs 5, 7 |
+| R47 | **The A1–A10 axiom set (§17) is the backbone of the v2 `INV-` map document**, and **each rung's gate names which axioms it proves or preserves.** | Rung 4 owns the document; every rung names its axioms |
+| R48 | **The capture rung adopts §14's formulas** — SC, ATH, Debt, RR, VAR, EGR — as the diagnostic definitions, including their windowing and canonical rounding. | Rung 8 |
+
+### Amendment 5 — 2026-08-15, RIDER 3: v0.1 as foundational authority, and precedence
+
+Operator, verbatim:
+
+> RIDER 3 (append to REQUEST.md): the third authority is on main —
+> docs/POIETIC_CALCULUS_v0.1.md, the foundational source. The
+> Formalization's §1 integration-boundary table can now be verified
+> against the source directly rather than taken on its word; where the
+> three documents disagree, precedence for the v2 DESIGN is: Formalization
+> (repairs) over Computable Calculus (design) over v0.1 (epistemology),
+> with every departure from v0.1 rowed in RECONCILIATION.md and one line
+> saying why. Two source anchors to honor: v0.1 §7's clean cut —
+> bookkeeping implementable, genesis left open, "an engine that implements
+> the bookkeeping faithfully and leaves genesis open IS an implementation
+> of 𝔓" — is the program's charter sentence; and v0.1 Axiom 4.1 (Genesis
+> Inertness: provenance confers nothing, neither warrant nor stigma) joins
+> the A1-A10 basis in the INV- document.
+
+| # | Requirement | Lands |
+|---|---|---|
+| R49 | **Precedence for the v2 DESIGN, in order: Formalization (repairs) > Computable Calculus (design) > v0.1 (epistemology).** Precedence governs DESIGN only; it is not a claim that a later document is more true. | program-wide |
+| R50 | **Every departure from v0.1 is ROWED in RECONCILIATION.md with one line saying why.** | RECONCILIATION.md §2M |
+| R51 | **v0.1 §7's clean cut is the program's CHARTER SENTENCE**: "an engine that implements the bookkeeping faithfully and leaves genesis open IS an implementation of 𝔓." No rung may treat the open genesis layer as an incompleteness to be closed. | program-wide |
+| R52 | **v0.1 Axiom 4.1 (Genesis Inertness) joins the A1–A10 basis** in the `INV-` document: all appraisal predicates are invariant under permutation of provenance records — origin confers neither warrant nor stigma. | Rung 4's `INV-` document |
+| R53 | **The Formalization's §1 integration-boundary table is now VERIFIABLE against v0.1 rather than taken on its word**, and the verification is recorded. | RECONCILIATION.md §2M |

@@ -136,3 +136,26 @@ the subject of one batched question to the operator** (three readings differ
 materially in behaviour and effort; see DELIVERY/the session report). Nothing
 is implemented against M21 until it is answered — writing the wrong second
 check is more expensive than asking.
+
+
+### Riders 2 and 3 (2026-08-15) — ledgered in the PROGRAM's request, not this one
+
+The operator's RIDER 2 (the Formalization as companion authority) and RIDER 3
+(v0.1 as foundational authority, and the precedence order) govern the v2
+PROGRAM — its drift table, its ladder, its decision sheet — not this tranche.
+They are recorded verbatim, with requirement numbers R43–R53, in
+`experiments/2026-08-14-change-calculus-reconciliation-v2/REQUEST.md`
+Amendments 4 and 5, and absorbed at this rung boundary into LADDER.md
+(Rungs 3, 6, 8 and the new §5b axiom basis), DECISIONS.md (ND-2) and
+RECONCILIATION.md (§2M).
+
+**What they change about work already delivered here:** one row, and it is
+recorded rather than repaired. `RECONCILIATION.md` V-6 — the two signals this
+tranche shipped, `problem.thrash.v1` and
+`criticism.attack-target-entropy.v1`, are NOT §14's formulas: the shipped ATH
+reads the whole standing attack relation, while §14.2 reads newly carried
+attacks in a fixed sequence-number window under a declared rounding rule. They
+were designed before the Formalization arrived. Rung 8 either re-founds them on
+§14 or declares them a distinct family; leaving two different things called
+attack-target entropy is the worse option. **Nothing here is reopened for it** —
+one tranche, one goal.

@@ -543,6 +543,68 @@ codebase is exactly the drift H3 exists to prevent, and the collision predates
 the calculus. Rung 1 renames the controller's predicate (a private method with
 no stored string behind it, so nothing in any root moves).
 
+### 2M. The three authorities, their precedence, and every departure from v0.1
+
+REQUEST.md Amendments 4 and 5 (R43–R53). Three documents now govern the v2
+design, and they are not one voice.
+
+**Precedence, for DESIGN only (R49):**
+
+    Formalization (repairs)  >  Computable Calculus (design)  >  v0.1 (epistemology)
+
+This orders which document decides a DESIGN question when they conflict. It is
+emphatically NOT a claim that a later document is truer: v0.1 is the
+foundational epistemology and the other two are read against it, which is why
+every departure from v0.1 is rowed below with its reason.
+
+**The charter sentence (R51), v0.1 §7, verbatim:**
+
+> "An engine that implements the bookkeeping faithfully and leaves genesis open
+> is not an incomplete implementation of 𝔓; it *is* an implementation of 𝔓."
+
+No rung may treat the open genesis layer as an incompleteness to be closed. The
+clean cut is the program's licence to exist: the bookkeeping layer — ledger,
+grounded-extension computation, supersession checks against registered
+explicanda, status derivation, problem objects with source-types — is what this
+harness builds, and the generators are entered as methodic contents,
+appraisal-inert in origin, criticized like everything else.
+
+#### The Formalization's §1 integration-boundary table, VERIFIED against v0.1 (R53)
+
+Previously this table had to be taken on its word about what v0.1 says. It no
+longer does. All seven rows check out; the verification is recorded because a
+row that had been wrong would have propagated into every rung that trusts it.
+
+| §1 row | What §1 attributes to v0.1 | v0.1 says | Verdict |
+|---|---|---|---|
+| Refutation | lone failed test ⇒ problematic; comparative succession required for tentative refutation | Def 3.5, verbatim: "a lone failed test yields *problematic*, never *refuted*" | **accurate** |
+| Support | status read from a Dung grounded extension | §3.3: standing "is read off the argumentation framework (𝔈, ⇀) by its grounded extension G(Σ)"; no dependency pass exists in v0.1 | **accurate** |
+| Hardness to vary | an order on functional slack structures, generally non-effective | Def 3.7 (embedding of slack structures) + §7 ("slack-comparison … undecidable") | **accurate** |
+| Knowledge | constructor-theoretic resilient information + a conjectured resilience identity | §2 Stratum Φ (the exact constructor-theoretic definition) + Principle 2.4, explicitly labelled *conjecture* | **accurate** |
+| Background exit | not represented as a separate axis in v0.1 | v0.1 has no frame-assertion / background-standing axis; "background" appears only as unformalized context in §3.5 and §5 | **accurate** |
+| Wound persistence | not represented in v0.1 | no wounds, no frame assertions | **accurate** |
+| Orphans after reinstatement | not represented in v0.1 | no presupposition cascade | **accurate** |
+
+#### Departures from v0.1, each with its one line (R50)
+
+| id | Departure | Why |
+|---|---|---|
+| V-1 | **The dependency-support pass** (`SUSPENDED_UNSUPPORTED`) has no counterpart in v0.1's pure grounded semantics | Licensed as a CONSERVATIVE extension (Formalization §1 + Theorem 5.2): with an empty dependency graph it reduces to v0.1's statics exactly, so nothing v0.1 decides is re-decided |
+| V-2 | **The harness refutes unilaterally** on an undefeated warranted violation; v0.1 Def 3.5 reserves *refuted* for the two-place relation requiring a surviving rival | Repaired rather than adopted: §1's split keeps BOTH as distinct derived relations — `Refuted` = unilateral defeat under registered criticism, `Superseded` = comparative theory choice (R46). v0.1's constraint survives intact under the second name, which is what makes "refuted but still framing" coherent |
+| V-3 | **`Status.ACCEPTED` exists as a stored label**; v0.1 §6 admits "no acceptance event" | Vocabulary only, and already rowed as H3: the stored label is a computed fold output, not an act, and the view layer is where the word is corrected. No rung may make it an event |
+| V-4 | **Attention reads provenance** — the seed question wins rank ties, import-role records never count as survivors | v0.1 Axiom 4.1 quantifies over APPRAISAL predicates ("problematic, good, superseded, harder-to-vary"), and ranking is none of them. Rowed anyway because it LOOKS like a violation, and the next reader should find the answer here rather than re-derive it |
+| V-5 | **The premise rent battery and prose-immunity key on commitment KIND** (substantive vs structural) | Also not appraisal-by-provenance: the discriminator is what an artifact DECLARES it forbids, which is available to any content whatever its origin. Axiom 4.1 is untouched; the formalism-optional law (L-4) is the constraint that actually binds here |
+| V-6 | **`problem.thrash.v1` and `criticism.attack-target-entropy.v1` as shipped at Rung 2 are NOT §14's formulas.** ATH as shipped reads the whole standing attack relation; §14.2 reads newly carried attacks in a fixed sequence-number window with a declared rounding rule | Shipped before the Formalization arrived. Rung 8 adopts §14's definitions (R48) and must either re-found these two signals or declare them a distinct family — an unreconciled name collision is worse than either |
+
+#### What joins the axiom basis
+
+v0.1 **Axiom 4.1 (Genesis Inertness)** — all appraisal predicates are invariant
+under permutation of provenance records; origin confers neither warrant nor
+stigma — joins A1–A10 in the `INV-` document (R52). It is the one axiom that
+comes from the foundational source rather than the reconstruction, and it
+excludes inductivism, authority, and genetic dismissal of any generator in a
+single line.
+
 ---
 
 ## 3. Errata entry candidates (R22)
@@ -598,3 +660,4 @@ each with priced options and one recommendation. Titles only, here:
 | D-6 | Succession is comparative; the operator distrusts judges. Program-first `accounts-for`, or a judge ensemble? |
 | D-7 | ~~Which park was "the signal-contract park"?~~ **ANSWERED 2026-08-14 — option (iii); the design is in REQUEST.md Amendment 2, reconciled as §2L, placed at Rungs 1 + 1b.** |
 | **D-8** *(added by Amendment 1)* | **When a premise is contentful but wrong-by-argument — not a category error — what refutes it, given that prose changes no status by default and the one trial mode that would is cross-family?** (drift row W-1) |
+| **ND-2** *(added by Amendment 4)* | **When a fallen premise is REINSTATED, what happens to the orphan mark — derived-view deactivation with the exit episode retained, or a fourth `revalidate` resolution?** (Formalization §1's explicitly recorded gap) |

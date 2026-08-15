@@ -34,11 +34,50 @@ answer is "defer, decide on evidence".
 | D-3 | **A** — premises are derived, not stored | Rung 2 |
 | D-4 | **A** — ship `knowledge(a)`, always with its definition inline | Rung 5 |
 | D-5 | **A** — a fixed finite DSL for σ, reusing `declarative_numeric_v1`'s shape | Rung 4 |
-| D-6 | **A** — program-first `accounts-for`; judges optional, via the trial guard | Rungs 5, 7 |
+| D-6 | **A** — program-first `accounts-for`; judges optional, via the trial guard. **REFINED 2026-08-15 (R46): the program-checkable forms are §3.5's three `Superseded` criteria — recovery, rigidity, non-immunization — and `Refuted` / `Superseded` stay DISTINCT derived relations** (unilateral defeat vs comparative theory choice) | Rungs 5, 7 |
 | D-7 | **(iii)** — the signal-contract design; 1b-i delivered, 1b-ii parked | Rungs 1, 1b |
 | D-8 | open — recommended: defer, then revive `single_family_trial` on evidence | Rung 2's boundary |
+| **ND-2** *(added by Amendment 4)* | open — recommended: **derived-view deactivation, exit episode retained** | Rung 2's cascade, enforced from Rung 4 |
 
-**Rungs 1 and 1b-i are delivered. Rung 2 is unblocked.**
+**Rungs 1, 1b-i and 2 are delivered.** Two decisions are open — **D-8** and
+**ND-2** — and neither blocks the next rung.
+
+**A note on the numbering.** The operator's rider names this item **ND-2**. This
+ledger contains no ND-1, and none has been supplied. The operator's numbering is
+kept rather than compacted: inventing an ND-1 to close the gap would be
+fabricating a decision nobody made, and renumbering would break the reference in
+their own words.
+
+---
+
+## ND-2 — When a fallen premise is REINSTATED, what happens to the orphan mark?
+
+**Why it needs a word.** The Formalization's §1 table records this as an
+explicit gap: "the source leaves the restored-premise case underspecified; the
+core formalization records the gap explicitly". Rung 2 shipped the cascade with
+the mark DERIVED (`premise_orphaned` is a pure function of replayed state), so
+today reinstating the premise silently un-marks the problem — the exit ever
+having happened leaves no trace on the problem. That is a defensible answer and
+it is also an unrecorded one, which is the part worth a decision.
+
+| Road | What you get | Cost | Risk |
+|---|---|---|---|
+| **A. Derived-view deactivation, exit episode RETAINED** *(recommended)* | The mark deactivates the moment the premise stands again — nothing to adjudicate, nothing to clean up — while the EXIT EPISODE stays in the log as a first-class record: this problem was orphaned, by this attribution, from this seq to that one | ~40–70 lines: the episode is already implicit in the event log; what is added is a derived reader that surfaces it | A reader who asks `premise_orphaned` and sees nothing may conclude nothing ever happened. Mitigated by making the episode reader part of the same module, not an optional view |
+| **B. A fourth resolution, `revalidate`** | An explicit adjudicated act closes the orphan when its premise returns, symmetric with retire / translate / independence | ~120–200 lines, and every reinstatement now REQUIRES an act before the problem is workable again | Contradicts D-3's answer (premises are derived, not stored) and C4 (statuses are computed, never stored). It also re-introduces an acceptance-shaped event on a layer whose whole design is that nothing is accepted — v0.1 §6, "no acceptance event" |
+
+**Recommendation: A.** It is the only road consistent with two answers already
+given: **D-3** (premises are derived) and **C4** (statuses are computed from the
+log, never stored). B would make the orphan mark the one stored, act-requiring
+status in a calculus that has none, and it would do so to record something the
+append-only log already contains. Retaining the exit episode answers the real
+worry behind B — that a reinstated problem should not look as though it was
+never in trouble — without buying a fourth resolution to get it.
+
+**Reversible if wrong:** yes, cheaply. If live evidence shows reinstated
+problems being re-worked as though nothing happened, B can be added later as a
+resolution over the retained episodes; nothing in A forecloses it.
+
+---
 
 ---
 

@@ -368,7 +368,36 @@ v2 readers, and that is the law working.
   gate proves instead is that a v2 run's OWN record round-trips: spawn, replay,
   and re-derive the frontier with the trigger gone.
 
-**Estimated size:** 150–250 lines (deletion + regression tests + map + errata).
+**ADDED 2026-08-15 by RIDER 2 (R43) — a REQUIRED invariant: frame-separation.**
+
+The mention law is **necessary but not sufficient** for wound persistence. The
+Computable Calculus claimed persistence followed from the frame assertion merely
+MENTIONING its subject; the Formalization (§7) shows that in a globally
+connected Dung graph a new attack on the subject can propagate through
+pre-existing attack cycles and move the assertion's label indirectly. What is
+actually needed is a graph condition:
+
+> **Definition 7.2 (frame-separation).** A consulted frame assertion `f` with
+> subject `b` is separated when `Comp(f) ∩ Comp(b) = ∅` in the UNDIRECTED graph
+> obtained from `att ∪ dep` by forgetting edge directions. **Mention edges are
+> excluded from that graph**, which is what makes the invariant satisfiable at
+> all: reach records supporting `f` must MENTION rather than DEPEND on the
+> subject, or refuting the subject revokes the reach case.
+
+The design ENFORCES component-separation, and this rung's gate proves **Theorem
+7.3's precondition** rather than assuming it — i.e. it exhibits the separation,
+not merely the mention. Rung 7 then gets to invoke the theorem instead of
+re-arguing it.
+
+This lands at Rung 3 rather than Rung 4 because it is a constraint on how the
+frame layer may be BUILT, and Rung 4 is where it would first be violated.
+
+**Estimated size:** 150–250 lines (deletion + regression tests + map + errata),
+**plus 80–140 for the separation invariant and its gate.**
+
+**Axioms this rung proves or preserves (R47):** proves **A6** (consulted frame
+assertions satisfy frame-separation) and its precondition **A5** (mention, not
+depend); preserves **A1**, **A3**, **A7**.
 
 **Frozen-surface forecast:** none. The enum shrinks, which under the old law
 would have been a stored-value compatibility break and is now simply the
@@ -511,7 +540,32 @@ updated with the frame slice's deterministic allocation;
   P4b (the "optionally with a quote" wording) is a separate prompt change and
   stays parked.
 
+**ADDED 2026-08-15 by RIDER 2 (R44) — the THIRD exit grade: contestation.**
+
+The Computable Calculus claims a consulted frame assertion exits standing in
+exactly two ways. The Formalization (§8.2) shows that is true only under an
+extra axiom the source never states:
+
+> `FrameDecisive(L): ℓ_L(f) ≠ S` for every promotion-addressed frame assertion.
+
+**Do NOT adopt it.** Three grades, honestly, keyed to the label the assertion
+lands on:
+
+| grade | label | what it means |
+|---|---|---|
+| **fall** | `R` (refuted) | the frame assertion itself is defeated — a comparative succession warrant or a direct warranted attack |
+| **revocation** | `SU` (suspended-unsupported) | accreditation lost — one or more reach records supporting the promotion case ceased to be unrefuted |
+| **contestation** | `S` (suspended / undecided) | unresolved attack under grounded semantics — nobody has won |
+
+`fall` and `revocation` are provably disjoint (Theorem 8.1). `contestation` is
+the one the two-exit claim silently assumed away, and adopting `FrameDecisive`
+to keep the claim would be choosing a tidy theorem over the calculus's own
+label set. A frame in contestation is neither defeated nor accredited, and the
+render must say so rather than round it to either neighbour.
+
 **Gate proves:**
+- **all three grades are reachable**, each by its own registration, and the
+  render distinguishes them — the anti-`FrameDecisive` check;
 - **L-5 / Prop 12.5, at the render layer:** the strongest available form — two
   runs over the same graph, one with the frame slice and one without, produce
   identical labels. A slice that changed a label would be a seat deciding
@@ -522,7 +576,11 @@ updated with the frame slice's deterministic allocation;
   produce byte-identical packs.
 - Token economy: the slice fits the pack budget; the allocation is logged.
 
-**Estimated size:** 300–450 lines.
+**Estimated size:** 300–450 lines, **plus 60–100 for the third grade and its
+render.**
+
+**Axioms this rung proves or preserves (R47):** proves **A9** (render acts only
+through attention); preserves **A3**, **A4**, **A10**.
 
 **Frozen-surface forecast:** surface 5 zero **only because no new role is
 added** — this is the rung most tempted to add one; if a summarizer variant is
@@ -614,13 +672,44 @@ which are still undefended.
 - **T-7 honesty:** `K_frame`, scope-predicate budgets, slice budgets and orphan
   scheduling ship as `Config` knobs with recorded defaults and a measurement
   plan. The calculus defends none of them and neither does this program.
+- **ADDED 2026-08-15 by RIDER 2 (R48) — §14's formulas become THE diagnostic
+  definitions.** Six, each a deterministic function of a fixed sequence-number
+  WINDOW `W_m(n)` and never of wall-clock time:
+
+  | name | what it measures | shape |
+  |---|---|---|
+  | **SC** | stream contraction | `1 − (N_eff − 1)/(N − 1)` over behavioral signatures, `N_eff = 1/Σp_z²` |
+  | **ATH** | attack-target entropy | normalized Shannon entropy of NEWLY CARRIED attacks over their targets |
+  | **Debt** | criticism debt | fraction of old unrefuted artifacts with no live attackers, above an age floor `h` |
+  | **RR** | reinstatement rate | `R→U` label changes per criticism registration |
+  | **VAR** | validity-node attack rate | new attacks on warrant-validity artifacts / all new attacks |
+  | **EGR** | exogenous grounding ratio | live warrants whose validity lineage terminates in budgeted checks, evidence or rulings, rather than a closed judgment loop |
+
+  Two obligations ride with them. **Canonical rounding and a declared fixed
+  precision are part of the policy**, not an implementation detail (A10). And
+  **the hysteresis controller (§14.7) may alter lineage quotas, render slices,
+  retrieval balance, critic budgets and variation budgets, and may NOT add or
+  remove attack edges, dependency edges, or labels** — Theorem 14.1 is what this
+  rung's gate must exhibit, not assume.
+
+  **Reconciliation obligation, rowed as V-6:** the two signals shipped at Rung 2
+  (`problem.thrash.v1`, `criticism.attack-target-entropy.v1`) predate this
+  adoption and are NOT these formulas — the shipped ATH reads the whole standing
+  attack relation, §14.2 reads a window of newly carried attacks. This rung
+  either re-founds them on §14 or declares them a distinct family. Leaving two
+  things called attack-target entropy is the worse option.
 
 **Gate proves:** §9.9 as a passing audit that has been shown to fail when
 seeded with a violation; G-5's before/after diagnostics present on every
 promotion event; and the program's closing honesty obligation — every constant
 named, with its evidence or with an explicit "unmeasured".
 
-**Estimated size:** 400–600 lines.
+**Estimated size:** 400–600 lines, **plus 200–300 for the six §14 diagnostics,
+their window policy and the hysteresis controller.**
+
+**Axioms this rung proves or preserves (R47):** proves **A9** (diagnostics act
+only through attention — Theorem 14.1) and **A10** (canonical rounding and
+sampling); preserves **A1**, **A2**.
 
 **Frozen-surface forecast:** none beyond `Config` knobs and their
 `_versioned_source_config_data` lines.
@@ -671,6 +760,34 @@ that on runs it makes itself, not on runs made by earlier versions.
 | N1, N3 | Rung 2 (problem layer), Rung 4 (frame assertions) |
 | P4 both halves | Rung 5 |
 | P11 | the whole program; nothing before Rung 7 discharges it |
+
+### 5b. The axiom basis, and which rung answers for each (R47, R52)
+
+**ADDED 2026-08-15 by RIDERS 2 and 3.** The Formalization's §17 gives a minimal
+axiom set sufficient for its thirteen results; v0.1's Axiom 4.1 joins it from
+the foundational source. Together they are the backbone of the v2 `INV-` map
+document, **owned by Rung 4** (the first rung that has all four layers to
+separate). Every rung's gate names the axioms it PROVES and the axioms it
+PRESERVES — an axiom nobody answers for is an axiom nobody is testing.
+
+| Axiom | Statement (compressed) | Proved at | Preserved by |
+|---|---|---|---|
+| **A1** | the log is append-only; state is a pure fold over it | already true — Rung 1 records it | every rung |
+| **A2** | all verdicts are finite-budget deterministic results | already true | every rung |
+| **A3** | status = grounded attack pass, then the acyclic support pass | already true | Rungs 2, 3, 4, 6 |
+| **A4** | standing is a derived consultation relation and never enters status computation | **Rung 4** | Rungs 5, 6, 7 |
+| **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (the law, for attributions), **Rung 4** (for frame assertions) | Rung 3 |
+| **A6** | consulted frame assertions satisfy frame-separation | **Rung 3** (R43) | Rungs 4, 7 |
+| **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
+| **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** | Rung 8 |
+| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) | Rungs 2, 5 |
+| **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung |
+| **Ax 4.1** | **Genesis Inertness** — all appraisal predicates are invariant under permutation of provenance records; origin confers neither warrant nor stigma (v0.1) | **Rung 4**'s `INV-` document states it; **no rung may violate it** | every rung |
+
+Genesis Inertness is the one that will be violated by accident rather than by
+design, and always in the same shape: a ranking, a gate or a criterion that
+reads WHO or WHAT produced a content instead of what it declares. Attention may
+read provenance (`RECONCILIATION.md` V-4); appraisal may not.
 
 ---
 
