@@ -183,6 +183,55 @@ def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> 
     return hv
 
 
+class VariationSampler:
+    """µ(·|a) and ≈_B bound together, for `measures/demarcation.py::mod`.
+
+    Everything here is the HV machinery above, reused rather than re-derived:
+    the same variator kernel, the same frozen equivalence battery, the same
+    verdict-vector-first equivalence with the embedder as a pre-filter only.
+    A second implementation of "is this the same explanation?" is a second
+    answer, and the two would drift.
+
+    LLM-dependent, like every HV estimate: the sample is a spot-check, so a
+    caller that turns it into a verdict owes ν the declaration that it did
+    (§17 — such assumptions are parked in the validity node, visible and
+    attackable, never eliminated).
+    """
+
+    def __init__(self, harness, adapter, k: int, embedder=None) -> None:
+        self.harness = harness
+        self.adapter = adapter
+        self.k = int(k)
+        self.embedder = embedder
+        self.last_edits: list[str] = []
+        # The battery ≈_B is decided against belongs to the artifact that was
+        # sampled, so it is captured by `sample` rather than guessed here.
+        self._equiv_battery: list[str] = []
+        self._pass_battery: list[str] = []
+
+    def sample(self, artifact) -> tuple[str, list[str]]:
+        text, battery, edits, _kernel, llm_call = _sample_edits(
+            self.harness, self.adapter, artifact, self.k
+        )
+        self.last_edits = list(edits)
+        self._pass_battery = list(battery)
+        self._equiv_battery = _equivalence_battery(self.harness, artifact)
+        self.harness.record_llm_calls(
+            [llm_call], "hv-nomeasure" if not edits else "demarcation-variation"
+        )
+        return text, list(edits)
+
+    def equivalent(self, a: str, b: str) -> bool:
+        return _equivalent(
+            a,
+            b,
+            self.embedder,
+            harness=self.harness,
+            equiv_battery=self._equiv_battery,
+            pass_battery=self._pass_battery,
+        )
+
+
 def hv_floor_commitment(config) -> Commitment:
     """Instantiate hv-floor@<params-hash> with k and HV_MIN frozen in."""
     k = int(config.HV_K)

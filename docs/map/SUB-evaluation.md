@@ -239,15 +239,19 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   (survivors already pass B0) and would collapse HV to 1.0, so agreement counts
   only when the equivalence battery has margin beyond it.
 `check: grep -q "never by embedding proximity" src/deepreason/measures/hv.py && python -m pytest "tests/test_reflexive_discipline.py::test_hv_equivalence_decided_by_verdict_vectors" -q`
-- **`measures/demarcation.py` is half machinery and half spec stub, and the
-  halves are not interchangeable.** `crit` is live as of the premise channel
-  (`DR-CON-problem-layer-lifecycle`) and decides whether an artifact forbids
-  anything, reusing `reach._substantive` so a well-formedness check cannot buy
-  demarcation. `mod` still raises `NotImplementedError`, so `active()` — which
-  is `crit and mod` — does not exist yet and must not be inferred from `crit`
-  alone. The older demarcation discipline that bites elsewhere is unchanged:
-  `skeleton_wf` failing an artifact that forbids nothing.
-`check: sh -c 'grep -q "def mod" src/deepreason/measures/demarcation.py && grep -q "raise NotImplementedError" src/deepreason/measures/demarcation.py && ! grep -q "def active" src/deepreason/measures/demarcation.py' && python -c "import pytest; from deepreason.measures.demarcation import mod; pytest.raises(NotImplementedError, mod, None, None)" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent -q`
+- **`measures/demarcation.py` is machinery, and its two halves answer
+  different questions.** `active(a) <=> crit(a) and mod(a)` is whole as of the
+  premise channel (`DR-CON-problem-layer-lifecycle`). `crit` reads the DECLARED
+  attack surface — at least one substantive commitment, via `reach._substantive`,
+  so a well-formedness check cannot buy demarcation. `mod` reads whether the
+  CONTENT varies into anything different, and it needs a variator, so it is a
+  sampled predicate rather than a proof: a caller that turns it into a verdict
+  owes its validity node the declaration that it rested on a sample (§17). The
+  halves are not substitutes — prose fails `crit` by construction, so `crit`
+  alone carries no information about prose, which is the whole reason the
+  second reading exists. The older demarcation discipline that bites elsewhere
+  is unchanged: `skeleton_wf` failing an artifact that forbids nothing.
+`check: python -c "import inspect; from deepreason.measures import demarcation as D; assert 'crit(artifact, commitments) and mod(artifact, variator)' in inspect.getsource(D.active); assert 'NotImplementedError' not in inspect.getsource(D)" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent tests/test_premise_channel.py::test_active_is_both_halves -q`
 - **`ProgramSpec.class_` and `external_toolchain` are reporting facts only.**
   They never alter commitment syntax, verdict interpretation, or labels. The one
   consumer with teeth is the anti-relapse gate, which refuses to establish

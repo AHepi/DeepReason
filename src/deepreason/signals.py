@@ -468,6 +468,29 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
         staleness="cycle",
     ),
     SignalDeclaration(
+        name="premise.rent-undecided.v1",
+        unit="event",
+        semantics="a premise carrying no substantive commitment was NOT "
+                  "refuted by demarcation, and why (inputs: [signal, premise "
+                  "artifact id, reason]): either the second reading was "
+                  "unavailable, or varying the content produced something "
+                  "that says a different thing. The distinction this records "
+                  "is the one silence destroys — 'we could not check' is not "
+                  "'we checked and it was fine', and neither is a verdict "
+                  "about the premise",
+        staleness="run",
+    ),
+    SignalDeclaration(
+        name="demarcation-variation",
+        unit="tokens",
+        semantics="one variator sample taken to decide whether a claim has a "
+                  "nontrivial variation surface (§6 mod); the call registers "
+                  "nothing itself and its spend is on this event. A sample, "
+                  "never a proof: whatever consumes it owes its own validity "
+                  "node the declaration that it rested on one",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
         name="premise.attribution-filed.v1",
         unit="event",
         semantics="a premise artifact and its attribution reached the record "

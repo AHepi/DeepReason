@@ -25,7 +25,12 @@ from deepreason.llm.firewall import (
 )
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.attention import attack_target_entropy, problem_thrash
-from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
+from deepreason.measures.hv import (
+    VariationSampler,
+    hv_spot_check,
+    is_hv_floor,
+    run_hv_floor,
+)
 from deepreason.measures.reach import reach_sweep
 from deepreason.premises import (
     independence_resolution_rate,
@@ -338,6 +343,9 @@ class Scheduler:
         # Bounded selection history behind the problem-thrash signal.
         # Non-epistemic and rebuildable, like _problem_worked beside it.
         self._selection_window: list[str] = []
+        # Premises whose second demarcation reading is settled: the mod
+        # half costs a provider call and is a sample, not a fixed point.
+        self._premise_decided: set[str] = set()
         self.schools = (
             schools.active_backend().init_schools(harness, config)
             if config.N_SCHOOLS > 0
@@ -2253,9 +2261,7 @@ class Scheduler:
             # can share one (CRIT_BATCH_K).
             self._arg_crit([a.id for a in admitted])
 
-        # Deterministic, spends no tokens, and runs beside the other free
-        # sweeps: a premise filed this cycle is adjudicated this cycle.
-        premise_rent_sweep(harness)
+        self._premise_rent_step()
         reach_sweep(
             harness, coverage_min=config.REACH_COVERAGE_MIN
         )  # hits recorded; debt spawns next scan
@@ -2294,6 +2300,38 @@ class Scheduler:
                 f"{independence_resolution_rate(harness):.4f}",
             ]
         )
+
+    def _premise_rent_step(self) -> None:
+        """Adjudicate filed premises by demarcation (`active` = crit and mod).
+
+        The first half is free; the second needs the variator, so this owns the
+        role check, the v6 transaction deferral and the cache exactly as
+        `_lazy_hv` does. Without a variator seat the sweep still runs and still
+        fells nothing, recording a typed abstention per premise — a solo run
+        that cannot take the second reading must say so rather than pass the
+        premise silently.
+
+        `_premise_decided` bounds the spend: one variator call per premise for
+        the life of the run, and a premise is only ever filed on an invitation,
+        so the sweep cannot scale with the artifact population.
+        """
+        harness = self.harness
+        if not self.adapter.has_role("variator"):
+            premise_rent_sweep(harness, decided=self._premise_decided)
+            return
+        if self._defer_untransactional_v6_phase(
+            "premise-demarcation-variation",
+            "variator",
+            "premise-rent",
+        ):
+            return
+        variator = VariationSampler(
+            harness, self.adapter, self.config.HV_K, self.embedder
+        )
+        try:
+            premise_rent_sweep(harness, variator, decided=self._premise_decided)
+        except (SchemaRepairError, EndpointError) as e:
+            self._drop(e)
 
     def _audit_step(self) -> None:
         """Judge-audit sweep every AUDIT_PERIOD cycles (§10.4), budgeted."""

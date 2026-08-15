@@ -36,4 +36,29 @@ def crit(artifact, commitments) -> bool:
 
 
 def mod(artifact, variator) -> bool:
-    raise NotImplementedError
+    """§6 mod: is there anything here that could have been otherwise?
+
+    ``variator`` supplies BOTH halves of Def 3.6 — the kernel µ(·|a) that
+    samples neighbours and the equivalence relation ≈_B that decides whether a
+    neighbour is a different claim or the same claim reworded. They travel
+    together because a variation surface is only nontrivial RELATIVE to what
+    counts as the same explanation; splitting them across two callers is how a
+    rename starts counting as a variation.
+
+    A sampled predicate, not a proof: no edits sampled means no evidence of a
+    variation surface, which is reported as False rather than dressed up as a
+    finding. Whoever acts on it owes the record the sample it rested on.
+    """
+    text, edits = variator.sample(artifact)
+    return any(not variator.equivalent(text, edit) for edit in edits)
+
+
+def active(artifact, commitments, variator) -> bool:
+    """§6 active(a) <=> crit(a) and mod(a) — the demarcation criterion whole.
+
+    The two halves are independent readings and that is the point: `crit`
+    reads the declared attack surface, `mod` reads whether the content varies
+    into anything different. A claim can fail one and pass the other, and only
+    a claim that fails BOTH forbids nothing under either reading.
+    """
+    return crit(artifact, commitments) and mod(artifact, variator)

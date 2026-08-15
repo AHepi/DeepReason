@@ -270,23 +270,60 @@ def file_premise(harness, problem_id: str, premise_text: str, *, provenance=None
     return premise, attribution
 
 
-def premise_rent_sweep(harness) -> list:
-    """Refute every premise that forbids nothing. Returns the critics registered.
+def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
+    """Refute every premise that forbids nothing UNDER BOTH READINGS.
 
-    DEMONSTRATIVE, so the verdict is status-changing under every authority mode
-    -- it is a machine reading of the artifact's own attack surface, not an
-    argument anyone made. Reversible like every other step: the verdict's
-    validity node is an ordinary registered artifact, so attacking it reinstates
-    the premise and un-marks the problem by the same computed predicate (N1).
+    `active(a) <=> crit(a) and mod(a)` (spec §6), and a premise falls only when
+    it fails both halves. The halves are independent on purpose: `crit` reads
+    the declared attack surface, `mod` reads whether the content varies into
+    anything different. A prose premise carries no attack surface by
+    construction, so `crit` alone would fell every premise a critic ever files
+    and the demarcation verdict would carry no information (operator, 2026-08-15:
+    "a second check needs to be added for prose"). `mod` is the check that can
+    still tell a vacuous claim from a contentful one nobody has formalised.
+
+    Without a variator there is no second reading, so NOTHING FALLS. That is a
+    typed abstention rather than a silent pass: a run with no variator seat
+    records `premise.rent-undecided.v1` once per premise and leaves the premise
+    accepted, because "we could not check" must never look like "we checked and
+    it was fine".
+
+    The verdict is DEMONSTRATIVE and therefore status-changing under every
+    authority mode. It is also LLM-dependent through `mod`'s sample, so ν says
+    so — the assumption is parked in the validity node, visible and attackable
+    (§17), and attacking ν reinstates the premise and un-marks the problem by
+    the same computed predicate (N1).
+
+    `decided` is a caller-owned cache of premise ids already settled by the
+    second check, exactly like the scheduler's `_fuzz_clean`. The sample costs
+    a provider call and is a spot-check rather than a fixed point, so
+    re-sampling every cycle would both burn tokens and churn the record.
     """
-    from deepreason.measures.demarcation import crit
+    from deepreason.measures.demarcation import crit, mod
     from deepreason.rules.warrants import register_fail_warrant
 
+    settled = decided if decided is not None else set()
     critics = []
     for artifact in list(harness.state.artifacts.values()):
         if PREMISE_RENT.id not in artifact.interface.commitments:
             continue
         if crit(artifact, harness.commitments):
+            continue  # it forbids something: the first reading already clears it
+        if artifact.id in settled:
+            continue
+        if variator is None:
+            settled.add(artifact.id)
+            harness.record_measure(
+                inputs=["premise.rent-undecided.v1", artifact.id, "no-variator"]
+            )
+            continue
+        varies = mod(artifact, variator)
+        edits = list(getattr(variator, "last_edits", ()))
+        if varies:
+            settled.add(artifact.id)
+            harness.record_measure(
+                inputs=["premise.rent-undecided.v1", artifact.id, "varies"]
+            )
             continue
         critic = register_fail_warrant(
             harness,
@@ -294,12 +331,16 @@ def premise_rent_sweep(harness) -> list:
             target_id=artifact.id,
             nu_content=(
                 f"nu: the demarcation verdict on {artifact.id} is sound and "
-                "relevant -- it forbids nothing, so nothing could count against it"
+                "relevant -- it forbids nothing under either reading: no "
+                "substantive commitment declares what could count against it, "
+                "and sampled variations of it are the same claim reworded. The "
+                "second half rests on a variator SAMPLE, not a proof"
             ),
             critic_content=(
                 f"critic: premise {artifact.id[:12]} pays no rent -- it carries "
                 "no substantive commitment, so no observation and no execution "
-                "could ever tell against it"
+                "could tell against it, and varying it produced nothing that "
+                "says anything different"
             ),
             trace_ref=harness.blobs.put(
                 canonical_json(
@@ -307,8 +348,10 @@ def premise_rent_sweep(harness) -> list:
                         "commitment": PREMISE_RENT.id,
                         "eval": PREMISE_RENT_EVAL,
                         "verdict": "fail",
-                        "reason": "no substantive commitment on the interface",
+                        "reason": "crit and mod both fail: no substantive "
+                                  "commitment, and no variation surface",
                         "commitments": list(artifact.interface.commitments),
+                        "sampled_variations": [edit[:120] for edit in edits],
                     }
                 )
             ),

@@ -42,13 +42,22 @@ at once". Support propagation would be eager and was rejected for that reason.
 
 ## The rent battery — how a premise falls without anyone attacking it
 
-A premise pays RENT by carrying at least one SUBSTANTIVE commitment;
-`measures/demarcation.py::crit` is §6's predicate and `premises.py::
-premise_rent_sweep` is the sweep that registers a DEMONSTRATIVE fail warrant
-against a premise that pays none. Demonstrative, so it is status-changing under
-every authority mode — it is a machine reading of the artifact's own attack
-surface, not an argument anyone made — and its validity node ν is an ordinary
-registered artifact, so the verdict is attackable like everything else.
+A premise falls only when it forbids nothing under BOTH readings of §6's
+`active(a) <=> crit(a) and mod(a)`. `crit` asks whether the interface declares
+a SUBSTANTIVE commitment; `mod` asks whether the content varies into anything
+that says something different. The second reading is not decoration: a prose
+premise carries no attack surface BY CONSTRUCTION, so `crit` alone would fell
+every premise a critic ever files and the verdict would carry no information
+(operator, 2026-08-15 — "a second check needs to be added for prose"). `mod` is
+what can still tell a vacuous claim from a contentful one nobody has formalised.
+
+`premises.py::premise_rent_sweep` registers the DEMONSTRATIVE fail warrant, so
+it is status-changing under every authority mode, and its validity node ν is an
+ordinary registered artifact, so the verdict is attackable like everything
+else. ν also DECLARES that its second half rested on a variator sample rather
+than a proof (§17), and without a variator seat the sweep fells nothing and
+records `premise.rent-undecided.v1` instead — "we could not check" must never
+look like "we checked and it was fine".
 
 The battery's own commitment carries eval kind `demarcation:crit`, which
 `programs.evaluate` does not know. That is the design, twice over. A program is
@@ -58,7 +67,7 @@ because an unknown eval kind is not `evaluable`, `reach._substantive` is False
 for it — so **carrying the rent battery can never satisfy the rent battery**.
 
 `check: python -c "from deepreason.premises import PREMISE_RENT; from deepreason.measures.reach import _substantive; from deepreason import programs; assert not programs.evaluable(PREMISE_RENT) and not _substantive(PREMISE_RENT)"`
-`check: python -m pytest tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent tests/test_premise_channel.py::test_the_rent_battery_cannot_satisfy_itself tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation -q`
+`check: python -m pytest tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent tests/test_premise_channel.py::test_the_rent_battery_cannot_satisfy_itself tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation tests/test_premise_channel.py::test_a_prose_premise_that_varies_into_something_different_survives tests/test_premise_channel.py::test_without_a_variator_nothing_falls_and_the_record_says_why -q`
 
 ## The producer, wired
 
@@ -127,15 +136,20 @@ label.
   itself is still computed from the log, because the problem's own record is
   never mutated. Read `open_orphans`, not `premise_orphaned`, when asking what
   is outstanding.
-- **A filed premise is prose, so it pays no rent, so filing IS the
-  accusation.** Under Rung 2 every premise a critic files falls by demarcation,
-  because the harness can see an artifact's attack surface and nothing else.
-  That is why the contract field means "a presupposition that forbids nothing"
-  and not "a presupposition", and why the recourse is threefold and unchanged:
-  attack ρ ("the problem never assumed that"), attack ν (the demarcation
-  verdict), or attach a substantive commitment to X. What this does NOT give is
-  discrimination between a vacuous premise and a true one nobody has
-  formalised — that is D-8, open.
+- **`crit` alone would have made filing an attribution equal to marking the
+  problem.** A filed premise is prose, so it pays no rent by construction, so
+  the first reading fells every one of them and the two locks collapse into a
+  single act. This was live for the length of one commit and closed by the
+  second reading (`mod`) on the operator's instruction. Read a `crit`-only
+  demarcation verdict anywhere as an unfinished one. The recourse against a
+  full verdict is threefold and unchanged: attack ρ ("the problem never assumed
+  that"), attack ν (the demarcation verdict, which declares its own sample), or
+  attach a substantive commitment to X.
+- **`mod` costs a provider call, so the sweep caches per premise and the
+  scheduler owns the seat check.** `_premise_rent_step` mirrors `_lazy_hv`:
+  role check, v6 transaction deferral, caller-owned cache, typed drop on
+  transport failure. A sweep that re-sampled every cycle would burn tokens and
+  churn the record with verdicts that are samples rather than fixed points.
 - **The invitation is offered inside the RULE, not passed by the scheduler.**
   `_arg_crit`'s call to `crit_argumentative_batch` is keyword-free by seam
   invariant (`DR-SEAM-scheduler-x-rules`), so the rule computes the invitation

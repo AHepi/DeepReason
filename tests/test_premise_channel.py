@@ -39,6 +39,8 @@ from deepreason.premises import (
 from deepreason.ontology import Problem, ProblemProvenance
 from tests.conftest import art, attack
 
+_SIREN_PREMISE = "a siren is the kind of thing that has a colour"
+
 
 def _commitment(harness, eval_name: str) -> str:
     kappa = Commitment(id=f"{eval_name}@v2", eval=eval_name, budget={"steps": 1000})
@@ -269,6 +271,31 @@ def test_an_unsupported_premise_grades_as_unaccredited(harness):
     assert premise_orphaned(harness) == {"pi": PREMISE_UNACCREDITED}
 
 
+class _Variator:
+    """A deterministic stand-in for µ(·|a) and ≈_B, bound together as
+    `demarcation.mod` requires. `distinct` decides whether the sampled edits
+    say anything different from the original — the whole content of the second
+    demarcation reading."""
+
+    def __init__(self, edits=("a siren has a pitch",), *, distinct=False):
+        self.edits = list(edits)
+        self.distinct = distinct
+        self.last_edits: list[str] = []
+
+    def sample(self, artifact):
+        from deepreason.programs import content_text
+
+        self.last_edits = list(self.edits)
+        return content_text(artifact, self._blobs), list(self.edits)
+
+    def equivalent(self, a, b):
+        return not self.distinct
+
+    def bind(self, harness):
+        self._blobs = harness.blobs
+        return self
+
+
 # --- the rent battery ------------------------------------------------------
 
 
@@ -320,7 +347,7 @@ def test_a_premise_falls_by_demarcation_with_no_written_refutation(harness):
     assert harness.state.status[premise.id] == Status.ACCEPTED
     assert premise_orphaned(harness) == {}
 
-    critics = premise_rent_sweep(harness)
+    critics = premise_rent_sweep(harness, _Variator().bind(harness))
 
     assert len(critics) == 1
     assert harness.state.status[premise.id] == Status.REFUTED
@@ -332,9 +359,10 @@ def test_a_premise_falls_by_demarcation_with_no_written_refutation(harness):
 def test_the_rent_verdict_is_reversible_and_never_doubled(harness):
     problem = _problem(harness, "what is the colour of a siren")
     premise, _ = file_premise(harness, problem, "a siren has a colour")
-    critic = premise_rent_sweep(harness)[0]
+    critic = premise_rent_sweep(harness, _Variator().bind(harness))[0]
 
-    assert premise_rent_sweep(harness) == []  # the verdict is already on record
+    # Already on record, and the second reading is not re-sampled either.
+    assert premise_rent_sweep(harness, _Variator().bind(harness)) == []
 
     attack(harness, critic.id, "sirens are individuated by their housing")
 
@@ -352,9 +380,75 @@ def test_a_premise_that_forbids_something_keeps_paying(harness):
     )
     _attribution(harness, problem, premise.id)
 
+    assert premise_rent_sweep(harness, _Variator().bind(harness)) == []
+    assert harness.state.status[premise.id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+
+
+def test_a_prose_premise_that_varies_into_something_different_survives(harness):
+    """M21 — the second check, and the reason it exists.
+
+    `crit` cannot tell a vacuous prose premise from a contentful one nobody has
+    formalised: neither carries an attack surface. `mod` can, and a premise
+    falls only when BOTH readings fail.
+    """
+    problem = _problem(harness, "why does the kettle whistle")
+    premise, _ = file_premise(harness, problem, "the whistle is driven by steam")
+
+    critics = premise_rent_sweep(
+        harness, _Variator(("the whistle is driven by resonance",), distinct=True).bind(harness)
+    )
+
+    assert critics == []
+    assert harness.state.status[premise.id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+    undecided = [
+        event
+        for event in harness.log.read()
+        if event.inputs[:1] == ["premise.rent-undecided.v1"]
+    ]
+    assert [event.inputs[2] for event in undecided] == ["varies"]
+
+
+def test_without_a_variator_nothing_falls_and_the_record_says_why(harness):
+    """M21 — 'we could not check' must never look like 'we checked'.
+
+    A run with no variator seat has only one of the two readings, so it fells
+    nothing and records the abstention against the premise it could not decide.
+    """
+    problem = _problem(harness, "what is the colour of a siren")
+    premise, _ = file_premise(harness, problem, _SIREN_PREMISE)
+
     assert premise_rent_sweep(harness) == []
     assert harness.state.status[premise.id] == Status.ACCEPTED
     assert premise_orphaned(harness) == {}
+
+    undecided = [
+        event
+        for event in harness.log.read()
+        if event.inputs[:1] == ["premise.rent-undecided.v1"]
+    ]
+    assert [event.inputs[1:] for event in undecided] == [[premise.id, "no-variator"]]
+
+
+def test_active_is_both_halves(harness):
+    """`active(a) <=> crit(a) and mod(a)` — neither half alone is demarcation."""
+    from deepreason.measures.demarcation import active
+
+    harness.register_commitment(PREMISE_RENT)
+    substantive = _commitment(harness, "predicate: 'steam' in content")
+    forbidding = art(
+        harness, "the whistle is driven by steam",
+        interface=Interface(commitments=[substantive]),
+    )
+    varying = _Variator(("something else",), distinct=True).bind(harness)
+    flat = _Variator(("a reword",)).bind(harness)
+
+    assert active(forbidding, harness.commitments, varying)
+    assert not active(forbidding, harness.commitments, flat)   # mod fails
+    prose = art(harness, "a siren has a colour",
+                interface=Interface(commitments=[PREMISE_RENT.id]))
+    assert not active(prose, harness.commitments, varying)     # crit fails
 
 
 # --- the producer ----------------------------------------------------------

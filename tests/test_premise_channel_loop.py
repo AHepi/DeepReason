@@ -53,11 +53,30 @@ def _problem(harness, pid: str, *, criteria=()):
     )
 
 
+def _flat_variator(prompt: str) -> str:
+    """A variator whose edits are the target reworded into itself.
+
+    Under ≈_B a rename is the same explanation, so `mod` is False and the
+    second demarcation reading agrees with the first — which is the case where
+    a prose premise is allowed to fall.
+    """
+    text = prompt.split("TARGET CONTENT:\n", 1)[1].split("\n\n", 1)[0]
+    return json.dumps({"edits": [{"content": text}]})
+
+
+def _distinct_variator(prompt: str) -> str:
+    """Edits that say something different: `mod` holds, so the premise stands
+    however bare its interface is."""
+    return json.dumps({"edits": [{"content": "a siren is individuated by its housing"}]})
+
+
 _ANSWERS = ("the colour is red", "it is loud", "it is shrill")
 _ANSWERS_ALL_PASSING = ("the colour is red", "the colour is grey")
 
 
-def _siren_run(tmp_path, critic_responses, answers=_ANSWERS, **config_kwargs):
+def _siren_run(
+    tmp_path, critic_responses, answers=_ANSWERS, variator=_flat_variator, **config_kwargs
+):
     """A run whose problem refutes most of what is offered for it.
 
     The criterion is deterministic, so the refutations that arm the producer
@@ -84,6 +103,8 @@ def _siren_run(tmp_path, critic_responses, answers=_ANSWERS, **config_kwargs):
         {
             "conjecturer": MockEndpoint([conjectures] * 4),
             "argumentative_critic": MockEndpoint(critic_responses),
+            # The second demarcation reading (§6 mod) needs the variator seat.
+            "variator": MockEndpoint(variator),
         },
         harness.blobs,
         retry_max=2,
@@ -195,6 +216,70 @@ def test_the_three_detection_signals_are_emitted_and_declared(tmp_path):
         assert contract is not None, signal
         assert contract.unit != "unspecified", signal
         assert contract.staleness != "unspecified", signal
+
+
+def test_a_prose_premise_with_a_variation_surface_survives_the_loop(tmp_path):
+    """M21 in the real loop — the second check is what stops the rent battery
+    from felling every premise a critic ever files."""
+    harness, scheduler = _siren_run(
+        tmp_path,
+        [
+            json.dumps({"attack": False, "case": ""}),
+            json.dumps({"attack": False, "case": "", "premise": _PREMISE}),
+        ],
+        variator=_distinct_variator,
+    )
+    scheduler.step()
+    scheduler.step()
+
+    attributions = standing_attributions(harness)
+    assert len(attributions) == 1
+    _, _, premise_id = attributions[0]
+    assert harness.state.status[premise_id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+    assert [
+        event.inputs[2]
+        for event in _measures(harness, "premise.rent-undecided.v1")
+    ] == ["varies"]
+
+
+def test_a_run_with_no_variator_seat_fells_no_premise(tmp_path):
+    """M21 — a solo run holding only the first reading says so, once per
+    premise, and leaves the premise standing."""
+    harness = Harness(tmp_path / "run")
+    harness.register_commitment(
+        Commitment(id="k-colour", eval="predicate:'colour' in content")
+    )
+    _problem(harness, "colour-of-a-siren", criteria=["k-colour"])
+    conjectures = json.dumps(
+        {"candidates": [{"content": t, "typicality": 0.9} for t in _ANSWERS]}
+    )
+    adapter = LLMAdapter(
+        {
+            "conjecturer": MockEndpoint([conjectures] * 4),
+            "argumentative_critic": MockEndpoint(
+                [
+                    json.dumps({"attack": False, "case": ""}),
+                    json.dumps({"attack": False, "case": "", "premise": _PREMISE}),
+                ]
+            ),
+        },
+        harness.blobs,
+        retry_max=2,
+    )
+    scheduler = Scheduler(
+        harness,
+        adapter,
+        Config(VS_K=3, N_SCHOOLS=0, FUZZ_N=0, FOCUS_PROBLEM="colour-of-a-siren"),
+    )
+    scheduler.step()
+    scheduler.step()
+
+    _, _, premise_id = standing_attributions(harness)[0]
+    assert harness.state.status[premise_id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+    undecided = _measures(harness, "premise.rent-undecided.v1")
+    assert [event.inputs[1:] for event in undecided] == [[premise_id, "no-variator"]]
 
 
 # --- selection: attention only ---------------------------------------------

@@ -198,6 +198,49 @@ from `step()` so the census is deterministic:
 Producer-agnostic semantics, each saying what it is NOT evidence of.
 `MIGRATION_DEBT` is unchanged: these are new declarations, not migrations.
 
+### D7 — the second check for prose (REQUEST.md Amendment 2, M21)
+
+The operator's answer to the batched question: **`mod`, completing
+`active()`**. `measures/demarcation.py` now holds the criterion whole —
+`active(a) <=> crit(a) and mod(a)` — and a premise falls only when BOTH
+readings fail.
+
+Why the second reading was owed, stated plainly because a one-commit window
+shipped without it: prose carries no attack surface BY CONSTRUCTION, so
+`crit` alone fells every premise a critic can file, the two locks collapse
+into the single act of filing, and the demarcation verdict carries no
+information about the premise it names. `mod` reads a different thing —
+whether the content varies into anything that says something different — so
+it can separate a vacuous claim from a contentful one nobody has formalised.
+
+Mechanism, reusing rather than re-deriving:
+
+- `mod(artifact, variator)` takes ONE object supplying both µ(·|a) and ≈_B.
+  They travel together because a variation surface is only nontrivial
+  relative to what counts as the same explanation; split across two callers,
+  a rename starts counting as a variation.
+- `measures/hv.py::VariationSampler` is that object, built from the existing
+  HV machinery — the same variator kernel, the same frozen equivalence
+  battery, the same verdict-vector-first equivalence with the embedder as a
+  pre-filter only. A second implementation of "is this the same
+  explanation?" would be a second answer, and the two would drift.
+- **No new role.** `variator` is an existing qualified seat (`hv_spot_check`
+  already dispatches it), so M15 holds and no subject digest moves.
+- **A sample, never a proof.** `mod` is LLM-dependent, so ν declares that its
+  second half rested on a variator sample, and the trace carries the sampled
+  variations — §17's rule that such assumptions are parked in the validity
+  node, visible and attackable, never eliminated.
+- **No variator seat ⇒ nothing falls**, and `premise.rent-undecided.v1`
+  records why, once per premise. "We could not check" must never look like
+  "we checked and it was fine". This is the solo-run road: a run without the
+  seat keeps its premises rather than losing them to an unchecked verdict.
+- `Scheduler._premise_rent_step` mirrors `_lazy_hv` exactly — role check, v6
+  transaction deferral, caller-owned cache (`_premise_decided`), typed drop
+  on transport failure. The cache bounds spend to one variator call per
+  premise for the life of the run.
+
+Acceptance: A20–A22 below.
+
 ### Step-2 acceptance checks
 
 | # | Check | R |
@@ -209,6 +252,9 @@ Producer-agnostic semantics, each saying what it is NOT evidence of.
 | A17 | The three signals are emitted by the real loop and every one resolves through `signals.declaration()` with a non-`unspecified` unit and staleness | M14 |
 | A18 | An uninvited critic response carrying `premise` registers nothing; a conjecture's rank/admission is unchanged by the presence or absence of an attribution | M9, M13 |
 | A19 | ONE guarded live run: `verify_root` green, typed terminal state, and the record searched for an attribution — outcome recorded either way | M19 |
+| A20 | A prose premise whose sampled variations say something DIFFERENT survives; the abstention is recorded with reason `varies` | M21 |
+| A21 | A prose premise whose sampled variations are the same claim reworded falls, and ν declares the sample | M21 |
+| A22 | A run with no variator seat fells no premise and records `premise.rent-undecided.v1` once per premise with reason `no-variator` | M21 |
 
 ### Diff budget — step 2
 
