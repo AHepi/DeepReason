@@ -152,9 +152,14 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
 - `src/deepreason/harness.py` event application / well-formedness
 - Replay-validation record formats; manifest schemas
 - Anything altering qualification subject digests
-- The append-only record itself: fix READERS so old roots stay valid;
-  a change that invalidates existing replay-valid roots is wrong by
-  definition.
+- The append-only record itself, WITHIN the current version: a live
+  run's record stays typed, append-only, and replayable by the code
+  that wrote it — that is the epistemology, not a compatibility
+  feature. CROSS-VERSION obligations are retired (operator law
+  2026-08-14, below): new versions owe old roots neither validity nor
+  readability, and no tranche owes a replay-byte-unchanged proof over
+  historical roots anymore. Old roots remain in git history as
+  artifacts of their own version.
 
 ## Hard-won invariants (violations of these were real, recorded defects)
 
@@ -307,6 +312,23 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   `experiments/2026-08-13-change-single-run-path-unification/` removed
   the second path the same day, on the operator's instruction — "Get rid
   of the old one." See `docs/ERRATA.md` E26).
+- **Old runs owe the future nothing; new versions optimise for new
+  functions** (2026-08-14, operator's words verbatim: "old runs do not
+  need to be valid or returnable by the way. What's important is that
+  new versions are optimised for new functions"): retires the
+  cross-version compatibility law that previously closed the frozen-
+  surfaces list ("fix READERS so old roots stay valid; a change that
+  invalidates existing replay-valid roots is wrong by definition" —
+  SUPERSEDED). New record formats, digests, and readers may change
+  freely when a new function warrants it; committed roots from earlier
+  versions remain in git history as artifacts of their own version, and
+  no tranche owes replay-byte-unchanged proofs, reader-widening-only
+  designs, or old-root sweeps as gate obligations anymore. SCOPE
+  BOUNDARY, stated so this law is never over-read: a CURRENT-version
+  run's record remains typed, append-only, and replayable by the code
+  that wrote it — within-version integrity is the epistemology itself
+  ("the record is the only admissible evidence") and is not touched by
+  this law.
 
 ## The map — `docs/map/` (read this before scoping any change)
 
