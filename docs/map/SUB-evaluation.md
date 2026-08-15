@@ -239,19 +239,22 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   (survivors already pass B0) and would collapse HV to 1.0, so agreement counts
   only when the equivalence battery has margin beyond it.
 `check: grep -q "never by embedding proximity" src/deepreason/measures/hv.py && python -m pytest "tests/test_reflexive_discipline.py::test_hv_equivalence_decided_by_verdict_vectors" -q`
-- **`measures/demarcation.py` is machinery, and its two halves answer
-  different questions.** `active(a) <=> crit(a) and mod(a)` is whole as of the
-  premise channel (`DR-CON-problem-layer-lifecycle`). `crit` reads the DECLARED
-  attack surface — at least one substantive commitment, via `reach._substantive`,
-  so a well-formedness check cannot buy demarcation. `mod` reads whether the
-  CONTENT varies into anything different, and it needs a variator, so it is a
-  sampled predicate rather than a proof: a caller that turns it into a verdict
-  owes its validity node the declaration that it rested on a sample (§17). The
-  halves are not substitutes — prose fails `crit` by construction, so `crit`
-  alone carries no information about prose, which is the whole reason the
-  second reading exists. The older demarcation discipline that bites elsewhere
-  is unchanged: `skeleton_wf` failing an artifact that forbids nothing.
-`check: python -c "import inspect; from deepreason.measures import demarcation as D; assert 'crit(artifact, commitments) and mod(artifact, variator)' in inspect.getsource(D.active); assert 'NotImplementedError' not in inspect.getsource(D)" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent tests/test_premise_channel.py::test_active_is_both_halves -q`
+- **`measures/demarcation.py` is machinery, and its two readings are not
+  substitutes.** `demarcated(a) = crit(a) ∧ load(a)` (Formalization §12.2,
+  superseding §6's `active = crit ∧ mod`). `crit` is the WEAK reading — a
+  nonempty attack surface, `K_a ≠ ∅`, and deliberately NOT "carries a
+  substantive commitment". `load` is where the work is: some sampled role
+  variant must draw a different verdict vector over `B^-HV`. Putting
+  substantiveness in `crit` instead is the recorded mistake — it fells every
+  claim written in prose, since prose declares almost nothing — and §12.2
+  closes the self-immunisation hole in `load`, where an artifact carrying only
+  `json-wf` fails because its variants pass that check too. `load` needs a
+  variator, so it is SAMPLED: a caller that turns it into a verdict owes its
+  validity node the declaration that it rested on a sample, and §12.1 is met by
+  logging the variants rather than seeding the kernel. The older demarcation
+  discipline that bites elsewhere is unchanged: `skeleton_wf` failing an
+  artifact that forbids nothing.
+`check: python -c "import inspect; from deepreason.measures import demarcation as D; assert 'crit(artifact, commitments) and load(artifact, variator)' in inspect.getsource(D.demarcated); assert 'any(cid in commitments' in inspect.getsource(D.crit); assert not hasattr(D, 'mod') and not hasattr(D, 'active')" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_crit_is_the_weak_declaration_test tests/test_premise_channel.py::test_a_structural_battery_is_not_load_bearing tests/test_premise_channel.py::test_demarcated_is_both_readings -q`
 - **`ProgramSpec.class_` and `external_toolchain` are reporting facts only.**
   They never alter commitment syntax, verdict interpretation, or labels. The one
   consumer with teeth is the anti-relapse gate, which refuses to establish

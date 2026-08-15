@@ -605,6 +605,45 @@ comes from the foundational source rather than the reconstruction, and it
 excludes inductivism, authority, and genetic dismissal of any generator in a
 single line.
 
+### 2N. The supersession clause, worked through (R54)
+
+REQUEST.md Amendment 6: *"Everything in these documents supercede my previous
+decisions."* A clause like this is only worth anything if someone actually walks
+the previous decisions against the documents, so here is that walk. Every
+previously-answered item, and what the documents do to it.
+
+| Previous decision | Do the documents speak? | Outcome |
+|---|---|---|
+| **H1** — a failed conjecture mints nothing | Yes, compatibly. v0.1 Axiom 4.3: P2 arises from the CONTENT of a solution, not from a failure; problems enter by GEN like everything else. Formalization A8 lets REACH spawn promotion problems, which is a different trigger | **stands** |
+| **H2** — the premise channel | Yes, compatibly. Formalization §9 is the cascade in full | **stands** |
+| **H3** — status vocabulary at the view layer only | Yes. v0.1 §6 "no acceptance event" is the sharper statement of the same thing | **stands**, rowed as V-3 |
+| **D-1** — crisis is a render state only | Yes, compatibly. §18: a wounded background may remain "refuted and still framing indefinitely, with its crisis RENDERED and its succession problem open" | **stands** |
+| **D-3** — premises are derived, not stored | Yes, compatibly for the MARK (§9.2 derived, §9.3 lazy). **But A7 requires problems to immutably RECORD their pose-time frame assertions** — storage, at the frame layer | **stands, with a refinement Rung 4 must honour**: derived marks, recorded pose-time frames. They are different objects and only one is derived |
+| **D-4** — ship `knowledge(a)` as a view | Yes, and it strengthens the obligation: §13 + Theorem 13.1 (attention-only) + §18 ("at most a fallible indicator") | **stands, strengthened** |
+| **D-5** — a fixed finite DSL for σ | Only indirectly: A2 requires finite-budget deterministic verdicts, which a DSL gives and an arbitrary program does not | **stands** |
+| **D-6** — program-first `accounts-for` | Yes: §3.5's three criteria become the checkable forms (R46) | **stands, refined** |
+| **D-8** — what refutes a contentful-but-wrong premise | **Partly answered.** §1's split makes refutation UNILATERAL: one undefeated warranted attack suffices, no surviving rival required. What remains open is not the mechanism but the AUTHORITY — who may issue that warrant in a solo configuration | **narrowed**; the open half is authority, not epistemology |
+| **ND-2** — restored-premise resolution | The Formalization explicitly records it as a GAP ("the core formalization records the gap explicitly") | **stays the operator's**; the documents decline to decide it |
+
+**Nothing above flips.** What flips is one thing the operator asked for
+directly, in Rider 1, and it lands on code already delivered:
+
+| id | What was shipped | What the documents say | Resolution |
+|---|---|---|---|
+| **S-1** | `crit(a)` requires a SUBSTANTIVE commitment; structural checks must not satisfy it (Rider 1, verbatim) | §12.2: `crit(a) = 1[K_a ≠ ∅]` — the weak declaration test — and the substantive work lives in `load_k`, mechanism load-bearingness | **FLIPPED and re-founded in this tranche.** §12.2 closes the self-immunisation hole better than the shipped design did: an artifact attaching `json-wf` has a nonempty `K` and still fails, because its role variants pass the same check and the verdict vectors agree. Substantiveness became something the battery EXHIBITS rather than something the interface asserts |
+| **S-2** | `active(a) = crit(a) ∧ mod(a)`, the Computable Calculus §6 names | §12.2's `demarcated_k(a) = crit(a) ∧ load_k(a)` | **renamed to the governing document's vocabulary.** Same shape; `mod`/`active` are gone rather than aliased, because two names for one predicate is how a codebase acquires two meanings |
+| **S-3** | an LLM variator sampled per premise, variants recorded only in the fall trace | §12.1: the kernel must be replay-deterministic — EITHER a seeded total function OR explicitly logged variants | **met by the second road.** Every sample logs its variants, including the empty one, so a replay never needs to reproduce a provider call to know what the reading saw |
+| **S-4** | equivalence via `hv._equivalent`, which falls back to embedding distance when the verdict vectors cannot decide | §12.2 defines a load-bearing variant by VERDICT-VECTOR difference and nothing else | **fixed.** An embedding distance is not a verdict; admitting it let a distant paraphrase count as a different claim |
+| **S-5** | nothing | §12.2's closing line: "For empirical scopes, at least one commitment must be observation-valued" | **OWED, not implemented.** A premise has no scope object until frame assertions exist, so there is nothing yet to test "empirical" against. Rung 4 introduces σ; Rung 4 or 5 owes this clause |
+| **S-6** | `hv._survival` scores an edit as surviving when it passes B0 and is inequivalent | §12.3's `I_i` requires RoleVariant ∧ BatteryInequivalent ∧ `Passes_{B^-HV}` — `B^-HV`, not B0, and no embedder in the equivalence test | **rowed, not changed here.** The HV estimator is not this tranche's surface and changing it would move a measure that live roots already carry. Whichever rung owns HV re-founds it on §12.3 |
+
+**What this cost, stated plainly:** the demarcation criterion was designed three
+times in one tranche — substantive-`crit`, then `crit ∧ mod`, then §12.2's
+`crit ∧ load`. Only the third is governed by a document. The first two are in
+the branch history and in this table, which is the honest place for them: a
+reader who finds `active()` in an old commit should be able to learn here why it
+is not in the tree.
+
 ---
 
 ## 3. Errata entry candidates (R22)

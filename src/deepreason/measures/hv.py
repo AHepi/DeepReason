@@ -184,51 +184,67 @@ def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> 
 
 
 class VariationSampler:
-    """µ(·|a) and ≈_B bound together, for `measures/demarcation.py::mod`.
+    """The variation kernel and the verdict-vector comparison, bound together,
+    for `measures/demarcation.py::load` (Formalization §12.1/§12.2).
 
     Everything here is the HV machinery above, reused rather than re-derived:
-    the same variator kernel, the same frozen equivalence battery, the same
-    verdict-vector-first equivalence with the embedder as a pre-filter only.
-    A second implementation of "is this the same explanation?" is a second
-    answer, and the two would drift.
+    the same variator kernel and the same battery. What it does NOT reuse is
+    `_equivalent`'s embedder fallback. §12.2 defines a load-bearing variant by
+    VERDICT-VECTOR difference over `B^-HV` and nothing else, and an embedding
+    distance is not a verdict — admitting it here would let a distant paraphrase
+    count as a different claim.
 
-    LLM-dependent, like every HV estimate: the sample is a spot-check, so a
-    caller that turns it into a verdict owes ν the declaration that it did
-    (§17 — such assumptions are parked in the validity node, visible and
-    attackable, never eliminated).
+    §12.1 requires a replay-deterministic kernel, and allows either a seeded
+    total function OR explicitly logged variants. A provider variator is not
+    seeded, so this takes the second road: every sample is logged with the
+    variants it produced, and `sampled` exposes them so a caller can put them on
+    its own record too.
     """
 
     def __init__(self, harness, adapter, k: int, embedder=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.k = int(k)
+        # Accepted and unused: the embedder is a pre-filter for HV equivalence
+        # and has no place in a demarcation reading (§12.2). Kept in the
+        # signature so callers that hold one need no special case.
         self.embedder = embedder
-        self.last_edits: list[str] = []
-        # The battery ≈_B is decided against belongs to the artifact that was
-        # sampled, so it is captured by `sample` rather than guessed here.
-        self._equiv_battery: list[str] = []
-        self._pass_battery: list[str] = []
+        self.sampled: list[str] = []
+        self._battery: list[str] = []
 
     def sample(self, artifact) -> tuple[str, list[str]]:
-        text, battery, edits, _kernel, llm_call = _sample_edits(
+        from deepreason.measures.demarcation import evaluation_battery
+
+        text, _pass_battery, edits, _kernel, llm_call = _sample_edits(
             self.harness, self.adapter, artifact, self.k
         )
-        self.last_edits = list(edits)
-        self._pass_battery = list(battery)
-        self._equiv_battery = _equivalence_battery(self.harness, artifact)
+        self.sampled = list(edits)
+        self._battery = evaluation_battery(self.harness, artifact)
+        # §12.1's determinism road: the variants ARE the record. Logged on every
+        # sample, including the empty one, so a replay never has to reproduce a
+        # provider call to know what the reading saw.
         self.harness.record_llm_calls(
-            [llm_call], "hv-nomeasure" if not edits else "demarcation-variation"
+            [llm_call],
+            "demarcation-variation",
+            *[edit[:120] for edit in edits],
         )
         return text, list(edits)
 
-    def equivalent(self, a: str, b: str) -> bool:
-        return _equivalent(
-            a,
-            b,
-            self.embedder,
-            harness=self.harness,
-            equiv_battery=self._equiv_battery,
-            pass_battery=self._pass_battery,
+    def role_variant_differs(self, text: str, variant: str) -> bool:
+        """RoleVariant(a_i, a) and VerdictVector(a_i) != VerdictVector(a).
+
+        A mere paraphrase is excluded by §12.1 and caught by normalization; a
+        variant that survives that test still counts only if the battery
+        actually says something different about it. With an empty `B^-HV` no
+        variant can differ, which is the correct reading of an artifact whose
+        battery cannot tell anything apart.
+        """
+        if _normalize(text) == _normalize(variant):
+            return False
+        if not self._battery:
+            return False
+        return _text_vector(self.harness, self._battery, text) != _text_vector(
+            self.harness, self._battery, variant
         )
 
 

@@ -9,6 +9,9 @@ Rung 2 step 1, all unmerged). Three commits:
 | `e7bacbb0` | ledger Amendment 1 verbatim + the step-2 design; no code |
 | `282e1acd` | the wiring (M12–M20) — gate 3635/0 |
 | `a476c564` | the second demarcation check for prose (M21) — gate 3640/0 |
+| `32154dc1` | validation and delivery record |
+| `da8e79fa` | Riders 2 and 3 absorbed into the v2 program |
+| *(this)* | the demarcation criterion RE-FOUNDED on Formalization §12.2 — gate 3640/0 |
 
 ## Requirement-by-requirement reconciliation
 
@@ -23,7 +26,8 @@ Rung 2 step 1, all unmerged). Three commits:
 | M18 | A marked problem is deprioritised, a retired one is not selected | **DONE** | `test_a_marked_problem_yields_to_unmarked_work`, `test_a_retired_problem_is_not_selected`, both selection modes |
 | M19 | ONE guarded live run, judged on typed outcomes; a MISS is inconclusive but recorded | **BLOCKED — not attempted** | no credential in this container (below) |
 | M20 | NOT OWED: any cross-version proof | **HONOURED** | none attempted; no old-root sweep run as a gate obligation |
-| M21 | A second check for prose | **DONE** | `measures/demarcation.py::mod`/`active`; `measures/hv.py::VariationSampler`; `scheduler.py::_premise_rent_step` |
+| M21 | A second check for prose | **DONE, then RE-FOUNDED** | `measures/demarcation.py::load`/`demarcated` (§12.2), `measures/hv.py::VariationSampler`, `scheduler.py::_premise_rent_step`. The second reading survives the supersession; what changed is that `crit` became the weak test and `load` carries the substantive work |
+| R54 | The three calculus documents supersede previous decisions | **APPLIED, retroactively, to shipped code** | `measures/demarcation.py` re-founded on §12.2/§12.1; the full walk of every previous decision is in the program's `RECONCILIATION.md` §2N |
 
 ## The one thing not delivered, and why
 

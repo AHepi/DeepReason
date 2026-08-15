@@ -56,17 +56,15 @@ def _problem(harness, pid: str, *, criteria=()):
 def _flat_variator(prompt: str) -> str:
     """A variator whose edits are the target reworded into itself.
 
-    Under ≈_B a rename is the same explanation, so `mod` is False and the
-    second demarcation reading agrees with the first — which is the case where
-    a prose premise is allowed to fall.
+    §12.1 excludes mere paraphrase, so no role variant differs, `load` is False,
+    and the premise fails demarcation — the case where a prose premise falls.
     """
     text = prompt.split("TARGET CONTENT:\n", 1)[1].split("\n\n", 1)[0]
     return json.dumps({"edits": [{"content": text}]})
 
 
 def _distinct_variator(prompt: str) -> str:
-    """Edits that say something different: `mod` holds, so the premise stands
-    however bare its interface is."""
+    """An edit the battery judges differently, so §12.2's `load` holds."""
     return json.dumps({"edits": [{"content": "a siren is individuated by its housing"}]})
 
 
@@ -218,9 +216,13 @@ def test_the_three_detection_signals_are_emitted_and_declared(tmp_path):
         assert contract.staleness != "unspecified", signal
 
 
-def test_a_prose_premise_with_a_variation_surface_survives_the_loop(tmp_path):
-    """M21 in the real loop — the second check is what stops the rent battery
-    from felling every premise a critic ever files."""
+def test_a_load_bearing_prose_premise_survives_the_loop(tmp_path):
+    """M21 in the real loop — the second reading is what stops demarcation
+    from felling every premise a critic ever files.
+
+    The variant drops the word the problem's own criterion tests for, so the
+    battery says something different about it: the premise's mechanism is
+    load-bearing and it stands however bare its interface is."""
     harness, scheduler = _siren_run(
         tmp_path,
         [
@@ -240,7 +242,7 @@ def test_a_prose_premise_with_a_variation_surface_survives_the_loop(tmp_path):
     assert [
         event.inputs[2]
         for event in _measures(harness, "premise.rent-undecided.v1")
-    ] == ["varies"]
+    ] == ["load-bearing"]
 
 
 def test_a_run_with_no_variator_seat_fells_no_premise(tmp_path):

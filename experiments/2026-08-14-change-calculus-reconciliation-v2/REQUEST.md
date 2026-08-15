@@ -372,3 +372,31 @@ Operator, verbatim:
 | R51 | **v0.1 §7's clean cut is the program's CHARTER SENTENCE**: "an engine that implements the bookkeeping faithfully and leaves genesis open IS an implementation of 𝔓." No rung may treat the open genesis layer as an incompleteness to be closed. | program-wide |
 | R52 | **v0.1 Axiom 4.1 (Genesis Inertness) joins the A1–A10 basis** in the `INV-` document: all appraisal predicates are invariant under permutation of provenance records — origin confers neither warrant nor stigma. | Rung 4's `INV-` document |
 | R53 | **The Formalization's §1 integration-boundary table is now VERIFIABLE against v0.1 rather than taken on its word**, and the verification is recorded. | RECONCILIATION.md §2M |
+
+### Amendment 6 — 2026-08-15, the supersession clause
+
+Operator, verbatim:
+
+> Everything in these documents supercede my previous decisions
+
+| # | Requirement | Lands |
+|---|---|---|
+| R54 | **The three calculus documents SUPERSEDE the operator's previous decisions.** Where a document speaks to a question a previous decision answered differently, the document governs. This sits ABOVE R49's inter-document precedence: R49 orders the documents against each other; R54 orders the documents against the decision sheet. | program-wide, retroactive |
+
+**Scope, stated conservatively because over-reading this would be worse than
+under-reading it.** "Previous decisions" is read as the operator's ANSWERS to
+questions this program put to them — `DECISIONS.md` D-1…D-8 and ND-2, the three
+headline items H1/H2/H3, and the design choices the rungs made under them. It is
+NOT read as repealing the standing **operator design laws** in CLAUDE.md
+(formalism-optional, a solo run with everything on, all configurations compile,
+operations parity, tokens-are-cheap, old runs owe the future nothing, the signal
+registry contract). Those are laws about how this repository is operated, not
+decisions about the calculus, and the documents are silent on almost all of
+them. If the operator means the laws too, that is one word from them and every
+affected row is already listed in `RECONCILIATION.md` §2K.
+
+**Retroactive, and it lands on shipped code.** §2N works the supersession
+through every previous decision and finds one that changes DELIVERED behaviour —
+the demarcation criterion of Rung 2. It is re-founded in the same tranche rather
+than rowed as future work, because leaving shipped code contradicting the
+governing authority is the failure mode this clause exists to prevent.

@@ -42,32 +42,35 @@ at once". Support propagation would be eager and was rejected for that reason.
 
 ## The rent battery — how a premise falls without anyone attacking it
 
-A premise falls only when it forbids nothing under BOTH readings of §6's
-`active(a) <=> crit(a) and mod(a)`. `crit` asks whether the interface declares
-a SUBSTANTIVE commitment; `mod` asks whether the content varies into anything
-that says something different. The second reading is not decoration: a prose
-premise carries no attack surface BY CONSTRUCTION, so `crit` alone would fell
-every premise a critic ever files and the verdict would carry no information
-(operator, 2026-08-15 — "a second check needs to be added for prose"). `mod` is
-what can still tell a vacuous claim from a contentful one nobody has formalised.
+A premise falls when it fails DEMARCATION, `demarcated(a) = crit(a) ∧ load(a)`
+(Formalization §12.2, which supersedes the Computable Calculus §6's
+`active = crit ∧ mod`; operator 2026-08-15, "everything in these documents
+supersede my previous decisions").
+
+`crit` is the WEAK reading — is the attack surface nonempty? `load` is the one
+that does the work — does some sampled ROLE VARIANT draw a different verdict
+vector from `B^-HV`? Reading the pair the other way round is the mistake worth
+naming: an earlier design put substantiveness in `crit`, which fells every
+premise written in PROSE, because prose declares almost nothing. §12.2 puts it
+in `load` instead, where an artifact that attaches `json-wf` to buy demarcation
+still fails — its variants pass the same check, so their vectors agree.
+
+`B^-HV` is the CURRENT battery (own evaluable commitments, then other
+registered ones, capped), minus hardness-to-vary commitments. Own-only would
+make it empty for every prose premise, and an empty battery can distinguish
+nothing.
 
 `premises.py::premise_rent_sweep` registers the DEMONSTRATIVE fail warrant, so
 it is status-changing under every authority mode, and its validity node ν is an
 ordinary registered artifact, so the verdict is attackable like everything
-else. ν also DECLARES that its second half rested on a variator sample rather
-than a proof (§17), and without a variator seat the sweep fells nothing and
-records `premise.rent-undecided.v1` instead — "we could not check" must never
-look like "we checked and it was fine".
+else. ν DECLARES that the `load` half rested on a variator sample, and §12.1's
+replay-determinism requirement is met the second way it allows — the sampled
+variants are logged rather than the kernel seeded. Without a variator seat the
+sweep fells nothing and records `premise.rent-undecided.v1` instead: "we could
+not check" must never look like "we checked and it was fine".
 
-The battery's own commitment carries eval kind `demarcation:crit`, which
-`programs.evaluate` does not know. That is the design, twice over. A program is
-handed `(text, budget, artifact)` and no commitment registry, so no content-only
-program can see whether the interface's OTHER commitments forbid anything. And
-because an unknown eval kind is not `evaluable`, `reach._substantive` is False
-for it — so **carrying the rent battery can never satisfy the rent battery**.
-
-`check: python -c "from deepreason.premises import PREMISE_RENT; from deepreason.measures.reach import _substantive; from deepreason import programs; assert not programs.evaluable(PREMISE_RENT) and not _substantive(PREMISE_RENT)"`
-`check: python -m pytest tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent tests/test_premise_channel.py::test_the_rent_battery_cannot_satisfy_itself tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation tests/test_premise_channel.py::test_a_prose_premise_that_varies_into_something_different_survives tests/test_premise_channel.py::test_without_a_variator_nothing_falls_and_the_record_says_why -q`
+`check: python -c "from deepreason.premises import PREMISE_RENT; from deepreason import programs; assert not programs.evaluable(PREMISE_RENT)"`
+`check: python -m pytest tests/test_premise_channel.py::test_crit_is_the_weak_declaration_test tests/test_premise_channel.py::test_a_structural_battery_is_not_load_bearing tests/test_premise_channel.py::test_the_rent_battery_never_enters_its_own_battery tests/test_premise_channel.py::test_demarcated_is_both_readings tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation tests/test_premise_channel.py::test_a_prose_premise_that_is_load_bearing_survives tests/test_premise_channel.py::test_without_a_variator_nothing_falls_and_the_record_says_why -q`
 
 ## The producer, wired
 
@@ -136,16 +139,22 @@ label.
   itself is still computed from the log, because the problem's own record is
   never mutated. Read `open_orphans`, not `premise_orphaned`, when asking what
   is outstanding.
-- **`crit` alone would have made filing an attribution equal to marking the
-  problem.** A filed premise is prose, so it pays no rent by construction, so
-  the first reading fells every one of them and the two locks collapse into a
-  single act. This was live for the length of one commit and closed by the
-  second reading (`mod`) on the operator's instruction. Read a `crit`-only
-  demarcation verdict anywhere as an unfinished one. The recourse against a
-  full verdict is threefold and unchanged: attack ρ ("the problem never assumed
-  that"), attack ν (the demarcation verdict, which declares its own sample), or
-  attach a substantive commitment to X.
-- **`mod` costs a provider call, so the sweep caches per premise and the
+- **A `crit`-only demarcation verdict makes filing an attribution equal to
+  marking the problem.** Prose declares almost nothing, so a first-reading-only
+  criterion fells every premise a critic can file and the two locks collapse
+  into a single act. This was live for the length of one commit, closed first
+  by adding a second reading and then RE-FOUNDED on §12.2, which puts the
+  substantive work in `load` and leaves `crit` weak. Read a `crit`-only verdict
+  anywhere as an unfinished one. The recourse against a full verdict is
+  threefold and unchanged: attack ρ ("the problem never assumed that"), attack
+  ν (which declares its own sample), or give X a battery that tells its
+  variants apart.
+- **`B^-HV` own-only is the same collapse wearing a different hat.** Read the
+  battery as the artifact's own commitments and a prose premise has an empty
+  one, no variant can differ, and `load` is false for every claim written in
+  words. The battery is the CURRENT one, own first then foreign — the shape
+  `measures/hv.py` already uses, for the same recorded reason.
+- **`load` costs a provider call, so the sweep caches per premise and the
   scheduler owns the seat check.** `_premise_rent_step` mirrors `_lazy_hv`:
   role check, v6 transaction deferral, caller-owned cache, typed drop on
   transport failure. A sweep that re-sampled every cycle would burn tokens and

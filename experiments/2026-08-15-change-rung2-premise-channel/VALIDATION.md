@@ -3,11 +3,15 @@
 Verdict: **PASS on everything that could be exercised in this container.
 A19 (the guarded live run) is BLOCKED, not failed** — see below.
 
+**Re-validated 2026-08-15 after the demarcation criterion was RE-FOUNDED on
+Formalization §12.2** (the program's REQUEST.md Amendment 6: "everything in
+these documents supercede my previous decisions"). Gate re-run in full.
+
 Instruments, run idle, one at a time:
 
 | Instrument | Result |
 |---|---|
-| `python -m pytest tests/ -q -n 4` | **3640 passed, 7 skipped, 0 failed** (783 s) |
+| `python -m pytest tests/ -q -n 4` | **3640 passed, 7 skipped, 0 failed** (783 s), re-run after the §12.2 re-founding |
 | `python tools/docs_verify.py` (full) | 898 checks, **3 failed — all `CON-run-identity`**, the recorded shallow-clone baseline |
 | `python tools/docs_verify.py --links` | 0 dangling references, 58 documents |
 | `tools/diff_budget.py` accounting | **EXCEEDED and disclosed** — production 458/320, tests 352/300, map docs 107/120 (SPEC.md carries the per-file breakdown) |
@@ -16,16 +20,19 @@ Instruments, run idle, one at a time:
 
 | # | Check | Verdict | Evidence |
 |---|---|---|---|
-| A13 | `crit()` False for structural-only and rent-only interfaces | PASS | `test_structural_commitments_do_not_pay_rent`, `test_the_rent_battery_cannot_satisfy_itself` |
+| A13 | ~~`crit()` False for structural-only interfaces~~ | **SUPERSEDED** | §12.2 makes `crit` the weak test; replaced by A23–A25 |
 | A14 | A rentless premise is REFUTED with no hand-written attack | PASS | `test_a_premise_falls_by_demarcation_with_no_written_refutation` |
 | A15 | The producer fires in an offline run of the ACTUAL `Scheduler` loop | PASS | `test_the_producer_fires_in_the_real_loop` — invitation Measure → premise + attribution → rent refutation → mark, all through `Scheduler.step` |
 | A16 | Marked deprioritised, retired never selected, both modes | PASS | `test_a_retired_problem_is_not_selected[True/False]`, `test_a_marked_problem_yields_to_unmarked_work[True/False]` |
 | A17 | Three signals emitted by the loop, none `unspecified` | PASS | `test_the_three_detection_signals_are_emitted_and_declared` |
 | A18 | An uninvited `premise` registers nothing | PASS | `test_an_uninvited_premise_registers_nothing` |
 | A19 | ONE guarded live run | **BLOCKED** | No credential: `experiments/*/env` absent, `OLLAMA_API_KEY` unset. Not a MISS — a miss requires a run that happened. |
-| A20 | A prose premise that varies into something different survives | PASS | `test_a_prose_premise_that_varies_into_something_different_survives`, `..._with_a_variation_surface_survives_the_loop` |
+| A20 | A load-bearing prose premise survives | PASS | `test_a_prose_premise_that_is_load_bearing_survives`, `test_a_load_bearing_prose_premise_survives_the_loop` |
 | A21 | A prose premise whose variations are the same claim falls; ν declares the sample | PASS | `test_a_premise_falls_by_demarcation_with_no_written_refutation` (now through both readings) |
 | A22 | No variator seat ⇒ nothing falls, recorded once per premise | PASS | `test_without_a_variator_nothing_falls_and_the_record_says_why`, `test_a_run_with_no_variator_seat_fells_no_premise` |
+| A23 | `crit` is the weak test (`json-wf`-only True; empty/unregistered False) | PASS | `test_crit_is_the_weak_declaration_test` |
+| A24 | A structural-only battery is not load-bearing — the immuniser fails in `load` | PASS | `test_a_structural_battery_is_not_load_bearing` |
+| A25 | The rent commitment never enters `B^-HV` | PASS | `test_the_rent_battery_never_enters_its_own_battery` |
 
 ## Hard constraints, checked rather than asserted
 
@@ -43,9 +50,13 @@ Instruments, run idle, one at a time:
 - **A19 is unexercised, and no offline result substitutes for it.** Whether a
   real critic ever takes the invitation is a question only a live run can
   answer, and one live miss would still be inconclusive.
-- **`mod` is a sample.** A premise's survival or fall through the second
-  reading rests on one variator draw. ν says so; a caller reading the verdict
-  as a proof is reading it wrong.
+- **`load` is a sample.** A premise's survival or fall through the second
+  reading rests on one variator draw. ν says so, and §12.1's determinism
+  requirement is met by LOGGING the variants rather than seeding the kernel; a
+  caller reading the verdict as a proof is reading it wrong.
+- **§12.2's empirical-scope clause is OWED, not met.** "For empirical scopes,
+  at least one commitment must be observation-valued" needs a scope object,
+  which arrives with frame assertions at Rung 4. Rowed as S-5.
 - **D-8 remains open.** A premise that is contentful and wrong BY ARGUMENT
   alone still needs argumentative status authority, which no solo
   configuration has today.

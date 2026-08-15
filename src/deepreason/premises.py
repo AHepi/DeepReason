@@ -41,18 +41,21 @@ RESOLUTION_EVAL = "program:premise_resolution_wf"
 
 RESOLUTIONS = ("retire", "translate", "independence")
 
-# The premise rent battery (calculus §6 demarcation). Its eval kind is NOT
-# ``program:``, and that is the design rather than an omission:
+# The premise rent battery (Formalization §12.2 demarcation). Its eval kind is
+# NOT ``program:``, and that is the design rather than an omission:
 # ``programs.evaluate`` hands a program (text, budget, artifact) and no
-# commitment registry, so no content-only program can see whether the OTHER
-# commitments on an interface forbid anything. Two properties follow, both
-# load-bearing. Every generic sweep skips it, because ``programs.evaluable``
-# is False for an unknown eval kind. And the substantive-commitment predicate
-# (measures/reach) is False for it too -- an unevaluable commitment cannot be
-# substantive -- so CARRYING THE RENT BATTERY CAN NEVER SATISFY THE RENT
-# BATTERY -- the self-immunisation shape `rules/warrants.py::formally_backed`
-# refuses is closed by construction here, not by a name on a deny-list.
-PREMISE_RENT_EVAL = "demarcation:crit"
+# commitment registry, and demarcation is a property of the INTERFACE plus its
+# behaviour under variation, which no content-only program can see. Two
+# properties follow, both load-bearing. Every generic sweep skips it, because
+# ``programs.evaluable`` is False for an unknown eval kind. And for the same
+# reason it never enters ``B^-HV``, so CARRYING THE RENT BATTERY CONTRIBUTES
+# NOTHING TO SATISFYING IT: no role variant can differ on a commitment nobody
+# can evaluate. §12.2 closes the self-immunisation hole in ``load`` rather than
+# in ``crit`` -- an artifact that attaches ``json-wf`` to buy demarcation has a
+# nonempty attack surface and still fails, because its variants pass that check
+# too. Substantiveness is what the battery EXHIBITS under variation, not what
+# the interface asserts.
+PREMISE_RENT_EVAL = "demarcation:demarcated"
 PREMISE_RENT = Commitment(id="demarcation:premise-rent", eval=PREMISE_RENT_EVAL)
 
 ATTRIBUTION_COMMITMENT = Commitment(id="presupposition-wf@v1", eval=ATTRIBUTION_EVAL)
@@ -271,35 +274,35 @@ def file_premise(harness, problem_id: str, premise_text: str, *, provenance=None
 
 
 def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
-    """Refute every premise that forbids nothing UNDER BOTH READINGS.
+    """Refute every premise that fails DEMARCATION (Formalization §12.2).
 
-    `active(a) <=> crit(a) and mod(a)` (spec §6), and a premise falls only when
-    it fails both halves. The halves are independent on purpose: `crit` reads
-    the declared attack surface, `mod` reads whether the content varies into
-    anything different. A prose premise carries no attack surface by
-    construction, so `crit` alone would fell every premise a critic ever files
-    and the demarcation verdict would carry no information (operator, 2026-08-15:
-    "a second check needs to be added for prose"). `mod` is the check that can
-    still tell a vacuous claim from a contentful one nobody has formalised.
+    `demarcated(a) = crit(a) and load(a)`. `crit` asks whether the interface
+    declares anything at all that could count against the premise; `load` asks
+    whether the claim does any work — whether a role variant of it gets a
+    different verdict from the battery. Both readings are needed and neither
+    substitutes for the other, which is the point for PROSE: a prose premise
+    declares almost nothing, so a criterion resting on `crit` alone fells every
+    premise a critic can file and its verdict carries no information (operator,
+    2026-08-15: "a second check needs to be added for prose").
 
-    Without a variator there is no second reading, so NOTHING FALLS. That is a
-    typed abstention rather than a silent pass: a run with no variator seat
-    records `premise.rent-undecided.v1` once per premise and leaves the premise
+    Without a variator the second reading cannot be taken, so NOTHING falls on
+    it. That is a typed abstention rather than a silent pass: the run records
+    `premise.rent-undecided.v1` once per premise and leaves the premise
     accepted, because "we could not check" must never look like "we checked and
-    it was fine".
+    it was fine". A premise whose interface declares nothing at all still falls,
+    because `crit` needs no sample.
 
     The verdict is DEMONSTRATIVE and therefore status-changing under every
-    authority mode. It is also LLM-dependent through `mod`'s sample, so ν says
-    so — the assumption is parked in the validity node, visible and attackable
-    (§17), and attacking ν reinstates the premise and un-marks the problem by
-    the same computed predicate (N1).
+    authority mode. It is also a SAMPLE through `load`, so ν says so and the
+    sampled variants are on the record (§12.1's determinism road: log the
+    variants rather than seed the kernel). Attacking ν reinstates the premise
+    and un-marks the problem by the same computed predicate (N1).
 
-    `decided` is a caller-owned cache of premise ids already settled by the
-    second check, exactly like the scheduler's `_fuzz_clean`. The sample costs
-    a provider call and is a spot-check rather than a fixed point, so
-    re-sampling every cycle would both burn tokens and churn the record.
+    `decided` is a caller-owned cache of premises already settled by the second
+    reading, exactly like the scheduler's `_fuzz_clean`: the sample costs a
+    provider call and is a spot-check rather than a fixed point.
     """
-    from deepreason.measures.demarcation import crit, mod
+    from deepreason.measures.demarcation import crit, load
     from deepreason.rules.warrants import register_fail_warrant
 
     settled = decided if decided is not None else set()
@@ -307,40 +310,44 @@ def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
     for artifact in list(harness.state.artifacts.values()):
         if PREMISE_RENT.id not in artifact.interface.commitments:
             continue
-        if crit(artifact, harness.commitments):
-            continue  # it forbids something: the first reading already clears it
         if artifact.id in settled:
             continue
-        if variator is None:
-            settled.add(artifact.id)
-            harness.record_measure(
-                inputs=["premise.rent-undecided.v1", artifact.id, "no-variator"]
-            )
-            continue
-        varies = mod(artifact, variator)
-        edits = list(getattr(variator, "last_edits", ()))
-        if varies:
-            settled.add(artifact.id)
-            harness.record_measure(
-                inputs=["premise.rent-undecided.v1", artifact.id, "varies"]
-            )
-            continue
+        declares = crit(artifact, harness.commitments)
+        sampled: list[str] = []
+        if declares:
+            if variator is None:
+                settled.add(artifact.id)
+                harness.record_measure(
+                    inputs=["premise.rent-undecided.v1", artifact.id, "no-variator"]
+                )
+                continue
+            if load(artifact, variator):
+                settled.add(artifact.id)
+                harness.record_measure(
+                    inputs=["premise.rent-undecided.v1", artifact.id, "load-bearing"]
+                )
+                continue
+            sampled = list(getattr(variator, "sampled", ()))
         critic = register_fail_warrant(
             harness,
             commitment_id=PREMISE_RENT.id,
             target_id=artifact.id,
             nu_content=(
                 f"nu: the demarcation verdict on {artifact.id} is sound and "
-                "relevant -- it forbids nothing under either reading: no "
-                "substantive commitment declares what could count against it, "
-                "and sampled variations of it are the same claim reworded. The "
-                "second half rests on a variator SAMPLE, not a proof"
+                "relevant -- it fails demarcation: "
+                + (
+                    "its interface declares nothing that could count against it"
+                    if not declares
+                    else "no sampled role variant of it draws a different verdict "
+                    "from its battery, so its mechanism is not load-bearing. That "
+                    "half rests on a SAMPLE, not a proof, and the sampled variants "
+                    "are on the record"
+                )
             ),
             critic_content=(
-                f"critic: premise {artifact.id[:12]} pays no rent -- it carries "
-                "no substantive commitment, so no observation and no execution "
-                "could tell against it, and varying it produced nothing that "
-                "says anything different"
+                f"critic: premise {artifact.id[:12]} fails demarcation -- "
+                "nothing it says could have been otherwise in any way its own "
+                "battery can see"
             ),
             trace_ref=harness.blobs.put(
                 canonical_json(
@@ -348,10 +355,15 @@ def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
                         "commitment": PREMISE_RENT.id,
                         "eval": PREMISE_RENT_EVAL,
                         "verdict": "fail",
-                        "reason": "crit and mod both fail: no substantive "
-                                  "commitment, and no variation surface",
+                        "crit": declares,
+                        "load": False,
+                        "reason": (
+                            "empty attack surface"
+                            if not declares
+                            else "no sampled role variant differs over B^-HV"
+                        ),
                         "commitments": list(artifact.interface.commitments),
-                        "sampled_variations": [edit[:120] for edit in edits],
+                        "sampled_variants": [text[:120] for text in sampled],
                     }
                 )
             ),

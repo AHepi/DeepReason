@@ -272,77 +272,120 @@ def test_an_unsupported_premise_grades_as_unaccredited(harness):
 
 
 class _Variator:
-    """A deterministic stand-in for µ(·|a) and ≈_B, bound together as
-    `demarcation.mod` requires. `distinct` decides whether the sampled edits
-    say anything different from the original — the whole content of the second
-    demarcation reading."""
+    """A deterministic stand-in for the §12.1 kernel and §12.2's role-variant
+    test. `differs` decides whether a sampled variant draws a different verdict
+    vector — the whole content of the second demarcation reading."""
 
-    def __init__(self, edits=("a siren has a pitch",), *, distinct=False):
-        self.edits = list(edits)
-        self.distinct = distinct
-        self.last_edits: list[str] = []
+    def __init__(self, variants=("a siren has a pitch",), *, differs=False):
+        self.variants = list(variants)
+        self.differs = differs
+        self.sampled: list[str] = []
 
     def sample(self, artifact):
         from deepreason.programs import content_text
 
-        self.last_edits = list(self.edits)
-        return content_text(artifact, self._blobs), list(self.edits)
+        self.sampled = list(self.variants)
+        return content_text(artifact, self._blobs), list(self.variants)
 
-    def equivalent(self, a, b):
-        return not self.distinct
+    def role_variant_differs(self, text, variant):
+        return self.differs
 
     def bind(self, harness):
         self._blobs = harness.blobs
         return self
 
 
-# --- the rent battery ------------------------------------------------------
+# --- demarcation (Formalization 12.2) ---------------------------------------
 
 
-def test_structural_commitments_do_not_pay_rent(harness):
-    """The self-immunisation trap (rules/warrants.py::formally_backed).
+def test_crit_is_the_weak_declaration_test(harness):
+    """12.2: crit(a) = 1[K_a != {}]. NOT 'carries a substantive commitment'.
 
-    Were a well-formedness check enough, any artifact could buy demarcation for
-    the price of a JSON check.
+    This is the superseded design's inverse and it is deliberate: the
+    self-immunisation hole moved to `load`, where it is closed better.
     """
     from deepreason.measures.demarcation import crit
 
-    for eval_name in ("program:json-wf", "program:skeleton_wf", ATTRIBUTION_EVAL):
-        cid = _commitment(harness, eval_name)
-        artifact = art(harness, f"forbids nothing ({eval_name})",
-                       interface=Interface(commitments=[cid]))
-        assert not crit(artifact, harness.commitments), eval_name
+    bare = art(harness, "declares nothing at all")
+    assert not crit(bare, harness.commitments)
 
-    substantive = _commitment(harness, "predicate: len(content) > 0")
-    paying = art(harness, "a claim with a way to be wrong",
-                 interface=Interface(commitments=[substantive]))
-    assert crit(paying, harness.commitments)
+    structural = art(
+        harness, "well formed and nothing more",
+        interface=Interface(commitments=[_commitment(harness, "program:json-wf")]),
+    )
+    assert crit(structural, harness.commitments)
+
+    # The harness refuses to REGISTER an artifact naming an unknown commitment,
+    # so this branch is unreachable through the normal path -- which is the
+    # stronger guarantee. Checked directly so `crit`'s own contract still holds
+    # for any caller holding an unregistered interface.
+    class _Unregistered:
+        interface = Interface(commitments=["no-such-commitment"])
+
+    assert not crit(_Unregistered(), harness.commitments)
 
 
-def test_the_rent_battery_cannot_satisfy_itself(harness):
-    """Carrying the battery is not paying it. Structural, not a deny-list: the
-    rent commitment is not evaluable, so `_substantive` is False for it."""
-    from deepreason.measures.demarcation import crit
-    from deepreason.measures.reach import _substantive
+def test_a_structural_battery_is_not_load_bearing(harness):
+    """The self-immunisation trap, closed in `load` rather than in `crit`.
 
-    assert not _substantive(PREMISE_RENT)
+    An artifact attaching a well-formedness check has a nonempty attack
+    surface, so it passes the first reading. Its role variants pass the same
+    check, so the verdict vectors agree and the second reading fails.
+    """
+    from deepreason.measures.demarcation import crit, demarcated
+
+    cid = _commitment(harness, "program:json-wf")
+    immunized = art(harness, '{"ok": true}',
+                    interface=Interface(commitments=[cid]))
+
+    assert crit(immunized, harness.commitments)
+    assert not demarcated(
+        immunized, harness.commitments, _Variator(('{"ok": false}',)).bind(harness)
+    )
+
+
+def test_the_rent_battery_never_enters_its_own_battery(harness):
+    """Stratification by construction: the rent commitment is not evaluable, so
+    it is absent from B^-HV and no variant can differ on it."""
+    from deepreason.measures.demarcation import evaluation_battery
+
     harness.register_commitment(PREMISE_RENT)
-    artifact = art(harness, "a siren is the kind of thing that has a colour",
-                   interface=Interface(commitments=[PREMISE_RENT.id]))
-    assert not crit(artifact, harness.commitments)
+    premise = art(harness, _SIREN_PREMISE,
+                  interface=Interface(commitments=[PREMISE_RENT.id]))
+
+    assert PREMISE_RENT.id not in evaluation_battery(harness, premise)
+
+
+def test_demarcated_is_both_readings(harness):
+    """demarcated(a) = crit(a) and load(a); neither half alone is demarcation."""
+    from deepreason.measures.demarcation import demarcated
+
+    substantive = _commitment(harness, "predicate: 'steam' in content")
+    forbidding = art(harness, "the whistle is driven by steam",
+                     interface=Interface(commitments=[substantive]))
+
+    assert demarcated(forbidding, harness.commitments,
+                      _Variator(("driven by resonance",), differs=True).bind(harness))
+    assert not demarcated(forbidding, harness.commitments,
+                          _Variator(("a reword",)).bind(harness))       # load fails
+
+    bare = art(harness, "declares nothing at all")
+    assert not demarcated(bare, harness.commitments,
+                          _Variator(("anything",), differs=True).bind(harness))  # crit fails
+
+
+# --- the rent battery ------------------------------------------------------
 
 
 def test_a_premise_falls_by_demarcation_with_no_written_refutation(harness):
     """A5 on a live path: nobody in this test writes an attack.
 
     The siren case as the harness must reach it -- the premise is filed, the
-    rent battery adjudicates it, the problem is marked. `attack()` is never
-    called and no conjecture is ever proposed on the problem.
+    demarcation criterion adjudicates it, the problem is marked. `attack()` is
+    never called and no conjecture is ever proposed on the problem.
     """
     problem = _problem(harness, "what is the colour of a siren")
-    premise, rho = file_premise(
-        harness, problem, "a siren is the kind of thing that has a colour"
-    )
+    premise, rho = file_premise(harness, problem, _SIREN_PREMISE)
 
     assert harness.state.status[premise.id] == Status.ACCEPTED
     assert premise_orphaned(harness) == {}
@@ -370,33 +413,17 @@ def test_the_rent_verdict_is_reversible_and_never_doubled(harness):
     assert premise_orphaned(harness) == {}
 
 
-def test_a_premise_that_forbids_something_keeps_paying(harness):
-    problem = _problem(harness, "why does the kettle whistle")
-    harness.register_commitment(PREMISE_RENT)
-    substantive = _commitment(harness, "predicate: 'steam' in content")
-    premise = harness.create_artifact(
-        "the whistle is driven by steam",
-        interface=Interface(commitments=[PREMISE_RENT.id, substantive]),
-    )
-    _attribution(harness, problem, premise.id)
-
-    assert premise_rent_sweep(harness, _Variator().bind(harness)) == []
-    assert harness.state.status[premise.id] == Status.ACCEPTED
-    assert premise_orphaned(harness) == {}
-
-
-def test_a_prose_premise_that_varies_into_something_different_survives(harness):
-    """M21 — the second check, and the reason it exists.
+def test_a_prose_premise_that_is_load_bearing_survives(harness):
+    """M21 -- the second reading, and the reason it exists.
 
     `crit` cannot tell a vacuous prose premise from a contentful one nobody has
-    formalised: neither carries an attack surface. `mod` can, and a premise
-    falls only when BOTH readings fail.
+    formalised: both declare only the rent battery. `load` can.
     """
     problem = _problem(harness, "why does the kettle whistle")
     premise, _ = file_premise(harness, problem, "the whistle is driven by steam")
 
     critics = premise_rent_sweep(
-        harness, _Variator(("the whistle is driven by resonance",), distinct=True).bind(harness)
+        harness, _Variator(("driven by resonance",), differs=True).bind(harness)
     )
 
     assert critics == []
@@ -407,13 +434,13 @@ def test_a_prose_premise_that_varies_into_something_different_survives(harness):
         for event in harness.log.read()
         if event.inputs[:1] == ["premise.rent-undecided.v1"]
     ]
-    assert [event.inputs[2] for event in undecided] == ["varies"]
+    assert [event.inputs[2] for event in undecided] == ["load-bearing"]
 
 
 def test_without_a_variator_nothing_falls_and_the_record_says_why(harness):
-    """M21 — 'we could not check' must never look like 'we checked'.
+    """M21 -- 'we could not check' must never look like 'we checked'.
 
-    A run with no variator seat has only one of the two readings, so it fells
+    A run with no variator seat cannot take the second reading, so it fells
     nothing and records the abstention against the premise it could not decide.
     """
     problem = _problem(harness, "what is the colour of a siren")
@@ -429,26 +456,6 @@ def test_without_a_variator_nothing_falls_and_the_record_says_why(harness):
         if event.inputs[:1] == ["premise.rent-undecided.v1"]
     ]
     assert [event.inputs[1:] for event in undecided] == [[premise.id, "no-variator"]]
-
-
-def test_active_is_both_halves(harness):
-    """`active(a) <=> crit(a) and mod(a)` — neither half alone is demarcation."""
-    from deepreason.measures.demarcation import active
-
-    harness.register_commitment(PREMISE_RENT)
-    substantive = _commitment(harness, "predicate: 'steam' in content")
-    forbidding = art(
-        harness, "the whistle is driven by steam",
-        interface=Interface(commitments=[substantive]),
-    )
-    varying = _Variator(("something else",), distinct=True).bind(harness)
-    flat = _Variator(("a reword",)).bind(harness)
-
-    assert active(forbidding, harness.commitments, varying)
-    assert not active(forbidding, harness.commitments, flat)   # mod fails
-    prose = art(harness, "a siren has a colour",
-                interface=Interface(commitments=[PREMISE_RENT.id]))
-    assert not active(prose, harness.commitments, varying)     # crit fails
 
 
 # --- the producer ----------------------------------------------------------

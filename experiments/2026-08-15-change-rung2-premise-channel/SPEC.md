@@ -241,20 +241,61 @@ Mechanism, reusing rather than re-deriving:
 
 Acceptance: A20–A22 below.
 
+### D8 — RE-FOUNDED on Formalization §12.2 (REQUEST.md Amendment 6 of the
+### program; operator: "everything in these documents supercede my previous
+### decisions")
+
+D1 and D7 above describe the criterion as it was DESIGNED and shipped. The
+governing document now says something different, and this is what the tranche
+ends with:
+
+    crit(a)         = 1[K_a != {}]            -- the WEAK declaration test
+    load_k(a)       = some ROLE VARIANT draws a different verdict vector
+                      over B^-HV
+    demarcated_k(a) = crit(a) and load_k(a)
+
+Three consequences, all applied:
+
+1. **`crit` is no longer the substantive test.** Rider 1 asked for
+   substantiveness in `crit`; §12.2 puts it in `load`, and closes the
+   self-immunisation hole better for it — an artifact attaching `json-wf` has a
+   nonempty `K` and still fails, because its variants pass the same check.
+2. **`active`/`mod` are gone**, replaced by `demarcated`/`load`. Not aliased:
+   two names for one predicate is how a codebase acquires two meanings.
+3. **§12.1's replay determinism** is met by logging the sampled variants on
+   every sample rather than seeding the kernel, which is the second road §12.1
+   itself allows. Equivalence for `load` is verdict-vector difference only — the
+   embedder fallback `hv._equivalent` uses is not admitted, because an embedding
+   distance is not a verdict.
+
+**`B^-HV` is the CURRENT battery** (own evaluable commitments, then other
+registered ones, capped), minus HV commitments. Own-only would be empty for
+every prose premise, no variant could differ, and `load` would be false for
+everything written in words — the same collapse §12.2 exists to prevent,
+arriving through the battery instead of through `crit`.
+
+**Owed and not done (S-5):** §12.2's closing line — "for empirical scopes, at
+least one commitment must be observation-valued". A premise has no scope object
+until frame assertions exist (Rung 4), so there is nothing yet to test
+"empirical" against. Rowed in the program's `RECONCILIATION.md` §2N.
+
 ### Step-2 acceptance checks
 
 | # | Check | R |
 |---|---|---|
-| A13 | `crit()` is False for an artifact whose only commitments are structural (`json-wf`, `skeleton_wf`, `presupposition_wf`) and False for one carrying only the rent battery itself | M12 |
+| A13 | ~~`crit()` is False for structural-only interfaces~~ **SUPERSEDED by §12.2** (Amendment 6). Replaced by A23–A25 | M12 |
 | A14 | A premise filed with no substantive commitment is REFUTED by the rent sweep, with no hand-written attack anywhere in the test | M17 |
 | A15 | The producer fires in an offline run of the ACTUAL `Scheduler` loop: the invitation Measure is on the record and a stub critic's `premise` becomes a registered premise + attribution, and the problem is marked | M16 |
 | A16 | A `premise_orphaned` problem is deprioritised and a `retired_problems` problem is never selected, in both selection modes | M18, M13 |
 | A17 | The three signals are emitted by the real loop and every one resolves through `signals.declaration()` with a non-`unspecified` unit and staleness | M14 |
 | A18 | An uninvited critic response carrying `premise` registers nothing; a conjecture's rank/admission is unchanged by the presence or absence of an attribution | M9, M13 |
 | A19 | ONE guarded live run: `verify_root` green, typed terminal state, and the record searched for an attribution — outcome recorded either way | M19 |
-| A20 | A prose premise whose sampled variations say something DIFFERENT survives; the abstention is recorded with reason `varies` | M21 |
+| A20 | A prose premise whose sampled variants draw a DIFFERENT verdict survives; the abstention is recorded with reason `load-bearing` | M21 |
 | A21 | A prose premise whose sampled variations are the same claim reworded falls, and ν declares the sample | M21 |
 | A22 | A run with no variator seat fells no premise and records `premise.rent-undecided.v1` once per premise with reason `no-variator` | M21 |
+| A23 | `crit` is the weak test: True for a `json-wf`-only interface, False for an empty or unregistered one | R54 |
+| A24 | A structural-only battery is NOT load-bearing, so the `json-wf` immuniser fails demarcation in `load` rather than in `crit` | R54 |
+| A25 | The rent commitment never enters `B^-HV`, so carrying it contributes nothing to satisfying it | R54 |
 
 ### Diff budget — step 2
 

@@ -1,64 +1,95 @@
-"""Demarcation (spec §6) — replaces falsifiability.
+"""Demarcation — the Formalization §12.2, which supersedes §6's `active`.
 
-    crit(a)   <=> a carries a SUBSTANTIVE commitment (nonempty attack surface)
-    mod(a)    <=> Pr_{a'~mu(.|a)}[a' !~=_B a] > 0 (nontrivial variation surface)
-    active(a) <=> crit(a) and mod(a)
+    crit(a)          <=> K_a != {}            (the attack surface is nonempty)
+    load_k(a)        <=> some ROLE VARIANT of a gets a DIFFERENT verdict vector
+                          over B^-HV          (the mechanism is load-bearing)
+    demarcated_k(a)  <=> crit(a) and load_k(a)
 
-Empirical falsifiability = special case of crit where a commitment is
-observation-valued. Skeleton discipline (§10.1) makes crit real: forbid
-nothing => empty attack surface => fails demarcation.
+Two readings, and neither is the other. `crit` asks what an artifact DECLARES
+could count against it; `load` asks whether the thing it claims actually does
+any work — whether changing its mechanism changes what the battery says. The
+pair is what makes the criterion informative about PROSE: prose declares little
+and a declaration alone proves nothing, so a criterion resting on `crit` alone
+fells everything written in words.
 
-`interface.commitments != {}` is NOT the criterion, though the spec's shorthand
-reads that way. A structural well-formedness program (`json-wf`, `skeleton_wf`,
-`presupposition_wf`) passes for anything well formed and forbids nothing about
-the subject, so counting it would let any artifact buy demarcation for the price
-of a JSON check — the self-immunisation shape `rules/warrants.py::
-formally_backed` already refuses for prose immunity, and `measures/reach.py`
-already refuses for reach. One predicate, `reach._substantive`, decides all
-three.
+`crit` is deliberately the WEAK form, `K_a != {}`, and not "carries a
+substantive commitment". The earlier design put substantiveness in `crit` to
+close the self-immunisation hole — an artifact attaching `json-wf` to buy
+demarcation. §12.2 closes the same hole in the other half and closes it better:
+an artifact carrying only a well-formedness check has a nonempty K, but its
+role-variants all pass that check too, so their verdict vectors agree, `load`
+is false, and it is not demarcated. Substantiveness is a property the battery
+EXHIBITS under variation rather than one the interface asserts.
+
+`B^-HV` is the evaluation battery with hardness-to-vary commitments removed, so
+a demarcation reading never consumes its own output (§12.2's own stratification,
+the same move `measures/hv.py` makes for HV over a battery containing itself).
+
+The Boolean view changes no label. A failed criterion MAY generate a
+demonstrative warrant, and that registration is the caller's move, made through
+the ordinary warrant path.
 """
 
-from deepreason.measures.reach import _substantive
+from deepreason.measures.hv import _equivalence_battery, is_hv_floor
 
 
 def crit(artifact, commitments) -> bool:
-    """§6 crit: does this artifact forbid anything?
+    """§12.2 crit: is the attack surface nonempty?
 
-    ``commitments`` is the registry, because an interface holds commitment IDS
-    and substantiveness is a property of the resolved Commitment. An id the
-    registry does not know contributes nothing: an attack surface nobody can
-    evaluate is not an attack surface.
+    Unregistered ids do not count: a commitment the registry cannot resolve is
+    an attack surface nobody can evaluate, which is not one.
     """
-    return any(
-        (kappa := commitments.get(cid)) is not None and _substantive(kappa)
-        for cid in artifact.interface.commitments
-    )
+    return any(cid in commitments for cid in artifact.interface.commitments)
 
 
-def mod(artifact, variator) -> bool:
-    """§6 mod: is there anything here that could have been otherwise?
+def evaluation_battery(harness, artifact) -> list[str]:
+    """B^-HV: the CURRENT evaluation battery, minus hardness-to-vary commitments.
 
-    ``variator`` supplies BOTH halves of Def 3.6 — the kernel µ(·|a) that
-    samples neighbours and the equivalence relation ≈_B that decides whether a
-    neighbour is a different claim or the same claim reworded. They travel
-    together because a variation surface is only nontrivial RELATIVE to what
-    counts as the same explanation; splitting them across two callers is how a
-    rename starts counting as a variation.
+    Current, not own. The artifact's own evaluable commitments come first, then
+    other registered evaluable commitments — the same shape `measures/hv.py`
+    uses for equivalence, for the same recorded reason: cross-problem criteria
+    are what give a variant room to differ from an all-passing original. Read
+    as "own only", the battery of a prose premise is empty, no variant can
+    differ from it, and `load` would be false for every claim written in words —
+    which would collapse demarcation back onto its first reading and undo the
+    very repair §12.2 exists to make.
 
-    A sampled predicate, not a proof: no edits sampled means no evidence of a
-    variation surface, which is reported as False rather than dressed up as a
-    finding. Whoever acts on it owes the record the sample it rested on.
+    HV-type commitments are removed. Stratification, not tidiness: a
+    demarcation reading that consumed a hardness-to-vary verdict would be
+    reading its own output back in.
     """
-    text, edits = variator.sample(artifact)
-    return any(not variator.equivalent(text, edit) for edit in edits)
+    return [
+        cid
+        for cid in _equivalence_battery(harness, artifact)
+        if not is_hv_floor(harness.commitments[cid])
+    ]
 
 
-def active(artifact, commitments, variator) -> bool:
-    """§6 active(a) <=> crit(a) and mod(a) — the demarcation criterion whole.
+def load(artifact, variator) -> bool:
+    """§12.2 load_k: does some ROLE VARIANT get a different verdict vector?
 
-    The two halves are independent readings and that is the point: `crit`
-    reads the declared attack surface, `mod` reads whether the content varies
-    into anything different. A claim can fail one and pass the other, and only
-    a claim that fails BOTH forbids nothing under either reading.
+    `variator` supplies both halves of the reading — the kernel that samples
+    variants and the verdict-vector comparison that decides whether a variant
+    says something different. They travel together because a variation surface
+    is only nontrivial relative to what counts as the same claim; split across
+    two callers, a rename starts counting as a variation.
+
+    A SAMPLED predicate over k variants, never a proof. §12.1 requires the
+    kernel be replay-deterministic, and offers two ways to get there: a total
+    seeded function, or logging the generated variants explicitly. The sampler
+    used here takes the second, so the record carries the variants the reading
+    rested on.
     """
-    return crit(artifact, commitments) and mod(artifact, variator)
+    text, variants = variator.sample(artifact)
+    return any(variator.role_variant_differs(text, variant) for variant in variants)
+
+
+def demarcated(artifact, commitments, variator) -> bool:
+    """§12.2 demarcated_k(a) = crit(a) and load_k(a).
+
+    Supersedes `active(a) = crit(a) and mod(a)` from the Computable Calculus §6
+    (operator, 2026-08-15: the Formalization supersedes previous decisions). The
+    shape is the same; what changed is that `crit` is the weak declaration test
+    and `load` carries the substantive work.
+    """
+    return crit(artifact, commitments) and load(artifact, variator)
