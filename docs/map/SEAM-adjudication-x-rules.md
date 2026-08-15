@@ -91,7 +91,7 @@ orbit `run-6472629d` ran to completion with none of the four and 42 `ACCEPTED`.
 (The none-of-the-four half originally pinned jolt `run-b4d6dfda` — 72
 `ACCEPTED`, 851 events — but that root's home was gitignored by its ladder and
 never entered the record; `docs/ERRATA.md` E7.)
-`check: python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 42 and len(list(h.log.read())) == 600; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"`
+    python -c "from deepreason.harness import Harness; from deepreason.ontology import Status, WarrantType; b='experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752'; h=Harness(b, read_only=True); assert (len(h.warrants), len(h.state.carries), len(h.state.att)) == (0,0,0); assert set(h.state.status.values()) == {Status.ACCEPTED} and len(h.state.artifacts) == 42 and len(list(h.log.read())) == 600; g='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; k=Harness(g, read_only=True); (wid, w), = k.warrants.items(); assert w.type is WarrantType.DEMONSTRATIVE and wid == 'w:%s:%s' % (w.commitment, w.target); assert len(k.state.carries) == 1 and len(k.state.att) == 1; assert sum(1 for s in k.state.status.values() if s == Status.REFUTED) == 1"
 
 ## What is deliberately absent
 
@@ -260,3 +260,14 @@ roots).
   that the boundary is unguarded. `DR-CON-warrants-and-attacks` holds the full
   guard-by-guard breakdown; `DR-SEAM-rules-x-scratch` holds the analogous
   criticism-side separation.
+
+**RETIRED 2026-08-15 — this claim was authenticated against a PRE-v2 run root,
+and v2 readers no longer parse it.** Deleting `SpawnTrigger.SUCCESSOR` (the
+decommissioned website pipeline's remnant, operator ruling 2026-08-15) means
+roots carrying `trigger: "successor"` no longer load. That is the 2026-08-14
+law working as written — "old runs do not need to be valid or returnable" — and
+NOT a defect to repair by widening a reader. The claim itself is unchanged and
+still believed; what it lost is its historical witness. It is re-authenticated
+the moment a current-version root exercises the same property, and the honest
+state until then is an unwitnessed claim, said so here rather than left as a
+green check over a root nobody can open.

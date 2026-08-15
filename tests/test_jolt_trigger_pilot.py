@@ -557,7 +557,8 @@ def _branch_source(root: Path) -> Harness:
             description="pre-existing restricted successor",
             criteria=list(original.criteria),
             provenance=ProblemProvenance.model_validate(
-                {"trigger": "successor", "from": [original.id]}
+                # Was SUCCESSOR (operator ruling 2026-08-15: the website pipeline stays decommissioned).
+                {"trigger": "remove-arbitrariness", "from": [original.id]}
             ),
         )
     )

@@ -133,14 +133,13 @@ Every `Measure` tag this package emits (`arg-crit`, `scrutiny`, `gate:`,
 registered in `src/deepreason/signals.py`, which is AST-scanned by the gate.
 `check: for tag in arg-crit arg-crit-overridden-by-execution scrutiny conj-noregister synth-noregister "gate:" vision-crit browser-pass; do grep -q "\"$tag\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py -q`
 
-`scan_spawns` covers SIX of the nine `SpawnTrigger` values. `SEED` is the
-operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here;
-and **`SUCCESSOR` is no longer spawned here at all** — H1 (Rung 3a) deleted the
-refuted⇒successor branch, so a failed verdict mints nothing. The member remains
-in the enum for a producer OUTSIDE this module (`easy.py::seed_component`,
-staged-pipeline component repair), which is why the count fell but the enum did
-not.
-`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC|SUCCESSOR)" src/deepreason/rules/spawn.py`
+`scan_spawns` covers SIX of the EIGHT `SpawnTrigger` values. `SEED` is the
+operator's and `AUDIT_CRITIC` is raised by the response ladder (§11.4), not
+here. There is no seventh: `SUCCESSOR` was deleted from the enum entirely once
+its producers reached zero (Rung 3a removed the refuted⇒successor branch; Rung
+3d removed the decommissioned pipeline's remnant that had kept the member
+alive).
+`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 8 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC)" src/deepreason/rules/spawn.py && ! grep -q "SUCCESSOR" src/deepreason/ontology/problem.py`
 
 ## Where to change what
 
@@ -187,15 +186,14 @@ not.
   format contract and bred prose that `skeleton_wf` refuted, cascading
   successors. Remove-arbitrariness carries the ROOT description; a 200k resume
   where `ra:` had no anchor wandered into unrelated abstract mathematics.
-  **The successor side of this trap is closed at the root as of Rung 3a**: H1
-  deleted the loop, so refutation mints nothing and there is no successor left
-  to nest. `SpawnTrigger.SUCCESSOR` is KEPT, and not as a dead reader — a live
-  producer still stamps it, `easy.py::seed_component` on a staged-pipeline
-  component repair problem, from two call sites in `workflows/website.py`.
-  Whether that second site is also an H1 site is an open operator question,
-  parked; reading the surviving enum member as "H1 was not applied" is the
-  misreading this sentence exists to prevent.
-`check: python -c "import inspect; from deepreason.rules.spawn import scan_spawns; assert 'SpawnTrigger.SUCCESSOR' not in inspect.getsource(scan_spawns)" && grep -q '"trigger": "successor"' src/deepreason/easy.py && python -m pytest tests/test_h1_no_spawn_from_refutation.py -q`
+  **The successor side of this trap is closed at the root**: H1 (Rung 3a)
+  deleted the loop, and Rung 3d deleted `SpawnTrigger.SUCCESSOR` itself. The
+  enum member briefly survived because `easy.py::seed_component` still stamped
+  it on a staged-pipeline component repair problem — until the operator ruled
+  that the website pipeline was already decommissioned and that producer was a
+  REMNANT of it, not a feature. Producers reached zero and the member went with
+  them. There is no successor trigger to nest, to spawn, or to revive.
+`check: python -m pytest tests/test_h1_no_spawn_from_refutation.py tests/test_decommissioned_pipeline_stays_out.py -q`
 - **A degraded anti-relapse gate must fail OPEN, with a receipt.** Missing
   domain, embedder, or `NEAR_DUP_EPS` degrades to hash-only and appends a
   `relapse-gate-degraded` record; the bronze run's gate instead compared every

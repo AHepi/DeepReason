@@ -151,19 +151,28 @@ def test_summary_only_relation_fails_on_form(tmp_path):
 
 
 def test_reflexive_budget_follows_lineage(tmp_path):
-    """A successor of a debt problem stays reflexive; a problem descending
-    from independent work does not; mixed parentage is independent."""
+    """A DESCENDANT of a debt problem stays reflexive; one descending from
+    independent work does not; mixed parentage is independent.
+
+    Re-founded on `discrimination` (operator ruling 2026-08-15: "There was a website development pipeline
+    that I decommissioned a while ago. That needs to stay decommissioned."). The descendants used to
+    carry SUCCESSOR, whose last producer was a remnant of that pipeline. The
+    property under test is that the reflexive budget follows LINEAGE rather
+    than the trigger, so it needs a descending trigger that is NOT itself
+    reflexive -- which is exactly what SUCCESSOR was, and what discrimination
+    is now. Re-founding, not weakening: the same asymmetry is asserted.
+    """
     h = Harness(tmp_path / "run")
     h.register_commitment(Commitment(id="k-a", eval="predicate:len(content) > 0"))
     _problem(h, "pi-root", ["k-a"])
     _problem(h, "debt:abc", ["k-a"], trigger="explanation-debt", from_=["pi-root"])
     on_debt = h.create_artifact("x", provenance=Provenance(role="conjecturer"),
                                 problem_id="debt:abc")
-    _problem(h, "succ:ofdebt", ["k-a"], trigger="successor",
+    _problem(h, "succ:ofdebt", ["k-a"], trigger="discrimination",
              from_=[on_debt.id, "debt:abc"])
     on_root = h.create_artifact("y", provenance=Provenance(role="conjecturer"),
                                 problem_id="pi-root")
-    _problem(h, "succ:ofroot", ["k-a"], trigger="successor",
+    _problem(h, "succ:ofroot", ["k-a"], trigger="discrimination",
              from_=[on_root.id, "pi-root"])
     reflexive = reflexive_problems(h.state)
     assert "debt:abc" in reflexive

@@ -746,8 +746,12 @@ def seed_component(harness, description: str, design_id: str, manifest,
         ):
             if request.alias in spec.runtime_imports:
                 capsules.append(content_text(harness.state.artifacts[capsule_id], harness.blobs))
+    # A repair problem keeps its lineage and is NOT a successor. The website
+    # pipeline is decommissioned (operator ruling, 2026-08-15) and its
+    # successor production was a remnant of it; both component branches are now
+    # ordinary seeded problems differing only in what they descend from.
     provenance = (
-        {"trigger": "successor", "from": [repair_of]}
+        {"trigger": "seed", "from": [repair_of]}
         if repair_of else {"trigger": "seed", "from": [design_id]}
     )
     return harness.register_problem(Problem(

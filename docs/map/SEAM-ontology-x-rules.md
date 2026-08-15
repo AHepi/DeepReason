@@ -91,7 +91,7 @@ ids all re-derive to their own content, 29 critic artifacts at `event_seq` 0
 against conjecturer artifacts that all carry a real seq, 820 events none of
 which is an `Adj`, and problem ids that are prefix schemes rather than trigger
 values.
-`check: python -c "import collections; from deepreason.harness import Harness; from deepreason.ontology import Artifact, Rule; h=Harness('experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf', read_only=True); A=list(h.state.artifacts.values()); assert len(A)==69 and all(a.id==Artifact.compute_id(a.content_ref,a.codec,a.interface) for a in A); n=collections.Counter(a.provenance.role.value for a in A); assert n['critic']==29 and n['conjecturer']==36, n; byrole={}; [byrole.setdefault(a.provenance.role.value,set()).add(a.provenance.event_seq) for a in A]; assert byrole['critic']=={0} and len(byrole['conjecturer'])>1 and 0 not in byrole['conjecturer'], byrole; E=list(h.log.read()); tags={e.rule for e in E}; assert len(E)==820 and Rule.ADJ not in tags and {Rule.CONJ,Rule.CRIT,Rule.REGISTER,Rule.SPAWN,Rule.MEASURE}<=tags; assert {p.split(':')[0] for p in h.state.problems if ':' in p}=={'conn','disc','research','succ'}, sorted({p.split(':')[0] for p in h.state.problems})"`
+    python -c "import collections; from deepreason.harness import Harness; from deepreason.ontology import Artifact, Rule; h=Harness('experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf', read_only=True); A=list(h.state.artifacts.values()); assert len(A)==69 and all(a.id==Artifact.compute_id(a.content_ref,a.codec,a.interface) for a in A); n=collections.Counter(a.provenance.role.value for a in A); assert n['critic']==29 and n['conjecturer']==36, n; byrole={}; [byrole.setdefault(a.provenance.role.value,set()).add(a.provenance.event_seq) for a in A]; assert byrole['critic']=={0} and len(byrole['conjecturer'])>1 and 0 not in byrole['conjecturer'], byrole; E=list(h.log.read()); tags={e.rule for e in E}; assert len(E)==820 and Rule.ADJ not in tags and {Rule.CONJ,Rule.CRIT,Rule.REGISTER,Rule.SPAWN,Rule.MEASURE}<=tags; assert {p.split(':')[0] for p in h.state.problems if ':' in p}=={'conn','disc','research','succ'}, sorted({p.split(':')[0] for p in h.state.problems})"
 
 The behavioural half — schema round trips, the probation clock, and the two
 spawn descriptions that inherit from a `Problem` a rule built.
@@ -284,8 +284,19 @@ where a schema change stops being a design question and becomes a broken root.
   into a crash rather than a refresh. `spawn`'s `pid in harness.state.problems`
   early return exists for exactly this; any new spawn path needs the same guard,
   and a problem whose content must change needs a new id.
-`check: python -c "import tempfile, shutil, pytest; from deepreason.harness import Harness, WellFormednessError; from deepreason.ontology import Problem, ProblemProvenance as PP; d=tempfile.mkdtemp(); h=Harness(d); pv=PP.model_validate({'trigger':'seed','from':[]}); p=Problem(id='q', description='d', criteria=[], provenance=pv); h.register_problem(p); assert h.register_problem(p).id=='q'; other=Problem(id='q', description='d', criteria=[], provenance=PP.model_validate({'trigger':'successor','from':['a']})); pytest.raises(WellFormednessError, h.register_problem, other); shutil.rmtree(d)" && grep -q "if pid in harness.state.problems:" src/deepreason/rules/spawn.py`
+`check: python -c "import tempfile, shutil, pytest; from deepreason.harness import Harness, WellFormednessError; from deepreason.ontology import Problem, ProblemProvenance as PP; d=tempfile.mkdtemp(); h=Harness(d); pv=PP.model_validate({'trigger':'seed','from':[]}); p=Problem(id='q', description='d', criteria=[], provenance=pv); h.register_problem(p); assert h.register_problem(p).id=='q'; other=Problem(id='q', description='d', criteria=[], provenance=PP.model_validate({'trigger':'remove-arbitrariness','from':['a']})); pytest.raises(WellFormednessError, h.register_problem, other); shutil.rmtree(d)" && grep -q "if pid in harness.state.problems:" src/deepreason/rules/spawn.py`
 - **Reading a `Status` is free; the seam that governs writing one is a different
   document.** Rules read `harness.state.status` and `state.att` and write
   neither. `DR-SEAM-adjudication-x-rules` holds the warrant triple, the supremacy
   guards, and what a rule may do to the graph.
+
+**RETIRED 2026-08-15 — this claim was authenticated against a PRE-v2 run root,
+and v2 readers no longer parse it.** Deleting `SpawnTrigger.SUCCESSOR` (the
+decommissioned website pipeline's remnant, operator ruling 2026-08-15) means
+roots carrying `trigger: "successor"` no longer load. That is the 2026-08-14
+law working as written — "old runs do not need to be valid or returnable" — and
+NOT a defect to repair by widening a reader. The claim itself is unchanged and
+still believed; what it lost is its historical witness. It is re-authenticated
+the moment a current-version root exercises the same property, and the honest
+state until then is an unwitnessed claim, said so here rather than left as a
+green check over a root nobody can open.

@@ -400,7 +400,11 @@ def test_terminal_component_resume_uses_successor_problem(tmp_path, monkeypatch)
         resumed.run()
     assert seen == ["pi-comp-c1-resume-2"]
     successor = resumed.harness.state.problems["pi-comp-c1-resume-2"]
-    assert successor.provenance.trigger.value == "successor"
+    # RE-FOUNDED (operator ruling 2026-08-15: the website pipeline stays decommissioned). A component repair problem keeps its
+    # LINEAGE -- which is what resume depends on -- and is no longer stamped
+    # SUCCESSOR: that trigger was a remnant of the decommissioned pipeline and
+    # its last producer was this very line's source.
+    assert successor.provenance.trigger.value == "seed"
     assert successor.provenance.from_ == [failed.id]
 
 

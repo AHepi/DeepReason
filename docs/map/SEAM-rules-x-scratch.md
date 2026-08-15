@@ -129,7 +129,7 @@ first, and is the half of this claim that catches a relative import.
 
 **An unresolved question is not a problem.** `ScratchProposalV1` has an
 `unresolved_questions` field and `scan_spawns` mints problems from seven
-structural triggers over the formal graph — successor, discrimination,
+structural triggers over the formal graph — discrimination,
 remove-arbitrariness, explanation-debt, connection, integration, research. (The
 `SpawnTrigger` enum carries exactly two more that `scan_spawns` never mints:
 `SEED` is the operator's question — set as a problem's provenance at run setup,
@@ -139,7 +139,7 @@ adjudication-ritual debt sweep.) No edge joins the two, and none should. A spawn
 commitment to spend the run's budget; a question in the workshop is explicitly
 allowed to be idle, wrong, or unanswerable. The same holds for the anti-relapse
 gate, which compares formal verdict vectors and never a note.
-`check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH'],sorted(m)" && python -c "from deepreason.ontology.problem import SpawnTrigger;n=sorted(t.name for t in SpawnTrigger);assert n==['AUDIT_CRITIC','CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SEED','SUCCESSOR'],n" && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/informal/appellate.py && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/capture/ladder.py && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
+`check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH'],sorted(m)" && python -c "from deepreason.ontology.problem import SpawnTrigger;n=sorted(t.name for t in SpawnTrigger);assert n==['AUDIT_CRITIC','CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH','SEED'],n" && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/informal/appellate.py && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/capture/ladder.py && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
 
 **Nothing that crosses the seam leaves a mark on the formal graph.** A scratch
 event's `state_diff` is empty, no scratch handle or receipt id appears in any

@@ -85,8 +85,13 @@ def test_the_regression_would_catch_the_old_loop(tmp_path):
                     f"Original problem: {root_desc}"
                 ),
                 criteria=list(parent.criteria),
+                # The deleted loop stamped SpawnTrigger.SUCCESSOR here. That
+                # member is gone with the decommissioned pipeline that was its
+                # last producer, so the mutation reinstates the loop's SHAPE --
+                # a problem minted from a refutation -- which is the thing H1
+                # forbids. The trigger it wore is not what the test is about.
                 provenance=ProblemProvenance.model_validate(
-                    {"trigger": "successor", "from": [aid, pid]}
+                    {"trigger": "remove-arbitrariness", "from": [aid, pid]}
                 ),
             )
         )
@@ -115,26 +120,27 @@ def test_every_other_structural_trigger_still_fires(tmp_path):
 
     assert SpawnTrigger.DISCRIMINATION in triggers, "two survivors, no rivalry"
     assert triggers, "the frontier must still grow by the structural routes"
-    assert SpawnTrigger.SUCCESSOR not in triggers  # the only route that closed
+    # The route that closed cannot even be named any more: the trigger was
+    # deleted with the decommissioned pipeline that was its last producer.
+    assert not hasattr(SpawnTrigger, "SUCCESSOR")
 
 
-def test_the_successor_trigger_survives_for_its_remaining_producer(tmp_path):
-    """B5 — the enum member is kept, and this is why.
+def test_the_successor_trigger_is_gone_entirely(tmp_path):
+    """RETIRED AND REPLACED — operator ruling 2026-08-15: "There was a website development pipeline that I decommissioned a while ago. That needs to stay decommissioned.""
 
-    `easy.py::seed_component` stamps `trigger: "successor"` on a staged-pipeline
-    component REPAIR problem, from two live call sites in `workflows/website.py`.
-    Deleting the member would break that path. Whether it is a second H1 site is
-    the operator's open question; that it still parses is this rung's obligation.
+    The earlier form of this test asserted that `SpawnTrigger.SUCCESSOR`
+    SURVIVED, because `easy.py::seed_component` still stamped it on a
+    staged-pipeline component repair problem. The operator's ruling reframed
+    that producer as a REMNANT of an already-decommissioned pipeline rather
+    than a feature to preserve, so the producer went, and with producers at
+    zero the member went too.
+
+    Retirement is the correct disposition here, not a weakening: the property
+    the old test protected (nothing breaks by deleting the member) was true
+    only while a producer existed, and asserting it now would be asserting the
+    remnant back into place.
     """
-    harness, _ = _seeded(tmp_path)
-    problem = harness.register_problem(
-        Problem(
-            id="pi-comp-header-r1",
-            description="repair the header component",
-            criteria=[],
-            provenance=ProblemProvenance.model_validate(
-                {"trigger": "successor", "from": ["some-component-artifact"]}
-            ),
-        )
-    )
-    assert problem.provenance.trigger == SpawnTrigger.SUCCESSOR
+    from deepreason.ontology import SpawnTrigger
+
+    assert not hasattr(SpawnTrigger, "SUCCESSOR")
+    assert "successor" not in {t.value for t in SpawnTrigger}

@@ -155,7 +155,7 @@ def test_default_problem_is_the_seed(tmp_path):
     h.register_problem(Problem(
         id="pi-child", description="a successor",
         provenance=ProblemProvenance.model_validate(
-            {"trigger": "successor", "from": ["pi-x"]})))
+            {"trigger": "remove-arbitrariness", "from": ["pi-x"]})))  # was SUCCESSOR
     assert evidence_pack(h).startswith("PROBLEM pi-x:")
 
 

@@ -251,7 +251,9 @@ def test_successor_family_scope(harness):
             description="successor after the first refutation",
             criteria=[],
             provenance=ProblemProvenance.model_validate(
-                {"trigger": "successor", "from": [root.id]}
+                # Was SUCCESSOR (operator ruling 2026-08-15: the website pipeline stays decommissioned); the domain-scoping
+                # property is about the provenance ROOT, not the trigger.
+                {"trigger": "remove-arbitrariness", "from": [root.id]}
             ),
         )
     )

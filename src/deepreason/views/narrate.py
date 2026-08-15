@@ -29,7 +29,6 @@ _NOISE_TAGS = (
 )
 
 _SPAWN_LINES = {
-    SpawnTrigger.SUCCESSOR: "a successor problem took its place, carrying the refuted candidate's contract",
     SpawnTrigger.DISCRIMINATION: "rival survivors remained, so a discrimination problem was opened",
     SpawnTrigger.INTEGRATION: "two accepted-but-unrelated results invited an integration problem",
     SpawnTrigger.CONNECTION: "an isolated result was asked to connect to its neighbourhood",

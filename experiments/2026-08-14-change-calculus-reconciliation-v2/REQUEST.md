@@ -482,3 +482,32 @@ Operator, verbatim:
 | R63 | Confirm Rung 2 removed `scan_spawns`' refuted⇒successor loop and carries the frontier-unchanged-under-refutation regression with its mutation proof. **If absent, it is the next step, ALONE.** | **CHECKED — ABSENT** | Rung 3, alone, next |
 | R64 | Frame-separation violations make a frame **UNCONSULTABLE with a typed diagnostic** — never a manufactured refutation. | adopt; refines R43 | Rungs 3/4 |
 | R65 | **Embedder, binding on that pending tranche:** the dependency lands at INSTALL time, warmup in `doctor`, absence is a typed capability disclosure. **Nothing installs inside a reasoning transaction.** | adopt | the embedder tranche |
+
+### Amendment 9 — 2026-08-15, ADDENDUM v2 and its correction
+
+Operator, verbatim:
+
+> "There was a website development pipeline that I decommissioned a while ago.
+> That needs to stay decommissioned. Code testing, simulation, scratch pad and
+> research backends need to stay live and be able to mint their own evidence."
+
+Operator, verbatim correction, same day:
+
+> "Sorry not scratch pad. that doesn't mint evidence"
+
+| # | Requirement | Lands |
+|---|---|---|
+| R66 | The website pipeline is **ALREADY decommissioned by operator ruling**, and stays so. Its successor production in scan-adjacent code is a **REMNANT, not a feature**. Remove it — producer sites, then `SpawnTrigger.SUCCESSOR` once producers = 0 — and leave nothing that could quietly revive the pipeline. | **Rung 3d, DELIVERED** |
+| R67 | Tests asserting the decommissioned behaviour are **RETIRED**, with docstrings citing this ruling. Retirement is the correct disposition here, **not a weakening**. | Rung 3d |
+| R68 | **PROTECTED-LIVE, four channels**, each fully functional: code testing/execution, simulation, research backend, scratch pad. | standing, all rungs |
+| R69 | **EVIDENCE-MINTING, three of the four**: code testing/execution (execution-grade), simulation (typed proposals through receipts), research backend (fetch receipts as citable evidence). **Scratch pad is protected-LIVE but ADVISORY** — `advisory_non_grounding`, informing conjecture, minting no evidence, exactly as its standing law states. | standing, all rungs |
+| R70 | Every proposed deletion carries a **two-scan proof of non-reachability from each of the four channels**. Overlap is a **contradiction-stop: report, do not cut**. | standing, every deletion |
+| R71 | Acceptance: **one green cited test row per protected channel** post-deletion, and the delivery states per channel that it compiles, dispatches, and mints its records — three prove "mints its records as evidence", scratch proves "live and advisory, boundary intact". | Rung 3d |
+
+**This amendment overturns a decision made two rungs earlier, and the reason is
+framing rather than evidence.** Rung 3a kept `SpawnTrigger.SUCCESSOR` because a
+census found a live producer in `easy.py`. The census was right about the tree
+and wrong about what it meant: the producer belonged to a pipeline the operator
+had already retired, so it was a remnant to remove rather than a dependency to
+respect. **A liveness scan tells you what runs; it cannot tell you what is
+supposed to run.** That question has one authority, and it is the operator.

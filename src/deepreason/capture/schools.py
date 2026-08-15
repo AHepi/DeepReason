@@ -180,7 +180,7 @@ def allocate(harness, problem, schools: dict[str, dict], config) -> list[str]:
         return everyone
     # Ownership by provenance: lineages follow through on their problem-shifts —
     # with a cross-examination floor so ownership cannot starve a rival school.
-    if trigger in (SpawnTrigger.SUCCESSOR, SpawnTrigger.REMOVE_ARBITRARINESS):
+    if trigger == SpawnTrigger.REMOVE_ARBITRARINESS:
         for fid in problem.provenance.from_:
             artifact = harness.state.artifacts.get(fid)
             if artifact is not None and artifact.provenance.school in schools:

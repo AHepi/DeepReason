@@ -81,7 +81,7 @@ def test_init_and_allocation(tmp_path):
     assert schools.allocate(harness, problem, roster, config) == ["school-0", "school-1"]
 
 
-def test_successor_owned_by_spawning_lineage(tmp_path):
+def test_descendant_owned_by_spawning_lineage(tmp_path):
     harness = Harness(tmp_path / "run")
     config = Config(N_SCHOOLS=2, VS_K=1)
     _seed_problem(harness, criteria=["k-true"])
@@ -93,7 +93,9 @@ def test_successor_owned_by_spawning_lineage(tmp_path):
     from deepreason.ontology import Problem as P
     from deepreason.ontology import ProblemProvenance as PP
 
-    # Fake a successor problem spawned from a school-1 artifact.
+    # A descendant problem spawned from a school-1 artifact. Was SUCCESSOR;
+    # re-founded on remove-arbitrariness, the remaining ownership trigger
+    # (operator ruling 2026-08-15: the website pipeline stays decommissioned).
     from deepreason.ontology import Interface, Provenance
 
     artifact = harness.create_artifact(
@@ -106,7 +108,7 @@ def test_successor_owned_by_spawning_lineage(tmp_path):
             id="succ:test",
             description="follow through",
             provenance=PP.model_validate(
-                {"trigger": "successor", "from": [artifact.id]}
+                {"trigger": "remove-arbitrariness", "from": [artifact.id]}
             ),
         )
     )

@@ -13,6 +13,7 @@ unchanged and still catch real writer faults.
 
 from __future__ import annotations
 
+import pytest
 import pathlib
 
 from deepreason.admission.parse import AdmissionInput, admit_sources
@@ -163,9 +164,27 @@ def test_a_conjecture_citing_the_bound_source_leaves_the_root_valid(
     assert _attached_evidence_findings(root) == []
 
 
+@pytest.mark.skip(
+    reason="pre-v2 root: carries the deleted `successor` trigger and no longer "
+    "loads. Retired by the 2026-08-14 law, not repaired."
+)
 def test_the_committed_triage_root_verifies_clean():
-    """Regression (stress-triplet run-0a3e93d6): the committed live record,
-    replayed read-only, no longer reports its citation as an integrity breach."""
+    """RETIRED — and this one is a real coverage LOSS, said plainly.
+
+    Regression (stress-triplet run-0a3e93d6): the committed live record,
+    replayed read-only, reported no integrity breach on its citation. The root
+    carries `trigger: "successor"`, and that member was deleted when the
+    decommissioned website pipeline's remnant went (operator ruling
+    2026-08-15), so v2 readers cannot load it at all.
+
+    Under the 2026-08-14 law — "old runs do not need to be valid or
+    returnable" — the root is an artifact of its own version and is owed
+    nothing, so widening a reader to keep this green would be the wrong fix.
+    But the property it guarded is real and now has no witness: nothing else
+    replays a committed root and checks the citation integrity of an attached
+    evidence record. The honest disposition is a skip that says so, and the
+    coverage returns when a current-version root exercises the same path.
+    """
 
     report = verify_root(COMMITTED_ROOT)
     assert report["violations"] == []

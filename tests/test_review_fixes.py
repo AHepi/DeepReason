@@ -507,7 +507,9 @@ def test_cross_examination_floor_unstarves_minority_school(tmp_path):
         Problem(
             id="succ:x", description="successor", criteria=[],
             provenance=ProblemProvenance.model_validate(
-                {"trigger": "successor", "from": [owner_artifact.id]}
+                # Was SUCCESSOR; re-founded on the remaining
+                # ownership-by-provenance trigger (operator ruling 2026-08-15: the website pipeline stays decommissioned).
+                {"trigger": "remove-arbitrariness", "from": [owner_artifact.id]}
             ),
         )
     )

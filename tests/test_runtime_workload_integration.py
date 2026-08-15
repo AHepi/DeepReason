@@ -111,7 +111,8 @@ def test_scheduler_owns_lineage_and_stable_code_relapse_domain(tmp_path):
             id="code:successor",
             description="retry the component",
             provenance=ProblemProvenance.model_validate(
-                {"trigger": "successor", "from": [candidates[0].id]}
+                # Was SUCCESSOR (operator ruling 2026-08-15: the website pipeline stays decommissioned).
+                {"trigger": "remove-arbitrariness", "from": [candidates[0].id]}
             ),
         )
     )

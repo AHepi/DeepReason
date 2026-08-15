@@ -19,13 +19,6 @@ POPPER_BATTERY: tuple[str, ...] = ()
 
 class SpawnTrigger(str, Enum):
     SEED = "seed"
-    # KEPT, and no longer produced by any failed verdict (H1, Rung 3a).
-    # `scan_spawns` minted these on refutation and no longer does. The
-    # member stays because a LIVE producer still uses it: easy.py's
-    # seed_component stamps it on a staged-pipeline component REPAIR
-    # problem. Whether that second site is also an H1 site is the
-    # operator's open question, parked, not answered by its survival here.
-    SUCCESSOR = "successor"                    # staged-pipeline repair only
     DISCRIMINATION = "discrimination"          # >=2 surviving rivals for one pi
     REMOVE_ARBITRARINESS = "remove-arbitrariness"  # accepted with low HV
     EXPLANATION_DEBT = "explanation-debt"      # reach event

@@ -28,7 +28,7 @@ the single-target contract, because the call structure is not the epistemology.
 The one thing crossing back the other way is identity, not authority: the
 anti-relapse gate scopes a candidate's comparison domain by the scheduler's
 `problem_family_key`, so a refuted approach cannot re-enter under a fresh
-successor id.
+successor id (the term of art survives; the TRIGGER does not).
 
 Nine files under `src/` mention both `deepreason.rules` and the scheduler; four
 carry the agreement. Of the five rules modules that say "scheduler", only
