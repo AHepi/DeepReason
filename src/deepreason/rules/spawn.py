@@ -59,30 +59,12 @@ def scan_spawns(harness, config) -> list[Problem]:
         if problem is not None:
             new.append(problem)
 
-    # Successor: a refuted candidate leaves its problem-shift behind. The
-    # parent's description carries forward — criteria alone starve the
-    # generator of the problem's format/content contract (observed live:
-    # successor packs without the skeleton instruction bred prose that
-    # skeleton-wf refuted, cascading successors).
-    for aid, pids in addressed.items():
-        if status.get(aid) != Status.REFUTED:
-            continue
-        for pid in sorted(pids):
-            parent = state.problems[pid]
-            # Carry the ROOT description, not the parent's: a successor of a
-            # successor would otherwise nest the whole ancestor chain
-            # (observed live: 7 levels deep, 52/70 problems multi-nested,
-            # compounding pack size per refutation generation). The text
-            # after the last marker is the seed description at any depth.
-            root_desc = parent.description.rsplit("Original problem: ", 1)[-1]
-            _spawn(
-                SpawnTrigger.SUCCESSOR,
-                [aid, pid],
-                f"supersede refuted candidate {aid[:12]} on {pid}. "
-                f"Original problem: {root_desc}",
-                criteria=parent.criteria,
-                problem_id=f"succ:{aid[:12]}",
-            )
+    # H1 (v2 calculus program, Rung 3a): there is NO refuted-artifact successor
+    # branch here, and its absence is the design. A failed conjecture mints
+    # nothing; failure may redirect ATTENTION only. A problem is replaced by an
+    # adjudicated `translate` resolution (premises.py), never by a refutation.
+    # Restoring a loop here is the specific regression tests/test_h1_no_spawn_
+    # from_refutation.py exists to catch, and it mutation-proves itself.
 
     # Discrimination: >=2 surviving rivals for one problem. A discrimination
     # problem's own rivals don't re-trigger it (no disc-of-disc regress).

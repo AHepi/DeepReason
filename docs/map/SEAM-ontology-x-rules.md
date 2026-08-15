@@ -95,7 +95,7 @@ values.
 
 The behavioural half — schema round trips, the probation clock, and the two
 spawn descriptions that inherit from a `Problem` a rule built.
-`check: python -m pytest tests/test_ontology.py tests/test_properties.py::test_probationary_property_is_not_promoted tests/test_properties.py::test_control_receipts_do_not_advance_property_probation tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria -q`
+`check: python -m pytest tests/test_ontology.py tests/test_properties.py::test_probationary_property_is_not_promoted tests/test_properties.py::test_control_receipts_do_not_advance_property_probation tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria tests/test_h1_no_spawn_from_refutation.py -q`
 
 ## What is deliberately absent
 
@@ -187,7 +187,7 @@ their own short prefix (`succ:`, `disc:`, `ra:`, `debt:`, `conn:`, `research:`,
 consequence is narrow and worth stating exactly: a trigger's `.value` IS
 on-record inside `ProblemProvenance.trigger`, but changing it moves no problem
 id and breaks no `addr` pair.
-`check: python -c "import ast,pathlib; s=pathlib.Path('src/deepreason/rules/spawn.py').read_text(); C=[n for n in ast.walk(ast.parse(s)) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='_spawn']; assert len(C)==7 and all(any(k.arg=='problem_id' for k in c.keywords) for c in C), len(C); X=[n for f in ('src/deepreason/informal/appellate.py','src/deepreason/capture/ladder.py') for n in ast.walk(ast.parse(open(f).read())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='spawn']; assert len(X)==2 and all(any(k.arg=='problem_id' for k in c.keywords) for c in X), len(X)" && grep -q 'pid = problem_id or f"{trigger.value}' src/deepreason/rules/spawn.py && grep -q 'return f"research:{commitment_id}:{target_id\[:12\]}"' src/deepreason/rules/act.py`
+`check: python -c "import ast,pathlib; s=pathlib.Path('src/deepreason/rules/spawn.py').read_text(); C=[n for n in ast.walk(ast.parse(s)) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='_spawn']; assert len(C)==6 and all(any(k.arg=='problem_id' for k in c.keywords) for c in C), len(C); X=[n for f in ('src/deepreason/informal/appellate.py','src/deepreason/capture/ladder.py') for n in ast.walk(ast.parse(open(f).read())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='spawn']; assert len(X)==2 and all(any(k.arg=='problem_id' for k in c.keywords) for c in X), len(X)" && grep -q 'pid = problem_id or f"{trigger.value}' src/deepreason/rules/spawn.py && grep -q 'return f"research:{commitment_id}:{target_id\[:12\]}"' src/deepreason/rules/act.py`
 
 **`Rule.ADJ` is emitted by nobody, in `rules/` or out of it.** Adjudication
 writes no event of its own; the status changes it computes ride out on the

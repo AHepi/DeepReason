@@ -133,16 +133,21 @@ Every `Measure` tag this package emits (`arg-crit`, `scrutiny`, `gate:`,
 registered in `src/deepreason/signals.py`, which is AST-scanned by the gate.
 `check: for tag in arg-crit arg-crit-overridden-by-execution scrutiny conj-noregister synth-noregister "gate:" vision-crit browser-pass; do grep -q "\"$tag\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py -q`
 
-`scan_spawns` covers seven of the nine `SpawnTrigger` values. `SEED` is the
-operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
-`check: for t in SUCCESSOR DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC)" src/deepreason/rules/spawn.py`
+`scan_spawns` covers SIX of the nine `SpawnTrigger` values. `SEED` is the
+operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here;
+and **`SUCCESSOR` is no longer spawned here at all** — H1 (Rung 3a) deleted the
+refuted⇒successor branch, so a failed verdict mints nothing. The member remains
+in the enum for a producer OUTSIDE this module (`easy.py::seed_component`,
+staged-pipeline component repair), which is why the count fell but the enum did
+not.
+`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC|SUCCESSOR)" src/deepreason/rules/spawn.py`
 
 ## Where to change what
 
 | To change... | Edit | Test |
 |---|---|---|
 | When a new problem is spawned, or add a trigger | `scan_spawns` in `rules/spawn.py`, plus `SpawnTrigger` in `ontology/problem.py` | `tests/test_harness_fixes.py::test_connection_problem_pins_lineage_ref_commitment` |
-| What a successor / remove-arbitrariness problem inherits from its parent | the `rsplit("Original problem: ")` and `criteria=parent.criteria` clauses in `scan_spawns` | `tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest` |
+| What a remove-arbitrariness problem inherits from its parent | the `rsplit("Original problem: ")` and `criteria=parent.criteria` clauses in `scan_spawns`. **The successor half is GONE** — H1 (Rung 3a) deleted the refuted⇒successor loop, so no failed verdict mints a problem | `tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest`, `tests/test_h1_no_spawn_from_refutation.py` |
 | What prose criticism may refute | `formally_backed` in `rules/warrants.py` — consumed by `informal/trial.py`, NOT by the criticism rule | `tests/test_prose_refutation_boundaries.py::test_formal_backing_covers_the_whole_formal_set_not_only_execution` |
 | Whether a sustained prose case changes a status or is only recorded | `_resolve_authority` / `_TRIAL_MODES` in `rules/crit.py` and `Config.ARGUMENTATIVE_AUTHORITY` — never the manifest (`DR-INV-frozen-surfaces`) | `tests/test_criticism_authority.py::test_observe_only_no_status_change` |
 | Which candidates the anti-relapse gate blocks, or the scope it compares within | `RelapseDomain.compatible` and `check` in `rules/guards/anti_relapse.py` | `tests/test_relapse_domains.py::test_archived_gemma_shape_scopes_battery_equivalence` |
@@ -180,9 +185,17 @@ operator's; `AUDIT_CRITIC` is raised by the response ladder (§11.4), not here.
   is load-bearing at any depth. The symmetric failure on the other side —
   dropping the parent description entirely — starved the generator of the
   format contract and bred prose that `skeleton_wf` refuted, cascading
-  successors. Both remove-arbitrariness and successor carry the ROOT
-  description; a 200k resume where `ra:` had no anchor wandered into unrelated
-  abstract mathematics.
+  successors. Remove-arbitrariness carries the ROOT description; a 200k resume
+  where `ra:` had no anchor wandered into unrelated abstract mathematics.
+  **The successor side of this trap is closed at the root as of Rung 3a**: H1
+  deleted the loop, so refutation mints nothing and there is no successor left
+  to nest. `SpawnTrigger.SUCCESSOR` is KEPT, and not as a dead reader — a live
+  producer still stamps it, `easy.py::seed_component` on a staged-pipeline
+  component repair problem, from two call sites in `workflows/website.py`.
+  Whether that second site is also an H1 site is an open operator question,
+  parked; reading the surviving enum member as "H1 was not applied" is the
+  misreading this sentence exists to prevent.
+`check: python -c "import inspect; from deepreason.rules.spawn import scan_spawns; assert 'SpawnTrigger.SUCCESSOR' not in inspect.getsource(scan_spawns)" && grep -q '"trigger": "successor"' src/deepreason/easy.py && python -m pytest tests/test_h1_no_spawn_from_refutation.py -q`
 - **A degraded anti-relapse gate must fail OPEN, with a receipt.** Missing
   domain, embedder, or `NEAR_DUP_EPS` degrades to hash-only and appends a
   `relapse-gate-degraded` record; the bronze run's gate instead compared every

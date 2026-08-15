@@ -622,3 +622,42 @@ one parameter which gates the mechanism proves the mechanism works
 *where it was already allowed to act*, and says nothing about whether
 it is ever allowed to act. State the configuration a live result was
 measured under, in the sentence that reports the result.
+**E29 — `docs/harness-spec-v1.3.md` §3's spawn-trigger list ("failed
+verdict ⇒ successor problem (P2)") and §7's dependent sentence are both
+FALSE as of the v2 program's Rung 3a.** The trigger is deleted: no failed
+verdict mints a problem, and `rules/spawn.py::scan_spawns` no longer
+contains the branch. §7's sentence is the load-bearing casualty — "No
+bespoke sharpen-or-drop: the failed verdict already Spawns a successor
+problem (P2) — sharpening is the successor's job" JUSTIFIED the absence
+of a sharpen-or-drop rule by pointing at the very trigger H1 removes, so
+deleting the trigger without re-founding that justification would leave
+a gap the spec still claims is filled. It is re-founded on two things
+that do exist: the premise channel (a problem's presupposition is
+criticisable, and a marked problem's three resolutions include
+*translate*, which is now the only path from one problem to another),
+and discrimination (two surviving rivals still spawn the comparison).
+Neither fires on a refutation, which is the whole content of H1: failure
+redirects ATTENTION, it does not spawn. Found and fixed 2026-08-15 by
+`experiments/2026-08-15-change-rung3a-h1-successor-deletion/`. The
+general lesson, recorded because it is the reusable half: when deleting
+a mechanism, grep for the sentences that CITE it as a reason for
+something else's absence — those are the claims that quietly become
+unsupported, and they are never in the same section as the deletion.
+**E30 — `docs/COMPUTABLE_CALCULUS.md` §5's trigger list, stated as
+"exhaustive", and §9.6's "The failed verdict spawns a successor problem
+as always" are deliberately NOT implemented.** Not contradicted by
+another document but by the operator's own H1 decision, which predates
+this program and was pre-decided rather than derived. The calculus is
+committed theory authority in this repository, so a reader must be told
+that two of its sentences are knowingly unimplemented and why: a
+successor minted from a failure is a problem nobody posed, carrying its
+parent's criteria under a new id, and one recorded run reached 2,894
+problems that way. §9.6's clause also had a second life — it minted the
+CRISIS problem under a consulted frame assertion — and that half is
+answered separately by `DECISIONS.md` D-1 (crisis is a render state
+only, no standing-layer trigger). Minted 2026-08-15 by the same tranche.
+The `SpawnTrigger.SUCCESSOR` enum member survives the deletion and is
+not evidence against this entry: a live producer outside the reasoning
+loop still stamps it (`easy.py::seed_component`, staged-pipeline
+component repair), and whether H1 reaches that site is an open operator
+question.

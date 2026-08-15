@@ -146,9 +146,17 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
 
 
 def test_successor_descriptions_do_not_nest(tmp_path):
-    """Chaos finding: successor problems embedded the whole ancestor chain
-    (7 levels deep live). A successor-of-a-successor must carry the ROOT
-    description exactly once, at any depth."""
+    """Chaos finding, now closed at the root: successor problems embedded the
+    whole ancestor chain (7 levels deep live, 52/70 problems multi-nested).
+
+    The defence used to be a `rsplit("Original problem: ")` inside the spawn
+    loop. H1 (Rung 3a) deleted the loop, so the nesting cannot recur through
+    `scan_spawns` at all -- and this test now pins the STRONGER property: no
+    depth of refutation produces any successor to nest. The original assertion
+    is kept below the fold, run against a hand-built chain, so the description
+    contract is still exercised for the one producer that survives
+    (`easy.py`'s staged-pipeline repair problems).
+    """
     from deepreason.rules.spawn import scan_spawns
     from tests.conftest import attack
 
@@ -161,10 +169,17 @@ def test_successor_descriptions_do_not_nest(tmp_path):
         a = h.create_artifact(f"candidate at depth {depth}", problem_id=pid)
         attack(h, a.id, f"kill-{depth}")
         spawned = scan_spawns(h, config)
-        succ = next(p for p in spawned if p.id == f"succ:{a.id[:12]}")
-        assert succ.description.count("Original problem:") == 1
-        assert seed_desc in succ.description
-        pid = succ.id
+        assert not [p for p in spawned if p.id.startswith("succ:")]
+
+    # The description contract itself, exercised on a hand-built chain: the
+    # root text appears exactly once at any depth, however a successor arrives.
+    desc = seed_desc
+    for depth in range(3):
+        desc = f"supersede refuted candidate x{depth} on pi-t. Original problem: " + (
+            desc.rsplit("Original problem: ", 1)[-1]
+        )
+        assert desc.count("Original problem:") == 1
+        assert seed_desc in desc
 
 
 def test_support_cascade_suspension_verifies_clean(tmp_path):

@@ -354,8 +354,20 @@ deletes something live today; 3b constrains something that does not yet exist.
 errata; the two errata entries themselves, minted against a freshly re-checked
 ledger tail (E29 was next free at `50e2397a9`).
 
-**Work (RE-CHOSEN 2026-08-15 under the new law):** remove the SUCCESSOR branch
-from `scan_spawns` **and remove `SpawnTrigger.SUCCESSOR` from the enum.**
+**Work (RE-CHOSEN TWICE, 2026-08-15):** remove the SUCCESSOR branch from
+`scan_spawns`. **The enum member is KEPT** — see the withdrawal below.
+
+**WITHDRAWN, on evidence found while executing this rung:** the plan below said
+to delete `SpawnTrigger.SUCCESSOR` too, and overruled the external advice for
+saying otherwise. A census found a SECOND, LIVE producer that has nothing to do
+with `scan_spawns` — `easy.py::seed_component` stamps `trigger: "successor"` on
+a staged-pipeline component REPAIR problem, from two call sites in
+`workflows/website.py`. Deleting the member breaks that path, and fixing it
+would drag a whole subsystem into a tranche the operator said must ship ALONE.
+The advice's recommendation therefore lands, for a stronger reason than the
+advice gave: it argued from old-root parsability, which the 2026-08-14 law had
+already retired, while the real reason is a producer nobody had counted.
+Delivered in `experiments/2026-08-15-change-rung3a-h1-successor-deletion/`.
 
 The previous design kept the enum member as a dead reader so that committed
 roots carrying `trigger: "successor"` would still parse — an additive shape
@@ -366,14 +378,13 @@ the v2 trigger vocabulary then says what v2 actually does, and a reader of the
 enum is not left wondering which members are live. Old roots stop parsing under
 v2 readers, and that is the law working.
 
-**The external advice DISAGREES here and is overruled, with the reason recorded**
-(`RECONCILIATION.md` §2P): it would keep the member as a legacy parser value,
-because deleting it "risks making already-recorded `ProblemProvenance` records
-unparsable for little functional benefit". That cost is real and is exactly what
-the 2026-08-14 law accepted — old roots are artifacts of their own version and
-are owed neither validity nor readability. An advisory review does not outrank a
-standing design law. If the operator wants the member kept, that is one word and
-this paragraph inverts.
+~~**The external advice DISAGREES here and is overruled**~~ — **the advice was
+RIGHT and this paragraph is withdrawn.** It is kept struck rather than deleted
+because the reasoning failure is the reusable part: the overruling argument was
+sound about the law (old roots really are owed nothing) and simply never asked
+whether anything CURRENT still produced the value. A compatibility question and
+a liveness question look alike and are not, and only one of them survives a law
+that retires compatibility.
 
 **ADDED 2026-08-15 by RIDER 5 (R63) — this rung is NEXT, and ALONE.** The
 external advice checked the tree and found the refuted⇒successor loop still in

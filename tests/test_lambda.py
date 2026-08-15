@@ -110,8 +110,11 @@ def test_focus_lock_works_only_the_focused_problem(tmp_path):
     config = Config(VS_K=2, N_SCHOOLS=0, FLOOR=0, FOCUS_PROBLEM="pi-arm")
     Scheduler(harness, adapter, config).run(4)
     worked = {pid for _, pid in harness.state.addr}
-    assert worked == {"pi-arm"}  # successors spawn but are never worked
-    assert any(p.startswith("succ:") for p in harness.state.problems)
+    assert worked == {"pi-arm"}          # the focus lock holds
+    # Under H1 (Rung 3a) refutation spawns nothing, so the lock is now tested
+    # against a frontier that never grew rather than one it declined to work.
+    # Both are the same guarantee; only the population changed.
+    assert not any(p.startswith("succ:") for p in harness.state.problems)
 
 
 def test_run_arm_reports_v2_metrics(tmp_path):

@@ -77,7 +77,11 @@ def test_multi_cycle_spawns_and_persistence(tmp_path):
     report = scheduler.run(4)
 
     problems = harness.state.problems
-    assert any(p.startswith("succ:") for p in problems)   # failed verdict => successor
+    # H1 (Rung 3a): a failed verdict spawns NOTHING. The frontier still grows,
+    # by every other structural route -- that is what this assertion pair is
+    # for, and dropping the succ: line without the negative would have left the
+    # test unable to notice the loop coming back.
+    assert not any(p.startswith("succ:") for p in problems)
     assert any(p.startswith("disc:") for p in problems)   # >=2 rivals => discrimination
     assert any(p.startswith("conn:") for p in problems)   # iso > 0 => connection
     assert harness.state.hv                               # lazy HV logged
@@ -162,7 +166,11 @@ def test_focus_family_restricts_selection(tmp_path):
         scheduler.step()
     family = problem_family(harness.state, "pi-stage")
     assert "pi-stage" in family
-    assert any(pid.startswith("succ:") for pid in family)  # successor joined
+    # The family used to be joined by a successor of the refuted candidate.
+    # H1 deleted that route (Rung 3a), so the lineage the focus lock is being
+    # tested on is the seed's own -- which is the property under test: focus
+    # never leaves the family, whatever put members in it.
+    assert not any(pid.startswith("succ:") for pid in family)
     worked = set(scheduler._problem_worked)
     assert worked and worked <= family          # never left the family
     assert "pi-other" not in worked
