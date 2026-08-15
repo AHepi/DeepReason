@@ -705,8 +705,10 @@ regression exists. Rung 2 did not remove it and never claimed to: the ladder
 assigns H1's deletion to **Rung 3**, and Rung 2 shipped the replacement channel
 first precisely because *translate* had to exist before the successor trigger
 could go. So the advice's finding is correct about the tree and correct about
-what must happen next, and the operator's own disposition applies: **Rung 3 is
-the next step, alone.**
+what must happen next, and the operator's own disposition applies: **Rung 3a is
+the next step, alone** — and "alone" forced a split, because Rider 2 had placed
+the frame-separation invariant in the same rung. H1's deletion is now **3a**,
+frame-separation is **3b**, and neither requirement moved or was dropped.
 
 **One thing the advice's ordering worry does NOT apply to, checked rather than
 assumed.** The advice warns that with the loop live, "refuting a malformed
@@ -733,7 +735,7 @@ before them, and why R63 stands.
 | R61 | programs consume frozen fence-stamped inputs, never live graph state | **adopt, with one delivered tension named.** Rung 2's `premise_rent_sweep` and `demarcation.load` read LIVE state (the current battery, the current registry). They are not `program:` commitments — the rent battery is deliberately not evaluable — so the letter does not bind them, but the spirit does, and Rung 8's re-founding of the diagnostics is where this gets settled for the whole surface | Rungs 5, 7, 8 |
 | R62 | P4's three-layer acceptance; **no live pilot before P4** | **adopt — and it DEFERS the pending live run.** See below | P4 tranche |
 | R63 | confirm the successor loop is gone | **ABSENT — next step, alone** | Rung 3 |
-| R64 | frame-separation violation ⇒ UNCONSULTABLE + typed diagnostic, never a manufactured refutation | **adopt**, refining R43. The distinction is the whole point: an unmet invariant is a reason to STOP TRUSTING a frame, never a reason to invent a defeat for it. Manufacturing a refutation would put an epistemic verdict on the graph to record an engineering fault | Rungs 3/4 |
+| R64 | frame-separation violation ⇒ UNCONSULTABLE + typed diagnostic, never a manufactured refutation | **adopt**, refining R43. The distinction is the whole point: an unmet invariant is a reason to STOP TRUSTING a frame, never a reason to invent a defeat for it. Manufacturing a refutation would put an epistemic verdict on the graph to record an engineering fault | **Rung 3b** — split out of Rung 3 so H1 ships alone |
 | R65 | embedder: install-time dependency, doctor warmup, typed capability disclosure; nothing installs inside a reasoning transaction | **adopt, binding on that tranche.** It is the all-configurations law in a new place: an absent capability is a typed disclosure, not a stop and not a silent self-repair | the embedder tranche |
 
 #### R62 defers the pending live run, and that changes what the operator is owed

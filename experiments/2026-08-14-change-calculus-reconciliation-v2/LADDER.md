@@ -329,7 +329,18 @@ scheduler.
 
 ---
 
-### Rung 3 — Delete the spawn trigger (H1)
+### Rung 3a — Delete the spawn trigger (H1) — **NEXT, and ALONE**
+
+**SPLIT 2026-08-15.** Rider 2 placed the frame-separation invariant at Rung 3;
+Rider 5 then said the successor-loop removal "is the next step, alone", and the
+advice it comes from is explicit — "the first code tranche should therefore do
+ONLY this". Both riders stand; they cannot both be one tranche. The split
+honours each: H1's deletion ships alone as **3a**, and frame-separation becomes
+**3b**, below. Nothing is dropped and no requirement moves rung.
+
+The split is also the better shape independently: frame-separation constrains
+CONSULTED FRAME ASSERTIONS, and no frame assertion exists until Rung 4. 3a
+deletes something live today; 3b constrains something that does not yet exist.
 
 **Discharges:** H1 (D-2 in the drift table), EC-1 and EC-2 errata candidates.
 
@@ -384,13 +395,6 @@ assertion, because a deletion is exactly the change whose test can pass
 vacuously. The gate also proves every OTHER structural spawn trigger still
 fires, so "nothing spawns" cannot masquerade as success.
 
-**ALSO ADDED (R64), for the frame-separation invariant this rung introduces:** a
-violation makes the frame **UNCONSULTABLE, with a typed diagnostic — never a
-manufactured refutation.** An unmet engineering invariant is a reason to stop
-trusting a frame, never a reason to invent a defeat for it; putting a fabricated
-verdict on the graph to record a code fault would make the record lie about
-epistemics to report a bug.
-
 **Gate proves:** no calculus proposition — a deletion proves absence of loss:
 - **the frontier-delta measurement** on root `8e22d0431fd2b98d`: the 16 SUCCESSOR
   problems disappear from a re-run's shape and nothing else moves;
@@ -403,6 +407,23 @@ epistemics to report a bug.
 - ~~root sweep byte-identical~~ — retired with the compatibility law. What the
   gate proves instead is that a v2 run's OWN record round-trips: spawn, replay,
   and re-derive the frontier with the trigger gone.
+
+**Estimated size:** 150–250 lines (deletion + regression tests + map + errata).
+
+**Axioms this rung proves or preserves (R47):** preserves **A1**, **A3**, **A7**.
+It proves none — a deletion proves absence of loss, not a new invariant.
+
+**Frozen-surface forecast:** none. The enum shrinks, which under the old law
+would have been a stored-value compatibility break and is now simply the
+vocabulary matching the behaviour.
+
+---
+
+### Rung 3b — The frame-separation invariant
+
+**Discharges:** R43, R64. Split out of Rung 3 so H1 could ship alone (above).
+
+**Entry artifacts:** Rung 3a's DELIVERY.
 
 **ADDED 2026-08-15 by RIDER 2 (R43) — a REQUIRED invariant: frame-separation.**
 
@@ -425,19 +446,27 @@ The design ENFORCES component-separation, and this rung's gate proves **Theorem
 not merely the mention. Rung 7 then gets to invoke the theorem instead of
 re-arguing it.
 
-This lands at Rung 3 rather than Rung 4 because it is a constraint on how the
-frame layer may be BUILT, and Rung 4 is where it would first be violated.
+This lands before Rung 4 rather than inside it because it is a constraint on how
+the frame layer may be BUILT, and Rung 4 is where it would first be violated.
 
-**Estimated size:** 150–250 lines (deletion + regression tests + map + errata),
-**plus 80–140 for the separation invariant and its gate.**
+**R64 — what a violation DOES.** A frame that fails separation becomes
+**UNCONSULTABLE, with a typed diagnostic — never a manufactured refutation.**
+An unmet engineering invariant is a reason to stop trusting a frame; it is not
+a reason to invent a defeat for it. Putting a fabricated verdict on the graph
+to record a code fault would make the record lie about epistemics in order to
+report a bug, and the record is the only admissible evidence this system has.
+
+**Gate proves:** the separation invariant HOLDS for every consulted assertion
+the rung can construct, and that a constructed violation yields the typed
+unconsultable diagnostic and **no attack edge, no warrant, no label change**.
+
+**Estimated size:** 80–140 lines.
 
 **Axioms this rung proves or preserves (R47):** proves **A6** (consulted frame
 assertions satisfy frame-separation) and its precondition **A5** (mention, not
-depend); preserves **A1**, **A3**, **A7**.
+depend); preserves **A1**, **A3**.
 
-**Frozen-surface forecast:** none. The enum shrinks, which under the old law
-would have been a stored-value compatibility break and is now simply the
-vocabulary matching the behaviour.
+**Frozen-surface forecast:** none.
 
 ---
 
@@ -445,7 +474,7 @@ vocabulary matching the behaviour.
 
 **Discharges:** S-1, S-3, S-5, S-6, S-10, O-9, O-10, T-3, T-4, T-5.
 
-**Entry artifacts:** Rung 3's DELIVERY; `DECISIONS.md` D-5 answered **A: a fixed
+**Entry artifacts:** Rung 3b's DELIVERY; `DECISIONS.md` D-5 answered **A: a fixed
 finite DSL**, reusing the `declarative_numeric_v1` shape (v1.6).
 
 **Exit artifacts:** the five tranche artifacts; `CON-standing-and-background.md`
@@ -814,7 +843,8 @@ convenience. Both rows exist because the automatic version is the tempting one.
 | 1 vocabulary | — | — | — | — | — | — |
 | 1b signal contract | — | — | — | — | — (adds no role) | — |
 | 2 premise channel | — | — | **additive** | — (Config only) | — | — |
-| 3 deletion | — | — | — | — | — | — |
+| 3a H1 deletion | — | — | — | — | — | — |
+| 3b frame separation | — | — | — | — | — | — |
 | 4 frame assertions | — | — | **additive** | — (Config only) | — | **changes** |
 | 5 promotion | — | — | — | — (Config only) | — | — |
 | 6 render + departures | — | — | — | — (Config only) | — | possible |
@@ -867,8 +897,8 @@ PRESERVES — an axiom nobody answers for is an axiom nobody is testing.
 | **A2** | all verdicts are finite-budget deterministic results | already true | every rung |
 | **A3** | status = grounded attack pass, then the acyclic support pass | already true | Rungs 2, 3, 4, 6 |
 | **A4** | standing is a derived consultation relation and never enters status computation | **Rung 4** | Rungs 5, 6, 7 |
-| **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (the law, for attributions), **Rung 4** (for frame assertions) | Rung 3 |
-| **A6** | consulted frame assertions satisfy frame-separation | **Rung 3** (R43) | Rungs 4, 7 |
+| **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (the law, for attributions), **Rung 4** (for frame assertions) | Rung 3b |
+| **A6** | consulted frame assertions satisfy frame-separation | **Rung 3b** (R43) | Rungs 4, 7 |
 | **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
 | **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** | Rung 8 |
 | **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) | Rungs 2, 5 |
