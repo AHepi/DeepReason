@@ -117,3 +117,22 @@ Requirements added by this amendment:
 | M18 | A marked problem is deprioritised and a retired one is not selected. | Amendment 1, tests |
 | M19 | ONE guarded live run, judged on typed outcomes only (`verify_root`, run state, the record), asking whether a real critic ever files an attribution. A live MISS is inconclusive, not a failure; recorded either way. | Amendment 1, tests |
 | M20 | NOT OWED: any cross-version proof. No replay-byte-unchanged obligation, no old-root sweep as a gate obligation (2026-08-14 law). | Amendment 1 |
+
+### Amendment 2 (2026-08-15) — a second check for prose
+
+Operator, verbatim, in reply to the step-2 status report that disclosed the
+residue ("a premise a critic writes is bare prose, so it never pays rent —
+filing an attribution is effectively the accusation, and the rent battery is
+its mechanical adjudication rather than an independent second test"):
+
+> Ok. A second check needs to be added for prose.
+
+| # | Requirement | Source |
+|---|---|---|
+| M21 | A PROSE premise — one carrying no substantive commitment — must face a SECOND check before it falls. The rent battery alone may not fell it. | Amendment 2 |
+
+**Status: the second check's IDENTITY is underdetermined by the message and is
+the subject of one batched question to the operator** (three readings differ
+materially in behaviour and effort; see DELIVERY/the session report). Nothing
+is implemented against M21 until it is answered — writing the wrong second
+check is more expensive than asking.

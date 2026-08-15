@@ -90,10 +90,14 @@ position ahead of every authority branch, and the correction that the line is
 execution/formal backing and NOT evaluability.
 `check: python -m pytest tests/test_prose_refutation_boundaries.py::test_formal_backing_covers_the_whole_formal_set_not_only_execution tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_still_records_scrutiny_for_a_formal_target tests/test_prose_refutation_boundaries.py::test_a_failing_formal_commitment_earns_no_protection tests/test_prose_refutation_boundaries.py::test_the_execution_guard_is_consulted_before_the_authority_branch tests/test_prose_refutation_boundaries.py::test_a_prose_case_against_a_formally_backed_target_is_refused_by_type tests/test_prose_refutation_boundaries.py::test_the_formal_boundary_is_execution_backing_and_not_evaluability -q`
 
-`_substantive` is defined once and imported once, and its refusal has teeth on
-both consumers: no reach from a structural battery, no prose immunity from a
-structural commitment, no relapse equivalence from a structural-only battery.
-`check: grep -q "from deepreason.measures.reach import _substantive" src/deepreason/rules/warrants.py && test "$(grep -rl _substantive --include=*.py src/deepreason | wc -l)" -eq 2 && python -m pytest "tests/test_reflexive_discipline.py::test_structural_programs_never_ground_reach" tests/test_prose_refutation_boundaries.py::test_a_structural_program_confers_no_formal_backing tests/test_guards.py::test_structural_only_does_not_block -q`
+`_substantive` is defined once and imported by two consumers, and its refusal
+has teeth on all three: no reach from a structural battery, no prose immunity
+from a structural commitment, no relapse equivalence from a structural-only
+battery — and, since the premise channel, no DEMARCATION from one either
+(`measures/demarcation.py::crit`, `DR-CON-problem-layer-lifecycle`). One
+predicate, three refusals; a fourth consumer that re-derived it would be the
+drift this census exists to catch.
+`check: grep -q "from deepreason.measures.reach import _substantive" src/deepreason/rules/warrants.py && test "$(grep -rl _substantive --include=*.py src/deepreason | wc -l)" -eq 3 && python -m pytest "tests/test_reflexive_discipline.py::test_structural_programs_never_ground_reach" tests/test_prose_refutation_boundaries.py::test_a_structural_program_confers_no_formal_backing tests/test_guards.py::test_structural_only_does_not_block -q`
 
 Execution supremacy holds in all three directions it is claimed in: a preference
 cannot unseat a running loser, a counterexample still refutes under
@@ -283,9 +287,9 @@ out.
   refuses to cache a trace carrying `sandbox_abort` — three separate places that
   each have to get it right, because there is no shared "did this actually
   decide?" helper.
-- **`register_fail_warrant` has eight callers and three of them are on the
+- **`register_fail_warrant` has nine callers and three of them are on the
   evaluation side** (`measures/hv.py`, `informal/trial.py`,
   `informal/audits.py`). A change to the ν wording, the `w:<κ>:<target>` id
   scheme or the critic provenance is not local to `rules/`; it moves the HV
   floor's warrants and the judge audits' findings too.
-`check: test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 8 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
+`check: test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 9 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`

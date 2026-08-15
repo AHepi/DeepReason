@@ -31,13 +31,38 @@ from __future__ import annotations
 
 import json
 
-from deepreason.ontology import Status
+from deepreason.canonical import canonical_json
+from deepreason.ontology import Commitment, Interface, Ref, Status
+from deepreason.ontology.artifact import RefRole
 from deepreason.programs import content_text
 
 ATTRIBUTION_EVAL = "program:presupposition_wf"
 RESOLUTION_EVAL = "program:premise_resolution_wf"
 
 RESOLUTIONS = ("retire", "translate", "independence")
+
+# The premise rent battery (calculus §6 demarcation). Its eval kind is NOT
+# ``program:``, and that is the design rather than an omission:
+# ``programs.evaluate`` hands a program (text, budget, artifact) and no
+# commitment registry, so no content-only program can see whether the OTHER
+# commitments on an interface forbid anything. Two properties follow, both
+# load-bearing. Every generic sweep skips it, because ``programs.evaluable``
+# is False for an unknown eval kind. And the substantive-commitment predicate
+# (measures/reach) is False for it too -- an unevaluable commitment cannot be
+# substantive -- so CARRYING THE RENT BATTERY CAN NEVER SATISFY THE RENT
+# BATTERY -- the self-immunisation shape `rules/warrants.py::formally_backed`
+# refuses is closed by construction here, not by a name on a deny-list.
+PREMISE_RENT_EVAL = "demarcation:crit"
+PREMISE_RENT = Commitment(id="demarcation:premise-rent", eval=PREMISE_RENT_EVAL)
+
+ATTRIBUTION_COMMITMENT = Commitment(id="presupposition-wf@v1", eval=ATTRIBUTION_EVAL)
+
+# How many refuted candidates a problem accumulates before the critic is asked
+# what the problem itself assumes. A module constant, not a Config field: a new
+# top-level Config field needs an explicit line in run_manifest.py's
+# _versioned_source_config_data (frozen surface 4) and moves the scheduler x
+# rules Config-partition count. Rung 1b-ii owns dials; this rung owns the hook.
+PREMISE_INVITE_AFTER = 2
 
 # Cascade grades (calculus 9.8). The distinction is inherited from the premise's
 # own label and is never stored on the problem.
@@ -216,7 +241,100 @@ def retired_problems(harness) -> set[str]:
     }
 
 
-def premise_work_invited(harness, problem_id: str, *, after: int) -> bool:
+def file_premise(harness, problem_id: str, premise_text: str, *, provenance=None):
+    """Register the premise X and the attribution rho. Returns (X, rho).
+
+    Both are ordinary artifacts, so both are attackable (P6), and X carries the
+    rent battery so demarcation adjudicates it without anyone writing an attack.
+    Content-addressed ids make a repeated filing idempotent rather than a
+    duplicate.
+    """
+    harness.register_commitment(PREMISE_RENT)
+    harness.register_commitment(ATTRIBUTION_COMMITMENT)
+    premise = harness.create_artifact(
+        premise_text,
+        interface=Interface(commitments=[PREMISE_RENT.id]),
+        provenance=provenance,
+    )
+    attribution = harness.create_artifact(
+        attribution_content(problem_id, premise.id),
+        codec="json",
+        interface=Interface(
+            commitments=[ATTRIBUTION_COMMITMENT.id],
+            # MENTION, never DEPENDENCE: law 9.4'. presupposition_wf refuses the
+            # other role, so this is guarded rather than merely intended.
+            refs=[Ref(target=premise.id, role=RefRole.MENTION)],
+        ),
+        provenance=provenance,
+    )
+    return premise, attribution
+
+
+def premise_rent_sweep(harness) -> list:
+    """Refute every premise that forbids nothing. Returns the critics registered.
+
+    DEMONSTRATIVE, so the verdict is status-changing under every authority mode
+    -- it is a machine reading of the artifact's own attack surface, not an
+    argument anyone made. Reversible like every other step: the verdict's
+    validity node is an ordinary registered artifact, so attacking it reinstates
+    the premise and un-marks the problem by the same computed predicate (N1).
+    """
+    from deepreason.measures.demarcation import crit
+    from deepreason.rules.warrants import register_fail_warrant
+
+    critics = []
+    for artifact in list(harness.state.artifacts.values()):
+        if PREMISE_RENT.id not in artifact.interface.commitments:
+            continue
+        if crit(artifact, harness.commitments):
+            continue
+        critic = register_fail_warrant(
+            harness,
+            commitment_id=PREMISE_RENT.id,
+            target_id=artifact.id,
+            nu_content=(
+                f"nu: the demarcation verdict on {artifact.id} is sound and "
+                "relevant -- it forbids nothing, so nothing could count against it"
+            ),
+            critic_content=(
+                f"critic: premise {artifact.id[:12]} pays no rent -- it carries "
+                "no substantive commitment, so no observation and no execution "
+                "could ever tell against it"
+            ),
+            trace_ref=harness.blobs.put(
+                canonical_json(
+                    {
+                        "commitment": PREMISE_RENT.id,
+                        "eval": PREMISE_RENT_EVAL,
+                        "verdict": "fail",
+                        "reason": "no substantive commitment on the interface",
+                        "commitments": list(artifact.interface.commitments),
+                    }
+                )
+            ),
+            skip_if_on_record=True,
+        )
+        if critic is not None:
+            critics.append(critic)
+    return critics
+
+
+def independence_resolution_rate(harness) -> float:
+    """Fraction of consulted resolutions settled as INDEPENDENCE.
+
+    The calculus's own over-binding diagnostic (9.8): a high rate says problems
+    are being marked as resting on premises they turn out not to need.
+    """
+    bodies = list(standing_resolutions(harness).values())
+    if not bodies:
+        return 0.0
+    independent = sum(1 for body in bodies if body.get("resolution") == "independence")
+    return independent / len(bodies)
+
+
+def premise_work_invited(
+    harness, problem_id: str, *, after: int = PREMISE_INVITE_AFTER
+) -> bool:
     """Should the critic be asked what this problem assumes?
 
     The deliberately dumb producer (Rung 2). Attention only: it invites a

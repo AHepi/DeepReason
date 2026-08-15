@@ -87,6 +87,27 @@ _MACHINE_EVAL_NOTE = (
 )
 
 
+def premise_invitation_note(problem_id: str) -> str:
+    """The premise channel's invitation (premises.py, v2 Rung 2).
+
+    Attention only, and it says so: declining carries no penalty, so nothing
+    ranks a critic on whether it accepts (C5). It asks for a presupposition
+    that FORBIDS NOTHING because that is the only kind the harness can
+    adjudicate on its own — it reads an artifact's attack surface, and a
+    presupposition with nothing to forbid has none.
+    """
+    return (
+        f"PREMISE INVITATION (optional): every candidate offered for problem "
+        f"{problem_id} so far has been refuted. If the PROBLEM ITSELF "
+        "presupposes something that FORBIDS NOTHING — a presupposition no "
+        "observation and no execution could ever tell against, so that the "
+        "question is malformed rather than merely hard — state that "
+        "presupposition in \"premise\". Leave it null otherwise; declining "
+        "costs you nothing, and this never replaces your case against the "
+        "target."
+    )
+
+
 def _active_property_claims(state: EpistemicState, blobs, criteria: list[str]) -> list[str]:
     """Docstring claims of ACCEPTED proposed properties (code:python-prop
     artifacts with a MENTION ref into the problem's criteria). Shown to the
@@ -563,6 +584,7 @@ def render_batch_crit_pack(
     token_budget: int,
     simulation_proposals: tuple[tuple[str, str, str, str], ...] = (),
     simulation_enabled: bool = False,
+    premise_invitation: str | None = None,
 ) -> str:
     """One critic pass over several targets (§14 batching): the commitment
     schemas — usually shared, since batch-mates come from one problem —
@@ -617,6 +639,11 @@ def render_batch_crit_pack(
                 )
         else:
             lines += ["", "SIMULATIONS ALREADY FILED ON THIS PROBLEM: none."]
+    # Gated exactly like the simulation section above: a pack with no
+    # standing invitation renders byte for byte what it rendered before this
+    # section existed.
+    if premise_invitation is not None:
+        lines += ["", premise_invitation_note(premise_invitation)]
     lines += [
         "",
         "DIRECTIVE: return exactly one entry per target id above — the "
@@ -809,6 +836,7 @@ def render_crit_pack(
     commitments: dict[str, Commitment],
     blobs,
     token_budget: int,
+    premise_invitation: str | None = None,
 ) -> str:
     target = state.artifacts[target_id]
     # Commitments render BEFORE the target (angle 4): problem criteria lead
@@ -953,6 +981,21 @@ def render_crit_pack(
                 6,
                 droppable=False,
                 compressible=False,
+            )
+        )
+    if premise_invitation is not None:
+        # Droppable: an invitation the budget cannot afford is an invitation
+        # not made this call, which costs nothing — the producer offers it
+        # again next time the problem is worked. Compressible with it, per the
+        # allocator's droppable/compressible pairing rule.
+        sections.append(
+            _pack_section(
+                "premise-invitation",
+                premise_invitation_note(premise_invitation),
+                6,
+                droppable=True,
+                compressible=True,
+                min_tokens=32,
             )
         )
     sections.append(

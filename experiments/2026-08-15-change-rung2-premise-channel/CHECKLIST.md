@@ -18,12 +18,13 @@ State: **step 1 complete (the channel). Step 2 in progress (the wiring).**
 
 | # | Step | Done-criterion | State |
 |---|---|---|---|
-| 8 | **S3a** — `measures/demarcation.py::crit(artifact, commitments)`; `PREMISE_RENT` commitment (`eval="demarcation:crit"`) in `premises.py` | A13: `crit()` False for structural-only and for rent-only interfaces; `_substantive(PREMISE_RENT)` is False | ☐ |
-| 9 | **S3b** — `premises.py::premise_rent_sweep(harness)` registering the DEMONSTRATIVE fail warrant | A14: a rentless premise reaches `Status.REFUTED` with no hand-written attack in the test | ☐ |
-| 10 | **S6b-i** — the filing channel: optional `premise` field on the four critic contracts | the four models carry it; `contract_id` values unchanged; `tests/test_wire_contracts.py` green | ☐ |
-| 11 | **S6b-ii** — the pack invitation + registration in `rules/crit.py` | invited + `premise` present ⇒ premise X and attribution ρ registered; uninvited ⇒ nothing (A18) | ☐ |
-| 12 | **S6b-iii** — the scheduler's three consults (retired filter, orphan rank term, invitation Measure) | A16 in both selection modes; pinned rank checks in `DR-SEAM-scheduler-x-rules` + `DR-CON-scheduler-ranking` moved in the same commit | ☐ |
-| 13 | **S6b-iv** — the three signal declarations + per-cycle emission | A17: emitted by the real loop, every one non-`unspecified`; `tests/test_signals.py` + `tests/test_signal_contract.py` green | ☐ |
-| 14 | **A15** — the producer fires in an offline run of the ACTUAL `Scheduler` loop | the loop test passes end to end: invitation Measure → premise + attribution → rent refutation → mark | ☐ |
-| 15 | **[COMMIT]** map + gate | map moves in the same commit; `python tools/docs_verify.py` full; full gate 0 failed; `tools/diff_budget.py` within the step-2 ceiling | ☐ |
-| 16 | **A19** — ONE guarded live run | typed outcome recorded either way: `verify_root`, run state, and whether any attribution reached the record | ☐ |
+| 8 | **S3a** — `measures/demarcation.py::crit(artifact, commitments)`; `PREMISE_RENT` commitment (`eval="demarcation:crit"`) in `premises.py` | A13: `crit()` False for structural-only and for rent-only interfaces; `_substantive(PREMISE_RENT)` is False | ✅ |
+| 9 | **S3b** — `premises.py::premise_rent_sweep(harness)` registering the DEMONSTRATIVE fail warrant | A14: a rentless premise reaches `Status.REFUTED` with no hand-written attack in the test | ✅ |
+| 10 | **S6b-i** — the filing channel: optional `premise` field on the four critic contracts | the four models carry it; `contract_id` values unchanged; `tests/test_wire_contracts.py` green | ✅ |
+| 11 | **S6b-ii** — the pack invitation + registration in `rules/crit.py` | invited + `premise` present ⇒ premise X and attribution ρ registered; uninvited ⇒ nothing (A18) | ✅ |
+| 12 | **S6b-iii** — the scheduler's three consults (retired filter, orphan rank term, invitation Measure) | A16 in both selection modes; pinned rank checks in `DR-SEAM-scheduler-x-rules` + `DR-CON-scheduler-ranking` moved in the same commit | ✅ |
+| 13 | **S6b-iv** — the three signal declarations + per-cycle emission | A17: emitted by the real loop, every one non-`unspecified`; `tests/test_signals.py` + `tests/test_signal_contract.py` green | ✅ |
+| 14 | **A15** — the producer fires in an offline run of the ACTUAL `Scheduler` loop | the loop test passes end to end: invitation Measure → premise + attribution → rent refutation → mark | ✅ |
+| 15 | **[COMMIT]** map + gate | map moves in the same commit; `python tools/docs_verify.py` full; full gate 0 failed; `tools/diff_budget.py` measured (EXCEEDED, disclosed in SPEC.md) | ✅ |
+| 16 | **S3c (M21)** — the SECOND check for prose: `mod`, completing `active()` | a prose premise falls only when BOTH `crit` and `mod` fail; a premise with a variation surface survives; a run with no variator role fells nothing and says so | ☐ |
+| 17 | **A19** — ONE guarded live run | typed outcome recorded either way: `verify_root`, run state, and whether any attribution reached the record | ☐ |

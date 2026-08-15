@@ -1195,6 +1195,50 @@ def _crit_proposed_properties(
     return None
 
 
+def _premise_invited_problem(harness, target_id: str) -> str | None:
+    """The problem this target answers, iff it is standing an invitation.
+
+    A fact about the graph, not about attention: the rule reads refuted-
+    candidate counts, never a cycle count, a cadence or a cap
+    (DR-SEAM-scheduler-x-rules).
+    """
+    from deepreason.premises import premise_work_invited
+
+    for aid, pid in harness.state.addr:
+        if aid == target_id and premise_work_invited(harness, pid):
+            return pid
+    return None
+
+
+def _file_attribution(harness, target_id: str, premise_text, *, critic_school_id=None):
+    """Register the premise and the attribution the critic named, if invited.
+
+    Gated on the invitation and not on the field alone: an uninvited premise is
+    a field the critic filled in unasked, and honouring it would let a call
+    file work the producer never offered. Registers no problem and moves no
+    status (H1) -- the rent battery adjudicates the premise afterwards, on the
+    ordinary path, and only the derived predicate marks anything.
+    """
+    from deepreason.premises import file_premise
+
+    text = (premise_text or "").strip()
+    if not text:
+        return None
+    problem_id = _premise_invited_problem(harness, target_id)
+    if problem_id is None:
+        return None
+    file_premise(
+        harness,
+        problem_id,
+        text,
+        provenance=Provenance(role="critic", school=critic_school_id),
+    )
+    harness.record_measure(
+        inputs=["premise.attribution-filed.v1", problem_id, target_id]
+    )
+    return problem_id
+
+
 def crit_argumentative(
     harness,
     target_id: str,
@@ -1232,6 +1276,7 @@ def crit_argumentative(
         harness.commitments,
         harness.blobs,
         token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
+        premise_invitation=_premise_invited_problem(harness, target_id),
     )
     pack = _condition_pack(pack, school_prefix)
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
@@ -1252,6 +1297,11 @@ def crit_argumentative(
     )
     primary_llm_call = llm_call
     try:
+        # Before the attack branch: a critic may find no fault with the
+        # candidate and still see that the QUESTION is malformed.
+        _file_attribution(
+            harness, target_id, output.premise, critic_school_id=critic_school_id
+        )
         if not output.attack or not output.case.strip():
             # No fault found: the call still spent tokens and must be logged once.
             harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
@@ -1358,6 +1408,21 @@ def crit_argumentative(
         )
 
 
+def _batch_premise_invitation(harness, target_ids) -> str | None:
+    """One invitation for a batch, and only when the batch is unanimous.
+
+    Batch-mates usually come from one problem; when they do not, no single
+    problem is the subject of the question and the invitation is withheld
+    rather than guessed.
+    """
+    invited = {
+        pid
+        for target_id in target_ids
+        if (pid := _premise_invited_problem(harness, target_id)) is not None
+    }
+    return invited.pop() if len(invited) == 1 else None
+
+
 def crit_argumentative_batch(
     harness,
     target_ids,
@@ -1459,6 +1524,7 @@ def crit_argumentative_batch(
             token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
             simulation_proposals=_filed_simulations(harness),
             simulation_enabled=_simulation_enabled(harness),
+            premise_invitation=_batch_premise_invitation(harness, target_ids),
         )
         return _condition_pack(pack, school_prefix)
 
@@ -1544,6 +1610,7 @@ def crit_argumentative_batch(
                         attack=atomic_output.attack,
                         case=atomic_output.case,
                         counterexample=atomic_output.counterexample,
+                        premise=atomic_output.premise,
                     )
                 )
                 atomic_calls.append(atomic_call)
@@ -1808,6 +1875,9 @@ def _crit_argumentative_batch_result(
         if case.target not in target_ids or case.target in ruled:
             continue
         ruled.add(case.target)
+        _file_attribution(
+            harness, case.target, case.premise, critic_school_id=critic_school_id
+        )
         if not case.attack or not case.case.strip():
             continue  # no fault found for this target: registers nothing
         case_source_call_seq = (

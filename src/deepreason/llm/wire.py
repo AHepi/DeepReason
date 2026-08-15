@@ -2340,6 +2340,7 @@ class BatchCriticCaseWireV2(StrictWireModel):
     attack: bool
     case: str = ""
     counterexample: list[Any] | None = None
+    premise: str | None = None
 
 
 class BatchCriticWireV2(StrictWireModel):
@@ -2440,6 +2441,7 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
                     attack=item.attack,
                     case=item.case,
                     counterexample=item.counterexample,
+                    premise=item.premise,
                 )
                 for item in wire.cases
             ]
@@ -2452,6 +2454,7 @@ class CompactCritic(StrictWireModel):
     grounds: str = ""
     cited_input_aliases: list[str] = Field(default_factory=list)
     counterexample: list[Any] | None = None
+    premise: str | None = None
 
 
 class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
@@ -2496,6 +2499,7 @@ class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
             attack=wire.attack,
             case="\n".join(parts),
             counterexample=wire.counterexample,
+            premise=wire.premise,
         )
 
 

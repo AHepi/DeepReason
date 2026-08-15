@@ -21,11 +21,14 @@ from deepreason.ontology.artifact import RefRole
 from deepreason.premises import (
     ATTRIBUTION_EVAL,
     PREMISE_REFUTED,
+    PREMISE_RENT,
     PREMISE_UNACCREDITED,
     RESOLUTION_EVAL,
     attribution_content,
+    file_premise,
     open_orphans,
     premise_orphaned,
+    premise_rent_sweep,
     premise_resolution_wf_program,
     premise_work_invited,
     presupposition_wf_program,
@@ -264,6 +267,94 @@ def test_an_unsupported_premise_grades_as_unaccredited(harness):
 
     assert harness.state.status[premise.id] == Status.SUSPENDED_UNSUPPORTED
     assert premise_orphaned(harness) == {"pi": PREMISE_UNACCREDITED}
+
+
+# --- the rent battery ------------------------------------------------------
+
+
+def test_structural_commitments_do_not_pay_rent(harness):
+    """The self-immunisation trap (rules/warrants.py::formally_backed).
+
+    Were a well-formedness check enough, any artifact could buy demarcation for
+    the price of a JSON check.
+    """
+    from deepreason.measures.demarcation import crit
+
+    for eval_name in ("program:json-wf", "program:skeleton_wf", ATTRIBUTION_EVAL):
+        cid = _commitment(harness, eval_name)
+        artifact = art(harness, f"forbids nothing ({eval_name})",
+                       interface=Interface(commitments=[cid]))
+        assert not crit(artifact, harness.commitments), eval_name
+
+    substantive = _commitment(harness, "predicate: len(content) > 0")
+    paying = art(harness, "a claim with a way to be wrong",
+                 interface=Interface(commitments=[substantive]))
+    assert crit(paying, harness.commitments)
+
+
+def test_the_rent_battery_cannot_satisfy_itself(harness):
+    """Carrying the battery is not paying it. Structural, not a deny-list: the
+    rent commitment is not evaluable, so `_substantive` is False for it."""
+    from deepreason.measures.demarcation import crit
+    from deepreason.measures.reach import _substantive
+
+    assert not _substantive(PREMISE_RENT)
+    harness.register_commitment(PREMISE_RENT)
+    artifact = art(harness, "a siren is the kind of thing that has a colour",
+                   interface=Interface(commitments=[PREMISE_RENT.id]))
+    assert not crit(artifact, harness.commitments)
+
+
+def test_a_premise_falls_by_demarcation_with_no_written_refutation(harness):
+    """A5 on a live path: nobody in this test writes an attack.
+
+    The siren case as the harness must reach it -- the premise is filed, the
+    rent battery adjudicates it, the problem is marked. `attack()` is never
+    called and no conjecture is ever proposed on the problem.
+    """
+    problem = _problem(harness, "what is the colour of a siren")
+    premise, rho = file_premise(
+        harness, problem, "a siren is the kind of thing that has a colour"
+    )
+
+    assert harness.state.status[premise.id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+
+    critics = premise_rent_sweep(harness)
+
+    assert len(critics) == 1
+    assert harness.state.status[premise.id] == Status.REFUTED
+    assert harness.state.status[rho.id] == Status.ACCEPTED  # the mention law holds
+    assert premise_orphaned(harness) == {problem: PREMISE_REFUTED}
+    assert not [aid for aid, pid in harness.state.addr if pid == problem]
+
+
+def test_the_rent_verdict_is_reversible_and_never_doubled(harness):
+    problem = _problem(harness, "what is the colour of a siren")
+    premise, _ = file_premise(harness, problem, "a siren has a colour")
+    critic = premise_rent_sweep(harness)[0]
+
+    assert premise_rent_sweep(harness) == []  # the verdict is already on record
+
+    attack(harness, critic.id, "sirens are individuated by their housing")
+
+    assert harness.state.status[premise.id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
+
+
+def test_a_premise_that_forbids_something_keeps_paying(harness):
+    problem = _problem(harness, "why does the kettle whistle")
+    harness.register_commitment(PREMISE_RENT)
+    substantive = _commitment(harness, "predicate: 'steam' in content")
+    premise = harness.create_artifact(
+        "the whistle is driven by steam",
+        interface=Interface(commitments=[PREMISE_RENT.id, substantive]),
+    )
+    _attribution(harness, problem, premise.id)
+
+    assert premise_rent_sweep(harness) == []
+    assert harness.state.status[premise.id] == Status.ACCEPTED
+    assert premise_orphaned(harness) == {}
 
 
 # --- the producer ----------------------------------------------------------

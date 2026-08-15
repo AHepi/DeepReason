@@ -24,8 +24,16 @@ from deepreason.llm.firewall import (
     route_fingerprint,
 )
 from deepreason.llm.embedder import HashingEmbedder
+from deepreason.measures.attention import attack_target_entropy, problem_thrash
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
+from deepreason.premises import (
+    independence_resolution_rate,
+    premise_orphaned,
+    premise_rent_sweep,
+    premise_work_invited,
+    retired_problems,
+)
 from deepreason.ontology import Rule, SpawnTrigger, Status
 from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
@@ -36,6 +44,11 @@ from deepreason.workflow.transaction import WorkBudgetDenied
 from deepreason.workloads.models import MandatoryInterface, MandatoryRef
 
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
+
+# How many recent selections the problem-thrash signal reads. Bounded so the
+# rate answers "lately" rather than "since the run began", where a long run
+# would average every episode of scatter away to nothing.
+_THRASH_WINDOW = 12
 # Reflexive theory-building work: problems ABOUT the run's own artifacts
 # (unification layer). All of it draws from ONE shared budget so it can
 # steer attention but never consume the inquiry (Bronze Age postmortem: the
@@ -322,6 +335,9 @@ class Scheduler:
         self._stop_resume_rehydrated = False
         self._stop_cycle_offset = 0
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
+        # Bounded selection history behind the problem-thrash signal.
+        # Non-epistemic and rebuildable, like _problem_worked beside it.
+        self._selection_window: list[str] = []
         self.schools = (
             schools.active_backend().init_schools(harness, config)
             if config.N_SCHOOLS > 0
@@ -1059,12 +1075,22 @@ class Scheduler:
             or self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE
         )
         reflexive = reflexive_problems(state)
+        # The premise layer, attention only (v2 Rung 2). A RETIRED problem is
+        # not selected and is not deleted: the retirement is a consulted
+        # resolution artifact, so attacking it puts the problem straight back
+        # in this pool (N1) and no resolution ever asserts insolubility (N3).
+        # A MARKED problem yields to unmarked work of the same age -- its
+        # premise has fallen and the open question is which of the three
+        # resolutions answers it, not another candidate.
+        retired = retired_problems(self.harness)
+        orphaned = set(premise_orphaned(self.harness))
         candidates = [
             p
             for p in state.problems.values()
             # Research problems are worked by backends, not gamma (§12).
             if p.provenance.trigger != SpawnTrigger.RESEARCH
             and (integration_allowed or p.id not in reflexive)
+            and p.id not in retired
             and not self._disc_paused(p)
         ]
         if self.config.FOCUS_FAMILY is not None:
@@ -1100,6 +1126,7 @@ class Scheduler:
                 return (
                     -(age * weight),
                     p.provenance.trigger != SpawnTrigger.SEED,
+                    p.id in orphaned,
                     p.id in reflexive,
                     p.id,
                 )
@@ -1114,7 +1141,11 @@ class Scheduler:
         unsolved = [p for p in candidates if not survivors_by_problem.get(p.id)]
         pool = sorted(
             unsolved or candidates,
-            key=lambda p: (p.provenance.trigger != SpawnTrigger.SEED, p.id in reflexive),
+            key=lambda p: (
+                p.provenance.trigger != SpawnTrigger.SEED,
+                p.id in orphaned,
+                p.id in reflexive,
+            ),
         )
         return pool[self._cycles % len(pool)]
 
@@ -1894,6 +1925,17 @@ class Scheduler:
         # heartbeat belongs to this cycle — the log segments itself, live
         # progress is tail-able, and stalls become diagnosable post hoc.
         harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
+        self._selection_window.append(problem.id if problem else "-")
+        del self._selection_window[:-_THRASH_WINDOW]
+        self._record_detection_signals()
+        if problem is not None and premise_work_invited(harness, problem.id):
+            # The anti-E28 receipt: a mechanism nobody triggers is a mechanism
+            # that never runs, and this harness has shipped two of those. The
+            # invitation is on the record whether or not a critic takes it up,
+            # and taking it up carries no reward and declining no penalty (C5).
+            harness.record_measure(
+                inputs=["premise.work-invited.v1", problem.id]
+            )
         self._maybe_config_referee()
         if problem is None:
             self._cycles += 1
@@ -2211,6 +2253,9 @@ class Scheduler:
             # can share one (CRIT_BATCH_K).
             self._arg_crit([a.id for a in admitted])
 
+        # Deterministic, spends no tokens, and runs beside the other free
+        # sweeps: a premise filed this cycle is adjudicated this cycle.
+        premise_rent_sweep(harness)
         reach_sweep(
             harness, coverage_min=config.REACH_COVERAGE_MIN
         )  # hits recorded; debt spawns next scan
@@ -2224,6 +2269,31 @@ class Scheduler:
         self._audit_step()
         self._capture_step()
         self._cycles += 1
+
+    def _record_detection_signals(self) -> None:
+        """The three v2 detection signals (`DR-INV-signal-contract`).
+
+        Declared through the typed channel and emitted every cycle so the
+        series is complete rather than sampled. They price ATTENTION for a
+        later allocation policy (Rung 1b-ii) and reach no label: the contract's
+        FROZEN layer is that allocation touches efficiency, never evidence.
+        """
+        harness = self.harness
+        harness.record_measure(
+            inputs=["problem.thrash.v1", f"{problem_thrash(self._selection_window):.4f}"]
+        )
+        harness.record_measure(
+            inputs=[
+                "criticism.attack-target-entropy.v1",
+                f"{attack_target_entropy(harness.state):.4f}",
+            ]
+        )
+        harness.record_measure(
+            inputs=[
+                "problem.independence-resolution-rate.v1",
+                f"{independence_resolution_rate(harness):.4f}",
+            ]
+        )
 
     def _audit_step(self) -> None:
         """Judge-audit sweep every AUDIT_PERIOD cycles (§10.4), budgeted."""

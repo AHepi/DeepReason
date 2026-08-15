@@ -239,11 +239,15 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   (survivors already pass B0) and would collapse HV to 1.0, so agreement counts
   only when the equivalence battery has margin beyond it.
 `check: grep -q "never by embedding proximity" src/deepreason/measures/hv.py && python -m pytest "tests/test_reflexive_discipline.py::test_hv_equivalence_decided_by_verdict_vectors" -q`
-- **`measures/demarcation.py` is a spec stub, not machinery.** `crit` and `mod`
-  raise `NotImplementedError` and nothing imports them; the demarcation
-  discipline that actually bites is `skeleton_wf` failing an artifact that
-  forbids nothing.
-`check: sh -c 'grep -q "raise NotImplementedError" src/deepreason/measures/demarcation.py && ! grep -rn "measures.demarcation\|measures import demarcation" --include=*.py src/ tests/' && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" -q`
+- **`measures/demarcation.py` is half machinery and half spec stub, and the
+  halves are not interchangeable.** `crit` is live as of the premise channel
+  (`DR-CON-problem-layer-lifecycle`) and decides whether an artifact forbids
+  anything, reusing `reach._substantive` so a well-formedness check cannot buy
+  demarcation. `mod` still raises `NotImplementedError`, so `active()` — which
+  is `crit and mod` — does not exist yet and must not be inferred from `crit`
+  alone. The older demarcation discipline that bites elsewhere is unchanged:
+  `skeleton_wf` failing an artifact that forbids nothing.
+`check: sh -c 'grep -q "def mod" src/deepreason/measures/demarcation.py && grep -q "raise NotImplementedError" src/deepreason/measures/demarcation.py && ! grep -q "def active" src/deepreason/measures/demarcation.py' && python -c "import pytest; from deepreason.measures.demarcation import mod; pytest.raises(NotImplementedError, mod, None, None)" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_structural_commitments_do_not_pay_rent -q`
 - **`ProgramSpec.class_` and `external_toolchain` are reporting facts only.**
   They never alter commitment syntax, verdict interpretation, or labels. The one
   consumer with teeth is the anti-relapse gate, which refuses to establish

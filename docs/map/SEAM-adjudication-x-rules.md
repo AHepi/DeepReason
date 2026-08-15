@@ -54,11 +54,11 @@ labels through the same `_adjudicate` the write path uses, and no second
 implementation of the fixpoint can drift from the first.
 `check: test "$(grep -rn "build_att(" --include=*.py src/deepreason | grep -vc "def build_att(")" -eq 1 && ! grep -q "build_att" src/deepreason/invariants.py && grep -q "h = Harness(root, read_only=True)" src/deepreason/invariants.py && python -c "import ast,inspect;from deepreason import harness as H;t=ast.parse(inspect.getsource(H));f=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='_adjudicate'];assert len(f)==1;assert sum(1 for c in ast.walk(f[0]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='build_att')==1"`
 
-One constructor, twelve call sites, and exactly three hand-built warrants
+One constructor, thirteen call sites, and exactly three hand-built warrants
 inside `rules/` — all `ARGUMENTATIVE` (D2 rev 2 added
 `rules/relatedness.py::relatedness_trial`'s own, reusing `relevance_trial`'s
 shape), because `DEMONSTRATIVE` is written in one file.
-`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 12 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 8 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 3 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
+`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 13 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 9 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 3 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
 
 `nu_interface` is a single optional parameter and the whole propagation surface a
 rule has; four sites in the tree pass it.

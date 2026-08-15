@@ -65,6 +65,13 @@ class ArgumentativeCriticOutput(BaseModel):
     # property becomes a DEMONSTRATIVE refutation; an invalid or passing
     # counterexample grounds nothing.
     counterexample: list | None = None
+    # A presupposition of the PROBLEM that forbids nothing — filed only when
+    # the pack carried the invitation, and never a substitute for the case
+    # against the target. It becomes an ordinary premise artifact plus an
+    # ordinary attribution artifact (premises.py), both attackable; the
+    # harness reads the artifact's attack surface, so a presupposition with
+    # nothing to forbid is what this field can honestly report.
+    premise: str | None = None
 
 
 class BatchCase(BaseModel):
@@ -76,6 +83,7 @@ class BatchCase(BaseModel):
     attack: bool
     case: str = ""
     counterexample: list | None = None  # same semantics as the single contract
+    premise: str | None = None          # same semantics as the single contract
 
 
 class BatchCriticOutput(BaseModel):

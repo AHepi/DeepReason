@@ -143,7 +143,7 @@ school membership out of every decision a rule makes about what to propose or
 attack (`DR-CON-schools`). The `None`s are consequential rather than cosmetic:
 `informal/trial.py` compares `critic_school_id` against the target's school, so
 a school-less mint is never same-school.
-`check: ! grep -rq "provenance\.school" --include=*.py src/deepreason/rules/ && python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Provenance']; w=[c for c in C if any(k.arg=='school' for k in c.keywords)]; assert (len(w), len(C))==(5,17), (len(w), len(C))" && grep -q 'provenance.school == school\["id"\]' src/deepreason/llm/packs.py && grep -q "critic_school_id == target.provenance.school" src/deepreason/informal/trial.py`
+`check: ! grep -rq "provenance\.school" --include=*.py src/deepreason/rules/ && python -c "import ast,pathlib; C=[n for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='Provenance']; w=[c for c in C if any(k.arg=='school' for k in c.keywords)]; assert (len(w), len(C))==(6,18), (len(w), len(C))" && grep -q 'provenance.school == school\["id"\]' src/deepreason/llm/packs.py && grep -q "critic_school_id == target.provenance.school" src/deepreason/informal/trial.py`
 
 **No rule builds a `FrozenList` or a `FrozenDict`, and none imports
 `deepreason.frozen`.** Freezing is a field validator's job on the ontology side,

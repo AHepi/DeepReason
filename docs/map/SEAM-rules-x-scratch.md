@@ -95,12 +95,16 @@ receipt, and a context receipt without scratch exposure.
 ## What is deliberately absent
 
 **Criticism is given no scratch content, and the refusal is structural.** It is
-not that no caller currently passes it — no parameter exists to pass. This is
+not that no caller currently passes it — no parameter exists to pass. The
+criticism renderers do take non-target parameters (`simulation_proposals`,
+`premise_invitation`), and the check below pins their exact signatures rather
+than merely counting them, so a scratch parameter cannot arrive disguised as
+one more of those. This is
 the operator's R5/R6 requirement: the scratchpad authority chain and the
 conjecture/criticism adjudication chain must not exist together. Reading the
 absence as an oversight and "wiring the critic to the workshop" is the specific
 mistake this section exists to prevent.
-`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic

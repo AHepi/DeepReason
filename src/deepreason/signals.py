@@ -408,8 +408,83 @@ _PREFIX_MEANINGS: dict[str, str] = {
                      "orbit-rotate | exogenous-brake | reseed)",
 }
 
+# ---------------------------------------------------------------------------
+# Signals declared UNDER the contract. Not `_migrated`: their authors stated a
+# unit and a staleness bound, which is what the contract asks for and what
+# `unspecified` records the absence of.
+# ---------------------------------------------------------------------------
+
+_DECLARED: tuple[SignalDeclaration, ...] = (
+    # The v2 calculus program's three detection signals (Rung 2 / Amendment 3),
+    # declared so Rung 1b-ii's allocation policy has something to consume.
+    # Every one prices ATTENTION and none may reach a label.
+    SignalDeclaration(
+        name="problem.thrash.v1",
+        unit="ratio",
+        semantics="fraction of recent consecutive work units that changed "
+                  "subject: 0.0 means work stayed on one problem (depth), 1.0 "
+                  "means every unit moved to a different one (scatter). "
+                  "Read over a bounded recent window, so it answers 'lately'. "
+                  "It is evidence about where effort went and about nothing "
+                  "else — never about whether any problem is solved, solvable, "
+                  "or worth working",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="criticism.attack-target-entropy.v1",
+        unit="ratio",
+        semantics="normalised Shannon entropy (0..1) of how the standing "
+                  "attack edges are distributed over the targets they attack: "
+                  "1.0 means criticism is spread evenly over everything it has "
+                  "touched, near 0 means it is concentrated on a single "
+                  "target, and 0.0 also covers 'fewer than two targets have "
+                  "been attacked at all'. Dispersion only — it says nothing "
+                  "about whether any attack is sound or any target is wrong",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="problem.independence-resolution-rate.v1",
+        unit="ratio",
+        semantics="fraction of consulted premise-orphan resolutions settled as "
+                  "INDEPENDENCE rather than retirement or translation — the "
+                  "calculus's over-binding diagnostic (§9.8): a high rate says "
+                  "questions are being marked as resting on premises they turn "
+                  "out not to need. 0.0 when nothing has been resolved. "
+                  "Diagnostic only; it neither validates nor impugns any "
+                  "resolution, each of which is an attackable artifact",
+        staleness="run",
+    ),
+    # The premise channel's two process receipts. They exist because a
+    # mechanism nobody triggers is a mechanism that never runs (ERRATA E28),
+    # and a receipt is the only way that is visible from the record alone.
+    SignalDeclaration(
+        name="premise.work-invited.v1",
+        unit="event",
+        semantics="an invitation to name what the problem itself presupposes "
+                  "was standing when a unit of work began (inputs: [signal, "
+                  "problem id]). Attention only: it offers a question, mints "
+                  "no problem, and carries no reward for accepting and no "
+                  "penalty for declining",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="premise.attribution-filed.v1",
+        unit="event",
+        semantics="a premise artifact and its attribution reached the record "
+                  "for one problem (inputs: [signal, problem id, the target "
+                  "whose criticism carried it]). Registration is not a "
+                  "verdict: both artifacts are ordinary and attackable, the "
+                  "problem is marked only if the attribution stands AND the "
+                  "premise falls, and a mark is an open question rather than a "
+                  "status",
+        staleness="permanent",
+    ),
+)
+
+
 # The declarations are the contract; these two are derived views of it.
 SIGNAL_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_SIGNAL_MEANINGS)
+SIGNAL_DECLARATIONS.update({d.name: d for d in _DECLARED})
 PREFIX_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_PREFIX_MEANINGS)
 
 SIGNALS: dict[str, str] = {n: d.semantics for n, d in SIGNAL_DECLARATIONS.items()}
