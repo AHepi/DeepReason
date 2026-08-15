@@ -6,34 +6,19 @@ correction recorded in Rung 1b-i.
 
 ## The two design questions this rung had to settle
 
-### Q1 — problems in `dep`, or a query? **DECIDED: a query.**
+### Q1 — how does the harness find a problem's premises? **By lookup.**
 
-The operator asked why the attribution is not simply an edge, since edges and
-support propagation already exist. Under the 2026-08-14 law the old objection
-(record compatibility) is retired, so the fork was re-priced on its merits.
+The operator asked whether the attribution could be an edge in the existing
+support wiring rather than a separate lookup. Answered, and not carried as a
+live alternative:
 
-Putting problems into `dep` would make Pass 2 mark them for free: refute the
-premise, and π becomes `suspended_unsupported` — "orphaned, not false" at the
-problem layer in the machinery that already computes it at the artifact layer.
-That is genuinely elegant, and two things kill it:
-
-1. **§9.8 requires LAZY materialisation; Pass 2 is EAGER.** The calculus is
-   explicit: "the fall is one event; its thousandfold consequence is paid as the
-   frontier is touched, not all at once." Pass 2 labels every dependent on every
-   recomputation. On the grounded-extension root — 2,894 problems — that is the
-   difference between a cheap fall and one that touches the whole frontier at
-   once. A derived query is lazy by construction; a Pass-2 label cannot be.
-2. **The free part is the smaller half.** Pass 2 would give one label. It gives
-   no grades (premise refuted vs premise unaccredited), no three resolutions, no
-   closure records. That machinery has to be built either way.
-
-A third consideration, recorded but not load-bearing: problems in `dep` would
-put them one edge-role away from `att`, and a problem carrying `refuted` is what
-N3 forbids. The query keeps that impossible by construction rather than by
-discipline.
-
-**Recorded as reversible.** If a live run shows the query is the bottleneck, the
-`dep` design is available and the law no longer stands in its way.
+1. **§9.8 requires LAZY materialisation; support propagation is EAGER.** "The
+   fall is one event; its thousandfold consequence is paid as the frontier is
+   touched, not all at once." Support propagation relabels every dependent on
+   every recomputation; on the grounded-extension root — 2,894 problems — that
+   is the whole frontier marked at once.
+2. **The saving is small.** It would supply the marking only. The two grades,
+   the three resolutions and the closure records are built either way.
 
 ### Q2 — what produces an attribution? **DECIDED: the critic seat, on a dumb rule, with signals for later.**
 

@@ -35,7 +35,11 @@ from deepreason.ontology.state import Status
 # Structural well-formedness programs: passing them says the CONTENT IS
 # WELL-FORMED, not that it answers the problem — they can never carry reach.
 _STRUCTURAL_PROGRAMS = frozenset(
-    {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf"}
+    # presupposition_wf/premise_resolution_wf prove an attribution or resolution
+    # is WELL FORMED, never that its claim holds -- structural like the rest, so
+    # passing one grounds no reach and immunises nothing (rules/warrants.py).
+    {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf",
+     "presupposition_wf", "premise_resolution_wf"}
 )
 
 

@@ -149,6 +149,18 @@ def _tsp14_tour_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     )
 
 
+def _presupposition_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.premises import presupposition_wf_program
+
+    return presupposition_wf_program(text, budget, artifact)
+
+
+def _premise_resolution_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.premises import premise_resolution_wf_program
+
+    return premise_resolution_wf_program(text, budget, artifact)
+
+
 def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
@@ -281,6 +293,13 @@ PROGRAMS: dict[str, ProgramSpec] = {
     "json-wf": ProgramSpec("json-wf", _json_wf, "structural"),
     "tsp14_tour_wf": ProgramSpec("tsp14_tour_wf", _tsp14_tour_wf, "execution"),
     "skeleton_wf": ProgramSpec("skeleton_wf", _skeleton_wf, "structural"),
+    # The premise channel (premises.py): both are STRUCTURAL well-formedness --
+    # they prove an attribution or resolution is well formed, never that its
+    # claim is true, so they ground no reach and confer no prose immunity.
+    "presupposition_wf": ProgramSpec("presupposition_wf", _presupposition_wf, "structural"),
+    "premise_resolution_wf": ProgramSpec(
+        "premise_resolution_wf", _premise_resolution_wf, "structural"
+    ),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
     "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
