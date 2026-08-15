@@ -644,6 +644,43 @@ the branch history and in this table, which is the honest place for them: a
 reader who finds `active()` in an old commit should be able to learn here why it
 is not in the tree.
 
+### 2O. Deferred-essential (R55–R57)
+
+REQUEST.md Amendment 7, sourced from `docs/STATE_OF_THE_PROGRAM_2026-08-14.md`
+§6. The operator's own framing — *"not priority, but they seem essential"* — is
+the disposition, and it is a real category rather than a polite deferral: these
+are not nice-to-haves that fell off a list, they are commitments the program
+has now written down so that shipping without them is a KNOWN absence instead
+of an oversight.
+
+| id | Row | Why it is essential | Disposition |
+|---|---|---|---|
+| **E-1** | **Proof debt.** Every derived judgment carries an itemized, attackable manifest of what it rests on: kernel-checked steps, open certificates (attackable conjectures such as slack embeddings), named axioms. Attacking a manifest item invalidates dependents ON RECOMPUTATION, not retroactively. Receipt format `KERNEL_CHECK / OPEN_CERTIFICATES / AXIOM_DEBT` | A result's authority is exactly the authority of its premises and apparatus, and the bill of materials has to stay stapled to the package. The harness already does this for ONE class of judgment — warrants carry validity nodes — and proof debt is that same discipline generalised to every derived judgment | **deferred-essential**; its own future rung, scheduled by the operator. Not in the current seven |
+| **E-2** | **Duhem localization.** A problem whose target is a BUNDLE — theory + apparatus + interpretation — does not project blame onto any member without a STANDING LOCALIZATION CRITICISM. Blame assignment is adjudicated work | This is the H2 premise channel's cousin and it slots into the same machinery: an attribution says "π presupposes X"; a localization says "the fault in this bundle lies with member m". Both are ordinary attackable artifacts, and both exist to stop an automatic projection that would otherwise happen silently | **deferred-essential**; the same future rung |
+| **E-3** | **Succession implements the STRONG relation.** "A good rival covering the same explicanda" is NOT a strict successor. Rigidity, non-immunization, and a STRICTNESS WITNESS are additionally required | The prose word "rival" invites the weak reading, and a succession program built on it admits non-successors — which then propagate into every place succession decides something. Cheaper to build strong than to re-found | **BINDS Rung 5 NOW.** Not deferred |
+
+**On E-3's placement, checked rather than taken on the operator's word** (they
+invited the check: *"unless the drift table finds Rung 5 needs (3) immediately —
+it does"*). It does. `DECISIONS.md` records D-6 as blocking "Rung 5 (criterion
+5), Rung 7", and Rung 5's work list builds five pinned criteria as programs, of
+which `accounts-for` IS the succession relation. There is no version of Rung 5
+that does not implement succession, so there is no version that can defer E-3.
+
+**E-3 converges with R46 rather than stacking on it.** Rider 2 already routed
+the Formalization §3.5's three criteria into D-6; §3.5's strict clause — "at
+least one of recovery, criticism survival, or rigidity is strict" — is the
+strictness witness E-3 names. Two authorities arriving at one requirement from
+different directions is corroboration, not two requirements, and it is recorded
+once so no rung implements it twice.
+
+**What E-1 and E-2 change about the current seven: nothing, and that is the
+point of writing them down.** Neither is smuggled into a rung it does not
+belong to. What they do change is what a green gate MEANS at the end of Rung 8:
+the program will have a working standing layer whose derived judgments do not
+yet carry manifests, and a criticism layer that cannot localize blame within a
+bundle. Both absences are now nameable, which is the difference between a
+limitation and a defect.
+
 ---
 
 ## 3. Errata entry candidates (R22)

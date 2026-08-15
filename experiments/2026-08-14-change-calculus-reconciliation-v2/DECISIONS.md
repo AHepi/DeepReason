@@ -34,7 +34,7 @@ answer is "defer, decide on evidence".
 | D-3 | **A** — premises are derived, not stored | Rung 2 |
 | D-4 | **A** — ship `knowledge(a)`, always with its definition inline | Rung 5 |
 | D-5 | **A** — a fixed finite DSL for σ, reusing `declarative_numeric_v1`'s shape | Rung 4 |
-| D-6 | **A** — program-first `accounts-for`; judges optional, via the trial guard. **REFINED 2026-08-15 (R46): the program-checkable forms are §3.5's three `Superseded` criteria — recovery, rigidity, non-immunization — and `Refuted` / `Superseded` stay DISTINCT derived relations** (unilateral defeat vs comparative theory choice) | Rungs 5, 7 |
+| D-6 | **A** — program-first `accounts-for`; judges optional, via the trial guard. **REFINED 2026-08-15 (R46 + R57): the program implements the STRONG relation — recovery, rigidity, non-immunization AND a strictness witness. A good rival covering the same explicanda is not a successor.** `Refuted` / `Superseded` stay DISTINCT derived relations (unilateral defeat vs comparative theory choice) | Rungs 5, 7 |
 | D-7 | **(iii)** — the signal-contract design; 1b-i delivered, 1b-ii parked | Rungs 1, 1b |
 | D-8 | open — recommended: defer, then revive `single_family_trial` on evidence | Rung 2's boundary |
 | **ND-2** *(added by Amendment 4)* | open — recommended: **derived-view deactivation, exit episode retained** | Rung 2's cascade, enforced from Rung 4 |

@@ -400,3 +400,42 @@ through every previous decision and finds one that changes DELIVERED behaviour �
 the demarcation criterion of Rung 2. It is re-founded in the same tranche rather
 than rowed as future work, because leaving shipped code contradicting the
 governing authority is the failure mode this clause exists to prevent.
+
+### Amendment 7 — 2026-08-15, RIDER 4: three deferred-essential rows
+
+Operator, verbatim:
+
+> RIDER 4: three deferred-essential rows join RECONCILIATION.md, sourced
+> from docs/STATE_OF_THE_PROGRAM_2026-08-14.md §6 (operator: "not
+> priority, but they seem essential"): (1) proof debt — derived judgments
+> carry an itemized attackable manifest (kernel steps / open certificates
+> / axiom debt) with recomputation on manifest attack; (2) Duhem
+> localization — bundle-level problematicity projects to a member only
+> through a standing localization criticism; (3) succession implements
+> the STRONG relation — good-rival-plus-recovery is insufficient without
+> rigidity, non-immunization, and a strictness witness (this one binds
+> the D-6 succession programs when Rung 5 builds them; the first two are
+> their own future rung, scheduled by the operator). Disposition:
+> deferred-essential, not in the current seven rungs unless the drift
+> table finds Rung 5 needs (3) immediately — it does.
+
+| # | Requirement | Lands |
+|---|---|---|
+| R55 | **Proof debt.** Every derived judgment travels with an explicit, itemized, ATTACKABLE manifest of what it rests on — kernel-checked steps, open certificates, named axioms — and attacking a manifest item invalidates dependents ON RECOMPUTATION. Receipt format `KERNEL_CHECK / OPEN_CERTIFICATES / AXIOM_DEBT`. | **deferred-essential**; its own future rung, scheduled by the operator |
+| R56 | **Duhem localization.** A problem with an explanatory BUNDLE (theory + apparatus + interpretation) does not project blame onto a member without a STANDING LOCALIZATION CRITICISM. Blame assignment is adjudicated work, never automatic. | **deferred-essential**; the same future rung |
+| R57 | **Succession implements the STRONG relation.** A good rival covering the same explicanda is NOT yet a strict successor: rigidity, non-immunization AND a strictness witness are additionally required. **BINDS the D-6 succession programs at Rung 5.** | **Rung 5**, now — the drift table confirms the need |
+
+**The disposition, confirmed rather than assumed.** The operator's own reading —
+"unless the drift table finds Rung 5 needs (3) immediately — it does" — checks
+out: `DECISIONS.md` already records D-6 as blocking "Rung 5 (criterion 5), Rung
+7", and Rung 5's work list names `accounts-for` as one of five pinned criteria
+built as programs. That criterion IS the succession relation. Building it as
+good-rival-plus-recovery and strengthening it later would mean shipping a
+succession program that admits non-successors, then re-founding it — the
+pattern this program has now paid for twice in one tranche.
+
+R57 also CONVERGES with R46 rather than adding to it: Rider 2 already routed
+§3.5's three criteria (recovery, rigidity, non-immunization) into D-6, and
+§3.5's strict clause — "at least one of recovery, criticism survival, or
+rigidity is strict" — is exactly the strictness witness R57 names. Two
+authorities, one requirement, recorded once.

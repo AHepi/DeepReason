@@ -477,23 +477,48 @@ evaluation path).
   (against the log's own timestamps, using the existing sealed-holdout machinery,
   I-6), scope-determinism, compatibility (an overlapping consulted assertion
   routes to discrimination — rivals never co-frame), accounts-for.
+- **`accounts-for` implements the STRONG succession relation** (RIDER 4 / R57,
+  drift row E-3; Formalization §3.5 via R46). A good rival covering the same
+  explicanda is NOT a strict successor. Four parts, all required:
+  **recovery** (`X(e) ⊆ X(e')`, or an unrefuted account of why `e` worked over
+  its restricted domain), **rigidity** (the successor is no easier to vary over
+  the shared explicanda), **non-immunization** (no proper functional component
+  of `e'` is removable while preserving every registered accounting and
+  criticism outcome — this is what rejects ad-hoc riders mechanically), and a
+  **strictness witness** (at least one of recovery, criticism survival, or
+  rigidity is STRICT). Building the weak form and strengthening it later ships
+  a program that admits non-successors, and this tranche has already paid twice
+  for exactly that ordering.
 - Remark 9.5's default-consult closure: criteria instantiated at registration
   generate demonstrative program warrants BEFORE the renderer's next
   consultation, and the renderer consults only assertions addressed to promotion
   problems.
 - Pin the mechanism-load-bearing criterion into the root battery for empirical
   scopes, reusing `µ_struct` (P-4). **As a criterion, never a gate** (C5).
-- **Complete `active(a)` = `crit(a) ∧ mod(a)`** (drift row M-1, corrected):
-  §9.3's rent law is written in terms of `active(b)`, and today
-  `measures/demarcation.py` holds two stubs that raise `NotImplementedError`
-  with no importers. Rung 2 builds the `crit` half for premises; this rung
-  completes `mod` over the existing variator kernel and wires `active` into the
-  promotion criteria. If `mod` proves too costly to evaluate per promotion, the
-  alternative — rent defined on `crit` plus observation-valuedness alone — is a
-  SPEC.md decision for this rung, recorded with its reason, not a silent
-  omission.
+- ~~**Complete `active(a)` = `crit(a) ∧ mod(a)`**~~ **— DONE AT RUNG 2, and on a
+  different definition.** `measures/demarcation.py` now holds
+  `demarcated(a) = crit(a) ∧ load(a)` per Formalization §12.2, which supersedes
+  §6's `active`/`mod` (R54). What this rung still owes is §12.2's closing
+  clause, which Rung 2 could not meet because premises carry no scope object:
+  **for empirical scopes, at least one commitment must be observation-valued**
+  (drift row S-5). The stale text below is kept struck rather than deleted so a
+  reader of an earlier plan finds out here why the tree does not match it.
+  ~~§9.3's rent law is written in terms of `active(b)`; `measures/demarcation.py`
+  holds two stubs that raise `NotImplementedError` with no importers; this rung
+  completes `mod` and wires `active` into the promotion criteria.~~ Every clause
+  of that plan is now false: the stubs are gone, the predicate is
+  `demarcated`, and Rung 2 completed both readings. The cost question it raised
+  — whether the sampled half is affordable per promotion — is still live, and
+  Rung 2's answer transfers: cache per subject, one sample for the life of the
+  run, and record a typed abstention when the variator seat is absent.
 
 **Gate proves:**
+- **E-3 / R57, the STRONG succession relation:** a rival that recovers the
+  incumbent's explicanda and nothing more is REFUSED as a successor — the test
+  that would pass under the weak reading and must fail under this one. Plus one
+  case per additional clause: an easier-to-vary rival refused on rigidity, a
+  rival with an excisable idle part refused on non-immunization, and a rival
+  meeting every clause non-strictly refused for want of a strictness witness.
 - **Remark 9.5:** a frame assertion registered outside a promotion problem is an
   ordinary artifact the renderer ignores; an unattacked one addressed to a
   promotion problem does NOT silently frame its scope, because its criteria fire
@@ -713,6 +738,36 @@ sampling); preserves **A1**, **A2**.
 
 **Frozen-surface forecast:** none beyond `Config` knobs and their
 `_versioned_source_config_data` lines.
+
+---
+
+### Rung D (unnumbered, unscheduled) — proof debt and Duhem localization
+
+**ADDED 2026-08-15 by RIDER 4 (R55, R56).** Deliberately unnumbered: it is not
+Rung 9, because the operator schedules it and a number would imply it follows
+Rung 8. It is written here rather than left in a wish-list so that the end of
+Rung 8 is a KNOWN state rather than an assumed-complete one.
+
+**Discharges:** drift rows E-1 and E-2.
+
+**Entry artifacts:** operator scheduling. No rung blocks on it and it blocks no
+rung.
+
+**Work, in outline only — a rung is specced by its own tranche, not here:**
+- **Proof debt (E-1):** a receipt format `KERNEL_CHECK / OPEN_CERTIFICATES /
+  AXIOM_DEBT` travelling with every derived judgment, itemized and attackable,
+  with dependents invalidated ON RECOMPUTATION rather than retroactively. The
+  harness already does this for one class — warrants carry validity nodes — so
+  the work is generalisation, and the first design question is which derived
+  judgments are in scope (labels? measures? render decisions?).
+- **Duhem localization (E-2):** bundle-level problematicity projects to a member
+  only through a standing localization criticism, which is an ordinary
+  attackable artifact. Structurally the premise channel's cousin: an attribution
+  says "π presupposes X", a localization says "the fault in this bundle is m".
+  Reuse `premises.py`'s shape rather than re-deriving it.
+
+**What it must NOT do:** make blame assignment automatic in the name of
+convenience. Both rows exist because the automatic version is the tempting one.
 
 ---
 
