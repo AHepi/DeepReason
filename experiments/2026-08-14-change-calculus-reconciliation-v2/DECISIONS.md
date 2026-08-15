@@ -21,10 +21,24 @@ recommendation with its reason. **Every item can be answered with a word.**
 | D-6 succession instrument | Rung 5 (criterion 5), Rung 7 | before Rung 5 |
 | D-4 `knowledge` view | Rung 5 | before Rung 5 |
 
-**Status, 2026-08-14: D-2 and D-7 are both answered and closed, so Rungs 1 and
-1b are unblocked and can start now.** Five of the original seven remain (D-1,
-D-3, D-4, D-5, D-6), plus D-8 which Amendment 1 added. Nothing is blocked on all
-of them.
+**Status, 2026-08-15: ALL SEVEN ARE ANSWERED AND CLOSED.** The operator
+answered D-1, D-3, D-4, D-5 and D-6 as **A** (every recommendation), D-2 as
+Road B, and D-7 as option (iii). Only **D-8** — added by Amendment 1, and not
+yet put to the operator — remains open, and it blocks nothing: its recommended
+answer is "defer, decide on evidence".
+
+| # | Answer | Where it lands |
+|---|---|---|
+| D-1 | **A** — crisis is a render state only; no standing-layer spawn trigger | Rung 7 |
+| D-2 | **Road B** — the operator's own siren case, in hand | Rung 2 |
+| D-3 | **A** — premises are derived, not stored | Rung 2 |
+| D-4 | **A** — ship `knowledge(a)`, always with its definition inline | Rung 5 |
+| D-5 | **A** — a fixed finite DSL for σ, reusing `declarative_numeric_v1`'s shape | Rung 4 |
+| D-6 | **A** — program-first `accounts-for`; judges optional, via the trial guard | Rungs 5, 7 |
+| D-7 | **(iii)** — the signal-contract design; 1b-i delivered, 1b-ii parked | Rungs 1, 1b |
+| D-8 | open — recommended: defer, then revive `single_family_trial` on evidence | Rung 2's boundary |
+
+**Rungs 1 and 1b-i are delivered. Rung 2 is unblocked.**
 
 ---
 

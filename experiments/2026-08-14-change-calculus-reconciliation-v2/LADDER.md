@@ -5,10 +5,26 @@ Deliverable 2 (REQUEST.md R16–R17). Each rung is **one tranche**, routed throu
 DELIVERY. Rows cited as `S-3`, `D-2`, `P-11` etc. are `RECONCILIATION.md` drift
 rows.
 
-**The invariant that governs every rung, without exception:**
+**REVISED 2026-08-15 under the operator's law of 2026-08-14** (CLAUDE.md, "Old
+runs owe the future nothing; new versions optimise for new functions",
+`main@003d57ffa`). The obligation that previously governed every rung —
 
-> Every committed run root replays byte-unchanged, at every rung.
-> `python tools/root_sweep.py` must show zero verdict drift before AND after.
+> ~~Every committed run root replays byte-unchanged, at every rung.~~
+
+— is **RETIRED**. No rung owes a replay-byte-unchanged proof over historical
+roots, an old-root sweep as a gate, or a reader-widening-only design. Record
+formats, digests and readers may change freely where the calculus is better
+served by a clean shape than an additive one.
+
+**The invariant that replaces it, and its scope boundary:**
+
+> A CURRENT-version run's record stays typed, append-only, and replayable by
+> the code that wrote it. Within-version integrity is the epistemology itself
+> ("the record is the only admissible evidence") and is untouched.
+
+Old roots remain in git history as artifacts of their own version. A new ERROR
+line in a sweep because a format moved on is the law working, not a finding
+(`docs/AUDIT_BASELINES.md`, sweep scope).
 
 ---
 
@@ -48,7 +64,7 @@ Net: **eight rungs**, mapping onto the operator's seven stages as follows.
 | Operator's suggested stage | Rung(s) |
 |---|---|
 | groundwork / vocabulary | **1** |
-| *(signal contract — added by Amendment 2, placement argued in `RECONCILIATION.md` §2L)* | **1b**, with clause (6)'s design law in **1** |
+| *(signal contract — added by Amendment 2, placement argued in `RECONCILIATION.md` §2L)* | **1b**, with clause (6)'s design law in **1**. DELIVERED IN TWO PARTS: 1b-i (declaration side: SC-1, SC-3, SC-6) landed 2026-08-15; 1b-ii (consumption side: SC-2, SC-4, SC-5) is parked ready-to-send at `experiments/2026-08-15-change-rung1b-signal-contract/PARKED.md` |
 | premise channel + spawn-trigger deletion | **2** (channel + cascade) and **3** (deletion) |
 | frame assertions + standing view | **4** |
 | promotion problems + programs | **5** |
@@ -63,8 +79,9 @@ Net: **eight rungs**, mapping onto the operator's seven stages as follows.
 **Gate, at every rung's boundary, in this order:**
 
 1. `python -m pytest tests/ -q -n 4` — 0 failed, the only acceptable result.
-2. `python tools/root_sweep.py <out.txt>` — diff against the previous rung's
-   sweep; `valid` and `len(att)` must not move for any root.
+2. ~~`python tools/root_sweep.py`~~ — **removed as a gate obligation** by the
+   2026-08-14 law. A rung that changes a CURRENT-version reader may still run it
+   to see what moved; nothing requires the result to be empty.
 3. `python tools/docs_verify.py` (FULL, not `--fast`) — the map moves in the
    same commit as the code.
 4. `python scripts/wheel_smoke.py` and `python -u
@@ -74,15 +91,21 @@ Net: **eight rungs**, mapping onto the operator's seven stages as follows.
 5. `python tools/blast_radius.py --files ...` at each `[COMMIT]` checkpoint, and
    `python tools/diff_budget.py` against the rung's ledgered ceiling.
 
-**Frozen-surface discipline, program-wide.** Three of the five surfaces should
-receive **zero** contact across the entire program, and a rung that finds itself
-touching one has mis-designed something:
+**Frozen-surface discipline, program-wide — RE-FOUNDED under the new law.**
+Three of the five surfaces still receive **zero** contact across the program,
+but for a DIFFERENT reason than before. The old reason was cross-version
+compatibility, which is retired. The reason that survives is within-version
+coherence: a run's own record must be replayable by the code that wrote it, and
+a mid-program change to how state is applied or digested breaks the runs of the
+version making the change. Where a row below previously said "additive only
+because old roots must still read", it now says what the calculus actually
+wants:
 
 | Surface | Forecast across all eight rungs |
 |---|---|
 | 1. `capabilities/state.py` digests | **zero contact.** Standing is not a capability; nothing in §9 flows through the proposal/work-order maps |
-| 2. `harness.py` event application | **zero contact.** Every new object is an ordinary artifact registered through existing `Conj`/`Crit`/`Register`/`Spawn` events. **Retirement and the orphan resolutions are ARTIFACTS, not new event rules** — that single design choice is what keeps this surface untouched, and every rung's SPEC must re-state it |
-| 3. `invariants.py` / `verification/` formats | **additive reader-widening only** — new checks appended, existing record formats never altered. Rungs 2, 4 and 7 have forecast contact and must request the grant IN ADVANCE in their own SPEC.md. `INV-frozen-surfaces.md`'s own Trap applies: "A STOP already written in prose is not a STOP that was obeyed" — the CP1-M tranche wrote the finding and shipped anyway |
+| 2. `harness.py` event application | **zero contact — and now for the right reason.** Retirement and the orphan resolutions are ARTIFACTS, not new event rules. That was previously justified as what kept this surface untouched for old roots; re-examined under the new law, it is what the CALCULUS wants independently: Prop 9.7's own proof says "resolutions exist only as registered problem-closures", and a closure that is a registered artifact is attackable (P6, N1) while a closure that is an event rule is not. The conclusion is unchanged; the reason it survives re-choosing is that it was never really a compatibility concession |
+| 3. `invariants.py` / `verification/` formats | **free to change shape.** The reader-widening-only constraint existed for old roots and is retired: a rung may give `verify_root` the record format the calculus wants rather than the one that would also have parsed a 2026-07 root. Rungs 2, 4 and 7 have forecast contact and still request the grant IN ADVANCE in their own SPEC.md — the surface is still frozen against CASUAL change, just no longer against SHAPE change. `INV-frozen-surfaces.md`'s own Trap still applies: "A STOP already written in prose is not a STOP that was obeyed" |
 | 4. Manifest schemas AND validators | **zero contact by design.** Every new per-run mode goes on `Config`, per `INV-frozen-surfaces.md`'s own guidance. **Trap, ledgered:** a new top-level `Config` field is not done until `_versioned_source_config_data` in `run_manifest.py` has an explicit line for it, for EVERY schema version — the `ENGAGED_CRITICISM_AUTHORITY` incident. Rungs 2, 4, 5, 6, 7, 8 each add knobs and each carry this line in their checklist |
 | 5. Qualification subject digests | **zero contact, conditional on one rule: the v2 program adds NO new LLM role.** The frame slice is a pack SECTION; departures are candidate CONTENT; promotion and succession use the existing conjecturer / critic / judge / variator roles. A new role would change the pair inventory, change every subject digest, and cost a ~14-minute battery rerun per home. Any rung that thinks it needs a new role must STOP and ask |
 | frozen-adjacent `route_fingerprint` | zero contact |
@@ -217,8 +240,9 @@ The largest rung, and the one the operator's H2 is about.
 1 — the general half of the §9.8 cascade. Absorbs parked **P5** (answered) and
 **P6**.
 
-**Entry artifacts:** Rung 1's DELIVERY; `DECISIONS.md` answers to D-2 (siren)
-and D-3 (derived vs stored `provenance.frame`).
+**Entry artifacts:** Rung 1's DELIVERY; `DECISIONS.md` answers to D-2 (siren —
+Road B, answered) and D-3 (**A: derived**, answered 2026-08-15). Both are in
+hand; Rung 2 is unblocked.
 
 **Exit artifacts:** the five tranche artifacts; a new map document for the
 problem-layer lifecycle (pose → attribution → orphan mark → resolution),
@@ -319,11 +343,17 @@ scheduler.
 errata; the two errata entries themselves, minted against a freshly re-checked
 ledger tail (E29 was next free at `50e2397a9`).
 
-**Work:** remove the SUCCESSOR branch from `scan_spawns`; retire
-`SpawnTrigger.SUCCESSOR` **as a producer while keeping the enum member**, so
-every committed root carrying `trigger: "successor"` still parses. That
-distinction is the whole risk of this rung: *stop writing it, never stop reading
-it.*
+**Work (RE-CHOSEN 2026-08-15 under the new law):** remove the SUCCESSOR branch
+from `scan_spawns` **and remove `SpawnTrigger.SUCCESSOR` from the enum.**
+
+The previous design kept the enum member as a dead reader so that committed
+roots carrying `trigger: "successor"` would still parse — an additive shape
+chosen *only* for old-root compatibility, which is exactly what the rider tells
+this program to re-choose. Under the 2026-08-14 law those roots are artifacts of
+their own version and are owed nothing. Deleting the member is the clean shape:
+the v2 trigger vocabulary then says what v2 actually does, and a reader of the
+enum is not left wondering which members are live. Old roots stop parsing under
+v2 readers, and that is the law working.
 
 **Gate proves:** no calculus proposition — a deletion proves absence of loss:
 - **the frontier-delta measurement** on root `8e22d0431fd2b98d`: the 16 SUCCESSOR
@@ -334,12 +364,15 @@ it.*
 - **no addressability lost:** every problem addressable before the deletion is
   addressable after — the deleted successor was a copy of its parent's criteria
   under a new id;
-- **root sweep byte-identical**, which is what proves the enum member still reads.
+- ~~root sweep byte-identical~~ — retired with the compatibility law. What the
+  gate proves instead is that a v2 run's OWN record round-trips: spawn, replay,
+  and re-derive the frontier with the trigger gone.
 
 **Estimated size:** 150–250 lines (deletion + regression tests + map + errata).
 
-**Frozen-surface forecast:** none. The enum member is retained precisely so no
-stored value becomes unreadable.
+**Frozen-surface forecast:** none. The enum shrinks, which under the old law
+would have been a stored-value compatibility break and is now simply the
+vocabulary matching the behaviour.
 
 ---
 
@@ -347,8 +380,8 @@ stored value becomes unreadable.
 
 **Discharges:** S-1, S-3, S-5, S-6, S-10, O-9, O-10, T-3, T-4, T-5.
 
-**Entry artifacts:** Rung 3's DELIVERY; `DECISIONS.md` answer to D-5 (scope
-predicate language).
+**Entry artifacts:** Rung 3's DELIVERY; `DECISIONS.md` D-5 answered **A: a fixed
+finite DSL**, reusing the `declarative_numeric_v1` shape (v1.6).
 
 **Exit artifacts:** the five tranche artifacts; `CON-standing-and-background.md`
 advanced from rationale to mechanism; an update to
@@ -398,8 +431,9 @@ traffic, and whose whole job is to keep standing out of label computation.
 **Discharges:** S-8, S-9, D-6 (the promotion spawn trigger), M-4, P-4/O-7/I-2
 (the mechanism-load-bearing half of demarcation), T-1.
 
-**Entry artifacts:** Rung 4's DELIVERY; `DECISIONS.md` answer to D-6
-(program-first `accounts-for` vs a judge ensemble).
+**Entry artifacts:** Rung 4's DELIVERY; `DECISIONS.md` D-6 answered **A:
+program-first `accounts-for`, judges optional** — succession works solo, and a
+rubric ruling is admitted only through the existing trial guard.
 
 **Exit artifacts:** the five tranche artifacts; `DR-SEAM-evaluation-x-rules`
 updated (promotion criteria are ordinary program commitments on the existing
@@ -503,8 +537,10 @@ pins in-commit.
 **Discharges:** S-13, S-14 (as re-founded by H1), S-15, S-16, S-17, S-20 (full
 totality), A-7 at the frame entry, D-7 in the drift table.
 
-**Entry artifacts:** Rung 6's DELIVERY; `DECISIONS.md` answers to D-1 (crisis)
-and D-6 (comparative succession).
+**Entry artifacts:** Rung 6's DELIVERY; `DECISIONS.md` D-1 answered **A: crisis
+is a render state only** — no standing-layer spawn trigger; the incumbent's
+promotion problem stays on the frontier, ranked by wound count (attention only).
+D-6 answered **A** as above.
 
 **Exit artifacts:** the five tranche artifacts; a RESULTS.md segment carrying
 §13's residue **verbatim** — "a wounded background with no arriving rival frames
@@ -605,13 +641,15 @@ named, with its evidence or with an explicit "unmeasured".
 | 7 falls + succession | — | — | **additive** | — (Config only) | — | — |
 | 8 rent + audit | — | — | — | — (Config only) | — | — |
 
-"Additive" means: new checks appended; **no existing record format altered**;
-grant requested in the rung's SPEC.md before any code is written; blast-radius
-disclosure run at every `[COMMIT]` checkpoint.
+"Additive" now means only: the grant is requested in the rung's SPEC.md before
+any code is written, and blast-radius disclosure runs at every `[COMMIT]`
+checkpoint. **It no longer means "no existing record format altered"** — that
+clause was cross-version compatibility and is retired.
 
-**The one number that governs all of it:** zero committed roots may change
-verdict at any rung. The instrument is `python tools/root_sweep.py`, run before
-and after, compared byte-for-byte.
+**The number that governs all of it, replaced:** ~~zero committed roots may
+change verdict at any rung~~ → **a v2 run's own record round-trips: written,
+replayed, and re-derived by the code that wrote it.** Each rung's gate proves
+that on runs it makes itself, not on runs made by earlier versions.
 
 ---
 
@@ -629,7 +667,7 @@ and after, compared byte-for-byte.
 | Thm 12.3 (no absorbing status) | Rung 4 (frame assertions inherit every exit), Rung 2 (retirement is reversible) |
 | Prop 12.4 (axis independence) | Rung 4 |
 | Prop 12.5 (standing never adjudicates) | Rung 4, re-proved at the render layer in Rung 6 |
-| Prop 12.6 (knowledge is a view) | Rung 5 **only if** `DECISIONS.md` D-4 says build it |
+| Prop 12.6 (knowledge is a view) | Rung 5 — **D-4 answered A: build it**, always rendered with its definition inline (`knowledge (unrefuted ∧ active ∧ reach > 0)`), never the bare word |
 | N1, N3 | Rung 2 (problem layer), Rung 4 (frame assertions) |
 | P4 both halves | Rung 5 |
 | P11 | the whole program; nothing before Rung 7 discharges it |

@@ -50,10 +50,26 @@ That is why the whole v2 program can be additive:
 - `verify_root`'s replay-validation formats are untouched;
 - every committed root replays byte-unchanged at every rung.
 
-The cost of the alternative — making Π a node set in `att` — would be a rewrite
-of frozen surfaces 2 and 3 and the invalidation of every committed root. The
-calculus's own design avoids it. **This is the single most important thing the
-implementing tranches must not forget.**
+**RE-EXAMINED 2026-08-15 under the operator's law of 2026-08-14** ("Old runs owe
+the future nothing"). The original argument for this finding rested partly on a
+cost that no longer exists: making Π a node set in `att` would have invalidated
+every committed root, and that is no longer a prohibition. The finding survives
+re-examination anyway, on two grounds that were always the stronger ones:
+
+1. **The calculus does not ask for it.** §9.8 criticises a problem THROUGH its
+   premise and marks the problem; nowhere does it make problems attack targets.
+   Building what the theory does not ask for is not a clean shape, it is a
+   bigger one.
+2. **Within-version coherence still binds.** A v2 run's record must be
+   replayable by the code that wrote it; rewriting event application and
+   verification formats mid-program breaks the runs of the version making the
+   change, which the law explicitly does not license.
+
+What HAS changed: the additive-only constraint is gone, so a rung may give
+`verify_root` and the record the shape the calculus wants rather than the shape
+that would also have parsed a 2026-07 root. **This is still the single most
+important thing the implementing tranches must not forget — now for the reason
+the calculus gives, not the reason the old compatibility law gave.**
 
 ---
 
@@ -294,7 +310,17 @@ visible condition of the schedule, never a verdict — exactly N3's own wording.
 | `suspended_unsupported` | `suspended_unsupported` | "orphaned, not false — it lost its ground, it was not shown wrong" |
 
 **The line that decides every case:** a string **written into a root** stays
-`accepted`; a string **rendered to a reader** may say `unrefuted`. Machine JSON
+`accepted`; a string **rendered to a reader** may say `unrefuted`.
+
+> **Note added 2026-08-15.** H3's stated rationale had two halves: "stored record
+> labels never change" AND "readers stay byte-compatible with every committed
+> root". The 2026-08-14 law retires the second half — nothing now forbids
+> renaming the stored label to `unrefuted` for v2. The first half is an
+> independent operator instruction and remains binding, so Rung 1 implemented it
+> as written and the stored labels did not move. Flagged, not acted on: if the
+> operator now wants the stored vocabulary to match the calculus outright, that
+> option has been reopened by the law and costs one small rung. It needs their
+> word, not an inference from the law. Machine JSON
 keeps the stored label (v1.5 §I: "machine JSON retains stable full IDs and typed
 results") and MAY carry an additional display field; it never substitutes.
 
@@ -540,7 +566,7 @@ minting rather than trusting the number below.
 
 | Deferred | Why | What brings it in |
 |---|---|---|
-| Making Π a node set in `att` (problems as literal attack targets) | It would rewrite frozen surfaces 2 and 3 and invalidate every committed root (§0). The calculus does not need it | Nothing short of an explicit operator decision to break record compatibility |
+| Making Π a node set in `att` (problems as literal attack targets) | **Re-examined 2026-08-15**: no longer barred by record compatibility (that law is retired), and still rejected — the calculus does not ask for it, and within-version coherence makes a mid-program rewrite of event application costly for v2's own runs (§0) | Evidence from a live v2 run that the premise channel cannot express a criticism the operator wants made |
 | A learned response controller for capture | v1.3 §11.4 defers it for the meta-attractor risk; the calculus's §10 does not reopen it | Out of the v2 program by both authorities |
 | `refl`'s unreferenced status (2026-08-13 dead-code census) | P6-adjacent but pre-existing and independently parked | Stays in `experiments/2026-08-13-audit/PARKED.md` P2 |
 
