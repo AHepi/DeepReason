@@ -6,7 +6,7 @@ Verdict: **PASS.**
 |---|---|
 | `python -m pytest tests/ -q -n 4` | **3644 passed, 7 skipped, 0 failed** (789 s) |
 | `python tools/docs_verify.py` (full) | 901 checks, **3 failed — all `CON-run-identity`**, the recorded shallow-clone baseline |
-| diff, measured | production **17**, tests **151**, docs + errata **63** — inside the 40/140/80 budget on production and docs, 11 over on tests |
+| diff, measured | production **13**, tests **177**, docs + errata **62** — production and docs well inside their 40/80 line items; **tests 37 over the 140 ceiling** |
 
 ## Acceptance checks
 
@@ -35,6 +35,16 @@ Four tests asserted the deleted behaviour. None had its assertion dropped:
 `scan_spawns` `_spawn` call sites **7 → 6**; triggers spawned there **7 → 6**;
 `SpawnTrigger` enum size **9 → 9** (unchanged, deliberately). Three pinned map
 checks moved with them.
+
+## The diff budget, corrected
+
+An earlier revision of this file quoted 17/151/63 — numbers written before the
+measurement, not from it. The measured figures are **13 / 177 / 62** (`git diff
+--cached --numstat` against `314d15c4f`), and tests are **37 lines over** their
+ceiling, not 11. Corrected in the same tranche it was miswritten in. The overrun
+is real and its cause is the mutation proof: reinstating the deleted loop in
+test code costs about as many lines as the deletion saved, which is the price of
+a regression that can actually fail.
 
 ## Residue
 
