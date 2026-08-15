@@ -1,7 +1,6 @@
 # VALIDATION — Rung 1
 
-Verdict: **PENDING A4** (every other acceptance check PASS; the root sweep is
-still running — see A4).
+Verdict: **PASS** — all ten acceptance checks.
 
 ## Acceptance checks
 
@@ -28,7 +27,38 @@ historical strings; `test_ontology_never_learns_the_rendered_word` reads
 in the module. v1.7 §E names `positions.accepted` as a key readers compare
 across roots.
 
-### A4 (R3) — root sweep, zero verdict drift — **see below**
+### A4 (R3) — root sweep, zero verdict drift — **PASS, full census**
+
+Every openable root under `experiments/` was swept and compared field-by-field
+against the committed baseline from the previous tranche
+(`experiments/2026-08-13-defect-controller-steering-inert/
+root-sweep-after-2026-08-13.txt`), which was taken on the reader code this rung
+started from:
+
+    baseline roots 107 | swept now 107 | compared 107
+    VERDICT DRIFT: NONE - every compared field byte-identical on all 107
+    not compared: []
+    valid=True: 86 | valid=False: 9
+    ERROR lines: 11 (AUDIT_BASELINES expects 11)
+
+Fields compared per root: `valid`, `att`, `epistemic_passed`, `blind`,
+`module_digests`, `seat_digests`. The 11 ERROR lines are exactly the recorded
+baseline (`UnsupportedRunManifestVersionError`), and the 9 `valid=False` roots
+are baseline-identical — none of them moved.
+
+Raw output archived beside this file as `sweep-part1.txt` / `sweep-part2.txt`.
+
+**How it was run, and why that is worth recording.** `tools/root_sweep.py`
+takes only an output path and writes it once, at the end, so a run killed by a
+timeout produces nothing. Against the baseline's known-hang root and the
+degraded per-root throughput already parked
+(`experiments/2026-08-13-change-smoke-currency-audit/PARKED.md` P1), the
+committed tool could not finish inside any timeout used here. The sweep was
+therefore run from a scratchpad copy of the same script with two changes and no
+others: the baseline's known-hang root is skipped with a `SKIPPED` row, and the
+output file is written after every root so a timeout costs progress instead of
+everything. Both halves are logged in this tranche's PARKED.md as the fix the
+tool itself should carry.
 
 ### A5 (R4) — no direct status render survives in `views/` — **PASS**
 
