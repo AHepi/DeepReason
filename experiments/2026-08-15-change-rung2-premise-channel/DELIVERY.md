@@ -2,7 +2,8 @@
 
 Branch `claude/calculus-rung2-step2-premise-pes36e`, based on
 `claude/calculus-reconciliation-v2-qqghvn` (which carries Rungs 1, 1b-i and
-Rung 2 step 1, all unmerged). Three commits:
+Rung 2 step 1, all unmerged), with `main` merged in for the two calculus
+authorities. Six commits:
 
 | Commit | What |
 |---|---|
@@ -17,7 +18,7 @@ Rung 2 step 1, all unmerged). Three commits:
 
 | # | Requirement (operator's words, condensed) | State | Where |
 |---|---|---|---|
-| M12 | Rent battery: a demarcation criterion pinned onto premise artifacts requiring a SUBSTANTIVE commitment; reuse `_substantive`; structural checks must NOT satisfy it; build the `crit` half of `active()` | **DONE** | `measures/demarcation.py::crit`; `premises.py::PREMISE_RENT`, `premise_rent_sweep` |
+| M12 | Rent battery: a demarcation criterion pinned onto premise artifacts requiring a SUBSTANTIVE commitment; reuse `_substantive`; structural checks must NOT satisfy it; build the `crit` half of `active()` | **DELIVERED, then SUPERSEDED by R54** | The battery is pinned onto premise artifacts and structural checks still cannot satisfy it — but §12.2 relocates the substantive test from `crit` to `load`, so `crit` no longer uses `_substantive` and `active()` is now `demarcated()`. The REQUIREMENT is met; the MECHANISM the operator named is not the one in the tree, on the operator's own later instruction. `measures/demarcation.py`, `premises.py::premise_rent_sweep`; walked in `RECONCILIATION.md` S-1 |
 | M13 | Wiring: critic pack invitation; scheduler consults `premise_work_invited`, deprioritises `premise_orphaned`, skips `retired_problems`. ATTENTION ONLY | **DONE** | `llm/packs.py::premise_invitation_note`; `rules/crit.py::_premise_invited_problem`, `_file_attribution`; `scheduler.py::_select_problem`, `step` |
 | M14 | Three detection signals declared through the Rung 1b-i contract; no `unspecified` | **DONE** | `signals.py::_DECLARED`; `measures/attention.py`; `premises.py::independence_resolution_rate` |
 | M15 | NO new LLM role | **HELD** | one optional field on existing contracts; `variator` is an existing seat |
@@ -50,15 +51,16 @@ Two facts worth carrying into that run, because they shape what a miss means:
    candidates and no standing attribution — so a short run, or one whose
    candidates all survive, will never offer it. A miss under those conditions
    says nothing about the channel.
-2. `mod` needs the `variator` seat. A live configuration without it will file
-   attributions and fell no premises, recording `premise.rent-undecided.v1`
-   with reason `no-variator` — which is a correct outcome to observe, not a
-   failure.
+2. `load` — the second demarcation reading — needs the `variator` seat. A live
+   configuration without it will file attributions and fell no premises,
+   recording `premise.rent-undecided.v1` with reason `no-variator`, which is a
+   correct outcome to observe rather than a failure.
 
 ## Known residue
 
-Carried verbatim from VALIDATION.md: `mod` is a sample and not a proof (ν says
-so); D-8 — a premise contentful and wrong by argument alone — remains
+Carried verbatim from VALIDATION.md: `load` is a sample and not a proof (ν says
+so, and the sampled variants are logged); §12.2's empirical-scope clause is owed
+and not met (S-5); D-8 — a premise contentful and wrong by argument alone — remains
 unanswered and needs argumentative status authority no solo configuration has;
 and the diff budget was EXCEEDED (production 458/320, tests 352/300) and is
 recorded as a miss rather than re-baselined.
