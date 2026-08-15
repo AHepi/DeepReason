@@ -14,7 +14,77 @@ Two measure families carry NO signal string by design: HV estimates
 their payload, not their inputs.
 """
 
-SIGNALS: dict[str, str] = {
+from dataclasses import dataclass
+from typing import Literal
+
+# ---------------------------------------------------------------------------
+# The contract (operator design law, 2026-08-14; v2 program Rung 1b).
+#
+# A signal is anything DECLARING a name, a unit, producer-agnostic semantics,
+# and a staleness bound. New setups add signals by declaration through this
+# typed channel -- never by teaching a consumer about a subsystem. The
+# declaration is the contract; SIGNALS and PREFIXES below are DERIVED views of
+# it, so the registry has one source of truth rather than two copies.
+#
+# `unspecified` is an honest debt marker, not a default. Every entry migrated
+# from the pre-contract registry carries it, because inventing a unit for a
+# signal whose author never stated one would be fabrication dressed as rigour.
+# A NEW signal may not use it: tests/test_signal_contract.py pins the census so
+# the debt can only shrink.
+# ---------------------------------------------------------------------------
+
+Unit = Literal[
+    "unspecified",   # migrated before the contract; the author stated none
+    "event",         # one occurrence of a discrete happening
+    "count",         # a cardinal quantity carried in the payload
+    "ratio",         # a dimensionless fraction
+    "tokens",        # provider token spend
+    "digest",        # a content address, carrying identity rather than size
+]
+
+Staleness = Literal[
+    "unspecified",   # migrated before the contract
+    "immediate",     # meaningful only in the cycle that emitted it
+    "cycle",         # usable until the next cycle boundary
+    "run",           # usable for the life of the run
+    "permanent",     # a fact about the record, never stale
+]
+
+
+@dataclass(frozen=True)
+class SignalDeclaration:
+    """One signal's contract. Producer-agnostic by construction: `semantics`
+    says what the signal MEANS, never which subsystem emits it -- a consumer
+    that needs to know the producer is reaching around the contract."""
+
+    name: str
+    unit: Unit
+    semantics: str
+    staleness: Staleness
+
+    def __post_init__(self) -> None:
+        if not self.name or not self.semantics:
+            raise ValueError(f"signal declaration incomplete: {self.name!r}")
+
+
+def _migrated(entries: dict) -> dict:
+    """Wrap a pre-contract registry literal as declarations.
+
+    Their semantics are the prose their authors wrote, carried verbatim. Their
+    unit and staleness are `unspecified` because nobody ever stated one, and
+    that is the truthful record of the situation.
+    """
+
+    return {
+        name: SignalDeclaration(
+            name=name, unit="unspecified", semantics=meaning,
+            staleness="unspecified",
+        )
+        for name, meaning in entries.items()
+    }
+
+
+_SIGNAL_MEANINGS: dict[str, str] = {
     "experimental-v5-override.v1": "explicit diagnostic-only override of "
                                     "the v5 active-inquiry containment gate "
                                     "(inputs: [signal, manifest digest]); "
@@ -286,7 +356,7 @@ SIGNALS: dict[str, str] = {
                     "inputs carry the reason — its spend is still on the record",
 }
 
-PREFIXES: dict[str, str] = {
+_PREFIX_MEANINGS: dict[str, str] = {
     "evidence-citation:": "one deterministic check of a candidate's claimed "
                           "grounding in an admitted dossier block (suffix = "
                           "typed outcome code, verified or failed; inputs: "
@@ -337,6 +407,35 @@ PREFIXES: dict[str, str] = {
                      "(suffix = stagnation-recruit | debt-sweep | "
                      "orbit-rotate | exogenous-brake | reseed)",
 }
+
+# The declarations are the contract; these two are derived views of it.
+SIGNAL_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_SIGNAL_MEANINGS)
+PREFIX_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_PREFIX_MEANINGS)
+
+SIGNALS: dict[str, str] = {n: d.semantics for n, d in SIGNAL_DECLARATIONS.items()}
+PREFIXES: dict[str, str] = {n: d.semantics for n, d in PREFIX_DECLARATIONS.items()}
+
+
+def declaration(signal: str) -> SignalDeclaration | None:
+    """The contract for one signal: exact match first, then longest prefix."""
+    exact = SIGNAL_DECLARATIONS.get(signal)
+    if exact is not None:
+        return exact
+    matches = [p for p in PREFIX_DECLARATIONS if signal.startswith(p)]
+    if not matches:
+        return None
+    return PREFIX_DECLARATIONS[max(matches, key=len)]
+
+
+def unspecified_declarations() -> list[str]:
+    """Names whose unit or staleness predates the contract. This list is the
+    migration debt: pinned by a test, allowed to shrink, never to grow."""
+    return sorted(
+        name
+        for name, d in {**SIGNAL_DECLARATIONS, **PREFIX_DECLARATIONS}.items()
+        if d.unit == "unspecified" or d.staleness == "unspecified"
+    )
+
 
 _UNREGISTERED = "(unregistered signal)"
 

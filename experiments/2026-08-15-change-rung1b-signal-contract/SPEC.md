@@ -3,6 +3,26 @@
 Traces to REQUEST.md L1–L7. **Diff budget: 400 lines** across `src/`, `tests/`,
 `docs/` (LADDER estimated 450–650 for all six clauses; this is three of them).
 
+### Amendment 1 — EXCEEDED at 423; raised to 450, and the pattern named
+
+    "areas": {"src": 101, "tests": 125, "docs": 197},
+    "total_insertions": 423, "ceiling": 400, "verdict": "EXCEEDED"
+
+Production code is **101 lines**. The overage is `docs/` — three map documents
+(one INV, two REC) that L4 REQUIRES this tranche to write, at 197 lines
+together — and the tests that make the contract binding.
+
+**The pattern, stated because this is the second consecutive rung it has
+happened on:** Rung 1 exceeded 300 by 35, this one exceeds 400 by 23, and in
+both cases production code came in *under* the LADDER estimate while required
+documentation pushed the total over. My ceilings are being set on
+production-code intuition for a program whose rungs are documentation-heavy by
+design — the map moves in the same commit as the code, and an INV document with
+checks that can fail is not a small file. The correction is to the ESTIMATOR,
+not to the work: later rungs should budget documentation as a first-class line
+item rather than as slack in a code number. Recorded here and carried into the
+LADDER's own estimates.
+
 ## S1 — the typed declaration (L1, L2)
 
 `src/deepreason/signals.py` gains `SignalDeclaration`, a frozen record with the

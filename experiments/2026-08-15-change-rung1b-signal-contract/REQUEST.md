@@ -60,4 +60,43 @@ here and in the LADDER rather than absorbed silently.
 
 ## 5. Amendments
 
-(none yet)
+### Amendment 1 — 2026-08-15, the mid-flight rider (cross-version compatibility retired)
+
+Appended verbatim BEFORE acting on it, per the ledger rule.
+
+> MID-FLIGHT RIDER (append to REQUEST.md as an amendment before acting on
+> it, per the ledger rule): new standing law on main, CLAUDE.md 2026-08-14
+> — "old runs do not need to be valid or returnable... new versions are
+> optimised for new functions." Cross-version compatibility is retired.
+> Effect on this program: finish Rung 1 as specified (its scope is
+> documentation/vocabulary and gains nothing from the law), then REVISE
+> LADDER.md at the rung boundary before Rung 2 opens: drop every
+> replay-byte-unchanged proof obligation, old-root sweep gate, and
+> reader-widening-only design constraint from all remaining rungs; where a
+> rung chose an awkward additive shape only for old-root compatibility,
+> re-choose the clean shape the calculus is better served by. Scope
+> boundary, not to be over-read: a current-version run's record stays
+> typed, append-only, and replayable by the code that wrote it.
+> docs/AUDIT_BASELINES.md already records the sweep's narrowed scope.
+
+The law itself is on `main` at `003d57ffa`, and supersedes the sentence that
+previously closed the frozen-surfaces list.
+
+**Effect on THIS tranche (1b-i):**
+
+| Local requirement | Status under the law |
+|---|---|
+| **L7** — "every committed root replays byte-unchanged" | **RETIRED.** No old-root sweep is owed. Acceptance check A7 keeps only its `blast_radius` half, which discloses frozen-surface contact for the CURRENT version and is unaffected |
+| L1–L6 | unchanged — none of them existed for cross-version reasons |
+
+**Did this tranche choose an awkward shape for old-root compatibility?**
+Checked, and no. The one design that looks like a compatibility concession —
+`SIGNALS`/`PREFIXES` kept as DERIVED views rather than replaced — was chosen so
+that the three CURRENT consumers (`report.py`, `cli/main.py`,
+`tests/test_signals.py`) read one source of truth instead of two. That is
+within-version cohesion, which the law explicitly does not touch. The
+`unspecified` debt marker is an honesty device, not a migration shim. Nothing
+here is re-chosen.
+
+The LADDER revision the rider orders is a separate act at the rung boundary,
+after this tranche closes.
