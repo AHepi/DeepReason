@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=23 blockers=none (docs_verify at baseline: 3 CON-run-identity git-history failures on a shallow clone; the one real finding was mine and is fixed, the other was load-induced and passes idle)
+State: next=25 blockers=none (full gate GREEN: 3702 passed, 6 skipped, 0 failed)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -802,13 +802,53 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       and the single named test passes alone in 10.72s. Recorded as the
       idle measurement, per the rule that says which run to record.
 
-- [ ] 23. (S13, R17) FULL gate, alone on the box.
+- [x] 23. (S13, R17) FULL gate, alone on the box.
       done-when: `python -m pytest tests/ -q -n 4` → output ends `N passed, 0 failed` (paste it verbatim)
 
-- [ ] 24. (S13) Warm-up smoke on a cold-ish path: prove
+      PROOF, verbatim, run detached and ALONE on the box (docs_verify
+      confirmed not running first — `dr-drive-harness` §5b forbids two
+      worker-spawning instruments at once, and this tranche already
+      produced one load-induced false failure by ignoring that):
+
+          ........................................................ [ 99%]
+          ...................................                      [100%]
+          3702 passed, 6 skipped in 1068.34s (0:17:48)
+
+      **0 failed.** Nothing was weakened to get there: the only two
+      assertions this tranche moved were STRENGTHENED (the
+      EmbedderUnavailable message test gained two checks) or EXTENDED by
+      exactly one key (the doctor readiness dict), both predicted in
+      advance — at SPEC time for the message, at step 1 for the dict.
+
+      Against the baseline (`docs/AUDIT_BASELINES.md`: "0 failed", with 3
+      `test_mcp_run.py` / 2 `test_mcp_scratch_bridge.py` known flaky
+      under `-n 4`): this run hit none of the known flakes, so no serial
+      re-run was needed.
+
+- [x] 24. (S13) Warm-up smoke on a cold-ish path: prove
       `deepreason embedder-warmup` is idempotent and cheap when the
       weights are already cached.
       done-when: a second `deepreason embedder-warmup` run exits 0 in under ~30 s (paste elapsed)
+
+      PROOF:
+
+          rc=0 elapsed=4s
+          embedder-warmup: initializing nomic-ai/nomic-embed-text-v1.5
+          (~523 MB of ONNX weights on first use, cached at
+          /tmp/fastembed_cache); this is a one-time cost per cache, not
+          per run ...
+          embedder-warmup: ready in 2.7s — nomic-ai/nomic-embed-text-v1.5
+          (fastembed-0.8.0+onnxruntime-1.28.0)
+          {"model": "nomic-ai/nomic-embed-text-v1.5",
+           "sentinel": "d6e3599ce0377000",
+           "version": "fastembed-0.8.0+onnxruntime-1.28.0"}
+
+      2.7 s against 4.3 s on the first call in this container and 14.2 s
+      on the cold fetch — idempotent and cheap once the weights are
+      present, which is what makes it safe to put in every ladder's
+      setup phase. The fingerprint is byte-identical to the first call's
+      (sentinel `d6e3599ce0377000`), so the printed identity is stable
+      within this environment and can be recorded before a run starts.
 
 - [ ] 25. (D) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` empty AND `git rev-parse HEAD origin/claude/embedder-auto-install-239s5x` prints the same sha twice (paste)
