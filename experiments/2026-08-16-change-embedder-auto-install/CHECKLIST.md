@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=12 blockers=none
+State: next=13 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -357,8 +357,22 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       `Verified-at:` advanced to this commit only because all 18 checks
       were actually re-run above.
 
-- [ ] 12. (A) [COMMIT] Ring for phase A, then commit and push.
+- [x] 12. (A) [COMMIT] Ring for phase A, then commit and push.
       done-when: `python -m pytest tests/test_embedder.py tests/test_scratch_similarity.py tests/test_manifest_integration.py tests/test_schema_v3_consumers.py tests/test_wheel_operational.py -q` → 0 failed (paste tail); commit pushed; State line refreshed
+
+      PROOF:
+
+          $ python -m pytest tests/test_embedder.py tests/test_scratch_similarity.py \
+              tests/test_manifest_integration.py tests/test_schema_v3_consumers.py \
+              tests/test_wheel_operational.py -q
+          ........................................................ [ 45%]
+          ........................................................ [ 91%]
+          ..............                                           [100%]
+          158 passed in 41.22s
+
+      Phase A closes: the dependency is core, the warm-up exists, the
+      docs and the map moved with it, and every consumer the census
+      named is green.
 
 ## Phase B — the fallback becomes loud
 
