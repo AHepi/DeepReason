@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=10 blockers=none
+State: next=11 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -278,7 +278,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
           the scale-specificity (still true) and that arming an
           absolute threshold is what requires calibration.
 
-- [ ] 10. (S4, S8, R5, R10, R11) Update the three docs: `CLAUDE.md`
+- [x] 10. (S4, S8, R5, R10, R11) Update the three docs: `CLAUDE.md`
       Environment section gains the disk-cost + warm-up line;
       `docs/EXPERIMENT_PROGRAM_2026-07.md:101` and
       `docs/SCRATCHPAD_GROUNDED_BRIDGE.md:83` stop instructing a manual
@@ -286,6 +286,32 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       CLAUDE.md's `pip install -e .` lines are unchanged and still
       correct.
       done-when: `grep -rn "deepreason\[embed\]\|\.\[embed\]" --include=*.md --include=*.py . | grep -v "experiments/2026-08-16-change-embedder-auto-install" | grep -v "experiments/2026-08-13-change-lifecycle-operation-parity"` → no hits
+
+      PROOF — R11 (no doc still instructs a manual extra install):
+
+          $ grep -rn "deepreason\[embed\]\|\.\[embed\]" --include=*.md --include=*.py --include=*.sh . | grep -v .git | grep -v <this tranche> | grep -v <2026-08-13 PARKED ledger>
+          (no hits)
+
+      PROOF — R10 (CLAUDE.md's plain-install lines keep working
+      unchanged by S1, VERIFIED BY GREP as the requirement asked):
+
+          $ git diff CLAUDE.md | grep -E "^[-+].*pip install -e"
+          +The embedder costs DISK, and the container clears it. `pip install -e .`
+
+      The only `pip install -e .` line in the diff is an ADDITION, in the
+      new prose. Neither of the two pre-existing install lines
+      (`CLAUDE.md:72` in the rollback-recovery block, `:99` in Build and
+      test) is added or removed, i.e. both are byte-identical and both
+      now do strictly more than they did: the same command that installs
+      the CLI installs the neural backend.
+
+      ONE ITERATION within the step: the first wording of
+      `docs/EXPERIMENT_PROGRAM_2026-07.md` kept the literal token while
+      making the sentence historical ("needed a manual `.[embed]`
+      install when E0.1 ran"), which is TRUE but left the grep dirty and
+      would have made a future reader adjudicate instruction-vs-history.
+      Reworded to "a manual optional-extra install", which preserves the
+      historical fact and leaves the check unambiguous.
 
 - [ ] 11. (S12, R18) Update `docs/map/SUB-llm.md` in this same commit: a
       `Traps` entry naming the grounded-extension run

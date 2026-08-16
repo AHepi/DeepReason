@@ -79,10 +79,13 @@ see a bounded attention pack and author a new formal conjecture, but that new
 object must pass the existing formal validator and registration path.
 
 Similarity is also advisory. High similarity can rank retrieval but cannot
-merge, delete, deduplicate, link, support, or validate blocks. The optional
-`fastembed` backend is installed with `deepreason[embed]`; without it, the
-deterministic hashing backend remains available. A configured neural failure
-that falls back is identified in the replay record.
+merge, delete, deduplicate, link, support, or validate blocks. The
+`fastembed` backend is a core dependency carried by a plain
+`pip install -e .` since 2026-08-16, and needs no separate install step; the
+deterministic hashing backend remains available for configurations that
+choose it (`EMBEDDER_MODEL` unset) or for machines where the backend cannot
+build. A configured neural failure that falls back is identified in the
+replay record.
 
 Attention mixes direct focus, explicit links, clusters, literal search,
 semantic retrieval, recency, loose material, dormancy, underexposure,

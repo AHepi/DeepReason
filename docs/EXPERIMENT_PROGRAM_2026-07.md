@@ -98,8 +98,10 @@ two of the three spend almost no tokens at all.
 **Question.** Do the prior novelty and basin findings survive replacing the
 scale-blind 128-dim `HashingEmbedder` with a real embedding model?
 
-**What it does.** No new LLM runs. Install the `.[embed]` extra (fastembed
-ONNX) and set the branch's `EMBEDDER_MODEL` knob. Re-score, offline, every
+**What it does.** No new LLM runs. Set the branch's `EMBEDDER_MODEL` knob —
+the fastembed ONNX backend needed a manual optional-extra install when E0.1 ran,
+and is a core dependency carried by a plain `pip install -e .` since
+2026-08-16 (`deepreason embedder-warmup` fetches its weights). Re-score, offline, every
 recoverable run root in the record (basin corpora, lambda pilot roots, T2
 replication roots, the two live gemma runs in this branch) under both
 embedders via replay: mean pairwise distance, nearest-prior-conjecture
