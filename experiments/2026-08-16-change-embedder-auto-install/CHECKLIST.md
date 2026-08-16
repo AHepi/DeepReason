@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=16 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=17 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -486,10 +486,32 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       NOT contain `(fallback)`, so the alarm word cannot decay into
       decoration.
 
-- [ ] 16. (S6, R8, A3) Decorate the run's terminal summary at the print
+- [x] 16. (S6, R8, A3) Decorate the run's terminal summary at the print
       site in `_cmd_reason` (`cli/main.py`, beside the existing
       `payload["run_id"]`), leaving `run-result.json` untouched.
       done-when: `grep -n 'payload\["embedder"\]' src/deepreason/cli/main.py` → a hit adjacent to the `run_id` decoration, and `git diff --stat` shows no change under `src/deepreason/runtime/` or to any durable-sidecar writer
+
+      PROOF — the decoration sits beside the two that were already there:
+
+          2401:    payload["run_id"] = prepared.managed_run_id
+          2403:        payload["evidence_dossier_digest"] = dossier_digest
+          2409:    payload["embedder"] = embedder_summary(Harness(accepted.root, read_only=True))
+
+      PROOF — no durable record format moved:
+
+          $ git diff --stat d52c739ff -- src/deepreason/runtime/ \
+              src/deepreason/application/text_runs.py \
+              src/deepreason/application/models.py \
+              src/deepreason/invariants.py src/deepreason/harness.py
+          (empty)
+
+      `run-result.json` on disk is untouched, `TextRunTerminalResultV1`'s
+      strict schema is untouched, and `verify_root` sees nothing new.
+      This is the smallest reading recorded as A3: the geometry is
+      ALREADY in the log as Measure events — what was missing was a
+      surface showing it to whoever launched the run, which is a
+      presentation gap, not a record gap. The root is opened read-only,
+      so reading a run's own result cannot repair (i.e. destroy) it.
 
 - [ ] 17. (S6, S9) Prove the two step-13 tests now pass and the rest of
       the results suite is unmoved.

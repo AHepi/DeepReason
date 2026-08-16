@@ -2323,6 +2323,7 @@ def _cmd_reason(args) -> int:
 
     from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
     from deepreason.application.intents import start_text_run_intent
+    from deepreason.application.results import embedder_summary
     from deepreason.preparation import (
         PUBLIC_DEFAULT_CYCLES,
         PUBLIC_DEFAULT_TOKEN_BUDGET,
@@ -2400,6 +2401,12 @@ def _cmd_reason(args) -> int:
     payload["run_id"] = prepared.managed_run_id
     if dossier_digest is not None:
         payload["evidence_dossier_digest"] = dossier_digest
+    # Presentation, not record: `run-result.json` on disk is untouched. The
+    # geometry is already IN the log as Measure events; what was missing was
+    # any surface that showed it to whoever launched the run. Derived here
+    # beside run_id for the same reason run_id is — the durable sidecar is a
+    # published artifact and this is a courtesy for the person reading stdout.
+    payload["embedder"] = embedder_summary(Harness(accepted.root, read_only=True))
     print(json.dumps(payload, indent=2, sort_keys=True))
     return terminal.exit_code()
 
