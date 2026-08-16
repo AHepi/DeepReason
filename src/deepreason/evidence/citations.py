@@ -28,6 +28,7 @@ EVIDENCE_REF_AMBIGUOUS = "EVIDENCE_REF_AMBIGUOUS"
 EVIDENCE_REF_TIER_INELIGIBLE = "EVIDENCE_REF_TIER_INELIGIBLE"
 EVIDENCE_QUOTE_MISMATCH = "EVIDENCE_QUOTE_MISMATCH"
 EVIDENCE_BLOCK_UNRECOVERABLE = "EVIDENCE_BLOCK_UNRECOVERABLE"
+EVIDENCE_REF_NOT_EXPOSED = "EVIDENCE_REF_NOT_EXPOSED"
 
 
 class CitationIntegrityError(ValueError):
@@ -50,6 +51,7 @@ class EvidenceCitationCheckV1(BaseModel):
         "EVIDENCE_REF_TIER_INELIGIBLE",
         "EVIDENCE_QUOTE_MISMATCH",
         "EVIDENCE_BLOCK_UNRECOVERABLE",
+        "EVIDENCE_REF_NOT_EXPOSED",
     ]
     block_ref: str = Field(min_length=1, max_length=64)
     block_id: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -123,6 +125,7 @@ def check_candidate_citations(
     *,
     extra_blocks=(),
     dossiers=(),
+    exposed_block_ids=None,
 ) -> tuple[EvidenceCitationCheckV1, ...]:
     """Check every claimed citation of one candidate; one outcome per claim.
 
@@ -136,6 +139,13 @@ def check_candidate_citations(
     have made evidence cumulative; each was loaded and checked against its
     own digest, so a citation verified against the first dossier verifies
     identically after any number of later ones.
+    ``exposed_block_ids``, when supplied, is the set of block ids the CALL's
+    own context-exposure receipt records — the bytes the model could actually
+    read. A citation resolving outside it is `EVIDENCE_REF_NOT_EXPOSED`: the
+    block is admitted and the id is real, but nothing in this run showed it to
+    this call, so a quote of it is a claim about bytes the model was not given
+    (P4 layer 3, R62). Omitting the argument leaves every outcome exactly as it
+    was before, so a caller opts into the binding rather than inheriting it.
     """
 
     checks: list[EvidenceCitationCheckV1] = []
@@ -177,6 +187,20 @@ def check_candidate_citations(
                         "cited reference matches more than one admitted block"
                         if failure == EVIDENCE_REF_AMBIGUOUS
                         else "cited reference matches no admitted block"
+                    ),
+                )
+            )
+            continue
+        if exposed_block_ids is not None and block.id not in exposed_block_ids:
+            checks.append(
+                EvidenceCitationCheckV1(
+                    code=EVIDENCE_REF_NOT_EXPOSED,
+                    block_ref=ref.block,
+                    block_id=block.id,
+                    quoted=quoted,
+                    detail=(
+                        "cited block is admitted but was not exposed to this "
+                        "call, so its bytes were never shown to the model"
                     ),
                 )
             )
@@ -259,6 +283,7 @@ __all__ = [
     "EVIDENCE_QUOTE_MISMATCH",
     "EVIDENCE_REF_AMBIGUOUS",
     "EVIDENCE_REF_TIER_INELIGIBLE",
+    "EVIDENCE_REF_NOT_EXPOSED",
     "EVIDENCE_REF_UNKNOWN_BLOCK",
     "EVIDENCE_REFS_UNBOUND",
     "CitationIntegrityError",

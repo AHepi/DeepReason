@@ -34,6 +34,11 @@ class ContextNamespace(str, Enum):
     SOURCE = "source"
     SIMULATION = "simulation"
     SCRATCH = "scratch"
+    # Citable admitted evidence blocks. Kept out of SOURCE because the
+    # semantic-retrieval contract (llm/wire.py) lets a model REQUEST context by
+    # visible SRC_### alias, and a citable block is not requestable — it is
+    # already rendered into the prompt.
+    EVIDENCE = "evidence"
 
 
 class RouteSeatModelClassificationV1(WorkflowRecord):
@@ -125,7 +130,7 @@ class WorkTransitionKind(str, Enum):
 
 class VisibleContextItemV1(WorkflowRecord):
     namespace: ContextNamespace
-    alias: str = Field(pattern=r"^(SRC|SIM|SCR)_[0-9]{3,}$")
+    alias: str = Field(pattern=r"^(SRC|SIM|SCR|EVD)_[0-9]{3,}$")
     object_ref: str = Field(min_length=1, max_length=512)
     content_sha256: str = Field(pattern=_DIGEST)
     planned_bytes: int = Field(ge=0, le=64 * 1024 * 1024)
@@ -136,6 +141,7 @@ class VisibleContextItemV1(WorkflowRecord):
             ContextNamespace.SOURCE: "SRC_",
             ContextNamespace.SIMULATION: "SIM_",
             ContextNamespace.SCRATCH: "SCR_",
+            ContextNamespace.EVIDENCE: "EVD_",
         }[self.namespace]
         if not self.alias.startswith(expected):
             raise ValueError("visible alias belongs to another context namespace")
@@ -211,6 +217,7 @@ class ContextPackPlanV1(IdentifiedWorkflowRecord):
         "simulation",
         "simulation_result",
         "combined",
+        "citable",
     ]
     items: tuple[VisibleContextItemV1, ...] = ()
     maximum_bytes: int = Field(ge=0, le=64 * 1024 * 1024)

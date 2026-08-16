@@ -73,11 +73,22 @@ PREMISE_REFUTED = "premise-refuted"          # the premise was shown wrong
 PREMISE_UNACCREDITED = "premise-unaccredited"  # the premise lost its support
 
 
-def attribution_content(problem_id: str, premise_id: str) -> str:
-    """Canonical content for an attribution artifact."""
-    return json.dumps(
-        {"problem": problem_id, "premise": premise_id}, sort_keys=True
-    )
+PREMISE_CITATION_SCHEMA = "premise-citation-record.v1"
+
+
+def attribution_content(
+    problem_id: str, premise_id: str, *, citation_ref: str | None = None
+) -> str:
+    """Canonical content for an attribution artifact.
+
+    The citation key appears only when there IS one, so an attribution filed
+    without citations keeps the content address it had before P4 and a repeated
+    filing stays idempotent across the change.
+    """
+    body = {"problem": problem_id, "premise": premise_id}
+    if citation_ref is not None:
+        body["citation"] = citation_ref
+    return json.dumps(body, sort_keys=True)
 
 
 def resolution_content(
@@ -244,13 +255,52 @@ def retired_problems(harness) -> set[str]:
     }
 
 
-def file_premise(harness, problem_id: str, premise_text: str, *, provenance=None):
+def citation_record_content(problem_id: str, checks) -> str:
+    """Canonical content for one verified-citation record."""
+    return json.dumps(
+        {
+            "schema": PREMISE_CITATION_SCHEMA,
+            "problem": problem_id,
+            "citations": sorted(
+                {(check.block_id, check.block_ref) for check in checks}
+            ),
+        },
+        sort_keys=True,
+    )
+
+
+def file_premise_citations(harness, problem_id: str, checks, *, provenance=None):
+    """Register the admitted-evidence record a premise attribution rests on.
+
+    Only VERIFIED checks reach here, and the artifact records the blocks rather
+    than the model's prose about them: what the attribution comes to depend on
+    is the byte-checked citation, not the sentence that claimed it.
+    """
+    verified = [check for check in checks if check.verified]
+    if not verified:
+        return None
+    return harness.create_artifact(
+        citation_record_content(problem_id, verified),
+        codec="json",
+        provenance=provenance,
+    )
+
+
+def file_premise(
+    harness, problem_id: str, premise_text: str, *, provenance=None, citation_ref=None
+):
     """Register the premise X and the attribution rho. Returns (X, rho).
 
     Both are ordinary artifacts, so both are attackable (P6), and X carries the
     rent battery so demarcation adjudicates it without anyone writing an attack.
     Content-addressed ids make a repeated filing idempotent rather than a
     duplicate.
+
+    `citation_ref` names an admitted-citation record, and the attribution
+    DEPENDS on it (R62's fourth layer): if the citation record falls, the
+    attribution loses its support. That is the one role the premise itself may
+    never have — depending on the premise would suspend the attribution the
+    moment the premise fell, erasing the relation that identifies the orphan.
     """
     harness.register_commitment(PREMISE_RENT)
     harness.register_commitment(ATTRIBUTION_COMMITMENT)
@@ -259,14 +309,19 @@ def file_premise(harness, problem_id: str, premise_text: str, *, provenance=None
         interface=Interface(commitments=[PREMISE_RENT.id]),
         provenance=provenance,
     )
+    refs = [
+        # MENTION, never DEPENDENCE: law 9.4'. presupposition_wf refuses the
+        # other role, so this is guarded rather than merely intended.
+        Ref(target=premise.id, role=RefRole.MENTION)
+    ]
+    if citation_ref is not None:
+        refs.append(Ref(target=citation_ref, role=RefRole.DEPENDENCE))
     attribution = harness.create_artifact(
-        attribution_content(problem_id, premise.id),
+        attribution_content(problem_id, premise.id, citation_ref=citation_ref),
         codec="json",
         interface=Interface(
             commitments=[ATTRIBUTION_COMMITMENT.id],
-            # MENTION, never DEPENDENCE: law 9.4'. presupposition_wf refuses the
-            # other role, so this is guarded rather than merely intended.
-            refs=[Ref(target=premise.id, role=RefRole.MENTION)],
+            refs=refs,
         ),
         provenance=provenance,
     )

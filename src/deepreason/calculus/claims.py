@@ -90,6 +90,10 @@ class PremiseAttributionV1(_Body):
     problem_subject_ref: str
     premise_ref: str
     derivation_manifest_ref: str | None = None
+    # The admitted-citation record this attribution rests on, when it cites
+    # evidence at all. Optional because a run with no dossier bound has nothing
+    # to cite and the all-configurations law forbids refusing it (R62).
+    citation_ref: str | None = None
 
 
 _MODELS: dict[str, type[_Body]] = {

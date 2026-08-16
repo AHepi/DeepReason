@@ -32,7 +32,9 @@ from deepreason.evidence.dossier import (
     pack_dossier,
 )
 from deepreason.evidence.render import (
+    CitableLegend,
     attach_bound_evidence,
+    citable_legend,
     render_citable_blocks,
     render_dossier_pack,
 )
@@ -60,6 +62,8 @@ __all__ = [
     "load_evidence_dossier",
     "load_run_input",
     "pack_dossier",
+    "CitableLegend",
+    "citable_legend",
     "render_citable_blocks",
     "render_dossier_pack",
     "stage_attached_source",

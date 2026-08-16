@@ -509,10 +509,35 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
 )
 
 
+# Prefix families declared under the Rung 1b-i contract. Separate from
+# _PREFIX_MEANINGS for the same reason _DECLARED is separate from
+# _SIGNAL_MEANINGS: that dict is the pre-contract migration pool and every
+# entry in it carries `unspecified`, which a new signal may not.
+_DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
+    SignalDeclaration(
+        name="premise-citation:",
+        unit="event",
+        semantics="one deterministic check of a citation a PREMISE "
+                  "attribution claimed (suffix = typed outcome code; inputs: "
+                  "[signal, block id or claimed ref, problem id]). Distinct "
+                  "from evidence-citation in its SUBJECT and in its BINDING: "
+                  "the subject is the problem's presupposition rather than a "
+                  "candidate, and the check resolves against the blocks that "
+                  "call's own exposure receipt records, so a real admitted "
+                  "block the call was never shown records NOT_EXPOSED rather "
+                  "than verifying. A verified check is not support for the "
+                  "premise — it says the quoted bytes are the admitted bytes, "
+                  "and nothing about whether the premise is true",
+        staleness="permanent",
+    ),
+)
+
+
 # The declarations are the contract; these two are derived views of it.
 SIGNAL_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_SIGNAL_MEANINGS)
 SIGNAL_DECLARATIONS.update({d.name: d for d in _DECLARED})
 PREFIX_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_PREFIX_MEANINGS)
+PREFIX_DECLARATIONS.update({d.name: d for d in _DECLARED_PREFIXES})
 
 SIGNALS: dict[str, str] = {n: d.semantics for n, d in SIGNAL_DECLARATIONS.items()}
 PREFIXES: dict[str, str] = {n: d.semantics for n, d in PREFIX_DECLARATIONS.items()}

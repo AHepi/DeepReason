@@ -80,6 +80,27 @@ def _union_blocks(dossiers) -> tuple:
     return tuple(blocks)
 
 
+def _exposed_block_ids(authorization) -> frozenset[str] | None:
+    """The blocks THIS call's exposure receipt records, or None if untyped.
+
+    None is not "no blocks": it means the call has no exposure receipt at all
+    (the pre-v6 path), and the citation checker must then behave exactly as it
+    did before P4. A v6 call that exposed no evidence returns an empty set, and
+    an empty set correctly refuses every citation.
+    """
+
+    from deepreason.workflow.transaction import ContextNamespace
+
+    receipt = getattr(authorization, "exposure_receipt", None)
+    if receipt is None:
+        return None
+    return frozenset(
+        item.object_ref
+        for item in receipt.exposed_items
+        if item.namespace == ContextNamespace.EVIDENCE
+    )
+
+
 def root_problem_family(state, problem_id: str) -> str:
     """Stable provenance-root family key for anti-relapse domains (RC3).
 
@@ -1342,17 +1363,22 @@ def conj(
                     dossiers=bound_dossiers,
                 )
     citable_evidence_context = None
+    citable_blocks_shown: tuple = ()
     if active_v5 or active_v6:
         from deepreason.capabilities.research import consumed_research_blocks
-        from deepreason.evidence import render_citable_blocks
+        from deepreason.evidence import citable_legend
 
-        citable_evidence_context = render_citable_blocks(
-            (
-                _union_blocks(bound_dossiers) if bound_dossier is not None else ()
-            )
-            + consumed_research_blocks(harness),
+        # The dossier is bound to the RUN, not to the seed problem. Gating this
+        # on `bound_dossier` — which is set only for an epoch problem — left
+        # every DERIVED problem reasoning about the run's evidence while unable
+        # to name a single block the §4 checker resolves (P4, R62).
+        legend = citable_legend(
+            _union_blocks(bound_dossiers) + consumed_research_blocks(harness),
             harness.blobs,
         )
+        if legend is not None:
+            citable_evidence_context = legend.text
+            citable_blocks_shown = legend.shown
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1624,6 +1650,38 @@ def conj(
                         rendered_bytes=rendered_bytes,
                     )
                 )
+        # P4 layer 1. Two filters, and both are load-bearing: `shown` drops a
+        # block the legend could not render, and the pack scan drops a block
+        # whose line section allocation compressed out. The receipt is built
+        # from what survived BOTH, never from the block universe — the same
+        # discipline the dossier plan above learned from a live selfstudy
+        # crash, applied before it can cost a run.
+        exposed_blocks = tuple(
+            block for block in citable_blocks_shown if f"[{block.id[:16]}]" in pack
+        )
+        if exposed_blocks:
+            # The legend is one indivisible section, so its bytes are booked
+            # once, on the first item.
+            rendered_bytes = len(citable_evidence_context.encode("utf-8"))
+            citable_items = tuple(
+                VisibleContextItemV1(
+                    namespace=ContextNamespace.EVIDENCE,
+                    alias=f"EVD_{index:03d}",
+                    object_ref=block.id,
+                    content_sha256=block.text_sha256,
+                    planned_bytes=(rendered_bytes if index == 1 else 0),
+                )
+                for index, block in enumerate(exposed_blocks, 1)
+            )
+            transaction_plans.append(
+                transaction_service.context_plan(
+                    transaction_preparation,
+                    plan_kind="citable",
+                    items=citable_items,
+                    maximum_bytes=rendered_bytes,
+                    rendered_bytes=rendered_bytes,
+                )
+            )
         if simulation_policy.enabled and simulation_policy.input_catalog:
             rendered_bytes = len(v6_simulation_rendered_text.encode("utf-8"))
             simulation_items = tuple(
@@ -2323,7 +2381,14 @@ def conj(
                 bound_dossier,
                 harness.blobs,
                 extra_blocks=consumed_research_blocks(harness),
-                dossiers=bound_dossiers if bound_dossier is not None else (),
+                dossiers=bound_dossiers,
+                # P4 layer 3: read the exposed set from the RECEIPT, not from
+                # the variable that rendered the legend. Layers 1 and 3 have to
+                # agree because they read the same record — agreeing because
+                # one author wrote both is not a property that survives.
+                exposed_block_ids=_exposed_block_ids(
+                    transaction_context_authorization
+                ),
             ):
                 harness.record_measure(
                     inputs=[

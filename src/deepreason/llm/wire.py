@@ -49,6 +49,7 @@ from deepreason.llm.contracts import (
     ConjectureCandidate,
     ConjecturerOutput,
     EvidenceRefClaimV1,
+    QuotedEvidenceRefV1,
     DefenderOutput,
     JudgeRuling,
     PairwiseRuling,
@@ -2335,12 +2336,20 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         return model.model_validate(values)
 
 
+class QuotedEvidenceWireV1(StrictWireModel):
+    block: str = Field(pattern=r"^[0-9a-f]{12,64}$")
+    quote: str = Field(min_length=1, max_length=2_000)
+
+
 class BatchCriticCaseWireV2(StrictWireModel):
     target_alias: str
     attack: bool
     case: str = ""
     counterexample: list[Any] | None = None
     premise: str | None = None
+    premise_evidence: list[QuotedEvidenceWireV1] | None = Field(
+        default=None, max_length=2
+    )
 
 
 class BatchCriticWireV2(StrictWireModel):
@@ -2442,6 +2451,11 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
                     case=item.case,
                     counterexample=item.counterexample,
                     premise=item.premise,
+                    premise_evidence=[
+                        QuotedEvidenceRefV1(block=ref.block, quote=ref.quote)
+                        for ref in (item.premise_evidence or ())
+                    ]
+                    or None,
                 )
                 for item in wire.cases
             ]
@@ -2455,6 +2469,9 @@ class CompactCritic(StrictWireModel):
     cited_input_aliases: list[str] = Field(default_factory=list)
     counterexample: list[Any] | None = None
     premise: str | None = None
+    premise_evidence: list[QuotedEvidenceWireV1] | None = Field(
+        default=None, max_length=2
+    )
 
 
 class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
@@ -2500,6 +2517,11 @@ class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
             case="\n".join(parts),
             counterexample=wire.counterexample,
             premise=wire.premise,
+            premise_evidence=[
+                QuotedEvidenceRefV1(block=ref.block, quote=ref.quote)
+                for ref in (wire.premise_evidence or ())
+            ]
+            or None,
         )
 
 

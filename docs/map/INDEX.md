@@ -44,6 +44,7 @@ than you need.
 | `SUB-capabilities.md` | simulation and research lifecycles. State digests are **frozen** |
 | `SUB-workflow.md` | the v6 transactional work lifecycle, replay, recovery |
 | `SUB-bridge.md` | the grounded-application bridge: ledger, compose, evidence packs |
+| `SUB-evidence.md` | attached dossiers, admitted blocks, and byte-checked citations |
 | `SUB-verification.md` | `verify_root`, replay validation, epistemic checks. **Frozen** |
 | `SUB-manifest.md` | RunManifest schema and validators, qualification. **Frozen** |
 | `SUB-evaluation.md` | programs, oracles, measures, informal trials — where formal meets informal |

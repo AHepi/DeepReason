@@ -79,6 +79,7 @@ warrant.
 | Counterexample admission or its retry reason | `try_counterexample`; `Config.CX_RETRY_MAX` | `tests/test_criticism_authority.py::test_execution_counterexample_still_refutes_under_observe_only` |
 | Which generators/properties `crit_fuzz` probes with | `rules/experiment.py` `accepted_generators`/`active_properties`/`promoted_properties` | `tests/test_experiment.py::test_refuted_generators_are_never_used` |
 | Whether criticism may read the scratchpad | `DR-SEAM-rules-x-scratch` — a seam change, not isolated; follow `docs/map/REC-change-a-seam.md` | `tests/test_prose_refutation_boundaries.py -k scratch` |
+| What a filed premise may cite, and how the citation is checked | `_file_attribution` / `_check_premise_citations` here; the checker itself is `DR-SUB-evidence` | `tests/test_p4_citable_evidence.py -k quote` |
 
 ## Traps
 
@@ -98,3 +99,18 @@ without being re-derived here. Socket-specific:
   `crit.py` would pass a naive check and still couple them; the single
   legitimate appearance of the word is `scratch_fence_seq`, ordering only.
 `check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence -q`
+
+- **This socket can now CITE, and a citation the critic never saw does not
+  verify.** Under a standing premise invitation the pack carries the admitted-
+  block legend and the contract carries `premise_evidence`, whose quote cannot
+  be null. The check resolves against the blocks THIS call's exposure receipt
+  records, so a real block id quoted from memory or from another call's context
+  is `EVIDENCE_REF_NOT_EXPOSED` rather than a pass. A verified citation becomes
+  an artifact the attribution DEPENDS on; an unverified one becomes a Measure
+  and grounds nothing — the premise is still filed either way, because a bad
+  citation is not a reason to lose the presupposition (P4, R62).
+`check: python -m pytest tests/test_p4_citable_evidence.py -k "quote or attribution" -q && python -c "
+from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase as B
+for model in (O, B):
+    assert 'premise_evidence' in model.model_fields, sorted(model.model_fields)
+"`

@@ -726,17 +726,29 @@ def _criticism_contract(harness, manifest, item, preparation, payload):
         "critic attempt index differs",
     )
     _authority(isinstance(payload.get("phase"), str) and payload["phase"], "critic phase missing")
-    exposed = item.exposure.exposed_items
+    # The TARGET catalog is the source namespace, exactly and only. Citable
+    # evidence blocks (P4) ride in their own namespace and are checked against
+    # the dossier rather than against the artifact store, so narrowing both
+    # assertions to source entries is what keeps a call that exposed evidence
+    # from recovering differently than it dispatched.
+    exposed = [
+        entry
+        for entry in item.exposure.exposed_items
+        if entry.namespace == ContextNamespace.SOURCE
+    ]
+    _authority(
+        all(
+            entry.namespace in {ContextNamespace.SOURCE, ContextNamespace.EVIDENCE}
+            for entry in item.exposure.exposed_items
+        ),
+        "critic exposure contains an unexpected namespace",
+    )
     aliases = {entry.alias: entry.object_ref for entry in exposed}
     expected_aliases = {
         f"SRC_{index:03d}": target_id
         for index, target_id in enumerate(preparation.target_refs, 1)
     }
     _authority(aliases == expected_aliases, "critic exposure catalog differs from targets")
-    _authority(
-        all(entry.namespace == ContextNamespace.SOURCE for entry in exposed),
-        "critic exposure contains a non-source namespace",
-    )
     for entry in exposed:
         _authority(
             entry.content_sha256 == _artifact_digest(harness, entry.object_ref),

@@ -812,3 +812,29 @@ each with priced options and one recommendation. Titles only, here:
 | D-7 | ~~Which park was "the signal-contract park"?~~ **ANSWERED 2026-08-14 — option (iii); the design is in REQUEST.md Amendment 2, reconciled as §2L, placed at Rungs 1 + 1b.** |
 | **D-8** *(added by Amendment 1)* | **When a premise is contentful but wrong-by-argument — not a category error — what refutes it, given that prose changes no status by default and the one trial mode that would is cross-family?** (drift row W-1) |
 | **ND-2** *(added by Amendment 4)* | **When a fallen premise is REINSTATED, what happens to the orphan mark — derived-view deactivation with the exit episode retained, or a fourth `revalidate` resolution?** (Formalization §1's explicitly recorded gap) |
+
+## §2Q — P4's scheduling, superseding the "absorbed by Rung 5" row (2026-08-16)
+
+The row above records P4's render half as absorbed by Rung 5's deterministic
+section allocation, with P4b parked. That disposition is **SUPERSEDED** by the
+operator's own board sentence of 2026-08-15 — "P4 before any live judgment; A19
+queued behind it" — which schedules P4 as its own tranche ahead of Rung 3b, and
+by R62, which gives it a four-line acceptance condition Rung 5 was never going
+to discharge.
+
+What actually landed (`experiments/2026-08-16-change-p4-citable-evidence/`) is
+all four lines: the citable legend reaches every problem and its blocks are
+named in the call's own exposure receipt; a quoted subtype exists whose quote
+cannot be null; admission byte-checks a citation against the blocks THAT CALL
+was shown; and a premise attribution that cites verified evidence depends on the
+citation record. **P4b — the "optionally with a quote" wording on the OLD
+conjecturer contract — remains parked**, unchanged: this tranche changed what
+that contract's citations are CHECKED against, never what its schema requires,
+because R62 forbids mutating the old V1 globally.
+
+One thing Rung 5 still owes, and it is the reason the absorption row was not
+wrong so much as incomplete: what a problem that INHERITED its context may cite
+is still decided by re-rendering the legend per call, not by a deterministic
+section allocation over inherited sets. P4 made every problem's citable universe
+the same (the run's), which removes the sharp edge; Rung 5 still owns the
+allocation question.

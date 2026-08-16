@@ -290,6 +290,7 @@ def _v6_transactional_batch_call(
     pack_factory: Callable[[], str],
     dispatch_authority: str | None = None,
     recover_existing: bool = False,
+    citable_blocks: tuple = (),
 ) -> tuple[BatchCriticOutput, object]:
     """Authorize and terminalize one v6 critic provider boundary.
 
@@ -411,13 +412,41 @@ def _v6_transactional_batch_call(
             )
             for index, (alias, target_id) in enumerate(aliases.aliases.items())
         )
-        plan = service.context_plan(
-            preparation,
-            plan_kind="dossier",
-            items=items,
-            maximum_bytes=rendered_bytes,
-            rendered_bytes=rendered_bytes,
+        plans = [
+            service.context_plan(
+                preparation,
+                plan_kind="dossier",
+                items=items,
+                maximum_bytes=rendered_bytes,
+                rendered_bytes=rendered_bytes,
+            )
+        ]
+        # P4 layer 1 for the criticism seat. Filtered against the RENDERED pack
+        # because the legend section is droppable: an invitation the budget
+        # could not afford takes its legend with it, and a receipt naming
+        # blocks the critic never saw would be a false record.
+        exposed_blocks = tuple(
+            block for block in citable_blocks if f"[{block.id[:16]}]" in pack
         )
+        if exposed_blocks:
+            plans.append(
+                service.context_plan(
+                    preparation,
+                    plan_kind="citable",
+                    items=tuple(
+                        VisibleContextItemV1(
+                            namespace=ContextNamespace.EVIDENCE,
+                            alias=f"EVD_{index:03d}",
+                            object_ref=block.id,
+                            content_sha256=block.text_sha256,
+                            planned_bytes=(rendered_bytes if index == 1 else 0),
+                        )
+                        for index, block in enumerate(exposed_blocks, 1)
+                    ),
+                    maximum_bytes=rendered_bytes,
+                    rendered_bytes=rendered_bytes,
+                )
+            )
         prompt, preview_contract, preview_lease, maximum_tokens = adapter.preview_request(
             "argumentative_critic",
             pack,
@@ -432,7 +461,7 @@ def _v6_transactional_batch_call(
             raise ValueError("v6 critic preview changed frozen call authority")
         authorized = service.issue(
             preparation,
-            plans=(plan,),
+            plans=tuple(plans),
             prompt=prompt,
             max_tokens=maximum_tokens,
         )
@@ -1210,7 +1239,111 @@ def _premise_invited_problem(harness, target_id: str) -> str | None:
     return None
 
 
-def _file_attribution(harness, target_id: str, premise_text, *, critic_school_id=None):
+def _citable_blocks(harness, run_manifest) -> tuple:
+    """The run's citable universe for a pack carrying the premise invitation.
+
+    BOUND-DOSSIER BLOCKS ONLY. Consumed research fetches are citable in the
+    conjecture pack and are deliberately absent here: reading them would make
+    `crit.py` import the capabilities package, and `DR-SEAM-capabilities-x-rules`
+    holds that `conj` is the only rules module that may. The cost is bounded and
+    visible — a premise cannot cite a mid-run fetch — and it is a smaller price
+    than a second rules-side door into the capability controllers.
+    """
+
+    policy = getattr(
+        getattr(run_manifest, "inquiry_capability_policy", None),
+        "attached_evidence",
+        None,
+    )
+    if run_manifest is not None and (policy is None or not policy.enabled):
+        return ()
+    from deepreason.amendment.state import union_citable_blocks
+
+    return union_citable_blocks(harness.root)
+
+
+def _citable_legend(harness, run_manifest=None):
+    """The rendered legend, or None when the run has nothing citable.
+
+    A None manifest is not "no policy": the dossier is bound to the ROOT, so a
+    caller without a manifest in hand still sees exactly the blocks this run
+    admitted, and a run that bound none sees nothing.
+    """
+    from deepreason.evidence import citable_legend
+
+    blocks = _citable_blocks(harness, run_manifest)
+    return citable_legend(blocks, harness.blobs) if blocks else None
+
+
+def _exposed_block_ids_for_call(harness, llm_call) -> frozenset[str] | None:
+    """The evidence blocks the receipt for THIS prompt records.
+
+    Bound by prompt digest rather than by a threaded variable: the exposure
+    receipt and the provider call name the same bytes, so a match proves the
+    blocks were in the prompt that produced this output — not merely that one
+    function rendered both. None means the call has no exposure receipt at all
+    (the pre-v6 path), which leaves the citation checker exactly as it was.
+    """
+
+    from deepreason.workflow.transaction import ContextNamespace
+
+    prompt_ref = getattr(llm_call, "prompt_ref", None)
+    if not prompt_ref:
+        return None
+    for item in harness.workflow_state.transaction_work.values():
+        exposure = getattr(item, "exposure", None)
+        if exposure is None or exposure.prompt_sha256 != prompt_ref:
+            continue
+        return frozenset(
+            entry.object_ref
+            for entry in exposure.exposed_items
+            if entry.namespace == ContextNamespace.EVIDENCE
+        )
+    return None
+
+
+def _check_premise_citations(harness, problem_id: str, refs, llm_call):
+    """Byte-check the quoted citations a premise filing carried (R62).
+
+    Every outcome is a Measure, verified or not: a failed citation is evidence
+    about the call, and a critic that quoted bytes it was never shown is a fact
+    the record should carry rather than a silence.
+    """
+    if not refs:
+        return ()
+    from deepreason.amendment.state import dossier_union
+    from deepreason.evidence.citations import check_candidate_citations
+
+    # The universe here is exactly what `_citable_blocks` may show — no research
+    # blocks, for the seam reason stated there. A premise citing one resolves to
+    # no admitted block and is recorded as such rather than silently accepted.
+    checks = check_candidate_citations(
+        tuple(refs),
+        None,
+        harness.blobs,
+        dossiers=dossier_union(harness.root),
+        exposed_block_ids=_exposed_block_ids_for_call(harness, llm_call),
+    )
+    for check in checks:
+        harness.record_measure(
+            inputs=[
+                f"premise-citation:{check.code}",
+                check.block_id or check.block_ref,
+                problem_id,
+            ]
+        )
+    return checks
+
+
+def _file_attribution(
+    harness,
+    target_id: str,
+    premise_text,
+    *,
+    critic_school_id=None,
+    premise_evidence=None,
+    llm_call=None,
+):
     """Register the premise and the attribution the critic named, if invited.
 
     Gated on the invitation and not on the field alone: an uninvited premise is
@@ -1219,7 +1352,7 @@ def _file_attribution(harness, target_id: str, premise_text, *, critic_school_id
     status (H1) -- the rent battery adjudicates the premise afterwards, on the
     ordinary path, and only the derived predicate marks anything.
     """
-    from deepreason.premises import file_premise
+    from deepreason.premises import file_premise, file_premise_citations
 
     text = (premise_text or "").strip()
     if not text:
@@ -1227,11 +1360,19 @@ def _file_attribution(harness, target_id: str, premise_text, *, critic_school_id
     problem_id = _premise_invited_problem(harness, target_id)
     if problem_id is None:
         return None
+    provenance = Provenance(role="critic", school=critic_school_id)
+    checks = _check_premise_citations(
+        harness, problem_id, premise_evidence or (), llm_call
+    )
+    citation = file_premise_citations(
+        harness, problem_id, checks, provenance=provenance
+    )
     file_premise(
         harness,
         problem_id,
         text,
-        provenance=Provenance(role="critic", school=critic_school_id),
+        provenance=provenance,
+        citation_ref=None if citation is None else citation.id,
     )
     harness.record_measure(
         inputs=["premise.attribution-filed.v1", problem_id, target_id]
@@ -1270,13 +1411,18 @@ def crit_argumentative(
         or coverage_observer is not None
     )
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
+    single_invitation = _premise_invited_problem(harness, target_id)
+    single_legend = _citable_legend(harness) if single_invitation is not None else None
     pack = render_crit_pack(
         target_id,
         harness.state,
         harness.commitments,
         harness.blobs,
         token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
-        premise_invitation=_premise_invited_problem(harness, target_id),
+        premise_invitation=single_invitation,
+        citable_evidence_context=(
+            None if single_legend is None else single_legend.text
+        ),
     )
     pack = _condition_pack(pack, school_prefix)
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
@@ -1300,7 +1446,12 @@ def crit_argumentative(
         # Before the attack branch: a critic may find no fault with the
         # candidate and still see that the QUESTION is malformed.
         _file_attribution(
-            harness, target_id, output.premise, critic_school_id=critic_school_id
+            harness,
+            target_id,
+            output.premise,
+            critic_school_id=critic_school_id,
+            premise_evidence=output.premise_evidence,
+            llm_call=llm_call,
         )
         if not output.attack or not output.case.strip():
             # No fault found: the call still spent tokens and must be logged once.
@@ -1515,6 +1666,13 @@ def crit_argumentative_batch(
                 critics.append(critic)
         return critics
 
+    batch_invitation = _batch_premise_invitation(harness, target_ids)
+    # Rendered ONCE, outside the factory: the same legend text must reach the
+    # pack and the exposure plan, and a factory that re-derived it could drift.
+    batch_legend = (
+        _citable_legend(harness, run_manifest) if batch_invitation is not None else None
+    )
+
     def primary_pack_factory() -> str:
         pack = render_batch_crit_pack(
             target_ids,
@@ -1524,7 +1682,10 @@ def crit_argumentative_batch(
             token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
             simulation_proposals=_filed_simulations(harness),
             simulation_enabled=_simulation_enabled(harness),
-            premise_invitation=_batch_premise_invitation(harness, target_ids),
+            premise_invitation=batch_invitation,
+            citable_evidence_context=(
+                None if batch_legend is None else batch_legend.text
+            ),
         )
         return _condition_pack(pack, school_prefix)
 
@@ -1638,6 +1799,9 @@ def crit_argumentative_batch(
                 pack_factory=pack_factory,
                 dispatch_authority=dispatch_authority,
                 recover_existing=resuming_atomic_decomposition,
+                citable_blocks=(
+                    () if batch_legend is None else batch_legend.shown
+                ),
             )
 
         incomplete = [
@@ -1876,7 +2040,12 @@ def _crit_argumentative_batch_result(
             continue
         ruled.add(case.target)
         _file_attribution(
-            harness, case.target, case.premise, critic_school_id=critic_school_id
+            harness,
+            case.target,
+            case.premise,
+            critic_school_id=critic_school_id,
+            premise_evidence=case.premise_evidence,
+            llm_call=llm_call,
         )
         if not case.attack or not case.case.strip():
             continue  # no fault found for this target: registers nothing

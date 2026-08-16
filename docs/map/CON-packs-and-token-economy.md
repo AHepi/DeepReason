@@ -74,7 +74,7 @@ tie-break is load-bearing in `render_crit_pack`: `target` and
 `target-support-chain` both sit at priority 4, and the chain follows the
 content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==15 and len(r)==10;assert r['target']==r['target-support-chain']==4"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==15 and len(r)==11;assert r['target']==r['target-support-chain']==4"`
 
 **Slow-changing sections precede volatile ones** so a provider prefix cache
 bills the repeated head at the cached rate — problem context and commitment

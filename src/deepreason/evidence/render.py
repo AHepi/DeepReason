@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from typing import NamedTuple
 
 from deepreason.evidence.models import (
     DossierPackReceiptV1,
@@ -165,16 +166,36 @@ def attach_bound_evidence(
     return attached
 
 
-__all__ = ["attach_bound_evidence", "render_dossier_pack"]
+__all__ = [
+    "CitableLegend",
+    "attach_bound_evidence",
+    "citable_legend",
+    "render_citable_blocks",
+    "render_dossier_pack",
+]
 
 
-def render_citable_blocks(
+class CitableLegend(NamedTuple):
+    """The legend text and the blocks whose bytes are actually in it.
+
+    Two fields rather than one because the receipt is built from ``shown``:
+    rendering drops a block whose bytes cannot be recovered, whose excerpt is
+    empty, or that falls past the cap, and it drops it SILENTLY so that
+    presentation never fails a pack. A receipt built from the input list would
+    therefore claim exposure that did not happen.
+    """
+
+    text: str
+    shown: tuple
+
+
+def citable_legend(
     blocks,
     blobs,
     *,
     maximum_blocks: int = 32,
     excerpt_chars: int = 160,
-) -> str | None:
+) -> CitableLegend | None:
     """Render the run's citable evidence blocks for a conjecture pack.
 
     The model can only byte-check-cite ids it can see. This legend lists
@@ -197,9 +218,9 @@ def render_citable_blocks(
         "artifact hashes and any other handles are rejected as unknown.",
         "",
     ]
-    shown = 0
+    shown: list = []
     for block in blocks:
-        if shown >= maximum_blocks:
+        if len(shown) >= maximum_blocks:
             break
         try:
             source = b"" if block.text is not None else blobs.get(block.source_sha256)
@@ -210,10 +231,17 @@ def render_citable_blocks(
         if not excerpt:
             continue
         lines.append(f"[{block.id[:16]}] {excerpt}")
-        shown += 1
-    if shown == 0:
+        shown.append(block)
+    if not shown:
         return None
-    remainder = len(blocks) - shown
+    remainder = len(blocks) - len(shown)
     if remainder > 0:
         lines.append(f"(+{remainder} further citable blocks not shown)")
-    return "\n".join(lines)
+    return CitableLegend(text="\n".join(lines), shown=tuple(shown))
+
+
+def render_citable_blocks(blocks, blobs, **kwargs) -> str | None:
+    """The legend text alone, for callers that expose nothing."""
+
+    legend = citable_legend(blocks, blobs, **kwargs)
+    return None if legend is None else legend.text

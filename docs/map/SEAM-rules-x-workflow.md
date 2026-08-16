@@ -54,7 +54,7 @@ every module under `rules/` loads no `deepreason.workflow.*` at all, and the
 rules stay testable against a fake harness with no v6 runtime present. The
 reverse arrow is three imports in two files, one of them at module scope
 (`anti_relapse`), because recovery cannot defer the gate it re-runs.
-`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==14, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 32 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
+`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==14, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 34 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
 
 ## Where it is expressed
 
@@ -78,6 +78,7 @@ reverse arrow is three imports in two files, one of them at module scope
 | Effect ordering (conjecture) | `rules/conj.py` | `register_batch` → `record_semantic_admission(admitted_refs=…registered…)` → `terminate` | the admission NAMES the artifacts the effect produced |
 | Effect ordering (criticism) | `rules/crit.py` | `_v6_transactional_batch_call` terminates, then `_crit_argumentative_batch_result` runs | the provider output is admitted before the caller-owned effect is applied |
 | Recovery, criticism | `workflow/nonconjecture_recovery.py` | `_recover_criticism_effect` → `rules/crit.py` appliers | `preparation.target_refs` are the targets, `input_refs` the coverage assignments |
+| Citable exposure | `rules/conj.py`, `rules/crit.py` | `context_plan(plan_kind="citable")` with `ContextNamespace.EVIDENCE` items | the admitted blocks a call was SHOWN are named in its exposure receipt, so a citation can be checked against what the model could read rather than against the whole dossier (P4, R62) |
 | Recovery, conjecture | `workflow/conjecture_recovery.py` | `_materialize_formal` → `anti_relapse` → `register_batch(rule=Rule.CONJ)` | the gate is re-run, not replayed; an artifact already present admits as `recovered-existing` |
 | Recovery, atomic child | `workflow/atomic_recovery.py` | `recover_atomic_child_output(harness, manifest, service, root_item, contract)` | the RULE hands its wire contract; the stored raw blob is re-validated with no adapter |
 | Idempotent re-application | `rules/crit.py` | `restart_safe` + `effect_source_call_seq` | two identical critic outputs from two transactions stay two effects |
@@ -341,3 +342,14 @@ of a canonical controller-v3 history).
   The generalisation is the one `DR-SEAM-llm-x-workflow` records about
   `retry_max`: a constraint whose violating case no fixture produces is tested by
   nothing.
+
+- **A new exposure namespace is a RECOVERY change before it is a dispatch
+  change.** P4 added `ContextNamespace.EVIDENCE` and `plan_kind="citable"` so a
+  call's citable blocks appear in its exposure receipt. The criticism recovery
+  path asserted that EVERY exposed entry was in the source namespace and that
+  the alias map equalled the target catalog exactly — both true until a critic
+  was shown evidence, and both would have refused the first resumed call that
+  had been. The assertions now scope to source-namespace entries, and the
+  namespace whitelist is explicit rather than implied.
+  (`experiments/2026-08-16-change-p4-citable-evidence/`)
+`check: python -m pytest tests/test_p4_citable_evidence.py::test_a_resumed_critic_tolerates_an_evidence_exposure_entry tests/test_v6_nonconjecture_recovery.py -q`

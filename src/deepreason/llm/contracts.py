@@ -32,6 +32,23 @@ class EvidenceRefClaimV1(BaseModel):
     quote: str | None = Field(default=None, min_length=1, max_length=2_000)
 
 
+class QuotedEvidenceRefV1(BaseModel):
+    """A citation that cannot be made without reproducing the bytes.
+
+    A SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional
+    quote is load-bearing for the conjecturer channel that already ships, and
+    tightening it globally would retroactively refuse citations that were legal
+    when they were recorded. The calculus claim channel is new and can be born
+    with the stronger rule (R62), so the requirement lives in the type rather
+    than in a prompt asking nicely.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    block: str = Field(pattern=r"^[0-9a-f]{12,64}$")
+    quote: str = Field(min_length=1, max_length=2_000)
+
+
 class ConjectureCandidate(BaseModel):
     content: str
     # Stated probability/typicality estimate for this candidate (§11.6).
@@ -72,6 +89,15 @@ class ArgumentativeCriticOutput(BaseModel):
     # harness reads the artifact's attack surface, so a presupposition with
     # nothing to forbid is what this field can honestly report.
     premise: str | None = None
+    # Citations grounding that presupposition, each one quoted (R62). Optional
+    # and absent-legal, exactly like `premise` and `counterexample` beside it: a
+    # solo run with no dossier bound has nothing to quote, and the
+    # all-configurations law forbids refusing it. What is impossible is an
+    # UNQUOTED entry. None rather than [] so an uncited case canonicalises to
+    # the same bytes it always did under `exclude_none`.
+    premise_evidence: list[QuotedEvidenceRefV1] | None = Field(
+        default=None, max_length=2
+    )
 
 
 class BatchCase(BaseModel):
@@ -84,6 +110,9 @@ class BatchCase(BaseModel):
     case: str = ""
     counterexample: list | None = None  # same semantics as the single contract
     premise: str | None = None          # same semantics as the single contract
+    premise_evidence: list[QuotedEvidenceRefV1] | None = Field(
+        default=None, max_length=2
+    )
 
 
 class BatchCriticOutput(BaseModel):

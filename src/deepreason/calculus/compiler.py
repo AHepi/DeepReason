@@ -41,10 +41,16 @@ def compile_interface(body) -> Interface:
             # fell, erasing the relation that identifies the orphan.
             Ref(target=body.premise_ref, role=RefRole.MENTION),
         ]
+        if body.citation_ref is not None:
+            # DEPENDENCE, and the reason is R62's fourth layer: an attribution
+            # that cites admitted evidence should lose its support when that
+            # evidence record falls. The premise stays a MENTION either way —
+            # this adds a support edge, it does not weaken the mention law.
+            refs.append(Ref(target=body.citation_ref, role=RefRole.DEPENDENCE))
         if body.derivation_manifest_ref is not None:
             # The manifest IS load-bearing for the attribution: if what the
             # attribution was derived from falls, the attribution should lose
-            # its support. That is a dependence, and the only one here.
+            # its support. That is a dependence.
             refs.append(
                 Ref(target=body.derivation_manifest_ref, role=RefRole.DEPENDENCE)
             )

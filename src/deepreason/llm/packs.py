@@ -87,7 +87,7 @@ _MACHINE_EVAL_NOTE = (
 )
 
 
-def premise_invitation_note(problem_id: str) -> str:
+def premise_invitation_note(problem_id: str, *, citable: bool = False) -> str:
     """The premise channel's invitation (premises.py, v2 Rung 2).
 
     Attention only, and it says so: declining carries no penalty, so nothing
@@ -105,6 +105,20 @@ def premise_invitation_note(problem_id: str) -> str:
         "presupposition in \"premise\". Leave it null otherwise; declining "
         "costs you nothing, and this never replaces your case against the "
         "target."
+    ) + (
+        # Only when blocks are actually listed below: asking for a quote a
+        # pack carries no source for would invite invention, which is the
+        # opposite of what the byte-check is for (R62).
+        (
+            " If admitted evidence bears on that presupposition, cite it in "
+            "\"premise_evidence\" as a block id from the CITABLE EVIDENCE "
+            "BLOCKS list together with an EXACT quote from that block. The "
+            "quote is byte-checked against the recorded bytes; an unquoted "
+            "citation cannot be made here, and a citation of a block this "
+            "call was not shown does not verify."
+        )
+        if citable
+        else ""
     )
 
 
@@ -585,6 +599,7 @@ def render_batch_crit_pack(
     simulation_proposals: tuple[tuple[str, str, str, str], ...] = (),
     simulation_enabled: bool = False,
     premise_invitation: str | None = None,
+    citable_evidence_context: str | None = None,
 ) -> str:
     """One critic pass over several targets (§14 batching): the commitment
     schemas — usually shared, since batch-mates come from one problem —
@@ -643,7 +658,14 @@ def render_batch_crit_pack(
     # standing invitation renders byte for byte what it rendered before this
     # section existed.
     if premise_invitation is not None:
-        lines += ["", premise_invitation_note(premise_invitation)]
+        lines += [
+            "",
+            premise_invitation_note(
+                premise_invitation, citable=bool(citable_evidence_context)
+            ),
+        ]
+        if citable_evidence_context:
+            lines += ["", citable_evidence_context]
     lines += [
         "",
         "DIRECTIVE: return exactly one entry per target id above — the "
@@ -837,6 +859,7 @@ def render_crit_pack(
     blobs,
     token_budget: int,
     premise_invitation: str | None = None,
+    citable_evidence_context: str | None = None,
 ) -> str:
     target = state.artifacts[target_id]
     # Commitments render BEFORE the target (angle 4): problem criteria lead
@@ -991,13 +1014,29 @@ def render_crit_pack(
         sections.append(
             _pack_section(
                 "premise-invitation",
-                premise_invitation_note(premise_invitation),
+                premise_invitation_note(
+                    premise_invitation, citable=bool(citable_evidence_context)
+                ),
                 6,
                 droppable=True,
                 compressible=True,
                 min_tokens=32,
             )
         )
+        if citable_evidence_context:
+            # Droppable with the invitation it serves, and never without it:
+            # a legend the critic can see while the invitation was dropped
+            # would list ids nothing asked it to cite.
+            sections.append(
+                _pack_section(
+                    "citable-evidence-blocks",
+                    citable_evidence_context,
+                    6,
+                    droppable=True,
+                    compressible=True,
+                    min_tokens=32,
+                )
+            )
     sections.append(
         _pack_section(
             "output-contract",

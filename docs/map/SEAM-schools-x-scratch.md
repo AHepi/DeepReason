@@ -147,13 +147,14 @@ rather than being an artifact of the critic having no context at all.
 `check: python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_rule_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch tests/test_prose_refutation_boundaries.py::test_the_defended_trial_imports_no_scratch_module tests/test_prose_refutation_boundaries.py::test_no_scratch_identifier_reaches_a_warrant_or_an_attack_edge -q && python -c "from deepreason.llm.firewall import EndpointLease as L, Route as T; from deepreason.rules.crit import _critic_execution as X; p=X(endpoint_lease=L(role='argumentative_critic',seat=1,route=T(endpoint_id='e',base_url='u',model_id='m',provider='p',family='f')), critic_school_id='school-3', critic_school_context={'id':'school-3','stance_text':'counterexample first'})[1]; assert 'school-3' in p and 'counterexample first' in p and 'scratch' not in p.lower()"`
 
 **Criticism cannot even declare a scratch context plan.** Every
-`ContextPackPlanV1` the criticism rule builds is `plan_kind="dossier"` — frozen
-evidence — and `conj.py` is the only rule that builds a `"scratch"` plan. The
-exposure ledger is the record of what a seat was shown, so this is not a habit
-of the current call sites: a criticism seat that showed scratch would have to
-mint a plan kind it never mints.
+`ContextPackPlanV1` the criticism rule builds is `plan_kind="dossier"` or
+`"citable"` — frozen evidence either way, the second being the admitted-block
+legend P4 added — and `conj.py` is the only rule that builds a `"scratch"`
+plan. The exposure ledger is the record of what a seat was shown, so this is
+not a habit of the current call sites: a criticism seat that showed scratch
+would have to mint a plan kind it never mints.
 
-`check: python -c "import ast, pathlib; kinds=lambda p: [k.value for n in ast.walk(ast.parse(pathlib.Path(p).read_text())) if isinstance(n, ast.Call) for k in n.keywords if k.arg=='plan_kind']; c=kinds('src/deepreason/rules/crit.py'); assert c, 'criticism builds no context pack plan at all'; assert all(isinstance(v, ast.Constant) and v.value=='dossier' for v in c), [ast.unparse(v) for v in c]; assert any(isinstance(v, ast.Constant) and v.value=='scratch' for v in kinds('src/deepreason/rules/conj.py'))"`
+`check: python -c "import ast, pathlib; kinds=lambda p: [k.value for n in ast.walk(ast.parse(pathlib.Path(p).read_text())) if isinstance(n, ast.Call) for k in n.keywords if k.arg=='plan_kind']; c=kinds('src/deepreason/rules/crit.py'); assert c, 'criticism builds no context pack plan at all'; assert all(isinstance(v, ast.Constant) and v.value in {'dossier','citable'} for v in c), [ast.unparse(v) for v in c]; assert any(isinstance(v, ast.Constant) and v.value=='scratch' for v in kinds('src/deepreason/rules/conj.py'))"`
 
 **The scratchpad does not know what a school IS.** `scratch/conjecture.py` is
 the only module under `scratch/` in which the word appears at all, and there it

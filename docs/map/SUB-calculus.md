@@ -95,4 +95,18 @@ found through `addr`.
   The union carries a `poietic.premise-attribution.v1` body that compiles to the
   same interface, and moving the channel onto it is a later step with its own
   regression obligations. Reading the two as one is the misreading to avoid.
-`check: ! grep -q "deepreason.calculus" src/deepreason/premises.py`
+  The two shapes are kept in step BY HAND, and P4 is the worked example: the
+  citation dependence R62 requires landed in both, as `citation_ref` on the
+  body and as the `citation_ref` keyword on `file_premise`. A change that lands
+  in one and not the other is the drift this row exists to catch.
+`check: ! grep -q "deepreason.calculus" src/deepreason/premises.py && python -c "
+from deepreason.calculus.claims import PremiseAttributionV1 as A
+from deepreason.calculus.compiler import compile_interface
+import inspect
+from deepreason.premises import file_premise
+assert 'citation_ref' in A.model_fields, sorted(A.model_fields)
+assert 'citation_ref' in inspect.signature(file_premise).parameters
+i = compile_interface(A(problem_subject_ref='s', premise_ref='x', citation_ref='c'))
+roles = {r.target: r.role.value for r in i.refs}
+assert roles == {'s': 'mention', 'x': 'mention', 'c': 'dependence'}, roles
+"`
