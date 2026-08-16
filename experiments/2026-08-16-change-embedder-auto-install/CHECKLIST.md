@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -18,7 +18,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
 
 ## Phase A — the dependency becomes core
 
-- [ ] 1. (S1, census) Resolve the census's highest-risk hit BEFORE
+- [x] 1. (S1, census) Resolve the census's highest-risk hit BEFORE
       changing anything: read `tests/test_schema_v3_consumers.py:102`
       and `tests/test_wheel_operational.py:4220` and record, in this
       file under the step, whether each derives its value from the live
@@ -26,6 +26,38 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       literal (MUST NOT MOVE).
       done-when: both classifications written into this checklist, each
       with the pasted source line.
+
+      **RESOLVED — both MUST NOT MOVE under S1.**
+
+      `tests/test_schema_v3_consumers.py` — the census's highest-risk
+      hit is NOT environment-derived. Both tests that assert on the
+      doctor embedder block force the answer themselves:
+
+          56:    monkeypatch.setattr("importlib.util.find_spec", lambda name: None)
+          109:   monkeypatch.setattr("importlib.util.find_spec", lambda name: None)
+
+      so `dependency_available: False` at line 102 is a monkeypatched
+      constant, immune to S1's packaging change. The risk the census
+      flagged does not exist.
+
+      `tests/test_wheel_operational.py:4220` — asserts one literal
+      about the wheel's package layout, not the dependency list:
+
+          4220:    assert 'packages = ["src/deepreason", "mini/minireason"]' in project
+
+      S1 edits `[project].dependencies` and
+      `[project.optional-dependencies]`, never
+      `[tool.hatch.build.targets.wheel]`. MUST NOT MOVE.
+
+      **NEWLY CLASSIFIED consumer, found by this step and recorded
+      before it can surprise step 7.** The same file asserts the
+      doctor embedder block by EXACT DICT EQUALITY
+      (`tests/test_schema_v3_consumers.py:102-110`,
+      `assert result["embedder"] == {...}`). S3's `warmup_command`
+      field will therefore move it — **EXPECTED TO MOVE at step 7, not
+      at steps 2-3**. The assertion is not weakened, only extended by
+      the one new key, which is what SPEC S3 predicted the field would
+      do.
 
 - [ ] 2. (S1) Move `fastembed>=0.3` from `[project.optional-
       dependencies].embed` into `[project].dependencies` in
