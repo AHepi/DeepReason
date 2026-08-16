@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=14 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=15 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -411,11 +411,42 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       stamp, and 2 carry NEITHER — the absence case is real committed
       history, not a constructed corner.
 
-- [ ] 14. (S6, R8) Add `NO_EMBEDDER_RECORD` to `ABSENCE_REASONS` and
+- [x] 14. (S6, R8) Add `NO_EMBEDDER_RECORD` to `ABSENCE_REASONS` and
       `embedder_summary(harness)` to
       `src/deepreason/application/results.py`, reading the log's
       `embedder` / `embedder-fallback` Measure events.
       done-when: `python -c "from deepreason.application.results import embedder_summary; from deepreason.harness import Harness; print(embedder_summary(Harness('experiments/2026-08-12-live-grounded-extension-expansion/run', read_only=True)))"` → a block with `fallback: True` and model `hashing-128` (paste)
+
+      PROOF — the grounded-extension root, read by the new function:
+
+          {"backend": "hashing", "model": "hashing-128",
+           "version": "1", "fingerprint": "4226e035204776db",
+           "fallback": true,
+           "configured_model": "nomic-ai/nomic-embed-text-v1.5",
+           "fallback_reason": "fastembed not installed (pip install
+             'deepreason[embed]'): No module named 'fastembed'"}
+
+      That single block is the whole tranche's motivating fact, now
+      readable: the run asked for neural geometry, got hashing-128, and
+      the reason is quoted from its own log.
+
+      LAST STAMP WINS, deliberately: an amended run continues into a new
+      epoch and stamps again (this root carries stamps at seq 8 and seq
+      10092), so the reported geometry is the one its final cycles used.
+
+      The three step-13 tests still FAIL here, correctly — this step adds
+      the function; step 15 wires it into `results_summary`.
+
+      OBSERVED, not caused by this step, and PARKED rather than fixed:
+      `experiments/jolt_architecture_2026-07-16/run` cannot be opened by
+      `Harness()` at all (`UnsupportedRunManifestVersionError`: schema
+      version 3). That is a pre-existing property of every reader that
+      constructs a Harness, `deepreason results` included, and is exactly
+      what the 2026-08-14 "old runs owe the future nothing" law
+      contemplates. The absence fixture selects the SMALLEST root with no
+      embedder stamp, which is
+      `live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16`,
+      not the jolt root, so no test depends on it.
 
 - [ ] 15. (S6, R8) Wire it into `results_summary` as
       `summary["embedder"]` and render the glossed line in

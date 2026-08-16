@@ -29,6 +29,7 @@ ABSENCE_REASONS = frozenset(
     {
         "AMENDMENT_CHAIN_UNREADABLE",
         "NO_CYCLE_RECORD",
+        "NO_EMBEDDER_RECORD",
         "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
         "NO_REPLAY_VALIDATION_JSON",
@@ -255,6 +256,55 @@ def _adjudication(harness) -> dict[str, Any]:
         "trial_observations": dict(sorted(observations.items())),
         "trial_declined": dict(sorted(declined.items())),
         "trial_blocked": dict(sorted(blocked.items())),
+    }
+
+
+def embedder_summary(harness) -> dict[str, Any]:
+    """Which embedder the run ACTUALLY measured with, and whether it is the
+    one the run asked for.
+
+    Both facts already ride Measure events the scheduler stamps — the
+    `embedder` identity once per run (model, version, sentinel) and an
+    `embedder-fallback` whenever a configured backend could not be built. The
+    pair was typed, recorded, replayable, and read by nobody: a run could
+    configure neural geometry, measure with `hashing-128` for 24 cycles, and
+    publish results that never said so. Deriving it here puts it on the one
+    surface an operator already opens.
+
+    The LAST stamp wins. An amended run continues into a new epoch and stamps
+    again, so a root can carry several; the run's final geometry is the one
+    its final cycles used.
+    """
+
+    configured: Any = None
+    reason: Any = None
+    fell_back = False
+    stamp: list[str] | None = None
+    for event in harness.log.read():
+        inputs = [str(value) for value in (event.inputs or ())]
+        if not inputs:
+            continue
+        if inputs[0] == "embedder" and len(inputs) >= 2:
+            stamp = inputs
+        elif inputs[0] == "embedder-fallback":
+            fell_back = True
+            configured = inputs[1] if len(inputs) > 1 else None
+            reason = inputs[2] if len(inputs) > 2 else None
+    if stamp is None:
+        return _absent("NO_EMBEDDER_RECORD")
+
+    model = stamp[1]
+    return {
+        # `hashing-128` is the one model id the deterministic backend ever
+        # reports, so the backend label is derived from it rather than from a
+        # separate signal that could disagree with the stamp.
+        "backend": "hashing" if model.startswith("hashing") else "neural",
+        "model": model,
+        "version": stamp[2] if len(stamp) > 2 else None,
+        "fingerprint": stamp[3] if len(stamp) > 3 else None,
+        "fallback": fell_back,
+        "configured_model": configured,
+        "fallback_reason": reason,
     }
 
 
