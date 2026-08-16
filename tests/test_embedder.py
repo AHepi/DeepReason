@@ -105,11 +105,17 @@ def test_hashing_escape_survives_the_armed_neural_default():
 
 
 def test_build_embedder_raises_unavailable_without_fastembed(monkeypatch):
+    """The refusal is typed AND actionable. Since 2026-08-16 fastembed is a
+    core dependency, so reaching this branch means the environment was not
+    installed from pyproject.toml — the message must point at the install,
+    not at the (now empty) [embed] extra."""
     import sys
 
     monkeypatch.setitem(sys.modules, "fastembed", None)  # forces ImportError
-    with pytest.raises(EmbedderUnavailable, match="deepreason\\[embed\\]"):
+    with pytest.raises(EmbedderUnavailable, match="fastembed") as raised:
         build_embedder("BAAI/bge-small-en-v1.5")
+    assert "pip install" in str(raised.value)
+    assert "[embed]" not in str(raised.value)
 
 
 def test_make_embedder_fallback_lands_on_the_log(monkeypatch, tmp_path):

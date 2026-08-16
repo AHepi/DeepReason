@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=5 blockers=none
+State: next=6 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -126,12 +126,31 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       (fastembed present, weights unfetchable), since `build_embedder`
       raises `EmbedderUnavailable` in both cases.
 
-- [ ] 5. (S8, census) Reword the `EmbedderUnavailable` message at
+- [x] 5. (S8, census) Reword the `EmbedderUnavailable` message at
       `src/deepreason/llm/embedder.py:107-109` — it currently instructs
       installing an extra that is now empty — and update the two
       message assertions the census flagged EXPECTED TO MOVE
       (`tests/test_embedder.py:43`, `:193` if it asserts the same).
       done-when: `python -m pytest tests/test_embedder.py -q` → 0 failed, and `grep -n "deepreason\[embed\]" src/deepreason/llm/embedder.py` → no hits
+
+      PROOF:
+
+          $ python -m pytest tests/test_embedder.py -q
+          ..............                                        [100%]
+          14 passed in 5.51s
+          $ grep -n "deepreason\[embed\]" src/deepreason/llm/embedder.py
+          (no hits)
+
+      The message now reads "fastembed not importable — reinstall the
+      package (pip install -e . / pip install deepreason)". Only ONE
+      assertion moved (`tests/test_embedder.py:111`), not the two the
+      census allowed for: `:193`'s hit was the `neural` fixture's
+      `pytest.skip(str(e))`, which passes the message through and
+      asserts nothing about it. The moved assertion was STRENGTHENED,
+      not weakened — `match="deepreason\[embed\]"` became
+      `match="fastembed"` plus two explicit checks that the message
+      still carries an actionable `pip install` and no longer names the
+      empty extra.
 
 - [ ] 6. (S3, R4) Add the `embedder-warmup` subparser and
       `_cmd_embedder_warmup` to `src/deepreason/cli/main.py`: progress
