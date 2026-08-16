@@ -175,7 +175,9 @@ read-only — and no writer, digest or record format moved.
     docs_verify --coverage: 6 seams swept, 16 without a Sweep: header,
                             2 finding(s) : PASS (neither finding is this
                             tranche's — see below)
-    docs_verify (full):     see the re-run note below
+    docs_verify (full):     60 documents, 917 checks, 3 failed : PASS
+                            (exactly the 3 baseline CON-run-identity
+                            git-history failures, nothing else)
 
 **`--coverage`'s 2 findings are pre-existing and untouched**, proven
 mechanically rather than asserted:
@@ -318,8 +320,21 @@ Two caveats stated plainly rather than buried, neither of which blocks:
 1. `wheel_operational_smoke.py` does not pass — and does not pass on the
    unmodified base either. Parked as P1, not fixed here, per the
    cross-routing law.
-2. The full `docs_verify` re-run confirming 3-baseline-only is in flight
-   at the time of writing; the earlier full run's 5 failures were triaged
-   individually (3 baseline, 1 mine and fixed with its check re-run
-   green, 1 load-induced and green idle). If the re-run shows anything
-   beyond the 3 baseline failures, this verdict must be revisited.
+2. RESOLVED — the confirming `docs_verify` re-run landed and the caveat
+   is discharged. Verbatim:
+
+       docs_verify [full]: 60 documents, 917 checks, 4 workers
+         FAIL CON-run-identity.md:200: ...
+         FAIL CON-run-identity.md:202: ... fatal: ambiguous argument '1637e808'
+         FAIL CON-run-identity.md:204: ... fatal: ambiguous argument 'f304fec1'
+       docs_verify: 3 failed
+
+   **3 failed, and all three are the documented baseline** — the same
+   `CON-run-identity.md` git-history checks `docs/AUDIT_BASELINES.md`
+   names, failing for the reason it names (a shallow clone lacks the
+   revisions they reference). The `SEAM-scheduler-x-workflow.md` census
+   fix HELD, and the load-induced `SUB-application.md:335` failure did
+   NOT recur on an idle box — which is what the hygiene rule predicted
+   and the reason the idle measurement was the one recorded.
+
+   Verdict is therefore unconditional.
