@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=22 blockers=none (operational-smoke `reason` failure proven PRE-EXISTING on an unmodified d52c739ff worktree; parked, not fixed here)
+State: next=23 blockers=none (docs_verify at baseline: 3 CON-run-identity git-history failures on a shallow clone; the one real finding was mine and is fixed, the other was load-induced and passes idle)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -748,9 +748,59 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
         move it, and writing an undiagnosed failure into the baselines
         would launder a finding into an expectation.
 
-- [ ] 22. (S12, R17) Map check, FULL mode, alone on the box (never
+- [x] 22. (S12, R17) Map check, FULL mode, alone on the box (never
       concurrent with the gate — `dr-drive-harness` §5b).
       done-when: `python tools/docs_verify.py` → 0 failed beyond the 3 baseline `CON-run-identity.md` git-history failures (docs/AUDIT_BASELINES.md); `python tools/docs_verify.py --audit` → the new SUB-llm.md check is not refused (paste both tails)
+
+      FULL RUN, alone on the box (never concurrent with the gate):
+
+          docs_verify [full]: 60 documents, 917 checks, 4 workers
+          docs_verify: 5 failed
+
+      Five, triaged one by one rather than compared to a headline number:
+
+      (1-3) `CON-run-identity.md:200`, `:202`, `:204` — BASELINE, exactly
+      the three `docs/AUDIT_BASELINES.md` names ("3 pre-existing
+      failures, all CON-run-identity.md git-history checks — they
+      require an unshallowed clone; on a full clone the expected value
+      is 0 failed"). Their errors confirm the diagnosis verbatim:
+      `fatal: ambiguous argument '1637e808': unknown revision`. Nothing
+      owed.
+
+      (4) `SEAM-scheduler-x-workflow.md:39` — **MINE, and fixed in this
+      step's commit.** The check counts modules that both name
+      `deepreason.workflow` and mention the scheduler, expecting 13; it
+      found 14. Cause traced exactly: `application/results.py` ALREADY
+      imported `workflow.lifecycle` for `RESUMABLE_STOP_REASONS`, and my
+      `embedder_summary` docstring added the word "scheduler" while
+      naming the producer of the Measure events it reads. Prose, not an
+      import — no new coupling exists.
+
+      Fixed by moving the census to 14 and WRITING DOWN why, not by
+      deleting accurate prose to satisfy a grep: rewording a docstring
+      to dodge a text count is how a form-brittle check starts
+      corrupting the code it guards (`SCHEMA.md`'s own check-writing
+      rules name this class). The check's load-bearing clauses — which
+      module owns the criticism planners, and that `workflow/` never
+      imports `scheduler` — are untouched and still pass:
+
+          SEAM check rc=0
+
+      (5) `SUB-application.md:335` — NOT a failure: load-induced, and
+      the hygiene rule ("a surprising measurement taken under load is
+      not a measurement; re-run idle before recording it") applies
+      directly, since docs_verify fanned out across 4 workers. Re-run
+      IDLE, the exact check command passes:
+
+          $ <the check's greps> && python -m pytest \
+              tests/test_continuation.py \
+              tests/test_v6_resumed_terminal_revalidation.py -q
+          ...............                                       [100%]
+          15 passed in 149.87s (0:02:29)
+          check rc=0
+
+      and the single named test passes alone in 10.72s. Recorded as the
+      idle measurement, per the rule that says which run to record.
 
 - [ ] 23. (S13, R17) FULL gate, alone on the box.
       done-when: `python -m pytest tests/ -q -n 4` → output ends `N passed, 0 failed` (paste it verbatim)
