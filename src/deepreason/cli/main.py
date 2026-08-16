@@ -1509,6 +1509,11 @@ def _doctor_policy_readiness(configured) -> dict:
             "dependency_available": dependency_available,
             "fallback_active": fallback_active,
             "ready": embedder_ready,
+            # A constant, not a cache probe: guessing fastembed's on-disk
+            # layout to report "already warm" would produce a confident
+            # wrong answer, and the warm-up is cheap and idempotent once
+            # the weights are present. Naming the command is the whole job.
+            "warmup_command": EMBEDDER_WARMUP_COMMAND,
         },
     }
 

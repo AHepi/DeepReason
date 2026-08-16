@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=7 blockers=none
+State: next=8 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -184,10 +184,37 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       all-configurations law (C6); only a genuinely unbuildable backend
       exits 1, which is a runtime failure at the point of use.
 
-- [ ] 7. (S3, R4) Add `warmup_command` to `doctor`'s existing
+- [x] 7. (S3, R4) Add `warmup_command` to `doctor`'s existing
       `embedder` readiness block in `cli/main.py` (the dict at
       ~line 1493).
       done-when: the doctor readiness dict carries `"warmup_command": "deepreason embedder-warmup"` — prove with a direct call to the readiness function, pasted
+
+      PROOF — `_doctor_policy_readiness(...)["embedder"]` called directly
+      on this container, AFTER the packaging change:
+
+          {
+            "configured_backend": "configured_neural",
+            "dependency_available": true,
+            "failure_policy": "fallback",
+            "fallback_active": false,
+            "fallback_backend": "deterministic_hashing",
+            "model": "nomic-ai/nomic-embed-text-v1.5",
+            "ready": true,
+            "warmup_command": "deepreason embedder-warmup"
+          }
+
+      Two things at once: the new field is present, and
+      `dependency_available: true` / `fallback_active: false` is the
+      tranche's whole point showing up in the preflight. Before step 2
+      the same call on the same container returned false/true.
+
+      The exact-dict assertion predicted at step 1 moved as predicted
+      (`tests/test_schema_v3_consumers.py:97-105`, one key added, the
+      other seven unchanged). Ring:
+
+          $ python -m pytest tests/test_schema_v3_consumers.py -q
+          ....                                                  [100%]
+          4 passed in 0.36s
 
 - [ ] 8. (S3, S9) Add a CLI-level test for `embedder-warmup` (parser
       accepts it; the handler surfaces a typed failure rather than a
