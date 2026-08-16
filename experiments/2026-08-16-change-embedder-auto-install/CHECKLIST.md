@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=13 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=14 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -376,11 +376,40 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
 
 ## Phase B — the fallback becomes loud
 
-- [ ] 13. (S6, S9, R8) Write the two results tests FIRST in
+- [x] 13. (S6, S9, R8) Write the two results tests FIRST in
       `tests/test_results_command.py`:
       `test_results_surfaces_embedder_fallback` and
       `test_results_embedder_absence_is_typed`.
       done-when: `python -m pytest tests/test_results_command.py -q -k embedder` → both FAIL for the right reason (paste the failure, proving the guard bites before the change)
+
+      PROOF — the guards bite before the reader exists (`-k` widened to
+      `"embedder or neural_backend"`; the third test's name does not
+      contain the substring "embedder", and the narrower selector
+      silently ran only two of the three):
+
+          $ python -m pytest tests/test_results_command.py -q -k "embedder or neural_backend"
+          tests/test_results_command.py:693: KeyError
+          FAILED ...::test_results_surfaces_the_embedder_and_names_a_fallback_loudly
+          FAILED ...::test_results_names_the_neural_backend_when_no_fallback_happened
+          FAILED ...::test_results_embedder_absence_is_typed_not_a_failure
+          3 failed, 22 deselected in 3.64s
+
+      All three fail with `KeyError: 'embedder'` — the reader has no such
+      key yet, which is exactly the right reason.
+
+      THREE tests, not the two planned. The third
+      (`..._names_the_neural_backend_when_no_fallback_happened`) exists
+      because a "fallback" label carries no information unless the
+      no-fallback case renders differently; a test suite that only ever
+      checked the fallback branch would pass against a reader that
+      printed "(fallback)" unconditionally.
+
+      Both fixtures are COMMITTED evidence selected by property, never
+      by path (durable-tests rule 1, and this file's own stated
+      discipline). Surveyed across all 107 tracked roots:
+      4 carry an `embedder-fallback` Measure, 105 carry the `embedder`
+      stamp, and 2 carry NEITHER — the absence case is real committed
+      history, not a constructed corner.
 
 - [ ] 14. (S6, R8) Add `NO_EMBEDDER_RECORD` to `ABSENCE_REASONS` and
       `embedder_summary(harness)` to

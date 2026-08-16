@@ -76,6 +76,36 @@ def _smallest_root_publishing(key: str) -> Path:
     pytest.skip(f"no committed root publishes run-result.json[{key!r}]")
 
 
+def _smallest_root_logging(*signals: str) -> Path:
+    """Smallest committed root whose log carries every named Measure signal.
+
+    Selected by PROPERTY rather than by path so the fixture survives roots
+    being retired, renamed by epoch, or added: 4 committed roots carry
+    `embedder-fallback` and 105 carry the `embedder` stamp today, and the
+    test means "a root of this shape", never "this particular directory".
+    """
+
+    for root in _tracked_roots():
+        text = (root / "log.jsonl").read_text(errors="ignore")
+        if all(f'"{signal}"' in text for signal in signals):
+            return root
+    pytest.skip(f"no committed root logs all of {signals}")
+
+
+def _smallest_root_logging_no_embedder() -> Path:
+    """Smallest committed root that never stamped an embedder identity.
+
+    Two exist. They predate the stamp, which is exactly why the reader must
+    tolerate their absence rather than treat it as a failure.
+    """
+
+    for root in _tracked_roots():
+        text = (root / "log.jsonl").read_text(errors="ignore")
+        if '"embedder"' not in text and '"embedder-fallback"' not in text:
+            return root
+    pytest.skip("every committed root stamps an embedder identity")
+
+
 def _smallest_root_without(*names: str) -> Path:
     for root in _tracked_roots():
         if not any((root / name).exists() for name in names):
@@ -594,3 +624,73 @@ def test_results_summary_carries_its_schema_and_resolution_provenance():
         "absences",
     }
     assert json.loads(json.dumps(summary)) == summary, "the summary must be JSON-stable"
+
+
+# ---- the embedder a run actually measured with (tranche 2026-08-16) ----
+
+
+def test_results_surfaces_the_embedder_and_names_a_fallback_loudly():
+    """Implements R8 of tranche 2026-08-16-change-embedder-auto-install.
+
+    A run that configured the neural model, failed to build it and measured
+    with hashing-128 recorded that as an `embedder-fallback` Measure and then
+    told nobody: the grounded-extension run carried the pair at log seq 2 and
+    seq 8 and its RESULTS.md never mentioned it. `deepreason results` is where
+    an operator already looks for a run's typed outcome, so it is where the
+    substituted geometry has to appear.
+    """
+
+    from deepreason.application.results import render_results, results_summary
+
+    root = _smallest_root_logging("embedder-fallback")
+    summary = results_summary(root)
+    embedder = summary["embedder"]
+
+    assert embedder["fallback"] is True
+    assert embedder["backend"] == "hashing"
+    assert embedder["model"] == "hashing-128"
+    # The configured model is the half that makes the fallback legible: it
+    # says which geometry the run was SUPPOSED to have.
+    assert embedder["configured_model"]
+    assert embedder["configured_model"] != embedder["model"]
+
+    rendered = render_results(summary)
+    assert "hashing (fallback)" in rendered
+
+
+def test_results_names_the_neural_backend_when_no_fallback_happened():
+    """The same line must distinguish a run that got what it asked for, or
+    "fallback" carries no information."""
+
+    from deepreason.application.results import render_results, results_summary
+
+    root = _smallest_root_logging("embedder")
+    summary = results_summary(root)
+    embedder = summary["embedder"]
+
+    assert _is_absence(embedder) is False
+    assert embedder["backend"] in {"hashing", "neural"}
+    assert isinstance(embedder["fingerprint"], str)
+    rendered = render_results(summary)
+    assert "embedder:" in rendered
+
+
+def test_results_embedder_absence_is_typed_not_a_failure():
+    """Reader-before-writer guardrail: two committed roots predate the
+    embedder stamp entirely. They must read as a typed ABSENCE from the
+    closed vocabulary, never as an error and never as a silently omitted key
+    a caller cannot distinguish from a false value.
+    """
+
+    from deepreason.application.results import (
+        ABSENCE_REASONS,
+        results_summary,
+    )
+
+    root = _smallest_root_logging_no_embedder()
+    summary = results_summary(root)
+
+    assert _is_absence(summary["embedder"])
+    assert summary["embedder"]["reason"] == "NO_EMBEDDER_RECORD"
+    assert "NO_EMBEDDER_RECORD" in ABSENCE_REASONS
+    assert "NO_EMBEDDER_RECORD" in summary["absences"]
