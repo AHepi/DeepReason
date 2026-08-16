@@ -525,6 +525,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--model", default=None,
         help="fastembed model id (default: the config's EMBEDDER_MODEL, "
              "else the hashing embedder)")
+    warmup_cmd = sub.add_parser(
+        "embedder-warmup",
+        help="fetch and initialize the configured embedding backend now, in "
+             "the setup phase, so a run never pays for it inside cycle 1",
+    )
+    warmup_cmd.add_argument(
+        "--model", default=None,
+        help="fastembed model id (default: the config's EMBEDDER_MODEL)")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
     results_cmd = sub.add_parser("results", help="read a run's typed results")
@@ -1119,6 +1127,9 @@ def _main(argv: list[str] | None = None) -> int:
                          indent=2, sort_keys=True))
         return 0
 
+    if args.command == "embedder-warmup":
+        return _cmd_embedder_warmup(args)
+
     if args.command == "capture":
         from deepreason.capture import detection
         from deepreason.config import load as load_config
@@ -1500,6 +1511,75 @@ def _doctor_policy_readiness(configured) -> dict:
             "ready": embedder_ready,
         },
     }
+
+
+def embedder_cache_dir() -> str:
+    """Where fastembed places the ONNX weights, derived the way fastembed
+    derives it rather than hardcoded: FASTEMBED_CACHE_PATH, else
+    `fastembed_cache` under the system temp directory. On a container the
+    latter means /tmp, which is routinely cleared between sessions — an
+    operator budgeting disk needs the real path, not a plausible one."""
+    import os
+    import tempfile
+
+    return os.environ.get("FASTEMBED_CACHE_PATH") or str(
+        Path(tempfile.gettempdir()) / "fastembed_cache"
+    )
+
+
+EMBEDDER_WARMUP_COMMAND = "deepreason embedder-warmup"
+
+
+def _cmd_embedder_warmup(args) -> int:
+    """Pay the weight fetch in the setup phase, where it is visible.
+
+    The neural backend fetches ~523 MB of ONNX weights the first time it is
+    constructed. With no explicit step that lands inside cycle 1 of whichever
+    run touches an embedder first, where a multi-minute download reads as a
+    stalled provider call rather than a one-time setup cost.
+    """
+    import time
+
+    from deepreason.config import load as load_config
+    from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
+
+    config = load_config(Path(args.config) if args.config else None)
+    model = args.model or config.EMBEDDER_MODEL
+    if not model:
+        # Not a refusal: a configuration that chose the hashing embedder is
+        # already warm. Report the backend it will actually use and succeed.
+        print(
+            "embedder-warmup: EMBEDDER_MODEL is unset — this configuration "
+            "uses the zero-dependency hashing embedder, which needs no "
+            "weights and no warm-up",
+            file=sys.stderr,
+        )
+        engine = build_embedder(None)
+        print(json.dumps(engine.fingerprint(), indent=2, sort_keys=True))
+        return 0
+
+    print(
+        f"embedder-warmup: initializing {model} (~523 MB of ONNX weights on "
+        f"first use, cached at {embedder_cache_dir()}); this is a one-time "
+        "cost per cache, not per run ...",
+        file=sys.stderr,
+        flush=True,
+    )
+    started = time.monotonic()
+    try:
+        engine = build_embedder(model)
+        fingerprint = engine.fingerprint()
+    except EmbedderUnavailable as error:
+        print(f"EMBEDDER_WARMUP_UNAVAILABLE: {error}", file=sys.stderr)
+        return 1
+    elapsed = time.monotonic() - started
+    print(
+        f"embedder-warmup: ready in {elapsed:.1f}s — {fingerprint['model']} "
+        f"({fingerprint['version']})",
+        file=sys.stderr,
+    )
+    print(json.dumps(fingerprint, indent=2, sort_keys=True))
+    return 0
 
 
 def _cmd_doctor(args) -> int:

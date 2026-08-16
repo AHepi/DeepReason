@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=6 blockers=none
+State: next=7 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -152,12 +152,37 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       still carries an actionable `pip install` and no longer names the
       empty extra.
 
-- [ ] 6. (S3, R4) Add the `embedder-warmup` subparser and
+- [x] 6. (S3, R4) Add the `embedder-warmup` subparser and
       `_cmd_embedder_warmup` to `src/deepreason/cli/main.py`: progress
       line to stderr naming the model, the 523 MB cost and the cache
       dir; fingerprint JSON to stdout; `--model` override; exit 1 with
       the typed reason on `EmbedderUnavailable`.
       done-when: `deepreason embedder-warmup 2>/dev/null | python -c "import json,sys; d=json.load(sys.stdin); assert {'model','version','sentinel'} <= set(d); print(d['model'])"` → the model id (paste), and the stderr progress line pasted
+
+      PROOF — stdout (the typed fingerprint):
+
+          nomic-ai/nomic-embed-text-v1.5
+          {"model": "nomic-ai/nomic-embed-text-v1.5",
+           "sentinel": "d6e3599ce0377000",
+           "version": "fastembed-0.8.0+onnxruntime-1.28.0"}
+          rc=0
+
+      PROOF — stderr (the visible progress line R4 asked for):
+
+          embedder-warmup: initializing nomic-ai/nomic-embed-text-v1.5
+          (~523 MB of ONNX weights on first use, cached at
+          /tmp/fastembed_cache); this is a one-time cost per cache, not
+          per run ...
+          embedder-warmup: ready in 4.3s — nomic-ai/nomic-embed-text-v1.5
+          (fastembed-0.8.0+onnxruntime-1.28.0)
+
+      The cache directory is DERIVED the way fastembed derives it
+      (`FASTEMBED_CACHE_PATH`, else `fastembed_cache` under the system
+      temp dir) rather than hardcoded, so the printed path is the real
+      one on any machine. `EMBEDDER_MODEL` unset is NOT refused — it
+      reports the hashing fingerprint and exits 0, per the
+      all-configurations law (C6); only a genuinely unbuildable backend
+      exits 1, which is a runtime failure at the point of use.
 
 - [ ] 7. (S3, R4) Add `warmup_command` to `doctor`'s existing
       `embedder` readiness block in `cli/main.py` (the dict at
