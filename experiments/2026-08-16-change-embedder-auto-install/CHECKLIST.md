@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=4 blockers=none
+State: next=5 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -85,7 +85,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
           $ python -c "import fastembed; print('fastembed', fastembed.__version__)"
           fastembed 0.8.0
 
-- [ ] 4. (S9, R14, R15) Write the four embedder regression tests in
+- [x] 4. (S9, R14, R15) Write the four embedder regression tests in
       `tests/test_embedder.py`:
       `test_fastembed_is_a_core_dependency` (never skips),
       `test_build_embedder_returns_neural_under_plain_install` (skips
@@ -94,6 +94,37 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       existing forced-fallback test still asserts the
       `embedder-fallback` measure.
       done-when: `python -m pytest tests/test_embedder.py -q` → 0 failed (paste tail)
+
+      PROOF:
+
+          $ python -m pytest tests/test_embedder.py -q
+          ..............                                        [100%]
+          14 passed in 5.92s
+
+      MUTATION PROOF (durable-tests rule 3 — the guarded claim was broken
+      and the tests went red, including the one that must never skip):
+
+          $ pip uninstall -y fastembed --break-system-packages -q
+          $ python -m pytest tests/test_embedder.py -q -k "core_dependency or returns_neural"
+          E  AssertionError: fastembed is missing, which is a packaging
+             regression and never a reason to skip: fastembed not installed
+          FAILED tests/test_embedder.py::test_fastembed_is_a_core_dependency
+          FAILED tests/test_embedder.py::test_build_embedder_returns_neural_under_plain_install
+          2 failed, 12 deselected in 0.12s
+
+      Note the second line: with fastembed absent the weight-fetch test
+      FAILS rather than skipping, which is the property R14 asked for.
+
+      IN-SCOPE CORRECTION made by this step, recorded because it is a
+      deletion: `tests/test_embedder.py` carried a module-level
+      `fastembed = pytest.importorskip("fastembed")`. A `Skipped` raised
+      at module scope skips the WHOLE module — so with fastembed absent,
+      `test_fastembed_is_a_core_dependency` would have vanished silently
+      instead of failing, which is the exact silence this tranche exists
+      to remove. It is replaced by a comment; the `neural` fixture below
+      it already skips on the one condition that warrants a skip
+      (fastembed present, weights unfetchable), since `build_embedder`
+      raises `EmbedderUnavailable` in both cases.
 
 - [ ] 5. (S8, census) Reword the `EmbedderUnavailable` message at
       `src/deepreason/llm/embedder.py:107-109` — it currently instructs

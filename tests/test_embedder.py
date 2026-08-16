@@ -3,8 +3,11 @@ runs/embedder_design, with the corrections its criticism record extracted:
 no cross-environment determinism claim (fingerprint + sentinel detect drift
 instead), visible fallback when the optional backend is missing, and
 threshold calibration against LABELED planted duplicates rather than a
-blind distribution map. Neural tests skip when fastembed is absent."""
+blind distribution map. fastembed is a core dependency since the
+2026-08-16 auto-install tranche; the neural tests skip only when its ONNX
+weights cannot be fetched."""
 
+import importlib.util
 import json
 
 import pytest
@@ -12,8 +15,10 @@ import pytest
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.embedder import (
+    DEFAULT_NEURAL_MODEL,
     EmbedderUnavailable,
     HashingEmbedder,
+    NeuralEmbedder,
     build_embedder,
     distance,
 )
@@ -34,6 +39,69 @@ def test_hashing_fingerprint_is_stable_and_complete():
 def test_build_embedder_default_is_hashing():
     assert isinstance(build_embedder(None), HashingEmbedder)
     assert isinstance(build_embedder(""), HashingEmbedder)
+
+
+def test_fastembed_is_a_core_dependency():
+    """Regression (tranche 2026-08-16-change-embedder-auto-install):
+    fastembed left the [embed] extra for the core dependency list, so a
+    plain `pip install -e .` arms the neural default that
+    config.EMBEDDER_MODEL has named all along. While it was optional, every
+    container preflight produced a run that measured with hashing-128
+    behind an `embedder-fallback` measure nobody read — grounded-extension
+    run log.jsonl seq 2 (the fallback) and seq 8 (the hashing stamp).
+
+    This test NEVER skips. A skip here would restore exactly the silence
+    the tranche removed.
+    """
+    assert importlib.util.find_spec("fastembed") is not None, (
+        "fastembed is not importable: either the core dependency was moved "
+        "back into an extra, or this environment was not installed from "
+        "pyproject.toml"
+    )
+
+
+def test_build_embedder_returns_neural_under_plain_install():
+    """Regression (tranche 2026-08-16-change-embedder-auto-install): the
+    configured neural model must actually BUILD, not merely be named.
+
+    The weight fetch is the one half that a genuinely offline machine
+    cannot perform, so it is the one half that may skip — and only after
+    proving fastembed itself is present, which is the packaging claim.
+    """
+    try:
+        engine = build_embedder(DEFAULT_NEURAL_MODEL)
+    except EmbedderUnavailable as error:
+        # Anchored to the module spec, not to the exception's wording: the
+        # message is operator-facing prose and may be reworded, but "is
+        # fastembed installed" is the actual question separating a
+        # packaging regression from an offline machine.
+        assert importlib.util.find_spec("fastembed") is not None, (
+            "fastembed is missing, which is a packaging regression and "
+            f"never a reason to skip: {error}"
+        )
+        pytest.skip(
+            "2026-08-16-change-embedder-auto-install: fastembed is "
+            "installed but its ONNX weights cannot be fetched in this "
+            f"environment ({error}); genuinely offline CI only. The "
+            "packaging half is asserted by "
+            "test_fastembed_is_a_core_dependency, which never skips."
+        )
+    assert isinstance(engine, NeuralEmbedder)
+    assert engine.model == DEFAULT_NEURAL_MODEL
+
+
+def test_hashing_escape_survives_the_armed_neural_default():
+    """Implements R3/R15 of tranche 2026-08-16-change-embedder-auto-install:
+    arming the neural backend by install does not close the deliberate
+    hashing road. EMBEDDER_MODEL=None stays the zero-dependency escape that
+    controlled experiments and replay configurations depend on, and taking
+    it is NOT a degradation — no `embedder-fallback` measure is recorded,
+    because nothing failed.
+    """
+    engine = build_embedder(None)
+    assert isinstance(engine, HashingEmbedder)
+    assert engine.model == "hashing-128"
+    assert engine.fingerprint()["model"] == "hashing-128"
 
 
 def test_build_embedder_raises_unavailable_without_fastembed(monkeypatch):
@@ -181,9 +249,14 @@ def test_scheduler_accepts_custom_embedder_and_stamps_it(tmp_path):
     assert list(stamp.inputs[1:]) == ["duck-7", "v7", "-"]
 
 
-# ---- neural backend (optional dependency; guarded like the browser oracle) ----
+# ---- neural backend (core dependency since 2026-08-16; weights fetched) ----
 
-fastembed = pytest.importorskip("fastembed")
+# No module-level importorskip: a Skipped raised here would skip the WHOLE
+# module, including test_fastembed_is_a_core_dependency, whose entire value
+# is that it cannot skip. The `neural` fixture below already degrades to a
+# skip for the only condition that legitimately warrants one — fastembed
+# present but its weights unfetchable — since build_embedder raises
+# EmbedderUnavailable in both cases.
 
 
 @pytest.fixture(scope="module")
