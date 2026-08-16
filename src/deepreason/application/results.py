@@ -438,7 +438,7 @@ def _show(value: Any) -> str:
     return str(value)
 
 
-def _embedder_line(embedder: dict[str, Any]) -> str:
+def embedder_line(embedder: dict[str, Any]) -> str:
     """One line naming the geometry, and saying plainly when it is not the
     one the run asked for.
 
@@ -523,7 +523,7 @@ def render_results(summary: dict[str, Any]) -> str:
         "## Measurement instrument",
         f"  embedder (the model that turned this run's text into vectors, so "
         f"its novelty, near-duplicate and school-distance readings are on "
-        f"that model's scale): {_embedder_line(summary['embedder'])}",
+        f"that model's scale): {embedder_line(summary['embedder'])}",
         "",
         "## Verification",
         f"  verify_root verdict (the replay check that re-derives the whole run "

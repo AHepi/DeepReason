@@ -2323,7 +2323,10 @@ def _cmd_reason(args) -> int:
 
     from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
     from deepreason.application.intents import start_text_run_intent
-    from deepreason.application.results import embedder_summary_for_root
+    from deepreason.application.results import (
+        embedder_line,
+        embedder_summary_for_root,
+    )
     from deepreason.preparation import (
         PUBLIC_DEFAULT_CYCLES,
         PUBLIC_DEFAULT_TOKEN_BUDGET,
@@ -2401,13 +2404,18 @@ def _cmd_reason(args) -> int:
     payload["run_id"] = prepared.managed_run_id
     if dossier_digest is not None:
         payload["evidence_dossier_digest"] = dossier_digest
-    # Presentation, not record: `run-result.json` on disk is untouched. The
-    # geometry is already IN the log as Measure events; what was missing was
-    # any surface that showed it to whoever launched the run. Derived here
-    # beside run_id for the same reason run_id is — the durable sidecar is a
-    # published artifact and this is a courtesy for the person reading stdout.
-    payload["embedder"] = embedder_summary_for_root(accepted.root)
     print(json.dumps(payload, indent=2, sort_keys=True))
+    # STDERR, deliberately, and never a key on the payload above: stdout's
+    # JSON is the durable result contract, and `run_result` over MCP must
+    # return it byte-identically (wheel_operational_smoke's
+    # STAGE_MCP_REQUEST compares the two for exact equality). The geometry is
+    # already in the log as Measure events; what was missing was a surface
+    # showing it to whoever launched the run, and that is a human-facing
+    # remark, not a field in a machine contract.
+    print(
+        f"embedder: {embedder_line(embedder_summary_for_root(accepted.root))}",
+        file=sys.stderr,
+    )
     return terminal.exit_code()
 
 def _cmd_skills(args) -> int:

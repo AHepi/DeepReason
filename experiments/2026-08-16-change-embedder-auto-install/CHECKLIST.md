@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=20 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=21 blockers=step 21 IN PROGRESS — wheel_smoke green; wheel_operational_smoke failed twice with DIFFERENT failures, first fixed (CLI/MCP parity), second under investigation against an unmodified d52c739ff worktree. Do not mark 21 done until that comparison lands.
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -505,6 +505,10 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
               src/deepreason/invariants.py src/deepreason/harness.py
           (empty)
 
+      SUPERSEDED AT STEP 21 — read the correction there before trusting
+      this paragraph. The decoration described here (a key on the printed
+      payload) broke CLI/MCP result parity and was moved to STDERR.
+
       `run-result.json` on disk is untouched, `TextRunTerminalResultV1`'s
       strict schema is untouched, and `verify_root` sees nothing new.
       This is the smallest reading recorded as A3: the geometry is
@@ -631,13 +635,81 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       cross-check script with the extra installed, not a live harness
       run. Ledger tail checked; the next free number, E32, stays unused.
 
-- [ ] 20. (C) [COMMIT] Commit and push phase C.
+- [x] 20. (C) [COMMIT] Commit and push phase C.
       done-when: commit pushed; State line refreshed
 
 ## Phase D — instruments and close
 
 - [ ] 21. (S11, R16) Run both wheel smokes on the changed tree.
       done-when: `python scripts/wheel_smoke.py; echo rc=$?` → `rc=0` and `python -u scripts/wheel_operational_smoke.py; echo rc=$?` → `rc=0` (paste both). If either moves, re-pin in the SAME commit and re-run.
+
+      PARTIAL — `wheel_smoke.py` PASSES, pasted:
+
+          wheel smoke passed: isolated V6-only contents, clean imports,
+          exact entry points, module parity, MCP registration, and exact
+          MCP schemas
+          wheel_smoke rc=0
+
+      This confirms SPEC S11's prediction from the source read: the
+      wheel smokes pin FILE PATHS inside the wheel and one METADATA
+      Summary line, not a dependency list, so a new `Requires-Dist` does
+      not move them, and the new `embedder-warmup` subcommand does not
+      move the console-help pin (which pins four REMOVED verbs plus the
+      presence of `shallow`). No re-pin was needed; the MCP surface did
+      not move, so the four-pin rule never engaged.
+
+      `wheel_operational_smoke.py` FAILED TWICE, with DIFFERENT failures.
+
+      FAILURE 1 — CAUSED BY THIS TRANCHE, FIXED. Stage `mcp_request`:
+
+          AssertionError: durable CLI result changed when retrieved
+          through MCP
+
+      Step 16 had added `payload["embedder"]` to the JSON `deepreason
+      reason` prints on stdout. That payload is the DURABLE RESULT
+      CONTRACT: `wheel_operational_smoke.py:3447` compares it for exact
+      equality against what the `run_result` MCP tool returns, and MCP
+      does not produce the decoration. The two existing decorations
+      (`run_id`, `evidence_dossier_digest`) do not break it because MCP
+      carries them; `embedder` is not in that payload.
+
+      Fixed by design change, not by weakening the assertion: the
+      embedder is now printed to STDERR as a glossed human-readable
+      line, leaving stdout's machine-readable contract byte-identical.
+      `_embedder_line` was promoted to the public `embedder_line`, since
+      it now has two callers. `SUB-application.md`'s check was updated in
+      the same commit and now asserts the INVERSE of what it asserted
+      before — that no `embedder` key is assigned to `payload` — so the
+      parity constraint is guarded from the map, not just from an
+      instrument no gate runs.
+
+      FAILURE 2 — ATTRIBUTION PENDING, DO NOT GUESS. Stage `reason`,
+      which the FIRST run had passed:
+
+          _assert_resumable_terminal(resumable_result)
+          AssertionError: terminal verification is incomplete
+
+      Two runs of effectively the same tree disagreeing on the same
+      stage is a non-determinism signature, not a deterministic
+      regression. The specific suspicion, which is this tranche's own
+      doing if true: arming the neural default means the smoke's run now
+      measures with ONNX neural embeddings, and `llm/embedder.py`'s own
+      docstring records that the "pinned ONNX is bitwise deterministic
+      on CPU" claim was REFUTED on this repo's adjudicated record
+      (kernel selection varies across CPU features and runtime
+      versions). The smoke's environment (`_environment`, line 1266)
+      sets neither `EMBEDDER_MODEL` nor `FASTEMBED_CACHE_PATH`, so it
+      inherits the armed neural default.
+
+      Per `docs/AUDIT_BASELINES.md` this is a FINDING, not baseline: the
+      baseline excuses only smoke failures naming the MCP schema sha or
+      tool-set pins, and this names neither.
+
+      IN PROGRESS: the same smoke is running against an unmodified
+      `d52c739ff` worktree to establish whether the base is green. Until
+      that lands, no verdict is recorded either way — misattributing a
+      cycle-0-style failure on first reading is a named, twice-paid
+      mistake in CLAUDE.md's hard-won invariants.
 
 - [ ] 22. (S12, R17) Map check, FULL mode, alone on the box (never
       concurrent with the gate — `dr-drive-harness` §5b).
