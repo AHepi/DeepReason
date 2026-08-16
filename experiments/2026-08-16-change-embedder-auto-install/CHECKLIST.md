@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=3 blockers=none
+State: next=4 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -71,9 +71,19 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
           $ python -c "import tomllib,pathlib; d=tomllib.loads(...); ...; print('ok')"
           ok
 
-- [ ] 3. (S1) Reinstall from the changed pyproject and prove a plain
+- [x] 3. (S1) Reinstall from the changed pyproject and prove a plain
       install carries fastembed.
       done-when: `pip install -e . --break-system-packages -q && python -c "import fastembed; print(fastembed.__version__)"` → a version string (paste it)
+
+      PROOF — fastembed was UNINSTALLED first, so this is the packaging
+      change working and not a leftover from the SPEC's P3 measurement:
+
+          $ pip uninstall -y fastembed --break-system-packages -q
+          $ python -c "import fastembed"
+          ModuleNotFoundError: No module named 'fastembed'
+          $ pip install -e . --break-system-packages -q
+          $ python -c "import fastembed; print('fastembed', fastembed.__version__)"
+          fastembed 0.8.0
 
 - [ ] 4. (S9, R14, R15) Write the four embedder regression tests in
       `tests/test_embedder.py`:
