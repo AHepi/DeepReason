@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=9 blockers=none
+State: next=10 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -248,11 +248,35 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       select the hashing road. The test's assertion was not weakened —
       it still demands `hashing-128`.
 
-- [ ] 9. (S4, S5, R5, R6) Correct `config.py`'s EMBEDDER_MODEL comment:
+- [x] 9. (S4, S5, R5, R6) Correct `config.py`'s EMBEDDER_MODEL comment:
       drop `deepreason[embed]` and "atlas radii", state the 523 MB
       `/tmp/fastembed_cache` cost, name `deepreason embedder-warmup`,
       and state that the absolute distance knobs ship unset.
       done-when: `grep -n "deepreason\[embed\]\|atlas radii" src/deepreason/config.py` → no hits, and `grep -n "fastembed_cache" src/deepreason/config.py` → a hit
+
+      PROOF:
+
+          $ grep -n "deepreason\[embed\]\|atlas radii" src/deepreason/config.py
+          (no hits)
+          $ grep -n "fastembed_cache" src/deepreason/config.py
+          527:    # (FASTEMBED_CACHE_PATH, else `fastembed_cache` under the system temp
+
+      THREE false claims removed from a comment that operators and
+      agents read as authority:
+      (a) "Requires the optional dependency group (pip install
+          'deepreason[embed]')" — false since step 2;
+      (b) "~0.5 GB" — measured at 523 MB, and the location was never
+          stated at all, which is the half that actually bites on a
+          container where the cache lands in /tmp;
+      (c) "EVERY distance threshold (NEAR_DUP_EPS, RESEED_DIST_MIN,
+          atlas radii) is scale-specific: recalibrate ... before
+          trusting a config on a new embedder" — this reads as though
+          shipped values need recalibrating. They do not exist. Both
+          named knobs default to None, no "atlas radii" knob exists in
+          config at all, and the two knobs that DO ship armed are
+          embedder-safe by construction. The corrected comment states
+          the scale-specificity (still true) and that arming an
+          absolute threshold is what requires calibration.
 
 - [ ] 10. (S4, S8, R5, R10, R11) Update the three docs: `CLAUDE.md`
       Environment section gains the disk-cost + warm-up line;
