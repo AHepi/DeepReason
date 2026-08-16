@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=17 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=18 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -513,9 +513,23 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       presentation gap, not a record gap. The root is opened read-only,
       so reading a run's own result cannot repair (i.e. destroy) it.
 
-- [ ] 17. (S6, S9) Prove the two step-13 tests now pass and the rest of
+- [x] 17. (S6, S9) Prove the two step-13 tests now pass and the rest of
       the results suite is unmoved.
       done-when: `python -m pytest tests/test_results_command.py tests/test_error_catalog.py -q` → 0 failed (paste tail)
+
+      PROOF:
+
+          $ python -m pytest tests/test_results_command.py tests/test_error_catalog.py -q
+          .................................                     [100%]
+          33 passed in 83.56s (0:01:23)
+
+      The census's two predictions for this file both held: the
+      key-enumerating tests absorbed the new `embedder` key and the new
+      `NO_EMBEDDER_RECORD` absence reason without any assertion being
+      weakened (`_key_shape` compares two roots against each other, so a
+      key added to both sides stays consistent), and
+      `tests/test_error_catalog.py` did not move — S6 added an absence
+      REASON, which is a different vocabulary from the error catalog.
 
 - [ ] 18. (B) [COMMIT] Commit and push phase B.
       done-when: commit pushed; State line refreshed
