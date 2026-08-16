@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=21 blockers=step 21 IN PROGRESS — wheel_smoke green; wheel_operational_smoke failed twice with DIFFERENT failures, first fixed (CLI/MCP parity), second under investigation against an unmodified d52c739ff worktree. Do not mark 21 done until that comparison lands.
+State: next=22 blockers=none (operational-smoke `reason` failure proven PRE-EXISTING on an unmodified d52c739ff worktree; parked, not fixed here)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -640,7 +640,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
 
 ## Phase D — instruments and close
 
-- [ ] 21. (S11, R16) Run both wheel smokes on the changed tree.
+- [x] 21. (S11, R16) Run both wheel smokes on the changed tree.
       done-when: `python scripts/wheel_smoke.py; echo rc=$?` → `rc=0` and `python -u scripts/wheel_operational_smoke.py; echo rc=$?` → `rc=0` (paste both). If either moves, re-pin in the SAME commit and re-run.
 
       PARTIAL — `wheel_smoke.py` PASSES, pasted:
@@ -705,11 +705,48 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       baseline excuses only smoke failures naming the MCP schema sha or
       tool-set pins, and this names neither.
 
-      IN PROGRESS: the same smoke is running against an unmodified
-      `d52c739ff` worktree to establish whether the base is green. Until
-      that lands, no verdict is recorded either way — misattributing a
-      cycle-0-style failure on first reading is a named, twice-paid
-      mistake in CLAUDE.md's hard-won invariants.
+      RESOLVED — **PRE-EXISTING, and my stated suspicion was WRONG.**
+      The same smoke run in a clean `git worktree` at the unmodified base
+      commit `d52c739ff` fails at the SAME stage with the SAME assertion:
+
+          BASE SMOKE rc=1
+          --- assertion failed (reason) ---
+              raise AssertionError("terminal verification is incomplete")
+          AssertionError: terminal verification is incomplete
+          --- end assertion failed (reason) ---
+          ..."stage":"reason","failure_kind":"assertion_failed"...
+
+      The ONNX-non-determinism hypothesis is refuted by that run, not
+      merely unsupported: the base worktree's wheel does not declare
+      fastembed, so its run measured with the hashing embedder and failed
+      anyway. Recording the refutation rather than quietly dropping it,
+      because the suspicion was written down as plausible and a reader
+      would otherwise carry it forward.
+
+      Across three observations of this stage on this container — my
+      run 1 (passed), my run 2 (failed), base (failed) — the `reason`
+      stage is FLAKY here, independent of this tranche.
+
+      CONSEQUENCE FOR WHAT IS PROVEN, stated exactly:
+      - `wheel_smoke.py`: GREEN on the changed tree. R16 satisfied.
+      - `wheel_operational_smoke.py`: cannot certify this tranche on this
+        container, because it does not reach a verdict on the UNCHANGED
+        tree either. The one failure it did attribute here (CLI/MCP
+        result parity) is fixed; because run 2 died EARLIER, at `reason`,
+        the smoke never re-reached `mcp_request`, so **the parity fix is
+        not verified by this instrument** and is not claimed to be. It is
+        guarded instead by the `SUB-application.md` AST check, which
+        asserts no `embedder` key is assigned to `payload` and which was
+        mutation-proven red/green.
+      - Per `docs/AUDIT_BASELINES.md` the failure is a FINDING (it names
+        neither the MCP schema sha nor a tool-set pin, the only two
+        carve-outs). It is PRE-EXISTING and therefore PARKED, not fixed:
+        cross-routing law — a defect found mid-change never gets fixed in
+        that change. See PARKED.md P1 for the ready-to-send prompt.
+      - `AUDIT_BASELINES.md` is deliberately NOT edited. The baseline
+        moves in the tranche that moved the value; this tranche did not
+        move it, and writing an undiagnosed failure into the baselines
+        would launder a finding into an expectation.
 
 - [ ] 22. (S12, R17) Map check, FULL mode, alone on the box (never
       concurrent with the gate — `dr-drive-harness` §5b).
