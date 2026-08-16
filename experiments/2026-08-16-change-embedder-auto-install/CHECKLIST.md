@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=11 blockers=none
+State: next=12 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -313,7 +313,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       Reworded to "a manual optional-extra install", which preserves the
       historical fact and leaves the check unambiguous.
 
-- [ ] 11. (S12, R18) Update `docs/map/SUB-llm.md` in this same commit: a
+- [x] 11. (S12, R18) Update `docs/map/SUB-llm.md` in this same commit: a
       `Traps` entry naming the grounded-extension run
       (`experiments/2026-08-12-live-grounded-extension-expansion`, log
       seq 2/8) and ONE new executable `check:` asserting
@@ -321,6 +321,41 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       that would FAIL if it moved back to the extra. Advance
       `Verified-at:` only after re-running that document's checks.
       done-when: `python tools/docs_verify.py --only docs/map/SUB-llm.md` (or the full run filtered to that file) → the new check passes, and inverting the condition by hand makes it fail (paste both)
+
+      NOTE on the command: `docs_verify.py` has no `--only` flag (its
+      filters are `--fast`, `--failed`, `--ring`). Every one of
+      SUB-llm.md's own `check:` lines was extracted and run instead,
+      which is what the criterion meant:
+
+          ALL 18 CHECKS EXIT 0
+
+      PROOF — the new check passes:
+
+          $ python -c "...pyproject core deps must carry fastembed, [embed] must be []..." \
+              && grep -q '"embedder-warmup"' src/deepreason/cli/main.py \
+              && python -m pytest tests/test_embedder.py::test_fastembed_is_a_core_dependency -q
+          .                                                     [100%]
+          1 passed in 0.08s
+          rc=0
+
+      MUTATION PROOF — fastembed moved back into the [embed] extra, the
+      exact regression the check exists to catch, and the check goes red:
+
+          core deps: ['pydantic>=2.7', 'pyyaml>=6.0']
+          embed extra: ['fastembed>=0.3']
+          AssertionError: ('fastembed must stay in the CORE dependency
+            list', ['pydantic>=2.7', 'pyyaml>=6.0'])
+          check rc=1
+          --- restored; check green again ---
+          check passes
+
+      The check asserts BOTH halves of R1/R2 — fastembed in the core
+      list AND the [embed] extra still declared and empty — plus that
+      the warm-up command still exists, so removing either half of the
+      tranche fails the map, not just the tests.
+
+      `Verified-at:` advanced to this commit only because all 18 checks
+      were actually re-run above.
 
 - [ ] 12. (A) [COMMIT] Ring for phase A, then commit and push.
       done-when: `python -m pytest tests/test_embedder.py tests/test_scratch_similarity.py tests/test_manifest_integration.py tests/test_schema_v3_consumers.py tests/test_wheel_operational.py -q` → 0 failed (paste tail); commit pushed; State line refreshed
