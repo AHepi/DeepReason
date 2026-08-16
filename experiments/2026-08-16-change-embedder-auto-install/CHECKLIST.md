@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=8 blockers=none
+State: next=9 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -216,10 +216,37 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
           ....                                                  [100%]
           4 passed in 0.36s
 
-- [ ] 8. (S3, S9) Add a CLI-level test for `embedder-warmup` (parser
+- [x] 8. (S3, S9) Add a CLI-level test for `embedder-warmup` (parser
       accepts it; the handler surfaces a typed failure rather than a
       traceback when the backend is unavailable).
       done-when: `python -m pytest tests/test_embedder.py -q` → 0 failed (paste tail)
+
+      PROOF:
+
+          $ python -m pytest tests/test_embedder.py -q
+          .................                                     [100%]
+          17 passed in 4.64s
+
+      Three tests, all driving the REAL parser and `main()` rather than
+      the handler directly, so a parser that stopped admitting the
+      command would fail them:
+      `test_embedder_warmup_reports_the_backend_a_run_will_use` (an
+      unset EMBEDDER_MODEL is a chosen configuration, reported and
+      exit 0, never refused — C6),
+      `test_embedder_warmup_surfaces_a_typed_failure_not_a_traceback`
+      (exit 1 with `EMBEDDER_WARMUP_UNAVAILABLE`, empty stdout, no
+      traceback), and
+      `test_embedder_warmup_names_the_real_cache_directory` (the printed
+      path is derived, both branches asserted).
+
+      ONE FAILURE, corrected within the step: the first version passed
+      `--model ""` to mean "no model", but an empty string is falsy and
+      fell through to the config default, so the test read
+      `nomic-ai/nomic-embed-text-v1.5` where it expected `hashing-128`.
+      Replaced with a real partial config (`EMBEDDER_MODEL: null`) via
+      the global `--config`, which is how an operator would actually
+      select the hashing road. The test's assertion was not weakened —
+      it still demands `hashing-128`.
 
 - [ ] 9. (S4, S5, R5, R6) Correct `config.py`'s EMBEDDER_MODEL comment:
       drop `deepreason[embed]` and "atlas radii", state the 523 MB

@@ -172,6 +172,72 @@ def test_embed_cache_is_keyed_by_model(tmp_path):
     assert v1 == [1.0, 0.0] and v2 == [2.0, 0.0]
 
 
+# ---- the setup-phase warm-up (tranche 2026-08-16-change-embedder-auto-install) ----
+
+
+def _warmup(argv, monkeypatch=None):
+    """Run `deepreason embedder-warmup ...` through the real parser."""
+    from deepreason.cli.main import build_parser, main
+
+    build_parser().parse_args(argv)  # the parser must admit the command
+    return main(argv)
+
+
+def test_embedder_warmup_reports_the_backend_a_run_will_use(tmp_path, capsys):
+    """Implements R4 of tranche 2026-08-16-change-embedder-auto-install: the
+    ~523 MB weight fetch happens in the setup phase behind a visible progress
+    line, never silently inside cycle 1 of the first run to touch an
+    embedder. The command's stdout is the typed fingerprint — the same
+    identity the scheduler stamps on the log — so a ladder can record which
+    geometry its runs are about to use before any of them start.
+    """
+    profile = tmp_path / "hashing.yaml"
+    profile.write_text("EMBEDDER_MODEL: null\n")
+    code = _warmup(["--config", str(profile), "embedder-warmup"])
+    captured = capsys.readouterr()
+    assert code == 0
+    fingerprint = json.loads(captured.out)
+    assert fingerprint["model"] == "hashing-128"
+    # An unset model is a chosen configuration, not a failure: it reports
+    # the hashing backend and succeeds (the all-configurations law).
+    assert "hashing embedder" in captured.err
+
+
+def test_embedder_warmup_surfaces_a_typed_failure_not_a_traceback(
+    monkeypatch, capsys
+):
+    """An unbuildable backend is a runtime failure at the point of use — a
+    named, non-zero exit an operator can read, never a stack trace and never
+    a compile-time refusal of the configuration itself.
+    """
+    import sys as _sys
+
+    monkeypatch.setitem(_sys.modules, "fastembed", None)  # forces ImportError
+    code = _warmup(["embedder-warmup", "--model", "BAAI/bge-small-en-v1.5"])
+    captured = capsys.readouterr()
+    assert code == 1
+    assert captured.out == ""
+    assert "EMBEDDER_WARMUP_UNAVAILABLE" in captured.err
+    assert "Traceback" not in captured.err
+
+
+def test_embedder_warmup_names_the_real_cache_directory(monkeypatch):
+    """The printed disk location must be where fastembed will actually put
+    the weights, so an operator budgeting disk is not planning against a
+    plausible-looking guess. Derived exactly as fastembed derives it:
+    FASTEMBED_CACHE_PATH, else `fastembed_cache` under the system temp dir.
+    """
+    import tempfile
+    from pathlib import Path
+
+    from deepreason.cli.main import embedder_cache_dir
+
+    monkeypatch.delenv("FASTEMBED_CACHE_PATH", raising=False)
+    assert embedder_cache_dir() == str(Path(tempfile.gettempdir()) / "fastembed_cache")
+    monkeypatch.setenv("FASTEMBED_CACHE_PATH", "/somewhere/else")
+    assert embedder_cache_dir() == "/somewhere/else"
+
+
 def _seeded_harness(tmp_path) -> Harness:
     harness = Harness(tmp_path / "run")
     harness.register_commitment(Commitment(id="k-any", eval="predicate:len(content) > 0"))
