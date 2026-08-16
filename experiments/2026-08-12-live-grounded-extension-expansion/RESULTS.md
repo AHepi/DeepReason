@@ -329,3 +329,105 @@ a record-first diagnosis rather than guessed at here.
   tranche. They are not new (the same channels read 344 / 305 at
   finalize, before any continuation cycle) and no claim is made about
   them either way.
+
+## 2026-08-16 — Addendum: these runs measured with hashing-128, not the configured neural embedder
+
+Appended by tranche
+`experiments/2026-08-16-change-embedder-auto-install/` (R12). Nothing
+above is edited; this segment adds a fact about the INSTRUMENT the two
+epochs used, which no earlier segment stated.
+
+### What the record shows
+
+`run/log.jsonl` carries the pair, twice — once per epoch:
+
+    seq 2      Measure ['embedder-fallback', 'nomic-ai/nomic-embed-text-v1.5',
+                        "fastembed not installed (pip install
+                         'deepreason[embed]'): No module named 'fastembed'"]
+    seq 8      Measure ['embedder', 'hashing-128', '1', '4226e035204776db']
+    seq 9969   Measure ['embedder-fallback', ...same...]
+    seq 10045  Measure ['embedder-fallback', ...same...]
+    seq 10092  Measure ['embedder', 'hashing-128', '1', '4226e035204776db']
+
+The run's config named `nomic-ai/nomic-embed-text-v1.5`. `fastembed`
+lived in the optional `[embed]` extra, the container preflight ran the
+documented plain `pip install -e .`, so `NeuralEmbedder` could not be
+built; `EMBEDDER_FAILURE_POLICY="fallback"` substituted
+`HashingEmbedder` and recorded the substitution. The degradation was
+typed, recorded and replayable the whole time — and no reader was
+looking at it, which is the only reason it went unremarked here until
+now.
+
+### The threshold regime it ran under
+
+Established by that tranche from the committed record, and it is the
+half that keeps this from being worse than it is: **every shipped
+absolute distance threshold was `None`.** `NEAR_DUP_EPS`,
+`RESEED_DIST_MIN` and the scratchpad's `similarity_threshold` all
+default to unset, and their consumers treat unset as off
+(`rules/guards/anti_relapse.py`: stages 2-3 "run ONLY when a
+RelapseDomain, an embedder, AND a calibrated `NEAR_DUP_EPS` are all"
+present). The two convergence knobs that WERE armed are embedder-safe by
+construction — `RESEED_RATIO_MAX` is a ratio of distances within one
+space, `GATE_ORBIT_MIN` a count of gate blocks.
+
+So these runs did NOT apply neural-calibrated numbers to hashing
+geometry. There were no neural-calibrated numbers to apply.
+
+### What this does NOT change
+
+Nothing in the segments above is retracted, and nothing needs re-running:
+
+- **Model calls, judge verdicts and artifact statuses are
+  embedder-independent.** Nothing in the conjecture/criticism path
+  consults an embedding to decide a status; the embedder feeds attention
+  machinery and logged diagnostics only. Accepted/refuted/suspended
+  counts, the survivor set, the frontier, stop_reason, the verify_root
+  verdict and the security/completion finding counts all stand exactly
+  as recorded.
+- **The residue list above is untouched.** Every item in it concerns
+  warrant chains, citation verification and epoch-0 ordering — none
+  depends on which embedder ran.
+
+### What it DOES affect
+
+The distance-valued instruments, which should be read as lexical rather
+than semantic for these two epochs: novelty (nearest-prior-conjecture
+distance), near-duplicate readings, inter-school centroid distance and
+the school-convergence diagnostics. E0.1
+(`experiments/results/e01_embedder_recalibration_report.json`) is the
+committed reason to take that seriously rather than as a footnote — it
+measured hash-vs-neural novelty orderings agreeing only weakly
+(Spearman 0.51 / 0.49) and demoted per-conjecture hash novelty rankings
+to unverified. This segment makes no claim about which specific reading
+would move; it records that they are on the lexical scale.
+
+### R13 scan — no ERRATA entry is warranted
+
+The tranche also scanned for any committed document asserting NEURAL
+embeddings where the record shows hashing. One candidate:
+`docs/HANDOVER_MONITOR_2026-08-10.md:100` ("embeddings corroborate"),
+which points at
+`experiments/2026-08-08-corpus-enrichment-patrol-pilot/PATROL_DETERMINISM_REPORT.md`.
+That claim is TRUE and its evidence is committed: the report is explicit
+that it ran "Two embedders — one lexical/hashing ..., one neural/ONNX
+run locally", `RESULTS.md:422` there names
+`NeuralEmbedder(BAAI/bge-small-en-v1.5)`, and the raw output
+`semantic_crosscheck.jsonl` carries 9,277 rows with DISTINCT
+`hashing_cosine` and `neural_cosine` columns per row (0.799416 vs
+0.871452 on the first). That was an offline cross-check script with the
+extra installed, not a live harness run, so the live-run fallback does
+not touch it. Scan recorded, no correction owed; the next free ERRATA
+number, E32, stays unused.
+
+### Residue — what this addendum does not establish
+
+- **No reading above is re-derived.** This segment states which
+  instrument was used and what class of reading depends on it. It does
+  NOT recompute any novelty, duplicate or school-distance figure under
+  the neural embedder, and therefore does not show that any specific
+  number in the earlier segments would move.
+- **Whether it would matter here is untested.** E0.1's weak-agreement
+  finding came from n=2 gemma4 WEBSITE runs; this is a text run on a
+  different model. Carrying that finding over is a plausible
+  expectation, not a measurement.

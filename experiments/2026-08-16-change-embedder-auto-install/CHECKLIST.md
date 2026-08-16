@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=19 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=20 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -587,7 +587,7 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
 
 ## Phase C — evidence honesty
 
-- [ ] 19. (S10, R12, R13) APPEND a dated 2026-08-16 segment to
+- [x] 19. (S10, R12, R13) APPEND a dated 2026-08-16 segment to
       `experiments/2026-08-12-live-grounded-extension-expansion/RESULTS.md`:
       the pasted Measure events, the S3 verdict's regime, what it does
       NOT change (LLM calls, judge verdicts, artifact statuses, stop
@@ -596,6 +596,40 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       verdict — no ERRATA entry needed, with the
       `semantic_crosscheck.jsonl` evidence for that verdict.
       done-when: `git diff --stat experiments/2026-08-12-live-grounded-extension-expansion/RESULTS.md` shows insertions only, 0 deletions (paste)
+
+      PROOF — append-only, as C5 requires:
+
+          $ git diff --numstat experiments/2026-08-12-live-grounded-extension-expansion/RESULTS.md
+          102     0     experiments/.../RESULTS.md
+
+      102 added, 0 removed. Nothing above the new segment is edited.
+
+      The segment states the instrument (both epochs' Measure events
+      pasted), the threshold regime (every shipped absolute distance
+      threshold was None, so no neural-calibrated number was applied to
+      hashing geometry), what does NOT change (model calls, judge
+      verdicts, artifact statuses, survivor set, frontier, stop_reason,
+      verify_root — none consults an embedding to decide a status, so
+      every recorded count stands), and what DOES (novelty, near-dup,
+      inter-school distance and school-convergence readings are on the
+      lexical scale).
+
+      It closes with its own Residue, because the honest limit matters
+      as much as the finding: no reading is re-derived under the neural
+      embedder, so nothing here SHOWS a specific number would move, and
+      E0.1's weak-agreement result came from website runs rather than
+      text runs, making the carry-over a plausible expectation and not a
+      measurement.
+
+      R13 SCAN VERDICT — no ERRATA entry (recorded in the same segment).
+      The one document claiming "embeddings corroborate"
+      (`docs/HANDOVER_MONITOR_2026-08-10.md:100`) points at
+      PATROL_DETERMINISM_REPORT.md, whose neural claim is TRUE and
+      evidenced: `semantic_crosscheck.jsonl` carries 9,277 rows with
+      distinct `hashing_cosine` and `neural_cosine` values per row
+      (0.799416 vs 0.871452 on row 1), and it was an offline
+      cross-check script with the extra installed, not a live harness
+      run. Ledger tail checked; the next free number, E32, stays unused.
 
 - [ ] 20. (C) [COMMIT] Commit and push phase C.
       done-when: commit pushed; State line refreshed
