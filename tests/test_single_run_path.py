@@ -52,13 +52,21 @@ from tests.test_run_input_v6_commitments import _write_qualification
 
 REPO = Path(__file__).resolve().parents[1]
 GROUNDED_TRANCHE = REPO / "experiments/2026-08-12-live-grounded-extension-expansion"
+GROUNDED_ROOT = GROUNDED_TRANCHE / "run"
 
-# The digest the live grounded run compiled to (its RESULTS.md and its own
-# run root name it).  Pinned here because the acceptance fixture is only
-# the acceptance fixture if it is the same configuration, not a lookalike.
+# The digest the live grounded run compiled to.  It names that run; it is NOT
+# a golden for a fresh compile.  The run bound six local documents as its
+# evidence dossier (build_manifest.py DOSSIER_PATHS), two of them under
+# docs/map/, so a fresh compile addresses whatever those files say TODAY --
+# editing one moves the digest, which is run identity working.  Anchored to
+# the committed root, whose bytes cannot move, instead.
 GROUNDED_MANIFEST_SHA256 = (
     "8e22d0431fd2b98dc915c66f2f3ccc6dc43184b4c326ff5d388a7c013a80989d"
 )
+
+# The one manifest field the bound evidence reaches: dossier bytes ->
+# evidence_dossier_digest -> run_input_digest -> manifest.sha256.
+EVIDENCE_BEARING_MANIFEST_FIELD = "run_input_digest"
 
 RICH_QUESTION = "Which configurations may the one run path refuse?"
 RICH_SOURCE = (
@@ -227,6 +235,16 @@ def _load_grounded_builder():
     return module
 
 
+def _without_evidence(manifest_payload: dict) -> dict:
+    """The configuration half of a manifest: everything evidence cannot reach."""
+
+    return {
+        key: value
+        for key, value in manifest_payload.items()
+        if key != EVIDENCE_BEARING_MANIFEST_FIELD
+    }
+
+
 def _terminal_state(root) -> str:
     TEXT_RUN_SERVICE.wait(str(root))
     terminal = TEXT_RUN_SERVICE.result(InspectTextRunIntentV1(root=str(root)))
@@ -305,6 +323,13 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     run-config.yaml through build_manifest.py because no service entry
     accepted a precompiled manifest.  That exact config must now enter
     through the one door.
+
+    "That exact config" is checked field by field against the manifest the
+    live run committed, excluding the one field its bound evidence reaches.
+    A whole-digest comparison would say the same thing less precisely and
+    would additionally assert that six working-tree documents still hold
+    the bytes they held in August 2026 -- two of them map documents that
+    SCHEMA.md REQUIRES be edited whenever the code they describe moves.
     """
 
     monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "home"))
@@ -313,7 +338,20 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     root.mkdir(parents=True)
 
     summary = _load_grounded_builder().build(root)
-    assert summary["manifest_sha256"] == GROUNDED_MANIFEST_SHA256
+
+    compiled = json.loads((root / MANIFEST_NAME).read_text(encoding="utf-8"))
+    committed = json.loads(
+        (GROUNDED_ROOT / MANIFEST_NAME).read_text(encoding="utf-8")
+    )
+    assert _without_evidence(compiled) == _without_evidence(committed)
+    # The evidence half is identity too, so it is asserted, not waived:
+    # it must address the dossier this compile actually admitted.
+    assert compiled[EVIDENCE_BEARING_MANIFEST_FIELD] == summary["run_input_digest"]
+    # And the constant still names the live run -- proved against the
+    # committed root, which no later edit can move.
+    assert (GROUNDED_ROOT / "run-manifest.sha256").read_text(
+        encoding="utf-8"
+    ).strip() == GROUNDED_MANIFEST_SHA256
 
     from deepreason.run_manifest import load_run_manifest
 
@@ -572,10 +610,12 @@ def test_run_identity_is_deterministic_through_the_one_road(tmp_path, monkeypatc
 
     `DR-CON-run-identity`: a manifest-launched root records
     `run_id == manifest.sha256` in `progress.jsonl`, and the manifest
-    digest is a pure function of the compiled configuration.  The check
-    that matters after deleting a launch path is that BOTH halves still
-    hold on the survivor -- compiling twice must agree, and the root the
-    one path writes must carry that same digest.
+    digest is a pure function of the compiled configuration AND the
+    evidence that configuration binds.  The check that matters after
+    deleting a launch path is that BOTH halves still hold on the survivor
+    -- compiling twice must agree, and the root the one path writes must
+    carry that same digest.  Neither half needs a literal: comparing to a
+    constant would test the working tree's documents, not the survivor.
     """
 
     monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "home"))
@@ -585,7 +625,6 @@ def test_run_identity_is_deterministic_through_the_one_road(tmp_path, monkeypatc
     first = builder.build(tmp_path / "identity-a")
     second = builder.build(tmp_path / "identity-b")
     assert first["manifest_sha256"] == second["manifest_sha256"]
-    assert first["manifest_sha256"] == GROUNDED_MANIFEST_SHA256
     assert first["run_input_digest"] == second["run_input_digest"]
 
     root = tmp_path / "identity-a"
@@ -611,4 +650,68 @@ def test_run_identity_is_deterministic_through_the_one_road(tmp_path, monkeypatc
         for line in (root / "progress.jsonl").read_text(encoding="utf-8").splitlines()
         if line.strip()
     }
-    assert recorded == {GROUNDED_MANIFEST_SHA256}
+    assert recorded == {first["manifest_sha256"]}
+
+
+def test_manifest_sha_sensitivity_to_bound_evidence_is_correct_behaviour(
+    tmp_path, monkeypatch
+):
+    """Regression (grounded-extension run 8e22d0431fd2b98d): editing a
+    document the run BOUND AS EVIDENCE must move its manifest digest.
+
+    This is identity working, not a defect.  It was diagnosed as a defect
+    twice -- once as a stale enum, once as a container cache -- before
+    `experiments/2026-08-16-defect-manifest-sha-doc-coupling` settled it
+    with an A/B probe: editing a document inside `DOSSIER_PATHS` moves the
+    digest chain, editing a map document outside it moves nothing.  The
+    two tests above used to assert the opposite by pinning a literal, so
+    the direction is asserted here rather than left to a comment.
+
+    The dossier is FROZEN into `tmp_path` first.  A test that pins a
+    digest against `docs/` is pinning documentation, which is the defect
+    this file carried; owning the bytes is what makes the pin honest.
+    """
+
+    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("OLLAMA_API_KEY", "offline-fixture-key")
+    builder = _load_grounded_builder()
+
+    frozen_dir = tmp_path / "frozen-dossier"
+    frozen_dir.mkdir()
+    frozen = []
+    for index, declared in enumerate(builder.DOSSIER_PATHS):
+        declared = Path(declared)
+        copy = frozen_dir / f"{index:02d}-{declared.name}"
+        copy.write_bytes(declared.read_bytes())
+        frozen.append(copy)
+    assert len(frozen) == 6, [str(path) for path in frozen]
+    monkeypatch.setattr(builder, "DOSSIER_PATHS", frozen)
+
+    before = builder.build(tmp_path / "frozen-a")
+    again = builder.build(tmp_path / "frozen-b")
+    assert before["manifest_sha256"] == again["manifest_sha256"]
+    assert before["evidence_dossier_digest"] == again["evidence_dossier_digest"]
+
+    # The copy of the map document whose ordinary, SCHEMA.md-mandated
+    # edits triggered the misdiagnoses.
+    edited = next(path for path in frozen if path.name.endswith("SUB-adjudication.md"))
+    edited.write_bytes(edited.read_bytes() + b"\n<!-- one more sentence -->\n")
+
+    after = builder.build(tmp_path / "frozen-c")
+    assert after["evidence_dossier_digest"] != before["evidence_dossier_digest"]
+    assert after["run_input_digest"] != before["run_input_digest"]
+    assert after["manifest_sha256"] != before["manifest_sha256"]
+
+    # ...and moved through the evidence channel alone: the configuration
+    # half of the manifest is untouched by an evidence edit.
+    before_manifest = json.loads(
+        (tmp_path / "frozen-a" / MANIFEST_NAME).read_text(encoding="utf-8")
+    )
+    after_manifest = json.loads(
+        (tmp_path / "frozen-c" / MANIFEST_NAME).read_text(encoding="utf-8")
+    )
+    assert _without_evidence(after_manifest) == _without_evidence(before_manifest)
+    assert (
+        after_manifest[EVIDENCE_BEARING_MANIFEST_FIELD]
+        != before_manifest[EVIDENCE_BEARING_MANIFEST_FIELD]
+    )

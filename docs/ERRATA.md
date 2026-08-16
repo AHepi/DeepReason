@@ -702,3 +702,41 @@ immutable commit messages that the correcting commit answers directly. The
 correction is confirmed by construction on a fresh container: see
 `experiments/2026-08-15-change-rung3d-website-remnant/VALIDATION.md`, close-out
 section.
+
+## 2026-08-16 (manifest-sha / doc-coupling close-out)
+
+**E32 — "the manifest digest is a pure function of the compiled
+configuration" was false, and a committed parked prompt recommended a road
+built on it.** `tests/test_single_run_path.py`'s
+`test_run_identity_is_deterministic_through_the_one_road` docstring stated
+that the manifest digest is a pure function of the compiled configuration.
+It is a function of the compiled configuration AND the evidence that
+configuration binds: dossier bytes → `evidence_dossier_digest` →
+`run_input_digest` → `manifest.sha256`, and the grounded-extension
+configuration binds six local documents, two of them under `docs/map/`.
+That sentence is why the same failure was diagnosed twice as something
+else — a deleted `SpawnTrigger.SUCCESSOR` enum, then a container/build
+cache — since a digest believed to depend on code alone cannot move when
+only a document moves, so something else always had to be blamed. Both
+prior readings were already falsified on record (`d52c739ff`; E31b);
+`experiments/2026-08-16-defect-manifest-sha-doc-coupling` settles the
+positive claim with an A/B probe — editing a bound dossier document moves
+all three digests together, editing a map document outside the dossier
+moves none — and corrects the docstring in the same commit.
+
+Also corrected: `experiments/2026-08-15-change-rung3d-website-remnant/PARKED.md`'s
+ready-to-send prompt offered as its preferred road (a) "freeze the dossier
+by copying those bytes into the tranche directory", which would edit
+`experiments/2026-08-12-live-grounded-extension-expansion/build_manifest.py`
+— a committed live tranche's own compile script — and leave it disagreeing
+with the `evidence-dossier.json` it produced. Superseded by an APPENDED
+addendum in that file (the prompt itself is left verbatim, per the
+append-don't-rewrite rule); the freeze belongs in the test's `tmp_path`.
+That prompt's cache framing is NOT among the corrections: it already said
+the cache hypothesis was refuted, and it was right.
+
+The general lesson: a digest's docstring must name every input class the
+digest covers, because the omitted class is the one a future reader will
+rule out first. "Pure function of X" invites exactly one diagnosis when the
+digest moves and X did not — look for corruption — and forbids the correct
+one, which is that some Y is also an input.

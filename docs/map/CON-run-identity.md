@@ -1,5 +1,5 @@
 <!-- DR-CON-run-identity -->
-Verified-at: bdc476e8
+Verified-at: ae869296
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/preparation.py, src/deepreason/application/text_runs.py, src/deepreason/runtime/continuation.py, src/deepreason/runtime/progress.py, src/deepreason/amendment/apply.py, src/deepreason/amendment/models.py, src/deepreason/amendment/state.py, src/deepreason/ui/status.py
 Seams: 
@@ -267,6 +267,29 @@ them, including the two that were never renamed.
 - **Expecting `amend` to hand back a fresh identity.** It does not. The root,
   the bound manifest digest and the managed id are all unchanged; only
   `current_epoch` advances. A ladder that keys on the root name observes nothing.
+- **Pinning a manifest digest compiled from live repository paths.** Identity
+  covers the attached-evidence dossier, so a configuration that binds local
+  documents has those documents' BYTES inside its digest, through exactly one
+  channel: dossier bytes → `evidence_dossier_digest` → `run_input_digest` →
+  `manifest.sha256`. The grounded-extension configuration
+  (`experiments/2026-08-12-live-grounded-extension-expansion/build_manifest.py`,
+  `DOSSIER_PATHS`) binds six local files, two of them map documents —
+  `docs/map/CON-warrants-and-attacks.md` and `docs/map/SUB-adjudication.md`. Two
+  tests in `tests/test_single_run_path.py` compared a fresh compile of that
+  configuration against a hard-coded `8e22d0431fd2b98d…`, which made every
+  SCHEMA.md-mandated edit to either document look like a run-identity
+  regression, and the digest mismatch named no cause. It was misdiagnosed twice
+  — once as a deleted enum, once as a container cache — before
+  `experiments/2026-08-16-defect-manifest-sha-doc-coupling` settled it with an
+  A/B probe: editing a document inside `DOSSIER_PATHS` moves all three digests
+  together, editing a map document outside it moves none of them. Fixed
+  2026-08-16, in the tests alone: the configuration half is compared field by
+  field against the live run's committed `run-manifest.json` (everything except
+  `run_input_digest`), the evidence half is compared against bytes the test
+  freezes in its own `tmp_path`, and the sensitivity is asserted as CORRECT so
+  it is not re-diagnosed a third time. The rule: a digest may be pinned only
+  against inputs the pinning test owns.
+`check: test "$(grep -c 'GROUNDED_MANIFEST_SHA256' tests/test_single_run_path.py)" = 2 && grep -q 'run-manifest.sha256' tests/test_single_run_path.py && python -m pytest tests/test_single_run_path.py -q -k sensitivity`
 - **Deleting `run-epochs/NNN/` to clear a half-committed amendment.** Recovery
   depends on whether the staged epoch reached the ledger. If it applied events,
   `amend` refuses a different amendment with `AMEND_PENDING_CONFLICT` and only a

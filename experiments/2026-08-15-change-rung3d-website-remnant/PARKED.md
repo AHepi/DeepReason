@@ -118,3 +118,40 @@ so the fixture pins its own immutable evidence rather than living documentation;
 loud comment in both map documents. (a) looks right -- an acceptance fixture
 should own its inputs -- but measure the alternatives before choosing.
 ```
+
+### Addendum — 2026-08-16, P1 settled (appended; nothing above is rewritten)
+
+Fixed in `experiments/2026-08-16-defect-manifest-sha-doc-coupling`. Two
+corrections to the ready-to-send prompt above, both to its FRAMING, none
+to its measurements — the four measurements and the refutation of the
+cache hypothesis stand exactly as written.
+
+**1. The verdict was open in the prompt and is now closed: the BUILDER IS
+CORRECT.** The prompt describes a "coupling defect", which reads as though
+the coupling itself were wrong. It is not. A run that binds documents as
+evidence has those documents inside its identity by construction — same
+question, same config, DIFFERENT evidence is a different run — and an A/B
+probe proved the ingestion is confined to the declared dossier: editing
+`docs/map/SUB-adjudication.md` (bound) moved `evidence_dossier_digest`,
+`run_input_digest` and `manifest_sha256` together; editing
+`docs/map/SUB-scheduler.md` (not bound) moved nothing. The defect was
+entirely in the two tests, which pinned a constant against inputs they did
+not own.
+
+**2. Road (a) is SUPERSEDED — do not take it.** "Freeze the dossier by
+copying those bytes into the tranche directory" would edit
+`experiments/2026-08-12-live-grounded-extension-expansion/build_manifest.py`,
+making that committed script disagree with the `evidence-dossier.json` and
+`run-manifest.sha256` it actually produced — the live tranche's record of
+what that run bound. Road (b) as stated ("drop the sha pin and assert the
+weaker property") is also not what shipped, because the property that
+shipped is STRONGER, not weaker: the compiled manifest is compared field
+by field against the live run's committed `run-manifest.json`, excluding
+only `run_input_digest`, so a mismatch names the field that drifted. The
+freeze that road (a) wanted lives in the new sensitivity test's `tmp_path`,
+where it owns its bytes and rots nothing. Road (c) was never viable — a
+loud comment does not stop a gate going red.
+
+The reproduction in the prompt above still works verbatim and now prints
+green on both arms; `probe_digests.py` in the fixing tranche is its
+committed, self-restoring form.
